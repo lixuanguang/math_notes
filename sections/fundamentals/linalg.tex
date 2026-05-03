@@ -516,23 +516,30 @@ The set $\{0, 1\, \ldots, n-1 \}$ equipped with these operations is denoted $\Z 
 
 \begin{theorem} \label{thm:primefieldthmforfinitefields} \hlt{The Prime Fields Theorem for Finite Fields}\\
 Let $1 < n \in \Z$, then $\Z / n \Z$ is a field if and only if $n$ is prime.
-\begin{proof}
+\begin{proof} Let $n > 1$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[]
 \item[$(\Rightarrow)$] If $n$ is not prime, then $\Z / n \Z$ is not a field.\\
-Suppose $n$ is composite, so $n = rs$ for some $r, s \in \Z$ such that $1 < r, s < n$. Then in $\Z / n \Z$, we have $r \cdot_n s$ with $r \neq 0$ and $s \neq 0$.\\
-Assume for contradiction that $r$ has a multiplicative inverse $r^{-1}$ in $\Z / n \Z$. Multiplying both sides of $r \cdot_n s = 0$ by $r^{-1}$ yields $s = 0$, contradicting $1 < s < n$. Hence $r$ and $s$ has no multiplicative inverse.\\
-Thus $\Z / n\Z$ cannot be a field.
-\item[$(\Leftarrow)$] If $n = p$ is prime, then $\Z / n \Z$ is a field.\\
-Fix $x \in \Z / n \Z$ with $x \neq 0$. Consider multiplication map $M_x: \Z / p \Z \rightarrow \Z / p \Z$, $M_x(z) = x \cdot_p z$.\\
-Note that if $a, b \in \Z / p \Z \backslash \{0 \}$, then $a \cdot_p b \neq 0$, that is, $M_x$ maps nonzero elements to nonzero elements.\\
-By pigeonhole principle, since $\Z / p \Z$ has $p$ elements and $M_x$ is injective (as $x \cdot_p z = x \cdot_p z' \Rightarrow z = z'$ by cancellation), $M_x$ is also surjective. $\exists \ z \in \Z / p \Z$ such that $M_x (z) = x \cdot_p z = 1$. Thus $x = x^{-1}exists.$\\
-Since $x$ was an arbitrary nonzero element, every nonzero element of $\Z / p \Z$ has a multiplicative inverse.\\
-Thus $\Z / p \Z$ is a field.
+If $n$ is composite, write $n = rs$ with $1 < r, s < n$. Then $\Z / n \Z$, $[r][s] = [rs] = [0]$ while $[r] \neq 0$ and $[s] \neq 0$. Thus $\exists$ nonzero elements whose product is $0$, i.e., nonzero elements in nullspace of multiplication by $[r]$.\\
+Equivalently, consider the linear map $\mathcal{M}_{[r]}: \Z / n \Z \rightarrow \Z / n \Z$, $\mathcal{M}_{[r]}([x]) = [r][x]$. Then $[s] \neq 0$ lies in $\text{ker}(\mathcal{M}_{[r]})$, so the nullspace is nontrivial. Hence $\mathcal{M}_{[r]}$ is not injective, so $[r]$ cannot have a multiplicative inverse. Therefore the ring is not a field.
+\item[$(\Leftarrow)$] If $n = p$ is prime, then $\Z / p \Z$ is a field.\\
+Fix a nonzero element $[x] \in \Z / p \Z$. Consider the linear map $\mathcal{M}_{[x]}: \Z / p \Z \rightarrow \Z / p \Z$, $\mathcal{M}_{[x]}([z]) = [x][z]$.\\
+To show $\text{ker}(\mathcal{M}_{[x]}) = \{ 0 \}$. Indeed, if $[x][z] = [0]$, then $p \ \vert \ xz$. Since $p$ is prime and $x \not\equiv 0 (\text{mod} \ p)$, it follows that $p \ \vert \ z$, hence $[z] = 0$. Thus the nullspace is trivial, so $\mathcal{M}_{[x]}$ is injective. Because $\Z / p \Z$ is finite, injectivity implies surjectivity. Hence $\exists$ $[z]$ such that $[x][z] = [1]$, so $[x]$ has a multiplicative inverse.\\
+Since every nonzero element is invertible, $\Z / p \Z$ is a field.
 \end{enumerate}
 \end{proof}
 \end{theorem}
+
+The entire theorem reduces to:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item Composite $n$: multiplication map has nontrivial nullspace $\rightarrow$ zero-divisors $\rightarrow$ not invertible.
+\item Prime $p$: multiplication by nonzero element has trivial nullspace $\rightarrow$ injective $\rightarrow$ bijective $\rightarrow$ invertible.
+\end{enumerate}
+The argument is parallel to standard results about linear operators:
+\begin{align}
+\text{ker}(T) = \{ 0 \} \Leftrightarrow T \text{ injective } \Leftrightarrow T \text{ invertible (finite-dimensional case)} \nonumber
+\end{align}
 
 \begin{definition} Let $T \in \mathcal{L}(\mathcal{V})$, and $\exists$ direct sum decomposition $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$ where each $\mathcal{U}_j$ is proper subspace of $\mathcal{V}$. The \hlt{restriction} of $T$ to smaller domain $\mathcal{U}_j$ is denoted $T|_{\mathcal{U}_j}$
 \end{definition}
@@ -547,48 +554,49 @@ A vector $\mathbf{u} \in \mathcal{V}$ is an \hlt{eigenvector} of $T$ if $T \math
 Note that the set of eigenvectors of $T$ corresponding to $\lambda$ equals $\text{null}(T - \lambda I)$.
 
 \begin{theorem} \label{thm:disctingeigenvectorsindependence} Let $T \in \mathcal{L}(\mathcal{V})$, and $\lambda_1, \ldots, \lambda_m$ distinct eigenvalues of $T$, $\mathbf{v}_1, \ldots, \mathbf{v}_m$ are corresponding nonzero eigenvectors, then $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly independent.
-\begin{proof}
-Suppose $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly dependent. Let $k$ be smallest positive integer such that
-\begin{align}
-\mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{k-1}) \nonumber
-\end{align}
-The existence of $k$ with this property follows from Lemma \ref{lem:lineardependencelemma}. Hence $\exists \ a_1, \ldots, a_{k-1} \in \mathbb{F}$ such that
-\begin{align}
-\mathbf{v}_k = a_1 \mathbf{v}_1 + \cdots + a_{k-1} \mathbf{v}_{k-1} \nonumber
-\end{align}
-Applying $T$ to both sides of equation gives
+\begin{proof} Let $T \in \mathcal{L}(\mathcal{V})$, let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues with corresponding nonzero eigenvectors $\mathbf{v}_1, \ldots, \mathbf{v}_m$.\\
+Assume for contradiction that $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly dependent. By linear dependence lemma \ref{lem:lineardependencelemma}, $\exists$ smallest index $k \geq 2$ such that $\mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{k-1})$. Thus $\exists$ scalars $a_1, \ldots, a_{k-1}$ such that $\mathbf{v}_k = a_1 \mathbf{v}_1 + \cdots + a_{k-1} \mathbf{v}_{k-1}$.\\
+By minimality of $k$, the list $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$  is linearly independent.\\
+Applying $T$ to both sides, $T(\mathbf{v}_k) = a_1 T(\mathbf{v}_1) + \cdots + a_{k-1} T(\mathbf{v}_{k-1})$. Using the eigenvector relations $T(\mathbf{v}_i) = \lambda_i \mathbf{v}_i$,
 \begin{align}
 \lambda_k \mathbf{v}_k = a_1 \lambda_1 \mathbf{v}_1 + \cdots + a_{k-1} \lambda_{k-1} \mathbf{v}_{k-1} \nonumber
 \end{align}
-Multiply both sides of second equation by $\lambda_k$ then subtracting above gives
+Multiply the original equation by $\lambda_k$,
 \begin{align}
-0 = a_1(\lambda_k - \lambda_1)\mathbf{v}_1 + \cdots + a_{k-1}(\lambda_k - \lambda_{k-1}) \mathbf{v}_{k-1} \nonumber
+\lambda_k \mathbf{v}_k = a_1 \lambda_k \mathbf{v}_1 + \cdots + a_{k-1} \lambda_k \mathbf{v}_{k-1} \nonumber
 \end{align}
-As $k$ is chosen to be smallest positive integer satisfying first equation, $(\mathbf{v}_1, \ldots, \mathbf{v}_{k-1})$ is linearly dependent, hence equation above implies that all $a$ are $0$, which also means $\mathbf{v}_k = \mathbf{0}$, contracting hypothesis that all $\mathbf{v}$ are nonzero. Hence assumption that $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly dependent must be false.
+Subtracting the two equations gives
+\begin{align}
+0 = \sum\limits_{i=1}^{k-1} a_i (\lambda_k - \lambda_i) \mathbf{v}_i \nonumber
+\end{align}
+Because $(\mathbf{v}_1, \ldots, \mathbf{v}_{k-1})$ is linearly independent, each coefficient must be zero, $a_i (\lambda_k - \lambda_i) = 0$ for all $i < k$.\\
+Since the eigenvalues are distinct ($\lambda_k - \lambda_i \neq 0$), hence $a_i = 0$ for all $i$.\\
+Thus $\mathbf{v}_k = \mathbf{0}$, contradicting that $\mathbf{v}_k$ is an eigenvector. Therefore, $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly independent.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} Each operator on $\mathcal{V}$ has at most $\text{dim}(\mathcal{V})$ distinct eigenvalues.
-\begin{proof} Let $T \in \mathcal{L}(\mathcal{V})$, and $\lambda_1, \ldots, \lambda_m$ distinct eigenvalues of $T$. Let $\mathbf{v}_1, \ldots, \mathbf{v}_m$ be corresponding nonzero eigenvectors. Theorem \ref{thm:disctingeigenvectorsindependence} implies $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly independent, hence $m \leq \text{dim}(\mathcal{V})$.
+\begin{proof} Let $T \in \mathcal{L}(\mathcal{V})$, and $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$. For each $i$, choose a corresponding nonzero eigenvector $\mathbf{v}_i \in \mathcal{V}$. By Theorem \ref{thm:disctingeigenvectorsindependence}, the list $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly independent.\\
+Let $(\mathbf{w}_1, \ldots, \mathbf{w}_n)$ be a basis of $\mathcal{V}$, then this list spans $\mathcal{V}$ and has length $n = \text{dim}(\mathcal{V})$. Applying Theorem \ref{thm:finitedimlenofvec} to the linearly independent list $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ and the spanning list $(\mathbf{w}_1, \ldots, \mathbf{w}_n)$, we obtain $m \leq n = \text{dim}(\mathcal{V})$.\\
+Hence $T$ has at most $\text{dim}(\mathcal{V})$ distinct eigenvalues.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} Every operator on a finite-dimensional, nonzero complex vector space has an eigenvalue.
-\begin{proof} Suppose $\mathcal{V}$ is a complex vector space with $\text{dim}(\mathcal{V})=n>0$ and $T \in \mathcal{L}(\mathcal{V})$. Choose $\mathbf{v} \in \mathcal{V}$ with $\mathbf{v} \neq \mathbf{0}$, then $(\mathbf{v}, T\mathbf{v}, T^2 \mathbf{v}, \ldots, T^n \mathbf{v})$ cannot be linearly independent as $\mathcal{V}$ has dimension $n$ and $n+1$ vectors. Thus $\exists \ a_0, \ldots, a_n \in \C$ not all $0$ such that
+\begin{proof} Let $\mathcal{V}$ be a complex vector space with $\text{dim}(\mathcal{V})=n>0$, and let $T \in \mathcal{L}(\mathcal{V})$. Choose $\mathbf{v} \in \mathcal{V}$ with $\mathbf{v} \neq \mathbf{0}$. Consider the list $(\mathbf{v}, T\mathbf{v}, T^2 \mathbf{v}, \ldots, T^n \mathbf{v})$, a list of $n+1$ vectors in a $n$-dimensional space, hence it is linearly dependent. Therefore $\exists$ scalars $a_0, \ldots, a_m \in \C$, not all zero, such that 
 \begin{align}
 0 = a_0 \mathbf{v} + a_1 T \mathbf{v} + \cdots + a_n T^n \mathbf{v} \nonumber
 \end{align}
-Let $m$ be largest index such that $a_m \neq 0$. As $\mathbf{v} \neq \mathbf{0}$, the coefficients $a_1, \ldots, a_m$ cannot all be $0$, hence $0 < m \leq n$. Let $a$ e coefficients of a polynomial in factored form
+Let $m$ be largest index such that $a_m \neq 0$. Then $m \geq 1$, and defining the polynomial
 \begin{align}
-a_0 + a_1 z + \cdots + a_n z^n = c(z - \lambda_1) \cdots (z - \lambda_m) \nonumber
+p(z) = a_0 + a_1 z + \cdots + a_m z^m \nonumber
 \end{align}
-where $c$ is nonzero complex number, each $\lambda_j \in \C$, and equation holds for all $z \in \C$, then
+we have $p(T) \mathbf{v} = 0$. As $\C$ is algebraically closed, the polynomial $p$ factors as $p(z) = c(z - \lambda_1) \cdots (z - \lambda_m)$, where $c \neq 0$ and $\lambda_1, \ldots, \lambda_m \in \C$. Substituting $T$ for $\mathbf{z}$, we obtain $p(T) = c(T - \lambda_1 I) \cdots (T - \lambda_m I)$ and hence
 \begin{align}
-\mathbf{0} &= a_0 \mathbf{v} + a_1 T \mathbf{v} + \cdots + a_n T^n \mathbf{v} \nonumber \\
-&= (a_0 I + a_1 T + \cdots + a_n T^n)\mathbf{v} \nonumber \\
-&= c(T - \lambda_1 I) \cdots (T - \lambda_m I)\mathbf{v} \nonumber
+c(T - \lambda_1 I) \cdots (T - \lambda_m I) \mathbf{v} = \mathbf{0} \nonumber
 \end{align}
-which means $T - \lambda_j I$ is not injective for at least one $j$. Hence $T$ has an eigenvalue.
+Because $\mathbf{v} \neq \mathbf{0}$, this implies the operator $(T - \lambda_1 I) \cdots (T - \lambda_m I)$ is not injective. Therefore at least one factor $T - \lambda_j I$ is not injective. Hence $\text{ker}(T - \lambda_i I) \neq \{ 0 \}$, so there exists a nonzero vector $\mathbf{u}$ such that $T (\mathbf{u}) = \lambda_j \mathbf{u}$.\\
+Thus $\lambda_j$ is an eigenvalue of $T$.
 \end{proof}
 \end{theorem}
 
@@ -611,23 +619,23 @@ Next proposition shows useful connection between upper-triangular matrices and i
 \item $T \mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ for each $k = 1, \ldots, n$
 \item $\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ is invariant under $T$ for each $k=1, \ldots, n$
 \end{enumerate}
-\begin{proof} $(i) \Rightarrow (ii)$ follows from definitions. Also, $(iii) \Rightarrow (ii)$ as $(iii)$ implies $(ii)$.\\
-$(ii) \Rightarrow (iii)$, suppose $(ii)$ holds. Fix $k \in \{1, \ldots, n \}$. From $(ii)$, we know that
-\begin{align}
-T \mathbf{v}_1 &\in \text{span}(\mathbf{v}_1) \subset \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k) \nonumber \\
-T \mathbf{v}_2 &\in \text{span}(\mathbf{v}_1, \mathbf{v}_2) \subset \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k) \nonumber \\
-&\vdots \nonumber \\
-T \mathbf{v}_k &\in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k) \nonumber
-\end{align}
-Hence if $\mathbf{v}$ is a linear combination of $(\mathbf{v}_1, \ldots, \mathbf{v}_k)$, then
-\begin{align}
-T \mathbf{v} \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k) \nonumber
-\end{align}
-Hence, $\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$ is invariant under $T$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[]
+\item[$(i)$]$\Rightarrow (ii)$ If the matrix $T$ is upper triangular, then for each $k$, the coordinate representation of $T \mathbf{v}_k$ has nonzero entries below the $k$-th position. Hence $T \mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$.
+\item[$(ii)$]$\Rightarrow (iii)$ Fix $k$, and let $\mathbf{u} \in \text{span}(\mathbf{v_1}, \ldots, \mathbf{v}_k)$. Then $\mathbf{u} = a_1 \mathbf{v}_1 + \cdots + a_k \mathbf{v}_k$.\\
+By linearity, $T\mathbf{u} = a_1 T \mathbf{v}_1 + \cdots + a_k T \mathbf{v}_k$. By $(ii)$, each $T\mathbf{v}_j \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$, hence $T \mathbf{u}$ lies in the same span. Therefore, $T(\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)) \subseteq \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$, so the subspace is invariant.
+\item[$(iii)$]$\Rightarrow (ii)$ Fix $k$. Since $\mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$ and this subspace is invariant under $T$, $T\mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$.
+\item[$(ii)$]$\Rightarrow (i)$ For each $k$, $T \mathbf{v}_k \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_k)$. Then the coordinate vector of $T \mathbf{v}_k$ relative to the basis $(\mathbf{v}_1, \ldots \mathbf{v}_n)$ has zero coefficients on $\mathbf{v}_{k+1}, \ldots, \mathbf{v}_n$. Therefore, the $k$-t column of the matrix of $T$ has zeroes below the diagonal. Since this holds for every $k$, the matrix of $T$ is upper triangular.
+\end{enumerate}
 \end{proof}
 \end{proposition}
 
-Next theorem shows that for each operator on a complex vector space, there is a basis of the vector space with respect to which the matrix of operator only has $0$ below the diagonal.
+An operator is upper triangular if and only if it preserves a nested sequence of subspaces (a flag):
+\begin{align}
+\{ 0 \} \subset \text{span}(\mathbf(v)_1) \subset \text{span}(\mathbf(v)_1, \mathbf(v)_2) \subset \cdots \subset \text{span}(\mathbf(v)_1, \ldots, \mathbf(v)_n) = \mathcal{V} \nonumber
+\end{align}
 
 \begin{theorem} 
 \label{thm:complexvecspaceuppertrigmatrix} Suppose $\mathcal{V}$ is a complex vector space and $T \in \mathcal{L}(\mathcal{V})$, then $T$ has an upper-triangular matrix with respect to some basis of $\mathcal{V}$.
