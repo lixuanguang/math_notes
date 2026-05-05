@@ -502,7 +502,7 @@ Therefore $T$ is both injective and surjective, hence invertible.
 
 In finite dimensions, injectivity and surjectivity are not independent: rank–nullity forces a trade-off between null and range dimensions. If one is maximal, the other must be as well, collapsing the distinction between injective, surjective, and invertible.
 
-\subsubsection{Eigenvalues and Eigenvectors}
+`
 
 \begin{definition} \hlt{Addition and Multiplication Modulo $n$}\\
 Let $1 < n \in \Z$. For $a,b \in \Z$ with $0 \leq a, b < n$, choose arbitrary $A,B \in \Z$ s.t. $A \equiv a \Mod{n}$, $B \equiv b \Mod{n}$.
@@ -942,67 +942,74 @@ In an orthonormal system, the squared norm of a linear combination is the sum of
 \norm{\mathbf{v}}^2 &= \abs{\innerprod{\mathbf{v}, \mathbf{e}_1}}^2 + \cdots + \abs{\innerprod{\mathbf{v}, \mathbf{e}_n}}^2 \nonumber
 \end{align}
 for every $\mathbf{e} \in \mathcal{V}$.
-\begin{proof} Let $\mathbf{v} \in \mathcal{V}$. As $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ is a basis of $\mathcal{V}$, there exists scalars $a_1, \ldots, a_n$ such that
+\begin{proof} Let $\mathbf{v} \in \mathcal{V}$. Since $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ is a basis, write $\mathbf{v} = \sum\limits_{j=1}^n a_j \mathbf{e}_j$. Taking inner product with $\mathbf{e}_k$,
 \begin{align}
-\mathbf{v} = a_1 \mathbf{e}_1 + \cdots + a_n \mathbf{e}_n \nonumber
+\innerprod{\mathbf{v}, \mathbf{e}_j} = \sum\limits_{j=1}^n a_j \innerprod{\mathbf{e}_j, \mathbf{e}_k} = a_k \nonumber
 \end{align}
-Take inner product of both sides of equation with $\mathbf{e}_j$ to get $\innerprod{\mathbf{v}, \mathbf{e}_j} = a_j$, hence proving.
+using orthonormality. Hence $\mathbf{v} = \sum\limits_{j=1}^n \innerprod{\mathbf{v}, \mathbf{e}_j} \mathbf{e}_j$. Applying Proposition \ref{prop:sumoforthonormal}, $\norm{v}^2 = \sum\limits_{j=1}^n \abs{\innerprod{\mathbf{v}, \mathbf{e}_j}}^2$
 \end{proof}
 \end{theorem}
+
+An orthonormal basis isolates coordinates via inner products. Orthogonality eliminates cross terms, turning geometry into coefficient-wise algebra.
 
 \begin{theorem} \label{thm:gramschmidtprocedure} If $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is a linearly independent list of vectors in $\mathcal{V}$, then there exists an orthonormal list $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ of vectors in $\mathcal{V}$ such that
 \begin{align}
 \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_j) = \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_j) \nonumber
 \end{align}
 for $j = 1, \ldots, m$.
-\begin{proof} Suppose $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly independent list of vectors in $\mathcal{V}$. To construct $\mathbf{e}$, let $\mathbf{e} = \mathbf{v}_1/\norm{\mathbf{v}_1}$, which satisfies condition for $j=1$.\\
-Suppose $j > 1$, and orthonormal list $(\mathbf{e}_1, \ldots, \mathbf{e}_{j-1})$ has been chosen so that
+\begin{proof} Construct $\mathbf{e}_1, \ldots, \mathbf{e}_m$ inductively. Set $\mathbf{e}_1 = \frac{\mathbf{v}_1}{\norm{\mathbf{v}_1}}$.\\
+Assume $\mathbf{e}_1, \ldots, \mathbf{e}_{j-1}$ are orthonormal and satisfy $\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j-1}) = \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_{j-1})$. Define
 \begin{align}
-\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j-1}) = \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_{j-1}) \nonumber
+\mathbf{u}_j = \mathbf{v}_j - \sum\limits_{k=1}^{j-1} \innerprod{\mathbf{v}_j, \mathbf{e}_k} \mathbf{e}_k, \ \ \ \mathbf{e}_j = \frac{\mathbf{u}_j}{\norm{\mathbf{u}_j}} \nonumber
 \end{align}
-Let
+Since $\mathbf{v}_j \notin \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j-1}) = \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_{j-1})$, we have $\mathbf{u}_j \neq \mathbf{0}$, so $\mathbf{e}_j$ is well-defined.\\
+For $k<j$,
 \begin{align}
-\mathbf{e}_j = \frac{\mathbf{v}_j - \innerprod{\mathbf{v}_j, \mathbf{e}_1}\mathbf{e}_1 - \cdots - \innerprod{\mathbf{v}_j, \mathbf{e}_{j-1}}\mathbf{e}_{j-1}}{\norm{\mathbf{v}_j - \innerprod{\mathbf{v}_j, \mathbf{e}_1}\mathbf{e}_1 - \cdots - \innerprod{\mathbf{v}_j, \mathbf{e}_{j-1}}\mathbf{e}_{j-1}}} \nonumber
+\innerprod{\mathbf{u}_j, \mathbf{e}_k} = \innerprod{\mathbf{v}_j, \mathbf{e}_k} - \sum\limits_{k=1}^{j-1} \innerprod{\mathbf{v}_j, \mathbf{e}_i} \innerprod{\mathbf{e}_i, \mathbf{e}_k} = \innerprod{\mathbf{v}_j, \mathbf{e}_k} - \innerprod{\mathbf{v}_j, \mathbf{e}_k} = \mathbf{0} \nonumber
 \end{align}
-Note that $\mathbf{v}_j \notin \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j-1})$ (as $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly independent), hence $\mathbf{v}_j \notin \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_{j-1})$. Hence above equation is not dividing by $\mathbf{0}$, and $\mathbf{e}_j$ is well defined. Note $\norm{\mathbf{e}_j} = 1$. Let $1 \leq k < j$, then
+so $\mathbf{e}_j \perp \mathbf{e}_k$. Also $\norm{\mathbf{e}_j} = 1$, hence $(\mathbf{e}_1, \ldots, \mathbf{e}_j)$ is orthonormal. By construction, $\mathbf{u}_j \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j})$, hence $\mathbf{e}_j \in \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j})$, so $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_{j}) \subset \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{j})$. The reverse inclusion follows since
 \begin{align}
-\innerprod{\mathbf{e}_j, \mathbf{e}_k} &= \innerprod{\frac{\mathbf{v}_j - \innerprod{\mathbf{v}_j, \mathbf{e}_1}\mathbf{e}_1 - \cdots - \innerprod{\mathbf{v}_j, \mathbf{e}_{j-1}}\mathbf{e}_{j-1}}{\norm{\mathbf{v}_j - \innerprod{\mathbf{v}_j, \mathbf{e}_1}\mathbf{e}_1 - \cdots - \innerprod{\mathbf{v}_j, \mathbf{e}_{j-1}}\mathbf{e}_{j-1}}}, \mathbf{e}_{k}} \nonumber \\
-&= \frac{\innerprod{\mathbf{v}_j, \mathbf{e}_k} - \innerprod{\mathbf{v}_j, \mathbf{e}_k}}{\norm{\mathbf{v}_j - \innerprod{\mathbf{v}_j, \mathbf{e}_1}\mathbf{e}_1 - \cdots - \innerprod{\mathbf{v}_j, \mathbf{e}_{j-1}}\mathbf{e}_{j-1}}} \nonumber \\
-&= 0 \nonumber
+\mathbf{v}_j = \mathbf{u}_j + \sum\limits_{k=1}^{j-1} \innerprod{\mathbf{v}_j, \mathbf{e}_k} \mathbf{e}_k \in \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_{j}) \nonumber
 \end{align}
-Hence $(\mathbf{e}_1, \ldots, \mathbf{e}_j)$ is an orthonormal list.\\
-Note that $\mathbf{v}_j \in \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_j)$, and hence
-\begin{align}
-\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_j) \subset \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_j) \nonumber
-\end{align}
-Both lists are linearly independent, hence both spaces have dimension $j$, thus must be equal.
+and the induction hypothesis gives the rest. Thus the spans are equal.
 \end{proof}
 \end{theorem}
 
+At each step, subtract the projection of $\mathbf{v}_j$ onto the previously constructed subspace, leaving a component orthogonal to it. Normalising yields an orthonormal basis without changing the span.
+
 \begin{corollary} Every finite-dimensional inner-product space has an orthonormal basis.
-\begin{proof} Choose a basis of $\mathcal{V}$. Apply Gram-Schmidt \ref{thm:gramschmidtprocedure} to it to produce an orthonormal list. This orthonormal list is linearly independent by Corollary \ref{cor:orthonormallistisindep} and its span equals $\mathcal{V}$, hence it is an orthonormal basis of $\mathcal{V}$.
+\begin{proof} Let $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ be a basis of $\mathcal{V}$. Apply Gram-Schmidt (Theorem \ref{thm:gramschmidtprocedure}), to obtain an orthonormal list $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ s.t. $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_m) = \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_m) = \mathcal{V}$. Thus $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ is an orthonormal basis of $\mathcal{V}$
 \end{proof}
 \end{corollary}
+
+Start from any basis and orthonormalise it without changing its span. This converts an arbitrary basis into an orthonormal one.
 
 \begin{corollary} \label{cor:linindepextendorthonorm} Every orthonormal list of vectors in $\mathcal{V}$ can be extended to an orthonormal basis of $\mathcal{V}$.
-\begin{proof} Suppose $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ is an orthonormal list of vectors in $\mathcal{V}$. Then $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ is linearly independent by Corollary \ref{cor:orthonormallistisindep}, hence it can be extended to a basis $(\mathbf{e}_1, \ldots, \mathbf{e}_m, \mathbf{v}_1, \ldots, \mathbf{v}_n)$ of $\mathcal{V}$. Apply Gram-Schmidt procedure \ref{thm:gramschmidtprocedure} to $(\mathbf{e}_1, \ldots, \mathbf{e}_m, \mathbf{v}_1, \ldots, \mathbf{v}_n)$ of $\mathcal{V}$ to produce an orthonormal list
-\begin{align}
-(\mathbf{e}_1, \ldots, \mathbf{e}_m, \mathbf{f}_1, \ldots, \mathbf{f}_n) \nonumber
-\end{align}
-Note Gram-Schmidt leaves first $m$ vectors unchanged as they are already orthonormal. Note that above is an orthonormal basis of $\mathcal{V}$ as it is linearly independent, and its span equals $\mathcal{V}$. Hence this gives the extension of $(\mathbf{e}_1, \ldots, \mathbf{e}_m,)$ to an orthonormal basis of $\mathcal{V}$.
+\begin{proof} Let $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ be an orthonormal list in $\mathcal{V}
+$. Extend it to a basis $(\mathbf{e}_1, \ldots, \mathbf{e}_m, \mathbf{v}_{m+1}, \ldots, \mathbf{v}_n)$ of $\mathcal{V}$.\\
+Apply Gram-Schmidt (Theorem \ref{thm:gramschmidtprocedure}) to this list to obtain an orthonormal list $(\mathbf{e}_1, \ldots, \mathbf{e}_m, \mathbf{f}_{m+1}, \ldots, \mathbf{f}_n)$.\\
+Because $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ is already orthonormal, Gram-Schmidt leaves these vectors unchanged.\\
+Hence $(\mathbf{e}_1, \ldots, \mathbf{e}_m, \mathbf{f}_{m+1}, \ldots, \mathbf{f}_n)$ is an orthonormal basis of $\mathcal{V}$, extending the original list.
 \end{proof}
 \end{corollary}
+
+Extend the orthonormal list to a basis, then orthonormalise. The existing orthonormal part is unaffected, so the extension remains intact.
 
 \begin{corollary} \label{cor:uppertriangmatorthonormalbasis} Suppose $T \in \mathcal{L}(\mathcal{V})$. If $T$ has an upper-triangular matrix with respect to some basis of $\mathcal{V}$, then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
-\begin{proof} Suppose $T$ has an upper-triangular matrix with respect to some basis $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ of $\mathcal{V}$. Thus $\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_j)$ is invariant under $T$ for each $j=1, \ldots, n$ by Proposition \ref{prop:invariantsubspaceequivalence}.\\
-Apply Gram-Schmidt procedure \ref{thm:gramschmidtprocedure} to $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ to produce an orthonormal basis $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ of $\mathcal{V}$. Note that $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_j) = \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_j)$ for each $j$, hence $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_j)$ is invariant under $T$ for each $j = 1, \ldots, n$. Hence by Proposition \ref{prop:invariantsubspaceequivalence}, $T$ has an upper-triangular matrix with respect to some orthonormal basis $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$.
+\begin{proof} Let $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis with respect to which $T$ is upper triangular.\\
+Then for each $j$, $T(\text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_n)) \subset \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_n)$. Apply Gram-Schmidt (Theorem \ref{thm:gramschmidtprocedure}) to obtain an orthonormal basis $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ such that $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_n) = \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ for all $j$. Hence each $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ is $T$-invariant. By Proposition \ref{prop:invariantsubspaceequivalence}, $T$ has an upper-triangular matrix w.r.t. $\mathbf{e}_1, \ldots, \mathbf{e}_n$.
 \end{proof}
 \end{corollary}
 
+Upper-triangular structure is equivalent to preservation of a nested chain of subspaces (a flag). Gram–Schmidt preserves this flag while making the basis orthonormal.
+
 \begin{corollary} \label{cor:complexvecspaceuppertrigmatorthonbasis} Suppose $\mathcal{V}$ is a complex vector space and $T \in \mathcal{L}(\mathcal{V})$, then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
-\begin{proof} This follows from Theorem \ref{thm:complexvecspaceuppertrigmatrix} and Corollary \ref{cor:uppertriangmatorthonormalbasis}.
+\begin{proof} By Theorem \ref{thm:complexvecspaceuppertrigmatrix}, $T$ has an upper-triangular matrix with respect to some basis $\mathcal{V}$.\\
+By Corollary \ref{cor:uppertriangmatorthonormalbasis}, there exists an orthonormal basis of $\mathcal{V}$ with respect to which $T$ is also upper-triangular.
 \end{proof}
 \end{corollary}
+
+Over $\C$, every operator admits a triangular form. Gram–Schmidt then converts the underlying basis into an orthonormal one without destroying that structure.
 
 \begin{definition} If $\mathcal{U}$ is a subset of $\mathcal{V}$, then the \hlt{orthogonal complement} of $\mathcal{U}$, denoted $\mathcal{U}^{\perp}$, is the set of all vectors in $\mathcal{V}$ that are orthogonal to every vector in $\mathcal{U}$:
 \begin{align}
@@ -1012,27 +1019,20 @@ Note that $\mathcal{U}^{\perp} \subset \mathcal{V}$, $\mathcal{V}^{\perp} = \{ \
 \end{definition}
 
 \begin{theorem} \label{thm:subspaceperpproperty} If $\mathcal{U}$ is a subspace of $\mathcal{V}$, then $\mathcal{V} = \mathcal{U} \oplus \mathcal{U}^{\perp}$.
-\begin{proof} Suppose $\mathcal{U}$ is a subspace of $\mathcal{V}$.\\
-First show that $\mathcal{V} = \mathcal{U} + \mathcal{U}^{\perp}$. Suppose $\mathbf{v} \in \mathcal{V}$, let $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ be an orthonormal basis of $\mathcal{U}$. Note that
-\begin{align}
-\mathbf{v} &= \innerprod{\mathbf{v}, \mathbf{e}_1}\mathbf{e}_1 + \cdots + \innerprod{\mathbf{v}, \mathbf{e}_m}\mathbf{e}_m + \mathbf{v} - \innerprod{\mathbf{v}, \mathbf{e}_1}\mathbf{e}_1 - \cdots - \innerprod{\mathbf{v}, \mathbf{e}_m}\mathbf{e}_m \nonumber \\
-&= \mathbf{u} + \mathbf{w} \nonumber
-\end{align}
-Clearly $\mathbf{u} \in \mathcal{U}$. As $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ is an orthonormal list, for each $j$, note that
-\begin{align}
-\innerprod{\mathbf{w}, \mathbf{e}_j} = \innerprod{v, \mathbf{e}_j} - \innerprod{\mathbf{v}, \mathbf{e}_j} = 0 \nonumber
-\end{align}
-Hence $\mathbf{w}$ is orthogonal to every vector in $\text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_m)$. Hence $\mathbf{w} \in \mathcal{U}^{\perp}$, hence $\mathbf{v} = \mathbf{u} + \mathbf{w}$, where $\mathbf{u} \in \mathcal{U}$ and $\mathbf{w} \in \mathcal{U}^{\perp}$, completing the proof for equation $\mathcal{V} = \mathcal{U} + \mathcal{U}^{\perp}$.\\
-If $\mathbf{v} \in \mathcal{U} \cap \mathcal{U}^{\perp}$, then $\mathbf{v}$ is orthogonal to every vector in $\mathcal{U}$, which implies $(\mathbf{v}, \mathbf{v}) = 0$, which implies $\mathbf{v} = \mathbf{0}$. Hence $\mathcal{U} \cap \mathcal{U}^{\perp} = \{ \mathbf{0} \}$. Note that $\mathcal{V} = \mathcal{U} + \mathcal{U}^{\perp}$ and above equation implies $\mathcal{V} = \mathcal{U} \oplus \mathcal{U}^{\perp}$.
+\begin{proof} Let $(\mathbf{e}_1, \ldots, \mathbf{e}_m)$ be an orthonormal basis of $\mathcal{U}$. For every $\mathbf{v} \in \mathcal{V}$, define $\mathbf{u} = \sum\limits_{j=1}^m \innerprod{\mathbf{v}, \mathbf{e}_j} \mathbf{e}_j$, $\mathbf{w} = \mathbf{v} - \mathbf{u}$.\\
+Then $\mathbf{u} \in \mathcal{U}$. For each $j$, $\innerprod{\mathbf{w}, \mathbf{e}_j} = \innerprod{\mathbf{v}, \mathbf{e}_j} - \innerprod{\mathbf{v}, \mathbf{e}_j} = \mathbf{0}$, so $\mathbf{w} \perp \mathcal{U}$, i.e., $\mathbf{w} \in \mathcal{U}^{\perp}$. Thus $\mathbf{v} = \mathbf{u} + \mathbf{w}$, proving $\mathcal{V} = \mathcal{U} + \mathcal{U}^{\perp}$. If $\mathbf{v} \in \mathcal{U} \cap \mathcal{U}^{\perp}$, then $\innerprod{\mathbf{v}, \mathbf{v}} = \mathbf{0}$, hence $\mathbf{v} = \mathbf{0}$. Thus $\mathcal{U} \cap \mathcal{U}^{\perp} = \{ \mathbf{0} \}$. Therefore $\mathcal{V} = \mathcal{U} \oplus \mathcal{U}^{\perp}$.
 \end{proof}
 \end{theorem}
 
+Decompose any vector into its projection onto $\mathcal{U}$ and the residual orthogonal component. Orthogonality forces uniqueness, giving a direct sum decomposition.
+
 \begin{corollary} If $\mathcal{U} \subset \mathcal{V}$, then $\mathcal{U} = (\mathcal{U}^{\perp})^{\perp}$.
-\begin{proof} Suppose $\mathcal{U} \subset \mathcal{V}$.\\
-First to show $\mathcal{U} \subset (\mathcal{U}^{\perp})^{\perp}$. Let $\mathbf{u} \in \mathcal{U}$. Then $\innerprod{\mathbf{u}, \mathbf{v}} = 0$ for every $\mathbf{v} \in \mathcal{U}^{\perp}$ by definition of $\mathcal{U}^{\perp}$. As $\mathbf{u}$ is orthogonal to every vector in $\mathcal{U}^{\perp}$, then we have $\mathbf{u} \in (\mathcal{U}^{\perp})^{\perp}$, completing the proof.\\
-Next to show $(\mathcal{U}^{\perp})^{\perp} \subset \mathcal{U}$, suppose $\mathbf{v} \in (\mathcal{U}^{\perp})^{\perp}$. By Theorem \ref{thm:subspaceperpproperty}, $\mathbf{v} = \mathbf{u} + \mathbf{w}$, where $\mathbf{u} \in \mathcal{U}$ and $\mathbf{w} \in \mathcal{U}^{\perp}$. Then $\mathbf{v} - \mathbf{u} = \mathbf{w} \in \mathcal{U}^{\perp}$. As $\mathbf{v} \in (\mathcal{U}^{\perp})^{\perp}$ and $\mathbf{u} \in (\mathcal{U}^{\perp})^{\perp}$, then $\mathbf{v} - \mathbf{u} \in (\mathcal{U}^{\perp})^{\perp}$, Thus $\mathbf{v} - \mathbf{u} \in \mathcal{U}^{\perp} \cap (\mathcal{U}^{\perp})^{\perp}$, which implies $\mathbf{v} - \mathbf{u}$ is orthogonal to itself, which implies $\mathbf{v} - \mathbf{u} = \mathbf{0}$, hence $\mathbf{v} = \mathbf{u} \in \mathcal{U}$. Hence $(\mathcal{U}^{\perp})^{\perp} \subset \mathcal{U}$.
+\begin{proof} First, if $\mathbf{u} \in \mathcal{U}$, then for every $\mathbf{v} \in \mathcal{U}^{\perp}$, $\innerprod{\mathbf{u}, \mathbf{v}} = \mathbf{0}$, so $\mathbf{u} \in (\mathcal{U}^{\perp})^{\perp}$. Hence $\mathcal{U} \subset (\mathcal{U}^{\perp})^{\perp}$.\\
+Conversely, let $\mathbf{v} \in (\mathcal{U}^{\perp})^{\perp}$. By Theorem \ref{thm:subspaceperpproperty}, write $\mathbf{v} = \mathbf{u} + \mathbf{w}$, $\mathbf{u} \in \mathcal{U}$, $\mathbf{w} \in \mathcal{U}^{\perp}$. Then $\mathbf{w} = \mathbf{v} - \mathbf{u} \in (\mathcal{U}^{\perp})^{\perp}$, so $\mathbf{w} \in \mathcal{U}^{\perp} \cap (\mathcal{U}^{\perp})^{\perp}$. Thus $\innerprod{\mathbf{w}, \mathbf{w}} = \mathbf{0} \Rightarrow \mathbf{w} = \mathbf{0}$, hence $\mathbf{v} = \mathbf{u} \in \mathcal{U}$. Therefore $(\mathcal{U}^{\perp})^{\perp} \subset \mathcal{U}$. Thus $\mathcal{U} = (\mathcal{U}^{\perp})^{\perp}$.
 \end{proof}
 \end{corollary}
+
+The orthogonal decomposition $\mathcal{V} = \mathcal{U} \oplus \mathcal{U}^{\perp}$ is unique. A vector orthogonal to $\mathcal{U}^{\perp}$ cannot have any component in $\mathcal{U}^{\perp}$, so it must lie entirely in $\mathcal{U}$.
 
 \begin{definition} Let $\mathcal{U} \subset \mathcal{V}$. Decomposition $\mathcal{V} = \mathcal{U} \oplus \mathcal{U}^{\perp}$ means each vector $\mathbf{v} \in \mathbf{V}$ can be written as $\mathbf{v} = \mathbf{u} + \mathbf{w}$, where $\mathbf{u} \in \mathcal{U}$ and $\mathbf{w} \in \mathcal{U}^{\perp}$.\\
 The \hlt{orthogonal projection} of $\mathcal{V}$ onto $\mathcal{U}$ is an operator on $\mathcal{V}$, denoted $P_{\mathcal{U}} = P_{\mathcal{U}, \mathcal{U}^{\perp}}$.\\
@@ -1056,42 +1056,28 @@ Note that for $\mathbf{v} \in \mathcal{V}$, denote $P_{\mathcal{U}}\mathbf{v}$ t
 \norm{\mathbf{v} - P_{\mathcal{U}} \mathbf{v}} \leq \norm{\mathbf{v} - \mathbf{u}} \nonumber
 \end{align}
 for every $\mathbf{v} \in \mathcal{U}$. Furthermore, if $\mathbf{v} \in \mathcal{U}$ and the inequality above is an equality, then $\mathbf{v} = P_{\mathcal{U}} \mathbf{v}$.
-\begin{proof} Suppose $\mathbf{u} \in \mathcal{U}$, then
+\begin{proof} Let $\mathbf{u} \in \mathcal{U}$. Then $\mathbf{v} - \mathbf{u} = (\mathbf{v} - P_{\mathcal{U}}\mathbf{v}) + (P_{\mathcal{U}}\mathbf{v} - \mathbf{u})$, where $\mathbf{v} - P_{\mathcal{U}}\mathbf{v} \in \mathcal{U}^{\perp}$ and $P_{\mathcal{U}}\mathbf{v} - \mathbf{u} \in \mathcal{U}$. Hence these two vectors are orthogonal. By Pythagorean Theorem \ref{thm:pythagorean},
 \begin{align}
-\norm{\mathbf{v} - P_{\mathcal{U}}\mathbf{v}} &\leq \norm{\mathbf{v} - P_{\mathcal{U}}\mathbf{v}}^2 + \norm{P_{\mathcal{U}}\mathbf{v} - \mathbf{u}}^2 \nonumber \\
-&= \norm{(\mathbf{v} - P_{\mathcal{U}}\mathbf{v}) + (P_{\mathcal{U}}\mathbf{v} - \mathbf{u})}^2 \ \ \ \text{by Pythagorean Theorem \ref{thm:pythagorean}} \nonumber \\
-&= \norm{\mathbf{v} - \mathbf{u}}^2 \nonumber
+\norm{\mathbf{v} - \mathbf{u}}^2 = \norm{\mathbf{v} - P_{\mathcal{U}}\mathbf{v}}^2 + \norm{P_{\mathcal{U}}\mathbf{v} - \mathbf{u}}^2 \geq \norm{\mathbf{v} - P_{\mathcal{U}}\mathbf{v}}^2 \nonumber
 \end{align}
-Note that for equality case, this happens if and only if $\norm{P_{\mathcal{U}}\mathbf{v} - \mathbf{u}} = 0$, hence $\mathbf{u} = P_{\mathcal{U}}\mathbf{v}$.
+Taking square roots, $\norm{\mathbf{v} - P_{\mathcal{U}}\mathbf{v}} \leq \norm{\mathbf{v} - \mathbf{u}}$.\\
+If equality holds for some $\mathbf{u} \in \mathcal{U}$, then $\norm{P_{\mathcal{U}}\mathbf{v} - \mathbf{u}} = \mathbf{0}$, hence $\mathbf{u} = P_{\mathcal{U}}\mathbf{v}$.
 \end{proof}
 \end{proposition}
 
+Decompose $\mathbf{v} - \mathbf{u}$ into orthogonal components: one fixed ($\mathbf{v} - P_{\mathcal{U}}\mathbf{v}$) and one variable inside $\mathcal{U}$. The projection minimises distance because any deviation adds an orthogonal error term.
+
 \begin{example} Approximate $\sin(x)$ on $[-\pi, \pi]$ with basis $(1, x, x^2, x^3, x^4, x^5)$ of $\mathcal{U}$.
-\begin{proof} Let
-\begin{align}
-\innerprod{f,g} = \int_{-\pi}^{\pi} f(x)g(x) \ dx,\ \ \ \ \ \ U_{\text{odd}}=\text{span} \{x,x^3,x^5 \} \nonumber
-\end{align}
-Then
-\begin{alignat*}{3}
-p_1 &= x, &\quad
-p_2 &= x^3 - \frac{3\pi^2}{5}x, &\quad
-p_3 &= x^5 - \frac{10\pi^2}{9}x^3 + \frac{5\pi^4}{21}x \\
-\norm{p_1}^2 &= \frac{2\pi^3}{3}, &\quad
-\norm{p_2}^2 &= \frac{8\pi^7}{175}, &\quad
-\norm{p_3}^2 &= \frac{128\pi^{11}}{43659} \\
-\innerprod{\sin x, p_1} &= 2\pi, &\quad
-\innerprod{\sin x, p_2} &= \frac{4\pi}{5}(\pi^2-15), &\quad
-\innerprod{\sin x, p_3} &= \frac{16\pi}{63}(\pi^4 - 105\pi^2 + 945)
-\end{alignat*}
-Hence
-\begin{align*}
-u &= \sum_{k=1}^3 \frac{\innerprod{\sin x, p_k}}{\innerprod{p_k, p_k}}p_k = A x + B x^3 + C x^5, \\
-A = \frac{105(-153\pi^2 + \pi^4 + 1485)}{8\pi^6},\quad
-B &= \frac{315(-1155 - \pi^4 + 125\pi^2)}{4\pi^8},\quad
-C = \frac{693(-105\pi^2 + \pi^4 + 945)}{8\pi^{10}}.
-\end{align*}
-\end{proof}
-\end{example}
+\begin{proof}
+Let $\innerprod{f, g} = \int_{-\pi}^{\pi} f(x)g(x)\ dx$. Since $\sin x$ is odd, it suffices to project onto $U_{\text{odd}} = \text{span}\{x, x^3, x^5\}$.\\
+Define orthogonal polynomials $p_1 = x, p_2 = x^3 - \frac{3\pi^2}{5}x, p_3 = x^5 - \frac{10\pi^2}{9}x^3 + \frac{5\pi^4}{21}x$.\\
+The norms are then $\norm{p_1}^2 = \frac{2\pi^3}{3}, \norm{p_2}^2 = \frac{8\pi^7}{175}, \norm{p_3}^2 = \frac{128\pi^{11}}{43659}$.\\
+Using symmetry and integration, $\innerprod{\sin x, p_1} = 2\pi, \innerprod{\sin x, p_2} = \frac{4\pi}{5}(\pi^2 - 15), \innerprod{\sin x, p_3} = \frac{16\pi}{63}(\pi^4 - 105\pi^2 + 945)$.\\
+The best approximation is the projection $u = \sum\limits_{k=1}^3 \frac{\innerprod{\sin x,p_k}}{\norm{p_k}^2} p_k = A x + B x^3 + C x^5$, \\
+where $A = \frac{105(\pi^4 - 153\pi^2 + 1485)}{8\pi^6}, B = \frac{315(125\pi^2 - \pi^4 - 1155)}{4\pi^8}, C = \frac{693(\pi^4 - 105\pi^2 + 945)}{8\pi^{10}}$
+\end{proof}\end{example}
+
+Project $\sin x$ onto the odd polynomial subspace using an orthogonal basis. Orthogonality diagonalises the least-squares problem, reducing it to independent scalar projections.
 
 \begin{definition} A \hlt{linear functional} on $\mathcal{V}$ is a linear map from $\mathcal{V}$ to the scalars $\mathbb{F}$.
 \end{definition}
@@ -1101,21 +1087,17 @@ C = \frac{693(-105\pi^2 + \pi^4 + 945)}{8\pi^{10}}.
 \varphi(\mathbf{u}) = \innerprod{\mathbf{u}, \mathbf{v}} \nonumber
 \end{align}
 for every $\mathbf{u} \in \mathcal{V}$.
-\begin{proof} First, to show $\exists$ a vector $\mathbf{v} \in \mathcal{V}$ such that $\varphi(\mathbf{u}) = \innerprod{\mathbf{u}, \mathbf{v}}$ for every $\mathbf{u} \in \mathcal{V}$.\\
-Let $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$, then
+\begin{proof} Let $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$. For any $\mathbf{u} \in \mathcal{V}$, $\mathbf{u} = \sum\limits_{j=1}^n \innerprod{\mathbf{u}, \mathbf{e}_j} \mathbf{e}_j$. Applying $\varphi$,
 \begin{align}
-\varphi{\mathbf{u}} &= \varphi(\innerprod{\mathbf{u}, \mathbf{e}_1}\mathbf{e}_1 + \cdots + \innerprod{\mathbf{u}, \mathbf{e}_n}\mathbf{e}_n) \ \ \ \text{by Theorem \ref{thm:orthonormalbasisinnerprod}} \nonumber \\
-&= \innerprod{\mathbf{u}, \mathbf{e}_1}\varphi(\mathbf{e}_1) + \cdots + \innerprod{\mathbf{u}, \mathbf{e}_n}\varphi(\mathbf{e}_n) \nonumber \\
-&= \innerprod{\mathbf{u}, \overline{\varphi(\mathbf{e}_1)}\mathbf{e}_1 + \cdots + \overline{\varphi(\mathbf{e}_n)}\mathbf{e}_n} \nonumber
+\varphi(\mathbf{u}) = \sum\limits_{j=1}^n \innerprod{\mathbf{u}, \mathbf{e}_j} \varphi(\mathbf{e}_j) = \innerprod{\mathbf{u}, \sum\limits_{j=1}^n \overline{\varphi(\mathbf{e}_j)}\mathbf{e}_j} \nonumber
 \end{align}
-for every $\mathbf{u} \in \mathcal{V}$. Setting $\mathbf{v} = \overline{\varphi(\mathbf{e}_1)}\mathbf{e}_1 + \cdots + \overline{\varphi(\mathbf{e}_n)}\mathbf{e}_n$, then $\varphi(\mathbf{u}) = \innerprod{\mathbf{u}, \mathbf{v}}$ for every $\mathbf{v} \in \mathcal{V}$ as desired.\\
-Next, to prove that only one vector $\mathbf{v} \in \mathcal{V}$ has the desired behaviour. Suppose $\mathbf{v}_1, \mathbf{v}_2 \in \mathcal{V}$, such that
-\begin{align}
-\varphi(\mathbf{u}) = \innerprod{\mathbf{u}, \mathbf{v}_1} = \innerprod{\mathbf{u}, \mathbf{v}_2} \nonumber
-\end{align}
-for every $\mathbf{u} \in \mathcal{V}$. Taking $\mathbf{u} = \mathbf{v}_1 - \mathbf{v}_2$ shows $\mathbf{v}_1 - \mathbf{v}_2 = \mathbf{0}$, hence $\mathbf{v}_1 = \mathbf{v}_2$, proving uniqueness.
+Set $\mathbf{v} = \sum\limits_{j=1}^n \overline{\varphi(\mathbf{e}_j)}\mathbf{e}_j$, then $\varphi(\mathbf{u}) = \innerprod{\mathbf{u}, \mathbf{v}}$ for all $\mathbf{u} \in \mathcal{V}$.\\
+For uniqueness, if $\innerprod{\mathbf{u}, \mathbf{v}_1} = \innerprod{\mathbf{u}, \mathbf{v}_2}$ for all $\mathbf{u}$, then $\innerprod{\mathbf{u}, \mathbf{v}_1 - \mathbf{v}_2} = \mathbf{0}$ for all $\mathbf{u}$.\\
+Taking $\mathbf{u} = \mathbf{v}_1 - \mathbf{v}_2$ gives $\mathbf{v}_1 - \mathbf{v}_2 = \mathbf{0}$, hence $\mathbf{v}_1 = \mathbf{v}_2$.
 \end{proof}
 \end{theorem}
+
+An orthonormal basis converts any linear functional into coordinates. The inner product reconstructs it by pairing those coordinates with basis vectors, yielding a representing vector.
 
 \begin{definition} Let $T \in \mathcal{L}(\mathcal{V}, \mathcal{W})$, where $\mathcal{W}, \mathcal{V}$ are finite-dimensional nonzero, inner-product space over $\mathbb{F}$. Fix $\mathbf{w} \in \mathcal{W}$, and consider the linear functional $f_{\mathbf{w}}: \mathcal{V} \rightarrow \mathbb{F}$ given by $f_{\mathbf{w}}(\mathbf{v}) = \innerprod{T\mathbf{v}, \mathbf{w}}$. There is a unique vector $\mathbf{y} \in \mathcal{V}$ such that $f_{\mathbf{w}}(\mathbf{v}) = \innerprod{\mathbf{v}, \mathbf{y}} \ \forall \ \mathbf{v} \in \mathcal{V}$, and let this unique vector $\mathbf{y}$ be $T^* \mathbf{w}$. Hence
 \begin{align}
@@ -1135,8 +1117,6 @@ for all $\mathbf{v} \in \mathcal{V}$. Doing this for every $\mathbf{w} \in \math
 \end{enumerate}
 \end{remark}
 
-Next result shows relationship between null space and range of a linear map and its adjoint.
-
 \begin{proposition} Suppose $T \in \mathcal{L}(\mathcal{V}, \mathcal{W})$, then
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
@@ -1145,14 +1125,23 @@ Next result shows relationship between null space and range of a linear map and 
 \item $\text{null}(T) = (\text{range}(T^*))^{\perp}$
 \item $\text{range}(T) = (\text{null}(T^*))^{\perp}$
 \end{enumerate}
-\begin{proof} For (i), let $\mathbf{w} \in \mathcal{W}$, then
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[]
+\item[$(i)$] For $\mathbf{w} \in \mathcal{W}$,
 \begin{align}
-\mathbf{w} \in \text{null}(T^*) \Leftrightarrow T^* \mathbf{w} = \mathbf{0} \Leftrightarrow \innerprod{\mathbf{v}, T^* \mathbf{w}} = \mathbf{0} \ \forall \ \mathbf{v} \in \mathcal{V} \Leftrightarrow \innerprod{T \mathbf{v}, \mathbf{w}} = \mathbf{0} \ \forall \ \mathbf{v} \in \mathcal{V} \Leftrightarrow \mathbf{w} \in \text{range(T)}^{\perp} \nonumber
+\mathbf{w} \in \text{null}(T^*) \Leftrightarrow T^* \mathbf{w} = \mathbf{0} \Leftrightarrow \innerprod{\mathbf{v}, T^* \mathbf{w}} = \mathbf{0} \ \forall \ \mathbf{v} \in \mathcal{V} \Leftrightarrow \innerprod{T \mathbf{v}, \mathbf{w}} = \mathbf{0} \ \forall \ \mathbf{v} \in \mathcal{V} \Leftrightarrow \mathbf{w} \in \text{range}(T) \nonumber
 \end{align}
-Take orthogonal complement of both sides of $(i)$ to get $(iv)$.\\
-Replace $T$ with $T^*$ in $(i)$ and $(iv)$ to get $(iii)$ and $(ii)$.
+Thus $\text{null}(T^*) = (\text{range}(T))^{\perp}$.
+\item[$(iv)$] Taking orthogonal complements and using $(\mathcal{U}^{\perp})^{\perp}$, $\text{range}(T) = (\text{null}(T^*))^{\perp}$.
+\item[$(iii)$] Replace $T$ by $T^*$ in $(i)$, $\text{null}(T^*) = (\text{range}(T^*))^{\perp}$.
+\item[$(ii)$] Taking orthogonal complements, $\text{range}(T^*) = (\text{null}(T))^{\perp}$.
+\end{enumerate}
 \end{proof}
 \end{proposition}
+
+The adjoint transfers action from one slot of the inner product to the other, converting algebraic conditions (null/range) into geometric ones (orthogonality).
 
 \begin{definition} The \hlt{conjugate transpose} of an $m \times n$ matrix is obtained by interchanging rows and columns, then taking the complex conjugate of each entry.
 \end{definition}
@@ -1165,13 +1154,15 @@ is the conjugate transpose of
 \begin{align}
 \mathcal{M}(T, (\mathbf{e}_1, \ldots, \mathbf{e}_n), (\mathbf{f}_1, \ldots, \mathbf{f}_m)) \nonumber
 \end{align}
-\begin{proof} Let $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ be orthonormal basis of $\mathcal{V}$ and $(\mathbf{f}_1, \ldots, \mathbf{f}_m)$ be orthonormal basis of $\mathcal{W}$. The $k$ column of $\mathcal{M}(T)$ is obtained by writing $T \mathbf{e}_k$ as a linear combination of $\mathbf{f}_j$, and the scalars used in this linear combination becomes the $k$ column of $\mathcal{M}(T)$. As $(\mathbf{f}_1, \ldots, \mathbf{f}_m)$ is an orthonormal basis of $\mathcal{W}$, $T \mathbf{e}_k$ can be written as a linear combination of the $\mathbf{f}_j$.
-\begin{align}
-T \mathbf{e}_k = \innerprod{T \mathbf{e}_k, \mathbf{f}_1} \mathbf{f}_1 + \cdots + \innerprod{T \mathbf{e}_k, \mathbf{f}_m} \mathbf{f}_m \nonumber
-\end{align}
-Hence the entry in row $j$ column $k$ of $\mathcal{M}(T)$ is $\innerprod{T \mathbf{e}_k, \mathbf{f}_j}$. Replace $T$ with $T^*$ and interchanging the roles played by $\mathbf{e}_j$ and $\mathbf{f}_j$, then the entry in row $j$ column $k$ of $\mathcal{K}(T^*)$ is $\innerprod{T^* \mathbf{f}_k, \mathbf{e}_j} = \innerprod{\mathbf{f}_k, T \mathbf{e}_j} = \overline{\innerprod{T \mathbf{e}_j, \mathbf{f}_k}}$, which equals the complex conjugate of entry in row $k$ column $j$ of $\mathcal{M}(T)$. Hence $\mathcal{M}(T^*)$ equals conjugate transpose of $\mathcal{M}(T)$.
+\begin{proof} Let $(\mathbf{e}_1, \ldots, \mathbf{e}_n)$ and $(\mathbf{f}_1, \ldots, \mathbf{f}_m)$ be orthonormal bases of $\mathcal{V}$ and $\mathcal{W}$.\\
+The $(j, k)$-entry of $\mathcal{M}(T)$ is $\mathcal{M}(T)_{j, k} = \innerprod{T \mathbf{e}_k, \mathbf{f}_j}$.\\
+The $(k, j)$-entry of $\mathcal{M}(T^*)$ is $\mathcal{M}(T^*)_{j, k} = \innerprod{T^* \mathbf{f}_j, \mathbf{e}_k} = \innerprod{\mathbf{f}_j, T \mathbf{e}_k}$.\\
+By conjugate symmetry, $\innerprod{\mathbf{f}_j, T \mathbf{e}_k} = \overline{\innerprod{T \mathbf{e}_k, \mathbf{f}_j}}$.\\
+Thus $\mathcal{M}(T^*)_{k, j} = \overline{\mathcal{M}(T)_{j, k}}$, so $\mathcal{M}(T^*)$ is the conjugate transpose of $\mathcal{M}(T)$.
 \end{proof}
 \end{proposition}
+
+Matrix entries of an operator are inner products; the adjoint swaps the operator across the inner product, which corresponds exactly to taking the conjugate transpose.
 
 \subsubsection{Operators on Inner-Product Spaces}
 
