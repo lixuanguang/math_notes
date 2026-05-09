@@ -14,6 +14,36 @@ T(a\mathbf{u} + b\mathbf{v}) = aT(\mathbf{u}) + bT(\mathbf{v}). \nonumber
 The set of all linear maps from $\mathcal{V}$ to $\mathcal{W}$ is denoted $\LL(\mathcal{V}, \mathcal{W})$. If $\mathcal{V} = \mathcal{W}$, we write $\LL(\mathcal{V})$ and call such a map an operator.
 \end{definition}
 
+\begin{definition} \hlt{Graph of a Function}\\
+For a function $T:\mathcal{V}\to\mathcal{W}$, the \hlt{graph} of $T$ is the subset of $\mathcal{V}\times\mathcal{W}$ defined by
+\begin{align}
+\operatorname{graph}(T)\defeq\{(\mathbf{v},T\mathbf{v}):\mathbf{v}\in\mathcal{V}\}. \nonumber
+\end{align}
+\end{definition}
+
+\begin{proposition} \label{prop:graph-subspace-characterizes-linearity} \hlt{Linearity and Graphs}\\
+A function $T:\mathcal{V}\to\mathcal{W}$ is linear if and only if $\operatorname{graph}(T)$ is a subspace of $\mathcal{V}\times\mathcal{W}$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T$ is linear, then $(\mathbf{0},\mathbf{0})\in\operatorname{graph}(T)$. If $(\mathbf{u},T\mathbf{u}),(\mathbf{v},T\mathbf{v})\in\operatorname{graph}(T)$ and $a\in\mathbb{F}$, then
+\begin{align}
+a(\mathbf{u},T\mathbf{u})+(\mathbf{v},T\mathbf{v})
+=(a\mathbf{u}+\mathbf{v},T(a\mathbf{u}+\mathbf{v}))\in\operatorname{graph}(T). \nonumber
+\end{align}
+Thus $\operatorname{graph}(T)$ is a subspace.
+\item[$(\Leftarrow)$] If $\operatorname{graph}(T)$ is a subspace, then for $\mathbf{u},\mathbf{v}\in\mathcal{V}$ and $a\in\mathbb{F}$,
+\begin{align}
+a(\mathbf{u},T\mathbf{u})+(\mathbf{v},T\mathbf{v})
+=(a\mathbf{u}+\mathbf{v},aT\mathbf{u}+T\mathbf{v}) \nonumber
+\end{align}
+lies in $\operatorname{graph}(T)$. Hence $T(a\mathbf{u}+\mathbf{v})=aT\mathbf{u}+T\mathbf{v}$, so $T$ is linear.
+\end{enumerate} \hfill \\
+\hlt{Structural Commentary}: A graph records a function as a subset of a product space.\\
+\hlt{Key Insight}: Closure of the graph is exactly linearity of the function.
+\end{proof}
+\end{proposition}
+
 \begin{remark} \hlt{Coordinate-Free Principle}\\
 A linear map is completely determined by what it does to a basis. Coordinates do not create the map; they only encode it once bases have been chosen.
 \end{remark}
@@ -50,6 +80,19 @@ A linear map $T \in \LL(\mathcal{V}, \mathcal{W})$ is injective if and only if
 \begin{align}
 \ker(T) = \{ \mathbf{0} \}. \nonumber
 \end{align}
+\end{proposition}
+
+\begin{proposition} \label{prop:direct-sum-map-injective} \hlt{Direct Sum Map}\\
+Suppose $\mathcal{U}_1,\ldots,\mathcal{U}_m$ are subspaces of $\mathcal{V}$. Define $\Gamma:\mathcal{U}_1\times\cdots\times\mathcal{U}_m\to\mathcal{U}_1+\cdots+\mathcal{U}_m$ by
+\begin{align}
+\Gamma(\mathbf{u}_1,\ldots,\mathbf{u}_m)=\mathbf{u}_1+\cdots+\mathbf{u}_m. \nonumber
+\end{align}
+Then $\mathcal{U}_1+\cdots+\mathcal{U}_m$ is a direct sum if and only if $\Gamma$ is injective.
+\begin{proof}
+The map $\Gamma$ is linear. Its kernel consists of all $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ such that $\mathbf{u}_1+\cdots+\mathbf{u}_m=\mathbf{0}$. Thus $\Gamma$ is injective if and only if the only zero decomposition is the trivial one, which is exactly the direct-sum condition.\\
+\hlt{Structural Commentary}: The sum map packages all decompositions into one linear map.\\
+\hlt{Key Insight}: Directness is injectivity of the map that adds the components.
+\end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:ranknullitythm} \hlt{Rank-Nullity Theorem}\\
@@ -98,6 +141,35 @@ An invertible linear map is called an isomorphism, and if one exists we write $\
 A linear map is invertible if and only if it is both injective and surjective.
 \end{proposition}
 
+\begin{definition} \hlt{Induced Map on a Quotient}\\
+For $T\in\LL(\mathcal{V},\mathcal{W})$, define $\widetilde{T}:\mathcal{V}/\ker(T)\to\mathcal{W}$ by
+\begin{align}
+\widetilde{T}(\mathbf{v}+\ker(T))=T\mathbf{v}. \nonumber
+\end{align}
+\end{definition}
+
+\begin{theorem} \label{thm:quotient-by-kernel-is-range} \hlt{Quotient by the Kernel}\\
+Let $T\in\LL(\mathcal{V},\mathcal{W})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\widetilde{T}$ is a well-defined linear map from $\mathcal{V}/\ker(T)$ to $\mathcal{W}$;
+\item $\widetilde{T}$ is injective;
+\item $\operatorname{range}(\widetilde{T})=\operatorname{range}(T)$;
+\item $\mathcal{V}/\ker(T)\cong\operatorname{range}(T)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathbf{v}+\ker(T)=\mathbf{v}'+\ker(T)$, then $\mathbf{v}-\mathbf{v}'\in\ker(T)$, so $T\mathbf{v}=T\mathbf{v}'$. Thus $\widetilde{T}$ is well-defined, and linearity follows from the quotient operations.
+\item If $\widetilde{T}(\mathbf{v}+\ker(T))=\mathbf{0}$, then $T\mathbf{v}=\mathbf{0}$, so $\mathbf{v}\in\ker(T)$ and $\mathbf{v}+\ker(T)=\ker(T)$. Hence $\ker(\widetilde{T})=\{\ker(T)\}$.
+\item By definition, the values of $\widetilde{T}$ are exactly the values of $T$.
+\item Parts (ii) and (iii) show that $\widetilde{T}$ is an isomorphism from $\mathcal{V}/\ker(T)$ onto $\operatorname{range}(T)$.
+\end{enumerate} \hfill \\
+\hlt{Structural Commentary}: Quotienting by the kernel removes exactly the ambiguity of $T$.\\
+\hlt{Key Insight}: Every linear map factors as a quotient followed by an isomorphism onto its range.
+\end{proof}
+\end{theorem}
+
 \begin{theorem}
 If $\mathcal{V}$ is finite-dimensional and $T \in \LL(\mathcal{V})$, then the following are equivalent:
 \begin{enumerate}[label=\roman*.]
@@ -123,6 +195,10 @@ Two finite-dimensional vector spaces are isomorphic if and only if they have the
 Let $\beta = (\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis of $\mathcal{V}$ and $\gamma = (\mathbf{w}_1, \ldots, \mathbf{w}_m)$ a basis of $\mathcal{W}$. For $\mathbf{v} \in \mathcal{V}$, denote its coordinate column vector by $[\mathbf{v}]_{\beta}$. For $T \in \LL(\mathcal{V}, \mathcal{W})$, the matrix of $T$ relative to $(\beta,\gamma)$ is the unique matrix $[T]_{\gamma \leftarrow \beta} \in \operatorname{Mat}(m,n,\mathbb{F})$ whose $j$th column is $[T(\mathbf{v}_j)]_{\gamma}$.
 \end{definition}
 
+\begin{definition} \hlt{Column Space and Matrix Rank}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$. The \hlt{column space} of $A$ is $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and the \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$.
+\end{definition}
+
 \begin{proposition}
 For every $\mathbf{v} \in \mathcal{V}$,
 \begin{align}
@@ -136,6 +212,49 @@ T(\mathbf{v}) = a_1T(\mathbf{v}_1) + \cdots + a_nT(\mathbf{v}_n), \nonumber
 and the right-hand side is exactly the linear combination of the columns of $[T]_{\gamma \leftarrow \beta}$ with coefficients $a_1,\ldots,a_n$.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:invertible-matrix-columns-basis} \hlt{Columns of an Invertible Matrix Form a Basis}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible. Then $(\mathbf{a}_1,\ldots,\mathbf{a}_n)$ is a basis of $\mathbb{F}^n$.
+\begin{proof}
+The columns span $\mathbb{F}^n$ because for any $\mathbf{y}\in\mathbb{F}^n$, writing $\mathbf{x}=A^{-1}\mathbf{y}$ gives
+\begin{align}
+\mathbf{y}=A\mathbf{x}=x_1\mathbf{a}_1+\cdots+x_n\mathbf{a}_n. \nonumber
+\end{align}
+They are linearly independent because if $c_1\mathbf{a}_1+\cdots+c_n\mathbf{a}_n=\mathbf{0}$, then $A\mathbf{c}=\mathbf{0}$, so $\mathbf{c}=A^{-1}\mathbf{0}=\mathbf{0}$. Hence $(\mathbf{a}_1,\ldots,\mathbf{a}_n)$ is a basis of $\mathbb{F}^n$.\\
+\hlt{Structural Commentary}: An invertible matrix is a coordinate isomorphism of $\mathbb{F}^n$. Its columns are the images of the standard coordinate directions.\\
+\hlt{Key Insight}: Invertibility forces the columns to span and prevents nontrivial column relations.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:two-sided-inverse-uniqueness} \hlt{Uniqueness of Two-Sided Inverses}\\
+Let $A,B,C\in\operatorname{Mat}(n,n,\mathbb{F})$. If $AB=I$ and $BC=I$, then $A=C$.
+\begin{proof}
+Using $BC=I$ and $AB=I$,
+\begin{align}
+A=AI=A(BC)=(AB)C=IC=C. \nonumber
+\end{align}
+\hlt{Structural Commentary}: A common middle inverse forces the left and right inverses to coincide.\\
+\hlt{Key Insight}: Associativity turns $AB=I=BC$ into $A=C$.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:square-one-sided-inverse-is-two-sided} \hlt{One-Sided Inverses of Square Matrices}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$. If $AB=I$, then $BA=I$.
+\begin{proof}
+Consider the descending sequence of subspaces
+\begin{align}
+\operatorname{Mat}(n,n,\mathbb{F})\supseteq B\operatorname{Mat}(n,n,\mathbb{F})\supseteq B^2\operatorname{Mat}(n,n,\mathbb{F})\supseteq \cdots . \nonumber
+\end{align}
+Since $\operatorname{Mat}(n,n,\mathbb{F})$ is finite-dimensional, this sequence stabilizes: for some $k$, $B^k\operatorname{Mat}(n,n,\mathbb{F})=B^{k+1}\operatorname{Mat}(n,n,\mathbb{F})$. Thus $B^k=B^{k+1}C$ for some $C\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
+From $AB=I$, induction gives $A^rB^r=I$ for all $r\geq 1$. Hence
+\begin{align}
+I=A^kB^k=A^kB^{k+1}C=(A^kB^k)BC=BC. \nonumber
+\end{align}
+By Lemma \ref{lem:two-sided-inverse-uniqueness}, $A=C$, so $BA=BC=I$.\\
+\hlt{Structural Commentary}: In finite dimensions, repeatedly multiplying by $B$ cannot produce an endlessly shrinking chain of column spaces. Stabilization produces the missing inverse.\\
+\hlt{Key Insight}: A one-sided inverse of a square matrix is automatically two-sided.
+\end{proof}
+\end{theorem}
 
 \begin{proposition} \hlt{Composition and Matrix Multiplication}\\
 If $T \in \LL(\mathcal{U}, \mathcal{V})$ and $S \in \LL(\mathcal{V}, \mathcal{W})$, then
