@@ -124,7 +124,7 @@ This is well-defined as basis coordinates are unique, and linearity follows by a
 
 \begin{definition} \hlt{Kernel and Range}\\
 For $T \in \LL(\mathcal{V}, \mathcal{W})$, define $\ker(T) \defeq \{ \mathbf{v} \in \mathcal{V} : T(\mathbf{v}) = \mathbf{0} \}$, $\operatorname{range}(T) \defeq \{ T(\mathbf{v}) : \mathbf{v} \in \mathcal{V} \}$.\\
-The kernel is also called the \hlt{null space} of $T$.
+The kernel is also called the \hlt{nullspace} of $T$.
 \end{definition}
 
 \begin{definition} \hlt{Injective and Surjective Linear Maps}\\
@@ -259,6 +259,16 @@ A linear map $T \in \LL(\mathcal{V}, \mathcal{W})$ is \hlt{invertible} if there 
 An invertible linear map is called an \hlt{isomorphism}, and if one exists we write $\mathcal{V} \cong \mathcal{W}$.
 \end{definition}
 
+\begin{proposition} \label{prop:inverse-linear-map-is-unique} \hlt{Inverse Is Unique}\\
+An invertible linear map has a unique inverse. Thus if $T$ is invertible, its inverse is denoted $T^{-1}$.
+\begin{proof}
+Suppose $S_1,S_2\in\LL(\mathcal{W},\mathcal{V})$ are inverses of $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+Then $S_1 = S_1I_{\mathcal{W}} = S_1(TS_2) = (S_1T)S_2 = I_{\mathcal{V}}S_2 = S_2$. Hence the inverse is unique.\\
+\hlt{Structural Commentary}: A two-sided inverse is forced by the composition identities.\\
+\hlt{Key Insight}: Associativity lets the two candidate inverses meet around $T$ and collapse to the same map.
+\end{proof}
+\end{proposition}
+
 \begin{proposition} \label{prop:linear-map-invertible-iff-bijective} \hlt{Invertibility and Bijectivity}\\
 A linear map is invertible if and only if it is both injective and surjective.
 \begin{proof}
@@ -336,7 +346,7 @@ By Proposition \ref{prop:linear-map-determined-by-basis}, there is a linear map 
 
 \begin{definition} \hlt{Matrices, Rows, and Columns}\\
 For positive integers $m,n$, $\operatorname{Mat}(m,n,\mathbb{F})$ denotes the set of all $m\times n$ matrices with entries in $\mathbb{F}$.\\
-If $A=[A_{j,k}]\in\operatorname{Mat}(m,n,\mathbb{F})$, then $A_{j,k}$ is the entry in row $j$ and column $k$. The $j$th row is denoted $A_{j,\cdot}$, and the $k$th column is denoted $A_{\cdot,k}$.
+If $A=[A_{j,k}]\in\operatorname{Mat}(m,n,\mathbb{F})$, then $A_{j,k}$ is the entry in row $j$ and column $k$. The $j$th row is denoted $A_{j,\cdot}$, and the $k$th column is denoted $A_{\cdot,k}$. The transpose of $A$ is $A^t\in\operatorname{Mat}(n,m,\mathbb{F})$, defined by $(A^t)_{k,j}=A_{j,k}$.
 \end{definition}
 
 \begin{definition} \hlt{Matrix Operations}\\
@@ -401,6 +411,16 @@ The $(j,k)$ entry of $\mathbf{a}_\ell\mathbf{b}_\ell^t$ is $A_{j,\ell}B_{\ell,k}
 \end{proof}
 \end{proposition}
 
+\begin{proposition} \label{prop:transpose-reverses-products} \hlt{Transpose Reverses Products}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,p,\mathbb{F})$, then $(AB)^t=B^tA^t$.
+\begin{proof}
+For $1\leq j\leq p$ and $1\leq k\leq m$, $((AB)^t)_{j,k}=(AB)_{k,j}=\sum\limits_{\ell=1}^n A_{k,\ell}B_{\ell,j}=\sum\limits_{\ell=1}^n (B^t)_{j,\ell}(A^t)_{\ell,k}=(B^tA^t)_{j,k}$.\\
+Thus the matrices are equal entrywise.\\
+\hlt{Structural Commentary}: Transposition swaps the order of composition encoded by matrix multiplication.\\
+\hlt{Key Insight}: Rows become columns, so the product order reverses.
+\end{proof}
+\end{proposition}
+
 \begin{definition} \hlt{Matrix Representation}\\
 Let $\beta = (\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis of $\mathcal{V}$ and $\gamma = (\mathbf{w}_1, \ldots, \mathbf{w}_m)$ a basis of $\mathcal{W}$. For $T \in \LL(\mathcal{V}, \mathcal{W})$, the matrix of $T$ relative to $(\beta,\gamma)$ is
 $[T]_{\gamma \leftarrow \beta} \defeq
@@ -412,7 +432,8 @@ $[T]_{\gamma \leftarrow \beta} \defeq
 
 \begin{definition} \hlt{Column Space, Matrix Rank, and Nullity}\\
 Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
-The \hlt{column space} of $A$ is $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and the \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$.\\
+The \hlt{column space} of $A$ is $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and the \hlt{row space} of $A$ is $\operatorname{row}(A)\defeq\operatorname{col}(A^t)\subseteq\mathbb{F}^n$.\\
+The \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$. If $\operatorname{rank}(A)=\min(m,n)$, then $A$ has \hlt{full rank}; if $\operatorname{rank}(A)=n$, then $A$ has \hlt{full column rank}; if $\operatorname{rank}(A)=m$, then $A$ has \hlt{full row rank}.\\
 The \hlt{kernel} of $A$ is $\ker(A)\defeq\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{0}\}$, and the \hlt{nullity} of $A$ is $\operatorname{nullity}(A)\defeq\dim(\ker(A))$.
 \end{definition}
 
@@ -453,6 +474,55 @@ Apply Theorem \ref{thm:rank-nullity} to the induced linear map $T_A:\mathbb{F}^n
 \hlt{Key Insight}: Kernel loss plus column-space dimension equals the number of columns.
 \end{proof}
 \end{corollary}
+
+\begin{theorem} \label{thm:row-rank-equals-column-rank} \hlt{Row Rank Equals Column Rank}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $dim(\operatorname{row}(A))=\dim(\operatorname{col}(A))$. Equivalently, $\operatorname{rank}(A^t)=\operatorname{rank}(A)$.
+\begin{proof}
+Let $r=\operatorname{rank}(A)$. If $r=0$, then $A=0$, so the result is immediate. Suppose $r>0$.\\
+Choose columns $\mathbf{a}_{j_1},\ldots,\mathbf{a}_{j_r}$ forming a basis of $\operatorname{col}(A)$, and set $B=[\mathbf{a}_{j_1}\ \cdots\ \mathbf{a}_{j_r}]\in\operatorname{Mat}(m,r,\mathbb{F})$.\\
+For each column $\mathbf{a}_k$ of $A$, there is a unique $\mathbf{x}_k\in\mathbb{F}^r$ such that $\mathbf{a}_k=B\mathbf{x}_k$.\\
+With $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_n]\in\operatorname{Mat}(r,n,\mathbb{F})$, we have $A=BX$, and hence $A^t=X^tB^t$. Thus every column of $A^t$ lies in $\operatorname{col}(X^t)$, so $\operatorname{rank}(A^t)\leq \operatorname{rank}(X^t)\leq r=\operatorname{rank}(A)$.
+Applying the same argument to $A^t$ gives $\operatorname{rank}(A)\leq\operatorname{rank}(A^t)$.\\
+\hlt{Structural Commentary}: Column rank controls row rank by factoring $A$ through a basis of its column space.\\
+\hlt{Key Insight}: Rows and columns measure the same intrinsic rank, viewed from transposed coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:full-rank-products-preserve-rank} \hlt{Full-Rank Products Preserve Rank}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. If $X\in\operatorname{Mat}(p,m,\mathbb{F})$ has full column rank and $Y\in\operatorname{Mat}(n,q,\mathbb{F})$ has full row rank, then $\operatorname{rank}(A)=\operatorname{rank}(XAY)$. This holds when $X$ and $Y$ are square invertible matrices of appropriate sizes.
+\begin{proof}
+Because $X$ has full column rank, the induced map $\mathbf{u}\mapsto X\mathbf{u}$ has kernel $\{\mathbf{0}\}$. Hence $\ker(XA)=\ker(A)$. Since $XA$ and $A$ have the same number of columns, Corollary \ref{cor:matrix-rank-nullity} gives $\operatorname{rank}(XA)=\operatorname{rank}(A)$.\\
+Because $Y$ has full row rank, $Y^t$ has full column rank. Applying the preceding paragraph to $A^t$ and $Y^t$, and then using Theorem \ref{thm:row-rank-equals-column-rank}, gives $\operatorname{rank}(AY)=\operatorname{rank}((AY)^t)=\operatorname{rank}(Y^tA^t)=\operatorname{rank}(A^t)=\operatorname{rank}(A)$.\\
+Combining the two rank-preserving multiplications gives $\operatorname{rank}(XAY)=\operatorname{rank}(A)$.\\
+\hlt{Structural Commentary}: Multiplication by a full-column-rank matrix on the left loses no output information, while full row rank on the right loses no input information.\\
+\hlt{Key Insight}: Rank changes only when multiplication introduces a new kernel or collapses the row side.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:rank-product-and-concatenation-bounds} \hlt{Rank Bounds for Products and Concatenations}\\
+Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,n,\mathbb{F})$, and $C\in\operatorname{Mat}(m,p,\mathbb{F})$. Then $\operatorname{rank}(AB)\leq \min(\operatorname{rank}(A),\operatorname{rank}(B))$ and $\operatorname{rank}(AB)=\operatorname{rank}(A)$ if and only if $\operatorname{col}(AB)=\operatorname{col}(A)$.\\
+Also, $\max(\operatorname{rank}(A),\operatorname{rank}(C))\leq\operatorname{rank}\!\begin{bmatrix}A & C\end{bmatrix}$ and $\operatorname{rank}\!\begin{bmatrix}A & C\end{bmatrix}=\operatorname{rank}(A)$ if and only if $\operatorname{col}(A)=\operatorname{col}(A)+\operatorname{col}(C)$.
+\begin{proof}
+Each column of $AB$ is a linear combination of the columns of $A$, so $\operatorname{col}(AB)\subseteq\operatorname{col}(A)$. Hence $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$, with equality exactly when the two column spaces are equal. Applying this inequality to $(AB)^t=B^tA^t$ and using Theorem \ref{thm:row-rank-equals-column-rank} gives $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$.\\
+For the block matrix, $\operatorname{col}\!\begin{bmatrix}A & C\end{bmatrix}=\operatorname{col}(A)+\operatorname{col}(C)$, which contains both $\operatorname{col}(A)$ and $\operatorname{col}(C)$. This gives the lower bound, and equality with $\operatorname{rank}(A)$ occurs exactly when adding $\operatorname{col}(C)$ does not enlarge $\operatorname{col}(A)$.\\
+\hlt{Structural Commentary}: Products can only reduce accessible column directions, while horizontal concatenation can only add column directions.\\
+\hlt{Key Insight}: Rank tracks whether a matrix operation preserves, loses, or adds column-space dimension.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:full-rank-factorization} \hlt{Full-Rank Factorization}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq 1$, and let the columns of $X\in\operatorname{Mat}(m,r,\mathbb{F})$ be a basis of $\operatorname{col}(A)$. Then there is a unique $Y\in\operatorname{Mat}(r,n,\mathbb{F})$ such that $A=XY$, and $\operatorname{rank}(X)=\operatorname{rank}(Y)=r$.
+\begin{proof}
+Write $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$. Since the columns of $X$ form a basis of $\operatorname{col}(A)$, for each $j$ there is a unique $\mathbf{y}_j\in\mathbb{F}^r$ such that $\mathbf{a}_j=X\mathbf{y}_j$. Set $Y=[\mathbf{y}_1\ \cdots\ \mathbf{y}_n]$. Then $A=[X\mathbf{y}_1\ \cdots\ X\mathbf{y}_n]=XY$ and uniqueness of the coordinates $\mathbf{y}_j$ gives uniqueness of $Y$. The columns of $X$ are independent, so $\operatorname{rank}(X)=r$.\\
+By Theorem \ref{thm:rank-product-and-concatenation-bounds}, $r=\operatorname{rank}(A)=\operatorname{rank}(XY)\leq \operatorname{rank}(Y)\leq r$ because $Y$ has only $r$ rows. Hence $\operatorname{rank}(Y)=r$.\\
+\hlt{Structural Commentary}: A matrix factors through a basis of its column space.\\
+\hlt{Key Insight}: Full-rank factorization separates column directions from their coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:full-rank-factorization} \hlt{Full-Rank Factorization}\\
+A factorization $A=XY$ with $X$ full column rank and $Y$ full row rank is called a \hlt{full-rank factorization} of $A$.
+\end{definition}
 
 \begin{corollary} \label{cor:homogeneous-system-more-variables-than-equations} \hlt{Homogeneous Systems with More Variables Than Equations}\\
 If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $n>m$, then the homogeneous system $A\mathbf{x}=\mathbf{0}$ has a nonzero solution.
@@ -590,6 +660,40 @@ For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $A$ is invertible $\Longleftrighta
 \hlt{Key Insight}: Invertibility means the columns fill $\mathbb{F}^n$.
 \end{proof}
 \end{corollary}
+
+\begin{corollary} \label{cor:transpose-invertible-iff} \hlt{Transpose Preserves Invertibility}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the matrix $A$ is invertible if and only if $A^t$ is invertible.
+\begin{proof}
+By Theorem \ref{thm:row-rank-equals-column-rank}, $\operatorname{rank}(A)=\operatorname{rank}(A^t)$. Thus $\operatorname{rank}(A)=n$ if and only if $\operatorname{rank}(A^t)=n$.\\
+Corollary \ref{cor:square-matrix-invertible-iff-full-rank} gives the result.\\
+\hlt{Structural Commentary}: Transposition exchanges rows and columns without changing rank.\\
+\hlt{Key Insight}: A square matrix is invertible exactly when either its rows or columns have full rank.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:ranks-of-matrix-powers-stabilize} \hlt{Ranks of Matrix Powers Stabilize}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{rank}(A^k)\geq\operatorname{rank}(A^{k+1})$ for $k=1,2,\ldots$;
+\item if $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+1})$, then $\operatorname{col}(A^k)=\operatorname{col}(A^{k+p})$ and $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+p})$ for every $p=1,2,\ldots$;
+\item if $A$ is not invertible, then there is a least positive integer $q\leq n$ such that $\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $A^{k+1}=AA^k$, Theorem \ref{thm:rank-product-and-concatenation-bounds} gives $\operatorname{rank}(A^{k+1})\leq\operatorname{rank}(A^k)$.
+\item The inclusion $\operatorname{col}(A^{k+1})\subseteq\operatorname{col}(A^k)$ and equality of dimensions give $\operatorname{col}(A^{k+1})=\operatorname{col}(A^k)$. Let $U=\operatorname{col}(A^k)$. Then multiplication by $A$ maps $U$ onto $U$, so induction gives $\operatorname{col}(A^{k+p})=U$ for every $p\geq1$.
+\item If $A$ is not invertible, then Corollary \ref{cor:square-matrix-invertible-iff-full-rank} gives $\operatorname{rank}(A)\leq n-1$. If all inequalities $\operatorname{rank}(A^k)>\operatorname{rank}(A^{k+1})$ held for $k=1,\ldots,n$, then $\operatorname{rank}(A^{n+1})\leq\operatorname{rank}(A)-n<0$, impossible. Hence equality occurs for some $q\leq n$; choose the least such $q$.
+\end{enumerate}
+\hlt{Structural Commentary}: The column spaces of powers form a decreasing chain. In finite dimensions, a decreasing chain cannot keep losing dimension forever.\\
+\hlt{Key Insight}: Once two consecutive ranks agree, the image has stabilized under multiplication by $A$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:matrix-index} \hlt{Index of a Matrix}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, define its \hlt{index} to be $0$. If $A$ is not invertible, its index is the least positive integer $q$ such that $\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$.
+\end{definition}
 
 \begin{theorem} \label{thm:change-of-basis-formula} \hlt{Change of Basis Formula}\\
 Let $\mathcal{V}$ be finite-dimensional, let $T \in \LL(\mathcal{V})$, and let $\beta$ be a basis of $\mathcal{V}$.
