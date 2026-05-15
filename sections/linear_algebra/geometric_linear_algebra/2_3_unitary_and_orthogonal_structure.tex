@@ -24,9 +24,12 @@ Thus each $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$ is invariant u
 \begin{theorem} \label{thm:schur-triangularization} \hlt{Schur Triangularisation}\\
 Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
 \begin{proof}
-By Theorem \ref{thm:complex-upper-triangularization}, $T$ has an upper-triangular matrix with respect to some basis of $\mathcal{V}$. Corollary \ref{cor:upper-triangular-orthonormal-basis} replaces that basis by an orthonormal basis without losing upper triangularity.\\
-\hlt{Structural Commentary}: Complex triangularisation gives a flag; Gram--Schmidt orthonormalizes it.\\
-\hlt{Key Insight}: Schur triangularisation is ordinary triangularisation plus orthonormalization of the flag.
+Proceed by induction on $n=\dim(\mathcal{V})$. The cases $n=0$ and $n=1$ are immediate.\\
+Suppose $n\geq2$ and the result holds for smaller dimensions. By Theorem \ref{thm:complex-operator-has-eigenvalue}, choose a unit eigenvector $\mathbf{e}_1$ of $T$, say $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Let $\mathcal{U}=\operatorname{span}(\mathbf{e}_1)$ and define $S\in\LL(\mathcal{U}^{\perp})$ by $S\mathbf{w}=P_{\mathcal{U}^{\perp}}(T\mathbf{w})$.\\
+By induction, choose an orthonormal basis $(\mathbf{e}_2,\ldots,\mathbf{e}_n)$ of $\mathcal{U}^{\perp}$ with respect to which $S$ has an upper-triangular matrix. Then $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal basis of $\mathcal{V}$.\\
+For $j\geq2$, the coordinates of $T\mathbf{e}_j$ along $\mathbf{e}_2,\ldots,\mathbf{e}_n$ are exactly the coordinates of $S\mathbf{e}_j$, hence have no entries below row $j$. Also $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Therefore $[T]_{\gamma\leftarrow\gamma}$ is upper triangular for $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$.\\
+\hlt{Structural Commentary}: Schur triangularisation builds an eigenline first, then triangularises the projected action on its orthogonal complement.\\
+\hlt{Key Insight}: The lower-right block is controlled by the compression $P_{\mathcal{U}^{\perp}}T|_{\mathcal{U}^{\perp}}$.
 \end{proof}
 \end{theorem}
 
@@ -105,8 +108,8 @@ Verify the defining identity; uniqueness gives equality.
 
 \begin{proposition} \label{prop:adjoint-kernel-range-orthogonality} \hlt{Adjoint Kernel-Range Orthogonality}\\
 Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
-Then $\ker(T^*)=(\operatorname{range}(T))^{\perp}$, $\operatorname{range}(T^*)=(\ker(T))^{\perp}$.\\
-Equivalently, the nullspace of $T^*$ is the orthogonal complement of the range of $T$.
+Then $\ker(T^*)=(\operatorname{range}(T))^{\perp}$, $\operatorname{range}(T^*)=(\ker(T))^{\perp}$, and $\ker(T)=(\operatorname{range}(T^*))^{\perp}$, $\operatorname{range}(T)=(\ker(T^*))^{\perp}$.\\
+Equivalently, the nullspace of an adjoint is the orthogonal complement of the range of the original map.
 \begin{proof}
 For $\mathbf{w}\in\mathcal{W}$,
 \begin{align}
@@ -117,8 +120,8 @@ For $\mathbf{w}\in\mathcal{W}$,
 \nonumber
 \end{align}
 Applying this identity to $T^*$ gives $\ker(T)=(\operatorname{range}(T^*))^{\perp}$.\\
-Taking orthogonal complements and using Corollary \ref{cor:double-orthogonal-complement} yields $\operatorname{range}(T^*)=(\ker(T))^{\perp}$.\\
-\hlt{Structural Commentary}: Adjoints trade ranges for kernels.\\
+Taking orthogonal complements, using Corollary \ref{cor:double-orthogonal-complement} yields $\operatorname{range}(T)=(\ker(T^*))^{\perp}$ and $\operatorname{range}(T^*)=(\ker(T))^{\perp}$.\\
+\hlt{Structural Commentary}: Adjoints trade ranges for kernels, and orthogonal complements reverse that trade.\\
 \hlt{Key Insight}: A vector is killed by $T^*$ exactly when it is orthogonal to everything $T$ can produce.
 \end{proof}
 \end{proposition}
@@ -126,3 +129,343 @@ Taking orthogonal complements and using Corollary \ref{cor:double-orthogonal-com
 \begin{definition} \label{def:self-adjoint-hermitian} \hlt{Self-Adjoint and Hermitian}\\
 An operator $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space is \hlt{self-adjoint} if $T^*=T$. A square matrix $A$ is \hlt{Hermitian} if $A^*=A$. In orthonormal coordinates, these are the same condition by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}.
 \end{definition}
+
+\begin{theorem} \label{thm:self-adjoint-eigenvalues-real} \hlt{Eigenvalues of Self-Adjoint Operators Are Real}\\
+Every eigenvalue of a self-adjoint operator on a finite-dimensional inner-product space is real.
+\begin{proof}
+Let $T=T^*$ and $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $\lambda\norm{\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\innerprod{\mathbf{v},\lambda\mathbf{v}} =\overline{\lambda}\norm{\mathbf{v}}^2$.\\
+Since $\norm{\mathbf{v}}^2>0$, $\lambda=\overline{\lambda}$, so $\lambda\in\mathbb{R}$.\\
+\hlt{Structural Commentary}: Self-adjointness moves $T$ between inner-product slots without changing the value.\\
+\hlt{Key Insight}: An eigenvalue must equal its conjugate because the eigenvector has positive squared norm.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:complex-zero-quadratic-form-implies-zero-operator} \hlt{Zero Complex Quadratic Form}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$.\\
+If $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
+\begin{proof}
+Set $Q(\mathbf{x})=\innerprod{T\mathbf{x},\mathbf{x}}$.\\
+For $\mathbf{u},\mathbf{w}\in\mathcal{V}$, expansion gives the polarization identity for the sesquilinear form $(\mathbf{u},\mathbf{w})\mapsto\innerprod{T\mathbf{u},\mathbf{w}}$:
+\begin{align}
+\innerprod{T\mathbf{u},\mathbf{w}} =\frac{Q(\mathbf{u}+\mathbf{w})-Q(\mathbf{u}-\mathbf{w})}{4} +i\,\frac{Q(\mathbf{u}+i\mathbf{w})-Q(\mathbf{u}-i\mathbf{w})}{4}. \nonumber
+\end{align}
+The hypothesis makes every term on the right zero, so $\innerprod{T\mathbf{u},\mathbf{w}}=0$ for all $\mathbf{u},\mathbf{w}$.\\
+Taking $\mathbf{w}=T\mathbf{u}$ gives $\norm{T\mathbf{u}}^2=0$, hence $T\mathbf{u}=\mathbf{0}$ for every $\mathbf{u}$.\\
+\hlt{Structural Commentary}: Over $\mathbb{C}$, diagonal values of a sesquilinear form determine all mixed values.\\
+\hlt{Key Insight}: Polarization turns the one-vector condition into a two-vector condition.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:complex-quadratic-form-self-adjoint-characterization} \hlt{Self-Adjointness from Real Quadratic Values}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$.\\
+Then $T$ is self-adjoint if and only if $\innerprod{T\mathbf{v},\mathbf{v}}\in\mathbb{R}$ for every $\mathbf{v}\in\mathcal{V}$.
+\begin{proof}
+For each $\mathbf{v}$, $\innerprod{(T-T^*)\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}}-\innerprod{T^*\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}}-\overline{\innerprod{T\mathbf{v},\mathbf{v}}}$.\\
+If all values $\innerprod{T\mathbf{v},\mathbf{v}}$ are real, this expression is zero for every $\mathbf{v}$, and Lemma \ref{lem:complex-zero-quadratic-form-implies-zero-operator} gives $T-T^*=0$.\\
+Conversely, if $T=T^*$, then $\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\overline{\innerprod{T\mathbf{v},\mathbf{v}}}$, so $\innerprod{T\mathbf{v},\mathbf{v}}$ is real.\\
+\hlt{Structural Commentary}: The imaginary part of $\innerprod{T\mathbf{v},\mathbf{v}}$ is exactly the diagonal trace of $T-T^*$.\\
+\hlt{Key Insight}: Over $\mathbb{C}$, real quadratic values force the operator to equal its adjoint.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:self-adjoint-zero-quadratic-form-implies-zero} \hlt{Zero Quadratic Form for Self-Adjoint Operators}\\
+Let $T$ be a self-adjoint operator on a finite-dimensional inner-product space $\mathcal{V}$.\\
+If $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
+\begin{proof}
+If $\mathbb{F}=\mathbb{C}$, this is Lemma \ref{lem:complex-zero-quadratic-form-implies-zero-operator}. Assume $\mathbb{F}=\mathbb{R}$.\\
+For $\mathbf{u},\mathbf{w}\in\mathcal{V}$, self-adjointness gives $\innerprod{T\mathbf{w},\mathbf{u}}=\innerprod{\mathbf{w},T\mathbf{u}}=\innerprod{T\mathbf{u},\mathbf{w}}$, so the real polarization identity gives
+\begin{align}
+\innerprod{T\mathbf{u},\mathbf{w}}
+=\frac{\innerprod{T(\mathbf{u}+\mathbf{w}),\mathbf{u}+\mathbf{w}}-\innerprod{T(\mathbf{u}-\mathbf{w}),\mathbf{u}-\mathbf{w}}}{4}=0.
+\nonumber
+\end{align}
+Taking $\mathbf{w}=T\mathbf{u}$ gives $T\mathbf{u}=\mathbf{0}$ for every $\mathbf{u}$.\\
+\hlt{Structural Commentary}: Self-adjointness supplies the missing symmetry needed for real polarization.\\
+\hlt{Key Insight}: A self-adjoint operator is determined by its quadratic form.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:normal-operator} \hlt{Normal Operator}\\
+An operator $T\in\LL(\mathcal{V})$ on a finite-dim inner-product space is \hlt{normal} if it commutes with its adjoint: $TT^*=T^*T$.\\
+Every self-adjoint operator is normal.
+\end{definition}
+
+\begin{theorem} \label{thm:normal-iff-equal-adjoint-norms} \hlt{Normal Operators and Equal Adjoint Norms}\\
+An operator $T\in\LL(\mathcal{V})$ is normal if and only if $\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$ for every $\mathbf{v}\in\mathcal{V}$.
+\begin{proof}
+The operator $A=T^*T-TT^*$ is self-adjoint.\\
+For every $\mathbf{v}\in\mathcal{V}$, $\innerprod{A\mathbf{v},\mathbf{v}} =\innerprod{T^*T\mathbf{v},\mathbf{v}}-\innerprod{TT^*\mathbf{v},\mathbf{v}} =\norm{T\mathbf{v}}^2-\norm{T^*\mathbf{v}}^2$.\\
+Thus $T$ is normal exactly when $A=0$, which by Proposition \ref{prop:self-adjoint-zero-quadratic-form-implies-zero} is equivalent to the displayed quadratic form being zero for every $\mathbf{v}$. This is equivalent to $\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$ for every $\mathbf{v}$.\\
+\hlt{Structural Commentary}: Normality is measured by the self-adjoint commutator $T^*T-TT^*$.\\
+\hlt{Key Insight}: A normal operator and its adjoint move every vector the same distance.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:normal-operator-adjoint-eigenvectors} \hlt{Normal Operators Share Eigenvectors with Their Adjoints}\\
+Let $T\in\LL(\mathcal{V})$ be normal. If $T\mathbf{v}=\lambda\mathbf{v}$ for some $\mathbf{v}\neq\mathbf{0}$, then $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.
+\begin{proof}
+The operator $T-\lambda I_{\mathcal{V}}$ is normal by Proposition \ref{prop:basic-adjoint-identities} and scalar multiples of $I_{\mathcal{V}}$ commute with $T$ and $T^*$. Applying Theorem \ref{thm:normal-iff-equal-adjoint-norms} to $T-\lambda I_{\mathcal{V}}$ gives $0=\norm{(T-\lambda I_{\mathcal{V}})\mathbf{v}} =\norm{(T-\lambda I_{\mathcal{V}})^*\mathbf{v}} =\norm{(T^*-\overline{\lambda}I_{\mathcal{V}})\mathbf{v}}$.\\
+\hlt{Structural Commentary}: For normal operators, kernels of $T-\lambda I$ and $T^*-\overline{\lambda}I$ coincide.\\
+\hlt{Key Insight}: Normality makes eigenvector information visible from both $T$ and $T^*$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/normal_operator_eigenvectors.tikz}
+  \caption{For a normal operator, an eigenvector of $T$ is also an eigenvector of $T^*$ with conjugate eigenvalue.}
+  \label{fig:normal-operator-eigenvectors}
+\end{figure}
+
+\begin{theorem} \label{thm:normal-eigenvectors-distinct-eigenvalues-orthogonal} \hlt{Orthogonal Eigenvectors for Normal Operators}\\
+Let $T\in\LL(\mathcal{V})$ be normal. Eigenvectors of $T$ corresponding to distinct eigenvalues are orthogonal.
+\begin{proof}
+Suppose $T\mathbf{u}=\alpha\mathbf{u}$ and $T\mathbf{v}=\beta\mathbf{v}$ with $\alpha\neq\beta$. By Theorem \ref{thm:normal-operator-adjoint-eigenvectors}, $T^*\mathbf{v}=\overline{\beta}\mathbf{v}$.\\
+Hence $\alpha\innerprod{\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T^*\mathbf{v}} =\innerprod{\mathbf{u},\overline{\beta}\mathbf{v}} =\beta\innerprod{\mathbf{u},\mathbf{v}}$. Since $\alpha-\beta\neq0$, $\innerprod{\mathbf{u},\mathbf{v}}=0$.\\
+\hlt{Structural Commentary}: Normality lets the operator move from one eigenvector to the other through the adjoint.\\
+\hlt{Key Insight}: Distinct eigenvalue scalings are incompatible unless the inner product is zero.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:isometry-linear-map} \hlt{Isometry}\\
+Let $\mathcal{V}$ be an inner-product space. An operator $T\in\LL(\mathcal{V})$ is an \hlt{isometry} if $\norm{T\mathbf{v}}=\norm{\mathbf{v}}$ for every $\mathbf{v}\in\mathcal{V}$.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-isometry-properties} \hlt{Basic Properties of Isometries}\\
+Let $\mathcal{V}$ be an inner-product space and let $S,T\in\LL(\mathcal{V})$ be isometries.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $ST$ is an isometry;
+\item $T$ is injective;
+\item if $\mathcal{V}$ is finite-dimensional, then $T$ is invertible and $T^{-1}$ is an isometry.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For every $\mathbf{v}$, $\norm{ST\mathbf{v}}=\norm{T\mathbf{v}}=\norm{\mathbf{v}}$.
+\item If $T\mathbf{v}=\mathbf{0}$, then $\norm{\mathbf{v}}=\norm{T\mathbf{v}}=0$, so $\mathbf{v}=\mathbf{0}$. Thus $\ker(T)=\{\mathbf{0}\}$.
+\item In finite dimensions, injectivity implies invertibility by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+If $\mathbf{u}=T\mathbf{v}$, then $\norm{T^{-1}\mathbf{u}}=\norm{\mathbf{v}}=\norm{T\mathbf{v}}=\norm{\mathbf{u}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Isometries preserve length, so they cannot collapse nonzero vectors.\\
+\hlt{Key Insight}: In finite dimensions, length preservation already forces an invertible geometry-preserving map.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:isometry-iff-inner-product-preserving} \hlt{Isometries Preserve Inner Products}\\
+Let $\mathcal{V}$ be an inner-product space, $T\in\LL(\mathcal{V})$. Then $T$ is an isometry if and only if $\innerprod{T\mathbf{u},T\mathbf{v}}=\innerprod{\mathbf{u},\mathbf{v}} \ \forall \mathbf{u},\mathbf{v}\in\mathcal{V}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $T$ is an isometry. Then every norm appearing in the polarization identities of Theorem \ref{thm:polarization-identities} is unchanged after applying $T$. Therefore $\innerprod{T\mathbf{u},T\mathbf{v}}=\innerprod{\mathbf{u},\mathbf{v}}$.
+\item[$(\Leftarrow)$] Suppose $T$ preserves inner products. Then $\norm{T\mathbf{u}}^2=\innerprod{T\mathbf{u},T\mathbf{u}}=\innerprod{\mathbf{u},\mathbf{u}}=\norm{\mathbf{u}}^2$, so $T$ is an isometry.
+\end{enumerate}
+\hlt{Structural Commentary}: Polarization converts preservation of norms into preservation of inner products.\\
+\hlt{Key Insight}: Length preservation for all vectors also preserves angle information.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:finite-dimensional-isometry-iff-adjoint-product-identity} \hlt{Isometries and the Adjoint Product}\\
+Let $\mathcal{V}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. Then $T$ is an isometry if and only if $T^*T=I_{\mathcal{V}}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $T$ is an isometry. By Theorem \ref{thm:isometry-iff-inner-product-preserving}, $\innerprod{T^*T\mathbf{u},\mathbf{v}}=\innerprod{T\mathbf{u},T\mathbf{v}}=\innerprod{\mathbf{u},\mathbf{v}}$ for all $\mathbf{u},\mathbf{v}$.\\
+Thus $\innerprod{(T^*T-I_{\mathcal{V}})\mathbf{u},\mathbf{v}}=0$ for every $\mathbf{v}$, so $T^*T\mathbf{u}=\mathbf{u}$ for every $\mathbf{u}$.
+\item[$(\Leftarrow)$] Suppose $T^*T=I_{\mathcal{V}}$. Then $\norm{T\mathbf{u}}^2 =\innerprod{T\mathbf{u},T\mathbf{u}} =\innerprod{T^*T\mathbf{u},\mathbf{u}} =\norm{\mathbf{u}}^2$ for every $\mathbf{u}$, so $T$ is an isometry.
+\end{enumerate}
+\hlt{Structural Commentary}: The operator $T^*T$ records inner products after applying $T$.\\
+\hlt{Key Insight}: $T$ is an isometry exactly when this Gram operator is the identity.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:unitary-operator-and-matrix} \hlt{Unitary and Orthogonal}\\
+An operator $U\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space is \hlt{unitary} if $U^*U=UU^*=I_{\mathcal{V}}$.\\
+A matrix $U\in\operatorname{Mat}(n,n,\mathbb{F})$ is \hlt{unitary} if $U^*U=I_n$. If $\mathbb{F}=\mathbb{R}$, a unitary matrix is called \hlt{orthogonal}.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/unitary_isometry_geometry.tikz}
+  \caption{Unitary operators preserve inner products, hence orthonormality.}
+  \label{fig:unitary-isometry-geometry}
+\end{figure}
+
+\begin{theorem} \label{thm:unitary-matrix-equivalent-conditions} \hlt{Equivalent Conditions for a Unitary Matrix}\\
+Let $U=[\mathbf{u}_1\ \cdots\ \mathbf{u}_n]\in\operatorname{Mat}(n,n,\mathbb{F})$. The following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $U$ is unitary, i.e. $U^*U=I_n$;
+\item the columns $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are orthonormal in $\mathbb{F}^n$;
+\item $UU^*=I_n$;
+\item $U^*$ is unitary;
+\item the rows of $U$ are orthonormal;
+\item $U$ is invertible and $U^{-1}=U^*$;
+\item $\norm{U\mathbf{x}}_2=\norm{\mathbf{x}}_2$ for every $\mathbf{x}\in\mathbb{F}^n$;
+\item $\innerprod[\mathbb{F}^n]{U\mathbf{x},U\mathbf{y}}=\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}$ for every $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$. Since $(U^*U)_{ij}=\mathbf{u}_i^*\mathbf{u}_j=\innerprod[\mathbb{F}^n]{\mathbf{u}_j,\mathbf{u}_i}$, equation $U^*U=I_n$ states columns of $U$ are orthonormal.
+\item[$(ii)$]$\Rightarrow (iii)$. Orthonormal columns give $U^*U=I_n$. Left inverse of a square matrix is right inverse, $UU^*=I_n$.
+\item[$(iii)$]$\Rightarrow (iv)$. The equation $UU^*=I_n$ is $(U^*)^*U^*=I_n$, so $U^*$ is unitary.
+\item[$(iv)$]$\Rightarrow (v)$. Apply $(i)\Rightarrow(ii)$ to $U^*$; the columns of $U^*$ are the conjugates of the rows of $U$.
+\item[$(v)$]$\Rightarrow (vi)$. Orthonormal rows give $UU^*=I_n$. Thus $U^*$ is the inverse of $U$, so $U^{-1}=U^*$.
+\item[$(vi)$]$\Rightarrow (vii)$. If $U^{-1}=U^*$, then $U^*U=I_n$.\\
+Therefore $\norm{U\mathbf{x}}_2^2 =\innerprod[\mathbb{F}^n]{U\mathbf{x},U\mathbf{x}} =\innerprod[\mathbb{F}^n]{U^*U\mathbf{x},\mathbf{x}} =\norm{\mathbf{x}}_2^2$ for every $\mathbf{x}\in\mathbb{F}^n$.
+\item[$(vii)$]$\Rightarrow (viii)$. Apply Theorem \ref{thm:isometry-iff-inner-product-preserving} to $\mathbf{x}\mapsto U\mathbf{x}$.
+\item[$(viii)$]$\Rightarrow (i)$. For every $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, $\innerprod[\mathbb{F}^n]{(U^*U-I_n)\mathbf{x},\mathbf{y}} =\innerprod[\mathbb{F}^n]{U\mathbf{x},U\mathbf{y}}-\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}} =0$. Thus $U^*U=I_n$.
+\end{enumerate}
+\hlt{Structural Commentary}: A unitary matrix is an isometry written in orthonormal coordinates.\\
+\hlt{Key Insight}: Columns, rows, inverses, norms, and inner products are different faces of the same condition.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:algebra-of-unitary-matrices} \hlt{Algebra of Unitary Matrices}\\
+Let $U,V\in\operatorname{Mat}(n,n,\mathbb{F})$, $W\in\operatorname{Mat}(m,m,\mathbb{F})$, where $V\oplus W$ denotes block diagonal matrix with blocks $V$ and $W$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item If $U$ and $V$ are unitary, then $UV$ is unitary.
+\item $V\oplus W$ is unitary if and only if $V$ and $W$ are unitary.
+\item If $U$ is unitary, then $\abs{\det U}=1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $(UV)^*(UV)=V^*U^*UV=V^*V=I_n$.
+\item Since $(V\oplus W)^*(V\oplus W)=V^*V\oplus W^*W$, this product equals $I_{n+m}$ exactly when $V^*V=I_n$ and $W^*W=I_m$.
+\item Taking determinants in $U^*U=I_n$ gives $1=\det(U^*)\det(U)=\overline{\det(U)}\det(U)=\abs{\det U}^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Unitary structure is stable under composition and blockwise orthogonal sums.\\
+\hlt{Key Insight}: The equation $U^*U=I$ makes every verification a short adjoint calculation.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:extend-isometric-columns-to-unitary-matrix} \hlt{Extending Isometric Columns to a Unitary Matrix}\\
+If $X\in\operatorname{Mat}(m,n,\mathbb{F})$ and $X^*X=I_n$, then there exists $X'\in\operatorname{Mat}(m,m-n,\mathbb{F})$ such that $[X\ X']$ is unitary.
+\begin{proof}
+Write $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_n]$. The condition $X^*X=I_n$ says $\mathbf{x}_1,\ldots,\mathbf{x}_n$ are orthonormal in $\mathbb{F}^m$ by Theorem \ref{thm:unitary-matrix-equivalent-conditions}. By Corollary \ref{cor:orthonormal-list-extends-to-basis}, extend this list to an orthonormal basis $\mathbf{x}_1,\ldots,\mathbf{x}_m$ of $\mathbb{F}^m$. Let $X'=[\mathbf{x}_{n+1}\ \cdots\ \mathbf{x}_m]$. Then the columns of $[X\ X']$ are orthonormal, so $[X\ X']$ is unitary.\\
+\hlt{Structural Commentary}: Isometric columns are a partial orthonormal basis.\\
+\hlt{Key Insight}: Complete the columns by extending the orthonormal list.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:unitary-and-permutation-similarity} \hlt{Unitary and Permutation Similarity}\\
+Square matrices $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are \hlt{unitarily similar} if $A=UBU^*$ for some unitary $U$. They are \hlt{orthogonally similar} if $\mathbb{F}=\mathbb{R}$ and $U$ can be chosen real orthogonal.\\
+A \hlt{permutation matrix} is a square matrix with exactly one entry equal to $1$ in each row and each column, and all other entries equal to $0$. Matrices are \hlt{permutation similar} if $A=PBP^*$ for some permutation matrix $P$.
+\end{definition}
+
+\begin{proposition} \label{prop:permutation-matrices-are-orthogonal} \hlt{Permutation Matrices Are Orthogonal}\\
+If $P=[\mathbf{e}_{\sigma(1)}\ \cdots\ \mathbf{e}_{\sigma(n)}]$ is a permutation matrix, then $P^*P=PP^*=I_n$. Hence $P$ is real orthogonal.
+\begin{proof}
+The columns of $P$ are a rearrangement of the standard orthonormal basis of $\mathbb{R}^n$, hence they are orthonormal. Theorem \ref{thm:unitary-matrix-equivalent-conditions} gives $P^*P=PP^*=I_n$.\\
+\hlt{Structural Commentary}: A permutation matrix only reorders the standard basis.\\
+\hlt{Key Insight}: Reordering orthonormal vectors preserves orthonormality.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:permutation-similarity-reorders-diagonal} \hlt{Permutation Similarity Reorders Diagonal Entries}\\
+Let $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ and let $P=[\mathbf{e}_{\sigma(1)}\ \cdots\ \mathbf{e}_{\sigma(n)}]$ be a permutation matrix. Then $P^*\Lambda P=\operatorname{diag}(\lambda_{\sigma(1)},\ldots,\lambda_{\sigma(n)})$.
+\begin{proof}
+The $(i,j)$ entry of $P^*\Lambda P$ is $\mathbf{e}_{\sigma(i)}^*\Lambda\mathbf{e}_{\sigma(j)} =\lambda_{\sigma(j)}\mathbf{e}_{\sigma(i)}^*\mathbf{e}_{\sigma(j)} =\lambda_{\sigma(j)}\delta_{ij}$.\\
+Thus all off-diagonal entries are zero, and the $j$th diagonal entry is $\lambda_{\sigma(j)}$.\\
+\hlt{Structural Commentary}: Permutation similarity applies the same basis reordering to rows and columns.\\
+\hlt{Key Insight}: Diagonal entries move exactly as the standard basis vectors are rearranged.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:rank-one-projection-matrix} \hlt{Rank-One Projection Matrix}\\
+Let $\mathbf{u}\in\mathbb{F}^n$ be a unit vector. The \hlt{rank-one projection matrix} onto $\operatorname{span}(\mathbf{u})$ is $P_{\mathbf{u}}\defeq \mathbf{u}\mathbf{u}^*\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
+For every $\mathbf{x}\in\mathbb{F}^n$, $P_{\mathbf{u}}\mathbf{x}=\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{u}}\mathbf{u}$.
+\end{definition}
+
+\begin{proposition} \label{prop:rank-one-projection-matrix-properties} \hlt{Properties of Rank-One Projection Matrices}\\
+Let $\mathbf{u}\in\mathbb{F}^n$ be a unit vector. Then:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{range}(P_{\mathbf{u}})=\operatorname{span}(\mathbf{u})$;
+\item $\ker(P_{\mathbf{u}})=\operatorname{span}(\mathbf{u})^{\perp}$;
+\item $P_{\mathbf{u}}^*=P_{\mathbf{u}}$;
+\item $P_{\mathbf{u}}^2=P_{\mathbf{u}}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The formula $P_{\mathbf{u}}\mathbf{x}=\innerprod{\mathbf{x},\mathbf{u}}\mathbf{u}$ gives $\operatorname{range}(P_{\mathbf{u}})\subseteq\operatorname{span}(\mathbf{u})$, and $P_{\mathbf{u}}\mathbf{u}=\mathbf{u}$ gives the reverse inclusion.
+\item The same formula gives $P_{\mathbf{u}}\mathbf{x}=0$ exactly when $\innerprod{\mathbf{x},\mathbf{u}}=0$.
+\item Since $P_{\mathbf{u}}=\mathbf{u}\mathbf{u}^*$, $P_{\mathbf{u}}^*=(\mathbf{u}\mathbf{u}^*)^*=\mathbf{u}\mathbf{u}^*=P_{\mathbf{u}}$.
+\item Because $\mathbf{u}^*\mathbf{u}=\norm{\mathbf{u}}_2^2=1$, $P_{\mathbf{u}}^2=\mathbf{u}(\mathbf{u}^*\mathbf{u})\mathbf{u}^*=\mathbf{u}\mathbf{u}^*=P_{\mathbf{u}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: A rank-one projection keeps the $\mathbf{u}$ direction and kills its orthogonal complement.\\
+\hlt{Key Insight}: The outer product $\mathbf{u}\mathbf{u}^*$ encodes projection onto one unit direction.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:householder-matrix} \hlt{Householder Matrix}\\
+Let $\mathbf{w}\in\mathbb{F}^n$ be nonzero and set $\mathbf{u}=\mathbf{w}/\norm{\mathbf{w}}_2$.\\
+The \hlt{Householder matrix} associated to $\mathbf{w}$ is $U_{\mathbf{w}}\defeq I_n-2P_{\mathbf{u}}=I_n-2\frac{\mathbf{w}\mathbf{w}^*}{\norm{\mathbf{w}}_2^2}$.\\
+It acts by $\mathbf{x}\mapsto U_{\mathbf{w}}\mathbf{x}=\mathbf{x}-2\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{u}}\mathbf{u}$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/householder_reflection.tikz}
+  \caption{A Householder matrix reflects a vector across the hyperplane orthogonal to $\mathbf{w}$.}
+  \label{fig:householder-reflection}
+\end{figure}
+
+\begin{theorem} \label{thm:householder-matrix-properties} \hlt{Householder Matrices Are Unitary Reflections}\\
+Every Householder matrix $U_{\mathbf{w}}$ is unitary, Hermitian, and involutive: $U_{\mathbf{w}}^*U_{\mathbf{w}}=I_n$, $U_{\mathbf{w}}^*=U_{\mathbf{w}}$, $U_{\mathbf{w}}^2=I_n$.\\
+If $\mathbf{w}\in\mathbb{R}^n$, then $U_{\mathbf{w}}$ is real orthogonal and symmetric.
+\begin{proof}
+Let $\mathbf{u}=\mathbf{w}/\norm{\mathbf{w}}_2$. By Proposition \ref{prop:rank-one-projection-matrix-properties}, $P_{\mathbf{u}}^*=P_{\mathbf{u}}$ and $P_{\mathbf{u}}^2=P_{\mathbf{u}}$.\\
+Therefore $U_{\mathbf{w}}^*=I_n-2P_{\mathbf{u}}=U_{\mathbf{w}}$, $U_{\mathbf{w}}^2=(I_n-2P_{\mathbf{u}})^2=I_n-4P_{\mathbf{u}}+4P_{\mathbf{u}}^2=I_n$.\\
+Thus $U_{\mathbf{w}}^*U_{\mathbf{w}}=U_{\mathbf{w}}^2=I_n$, so $U_{\mathbf{w}}$ is unitary. The real case is the same statement with conjugation removed.\\
+\hlt{Structural Commentary}: A Householder matrix reflects across an orthogonal hyperplane.\\
+\hlt{Key Insight}: The identity $P_{\mathbf{u}}^2=P_{\mathbf{u}}$ makes $(I-2P_{\mathbf{u}})^2=I$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:householder-maps-equal-norm-vectors} \hlt{Householder Map Between Equal-Norm Vectors}\\
+Let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$ satisfy $\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2\neq0$. Define
+\begin{align}
+\sigma=
+\begin{cases}
+1, & \innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}=0,\\
+-\dfrac{\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}}{\abs{\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}}}, & \innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}\neq0,
+\end{cases}
+\qquad
+\mathbf{w}=\mathbf{y}-\sigma\mathbf{x}.
+\nonumber
+\end{align}
+Then $\mathbf{w}\neq\mathbf{0}$, $\abs{\sigma}=1$, and $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}$.
+\begin{proof}
+Clearly $\abs{\sigma}=1$. Let $z=\innerprod{\mathbf{x},\mathbf{y}}$. By construction, $\sigma z=-\abs{z}$, with the convention that this equals $0$ when $z=0$. Hence $\norm{\mathbf{w}}_2^2 =\norm{\mathbf{y}-\sigma\mathbf{x}}_2^2 =2\left(\norm{\mathbf{x}}_2^2+\abs{z}\right)>0$, so $\mathbf{w}\neq\mathbf{0}$.\\
+Since $\mathbf{y}=\mathbf{w}+\sigma\mathbf{x}$, $\sigma U_{\mathbf{w}}\mathbf{x} =\sigma\mathbf{x}-2\sigma\frac{\innerprod{\mathbf{x},\mathbf{w}}}{\norm{\mathbf{w}}_2^2}\mathbf{w} =\mathbf{y}-\left(1+2\sigma\frac{\innerprod{\mathbf{x},\mathbf{w}}}{\norm{\mathbf{w}}_2^2}\right)\mathbf{w}$.\\
+But $\innerprod{\mathbf{x},\mathbf{w}}=z-\overline{\sigma}\norm{\mathbf{x}}_2^2$, so $2\sigma\innerprod{\mathbf{x},\mathbf{w}}=-2(\norm{\mathbf{x}}_2^2+\abs{z})=-\norm{\mathbf{w}}_2^2$.\\
+Coefficient of $\mathbf{w}$ is hence zero, proving $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}$.\\
+\hlt{Structural Commentary}: The scalar $\sigma$ chooses the phase so that $\mathbf{y}-\sigma\mathbf{x}$ gives a stable reflection direction.\\
+\hlt{Key Insight}: Householder reflections connect equal-norm vectors up to a unit scalar.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:householder-unitary-annihilator} \hlt{Householder Unitary Annihilator}\\
+Let $\mathbf{x}=[x_1\ \cdots\ x_n]^t\in\mathbb{F}^n$ be nonzero. Define
+\begin{align}
+\sigma=
+\begin{cases}
+1, & x_1=0,\\
+-\dfrac{x_1}{\abs{x_1}}, & x_1\neq0,
+\end{cases}
+\qquad
+\mathbf{w}=\norm{\mathbf{x}}_2\mathbf{e}_1-\sigma\mathbf{x}.
+\nonumber
+\end{align}
+Then $\sigma U_{\mathbf{w}}\mathbf{x}=\norm{\mathbf{x}}_2\mathbf{e}_1$. If $\mathbf{x}$ is a unit vector, then $\overline{\sigma}U_{\mathbf{w}}$ is unitary and has $\mathbf{x}$ as its first column.
+\begin{proof}
+Apply Theorem \ref{thm:householder-maps-equal-norm-vectors} with $\mathbf{y}=\norm{\mathbf{x}}_2\mathbf{e}_1$, noting that $\innerprod{\mathbf{x},\mathbf{y}}=x_1\norm{\mathbf{x}}_2$. If $\norm{\mathbf{x}}_2=1$, then $(\sigma U_{\mathbf{w}})\mathbf{x}=\mathbf{e}_1$, so $(\sigma U_{\mathbf{w}})^*\mathbf{e}_1=\mathbf{x}$. Since $(\sigma U_{\mathbf{w}})^*=\overline{\sigma}U_{\mathbf{w}}$, this says the first column of $\overline{\sigma}U_{\mathbf{w}}$ is $\mathbf{x}$.\\
+\hlt{Structural Commentary}: The reflector concentrates all mass of $\mathbf{x}$ into the first coordinate.\\
+\hlt{Key Insight}: Householder matrices produce explicit unitary matrices with a prescribed first column.
+\end{proof}
+\end{corollary}
