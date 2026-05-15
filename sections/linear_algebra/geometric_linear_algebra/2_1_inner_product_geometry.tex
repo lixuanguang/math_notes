@@ -1,1 +1,224 @@
 \subsubsection{Inner Product Geometry}
+
+Throughout this subsection, $\mathbb{F}$ denotes either $\mathbb{R}$ or $\mathbb{C}$. Inner products turn linear spaces into geometric spaces: they let us measure length, angle, and orthogonality.
+
+\begin{definition} \label{def:inner-product-preliminary-terminology} \hlt{Preliminary Terminology}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\mathbf{x},\mathbf{y}\in\mathbb{R}^n$, the \hlt{dot product} is $\mathbf{x}\cdot\mathbf{y}\defeq x_1y_1+\cdots+x_ny_n$.
+\item For $z=a+bi\in\mathbb{C}$, \hlt{complex conjugate} is $\overline{z}\defeq a-bi$, \hlt{modulus} is $\abs{z}\defeq\sqrt{a^2+b^2}$. Thus $\abs{z}^2=z\overline{z}$.
+\item A map $f:\mathcal{V}\to\mathbb{F}$ is \hlt{conjugate linear} if $f(\mathbf{u}+\mathbf{v})=f(\mathbf{u})+f(\mathbf{v})$ and $f(\lambda\mathbf{v})=\overline{\lambda}f(\mathbf{v})$.
+\item A function $B:\mathcal{V}\times\mathcal{V}\to\mathbb{F}$ is \hlt{sesquilinear} if it is linear in one slot and conjugate linear in the other.
+\end{enumerate}
+\end{definition}
+
+\begin{motivation} \label{mot:inner-product-from-dot-product} \hlt{From Dot Products to Inner Products}\\
+For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{R}^n$, the Euclidean length is $\norm{\mathbf{x}}=\sqrt{x_1^2+\cdots+x_n^2}$.\\
+The expression under the square root is the dot product of $\mathbf{x}$ with itself. Over $\mathbb{C}$, conjugates are needed to keep squared length real and nonnegative: $\norm{\mathbf{z}}^2=\abs{z_1}^2+\cdots+\abs{z_n}^2 =z_1\overline{z_1}+\cdots+z_n\overline{z_n}$.\\
+Thus the standard inner product on $\mathbb{F}^n$ is $\innerprod{\mathbf{x},\mathbf{y}} \defeq x_1\overline{y_1}+\cdots+x_n\overline{y_n}$.
+\end{motivation}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/inner_product_norm_vector.tikz}
+  \caption{The norm of a vector is the length determined by its inner product with itself.}
+  \label{fig:inner-product-norm-vector}
+\end{figure}
+
+\begin{definition} \label{def:inner-product} \hlt{Inner Product}\\
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. An \hlt{inner product} on $\mathcal{V}$ is a function that assigns to each pair $\mathbf{u},\mathbf{v}\in\mathcal{V}$ a scalar $\innerprod{\mathbf{u},\mathbf{v}}\in\mathbb{F}$ satisfying, for all $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$ and all $\lambda\in\mathbb{F}$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item \hlt{positivity}: $\innerprod{\mathbf{v},\mathbf{v}}\geq 0$;
+\item \hlt{definiteness}: $\innerprod{\mathbf{v},\mathbf{v}}=0$ if and only if $\mathbf{v}=\mathbf{0}$;
+\item \hlt{additivity in the first slot}: $\innerprod{\mathbf{u}+\mathbf{v},\mathbf{w}}=\innerprod{\mathbf{u},\mathbf{w}}+\innerprod{\mathbf{v},\mathbf{w}}$;
+\item \hlt{homogeneity in the first slot}: $\innerprod{\lambda\mathbf{u},\mathbf{v}}=\lambda\innerprod{\mathbf{u},\mathbf{v}}$;
+\item \hlt{conjugate symmetry}: $\innerprod{\mathbf{u},\mathbf{v}}=\overline{\innerprod{\mathbf{v},\mathbf{u}}}$.
+\end{enumerate}
+In the positivity axiom, $\innerprod{\mathbf{v},\mathbf{v}}\geq 0$ means that $\innerprod{\mathbf{v},\mathbf{v}}$ is a real nonnegative scalar.
+\end{definition}
+
+\begin{definition} \label{def:inner-product-space} \hlt{Inner-Product Space}\\
+An \hlt{inner-product space} is a vector space $\mathcal{V}$ together with an inner product on $\mathcal{V}$.
+\end{definition}
+
+\begin{example} \label{ex:standard-inner-product-on-fn} \hlt{Standard Inner Product on $\mathbb{F}^n$}\\
+For $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, the standard inner product is $\innerprod{\mathbf{x},\mathbf{y}}=\sum\limits_{j=1}^{n}x_j\overline{y_j}$. When $\mathbb{F}=\mathbb{R}$, this is the usual dot product.
+\end{example}
+
+\begin{example} \label{ex:function-and-matrix-inner-products} \hlt{Function and Matrix Inner Products}\\
+If $\mathcal{V}=C_{\mathbb{F}}[a,b]$, then $\innerprod{f,g}=\int_a^b f(t)\overline{g(t)}\,dt$ is an inner product.\\
+If $\mathcal{V}=\operatorname{Mat}(m,n,\mathbb{F})$, then the \hlt{Frobenius inner product} is $\innerprod[F]{A,B} \defeq \sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n} a_{ij}\overline{b_{ij}}$.
+\end{example}
+
+\begin{proposition} \label{prop:basic-inner-product-identities} \hlt{Basic Inner-Product Identities}\\
+Let $\mathcal{V}$ be an inner-product space. Then for all $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item for fixed $\mathbf{u}$, the map $\mathbf{v}\mapsto \innerprod{\mathbf{v},\mathbf{u}}$ is linear;
+\item $\innerprod{\mathbf{0},\mathbf{u}}=0$ and $\innerprod{\mathbf{u},\mathbf{0}}=0$;
+\item $\innerprod{\mathbf{u},\mathbf{v}+\mathbf{w}}=\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{u},\mathbf{w}}$;
+\item $\innerprod{\mathbf{u},\lambda\mathbf{v}}=\overline{\lambda}\innerprod{\mathbf{u},\mathbf{v}}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is exactly additivity and homogeneity in the first slot.
+\item A linear map sends $\mathbf{0}$ to $0$, so $\innerprod{\mathbf{0},\mathbf{u}}=0$. Conjugate symmetry gives $\innerprod{\mathbf{u},\mathbf{0}}=\overline{\innerprod{\mathbf{0},\mathbf{u}}}=0$.
+\item By conjugate symmetry and additivity, $\innerprod{\mathbf{u},\mathbf{v}+\mathbf{w}} =\overline{\innerprod{\mathbf{v}+\mathbf{w},\mathbf{u}}} =\overline{\innerprod{\mathbf{v},\mathbf{u}}+\innerprod{\mathbf{w},\mathbf{u}}} =\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{u},\mathbf{w}}$.
+\item By conjugate symmetry and homogeneity, $\innerprod{\mathbf{u},\lambda\mathbf{v}} =\overline{\innerprod{\lambda\mathbf{v},\mathbf{u}}} =\overline{\lambda\innerprod{\mathbf{v},\mathbf{u}}} =\overline{\lambda}\innerprod{\mathbf{u},\mathbf{v}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: First-slot linearity and conjugate symmetry force conjugate linearity in second slot.\\
+\hlt{Key Insight}: Once one slot is linear, the other slot is forced to be conjugate linear.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:norm-induced-by-inner-product} \hlt{Norm Induced by an Inner Product}\\
+For $\mathbf{v}\in\mathcal{V}$, the \hlt{norm} of $\mathbf{v}$ is $\norm{\mathbf{v}}\defeq\sqrt{\innerprod{\mathbf{v},\mathbf{v}}}$.
+\end{definition}
+
+\begin{example} \label{ex:norms-induced-by-inner-products} \hlt{Norms from Standard Inner Products}\\
+In $\mathbb{F}^n$, $\norm{(x_1,\ldots,x_n)}=\sqrt{\abs{x_1}^2+\cdots+\abs{x_n}^2}$. In $C_{\mathbb{F}}[a,b]$ with the integral inner product, $\norm{f} =\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.
+\end{example}
+
+\begin{proposition} \label{prop:basic-norm-identities} \hlt{Basic Norm Identities}\\
+Let $\mathcal{V}$ be an inner-product space. For all $\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\norm{\mathbf{v}}=0$ if and only if $\mathbf{v}=\mathbf{0}$;
+\item $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By definition, $\norm{\mathbf{v}}=0$ if and only if $\innerprod{\mathbf{v},\mathbf{v}}=0$, which holds if and only if $\mathbf{v}=\mathbf{0}$ by definiteness.
+\item Compute $\norm{\lambda\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\lambda\mathbf{v}} =\lambda\overline{\lambda}\innerprod{\mathbf{v},\mathbf{v}} =\abs{\lambda}^2\norm{\mathbf{v}}^2$. Taking nonnegative square roots, $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Positivity and sesquilinearity give these two norm identities.\\
+\hlt{Key Insight}: Squared length is easier to manipulate than length itself.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:orthogonal-vectors} \hlt{Orthogonal Vectors}\\
+Vectors $\mathbf{u},\mathbf{v}\in\mathcal{V}$ are \hlt{orthogonal}, written $\mathbf{u}\perp\mathbf{v}$, if $\innerprod{\mathbf{u},\mathbf{v}}=0$.
+\end{definition}
+
+\begin{proposition} \label{prop:orthogonality-and-zero} \hlt{Orthogonality and the Zero Vector}\\
+Let $\mathcal{V}$ be an inner-product space.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\mathbf{u}\perp\mathbf{v}$ if and only if $\mathbf{v}\perp\mathbf{u}$.
+\item $\mathbf{0}$ is orthogonal to every vector in $\mathcal{V}$.
+\item If $\mathbf{v}$ is orthogonal to itself, then $\mathbf{v}=\mathbf{0}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\innerprod{\mathbf{u},\mathbf{v}}=0$, then conjugate symmetry gives $\innerprod{\mathbf{v},\mathbf{u}}=\overline{0}=0$, and the converse is identical.
+\item This follows from Proposition \ref{prop:basic-inner-product-identities}, which gives $\innerprod{\mathbf{0},\mathbf{u}}=0$ and $\innerprod{\mathbf{u},\mathbf{0}}=0$.
+\item If $\mathbf{v}\perp\mathbf{v}$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$, hence $\mathbf{v}=\mathbf{0}$ by definiteness.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugate symmetry makes orthogonality symmetric, and definiteness isolates $\mathbf{0}$.\\
+\hlt{Key Insight}: Conjugate symmetry preserves the equation ``equals zero.''
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:cross-terms} \hlt{Cross Terms}\\
+In an expansion such as $\norm{\mathbf{u}+\mathbf{v}}^2$, the terms involving both vectors, $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$, are called \hlt{cross terms}. The terms $\norm{\mathbf{u}}^2$ and $\norm{\mathbf{v}}^2$ are the pure squared-length terms.
+\end{remark}
+
+\begin{theorem} \label{thm:pythagorean-inner-product} \hlt{Pythagorean Theorem}\\
+If $\mathbf{u},\mathbf{v}\in\mathcal{V}$ and $\mathbf{u}\perp\mathbf{v}$, then $\norm{\mathbf{u}+\mathbf{v}}^2=\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2$.
+\begin{proof}
+Since $\mathbf{u}\perp\mathbf{v}$, Proposition \ref{prop:orthogonality-and-zero} gives $\innerprod{\mathbf{v},\mathbf{u}}=0$. Thus
+\begin{align}
+\norm{\mathbf{u}+\mathbf{v}}^2 =\innerprod{\mathbf{u}+\mathbf{v},\mathbf{u}+\mathbf{v}}=\innerprod{\mathbf{u},\mathbf{u}}+\innerprod{\mathbf{u},\mathbf{v}}
+  +\innerprod{\mathbf{v},\mathbf{u}}+\innerprod{\mathbf{v},\mathbf{v}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: Orthogonality cancels the cross terms in the squared-norm expansion.\\
+\hlt{Key Insight}: Perpendicular components add in squared length, not in length.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:orthogonal-decomposition-one-vector} \hlt{Orthogonal Decomposition Along One Vector}\\
+Let $\mathbf{u},\mathbf{v}\in\mathcal{V}$ with $\mathbf{v}\neq\mathbf{0}$. Define $c\defeq\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}$, $\mathbf{w}\defeq\mathbf{u}-c\mathbf{v}$.\\
+Then $\mathbf{w}\perp\mathbf{v}$ and $\mathbf{u}=c\mathbf{v}+\mathbf{w}$. The vector $c\mathbf{v}$ is the \hlt{orthogonal projection} of $\mathbf{u}$ onto $\operatorname{span}(\mathbf{v})$.
+\begin{proof}
+The decomposition $\mathbf{u}=c\mathbf{v}+\mathbf{w}$ follows from the definition of $\mathbf{w}$.\\
+Moreover, $\innerprod{\mathbf{w},\mathbf{v}} =\innerprod{\mathbf{u}-c\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{u},\mathbf{v}}-c\innerprod{\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{u},\mathbf{v}} -\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}\norm{\mathbf{v}}^2 =0$. Thus $\mathbf{w}\perp\mathbf{v}$.\\
+\hlt{Structural Commentary}: Choose $c$ so the remainder $\mathbf{u}-c\mathbf{v}$ has zero inner product with $\mathbf{v}$.\\
+\hlt{Key Insight}: Projection is the part detected by pairing with the direction vector.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/orthogonal_decomposition_one_vector.tikz}
+  \caption{Writing $\mathbf{u}$ as a component parallel to $\mathbf{v}$ plus a component orthogonal to $\mathbf{v}$.}
+  \label{fig:orthogonal-decomposition-one-vector}
+\end{figure}
+
+\begin{theorem} \label{thm:cauchy-schwarz-inequality} \hlt{Cauchy-Schwarz Inequality}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}\norm{\mathbf{v}}$.
+Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a scalar multiple of the other.
+\begin{proof}
+If $\mathbf{v}=\mathbf{0}$, both sides are $0$. Assume $\mathbf{v}\neq\mathbf{0}$. By Proposition \ref{prop:orthogonal-decomposition-one-vector}, $\mathbf{u}=\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}\mathbf{v}+\mathbf{w}$, $\mathbf{w}\perp\mathbf{v}$.\\
+The Pythagorean Theorem \ref{thm:pythagorean-inner-product} gives
+\begin{align}
+\norm{\mathbf{u}}^2 = \norm{\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}\mathbf{v}}^2 +\norm{\mathbf{w}}^2 = \frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2} +\norm{\mathbf{w}}^2 \geq \frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2}.
+\nonumber
+\end{align}
+Multiplying by $\norm{\mathbf{v}}^2$ and taking square roots proves the inequality. Equality holds exactly when $\norm{\mathbf{w}}=0$, i.e. $\mathbf{w}=\mathbf{0}$, which is equivalent to $\mathbf{u}$ being a scalar multiple of $\mathbf{v}$. The case $\mathbf{v}=\mathbf{0}$ is also covered because $\mathbf{v}=0\mathbf{u}$.\\
+\hlt{Structural Commentary}: Decompose $\mathbf{u}$ into parallel and orthogonal parts relative to $\mathbf{v}$.\\
+\hlt{Key Insight}: The component of $\mathbf{u}$ along $\mathbf{v}$ cannot be longer than $\mathbf{u}$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/triangle_inequality_inner_product.tikz}
+  \caption{The vector $\mathbf{u}+\mathbf{v}$ is the third side of the triangle formed by placing $\mathbf{v}$ after $\mathbf{u}$.}
+  \label{fig:triangle-inequality-inner-product}
+\end{figure}
+
+\begin{theorem} \label{thm:triangle-inequality-inner-product} \hlt{Triangle Inequality}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}} \leq \norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
+Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a nonnegative scalar multiple of the other.
+\begin{proof}
+We compute
+\begin{align}
+\norm{\mathbf{u}+\mathbf{v}}^2 &=\innerprod{\mathbf{u}+\mathbf{v},\mathbf{u}+\mathbf{v}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{v},\mathbf{u}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}} \nonumber\\
+&\leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\norm{\mathbf{u}}\norm{\mathbf{v}} =\bigl(\norm{\mathbf{u}}+\norm{\mathbf{v}}\bigr)^2.
+\nonumber
+\end{align}
+Taking square roots gives the inequality. If either vector is $\mathbf{0}$, the equality condition is immediate. Otherwise, equality holds exactly when $\innerprod{\mathbf{u},\mathbf{v}}=\abs{\innerprod{\mathbf{u},\mathbf{v}}}$ and equality holds in Cauchy-Schwarz. Thus $\mathbf{u}=a\mathbf{v}$ for some $a\in\mathbb{F}$ and $a\norm{\mathbf{v}}^2=\innerprod{\mathbf{u},\mathbf{v}}$ is real nonnegative, so $a\geq 0$. Conversely, if $\mathbf{u}=a\mathbf{v}$ with $a\geq 0$, then $\norm{\mathbf{u}+\mathbf{v}}=(a+1)\norm{\mathbf{v}}=\norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
+\hlt{Structural Commentary}: Square the norm and bound the cross term by Cauchy-Schwarz.\\
+\hlt{Key Insight}: Equality means the two vectors point in the same direction.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/parallelogram_identity_inner_product.tikz}
+  \caption{A parallelogram with diagonals $\mathbf{u}+\mathbf{v}$ and $\mathbf{u}-\mathbf{v}$ and side directions $\mathbf{u}$ and $\mathbf{v}$.}
+  \label{fig:parallelogram-identity-inner-product}
+\end{figure}
+
+\begin{theorem} \label{thm:parallelogram-identity-inner-product} \hlt{Parallelogram Identity}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2 = 2\bigl(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\bigr)$.
+\begin{proof}
+Expanding both squared norms gives
+\begin{align}
+\norm{\mathbf{u}+\mathbf{v}}^2 &=\norm{\mathbf{u}}^2+\innerprod{\mathbf{u},\mathbf{v}} +\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2, \nonumber \\
+\norm{\mathbf{u}-\mathbf{v}}^2 &=\norm{\mathbf{u}}^2-\innerprod{\mathbf{u},\mathbf{v}} -\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2. \nonumber
+\end{align}
+Adding the two identities cancels the cross terms and yields the result.\\
+\hlt{Structural Commentary}: Opposite cross terms cancel when the two diagonal norms are added.\\
+\hlt{Key Insight}: Inner-product norms remember parallelogram geometry through cancellation.
+\end{proof}
+\end{theorem}
+
+\begin{principle} \label{pri:inner-product-geometry} \hlt{Geometry from Algebra}\\
+Most geometric statements in an inner-product space come from expanding $\norm{\mathbf{u}\pm\mathbf{v}}^2$ and then interpreting the cross terms $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$.
+\end{principle}
