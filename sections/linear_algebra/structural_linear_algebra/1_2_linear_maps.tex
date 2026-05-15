@@ -903,6 +903,147 @@ Parts (i) and (ii) follow immediately from Proposition \ref{prop:block-matrix-ar
 \end{proof}
 \end{proposition}
 
+\begin{lemma} \label{lem:determinant-identity-direct-sum} \hlt{Identity Blocks Do Not Change Determinant}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and let $n\geq0$. Then $\det(I_n\oplus A)=\det(A)=\det(A\oplus I_n)$.
+\begin{proof}
+For $I_n\oplus A$, expand the determinant along the first $n$ rows. The only nonzero contribution chooses the diagonal entries of $I_n$, leaving the minor $A$, so $\det(I_n\oplus A)=\det(A)$. Expanding $A\oplus I_n$ along the last $n$ rows gives the same conclusion. The case $n=0$ is the empty identity block convention.\\
+\hlt{Structural Commentary}: Identity blocks add directions without changing volume.\\
+\hlt{Key Insight}: In a Laplace expansion through an identity block, exactly one minor survives.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:block-upper-triangular-determinant} \hlt{Determinant of an Upper Block-Triangular Matrix}\\
+Let $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$. Then
+\begin{align}
+\det
+\begin{bmatrix}
+A & B\\
+0 & D
+\end{bmatrix}
+=\det(A)\det(D).
+\nonumber
+\end{align}
+\begin{proof}
+Factor
+\begin{align}
+\begin{bmatrix}
+A & B\\
+0 & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_r & 0\\
+0 & D
+\end{bmatrix}
+\begin{bmatrix}
+I_r & B\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & 0\\
+0 & I_s
+\end{bmatrix}.
+\nonumber
+\end{align}
+The first and last factors have determinants $\det(D)$ and $\det(A)$ by Lemma \ref{lem:determinant-identity-direct-sum}.\\
+The middle factor is upper triangular with every diagonal entry equal to $1$, so its determinant is $1$. Multiplicativity of determinant gives the formula.\\
+\hlt{Structural Commentary}: Block upper triangular matrices separate determinant contribution into diagonal blocks. The off-diagonal block does not affect the determinant.\\
+\hlt{Key Insight}: Factor the matrix into two block diagonal pieces and one unit upper triangular piece.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:schur-complement-determinant-formula} \hlt{Schur Complement Determinant Formula}\\
+Let
+\begin{align}
+M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix},
+\qquad
+A\in\operatorname{Mat}(r,r,\mathbb{F}),
+\quad
+D\in\operatorname{Mat}(s,s,\mathbb{F}).
+\nonumber
+\end{align}
+If $A$ is invertible, then the \hlt{Schur complement of $A$ in $M$} is $M/A\defeq D-CA^{-1}B$, $\det(M)=\det(A)\det(M/A)$
+\begin{proof}
+Block Gaussian elimination gives
+\begin{align}
+\begin{bmatrix}
+I_r & 0\\
+-CA^{-1} & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A & B\\
+0 & D-CA^{-1}B
+\end{bmatrix}.
+\nonumber
+\end{align}
+The elimination matrix has determinant $1$ by Theorem \ref{thm:block-upper-triangular-determinant}. Taking determinants and applying Theorem \ref{thm:block-upper-triangular-determinant} to the right-hand block triangular matrix gives $\det(M)=\det(A)\det(D-CA^{-1}B)$.\\
+\hlt{Structural Commentary}: Schur complementation is block Gaussian elimination.\\
+\hlt{Key Insight}: Eliminating $C$ splits the determinant into $\det(A)$ times the remaining block determinant.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:bordered-determinant-formulas} \hlt{Bordered Determinant Formulas}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and let $c\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $c\neq0$, then
+\begin{align}
+\det
+\begin{bmatrix}
+c & \mathbf{x}^t\\
+\mathbf{y} & A
+\end{bmatrix}
+=
+c\det\left(A-\frac{1}{c}\mathbf{y}\mathbf{x}^t\right).
+\nonumber
+\end{align}
+\item If $A$ is invertible, then
+\begin{align}
+\det
+\begin{bmatrix}
+A & \mathbf{x}\\
+\mathbf{y}^t & c
+\end{bmatrix}
+=
+\left(c-\mathbf{y}^tA^{-1}\mathbf{x}\right)\det(A).
+\nonumber
+\end{align}
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is Proposition \ref{prop:schur-complement-determinant-formula} with the scalar block $c$ in the upper-left corner.
+\item This is Proposition \ref{prop:schur-complement-determinant-formula} with $A$ as the upper-left block and $D=c$.
+\end{enumerate}
+\hlt{Structural Commentary}: A bordered determinant is a one-row and one-column Schur complement. The large determinant reduces to a scalar correction or a rank-one correction.\\
+\hlt{Key Insight}: Treat the border as a $1\times1$ block and apply the Schur complement formula.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:bordered-determinant-adjugate-form} \hlt{Adjugate Form of the Bordered Formula}\\
+If $\operatorname{adj}(A)$ denotes the adjugate matrix, then the second formula in Proposition \ref{prop:bordered-determinant-formulas} can be written as
+\begin{align}
+\det
+\begin{bmatrix}
+A & \mathbf{x}\\
+\mathbf{y}^t & c
+\end{bmatrix}
+=
+c\det(A)-\mathbf{y}^t\operatorname{adj}(A)\mathbf{x}.
+\nonumber
+\end{align}
+This adjugate form remains meaningful even when $A$ is not invertible.
+\end{remark}
+
 \begin{proposition} \label{prop:diagonal-multiplication-scales-rows-columns} \hlt{Diagonal Multiplication Scales Rows and Columns}\\
 Let $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$, let $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$, and let $M=\operatorname{diag}(\mu_1,\ldots,\mu_m)$. Then $A\Lambda=[\lambda_j a_{ij}]$ and $MA=[\mu_i a_{ij}]$. Thus right multiplication by $\Lambda$ scales columns of $A$, left multiplication by $M$ scales rows of $A$.
 \begin{proof}
@@ -1027,6 +1168,92 @@ Block multiplication gives $(A\Lambda)_{ij}=\lambda_jA_{ij}$ and $(\Lambda A)_{i
 \begin{example} \hlt{Distinctness Is Necessary}\\
 The distinctness hypothesis in Lemma \ref{lem:block-diagonal-commutant-distinct-scalars} cannot be dropped. If $\lambda_1=\cdots=\lambda_k=1$, then $\Lambda=I_n$ commutes with every matrix in $\operatorname{Mat}(n,n,\mathbb{F})$, including matrices that are not block diagonal for the chosen partition.
 \end{example}
+
+\begin{definition} \hlt{Commutator}\\
+For $S,T\in\LL(\mathcal{V})$, the \hlt{commutator} of $S$ and $T$ is $[S,T]\defeq ST-TS$. For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{matrix commutator} is $[A,B]\defeq AB-BA$.
+\end{definition}
+
+\begin{proposition} \label{prop:commutators-have-zero-trace} \hlt{Trace Obstruction for Commutators}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\operatorname{tr}([A,B])=0$.\\
+Consequently, if $n\cdot1_{\mathbb{F}}\neq0$, then no nonzero scalar matrix is a commutator.
+\begin{proof}
+Cyclicity of trace gives $\operatorname{tr}([A,B])=\operatorname{tr}(AB)-\operatorname{tr}(BA)=0$.\\
+If $cI_n=[A,B]$, then $nc=\operatorname{tr}(cI_n)=0$. Under $n\cdot1_{\mathbb{F}}\neq0$, this forces $c=0$.\\
+\hlt{Structural Commentary}: Trace detects the first unavoidable obstruction to being a commutator. Scalar matrices fail this obstruction unless the field characteristic makes $n$ vanish.\\
+\hlt{Key Insight}: The two products $AB$ and $BA$ have the same trace, so their difference has trace zero.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:scalar-matrix-dependent-orbits} \hlt{Scalar Matrices and One-Step Orbits}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $n\geq2$.\\
+Then $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}\in\mathbb{F}^n$ if and only if $A$ is a scalar matrix.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $A=cI_n$. Then $A\mathbf{x}=c\mathbf{x}$ for every $\mathbf{x}$, so $(\mathbf{x},A\mathbf{x})$ is linearly dependent.
+\item[$(\Leftarrow)$] Suppose $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}$. For each standard basis vector $\mathbf{e}_i$, there is $a_i\in\mathbb{F}$ such that $A\mathbf{e}_i=a_i\mathbf{e}_i$. For $i\geq2$, dependence of $\mathbf{e}_1+\mathbf{e}_i$ and $A(\mathbf{e}_1+\mathbf{e}_i)=a_1\mathbf{e}_1+a_i\mathbf{e}_i$ gives $a_1=a_i$.
+\end{enumerate}
+\hlt{Structural Commentary}: A scalar matrix preserves every one-dimensional coordinate direction and every diagonal line between two coordinates. These diagonal lines force all coordinate scalars to agree.\\
+\hlt{Key Insight}: If every vector is an eigenvector, then there can be only one eigenvalue.
+\end{proof}
+\end{lemma}
+
+\begin{lemma} \label{lem:nonscalar-similar-zero-entry} \hlt{Nonscalar Matrices Have a Zero Diagonal Entry After Similarity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $n\geq2$.\\
+If $A$ is not a scalar matrix, then $A$ is similar over $\mathbb{F}$ to a matrix whose $(1,1)$ entry is $0$.
+\begin{proof}
+By Lemma \ref{lem:scalar-matrix-dependent-orbits}, there is $\mathbf{x}\in\mathbb{F}^n$ such that $(\mathbf{x},A\mathbf{x})$ is linearly independent. Extend $(\mathbf{x},A\mathbf{x})$ to a basis $\beta$ of $\mathbb{F}^n$. In the basis $\beta$, the first column of the matrix of $A$ is the coordinate vector of $A\mathbf{x}$, namely $(0,1,0,\ldots,0)^t$. Thus the $(1,1)$ entry is $0$, and this matrix is similar to $A$.\\
+\hlt{Structural Commentary}: Nonscalarity produces a vector whose first iterate points in a genuinely new direction. Using these two vectors as the start of a basis forces a zero in the first diagonal position.\\
+\hlt{Key Insight}: Put $\mathbf{x}$ first and $A\mathbf{x}$ second in the basis.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:similar-to-constant-diagonal} \hlt{Similarity to a Constant-Diagonal Matrix}\\
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. Then $A$ is similar over $\mathbb{F}$ to a matrix whose diagonal entries are all equal to $\frac{1}{n}\operatorname{tr}(A)$.
+\begin{proof}
+Set $\tau=\frac{1}{n}\operatorname{tr}(A)$ and $B=A-\tau I_n$. Then $\operatorname{tr}(B)=0$. It is enough to show that every trace-zero matrix is similar to a matrix with zero diagonal, because Theorem \ref{thm:similarity-preserves-scalar-shifts} then adds $\tau I_n$ back to the diagonal.\\
+We prove the trace-zero claim by induction on $n$. The case $n=1$ is immediate. Let $n\geq2$ and let $\operatorname{tr}(B)=0$. If $B$ is scalar, then $B=cI_n$ and $0=\operatorname{tr}(B)=nc$, so $c=0$. If $B$ is not scalar, Lemma \ref{lem:nonscalar-similar-zero-entry} makes $B$ similar to
+\begin{align}
+\begin{bmatrix}
+0 & *\\
+* & B_1
+\end{bmatrix},
+\qquad
+\operatorname{tr}(B_1)=0.
+\nonumber
+\end{align}
+By induction, $B_1$ is similar to a matrix with zero diagonal. Conjugating by a block diagonal matrix that leaves the first coordinate fixed makes the whole matrix have zero diagonal.\\
+\hlt{Structural Commentary}: The proof removes one zero diagonal entry at a time.\\
+\hlt{Key Insight}: Similarity creates the first zero; trace zero handles the smaller block.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:shoda-trace-zero-commutators} \hlt{Shoda's Theorem in the Distinct-Diagonal Case}\\
+Let $n\geq1$ and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the matrix $A$ is a commutator in $\operatorname{Mat}(n,n,\mathbb{F})$ if and only if $\operatorname{tr}(A)=0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] This is Proposition \ref{prop:commutators-have-zero-trace}.
+\item[$(\Leftarrow)$] Suppose $\operatorname{tr}(A)=0$. By Theorem \ref{thm:similar-to-constant-diagonal}, there is an invertible $S$ such that $B=S^{-1}AS=[b_{ij}]$ has zero diagonal. Let $X=\operatorname{diag}(1,2,\ldots,n)$, viewing the integers as scalars in $\mathbb{F}$, and define $Y=[y_{ij}]$ by
+\begin{align}
+y_{ij}=
+\begin{cases}
+(i-j)^{-1}b_{ij}, & i\neq j,\\
+0, & i=j.
+\end{cases}
+\nonumber
+\end{align}
+The hypothesis ensures that $i-j\neq0$ in $\mathbb{F}$ whenever $i\neq j$. Thus $XY-YX=[(i-j)y_{ij}]=B$.\\
+Hence $A=(SXS^{-1})(SYS^{-1})-(SYS^{-1})(SXS^{-1})$, so $A$ is a commutator.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity reduces trace zero to zero diagonal form.\\
+\hlt{Key Insight}: A distinct diagonal commutator solves off-diagonal entries one at a time.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:shoda-field-hypothesis} \hlt{Field Hypothesis in the Diagonal Proof}\\
+The proof above uses that the integers $1,\ldots,n$ are distinct and that each smaller block size remains nonzero in $\mathbb{F}$. In small characteristic, this diagonal proof must be replaced by a more delicate argument.
+\end{remark}
 
 \begin{proposition} \label{prop:invariant-subspaces-and-block-form} \hlt{Invariant Subspaces and Block Form}\\
 Let $T \in \LL(\mathcal{V})$ and suppose $\mathcal{V} = \mathcal{U} \oplus \mathcal{W}$.
