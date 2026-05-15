@@ -78,24 +78,43 @@ For $\mathbf{v}\in\mathcal{V}$, the \hlt{norm} of $\mathbf{v}$ is $\norm{\mathbf
 \end{definition}
 
 \begin{example} \label{ex:norms-induced-by-inner-products} \hlt{Norms from Standard Inner Products}\\
-In $\mathbb{F}^n$, $\norm{(x_1,\ldots,x_n)}=\sqrt{\abs{x_1}^2+\cdots+\abs{x_n}^2}$. In $C_{\mathbb{F}}[a,b]$ with the integral inner product, $\norm{f} =\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.
+In $\mathbb{F}^n$, norm from standard inner product is \hlt{Euclidean norm} $\norm{(x_1,\ldots,x_n)}_2=\sqrt{\abs{x_1}^2+\cdots+\abs{x_n}^2}$.\\
+In $C_{\mathbb{F}}[a,b]$, with integral inner product, derived norm is \hlt{$L^2$ norm} $\norm{f}_{2}=\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.\\
+In $\operatorname{Mat}(m,n,\mathbb{F})$, with Frobenius inner product, \hlt{Frobenius norm} is $\norm{A}_{F}=\sqrt{\innerprod[F]{A,A}}=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n}\abs{a_{ij}}^2}$, $A=[a_{ij}]$. The Frobenius norm is also called the \hlt{Schur norm} or \hlt{Hilbert-Schmidt norm}.
 \end{example}
 
-\begin{proposition} \label{prop:basic-norm-identities} \hlt{Basic Norm Identities}\\
-Let $\mathcal{V}$ be an inner-product space. For all $\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
+\begin{proposition} \label{prop:derived-norm-basic-properties}\label{prop:basic-norm-identities} \hlt{Basic Properties of the Derived Norm}\\
+Let $\mathcal{V}$ be an inner-product space with derived norm $\norm{\cdot}$. For all $\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
+\item $\norm{\mathbf{v}}$ is real and nonnegative;
 \item $\norm{\mathbf{v}}=0$ if and only if $\mathbf{v}=\mathbf{0}$;
 \item $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
+\item By positivity, $\innerprod{\mathbf{v},\mathbf{v}}$ is real and nonnegative, so its square root is real and nonnegative.
 \item By definition, $\norm{\mathbf{v}}=0$ if and only if $\innerprod{\mathbf{v},\mathbf{v}}=0$, which holds if and only if $\mathbf{v}=\mathbf{0}$ by definiteness.
 \item Compute $\norm{\lambda\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\lambda\mathbf{v}} =\lambda\overline{\lambda}\innerprod{\mathbf{v},\mathbf{v}} =\abs{\lambda}^2\norm{\mathbf{v}}^2$. Taking nonnegative square roots, $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$.
 \end{enumerate}
-\hlt{Structural Commentary}: Positivity and sesquilinearity give these two norm identities.\\
+\hlt{Structural Commentary}: Positivity gives length; sesquilinearity gives scaling.\\
 \hlt{Key Insight}: Squared length is easier to manipulate than length itself.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:unit-vector-and-normalization} \hlt{Unit Vector and Normalization}\\
+A vector $\mathbf{u}\in\mathcal{V}$ is a \hlt{unit vector} if $\norm{\mathbf{u}}=1$. If $\mathbf{v}\neq\mathbf{0}$, then $\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is called the \hlt{normalization} of $\mathbf{v}$.
+\end{definition}
+
+\begin{proposition} \label{prop:normalization-gives-unit-vector} \hlt{Normalization Gives a Unit Vector}\\
+If $\mathbf{v}\in\mathcal{V}$ and $\mathbf{v}\neq\mathbf{0}$, then $\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is a unit vector in the same direction as $\mathbf{v}$.
+\begin{proof}
+By Proposition \ref{prop:derived-norm-basic-properties}, $\norm{\mathbf{v}}>0$ and $\norm{\frac{\mathbf{v}}{\norm{\mathbf{v}}}} =\frac{1}{\norm{\mathbf{v}}}\norm{\mathbf{v}}=1$.\\
+The vector $\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is a positive scalar multiple of $\mathbf{v}$, so it lies in the same one-dimensional direction.
+\\
+\hlt{Structural Commentary}: Normalization changes scale but preserves direction.\\
+\hlt{Key Insight}: Divide by the length to make the length equal to one.
 \end{proof}
 \end{proposition}
 
@@ -141,9 +160,9 @@ Since $\mathbf{u}\perp\mathbf{v}$, Proposition \ref{prop:orthogonality-and-zero}
 \end{proof}
 \end{theorem}
 
-\begin{proposition} \label{prop:orthogonal-decomposition-one-vector} \hlt{Orthogonal Decomposition Along One Vector}\\
-Let $\mathbf{u},\mathbf{v}\in\mathcal{V}$ with $\mathbf{v}\neq\mathbf{0}$. Define $c\defeq\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}$, $\mathbf{w}\defeq\mathbf{u}-c\mathbf{v}$.\\
-Then $\mathbf{w}\perp\mathbf{v}$ and $\mathbf{u}=c\mathbf{v}+\mathbf{w}$. The vector $c\mathbf{v}$ is the \hlt{orthogonal projection} of $\mathbf{u}$ onto $\operatorname{span}(\mathbf{v})$.
+\begin{proposition} \label{prop:orthogonal-projection-onto-line}\label{prop:orthogonal-decomposition-one-vector} \hlt{Orthogonal Projection onto a Line}\\
+Let $\mathbf{u},\mathbf{v}\in\mathcal{V}$ with $\mathbf{v}\neq\mathbf{0}$. Define $c\defeq\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}$, $\mathbf{w}\defeq\mathbf{u}-c\mathbf{v}$. Then $\mathbf{w}\perp\mathbf{v}$ and $\mathbf{u}=c\mathbf{v}+\mathbf{w}$.\\
+The vector $\operatorname{proj}_{\mathbf{v}}(\mathbf{u})\defeq c\mathbf{v} =\innerprod{\mathbf{u},\frac{\mathbf{v}}{\norm{\mathbf{v}}}}\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is the \hlt{orthogonal projection} of $\mathbf{u}$ onto $\operatorname{span}(\mathbf{v})$.
 \begin{proof}
 The decomposition $\mathbf{u}=c\mathbf{v}+\mathbf{w}$ follows from the definition of $\mathbf{w}$.\\
 Moreover, $\innerprod{\mathbf{w},\mathbf{v}} =\innerprod{\mathbf{u}-c\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{u},\mathbf{v}}-c\innerprod{\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{u},\mathbf{v}} -\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}\norm{\mathbf{v}}^2 =0$. Thus $\mathbf{w}\perp\mathbf{v}$.\\
@@ -210,12 +229,37 @@ For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}}^2+\
 \begin{proof}
 Expanding both squared norms gives
 \begin{align}
-\norm{\mathbf{u}+\mathbf{v}}^2 &=\norm{\mathbf{u}}^2+\innerprod{\mathbf{u},\mathbf{v}} +\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2, \nonumber \\
-\norm{\mathbf{u}-\mathbf{v}}^2 &=\norm{\mathbf{u}}^2-\innerprod{\mathbf{u},\mathbf{v}} -\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2. \nonumber
+\norm{\mathbf{u}+\mathbf{v}}^2 =\norm{\mathbf{u}}^2+\innerprod{\mathbf{u},\mathbf{v}} +\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2, \quad \norm{\mathbf{u}-\mathbf{v}}^2 =\norm{\mathbf{u}}^2-\innerprod{\mathbf{u},\mathbf{v}} -\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2. \nonumber
 \end{align}
 Adding the two identities cancels the cross terms and yields the result.\\
 \hlt{Structural Commentary}: Opposite cross terms cancel when the two diagonal norms are added.\\
 \hlt{Key Insight}: Inner-product norms remember parallelogram geometry through cancellation.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/polarization_identity_inner_product.tikz}
+  \caption{Polarization recovers inner-product information from the lengths of sum and difference vectors.}
+  \label{fig:polarization-identity-inner-product}
+\end{figure}
+
+\begin{theorem} \label{thm:polarization-identities} \hlt{Polarization Identities}\\
+Let $\mathcal{V}$ be an inner-product space and let $\mathbf{u},\mathbf{v}\in\mathcal{V}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item If $\mathbb{F}=\mathbb{R}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2\right)$
+\item If $\mathbb{F}=\mathbb{C}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2 +i\norm{\mathbf{u}+i\mathbf{v}}^2-i\norm{\mathbf{u}-i\mathbf{v}}^2\right)$
+\end{enumerate}
+\begin{proof}
+Let $z\defeq\innerprod{\mathbf{u},\mathbf{v}}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathbb{F}=\mathbb{R}$, then expanding squared norms gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z=4z$, proving (i).
+\item If $\mathbb{F}=\mathbb{C}$, the first expansion gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z$. The same expansion with $i\mathbf{v}$ gives $\norm{\mathbf{u}+i\mathbf{v}}^2-\norm{\mathbf{u}-i\mathbf{v}}^2=4\operatorname{Im} z$. Combining the real and imaginary parts gives (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Two norm differences extract the real and imaginary parts.\\
+\hlt{Key Insight}: The norm determines the inner product because it determines both parts of every cross term.
 \end{proof}
 \end{theorem}
 
