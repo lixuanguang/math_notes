@@ -433,7 +433,7 @@ $[T]_{\gamma \leftarrow \beta} \defeq
 \begin{definition} \hlt{Column Space, Matrix Rank, and Nullity}\\
 Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
 The \hlt{column space} of $A$ is $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and the \hlt{row space} of $A$ is $\operatorname{row}(A)\defeq\operatorname{col}(A^t)\subseteq\mathbb{F}^n$.\\
-The \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$. If $\operatorname{rank}(A)=\min(m,n)$, then $A$ has \hlt{full rank}; if $\operatorname{rank}(A)=n$, then $A$ has \hlt{full column rank}; if $\operatorname{rank}(A)=m$, then $A$ has \hlt{full row rank}.\\
+The \hlt{column rank} of $A$ is $\dim(\operatorname{col}(A))$, the \hlt{row rank} of $A$ is $\dim(\operatorname{row}(A))$, and the \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$. If $\operatorname{rank}(A)=\min(m,n)$, then $A$ has \hlt{full rank}; if $\operatorname{rank}(A)=n$, then $A$ has \hlt{full column rank}; if $\operatorname{rank}(A)=m$, then $A$ has \hlt{full row rank}.\\
 The \hlt{kernel} of $A$ is $\ker(A)\defeq\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{0}\}$, and the \hlt{nullity} of $A$ is $\operatorname{nullity}(A)\defeq\dim(\ker(A))$.
 \end{definition}
 
@@ -476,7 +476,7 @@ Apply Theorem \ref{thm:rank-nullity} to the induced linear map $T_A:\mathbb{F}^n
 \end{corollary}
 
 \begin{theorem} \label{thm:row-rank-equals-column-rank} \hlt{Row Rank Equals Column Rank}\\
-For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $dim(\operatorname{row}(A))=\dim(\operatorname{col}(A))$. Equivalently, $\operatorname{rank}(A^t)=\operatorname{rank}(A)$.
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\dim(\operatorname{row}(A))=\dim(\operatorname{col}(A))$. Equivalently, $\operatorname{rank}(A^t)=\operatorname{rank}(A)$.
 \begin{proof}
 Let $r=\operatorname{rank}(A)$. If $r=0$, then $A=0$, so the result is immediate. Suppose $r>0$.\\
 Choose columns $\mathbf{a}_{j_1},\ldots,\mathbf{a}_{j_r}$ forming a basis of $\operatorname{col}(A)$, and set $B=[\mathbf{a}_{j_1}\ \cdots\ \mathbf{a}_{j_r}]\in\operatorname{Mat}(m,r,\mathbb{F})$.\\
@@ -510,6 +510,31 @@ For the block matrix, $\operatorname{col}\!\begin{bmatrix}A & C\end{bmatrix}=\op
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:sylvester-rank-inequality} \hlt{Sylvester Rank Inequality}\\
+Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$. Then $\operatorname{rank}(A)+\operatorname{rank}(B)-k\leq\operatorname{rank}(AB)$.
+\begin{proof}
+Let $R=\operatorname{col}(B)\subseteq\mathbb{F}^k$. The columns of $AB$ are $A$ applied to the columns of $B$, so $\operatorname{col}(AB)=A(R)$.\\
+Applying rank-nullity to the restriction of the induced map $T_A$ to $R$ gives
+\begin{align}
+\operatorname{rank}(AB) =\dim(A(R)) =\dim(R)-\dim(R\cap\ker(A)) \geq \operatorname{rank}(B)-\dim(\ker(A)).
+\nonumber
+\end{align}
+Since $A$ has $k$ columns, Corollary \ref{cor:matrix-rank-nullity} gives $\dim(\ker(A))=k-\operatorname{rank}(A)$. Substitution gives desired inequality.\\
+\hlt{Structural Commentary}: Multiplication by $A$ can lose only the part of $\operatorname{col}(B)$ lying in $\ker(A)$. Sylvester's inequality is this loss estimate in dimensions.\\
+\hlt{Key Insight}: The shared middle dimension $k$ bounds how much rank can disappear in the product.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:rank-triangle-inequality} \hlt{Rank Triangle Inequality}\\
+If $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, then $\abs{\operatorname{rank}(A)-\operatorname{rank}(B)} \leq \operatorname{rank}(A+B) \leq \operatorname{rank}(A)+\operatorname{rank}(B)$.
+\begin{proof}
+Since $\operatorname{col}(A+B)\subseteq\operatorname{col}(A)+\operatorname{col}(B)$, Theorem \ref{thm:dimension-formula-for-sum} gives $\operatorname{rank}(A+B)\leq\dim(\operatorname{col}(A)+\operatorname{col}(B))\leq\operatorname{rank}(A)+\operatorname{rank}(B)$.
+Applying this upper bound to $A=(A+B)-B$ gives $\operatorname{rank}(A)\leq\operatorname{rank}(A+B)+\operatorname{rank}(B)$, and applying it to $B=(A+B)-A$ gives $\operatorname{rank}(B)\leq\operatorname{rank}(A+B)+\operatorname{rank}(A)$. These two inequalities are equivalent to the lower bound.\\
+\hlt{Structural Commentary}: The rank of a sum is controlled by the sum of the two column spaces. The reverse bounds come by solving for either summand.\\
+\hlt{Key Insight}: Rank behaves like a dimension-valued size under addition.
+\end{proof}
+\end{theorem}
+
 \begin{theorem} \label{thm:full-rank-factorization} \hlt{Full-Rank Factorization}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq 1$, and let the columns of $X\in\operatorname{Mat}(m,r,\mathbb{F})$ be a basis of $\operatorname{col}(A)$. Then there is a unique $Y\in\operatorname{Mat}(r,n,\mathbb{F})$ such that $A=XY$, and $\operatorname{rank}(X)=\operatorname{rank}(Y)=r$.
 \begin{proof}
@@ -523,6 +548,16 @@ By Theorem \ref{thm:rank-product-and-concatenation-bounds}, $r=\operatorname{ran
 \begin{definition} \label{def:full-rank-factorization} \hlt{Full-Rank Factorization}\\
 A factorization $A=XY$ with $X$ full column rank and $Y$ full row rank is called a \hlt{full-rank factorization} of $A$.
 \end{definition}
+
+\begin{theorem} \label{thm:complete-full-column-rank-matrix} \hlt{Completing a Full-Column-Rank Matrix}\\
+If $X\in\operatorname{Mat}(m,n,\mathbb{F})$ has rank $n<m$, then $\exists$ $X'\in\operatorname{Mat}(m,m-n,\mathbb{F})$ s.t. $\begin{bmatrix}X & X'\end{bmatrix}\in\operatorname{Mat}(m,m,\mathbb{F})$ is invertible.
+\begin{proof}
+Write $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_n]$. Since $\operatorname{rank}(X)=n$, the columns $\mathbf{x}_1,\ldots,\mathbf{x}_n$ are linearly independent in $\mathbb{F}^m$. By Theorem \ref{thm:extending-independent-lists}, extend this list to a basis $(\mathbf{x}_1,\ldots,\mathbf{x}_n,\mathbf{x}_{n+1},\ldots,\mathbf{x}_m)$ of $\mathbb{F}^m$.\\
+Set $X'=[\mathbf{x}_{n+1}\ \cdots\ \mathbf{x}_m]$. Corollary \ref{cor:basis-columns-form-invertible-matrix} shows that $\begin{bmatrix}X & X'\end{bmatrix}$ is invertible.\\
+\hlt{Structural Commentary}: Full column rank means the existing columns are independent directions. Extending them to a basis turns the rectangular matrix into an invertible square matrix.\\
+\hlt{Key Insight}: Independent columns can always be completed to a basis in finite dimensions.
+\end{proof}
+\end{theorem}
 
 \begin{corollary} \label{cor:homogeneous-system-more-variables-than-equations} \hlt{Homogeneous Systems with More Variables Than Equations}\\
 If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $n>m$, then the homogeneous system $A\mathbf{x}=\mathbf{0}$ has a nonzero solution.
@@ -544,10 +579,8 @@ The induced map $T_A:\mathbb{F}^n\to\mathbb{F}^m$ has domain dimension smaller t
 \end{corollary}
 
 \begin{proposition} \label{prop:matrix-representation-action} \hlt{Matrix Representation Acts on Coordinates}\\
-Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$, let $\gamma$ be a basis of $\mathcal{W}$, and let $T\in\LL(\mathcal{V},\mathcal{W})$. Then for every $\mathbf{v} \in \mathcal{V}$,
-\begin{align}
-[T(\mathbf{v})]_{\gamma} = [T]_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}. \nonumber
-\end{align}
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$, let $\gamma$ be a basis of $\mathcal{W}$, and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+Then for every $\mathbf{v} \in \mathcal{V}$, $[T(\mathbf{v})]_{\gamma} = [T]_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}$.
 \begin{proof}
 Write $\mathbf{v} = a_1\mathbf{v}_1 + \cdots + a_n\mathbf{v}_n$. Then linearity gives $T(\mathbf{v}) = a_1T(\mathbf{v}_1) + \cdots + a_nT(\mathbf{v}_n)$ and the right-hand side is exactly the linear combination of the columns of $[T]_{\gamma \leftarrow \beta}$ with coefficients $a_1,\ldots,a_n$.\\
 \hlt{Structural Commentary}: Matrix representation turns applying $T$ into multiplying coordinate columns.\\
@@ -793,6 +826,207 @@ A_{21} & A_{22}
 \end{align}
 where each block records the part of $T$ mapping one summand of the domain into one summand of the codomain.
 \end{definition}
+
+\begin{definition} \hlt{Conformal Block Partitions}\\
+For a block matrix $A=[A_{ij}]$, the submatrices $A_{ij}$ are called \hlt{blocks}. Two block partitions are \hlt{conformal for addition} when corresponding blocks have the same sizes. They are \hlt{conformal for multiplication} when every block product appearing in the usual row-column block multiplication is defined.
+\end{definition}
+
+\begin{proposition} \label{prop:block-matrix-arithmetic} \hlt{Block Matrix Arithmetic}\\
+For conformal $2\times2$ block matrices,
+\begin{align}
+\begin{bmatrix}
+A_{11} & A_{12}\\
+A_{21} & A_{22}
+\end{bmatrix}
++
+\begin{bmatrix}
+B_{11} & B_{12}\\
+B_{21} & B_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+A_{11}+B_{11} & A_{12}+B_{12}\\
+A_{21}+B_{21} & A_{22}+B_{22}
+\end{bmatrix}
+\nonumber
+\end{align}
+and
+\begin{align}
+\begin{bmatrix}
+A_{11} & A_{12}\\
+A_{21} & A_{22}
+\end{bmatrix}
+\begin{bmatrix}
+B_{11} & B_{12}\\
+B_{21} & B_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+A_{11}B_{11}+A_{12}B_{21} & A_{11}B_{12}+A_{12}B_{22}\\
+A_{21}B_{11}+A_{22}B_{21} & A_{21}B_{12}+A_{22}B_{22}
+\end{bmatrix}.
+\nonumber
+\end{align}
+\begin{proof}
+Each displayed block consists of the same entries obtained by ordinary entrywise addition or ordinary row-column multiplication, with the common indices grouped according to the partition.\\
+\hlt{Structural Commentary}: This is ordinary matrix arithmetic with indices grouped into rectangular packages.\\
+\hlt{Key Insight}: Conformality is exactly the condition that the grouped row-column products make sense.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \hlt{Direct Sum of Matrices}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(p,q,\mathbb{F})$, the \hlt{direct sum} of $A$ and $B$ is
+\begin{align}
+A\oplus B\defeq
+\begin{bmatrix}
+A & 0\\
+0 & B
+\end{bmatrix}
+\in\operatorname{Mat}(m+p,n+q,\mathbb{F}).
+\nonumber
+\end{align}
+\end{definition}
+
+\begin{proposition} \label{prop:direct-sum-matrix-algebra} \hlt{Algebra of Matrix Direct Sums}\\
+Whenever the expressions are defined,
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $a(A\oplus B)+b(C\oplus D)=(aA+bC)\oplus(aB+bD)$;
+\item $(A\oplus B)(C\oplus D)=AC\oplus BD$;
+\item if $A$ and $B$ are square, then $(A\oplus B)^k=A^k\oplus B^k$ for every positive integer $k$;
+\item if $A$ and $B$ are square and $p$ is a polynomial, then $p(A\oplus B)=p(A)\oplus p(B)$.
+\end{enumerate}
+\begin{proof}
+Parts (i) and (ii) follow immediately from Proposition \ref{prop:block-matrix-arithmetic}. Part (iii) follows from (ii) by induction on $k$, and part (iv) follows by applying (i) to the finite linear combination defining $p(A\oplus B)$.\\
+\hlt{Structural Commentary}: A direct sum matrix keeps the two blocks independent under linear combinations, products, powers, and polynomials.\\
+\hlt{Key Insight}: Block diagonal matrices behave componentwise.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:diagonal-multiplication-scales-rows-columns} \hlt{Diagonal Multiplication Scales Rows and Columns}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$, let $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$, and let $M=\operatorname{diag}(\mu_1,\ldots,\mu_m)$. Then $A\Lambda=[\lambda_j a_{ij}]$ and $MA=[\mu_i a_{ij}]$. Thus right multiplication by $\Lambda$ scales columns of $A$, left multiplication by $M$ scales rows of $A$.
+\begin{proof}
+The $(i,j)$ entry of $A\Lambda$ is $\sum_{r=1}^n a_{ir}\Lambda_{rj}=a_{ij}\lambda_j$, and the $(i,j)$ entry of $MA$ is $\sum_{r=1}^m M_{ir}a_{rj}=\mu_i a_{ij}$.\\
+\hlt{Structural Commentary}: Diagonal matrices act by independent scalar weights on coordinate directions.\\
+\hlt{Key Insight}: Multiplication on the right scales columns, while multiplication on the left scales rows.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:block-upper-triangular-inverse} \hlt{Inverse of an Upper Block-Triangular Matrix}\\
+If $Y$ and $Z$ are square invertible matrices and $X$ has compatible size, then
+\begin{align}
+\begin{bmatrix}
+Y & X\\
+0 & Z
+\end{bmatrix}^{-1}
+=
+\begin{bmatrix}
+Y^{-1} & -Y^{-1}XZ^{-1}\\
+0 & Z^{-1}
+\end{bmatrix}.
+\nonumber
+\end{align}
+\begin{proof}
+Multiplying the two displayed block matrices in either order gives
+\begin{align}
+\begin{bmatrix}
+I & 0\\
+0 & I
+\end{bmatrix},
+\nonumber
+\end{align}
+by Proposition \ref{prop:block-matrix-arithmetic}. Hence the displayed matrix is the inverse.\\
+\hlt{Structural Commentary}: Upper block-triangular inversion preserves the zero lower-left block. The off-diagonal term is forced by cancelling the original upper-right block.\\
+\hlt{Key Insight}: Inverting a block triangular matrix inverts diagonal blocks and corrects the coupling block.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:inverse-upper-triangular} \hlt{Inverse of an Upper Triangular Matrix}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ be upper triangular with nonzero diagonal entries. Then $A$ is invertible, $A^{-1}$ is upper triangular, and the diagonal entries of $A^{-1}$ are $a_{11}^{-1},\ldots,a_{nn}^{-1}$.
+\begin{proof}
+We argue by induction on $n$. The case $n=1$ is immediate. For $n>1$, write
+\begin{align}
+A=
+\begin{bmatrix}
+B & \mathbf{x}\\
+0 & a_{nn}
+\end{bmatrix},
+\nonumber
+\end{align}
+where $B$ is $(n-1)\times(n-1)$ upper triangular with nonzero diagonal entries. By induction, $B^{-1}$ is upper triangular with diagonal entries $a_{11}^{-1},\ldots,a_{n-1,n-1}^{-1}$. Proposition \ref{prop:block-upper-triangular-inverse} gives
+\begin{align}
+A^{-1}=
+\begin{bmatrix}
+B^{-1} & -B^{-1}\mathbf{x}a_{nn}^{-1}\\
+0 & a_{nn}^{-1}
+\end{bmatrix},
+\nonumber
+\end{align}
+which is upper triangular and has the asserted diagonal.\\
+\hlt{Structural Commentary}: An upper triangular matrix splits into a smaller upper triangular block and one final scalar block. The block inverse formula preserves this triangular structure.\\
+\hlt{Key Insight}: Nonzero diagonals make blockwise triangular inversion possible.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:upper-block-triangular-similarity-shift} \hlt{Upper Block-Triangular Similarity Shift}\\
+Let $B\in\operatorname{Mat}(m,m,\mathbb{F})$, let $D\in\operatorname{Mat}(n,n,\mathbb{F})$, and let $C,X\in\operatorname{Mat}(m,n,\mathbb{F})$. Then
+\begin{align}
+\begin{bmatrix}
+B & C\\
+0 & D
+\end{bmatrix}
+\quad\text{is similar to}\quad
+\begin{bmatrix}
+B & C+XD-BX\\
+0 & D
+\end{bmatrix}.
+\nonumber
+\end{align}
+\begin{proof}
+The matrices $\begin{bmatrix} I & X\\ 0 & I \end{bmatrix}$ and $\begin{bmatrix} I & -X\\ 0 & I \end{bmatrix}$ are inverses, and block multiplication gives
+\begin{align}
+\begin{bmatrix}
+I & X\\
+0 & I
+\end{bmatrix}
+\begin{bmatrix}
+B & C\\
+0 & D
+\end{bmatrix}
+\begin{bmatrix}
+I & -X\\
+0 & I
+\end{bmatrix}
+=
+\begin{bmatrix}
+B & C+XD-BX\\
+0 & D
+\end{bmatrix}.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: Unit upper block-triangular conjugation changes only the coupling block.\\
+\hlt{Key Insight}: Similarity can adjust the connecting block while preserving the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:block-diagonal-commutant-distinct-scalars} \hlt{Commuting with a Block Scalar Diagonal Matrix}\\
+Let $\lambda_1,\ldots,\lambda_k\in\mathbb{F}$ and let $\Lambda=\lambda_1 I_{n_1}\oplus\cdots\oplus\lambda_k I_{n_k}$.\\
+Partition $A=[A_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ conformally with $\Lambda$, so $A_{ij}\in\operatorname{Mat}(n_i,n_j,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ is block diagonal, then $A\Lambda=\Lambda A$.
+\item If $A\Lambda=\Lambda A$ and $\lambda_1,\ldots,\lambda_k$ are distinct, then $A$ is block diagonal.
+\end{enumerate}
+\begin{proof}
+Block multiplication gives $(A\Lambda)_{ij}=\lambda_jA_{ij}$ and $(\Lambda A)_{ij}=\lambda_iA_{ij}$. If $A$ is block diagonal, then $A_{ij}=0$ for $i\neq j$, and these two expressions agree for every block. Conversely, if $A\Lambda=\Lambda A$, then $(\lambda_j-\lambda_i)A_{ij}=0$ for every $i,j$. Distinctness of the $\lambda_i$ forces $A_{ij}=0$ whenever $i\neq j$, so $A$ is block diagonal.\\
+\hlt{Structural Commentary}: Distinct scalar blocks force commuting matrices to respect the block decomposition.\\
+\hlt{Key Insight}: Distinct block scalars make every off-diagonal block visible and force it to vanish.
+\end{proof}
+\end{lemma}
+
+\begin{example} \hlt{Distinctness Is Necessary}\\
+The distinctness hypothesis in Lemma \ref{lem:block-diagonal-commutant-distinct-scalars} cannot be dropped. If $\lambda_1=\cdots=\lambda_k=1$, then $\Lambda=I_n$ commutes with every matrix in $\operatorname{Mat}(n,n,\mathbb{F})$, including matrices that are not block diagonal for the chosen partition.
+\end{example}
 
 \begin{proposition} \label{prop:invariant-subspaces-and-block-form} \hlt{Invariant Subspaces and Block Form}\\
 Let $T \in \LL(\mathcal{V})$ and suppose $\mathcal{V} = \mathcal{U} \oplus \mathcal{W}$.
