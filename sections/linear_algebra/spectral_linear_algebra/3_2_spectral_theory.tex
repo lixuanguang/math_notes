@@ -178,3 +178,161 @@ For $\lambda\in\mathbb{F}$, the matrix of $T-\lambda I_{\mathcal{V}}$ in the sam
 \begin{perspective} \label{per:upper-triangular-viewpoint} \hlt{Why Triangular Form Matters}\\
 Upper-triangular form is the first useful simplification beyond finding one eigenvector. It preserves enough of the operator to read eigenvalues from the diagonal while still allowing nontrivial coupling above the diagonal.
 \end{perspective}
+
+\begin{theorem} \label{thm:complex-spectral-theorem} \hlt{Complex Spectral Theorem}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $T$ is normal;
+\item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$
+By Schur triangularisation (Theorem \ref{thm:schur-triangularization}), choose an orthonormal basis $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ in which $A=[T]_{\gamma\leftarrow\gamma}=[a_{ij}]$ is upper triangular. Clear rows inductively: once rows $<k$ are cleared, Theorem \ref{thm:normal-iff-equal-adjoint-norms} gives $\abs{a_{kk}}^2=\norm{T\mathbf{e}_k}^2=\norm{T^*\mathbf{e}_k}^2 =\abs{a_{kk}}^2+\sum_{j>k}\abs{a_{kj}}^2$.\\
+Hence $a_{kj}=0$ for $j>k$. Thus $A$ is diagonal, so $\gamma$ is an orthonormal basis of eigenvectors.
+\item[$(ii)$]$\Rightarrow(iii)$
+In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
+\item[$(iii)$]$\Rightarrow(i)$
+If $[T]$ is diagonal in an orthonormal basis, then $[T^*]=[T]^*$ is diagonal as well. Diagonal matrices commute, so $TT^*=T^*T$; hence $T$ is normal.
+\end{enumerate}
+\hlt{Structural Commentary}: Schur gives triangular form; normality kills the upper entries.\\
+\hlt{Key Insight}: Equal norms of $T\mathbf{e}_j$ and $T^*\mathbf{e}_j$ force each row tail to vanish.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/spectral_theorem_triangular_to_diagonal.tikz}
+  \caption{Normality turns Schur triangular form diagonal by forcing row tails to vanish.}
+  \label{fig:spectral-theorem-triangular-to-diagonal}
+\end{figure}
+
+\begin{proposition} \label{prop:invertible-quadratic-self-adjoint} \hlt{Invertible Quadratic Expressions}\\
+Let $T\in\LL(\mathcal{V})$ be self-adjoint on a finite-dimensional inner-product space.\\
+If $b,c\in\mathbb{R}$ and $b^2<4c$, then $T^2+bT+cI_{\mathcal{V}}$ is invertible.
+\begin{proof}
+Let $S=T^2+bT+cI_{\mathcal{V}}$. For $\mathbf{v}\neq\mathbf{0}$,
+\begin{align}
+\innerprod{S\mathbf{v},\mathbf{v}} &=\norm{T\mathbf{v}}^2+b\innerprod{T\mathbf{v},\mathbf{v}}+c\norm{\mathbf{v}}^2 \geq \norm{T\mathbf{v}}^2-\abs{b}\norm{T\mathbf{v}}\norm{\mathbf{v}}+c\norm{\mathbf{v}}^2 \nonumber \\
+&=\left(\norm{T\mathbf{v}}-\frac{\abs{b}}{2}\norm{\mathbf{v}}\right)^2+\left(c-\frac{b^2}{4}\right)\norm{\mathbf{v}}^2>0 \nonumber
+\end{align}
+Thus $S\mathbf{v}\neq\mathbf{0}$ for every nonzero $\mathbf{v}$, so $\ker(S)=\{\mathbf{0}\}$. In finite dimensions, injectivity implies invertibility.\\
+\hlt{Structural Commentary}: Negative discriminant keeps this self-adjoint quadratic positive.\\
+\hlt{Key Insight}: Self-adjointness converts $\innerprod{T^2\mathbf{v},\mathbf{v}}$ into $\norm{T\mathbf{v}}^2$, so completing the square controls the kernel.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:self-adjoint-operators-have-eigenvalues} \hlt{Self-Adjoint Operators Have Eigenvalues}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real inner-product space. Every self-adjoint $T\in\LL(\mathcal{V})$ has an eigenvalue.
+\begin{proof}
+Choose $\mathbf{v}\neq\mathbf{0}$ and set $n=\dim(\mathcal{V})$. The list $\mathbf{v},T\mathbf{v},\ldots,T^n\mathbf{v}$ is linearly dependent, so some nonzero real polynomial $p$ satisfies $p(T)\mathbf{v}=\mathbf{0}$. Factor $p$ over $\mathbb{R}$ as a product of real linear factors and irreducible real quadratic factors: $p(x)=a\prod_{j=1}^{M}(x^2+b_jx+c_j)\prod_{k=1}^{m}(x-\lambda_k)$, where $a\neq0$, $b_j^2<4c_j$, and $\lambda_k\in\mathbb{R}$.\\
+By Proposition \ref{prop:invertible-quadratic-self-adjoint}, every quadratic factor $T^2+b_jT+c_jI_{\mathcal{V}}$ is invertible. If $m=0$, then $p(T)$ would be invertible, contradicting $p(T)\mathbf{v}=0$ with $\mathbf{v}\neq0$. Hence $m\geq1$.\\
+After removing the invertible quadratic factors, the product $(T-\lambda_1I_{\mathcal{V}})\cdots(T-\lambda_mI_{\mathcal{V}})$ has nontrivial kernel. Therefore at least one factor $T-\lambda_kI_{\mathcal{V}}$ is not injective, and $\lambda_k$ is an eigenvalue of $T$.\\
+\hlt{Structural Commentary}: An annihilating polynomial remains; quadratic factors are invertible.\\
+\hlt{Key Insight}: The nontrivial kernel must come from a real linear factor, hence from an eigenvalue.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:self-adjoint-invariant-subspaces} \hlt{Self-Adjoint Operators and Invariant Subspaces}\\
+Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}$ be a subspace of $\mathcal{V}$ invariant under $T$. Then:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}^{\perp}$ is invariant under $T$;
+\item $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ is self-adjoint;
+\item $T|_{\mathcal{U}^{\perp}}\in\LL(\mathcal{U}^{\perp})$ is self-adjoint.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+If $\mathbf{v}\in\mathcal{U}^{\perp}$ and $\mathbf{u}\in\mathcal{U}$, then $\innerprod{T\mathbf{v},\mathbf{u}}=\innerprod{\mathbf{v},T\mathbf{u}}=0$ because $T\mathbf{u}\in\mathcal{U}$. Hence $T\mathbf{v}\in\mathcal{U}^{\perp}$.
+\item For $\mathbf{u},\mathbf{v}\in\mathcal{U}$, $\innerprod{(T|_{\mathcal{U}})\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T\mathbf{v}} =\innerprod{\mathbf{u},(T|_{\mathcal{U}})\mathbf{v}}$. Thus $T|_{\mathcal{U}}$ is self-adjoint.
+\item By (i), $\mathcal{U}^{\perp}$ is invariant, so (ii)'s argument applies to $T|_{\mathcal{U}^{\perp}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Self-adjointness preserves orthogonal complements of invariant subspaces.\\
+\hlt{Key Insight}: Move $T$ across the inner product; invariance of $\mathcal{U}$ then forces orthogonality to persist.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:real-spectral-theorem} \hlt{Real Spectral Theorem}\\
+Let $\mathcal{V}$ be a finite-dimensional real inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $T$ is self-adjoint;
+\item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$
+Assume $T=T^*$ and induct on $n=\dim(\mathcal{V})$; $n\leq1$ is clear. For $n\geq2$, Lemma \ref{lem:self-adjoint-operators-have-eigenvalues} gives a unit eigenvector $\mathbf{u}$. Set $\mathcal{U}=\operatorname{span}(\mathbf{u})$. Since $\mathcal{U}$ is invariant, Proposition \ref{prop:self-adjoint-invariant-subspaces} makes $\mathcal{U}^{\perp}$ invariant and $T|_{\mathcal{U}^{\perp}}$ self-adjoint. Induct on $\mathcal{U}^{\perp}$ and adjoin $\mathbf{u}$.
+\item[$(ii)$]$\Rightarrow (iii)$
+In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
+\item[$(iii)$]$\Rightarrow (i)$
+In an orthonormal basis where $[T]$ is real diagonal, $[T^*]=[T]^t=[T]$. Hence $T=T^*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Split off one eigendirection, then restrict to its orthogonal complement.\\
+\hlt{Key Insight}: One eigenvector reduces the dimension.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:positive-operator} \hlt{Positive Operator}\\
+$T\in\LL(\mathcal{V})$ is \hlt{positive} if $T=T^*$ and $\innerprod{T\mathbf{v},\mathbf{v}}\geq0$ for all $\mathbf{v}\in\mathcal{V}$.
+\end{definition}
+
+\begin{definition} \label{def:square-root-operator} \hlt{Square Root of an Operator}\\
+An operator $R\in\LL(\mathcal{V})$ is a \hlt{square root} of $T\in\LL(\mathcal{V})$ if $R^2=T$.
+\end{definition}
+
+\begin{theorem} \label{thm:positive-operator-characterization} \hlt{Characterization of Positive Operators}\\
+For $T\in\LL(\mathcal{V})$, the following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $T$ is positive;
+\item $T$ is self-adjoint and every eigenvalue of $T$ is nonnegative;
+\item $T$ has a positive square root;
+\item $T$ has a self-adjoint square root;
+\item there exists $R\in\LL(\mathcal{V})$ such that $T=R^*R$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ If $T\mathbf{v}=\lambda\mathbf{v}$ and $\mathbf{v}\neq0$, then $\lambda\in\mathbb{R}$ and $0\leq\innerprod{T\mathbf{v},\mathbf{v}}=\lambda\norm{\mathbf{v}}^2$ so $\lambda\geq0$.
+\item[$(ii)$]$\Rightarrow (iii)$ By the spectral theorem, choose an orthonormal eigenbasis $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ with $T\mathbf{e}_j=\lambda_j\mathbf{e}_j$ and $\lambda_j\geq0$. Define $S\mathbf{e}_j=\sqrt{\lambda_j}\mathbf{e}_j$. Then $S$ is positive and $S^2=T$.
+\item[$(iii)$]$\Rightarrow (iv)$ A positive square root is self-adjoint.
+\item[$(iv)$]$\Rightarrow (v)$ If $T=R^2$ with $R=R^*$, then $T=R^*R$.
+\item[$(v)$]$\Rightarrow (i)$ If $T=R^*R$, then $T^*=T$ and $\innerprod{T\mathbf{v},\mathbf{v}}=\innerprod{R\mathbf{v},R\mathbf{v}}=\norm{R\mathbf{v}}^2\geq0$ for every $\mathbf{v}$, so $T$ is positive.
+\end{enumerate}
+\hlt{Structural Commentary}: Positivity equals nonnegative spectrum and square-root factorization.\\
+\hlt{Key Insight}: In an eigenbasis, the proof is scalar: $\lambda\geq0$ iff $\sqrt{\lambda}$ exists.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:positive-square-root-unique} \hlt{Unique Positive Square Root}\\
+Every positive operator on $\mathcal{V}$ has a unique positive square root.
+\begin{proof}
+Existence follows from Theorem \ref{thm:positive-operator-characterization}. For uniqueness, decompose $\mathcal{V}=E_{\lambda_1}(T)\oplus\cdots\oplus E_{\lambda_m}(T)$.\\
+Any positive square root must equal $\sqrt{\lambda_j}I$ on $E_{\lambda_j}(T)$: indeed, if $R^2=T$, then $R$ commutes with $T$, so $E_{\lambda_j}(T)$ is $R$-invariant, and positivity plus the spectral theorem force $R|_{E_{\lambda_j}(T)}=\sqrt{\lambda_j}I$.\\
+Thus two positive square roots agree on every eigenspace.\\
+\hlt{Structural Commentary}: Each eigenspace determines its own scalar root.\\
+\hlt{Key Insight}: Positivity selects the nonnegative root.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:positive-square-root-notation} \hlt{Positive Square Root Notation}\\
+If $T$ is positive, then $\sqrt{T}$ denotes the unique positive square root of $T$.
+\end{definition}
+
+\begin{theorem} \label{thm:complex-isometry-description} \hlt{Description of Complex Isometries}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $S\in\LL(\mathcal{V})$. Then $S$ is an isometry if and only if $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $S$ whose eigenvalues all have absolute value $1$.
+\begin{proof}
+If $S\mathbf{e}_j=\lambda_j\mathbf{e}_j$ in an orthonormal basis with $\abs{\lambda_j}=1$, then for $\mathbf{v}=\sum_j c_j\mathbf{e}_j$,\\
+$\norm{S\mathbf{v}}^2=\sum\limits_j\abs{\lambda_jc_j}^2=\sum\limits_j\abs{c_j}^2=\norm{\mathbf{v}}^2$, so $S$ is an isometry. Conversely, if $S$ is an isometry, then $S^*S=I_{\mathcal{V}}$ by Theorem \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity}. Finite-dimensional invertibility gives $SS^*=I_{\mathcal{V}}$, so $S$ is normal. By Complex Spectral Theorem, choose orthonormal eigenbasis $S\mathbf{e}_j=\lambda_j\mathbf{e}_j$. Since $\mathbf{e}_j$ is unit and $S$ preserves norms, $\abs{\lambda_j}=\norm{S\mathbf{e}_j}=1$.\\
+\hlt{Structural Commentary}: Complex isometries are normal with unit-circle spectrum.\\
+\hlt{Key Insight}: In an eigenbasis, isometry means $\abs{\lambda_j}=1$.
+\end{proof}
+\end{theorem}

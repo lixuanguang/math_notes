@@ -1,1 +1,111 @@
 \subsubsection{Matrix Factorisations and Decompositions}
+
+Factorisations expose the geometry hidden inside a matrix or operator. In this section, positive square roots separate stretching from isometric motion, singular values record the stretching scales, and QR factorisation turns arbitrary independent columns into orthonormal coordinates.
+
+\begin{theorem} \label{thm:polar-decomposition} \hlt{Polar Decomposition}\\
+For every $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\exists$ an isometry $S\in\LL(\mathcal{V})$ s.t. $T=S\sqrt{T^*T}$.
+\begin{proof}
+Let $P=\sqrt{T^*T}$. Since $T^*T$ is positive, $P$ is well defined by Proposition \ref{prop:positive-square-root-unique}.\\
+For every $\mathbf{v}\in\mathcal{V}$, $\norm{T\mathbf{v}}^2 =\innerprod{T^*T\mathbf{v},\mathbf{v}} =\innerprod{P^2\mathbf{v},\mathbf{v}} =\norm{P\mathbf{v}}^2$.\\
+Define $S_1:\operatorname{range}(P)\to\operatorname{range}(T)$ by $S_1(P\mathbf{v})=T\mathbf{v}$. The norm identity shows this is well defined: if $P\mathbf{v}_1=P\mathbf{v}_2$, then $\norm{T(\mathbf{v}_1-\mathbf{v}_2)}=\norm{P(\mathbf{v}_1-\mathbf{v}_2)}=0$. It also shows $S_1$ is an isometry onto $\operatorname{range}(T)$.\\
+Choose any isometry from $\operatorname{range}(P)^{\perp}$ onto $\operatorname{range}(T)^{\perp}$, possible because the two complements have the same dimension. Combining it orthogonally with $S_1$ gives an isometry $S$ on all of $\mathcal{V}$.\\
+Then $SP\mathbf{v}=S_1(P\mathbf{v})=T\mathbf{v}$ for every $\mathbf{v}$, so $T=S\sqrt{T^*T}$.\\
+\hlt{Structural Commentary}: The positive factor $\sqrt{T^*T}$ reproduces exactly the lengths produced by $T$.\\
+\hlt{Key Insight}: Once the metric stretching has been extracted, the remaining map is forced to be an isometry.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/polar_decomposition_operator.tikz}
+  \caption{Polar decomposition builds $S_1$ using $\norm{T\mathbf{v}}=\norm{\sqrt{T^*T}\mathbf{v}}$.}
+  \label{fig:polar-decomposition-operator}
+\end{figure}
+
+\begin{definition} \label{def:singular-values} \hlt{Singular Values}\\
+For $T\in\LL(\mathcal{V})$, \hlt{singular values} of $T$ are eigenvalues of $\sqrt{T^*T}$, where each eigenvalue $\lambda$ is repeated $\dim E_{\lambda}(\sqrt{T^*T})$.
+\end{definition}
+
+\begin{theorem} \label{thm:singular-value-decomposition} \hlt{Singular Value Decomposition}\\
+Let $T\in\LL(\mathcal{V})$ have singular values $s_1,\ldots,s_n$. Then $\exists$ orthonormal bases $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ and $(\mathbf{f}_1,\ldots,\mathbf{f}_n)$ of $\mathcal{V}$ s.t. $T\mathbf{v}=s_1\innerprod{\mathbf{v},\mathbf{e}_1}\mathbf{f}_1+\cdots+s_n\innerprod{\mathbf{v},\mathbf{e}_n}\mathbf{f}_n$ for every $\mathbf{v}\in\mathcal{V}$.
+\begin{proof}
+Let $\abs{T}=\sqrt{T^*T}$. Since $\abs{T}$ is positive, the real or complex spectral theorem gives an orthonormal basis $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ with $\abs{T}\mathbf{e}_j=s_j\mathbf{e}_j$. Thus $\abs{T}\mathbf{v}=\sum\limits_{j=1}^{n}s_j\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$.\\
+By Theorem \ref{thm:polar-decomposition}, $T=S\abs{T}$ for some isometry $S$. Put $\mathbf{f}_j=S\mathbf{e}_j$. The vectors $\mathbf{f}_1,\ldots,\mathbf{f}_n$ form an orthonormal basis, and applying $S$ to the displayed expansion gives the desired formula.\\
+\hlt{Structural Commentary}: SVD diagonalises $\abs{T}$, then transports its eigenvectors by $S$.\\
+\hlt{Key Insight}: The $s_j$ are stretches; the $\mathbf{f}_j$ are their landing directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/singular_value_decomposition.tikz}
+  \caption{Since $T=S\sqrt{T^*T}$, each $\mathbf{e}_j$ maps to $s_j\mathbf{f}_j$.}
+  \label{fig:singular-value-decomposition}
+\end{figure}
+
+\begin{proposition} \label{prop:singular-values-from-t-star-t} \hlt{Singular Values from $T^*T$}\\
+The singular values of $T\in\LL(\mathcal{V})$ are the nonnegative square roots of the eigenvalues of $T^*T$, with the same eigenspace multiplicities.
+\begin{proof}
+By the spectral theorem, choose an orthonormal basis $\mathbf{e}_1,\ldots,\mathbf{e}_n$ and nonnegative scalars $\lambda_1,\ldots,\lambda_n$ such that $T^*T\mathbf{e}_j=\lambda_j\mathbf{e}_j$. The unique positive square root of $T^*T$ sends $\mathbf{e}_j$ to $\sqrt{\lambda_j}\mathbf{e}_j$.\\
+Thus the singular values are $\sqrt{\lambda_j}$, with the same eigenspace multiplicities.\\
+\hlt{Structural Commentary}: The positive square root keeps eigenspaces and sends $\lambda$ to $\sqrt{\lambda}$.\\
+\hlt{Key Insight}: Singular values can be read from $T^*T$ directly.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, a factorisation
+\begin{align}
+A=V\begin{bmatrix}R\\0\end{bmatrix}
+\nonumber
+\end{align}
+with $V\in\operatorname{Mat}(m,m,\mathbb{F})$ unitary and $R\in\operatorname{Mat}(n,n,\mathbb{F})$ upper triangular is called a \hlt{wide QR factorisation}.\\
+Writing $V=[Q\ Q']$ gives the \hlt{narrow QR factorisation} $A=QR$.
+\end{definition}
+
+\begin{theorem} \label{thm:qr-factorization} \hlt{QR Factorisation}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and suppose $m\geq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists$ a unitary $V$ and an upper triangular $R$ with real nonnegative diagonal entries such that
+\begin{align}
+A=V\begin{bmatrix}R\\0\end{bmatrix}.
+\nonumber
+\end{align}
+Writing $V=[Q\ Q']$ with $Q$ the first $n$ columns gives $A=QR$, with $Q$ orthonormal columns.
+\item If $\operatorname{rank}(A)=n$, then narrow $A=QR$ is unique when $R$ has positive diagonal entries.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+At step $k$, choose a Householder unitary $I_{k-1}\oplus U_k$ that sends the tail of the $k$th column to $r_{kk}\mathbf{e}_1$ with $r_{kk}\geq 0$, while preserving the earlier triangular columns. After $n$ steps,
+\begin{align}
+U_n\cdots U_1A=\begin{bmatrix}R\\0\end{bmatrix},
+\nonumber
+\end{align}
+where $R$ is upper triangular with nonnegative diagonal entries. Let $V=(U_n\cdots U_1)^*$. Then $A=V\begin{bmatrix}R\\0\end{bmatrix}$, and writing $V=[Q\ Q']$ gives $A=QR$ with $Q$ orthonormal columns. If $\operatorname{rank}(A)=n$, then $R$ is invertible, so its diagonal entries are positive.
+\item
+Suppose $A=Q_1R_1=Q_2R_2$, where $Q_i^*Q_i=I_n$ and the $R_i$ are upper triangular with positive diagonal entries. Then $A^*A=R_1^*R_1=R_2^*R_2$. Let $D=R_1R_2^{-1}$. Substituting $R_1=DR_2$ gives $D^*D=I_n$. Thus $D$ is upper triangular and unitary, hence diagonal with entries of modulus $1$. Its diagonal entries are positive, so $D=I_n$. Therefore $R_1=R_2$, and then $Q_1=Q_2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Householder steps triangularise columns; full rank makes the diagonal positive.\\
+\hlt{Key Insight}: Positive diagonals remove the sign/phase ambiguity.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/qr_factorization_geometry.tikz}
+  \caption{QR writes $A=QR$ while preserving prefix column spaces: $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.}
+  \label{fig:qr-factorization-geometry}
+\end{figure}
+
+\begin{corollary} \label{cor:qr-prefix-column-spaces} \hlt{Prefix Column Spaces in QR Factorisation}\\
+Let $A=QR$ be the narrow QR factorisation of $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $\operatorname{rank}(A)=n$ and positive diagonal entries in $R$. For $k=1,\ldots,n$, let $A_k$ and $Q_k$ be the first $k$ columns of $A$ and $Q$, respectively. Then $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.\\
+Thus the columns of $Q_k$ form an orthonormal basis of $\operatorname{col}(A_k)$.
+\begin{proof}
+Let $R_k$ be the leading $k\times k$ principal submatrix of $R$. Since $R$ is upper triangular with positive diagonal entries, $R_k$ is invertible. The first $k$ columns of $A=QR$ satisfy $A_k=Q_kR_k$, because upper triangularity prevents later columns of $Q$ from contributing. Hence $\operatorname{col}(A_k)\subseteq\operatorname{col}(Q_k)$ and $Q_k=A_kR_k^{-1}$ gives the reverse inclusion. The columns of $Q_k$ are orthonormal because $Q$ has orthonormal columns.\\
+\hlt{Structural Commentary}: QR preserves prefix column spaces while orthonormalising them.\\
+\hlt{Key Insight}: Invertible $R_k$ only changes coordinates within that space.
+\end{proof}
+\end{corollary}
