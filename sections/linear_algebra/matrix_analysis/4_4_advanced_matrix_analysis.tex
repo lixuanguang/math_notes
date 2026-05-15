@@ -1,1 +1,232 @@
 \subsubsection{Advanced Matrix Analysis}
+
+This subsection collects matrix identities that organise larger linear systems by blocks, tensor products, vectorisation, and rank bookkeeping.
+
+\begin{definition} \label{def:kronecker-product} \hlt{Kronecker Product}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(p,q,\mathbb{F})$. The \hlt{Kronecker product} of $A$ and $B$ is the block matrix
+\begin{align}
+A\otimes B
+\defeq
+\begin{bmatrix}
+a_{11}B & a_{12}B & \cdots & a_{1n}B\\
+a_{21}B & a_{22}B & \cdots & a_{2n}B\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{m1}B & a_{m2}B & \cdots & a_{mn}B
+\end{bmatrix}
+\in\operatorname{Mat}(mp,nq,\mathbb{F}).
+\nonumber
+\end{align}
+The Kronecker product is also called the tensor product of matrices.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-kronecker-identities} \hlt{Basic Kronecker Identities}\\
+Whenever the expressions are defined,
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $c(A\otimes B)=(cA)\otimes B=A\otimes(cB)$;
+\item $(A+B)\otimes C=A\otimes C+B\otimes C$ and $A\otimes(B+C)=A\otimes B+A\otimes C$;
+\item $(A\otimes B)\otimes C=A\otimes(B\otimes C)$;
+\item $(A\otimes B)^t=A^t\otimes B^t$;
+\item $I_m\otimes I_n=I_{mn}$.
+\end{enumerate}
+If $\mathbb{F}=\mathbb{C}$, then also $\overline{A\otimes B}=\overline{A}\otimes\overline{B}$ and $(A\otimes B)^*=A^*\otimes B^*$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The $(i,j)$ block of $c(A\otimes B)$ is $c(a_{ij}B)=(ca_{ij})B=a_{ij}(cB)$, which is $(i,j)$ block of $(cA)\otimes B$ and $A\otimes(cB)$.
+\item The $(i,j)$ block of $(A+B)\otimes C$ is $(a_{ij}+b_{ij})C=a_{ij}C+b_{ij}C$, so $(A+B)\otimes C=A\otimes C+B\otimes C$.\\
+The proof of $A\otimes(B+C)=A\otimes B+A\otimes C$ is identical inside each block.
+\item If $B=[b_{rs}]$, then both $(A\otimes B)\otimes C$ and $A\otimes(B\otimes C)$ have blocks $a_{ij}b_{rs}C$ in the same relative positions.
+\item The $(j,i)$ block of $(A\otimes B)^t$ is $(a_{ij}B)^t=a_{ij}B^t$, which is the $(j,i)$ block of $A^t\otimes B^t$.
+\item The block matrix $I_m\otimes I_n$ has $I_n$ on its diagonal blocks and zero elsewhere, hence equals $I_{mn}$.
+\end{enumerate}
+If $\mathbb{F}=\mathbb{C}$, conjugation is checked blockwise, adjoint identity follows from conjugation together with part (iv).\\
+\hlt{Structural Commentary}: Kronecker products replace scalar entries by whole scaled blocks. Standard algebraic rules survive because each block is still controlled by scalar distributivity and transposition.\\
+\hlt{Key Insight}: Check identities block-by-block; each block reduces to an ordinary scalar-matrix identity.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:kronecker-mixed-product-property} \hlt{Mixed Product Property}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(p,q,\mathbb{F})$, $C\in\operatorname{Mat}(n,r,\mathbb{F})$, $D\in\operatorname{Mat}(q,s,\mathbb{F})$.  $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$.
+\begin{proof}
+Write $A=[a_{ik}]$ and $C=[c_{kj}]$.\\
+The $(i,j)$ block of $(A\otimes B)(C\otimes D)$ is $\sum\limits_{k=1}^{n}(a_{ik}B)(c_{kj}D) =\left(\sum\limits_{k=1}^{n}a_{ik}c_{kj}\right)BD =(AC)_{ij}BD$, which is exactly the $(i,j)$ block of $(AC)\otimes(BD)$.\\
+\hlt{Structural Commentary}: The outer indices multiply as $AC$, while the inner block action multiplies as $BD$.\\
+\hlt{Key Insight}: Kronecker multiplication separates into ordinary multiplication in each factor.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:inverse-of-kronecker-product} \hlt{Inverse of a Kronecker Product}\\
+If $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and $B\in\operatorname{Mat}(n,n,\mathbb{F})$ are invertible, then $A\otimes B$ is invertible and $(A\otimes B)^{-1}=A^{-1}\otimes B^{-1}$.
+\begin{proof}
+By Theorem \ref{thm:kronecker-mixed-product-property}, $(A\otimes B)(A^{-1}\otimes B^{-1})=I_m\otimes I_n=I_{mn}$ and the reverse product is identical.\\
+\hlt{Structural Commentary}: Inverting a Kronecker product inverts each independent factor.\\
+\hlt{Key Insight}: The mixed product property turns the inverse check into two ordinary inverse checks.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:vectorization-map} \hlt{Vectorisation}\\
+Let $X=[\mathbf{x}_1\ \mathbf{x}_2\ \cdots\ \mathbf{x}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$. The \hlt{vectorisation} of $X$ is
+\begin{align}
+\operatorname{vec}(X)\defeq
+\begin{bmatrix}
+\mathbf{x}_1\\
+\mathbf{x}_2\\
+\vdots\\
+\mathbf{x}_n
+\end{bmatrix}
+\in\mathbb{F}^{mn}.
+\nonumber
+\end{align}
+Thus $\operatorname{vec}$ stacks the columns of $X$ vertically.
+\end{definition}
+
+\begin{theorem} \label{thm:vectorization-of-triple-product} \hlt{Vectorisation of a Triple Product}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $X\in\operatorname{Mat}(n,p,\mathbb{F})$, and $B\in\operatorname{Mat}(p,q,\mathbb{F})$. Then $\operatorname{vec}(AXB)=(B^t\otimes A)\operatorname{vec}(X)$.
+\begin{proof}
+Write $B=[\mathbf{b}_1\ \cdots\ \mathbf{b}_q]$ and $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_p]$.\\
+The $k$th column of $AXB$ is $AX\mathbf{b}_k=A\sum\limits_{i=1}^{p}b_{ik}\mathbf{x}_i =\sum\limits_{i=1}^{p}b_{ik}A\mathbf{x}_i =(\mathbf{b}_k^t\otimes A)\operatorname{vec}(X)$.\\
+Stacking these $q$ columns gives $(B^t\otimes A)\operatorname{vec}(X)$.\\
+\hlt{Structural Commentary}: Vectorisation rewrites two-sided multiplication as one matrix action.\\
+\hlt{Key Insight}: Left multiplication contributes $A$; right multiplication contributes $B^t$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
+If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
+\begin{proof}
+Block Gaussian elimination gives
+\begin{align}
+\begin{bmatrix}
+I_r & -BD^{-1}\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A-BD^{-1}C & 0\\
+C & D
+\end{bmatrix}.
+\nonumber
+\end{align}
+The elimination matrix has determinant $1$, and the matrix on the right is lower block-triangular, so Theorem \ref{thm:block-upper-triangular-determinant} applied after transposition gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
+\hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
+\hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
+Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
+\begin{proof}
+Consider
+\begin{align}
+M=
+\begin{bmatrix}
+I_n & -A\\
+B & I_m
+\end{bmatrix}.
+\nonumber
+\end{align}
+Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$ gives $\det(M)=\det(I_n+AB)$. Using Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$ gives $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
+\hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
+\hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:block-centrosymmetric-commutation} \hlt{Block Centrosymmetry and Commutation}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}\in\operatorname{Mat}(2n,2n,\mathbb{F})$,
+$L_{2n}=
+\begin{bmatrix}
+0 & I_n\\
+I_n & 0
+\end{bmatrix}$.\\
+Then $M$ has block centrosymmetric form $A=D$ and $B=C$ if and only if $L_{2n}M=ML_{2n}$.
+\begin{proof}
+Block multiplication gives
+\begin{align}
+L_{2n}M=
+\begin{bmatrix}
+C & D\\
+A & B
+\end{bmatrix},
+\qquad
+ML_{2n}=
+\begin{bmatrix}
+B & A\\
+D & C
+\end{bmatrix}.
+\nonumber
+\end{align}
+The two matrices are equal exactly when $A=D$ and $B=C$.\\
+\hlt{Structural Commentary}: The matrix $L_{2n}$ swaps the two block coordinates. Commuting with that swap means $M$ treats the two block positions symmetrically.\\
+\hlt{Key Insight}: Compute both block products; equality forces matching opposite blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:frobenius-rank-inequality} \hlt{Frobenius Rank Inequality}\\
+Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,p,\mathbb{F})$, and $C\in\operatorname{Mat}(p,n,\mathbb{F})$. $\operatorname{rank}(AB)+\operatorname{rank}(BC) \leq \operatorname{rank}(B)+\operatorname{rank}(ABC)$.
+\begin{proof}
+Let $R=\operatorname{col}(B)$ and $S=\operatorname{col}(BC)$. Then $S\subseteq R$. The induced map $T_A$ maps $R$ onto $\operatorname{col}(AB)$ and maps $S$ onto $\operatorname{col}(ABC)$. Rank-nullity on the restrictions $T_A|_R$ and $T_A|_S$ gives
+\begin{align}
+\operatorname{rank}(AB)&=\dim R-\dim(R\cap\ker A), \nonumber\\
+\operatorname{rank}(ABC)&=\dim S-\dim(S\cap\ker A). \nonumber
+\end{align}
+Since $S\cap\ker A\subseteq R\cap\ker A$, we have $\dim(S\cap\ker A)\leq\dim(R\cap\ker A)$. Substituting $\dim R=\operatorname{rank}(B)$ and $\dim S=\operatorname{rank}(BC)$ gives the stated inequality.\\
+\hlt{Structural Commentary}: Frobenius tracks $A$ on nested column spaces.\\
+\hlt{Key Insight}: The smaller column space cannot lose more dimensions to $\ker A$ than the larger one.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:frobenius-rank-inequality-special-cases} \hlt{Rank Inequalities from Frobenius}\\
+The following are special cases of Theorem \ref{thm:frobenius-rank-inequality}:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+$\operatorname{rank}(AB)\leq\min(\operatorname{rank}(A),\operatorname{rank}(B))$;
+\item
+$\operatorname{rank}(A)+\operatorname{rank}(B)-k\leq\operatorname{rank}(AB)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Apply Frobenius to generic factors $X,Y,Z$. Taking $Z=0$ gives $\operatorname{rank}(XY)\leq\operatorname{rank}(Y)$, and taking $X=0$ gives $\operatorname{rank}(YZ)\leq\operatorname{rank}(Y)$. Renaming the factors gives $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$ and $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$.
+\item
+Taking the middle matrix to be $I_k$ gives $\operatorname{rank}(A)+\operatorname{rank}(B)\leq k+\operatorname{rank}(AB)$, which is Sylvester's inequality.
+\end{enumerate}
+\hlt{Structural Commentary}: Frobenius is the three-factor parent inequality. The usual upper and lower product-rank bounds appear by making one factor zero or identity.\\
+\hlt{Key Insight}: Zero factors isolate upper bounds; an identity middle factor yields the Sylvester lower bound.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:sylvester-law-of-nullity} \hlt{Sylvester's Law of Nullity}\\
+For a matrix $X$, let $\operatorname{nullity}(X)=\dim(\ker X)$; this is the dimension of its nullspace.\\
+If $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$, then $\operatorname{nullity}(AB)\leq\operatorname{nullity}(A)+\operatorname{nullity}(B)$.\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$.
+\begin{proof}
+For the first inequality, use rank-nullity and Theorem \ref{thm:sylvester-rank-inequality}:
+\begin{align}
+\operatorname{nullity}(AB)
+&=n-\operatorname{rank}(AB) \nonumber\\
+&\leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k \nonumber\\
+&=(k-\operatorname{rank}(A))+(n-\operatorname{rank}(B)) \nonumber\\
+&=\operatorname{nullity}(A)+\operatorname{nullity}(B).
+\nonumber
+\end{align}
+For square $A,B$, the product rank bound gives $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$ and $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$. Subtracting from $n$ gives $\operatorname{nullity}(AB)\geq\operatorname{nullity}(A)$ and $\operatorname{nullity}(AB)\geq\operatorname{nullity}(B)$.\\
+\hlt{Structural Commentary}: Nullity is rank loss from the domain.\\
+\hlt{Key Insight}: Use rank-nullity to translate rank bounds into kernel bounds.
+\end{proof}
+\end{proposition}
