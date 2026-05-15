@@ -1,6 +1,21 @@
 \subsubsection{Linear Maps and Representations}
 
-This subsection blends the two standard viewpoints. Axler emphasises linear maps as the primary objects and matrices as secondary coordinate descriptions; Garcia and Horn emphasises how matrices expose structure. We will use both viewpoints together.
+This subsection blends the two standard viewpoints. Axler emphasises linear maps as the primary objects and matrices as secondary coordinate descriptions; Garcia and Horn emphasises how matrices expose structure.
+
+\begin{definition} \hlt{Coordinate Vector}\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of a finite-dimensional vector space $\mathcal{V}$.\\
+If $\mathbf{v}=c_1\mathbf{v}_1+\cdots+c_n\mathbf{v}_n$, then the \hlt{$\beta$-coordinate vector} of $\mathbf{v}$ is
+\begin{align}
+[\mathbf{v}]_{\beta}\defeq
+\begin{bmatrix}
+c_1\\
+\vdots\\
+c_n
+\end{bmatrix}
+\in\mathbb{F}^n. \nonumber
+\end{align}
+The function $[\cdot]_{\beta}:\mathcal{V}\to\mathbb{F}^n$ is the \hlt{$\beta$-basis representation function}.
+\end{definition}
 
 \begin{definition} \hlt{Linear Map}\\
 Let $\mathcal{V}$ and $\mathcal{W}$ be vector spaces over the same field $\mathbb{F}$. A function
@@ -13,6 +28,27 @@ T(a\mathbf{u} + b\mathbf{v}) = aT(\mathbf{u}) + bT(\mathbf{v}). \nonumber
 \end{align}
 The set of all linear maps from $\mathcal{V}$ to $\mathcal{W}$ is denoted $\LL(\mathcal{V}, \mathcal{W})$. If $\mathcal{V} = \mathcal{W}$, we write $\LL(\mathcal{V})$ and call such a map an operator.
 \end{definition}
+
+\begin{proposition} \label{prop:coordinate-map-isomorphism} \hlt{Coordinate Maps Are Isomorphisms}\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of a finite-dimensional vector space $\mathcal{V}$. Then the coordinate map $[\cdot]_{\beta}:\mathcal{V}\to\mathbb{F}^n$ is an isomorphism.
+\begin{proof}
+If $\mathbf{u}=a_1\mathbf{v}_1+\cdots+a_n\mathbf{v}_n$ and $\mathbf{v}=b_1\mathbf{v}_1+\cdots+b_n\mathbf{v}_n$, then for $c\in\mathbb{F}$,
+\begin{align}
+[c\mathbf{u}+\mathbf{v}]_{\beta}
+=
+\begin{bmatrix}
+ca_1+b_1\\
+\vdots\\
+ca_n+b_n
+\end{bmatrix}
+=
+c[\mathbf{u}]_{\beta}+[\mathbf{v}]_{\beta}. \nonumber
+\end{align}
+Thus $[\cdot]_{\beta}$ is linear. It is injective because $[\mathbf{v}]_{\beta}=\mathbf{0}$ forces all basis coefficients of $\mathbf{v}$ to be zero, and it is surjective because every column $(c_1,\ldots,c_n)^t\in\mathbb{F}^n$ equals $[c_1\mathbf{v}_1+\cdots+c_n\mathbf{v}_n]_{\beta}$.\\
+\hlt{Structural Commentary}: A basis converts abstract vectors into coordinate columns without losing structure.\\
+\hlt{Key Insight}: Coordinates are an isomorphic copy of the vector space, not extra information.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \hlt{Graph of a Function}\\
 For a function $T:\mathcal{V}\to\mathcal{W}$, the \hlt{graph} of $T$ is the subset of $\mathcal{V}\times\mathcal{W}$ defined by
@@ -48,7 +84,7 @@ lies in $\operatorname{graph}(T)$. Hence $T(a\mathbf{u}+\mathbf{v})=aT\mathbf{u}
 A linear map is completely determined by what it does to a basis. Coordinates do not create the map; they only encode it once bases have been chosen.
 \end{remark}
 
-\begin{proposition}
+\begin{proposition} \label{prop:linear-map-determined-by-basis} \hlt{Linear Maps Are Determined by a Basis}\\
 If $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ is a basis of $\mathcal{V}$ and $\mathbf{w}_1, \ldots, \mathbf{w}_n \in \mathcal{W}$ are arbitrary, then there exists a unique linear map $T : \mathcal{V} \to \mathcal{W}$ such that
 \begin{align}
 T(\mathbf{v}_j) = \mathbf{w}_j \qquad \text{for } j=1,\ldots,n. \nonumber
@@ -58,7 +94,9 @@ Every $\mathbf{v} \in \mathcal{V}$ has a unique expression $\mathbf{v} = a_1\mat
 \begin{align}
 T(\mathbf{v}) \defeq a_1\mathbf{w}_1 + \cdots + a_n\mathbf{w}_n. \nonumber
 \end{align}
-This is well-defined because basis coordinates are unique, and linearity is immediate.
+This is well-defined because basis coordinates are unique, and linearity follows by applying the definition to coordinate expansions. Any linear map with the prescribed values on the basis must agree with this formula, so it is unique.\\
+\hlt{Structural Commentary}: A basis reduces a linear map to finitely many choices.\\
+\hlt{Key Insight}: Once basis images are fixed, linearity determines every other value.
 \end{proof}
 \end{proposition}
 
@@ -71,15 +109,60 @@ For $T \in \LL(\mathcal{V}, \mathcal{W})$, define
 \end{align}
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{prop:kernel-and-range-are-subspaces} \hlt{Kernel and Range Are Subspaces}\\
 If $T \in \LL(\mathcal{V}, \mathcal{W})$, then $\ker(T)$ is a subspace of $\mathcal{V}$ and $\operatorname{range}(T)$ is a subspace of $\mathcal{W}$.
+\begin{proof}
+Since $T\mathbf{0}=\mathbf{0}$, the kernel is nonempty. If $\mathbf{u},\mathbf{v}\in\ker(T)$ and $a\in\mathbb{F}$, then
+\begin{align}
+T(a\mathbf{u}+\mathbf{v})=aT\mathbf{u}+T\mathbf{v}=\mathbf{0}, \nonumber
+\end{align}
+so $a\mathbf{u}+\mathbf{v}\in\ker(T)$. For the range, if $T\mathbf{u},T\mathbf{v}\in\operatorname{range}(T)$, then
+\begin{align}
+aT\mathbf{u}+T\mathbf{v}=T(a\mathbf{u}+\mathbf{v})\in\operatorname{range}(T). \nonumber
+\end{align}
+Thus both sets are subspaces.\\
+\hlt{Structural Commentary}: The kernel and range are the two canonical subspaces attached to a linear map.\\
+\hlt{Key Insight}: Linearity makes both preimages of zero and images of vectors closed under linear combinations.
+\end{proof}
 \end{proposition}
 
-\begin{proposition}
+\begin{figure}[H]
+\centering
+\scalebox{0.75}{\input{figures/linear_algebra/kernel_range_linear_map.tikz}}
+\caption{For a linear map $T:\mathcal{V}\to\mathcal{W}$, the range of $T$ may be a proper subspace of $\mathcal{W}$, and the kernel of $T$ may contain nonzero vectors. The equalities $\operatorname{range}(T)=\mathcal{W}$ and $\ker(T)=\{\mathbf{0}\}$ characterize surjectivity and injectivity, respectively.}
+\label{fig:kernel-range-linear-map}
+\end{figure}
+
+\begin{proposition} \label{prop:shift-operators-finitely-nonzero} \hlt{Shift Operators on Finitely Nonzero Sequences}\\
+Define $R,S:\mathbb{F}^{(\mathbb{N})}\to\mathbb{F}^{(\mathbb{N})}$ by
+\begin{align}
+R(x_1,x_2,\ldots)=(0,x_1,x_2,\ldots),
+\qquad
+S(x_1,x_2,\ldots)=(x_2,x_3,\ldots). \nonumber
+\end{align}
+Then $R,S\in\LL(\mathbb{F}^{(\mathbb{N})})$. Moreover, $\ker(R)=\{\mathbf{0}\}$, $\operatorname{range}(R)=\{(x_1,x_2,\ldots)\in\mathbb{F}^{(\mathbb{N})}:x_1=0\}$, $\ker(S)=\operatorname{span}((1,0,0,\ldots))$, and $\operatorname{range}(S)=\mathbb{F}^{(\mathbb{N})}$.
+\begin{proof}
+Both $R$ and $S$ preserve finite support, so they map $\mathbb{F}^{(\mathbb{N})}$ into itself. Since both maps act componentwise by shifting entries, $R(a\mathbf{x}+\mathbf{y})=aR\mathbf{x}+R\mathbf{y}$ and $S(a\mathbf{x}+\mathbf{y})=aS\mathbf{x}+S\mathbf{y}$ for all $\mathbf{x},\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$ and $a\in\mathbb{F}$. Thus $R$ and $S$ are linear.\\
+The map $R$ has zero kernel because $R\mathbf{x}=\mathbf{0}$ forces every entry of $\mathbf{x}$ to be zero, and its range is exactly the set of finitely nonzero sequences with first entry zero. For $S$, the equation $S\mathbf{x}=\mathbf{0}$ forces $x_2=x_3=\cdots=0$, so $\ker(S)=\operatorname{span}((1,0,0,\ldots))$. Finally, for any $(y_1,y_2,\ldots)\in\mathbb{F}^{(\mathbb{N})}$, we have $S(0,y_1,y_2,\ldots)=(y_1,y_2,\ldots)$, so $S$ is surjective.\\
+\hlt{Structural Commentary}: Shift operators expose behavior that finite-dimensional maps cannot have.\\
+\hlt{Key Insight}: The right shift is injective but not surjective, while the left shift is surjective but not injective.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:injective-iff-kernel-zero} \hlt{Injectivity and the Kernel}\\
 A linear map $T \in \LL(\mathcal{V}, \mathcal{W})$ is injective if and only if
 \begin{align}
 \ker(T) = \{ \mathbf{0} \}. \nonumber
 \end{align}
+\begin{proof}
+\begin{enumerate}[label=(\roman)*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T$ is injective and $\mathbf{v}\in\ker(T)$, then $T\mathbf{v}=\mathbf{0}=T\mathbf{0}$, so $\mathbf{v}=\mathbf{0}$.
+\item[$(\Leftarrow)$] If $\ker(T)=\{\mathbf{0}\}$ and $T\mathbf{v}=T\mathbf{w}$, then $T(\mathbf{v}-\mathbf{w})=\mathbf{0}$. Hence $\mathbf{v}-\mathbf{w}\in\ker(T)$, so $\mathbf{v}=\mathbf{w}$.
+\end{enumerate} \hfill \\
+\hlt{Structural Commentary}: The kernel measures exactly where a linear map collapses vectors to zero.\\
+\hlt{Key Insight}: Injectivity is equivalent to collapsing only the zero vector.
+\end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:direct-sum-map-injective} \hlt{Direct Sum Map}\\
@@ -95,7 +178,24 @@ The map $\Gamma$ is linear. Its kernel consists of all $(\mathbf{u}_1,\ldots,\ma
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:ranknullitythm} \hlt{Rank-Nullity Theorem}\\
+\begin{theorem} \label{thm:range-spanned-by-images-of-basis} \hlt{Range from Basis Images}\\
+Let $\mathcal{V}$ be finite-dimensional with basis $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$, and let $T\in\LL(\mathcal{V},\mathcal{W})$. Then
+\begin{align}
+\operatorname{range}(T)=\operatorname{span}(T\mathbf{v}_1,\ldots,T\mathbf{v}_n). \nonumber
+\end{align}
+In particular, $\operatorname{range}(T)$ is finite-dimensional and $\dim(\operatorname{range}(T))\leq n$.
+\begin{proof}
+If $\mathbf{v}=c_1\mathbf{v}_1+\cdots+c_n\mathbf{v}_n$, then
+\begin{align}
+T\mathbf{v}=c_1T\mathbf{v}_1+\cdots+c_nT\mathbf{v}_n. \nonumber
+\end{align}
+Thus every vector in $\operatorname{range}(T)$ lies in $\operatorname{span}(T\mathbf{v}_1,\ldots,T\mathbf{v}_n)$, and the reverse inclusion is immediate from the definition of range. The dimension bound follows because this spanning list has length $n$.\\
+\hlt{Structural Commentary}: The range is generated by the images of any basis of the domain.\\
+\hlt{Key Insight}: Linear maps carry a basis-spanning formula directly into a range-spanning formula.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:rank-nullity} \hlt{Rank-Nullity Theorem}\\
 If $\mathcal{V}$ is finite-dimensional and $T \in \LL(\mathcal{V}, \mathcal{W})$, then
 \begin{align}
 \dim(\mathcal{V}) = \dim(\ker(T)) + \dim(\operatorname{range}(T)). \nonumber
@@ -119,7 +219,9 @@ would imply $a_1\mathbf{w}_1 + \cdots + a_r\mathbf{w}_r \in \ker(T)$, contradict
 \qquad
 \dim(\ker(T)) = m, \nonumber
 \end{align}
-and $\dim(\mathcal{V}) = m+r$.
+and $\dim(\mathcal{V}) = m+r$.\\
+\hlt{Structural Commentary}: A basis adapted to $\ker(T)$ separates collapsed directions from directions visible in the range.\\
+\hlt{Key Insight}: Rank-nullity counts domain dimensions by splitting them into lost dimensions and image dimensions.
 \end{proof}
 \end{theorem}
 
@@ -137,8 +239,17 @@ TS = I_{\mathcal{W}}. \nonumber
 An invertible linear map is called an isomorphism, and if one exists we write $\mathcal{V} \cong \mathcal{W}$.
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{prop:linear-map-invertible-iff-bijective} \hlt{Invertibility and Bijectivity}\\
 A linear map is invertible if and only if it is both injective and surjective.
+\begin{proof}
+If $T$ has inverse $S$, then $T\mathbf{v}=T\mathbf{w}$ implies $\mathbf{v}=ST\mathbf{v}=ST\mathbf{w}=\mathbf{w}$, so $T$ is injective; also every $\mathbf{w}$ in the codomain equals $T(S\mathbf{w})$, so $T$ is surjective. Conversely, if $T$ is injective and surjective, define $S\mathbf{w}$ to be the unique vector $\mathbf{v}$ with $T\mathbf{v}=\mathbf{w}$. Since both sides below map under $T$ to $a\mathbf{w}_1+\mathbf{w}_2$,
+\begin{align}
+S(a\mathbf{w}_1+\mathbf{w}_2)=aS\mathbf{w}_1+S\mathbf{w}_2, \nonumber
+\end{align}
+so $S$ is linear and satisfies $ST=I$ and $TS=I$.\\
+\hlt{Structural Commentary}: Invertibility is bijectivity with a linear inverse. Linearity of the inverse follows from uniqueness of preimages.\\
+\hlt{Key Insight}: A linear map can be reversed exactly when it loses no vectors and misses no vectors.
+\end{proof}
 \end{proposition}
 
 \begin{definition} \hlt{Induced Map on a Quotient}\\
@@ -170,7 +281,7 @@ Let $T\in\LL(\mathcal{V},\mathcal{W})$. Then:
 \end{proof}
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem} \label{thm:finite-dimensional-operator-invertible-equivalences} \hlt{Finite-Dimensional Invertibility Criteria}\\
 If $\mathcal{V}$ is finite-dimensional and $T \in \LL(\mathcal{V})$, then the following are equivalent:
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
@@ -179,27 +290,61 @@ If $\mathcal{V}$ is finite-dimensional and $T \in \LL(\mathcal{V})$, then the fo
 \item $T$ is surjective.
 \end{enumerate}
 \begin{proof}
-The implication $(i) \Rightarrow (ii)$ is immediate. If $T$ is injective, then $\ker(T)=\{ \mathbf{0} \}$, so rank-nullity gives
+By Proposition \ref{prop:linear-map-invertible-iff-bijective}, (i) implies both (ii) and (iii). If $T$ is injective, then $\ker(T)=\{ \mathbf{0} \}$, so rank-nullity gives
 \begin{align}
 \dim(\operatorname{range}(T)) = \dim(\mathcal{V}), \nonumber
 \end{align}
-hence $\operatorname{range}(T)=\mathcal{V}$ and $T$ is surjective. The implication $(iii) \Rightarrow (i)$ follows similarly.
+hence $\operatorname{range}(T)=\mathcal{V}$ and $T$ is surjective. If $T$ is surjective, then rank-nullity gives $\dim(\ker(T))=0$, so $T$ is injective. Thus either (ii) or (iii) implies (i).\\
+\hlt{Structural Commentary}: For operators on finite-dimensional spaces, kernel and range dimensions trade off exactly. Injectivity and surjectivity therefore force each other.\\
+\hlt{Key Insight}: In equal finite dimensions, losing no information is the same as reaching the whole space.
 \end{proof}
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem} \label{thm:finite-dimensional-isomorphic-iff-same-dimension} \hlt{Isomorphism and Dimension}\\
 Two finite-dimensional vector spaces are isomorphic if and only if they have the same dimension.
+\begin{proof}
+If $T:\mathcal{V}\to\mathcal{W}$ is an isomorphism and $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ is a basis of $\mathcal{V}$, then $(T\mathbf{v}_1,\ldots,T\mathbf{v}_n)$ is a basis of $\mathcal{W}$, so the dimensions agree. Conversely, if both spaces have dimension $n$, choose bases $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ and $(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ and define $T\mathbf{v}_j=\mathbf{w}_j$. The induced linear map is bijective, hence an isomorphism.\\
+\hlt{Structural Commentary}: A finite-dimensional vector space is classified up to isomorphism by the number of basis directions it has.\\
+\hlt{Key Insight}: Matching bases give an isomorphism; any isomorphism carries bases to bases.
+\end{proof}
 \end{theorem}
 
 \begin{definition} \hlt{Matrix Representation}\\
-Let $\beta = (\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis of $\mathcal{V}$ and $\gamma = (\mathbf{w}_1, \ldots, \mathbf{w}_m)$ a basis of $\mathcal{W}$. For $\mathbf{v} \in \mathcal{V}$, denote its coordinate column vector by $[\mathbf{v}]_{\beta}$. For $T \in \LL(\mathcal{V}, \mathcal{W})$, the matrix of $T$ relative to $(\beta,\gamma)$ is the unique matrix $[T]_{\gamma \leftarrow \beta} \in \operatorname{Mat}(m,n,\mathbb{F})$ whose $j$th column is $[T(\mathbf{v}_j)]_{\gamma}$.
+Let $\beta = (\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis of $\mathcal{V}$ and $\gamma = (\mathbf{w}_1, \ldots, \mathbf{w}_m)$ a basis of $\mathcal{W}$. For $T \in \LL(\mathcal{V}, \mathcal{W})$, the matrix of $T$ relative to $(\beta,\gamma)$ is
+\begin{align}
+[T]_{\gamma \leftarrow \beta}
+\defeq
+\begin{bmatrix}
+[T(\mathbf{v}_1)]_{\gamma} & \cdots & [T(\mathbf{v}_n)]_{\gamma}
+\end{bmatrix}
+\in \operatorname{Mat}(m,n,\mathbb{F}). \nonumber
+\end{align}
 \end{definition}
 
 \begin{definition} \hlt{Column Space and Matrix Rank}\\
 Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$. The \hlt{column space} of $A$ is $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and the \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$.
 \end{definition}
 
-\begin{proposition}
+\begin{definition} \hlt{Linear Map Induced by a Matrix}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, the \hlt{linear map induced by $A$} is the map $T_A:\mathbb{F}^n\to\mathbb{F}^m$ defined by
+\begin{align}
+T_A(\mathbf{x})=A\mathbf{x}. \nonumber
+\end{align}
+\end{definition}
+
+\begin{proposition} \label{prop:matrix-induced-map-linear} \hlt{Matrix-Induced Maps Are Linear}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$, then $T_A:\mathbb{F}^n\to\mathbb{F}^m$ is linear.
+\begin{proof}
+For $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$ and $a\in\mathbb{F}$,
+\begin{align}
+T_A(a\mathbf{x}+\mathbf{y})=A(a\mathbf{x}+\mathbf{y})=aA\mathbf{x}+A\mathbf{y}=aT_A(\mathbf{x})+T_A(\mathbf{y}). \nonumber
+\end{align}
+\hlt{Structural Commentary}: Matrix multiplication preserves addition and scalar multiplication.\\
+\hlt{Key Insight}: Every matrix defines a canonical linear map between coordinate spaces.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:matrix-representation-action} \hlt{Matrix Representation Acts on Coordinates}\\
 For every $\mathbf{v} \in \mathcal{V}$,
 \begin{align}
 [T(\mathbf{v})]_{\gamma} = [T]_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}. \nonumber
@@ -209,7 +354,9 @@ Write $\mathbf{v} = a_1\mathbf{v}_1 + \cdots + a_n\mathbf{v}_n$. Then linearity 
 \begin{align}
 T(\mathbf{v}) = a_1T(\mathbf{v}_1) + \cdots + a_nT(\mathbf{v}_n), \nonumber
 \end{align}
-and the right-hand side is exactly the linear combination of the columns of $[T]_{\gamma \leftarrow \beta}$ with coefficients $a_1,\ldots,a_n$.
+and the right-hand side is exactly the linear combination of the columns of $[T]_{\gamma \leftarrow \beta}$ with coefficients $a_1,\ldots,a_n$.\\
+\hlt{Structural Commentary}: Matrix representation turns applying $T$ into multiplying coordinate columns.\\
+\hlt{Key Insight}: The columns of $[T]_{\gamma \leftarrow \beta}$ are the coordinate images of the basis vectors.
 \end{proof}
 \end{proposition}
 
@@ -256,15 +403,26 @@ By Lemma \ref{lem:two-sided-inverse-uniqueness}, $A=C$, so $BA=BC=I$.\\
 \end{proof}
 \end{theorem}
 
-\begin{proposition} \hlt{Composition and Matrix Multiplication}\\
+\begin{proposition} \label{prop:composition-and-matrix-multiplication} \hlt{Composition and Matrix Multiplication}\\
 If $T \in \LL(\mathcal{U}, \mathcal{V})$ and $S \in \LL(\mathcal{V}, \mathcal{W})$, then
 \begin{align}
 [ST]_{\delta \leftarrow \alpha} = [S]_{\delta \leftarrow \beta}[T]_{\beta \leftarrow \alpha} \nonumber
 \end{align}
 for any bases $\alpha$ of $\mathcal{U}$, $\beta$ of $\mathcal{V}$, and $\delta$ of $\mathcal{W}$.
+\begin{proof}
+For every $\mathbf{u}\in\mathcal{U}$,
+\begin{align}
+[(ST)\mathbf{u}]_{\delta}
+=[S]_{\delta \leftarrow \beta}[T\mathbf{u}]_{\beta}
+=[S]_{\delta \leftarrow \beta}[T]_{\beta \leftarrow \alpha}[\mathbf{u}]_{\alpha}. \nonumber
+\end{align}
+Since coordinate columns $[\mathbf{u}]_{\alpha}$ range over all of $\mathbb{F}^{\dim(\mathcal{U})}$, the representing matrices are equal.\\
+\hlt{Structural Commentary}: Matrix multiplication is the coordinate shadow of composition of linear maps.\\
+\hlt{Key Insight}: Applying $T$ then $S$ becomes multiplying first by the matrix of $T$, then by the matrix of $S$.
+\end{proof}
 \end{proposition}
 
-\begin{theorem} \hlt{Linear Maps and Matrices Are the Same Data}\\
+\begin{theorem} \label{thm:linear-maps-and-matrices-same-data} \hlt{Linear Maps and Matrices Are the Same Data}\\
 If $\dim(\mathcal{V}) = n$ and $\dim(\mathcal{W}) = m$, then choosing bases of $\mathcal{V}$ and $\mathcal{W}$ gives a vector-space isomorphism
 \begin{align}
 \LL(\mathcal{V}, \mathcal{W}) \cong \operatorname{Mat}(m,n,\mathbb{F}). \nonumber
@@ -273,6 +431,19 @@ Consequently,
 \begin{align}
 \dim(\LL(\mathcal{V}, \mathcal{W})) = mn. \nonumber
 \end{align}
+\begin{proof}
+Fix bases $\beta$ of $\mathcal{V}$ and $\gamma$ of $\mathcal{W}$. The map
+\begin{align}
+T\mapsto [T]_{\gamma \leftarrow \beta} \nonumber
+\end{align}
+is linear. It is injective because a linear map whose matrix is zero sends every basis vector of $\mathcal{V}$ to $\mathbf{0}$, hence is the zero map. It is surjective because, for any $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$, there is a unique linear map satisfying
+\begin{align}
+T(\mathbf{v}_j)=a_{1j}\mathbf{w}_1+\cdots+a_{mj}\mathbf{w}_m \qquad j=1,\ldots,n. \nonumber
+\end{align}
+Thus $\LL(\mathcal{V},\mathcal{W})\cong\operatorname{Mat}(m,n,\mathbb{F})$, whose standard entry matrices form a basis of length $mn$.\\
+\hlt{Structural Commentary}: Choosing bases converts every linear map into one and only one array of scalars.\\
+\hlt{Key Insight}: A matrix is exactly the list of coordinate images of the domain basis vectors.
+\end{proof}
 \end{theorem}
 
 \begin{remark} \hlt{Why This Matters}\\
@@ -291,32 +462,88 @@ Thus
 for every $\mathbf{v} \in \mathcal{V}$.
 \end{definition}
 
-\begin{proposition}
-The change-of-basis matrix $C_{\gamma \leftarrow \beta}$ is invertible, with inverse
+\begin{theorem} \label{thm:change-of-basis-matrices} \hlt{Change-of-Basis Matrices}\\
+Let $\mathcal{V}$ be $n$-dimensional and let $\beta$ be a basis of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\gamma$ is a basis of $\mathcal{V}$, then $C_{\gamma \leftarrow \beta}$ is invertible and
 \begin{align}
-C_{\beta \leftarrow \gamma}. \nonumber
+(C_{\gamma \leftarrow \beta})^{-1}=C_{\beta \leftarrow \gamma}. \nonumber
 \end{align}
-\end{proposition}
+\item If $S\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, then there is a basis $\gamma$ of $\mathcal{V}$ such that
+\begin{align}
+S=C_{\gamma \leftarrow \beta}. \nonumber
+\end{align}
+\end{enumerate}
+\begin{proof}
+For (i), applying the two coordinate changes successively gives
+\begin{align}
+C_{\beta \leftarrow \gamma}C_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}=[\mathbf{v}]_{\beta},
+\qquad
+C_{\gamma \leftarrow \beta}C_{\beta \leftarrow \gamma}[\mathbf{v}]_{\gamma}=[\mathbf{v}]_{\gamma} \nonumber
+\end{align}
+for every $\mathbf{v}\in\mathcal{V}$. Since coordinate columns fill $\mathbb{F}^n$, the two products are both $I_n$.\\
+For (ii), write $S^{-1}=[\mathbf{s}_1\ \cdots\ \mathbf{s}_n]$ and let $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ be the unique list satisfying $[\mathbf{w}_j]_{\beta}=\mathbf{s}_j$. The columns of $S^{-1}$ form a basis of $\mathbb{F}^n$ by Theorem \ref{thm:invertible-matrix-columns-basis}, so $\gamma$ is a basis of $\mathcal{V}$. Hence $C_{\beta \leftarrow \gamma}=S^{-1}$, and part (i) gives $C_{\gamma \leftarrow \beta}=S$.\\
+\hlt{Structural Commentary}: Change-of-basis matrices are exactly invertible coordinate transformations. They only rewrite coordinates; they do not change the underlying vector.\\
+\hlt{Key Insight}: Moving from one basis to another must be reversible, and every invertible matrix can be realised as such a move.
+\end{proof}
+\end{theorem}
 
-\begin{theorem} \hlt{Change of Basis Formula}\\
-Let $T \in \LL(\mathcal{V})$, and let $\beta,\gamma$ be two bases of $\mathcal{V}$. Then
+\begin{corollary} \label{cor:basis-columns-form-invertible-matrix} \hlt{Basis Columns Give an Invertible Matrix}\\
+If $(\mathbf{a}_1,\ldots,\mathbf{a}_n)$ is a basis of $\mathbb{F}^n$, then
+\begin{align}
+A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(n,n,\mathbb{F}) \nonumber
+\end{align}
+is invertible.
+\begin{proof}
+Let $\epsilon=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be the standard basis and $\alpha=(\mathbf{a}_1,\ldots,\mathbf{a}_n)$. Then the columns of $C_{\epsilon \leftarrow \alpha}$ are precisely $[\mathbf{a}_1]_{\epsilon},\ldots,[\mathbf{a}_n]_{\epsilon}$, so $C_{\epsilon \leftarrow \alpha}=A$. Theorem \ref{thm:change-of-basis-matrices} gives that $A$ is invertible.\\
+\hlt{Structural Commentary}: A basis of $\mathbb{F}^n$ is another coordinate system. The matrix with those basis vectors as columns is its change-of-basis matrix to standard coordinates.\\
+\hlt{Key Insight}: Basis columns are invertible because changing from those coordinates to standard coordinates is reversible.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:square-matrix-invertible-iff-full-rank} \hlt{Invertibility and Full Rank}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$,
+\begin{align}
+A \text{ is invertible}
+\qquad\Longleftrightarrow\qquad
+\operatorname{rank}(A)=n. \nonumber
+\end{align}
+\begin{proof}
+If $A$ is invertible, Theorem \ref{thm:invertible-matrix-columns-basis} says its columns form a basis of $\mathbb{F}^n$, so $\operatorname{rank}(A)=n$. Conversely, if $\operatorname{rank}(A)=n$, then the columns of $A$ span $\mathbb{F}^n$; since there are $n$ columns in an $n$-dimensional space, Proposition \ref{prop:dimension-bounds-and-basis-criteria} makes them a basis. Corollary \ref{cor:basis-columns-form-invertible-matrix} then gives that $A$ is invertible.\\
+\hlt{Structural Commentary}: Full rank means the columns occupy all available directions in $\mathbb{F}^n$. For a square matrix, that is exactly invertibility.\\
+\hlt{Key Insight}: A square matrix is invertible precisely when its column space has maximal dimension.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:change-of-basis-formula} \hlt{Change of Basis Formula}\\
+Let $\mathcal{V}$ be finite-dimensional, let $T \in \LL(\mathcal{V})$, and let $\beta$ be a basis of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\gamma$ is a basis of $\mathcal{V}$ and $S=C_{\gamma \leftarrow \beta}$, then
 \begin{align}
 [T]_{\gamma \leftarrow \gamma}
 =
-C_{\gamma \leftarrow \beta}[T]_{\beta \leftarrow \beta}C_{\beta \leftarrow \gamma}. \nonumber
+S[T]_{\beta \leftarrow \beta}S^{-1}. \nonumber
 \end{align}
-\begin{proof}
-Use the identity
+\item If $S\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, then there is a basis $\gamma$ of $\mathcal{V}$ such that
 \begin{align}
-[T(\mathbf{v})]_{\gamma}
+[T]_{\gamma \leftarrow \gamma}
 =
-C_{\gamma \leftarrow \beta}[T(\mathbf{v})]_{\beta}
-=
-C_{\gamma \leftarrow \beta}[T]_{\beta \leftarrow \beta}[\mathbf{v}]_{\beta}
-=
-C_{\gamma \leftarrow \beta}[T]_{\beta \leftarrow \beta}C_{\beta \leftarrow \gamma}[\mathbf{v}]_{\gamma}. \nonumber
+S[T]_{\beta \leftarrow \beta}S^{-1}. \nonumber
 \end{align}
-for all $\mathbf{v} \in \mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+For (i), Theorem \ref{thm:change-of-basis-matrices} gives $S^{-1}=C_{\beta \leftarrow \gamma}$. For every $\mathbf{v}\in\mathcal{V}$,
+\begin{align}
+[T\mathbf{v}]_{\gamma}
+=S[T\mathbf{v}]_{\beta}
+=S[T]_{\beta \leftarrow \beta}[\mathbf{v}]_{\beta}
+=S[T]_{\beta \leftarrow \beta}S^{-1}[\mathbf{v}]_{\gamma}. \nonumber
+\end{align}
+Since $\gamma$-coordinate columns range over all of $\mathbb{F}^n$, the matrices are equal. Part (ii) follows by choosing $\gamma$ with $S=C_{\gamma \leftarrow \beta}$ from Theorem \ref{thm:change-of-basis-matrices}.\\
+\hlt{Structural Commentary}: Changing basis conjugates the matrix of an operator. The operator stays fixed while its coordinate description changes.\\
+\hlt{Key Insight}: Similarity is the algebraic form of rewriting the same linear operator in a new basis.
 \end{proof}
 \end{theorem}
 
@@ -330,6 +557,81 @@ B = PAP^{-1}. \nonumber
 \begin{remark} \hlt{Similarity as Same Operator, New Coordinates}\\
 Similarity does not mean two operators are merely related; it means they are the same operator written in two different bases. This is the structural content behind change of basis.
 \end{remark}
+
+\begin{corollary} \label{cor:similar-iff-same-linear-operator} \hlt{Similarity as One Operator in Two Bases}\\
+For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ and $B$ are similar.
+\item There are an $n$-dimensional vector space $\mathcal{V}$, bases $\beta,\gamma$ of $\mathcal{V}$, and $T\in\LL(\mathcal{V})$ such that
+\begin{align}
+A=[T]_{\beta \leftarrow \beta},
+\qquad
+B=[T]_{\gamma \leftarrow \gamma}. \nonumber
+\end{align}
+\end{enumerate}
+\begin{proof}
+If $B=PAP^{-1}$ with $P$ invertible, let $\mathcal{V}=\mathbb{F}^n$, let $\beta$ be the standard basis, and let $T_A(\mathbf{x})=A\mathbf{x}$. Choose $\gamma$ so that $P=C_{\gamma \leftarrow \beta}$ by Theorem \ref{thm:change-of-basis-matrices}. Then $[T_A]_{\beta \leftarrow \beta}=A$ and Theorem \ref{thm:change-of-basis-formula} gives $[T_A]_{\gamma \leftarrow \gamma}=B$. Conversely, if $A$ and $B$ are two matrix representations of the same operator, Theorem \ref{thm:change-of-basis-formula} gives $B=C_{\gamma \leftarrow \beta}AC_{\beta \leftarrow \gamma}$, so $A$ and $B$ are similar.\\
+\hlt{Structural Commentary}: Similar matrices are not different operators with coincidental algebra; they are one operator viewed through different coordinate systems.\\
+\hlt{Key Insight}: Conjugation records a change of basis.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:similarity-preserves-scalar-shifts} \hlt{Similarity and Scalar Shifts}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ and $B$ are similar, then $A-\lambda I_n$ and $B-\lambda I_n$ are similar for every $\lambda\in\mathbb{F}$.
+\item If $A-\lambda I_n$ and $B-\lambda I_n$ are similar for some $\lambda\in\mathbb{F}$, then $A$ and $B$ are similar.
+\end{enumerate}
+\begin{proof}
+If $B=PAP^{-1}$, then
+\begin{align}
+B-\lambda I_n=PAP^{-1}-\lambda PP^{-1}=P(A-\lambda I_n)P^{-1}. \nonumber
+\end{align}
+This proves (i). Conversely, if $B-\lambda I_n=P(A-\lambda I_n)P^{-1}$ for some invertible $P$, then adding $\lambda I_n=\lambda PP^{-1}$ to both sides gives $B=PAP^{-1}$.\\
+\hlt{Structural Commentary}: Subtracting $\lambda I_n$ commutes with a change of basis because the identity matrix looks the same in every basis.\\
+\hlt{Key Insight}: Scalar shifts do not disturb similarity.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:similarity-preserves-trace-and-determinant} \hlt{Trace and Determinant Are Similarity Invariants}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are similar, then
+\begin{align}
+\operatorname{tr}(A)=\operatorname{tr}(B),
+\qquad
+\det(A)=\det(B). \nonumber
+\end{align}
+\begin{proof}
+Write $B=PAP^{-1}$ with $P$ invertible. Cyclicity of trace gives
+\begin{align}
+\operatorname{tr}(B)=\operatorname{tr}(PAP^{-1})=\operatorname{tr}(AP^{-1}P)=\operatorname{tr}(A). \nonumber
+\end{align}
+The product rule for determinants gives
+\begin{align}
+\det(B)=\det(P)\det(A)\det(P^{-1})=\det(A). \nonumber
+\end{align}
+\hlt{Structural Commentary}: Trace and determinant ignore the coordinate system used to write an operator.\\
+\hlt{Key Insight}: Conjugating by $P$ inserts $P$ and $P^{-1}$, which cancel inside trace and determinant.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \hlt{Equivalence Relation}\\
+A relation is an equivalence relation if it is reflexive, symmetric, and transitive.
+\end{definition}
+
+\begin{proposition} \label{prop:similarity-equivalence-relation} \hlt{Similarity Is an Equivalence Relation}\\
+Similarity is an equivalence relation on $\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{proof}
+Reflexivity follows from $A=I_nAI_n^{-1}$. If $B=PAP^{-1}$, then $A=P^{-1}BP$, so similarity is symmetric. If $B=PAP^{-1}$ and $C=QBQ^{-1}$, then
+\begin{align}
+C=Q(PAP^{-1})Q^{-1}=(QP)A(QP)^{-1}, \nonumber
+\end{align}
+so similarity is transitive.\\
+\hlt{Structural Commentary}: Similarity partitions matrices into classes representing the same linear operator under different bases.\\
+\hlt{Key Insight}: Identity, inverse changes of basis, and composed changes of basis give reflexivity, symmetry, and transitivity.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \hlt{Block Matrices}\\
 Suppose
@@ -349,7 +651,7 @@ A_{21} & A_{22}
 where each block records the part of $T$ mapping one summand of the domain into one summand of the codomain.
 \end{definition}
 
-\begin{proposition} \hlt{Invariant Subspaces and Block Form}\\
+\begin{proposition} \label{prop:invariant-subspaces-and-block-form} \hlt{Invariant Subspaces and Block Form}\\
 Let $T \in \LL(\mathcal{V})$ and suppose
 \begin{align}
 \mathcal{V} = \mathcal{U} \oplus \mathcal{W}. \nonumber
@@ -372,7 +674,9 @@ A & 0 \\
 \end{align}
 \end{enumerate}
 \begin{proof}
-If $\mathcal{U}$ is invariant, then $T(\mathcal{U}) \subseteq \mathcal{U}$, so no basis vector from $\mathcal{U}$ can acquire a component in $\mathcal{W}$. That forces the lower-left block to be zero. If $\mathcal{W}$ is also invariant, the same argument forces the upper-right block to be zero for the complementary direction as well.
+If $\mathcal{U}$ is invariant, then $T(\mathcal{U}) \subseteq \mathcal{U}$, so no basis vector from $\mathcal{U}$ can acquire a component in $\mathcal{W}$. That forces the lower-left block to be zero. If $\mathcal{W}$ is also invariant, the same argument forces the upper-right block to be zero for the complementary direction as well.\\
+\hlt{Structural Commentary}: Block form records how an operator moves vectors between chosen summands. Invariant summands force the corresponding off-diagonal movement to vanish.\\
+\hlt{Key Insight}: Zero blocks are coordinate evidence of invariant subspaces.
 \end{proof}
 \end{proposition}
 
