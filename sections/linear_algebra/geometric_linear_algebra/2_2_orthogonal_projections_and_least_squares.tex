@@ -75,6 +75,89 @@ Thus the displayed expansion and coordinate column follow. The norm identity fol
   \label{fig:orthonormal-coordinates}
 \end{figure}
 
+\begin{theorem} \label{thm:parseval-identity-finite-dimensional} \hlt{Parseval's Identity}\\
+Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of an inner-product space $\mathcal{V}$.\\
+Then, for all $\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\innerprod{\mathbf{v},\mathbf{w}} =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_j}} =\innerprod[\mathbb{F}^n]{[\mathbf{v}]_{\beta},[\mathbf{w}]_{\beta}}$.
+\begin{proof}
+By Theorem \ref{thm:orthonormal-basis-coordinates}, $\mathbf{v}=\sum_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$ and $\mathbf{w}=\sum_{k=1}^{n}\innerprod{\mathbf{w},\mathbf{e}_k}\mathbf{e}_k$.\\
+Hence $\innerprod{\mathbf{v},\mathbf{w}} =\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_k}}\innerprod{\mathbf{e}_j,\mathbf{e}_k} =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_j}}$.\\
+The last expression is exactly the standard inner product of the coordinate columns in $\mathbb{F}^n$.\\
+\hlt{Structural Commentary}: Orthonormal coordinates make inner products coordinatewise.\\
+\hlt{Key Insight}: Orthonormal coordinates preserve angles and lengths, not just linear combinations.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:bessel-inequality-finite-orthonormal-list} \hlt{Bessel's Inequality}\\
+Let $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ be an orthonormal list in an inner-product space $\mathcal{V}$.\\
+Then, for every $\mathbf{v}\in\mathcal{V}$, $\sum\limits_{j=1}^{m}\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}^2\leq\norm{\mathbf{v}}^2$.
+\begin{proof}
+Set $\mathbf{u}=\sum_{j=1}^{m}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$. For each $k$, orthonormality gives $\innerprod{\mathbf{v}-\mathbf{u},\mathbf{e}_k} =\innerprod{\mathbf{v},\mathbf{e}_k} -\sum\limits_{j=1}^{m}\innerprod{\mathbf{v},\mathbf{e}_j}\innerprod{\mathbf{e}_j,\mathbf{e}_k}=0$.\\
+Thus $\mathbf{v}-\mathbf{u}$ is orthogonal to $\mathbf{u}$. By Pythagorean Theorem \ref{thm:pythagorean-inner-product} and Proposition \ref{prop:orthonormal-linear-combination-norm},
+\begin{align}
+\norm{\mathbf{v}}^2=\norm{\mathbf{u}}^2+\norm{\mathbf{v}-\mathbf{u}}^2
+\geq \norm{\mathbf{u}}^2
+=\sum_{j=1}^{m}\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}^2.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: The chosen directions give an orthogonal part of $\mathbf{v}$; the residual is perpendicular.\\
+\hlt{Key Insight}: Partial orthonormal coordinates cannot contain more energy than the whole vector.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:orthonormal-sequence-coefficients-vanish} \hlt{Coefficients Against an Orthonormal Sequence Vanish}\\
+Let $(\mathbf{e}_1,\mathbf{e}_2,\ldots)$ be an orthonormal sequence in an inner-product space $\mathcal{V}$, meaning every finite sublist is orthonormal. Then, for every $\mathbf{v}\in\mathcal{V}$, $\lim\limits_{n\to\infty}\innerprod{\mathbf{v},\mathbf{e}_n}=0$.
+\begin{proof}
+Fix $\epsilon>0$. By Theorem \ref{thm:bessel-inequality-finite-orthonormal-list}, every finite set of indices satisfying $\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}\geq\epsilon$ has cardinality at most $\norm{\mathbf{v}}^2/\epsilon^2$. Hence only finitely many $j$ have $\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}\geq\epsilon$. This holds for every $\epsilon>0$, so $\innerprod{\mathbf{v},\mathbf{e}_n}\to0$.\\
+\hlt{Structural Commentary}: Bessel bounds the number of large orthonormal coefficients.\\
+\hlt{Key Insight}: Infinitely many large coefficients would force infinite energy.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:matrix-entries-from-orthonormal-codomain} \hlt{Matrix Entries from an Orthonormal Codomain Basis}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional vector spaces over $\mathbb{F}$, with $\mathcal{W}$ an inner-product space. Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$ and let $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_m)$ be an orthonormal basis of $\mathcal{W}$. If $T\in\LL(\mathcal{V},\mathcal{W})$, then
+\begin{align}
+[T]_{\gamma\leftarrow\beta}
+=\begin{bmatrix}
+\innerprod{T\mathbf{v}_1,\mathbf{w}_1} & \cdots & \innerprod{T\mathbf{v}_n,\mathbf{w}_1}\\
+\vdots & \ddots & \vdots\\
+\innerprod{T\mathbf{v}_1,\mathbf{w}_m} & \cdots & \innerprod{T\mathbf{v}_n,\mathbf{w}_m}
+\end{bmatrix}.
+\nonumber
+\end{align}
+Conversely, for each $A\in\operatorname{Mat}(m,n,\mathbb{F})$, there is a unique $T\in\LL(\mathcal{V},\mathcal{W})$ such that $[T]_{\gamma\leftarrow\beta}=A$.
+\begin{proof}
+The $j$th column of $[T]_{\gamma\leftarrow\beta}$ is $[T\mathbf{v}_j]_{\gamma}$. Since $\gamma$ is orthonormal, Theorem \ref{thm:orthonormal-basis-coordinates} gives
+\begin{align}
+[T\mathbf{v}_j]_{\gamma}
+=\begin{bmatrix}
+\innerprod{T\mathbf{v}_j,\mathbf{w}_1}\\
+\vdots\\
+\innerprod{T\mathbf{v}_j,\mathbf{w}_m}
+\end{bmatrix}.
+\nonumber
+\end{align}
+This proves the displayed matrix formula. The converse is exactly the surjectivity and injectivity of the coordinate encoding in Theorem \ref{thm:linear-maps-and-matrices-same-data}.\\
+\hlt{Structural Commentary}: Columns are basis-image coordinates, read by inner products.\\
+\hlt{Key Insight}: Each entry measures $T\mathbf{v}_j$ against one output direction.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:inner-product-through-operator-matrix} \hlt{Inner Products Through an Operator Matrix}\\
+Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of a finite-dimensional inner-product space $\mathcal{V}$, and let $T\in\LL(\mathcal{V})$. Then, for all $\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\innerprod{T\mathbf{v},\mathbf{w}} =\innerprod[\mathbb{F}^n]{[T]_{\beta\leftarrow\beta}[\mathbf{v}]_{\beta},[\mathbf{w}]_{\beta}}$.
+\begin{proof}
+By Proposition \ref{prop:matrix-representation-action}, $[T\mathbf{v}]_{\beta}=[T]_{\beta\leftarrow\beta}[\mathbf{v}]_{\beta}$. Apply Parseval's Identity \ref{thm:parseval-identity-finite-dimensional} to $T\mathbf{v}$ and $\mathbf{w}$ gives result.\\
+\hlt{Structural Commentary}: Orthonormal coordinates turn $\innerprod{T\mathbf{v},\mathbf{w}}$ into matrix computation.\\
+\hlt{Key Insight}: Orthonormal coordinates make operator geometry computable by matrices.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/orthonormal_matrix_entries.tikz}
+  \caption{The $j$th column of $[T]_{\gamma\leftarrow\beta}$ is obtained by resolving $T\mathbf{v}_j$ against the orthonormal basis of $\mathcal{W}$.}
+  \label{fig:orthonormal-matrix-entries}
+\end{figure}
+
 \begin{theorem} \label{thm:gram-schmidt-process} \hlt{Gram--Schmidt Process}\\
 Let $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a linearly independent list in an inner-product space $\mathcal{V}$.\\
 Define $\mathbf{u}_1=\mathbf{v}_1$, $\mathbf{e}_1=\frac{\mathbf{u}_1}{\norm{\mathbf{u}_1}}$ and, for $2\leq j\leq m$, $\mathbf{u}_j=\mathbf{v}_j-\sum\limits_{k=1}^{j-1}\innerprod{\mathbf{v}_j,\mathbf{e}_k}\mathbf{e}_k$, $\mathbf{e}_j=\frac{\mathbf{u}_j}{\norm{\mathbf{u}_j}}$.\\
@@ -143,6 +226,21 @@ For uniqueness, suppose $\innerprod{\mathbf{v},\mathbf{u}_1}=\innerprod{\mathbf{
 \begin{perspective} \label{per:riesz-representation-coordinates} \hlt{Riesz as Coordinate Duality}\\
 The vector $\sum_{j=1}^{n}\overline{\varphi(\mathbf{e}_j)}\mathbf{e}_j$ seems to depend on the orthonormal basis, but Theorem \ref{thm:riesz-representation-finite-dimensional} shows that the resulting representing vector is intrinsic.
 \end{perspective}
+
+\begin{definition} \label{def:riesz-vector} \hlt{Riesz Vector}\\
+Let $\mathcal{V}$ be finite-dimensional and let $\varphi:\mathcal{V}\to\mathbb{F}$ be a linear functional. The unique vector $\mathbf{u}\in\mathcal{V}$ satisfying $\varphi(\mathbf{v})=\innerprod{\mathbf{v},\mathbf{u}}$ for every $\mathbf{v}\in\mathcal{V}$ is the \hlt{Riesz vector} representing $\varphi$.
+\end{definition}
+
+\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
+On $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product, the Riesz vector of the trace functional $A\mapsto\operatorname{tr}(A)$ is $I_n$, since $\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/riesz_representation_vector_functional.tikz}
+  \caption{Riesz identifies a functional with its representing vector.}
+  \label{fig:riesz-representation-vector-functional}
+\end{figure}
 
 \begin{definition} \label{def:orthogonal-complement} \hlt{Orthogonal Complement}\\
 If $\mathcal{U}\subseteq\mathcal{V}$, then the \hlt{orthogonal complement} of $\mathcal{U}$ is $\mathcal{U}^{\perp}\defeq\{\mathbf{v}\in\mathcal{V}:\innerprod{\mathbf{v},\mathbf{u}}=0\text{ for every }\mathbf{u}\in\mathcal{U}\}$

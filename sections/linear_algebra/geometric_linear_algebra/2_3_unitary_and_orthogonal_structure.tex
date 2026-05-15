@@ -1,6 +1,6 @@
 \subsubsection{Unitary and Orthogonal Structure}
 
-Orthonormal bases allow geometric structure to coexist with coordinate computations. The first payoff is that triangular forms can be chosen without giving up orthonormal coordinates.
+Orthonormal bases allow geometric structure to coexist with coordinate computations. They support triangular forms, and they also turn the dual action of a linear map into its adjoint.
 
 \begin{corollary} \label{cor:upper-triangular-orthonormal-basis} \hlt{Upper-Triangular Form in an Orthonormal Basis}\\
 Let $\mathcal{V}$ be a finite-dimensional inner-product space and let $T\in\LL(\mathcal{V})$. If $T$ has an upper-triangular matrix with respect to some basis of $\mathcal{V}$, then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
@@ -25,7 +25,104 @@ Thus each $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$ is invariant u
 Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
 \begin{proof}
 By Theorem \ref{thm:complex-upper-triangularization}, $T$ has an upper-triangular matrix with respect to some basis of $\mathcal{V}$. Corollary \ref{cor:upper-triangular-orthonormal-basis} replaces that basis by an orthonormal basis without losing upper triangularity.\\
-\hlt{Structural Commentary}: Complex spectral existence gives an invariant flag; Gram--Schmidt turns the flag into orthonormal coordinates.\\
+\hlt{Structural Commentary}: Complex triangularisation gives a flag; Gram--Schmidt orthonormalizes it.\\
 \hlt{Key Insight}: Schur triangularisation is ordinary triangularisation plus orthonormalization of the flag.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:adjoint-linear-map} \hlt{Adjoint of a Linear Map}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be inner-product spaces and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+A function $S:\mathcal{W}\to\mathcal{V}$ is an \hlt{adjoint} of $T$ if $\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}} =\innerprod[\mathcal{V}]{\mathbf{v},S\mathbf{w}}$, $\mathbf{v}\in\mathcal{V},\ \mathbf{w}\in\mathcal{W}$.
+\end{definition}
+
+\begin{lemma} \label{lem:adjoint-unique-if-exists} \hlt{Uniqueness of Adjoints}\\
+A linear map has at most one adjoint.
+\begin{proof}
+Suppose $S_1,S_2:\mathcal{W}\to\mathcal{V}$ are adjoints of $T$. For each $\mathbf{w}\in\mathcal{W}$ and every $\mathbf{v}\in\mathcal{V}$, $\innerprod[\mathcal{V}]{\mathbf{v},S_1\mathbf{w}-S_2\mathbf{w}}=0$.\\
+Taking $\mathbf{v}=S_1\mathbf{w}-S_2\mathbf{w}$ gives $S_1\mathbf{w}=S_2\mathbf{w}$. Hence $S_1=S_2$.\\
+\hlt{Structural Commentary}: Same tests force candidate adjoints to agree.\\
+\hlt{Key Insight}: Inner products separate vectors.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:finite-dimensional-adjoint-exists} \hlt{Existence of the Adjoint}\\
+Let $\mathcal{V}$ be a finite-dimensional inner-product space, let $\mathcal{W}$ be an inner-product space, and let $T\in\LL(\mathcal{V},\mathcal{W})$. Then $T$ has a unique adjoint $T^*:\mathcal{W}\to\mathcal{V}$, and $T^*$ is linear.
+\begin{proof}
+For each $\mathbf{w}\in\mathcal{W}$, the map $\varphi_{\mathbf{w}}:\mathcal{V}\to\mathbb{F}$ defined by $\varphi_{\mathbf{w}}(\mathbf{v})=\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}}$ is a linear functional. By Theorem \ref{thm:riesz-representation-finite-dimensional}, there is a unique vector $T^*\mathbf{w}\in\mathcal{V}$ such that $\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}} =\innerprod[\mathcal{V}]{\mathbf{v},T^*\mathbf{w}}$, $\mathbf{v}\in\mathcal{V}$.\\
+Thus $T^*$ is an adjoint, and it is unique by Lemma \ref{lem:adjoint-unique-if-exists}. For $\mathbf{w}_1,\mathbf{w}_2\in\mathcal{W}$ and $a\in\mathbb{F}$,
+\begin{align}
+\innerprod[\mathcal{V}]{\mathbf{v},T^*(a\mathbf{w}_1+\mathbf{w}_2)} =\innerprod[\mathcal{W}]{T\mathbf{v},a\mathbf{w}_1+\mathbf{w}_2} =\overline{a}\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}_1}+\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}_2} =\innerprod[\mathcal{V}]{\mathbf{v},aT^*\mathbf{w}_1+T^*\mathbf{w}_2} \nonumber
+\end{align}
+for every $\mathbf{v}\in\mathcal{V}$. Hence $T^*(a\mathbf{w}_1+\mathbf{w}_2)=aT^*\mathbf{w}_1+T^*\mathbf{w}_2$.\\
+\hlt{Structural Commentary}: Each $\mathbf{w}$ gives a Riesz-represented functional on $\mathcal{V}$.\\
+\hlt{Key Insight}: The adjoint is pointwise Riesz representation for $T$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/adjoint_inner_product_bridge.tikz}
+  \caption{The adjoint transfers $T$ between inner-product slots.}
+  \label{fig:adjoint-inner-product-bridge}
+\end{figure}
+
+\begin{definition} \label{def:conjugate-transpose} \hlt{Conjugate Transpose}\\
+For $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$, the \hlt{conjugate transpose} of $A$ is $A^*=[\overline{a_{ji}}]\in\operatorname{Mat}(n,m,\mathbb{F})$. Over $\mathbb{R}$, this is the ordinary transpose.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-of-adjoint-is-conjugate-transpose} \hlt{Matrix of the Adjoint}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces. Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$ and let $\gamma=(\mathbf{f}_1,\ldots,\mathbf{f}_m)$ be an orthonormal basis of $\mathcal{W}$. If $T\in\LL(\mathcal{V},\mathcal{W})$, then $[T^*]_{\beta\leftarrow\gamma} =\bigl([T]_{\gamma\leftarrow\beta}\bigr)^*$.
+\begin{proof}
+Let $A=[T]_{\gamma\leftarrow\beta}$ and $B=[T^*]_{\beta\leftarrow\gamma}$.\\
+By Theorem \ref{thm:matrix-entries-from-orthonormal-codomain}, $B_{i,j}=\innerprod[\mathcal{V}]{T^*\mathbf{f}_j,\mathbf{e}_i} =\overline{\innerprod[\mathcal{V}]{\mathbf{e}_i,T^*\mathbf{f}_j}} =\overline{\innerprod[\mathcal{W}]{T\mathbf{e}_i,\mathbf{f}_j}} =\overline{A_{j,i}}$. Thus $B=A^*$.\\
+\hlt{Structural Commentary}: Entries swap by moving $T$ across the inner product.\\
+\hlt{Key Insight}: In orthonormal coordinates, taking adjoints is exactly taking conjugate transposes.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:basic-adjoint-identities} \hlt{Basic Adjoint Identities}\\
+For finite-dimensional inner-product spaces and composable linear maps:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $(aS+T)^*=\overline{a}S^*+T^*$ for $S,T\in\LL(\mathcal{V},\mathcal{W})$ and $a\in\mathbb{F}$;
+\item $(SR)^*=R^*S^*$ for $R\in\LL(\mathcal{U},\mathcal{V})$ and $S\in\LL(\mathcal{V},\mathcal{W})$;
+\item $(T^*)^*=T$;
+\item $I_{\mathcal{V}}^*=I_{\mathcal{V}}$.
+\end{enumerate}
+\begin{proof}
+Verify the defining identity; uniqueness gives equality.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\mathbf{v}\in\mathcal{V}$, $\mathbf{w}\in\mathcal{W}$, $\innerprod{(aS+T)\mathbf{v},\mathbf{w}} =a\innerprod{S\mathbf{v},\mathbf{w}}+\innerprod{T\mathbf{v},\mathbf{w}} =\innerprod{\mathbf{v},\overline{a}S^*\mathbf{w}+T^*\mathbf{w}}$, so $(aS+T)^*=\overline{a}S^*+T^*$.
+\item For $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$, $\innerprod{SR\mathbf{u},\mathbf{w}} =\innerprod{R\mathbf{u},S^*\mathbf{w}} =\innerprod{\mathbf{u},R^*S^*\mathbf{w}}$, so $(SR)^*=R^*S^*$.
+\item Conjugating $\innerprod{T\mathbf{v},\mathbf{w}}=\innerprod{\mathbf{v},T^*\mathbf{w}}$ gives $\innerprod{T^*\mathbf{w},\mathbf{v}}=\innerprod{\mathbf{w},T\mathbf{v}}$, so $T$ is the adjoint of $T^*$.
+\item Since $\innerprod{I\mathbf{v},\mathbf{w}}=\innerprod{\mathbf{v},I\mathbf{w}}$, the identity map is its own adjoint.
+\end{enumerate}
+\hlt{Structural Commentary}: Put both sides in one inner-product slot, then use uniqueness.\\
+\hlt{Key Insight}: Like matrix transposes, adjoints reverse products and conjugate scalars.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:adjoint-kernel-range-orthogonality} \hlt{Adjoint Kernel-Range Orthogonality}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+Then $\ker(T^*)=(\operatorname{range}(T))^{\perp}$, $\operatorname{range}(T^*)=(\ker(T))^{\perp}$.\\
+Equivalently, the nullspace of $T^*$ is the orthogonal complement of the range of $T$.
+\begin{proof}
+For $\mathbf{w}\in\mathcal{W}$,
+\begin{align}
+\mathbf{w}\in\ker(T^*)
+&\Longleftrightarrow \innerprod[\mathcal{V}]{\mathbf{v},T^*\mathbf{w}}=0\quad\text{for every }\mathbf{v}\in\mathcal{V} \nonumber\\
+&\Longleftrightarrow \innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}}=0\quad\text{for every }\mathbf{v}\in\mathcal{V} \nonumber\\
+&\Longleftrightarrow \mathbf{w}\in(\operatorname{range}(T))^{\perp}.
+\nonumber
+\end{align}
+Applying this identity to $T^*$ gives $\ker(T)=(\operatorname{range}(T^*))^{\perp}$.\\
+Taking orthogonal complements and using Corollary \ref{cor:double-orthogonal-complement} yields $\operatorname{range}(T^*)=(\ker(T))^{\perp}$.\\
+\hlt{Structural Commentary}: Adjoints trade ranges for kernels.\\
+\hlt{Key Insight}: A vector is killed by $T^*$ exactly when it is orthogonal to everything $T$ can produce.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:self-adjoint-hermitian} \hlt{Self-Adjoint and Hermitian}\\
+An operator $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space is \hlt{self-adjoint} if $T^*=T$. A square matrix $A$ is \hlt{Hermitian} if $A^*=A$. In orthonormal coordinates, these are the same condition by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}.
+\end{definition}
