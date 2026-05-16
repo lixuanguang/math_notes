@@ -306,7 +306,7 @@ Let $\mathcal{U}$ be finite-dimensional subspace of $\mathcal{V}$. For $\mathbf{
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/orthogonal_projection_subspace.tikz}
-  \caption{The decomposition $\mathbf{v}=P_{\mathcal{U}}\mathbf{v}+(\mathbf{v}-P_{\mathcal{U}}\mathbf{v})$ with residual in $\mathcal{U}^{\perp}$.}
+  \caption{Orthogonal projection decomposes $\mathbf{v}$ into $P_{\mathcal{U}}\mathbf{v}$ plus an orthogonal residual.}
   \label{fig:orthogonal-projection-subspace}
 \end{figure}
 
@@ -359,3 +359,74 @@ Taking square roots gives the inequality. Equality holds exactly when $\norm{P_{
 \begin{principle} \label{pri:least-squares-projection-principle} \hlt{Least Squares as Orthogonal Projection}\\
 In an inner-product space, the best approximation to $\mathbf{v}$ from a finite-dimensional subspace $\mathcal{U}$ is $P_{\mathcal{U}}\mathbf{v}$. The residual $\mathbf{v}-P_{\mathcal{U}}\mathbf{v}$ is orthogonal to every allowable correction inside $\mathcal{U}$.
 \end{principle}
+
+\begin{definition} \label{def:distance-to-subspace} \hlt{Distance to a Subspace}\\
+Let $\mathcal{U}$ be a nonempty subset of inner-product space $\mathcal{V}$. The \hlt{distance} from $\mathbf{v}\in\mathcal{V}$ to $\mathcal{U}$ is $d(\mathbf{v},\mathcal{U})\defeq \inf_{\mathbf{u}\in\mathcal{U}}\norm{\mathbf{v}-\mathbf{u}}$.\\
+If $\mathcal{U}$ is finite-dimensional, Theorem \ref{thm:orthogonal-projection-minimizes-distance} gives $d(\mathbf{v},\mathcal{U})=\norm{\mathbf{v}-P_{\mathcal{U}}\mathbf{v}}$.
+\end{definition}
+
+\begin{theorem} \label{thm:normal-equations-for-projection} \hlt{Normal Equations for Projection}\\
+Let $\mathcal{U}$ be a finite-dimensional subspace of an inner-product space $\mathcal{V}$, and suppose $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.\\
+For $\mathbf{v}\in\mathcal{V}$, the projection has the form $P_{\mathcal{U}}\mathbf{v}=\sum\limits_{j=1}^{n}c_j\mathbf{u}_j$, where $(c_1,\ldots,c_n)$ solves the normal equations
+\begin{align}
+\begin{bmatrix}
+\innerprod{\mathbf{u}_1,\mathbf{u}_1} & \innerprod{\mathbf{u}_2,\mathbf{u}_1} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_1}\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_2} & \innerprod{\mathbf{u}_2,\mathbf{u}_2} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_2}\\
+\vdots & \vdots & \ddots & \vdots\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_n} & \innerprod{\mathbf{u}_2,\mathbf{u}_n} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_n}
+\end{bmatrix}
+\begin{bmatrix}
+c_1\\ c_2\\ \vdots\\ c_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+\innerprod{\mathbf{v},\mathbf{u}_1}\\
+\innerprod{\mathbf{v},\mathbf{u}_2}\\
+\vdots\\
+\innerprod{\mathbf{v},\mathbf{u}_n}
+\end{bmatrix}.
+\nonumber
+\end{align}
+This system is consistent. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, then the solution is unique.
+\begin{proof}
+Since $P_{\mathcal{U}}\mathbf{v}\in\mathcal{U}$, write $P_{\mathcal{U}}\mathbf{v}=\sum_{j=1}^{n}c_j\mathbf{u}_j$.\\
+The residual $\mathbf{v}-P_{\mathcal{U}}\mathbf{v}$ lies in $\mathcal{U}^{\perp}$, so for each $i$, $0=\innerprod{\mathbf{v}-\sum\limits_{j=1}^{n}c_j\mathbf{u}_j,\mathbf{u}_i} =\innerprod{\mathbf{v},\mathbf{u}_i}-\sum\limits_{j=1}^{n}c_j\innerprod{\mathbf{u}_j,\mathbf{u}_i}$.\\
+These equations are exactly the displayed system, so consistency follows from the existence of $P_{\mathcal{U}}\mathbf{v}$. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, they form a basis of $\mathcal{U}$, so the coordinates of $P_{\mathcal{U}}\mathbf{v}$ in this basis are unique.\\
+\hlt{Structural Commentary}: Normal equations express residual orthogonality.\\
+\hlt{Key Insight}: The projection error is perpendicular to $\mathcal{U}$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/normal_equations_projection.tikz}
+  \caption{Normal equations impose $\innerprod{\mathbf{v}-P_{\mathcal{U}}\mathbf{v},\mathbf{u}_i}=0$ for each spanning vector.}
+  \label{fig:normal-equations-projection}
+\end{figure}
+
+\begin{definition} \label{def:gram-matrix-and-determinant} \hlt{Gram Matrix}\\
+For vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in an inner-product space, the \hlt{Gram matrix} is
+\begin{align}
+G(\mathbf{u}_1,\ldots,\mathbf{u}_n)
+\defeq
+\begin{bmatrix}
+\innerprod{\mathbf{u}_1,\mathbf{u}_1} & \innerprod{\mathbf{u}_2,\mathbf{u}_1} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_1}\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_2} & \innerprod{\mathbf{u}_2,\mathbf{u}_2} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_2}\\
+\vdots & \vdots & \ddots & \vdots\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_n} & \innerprod{\mathbf{u}_2,\mathbf{u}_n} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_n}
+\end{bmatrix}.
+\nonumber
+\end{align}
+The \hlt{Gram determinant} is $g(\mathbf{u}_1,\ldots,\mathbf{u}_n)\defeq\det G(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.
+\end{definition}
+
+\begin{proposition} \label{prop:gram-matrix-positive-semidefinite} \hlt{Gram Matrices Are Hermitian Positive Semidefinite}\\
+For any vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$, the Gram matrix $G(\mathbf{u}_1,\ldots,\mathbf{u}_n)$ is Hermitian and positive semidefinite. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, then it is positive definite.
+\begin{proof}
+Hermitian symmetry follows from conjugate symmetry of the inner product.\\
+For $\mathbf{c}=[c_1\ \cdots\ c_n]^t$, $\mathbf{c}^*G(\mathbf{u}_1,\ldots,\mathbf{u}_n)\mathbf{c} =\norm{\sum\limits_{j=1}^{n}c_j\mathbf{u}_j}^2\geq0$.\\
+If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, the squared norm above is $0$ only when all $c_j=0$, so $G$ is positive definite.\\
+\hlt{Structural Commentary}: A Gram matrix records every pairwise inner product in a list of vectors.\\
+\hlt{Key Insight}: The quadratic form of a Gram matrix is exactly the squared norm of a linear combination.
+\end{proof}
+\end{proposition}

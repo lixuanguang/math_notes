@@ -1,1 +1,34 @@
 \subsubsection{Matrix Norms and Numerical Structure}
+
+Numerical linear algebra often replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+
+\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if
+\begin{align}
+a_{ij}=0\qquad\text{whenever } i>j+1.
+\nonumber
+\end{align}
+Equivalently, all entries below the first subdiagonal are zero.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
+  \caption{Upper Hessenberg form keeps the diagonal, the first subdiagonal, and all entries above them.}
+  \label{fig:upper-hessenberg-pattern}
+\end{figure}
+
+\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
+For every $A\in\operatorname{Mat}(n,n,\mathbb{F})$, there exists a unitary matrix $U$ such that $U^*AU$ is upper Hessenberg. Moreover, the subdiagonal entries of $U^*AU$ can be chosen real and nonnegative.
+\begin{proof}
+Construct the unitary similarity column by column. At step $k=1,\ldots,n-2$, assume entries below the first subdiagonal are already zero in columns $1,\ldots,k-1$. Look at the tail of column $k$ in rows $k+1,\ldots,n$. By Corollary \ref{cor:householder-unitary-annihilator}, choose a unitary $V_k\in\operatorname{Mat}(n-k,n-k,\mathbb{F})$ such that $V_k^*$ sends this tail to a vector whose only nonzero entry is its first entry, chosen real and nonnegative.\\
+Set $U_k=I_k\oplus V_k$ and replace the current matrix $A_{k-1}$ by $A_k=U_k^*A_{k-1}U_k$. Because $U_k$ fixes the first $k$ coordinate vectors, right multiplication by $U_k$ does not change the first $k$ columns before the left action is applied. The left action affects only rows $k+1,\ldots,n$, so previously created zeros in columns $1,\ldots,k-1$ stay zero, while column $k$ gains zeros below row $k+1$.\\
+After $n-2$ steps, $A_{n-2}$ is upper Hessenberg with real nonnegative subdiagonal entries. Since each step is a unitary similarity, $A_{n-2}=U^*AU$ for the product $U=U_1U_2\cdots U_{n-2}$.\\
+\hlt{Structural Commentary}: Householder similarities annihilate one column tail at a time while fixing the earlier coordinate flag.\\
+\hlt{Key Insight}: Acting only on the trailing coordinates preserves previous zeros and creates the next Hessenberg column.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
+Upper Hessenberg matrices are almost triangular but still unitarily similar to the original matrix. This preserves spectral data while making iterative eigenvalue algorithms cheaper because only one subdiagonal must be tracked.
+\end{perspective}
