@@ -1,6 +1,6 @@
 \subsubsection{Matrix Factorisations and Decompositions}
 
-Factorisations expose the geometry hidden inside a matrix or operator. In this section, positive square roots separate stretching from isometric motion, singular values record the stretching scales, and QR factorisation turns arbitrary independent columns into orthonormal coordinates.
+Factorisations expose the geometry hidden inside a matrix or operator. In this section, positive square roots separate stretching from isometric motion, singular values record the stretching scales, compact SVD isolates the rank-bearing subspaces, and QR factorisation turns arbitrary independent columns into orthonormal coordinates.
 
 \begin{theorem} \label{thm:polar-decomposition} \hlt{Polar Decomposition}\\
 For every $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\exists$ an isometry $S\in\LL(\mathcal{V})$ s.t. $T=S\sqrt{T^*T}$.
@@ -67,6 +67,206 @@ Thus $C=A^{1/2}$ by uniqueness of the positive semidefinite square root.\\
 \hlt{Key Insight}: Square the linear candidate and use Cayley--Hamilton.
 \end{proof}
 \end{proposition}
+
+\begin{definition} \label{def:matrix-singular-values} \hlt{Matrix Singular Values}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $q=\min(m,n)$, and let $r=\operatorname{rank}(A)$. The \hlt{positive singular values} of $A$ are the positive eigenvalues of $\abs{A}=(A^*A)^{1/2}$, written $\sigma_1\geq\sigma_2\geq\cdots\geq\sigma_r>0$.\\
+The full list of singular values is $\sigma_1,\ldots,\sigma_r,\sigma_{r+1},\ldots,\sigma_q$, where $\sigma_{r+1}=\cdots=\sigma_q=0$.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-singular-value-decomposition} \hlt{Matrix Singular Value Decomposition}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$.\\
+Then there are unitary matrices $V\in\operatorname{Mat}(m,m,\mathbb{F})$ and $W\in\operatorname{Mat}(n,n,\mathbb{F})$ such that
+\begin{align}
+A=V\Sigma W^*,
+\qquad
+\Sigma=
+\begin{bmatrix}
+\operatorname{diag}(\sigma_1,\ldots,\sigma_q) & 0\\
+0 & 0
+\end{bmatrix}
+\in\operatorname{Mat}(m,n,\mathbb{R}),
+\nonumber
+\end{align}
+with the evident deletion of empty blocks.
+\begin{proof}
+If $A=0$, take $\Sigma=0$ and choose any unitary $V,W$. Assume $r=\operatorname{rank}(A)\geq1$.\\
+Diagonalise $A^*A$ as $W^*A^*AW=\operatorname{diag}(\sigma_1^2,\ldots,\sigma_r^2,0,\ldots,0)$, where $\mathbf{w}_1,\ldots,\mathbf{w}_n$ are the columns of $W$.\\
+For $1\leq j\leq r$, set $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$. Then $\mathbf{v}_i^*\mathbf{v}_j =\frac{1}{\sigma_i\sigma_j}\mathbf{w}_i^*A^*A\mathbf{w}_j =\delta_{ij}$ so $\mathbf{v}_1,\ldots,\mathbf{v}_r$ are orthonormal.\\
+Complete them to an orthonormal basis of $\mathbb{F}^m$ and let $V$ be the matrix with these columns.\\
+For $j>r$, $\norm{A\mathbf{w}_j}_2^2=\mathbf{w}_j^*A^*A\mathbf{w}_j=0$, hence $A\mathbf{w}_j=0$. Thus $AW=V\Sigma$, equivalently $A=V\Sigma W^*$.\\
+\hlt{Structural Commentary}: $A^*A$ determines the right singular directions and singular values.\\
+\hlt{Key Insight}: Apply $A$ and normalize to get the left singular directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/matrix_svd_unit_ball_to_ellipse.tikz}
+  \caption{SVD: right-unitary motion, diagonal stretch, left-unitary motion.}
+  \label{fig:matrix-svd-unit-ball-to-ellipse}
+\end{figure}
+
+\begin{proposition} \label{prop:basic-singular-value-identities} \hlt{Basic Singular Value Identities}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$ and $r=\operatorname{rank}(A)$. Let $c\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The positive eigenvalues of $A^*A$ and $AA^*$ are $\sigma_1^2,\ldots,\sigma_r^2$.
+\item $\sum_{j=1}^{q}\sigma_j^2=\operatorname{tr}(A^*A)=\operatorname{tr}(AA^*)=\norm{A}_F^2$, where $\norm{A}_F^2\defeq\operatorname{tr}(A^*A)$.
+\item $A$ and $A^*$ have the same singular values. Over $\mathbb{C}$, so do $A^t$ and $\overline{A}$.
+\item The singular values of $cA$ are $\abs{c}\sigma_1,\ldots,\abs{c}\sigma_q$.
+\end{enumerate}
+\begin{proof}
+Let $A=V\Sigma W^*$ be an SVD. Then $A^*A=W(\Sigma^*\Sigma)W^*$ and $AA^*=V(\Sigma\Sigma^*)V^*$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The nonzero diagonal entries of $\Sigma^*\Sigma$ and $\Sigma\Sigma^*$ are $\sigma_1^2,\ldots,\sigma_r^2$.
+\item Taking traces in (i) gives the identity; the final equality is the definition of $\norm{A}_F$.
+\item For $A^*$, the two Gram matrices are interchanged.\\
+Over $\mathbb{C}$, $(A^t)^*A^t=(AA^*)^t$ and $(\overline{A})^*\overline{A}=(A^*A)^t$, so the spectra agree.
+\item Since $(cA)^*(cA)=\abs{c}^2A^*A$, singular values scale by $\abs{c}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Unitary factors do not change Gram spectra; $\Sigma$ contains all singular data.\\
+\hlt{Key Insight}: Reduce each claim to $\Sigma^*\Sigma$ and $\Sigma\Sigma^*$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:compact-singular-value-decomposition} \hlt{Compact Singular Value Decomposition}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq1$.\\
+A factorisation $A=X\Sigma_rY^*$ is a \hlt{compact singular value decomposition} if $X\in\operatorname{Mat}(m,r,\mathbb{F})$ and $Y\in\operatorname{Mat}(n,r,\mathbb{F})$ have orthonormal columns and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$ with $\sigma_1\geq\cdots\geq\sigma_r>0$.
+\end{definition}
+
+\begin{theorem} \label{thm:compact-singular-value-decomposition} \hlt{Compact Singular Value Decomposition}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A=V\Sigma W^*$ is an SVD and $X,Y$ are the first $r$ columns of $V,W$, then $A=X\Sigma_rY^*$.
+\item Conversely, if $X,Y$ have orthonormal columns and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$ with $\sigma_1\geq\cdots\geq\sigma_r>0$, then $X\Sigma_rY^*$ has positive singular values $\sigma_1,\ldots,\sigma_r$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Partition $V=[X\ X_0]$, $W=[Y\ Y_0]$, and $\Sigma=
+\begin{bmatrix}
+\Sigma_r & 0\\
+0 & 0
+\end{bmatrix}$. Multiplication gives $A=V\Sigma W^*=X\Sigma_rY^*$.
+\item Let $B=X\Sigma_rY^*$. Since $X^{*}X=Y^{*}Y=I_r$, $B^{*}B=Y\Sigma_r^{2}Y^{*}$.\\
+Completing $Y$ to a unitary matrix shows $B^{*}B$ is unitarily similar to $\Sigma_r^{2}\oplus0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Compact SVD keeps only the nonzero singular directions.\\
+\hlt{Key Insight}: The rank-$r$ data $X,\Sigma_r,Y$ reconstructs $A$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:compact-svd-subspaces} \hlt{Column and Kernel Spaces from Compact SVD}\\
+Let $A=X\Sigma_rY^*$ be a compact SVD. Then $\operatorname{col}(A)=\operatorname{col}(X)=(\ker A^*)^{\perp}$, and $\ker(A)=\operatorname{col}(Y)^{\perp}=(\operatorname{col}(A^*))^{\perp}$.
+\begin{proof}
+Since $A=X\Sigma_rY^*$ and $AY\Sigma_r^{-1}=X$, $\operatorname{col}(A)=\operatorname{col}(X)$.\\
+For $\mathbf{z}\in\mathbb{F}^n$, $A\mathbf{z}=0$ $\Longleftrightarrow$ $X\Sigma_rY^*\mathbf{z}=0$ $\Longleftrightarrow$ $Y^*\mathbf{z}=0$ $\Longleftrightarrow$ $\mathbf{z}\perp\operatorname{col}(Y)$, because $X$ has independent columns and $\Sigma_r$ is invertible. The orthogonal-complement identities follow from Proposition \ref{prop:adjoint-kernel-range-orthogonality}.\\
+\hlt{Structural Commentary}: Compact SVD exposes image directions $X$ and null directions $\operatorname{col}(Y)^\perp$.\\
+\hlt{Key Insight}: $A$ acts only on the right singular subspace $\operatorname{col}(Y)$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/compact_svd_subspaces.tikz}
+  \caption{Compact SVD: $A$ maps $\operatorname{col}(Y)$ onto $\operatorname{col}(X)$ and kills $\ker(A)=\operatorname{col}(Y)^\perp$.}
+  \label{fig:compact-svd-subspaces}
+\end{figure}
+
+\begin{theorem} \label{thm:compact-svd-unitary-ambiguity} \hlt{Uniqueness of Compact SVD up to Singular Subspaces}\\
+Let $A=X_1\Sigma_rY_1^*=X_2\Sigma_rY_2^*$ be compact SVDs with the same $\Sigma_r$. Then $X_1=X_2U$, $Y_1=Y_2U$ for some unitary $U$ satisfying $U\Sigma_r=\Sigma_rU$. Hence $U=U_1\oplus\cdots\oplus U_d$ along the equal singular-value blocks of $\Sigma_r$.
+\begin{proof}
+Theorem \ref{thm:compact-svd-subspaces} gives $\operatorname{col}(X_1)=\operatorname{col}(X_2)$ and $\operatorname{col}(Y_1)=\operatorname{col}(Y_2)$, so $X_1=X_2U$ and $Y_1=Y_2V$ for unitary $U,V$. Substitution gives $\Sigma_r=U\Sigma_rV^*$ and $U\Sigma_r=\Sigma_rV$.
+Thus $U\Sigma_r^2U^*=\Sigma_r^2$, so $U$ commutes with $\Sigma_r^2$.\\
+Lemma \ref{lem:block-diagonal-commutant-distinct-scalars} makes $U$ block diagonal on equal singular-value blocks, hence $U\Sigma_r=\Sigma_rU$ and $V=U$.\\
+\hlt{Structural Commentary}: Compact SVD is unique up to unitary changes inside equal singular-value blocks.\\
+\hlt{Key Insight}: Distinct singular values fix subspaces; repeated ones only fix the subspace, not its basis.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:matrix-modulus} \hlt{Matrix Modulus}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, the \hlt{modulus} of $A$ is $\abs{A}\defeq(A^*A)^{1/2}\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
+Thus $\abs{A^*}=(AA^*)^{1/2}\in\operatorname{Mat}(m,m,\mathbb{F})$.
+\end{definition}
+
+\begin{proposition} \label{prop:matrix-modulus-from-svd} \hlt{Modulus from SVD}\\
+Let $A=V\Sigma W^*$ be an SVD. Then $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$ and $\abs{A^*}=V(\Sigma\Sigma^*)^{1/2}V^*$.
+\begin{proof}
+Since $A^*A=W(\Sigma^*\Sigma)W^*$ and $AA^*=V(\Sigma\Sigma^*)V^*$, the displayed matrices are positive semidefinite square roots of $A^*A$ and $AA^*$, respectively. Uniqueness of the positive semidefinite square root gives the claim.\\
+\hlt{Structural Commentary}: The modulus keeps only the singular-value stretch.\\
+\hlt{Key Insight}: In an SVD, $\abs{A}$ is the right singular-vector version of the diagonal stretch.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:rectangular-polar-decomposition} \hlt{Rectangular Polar Decomposition}\\
+Let $A=V\Sigma W^*\in\operatorname{Mat}(m,n,\mathbb{F})$ be an SVD.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $m\geq n$, let $V_n$ be the first $n$ columns of $V$ and set $U=V_nW^*$. Then $U^*U=I_n$ and $A=U\abs{A}$.
+\item If $m\leq n$, let $W_m$ be the first $m$ columns of $W$ and set $U=VW_m^*$. Then $UU^*=I_m$ and $A=\abs{A^*}U$.
+\item If $m=n$, then $U=VW^*$ is unitary and $A=U\abs{A}=\abs{A^*}U$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Proposition \ref{prop:matrix-modulus-from-svd} gives $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$.\\
+Since $V_n(\Sigma^*\Sigma)^{1/2}=V\Sigma$, $U\abs{A}=V_nW^*W(\Sigma^*\Sigma)^{1/2}W^*=V\Sigma W^*=A$. Also $U^*U=WV_n^*V_nW^*=I_n$.
+\item Apply (i) to $A^*$ and take adjoints; this gives $A=\abs{A^*}U$ and $UU^*=I_m$.
+\item This is the common case of (i) and (ii), with $U=VW^*$ unitary.
+\end{enumerate}
+\hlt{Structural Commentary}: Polar decomposition compresses the two SVD unitary factors into one partial isometry.\\
+\hlt{Key Insight}: SVD records every singular direction; polar form records stretch plus motion.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:polar-factor-uniqueness} \hlt{Uniqueness of the Positive Polar Factor}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $m\geq n$ and $A=UB$ with $U^*U=I_n$ and $B\succeq0$, then $B=\abs{A}$.\\
+If $\operatorname{rank}(A)=n$, then $U=A\abs{A}^{-1}$ is unique.
+\item If $m\leq n$ and $A=CU$ with $UU^*=I_m$ and $C\succeq0$, then $C=\abs{A^*}$.\\
+If $\operatorname{rank}(A)=m$, then $U=\abs{A^*}^{-1}A$ is unique.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A^*A=BU^*UB=B^2$, so $B=\abs{A}$ by uniqueness of the positive square root.\\
+If $\operatorname{rank}(A)=n$, then $\abs{A}$ is invertible and $U=A\abs{A}^{-1}$.
+\item Similarly, $AA^*=CUU^*C=C^2$, so $C=\abs{A^*}$. If $\operatorname{rank}(A)=m$, then $\abs{A^*}$ is invertible and $U=\abs{A^*}^{-1}A$.
+\end{enumerate}
+\hlt{Structural Commentary}: The positive factor is fixed by the Gram matrix.\\
+\hlt{Key Insight}: Full rank makes the partial isometry unique.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:normal-iff-polar-factors-commute} \hlt{Normality and Polar Commutation}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and suppose $A=U\abs{A}$ with $U$ unitary. Then $A$ is normal if and only if $U\abs{A}=\abs{A}U$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is normal, then $\abs{A}^2=A^*A=AA^*=U\abs{A}^2U^*$.\\
+Thus $U$ commutes with $\abs{A}^2$, hence with its positive square root $\abs{A}$.
+\item[$(\Leftarrow)$] If $U\abs{A}=\abs{A}U$, then $AA^*=U\abs{A}^2U^*=\abs{A}^2=A^*A$.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality says that the polar motion preserves the stretching eigenspaces.\\
+\hlt{Key Insight}: Normality is commutation of polar motion and stretch.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:svd-polar-computation} \hlt{SVD and Polar Computation Method}\\
+To compute an SVD and the associated polar factors of $A\in\operatorname{Mat}(m,n,\mathbb{F})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Diagonalise $A^*A$; the square roots of its positive eigenvalues are the positive singular values.
+\item Choose orthonormal right singular vectors $\mathbf{w}_j$ for the positive eigenvalues and set $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$.
+\item Complete the $\mathbf{v}_j$ and $\mathbf{w}_j$ to unitary matrices $V,W$ to obtain $A=V\Sigma W^*$.\\
+Omit zero-singular directions for compact SVD.
+\item Use $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$ and merge $V,W$ as in Theorem \ref{thm:rectangular-polar-decomposition} to obtain the polar factor.
+\end{enumerate}
+\end{method}
 
 \begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
 For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, a factorisation
