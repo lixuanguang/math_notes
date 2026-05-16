@@ -92,6 +92,155 @@ Stacking these $q$ columns gives $(B^t\otimes A)\operatorname{vec}(X)$.\\
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:sylvester-linear-matrix-equation} \hlt{Sylvester Linear Matrix Equation}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$ and $B\in\operatorname{Mat}(n,n,\mathbb{C})$. If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then for every $C\in\operatorname{Mat}(m,n,\mathbb{C})$ the equation $AX-XB=C$ has a unique solution $X\in\operatorname{Mat}(m,n,\mathbb{C})$.
+\begin{proof}
+Let $L(X)=AX-XB$. Since $L$ has equal finite-dimensional domain and codomain, it suffices to show $\ker L=\{0\}$. If $AX=XB$, then $p(A)X=Xp(B)$ for every polynomial $p$. \\
+With $p=p_B$, Cayley--Hamilton gives $p_B(A)X=Xp_B(B)=0$. For every $\lambda\in\operatorname{spec}(A)$, disjointness gives $p_B(\lambda)\neq0$; hence $p_B(A)$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test}. Thus $X=0$, so $L$ is bijective.\\
+\hlt{Structural Commentary}: Polynomial calculus pass through homogeneous solutions; disjoint spectra invert $p_B(A)$.\\
+\hlt{Key Insight}: Spectral separation turns an intertwining relation into the zero relation.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/sylvester_equation_spectral_gap.tikz}
+  \caption{Disjoint spectra make $p_B(A)$ invertible, so the Sylvester map $L(X)=AX-XB$ is invertible.}
+  \label{fig:sylvester-equation-spectral-gap}
+\end{figure}
+
+\begin{corollary} \label{cor:block-upper-triangular-remove-disjoint-coupling} \hlt{Removing a Spectrally Separated Off-Diagonal Block}\\
+Let $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$ and $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$ Then $M$ is similar to $A\oplus B$.
+\begin{proof}
+By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X$ such that $AX-XB=-C$. Then
+\begin{align}
+\begin{bmatrix}I&-X\\0&I\end{bmatrix}
+\begin{bmatrix}A&C\\0&B\end{bmatrix}
+\begin{bmatrix}I&X\\0&I\end{bmatrix}
+=
+\begin{bmatrix}A&AX+C-XB\\0&B\end{bmatrix}
+=
+\begin{bmatrix}A&0\\0&B\end{bmatrix}.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: A block shear cancels the off-diagonal block via Sylvester's equation.\\
+\hlt{Key Insight}: Spectrally separated diagonal blocks cannot carry essential upper-right coupling.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:schur-block-form-by-eigenvalue-groups} \hlt{Schur Form Grouped by Eigenvalues}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$ with algebraic multiplicities $n_1,\ldots,n_d$.\\
+Then $A$ is unitarily similar to a block upper-triangular matrix
+\begin{align}
+T=
+\begin{bmatrix}
+T_{11}&T_{12}&\cdots&T_{1d}\\
+0&T_{22}&\cdots&T_{2d}\\
+\vdots&\vdots&\ddots&\vdots\\
+0&0&\cdots&T_{dd}
+\end{bmatrix},
+\qquad
+T_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C}),
+\nonumber
+\end{align}
+where each $T_{ii}$ is upper triangular with all diagonal entries equal to $\lambda_i$. Moreover, $A$ is similar to $T_{11}\oplus\cdots\oplus T_{dd}$.
+\begin{proof}
+Order the Schur diagonal as $\lambda_1,\ldots,\lambda_1,\lambda_2,\ldots,\lambda_2,\ldots,\lambda_d,\ldots,\lambda_d$.\\
+Theorem \ref{thm:matrix-schur-triangularization-ordered} gives the displayed block Schur form. Since $\operatorname{spec}(T_{11})$ is disjoint from the trailing block spectrum, Corollary \ref{cor:block-upper-triangular-remove-disjoint-coupling} splits off $T_{11}$. Iterating splits off every diagonal block.\\
+\hlt{Structural Commentary}: Grouped Schur form isolates spectral blocks; Sylvester shears split disjoint groups.\\
+\hlt{Key Insight}: Cross-group upper blocks are coordinate artefacts.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:minimal-polynomial-direct-sum-disjoint-spectra} \hlt{Minimal Polynomial of a Spectrally Disjoint Direct Sum}\\
+Let $A=A_1\oplus\cdots\oplus A_d$, where the spectra of $A_1,\ldots,A_d$ are pairwise disjoint. Then $\mu_A=\mu_{A_1}\mu_{A_2}\cdots\mu_{A_d}$.
+\begin{proof}
+Let $f=\prod\limits_i\mu_{A_i}$. Since $f(A_i)=0$ for all $i$, $f(A)=0$ and $\mu_A\mid f$. Conversely, $\mu_A(A_i)=0$, so $\mu_{A_i}\mid\mu_A$ for each $i$. Disjoint spectra make the $\mu_{A_i}$ pairwise relatively prime, hence $f\mid\mu_A$. Thus $\mu_A=f$.\\
+\hlt{Structural Commentary}: Direct sums are annihilated blockwise; disjoint spectra make the block factors coprime.\\
+\hlt{Key Insight}: Each spectral component contributes its own minimal-polynomial factor.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} \hlt{Commuting with Disjoint Blocks}\\
+Let $A=A_{11}\oplus\cdots\oplus A_{dd}$, where the spectra of $A_{11},\ldots,A_{dd}$ are pairwise disjoint.\\
+Partition $B=[B_{ij}]$ conformally with $A$. If $AB=BA$, then $B_{ij}=0$ for all $i\neq j$.
+\begin{proof}
+Equating $(i,j)$ blocks in $AB=BA$ gives $A_{ii}B_{ij}-B_{ij}A_{jj}=0$.\\
+For $i\neq j$, the spectra of $A_{ii}$ and $A_{jj}$ are disjoint, so Theorem \ref{thm:sylvester-linear-matrix-equation} with $C=0$ gives $B_{ij}=0$.\\
+\hlt{Structural Commentary}: A commuting matrix cannot mix direct-sum blocks with disjoint spectra.\\
+\hlt{Key Insight}: The off-diagonal block solves a homogeneous Sylvester equation, whose only solution is zero.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:simultaneous-schur-triangularization-commuting-family} \hlt{Simultaneous Schur Triangularisation}\\
+Let $\emptyset\neq\mathcal{F}\subseteq\operatorname{Mat}(n,n,\mathbb{C})$ be a commuting family.\\
+Then there is a unitary $U\in\operatorname{Mat}(n,n,\mathbb{C})$ such that $U^*AU$ is upper triangular for every $A\in\mathcal{F}$.\\
+If every matrix in $\mathcal{F}$ is real and has only real eigenvalues, then $U$ can be chosen real orthogonal.
+\begin{proof}
+Induct on $n$. Choose a common unit eigenvector $\mathbf{x}$, extend it to an orthonormal basis, and write $V=[\mathbf{x}\ V_2]$. Then for every $A\in\mathcal{F}$,
+\begin{align}
+V^*AV=
+\begin{bmatrix}
+\lambda_A&*\\
+0&A'
+\end{bmatrix}.
+\nonumber
+\end{align}
+Commutation gives $A'B'=B'A'$ for all $A,B\in\mathcal{F}$, so induction simultaneously triangularises the compressed family.\\
+In the real case, choose a real common eigenvector: if all matrices are scalar, any real unit vector works; otherwise a nonzero proper real eigenspace of some nonscalar $A_0\in\mathcal{F}$ is invariant under all of $\mathcal{F}$, and induction inside it gives one. Then use real orthonormal extensions.\\
+\hlt{Structural Commentary}: A common eigenline creates the first block; commutation descends to the compression.\\
+\hlt{Key Insight}: Simultaneous triangularisation is Schur induction with a common eigenvector at every step.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/simultaneous_triangularization_commuting.tikz}
+  \caption{A shared eigenline gives a simultaneous first block; lower-right compressions still commute.}
+  \label{fig:simultaneous-triangularization-commuting}
+\end{figure}
+
+\begin{corollary} \label{cor:commuting-sum-product-eigenvalues} \hlt{Eigenvalues of Sums and Products of Commuting Matrices}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ and $AB=BA$. Their eigenvalues can be ordered as $\lambda_1,\ldots,\lambda_n$ and $\mu_1,\ldots,\mu_n$ so that $A+B$ has eigenvalues $\lambda_i+\mu_i$ and $AB$ has eigenvalues $\lambda_i\mu_i$, counted with multiplicity.
+\begin{proof}
+Choose simultaneous Schur forms $T=U^*AU$ and $R=U^*BU$. Set $\lambda_i=t_{ii}$ and $\mu_i=r_{ii}$. Then $T+R$ and $TR$ are upper triangular with diagonals $\lambda_i+\mu_i$ and $\lambda_i\mu_i$, and are similar to $A+B$ and $AB$.\\
+\hlt{Structural Commentary}: Simultaneous Schur form aligns both spectra on one diagonal.\\
+\hlt{Key Insight}: In common triangular coordinates, diagonals add and multiply.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:brauer-rank-one-eigenvalue-shift} \hlt{Brauer Rank-One Eigenvalue Shift}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $A\mathbf{x}=\lambda\mathbf{x}$ with $\mathbf{x}\neq\mathbf{0}$, and let $\mathbf{y}\in\mathbb{C}^n$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$ with multiplicity, then the eigenvalues of $A+\mathbf{x}\mathbf{y}^*$ are $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$.\\
+Moreover, $\mathbf{x}$ is an eigenvector of $A+\mathbf{x}\mathbf{y}^*$ corresponding to $\lambda+\mathbf{y}^*\mathbf{x}$.
+\begin{proof}
+Put $\mathbf{u}=\mathbf{x}/\norm{\mathbf{x}}_2$. By Schur triangularisation, choose a unitary $U=[\mathbf{u}\ U_2]$ such that $U^*AU=\begin{bmatrix}\lambda&*\\0&T'\end{bmatrix}$, where the diagonal entries of $T'$ are $\lambda_2,\ldots,\lambda_n$. Also $U^*(\mathbf{x}\mathbf{y}^*)U
+=
+\begin{bmatrix}
+\mathbf{y}^*\mathbf{x}&*\\
+0&0
+\end{bmatrix}$.
+Therefore $U^*(A+\mathbf{x}\mathbf{y}^*)U$ is upper triangular with diagonal entries $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$. Finally, $(A+\mathbf{x}\mathbf{y}^*)\mathbf{x}=A\mathbf{x}+\mathbf{x}(\mathbf{y}^*\mathbf{x})=(\lambda+\mathbf{y}^*\mathbf{x})\mathbf{x}$.
+\hlt{Structural Commentary}: A rank-one eigenvector update changes only the first Schur diagonal entry.\\
+\hlt{Key Insight}: Align the update with the first coordinate; only one diagonal term shifts.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/brauer_rank_one_shift.tikz}
+  \caption{Brauer's update shifts one Schur diagonal entry.}
+  \label{fig:brauer-rank-one-shift}
+\end{figure}
+
+\begin{corollary} \label{cor:damped-rank-one-eigenvalue-reset} \hlt{Damped Rank-One Eigenvalue Reset}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenpair $(\lambda,\mathbf{x})$, let $\mathbf{y}^*\mathbf{x}=1$, and let $\tau\in\mathbb{C}$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$, then $A_{\tau}\defeq \tau A+(1-\tau)\lambda\mathbf{x}\mathbf{y}^*$ has eigenvalues $\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$.
+\begin{proof}
+The eigenvalues of $\tau A$ are $\tau\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$. Since $A_{\tau}=\tau A+\mathbf{x}((1-\overline{\tau})\overline{\lambda}\mathbf{y})^*$, Theorem \ref{thm:brauer-rank-one-eigenvalue-shift} shifts only $\tau\lambda$ by $(1-\tau)\lambda\mathbf{y}^*\mathbf{x}=(1-\tau)\lambda$. Thus $\tau\lambda$ becomes $\lambda$, while the other eigenvalues stay $\tau\lambda_i$.\\
+\hlt{Structural Commentary}: Damping scales the spectrum; Brauer's update restores one eigenvalue.\\
+\hlt{Key Insight}: Brauer's theorem changes one spectral coordinate without moving the rest.
+\end{proof}
+\end{corollary}
+
 \begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
 Let $M=
 \begin{bmatrix}
@@ -100,9 +249,7 @@ C & D
 \end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
 If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
 \begin{proof}
-Block Gaussian elimination gives
-\begin{align}
-\begin{bmatrix}
+Block Gaussian elimination gives $\begin{bmatrix}
 I_r & -BD^{-1}\\
 0 & I_s
 \end{bmatrix}
@@ -114,9 +261,7 @@ C & D
 \begin{bmatrix}
 A-BD^{-1}C & 0\\
 C & D
-\end{bmatrix}.
-\nonumber
-\end{align}
+\end{bmatrix}$.\\
 The elimination matrix has determinant $1$, and the matrix on the right is lower block-triangular, so Theorem \ref{thm:block-upper-triangular-determinant} applied after transposition gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
 \hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
 \hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
@@ -126,15 +271,11 @@ The elimination matrix has determinant $1$, and the matrix on the right is lower
 \begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
 Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
 \begin{proof}
-Consider
-\begin{align}
-M=
+Let $M=
 \begin{bmatrix}
 I_n & -A\\
 B & I_m
-\end{bmatrix}.
-\nonumber
-\end{align}
+\end{bmatrix}$.\\
 Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$ gives $\det(M)=\det(I_n+AB)$. Using Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$ gives $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
 \hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
 \hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
@@ -142,19 +283,12 @@ Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower
 \end{theorem}
 
 \begin{theorem} \label{thm:ab-ba-nonzero-eigenvalues} \hlt{Nonzero Eigenvalues of $AB$ and $BA$}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, $B\in\operatorname{Mat}(n,m,\mathbb{C})$, and suppose $n\geq m$. Then
-\begin{align}
-p_{BA}(z)=z^{n-m}p_{AB}(z).
-\nonumber
-\end{align}
+Let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, $B\in\operatorname{Mat}(n,m,\mathbb{C})$, and suppose $n\geq m$. Then $p_{BA}(z)=z^{n-m}p_{AB}(z)$.\
 Consequently, for $\lambda\neq0$, $m_{AB}(\lambda)=m_{BA}(\lambda)$. If $m_{AB}(0)=k$, then $m_{BA}(0)=k+n-m$.
 \begin{proof}
 For $z\neq0$, Sylvester's determinant identity gives
 \begin{align}
-\det(zI_n-BA)
-&=z^n\det(I_n-z^{-1}BA) \nonumber\\
-&=z^n\det(I_m-z^{-1}AB)
-=z^{n-m}\det(zI_m-AB).
+\det(zI_n-BA) =z^n\det(I_n-z^{-1}BA) =z^n\det(I_m-z^{-1}AB) =z^{n-m}\det(zI_m-AB).
 \nonumber
 \end{align}
 Both sides are polynomials in $z$, so the identity holds for all $z$. The claimed multiplicities follow by factoring $p_{AB}$ and comparing with $p_{BA}=z^{n-m}p_{AB}$.\\
@@ -176,21 +310,16 @@ I_n & 0
 \end{bmatrix}$.\\
 Then $M$ has block centrosymmetric form $A=D$ and $B=C$ if and only if $L_{2n}M=ML_{2n}$.
 \begin{proof}
-Block multiplication gives
-\begin{align}
-L_{2n}M=
+Block multiplication gives $L_{2n}M=
 \begin{bmatrix}
 C & D\\
 A & B
-\end{bmatrix},
-\qquad
-ML_{2n}=
+\end{bmatrix}$ and 
+$ML_{2n}=
 \begin{bmatrix}
 B & A\\
 D & C
-\end{bmatrix}.
-\nonumber
-\end{align}
+\end{bmatrix}$.\\
 The two matrices are equal exactly when $A=D$ and $B=C$.\\
 \hlt{Structural Commentary}: The matrix $L_{2n}$ swaps the two block coordinates. Commuting with that swap means $M$ treats the two block positions symmetrically.\\
 \hlt{Key Insight}: Compute both block products; equality forces matching opposite blocks.
@@ -205,7 +334,8 @@ Let $R=\operatorname{col}(B)$ and $S=\operatorname{col}(BC)$. Then $S\subseteq R
 \operatorname{rank}(AB)&=\dim R-\dim(R\cap\ker A), \nonumber\\
 \operatorname{rank}(ABC)&=\dim S-\dim(S\cap\ker A). \nonumber
 \end{align}
-Since $S\cap\ker A\subseteq R\cap\ker A$, we have $\dim(S\cap\ker A)\leq\dim(R\cap\ker A)$. Substituting $\dim R=\operatorname{rank}(B)$ and $\dim S=\operatorname{rank}(BC)$ gives the stated inequality.\\
+Since $S\cap\ker A\subseteq R\cap\ker A$, we have $\dim(S\cap\ker A)\leq\dim(R\cap\ker A)$.\\
+Substituting $\dim R=\operatorname{rank}(B)$ and $\dim S=\operatorname{rank}(BC)$ gives the stated inequality.\\
 \hlt{Structural Commentary}: Frobenius tracks $A$ on nested column spaces.\\
 \hlt{Key Insight}: The smaller column space cannot lose more dimensions to $\ker A$ than the larger one.
 \end{proof}
@@ -234,20 +364,24 @@ Taking the middle matrix to be $I_k$ gives $\operatorname{rank}(A)+\operatorname
 \end{corollary}
 
 \begin{proposition} \label{prop:sylvester-law-of-nullity} \hlt{Sylvester's Law of Nullity}\\
-For a matrix $X$, let $\operatorname{nullity}(X)=\dim(\ker X)$; this is the dimension of its nullspace.\\
-If $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$, then $\operatorname{nullity}(AB)\leq\operatorname{nullity}(A)+\operatorname{nullity}(B)$.\\
-If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$.
+For a matrix $X$, let $\operatorname{nullity}(X)=\dim(\ker X)$; this is the dimension of its nullspace.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$, then $\operatorname{nullity}(AB)\leq\operatorname{nullity}(A)+\operatorname{nullity}(B)$
+\item
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$
+\end{enumerate}
 \begin{proof}
-For the first inequality, use rank-nullity and Theorem \ref{thm:sylvester-rank-inequality}:
-\begin{align}
-\operatorname{nullity}(AB)
-&=n-\operatorname{rank}(AB) \nonumber\\
-&\leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k \nonumber\\
-&=(k-\operatorname{rank}(A))+(n-\operatorname{rank}(B)) \nonumber\\
-&=\operatorname{nullity}(A)+\operatorname{nullity}(B).
-\nonumber
-\end{align}
-For square $A,B$, the product rank bound gives $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$ and $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$. Subtracting from $n$ gives $\operatorname{nullity}(AB)\geq\operatorname{nullity}(A)$ and $\operatorname{nullity}(AB)\geq\operatorname{nullity}(B)$.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+By rank-nullity and Theorem \ref{thm:sylvester-rank-inequality},
+\begin{align*}
+\operatorname{nullity}(AB) &=n-\operatorname{rank}(AB) \leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k \\
+&=(k-\operatorname{rank}(A))+(n-\operatorname{rank}(B)) =\operatorname{nullity}(A)+\operatorname{nullity}(B).
+\end{align*}
+\item For square $A,B$, $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$, $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$. Subtract from $n$ gives desired lower bounds.
+\end{enumerate}
 \hlt{Structural Commentary}: Nullity is rank loss from the domain.\\
 \hlt{Key Insight}: Use rank-nullity to translate rank bounds into kernel bounds.
 \end{proof}
