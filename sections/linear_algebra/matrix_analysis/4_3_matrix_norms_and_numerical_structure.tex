@@ -477,16 +477,16 @@ Equivalently, all entries below the first subdiagonal are zero.
 \end{figure}
 
 \begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
-For every $A\in\operatorname{Mat}(n,n,\mathbb{F})$, there exists a unitary matrix $U$ such that $U^*AU$ is upper Hessenberg. Moreover, the subdiagonal entries of $U^*AU$ can be chosen real and nonnegative.
+Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
 \begin{proof}
-Construct the unitary similarity column by column. At step $k=1,\ldots,n-2$, assume entries below the first subdiagonal are already zero in columns $1,\ldots,k-1$. Look at the tail of column $k$ in rows $k+1,\ldots,n$. By Corollary \ref{cor:householder-unitary-annihilator}, choose a unitary $V_k\in\operatorname{Mat}(n-k,n-k,\mathbb{F})$ such that $V_k^*$ sends this tail to a vector whose only nonzero entry is its first entry, chosen real and nonnegative.\\
-Set $U_k=I_k\oplus V_k$ and replace the current matrix $A_{k-1}$ by $A_k=U_k^*A_{k-1}U_k$. Because $U_k$ fixes the first $k$ coordinate vectors, right multiplication by $U_k$ does not change the first $k$ columns before the left action is applied. The left action affects only rows $k+1,\ldots,n$, so previously created zeros in columns $1,\ldots,k-1$ stay zero, while column $k$ gains zeros below row $k+1$.\\
-After $n-2$ steps, $A_{n-2}$ is upper Hessenberg with real nonnegative subdiagonal entries. Since each step is a unitary similarity, $A_{n-2}=U^*AU$ for the product $U=U_1U_2\cdots U_{n-2}$.\\
-\hlt{Structural Commentary}: Householder similarities annihilate one column tail at a time while fixing the earlier coordinate flag.\\
-\hlt{Key Insight}: Acting only on the trailing coordinates preserves previous zeros and creates the next Hessenberg column.
+Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
+Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
+After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
+\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
+\hlt{Key Insight}: Kill one column tail at a time.
 \end{proof}
 \end{theorem}
 
 \begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
-Upper Hessenberg matrices are almost triangular but still unitarily similar to the original matrix. This preserves spectral data while making iterative eigenvalue algorithms cheaper because only one subdiagonal must be tracked.
+Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
 \end{perspective}
