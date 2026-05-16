@@ -467,6 +467,73 @@ Similarity preserves spectra and the ranks of $(X-\lambda I_n)^p$. Thus $J$ and 
 \end{proof}
 \end{corollary}
 
+\begin{definition} \label{def:reversal-matrix} \hlt{Reversal Matrix}\\
+For $k\geq1$, the \hlt{reversal matrix} $R_k\in\operatorname{Mat}(k,k,\mathbb{C})$ is defined by
+\begin{align}
+(R_k)_{ij}=
+\begin{cases}
+1,& i+j=k+1,\\
+0,& i+j\neq k+1.
+\end{cases}
+\nonumber
+\end{align}
+Thus $R_k^t=R_k$ and $R_k^2=I_k$.
+\end{definition}
+
+\begin{lemma} \label{lem:jordan-block-transpose-reversal-similarity} \hlt{Reversal Conjugates a Jordan Block to Its Transpose}\\
+For every $k\geq1$ and $\lambda\in\mathbb{C}$, $J_k(\lambda)^t=R_kJ_k(\lambda)R_k$. Moreover, $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.
+\begin{proof}
+Let $N=J_k(0)$. Since $R_k$ reverses standard basis order, $R_kNR_k=N^t$.\\
+Adding scalar gives $R_kJ_k(\lambda)R_k=J_k(\lambda)^t$. As $R_k=R_k^t=R_k^{-1}$, this identity gives $J_k(\lambda)^tR_k=R_kJ_k(\lambda)$ and $R_kJ_k(\lambda)^t=J_k(\lambda)R_k$, so $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.\\
+\hlt{Structural Commentary}: Reversal changes the superdiagonal shift into the subdiagonal shift.\\
+\hlt{Key Insight}: Transposition reads the same Jordan chain backwards.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:matrix-similar-to-transpose-and-symmetric-factorizations} \hlt{Transpose Similarity and Symmetric Factorisations}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $A^t$ via a symmetric similarity matrix.
+\item $A=BC=DE$, where $B,C,D,E$ are symmetric and $B,E$ are invertible.
+\end{enumerate}
+\begin{proof}
+Choose a Jordan form $A=SJS^{-1}$, and let $R$ be the direct sum of the reversal matrices matching the Jordan blocks of $J$. By Lemma \ref{lem:jordan-block-transpose-reversal-similarity}, $J^t=RJR$, $R^t=R$, $R^2=I_n$, and both $RJ$ and $JR$ are symmetric.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Set $P=(S^{-1})^tRS^{-1}$. Then $P^t=P$ and $PAP^{-1}=(S^{-1})^tRJR S^t=(S^{-1})^tJ^tS^t=A^t$.
+\item
+Using $R^2=I_n$, $A=(SRS^t)\bigl((S^{-1})^tRJ S^{-1}\bigr)$ and $A=(SJR S^t)\bigl((S^{-1})^tR S^{-1}\bigr)$.\\
+All four factors are symmetric because $R,RJ,JR$ are symmetric; $SRS^t$ and $(S^{-1})^tRS^{-1}$ are invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: Reduce to Jordan blocks, reverse chains, then conjugate back.\\
+\hlt{Key Insight}: Symmetric involutions produce both transpose similarity and symmetric factors.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_transpose_reversal.tikz}
+  \caption{Reversal gives $R_kJ_k(0)R_k=J_k(0)^t$: the same chain read backwards.}
+  \label{fig:jordan-transpose-reversal}
+\end{figure}
+
+\begin{theorem} \label{thm:conjugate-similarity-jordan-block-criterion} \hlt{Conjugate Similarity Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is similar to $\overline{A}$ if and only if each $J_k(\lambda)$ occurs in the Jordan form of $A$ with the same multiplicity as $J_k(\overline{\lambda})$.
+\begin{proof}
+Let $J$ be a Jordan form of $A$. Then $\overline{J}$ is a Jordan form of $\overline{A}$, obtained by replacing each $J_k(\lambda)$ by $J_k(\overline{\lambda})$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is similar to $\overline{A}$, then $J$ and $\overline{J}$ are similar.\\
+By Corollary \ref{cor:jordan-form-unique-up-to-block-permutation}, their Jordan blocks have same multiplicities.
+\item[$(\Leftarrow)$] If the multiplicities agree, then $J$ and $\overline{J}$ differ only by a permutation of blocks. Hence $A$ is similar to $\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation changes eigenvalue labels but not block sizes.\\
+\hlt{Key Insight}: Non-real Jordan blocks must occur in conjugate pairs.
+\end{proof}
+\end{theorem}
+
 \begin{proposition} \label{prop:exponential-of-jordan-block} \hlt{Exponential of a Jordan Block}\\
 For $k\geq1$, $\lambda\in\mathbb{C}$, and $t\in\mathbb{C}$, $e^{tJ_k(\lambda)} =e^{\lambda t}\sum\limits_{r=0}^{k-1}\frac{t^r}{r!}J_k(0)^r$.
 \begin{proof}
