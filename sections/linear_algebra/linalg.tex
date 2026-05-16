@@ -340,84 +340,36 @@ Over $\R$, an isometry cannot always be diagonalised because complex eigenvalues
 
 \subsection{Operators on Complex Vector Spaces}
 
-\begin{definition} Given $T \in \mathcal{L}(\mathcal{V})$, and $\lambda$ an eigenvalue of $T$, a vector $\mathbf{v} \in \mathcal{V}$ is a \hlt{generalised eigenvector} of $T$ corresponding to $\lambda$ if $(T - \lambda I)^j \mathbf{v} = \mathbf{0}$ for some positive integer $j$.
-\end{definition}
+% Migrated to sections/linear_algebra/spectral_linear_algebra/3_3_polynomial_and_jordan_structure.tex:
+% generalized eigenspaces, kernel stabilization, nilpotent operators, primary
+% decomposition, primary upper-triangular blocks, and square roots of invertible
+% complex operators.
+%
+% The items below remain here because they have not yet been migrated into the
+% modular subfolder notes.
 
-Suppose $T \in \mathcal{L}(\mathcal{V})$ and $k \geq 0$, $k \in \Z$. If $T^k \mathbf{v} = \mathbf{0}$, then $T^{k+1}\mathbf{v} = T(T^k \mathbf{v}) = T(\mathbf{0}) = \mathbf{0}$, hence,
+\begin{proposition} \label{prop:rangestablise} \hlt{Range Stabilization}\\
+If $T \in \mathcal{L}(\mathcal{V})$ and $n=\text{dim}(\mathcal{V})$, then
 \begin{align}
-\{\mathbf{0} \} = \text{null}(T^0) \subset \text{null}(T^1) \subset \cdots \subset \text{null}(T^k) \subset \cdots \nonumber
+\text{range}(T^n) = \text{range}(T^{n+1}) = \text{range}(T^{n+2}) = \cdots \nonumber
 \end{align}
-
-\begin{proposition} \label{prop:equalnullspace} If $T \in \mathcal{L}(\mathcal{V})$ and $m \geq 0$, $m \in \Z$ such that $\text{null}(T^m) = \text{null}(T^{m+1})$, then
-\begin{align}
-\text{null}(T^0) \subset \text{null}(T^1) \subset \cdots \subset \text{null}(T^m) = \text{null}(T^{m+1}) = \text{null}(T^{m+2}) = \cdots \nonumber
-\end{align}
-\begin{proof} Let $T \in \mathcal{L}(\mathcal{V})$ and suppose $\text{null}(T^m) = \text{null}(T^{m+1})$.\\
-Since $\text{null}(T^j) \subseteq \text{null}(T^{j+1})$ for every $j \geq 0$, it suffices to prove $\text{null}(T^{m+k+1}) \subseteq \text{null}(T^{m+k})$ for all $k \geq 0$.\\
-Take $\mathbf{v} \in \text{null}(T^{m+k+1})$, then $0 = T^{m + k +1}\mathbf{v} = T^{m+1} (T^k \mathbf{v})$, so $T^k \mathbf{v} \in \text{null}(T^{m+1}) = \text{null}(T^{m})$.\\
-Hence $0 = T^m (T^k \mathbf{v}) = T^{m+k} \mathbf{v}$, which shows $\mathbf{v} \in \text{null}(T^{m+k})$, therefore $\text{null}(T^{m+k+1}) \subseteq \text{null}(T^{m+k})$.\\
-Combine with reverse inclusion to get $\text{null}(T^{m+k}) = \text{null}(T^{m+k+1})$ for all $k \geq 0$. Thus the chain stabilises.
-\end{proof}
-\end{proposition}
-
-The kernels of powers of $T$ form an increasing chain. Once two consecutive kernels coincide, no new vectors can enter later kernels, because any vector killed by a higher power would already produce a vector in the stabilised kernel after applying a suitable power of $T$.
-
-\begin{proposition} \label{prop:equalnullspacedimv} If $T \in \mathcal{L}(\mathcal{V})$, then
-\begin{align}
-\text{null}(T^{\text{dim}(\mathcal{V})}) = \text{null}(T^{\text{dim}(\mathcal{V} + 1)}) = \text{null}(T^{\text{dim}(\mathcal{V}+2)}) = \cdots \nonumber
-\end{align}
-\begin{proof} Let $n = \text{dim}(\mathcal{V})$. Suppose for contradiction that $\text{null}(T^n) \neq \text{null}(T^{n+1})$. By Proposition \ref{prop:equalnullspace},
-\begin{align}
-\{ \mathbf{0} \} = \text{null}(T^0) \subsetneq \text{null}(T^1) \subsetneq \cdots \subsetneq \text{null}(T^n) \subsetneq \text{null}(T^{n+1}) \nonumber
-\end{align}
-is strictly increasing. Each strict inclusion increases dimension by at least $1$. \\
-Since $\text{dim}(\text{null}(T^0)) = 0$, it follows that $\text{dim}(\text{null}(T^{n+1})) \geq n+1$. But $\text{null}(T^{n+1})$ is a subspace of $\mathcal{V}$, so its dimension cannot exceed $n = \text{dim}(\mathcal{V})$, a contradiction.\\
-Hence $\text{null}(T^{n}) = \text{null}(T^{n+1})$. Applying Proposition \ref{prop:equalnullspace} again yields $\text{null}(T^{n}) = \text{null}(T^{n+1}) = \cdots$.
-\end{proof}
-\end{proposition}
-
-The kernels $\text{null}(T), \text{null}(T^2), \ldots$ form an increasing chain of subspaces. In a finite-dimensional space, such a chain cannot strictly increase more than $\text{dim}(\mathcal{V})$ times, so the sequence must eventually stabilise.
-
-\begin{corollary} \label{cor:geneigennullpowerdim} Suppose $T \in \mathcal{L}(\mathcal{V})$ and $\lambda$ is an eigenvalue of $T$, then the set of generalised eigenvectors of $T$ corresponding to $\lambda$ equals $\text{null}(T - \lambda I)^{\text{dim}(\mathcal{V})}$.
-\begin{proof} 
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[]
-\item[$(\Rightarrow)$] Let $n = \text{dim}(\mathcal{V})$. If $\mathbf{v} \in \text{null}((T - \lambda I)^n)$, then $\mathbf{v}$ is a generalised eigenvector corresponding to $\lambda$.
-\item[$(\Leftarrow)$] Suppose $\mathbf{v}$ is a generalised eigenvector corresponding to $\lambda$, then $\exists \ j \geq 0$ such that $\mathbf{v} \in \text{null}((T - \lambda I)^j)$.\\
-By Proposition \ref{prop:equalnullspacedimv}, $\text{null}(T - \lambda I) \subseteq \text{null}((T - \lambda I)^{2}) \subseteq \cdots$ is an increasing sequence of subspaces.\\
-Proposition \ref{prop:equalnullspace}, applied to $T - \lambda I$, implies that $\text{null}((T - \lambda I)^{n})= \text{null}((T - \lambda I)^{n+1}) = \cdots$, hence $\mathbf{v} \in \text{null}((T - \lambda I)^{n})$. Therefore the set of generalised eigenvectors corresponding to $\lambda$ equals $\text{null}((T - \lambda I)^{n})$.
-\end{enumerate}
-\end{proof}
-\end{corollary}
-
-The kernels of successive powers of $T - \lambda I$ form an increasing chain of subspaces. In finite dimensions, this must stabilise by $\exp(\text{dim}(\mathcal{V}))$, so every generalised eigenvector is already annihilated by the $\text{dim}(\mathcal{V})$-th power.
-
-\begin{definition} An operator is \hlt{nilpotent} if some power of it equals $0$.
-\end{definition}
-
-\begin{corollary} Suppose $N \in \mathcal{L}(\mathcal{V})$ is nilpotent, then $N^{\text{dim}(\mathcal{V})} = 0$.
-\begin{proof} Let $n = \text{dim}(\mathcal{V})$. As $N$ is nilpotent, for every $\mathbf{v} \in \mathcal{V}$ $\exists$ $j>0$ such that $N^j \mathbf{v} = 0$. Thus every vector in $\mathcal{V}$ is a generalised eigenvector corresponding to the eigenvalue $0$.\\
-By Corollary \ref{cor:geneigennullpowerdim}, $\text{null}(N^n) = \mathcal{V}$, therefore $N^n = 0$
-\end{proof}
-\end{corollary}
-
-A nilpotent operator eventually kills every vector. In finite dimensions, orollary \ref{cor:geneigennullpowerdim} shows that exponent $\text{dim}(\mathcal{V})$ is already sufficient to annihilate the entire space.
-
-\begin{proposition} \label{prop:rangestablise} If $T \in \mathcal{L}(\mathcal{V})$, then $\text{range}(T^{\text{dim}(\mathcal{V})}) = \text{range}(T^{\text{dim}(\mathcal{V}+1)}) = \text{range}(T^{\text{dim}(\mathcal{V})+2}) = \cdots$
-\begin{proof} Let $n = \text{dim}(\mathcal{V})$, and suppose $m > n$. By Proposition \ref{prop:equalnullspacedimv}, $\text{dim}(T^m) = \text{dim}(T^n)$.\\
+\begin{proof} Let $m > n$. By Theorem \ref{thm:kernel-powers-stabilize-by-dimension}, $\text{null}(T^m) = \text{null}(T^n)$.\\
 Hence by Rank-Nullity Theorem \ref{thm:rank-nullity},
 \begin{align}
 \text{dim}(\text{range}(T^m)) &= \text{dim}(\mathcal{V}) - \text{dim}(\text{null}(T^m)) = \text{dim}(\mathcal{V}) - \text{dim}(\text{null}(T^n)) = \text{dim}(\text{range}(T^n)) \nonumber
 \end{align}
-Also $\text{range}(T^n) \subseteq \text{range}(T^m)$. Thus $\text{range}(T^m) = \text{range}(T^{m+1}) = \text{range}(T^{m+2}) = \cdots$.
+Also $\text{range}(T^m) \subseteq \text{range}(T^n)$. Equal dimensions force $\text{range}(T^m)=\text{range}(T^n)$, and since $m>n$ was arbitrary, the tail is constant.
 \end{proof}
 \end{proposition}
 
 The kernels of $T^k$ eventually stabilise, so rank–nullity forces the dimensions of the ranges to stabilise as well. Since the ranges already form a decreasing chain of subspaces, equal dimensions imply the ranges themselves must eventually stop shrinking.
 
-\begin{theorem} \label{thm:eigenvaluerepeatisindepbasis} Let $T \in \mathcal{L}(\mathcal{V})$ and $\lambda \in \mathbb{F}$, then for every basis of $\mathcal{V}$ with respect to which $T$ has an upper-triangular matrix, $\lambda$ appears on diagonal of matrix of $T$ precisely $\dim(\text{null}(T - \lambda I))^{\dim(\mathcal{V})}$ times.
-\begin{proof} Let $n = \text{dim}(\mathcal{V})$. Replacing $T$ by $T - \lambda I$ shifts every diagonal entry by $-\lambda$, so it suffices to prove the theorem for $\lambda = 0$. Proceed by induction on $n$. Result is trivial for $n=1$.\\
+\begin{theorem} \label{thm:eigenvaluerepeatisindepbasis} \hlt{Diagonal Multiplicity in Upper-Triangular Form}\\
+Let $T \in \mathcal{L}(\mathcal{V})$, let $\lambda \in \mathbb{F}$, and let $n=\text{dim}(\mathcal{V})$. If $T$ has an upper-triangular matrix with diagonal entries $\lambda_1,\ldots,\lambda_n$ in some basis, then the number of indices $j$ such that $\lambda_j=\lambda$ is
+\begin{align}
+\text{dim}\left(\text{null}\left((T-\lambda I)^n\right)\right). \nonumber
+\end{align}
+\begin{proof} Replacing $T$ by $T - \lambda I$ shifts every diagonal entry by $-\lambda$, so it suffices to prove the theorem for $\lambda = 0$. Proceed by induction on $n$. The result is trivial for $n=1$.\\
 Assume $n>1$, and let $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis with respect to which $T$ has upper-triangular matrix
 \begin{align}
 \mathcal{M}(T) =
@@ -428,47 +380,30 @@ Assume $n>1$, and let $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ be a basis with res
 0 & 0 & \cdots & \lambda_n
 \end{bmatrix} \nonumber
 \end{align}
-Let $\mathcal{U} = \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{n-1})$. Then $\mathcal{U}$ is invariant under $T$, and $T|_{\mathcal{U}}$ has upper-triangular matrix with diagonal entries $\lambda_1, \ldots, \lambda_{n-1}$. By induction hypothesis, number of zeroes among $\lambda_1, \ldots, \lambda_{n-1}$ equals $\text{dim}(\text{null}((T|_{\mathcal{U}})^n))$.\\
+Let $\mathcal{U} = \text{span}(\mathbf{v}_1, \ldots, \mathbf{v}_{n-1})$. Then $\mathcal{U}$ is invariant under $T$, and $T|_{\mathcal{U}}$ has upper-triangular matrix with diagonal entries $\lambda_1, \ldots, \lambda_{n-1}$. By induction hypothesis, and kernel stabilization for the operator $T|_{\mathcal{U}}$, the number of zeroes among $\lambda_1, \ldots, \lambda_{n-1}$ equals $\text{dim}(\text{null}((T|_{\mathcal{U}})^n))$.\\
 Now compare this with $\text{null}(T^n)$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[Case $1$]: $\lambda_n \neq 0$. Since powers of upper-triangular matrix remain upper triangular, $\mathcal{M}(T^n)$ has diagonal entries $\lambda_1^n, \ldots, \lambda_n^n$. In particular, $T^n \mathbf{v}_n = \mathbf{u} + \lambda_n^n \mathbf{v}_n$ for some $\mathbf{u} \in \mathcal{U}$.\\
+\item[Case $1$:] $\lambda_n \neq 0$. Since powers of upper-triangular matrices remain upper triangular, $\mathcal{M}(T^n)$ has diagonal entries $\lambda_1^n, \ldots, \lambda_n^n$. In particular, $T^n \mathbf{v}_n = \mathbf{u} + \lambda_n^n \mathbf{v}_n$ for some $\mathbf{u} \in \mathcal{U}$.\\
 Take $\mathbf{v} \in \text{null}(T^n)$ and write $\mathbf{v} = \tilde{\mathbf{u}} + a \mathbf{v}_n$, $\tilde{\mathbf{u}} \in \mathcal{U}$, then $0 = T^n \mathbf{v} = T^n \tilde{\mathbf{u}} + a T^n \mathbf{v}_n = T^n \tilde{\mathbf{u}} + a \mathbf{u} + a \lambda_n^n \mathbf{v}_n$.\\
 Because $T^n \tilde{\mathbf{u}}$, $a \mathbf{u} \in \mathcal{U}$ and $\mathbf{v}_n \notin \mathcal{U}$, thus $a \lambda_n^n = 0$. Since $\lambda_n \neq 0$, it follows that $a=0$. Hence $\text{null}(T^n) \subseteq \mathcal{U}$.\\
 Therefore $\text{null}(T^n) = \text{null}((T|_{\mathcal{U}})^n)$, so the number of zeroes on the diagonal equals $\text{dim}(\text{null}(T^n))$.
-\item[Case $2$]: $\lambda = 0$. Then $T \mathbf{v}_n \in \mathcal{U}$, so $T^n \mathbf{v}_n = T^{n-1}(T \mathbf{v}_n) \in \text{range}((T|_{\mathcal{U}})^{n-1})$.\\
+\item[Case $2$:] $\lambda_n = 0$. Then $T \mathbf{v}_n \in \mathcal{U}$, so $T^n \mathbf{v}_n = T^{n-1}(T \mathbf{v}_n) \in \text{range}((T|_{\mathcal{U}})^{n-1})$.\\
 By Proposition \ref{prop:rangestablise}, $\text{range}((T|_{\mathcal{U}})^{n-1}) = \text{range}((T|_{\mathcal{U}})^{n})$. Hence $\exists \ \mathbf{u} \in \mathcal{U}$ such that $T^n \mathbf{u} = T^n \mathbf{v}_n$.\\
-Thus $\mathbf{u} - \mathbf{u}_n \in \text{null}(T^n)$. Because $\mathbf{v}_n \notin \mathcal{U}$, this vector is not in $\mathcal{U}$.\\
-Therefore $\text{dim}(\text{null}(T^n)) = \text{dim}(\text{null}((T|_{\mathcal{U}})^{n})) + 1$. Since $\lambda_n = 0$, the number of zeroes on the diagonal also increases by $1$. Hence the number of zeroes on the diagonal equals $\text{dim}(\text{null}(T^n))$.
+Thus $\mathbf{u} - \mathbf{v}_n \in \text{null}(T^n)$. Because $\mathbf{v}_n \notin \mathcal{U}$, this vector is not in $\mathcal{U}$. The quotient of $\text{null}(T^n)$ by $\text{null}(T^n)\cap\mathcal{U}=\text{null}((T|_{\mathcal{U}})^n)$ is therefore one-dimensional. Hence
+\begin{align}
+\text{dim}(\text{null}(T^n)) = \text{dim}(\text{null}((T|_{\mathcal{U}})^n)) + 1. \nonumber
+\end{align}
+Since $\lambda_n=0$, the number of zeroes on the diagonal also increases by $1$.
 \end{enumerate}
-This proofs the theorem for $\lambda = 0$, and therefore for arbitrary $\lambda$ by replacing $T$ with $T - \lambda I$.
+This proves the theorem for $\lambda = 0$, and therefore for arbitrary $\lambda$ by replacing $T$ with $T - \lambda I$.
 \end{proof}
 \end{theorem}
 
 For an upper-triangular operator, the generalised eigenspace for $\lambda$ is detected entirely by how many times $\lambda$ appears on the diagonal. The proof inductively peels off the last basis vector and compares how the nullspace of $T^n$ changes depending on whether the final diagonal entry is zero.
 
-\begin{definition} Suppose $T \in \mathcal{L}(\mathcal{V})$. The \hlt{multiplicity} of eigenvalue $\lambda$ in $T$ is defined to be dimension of subspace of generalised eigenvectors corresponding to $\lambda$, which is $\text{dim}(\text{null}(T - \lambda I)^{\text{dim}(\mathcal{V})})$.
-\end{definition}
-
-\begin{proposition} \label{prop:complexvectorspacesummultiplicities} If $\mathcal{V}$ is a complex vector space and $T \in \mathcal{L}(\mathcal{V})$, then the sum of multiplicities of all eigenvalues of $T$ equals $\text{dim}(\mathcal{V})$.
-\begin{proof} Let $n = \text{dim}(\mathcal{V})$. As $\mathcal{V}$ is a complex vector space, $\exists$ a basis of $\mathcal{V}$ with respect to which $T$ is upper-triangular
-\begin{align}
-\mathcal{M}(T) =
-\begin{bmatrix}
-\lambda_1 & * & \cdots & * \\
-0 & \lambda_2 & \cdots & * \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & \lambda_n
-\end{bmatrix} \nonumber
-\end{align}
-The eigenvalues of $T$ are precisely the diagonal entries $\lambda_1, \ldots, \lambda_n$. By Theorem \ref{thm:eigenvaluerepeatisindepbasis}, the multiplicity of an eigenvalue $\lambda$ equals the number of times $\lambda$ appears on the diagonal. Hence the sum of the multiplicities of all eigenvalues equals the total number of diagonal entries ($n$).\\
-Therefore the sum of the multiplicities of all eigenvalues of $T$ equals $\text{dim}(\mathcal{V})$.
-\end{proof}	
-\end{proposition}
-
-Over $\C$, every operator can be triangularised, so all eigenvalues appear on the diagonal of an upper-triangular matrix. Counting diagonal entries with repetition therefore counts eigenvalues with their algebraic multiplicities.
-
-\begin{definition} Let $\mathcal{V}$ be complex vector space, and $T \in \mathcal{L}(\mathcal{V})$. Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$, $d_j$ be multiplicity of $\lambda_j$ as an eigenvalue of $T$. The \hlt{characteristic polynomial} of $T$ is $(z - \lambda_1)^{d_1} \cdots (z - \lambda_m)^{d_m}$.
+\begin{definition} \label{def:characteristic-polynomial-complex-operator} \hlt{Characteristic Polynomial}\\
+Let $\mathcal{V}$ be a complex vector space and $T \in \mathcal{L}(\mathcal{V})$. Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$, and let $d_j$ be the multiplicity of $\lambda_j$ in the sense of Definition \ref{def:eigenvalue-multiplicity-generalized-eigenspace}. The \hlt{characteristic polynomial} of $T$ is $(z - \lambda_1)^{d_1} \cdots (z - \lambda_m)^{d_m}$.
 \end{definition}
 
 \begin{theorem} \label{thm:cayleyhamiltonthm} \hlt{Cayley-Hamilton Theorem}\\
@@ -483,7 +418,7 @@ Suppose $\mathcal{V}$ is complex vector space and $T \in \mathcal{L}(\mathcal{V}
 0 & 0 & \cdots & \lambda_n
 \end{bmatrix} \nonumber
 \end{align}
-Then the characteristic polynomial of $T$ is $q(x) = (x - \lambda_1) \cdots (x - \lambda_n)$.\\
+By Theorem \ref{thm:eigenvaluerepeatisindepbasis}, the characteristic polynomial of $T$ is $q(x) = (x - \lambda_1) \cdots (x - \lambda_n)$.\\
 It suffices to show $q(T) \mathbf{v}_j = 0$ for $j =1, \ldots, n$, because $(\mathbf{v}_1, \ldots, \mathbf{v}_n)$ is a basis of $\mathcal{V}$.\\
 Proof by induction on $j$ that $(T - \lambda_1 I) \cdots (T - \lambda_j I) \mathbf{v}_j = 0$.\\
 For $j=1$, $T \mathbf{v}_1 = \lambda_1 \mathbf{v}_1$, so $(T - \lambda_1 I) \mathbf{v}_1 = 0$.\\
@@ -495,137 +430,6 @@ Hence $(T - \lambda_1 I) \cdots (T - \lambda_j I) \mathbf{v}_j = 0$. Therefore $
 
 
 In an upper-triangular basis, each operator $(T - \lambda_j I)$ lowers vectors one step in the invariant flag generated by the basis vectors. Applying all factors successively eventually kills every basis vector, forcing $q(T)=0$.
-
-% Migrated to sections/linear_algebra/spectral_linear_algebra/3_2_spectral_theory.tex:
-% invariance of kernels of polynomial expressions in an operator.
-
-\begin{theorem} \label{thm:majorstructurethm} \hlt{Major Structure Theorem / Primary Decomposition Theorem}\\
-Suppose $\mathcal{V}$ is a complex vector space and $T \in \mathcal{L}(\mathcal{V})$. Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$, and let $\mathcal{U}_1, \ldots, \mathcal{U}_m$ be corresponding subspaces of generalised eigenvalues. Then
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$
-\item each $\mathcal{U}_j$ is invariant under $T$
-\item each $(T - \lambda_j I)|_{\mathcal{U}_j}$ is nilpotent
-\end{enumerate}
-\begin{proof} Let $n = \text{dim}(\mathcal{V})$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(i)$] For each $j$, let $\mathcal{U}_j$ denote the generalised eigenspace corresponding to $\lambda_j$.\\
-By Theorem \ref{thm:eigenvaluerepeatisindepbasis}, the multiplicity of $\lambda_j$ equals $\text{dim}(\mathcal{U}_j)$. By Proposition \ref{prop:complexvectorspacesummultiplicities}, the sum of multiplicity of all distinct eigenvalues equals $n$, hence $n = \text{dim}(\mathcal{U}_1) + \cdots + \text{dim}(\mathcal{U}_m)$).\\
-Let $\mathcal{U} = \mathcal{U}_1 + \cdots + \mathcal{U}_m$. Then $\mathcal{U}$ is invariant under $T$. Consider the restriction $S = T|_{\mathcal{U}}$. Every generalised eigenvector of $T$ lies in $\mathcal{U}$, so the generalised eigenspaces of $S$ are precisely $\mathcal{U}_1, \ldots, \mathcal{U}_m$.\\
-Therefore the eigenvalues of $S$ are $\lambda_1, \ldots, \lambda_m$ with multiplicities $\text{dim}(\mathcal{U}_1), \ldots, \text{dim}(\mathcal{U}_m)$.\\
-Applying Proposition \ref{prop:complexvectorspacesummultiplicities} to $S$, $\text{dim}(\mathcal{U}) = \text{dim}(\mathcal{U}_1) + \cdots + \text{dim}(\mathcal{U}_m) = n$.\\
-Since $\mathcal{U} \subseteq \mathcal{V}$ and $\text{dim}(\mathcal{U}) = \text{dim}(\mathcal{V})$, hence $\mathcal{V} = \mathcal{U}_1 + \cdots + \mathcal{U}_m$.\\
-As $\text{dim}(\mathcal{V}) = \text{dim}(\mathcal{U}_1) + \cdots + \text{dim}(\mathcal{U}_m)$, the sum is direct. Hence $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$.
-\item[$(ii)$] By Corollary \ref{cor:geneigennullpowerdim}, $\mathcal{U}_j = \text{null}((T - \lambda_j I)^{n})$. Since $T$ commutes with $T - \lambda_j I$, Proposition \ref{prop:kernel-of-polynomial-in-operator-is-invariant} implies that $\mathcal{U}_j$ is invariant under $T$.
-\item[$(iii)$] On $\mathcal{U}_j$, $(T - \lambda_j I)^n = 0$ because every vector in $\mathcal{U}_j$ lies in $\text{null}((T - \lambda_j I)^n)$. Hence $(T - \lambda_j I)|_{\mathcal{U}_j}$ is nilpotent.
-\end{enumerate}
-\end{proof}
-\end{theorem}
-
-The generalised eigenspaces capture all vectors annihilated by powers of $T - \lambda I$. Over $\C$, these generalised eigenspaces partition the entire space into invariant pieces where T behaves as eigenvalue $+$ nilpotent part.
-
-\begin{corollary} Suppose $\mathcal{V}$ is a complex vector space and $T \in \mathcal{L}(\mathcal{V})$. Then there is a basis of $\mathcal{V}$ consisting of generalised eigenvectors of $T$.
-\begin{proof} Let $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$ be decomposition from Theorem \ref{thm:majorstructurethm}, where each $\mathcal{U}_j$ is the generalised eigenspace corresponding to each $\lambda_j$. Choose a basis for each $\mathcal{U}_j$. Since the sum is direct, the union of these bases form a basis of $\mathcal{V}$. Every vector in each $\mathcal{U}_j$ is a generalised eigenvector of $T$, so this basis consists entirely of generalised eigenvectors of $T$.
-\end{proof}
-\end{corollary}
-
-The Primary Decomposition Theorem splits the whole space into generalised eigenspaces. Taking bases inside each piece automatically produces a basis of the entire space consisting entirely of generalised eigenvectors.
-
-\begin{lemma} \label{lem:nilpotentopstrictuptrigmatrix} Suppose $N$ is nilpotent operator on $\mathcal{V}$, then $\exists$ a basis of $\mathcal{V}$ w.r.t. which matrix of $N$ has form
-\begin{align}
-\begin{bmatrix}
-0 & & *\\
-& \ddots & \\
-0 & & 0
-\end{bmatrix} \nonumber
-\end{align}
-where all entries on and below diagonal are $0$s.
-\begin{proof} Since $N$ is nilpotent, $\exists \ m \geq 1$ s.t. $N^m = 0$. Hence $\{ 0 \} \subseteq \text{null}(N)	 \subseteq \text{null}(N^2) \subseteq \cdots \subseteq \text{null}(N^m) = \mathcal{V}$.\\
-Construct a basis of $\mathcal{V}$ adapted to this chain. First choose a basis of $\text{null}(N)$, then extend it to a basis of $\text{null}(N^2)$, then to $\text{null}(N^3)$ and so on until obtaining a basis of $\mathcal{V}$.\\
-Let $\mathbf{v}$ be a basis vector chosen from $\text{null}(N^k) \backslash \text{null}(N^{k-1})$. Then $N \mathbf{v} \in \text{null}(N^{k-1})$ as $N^{k-1}(N \mathbf{v}) = N^k \mathbf{v} = 0$.\\
-By construction of the basis, $\text{null}(N^{k-1})$ is spanned by basis vectors appearing earlier in the ordering. Thus $N \mathbf{v}$ is a linear combination of earlier basis vectors.\\
-Therefore, in the matrix of $N$ with respect to this basis, every column has nonzero entires only above the diagonal. Hence the matrix of $N$ is strictly upper triangular.
-\end{proof}
-\end{lemma}
-
-The kernels $\text{null}(N) \subseteq \text{null}(N^2) \subseteq \cdots$ form a natural filtration for a nilpotent operator. Choosing a basis adapted to this filtration forces each vector to map into the span of earlier basis vectors, producing a strictly upper-triangular matrix.
-
-\begin{theorem} \label{thm:triangularformthmforlinopoverc} \hlt{Triangular Form Theorem for Linear Operators over $\C$}\\
-Suppose $\mathcal{V}$ is a complex vector space and $T \in \mathcal{L}(\mathcal{V})$. Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$. Then there exists a basis of $\mathcal{V}$ with respect to which the matrix of $T$ is block diagonal of form
-\begin{align}
-\begin{bmatrix}
-A_1 & & 0 \\
- & \ddots & \\
-0 & & A_m
-\end{bmatrix} \nonumber
-\end{align}
-where each $A_j$ is an upper triangular matrix of form
-\begin{align}
-A_j = \begin{bmatrix}
-\lambda_j & & * \\
-& \ddots & \\
-0 & & \lambda_j
-\end{bmatrix} \nonumber
-\end{align}
-\begin{proof} For $j=1, \ldots, m$, let $\mathcal{U})_j$ denote the generalised eigenspace corresponding to $\lambda_j$. By Major Structure Theorem \ref{thm:majorstructurethm}, $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$ and $(T - \lambda_j I)|_{\mathcal{U}_j}$ is nilpotent.\\
-By Lemma \ref{lem:nilpotentopstrictuptrigmatrix}, for each $j$, $\exists$ a basis of $\mathcal{U}_j$ with respect to which $(T - \lambda_j I)|_{\mathcal{U}_j}$ has a strictly upper-triangular matrix. Therefore the matrix $T|_{\mathcal{U}_j} = \lambda_j I + (T - \lambda_j I)|_{\mathcal{U}_j}$ has the form
-\begin{align}
-A_j =
-\begin{bmatrix}
-\lambda_j & * & \cdots & * \\
-0 & \lambda_j & \cdots & * \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & \lambda_j
-\end{bmatrix} \nonumber
-\end{align}
-Combining the chosen bases of $\mathcal{U}_1, \ldots, \mathcal{U}_m$ gives a basis of $\mathcal{V}$. With respect to this basis, the matrix of $T$ is block diagonal with blocks $A_1, \ldots, A_m$.
-\end{proof}
-\end{theorem}
-
-Each generalised eigenspace reduces $T$ to an eigenvalue plus a nilpotent operator. Choosing a basis adapted to the nilpotent part yields an upper-triangular block with that eigenvalue on the diagonal.
-
-\begin{lemma} \label{lem:nilpotentaddidenhassqrroot} Suppose $N \in \mathcal{L}(\mathcal{V})$ is nilpotent, then $I+N$ has a square root.
-\begin{proof} Let $m \geq 1$ such that $N^m = 0$. Seek square root of $I+N$ in form $S = I + a_1 N + a_2 N^2 + \cdots + a_{m-1} N^{m-1}$, where $a_1, \ldots, a_{m-1} \in \C$. Expanding $S^2$,
-\begin{align}
-S^2 = \sum\limits_{k=0}^{m-1} \left( \sum\limits_{r=0}^k a_r a_{k-r} \right)N^k \nonumber
-\end{align}
-where $a_0 = 1$, and all powers $N^k$ with $k \geq m$ vanish because $N^m = 0$.\\
-Seek $S^2 = I+N$, so coefficients must satisfy
-\begin{align}
-\sum\limits_{r=0}^k a_r a_{k-r} =
-\begin{cases}
-1, & k = 0, 1 \\
-0, & 2 \leq k \leq m-1
-\end{cases} \nonumber
-\end{align}
-For $k \geq 1$, $\sum\limits_{r=0}^k a_r a_{k-r} = s a_k + \sum\limits_{r=1}^{k-1} a_r a_{k-r}$, hence the recursive equation is $2a_1 = 1$.\\
-For $2 \leq k \leq m-1$, $2 a_k + \sum\limits_{r=1}^{k-1} a_r a_{k-r} = 0$.\\
-These equations uniquely determine $a_1, \ldots, a_{m-1}$, hence $S^2 = I + N$, and $I+N$ has a square root.
-\end{proof}
-\end{lemma}
-
-As $N$ is nilpotent, every power series in $N$ truncates to a finite polynomial. Thus one can construct $\sqrt{I + N}$ exactly by solving recursively for polynomial coefficients.
-
-\begin{theorem} Let $\mathcal{V}$ be a complex vector space and $T \in \mathcal{L}(\mathcal{V})$. If $T$ is invertible, then $T$ has a square root.
-\begin{proof} Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$, and let $\mathcal{U}_j$ be the corresponding generalised eigenspaces.\\
-By Major Structure Theorem \ref{thm:majorstructurethm}, $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$, and for each $j$, $T|_{\mathcal{U}_j} = \lambda_j I + N_j$ where $N_j$ is nilpotent.\\
- As $T$ is invertible, $0$ is not an eigenvalue, hence each $\lambda_j \neq 0$, thus
-\begin{align}
-T|_{\mathcal{U}_j} = \lambda_j \left(I + \frac{N_j}{\lambda_j} \right) \nonumber
-\end{align}
-Since $N_j$ is nilpotent, so is $N_j/\lambda_j$, hence by Lemma \ref{lem:nilpotentaddidenhassqrroot}, there exists $R_j \in \mathcal{L}(\mathcal{U}_j)$ such that $R^2 = I + \frac{N_j}{\lambda_j}$.\\
-Chooseing $\alpha_j \in \C$ satisfying $\alpha_j^2 = \lambda_j$, and define $S_j = \alpha_j R_j$, then
-\begin{align}
-S_j^2 = \alpha_j^2 R_j^2 = \lambda_j \left( I + \frac{N_j}{\lambda_j} \right) = T|_{\mathcal{U}_j} \nonumber
-\end{align}
-Now define $S \in \mathcal{L}(\mathcal{V})$ by $S(\mathbf{u}_1 + \cdots + \mathbf{u}_m) = S_1 \mathbf{u}_1 + \cdots + S_m \mathbf{u}_m$, $\mathbf{u}_j \in \mathcal{U}_j$. This is well-defined as $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$.\\
-For each $\mathbf{u}_j \in \mathcal{U}_j$, $S^2(\mathbf{u}_1 + \cdots + \mathbf{u}_m) = S_1^2 \mathbf{u}_1 + \cdots + S_m^2 \mathbf{u}_m = T \mathbf{u}_1 + \cdots + T \mathbf{u}_m = T (\mathbf{u}_1 + \cdots + \mathbf{u}_m)$.\\
-Hence $S^2 = T$, and therefore $T$ has a square root.
-\end{proof}
-\end{theorem}
-
-On each generalised eigenspace, $T$ is a nonzero scalar plus a nilpotent operator. Taking square roots of these pieces block-wise yields a square root of T.
 
 \begin{definition} A \hlt{monic polynomial} is a non-zero univariate polynomial in which the leading coefficient equals $1$, i.e., $x^n + c_{n-1} x^{n-1} + \cdots + c_2 x^2 + c_1 x + x_0$ with $n \geq 0$.
 \end{definition}
@@ -666,14 +470,14 @@ As $\mathbf{v} \neq \mathbf{0}$, $p(\lambda) = 0$. Therefore the roots of minima
 A root $\lambda$ of the minimal polynomial produces a nonzero vector annihilated by $T - \lambda I$, hence an eigenvector. Conversely, eigenvectors reduce polynomial evaluation at T to ordinary scalar evaluation at the eigenvalue.
 
 \begin{remark} \hlt{Computing Minimal Polynomial}\\
-Let $T \in \mathcal{L}(\mathcal{V})$, and let $A = (\mathcal{M}(T)$ be the matrix of $T$ with respect to some basis.\\
+Let $T \in \mathcal{L}(\mathcal{V})$, and let $A = \mathcal{M}(T)$ be the matrix of $T$ with respect to some basis.\\
 Consider the sequence $I, A, A^2, A^3, \ldots$. Since the vector space of $n \times n$ matrices is finite-dimensional, this sequence must eventually become linearly dependent. Let $m \geq 1$ be smallest integer such that $I, A, A^2, A^3, \ldots, A^m$ are linearly dependent. Then $\exists$ scalars $a_0, \ldots, a_{m-1} \in \mathbb{F}$ such that $a_0 I + a_1 A + \cdots + a_{m-1} A^{m-1} + A^m = 0$.\\
 Equivalently, $(A^m + a_{m-1} A^{m-1} + \cdots + a_1 A + a_0 I) = 0$.\\
 Hence the monic polynomial $p(z) = a_0 + a_1 z + \cdots + a_{m-1}z^{m-1} + z^m$ satisfies $p(T) = 0$.\\
 By minimality of $m$, this polynomial is the minimal polynomial of $T$.
 \end{remark}
 
-The powers of $T$ cannot remain linearly independent forever in a finite-dimensional matrix space. The first linear dependence relation among $I, T, T^2, \ldots$ products the minimal polynomial.
+The powers of $T$ cannot remain linearly independent forever in a finite-dimensional matrix space. The first linear dependence relation among $I, T, T^2, \ldots$ produces the minimal polynomial.
 
 \begin{lemma} \label{lem:nilpotentbasisequivalence} Let $N \in \mathcal{L}(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1, \ldots, \mathbf{v}_k \in \mathcal{V}$ such that
 \begin{enumerate}[label=\roman*.]
@@ -737,7 +541,7 @@ With respect to this ordered basis, $N$ acts by sending each vector to the previ
 \end{align}
 which is a Jordan block with eigenvalue $0$.\\
 Since the chains together forms a basis of $\mathcal{V}$, the matrix of $N$ is block diagonal with Jordan blocks corresponding to eigenvalue $0$. Thus every nilpotent operator has Jordan form.\\
-Now let $T \in \mathcal{L}(\mathcal{V})$ be arbitrary. Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$, and let $\mathcal{U}_j$ be the corresponding generalised eigenspaces. By Major Structure Theorem \ref{thm:majorstructurethm} $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$ and $(T - \lambda_j I)|_{\mathcal{U}_j}$ is nilpotent.\\
+Now let $T \in \mathcal{L}(\mathcal{V})$ be arbitrary. Let $\lambda_1, \ldots, \lambda_m$ be distinct eigenvalues of $T$, and let $\mathcal{U}_j$ be the corresponding generalised eigenspaces. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V} = \mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$ and $(T - \lambda_j I)|_{\mathcal{U}_j}$ is nilpotent.\\
 Applying the nilpotent case to $(T - \lambda_j I)|_{\mathcal{U}_j}$, $\exists$ a basis of $\mathcal{U}_j$ with respect to which $(T - \lambda_j I)|_{\mathcal{U}_j}$ has Jordan form with eigenvalue $0$. Equivalently, $T|_{\mathcal{U}_j}$ has Jordan blocks with eigenvalue $\lambda_j$.\\
 Combining these bases for all $\mathcal{U}_j$ gives a basis of $\mathcal{V}$ with respect to which $T$ is in Jordan form.
 \end{proof}
