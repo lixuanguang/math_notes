@@ -206,6 +206,135 @@ Taking dimensions, by Corollary \ref{cor:dimension-direct-sum}, $\dim(\mathcal{V
 \end{proof}
 \end{proposition}
 
+\begin{motivation} \label{mot:characteristic-and-minimal-polynomials} \hlt{Two Spectral Polynomials}\\
+The characteristic polynomial records the whole primary decomposition with dimensions.\\
+The minimal polynomial records the shortest polynomial relation satisfied by the operator.
+\end{motivation}
+
+\begin{definition} \label{def:operator-characteristic-polynomial} \hlt{Characteristic Polynomial of an Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $T\in\LL(\mathcal{V})$. If $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues of $T$ and $d_j=\dim G(\lambda_j,T)$, then the \hlt{characteristic polynomial} of $T$ is $q_T(z)\defeq\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$.
+\end{definition}
+
+\begin{proposition} \label{prop:operator-characteristic-polynomial-degree-roots} \hlt{Degree and Roots of $q_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $q_T$ be the characteristic polynomial of $T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\deg q_T=\dim(\mathcal{V})$.
+\item The roots of $q_T$ are precisely the eigenvalues of $T$.
+\end{enumerate}
+\begin{proof}
+Write $q_T(z)=\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$, where $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues and $d_j=\dim G(\lambda_j,T)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities} gives $\deg q_T=\sum_jd_j=\dim(\mathcal{V})$.
+\item The displayed factorization has exactly the roots $\lambda_1,\ldots,\lambda_m$.
+\end{enumerate}
+\hlt{Structural Commentary}: Each primary summand contributes one root factor.\\
+\hlt{Key Insight}: Multiplicity is dimension.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/operator_characteristic_polynomial_primary_blocks.tikz}
+  \caption{Each primary summand contributes $(z-\lambda_j)^{d_j}$, where $d_j=\dim G(\lambda_j,T)$.}
+  \label{fig:operator-characteristic-polynomial-primary-blocks}
+\end{figure}
+
+\begin{theorem} \label{thm:cayley-hamilton-operator} \hlt{Cayley--Hamilton Theorem for Operators}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, $q_T$ be characteristic polynomial of $T\in\LL(\mathcal{V})$. Then $q_T(T)=0$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues and set $d_j=\dim G(\lambda_j,T)$.\\
+It suffices, by primary decomposition, to show $q_T(T)$ kills each $G(\lambda_j,T)$.\\
+On $G(\lambda_j,T)$, the operator $T-\lambda_jI_{\mathcal{V}}$ is nilpotent, so Corollary \ref{cor:nilpotent-power-dimension-zero} gives $(T-\lambda_jI_{\mathcal{V}})^{d_j}=0$ on $G(\lambda_j,T)$.\\
+Since the factors of $q_T(T)$ commute, this factor kills the whole product on $G(\lambda_j,T)$. Hence $q_T(T)=0$.\\
+\hlt{Structural Commentary}: Check the polynomial on each primary summand.\\
+\hlt{Key Insight}: One factor of $q_T(T)$ kills each summand.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:monic-polynomial} \hlt{Monic Polynomial}\\
+A nonzero polynomial is \hlt{monic} if its highest-degree coefficient is $1$.
+\end{definition}
+
+\begin{theorem} \label{thm:operator-minimal-polynomial-existence} \hlt{Existence of the Minimal Polynomial}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then $T$ has a unique least-degree monic annihilator $\mu_T$.
+\begin{proof}
+Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} gives a nonzero annihilator; scaling makes it monic, so a least-degree monic annihilator exists. sIf $p$ and $q$ are two of them, then $(p-q)(T)=0$ and $\deg(p-q)<\deg p$. If $p\neq q$, scaling $p-q$ gives a smaller monic annihilator, impossible. Hence $p=q$.\\
+\hlt{Structural Commentary}: Existence comes from finite-dimensional dependence; uniqueness from minimality.\\
+\hlt{Key Insight}: Two least monic annihilators cannot differ.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:operator-minimal-polynomial} \hlt{Minimal Polynomial of an Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} of $T$, denoted $\mu_T$, is the unique monic polynomial of smallest degree such that $\mu_T(T)=0$.
+\end{definition}
+
+\begin{method} \label{meth:operator-minimal-polynomial-from-matrix} \hlt{Computing $\mu_T$ from a Matrix}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be the matrix of $T$ in some basis.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $m=1,2,\ldots$, test the monic candidate $p_m(z)=a_0+a_1z+\cdots+a_{m-1}z^{m-1}+z^m$.
+\item Solve the linear matrix equation $a_0I+a_1A+\cdots+a_{m-1}A^{m-1}=-A^m$ for $a_0,\ldots,a_{m-1}$.\\
+Equivalently, vectorize $\begin{bmatrix}
+\operatorname{vec}(I)&\operatorname{vec}(A)&\cdots&\operatorname{vec}(A^{m-1})
+\end{bmatrix}
+\begin{bmatrix}
+a_0\\a_1\\ \vdots\\ a_{m-1}
+\end{bmatrix}
+=-\operatorname{vec}(A^m)$
+\item If no solution exists, increase $m$. The first solvable candidate is $\mu_T$.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/minimal_polynomial_linear_system.tikz}
+  \caption{Solve $a_0I+\cdots+a_{m-1}A^{m-1}=-A^m$; the first solvable monic candidate is $\mu_T$.}
+  \label{fig:minimal-polynomial-linear-system}
+\end{figure}
+
+\begin{theorem} \label{thm:operator-annihilator-iff-multiple-minimal-polynomial} \hlt{Annihilators Are Multiples of $\mu_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim, $T\in\LL(\mathcal{V})$, and $f\in\mathcal{P}(\mathbb{F})$ be nonzero. Then $f(T)=0$ if and only if $\mu_T$ divides $f$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $f(T)=0$. Divide $f=s\mu_T+r$, where $r=0$ or $\deg r<\deg\mu_T$.\\
+Then $r(T)=0$, so minimality forces $r=0$. Hence $\mu_T$ divides $f$.
+\item[$(\Leftarrow)$] If $f=\mu_Ts$, then $f(T)=\mu_T(T)s(T)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial division reduces every annihilator to its remainder modulo $\mu_T$.\\
+\hlt{Key Insight}: Minimality forces that remainder to be zero.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:operator-characteristic-multiple-minimal-polynomial} \hlt{$q_T$ Is a Multiple of $\mu_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$.\\
+Then the characteristic polynomial $q_T$ is a polynomial multiple of the minimal polynomial $\mu_T$.
+\begin{proof}
+Theorem \ref{thm:cayley-hamilton-operator} gives $q_T(T)=0$. Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial} then implies that $\mu_T$ divides $q_T$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton turns the characteristic polynomial into an annihilator.\\
+\hlt{Key Insight}: The minimal polynomial divides every annihilator, hence divides $q_T$.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:operator-minimal-polynomial-roots-eigenvalues} \hlt{Roots of $\mu_T$ Are Eigenvalues}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. Then the roots of $\mu_T$ are precisely the eigenvalues of $T$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mu_T(\lambda)=0$, write $\mu_T(z)=(z-\lambda)g(z)$. Since $\deg g<\deg\mu_T$, minimality gives $g(T)\neq0$; choose $\mathbf{v}$ with $\mathbf{u}=g(T)\mathbf{v}\neq\mathbf{0}$. Then $(T-\lambda I_{\mathcal{V}})\mathbf{u}=\mu_T(T)\mathbf{v}=\mathbf{0}$.
+\item[$(\Leftarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $0=\mu_T(T)\mathbf{v}=\mu_T(\lambda)\mathbf{v}$, so $\mu_T(\lambda)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: A root splits off one shifted operator.\\
+\hlt{Key Insight}: The quotient cannot already annihilate $T$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:characteristic-versus-minimal-polynomial} \hlt{Characteristic vs. Minimal Polynomial}\\
+The characteristic polynomial records every primary block with its dimension. The minimal polynomial records the least polynomial needed to annihilate all blocks at once.
+\end{perspective}
+
 \begin{theorem} \label{thm:complex-block-diagonal-generalized-eigenbasis} \hlt{Block Diagonal Form with Upper-Triangular Primary Blocks}\\
 Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T\in\LL(\mathcal{V})$, with multiplicities $d_1,\ldots,d_m$. Then $T$ has a matrix of the form
 \begin{equation*}
@@ -232,6 +361,244 @@ Choose a basis of each $\mathcal{U}_j$ in which $N_j$ is strictly upper triangul
   \label{fig:primary-block-diagonal-form}
 \end{figure}
 
+\begin{definition} \label{def:jordan-chain-block-and-matrix} \hlt{Jordan Chains, Blocks, and Matrices}\\
+For $k\geq1$, the \hlt{nilpotent Jordan block} $J_k(0)$ is the $k\times k$ matrix with $1$ on the first superdiagonal and $0$ elsewhere:
+\begin{align}
+J_k(0)=
+\begin{bmatrix}
+0&1&0&\cdots&0\\
+0&0&1&\ddots&\vdots\\
+\vdots&\ddots&\ddots&\ddots&0\\
+0&\cdots&0&0&1\\
+0&\cdots&\cdots&0&0
+\end{bmatrix}.
+\nonumber
+\end{align}
+For $\lambda\in\mathbb{C}$, set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
+\end{definition}
+
+\begin{theorem} \label{thm:nilpotent-jordan-chain-basis} \hlt{Nilpotent Jordan Chain Basis}\\
+Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ s.t. $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
+\begin{proof}
+Induct on $n=\dim(\mathcal{V})$. If $N=0$, any basis works with all $m_j=0$.\\
+Now assume $N\neq0$. Then $N$ is not injective, so $\operatorname{range}(N)$ is a proper subspace, and $N|_{\operatorname{range}(N)}$ is nilpotent. By induction, $\operatorname{range}(N)$ has a chain basis $\bigl(N^{m_1}\mathbf{u}_1,\ldots,N\mathbf{u}_1,\mathbf{u}_1,\ldots, N^{m_r}\mathbf{u}_r,\ldots,N\mathbf{u}_r,\mathbf{u}_r\bigr)$ with $N^{m_j+1}\mathbf{u}_j=\mathbf{0}$.\\
+Choose $\mathbf{v}_j\in\mathcal{V}$ such that $N\mathbf{v}_j=\mathbf{u}_j$, and lift the chains to $\mathcal{L}= \bigl(N^{m_1+1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r+1}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$.\\
+This is linearly independent: applying $N$ to any dependence among its vectors gives a dependence among range-chain basis. Only coefficients of $N^{m_j+1}\mathbf{v}_j$ may remain; but $N^{m_j+1}\mathbf{v}_j=N^{m_j}\mathbf{u}_j$, so those coefficients vanish too.\\
+Extend $\mathcal{L}$ to a basis by adding $\mathbf{w}_1,\ldots,\mathbf{w}_s$. For each $i$, choose $\mathbf{x}_i\in\operatorname{span}(\mathcal{L})$ s.t. $N\mathbf{x}_i=N\mathbf{w}_i$, and $\mathbf{z}_i=\mathbf{w}_i-\mathbf{x}_i$. Then $N\mathbf{z}_i=\mathbf{0}$, and replacing each $\mathbf{w}_i$ by $\mathbf{z}_i$ preserves the span. Thus $\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s$ is the desired chain basis.\\
+\hlt{Structural Commentary}: Build chains in $\operatorname{range}(N)$, lift them once, then add kernel chains.\\
+\hlt{Key Insight}: Applying $N$ turns lifted-chain dependences into known range-chain dependences.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_chain_nilpotent_basis.tikz}
+  \caption{A nilpotent chain shifts left under $N$; in this basis order it becomes one Jordan block.}
+  \label{fig:jordan-chain-nilpotent-basis}
+\end{figure}
+
+\begin{theorem} \label{thm:complex-jordan-form} \hlt{Jordan Form over $\mathbb{C}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$. Then $\mathcal{V}$ has a Jordan basis for $T$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=G(\lambda_1,T)\oplus\cdots\oplus G(\lambda_m,T)$, and each $N_j\defeq(T-\lambda_jI_{\mathcal{V}})|_{G(\lambda_j,T)}$ is nilpotent. Apply Theorem \ref{thm:nilpotent-jordan-chain-basis} to each $N_j$. In the resulting chain basis of $G(\lambda_j,T)$, the operator $N_j$ has direct-sum matrix blocks $J_k(0)$, so $T|_{G(\lambda_j,T)}=\lambda_jI+N_j$ has the corresponding blocks $J_k(\lambda_j)$. Concatenating the chain bases over all eigenvalues gives a Jordan basis of $\mathcal{V}$.\\
+\hlt{Structural Commentary}: Primary pieces decompose into nilpotent chains.\\
+\hlt{Key Insight}: Jordan form is ``eigenvalue plus nilpotent chains'' on every generalized eigenspace.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_form_primary_chains.tikz}
+  \caption{Primary pieces $G(\lambda_j,T)$ give nilpotent chains, hence Jordan blocks.}
+  \label{fig:jordan-form-primary-chains}
+\end{figure}
+
+\begin{lemma} \label{lem:nilpotent-jordan-block-power-rank} \hlt{Powers of a Nilpotent Jordan Block}\\
+For $k\geq1$ and $p\geq0$, $\operatorname{rank}\bigl(J_k(0)^p\bigr)=\max(k-p,0)$ and $\dim\ker\bigl(J_k(0)^p\bigr)=\min(p,k)$.
+\begin{proof}
+Since $J_k(0)$ is the left-shift, $J_k(0)^p\mathbf{e}_j=\mathbf{0}$ for $j\leq p$ and $J_k(0)^p\mathbf{e}_j=\mathbf{e}_{j-p}$ for $j>p$. Thus the image has dimension $\max(k-p,0)$, and rank-nullity gives the kernel dimension.\\
+\hlt{Structural Commentary}: A nilpotent Jordan block is a left-shift on the standard basis.\\
+\hlt{Key Insight}: Each power deletes one more leading layer of the chain.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:weyr-characteristic} \hlt{Weyr Characteristic}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\lambda\in\operatorname{spec}(A)$.\\
+For $p\geq1$, define $w_p(\lambda,A)\defeq \operatorname{rank}\bigl((A-\lambda I_n)^{p-1}\bigr) - \operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$.\\
+The positive part of the sequence $w_1,w_2,\ldots$ is the \hlt{Weyr characteristic} of $A$ associated with $\lambda$.
+\end{definition}
+
+\begin{theorem} \label{thm:jordan-block-sizes-from-rank-drops} \hlt{Jordan Block Sizes from Rank Drops}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda\in\operatorname{spec}(A)$, and $p\geq1$. Then $w_p(\lambda,A)$ is the number of $\lambda$-Jordan blocks of size at least $p$; hence $w_p(\lambda,A)-w_{p+1}(\lambda,A)$ is the number of $\lambda$-blocks of size exactly $p$.
+\begin{proof}
+Rank is similarity-invariant, so assume $A$ is in Jordan form.\\
+Blocks $J_k(\mu)$ with $\mu\neq\lambda$ contribute $0$ to the rank drop because $J_k(\mu)-\lambda I_k$ is invertible.\\
+A block $J_k(\lambda)$ contributes $\operatorname{rank}\bigl(J_k(0)^{p-1}\bigr)-\operatorname{rank}\bigl(J_k(0)^p\bigr)$, which is $1$ exactly when $p\leq k$ by Lemma \ref{lem:nilpotent-jordan-block-power-rank}.\\
+Summing over blocks proves the first claim; subtracting the $p+1$ count gives the exact-size count.\\
+\hlt{Structural Commentary}: Rank drops count surviving chain lengths.\\
+\hlt{Key Insight}: A length-$k$ block contributes to drops $1,\ldots,k$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/weyr_rank_drops_jordan_blocks.tikz}
+  \caption{For $r_p=\operatorname{rank}((A-\lambda I)^p)$, drops count surviving chains; $w_p-w_{p+1}$ counts size-$p$ blocks.}
+  \label{fig:weyr-rank-drops-jordan-blocks}
+\end{figure}
+
+\begin{method} \label{meth:jordan-form-from-rank-drops} \hlt{Computing Jordan Blocks by Rank Drops}\\
+For each eigenvalue $\lambda$ of $A\in\operatorname{Mat}(n,n,\mathbb{C})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $r_p=\operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$ for $p=0,1,2,\ldots$ until the differences stabilize at $0$.
+\item Set $w_p=r_{p-1}-r_p$. Then $w_p$ is the number of $\lambda$-blocks of size at least $p$.
+\item The number of blocks $J_p(\lambda)$ is $w_p-w_{p+1}$.
+\item Assemble the Jordan form by taking the direct sum over all eigenvalues.
+\end{enumerate}
+\end{method}
+
+\begin{corollary} \label{cor:jordan-form-unique-up-to-block-permutation} \hlt{Uniqueness of Jordan Form}\\
+If $J$ and $J'$ are Jordan matrices similar to $A\in\operatorname{Mat}(n,n,\mathbb{C})$, they differ only by a permutation of Jordan blocks.
+\begin{proof}
+Similarity preserves spectra and the ranks of $(X-\lambda I_n)^p$. Thus $J$ and $J'$ have the same Weyr characteristic for each eigenvalue. Theorem \ref{thm:jordan-block-sizes-from-rank-drops} then gives the same block multiplicities, so only block order may differ.\\
+\hlt{Structural Commentary}: Weyr data is similarity-invariant and fixes block multiplicities.\\
+\hlt{Key Insight}: Jordan form is unique modulo block order.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:exponential-of-jordan-block} \hlt{Exponential of a Jordan Block}\\
+For $k\geq1$, $\lambda\in\mathbb{C}$, and $t\in\mathbb{C}$, $e^{tJ_k(\lambda)} =e^{\lambda t}\sum\limits_{r=0}^{k-1}\frac{t^r}{r!}J_k(0)^r$.
+\begin{proof}
+Since $J_k(\lambda)=\lambda I_k+J_k(0)$ and the two summands commute, $e^{tJ_k(\lambda)}=e^{\lambda tI_k}e^{tJ_k(0)}$.\\
+The first factor is $e^{\lambda t}I_k$, and the second exponential truncates because $J_k(0)^k=0$.\\
+\hlt{Structural Commentary}: The scalar part supplies $e^{\lambda t}$; the nilpotent part supplies a finite polynomial in $t$.\\
+\hlt{Key Insight}: Nilpotence turns the exponential series into a finite sum.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:solve-linear-ode-by-jordan-form} \hlt{Solving $\mathbf{x}'(t)=A\mathbf{x}(t)$ by Jordan Form}\\
+To solve $\mathbf{x}'(t)=A\mathbf{x}(t)$ with $\mathbf{x}(0)=\mathbf{x}_0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $A=SJS^{-1}$, where $J=\bigoplus_{i=1}^rJ_{k_i}(\lambda_i)$.
+\item Set $\mathbf{y}(t)=S^{-1}\mathbf{x}(t)$ and $\mathbf{y}_0=S^{-1}\mathbf{x}_0$. Then $\mathbf{y}'(t)=J\mathbf{y}(t)$ and $\mathbf{x}(t)=S\mathbf{y}(t)$.
+\item Split $\mathbf{y}=(\mathbf{y}_1,\ldots,\mathbf{y}_r)$ according to the Jordan blocks. Then $\mathbf{y}_i'(t)=J_{k_i}(\lambda_i)\mathbf{y}_i(t)$.
+\item For each block, use Proposition \ref{prop:exponential-of-jordan-block}: $\mathbf{y}_i(t) =e^{tJ_{k_i}(\lambda_i)}\mathbf{y}_i(0) =e^{\lambda_i t}\sum\limits_{q=0}^{k_i-1}\frac{t^q}{q!}J_{k_i}(0)^q\mathbf{y}_i(0)$.
+\item Reassemble $\mathbf{y}(t)$ and transform back: $\mathbf{x}(t)=S\mathbf{y}(t)$.
+\end{enumerate}
+Thus a size-$k$ block with eigenvalue $\lambda$ contributes entries of the form $e^{\lambda t}p(t)$, where $\deg p<k$.
+\end{method}
+
+\begin{definition} \label{def:spectral-radius-and-convergent-matrix} \hlt{Spectral Radius and Convergent Matrix}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, the \hlt{spectral radius} is $\rho(A)\defeq\max\{\abs{\lambda}:\lambda\in\operatorname{spec}(A)\}$.\\
+We say $A^p\to0$ if every entry of $A^p$ converges to $0$ as $p\to\infty$.
+\end{definition}
+
+\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
+For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
+\begin{proof} Formula follows from binomial theorem applied to $J_k(\lambda)=\lambda I_k+J_k(0)$, with truncation from $J_k(0)^k=0$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
+\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then each coefficient $\binom{p}{r}\lambda^{p-r} \rightarrow 0$ for fixed $r$; hence every term in finite expansion tends to $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
+\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:matrix-powers-converge-to-zero-spectral-radius} \hlt{Matrix Powers Converge to Zero}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A^p\to0$ if and only if $\rho(A)<1$.
+\begin{proof}
+Choose a Jordan form $A=SJS^{-1}$.\\
+Since $S$ and $S^{-1}$ are fixed, $A^p\to0$ if and only if every Jordan block power in $J^p$ converges to $0$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Each block power tends to $0$, so Proposition \ref{prop:powers-of-jordan-block} gives $\abs{\lambda}<1$ for every eigenvalue. Thus $\rho(A)<1$.
+\item[$(\Leftarrow)$] If $\rho(A)<1$, then every eigenvalue satisfies $\abs{\lambda}<1$. Proposition \ref{prop:powers-of-jordan-block} makes each block power tend to $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity reduces matrix-power convergence to Jordan block-power convergence.\\
+\hlt{Key Insight}: The largest eigenvalue modulus controls the asymptotic size of all blocks.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_spectral_radius_convergence.tikz}
+  \caption{The gray circle is $\abs{\lambda}=1$: inside it, powers decay; on or outside it, they do not.}
+  \label{fig:jordan-spectral-radius-convergence}
+\end{figure}
+
+\begin{definition} \label{def:power-bounded-matrix} \hlt{Power Bounded Matrix}\\
+A matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is \hlt{power bounded} if for each entry position $(i,j)$, the sequence of entries of $A^p$ in that position is bounded for $p=1,2,\ldots$.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-power-bounded-jordan-criterion} \hlt{Power Bounded Jordan Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is power bounded.
+\item $\rho(A)\leq1$, and every eigenvalue $\lambda$ with $\abs{\lambda}=1$ has only $1\times1$ Jordan blocks.
+\item $\rho(A)\leq1$, and $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$ with $\abs{\lambda}=1$.
+\end{enumerate}
+\begin{proof}
+Work in Jordan form.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$: If $\abs{\lambda}>1$, the diagonal entries $\lambda^p$ are unbounded.\\
+If $\abs{\lambda}=1$ and $J_k(\lambda)$ has $k\geq2$, then the first superdiagonal contains $p\lambda^{p-1}$, also unbounded.
+\item[$(ii)$]$\Rightarrow(i)$: Blocks with $\abs{\lambda}<1$ converge to $0$ by Proposition \ref{prop:powers-of-jordan-block}; $1\times1$ blocks with $\abs{\lambda}=1$ are bounded. Finite direct sums and fixed similarities preserve boundedness.
+\item[$(ii)$]$\Leftrightarrow(iii)$: For fixed $\lambda$, $\dim E_{\lambda}(A)$ counts Jordan blocks, while $m_A(\lambda)$ counts their total size.\\
+Equality holds exactly when every block has size $1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Unit-circle eigenvalues are harmless only when their nilpotent parts vanish.\\
+\hlt{Key Insight}: Nontrivial Jordan blocks on the unit circle create polynomial growth.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:probability-vector-and-markov-matrix} \hlt{Probability Vectors and Markov Matrices}\\
+A vector $\mathbf{x}\in\mathbb{R}^n$ is a \hlt{probability vector} if its entries are nonnegative and sum to $1$. Let $\mathbf{e}\defeq(1,\ldots,1)^t$. A matrix $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{R})$ is a \hlt{Markov matrix} if $a_{ij}\geq0$ for all $i,j$ and $A\mathbf{e}=\mathbf{e}$; equivalently, every row sum is $1$.
+\end{definition}
+
+\begin{lemma} \label{lem:markov-matrix-basic-properties} \hlt{Basic Properties of Markov Matrices}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{R})$ is Markov, then $1\in\operatorname{spec}(A)$, and each $A^p$ is Markov with entries in $[0,1]$.
+\begin{proof}
+Since $A\mathbf{e}=\mathbf{e}$, $1$ is an eigenvalue. Inductively, $A^p$ has nonnegative entries and $A^p\mathbf{e}=\mathbf{e}$, so $A^p$ is Markov. Each nonnegative row sums to $1$, so all entries lie in $[0,1]$.\\
+\hlt{Structural Commentary}: Markov structure is closed under powers.\\
+\hlt{Key Insight}: Nonnegative row sums of $1$ bound every entry.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:markov-matrix-unit-circle-semisimple} \hlt{Unit-Circle Spectrum of Markov Matrices}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{R})$ is Markov, then $\rho(A)=1$, and $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$ with $\abs{\lambda}=1$.
+\begin{proof}
+Lemma \ref{lem:markov-matrix-basic-properties} makes $A$ power bounded. Theorem \ref{thm:matrix-power-bounded-jordan-criterion} gives $\rho(A)\leq1$ and $\dim E_{\lambda}(A)=m_A(\lambda)$ on $\abs{\lambda}=1$. Since $A\mathbf{e}=\mathbf{e}$, $1\in\operatorname{spec}(A)$, so $\rho(A)\geq1$. Thus $\rho(A)=1$.\\
+\hlt{Structural Commentary}: Bounded Markov powers rule out unit-circle Jordan growth.\\
+\hlt{Key Insight}: $A\mathbf{e}=\mathbf{e}$ forces the eigenvalue $1$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:positive-markov-stationary-distribution} \hlt{Positive Markov Matrices Converge to a Stationary Distribution}\\
+Let $n\geq2$ and let $A\in\operatorname{Mat}(n,n,\mathbb{R})$ be a Markov matrix with positive entries. Then there is a unique probability vector $\mathbf{x}$ with $A^t\mathbf{x}=\mathbf{x}$; its entries are positive and $\lim\limits_{p\to\infty}A^p=\mathbf{e}\mathbf{x}^t$.
+\begin{proof}
+Let $A\mathbf{y}=\lambda\mathbf{y}$ with $\abs{\lambda}=1$, and choose $k$ with $\abs{y_k}=\norm{\mathbf{y}}_{\infty}$.\\
+Positivity and the $k$th row sum give $\norm{\mathbf{y}}_{\infty} =\abs{\lambda y_k} =\abs{\sum\limits_{j=1}^{n}a_{kj}y_j} \leq\sum\limits_{j=1}^{n}a_{kj}\abs{y_j} \leq\norm{\mathbf{y}}_{\infty}$.\\
+Equality forces all $\abs{y_j}=\norm{\mathbf{y}}_{\infty}$ and all $y_j$ to have the same argument. Hence $\mathbf{y}=c\mathbf{e}$, and $A\mathbf{e}=\mathbf{e}$ gives $\lambda=1$. Thus $E_1(A)=\operatorname{span}(\mathbf{e})$ and no other eigenvalue lies on the unit circle.\\
+By Theorem \ref{thm:markov-matrix-unit-circle-semisimple}, the Jordan form is $[1]\oplus J$ with $\rho(J)<1$. Choose $S=[\mathbf{e}\ Y]$ such that $A=S([1]\oplus J)S^{-1}$, and let $\mathbf{x}^t$ be the first row of $S^{-1}$. Then $\mathbf{x}^tA=\mathbf{x}^t$ and $\mathbf{x}^t\mathbf{e}=1$. Since $J^p\to0$, $A^p=S([1]\oplus J^p)S^{-1}\to \mathbf{e}\mathbf{x}^t$.\\
+The nonnegative powers $A^p$ imply $\mathbf{x}\geq0$; since $A^t\mathbf{x}=\mathbf{x}$ and $A^t$ has positive entries, in fact $\mathbf{x}>0$. Finally, $\dim E_1(A^t)=\dim E_1(A)=1$, so $\mathbf{x}^t\mathbf{e}=1$ gives uniqueness among probability vectors.\\
+\hlt{Structural Commentary}: Positivity leaves one simple unit-circle block; all other blocks decay.\\
+\hlt{Key Insight}: The limit is the rank-one projection $\mathbf{e}\mathbf{x}^t$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/positive_markov_stationary_limit.tikz}
+  \caption{The line $\operatorname{span}(\mathbf{e})$ remains; all other Jordan directions decay, so $A^p\to\mathbf{e}\mathbf{x}^t$.}
+  \label{fig:positive-markov-stationary-limit}
+\end{figure}
+
 \begin{lemma} \label{lem:identity-plus-nilpotent-square-root} \hlt{Identity Plus Nilpotent Has a Square Root}\\
 Let $\mathcal{V}$ be a complex vector space and let $N\in\LL(\mathcal{V})$ be nilpotent. Then $I_{\mathcal{V}}+N$ has a square root.
 \begin{proof}
@@ -254,7 +621,7 @@ Terms of degree $\geq m$ vanish because $N^m=0$, so $R^2=I_{\mathcal{V}}+N$.\\
 Let $\mathcal{V}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$ be invertible. Then $T$ has a square root.
 \begin{proof}
 Let $\mathcal{U}_j=G(\lambda_j,T)$ for the distinct eigenvalues of $T$. Primary decomposition gives $\mathcal{V}=\mathcal{U}_1\oplus\cdots\oplus\mathcal{U}_m$, and invertibility gives $\lambda_j\neq0$. Put $N_j=(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{U}_j}$.\\
-Then $|_{\mathcal{U}_j} =\lambda_j\left(I_{\mathcal{U}_j}+\lambda_j^{-1}N_j\right)$ with $\lambda_j^{-1}N_j$ nilpotent. By Lemma \ref{lem:identity-plus-nilpotent-square-root}, choose $B_j^2=I_{\mathcal{U}_j}+\lambda_j^{-1}N_j$; choose $\alpha_j^2=\lambda_j$ and set $R_j=\alpha_jB_j$. Then $R_j^2=T|_{\mathcal{U}_j}$. Define $R=R_1\oplus\cdots\oplus R_m$ on the direct sum. Then $R^2=T$.\\
+Then $T|_{\mathcal{U}_j} =\lambda_j\left(I_{\mathcal{U}_j}+\lambda_j^{-1}N_j\right)$ with $\lambda_j^{-1}N_j$ nilpotent. By Lemma \ref{lem:identity-plus-nilpotent-square-root}, choose $B_j^2=I_{\mathcal{U}_j}+\lambda_j^{-1}N_j$; choose $\alpha_j^2=\lambda_j$ and set $R_j=\alpha_jB_j$. Then $R_j^2=T|_{\mathcal{U}_j}$. Define $R=R_1\oplus\cdots\oplus R_m$ on the direct sum. Then $R^2=T$.\\
 \hlt{Structural Commentary}: Take square roots on primary blocks, then recombine.\\
 \hlt{Key Insight}: Invertibility makes every scalar block nonzero.
 \end{proof}
