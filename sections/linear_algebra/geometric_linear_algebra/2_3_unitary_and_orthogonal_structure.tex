@@ -131,6 +131,10 @@ Taking orthogonal complements, using Corollary \ref{cor:double-orthogonal-comple
 An operator $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space is \hlt{self-adjoint} if $T^*=T$. A square matrix $A$ is \hlt{Hermitian} if $A^*=A$. In orthonormal coordinates, these are the same condition by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}.
 \end{definition}
 
+\begin{definition} \label{def:orthogonal-projection-matrix} \hlt{Orthogonal Projection Matrix}\\
+A square matrix $P\in\operatorname{Mat}(n,n,\mathbb{F})$ is an \hlt{orthogonal projection matrix} if $P^2=P$ and $P^*=P$.
+\end{definition}
+
 \begin{theorem} \label{thm:orthogonal-projection-self-adjoint-idempotent} \hlt{Orthogonal Projections as Self-Adjoint Idempotents}\\
 Let $\mathcal{V}$ be finite-dimensional and let $P\in\LL(\mathcal{V})$.\\
 Then $P$ is the orthogonal projection onto $\operatorname{range}(P)$ if and only if $P^2=P$ and $P^*=P$.
@@ -146,8 +150,84 @@ Thus the residual lies in $\ker(P)$. Since $P=P^*$, Proposition \ref{prop:adjoin
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:orthogonal-projection-matrix-unitary-coordinate-form} \hlt{Unitary Coordinate Form of an Orthogonal Projection}\\
+Let $P\in\operatorname{Mat}(n,n,\mathbb{F})$ be an orthogonal projection matrix and let $r=\operatorname{rank}(P)$. Then $P$ is unitarily similar to $I_r\oplus0_{n-r}$. Equivalently, there is a unitary matrix $U$ such that
+\begin{align}
+U^*PU=
+\begin{bmatrix}
+I_r & 0\\
+0 & 0_{n-r}
+\end{bmatrix} \nonumber
+\end{align}
+\begin{proof}
+Let $\mathcal{U}=\operatorname{col}(P)$. Identifying $P$ with its induced operator on $\mathbb{F}^n$, Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent} says $P$ is the orthogonal projection onto $\mathcal{U}$, so $P$ is the identity on $\mathcal{U}$ and zero on $\mathcal{U}^{\perp}$. Choose an orthonormal basis $\mathbf{u}_1,\ldots,\mathbf{u}_r$ of $\mathcal{U}$ and extend it to an orthonormal basis $\mathbf{u}_1,\ldots,\mathbf{u}_n$ of $\mathbb{F}^n$. Let $U=[\mathbf{u}_1\ \cdots\ \mathbf{u}_n]$.\\
+Then $U$ is unitary, and the matrix of $P$ in this orthonormal basis has the displayed block diagonal form.\\
+\hlt{Structural Commentary}: Orthogonal projection splits the space into range and orthogonal kernel.\\
+\hlt{Key Insight}: In a basis adapted to $\operatorname{col}(P)\oplus\operatorname{col}(P)^{\perp}$, projection keeps the first coordinates and kills the rest.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/orthogonal_projection_unitary_block.tikz}
+  \caption{Adapted basis: $U^*PU=I_r\oplus0_{n-r}$, identity on $\operatorname{col}(P)$ and zero on $\operatorname{col}(P)^\perp$.}
+  \label{fig:orthogonal-projection-unitary-block}
+\end{figure}
+
+\begin{theorem} \label{thm:matrix-invariant-subspace-projection-block-criteria} \hlt{Invariant Subspaces, Blocks, and Projections}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathcal{U}$ be an $r$-dimensional subspace of $\mathbb{F}^n$ with $1\leq r\leq n-1$, and let $Q=[Q_1\ Q_2]$ be unitary, where the columns of $Q_1$ and $Q_2$ are orthonormal bases of $\mathcal{U}$ and $\mathcal{U}^{\perp}$, respectively. Let $P=Q_1Q_1^*$ be the orthogonal projection onto $\mathcal{U}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}$ is invariant under $A$;
+\item $Q^*AQ=\begin{bmatrix}B & X\\ 0 & C\end{bmatrix}$ for some compatible matrices $B,X,C$;
+\item $PAP=AP$.
+\end{enumerate}
+\begin{proof} Let $M=Q^*AQ=\begin{bmatrix}B&X\\Y&C\end{bmatrix}$, $E=Q^*PQ=I_r\oplus0_{n-r}$. Here $Y=Q_2^*AQ_1$ and $\ker(Q_2^*)=\operatorname{col}(Q_1)=\mathcal{U}$.
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ If $A\mathcal{U}\subseteq\mathcal{U}$, then the columns of $AQ_1$ lie in $\ker(Q_2^*)$, so $Y=0$.
+\item[$(ii)$] $\Rightarrow (iii)$ If $Y=0$, then $EME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$.\\
+Thus $Q^*(PAP)Q=EME=ME=Q^*(AP)Q$, so $PAP=AP$.
+\item[$(iii)$] $\Rightarrow (i)$ If $PAP=AP$, then $EME=ME$. Since $EME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\Y&0\end{bmatrix}$, we get $Y=0$.\\
+Hence $AQ_1$ has columns in $\ker(Q_2^*)=\mathcal{U}$, so $A\mathcal{U}\subseteq\mathcal{U}$.
+\end{enumerate}
+\hlt{Structural Commentary}: In adapted coordinates, the lower-left block is the component of $A\mathcal{U}$ in $\mathcal{U}^{\perp}$.\\
+\hlt{Key Insight}: $PAP=AP$ exactly kills this component.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:reducing-subspace-projection-commutation} \hlt{Reducing Subspaces and Commuting Projections}\\
+Maintain the notation of Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}$ is invariant under both $A$ and $A^*$;
+\item $Q^*AQ=B\oplus C$ for some $B\in\operatorname{Mat}(r,r,\mathbb{F})$ and $C\in\operatorname{Mat}(n-r,n-r,\mathbb{F})$;
+\item $PA=AP$.
+\end{enumerate}
+\begin{proof} Let $M=Q^*AQ=\begin{bmatrix}B&X\\Y&C\end{bmatrix}$ and $E=Q^*PQ=I_r\oplus0_{n-r}$.\\
+Then $Q^*A^*Q=M^*$, $Q^*(PA)Q=EM$, and $Q^*(AP)Q=ME$.
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ By Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}, $A$-invariance gives $Y=0$; apply to $A^*$ gives $X=0$. Thus $M=B\oplus C$.
+\item[$(ii)$] $\Rightarrow (iii)$ If $M=B\oplus C$, then $EM=ME$, hence $PA=AP$.
+\item[$(iii)$] $\Rightarrow (i)$ If $PA=AP$, then $EM=ME$. Since $EM=\begin{bmatrix}B&X\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\Y&0\end{bmatrix}$, we get $X=Y=0$.\\
+Hence $\mathcal{U}$ is invariant under both $A$ and $A^*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Reducing subspaces are exactly block diagonal decompositions in adapted coordinates.\\
+\hlt{Key Insight}: Commutation with $P$ kills both off-diagonal blocks.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/invariant_projection_block_form.tikz}
+  \caption{Adapted coordinates: $A\mathcal{U}\subseteq\mathcal{U}$ gives $\begin{bmatrix}B&X\\0&C\end{bmatrix}$; $PA=AP$ gives block diagonal form.}
+  \label{fig:invariant-projection-block-form}
+\end{figure}
+
 \begin{definition} \label{def:minimum-norm-solution} \hlt{Minimum Norm Solution}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\operatorname{col}(A)$. A solution $\mathbf{s}$ of $A\mathbf{x}=\mathbf{y}$ is a \hlt{minimum norm solution} if $\norm{\mathbf{s}}_2\leq\norm{\mathbf{x}}_2$ for every solution $\mathbf{x}$ of $A\mathbf{x}=\mathbf{y}$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\operatorname{col}(A)$.\\
+A solution $\mathbf{s}$ of $A\mathbf{x}=\mathbf{y}$ is a \hlt{minimum norm solution} if $\norm{\mathbf{s}}_2\leq\norm{\mathbf{x}}_2$ for every solution $\mathbf{x}$ of $A\mathbf{x}=\mathbf{y}$.
 \end{definition}
 
 \begin{theorem} \label{thm:minimum-norm-solution-consistent-system} \hlt{Minimum Norm Solution of a Consistent Linear System}\\

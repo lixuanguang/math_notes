@@ -404,6 +404,45 @@ These equations are exactly the displayed system, so consistency follows from th
   \label{fig:normal-equations-projection}
 \end{figure}
 
+\begin{theorem} \label{thm:matrix-least-squares-normal-equations} \hlt{Matrix Least Squares and Normal Equations}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\mathbb{F}^m$, where $A^*$ denotes the conjugate transpose of $A$.\\
+A vector $\mathbf{x}_0\in\mathbb{F}^n$ satisfies $\norm{\mathbf{y}-A\mathbf{x}_0}_2=\min_{\mathbf{x}\in\mathbb{F}^n}\norm{\mathbf{y}-A\mathbf{x}}_2$ if and only if $A^*A\mathbf{x}_0=A^*\mathbf{y}$.\\
+The normal equations are always consistent, and their solution is unique if and only if $\operatorname{rank}(A)=n$.
+\begin{proof}
+Let $\mathcal{U}=\operatorname{col}(A)$, and write $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$. Since $\{A\mathbf{x}:\mathbf{x}\in\mathbb{F}^n\}=\mathcal{U}$, the vector $\mathbf{x}_0$ is least-squares optimal exactly when $A\mathbf{x}_0=P_{\mathcal{U}}\mathbf{y}$, or equivalently when $\mathbf{y}-A\mathbf{x}_0\in\mathcal{U}^{\perp}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{x}_0$ is least-squares optimal, then $\mathbf{y}-A\mathbf{x}_0\in\mathcal{U}^{\perp}$.\\
+Hence $\innerprod{\mathbf{y}-A\mathbf{x}_0,\mathbf{a}_j}=0$, $j=1,\ldots,n$, which is $A^*(\mathbf{y}-A\mathbf{x}_0)=\mathbf{0}$, so $A^*A\mathbf{x}_0=A^*\mathbf{y}$.
+\item[$(\Leftarrow)$] If $A^*A\mathbf{x}_0=A^*\mathbf{y}$, then $A^*(\mathbf{y}-A\mathbf{x}_0)=\mathbf{0}$, so $\mathbf{y}-A\mathbf{x}_0\in\mathcal{U}^{\perp}$.\\
+Hence $A\mathbf{x}_0=P_{\mathcal{U}}\mathbf{y}$, so $\mathbf{x}_0$ is least-squares optimal.
+\end{enumerate}
+Consistency follows by choosing $\mathbf{x}_0$ such that $A\mathbf{x}_0=P_{\mathcal{U}}\mathbf{y}$.\\
+If $\mathbf{x}_0,\mathbf{x}_1$ solve the normal equations, then $\norm{A(\mathbf{x}_0-\mathbf{x}_1)}_2^2 =\innerprod{\mathbf{x}_0-\mathbf{x}_1,A^*A(\mathbf{x}_0-\mathbf{x}_1)}=0$, so $\mathbf{x}_0-\mathbf{x}_1\in\ker(A)$.\\
+Thus uniqueness is equivalent to $\ker(A)=\{\mathbf{0}\}$, equivalently $\operatorname{rank}(A)=n$.\\
+\hlt{Structural Commentary}: Least squares is orthogonal projection onto the column space of $A$.\\
+\hlt{Key Insight}: The normal equations say exactly that the residual is orthogonal to every column of $A$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/least_squares_column_projection.tikz}
+  \caption{Fitted vector and orthogonal residual: $A\mathbf{x}_0=P_{\operatorname{col}(A)}\mathbf{y}$ and $\mathbf{r}=\mathbf{y}-A\mathbf{x}_0\in\operatorname{col}(A)^{\perp}=\ker(A^*)$.}
+  \label{fig:least-squares-column-projection}
+\end{figure}
+
+\begin{corollary} \label{cor:full-column-rank-projection-formula} \hlt{Projection Formula for Full Column Rank}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $n$.\\
+Then $A^*A$ is invertible and the orthogonal projection onto $\operatorname{col}(A)$ is $P_{\operatorname{col}(A)}=A(A^*A)^{-1}A^*$.
+\begin{proof} If $A^*A\mathbf{x}=\mathbf{0}$, then $\norm{A\mathbf{x}}_2^2=\innerprod{\mathbf{x},A^*A\mathbf{x}}=0$, so $A\mathbf{x}=\mathbf{0}$.\\
+Since $\operatorname{rank}(A)=n$, we get $\mathbf{x}=\mathbf{0}$. Hence $A^*A$ is invertible. By Theorem \ref{thm:matrix-least-squares-normal-equations}, the least-squares solution is $\mathbf{x}_0=(A^*A)^{-1}A^*\mathbf{y}$. The fitted vector is $P_{\operatorname{col}(A)}\mathbf{y}=A\mathbf{x}_0=A(A^*A)^{-1}A^*\mathbf{y}$.\\
+Since this holds for every $\mathbf{y}$, the displayed operator formula follows.\\
+\hlt{Structural Commentary}: Full column rank makes the normal-equation coordinates unique.\\
+\hlt{Key Insight}: Solve for coefficients, then map back by $A$.
+\end{proof}
+\end{corollary}
+
 \begin{definition} \label{def:gram-matrix-and-determinant} \hlt{Gram Matrix}\\
 For vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in an inner-product space, the \hlt{Gram matrix} is
 \begin{align}
