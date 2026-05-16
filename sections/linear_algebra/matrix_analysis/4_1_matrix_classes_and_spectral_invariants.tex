@@ -101,16 +101,266 @@ Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $p_A
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:schur-inequality-defect-normality} \hlt{Schur's Inequality and Normality}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity.\\
-Then $\sum\limits_{j=1}^{n}\abs{\lambda_j}^2\leq\norm{A}_F^2$, with equality if and only if $A$ is normal.
+\begin{definition} \label{def:positive-semidefinite-matrix} \hlt{Positive Semidefinite and Positive Definite Matrices}\\
+Let $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$ and let $A\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
+The matrix $A$ is \hlt{positive semidefinite}, written $A\succeq0$, if $A=A^*$ and $\mathbf{x}^*A\mathbf{x}\geq0$ for every $\mathbf{x}\in\mathbb{F}^n$.\\
+It is \hlt{positive definite}, written $A\succ0$, if $A=A^*$ and $\mathbf{x}^*A\mathbf{x}>0$ for every nonzero $\mathbf{x}\in\mathbb{F}^n$.\\
+Negative semidefinite and negative definite mean $-A\succeq0$ and $-A\succ0$, respectively.
+\end{definition}
+
+\begin{theorem} \label{thm:positive-semidefinite-matrix-equivalences} \hlt{Equivalent Forms of Positive Semidefiniteness}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\succeq0$.
+\item $A$ is Hermitian and all eigenvalues of $A$ are nonnegative.
+\item $A=B^*B$ for some $B\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\item $A$ has a positive semidefinite square root.
+\end{enumerate}
+In this case the positive semidefinite square root is unique.\\
+If $A=U\Lambda U^*$ with $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ and $\lambda_i\geq0$, then $A^{1/2}=U\operatorname{diag}(\sqrt{\lambda_1},\ldots,\sqrt{\lambda_n})U^*$.
 \begin{proof}
-Choose a Schur form $A=UTU^*$, where $U$ is unitary, $T=[t_{ij}]$ is upper triangular, and $t_{jj}=\lambda_j$.\\
-By cyclicity of trace, $\norm{A}_F^2 =\operatorname{tr}(A^*A) =\operatorname{tr}(T^*T) =\sum\limits_{j=1}^{n}\abs{\lambda_j}^2+\sum_{i<j}\abs{t_{ij}}^2$.\\
-The inequality follows, and equality holds exactly when $T$ is diagonal.\\
-A matrix unitarily similar to a diagonal matrix is normal; conversely, if $A$ is normal, then $T$ is normal and upper triangular, hence diagonal by Lemma \ref{lem:upper-triangular-normal-matrix-is-diagonal}.\\
-\hlt{Structural Commentary}: Schur form separates diagonal spectral mass from strictly upper-triangular coupling.\\
-\hlt{Key Insight}: The gap is exactly the Schur off-diagonal energy.
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ This is the matrix form of Theorem \ref{thm:positive-operator-characterization}.
+\item[$(ii)$]$\Rightarrow (iv)$ By the spectral theorem, write $A=U\Lambda U^*$, where $U$ is unitary and $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ with $\lambda_i\geq0$. Then $A^{1/2}=U\operatorname{diag}(\sqrt{\lambda_1},\ldots,\sqrt{\lambda_n})U^*$ is positive semidefinite and satisfies $(A^{1/2})^2=A$.
+\item[$(iv)$]$\Rightarrow (iii)$ If $C\succeq0$ and $C^2=A$, then $C=C^*$ and $A=C^*C$, so (iii) holds with $m=n$.
+\item[$(iii)$]$\Rightarrow (i)$ If $A=B^*B$, then $A^*=A$ and $\mathbf{x}^*A\mathbf{x}=\mathbf{x}^*B^*B\mathbf{x}=\norm{B\mathbf{x}}_2^2\geq0$, so $A\succeq0$.
+\end{enumerate}
+The positive semidefinite square root is unique by Proposition \ref{prop:positive-square-root-unique}.\\
+\hlt{Structural Commentary}: Positive semidefinite matrices are Gram-type matrices with nonnegative spectrum.\\
+\hlt{Key Insight}: Positivity is best checked either on eigenvalues or by finding a factor $B$ with $A=B^*B$.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:psd-spectral-factorization} \hlt{PSD Spectral Factorisation Method}\\
+To analyse a Hermitian matrix $A$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item diagonalise $A=U\Lambda U^*$;
+\item check the signs of the diagonal entries of $\Lambda$;
+\item if $\Lambda\geq0$, set $A^{1/2}=U\Lambda^{1/2}U^*$ and use $A=(A^{1/2})^*A^{1/2}$;
+\item translate kernel, rank, and zero-quadratic-form questions into the factor $A^{1/2}$.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:positive-definite-matrix-equivalences} \hlt{Equivalent Forms of Positive Definiteness}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\succ0$.
+\item $A$ is Hermitian and all eigenvalues of $A$ are positive.
+\item $A\succeq0$ and $A$ is invertible.
+\item $A=B^*B$ for some invertible $B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\item $A$ is invertible and $A^{-1}\succ0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ If $(\lambda,\mathbf{v})$ is an eigenpair with $\mathbf{v}\neq\mathbf{0}$, then $\lambda\norm{\mathbf{v}}_2^2=\mathbf{v}^*A\mathbf{v}>0$, so every eigenvalue is positive.
+\item[$(ii)$]$\Rightarrow (iii)$ Positive eigenvalues imply $A\succeq0$ by Theorem \ref{thm:positive-semidefinite-matrix-equivalences}; they also exclude $0$, so $A$ is invertible.
+\item[$(iii)$]$\Rightarrow (iv)$ By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, $A$ has a positive semidefinite square root $A^{1/2}$.\\
+Since $A$ is invertible, $A^{1/2}$ is invertible, and $A=(A^{1/2})^*A^{1/2}$.
+\item[$(iv)$]$\Rightarrow (i)$ If $A=B^*B$ and $B$ is invertible, then for every nonzero $\mathbf{x}$, $\mathbf{x}^*A\mathbf{x}=\norm{B\mathbf{x}}_2^2>0$.
+\item[$(ii)$]$\Leftrightarrow (v)$ Hermitian-ness is preserved by inversion, and eigenvalues of $A^{-1}$ are reciprocal eigenvalues of $A$.
+\end{enumerate}
+\hlt{Structural Commentary}: Positive definite matrices are the invertible part of the positive semidefinite cone.\\
+\hlt{Key Insight}: Positive definite means every eigenvalue is strictly on the positive side of zero.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:trace-determinant-positive-semidefinite} \hlt{Trace and Determinant of Positive Semidefinite Matrices}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Then $\operatorname{tr}A\geq0$, with equality if and only if $A=0$, and $\det A\geq0$, with strict inequality if and only if $A$ is positive definite.
+\begin{proof}
+List the eigenvalues of $A$ as $\lambda_1,\ldots,\lambda_n$. By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, each $\lambda_j\geq0$.\\
+Hence $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j\geq0$ and $\det A=\prod\limits_{j=1}^{n}\lambda_j\geq0$.\\
+The trace is zero exactly when every $\lambda_j=0$, which for a Hermitian matrix means $A=0$. The determinant is positive exactly when every $\lambda_j>0$, which is positive definiteness by Theorem \ref{thm:positive-definite-matrix-equivalences}.\\
+\hlt{Structural Commentary}: Trace and determinant aggregate the nonnegative eigenvalues by sum and product.\\
+\hlt{Key Insight}: Equality is controlled by which eigenvalues vanish.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:gram-factor-kernel-rank-column-data} \hlt{Kernel, Rank, and Columns of $B^*B$}\\
+Let $B\in\operatorname{Mat}(m,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and set $A=B^*B$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\succeq0$;
+\item $\ker(A)=\ker(B)$;
+\item $\operatorname{rank}(A)=\operatorname{rank}(B)$;
+\item $\operatorname{col}(A)=\operatorname{col}(B^*)$;
+\item $A=0$ if and only if $B=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Positive semidefiniteness follows from Theorem \ref{thm:positive-semidefinite-matrix-equivalences}.
+\item If $B\mathbf{x}=0$, then $A\mathbf{x}=0$. Conversely, if $A\mathbf{x}=0$, then $0=\mathbf{x}^*A\mathbf{x}=\norm{B\mathbf{x}}_2^2$ so $B\mathbf{x}=0$.
+\item Since $A$ and $B$ both have $n$ columns, rank-nullity and (ii) give $\operatorname{rank}(A)=\operatorname{rank}(B)$.
+\item By Proposition \ref{prop:adjoint-kernel-range-orthogonality} and (ii), $\operatorname{col}(A)=\ker(A)^{\perp}=\ker(B)^{\perp}=\operatorname{col}(B^*)$
+\item This follows from (iii), since a matrix is zero if and only if its rank is zero.
+\end{enumerate}
+\hlt{Structural Commentary}: The Gram product $B^*B$ preserves the kernel of $B$.\\
+\hlt{Key Insight}: The identity $\mathbf{x}^*B^*B\mathbf{x}=\norm{B\mathbf{x}}_2^2$ is the whole mechanism.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:positive-semidefinite-principal-block-column-inclusion} \hlt{Principal Blocks and Column Inclusion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and partition
+\begin{align}
+A=
+\begin{bmatrix}
+A_{11} & A_{12}\\
+A_{12}^* & A_{22}
+\end{bmatrix},
+\qquad A_{11}\in\operatorname{Mat}(k,k,\mathbb{F}).
+\nonumber
+\end{align}
+Then $A_{11}\succeq0$, $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$, and $\operatorname{rank}(A_{12})\leq\operatorname{rank}(A_{11})$. If $A\succ0$, then $A_{11}\succ0$.
+\begin{proof}
+Write $A=B^*B$ and partition $B=[B_1\ B_2]$ conformally. Then $A_{11}=B_1^*B_1$ and $A_{12}=B_1^*B_2$.\\
+Hence $A_{11}\succeq0$ and $\operatorname{col}(A_{12})=\operatorname{col}(B_1^*B_2)\subseteq\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)=\operatorname{col}(A_{11})$, last equality is Theorem \ref{thm:gram-factor-kernel-rank-column-data}. The rank inequality follows by taking dimensions. If $A\succ0$ and $\mathbf{x}\neq0$ in $\mathbb{F}^k$, then
+\begin{align}
+\mathbf{x}^*A_{11}\mathbf{x}=
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}^*
+A
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}>0,
+\nonumber
+\end{align}\\
+\hlt{Structural Commentary}: In a positive block matrix, cross-block columns lie in principal block's column space.\\
+\hlt{Key Insight}: Factor first; then column inclusion is immediate from $A_{12}=B_1^*B_2$.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/principal_block_column_inclusion.tikz}
+  \caption{For $A\succeq0$, factorisation forces $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$.}
+  \label{fig:principal-block-column-inclusion}
+\end{figure}
+
+\begin{corollary} \label{cor:positive-semidefinite-zero-quadratic-form} \hlt{Zero Quadratic Form Detects the Kernel}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\mathbf{x}^*A\mathbf{x}=0$ if and only if $A\mathbf{x}=0$.
+\begin{proof}
+Write $A=B^*B$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{x}^*A\mathbf{x}=0$, then $\norm{B\mathbf{x}}_2^2=0$, so $B\mathbf{x}=0$ and hence $A\mathbf{x}=B^*B\mathbf{x}=0$.
+\item[$(\Leftarrow)$] If $A\mathbf{x}=0$, then $\mathbf{x}^*A\mathbf{x}=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: A zero PSD quadratic value has no hidden cancellation.\\
+\hlt{Key Insight}: Zero length-square means the factored vector itself is zero.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:positive-semidefinite-stability-rules} \hlt{Stability Rules for Positive Semidefinite Matrices}\\
+Let $A,B\succeq0$ over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Whenever the expressions are defined:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $aA+bB\succeq0$ for $a,b\geq0$; if $a,b>0$ and one of $A,B$ is positive definite, then $aA+bB\succ0$.
+\item $S^*AS\succeq0$; moreover, $S^*AS\succ0$ if and only if $S\mathbf{x}\notin\ker(A)$ for all $\mathbf{x}\neq\mathbf{0}$.
+\item $A\oplus B\succeq0$, with $A\oplus B\succ0$ if and only if $A\succ0$ and $B\succ0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbf{x}^*(aA+bB)\mathbf{x}=a\mathbf{x}^*A\mathbf{x}+b\mathbf{x}^*B\mathbf{x}\geq0$; strictness follows from a positive definite summand.
+\item $\mathbf{x}^*S^*AS\mathbf{x}=(S\mathbf{x})^*A(S\mathbf{x})\geq0$. By Corollary \ref{cor:positive-semidefinite-zero-quadratic-form}, equality occurs exactly when $S\mathbf{x}\in\ker(A)$.
+\item $(\mathbf{x}\oplus\mathbf{y})^*(A\oplus B)(\mathbf{x}\oplus\mathbf{y})=\mathbf{x}^*A\mathbf{x}+\mathbf{y}^*B\mathbf{y}$; the strict case is immediate.
+\end{enumerate}
+\hlt{Structural Commentary}: The PSD cone is stable under sums, pullbacks, and direct sums.\\
+\hlt{Key Insight}: Test the quadratic form after each construction.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:simultaneous-congruence-one-positive-definite-form} \hlt{Simultaneous Congruence with One Positive Definite Form}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be Hermitian, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and let $A\succ0$.\\
+Then, for some invertible $S$ and real diagonal $\Lambda$, $A=SS^*$ and $B=S\Lambda S^*$.\\
+The diagonal entries of $\Lambda$ are the eigenvalues of $A^{-1}B$.
+\begin{proof}
+Let $C=A^{-1/2}BA^{-1/2}=U\Lambda U^*$ be spectral decomposition, $S=A^{1/2}U$. Then $SS^*=A$ and $S\Lambda S^*=B$.\\
+Also $A^{-1}B=A^{-1/2}CA^{1/2}$, so $A^{-1}B$ is similar to $C$ and has eigenvalues given by the diagonal entries of $\Lambda$.\\
+\hlt{Structural Commentary}: The positive definite form $A$ normalizes $B$ to a Hermitian matrix.\\
+\hlt{Key Insight}: Normalize, diagonalise, then transform back.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:positive-definite-hermitian-product-spectrum} \hlt{Products with One Positive Definite Factor}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and let $A\succ0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $B$ is Hermitian, then $AB$ is diagonalizable with real spectrum.
+\item If $B\succeq0$, then $AB$ is diagonalizable with nonnegative real spectrum; if $B\neq0$, one eigenvalue is positive.
+\item If $B\succ0$, then $AB$ is diagonalizable with positive real spectrum.
+\end{enumerate}
+\begin{proof}
+Let $C=A^{1/2}BA^{1/2}$. Since $A^{-1/2}(AB)A^{1/2}=C$, the matrices $AB$ and $C$ are similar.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $B$ is Hermitian, then $C$ is Hermitian, hence diagonalizable with real spectrum.
+\item If $B\succeq0$, then $C\succeq0$ by Theorem \ref{thm:positive-semidefinite-stability-rules}, so its spectrum is nonnegative.\\
+If $B\neq0$, then $C\neq0$, hence some eigenvalue is positive.
+\item If $B\succ0$, then $C\succ0$ by Theorem \ref{thm:positive-semidefinite-stability-rules}, so all eigenvalues are positive.
+\end{enumerate}
+\hlt{Structural Commentary}: A positive definite factor makes $AB$ similar to a Hermitian congruence.\\
+\hlt{Key Insight}: Use $AB\sim A^{1/2}BA^{1/2}$.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:real-quadratic-form-principal-axes} \hlt{Principal Axes for Real Quadratic Forms}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{R})$ be symmetric. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item there are a real orthogonal $Q$ and real $\lambda_1,\ldots,\lambda_n$ such that, with $\mathbf{y}=Q^t\mathbf{x}$, $\mathbf{x}^tA\mathbf{x}=\sum\limits_{j=1}^{n}\lambda_jy_j^2$.
+\item $A\succeq0$ if and only if every $\lambda_j\geq0$;
+\item $A\succ0$ if and only if every $\lambda_j>0$;
+\item $A$ is indefinite if and only if some $\lambda_j>0$ and some $\lambda_k<0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By the real spectral theorem, write $A=Q\operatorname{diag}(\lambda_1,\ldots,\lambda_n)Q^t$.\\
+Then $\mathbf{x}^tA\mathbf{x} =\mathbf{x}^tQ\operatorname{diag}(\lambda_j)Q^t\mathbf{x} =\mathbf{y}^t\operatorname{diag}(\lambda_j)\mathbf{y} =\sum\limits_{j=1}^{n}\lambda_jy_j^2$.
+\item The displayed sum is nonnegative for all $\mathbf{y}$ exactly when each coefficient $\lambda_j$ is nonnegative.
+\item The displayed sum is positive for all nonzero $\mathbf{y}$ exactly when each coefficient $\lambda_j$ is positive.
+\item The diagonal form takes both signs exactly when its coefficients include both signs.
+\end{enumerate}
+\hlt{Structural Commentary}: Principal axes turn the form into signed squares.\\
+\hlt{Key Insight}: Eigenvalue signs classify the quadratic form.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:quadratic-form-principal-axes} \hlt{Quadratic Form Principal-Axes Method}\\
+To analyse a real quadratic form:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item write it as $\mathbf{x}^tA\mathbf{x}$ with $A=A^t$; split each cross coefficient equally between $a_{ij}$ and $a_{ji}$;
+\item diagonalise $A=Q\Lambda Q^t$;
+\item change variables by $\mathbf{y}=Q^t\mathbf{x}$;
+\item classify the form from the signs of the eigenvalues in $\Lambda$.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/quadratic_form_principal_axes.tikz}
+  \caption{Orthogonal coordinates reveal the principal axes of a quadratic form.}
+  \label{fig:quadratic-form-principal-axes}
+\end{figure}
+
+\begin{theorem} \label{thm:schur-inequality-defect-normality} \hlt{Schur's Inequality and Normality}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$, counted algebraically.\\
+Then $\sum\limits_{j=1}^{n}\abs{\lambda_j}^2\leq\norm{A}_F^2$ with equality if and only if $A$ is normal.
+\begin{proof}
+Let $A=UTU^*$ be a Schur form, where $T=[t_{ij}]$ is upper triangular and $t_{jj}=\lambda_j$.\\
+Then $\norm{A}_F^2=\operatorname{tr}(T^*T)=\sum_{j=1}^{n}\abs{\lambda_j}^2+\sum_{i<j}\abs{t_{ij}}^2$.
+Inequality holds. Equality holds exactly when $T$ is diagonal.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If equality holds, then $T$ is diagonal, so $A$ is unitarily diagonalizable and hence normal.
+\item[$(\Leftarrow)$] If $A$ is normal, then $T$ is normal and upper triangular, hence diagonal by Lemma \ref{lem:upper-triangular-normal-matrix-is-diagonal}.
+\end{enumerate}
+\hlt{Structural Commentary}: Schur form splits Frobenius norm into eigenvalue mass plus off-diagonal mass.\\
+\hlt{Key Insight}: Normality means the Schur off-diagonal part vanishes.
 \end{proof}
 \end{theorem}
 

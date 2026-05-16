@@ -53,6 +53,21 @@ Thus the singular values are $\sqrt{\lambda_j}$, with the same eigenspace multip
 \end{proof}
 \end{proposition}
 
+\begin{proposition} \label{prop:two-by-two-positive-semidefinite-square-root} \hlt{Explicit Square Root for a $2\times2$ Positive Semidefinite Matrix}\\
+Let $A\in\operatorname{Mat}(2,2,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, be positive semidefinite and nonzero. Set $\tau=\bigl(\operatorname{tr}A+2\sqrt{\det A}\bigr)^{1/2}$.\\
+Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$
+\begin{proof}
+Let $C=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$. By Proposition \ref{prop:trace-determinant-positive-semidefinite}, $\det A\geq0$ and $\operatorname{tr}A>0$, hence $\tau>0$; by Theorem \ref{thm:positive-semidefinite-stability-rules}, $C\succeq0$. Cayley--Hamilton gives $A^2-(\operatorname{tr}A)A+(\det A)I_2=0$, so
+\begin{align}
+C^2 =\frac{1}{\tau^2}\bigl(A^2+2\sqrt{\det A}\,A+(\det A)I_2\bigr) =\frac{1}{\tau^2}\bigl((\operatorname{tr}A)A+2\sqrt{\det A}\,A\bigr)=A.
+\nonumber
+\end{align}
+Thus $C=A^{1/2}$ by uniqueness of the positive semidefinite square root.\\
+\hlt{Structural Commentary}: In dimension $2$, Cayley--Hamilton makes $A^{1/2}$ linear in $A$.\\
+\hlt{Key Insight}: Square the linear candidate and use Cayley--Hamilton.
+\end{proof}
+\end{proposition}
+
 \begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
 For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, a factorisation
 \begin{align}
@@ -79,12 +94,8 @@ Writing $V=[Q\ Q']$ with $Q$ the first $n$ columns gives $A=QR$, with $Q$ orthon
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item
-At step $k$, choose a Householder unitary $I_{k-1}\oplus U_k$ that sends the tail of the $k$th column to $r_{kk}\mathbf{e}_1$ with $r_{kk}\geq 0$, while preserving the earlier triangular columns. After $n$ steps,
-\begin{align}
-U_n\cdots U_1A=\begin{bmatrix}R\\0\end{bmatrix},
-\nonumber
-\end{align}
-where $R$ is upper triangular with nonnegative diagonal entries. Let $V=(U_n\cdots U_1)^*$. Then $A=V\begin{bmatrix}R\\0\end{bmatrix}$, and writing $V=[Q\ Q']$ gives $A=QR$ with $Q$ orthonormal columns. If $\operatorname{rank}(A)=n$, then $R$ is invertible, so its diagonal entries are positive.
+At step $k$, choose a Householder unitary $I_{k-1}\oplus U_k$ that sends the tail of the $k$th column to $r_{kk}\mathbf{e}_1$ with $r_{kk}\geq 0$, while preserving the earlier triangular columns. After $n$ steps, $U_n\cdots U_1A=\begin{bmatrix}R\\0\end{bmatrix}$, where $R$ is upper triangular with nonnegative diagonal entries.\\
+Let $V=(U_n\cdots U_1)^*$. Then $A=V\begin{bmatrix}R\\0\end{bmatrix}$, and writing $V=[Q\ Q']$ gives $A=QR$ with $Q$ orthonormal columns. If $\operatorname{rank}(A)=n$, then $R$ is invertible, so its diagonal entries are positive.
 \item
 Suppose $A=Q_1R_1=Q_2R_2$, where $Q_i^*Q_i=I_n$ and the $R_i$ are upper triangular with positive diagonal entries. Then $A^*A=R_1^*R_1=R_2^*R_2$. Let $D=R_1R_2^{-1}$. Substituting $R_1=DR_2$ gives $D^*D=I_n$. Thus $D$ is upper triangular and unitary, hence diagonal with entries of modulus $1$. Its diagonal entries are positive, so $D=I_n$. Therefore $R_1=R_2$, and then $Q_1=Q_2$.
 \end{enumerate}
@@ -119,3 +130,19 @@ Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also
 \hlt{Key Insight}: Project onto $Q$, then solve triangularly.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
+\begin{proof}
+Let $B=A^{1/2}$ and take a QR factorisation $B=QR$ with $R$ upper triangular and diagonal entries nonnegative. Then $A=B^*B=R^*R$, thus $L=R^*$ works. If $A\succ0$, then $L$ is invertible, so its diagonal entries are positive. If $A=L_1L_1^*=L_2L_2^*$ with positive diagonal and $R_i=L_i^*$, then $B=Q_iR_i$ with $Q_i=BR_i^{-1}$ are QR factorisations of $B$. Uniqueness of QR gives $R_1=R_2$, hence $L_1=L_2$.\\
+\hlt{Structural Commentary}: Cholesky is QR applied to $A^{1/2}$.\\
+\hlt{Key Insight}: Triangularise the square root, then set $L=R^*$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/cholesky_from_qr.tikz}
+  \caption{Apply QR to $B=A^{1/2}$; then $A=R^*R=LL^*$, with uniqueness in the positive definite case.}
+  \label{fig:cholesky-from-qr}
+\end{figure}
