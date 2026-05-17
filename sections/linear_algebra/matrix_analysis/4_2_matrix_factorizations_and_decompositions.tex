@@ -22,15 +22,6 @@ Then $SP\mathbf{v}=S_1(P\mathbf{v})=T\mathbf{v}$ for every $\mathbf{v}$, so $T=S
   \label{fig:polar-decomposition-operator}
 \end{figure}
 
-\begin{proposition} \label{prop:absolute-determinant-positive-polar-factor} \hlt{Absolute Determinant Comes from the Positive Polar Factor}\\
-For $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\abs{\det T}=\det\sqrt{T^*T}$.
-\begin{proof}
-By Theorem \ref{thm:polar-decomposition}, $T=S\sqrt{T^*T}$ for some isometry $S$. Hence $\abs{\det T} =\abs{\det S}\,\abs{\det\sqrt{T^*T}} =\det\sqrt{T^*T}$, where Proposition \ref{prop:isometry-determinant-absolute-one} gives $\abs{\det S}=1$, and positivity of $\sqrt{T^*T}$ gives nonnegative determinant.\\
-\hlt{Structural Commentary}: Polar decomposition isolates stretch; only the positive factor changes volume.\\
-\hlt{Key Insight}: Determinant sign or phase belongs to the isometric part; volume belongs to the positive part.
-\end{proof}
-\end{proposition}
-
 \begin{definition} \label{def:singular-values} \hlt{Singular Values}\\
 For $T\in\LL(\mathcal{V})$, \hlt{singular values} of $T$ are eigenvalues of $\sqrt{T^*T}$, where each eigenvalue $\lambda$ is repeated $\dim E_{\lambda}(\sqrt{T^*T})$.
 \end{definition}
@@ -262,6 +253,15 @@ Omit zero-singular directions for compact SVD.
 \end{enumerate}
 \end{method}
 
+\begin{proposition} \label{prop:absolute-determinant-positive-polar-factor} \hlt{Absolute Determinant Comes from the Positive Polar Factor}\\
+For $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\abs{\det T}=\det\sqrt{T^*T}$.
+\begin{proof}
+By Theorem \ref{thm:polar-decomposition}, $T=S\sqrt{T^*T}$ for some isometry $S$. Hence $\abs{\det T} =\abs{\det S}\,\abs{\det\sqrt{T^*T}} =\det\sqrt{T^*T}$, where Proposition \ref{prop:isometry-determinant-absolute-one} gives $\abs{\det S}=1$, and positivity of $\sqrt{T^*T}$ gives nonnegative determinant.\\
+\hlt{Structural Commentary}: Polar decomposition isolates stretch; only the positive factor changes volume.\\
+\hlt{Key Insight}: Determinant sign or phase belongs to the isometric part; volume belongs to the positive part.
+\end{proof}
+\end{proposition}
+
 \begin{theorem} \label{thm:linear-map-volume-scaling-determinant} \hlt{Linear Maps Scale Volume by $\abs{\det T}$}\\
 Let $T\in\LL(\mathbb{R}^n)$ and let $\Omega\subseteq\mathbb{R}^n$ be a sufficiently regular measurable set. Then $\operatorname{vol}(T(\Omega))=\abs{\det T}\operatorname{vol}(\Omega)$.
 \begin{proof}
@@ -367,39 +367,6 @@ Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also
 \end{proof}
 \end{proposition}
 
-Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
-
-\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if
-\begin{align}
-a_{ij}=0\qquad\text{whenever } i>j+1.
-\nonumber
-\end{align}
-Equivalently, all entries below the first subdiagonal are zero.
-\end{definition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
-  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
-  \label{fig:upper-hessenberg-pattern}
-\end{figure}
-
-\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
-Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
-\begin{proof}
-Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
-Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
-After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
-\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
-\hlt{Key Insight}: Kill one column tail at a time.
-\end{proof}
-\end{theorem}
-
-\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
-Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
-\end{perspective}
-
 \begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
 \begin{proof}
@@ -414,4 +381,13 @@ Let $B=A^{1/2}$ and take a QR factorisation $B=QR$ with $R$ upper triangular and
   \input{figures/linear_algebra/cholesky_from_qr.tikz}
   \caption{Apply QR to $B=A^{1/2}$; then $A=R^*R=LL^*$, with uniqueness in the positive definite case.}
   \label{fig:cholesky-from-qr}
+\end{figure}
+
+Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
+  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
+  \label{fig:upper-hessenberg-pattern}
 \end{figure}
