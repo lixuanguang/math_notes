@@ -354,6 +354,75 @@ For same size matrices, addition and scalar multiplication are defined $(A+C)_{j
 If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,p,\mathbb{F})$, then $AB\in\operatorname{Mat}(m,p,\mathbb{F})$ is defined $(AB)_{j,k}\defeq\sum\limits_{r=1}^n A_{j,r}B_{r,k}$.
 \end{definition}
 
+\begin{definition} \label{def:matrix-trace-and-determinant} \hlt{Trace and Determinant of a Matrix}\\
+For $A=[A_{j,k}]\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{trace} of $A$ is $\operatorname{tr}(A)\defeq A_{1,1}+\cdots+A_{n,n}$.\\
+Let $\mathfrak{S}_n$ denote the set of permutations of $\{1,\ldots,n\}$. The \hlt{sign} of $\sigma\in\mathfrak{S}_n$ is $\sign(\sigma)=1$ if the number of pairs $j<k$ with $\sigma(j)>\sigma(k)$ is even, and $\sign(\sigma)=-1$ otherwise.\\
+The \hlt{determinant} of $A$ is $\det A \defeq \sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.
+\end{definition}
+
+\begin{proposition} \label{prop:trace-cyclicity-two-factors} \hlt{Trace Is Cyclic for Two Factors}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,m,\mathbb{F})$, then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.
+\begin{proof}
+Expand both traces by entries: $\operatorname{tr}(AB) =\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{n}A_{j,k}B_{k,j} =\sum\limits_{k=1}^{n}\sum\limits_{j=1}^{m}B_{k,j}A_{j,k} =\operatorname{tr}(BA)$.\\
+\hlt{Structural Commentary}: Cyclicity is just reindexing the same double sum.\\
+\hlt{Key Insight}: The two double sums contain exactly the same scalar terms.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:determinant-basic-laws} \hlt{Basic Determinant Laws}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=1$.
+\item $\det(A)$ is linear as a function of each column of $A$ when the other columns are fixed.
+\item Swapping two columns negates the determinant; equal columns force $\det A=0$.
+\item If $A$ is triangular, then $\det A=A_{1,1}\cdots A_{n,n}$.
+\item $\det(AB)=\det(A)\det(B)$.
+\item $A$ is invertible if and only if $\det A\neq0$. In that case $\det(A^{-1})=(\det A)^{-1}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)(I_n)_{\sigma(1),1}\cdots (I_n)_{\sigma(n),n}=1$ as product is nonzero only when $\sigma(k)=k \ \forall k$.
+\item For fixed $k$, $\det(A_{\cdot,1},\ldots,\mathbf{x},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)x_{\sigma(k)}\prod\limits_{\ell\neq k}A_{\sigma(\ell),\ell}$, which is linear in $\mathbf{x}$.
+\item If $B_{\cdot,k}=A_{\cdot,\tau(k)}$ for transposition $\tau$, then $\det B=\sum\limits_{\rho\in\mathfrak{S}_n}\sign(\rho\tau)\prod\limits_{k=1}^n A_{\rho(k),k} =-\det A$.\\
+If the swapped columns are equal, then $B=A$, so $\det A=-\det A$ and $\det A=0$.
+\item If $A$ is upper triangular and $\prod_{k=1}^n A_{\sigma(k),k}\neq0$, then $\sigma(k)\leq k$ for all $k$, hence $\sigma(k)=k$ for all $k$.\\
+Thus $\det A=A_{1,1}\cdots A_{n,n}$. The lower triangular case is analogous.
+\item If $F$ is alternating, multilinear in columns, then
+\begin{align}
+F(A_{\cdot,1},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)F(I_n)A_{\sigma(1),1}\cdots A_{\sigma(n),n} =F(I_n)\det A \nonumber
+\end{align}
+For $G(B)=\det(AB)$, the map $G$ is alternating multilinear and $G(I_n)=\det A$.\\
+Hence $\det(AB)=G(B)=G(I_n)\det B=\det(A)\det(B)$.
+\item If $A$ is invertible, then $1=\det I_n=\det(AA^{-1})=\det(A)\det(A^{-1})$.\\
+If $A_{\cdot,k}=\sum\limits_{\ell\neq k}c_\ell A_{\cdot,\ell}$, then $\det A=\sum\limits_{\ell\neq k}c_\ell\det(A_{\cdot,1},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,n})=0$.\\
+Thus $\det A\neq0$ iff the columns of $A$ are independent, iff $A$ is invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: The determinant is the normalized alternating multilinear measure of columns.\\
+\hlt{Key Insight}: Multilinearity expands columns; alternation kills repeated directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/determinant_column_geometry.tikz}
+  \caption{Determinant is signed column-volume; swaps reverse orientation and dependence gives zero volume.}
+  \label{fig:determinant-column-geometry}
+\end{figure}
+
+\begin{method} \label{meth:determinant-by-structure} \hlt{Determinant by Structure}\\
+To compute or simplify a determinant:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item first look for triangular or block triangular form;
+\item use column linearity to split complicated columns only when it reduces structure;
+\item use column swaps to move useful pivots into position, tracking a factor of $-1$ for each swap;
+\item detect zero determinants from dependent columns or repeated columns;
+\item for products or changes of basis, use multiplicativity instead of expanding permutations.
+\end{enumerate}
+\end{method}
+
 \begin{proposition} \label{prop:matrix-spaces-are-vector-spaces} \hlt{Matrix Spaces}\\
 For positive integers $m,n$, $\operatorname{Mat}(m,n,\mathbb{F})$ is a vector space over $\mathbb{F}$ with dimension $mn$.
 \begin{proof}
@@ -434,7 +503,7 @@ $[T]_{\gamma \leftarrow \beta} \defeq
 Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
 The \hlt{column space} of $A$ is $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and the \hlt{row space} of $A$ is $\operatorname{row}(A)\defeq\operatorname{col}(A^t)\subseteq\mathbb{F}^n$.\\
 The \hlt{column rank} of $A$ is $\dim(\operatorname{col}(A))$, the \hlt{row rank} of $A$ is $\dim(\operatorname{row}(A))$, and the \hlt{rank} of $A$ is $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$. If $\operatorname{rank}(A)=\min(m,n)$, then $A$ has \hlt{full rank}; if $\operatorname{rank}(A)=n$, then $A$ has \hlt{full column rank}; if $\operatorname{rank}(A)=m$, then $A$ has \hlt{full row rank}.\\
-The \hlt{kernel} of $A$ is $\ker(A)\defeq\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{0}\}$, and the \hlt{nullity} of $A$ is $\operatorname{nullity}(A)\defeq\dim(\ker(A))$.
+The \hlt{kernel} of $A$ is $\ker(A)\defeq\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{0}\}$; this is also called the \hlt{nullspace} of $A$. The \hlt{nullity} of $A$ is $\operatorname{nullity}(A)\defeq\dim(\ker(A))$.
 \end{definition}
 
 \begin{proposition} \label{prop:matrix-representation-respects-linear-combinations} \hlt{Matrices Respect Linear Combinations of Maps}\\
@@ -796,7 +865,18 @@ Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
 \begin{theorem} \label{thm:similarity-preserves-trace-and-determinant} \hlt{Trace and Determinant Are Similarity Invariants}\\
 If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are similar, then $\operatorname{tr}(A)=\operatorname{tr}(B)$, $\det(A)=\det(B)$.
 \begin{proof}
-Write $B=PAP^{-1}$ with $P$ invertible. Cyclicity of trace gives $\operatorname{tr}(B)=\operatorname{tr}(PAP^{-1})=\operatorname{tr}(AP^{-1}P)=\operatorname{tr}(A)$ and multiplicativity of determinant gives $\det(B)=\det(P)\det(A)\det(P^{-1})=\det(A)$.\\
+Write $B=PAP^{-1}$ with $P$ invertible. Proposition \ref{prop:trace-cyclicity-two-factors} gives
+\begin{align}
+\operatorname{tr}(B)=\operatorname{tr}\bigl(P(AP^{-1})\bigr)
+=\operatorname{tr}\bigl((AP^{-1})P\bigr)
+=\operatorname{tr}(A).
+\nonumber
+\end{align}
+Theorem \ref{thm:determinant-basic-laws} gives
+\begin{align}
+\det(B)=\det(P)\det(A)\det(P^{-1})=\det(A).
+\nonumber
+\end{align}
 \hlt{Structural Commentary}: Trace and determinant ignore the coordinate system used to write an operator.\\
 \hlt{Key Insight}: Conjugating by $P$ inserts $P$ and $P^{-1}$, which cancel inside trace and determinant.
 \end{proof}
