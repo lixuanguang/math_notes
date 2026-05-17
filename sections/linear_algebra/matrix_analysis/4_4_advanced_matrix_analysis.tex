@@ -167,6 +167,31 @@ To prove an entrywise product is positive semidefinite:
 \end{enumerate}
 \end{method}
 
+\begin{theorem} \label{thm:bauer-fike-eigenvalue-perturbation} \hlt{Bauer--Fike Eigenvalue Perturbation Bound}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be diagonalizable, with $A=S\Lambda S^{-1}$ and $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$.\\
+If $\Delta A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\mu\in\operatorname{spec}(A+\Delta A)$, then $\min_{1\leq j\leq n}\abs{\mu-\lambda_j} \leq \kappa_2(S)\norm{\Delta A}_2$.
+\begin{proof}
+If $\mu=\lambda_j$ for some $j$, the claim is immediate. Otherwise $\Lambda-\mu I_n$ is invertible.\\
+Since $\mu$ is an eigenvalue of $A+\Delta A$, the matrix $A+\Delta A-\mu I_n$ is singular.\\
+Conjugating gives $S^{-1}(A+\Delta A-\mu I_n)S =(\Lambda-\mu I_n)\left(I_n+(\Lambda-\mu I_n)^{-1}S^{-1}\Delta AS\right)$ so the second factor is singular.\\
+Lemma \ref{lem:small-spectral-norm-perturbation-invertible} implies $1\leq \norm{(\Lambda-\mu I_n)^{-1}S^{-1}\Delta AS}_2 \leq \frac{\norm{S^{-1}}_2\norm{\Delta A}_2\norm{S}_2}{\min_j\abs{\mu-\lambda_j}}$.
+Rearranging gives the bound.\\
+\hlt{Structural Commentary}: Diagonalize, then test how perturbation breaks shifted invertibility.\\
+\hlt{Key Insight}: Eigenvalue sensitivity is controlled by how ill-conditioned the eigenvector matrix $S$ is.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:bauer-fike-perturbation-method} \hlt{Bauer--Fike Perturbation Method}\\
+To bound eigenvalue movement for a diagonalizable matrix:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item diagonalize $A=S\Lambda S^{-1}$;
+\item estimate $\norm{\Delta A}_2$;
+\item compute or bound $\kappa_2(S)$;
+\item place every eigenvalue of $A+\Delta A$ inside the union of disks $\abs{z-\lambda_j}\leq\kappa_2(S)\norm{\Delta A}_2$.
+\end{enumerate}
+\end{method}
+
 \begin{theorem} \label{thm:brauer-rank-one-eigenvalue-shift} \hlt{Brauer Rank-One Eigenvalue Shift}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $A\mathbf{x}=\lambda\mathbf{x}$ with $\mathbf{x}\neq\mathbf{0}$, and let $\mathbf{y}\in\mathbb{C}^n$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$ with multiplicity, then the eigenvalues of $A+\mathbf{x}\mathbf{y}^*$ are $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$.\\
 Moreover, $\mathbf{x}$ is an eigenvector of $A+\mathbf{x}\mathbf{y}^*$ corresponding to $\lambda+\mathbf{y}^*\mathbf{x}$.
@@ -198,282 +223,6 @@ The eigenvalues of $\tau A$ are $\tau\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$
 \hlt{Key Insight}: Brauer's theorem changes one spectral coordinate without moving the rest.
 \end{proof}
 \end{corollary}
-
-\begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
-Let $M=
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
-If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
-\begin{proof}
-Block Gaussian elimination gives $\begin{bmatrix}
-I_r & -BD^{-1}\\
-0 & I_s
-\end{bmatrix}
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}
-=
-\begin{bmatrix}
-A-BD^{-1}C & 0\\
-C & D
-\end{bmatrix}$.\\
-The elimination matrix has determinant $1$, and the matrix on the right is lower block-triangular, so Theorem \ref{thm:block-upper-triangular-determinant} applied after transposition gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
-\hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
-\hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
-\end{proof}
-\end{proposition}
-
-\begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
-Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
-\begin{proof}
-Let $M=
-\begin{bmatrix}
-I_n & -A\\
-B & I_m
-\end{bmatrix}$.\\
-Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$ gives $\det(M)=\det(I_n+AB)$. Using Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$ gives $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
-\hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
-\hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:ab-ba-nonzero-eigenvalues} \hlt{Nonzero Eigenvalues of $AB$ and $BA$}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, $B\in\operatorname{Mat}(n,m,\mathbb{C})$, and suppose $n\geq m$. Then $p_{BA}(z)=z^{n-m}p_{AB}(z)$.\\
-Consequently, for $\lambda\neq0$, $m_{AB}(\lambda)=m_{BA}(\lambda)$. If $m_{AB}(0)=k$, then $m_{BA}(0)=k+n-m$.
-\begin{proof}
-For $z\neq0$, Sylvester's determinant identity gives
-\begin{align}
-\det(zI_n-BA) =z^n\det(I_n-z^{-1}BA) =z^n\det(I_m-z^{-1}AB) =z^{n-m}\det(zI_m-AB).
-\nonumber
-\end{align}
-Both sides are polynomials in $z$, so the identity holds for all $z$. The claimed multiplicities follow by factoring $p_{AB}$ and comparing with $p_{BA}=z^{n-m}p_{AB}$.\\
-\hlt{Structural Commentary}: Sylvester's determinant identity moves the rectangular product across the determinant.\\
-\hlt{Key Insight}: Passing from $AB$ to $BA$ only adds the necessary extra zero roots when the sizes differ.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:ab-ba-same-nonzero-jordan-blocks} \hlt{Nonzero Jordan Blocks of $AB$ and $BA$}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. For every $\lambda\neq0$, the Jordan blocks of $AB$ and $BA$ at $\lambda$ coincide.
-\begin{proof} Set $X=\begin{bmatrix}AB&A\\0&0\end{bmatrix}$ and $Y=\begin{bmatrix}0&A\\0&BA\end{bmatrix}$. Then $\begin{bmatrix}I_n&0\\B&I_n\end{bmatrix}
-X
-\begin{bmatrix}I_n&0\\-B&I_n\end{bmatrix}
-=Y$, so $X$ and $Y$ are similar.\\
-For $\lambda\neq0$ and $p\geq1$, the extra diagonal block in each shifted power is $(-\lambda)^pI_n$, hence invertible. Thus block row and column operations give
-\begin{align}
-\operatorname{rank}\bigl((X-\lambda I_{2n})^p\bigr)
-&=n+\operatorname{rank}\bigl((AB-\lambda I_n)^p\bigr), \nonumber\\
-\operatorname{rank}\bigl((Y-\lambda I_{2n})^p\bigr)
-&=n+\operatorname{rank}\bigl((BA-\lambda I_n)^p\bigr).
-\nonumber
-\end{align}
-Since $X$ and $Y$ are similar, these left sides agree for all $p$.\\
-Hence the shifted rank drops of $AB$ and $BA$ at $\lambda$ agree, so Theorem \ref{thm:jordan-block-sizes-from-rank-drops} gives the same Jordan blocks.\\
-\hlt{Structural Commentary}: Similar block embeddings make the nonzero shifted ranks match.\\
-\hlt{Key Insight}: At $\lambda\neq0$, the extra block is invertible and splits off.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/ab_ba_nonzero_jordan_blocks.tikz}
-  \caption{For $\lambda\neq0$, the auxiliary similarity reduces the comparison to shifted ranks of $AB$ and $BA$.}
-  \label{fig:ab-ba-nonzero-jordan-blocks}
-\end{figure}
-
-\begin{corollary} \label{cor:ab-ba-similar-rank-power-criterion} \hlt{Similarity Criterion for $AB$ and $BA$}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. $AB$ is similar to $BA$ if and only if $\operatorname{rank}\bigl((AB)^p\bigr)=\operatorname{rank}\bigl((BA)^p\bigr)$, $p=1,\ldots,n$.
-\begin{proof}
-If $AB$ and $BA$ are similar, then their powers are similar and have equal rank.\\
-Conversely, Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks} gives equality of all nonzero Jordan blocks. The displayed rank equalities, together with the trivial equality at $p=0$, give the same Weyr characteristic at $\lambda=0$ by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}. Hence the nilpotent Jordan blocks also agree, so the two Jordan forms are identical up to block order.\\
-\hlt{Structural Commentary}: Nonzero blocks agree automatically; only the nilpotent blocks must be tested.\\
-\hlt{Key Insight}: Powers of $AB$ and $BA$ measure exactly the zero-Jordan-block data.
-\end{proof}
-\end{corollary}
-
-\begin{method} \label{meth:checking-ab-ba-similarity} \hlt{Checking Whether $AB$ and $BA$ Are Similar}\\
-For $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item The nonzero Jordan blocks of $AB$ and $BA$ already match.
-\item Compute $\operatorname{rank}\bigl((AB)^p\bigr)$ and $\operatorname{rank}\bigl((BA)^p\bigr)$ for $p=1,\ldots,n$.
-\item If all ranks agree, then $AB\sim BA$; if some rank differs, then only the nilpotent Jordan structure differs.
-\end{enumerate}
-\end{method}
-
-\begin{corollary} \label{cor:hermitian-products-and-conjugate-products} \hlt{Hermitian Products and Conjugate Products}\\
-Let $A,H,K\in\operatorname{Mat}(n,n,\mathbb{C})$, and suppose $H$ and $K$ are Hermitian.\\
-Then $HK$ is similar to $KH$, and $A\overline{A}$ is similar to $\overline{A}A$.
-\begin{proof}
-For each $p=1,\ldots,n$, $\operatorname{rank}\bigl((HK)^p\bigr) =\operatorname{rank}\bigl(((HK)^p)^*\bigr) = \operatorname{rank}\bigl((KH)^p\bigr)$.\\
-Also, $\operatorname{rank}\bigl((A\overline{A})^p\bigr) =\operatorname{rank}\bigl(\overline{(A\overline{A})^p}\bigr) =\operatorname{rank}\bigl((\overline{A}A)^p\bigr)$. Apply Corollary \ref{cor:ab-ba-similar-rank-power-criterion} in both cases.\\
-\hlt{Structural Commentary}: Adjoint and conjugation preserve rank and reverse product order.\\
-\hlt{Key Insight}: The rank-power test turns order reversal into similarity.
-\end{proof}
-\end{corollary}
-
-\begin{theorem} \label{thm:conjugate-similarity-hermitian-product-equivalences} \hlt{Conjugate Similarity and Hermitian Products}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $A$ is similar to $\overline{A}$.
-\item $A$ is similar to $A^*$.
-\item $A$ is similar to $A^*$ via a Hermitian similarity matrix.
-\item $A=HK=LM$, where $H,K,L,M$ are Hermitian, and $H,M$ are invertible.
-\item $A=HK$ for some Hermitian matrices $H,K$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow(ii)$ Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations} applied to $\overline{A}$ gives $\overline{A}\sim(\overline{A})^t=A^*$. Thus $A\sim A^*$.
-\item[$(ii)$]$\Rightarrow(iii)$ Choose invertible $S$ such that $A=SA^*S^{-1}$, so $AS=SA^*$. For $\theta\in\mathbb{R}$, put $S_{\theta}=e^{i\theta}S$.\\
-Then $AS_{\theta}=S_{\theta}A^*$ and, by taking adjoints, $AS_{\theta}^*=S_{\theta}^*A^*$. Hence $A(S_{\theta}+S_{\theta}^*)=(S_{\theta}+S_{\theta}^*)A^*$.\\
-The matrix $H_{\theta}=S_{\theta}+S_{\theta}^*$ is Hermitian. Also $S_{\theta}^{-1}H_{\theta}=I_n+e^{-2i\theta}S^{-1}S^*$. Only finitely many values of $-e^{2i\theta}$ can be eigenvalues of $S^{-1}S^*$, so choose $\theta$ for which $H_{\theta}$ is invertible. Then $A=H_{\theta}A^*H_{\theta}^{-1}$.
-\item[$(iii)$]$\Rightarrow(iv)$ Let $R$ be invertible Hermitian and satisfy $A=RA^*R^{-1}$. Then $AR=RA^*$ and $R^{-1}A=A^*R^{-1}$.\\
-Thus $A^*R^{-1}$ and $RA^*$ are Hermitian, and $A=R(A^*R^{-1})=(RA^*)R^{-1}$.\\
-This gives the two asserted Hermitian factorizations, with the first factor in the first product and the second factor in the second product invertible.
-\item[$(iv)$]$\Rightarrow(v)$ Immediate.
-\item[$(v)$]$\Rightarrow(i)$ If $A=HK$ with $H,K$ Hermitian, then Corollary \ref{cor:hermitian-products-and-conjugate-products} gives $HK\sim KH$.\\
-By Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations}, $KH\sim (KH)^t=H^tK^t=\overline{H}\,\overline{K}=\overline{A}$. Hence $A\sim\overline{A}$.
-\end{enumerate}
-\hlt{Structural Commentary}: The equivalences move between conjugation, adjoints, and Hermitian products by combining transpose similarity with a Hermitianized similarity matrix.\\
-\hlt{Key Insight}: A phase-rotated average $e^{i\theta}S+e^{-i\theta}S^*$ turns an arbitrary similarity to $A^*$ into a Hermitian one.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/conjugate_similarity_hermitian_products.tikz}
-  \caption{Conjugate similarity, adjoint similarity, and Hermitian product factorisations are equivalent.}
-  \label{fig:conjugate-similarity-hermitian-products}
-\end{figure}
-
-\begin{proposition} \label{prop:block-centrosymmetric-commutation} \hlt{Block Centrosymmetry and Commutation}\\
-Let $M=
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}\in\operatorname{Mat}(2n,2n,\mathbb{F})$,
-$L_{2n}=
-\begin{bmatrix}
-0 & I_n\\
-I_n & 0
-\end{bmatrix}$.\\
-Then $M$ has block centrosymmetric form $A=D$ and $B=C$ if and only if $L_{2n}M=ML_{2n}$.
-\begin{proof}
-Block multiplication gives $L_{2n}M=
-\begin{bmatrix}
-C & D\\
-A & B
-\end{bmatrix}$ and 
-$ML_{2n}=
-\begin{bmatrix}
-B & A\\
-D & C
-\end{bmatrix}$.\\
-The two matrices are equal exactly when $A=D$ and $B=C$.\\
-\hlt{Structural Commentary}: The matrix $L_{2n}$ swaps the two block coordinates. Commuting with that swap means $M$ treats the two block positions symmetrically.\\
-\hlt{Key Insight}: Compute both block products; equality forces matching opposite blocks.
-\end{proof}
-\end{proposition}
-
-\begin{theorem} \label{thm:frobenius-rank-inequality} \hlt{Frobenius Rank Inequality}\\
-Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,p,\mathbb{F})$, and $C\in\operatorname{Mat}(p,n,\mathbb{F})$. $\operatorname{rank}(AB)+\operatorname{rank}(BC) \leq \operatorname{rank}(B)+\operatorname{rank}(ABC)$.
-\begin{proof}
-Let $R=\operatorname{col}(B)$ and $S=\operatorname{col}(BC)$. Then $S\subseteq R$. The induced map $T_A$ maps $R$ onto $\operatorname{col}(AB)$ and maps $S$ onto $\operatorname{col}(ABC)$. Rank-nullity on the restrictions $T_A|_R$ and $T_A|_S$ gives
-\begin{align}
-\operatorname{rank}(AB)&=\dim R-\dim(R\cap\ker A), \nonumber\\
-\operatorname{rank}(ABC)&=\dim S-\dim(S\cap\ker A). \nonumber
-\end{align}
-Since $S\cap\ker A\subseteq R\cap\ker A$, we have $\dim(S\cap\ker A)\leq\dim(R\cap\ker A)$.\\
-Substituting $\dim R=\operatorname{rank}(B)$ and $\dim S=\operatorname{rank}(BC)$ gives the stated inequality.\\
-\hlt{Structural Commentary}: Frobenius tracks $A$ on nested column spaces.\\
-\hlt{Key Insight}: The smaller column space cannot lose more dimensions to $\ker A$ than the larger one.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:frobenius-rank-inequality-special-cases} \hlt{Rank Inequalities from Frobenius}\\
-The following are special cases of Theorem \ref{thm:frobenius-rank-inequality}:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-$\operatorname{rank}(AB)\leq\min(\operatorname{rank}(A),\operatorname{rank}(B))$;
-\item
-$\operatorname{rank}(A)+\operatorname{rank}(B)-k\leq\operatorname{rank}(AB)$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-Apply Frobenius to generic factors $X,Y,Z$. Taking $Z=0$ gives $\operatorname{rank}(XY)\leq\operatorname{rank}(Y)$, and taking $X=0$ gives $\operatorname{rank}(YZ)\leq\operatorname{rank}(Y)$. Renaming the factors gives $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$ and $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$.
-\item
-Taking the middle matrix to be $I_k$ gives $\operatorname{rank}(A)+\operatorname{rank}(B)\leq k+\operatorname{rank}(AB)$, which is Sylvester's inequality.
-\end{enumerate}
-\hlt{Structural Commentary}: Frobenius is the three-factor parent inequality. The usual upper and lower product-rank bounds appear by making one factor zero or identity.\\
-\hlt{Key Insight}: Zero factors isolate upper bounds; an identity middle factor yields the Sylvester lower bound.
-\end{proof}
-\end{corollary}
-
-\begin{proposition} \label{prop:sylvester-law-of-nullity} \hlt{Sylvester's Law of Nullity}\\
-For a matrix $X$, let $\operatorname{nullity}(X)=\dim(\ker X)$; this is the dimension of its nullspace.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item If $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$, then $\operatorname{nullity}(AB)\leq\operatorname{nullity}(A)+\operatorname{nullity}(B)$
-\item
-If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-By rank-nullity and Theorem \ref{thm:sylvester-rank-inequality},
-\begin{align*}
-\operatorname{nullity}(AB) &=n-\operatorname{rank}(AB) \leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k \\
-&=(k-\operatorname{rank}(A))+(n-\operatorname{rank}(B)) =\operatorname{nullity}(A)+\operatorname{nullity}(B).
-\end{align*}
-\item For square $A,B$, $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$, $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$. Subtract from $n$ gives desired lower bounds.
-\end{enumerate}
-\hlt{Structural Commentary}: Nullity is rank loss from the domain.\\
-\hlt{Key Insight}: Use rank-nullity to translate rank bounds into kernel bounds.
-\end{proof}
-\end{proposition}
-
-\begin{lemma} \label{lem:small-spectral-norm-perturbation-invertible} \hlt{Small Spectral-Norm Perturbations of the Identity}\\
-If $E\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\norm{E}_2<1$, then $I_n+E$ is invertible.
-\begin{proof}
-Theorem \ref{thm:eigenvalues-versus-singular-values} gives $\rho(E)\leq\norm{E}_2<1$, so $-1\notin\operatorname{spec}(E)$.\\
-Hence $0\notin\operatorname{spec}(I_n+E)$, and $I_n+E$ is invertible.\\
-\hlt{Structural Commentary}: Spectral-norm smallness traps every eigenvalue inside the unit disk.\\
-\hlt{Key Insight}: If $-1$ is not an eigenvalue of $E$, then $I+E$ has no kernel.
-\end{proof}
-\end{lemma}
-
-\begin{theorem} \label{thm:bauer-fike-eigenvalue-perturbation} \hlt{Bauer--Fike Eigenvalue Perturbation Bound}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be diagonalizable, with $A=S\Lambda S^{-1}$ and $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$.\\
-If $\Delta A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\mu\in\operatorname{spec}(A+\Delta A)$, then $\min_{1\leq j\leq n}\abs{\mu-\lambda_j} \leq \kappa_2(S)\norm{\Delta A}_2$.
-\begin{proof}
-If $\mu=\lambda_j$ for some $j$, the claim is immediate. Otherwise $\Lambda-\mu I_n$ is invertible.\\
-Since $\mu$ is an eigenvalue of $A+\Delta A$, the matrix $A+\Delta A-\mu I_n$ is singular.\\
-Conjugating gives $S^{-1}(A+\Delta A-\mu I_n)S =(\Lambda-\mu I_n)\left(I_n+(\Lambda-\mu I_n)^{-1}S^{-1}\Delta AS\right)$ so the second factor is singular.\\
-Lemma \ref{lem:small-spectral-norm-perturbation-invertible} implies $1\leq \norm{(\Lambda-\mu I_n)^{-1}S^{-1}\Delta AS}_2 \leq \frac{\norm{S^{-1}}_2\norm{\Delta A}_2\norm{S}_2}{\min_j\abs{\mu-\lambda_j}}$.
-Rearranging gives the bound.\\
-\hlt{Structural Commentary}: Diagonalize, then test how perturbation breaks shifted invertibility.\\
-\hlt{Key Insight}: Eigenvalue sensitivity is controlled by how ill-conditioned the eigenvector matrix $S$ is.
-\end{proof}
-\end{theorem}
-
-\begin{method} \label{meth:bauer-fike-perturbation-method} \hlt{Bauer--Fike Perturbation Method}\\
-To bound eigenvalue movement for a diagonalizable matrix:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item diagonalize $A=S\Lambda S^{-1}$;
-\item estimate $\norm{\Delta A}_2$;
-\item compute or bound $\kappa_2(S)$;
-\item place every eigenvalue of $A+\Delta A$ inside the union of disks $\abs{z-\lambda_j}\leq\kappa_2(S)\norm{\Delta A}_2$.
-\end{enumerate}
-\end{method}
 
 \begin{definition} \label{def:gersgorin-disks} \hlt{Gersgorin Disks}\\
 Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{deleted absolute row sum} in row $k$ is $R'_k(A)\defeq\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
@@ -578,43 +327,6 @@ Hence all inequalities are equalities. Since no $a_{kj}$ vanishes, $\abs{x_j}=\n
 \hlt{Key Insight}: One strict row breaks that equality pattern.
 \end{proof}
 \end{theorem}
-
-Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
-
-\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if
-\begin{align}
-a_{ij}=0\qquad\text{whenever } i>j+1.
-\nonumber
-\end{align}
-Equivalently, all entries below the first subdiagonal are zero.
-\end{definition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
-  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
-  \label{fig:upper-hessenberg-pattern}
-\end{figure}
-
-\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
-Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
-\begin{proof}
-Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
-Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
-After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
-\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
-\hlt{Key Insight}: Kill one column tail at a time.
-\end{proof}
-\end{theorem}
-
-\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
-Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
-\end{perspective}
-
-\begin{definition} \label{def:increasing-hermitian-eigenvalue-ordering} \hlt{Increasing Hermitian Eigenvalue Order}\\
-For a Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$, write $\lambda_1(A)\leq\lambda_2(A)\leq\cdots\leq\lambda_n(A)$ for its eigenvalues counted with algebraic multiplicity. If only one Hermitian matrix is under discussion, we write $\lambda_i$ instead of $\lambda_i(A)$.
-\end{definition}
 
 \begin{theorem} \label{thm:rayleigh-quotient-spectral-interval} \hlt{Rayleigh Quotient on a Spectral Interval}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$. If $1\leq p\leq q\leq n$ and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ is a unit vector, then $\lambda_p\leq \mathbf{x}^*A\mathbf{x}\leq \lambda_q$.
@@ -793,6 +505,11 @@ To bound eigenvalues of $A+B$:
 \item for positive semidefinite or low-rank $B$, insert the known zero or nonnegative eigenvalues to recover monotonicity or interlacing.
 \end{enumerate}
 \end{method}
+
+\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
+A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
+\end{definition}
 
 \begin{theorem} \label{thm:sylvester-positive-definite-criterion-leading-minors} \hlt{Sylvester's Criterion}\\
 A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite if and only if all leading principal minors are positive.

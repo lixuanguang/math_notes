@@ -594,6 +594,67 @@ Since $A$ has $k$ columns, Corollary \ref{cor:matrix-rank-nullity} gives $\dim(\
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:frobenius-rank-inequality} \hlt{Frobenius Rank Inequality}\\
+Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,p,\mathbb{F})$, and $C\in\operatorname{Mat}(p,n,\mathbb{F})$. $\operatorname{rank}(AB)+\operatorname{rank}(BC) \leq \operatorname{rank}(B)+\operatorname{rank}(ABC)$.
+\begin{proof}
+Let $R=\operatorname{col}(B)$ and $S=\operatorname{col}(BC)$. Then $S\subseteq R$. The induced map $T_A$ maps $R$ onto $\operatorname{col}(AB)$ and maps $S$ onto $\operatorname{col}(ABC)$. Rank-nullity on the restrictions $T_A|_R$ and $T_A|_S$ gives
+\begin{align}
+\operatorname{rank}(AB)&=\dim R-\dim(R\cap\ker A), \nonumber\\
+\operatorname{rank}(ABC)&=\dim S-\dim(S\cap\ker A). \nonumber
+\end{align}
+Since $S\cap\ker A\subseteq R\cap\ker A$, we have $\dim(S\cap\ker A)\leq\dim(R\cap\ker A)$.\\
+Substituting $\dim R=\operatorname{rank}(B)$ and $\dim S=\operatorname{rank}(BC)$ gives the stated inequality.\\
+\hlt{Structural Commentary}: Frobenius tracks $A$ on nested column spaces.\\
+\hlt{Key Insight}: The smaller column space cannot lose more dimensions to $\ker A$ than the larger one.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:frobenius-rank-inequality-special-cases} \hlt{Rank Inequalities from Frobenius}\\
+The following are special cases of Theorem \ref{thm:frobenius-rank-inequality}:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+$\operatorname{rank}(AB)\leq\min(\operatorname{rank}(A),\operatorname{rank}(B))$;
+\item
+$\operatorname{rank}(A)+\operatorname{rank}(B)-k\leq\operatorname{rank}(AB)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Apply Frobenius to generic factors $X,Y,Z$. Taking $Z=0$ gives $\operatorname{rank}(XY)\leq\operatorname{rank}(Y)$, and taking $X=0$ gives $\operatorname{rank}(YZ)\leq\operatorname{rank}(Y)$. Renaming the factors gives $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$ and $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$.
+\item
+Taking the middle matrix to be $I_k$ gives $\operatorname{rank}(A)+\operatorname{rank}(B)\leq k+\operatorname{rank}(AB)$, which is Sylvester's inequality.
+\end{enumerate}
+\hlt{Structural Commentary}: Frobenius is the three-factor parent inequality. The usual upper and lower product-rank bounds appear by making one factor zero or identity.\\
+\hlt{Key Insight}: Zero factors isolate upper bounds; an identity middle factor yields the Sylvester lower bound.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:sylvester-law-of-nullity} \hlt{Sylvester's Law of Nullity}\\
+For a matrix $X$, let $\operatorname{nullity}(X)=\dim(\ker X)$; this is the dimension of its nullspace.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$, then $\operatorname{nullity}(AB)\leq\operatorname{nullity}(A)+\operatorname{nullity}(B)$
+\item
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+By rank-nullity and Theorem \ref{thm:sylvester-rank-inequality},
+\begin{align*}
+\operatorname{nullity}(AB) &=n-\operatorname{rank}(AB) \leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k \\
+&=(k-\operatorname{rank}(A))+(n-\operatorname{rank}(B)) =\operatorname{nullity}(A)+\operatorname{nullity}(B).
+\end{align*}
+\item For square $A,B$, $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$, $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$. Subtract from $n$ gives desired lower bounds.
+\end{enumerate}
+\hlt{Structural Commentary}: Nullity is rank loss from the domain.\\
+\hlt{Key Insight}: Use rank-nullity to translate rank bounds into kernel bounds.
+\end{proof}
+\end{proposition}
+
 \begin{theorem} \label{thm:rank-triangle-inequality} \hlt{Rank Triangle Inequality}\\
 If $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, then $\abs{\operatorname{rank}(A)-\operatorname{rank}(B)} \leq \operatorname{rank}(A+B) \leq \operatorname{rank}(A)+\operatorname{rank}(B)$.
 \begin{proof}
@@ -954,6 +1015,35 @@ Each displayed block consists of the same entries obtained by ordinary entrywise
 \end{proof}
 \end{proposition}
 
+\begin{proposition} \label{prop:block-centrosymmetric-commutation} \hlt{Block Centrosymmetry and Commutation}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}\in\operatorname{Mat}(2n,2n,\mathbb{F})$,
+$L_{2n}=
+\begin{bmatrix}
+0 & I_n\\
+I_n & 0
+\end{bmatrix}$.\\
+Then $M$ has block centrosymmetric form $A=D$ and $B=C$ if and only if $L_{2n}M=ML_{2n}$.
+\begin{proof}
+Block multiplication gives $L_{2n}M=
+\begin{bmatrix}
+C & D\\
+A & B
+\end{bmatrix}$ and 
+$ML_{2n}=
+\begin{bmatrix}
+B & A\\
+D & C
+\end{bmatrix}$.\\
+The two matrices are equal exactly when $A=D$ and $B=C$.\\
+\hlt{Structural Commentary}: The matrix $L_{2n}$ swaps the two block coordinates. Commuting with that swap means $M$ treats the two block positions symmetrically.\\
+\hlt{Key Insight}: Compute both block products; equality forces matching opposite blocks.
+\end{proof}
+\end{proposition}
+
 \begin{definition} \hlt{Direct Sum of Matrices}\\
 For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(p,q,\mathbb{F})$, the \hlt{direct sum} of $A$ and $B$ is
 \begin{align}
@@ -1070,6 +1160,47 @@ The elimination matrix has determinant $1$ by Theorem \ref{thm:block-upper-trian
 \hlt{Key Insight}: Eliminating $C$ splits the determinant into $\det(A)$ times the remaining block determinant.
 \end{proof}
 \end{proposition}
+
+\begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
+If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
+\begin{proof}
+Block Gaussian elimination gives $\begin{bmatrix}
+I_r & -BD^{-1}\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A-BD^{-1}C & 0\\
+C & D
+\end{bmatrix}$.\\
+The elimination matrix has determinant $1$, and the matrix on the right is lower block-triangular, so Theorem \ref{thm:block-upper-triangular-determinant} applied after transposition gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
+\hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
+\hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
+Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
+\begin{proof}
+Let $M=
+\begin{bmatrix}
+I_n & -A\\
+B & I_m
+\end{bmatrix}$.\\
+Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$ gives $\det(M)=\det(I_n+AB)$. Using Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$ gives $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
+\hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
+\hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
+\end{proof}
+\end{theorem}
 
 \begin{proposition} \label{prop:bordered-determinant-formulas} \hlt{Bordered Determinant Formulas}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and let $c\in\mathbb{F}$.

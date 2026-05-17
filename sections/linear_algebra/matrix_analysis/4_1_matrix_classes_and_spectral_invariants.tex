@@ -80,6 +80,17 @@ It is \hlt{positive definite}, written $A\succ0$, if $A=A^*$ and $\mathbf{x}^*A\
 Negative semidefinite and negative definite mean $-A\succeq0$ and $-A\succ0$, respectively.
 \end{definition}
 
+\begin{proposition} \label{prop:gram-matrix-positive-semidefinite} \hlt{Gram Matrices Are Hermitian Positive Semidefinite}\\
+For any vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$, the Gram matrix $G(\mathbf{u}_1,\ldots,\mathbf{u}_n)$ is Hermitian and positive semidefinite. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, then it is positive definite.
+\begin{proof}
+Hermitian symmetry follows from conjugate symmetry of the inner product.\\
+For $\mathbf{c}=[c_1\ \cdots\ c_n]^t$, $\mathbf{c}^*G(\mathbf{u}_1,\ldots,\mathbf{u}_n)\mathbf{c} =\norm{\sum\limits_{j=1}^{n}c_j\mathbf{u}_j}^2\geq0$.\\
+If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, the squared norm above is $0$ only when all $c_j=0$, so $G$ is positive definite.\\
+\hlt{Structural Commentary}: A Gram matrix records every pairwise inner product in a list of vectors.\\
+\hlt{Key Insight}: The quadratic form of a Gram matrix is exactly the squared norm of a linear combination.
+\end{proof}
+\end{proposition}
+
 \begin{theorem} \label{thm:positive-semidefinite-matrix-equivalences} \hlt{Equivalent Forms of Positive Semidefiniteness}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
@@ -210,11 +221,6 @@ A
   \label{fig:principal-block-column-inclusion}
 \end{figure}
 
-\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
-A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
-\end{definition}
-
 \begin{corollary} \label{cor:positive-semidefinite-zero-quadratic-form} \hlt{Zero Quadratic Form Detects the Kernel}\\
 If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\mathbf{x}^*A\mathbf{x}=0$ if and only if $A\mathbf{x}=0$.
 \begin{proof}
@@ -248,6 +254,21 @@ Let $A,B\succeq0$ over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Whenever the ex
 \hlt{Key Insight}: Test the quadratic form after each construction.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:two-by-two-positive-semidefinite-square-root} \hlt{Explicit Square Root for a $2\times2$ Positive Semidefinite Matrix}\\
+Let $A\in\operatorname{Mat}(2,2,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, be positive semidefinite and nonzero. Set $\tau=\bigl(\operatorname{tr}A+2\sqrt{\det A}\bigr)^{1/2}$.\\
+Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$
+\begin{proof}
+Let $C=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$. By Proposition \ref{prop:trace-determinant-positive-semidefinite}, $\det A\geq0$ and $\operatorname{tr}A>0$, hence $\tau>0$; by Theorem \ref{thm:positive-semidefinite-stability-rules}, $C\succeq0$. Cayley--Hamilton gives $A^2-(\operatorname{tr}A)A+(\det A)I_2=0$, so
+\begin{align}
+C^2 =\frac{1}{\tau^2}\bigl(A^2+2\sqrt{\det A}\,A+(\det A)I_2\bigr) =\frac{1}{\tau^2}\bigl((\operatorname{tr}A)A+2\sqrt{\det A}\,A\bigr)=A.
+\nonumber
+\end{align}
+Thus $C=A^{1/2}$ by uniqueness of the positive semidefinite square root.\\
+\hlt{Structural Commentary}: In dimension $2$, Cayley--Hamilton makes $A^{1/2}$ linear in $A$.\\
+\hlt{Key Insight}: Square the linear candidate and use Cayley--Hamilton.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:simultaneous-congruence-one-positive-definite-form} \hlt{Simultaneous Congruence with One Positive Definite Form}\\
 Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be Hermitian, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and let $A\succ0$.\\
@@ -378,13 +399,3 @@ The entries $d_j=e^{i\theta}$ count exactly the eigenvalues on the ray $\{\rho e
 \begin{perspective} \label{per:hermitian-inertia-as-real-phase-inertia} \hlt{Hermitian Inertia as Real Phase Inertia}\\
 For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes. Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
 \end{perspective}
-
-\begin{corollary} \label{cor:eigenvalues-of-inverse-matrix} \hlt{Eigenvalues of the Inverse}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be invertible with eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity. Then $A^{-1}$ has eigenvalues $\lambda_1^{-1},\ldots,\lambda_n^{-1}$, counted with algebraic multiplicity.
-\begin{proof}
-Take a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
-Then $A^{-1}=UT^{-1}U^*$, and $T^{-1}$ is upper triangular with diagonal $\lambda_1^{-1},\ldots,\lambda_n^{-1}$.\\
-\hlt{Structural Commentary}: Invert the Schur form and read the diagonal.\\
-\hlt{Key Insight}: The inverse spectrum is the reciprocal spectrum.
-\end{proof}
-\end{corollary}

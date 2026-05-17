@@ -990,12 +990,86 @@ For each eigenvalue $\lambda$ of $A\in\operatorname{Mat}(n,n,\mathbb{C})$:
 \end{enumerate}
 \end{method}
 
+\begin{theorem} \label{thm:ab-ba-nonzero-eigenvalues} \hlt{Nonzero Eigenvalues of $AB$ and $BA$}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, $B\in\operatorname{Mat}(n,m,\mathbb{C})$, and suppose $n\geq m$. Then $p_{BA}(z)=z^{n-m}p_{AB}(z)$.\\
+Consequently, for $\lambda\neq0$, $m_{AB}(\lambda)=m_{BA}(\lambda)$. If $m_{AB}(0)=k$, then $m_{BA}(0)=k+n-m$.
+\begin{proof}
+For $z\neq0$, Sylvester's determinant identity gives
+\begin{align}
+\det(zI_n-BA) =z^n\det(I_n-z^{-1}BA) =z^n\det(I_m-z^{-1}AB) =z^{n-m}\det(zI_m-AB).
+\nonumber
+\end{align}
+Both sides are polynomials in $z$, so the identity holds for all $z$. The claimed multiplicities follow by factoring $p_{AB}$ and comparing with $p_{BA}=z^{n-m}p_{AB}$.\\
+\hlt{Structural Commentary}: Sylvester's determinant identity moves the rectangular product across the determinant.\\
+\hlt{Key Insight}: Passing from $AB$ to $BA$ only adds the necessary extra zero roots when the sizes differ.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:ab-ba-same-nonzero-jordan-blocks} \hlt{Nonzero Jordan Blocks of $AB$ and $BA$}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. For every $\lambda\neq0$, the Jordan blocks of $AB$ and $BA$ at $\lambda$ coincide.
+\begin{proof} Set $X=\begin{bmatrix}AB&A\\0&0\end{bmatrix}$ and $Y=\begin{bmatrix}0&A\\0&BA\end{bmatrix}$. Then $\begin{bmatrix}I_n&0\\B&I_n\end{bmatrix}
+X
+\begin{bmatrix}I_n&0\\-B&I_n\end{bmatrix}
+=Y$, so $X$ and $Y$ are similar.\\
+For $\lambda\neq0$ and $p\geq1$, the extra diagonal block in each shifted power is $(-\lambda)^pI_n$, hence invertible. Thus block row and column operations give
+\begin{align}
+\operatorname{rank}\bigl((X-\lambda I_{2n})^p\bigr)
+&=n+\operatorname{rank}\bigl((AB-\lambda I_n)^p\bigr), \nonumber\\
+\operatorname{rank}\bigl((Y-\lambda I_{2n})^p\bigr)
+&=n+\operatorname{rank}\bigl((BA-\lambda I_n)^p\bigr).
+\nonumber
+\end{align}
+Since $X$ and $Y$ are similar, these left sides agree for all $p$.\\
+Hence the shifted rank drops of $AB$ and $BA$ at $\lambda$ agree, so Theorem \ref{thm:jordan-block-sizes-from-rank-drops} gives the same Jordan blocks.\\
+\hlt{Structural Commentary}: Similar block embeddings make the nonzero shifted ranks match.\\
+\hlt{Key Insight}: At $\lambda\neq0$, the extra block is invertible and splits off.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/ab_ba_nonzero_jordan_blocks.tikz}
+  \caption{For $\lambda\neq0$, the auxiliary similarity reduces the comparison to shifted ranks of $AB$ and $BA$.}
+  \label{fig:ab-ba-nonzero-jordan-blocks}
+\end{figure}
+
 \begin{corollary} \label{cor:jordan-form-unique-up-to-block-permutation} \hlt{Uniqueness of Jordan Form}\\
 If $J$ and $J'$ are Jordan matrices similar to $A\in\operatorname{Mat}(n,n,\mathbb{C})$, they differ only by a permutation of Jordan blocks.
 \begin{proof}
 Similarity preserves spectra and the ranks of $(X-\lambda I_n)^p$. Thus $J$ and $J'$ have the same Weyr characteristic for each eigenvalue. Theorem \ref{thm:jordan-block-sizes-from-rank-drops} then gives the same block multiplicities, so only block order may differ.\\
 \hlt{Structural Commentary}: Weyr data is similarity-invariant and fixes block multiplicities.\\
 \hlt{Key Insight}: Jordan form is unique modulo block order.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:ab-ba-similar-rank-power-criterion} \hlt{Similarity Criterion for $AB$ and $BA$}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. $AB$ is similar to $BA$ if and only if $\operatorname{rank}\bigl((AB)^p\bigr)=\operatorname{rank}\bigl((BA)^p\bigr)$, $p=1,\ldots,n$.
+\begin{proof}
+If $AB$ and $BA$ are similar, then their powers are similar and have equal rank.\\
+Conversely, Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks} gives equality of all nonzero Jordan blocks. The displayed rank equalities, together with the trivial equality at $p=0$, give the same Weyr characteristic at $\lambda=0$ by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}. Hence the nilpotent Jordan blocks also agree, so the two Jordan forms are identical up to block order.\\
+\hlt{Structural Commentary}: Nonzero blocks agree automatically; only the nilpotent blocks must be tested.\\
+\hlt{Key Insight}: Powers of $AB$ and $BA$ measure exactly the zero-Jordan-block data.
+\end{proof}
+\end{corollary}
+
+\begin{method} \label{meth:checking-ab-ba-similarity} \hlt{Checking Whether $AB$ and $BA$ Are Similar}\\
+For $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The nonzero Jordan blocks of $AB$ and $BA$ already match.
+\item Compute $\operatorname{rank}\bigl((AB)^p\bigr)$ and $\operatorname{rank}\bigl((BA)^p\bigr)$ for $p=1,\ldots,n$.
+\item If all ranks agree, then $AB\sim BA$; if some rank differs, then only the nilpotent Jordan structure differs.
+\end{enumerate}
+\end{method}
+
+\begin{corollary} \label{cor:hermitian-products-and-conjugate-products} \hlt{Hermitian Products and Conjugate Products}\\
+Let $A,H,K\in\operatorname{Mat}(n,n,\mathbb{C})$, and suppose $H$ and $K$ are Hermitian.\\
+Then $HK$ is similar to $KH$, and $A\overline{A}$ is similar to $\overline{A}A$.
+\begin{proof}
+For each $p=1,\ldots,n$, $\operatorname{rank}\bigl((HK)^p\bigr) =\operatorname{rank}\bigl(((HK)^p)^*\bigr) = \operatorname{rank}\bigl((KH)^p\bigr)$.\\
+Also, $\operatorname{rank}\bigl((A\overline{A})^p\bigr) =\operatorname{rank}\bigl(\overline{(A\overline{A})^p}\bigr) =\operatorname{rank}\bigl((\overline{A}A)^p\bigr)$. Apply Corollary \ref{cor:ab-ba-similar-rank-power-criterion} in both cases.\\
+\hlt{Structural Commentary}: Adjoint and conjugation preserve rank and reverse product order.\\
+\hlt{Key Insight}: The rank-power test turns order reversal into similarity.
 \end{proof}
 \end{corollary}
 
@@ -1084,6 +1158,42 @@ All four factors are symmetric because $R,RJ,JR$ are symmetric; $SRS^t$ and $(S^
   \input{figures/linear_algebra/jordan_transpose_reversal.tikz}
   \caption{Reversal gives $R_kJ_k(0)R_k=J_k(0)^t$: the same chain read backwards.}
   \label{fig:jordan-transpose-reversal}
+\end{figure}
+
+\begin{theorem} \label{thm:conjugate-similarity-hermitian-product-equivalences} \hlt{Conjugate Similarity and Hermitian Products}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $\overline{A}$.
+\item $A$ is similar to $A^*$.
+\item $A$ is similar to $A^*$ via a Hermitian similarity matrix.
+\item $A=HK=LM$, where $H,K,L,M$ are Hermitian, and $H,M$ are invertible.
+\item $A=HK$ for some Hermitian matrices $H,K$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$ Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations} applied to $\overline{A}$ gives $\overline{A}\sim(\overline{A})^t=A^*$. Thus $A\sim A^*$.
+\item[$(ii)$]$\Rightarrow(iii)$ Choose invertible $S$ such that $A=SA^*S^{-1}$, so $AS=SA^*$. For $\theta\in\mathbb{R}$, put $S_{\theta}=e^{i\theta}S$.\\
+Then $AS_{\theta}=S_{\theta}A^*$ and, by taking adjoints, $AS_{\theta}^*=S_{\theta}^*A^*$. Hence $A(S_{\theta}+S_{\theta}^*)=(S_{\theta}+S_{\theta}^*)A^*$.\\
+The matrix $H_{\theta}=S_{\theta}+S_{\theta}^*$ is Hermitian. Also $S_{\theta}^{-1}H_{\theta}=I_n+e^{-2i\theta}S^{-1}S^*$. Only finitely many values of $-e^{2i\theta}$ can be eigenvalues of $S^{-1}S^*$, so choose $\theta$ for which $H_{\theta}$ is invertible. Then $A=H_{\theta}A^*H_{\theta}^{-1}$.
+\item[$(iii)$]$\Rightarrow(iv)$ Let $R$ be invertible Hermitian and satisfy $A=RA^*R^{-1}$. Then $AR=RA^*$ and $R^{-1}A=A^*R^{-1}$.\\
+Thus $A^*R^{-1}$ and $RA^*$ are Hermitian, and $A=R(A^*R^{-1})=(RA^*)R^{-1}$.\\
+This gives the two asserted Hermitian factorizations, with the first factor in the first product and the second factor in the second product invertible.
+\item[$(iv)$]$\Rightarrow(v)$ Immediate.
+\item[$(v)$]$\Rightarrow(i)$ If $A=HK$ with $H,K$ Hermitian, then Corollary \ref{cor:hermitian-products-and-conjugate-products} gives $HK\sim KH$.\\
+By Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations}, $KH\sim (KH)^t=H^tK^t=\overline{H}\,\overline{K}=\overline{A}$. Hence $A\sim\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The equivalences move between conjugation, adjoints, and Hermitian products by combining transpose similarity with a Hermitianized similarity matrix.\\
+\hlt{Key Insight}: A phase-rotated average $e^{i\theta}S+e^{-i\theta}S^*$ turns an arbitrary similarity to $A^*$ into a Hermitian one.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/conjugate_similarity_hermitian_products.tikz}
+  \caption{Conjugate similarity, adjoint similarity, and Hermitian product factorisations are equivalent.}
+  \label{fig:conjugate-similarity-hermitian-products}
 \end{figure}
 
 \begin{theorem} \label{thm:conjugate-similarity-jordan-block-criterion} \hlt{Conjugate Similarity Criterion}\\

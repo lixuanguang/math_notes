@@ -114,21 +114,6 @@ Thus the singular values are $\sqrt{\lambda_j}$, with the same eigenspace multip
 \end{proof}
 \end{proposition}
 
-\begin{proposition} \label{prop:two-by-two-positive-semidefinite-square-root} \hlt{Explicit Square Root for a $2\times2$ Positive Semidefinite Matrix}\\
-Let $A\in\operatorname{Mat}(2,2,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, be positive semidefinite and nonzero. Set $\tau=\bigl(\operatorname{tr}A+2\sqrt{\det A}\bigr)^{1/2}$.\\
-Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$
-\begin{proof}
-Let $C=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$. By Proposition \ref{prop:trace-determinant-positive-semidefinite}, $\det A\geq0$ and $\operatorname{tr}A>0$, hence $\tau>0$; by Theorem \ref{thm:positive-semidefinite-stability-rules}, $C\succeq0$. Cayley--Hamilton gives $A^2-(\operatorname{tr}A)A+(\det A)I_2=0$, so
-\begin{align}
-C^2 =\frac{1}{\tau^2}\bigl(A^2+2\sqrt{\det A}\,A+(\det A)I_2\bigr) =\frac{1}{\tau^2}\bigl((\operatorname{tr}A)A+2\sqrt{\det A}\,A\bigr)=A.
-\nonumber
-\end{align}
-Thus $C=A^{1/2}$ by uniqueness of the positive semidefinite square root.\\
-\hlt{Structural Commentary}: In dimension $2$, Cayley--Hamilton makes $A^{1/2}$ linear in $A$.\\
-\hlt{Key Insight}: Square the linear candidate and use Cayley--Hamilton.
-\end{proof}
-\end{proposition}
-
 \begin{definition} \label{def:matrix-singular-values} \hlt{Matrix Singular Values}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $q=\min(m,n)$, and let $r=\operatorname{rank}(A)$. The \hlt{positive singular values} of $A$ are the positive eigenvalues of $\abs{A}=(A^*A)^{1/2}$, written $\sigma_1\geq\sigma_2\geq\cdots\geq\sigma_r>0$.\\
 The full list of singular values is $\sigma_1,\ldots,\sigma_r,\sigma_{r+1},\ldots,\sigma_q$, where $\sigma_{r+1}=\cdots=\sigma_q=0$.
@@ -391,6 +376,39 @@ Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also
 \hlt{Key Insight}: Project onto $Q$, then solve triangularly.
 \end{proof}
 \end{proposition}
+
+Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+
+\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if
+\begin{align}
+a_{ij}=0\qquad\text{whenever } i>j+1.
+\nonumber
+\end{align}
+Equivalently, all entries below the first subdiagonal are zero.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
+  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
+  \label{fig:upper-hessenberg-pattern}
+\end{figure}
+
+\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
+Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
+\begin{proof}
+Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
+Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
+After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
+\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
+\hlt{Key Insight}: Kill one column tail at a time.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
+Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
+\end{perspective}
 
 \begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
