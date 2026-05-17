@@ -167,6 +167,16 @@ To prove an entrywise product is positive semidefinite:
 \end{enumerate}
 \end{method}
 
+\begin{lemma} \label{lem:small-spectral-norm-perturbation-invertible} \hlt{Small Spectral-Norm Perturbations of the Identity}\\
+If $E\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\norm{E}_2<1$, then $I_n+E$ is invertible.
+\begin{proof}
+Theorem \ref{thm:eigenvalues-versus-singular-values} gives $\rho(E)\leq\norm{E}_2<1$, so $-1\notin\operatorname{spec}(E)$.\\
+Hence $0\notin\operatorname{spec}(I_n+E)$, and $I_n+E$ is invertible.\\
+\hlt{Structural Commentary}: Spectral-norm smallness traps every eigenvalue inside the unit disk.\\
+\hlt{Key Insight}: If $-1$ is not an eigenvalue of $E$, then $I+E$ has no kernel.
+\end{proof}
+\end{lemma}
+
 \begin{theorem} \label{thm:bauer-fike-eigenvalue-perturbation} \hlt{Bauer--Fike Eigenvalue Perturbation Bound}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be diagonalizable, with $A=S\Lambda S^{-1}$ and $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$.\\
 If $\Delta A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\mu\in\operatorname{spec}(A+\Delta A)$, then $\min_{1\leq j\leq n}\abs{\mu-\lambda_j} \leq \kappa_2(S)\norm{\Delta A}_2$.
@@ -191,71 +201,6 @@ To bound eigenvalue movement for a diagonalizable matrix:
 \item place every eigenvalue of $A+\Delta A$ inside the union of disks $\abs{z-\lambda_j}\leq\kappa_2(S)\norm{\Delta A}_2$.
 \end{enumerate}
 \end{method}
-
-\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if
-\begin{align}
-a_{ij}=0\qquad\text{whenever } i>j+1.
-\nonumber
-\end{align}
-Equivalently, all entries below the first subdiagonal are zero.
-\end{definition}
-
-Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
-  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
-  \label{fig:upper-hessenberg-pattern}
-\end{figure}
-
-\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
-Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
-\begin{proof}
-Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
-Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
-After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
-\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
-\hlt{Key Insight}: Kill one column tail at a time.
-\end{proof}
-\end{theorem}
-
-\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
-Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
-\end{perspective}
-
-\begin{theorem} \label{thm:brauer-rank-one-eigenvalue-shift} \hlt{Brauer Rank-One Eigenvalue Shift}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $A\mathbf{x}=\lambda\mathbf{x}$ with $\mathbf{x}\neq\mathbf{0}$, and let $\mathbf{y}\in\mathbb{C}^n$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$ with multiplicity, then the eigenvalues of $A+\mathbf{x}\mathbf{y}^*$ are $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$.\\
-Moreover, $\mathbf{x}$ is an eigenvector of $A+\mathbf{x}\mathbf{y}^*$ corresponding to $\lambda+\mathbf{y}^*\mathbf{x}$.
-\begin{proof}
-Put $\mathbf{u}=\mathbf{x}/\norm{\mathbf{x}}_2$. By Schur triangularisation, choose a unitary $U=[\mathbf{u}\ U_2]$ such that $U^*AU=\begin{bmatrix}\lambda&*\\0&T'\end{bmatrix}$, where the diagonal entries of $T'$ are $\lambda_2,\ldots,\lambda_n$. Also $U^*(\mathbf{x}\mathbf{y}^*)U
-=
-\begin{bmatrix}
-\mathbf{y}^*\mathbf{x}&*\\
-0&0
-\end{bmatrix}$.
-Therefore $U^*(A+\mathbf{x}\mathbf{y}^*)U$ is upper triangular with diagonal entries $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$. Finally, $(A+\mathbf{x}\mathbf{y}^*)\mathbf{x}=A\mathbf{x}+\mathbf{x}(\mathbf{y}^*\mathbf{x})=(\lambda+\mathbf{y}^*\mathbf{x})\mathbf{x}$.
-\hlt{Structural Commentary}: A rank-one eigenvector update changes only the first Schur diagonal entry.\\
-\hlt{Key Insight}: Align the update with the first coordinate; only one diagonal term shifts.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/brauer_rank_one_shift.tikz}
-  \caption{Brauer's update shifts one Schur diagonal entry.}
-  \label{fig:brauer-rank-one-shift}
-\end{figure}
-
-\begin{corollary} \label{cor:damped-rank-one-eigenvalue-reset} \hlt{Damped Rank-One Eigenvalue Reset}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenpair $(\lambda,\mathbf{x})$, let $\mathbf{y}^*\mathbf{x}=1$, and let $\tau\in\mathbb{C}$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$, then $A_{\tau}\defeq \tau A+(1-\tau)\lambda\mathbf{x}\mathbf{y}^*$ has eigenvalues $\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$.
-\begin{proof}
-The eigenvalues of $\tau A$ are $\tau\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$. Since $A_{\tau}=\tau A+\mathbf{x}((1-\overline{\tau})\overline{\lambda}\mathbf{y})^*$, Theorem \ref{thm:brauer-rank-one-eigenvalue-shift} shifts only $\tau\lambda$ by $(1-\tau)\lambda\mathbf{y}^*\mathbf{x}=(1-\tau)\lambda$. Thus $\tau\lambda$ becomes $\lambda$, while the other eigenvalues stay $\tau\lambda_i$.\\
-\hlt{Structural Commentary}: Damping scales the spectrum; Brauer's update restores one eigenvalue.\\
-\hlt{Key Insight}: Brauer's theorem changes one spectral coordinate without moving the rest.
-\end{proof}
-\end{corollary}
 
 \begin{definition} \label{def:gersgorin-disks} \hlt{Gersgorin Disks}\\
 Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{deleted absolute row sum} in row $k$ is $R'_k(A)\defeq\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
@@ -360,6 +305,43 @@ Hence all inequalities are equalities. Since no $a_{kj}$ vanishes, $\abs{x_j}=\n
 \hlt{Key Insight}: One strict row breaks that equality pattern.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if
+\begin{align}
+a_{ij}=0\qquad\text{whenever } i>j+1.
+\nonumber
+\end{align}
+Equivalently, all entries below the first subdiagonal are zero.
+\end{definition}
+
+Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
+  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
+  \label{fig:upper-hessenberg-pattern}
+\end{figure}
+
+\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
+Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
+\begin{proof}
+Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
+Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
+After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
+\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
+\hlt{Key Insight}: Kill one column tail at a time.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
+Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
+\end{perspective}
+
+\begin{definition} \label{def:increasing-hermitian-eigenvalue-ordering} \hlt{Increasing Hermitian Eigenvalue Order}\\
+For a Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$, write $\lambda_1(A)\leq\lambda_2(A)\leq\cdots\leq\lambda_n(A)$ for its eigenvalues counted with algebraic multiplicity. If only one Hermitian matrix is under discussion, we write $\lambda_i$ instead of $\lambda_i(A)$.
+\end{definition}
 
 \begin{theorem} \label{thm:rayleigh-quotient-spectral-interval} \hlt{Rayleigh Quotient on a Spectral Interval}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$. If $1\leq p\leq q\leq n$ and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ is a unit vector, then $\lambda_p\leq \mathbf{x}^*A\mathbf{x}\leq \lambda_q$.
@@ -538,3 +520,35 @@ To bound eigenvalues of $A+B$:
 \item for positive semidefinite or low-rank $B$, insert the known zero or nonnegative eigenvalues to recover monotonicity or interlacing.
 \end{enumerate}
 \end{method}
+
+\begin{theorem} \label{thm:brauer-rank-one-eigenvalue-shift} \hlt{Brauer Rank-One Eigenvalue Shift}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $A\mathbf{x}=\lambda\mathbf{x}$ with $\mathbf{x}\neq\mathbf{0}$, and let $\mathbf{y}\in\mathbb{C}^n$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$ with multiplicity, then the eigenvalues of $A+\mathbf{x}\mathbf{y}^*$ are $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$.\\
+Moreover, $\mathbf{x}$ is an eigenvector of $A+\mathbf{x}\mathbf{y}^*$ corresponding to $\lambda+\mathbf{y}^*\mathbf{x}$.
+\begin{proof}
+Put $\mathbf{u}=\mathbf{x}/\norm{\mathbf{x}}_2$. By Schur triangularisation, choose a unitary $U=[\mathbf{u}\ U_2]$ such that $U^*AU=\begin{bmatrix}\lambda&*\\0&T'\end{bmatrix}$, where the diagonal entries of $T'$ are $\lambda_2,\ldots,\lambda_n$. Also $U^*(\mathbf{x}\mathbf{y}^*)U
+=
+\begin{bmatrix}
+\mathbf{y}^*\mathbf{x}&*\\
+0&0
+\end{bmatrix}$.
+Therefore $U^*(A+\mathbf{x}\mathbf{y}^*)U$ is upper triangular with diagonal entries $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$. Finally, $(A+\mathbf{x}\mathbf{y}^*)\mathbf{x}=A\mathbf{x}+\mathbf{x}(\mathbf{y}^*\mathbf{x})=(\lambda+\mathbf{y}^*\mathbf{x})\mathbf{x}$.
+\hlt{Structural Commentary}: A rank-one eigenvector update changes only the first Schur diagonal entry.\\
+\hlt{Key Insight}: Align the update with the first coordinate; only one diagonal term shifts.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/brauer_rank_one_shift.tikz}
+  \caption{Brauer's update shifts one Schur diagonal entry.}
+  \label{fig:brauer-rank-one-shift}
+\end{figure}
+
+\begin{corollary} \label{cor:damped-rank-one-eigenvalue-reset} \hlt{Damped Rank-One Eigenvalue Reset}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenpair $(\lambda,\mathbf{x})$, let $\mathbf{y}^*\mathbf{x}=1$, and let $\tau\in\mathbb{C}$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$, then $A_{\tau}\defeq \tau A+(1-\tau)\lambda\mathbf{x}\mathbf{y}^*$ has eigenvalues $\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$.
+\begin{proof}
+The eigenvalues of $\tau A$ are $\tau\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$. Since $A_{\tau}=\tau A+\mathbf{x}((1-\overline{\tau})\overline{\lambda}\mathbf{y})^*$, Theorem \ref{thm:brauer-rank-one-eigenvalue-shift} shifts only $\tau\lambda$ by $(1-\tau)\lambda\mathbf{y}^*\mathbf{x}=(1-\tau)\lambda$. Thus $\tau\lambda$ becomes $\lambda$, while the other eigenvalues stay $\tau\lambda_i$.\\
+\hlt{Structural Commentary}: Damping scales the spectrum; Brauer's update restores one eigenvalue.\\
+\hlt{Key Insight}: Brauer's theorem changes one spectral coordinate without moving the rest.
+\end{proof}
+\end{corollary}

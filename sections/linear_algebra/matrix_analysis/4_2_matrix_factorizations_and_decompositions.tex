@@ -2,6 +2,99 @@
 
 Factorisations expose the geometry hidden inside a matrix or operator. In this section, positive square roots separate stretching from isometric motion, singular values record the stretching scales, compact SVD isolates the rank-bearing subspaces, and QR factorisation turns arbitrary independent columns into orthonormal coordinates.
 
+\begin{definition} \label{def:full-rank-factorization} \hlt{Full-Rank Factorization}\\
+A factorization $A=XY$ with $X$ full column rank and $Y$ full row rank is called a \hlt{full-rank factorization} of $A$.
+\end{definition}
+
+\begin{theorem} \label{thm:full-rank-factorization} \hlt{Full-Rank Factorization}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq 1$, and let the columns of $X\in\operatorname{Mat}(m,r,\mathbb{F})$ be a basis of $\operatorname{col}(A)$. Then there is a unique $Y\in\operatorname{Mat}(r,n,\mathbb{F})$ such that $A=XY$, and $\operatorname{rank}(X)=\operatorname{rank}(Y)=r$.
+\begin{proof}
+Write $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$. Since the columns of $X$ form a basis of $\operatorname{col}(A)$, for each $j$ there is a unique $\mathbf{y}_j\in\mathbb{F}^r$ such that $\mathbf{a}_j=X\mathbf{y}_j$. Set $Y=[\mathbf{y}_1\ \cdots\ \mathbf{y}_n]$. Then $A=[X\mathbf{y}_1\ \cdots\ X\mathbf{y}_n]=XY$ and uniqueness of the coordinates $\mathbf{y}_j$ gives uniqueness of $Y$. The columns of $X$ are independent, so $\operatorname{rank}(X)=r$.\\
+By Theorem \ref{thm:rank-product-and-concatenation-bounds}, $r=\operatorname{rank}(A)=\operatorname{rank}(XY)\leq \operatorname{rank}(Y)\leq r$ because $Y$ has only $r$ rows. Hence $\operatorname{rank}(Y)=r$.\\
+\hlt{Structural Commentary}: A matrix factors through a basis of its column space.\\
+\hlt{Key Insight}: Full-rank factorization separates column directions from their coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, a factorisation
+\begin{align}
+A=V\begin{bmatrix}R\\0\end{bmatrix}
+\nonumber
+\end{align}
+with $V\in\operatorname{Mat}(m,m,\mathbb{F})$ unitary and $R\in\operatorname{Mat}(n,n,\mathbb{F})$ upper triangular is called a \hlt{wide QR factorisation}.\\
+Writing $V=[Q\ Q']$ gives the \hlt{narrow QR factorisation} $A=QR$.
+\end{definition}
+
+\begin{theorem} \label{thm:qr-factorization} \hlt{QR Factorisation}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and suppose $m\geq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists$ a unitary $V$ and an upper triangular $R$ with real nonnegative diagonal entries such that
+\begin{align}
+A=V\begin{bmatrix}R\\0\end{bmatrix}.
+\nonumber
+\end{align}
+Writing $V=[Q\ Q']$ with $Q$ the first $n$ columns gives $A=QR$, with $Q$ orthonormal columns.
+\item If $\operatorname{rank}(A)=n$, then narrow $A=QR$ is unique when $R$ has positive diagonal entries.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+At step $k$, choose a Householder unitary $I_{k-1}\oplus U_k$ that sends the tail of the $k$th column to $r_{kk}\mathbf{e}_1$ with $r_{kk}\geq 0$, while preserving the earlier triangular columns. After $n$ steps, $U_n\cdots U_1A=\begin{bmatrix}R\\0\end{bmatrix}$, where $R$ is upper triangular with nonnegative diagonal entries.\\
+Let $V=(U_n\cdots U_1)^*$. Then $A=V\begin{bmatrix}R\\0\end{bmatrix}$, and writing $V=[Q\ Q']$ gives $A=QR$ with $Q$ orthonormal columns. If $\operatorname{rank}(A)=n$, then $R$ is invertible, so its diagonal entries are positive.
+\item
+Suppose $A=Q_1R_1=Q_2R_2$, where $Q_i^*Q_i=I_n$ and the $R_i$ are upper triangular with positive diagonal entries. Then $A^*A=R_1^*R_1=R_2^*R_2$. Let $D=R_1R_2^{-1}$. Substituting $R_1=DR_2$ gives $D^*D=I_n$. Thus $D$ is upper triangular and unitary, hence diagonal with entries of modulus $1$. Its diagonal entries are positive, so $D=I_n$. Therefore $R_1=R_2$, and then $Q_1=Q_2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Householder steps triangularise columns; full rank makes the diagonal positive.\\
+\hlt{Key Insight}: Positive diagonals remove the sign/phase ambiguity.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/qr_factorization_geometry.tikz}
+  \caption{QR writes $A=QR$ while preserving prefix column spaces: $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.}
+  \label{fig:qr-factorization-geometry}
+\end{figure}
+
+\begin{corollary} \label{cor:qr-prefix-column-spaces} \hlt{Prefix Column Spaces in QR Factorisation}\\
+Let $A=QR$ be the narrow QR factorisation of $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $\operatorname{rank}(A)=n$ and positive diagonal entries in $R$. For $k=1,\ldots,n$, let $A_k$ and $Q_k$ be the first $k$ columns of $A$ and $Q$, respectively. Then $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.\\
+Thus the columns of $Q_k$ form an orthonormal basis of $\operatorname{col}(A_k)$.
+\begin{proof}
+Let $R_k$ be the leading $k\times k$ principal submatrix of $R$. Since $R$ is upper triangular with positive diagonal entries, $R_k$ is invertible. The first $k$ columns of $A=QR$ satisfy $A_k=Q_kR_k$, because upper triangularity prevents later columns of $Q$ from contributing. Hence $\operatorname{col}(A_k)\subseteq\operatorname{col}(Q_k)$ and $Q_k=A_kR_k^{-1}$ gives the reverse inclusion. The columns of $Q_k$ are orthonormal because $Q$ has orthonormal columns.\\
+\hlt{Structural Commentary}: QR preserves prefix column spaces while orthonormalising them.\\
+\hlt{Key Insight}: Invertible $R_k$ only changes coordinates within that space.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
+Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
+\begin{proof}
+The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
+Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
+\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
+\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
+\begin{proof}
+Let $B=A^{1/2}$ and take a QR factorisation $B=QR$ with $R$ upper triangular and diagonal entries nonnegative. Then $A=B^*B=R^*R$, thus $L=R^*$ works. If $A\succ0$, then $L$ is invertible, so its diagonal entries are positive. If $A=L_1L_1^*=L_2L_2^*$ with positive diagonal and $R_i=L_i^*$, then $B=Q_iR_i$ with $Q_i=BR_i^{-1}$ are QR factorisations of $B$. Uniqueness of QR gives $R_1=R_2$, hence $L_1=L_2$.\\
+\hlt{Structural Commentary}: Cholesky is QR applied to $A^{1/2}$.\\
+\hlt{Key Insight}: Triangularise the square root, then set $L=R^*$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/cholesky_from_qr.tikz}
+  \caption{Apply QR to $B=A^{1/2}$; then $A=R^*R=LL^*$, with uniqueness in the positive definite case.}
+  \label{fig:cholesky-from-qr}
+\end{figure}
+
 \begin{theorem} \label{thm:polar-decomposition} \hlt{Polar Decomposition}\\
 For every $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\exists$ an isometry $S\in\LL(\mathcal{V})$ s.t. $T=S\sqrt{T^*T}$.
 \begin{proof}
@@ -303,82 +396,3 @@ Thus area integrals acquire the factor $r\,dr\,d\theta$.\\
 For spherical coordinates $\sigma(\rho,\varphi,\theta) =(\rho\sin\varphi\cos\theta,\rho\sin\varphi\sin\theta,\rho\cos\varphi)$, and $\abs{\det D\sigma(\rho,\varphi,\theta)}=\rho^2\sin\varphi$.\\
 Thus volume integrals acquire the factor $\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$.
 \end{example}
-
-\begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
-For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, a factorisation
-\begin{align}
-A=V\begin{bmatrix}R\\0\end{bmatrix}
-\nonumber
-\end{align}
-with $V\in\operatorname{Mat}(m,m,\mathbb{F})$ unitary and $R\in\operatorname{Mat}(n,n,\mathbb{F})$ upper triangular is called a \hlt{wide QR factorisation}.\\
-Writing $V=[Q\ Q']$ gives the \hlt{narrow QR factorisation} $A=QR$.
-\end{definition}
-
-\begin{theorem} \label{thm:qr-factorization} \hlt{QR Factorisation}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and suppose $m\geq n$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\exists$ a unitary $V$ and an upper triangular $R$ with real nonnegative diagonal entries such that
-\begin{align}
-A=V\begin{bmatrix}R\\0\end{bmatrix}.
-\nonumber
-\end{align}
-Writing $V=[Q\ Q']$ with $Q$ the first $n$ columns gives $A=QR$, with $Q$ orthonormal columns.
-\item If $\operatorname{rank}(A)=n$, then narrow $A=QR$ is unique when $R$ has positive diagonal entries.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-At step $k$, choose a Householder unitary $I_{k-1}\oplus U_k$ that sends the tail of the $k$th column to $r_{kk}\mathbf{e}_1$ with $r_{kk}\geq 0$, while preserving the earlier triangular columns. After $n$ steps, $U_n\cdots U_1A=\begin{bmatrix}R\\0\end{bmatrix}$, where $R$ is upper triangular with nonnegative diagonal entries.\\
-Let $V=(U_n\cdots U_1)^*$. Then $A=V\begin{bmatrix}R\\0\end{bmatrix}$, and writing $V=[Q\ Q']$ gives $A=QR$ with $Q$ orthonormal columns. If $\operatorname{rank}(A)=n$, then $R$ is invertible, so its diagonal entries are positive.
-\item
-Suppose $A=Q_1R_1=Q_2R_2$, where $Q_i^*Q_i=I_n$ and the $R_i$ are upper triangular with positive diagonal entries. Then $A^*A=R_1^*R_1=R_2^*R_2$. Let $D=R_1R_2^{-1}$. Substituting $R_1=DR_2$ gives $D^*D=I_n$. Thus $D$ is upper triangular and unitary, hence diagonal with entries of modulus $1$. Its diagonal entries are positive, so $D=I_n$. Therefore $R_1=R_2$, and then $Q_1=Q_2$.
-\end{enumerate}
-\hlt{Structural Commentary}: Householder steps triangularise columns; full rank makes the diagonal positive.\\
-\hlt{Key Insight}: Positive diagonals remove the sign/phase ambiguity.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/qr_factorization_geometry.tikz}
-  \caption{QR writes $A=QR$ while preserving prefix column spaces: $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.}
-  \label{fig:qr-factorization-geometry}
-\end{figure}
-
-\begin{corollary} \label{cor:qr-prefix-column-spaces} \hlt{Prefix Column Spaces in QR Factorisation}\\
-Let $A=QR$ be the narrow QR factorisation of $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $\operatorname{rank}(A)=n$ and positive diagonal entries in $R$. For $k=1,\ldots,n$, let $A_k$ and $Q_k$ be the first $k$ columns of $A$ and $Q$, respectively. Then $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.\\
-Thus the columns of $Q_k$ form an orthonormal basis of $\operatorname{col}(A_k)$.
-\begin{proof}
-Let $R_k$ be the leading $k\times k$ principal submatrix of $R$. Since $R$ is upper triangular with positive diagonal entries, $R_k$ is invertible. The first $k$ columns of $A=QR$ satisfy $A_k=Q_kR_k$, because upper triangularity prevents later columns of $Q$ from contributing. Hence $\operatorname{col}(A_k)\subseteq\operatorname{col}(Q_k)$ and $Q_k=A_kR_k^{-1}$ gives the reverse inclusion. The columns of $Q_k$ are orthonormal because $Q$ has orthonormal columns.\\
-\hlt{Structural Commentary}: QR preserves prefix column spaces while orthonormalising them.\\
-\hlt{Key Insight}: Invertible $R_k$ only changes coordinates within that space.
-\end{proof}
-\end{corollary}
-
-\begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
-Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
-\begin{proof}
-The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
-Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
-\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
-\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
-\end{proof}
-\end{proposition}
-
-\begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
-\begin{proof}
-Let $B=A^{1/2}$ and take a QR factorisation $B=QR$ with $R$ upper triangular and diagonal entries nonnegative. Then $A=B^*B=R^*R$, thus $L=R^*$ works. If $A\succ0$, then $L$ is invertible, so its diagonal entries are positive. If $A=L_1L_1^*=L_2L_2^*$ with positive diagonal and $R_i=L_i^*$, then $B=Q_iR_i$ with $Q_i=BR_i^{-1}$ are QR factorisations of $B$. Uniqueness of QR gives $R_1=R_2$, hence $L_1=L_2$.\\
-\hlt{Structural Commentary}: Cholesky is QR applied to $A^{1/2}$.\\
-\hlt{Key Insight}: Triangularise the square root, then set $L=R^*$.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/cholesky_from_qr.tikz}
-  \caption{Apply QR to $B=A^{1/2}$; then $A=R^*R=LL^*$, with uniqueness in the positive definite case.}
-  \label{fig:cholesky-from-qr}
-\end{figure}

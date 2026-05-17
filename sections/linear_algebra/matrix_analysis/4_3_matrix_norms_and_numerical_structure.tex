@@ -66,71 +66,6 @@ Proposition \ref{prop:frobenius-and-spectral-norm-comparison} gives $\norm{A}_2\
 \end{proof}
 \end{theorem}
 
-\begin{proposition} \label{prop:rank-one-svd-orthogonality-and-truncation-error} \hlt{Rank-One SVD Terms and Truncation Error}\\
-Let $A=X\Sigma_rY^*=\sum_{j=1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$ be a compact SVD, with $\sigma_1\geq\cdots\geq\sigma_r>0$.\\
-For $0\leq k\leq r$, set $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, $A_0\defeq0$.\\
-Then the rank-one summands are mutually orthogonal in the Frobenius inner product, and
-\begin{align}
-\norm{A}_F^2=\sum_{j=1}^{r}\sigma_j^2,
-\qquad
-\norm{A-A_k}_F^2=\sum_{j=k+1}^{r}\sigma_j^2,
-\qquad
-\norm{A-A_k}_2=
-\begin{cases}
-\sigma_{k+1},&k<r,\\
-0,&k=r.
-\end{cases}
-\nonumber
-\end{align}
-\begin{proof}
-For $i,j\in\{1,\ldots,r\}$, $\innerprod[F]{\sigma_i\mathbf{x}_i\mathbf{y}_i^*,\sigma_j\mathbf{x}_j\mathbf{y}_j^*} =\sigma_i\sigma_j\operatorname{tr}(\mathbf{y}_i\mathbf{x}_i^*\mathbf{x}_j\mathbf{y}_j^*) =\sigma_i\sigma_j\delta_{ij}$.\\
-Pythagoras in the Frobenius inner product gives the two Frobenius formulas. The residual $A-A_k$ has compact SVD $\sum_{j=k+1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, so Theorem \ref{thm:spectral-norm-largest-singular-value} gives the spectral-norm formula.\\
-\hlt{Structural Commentary}: Compact SVD decomposes a matrix into orthogonal rank-one energy packets.\\
-\hlt{Key Insight}: Truncation error is exactly the energy left in the discarded singular directions.
-\end{proof}
-\end{proposition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/truncated_svd_energy.tikz}
-  \caption{Blue bars form $A_k$; red bars are discarded, with $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$.}
-  \label{fig:truncated-svd-energy}
-\end{figure}
-
-\begin{theorem} \label{thm:eckart-young-frobenius-spectral} \hlt{Eckart--Young Low-Rank Approximation}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$ and $\sigma_j=0$ for $j>q$. If $A_k$ is the rank-$k$ truncated SVD, $0\leq k<q$, and $B\in\operatorname{Mat}(m,n,\mathbb{F})$ has $\operatorname{rank}(B)\leq k$, then
-\begin{align}
-\norm{A-A_k}_2\leq\norm{A-B}_2,
-\qquad
-\norm{A-A_k}_F\leq\norm{A-B}_F.
-\nonumber
-\end{align}
-\begin{proof}
-Let $\mathbf{w}_1,\ldots,\mathbf{w}_n$ be right singular vectors for $A$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item Since $\dim\ker(B)\geq n-k$, choose a unit $\mathbf{x}\in\ker(B)\cap\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{k+1})$.\\
-Then $\norm{A-B}_2\geq\norm{(A-B)\mathbf{x}}_2=\norm{A\mathbf{x}}_2\geq\sigma_{k+1}=\norm{A-A_k}_2$.
-\item Choose an $(n-k)$-dimensional subspace $\mathcal{U}\subseteq\ker(B)$, with projection $P$ and orthonormal basis $\mathbf{z}_1,\ldots,\mathbf{z}_{n-k}$.\\
-Since $B\mathbf{z}_j=0$, $\norm{A-B}_F^2\geq\sum\limits_{j=1}^{n-k}\norm{(A-B)\mathbf{z}_j}_2^2=\sum\limits_{j=1}^{n-k}\norm{A\mathbf{z}_j}_2^2=\sum\limits_{i=1}^{n}\sigma_i^2\norm{P\mathbf{w}_i}_2^2$.\\
-$\alpha_i=\norm{P\mathbf{w}_i}_2^2$ satisfies $0\leq\alpha_i\leq1$ and $\sum_i\alpha_i=n-k$.\\
-Since $\sigma_i^2$ decreases, $\sum\limits_i\sigma_i^2\alpha_i\geq\sum\limits_{i=k+1}^{n}\sigma_i^2=\norm{A-A_k}_F^2$.
-\end{enumerate}
-\hlt{Structural Commentary}: Rank-$k$ competitors vanish on at least $n-k$ directions.\\
-\hlt{Key Insight}: The optimal loss is precisely the singular-value tail.
-\end{proof}
-\end{theorem}
-
-\begin{method} \label{meth:truncated-svd-approximation} \hlt{Truncated SVD Approximation Method}\\
-To compress or approximate $A$ by rank $k$:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item compute or estimate the leading singular triples $(\sigma_j,\mathbf{x}_j,\mathbf{y}_j)$;
-\item keep $A_k=\sum_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$;
-\item use $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$ and $\norm{A-A_k}_2=\sigma_{k+1}$ to quantify the lost information.
-\end{enumerate}
-\end{method}
-
 \begin{proposition} \label{prop:unitary-invariance-of-singular-values} \hlt{Unitary Invariance of Singular Values}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, and let $U\in\operatorname{Mat}(m,m,\mathbb{F})$ and $V\in\operatorname{Mat}(n,n,\mathbb{F})$ be unitary. Then $A$ and $UAV$ have the same singular values. In particular, $\norm{UAV}_2=\norm{A}_2$ and $\norm{UAV}_F=\norm{A}_F$.
 \begin{proof}
@@ -196,16 +131,6 @@ If $A$ is invertible, apply (ii) to $A^{-1}$: $\frac{1}{\abs{\lambda_n}}=\rho(A^
 \end{proof}
 \end{theorem}
 
-\begin{lemma} \label{lem:small-spectral-norm-perturbation-invertible} \hlt{Small Spectral-Norm Perturbations of the Identity}\\
-If $E\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\norm{E}_2<1$, then $I_n+E$ is invertible.
-\begin{proof}
-Theorem \ref{thm:eigenvalues-versus-singular-values} gives $\rho(E)\leq\norm{E}_2<1$, so $-1\notin\operatorname{spec}(E)$.\\
-Hence $0\notin\operatorname{spec}(I_n+E)$, and $I_n+E$ is invertible.\\
-\hlt{Structural Commentary}: Spectral-norm smallness traps every eigenvalue inside the unit disk.\\
-\hlt{Key Insight}: If $-1$ is not an eigenvalue of $E$, then $I+E$ has no kernel.
-\end{proof}
-\end{lemma}
-
 \begin{theorem} \label{thm:trace-bounded-by-singular-values} \hlt{Trace Bound by Singular Values}\\
 If $A\in\operatorname{Mat}(n,n,\mathbb{C})$, then $\abs{\operatorname{tr}A}\leq\sum\limits_{j=1}^{n}\sigma_j(A)$. Consequently, $\sum\limits_{j=1}^{n}\abs{\lambda_j(A)}\leq\sum\limits_{j=1}^{n}\sigma_j(A)$ and $\sum\limits_{j=1}^{n}\abs{a_{jj}}\leq\sum\limits_{j=1}^{n}\sigma_j(A)$.
 \begin{proof}
@@ -218,6 +143,71 @@ In both cases, unitary invariance of singular values and the trace bound give th
 \hlt{Key Insight}: Prove $\abs{\operatorname{tr}A}\leq\sum\limits_j\sigma_j$ once, then rotate phases.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:rank-one-svd-orthogonality-and-truncation-error} \hlt{Rank-One SVD Terms and Truncation Error}\\
+Let $A=X\Sigma_rY^*=\sum_{j=1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$ be a compact SVD, with $\sigma_1\geq\cdots\geq\sigma_r>0$.\\
+For $0\leq k\leq r$, set $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, $A_0\defeq0$.\\
+Then the rank-one summands are mutually orthogonal in the Frobenius inner product, and
+\begin{align}
+\norm{A}_F^2=\sum_{j=1}^{r}\sigma_j^2,
+\qquad
+\norm{A-A_k}_F^2=\sum_{j=k+1}^{r}\sigma_j^2,
+\qquad
+\norm{A-A_k}_2=
+\begin{cases}
+\sigma_{k+1},&k<r,\\
+0,&k=r.
+\end{cases}
+\nonumber
+\end{align}
+\begin{proof}
+For $i,j\in\{1,\ldots,r\}$, $\innerprod[F]{\sigma_i\mathbf{x}_i\mathbf{y}_i^*,\sigma_j\mathbf{x}_j\mathbf{y}_j^*} =\sigma_i\sigma_j\operatorname{tr}(\mathbf{y}_i\mathbf{x}_i^*\mathbf{x}_j\mathbf{y}_j^*) =\sigma_i\sigma_j\delta_{ij}$.\\
+Pythagoras in the Frobenius inner product gives the two Frobenius formulas. The residual $A-A_k$ has compact SVD $\sum_{j=k+1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, so Theorem \ref{thm:spectral-norm-largest-singular-value} gives the spectral-norm formula.\\
+\hlt{Structural Commentary}: Compact SVD decomposes a matrix into orthogonal rank-one energy packets.\\
+\hlt{Key Insight}: Truncation error is exactly the energy left in the discarded singular directions.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/truncated_svd_energy.tikz}
+  \caption{Blue bars form $A_k$; red bars are discarded, with $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$.}
+  \label{fig:truncated-svd-energy}
+\end{figure}
+
+\begin{theorem} \label{thm:eckart-young-frobenius-spectral} \hlt{Eckart--Young Low-Rank Approximation}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$ and $\sigma_j=0$ for $j>q$. If $A_k$ is the rank-$k$ truncated SVD, $0\leq k<q$, and $B\in\operatorname{Mat}(m,n,\mathbb{F})$ has $\operatorname{rank}(B)\leq k$, then
+\begin{align}
+\norm{A-A_k}_2\leq\norm{A-B}_2,
+\qquad
+\norm{A-A_k}_F\leq\norm{A-B}_F.
+\nonumber
+\end{align}
+\begin{proof}
+Let $\mathbf{w}_1,\ldots,\mathbf{w}_n$ be right singular vectors for $A$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item Since $\dim\ker(B)\geq n-k$, choose a unit $\mathbf{x}\in\ker(B)\cap\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{k+1})$.\\
+Then $\norm{A-B}_2\geq\norm{(A-B)\mathbf{x}}_2=\norm{A\mathbf{x}}_2\geq\sigma_{k+1}=\norm{A-A_k}_2$.
+\item Choose an $(n-k)$-dimensional subspace $\mathcal{U}\subseteq\ker(B)$, with projection $P$ and orthonormal basis $\mathbf{z}_1,\ldots,\mathbf{z}_{n-k}$.\\
+Since $B\mathbf{z}_j=0$, $\norm{A-B}_F^2\geq\sum\limits_{j=1}^{n-k}\norm{(A-B)\mathbf{z}_j}_2^2=\sum\limits_{j=1}^{n-k}\norm{A\mathbf{z}_j}_2^2=\sum\limits_{i=1}^{n}\sigma_i^2\norm{P\mathbf{w}_i}_2^2$.\\
+$\alpha_i=\norm{P\mathbf{w}_i}_2^2$ satisfies $0\leq\alpha_i\leq1$ and $\sum_i\alpha_i=n-k$.\\
+Since $\sigma_i^2$ decreases, $\sum\limits_i\sigma_i^2\alpha_i\geq\sum\limits_{i=k+1}^{n}\sigma_i^2=\norm{A-A_k}_F^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rank-$k$ competitors vanish on at least $n-k$ directions.\\
+\hlt{Key Insight}: The optimal loss is precisely the singular-value tail.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:truncated-svd-approximation} \hlt{Truncated SVD Approximation Method}\\
+To compress or approximate $A$ by rank $k$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item compute or estimate the leading singular triples $(\sigma_j,\mathbf{x}_j,\mathbf{y}_j)$;
+\item keep $A_k=\sum_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$;
+\item use $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$ and $\norm{A-A_k}_2=\sigma_{k+1}$ to quantify the lost information.
+\end{enumerate}
+\end{method}
 
 \begin{definition} \label{def:moore-penrose-pseudoinverse} \hlt{Moore--Penrose Pseudoinverse}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. If $A=0$, define $A^{\dagger}=0_{n,m}$.\\

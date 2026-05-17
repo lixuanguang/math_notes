@@ -1,6 +1,5 @@
 \subsubsection{Polynomial and Jordan Structure}
 
-Generalized eigenvectors repair the main defect of ordinary eigenvectors: an operator may not have enough eigendirections to form a basis. The replacement is to study vectors killed by powers of shifted operators.
 
 \begin{definition} \label{def:operator-powers} \hlt{Powers of an Operator}\\
 Let $T\in\LL(\mathcal{V})$. For a positive integer $m$, $T^m\defeq \underbrace{T\cdots T}_{m\text{ times}}$ and $T^0\defeq I_{\mathcal{V}}$.\\
@@ -60,34 +59,17 @@ If $p(z)=\sum\limits_{j=0}^{m}a_jz^j$, then $p(T)\mathbf{v} =\sum\limits_{j=0}^{
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:annihilating-polynomials-control-spectrum} \hlt{Annihilating Polynomials Control the Spectrum}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $p$ be a nonconstant annihilating polynomial for $T$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Every eigenvalue of $T$ is a root of $p$.
-\item If $\mathbb{F}=\mathbb{C}$, then at least one root of $p$ is an eigenvalue of $T$.
-\end{enumerate}
+\begin{theorem} \label{thm:polynomial-functional-calculus-diagonalizable-matrix} \hlt{Polynomial Functional Calculus for Diagonalizable Matrices}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be diagonalizable and write $A=S\Lambda S^{-1}$, where $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$.\\
+If $p\in\mathcal{P}(\mathbb{F})$, then $p(A)=S\operatorname{diag}(p(\lambda_1),\ldots,p(\lambda_n))S^{-1}$.
 \begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then Proposition \ref{prop:polynomial-eigenvector-evaluation} gives $0=p(T)\mathbf{v}=p(\lambda)\mathbf{v}$. Since $\mathbf{v}\neq\mathbf{0}$, $p(\lambda)=0$.
-\item Factor $p(z)=c(z-\lambda_1)\cdots(z-\lambda_m)$ over $\mathbb{C}$, with $c\neq0$. Then $0=p(T)=c(T-\lambda_1I_{\mathcal{V}})\cdots(T-\lambda_mI_{\mathcal{V}})$. At least one factor $T-\lambda_jI_{\mathcal{V}}$ is not injective; otherwise product would be injective. Hence $\lambda_j$ is an eigenvalue.
-\end{enumerate}
-\hlt{Structural Commentary}: Annihilating polynomial restricts spectrum to its roots; over $\mathbb{C}$, one root must appear.\\
-\hlt{Key Insight}: Eigenvectors turn $p(T)$ into $p(\lambda)$.
+For every $j\geq0$, $A^j=S\Lambda^jS^{-1}$.\\
+If $p(z)=\sum_j c_jz^j$, then $p(A)=\sum\limits_j c_jA^j =S\left(\sum\limits_j c_j\Lambda^j\right)S^{-1} =S p(\Lambda) S^{-1}$.\\
+Since $\Lambda$ is diagonal, $p(\Lambda)=\operatorname{diag}(p(\lambda_1),\ldots,p(\lambda_n))$.\\
+\hlt{Structural Commentary}: Diagonalization reduces $p(A)$ to scalar evaluation on eigenvalues.\\
+\hlt{Key Insight}: Compute functions of $A$ by applying the function to the eigenvalues.
 \end{proof}
 \end{theorem}
-
-\begin{proposition} \label{prop:kernel-range-polynomial-in-operator-invariant} \label{prop:kernel-of-polynomial-in-operator-is-invariant} \hlt{Kernel and Range of a Polynomial in an Operator Are Invariant}\\
-Let $T\in\LL(\mathcal{V})$ and $p\in\mathcal{P}(\mathbb{F})$. Then $\ker(p(T))$ and $\operatorname{range}(p(T))$ are invariant under $T$.
-\begin{proof}
-If $\mathbf{v}\in\ker(p(T))$, then $p(T)\mathbf{v}=\mathbf{0}$.\\
-Since $p(T)$ commutes with $T$ by Proposition \ref{prop:operator-polynomial-products}, $p(T)(T\mathbf{v})=T(p(T)\mathbf{v})=T\mathbf{0}=\mathbf{0}$.\\
-If $\mathbf{v}\in\operatorname{range}(p(T))$, write $\mathbf{v}=p(T)\mathbf{u}$. Then $T\mathbf{v}=Tp(T)\mathbf{u}=p(T)(T\mathbf{u})$, so $T\mathbf{v}\in\operatorname{range}(p(T))$.\\
-\hlt{Structural Commentary}: Polynomial kernels and ranges are stable under the original operator.\\
-\hlt{Key Insight}: Since $T$ commutes with $p(T)$, it preserves both $\ker p(T)$ and $\operatorname{range}p(T)$.
-\end{proof}
-\end{proposition}
 
 \begin{motivation} \label{mot:characteristic-and-minimal-polynomials} \hlt{Two Spectral Polynomials}\\
 The characteristic polynomial records the whole primary decomposition with dimensions.\\
@@ -289,6 +271,28 @@ Write $q_T(z)=\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$, where $\lambda_1,\ldot
   \label{fig:operator-characteristic-polynomial-primary-blocks}
 \end{figure}
 
+\begin{definition} \label{def:monic-polynomial} \hlt{Monic Polynomial}\\
+A nonzero polynomial is \hlt{monic} if its highest-degree coefficient is $1$.
+\end{definition}
+
+\begin{theorem} \label{thm:operator-minimal-polynomial-existence} \hlt{Existence of the Minimal Polynomial}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then $T$ has a unique least-degree monic annihilator $\mu_T$.
+\begin{proof}
+Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} gives a nonzero annihilator; scaling makes it monic, so a least-degree monic annihilator exists. If $p$ and $q$ are two of them, then $(p-q)(T)=0$ and $\deg(p-q)<\deg p$.\\
+If $p\neq q$, scaling $p-q$ gives a smaller monic annihilator, impossible. Hence $p=q$.\\
+\hlt{Structural Commentary}: Existence comes from finite-dimensional dependence; uniqueness from minimality.\\
+\hlt{Key Insight}: Two least monic annihilators cannot differ.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:operator-minimal-polynomial} \hlt{Minimal Polynomial of an Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} of $T$, denoted $\mu_T$, is the unique monic polynomial of smallest degree such that $\mu_T(T)=0$.
+\end{definition}
+
+\begin{definition} \label{def:minimal-polynomial-matrix} \hlt{Minimal Polynomial of a Matrix}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{minimal polynomial} of $A$, denoted $\mu_A$, is the unique monic polynomial of smallest positive degree such that $\mu_A(A)=0$.
+\end{definition}
+
 \begin{theorem} \label{thm:cayley-hamilton-operator} \hlt{Cayley--Hamilton Theorem for Operators}\\
 Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, $q_T$ be characteristic polynomial of $T\in\LL(\mathcal{V})$. Then $q_T(T)=0$.
 \begin{proof}
@@ -316,151 +320,9 @@ If true for $j$, then the first $j+1$ columns of $T-\lambda_{j+1}I_n$ lie in $\o
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/cayley_hamilton_triangular_killing.tikz}
-  \caption{In Schur form, the factors $T-\lambda_iI$ kill the leading columns one layer at a time.}
+\caption{In Schur form, the factors $T-\lambda_iI$ kill the leading columns one layer at a time.}
   \label{fig:cayley-hamilton-triangular-killing}
 \end{figure}
-
-\begin{corollary} \label{cor:polynomial-reduction-by-characteristic-polynomial} \hlt{Reduction Modulo the Characteristic Polynomial}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and let $f\in\mathcal{P}(\mathbb{C})$. If $f=p_Aq+r$ with $\deg r<n$, then $f(A)=r(A)$.
-\begin{proof}
-Evaluate division identity at $A$: $f(A)=p_A(A)q(A)+r(A)=0q(A)+r(A)=r(A)$.\\
-Theorem \ref{thm:cayley-hamilton-matrix} gives $p_A(A)=0$.\\
-\hlt{Structural Commentary}: Cayley--Hamilton makes polynomial expressions in $A$ reducible modulo $p_A$.\\
-\hlt{Key Insight}: Every high power of $A$ can be rewritten using powers below $n$.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:powers-of-matrix-span-dimension-at-most-n} \hlt{Powers Span at Most $n$ Dimensions}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{span}(I_n,A,A^2,\ldots)=\operatorname{span}(I_n,A,\ldots,A^{n-1})$, so this has dimension at most $n$.
-\begin{proof}
-For each $k\geq0$, Corollary \ref{cor:polynomial-reduction-by-characteristic-polynomial} applied to $f(z)=z^{n+k}$ gives a polynomial $r_k$ of degree at most $n-1$ such that $A^{n+k}=r_k(A)$. Thus every power of $A$ lies in $\operatorname{span}(I_n,A,\ldots,A^{n-1})$.\\
-\hlt{Structural Commentary}: Polynomial reduction collapses the infinite power list to its first $n$ terms.\\
-\hlt{Key Insight}: Cayley--Hamilton gives the recurrence relation for powers of $A$.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:inverse-from-characteristic-polynomial} \hlt{Inverse from the Characteristic Polynomial}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have $p_A(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$.\\
-If $A$ is invertible, then $A^{-1}=-c_0^{-1}(A^{n-1}+c_{n-1}A^{n-2}+\cdots+c_2A+c_1I_n)$.
-\begin{proof}
-Since $A$ is invertible, $0\notin\operatorname{spec}(A)$, so $c_0=p_A(0)=(-1)^n\det A\neq0$.\\
-Cayley--Hamilton gives $A^n+c_{n-1}A^{n-1}+\cdots+c_1A+c_0I_n=0$.\\
-Move $c_0I_n$ to the other side and multiply by $-c_0^{-1}A^{-1}$.\\
-\hlt{Structural Commentary}: The characteristic equation contains an identity term exactly when $A$ is invertible.\\
-\hlt{Key Insight}: Solve Cayley--Hamilton for $A^{-1}$ after factoring out one $A$.
-\end{proof}
-\end{corollary}
-
-\begin{proposition} \label{prop:eigenvalues-of-polynomial-in-matrix} \hlt{Eigenvalues of a Polynomial in a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $p\in\mathcal{P}(\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_n$ be the eigenvalues of $A$, counted with algebraic multiplicity. Then the eigenvalues of $p(A)$ are $p(\lambda_1),\ldots,p(\lambda_n)$, counted with algebraic multiplicity.
-\begin{proof}
-Choose a Schur form $U^*AU=T$ with diagonal $\lambda_1,\ldots,\lambda_n$. Then $p(A)=Up(T)U^*$, and $p(T)$ is upper triangular with diagonal $p(\lambda_1),\ldots,p(\lambda_n)$. Hence $p(A)$ has precisely these eigenvalues.\\
-\hlt{Structural Commentary}: Schur form reduces the claim to the diagonal.\\
-\hlt{Key Insight}: A polynomial preserves triangular form and applies $p$ to each diagonal entry.
-\end{proof}
-\end{proposition}
-
-\begin{corollary} \label{cor:polynomial-in-matrix-invertible-spectrum-test} \hlt{Polynomial Invertibility Test}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $p\in\mathcal{P}(\mathbb{C})$. If $p(\lambda)\neq0$ for every $\lambda\in\operatorname{spec}(A)$, then $p(A)$ is invertible.
-\begin{proof}
-By Proposition \ref{prop:eigenvalues-of-polynomial-in-matrix}, $0\notin\operatorname{spec}(p(A))$. Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum} gives invertibility.\\
-\hlt{Structural Commentary}: Invertibility of $p(A)$ is checked on spectral values of $A$.\\
-\hlt{Key Insight}: Avoiding zero on the spectrum prevents $p(A)$ from having a kernel.
-\end{proof}
-\end{corollary}
-
-\begin{theorem} \label{thm:sylvester-linear-matrix-equation} \hlt{Sylvester Linear Matrix Equation}\\
-Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$ and $B\in\operatorname{Mat}(n,n,\mathbb{C})$. If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then for every $C\in\operatorname{Mat}(m,n,\mathbb{C})$ the equation $AX-XB=C$ has a unique solution $X\in\operatorname{Mat}(m,n,\mathbb{C})$.
-\begin{proof}
-Let $L(X)=AX-XB$. Since $L$ has equal finite-dimensional domain and codomain, it suffices to show $\ker L=\{0\}$. If $AX=XB$, then $p(A)X=Xp(B)$ for every polynomial $p$. \\
-With $p=p_B$, Cayley--Hamilton gives $p_B(A)X=Xp_B(B)=0$. For every $\lambda\in\operatorname{spec}(A)$, disjointness gives $p_B(\lambda)\neq0$; hence $p_B(A)$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test}. Thus $X=0$, so $L$ is bijective.\\
-\hlt{Structural Commentary}: Polynomial calculus pass through homogeneous solutions; disjoint spectra invert $p_B(A)$.\\
-\hlt{Key Insight}: Spectral separation turns an intertwining relation into the zero relation.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/sylvester_equation_spectral_gap.tikz}
-  \caption{Disjoint spectra make $p_B(A)$ invertible, so the Sylvester map $L(X)=AX-XB$ is invertible.}
-  \label{fig:sylvester-equation-spectral-gap}
-\end{figure}
-
-\begin{corollary} \label{cor:block-upper-triangular-remove-disjoint-coupling} \hlt{Removing a Spectrally Separated Off-Diagonal Block}\\
-Let $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$ and $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$ Then $M$ is similar to $A\oplus B$.
-\begin{proof}
-By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X$ such that $AX-XB=-C$. Then
-\begin{align}
-\begin{bmatrix}I&-X\\0&I\end{bmatrix}
-\begin{bmatrix}A&C\\0&B\end{bmatrix}
-\begin{bmatrix}I&X\\0&I\end{bmatrix}
-=
-\begin{bmatrix}A&AX+C-XB\\0&B\end{bmatrix}
-=
-\begin{bmatrix}A&0\\0&B\end{bmatrix}.
-\nonumber
-\end{align}
-\hlt{Structural Commentary}: A block shear cancels the off-diagonal block via Sylvester's equation.\\
-\hlt{Key Insight}: Spectrally separated diagonal blocks cannot carry essential upper-right coupling.
-\end{proof}
-\end{corollary}
-
-\begin{theorem} \label{thm:schur-block-form-by-eigenvalue-groups} \hlt{Schur Form Grouped by Eigenvalues}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$ with algebraic multiplicities $n_1,\ldots,n_d$.\\
-Then $A$ is unitarily similar to a block upper-triangular matrix
-\begin{align}
-T=
-\begin{bmatrix}
-T_{11}&T_{12}&\cdots&T_{1d}\\
-0&T_{22}&\cdots&T_{2d}\\
-\vdots&\vdots&\ddots&\vdots\\
-0&0&\cdots&T_{dd}
-\end{bmatrix},
-\qquad
-T_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C}),
-\nonumber
-\end{align}
-where each $T_{ii}$ is upper triangular with all diagonal entries equal to $\lambda_i$. Moreover, $A$ is similar to $T_{11}\oplus\cdots\oplus T_{dd}$.
-\begin{proof}
-Order the Schur diagonal as $\lambda_1,\ldots,\lambda_1,\lambda_2,\ldots,\lambda_2,\ldots,\lambda_d,\ldots,\lambda_d$.\\
-Theorem \ref{thm:matrix-schur-triangularization-ordered} gives the displayed block Schur form. Since $\operatorname{spec}(T_{11})$ is disjoint from the trailing block spectrum, Corollary \ref{cor:block-upper-triangular-remove-disjoint-coupling} splits off $T_{11}$. Iterating splits off every diagonal block.\\
-\hlt{Structural Commentary}: Grouped Schur form isolates spectral blocks; Sylvester shears split disjoint groups.\\
-\hlt{Key Insight}: Cross-group upper blocks are coordinate artefacts.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} \hlt{Commuting with Disjoint Blocks}\\
-Let $A=A_{11}\oplus\cdots\oplus A_{dd}$, where the spectra of $A_{11},\ldots,A_{dd}$ are pairwise disjoint.\\
-Partition $B=[B_{ij}]$ conformally with $A$. If $AB=BA$, then $B_{ij}=0$ for all $i\neq j$.
-\begin{proof}
-Equating $(i,j)$ blocks in $AB=BA$ gives $A_{ii}B_{ij}-B_{ij}A_{jj}=0$.\\
-For $i\neq j$, the spectra of $A_{ii}$ and $A_{jj}$ are disjoint, so Theorem \ref{thm:sylvester-linear-matrix-equation} with $C=0$ gives $B_{ij}=0$.\\
-\hlt{Structural Commentary}: A commuting matrix cannot mix direct-sum blocks with disjoint spectra.\\
-\hlt{Key Insight}: The off-diagonal block solves a homogeneous Sylvester equation, whose only solution is zero.
-\end{proof}
-\end{corollary}
-
-\begin{definition} \label{def:monic-polynomial} \hlt{Monic Polynomial}\\
-A nonzero polynomial is \hlt{monic} if its highest-degree coefficient is $1$.
-\end{definition}
-
-\begin{theorem} \label{thm:operator-minimal-polynomial-existence} \hlt{Existence of the Minimal Polynomial}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then $T$ has a unique least-degree monic annihilator $\mu_T$.
-\begin{proof}
-Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} gives a nonzero annihilator; scaling makes it monic, so a least-degree monic annihilator exists. If $p$ and $q$ are two of them, then $(p-q)(T)=0$ and $\deg(p-q)<\deg p$.\\
-If $p\neq q$, scaling $p-q$ gives a smaller monic annihilator, impossible. Hence $p=q$.\\
-\hlt{Structural Commentary}: Existence comes from finite-dimensional dependence; uniqueness from minimality.\\
-\hlt{Key Insight}: Two least monic annihilators cannot differ.
-\end{proof}
-\end{theorem}
-
-\begin{definition} \label{def:operator-minimal-polynomial} \hlt{Minimal Polynomial of an Operator}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} of $T$, denoted $\mu_T$, is the unique monic polynomial of smallest degree such that $\mu_T(T)=0$.
-\end{definition}
-
-\begin{definition} \label{def:minimal-polynomial-matrix} \hlt{Minimal Polynomial of a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{minimal polynomial} of $A$, denoted $\mu_A$, is the unique monic polynomial of smallest positive degree such that $\mu_A(A)=0$.
-\end{definition}
 
 \begin{theorem} \label{thm:minimal-polynomial-basic-properties} \hlt{Basic Properties of the Minimal Polynomial}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_d$ be the distinct eigenvalues of $A$.
@@ -623,132 +485,156 @@ Hence no nonzero polynomial of degree $<n$ annihilates $C_f$. Therefore $\deg\mu
 \end{proof}
 \end{theorem}
 
-\begin{proposition} \label{prop:minimal-polynomial-complexification} \hlt{Minimal Polynomial Survives Complexification}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$. Then $\mu_{T_{\mathbb{C}}}=\mu_T$ in $\mathcal{P}(\mathbb{C})$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Since $\mu_T(T)=0$, Proposition \ref{prop:complexification-operator-basic-properties} gives $\mu_T(T_{\mathbb{C}})=(\mu_T(T))_{\mathbb{C}}=0$. Hence $\mu_{T_{\mathbb{C}}}$ divides $\mu_T$ in $\mathcal{P}(\mathbb{C})$.
-\item[$(\Leftarrow)$] Let $q=\mu_{T_{\mathbb{C}}}=r+is$, with $r,s\in\mathcal{P}(\mathbb{R})$. Since $q$ is monic, $r$ is monic and $\deg r=\deg q$.\\
-For every $\mathbf{u}\in\mathcal{V}$, $0=q(T_{\mathbb{C}})(\mathbf{u}+i\mathbf{0})=r(T)\mathbf{u}+is(T)\mathbf{u}$. Thus $r(T)=0$, so $\deg\mu_T\leq\deg r=\deg q$. The first part gives opposite degree inequality. As $q$ divides $\mu_T$ and both are monic with equal degree, $q=\mu_T$.
-\end{enumerate}
-\hlt{Structural Commentary}: Annihilation passes to complexification and back by real-part extraction.\\
-\hlt{Key Insight}: Evaluate $q(T_{\mathbb{C}})$ on $\mathbf{u}+i\mathbf{0}$.
-\end{proof}
-\end{proposition}
-
-\begin{proposition} \label{prop:real-eigenvalues-complexification} \hlt{Real Eigenvalues of a Complexification}\\
-Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, and let $\lambda\in\mathbb{R}$. Then $\lambda$ is an eigenvalue of $T$ if and only if it is an eigenvalue of $T_{\mathbb{C}}$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $T_{\mathbb{C}}(\mathbf{v}+i\mathbf{0})=\lambda(\mathbf{v}+i\mathbf{0})$.
-\item[$(\Leftarrow)$] If $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=\lambda(\mathbf{u}+i\mathbf{v})$ and $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$, then $T\mathbf{u}=\lambda\mathbf{u}$ and $T\mathbf{v}=\lambda\mathbf{v}$.\\
-Since $\mathbf{u}$ or $\mathbf{v}$ is nonzero, $T$ has eigenvalue $\lambda$.
-\end{enumerate}
-\hlt{Structural Commentary}: Real eigenvalues survive complexification exactly.\\
-\hlt{Key Insight}: For real $\lambda$, real and imaginary parts decouple.
-\end{proof}
-\end{proposition}
-
-\begin{lemma} \label{lem:complexification-conjugate-generalized-eigenspaces} \hlt{Conjugation Transfers Generalized Eigenspaces}\\
-Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, let $\lambda\in\mathbb{C}$, and let $k\geq0$. Then $(T_{\mathbb{C}}-\lambda I)^k(\mathbf{u}+i\mathbf{v})=\mathbf{0}$ $\Longleftrightarrow$ $(T_{\mathbb{C}}-\overline{\lambda} I)^k(\mathbf{u}-i\mathbf{v})=\mathbf{0}$.
-\begin{proof}
-Let $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$.\\
-Then $\Gamma$ is a conjugate-linear bijection, $\Gamma T_{\mathbb{C}}=T_{\mathbb{C}}\Gamma$, and $\Gamma\bigl((T_{\mathbb{C}}-\lambda I)^k\mathbf{x}\bigr) =(T_{\mathbb{C}}-\overline{\lambda} I)^k\Gamma\mathbf{x}$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Apply the displayed identity to $\mathbf{x}=\mathbf{u}+i\mathbf{v}$.
-\item[$(\Leftarrow)$] Apply the first direction with $\overline{\lambda}$ in place of $\lambda$ and $\mathbf{u}-i\mathbf{v}$ in place of $\mathbf{u}+i\mathbf{v}$.
-\end{enumerate}
-\hlt{Structural Commentary}: Conjugation commutes with $T_{\mathbb{C}}$ and conjugates scalars.\\
-\hlt{Key Insight}: Conjugation pairs generalized eigenspaces.
-\end{proof}
-\end{lemma}
-
-\begin{corollary} \label{cor:complexification-conjugate-eigenvalue-multiplicities} \hlt{Conjugate Eigenvalues Have Equal Multiplicity}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
-If $\lambda$ is an eigenvalue of $T_{\mathbb{C}}$, then $\overline{\lambda}$ is an eigenvalue of $T_{\mathbb{C}}$, and $\dim_{\mathbb{C}}G(\lambda,T_{\mathbb{C}}) =\dim_{\mathbb{C}}G(\overline{\lambda},T_{\mathbb{C}})$.
-\begin{proof}
-Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} with $k=1$ gives the eigenvalue pairing.\\
-With $k=\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$, the same lemma gives a conjugate-linear bijection $G(\lambda,T_{\mathbb{C}})\longrightarrow G(\overline{\lambda},T_{\mathbb{C}})$, and $\mathbf{x}\longmapsto\Gamma\mathbf{x}$.
-Conjugate-linear bijections preserve complex dimension, so the multiplicities agree.\\
-\hlt{Structural Commentary}: Conjugation mirrors generalized eigenspaces.\\
-\hlt{Key Insight}: Nonreal spectral data of a real operator arrives in equal-sized conjugate pairs.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:odd-dimensional-real-operator-has-eigenvalue} \hlt{Odd-Dimensional Real Operators Have Eigenvalues}\\
-Every operator on a nonzero odd-dimensional real vector space has a real eigenvalue.
-\begin{proof}
-Let $T\in\LL(\mathcal{V})$, where $\dim_{\mathbb{R}}\mathcal{V}$ is odd. By Proposition \ref{prop:complexification-vector-space-basis}, $\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$ is odd.\\
-The sum of the multiplicities of all eigenvalues of $T_{\mathbb{C}}$ equals this odd dimension by Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities}. Nonreal eigenvalues contribute in conjugate pairs of equal multiplicity by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, hence contribute an even total. Therefore $T_{\mathbb{C}}$ has at least one real eigenvalue, which is an eigenvalue of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.\\
-\hlt{Structural Commentary}: Odd dimension forces a real eigenvalue.\\
-\hlt{Key Insight}: Parity forces at least one real spectral direction.
-\end{proof}
-\end{corollary}
-
-\begin{definition} \label{def:real-operator-characteristic-polynomial} \hlt{Characteristic Polynomial of a Real Operator}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
-The \hlt{characteristic polynomial} of $T$ is $q_T\defeq q_{T_{\mathbb{C}}}$, the characteristic polynomial of its complexification.
-\end{definition}
-
-\begin{theorem} \label{thm:real-operator-characteristic-polynomial-properties} \hlt{Characteristic Polynomial over $\mathbb{R}$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space, let $T\in\LL(\mathcal{V})$, and let $q_T$ be its characteristic polynomial.
+\begin{theorem} \label{thm:annihilating-polynomials-control-spectrum} \hlt{Annihilating Polynomials Control the Spectrum}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $p$ be a nonconstant annihilating polynomial for $T$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $q_T\in\mathcal{P}(\mathbb{R})$.
-\item $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
-\item The real zeros of $q_T$ are precisely the eigenvalues of $T$.
-\item $q_T(T)=0$.
+\item Every eigenvalue of $T$ is a root of $p$.
+\item If $\mathbb{F}=\mathbb{C}$, then at least one root of $p$ is an eigenvalue of $T$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Factor $q_{T_{\mathbb{C}}}$ over $\mathbb{C}$. Real eigenvalues give real linear factors. If $\lambda\notin\mathbb{R}$ has multiplicity $m$, then $\overline{\lambda}$ has multiplicity $m$ by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, and $(z-\lambda)^m(z-\overline{\lambda})^m=\bigl(z^2-2\operatorname{Re}(\lambda)z+\abs{\lambda}^2\bigr)^m$, which is real.
-\item Proposition \ref{prop:operator-characteristic-polynomial-degree-roots} and Proposition \ref{prop:complexification-vector-space-basis} give $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
-\item The real zeros of $q_T=q_{T_{\mathbb{C}}}$ are the real eigenvalues of $T_{\mathbb{C}}$ by Proposition \ref{prop:operator-characteristic-polynomial-degree-roots}, hence the eigenvalues of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.
-\item Cayley--Hamilton over $\mathbb{C}$ gives $q_T(T_{\mathbb{C}})=0$. By (i), Proposition \ref{prop:complexification-operator-basic-properties}, $q_T(T_{\mathbb{C}})=(q_T(T))_{\mathbb{C}}$, so $q_T(T)=0$.
+\item If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then Proposition \ref{prop:polynomial-eigenvector-evaluation} gives $0=p(T)\mathbf{v}=p(\lambda)\mathbf{v}$. Since $\mathbf{v}\neq\mathbf{0}$, $p(\lambda)=0$.
+\item Factor $p(z)=c(z-\lambda_1)\cdots(z-\lambda_m)$ over $\mathbb{C}$, with $c\neq0$. Then $0=p(T)=c(T-\lambda_1I_{\mathcal{V}})\cdots(T-\lambda_mI_{\mathcal{V}})$. At least one factor $T-\lambda_jI_{\mathcal{V}}$ is not injective; otherwise product would be injective. Hence $\lambda_j$ is an eigenvalue.
 \end{enumerate}
-\hlt{Structural Commentary}: Nonreal factors pair into real quadratics.\\
-\hlt{Key Insight}: Complexify, then pair conjugates.
+\hlt{Structural Commentary}: Annihilating polynomial restricts spectrum to its roots; over $\mathbb{C}$, one root must appear.\\
+\hlt{Key Insight}: Eigenvectors turn $p(T)$ into $p(\lambda)$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:kernel-range-polynomial-in-operator-invariant} \label{prop:kernel-of-polynomial-in-operator-is-invariant} \hlt{Kernel and Range of a Polynomial in an Operator Are Invariant}\\
+Let $T\in\LL(\mathcal{V})$ and $p\in\mathcal{P}(\mathbb{F})$. Then $\ker(p(T))$ and $\operatorname{range}(p(T))$ are invariant under $T$.
+\begin{proof}
+If $\mathbf{v}\in\ker(p(T))$, then $p(T)\mathbf{v}=\mathbf{0}$.\\
+Since $p(T)$ commutes with $T$ by Proposition \ref{prop:operator-polynomial-products}, $p(T)(T\mathbf{v})=T(p(T)\mathbf{v})=T\mathbf{0}=\mathbf{0}$.\\
+If $\mathbf{v}\in\operatorname{range}(p(T))$, write $\mathbf{v}=p(T)\mathbf{u}$. Then $T\mathbf{v}=Tp(T)\mathbf{u}=p(T)(T\mathbf{u})$, so $T\mathbf{v}\in\operatorname{range}(p(T))$.\\
+\hlt{Structural Commentary}: Polynomial kernels and ranges are stable under the original operator.\\
+\hlt{Key Insight}: Since $T$ commutes with $p(T)$, it preserves both $\ker p(T)$ and $\operatorname{range}p(T)$.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:polynomial-reduction-by-characteristic-polynomial} \hlt{Reduction Modulo the Characteristic Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and let $f\in\mathcal{P}(\mathbb{C})$. If $f=p_Aq+r$ with $\deg r<n$, then $f(A)=r(A)$.
+\begin{proof}
+Evaluate division identity at $A$: $f(A)=p_A(A)q(A)+r(A)=0q(A)+r(A)=r(A)$.\\
+Theorem \ref{thm:cayley-hamilton-matrix} gives $p_A(A)=0$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton makes polynomial expressions in $A$ reducible modulo $p_A$.\\
+\hlt{Key Insight}: Every high power of $A$ can be rewritten using powers below $n$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:powers-of-matrix-span-dimension-at-most-n} \hlt{Powers Span at Most $n$ Dimensions}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{span}(I_n,A,A^2,\ldots)=\operatorname{span}(I_n,A,\ldots,A^{n-1})$, so this has dimension at most $n$.
+\begin{proof}
+For each $k\geq0$, Corollary \ref{cor:polynomial-reduction-by-characteristic-polynomial} applied to $f(z)=z^{n+k}$ gives a polynomial $r_k$ of degree at most $n-1$ such that $A^{n+k}=r_k(A)$. Thus every power of $A$ lies in $\operatorname{span}(I_n,A,\ldots,A^{n-1})$.\\
+\hlt{Structural Commentary}: Polynomial reduction collapses the infinite power list to its first $n$ terms.\\
+\hlt{Key Insight}: Cayley--Hamilton gives the recurrence relation for powers of $A$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:inverse-from-characteristic-polynomial} \hlt{Inverse from the Characteristic Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have $p_A(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$.\\
+If $A$ is invertible, then $A^{-1}=-c_0^{-1}(A^{n-1}+c_{n-1}A^{n-2}+\cdots+c_2A+c_1I_n)$.
+\begin{proof}
+Since $A$ is invertible, $0\notin\operatorname{spec}(A)$, so $c_0=p_A(0)=(-1)^n\det A\neq0$.\\
+Cayley--Hamilton gives $A^n+c_{n-1}A^{n-1}+\cdots+c_1A+c_0I_n=0$.\\
+Move $c_0I_n$ to the other side and multiply by $-c_0^{-1}A^{-1}$.\\
+\hlt{Structural Commentary}: The characteristic equation contains an identity term exactly when $A$ is invertible.\\
+\hlt{Key Insight}: Solve Cayley--Hamilton for $A^{-1}$ after factoring out one $A$.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:eigenvalues-of-polynomial-in-matrix} \hlt{Eigenvalues of a Polynomial in a Matrix}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $p\in\mathcal{P}(\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_n$ be the eigenvalues of $A$, counted with algebraic multiplicity. Then the eigenvalues of $p(A)$ are $p(\lambda_1),\ldots,p(\lambda_n)$, counted with algebraic multiplicity.
+\begin{proof}
+Choose a Schur form $U^*AU=T$ with diagonal $\lambda_1,\ldots,\lambda_n$. Then $p(A)=Up(T)U^*$, and $p(T)$ is upper triangular with diagonal $p(\lambda_1),\ldots,p(\lambda_n)$. Hence $p(A)$ has precisely these eigenvalues.\\
+\hlt{Structural Commentary}: Schur form reduces the claim to the diagonal.\\
+\hlt{Key Insight}: A polynomial preserves triangular form and applies $p$ to each diagonal entry.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:polynomial-in-matrix-invertible-spectrum-test} \hlt{Polynomial Invertibility Test}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $p\in\mathcal{P}(\mathbb{C})$. If $p(\lambda)\neq0$ for every $\lambda\in\operatorname{spec}(A)$, then $p(A)$ is invertible.
+\begin{proof}
+By Proposition \ref{prop:eigenvalues-of-polynomial-in-matrix}, $0\notin\operatorname{spec}(p(A))$. Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum} gives invertibility.\\
+\hlt{Structural Commentary}: Invertibility of $p(A)$ is checked on spectral values of $A$.\\
+\hlt{Key Insight}: Avoiding zero on the spectrum prevents $p(A)$ from having a kernel.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:sylvester-linear-matrix-equation} \hlt{Sylvester Linear Matrix Equation}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$ and $B\in\operatorname{Mat}(n,n,\mathbb{C})$. If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then for every $C\in\operatorname{Mat}(m,n,\mathbb{C})$ the equation $AX-XB=C$ has a unique solution $X\in\operatorname{Mat}(m,n,\mathbb{C})$.
+\begin{proof}
+Let $L(X)=AX-XB$. Since $L$ has equal finite-dimensional domain and codomain, it suffices to show $\ker L=\{0\}$. If $AX=XB$, then $p(A)X=Xp(B)$ for every polynomial $p$. \\
+With $p=p_B$, Cayley--Hamilton gives $p_B(A)X=Xp_B(B)=0$. For every $\lambda\in\operatorname{spec}(A)$, disjointness gives $p_B(\lambda)\neq0$; hence $p_B(A)$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test}. Thus $X=0$, so $L$ is bijective.\\
+\hlt{Structural Commentary}: Polynomial calculus pass through homogeneous solutions; disjoint spectra invert $p_B(A)$.\\
+\hlt{Key Insight}: Spectral separation turns an intertwining relation into the zero relation.
 \end{proof}
 \end{theorem}
 
 \begin{figure}[H]
   \centering
-  \input{figures/linear_algebra/real_characteristic_conjugate_pairs.tikz}
-  \caption{Conjugate factors pair into real quadratics.}
-  \label{fig:real-characteristic-conjugate-pairs}
+  \input{figures/linear_algebra/sylvester_equation_spectral_gap.tikz}
+  \caption{Disjoint spectra make $p_B(A)$ invertible, so the Sylvester map $L(X)=AX-XB$ is invertible.}
+  \label{fig:sylvester-equation-spectral-gap}
 \end{figure}
 
-\begin{corollary} \label{cor:real-characteristic-polynomial-multiple-minimal-polynomial} \hlt{$q_T$ Is a Multiple of $\mu_T$ over $\mathbb{R}$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
-Then $\deg\mu_T\leq\dim_{\mathbb{R}}\mathcal{V}$, and $q_T$ is a polynomial multiple of $\mu_T$ in $\mathcal{P}(\mathbb{R})$.
+\begin{corollary} \label{cor:block-upper-triangular-remove-disjoint-coupling} \hlt{Removing a Spectrally Separated Off-Diagonal Block}\\
+Let $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$ and $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$ Then $M$ is similar to $A\oplus B$.
 \begin{proof}
-Theorem \ref{thm:real-operator-characteristic-polynomial-properties} gives $q_T(T)=0$.\\
-By Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial}, $\mu_T$ divides $q_T$ in $\mathcal{P}(\mathbb{R})$. The degree bound follows from $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.\\
-\hlt{Structural Commentary}: Cayley--Hamilton makes $q_T$ a real annihilator of $T$.\\
-\hlt{Key Insight}: The minimal polynomial divides every real annihilator.
+By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X$ such that $AX-XB=-C$. Then
+\begin{align}
+\begin{bmatrix}I&-X\\0&I\end{bmatrix}
+\begin{bmatrix}A&C\\0&B\end{bmatrix}
+\begin{bmatrix}I&X\\0&I\end{bmatrix}
+=
+\begin{bmatrix}A&AX+C-XB\\0&B\end{bmatrix}
+=
+\begin{bmatrix}A&0\\0&B\end{bmatrix}.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: A block shear cancels the off-diagonal block via Sylvester's equation.\\
+\hlt{Key Insight}: Spectrally separated diagonal blocks cannot carry essential upper-right coupling.
 \end{proof}
 \end{corollary}
 
-\begin{theorem} \label{thm:operator-minimal-polynomial-roots-eigenvalues} \hlt{Roots of $\mu_T$ Are Eigenvalues}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. Then the roots of $\mu_T$ are precisely the eigenvalues of $T$.
+\begin{theorem} \label{thm:schur-block-form-by-eigenvalue-groups} \hlt{Schur Form Grouped by Eigenvalues}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$ with algebraic multiplicities $n_1,\ldots,n_d$.\\
+Then $A$ is unitarily similar to a block upper-triangular matrix
+\begin{align}
+T=
+\begin{bmatrix}
+T_{11}&T_{12}&\cdots&T_{1d}\\
+0&T_{22}&\cdots&T_{2d}\\
+\vdots&\vdots&\ddots&\vdots\\
+0&0&\cdots&T_{dd}
+\end{bmatrix},
+\qquad
+T_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C}),
+\nonumber
+\end{align}
+where each $T_{ii}$ is upper triangular with all diagonal entries equal to $\lambda_i$. Moreover, $A$ is similar to $T_{11}\oplus\cdots\oplus T_{dd}$.
 \begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\mu_T(\lambda)=0$, write $\mu_T(z)=(z-\lambda)g(z)$. Since $\deg g<\deg\mu_T$, minimality gives $g(T)\neq0$; choose $\mathbf{v}$ with $\mathbf{u}=g(T)\mathbf{v}\neq\mathbf{0}$. Then $(T-\lambda I_{\mathcal{V}})\mathbf{u}=\mu_T(T)\mathbf{v}=\mathbf{0}$.
-\item[$(\Leftarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $0=\mu_T(T)\mathbf{v}=\mu_T(\lambda)\mathbf{v}$, so $\mu_T(\lambda)=0$.
-\end{enumerate}
-\hlt{Structural Commentary}: A root splits off one shifted operator.\\
-\hlt{Key Insight}: The quotient cannot already annihilate $T$.
+Order the Schur diagonal as $\lambda_1,\ldots,\lambda_1,\lambda_2,\ldots,\lambda_2,\ldots,\lambda_d,\ldots,\lambda_d$.\\
+Theorem \ref{thm:matrix-schur-triangularization-ordered} gives the displayed block Schur form. Since $\operatorname{spec}(T_{11})$ is disjoint from the trailing block spectrum, Corollary \ref{cor:block-upper-triangular-remove-disjoint-coupling} splits off $T_{11}$. Iterating splits off every diagonal block.\\
+\hlt{Structural Commentary}: Grouped Schur form isolates spectral blocks; Sylvester shears split disjoint groups.\\
+\hlt{Key Insight}: Cross-group upper blocks are coordinate artefacts.
 \end{proof}
 \end{theorem}
 
-\begin{perspective} \label{per:characteristic-versus-minimal-polynomial} \hlt{Characteristic vs. Minimal Polynomial}\\
-The characteristic polynomial records every primary block with its dimension. The minimal polynomial records the least polynomial needed to annihilate all blocks at once.
-\end{perspective}
+\begin{corollary} \label{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} \hlt{Commuting with Disjoint Blocks}\\
+Let $A=A_{11}\oplus\cdots\oplus A_{dd}$, where the spectra of $A_{11},\ldots,A_{dd}$ are pairwise disjoint.\\
+Partition $B=[B_{ij}]$ conformally with $A$. If $AB=BA$, then $B_{ij}=0$ for all $i\neq j$.
+\begin{proof}
+Equating $(i,j)$ blocks in $AB=BA$ gives $A_{ii}B_{ij}-B_{ij}A_{jj}=0$.\\
+For $i\neq j$, the spectra of $A_{ii}$ and $A_{jj}$ are disjoint, so Theorem \ref{thm:sylvester-linear-matrix-equation} with $C=0$ gives $B_{ij}=0$.\\
+\hlt{Structural Commentary}: A commuting matrix cannot mix direct-sum blocks with disjoint spectra.\\
+\hlt{Key Insight}: The off-diagonal block solves a homogeneous Sylvester equation, whose only solution is zero.
+\end{proof}
+\end{corollary}
+
+Generalized eigenvectors repair the main defect of ordinary eigenvectors: an operator may not have enough eigendirections to form a basis. The replacement is to study vectors killed by powers of shifted operators.
 
 \begin{definition} \label{def:generalized-eigenvector-and-eigenspace} \hlt{Generalized Eigenvectors and Generalized Eigenspaces}\\
 Let $T\in\LL(\mathcal{V})$, $\lambda\in\mathbb{F}$. Nonzero vector $\mathbf{v}\in\mathcal{V}$ is a \hlt{generalized eigenvector} of $T$ to $\lambda$ if $(T-\lambda I_{\mathcal{V}})^j\mathbf{v}=\mathbf{0}$ for some positive integer $j$. The \hlt{generalized eigenspace} corresponding to $\lambda$ is
@@ -1019,6 +905,19 @@ J_k(0)=
 \end{align}
 For $\lambda\in\mathbb{C}$, set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
 \end{definition}
+
+\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
+For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
+\begin{proof} Formula follows from binomial theorem applied to $J_k(\lambda)=\lambda I_k+J_k(0)$, with truncation from $J_k(0)^k=0$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
+\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then each coefficient $\binom{p}{r}\lambda^{p-r} \rightarrow 0$ for fixed $r$; hence every term in finite expansion tends to $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
+\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:nilpotent-jordan-chain-basis} \hlt{Nilpotent Jordan Chain Basis}\\
 Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ s.t. $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
@@ -1372,3 +1271,130 @@ Then $T|_{\mathcal{U}_j} =\lambda_j\left(I_{\mathcal{U}_j}+\lambda_j^{-1}N_j\rig
 \hlt{Key Insight}: Invertibility makes every scalar block nonzero.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:minimal-polynomial-complexification} \hlt{Minimal Polynomial Survives Complexification}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$. Then $\mu_{T_{\mathbb{C}}}=\mu_T$ in $\mathcal{P}(\mathbb{C})$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Since $\mu_T(T)=0$, Proposition \ref{prop:complexification-operator-basic-properties} gives $\mu_T(T_{\mathbb{C}})=(\mu_T(T))_{\mathbb{C}}=0$. Hence $\mu_{T_{\mathbb{C}}}$ divides $\mu_T$ in $\mathcal{P}(\mathbb{C})$.
+\item[$(\Leftarrow)$] Let $q=\mu_{T_{\mathbb{C}}}=r+is$, with $r,s\in\mathcal{P}(\mathbb{R})$. Since $q$ is monic, $r$ is monic and $\deg r=\deg q$.\\
+For every $\mathbf{u}\in\mathcal{V}$, $0=q(T_{\mathbb{C}})(\mathbf{u}+i\mathbf{0})=r(T)\mathbf{u}+is(T)\mathbf{u}$. Thus $r(T)=0$, so $\deg\mu_T\leq\deg r=\deg q$. The first part gives opposite degree inequality. As $q$ divides $\mu_T$ and both are monic with equal degree, $q=\mu_T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Annihilation passes to complexification and back by real-part extraction.\\
+\hlt{Key Insight}: Evaluate $q(T_{\mathbb{C}})$ on $\mathbf{u}+i\mathbf{0}$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:real-eigenvalues-complexification} \hlt{Real Eigenvalues of a Complexification}\\
+Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, and let $\lambda\in\mathbb{R}$. Then $\lambda$ is an eigenvalue of $T$ if and only if it is an eigenvalue of $T_{\mathbb{C}}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $T_{\mathbb{C}}(\mathbf{v}+i\mathbf{0})=\lambda(\mathbf{v}+i\mathbf{0})$.
+\item[$(\Leftarrow)$] If $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=\lambda(\mathbf{u}+i\mathbf{v})$ and $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$, then $T\mathbf{u}=\lambda\mathbf{u}$ and $T\mathbf{v}=\lambda\mathbf{v}$.\\
+Since $\mathbf{u}$ or $\mathbf{v}$ is nonzero, $T$ has eigenvalue $\lambda$.
+\end{enumerate}
+\hlt{Structural Commentary}: Real eigenvalues survive complexification exactly.\\
+\hlt{Key Insight}: For real $\lambda$, real and imaginary parts decouple.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:complexification-conjugate-generalized-eigenspaces} \hlt{Conjugation Transfers Generalized Eigenspaces}\\
+Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, let $\lambda\in\mathbb{C}$, and let $k\geq0$. Then $(T_{\mathbb{C}}-\lambda I)^k(\mathbf{u}+i\mathbf{v})=\mathbf{0}$ $\Longleftrightarrow$ $(T_{\mathbb{C}}-\overline{\lambda} I)^k(\mathbf{u}-i\mathbf{v})=\mathbf{0}$.
+\begin{proof}
+Let $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$.\\
+Then $\Gamma$ is a conjugate-linear bijection, $\Gamma T_{\mathbb{C}}=T_{\mathbb{C}}\Gamma$, and $\Gamma\bigl((T_{\mathbb{C}}-\lambda I)^k\mathbf{x}\bigr) =(T_{\mathbb{C}}-\overline{\lambda} I)^k\Gamma\mathbf{x}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Apply the displayed identity to $\mathbf{x}=\mathbf{u}+i\mathbf{v}$.
+\item[$(\Leftarrow)$] Apply the first direction with $\overline{\lambda}$ in place of $\lambda$ and $\mathbf{u}-i\mathbf{v}$ in place of $\mathbf{u}+i\mathbf{v}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation commutes with $T_{\mathbb{C}}$ and conjugates scalars.\\
+\hlt{Key Insight}: Conjugation pairs generalized eigenspaces.
+\end{proof}
+\end{lemma}
+
+\begin{corollary} \label{cor:complexification-conjugate-eigenvalue-multiplicities} \hlt{Conjugate Eigenvalues Have Equal Multiplicity}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
+If $\lambda$ is an eigenvalue of $T_{\mathbb{C}}$, then $\overline{\lambda}$ is an eigenvalue of $T_{\mathbb{C}}$, and $\dim_{\mathbb{C}}G(\lambda,T_{\mathbb{C}}) =\dim_{\mathbb{C}}G(\overline{\lambda},T_{\mathbb{C}})$.
+\begin{proof}
+Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} with $k=1$ gives the eigenvalue pairing.\\
+With $k=\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$, the same lemma gives a conjugate-linear bijection $G(\lambda,T_{\mathbb{C}})\longrightarrow G(\overline{\lambda},T_{\mathbb{C}})$, and $\mathbf{x}\longmapsto\Gamma\mathbf{x}$.
+Conjugate-linear bijections preserve complex dimension, so the multiplicities agree.\\
+\hlt{Structural Commentary}: Conjugation mirrors generalized eigenspaces.\\
+\hlt{Key Insight}: Nonreal spectral data of a real operator arrives in equal-sized conjugate pairs.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:odd-dimensional-real-operator-has-eigenvalue} \hlt{Odd-Dimensional Real Operators Have Eigenvalues}\\
+Every operator on a nonzero odd-dimensional real vector space has a real eigenvalue.
+\begin{proof}
+Let $T\in\LL(\mathcal{V})$, where $\dim_{\mathbb{R}}\mathcal{V}$ is odd. By Proposition \ref{prop:complexification-vector-space-basis}, $\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$ is odd.\\
+The sum of the multiplicities of all eigenvalues of $T_{\mathbb{C}}$ equals this odd dimension by Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities}. Nonreal eigenvalues contribute in conjugate pairs of equal multiplicity by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, hence contribute an even total. Therefore $T_{\mathbb{C}}$ has at least one real eigenvalue, which is an eigenvalue of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.\\
+\hlt{Structural Commentary}: Odd dimension forces a real eigenvalue.\\
+\hlt{Key Insight}: Parity forces at least one real spectral direction.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:real-operator-characteristic-polynomial} \hlt{Characteristic Polynomial of a Real Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+The \hlt{characteristic polynomial} of $T$ is $q_T\defeq q_{T_{\mathbb{C}}}$, the characteristic polynomial of its complexification.
+\end{definition}
+
+\begin{theorem} \label{thm:real-operator-characteristic-polynomial-properties} \hlt{Characteristic Polynomial over $\mathbb{R}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space, let $T\in\LL(\mathcal{V})$, and let $q_T$ be its characteristic polynomial.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $q_T\in\mathcal{P}(\mathbb{R})$.
+\item $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
+\item The real zeros of $q_T$ are precisely the eigenvalues of $T$.
+\item $q_T(T)=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Factor $q_{T_{\mathbb{C}}}$ over $\mathbb{C}$. Real eigenvalues give real linear factors. If $\lambda\notin\mathbb{R}$ has multiplicity $m$, then $\overline{\lambda}$ has multiplicity $m$ by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, and $(z-\lambda)^m(z-\overline{\lambda})^m=\bigl(z^2-2\operatorname{Re}(\lambda)z+\abs{\lambda}^2\bigr)^m$, which is real.
+\item Proposition \ref{prop:operator-characteristic-polynomial-degree-roots} and Proposition \ref{prop:complexification-vector-space-basis} give $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
+\item The real zeros of $q_T=q_{T_{\mathbb{C}}}$ are the real eigenvalues of $T_{\mathbb{C}}$ by Proposition \ref{prop:operator-characteristic-polynomial-degree-roots}, hence the eigenvalues of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.
+\item Cayley--Hamilton over $\mathbb{C}$ gives $q_T(T_{\mathbb{C}})=0$. By (i), Proposition \ref{prop:complexification-operator-basic-properties}, $q_T(T_{\mathbb{C}})=(q_T(T))_{\mathbb{C}}$, so $q_T(T)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Nonreal factors pair into real quadratics.\\
+\hlt{Key Insight}: Complexify, then pair conjugates.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_characteristic_conjugate_pairs.tikz}
+  \caption{Conjugate factors pair into real quadratics.}
+  \label{fig:real-characteristic-conjugate-pairs}
+\end{figure}
+
+\begin{corollary} \label{cor:real-characteristic-polynomial-multiple-minimal-polynomial} \hlt{$q_T$ Is a Multiple of $\mu_T$ over $\mathbb{R}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+Then $\deg\mu_T\leq\dim_{\mathbb{R}}\mathcal{V}$, and $q_T$ is a polynomial multiple of $\mu_T$ in $\mathcal{P}(\mathbb{R})$.
+\begin{proof}
+Theorem \ref{thm:real-operator-characteristic-polynomial-properties} gives $q_T(T)=0$.\\
+By Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial}, $\mu_T$ divides $q_T$ in $\mathcal{P}(\mathbb{R})$. The degree bound follows from $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton makes $q_T$ a real annihilator of $T$.\\
+\hlt{Key Insight}: The minimal polynomial divides every real annihilator.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:operator-minimal-polynomial-roots-eigenvalues} \hlt{Roots of $\mu_T$ Are Eigenvalues}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. Then the roots of $\mu_T$ are precisely the eigenvalues of $T$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mu_T(\lambda)=0$, write $\mu_T(z)=(z-\lambda)g(z)$. Since $\deg g<\deg\mu_T$, minimality gives $g(T)\neq0$; choose $\mathbf{v}$ with $\mathbf{u}=g(T)\mathbf{v}\neq\mathbf{0}$. Then $(T-\lambda I_{\mathcal{V}})\mathbf{u}=\mu_T(T)\mathbf{v}=\mathbf{0}$.
+\item[$(\Leftarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $0=\mu_T(T)\mathbf{v}=\mu_T(\lambda)\mathbf{v}$, so $\mu_T(\lambda)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: A root splits off one shifted operator.\\
+\hlt{Key Insight}: The quotient cannot already annihilate $T$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:characteristic-versus-minimal-polynomial} \hlt{Characteristic vs. Minimal Polynomial}\\
+The characteristic polynomial records every primary block with its dimension. The minimal polynomial records the least polynomial needed to annihilate all blocks at once.
+\end{perspective}

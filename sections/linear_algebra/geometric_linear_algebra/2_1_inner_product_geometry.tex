@@ -6,7 +6,7 @@ Throughout this subsection, $\mathbb{F}$ denotes either $\mathbb{R}$ or $\mathbb
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $\mathbf{x},\mathbf{y}\in\mathbb{R}^n$, the \hlt{dot product} is $\mathbf{x}\cdot\mathbf{y}\defeq x_1y_1+\cdots+x_ny_n$.
-\item For $z=a+bi\in\mathbb{C}$, \hlt{complex conjugate} is $\overline{z}\defeq a-bi$, \hlt{modulus} is $\abs{z}\defeq\sqrt{a^2+b^2}$. Thus $\abs{z}^2=z\overline{z}$.
+\item For $z=a+bi\in\mathbb{C}$, the \hlt{complex conjugate} is $\overline{z}\defeq a-bi$, and the \hlt{modulus} is $\abs{z}\defeq\sqrt{a^2+b^2}$. Thus $\abs{z}^2=z\overline{z}$.
 \item A map $f:\mathcal{V}\to\mathbb{F}$ is \hlt{conjugate linear} if $f(\mathbf{u}+\mathbf{v})=f(\mathbf{u})+f(\mathbf{v})$ and $f(\lambda\mathbf{v})=\overline{\lambda}f(\mathbf{v})$.
 \item A function $B:\mathcal{V}\times\mathcal{V}\to\mathbb{F}$ is \hlt{sesquilinear} if it is linear in one slot and conjugate linear in the other.
 \end{enumerate}
@@ -78,9 +78,9 @@ For $\mathbf{v}\in\mathcal{V}$, the \hlt{norm} of $\mathbf{v}$ is $\norm{\mathbf
 \end{definition}
 
 \begin{example} \label{ex:norms-induced-by-inner-products} \hlt{Norms from Standard Inner Products}\\
-In $\mathbb{F}^n$, norm from standard inner product is \hlt{Euclidean norm} $\norm{(x_1,\ldots,x_n)}_2=\sqrt{\abs{x_1}^2+\cdots+\abs{x_n}^2}$.\\
-In $C_{\mathbb{F}}[a,b]$, with integral inner product, derived norm is \hlt{$L^2$ norm} $\norm{f}_{2}=\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.\\
-In $\operatorname{Mat}(m,n,\mathbb{F})$, with Frobenius inner product, \hlt{Frobenius norm} is $\norm{A}_{F}=\sqrt{\innerprod[F]{A,A}}=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n}\abs{a_{ij}}^2}$, $A=[a_{ij}]$. The Frobenius norm is also called the \hlt{Schur norm} or \hlt{Hilbert-Schmidt norm}.
+In $\mathbb{F}^n$, the norm from the standard inner product is the \hlt{Euclidean norm} $\norm{(x_1,\ldots,x_n)}_2=\sqrt{\abs{x_1}^2+\cdots+\abs{x_n}^2}$.\\
+In $C_{\mathbb{F}}[a,b]$, with the integral inner product, the derived norm is the \hlt{$L^2$ norm} $\norm{f}_{2}=\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.\\
+In $\operatorname{Mat}(m,n,\mathbb{F})$, with the Frobenius inner product, the \hlt{Frobenius norm} is $\norm{A}_{F}=\sqrt{\innerprod[F]{A,A}}=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n}\abs{a_{ij}}^2}$, $A=[a_{ij}]$. The Frobenius norm is also called the \hlt{Schur norm} or \hlt{Hilbert-Schmidt norm}.
 \end{example}
 
 \begin{proposition} \label{prop:derived-norm-basic-properties}\label{prop:basic-norm-identities} \hlt{Basic Properties of the Derived Norm}\\
@@ -103,6 +103,144 @@ Let $\mathcal{V}$ be an inner-product space with derived norm $\norm{\cdot}$. Fo
 \end{proof}
 \end{proposition}
 
+\begin{theorem} \label{thm:cauchy-schwarz-inequality} \hlt{Cauchy-Schwarz Inequality}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}\norm{\mathbf{v}}$.
+Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a scalar multiple of the other.
+\begin{proof}
+If $\mathbf{v}=\mathbf{0}$, both sides are $0$. Assume $\mathbf{v}\neq\mathbf{0}$. For any $\lambda\in\mathbb{F}$, positivity gives
+\begin{align}
+0\leq \norm{\mathbf{u}-\lambda\mathbf{v}}^2
+=\norm{\mathbf{u}}^2-\lambda\innerprod{\mathbf{v},\mathbf{u}}-\overline{\lambda}\innerprod{\mathbf{u},\mathbf{v}}+\abs{\lambda}^2\norm{\mathbf{v}}^2. \nonumber
+\end{align}
+Choose $\lambda=\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}$. Since $\innerprod{\mathbf{v},\mathbf{u}}=\overline{\innerprod{\mathbf{u},\mathbf{v}}}$, the inequality becomes
+\begin{align}
+0\leq \norm{\mathbf{u}}^2-\frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2}. \nonumber
+\end{align}
+Multiplying by $\norm{\mathbf{v}}^2$ and taking square roots proves the inequality. Equality holds exactly when $\mathbf{u}-\lambda\mathbf{v}=\mathbf{0}$ for this choice of $\lambda$, so $\mathbf{u}$ is a scalar multiple of $\mathbf{v}$. The case $\mathbf{v}=\mathbf{0}$ is also covered because $\mathbf{v}=0\mathbf{u}$.\\
+\hlt{Structural Commentary}: Positivity of squared length controls the mixed inner-product term.\\
+\hlt{Key Insight}: The best scalar comparison between two vectors bounds their inner product.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:triangle-inequality-inner-product} \hlt{Triangle Inequality}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}} \leq \norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
+Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a nonnegative scalar multiple of the other.
+\begin{proof}
+We compute
+\begin{align}
+\norm{\mathbf{u}+\mathbf{v}}^2 &=\innerprod{\mathbf{u}+\mathbf{v},\mathbf{u}+\mathbf{v}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{v},\mathbf{u}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}} \nonumber\\
+&\leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\norm{\mathbf{u}}\norm{\mathbf{v}} =\bigl(\norm{\mathbf{u}}+\norm{\mathbf{v}}\bigr)^2.
+\nonumber
+\end{align}
+Taking square roots gives the inequality. If either vector is $\mathbf{0}$, the equality condition is immediate. Otherwise, equality holds exactly when $\innerprod{\mathbf{u},\mathbf{v}}=\abs{\innerprod{\mathbf{u},\mathbf{v}}}$ and equality holds in Cauchy-Schwarz. Thus $\mathbf{u}=a\mathbf{v}$ for some $a\in\mathbb{F}$ and $a\norm{\mathbf{v}}^2=\innerprod{\mathbf{u},\mathbf{v}}$ is real nonnegative, so $a\geq 0$. Conversely, if $\mathbf{u}=a\mathbf{v}$ with $a\geq 0$, then $\norm{\mathbf{u}+\mathbf{v}}=(a+1)\norm{\mathbf{v}}=\norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
+\hlt{Structural Commentary}: Square the norm and bound the cross term by Cauchy-Schwarz.\\
+\hlt{Key Insight}: Equality means the two vectors point in the same direction.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/triangle_inequality_inner_product.tikz}
+  \caption{Triangle inequality: $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$.}
+  \label{fig:triangle-inequality-inner-product}
+\end{figure}
+
+\begin{definition} \label{def:norm-and-normed-vector-space} \hlt{Norm and Normed Vector Space}\\
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. A \hlt{norm} on $\mathcal{V}$ is a function $\norm{\cdot}:\mathcal{V}\to[0,\infty)$ such that, for all $\mathbf{u},\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\norm{\mathbf{u}}\geq0$;
+\item $\norm{\mathbf{u}}=0$ if and only if $\mathbf{u}=\mathbf{0}$;
+\item $\norm{\lambda\mathbf{u}}=\abs{\lambda}\norm{\mathbf{u}}$;
+\item $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$.
+\end{enumerate}
+A \hlt{normed vector space} is a vector space equipped with a norm. Its \hlt{unit ball} is $\{\mathbf{v}\in\mathcal{V}:\norm{\mathbf{v}}\leq1\}$.
+\end{definition}
+
+\begin{theorem} \label{thm:parallelogram-identity-inner-product} \hlt{Parallelogram Identity}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2 = 2\bigl(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\bigr)$.
+\begin{proof}
+Expanding both squared norms gives
+\begin{align}
+\norm{\mathbf{u}+\mathbf{v}}^2 =\norm{\mathbf{u}}^2+\innerprod{\mathbf{u},\mathbf{v}} +\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2, \quad \norm{\mathbf{u}-\mathbf{v}}^2 =\norm{\mathbf{u}}^2-\innerprod{\mathbf{u},\mathbf{v}} -\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2. \nonumber
+\end{align}
+Adding the two identities cancels the cross terms and yields the result.\\
+\hlt{Structural Commentary}: Opposite cross terms cancel when the two diagonal norms are added.\\
+\hlt{Key Insight}: Inner-product norms remember parallelogram geometry through cancellation.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/parallelogram_identity_inner_product.tikz}
+  \caption{Parallelogram identity: $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2=2(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2)$.}
+  \label{fig:parallelogram-identity-inner-product}
+\end{figure}
+
+\begin{proposition} \label{prop:coordinate-norms-on-fn} \hlt{Coordinate Norms on $\mathbb{F}^n$}\\
+For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}^n$, $\norm{\mathbf{x}}_1=\sum\limits_{j=1}^{n}\abs{x_j}$, $\norm{\mathbf{x}}_2=\left(\sum\limits_{j=1}^{n}\abs{x_j}^2\right)^{1/2}$, $\norm{\mathbf{x}}_{\infty}=\max_{1\leq j\leq n}\abs{x_j}$ are norms on $\mathbb{F}^n$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\norm{\cdot}_1$, nonnegativity, definiteness, and homogeneity follow from the corresponding facts for modulus. The triangle inequality follows from $\norm{\mathbf{x}+\mathbf{y}}_1=\sum\limits_{j=1}^{n}\abs{x_j+y_j}\leq\sum_{j=1}^{n}\bigl(\abs{x_j}+\abs{y_j}\bigr)=\norm{\mathbf{x}}_1+\norm{\mathbf{y}}_1$.
+\item For $\norm{\cdot}_2$, the norm is induced by the standard inner product, so the axioms follow from Proposition \ref{prop:derived-norm-basic-properties} and Theorem \ref{thm:triangle-inequality-inner-product}.
+\item For $\norm{\cdot}_{\infty}$, nonnegativity, definiteness, and homogeneity are immediate from the maximum of finitely many moduli. If $k$ is chosen so that $\norm{\mathbf{x}+\mathbf{y}}_{\infty}=\abs{x_k+y_k}$, then $\norm{\mathbf{x}+\mathbf{y}}_{\infty}\leq\abs{x_k}+\abs{y_k}\leq\norm{\mathbf{x}}_{\infty}+\norm{\mathbf{y}}_{\infty}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The $\ell_1$ norm sums coordinate magnitudes, $\ell_{\infty}$ keeps only the largest coordinate magnitude, and $\ell_2$ comes from the standard inner product.\\
+\hlt{Key Insight}: All three obey the same abstract axioms, even though their unit balls have different shapes.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/unit_balls_coordinate_norms.tikz}
+  \caption{The unit balls of $\norm{\cdot}_1$, $\norm{\cdot}_2$, and $\norm{\cdot}_{\infty}$ in $\mathbb{R}^2$.}
+  \label{fig:unit-balls-coordinate-norms}
+\end{figure}
+
+\begin{corollary} \label{cor:l1-linfty-not-inner-product-norms} \hlt{$\ell_1$ and $\ell_{\infty}$ Are Not Inner-Product Norms}\\
+If $n\geq2$, then the norms $\norm{\cdot}_1$ and $\norm{\cdot}_{\infty}$ on $\mathbb{F}^n$ are not induced by any inner product.
+\begin{proof}
+Let $\mathbf{e}_1,\mathbf{e}_2$ be the first two standard coordinate vectors.\\
+For $\norm{\cdot}_1$, $\norm{\mathbf{e}_1+\mathbf{e}_2}_1^2+\norm{\mathbf{e}_1-\mathbf{e}_2}_1^2=4+4=8$, but $2\norm{\mathbf{e}_1}_1^2+2\norm{\mathbf{e}_2}_1^2=4$.\\
+For $\norm{\cdot}_{\infty}$, $\norm{\mathbf{e}_1+\mathbf{e}_2}_{\infty}^2+\norm{\mathbf{e}_1-\mathbf{e}_2}_{\infty}^2=1+1=2$ but $2\norm{\mathbf{e}_1}_{\infty}^2+2\norm{\mathbf{e}_2}_{\infty}^2=4$.\\
+Both norms violate Theorem \ref{thm:parallelogram-identity-inner-product}, which every inner-product norm must satisfy.\\
+\hlt{Structural Commentary}: The parallelogram identity detects inner-product norms.\\
+\hlt{Key Insight}: Different unit-ball geometry can rule out hidden inner-product structure.
+\end{proof}
+\end{corollary}
+
+
+\begin{theorem} \label{thm:polarization-identities} \hlt{Polarization Identities}\\
+Let $\mathcal{V}$ be an inner-product space and let $\mathbf{u},\mathbf{v}\in\mathcal{V}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item If $\mathbb{F}=\mathbb{R}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2\right)$.
+\item If $\mathbb{F}=\mathbb{C}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2 +i\norm{\mathbf{u}+i\mathbf{v}}^2-i\norm{\mathbf{u}-i\mathbf{v}}^2\right)$.
+\end{enumerate}
+\begin{proof}
+Let $z\defeq\innerprod{\mathbf{u},\mathbf{v}}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathbb{F}=\mathbb{R}$, then expanding squared norms gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z=4z$, proving (i).
+\item If $\mathbb{F}=\mathbb{C}$, the first expansion gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z$. The same expansion with $i\mathbf{v}$ gives $\norm{\mathbf{u}+i\mathbf{v}}^2-\norm{\mathbf{u}-i\mathbf{v}}^2=4\operatorname{Im} z$. Combining the real and imaginary parts gives (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Two norm differences extract the real and imaginary parts.\\
+\hlt{Key Insight}: The norm determines the inner product because it determines both parts of every cross term.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/polarization_identity_inner_product.tikz}
+  \caption{Polarization identity: $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}$.}
+  \label{fig:polarization-identity-inner-product}
+\end{figure}
+
+\begin{principle} \label{pri:inner-product-geometry} \hlt{Geometry from Algebra}\\
+Most geometric statements in an inner-product space come from expanding $\norm{\mathbf{u}\pm\mathbf{v}}^2$ and then interpreting the cross terms $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$.
+\end{principle}
+
 \begin{definition} \label{def:unit-vector-and-normalization} \hlt{Unit Vector and Normalization}\\
 A vector $\mathbf{u}\in\mathcal{V}$ is a \hlt{unit vector} if $\norm{\mathbf{u}}=1$. If $\mathbf{v}\neq\mathbf{0}$, then $\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is called the \hlt{normalization} of $\mathbf{v}$.
 \end{definition}
@@ -112,7 +250,6 @@ If $\mathbf{v}\in\mathcal{V}$ and $\mathbf{v}\neq\mathbf{0}$, then $\frac{\mathb
 \begin{proof}
 By Proposition \ref{prop:derived-norm-basic-properties}, $\norm{\mathbf{v}}>0$ and $\norm{\frac{\mathbf{v}}{\norm{\mathbf{v}}}} =\frac{1}{\norm{\mathbf{v}}}\norm{\mathbf{v}}=1$.\\
 The vector $\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is a positive scalar multiple of $\mathbf{v}$, so it lies in the same one-dimensional direction.
-\\
 \hlt{Structural Commentary}: Normalization changes scale but preserves direction.\\
 \hlt{Key Insight}: Divide by the length to make the length equal to one.
 \end{proof}
@@ -139,6 +276,38 @@ Let $\mathcal{V}$ be an inner-product space.
 \end{enumerate}
 \hlt{Structural Commentary}: Conjugate symmetry makes orthogonality symmetric, and definiteness isolates $\mathbf{0}$.\\
 \hlt{Key Insight}: Conjugate symmetry preserves the equation ``equals zero.''
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:orthogonal-complement} \hlt{Orthogonal Complement}\\
+If $\mathcal{U}\subseteq\mathcal{V}$, then the \hlt{orthogonal complement} of $\mathcal{U}$ is $\mathcal{U}^{\perp}\defeq\{\mathbf{v}\in\mathcal{V}:\innerprod{\mathbf{v},\mathbf{u}}=0\text{ for every }\mathbf{u}\in\mathcal{U}\}$.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-properties-orthogonal-complement} \hlt{Basic Properties of Orthogonal Complements}\\
+For subsets $\mathcal{U},\mathcal{W}\subseteq\mathcal{V}$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}^{\perp}$ is a subspace of $\mathcal{V}$;
+\item $\{\mathbf{0}\}^{\perp}=\mathcal{V}$;
+\item $\mathcal{V}^{\perp}=\{\mathbf{0}\}$;
+\item $\mathcal{U}\cap\mathcal{U}^{\perp}\subseteq\{\mathbf{0}\}$;
+\item if $\mathcal{U}\subseteq\mathcal{W}$, then $\mathcal{W}^{\perp}\subseteq\mathcal{U}^{\perp}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item We have $\mathbf{0}\in\mathcal{U}^{\perp}$. If $\mathbf{v},\mathbf{w}\in\mathcal{U}^{\perp}$ and $a\in\mathbb{F}$, then for every $\mathbf{u}\in\mathcal{U}$,
+\begin{align}
+\innerprod{a\mathbf{v}+\mathbf{w},\mathbf{u}}=a\innerprod{\mathbf{v},\mathbf{u}}+\innerprod{\mathbf{w},\mathbf{u}}=0. \nonumber
+\end{align}
+Thus $a\mathbf{v}+\mathbf{w}\in\mathcal{U}^{\perp}$.
+\item For every $\mathbf{v}\in\mathcal{V}$, $\innerprod{\mathbf{v},\mathbf{0}}=0$, so $\mathbf{v}\in\{\mathbf{0}\}^{\perp}$.
+\item If $\mathbf{v}\in\mathcal{V}^{\perp}$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$, so $\mathbf{v}=\mathbf{0}$.
+\item If $\mathbf{v}\in\mathcal{U}\cap\mathcal{U}^{\perp}$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$, so $\mathbf{v}=\mathbf{0}$.
+\item If $\mathbf{v}\in\mathcal{W}^{\perp}$, then $\mathbf{v}$ is orthogonal to every vector in $\mathcal{W}$, hence to every vector in $\mathcal{U}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Orthogonal complements are solution spaces of homogeneous inner-product equations. Larger input sets impose more equations, so their complements become smaller.\\
+\hlt{Key Insight}: Orthogonality constraints are linear constraints.
 \end{proof}
 \end{proposition}
 
@@ -191,7 +360,11 @@ Since its length is $\dim(\mathcal{V})$, Proposition \ref{prop:dimension-bounds-
 \begin{theorem} \label{thm:gram-schmidt-process} \hlt{Gram--Schmidt Process}\\
 Let $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a linearly independent list in an inner-product space $\mathcal{V}$.\\
 Define $\mathbf{u}_1=\mathbf{v}_1$, $\mathbf{e}_1=\frac{\mathbf{u}_1}{\norm{\mathbf{u}_1}}$ and, for $2\leq j\leq m$, $\mathbf{u}_j=\mathbf{v}_j-\sum\limits_{k=1}^{j-1}\innerprod{\mathbf{v}_j,\mathbf{e}_k}\mathbf{e}_k$, $\mathbf{e}_j=\frac{\mathbf{u}_j}{\norm{\mathbf{u}_j}}$.\\
-Then $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ is orthonormal and $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)=\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j),\qquad j=1,\ldots,m$.
+Then $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ is orthonormal and
+\begin{align}
+\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)=\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j),
+\qquad j=1,\ldots,m. \nonumber
+\end{align}
 \begin{proof}
 Proceed by induction. The case $j=1$ is normalization of the nonzero vector $\mathbf{v}_1$. Assume the result holds through $j-1$. Since $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{j-1})=\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{j-1})$ and the $\mathbf{v}$-list is linearly independent, $\mathbf{u}_j\neq\mathbf{0}$.\\
 For $k<j$, $\innerprod{\mathbf{u}_j,\mathbf{e}_k} =\innerprod{\mathbf{v}_j,\mathbf{e}_k} -\sum\limits_{i=1}^{j-1}\innerprod{\mathbf{v}_j,\mathbf{e}_i}\innerprod{\mathbf{e}_i,\mathbf{e}_k} =\innerprod{\mathbf{v}_j,\mathbf{e}_k}-\innerprod{\mathbf{v}_j,\mathbf{e}_k}=0$.\\
@@ -211,7 +384,7 @@ Combining this with the induction hypothesis gives equality of the two spans at 
 \end{figure}
 
 \begin{lemma} \label{lem:gram-schmidt-preserves-orthogonal-lists} \hlt{Gram--Schmidt on Orthogonal Lists}\\
-If $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is a nonzero mutually orthogonal list, then Gram--Schmidt produces $\mathbf{e}_j=\frac{\mathbf{v}_j}{\norm{\mathbf{v}_j}}$, $ j=1,\ldots,m$.\\
+If $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is a nonzero mutually orthogonal list, then Gram--Schmidt produces $\mathbf{e}_j=\frac{\mathbf{v}_j}{\norm{\mathbf{v}_j}}$, $j=1,\ldots,m$.\\
 In particular, if the original list is orthonormal, Gram--Schmidt leaves it unchanged.
 \begin{proof}
 Assume $\mathbf{e}_i=\mathbf{v}_i/\norm{\mathbf{v}_i}$ for $i<j$. Since $\mathbf{v}_j\perp\mathbf{v}_i$, we have $\innerprod{\mathbf{v}_j,\mathbf{e}_i}=0$ for every $i<j$.\\
@@ -241,6 +414,35 @@ Let $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ be orthonormal. It is linearly independ
 \end{proof}
 \end{corollary}
 
+\begin{theorem} \label{thm:orthogonal-direct-sum-decomposition} \hlt{Direct Sum with the Orthogonal Complement}\\
+If $\mathcal{U}$ is a finite-dimensional subspace of $\mathcal{V}$, then $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$.
+\begin{proof}
+Let $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ be an orthonormal basis of $\mathcal{U}$. For $\mathbf{v}\in\mathcal{V}$, define $\mathbf{u}=\sum\limits_{j=1}^{m}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$ and set $\mathbf{w}=\mathbf{v}-\mathbf{u}$. Clearly $\mathbf{u}\in\mathcal{U}$.\\
+For each $k$, $\innerprod{\mathbf{w},\mathbf{e}_k} =\innerprod{\mathbf{v},\mathbf{e}_k} -\sum\limits_{j=1}^{m}\innerprod{\mathbf{v},\mathbf{e}_j}\innerprod{\mathbf{e}_j,\mathbf{e}_k} =0$.
+Thus $\mathbf{w}$ is orthogonal to every vector in $\mathcal{U}$, so $\mathbf{w}\in\mathcal{U}^{\perp}$ and $\mathbf{v}=\mathbf{u}+\mathbf{w}$. Hence $\mathcal{V}=\mathcal{U}+\mathcal{U}^{\perp}$. The intersection is $\{\mathbf{0}\}$ by Proposition \ref{prop:basic-properties-orthogonal-complement}, so the sum is direct.\\
+\hlt{Structural Commentary}: Each vector splits into a $\mathcal{U}$-component and an orthogonal residual.\\
+\hlt{Key Insight}: Projection plus residual gives the canonical direct-sum decomposition.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:dimension-of-orthogonal-complement} \hlt{Dimension of the Orthogonal Complement}\\
+If $\mathcal{V}$ is finite-dimensional and $\mathcal{U}$ is a subspace of $\mathcal{V}$, then $\dim(\mathcal{U}^{\perp})=\dim(\mathcal{V})-\dim(\mathcal{U})$.
+\begin{proof}
+Since $\mathcal{V}$ is finite-dimensional, $\mathcal{U}$ is finite-dimensional by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}. Theorem \ref{thm:orthogonal-direct-sum-decomposition} gives $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$. Thus Corollary \ref{cor:dimension-direct-sum} gives $\dim(\mathcal{V})=\dim(\mathcal{U})+\dim(\mathcal{U}^{\perp})$.\\
+\hlt{Structural Commentary}: Dimensions add across the orthogonal split.\\
+\hlt{Key Insight}: Orthogonal complements contain exactly the dimensions not used by $\mathcal{U}$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:double-orthogonal-complement} \hlt{Double Orthogonal Complement}\\
+If $\mathcal{U}$ is a finite-dimensional subspace of $\mathcal{V}$, then $\mathcal{U}=(\mathcal{U}^{\perp})^{\perp}$.
+\begin{proof}
+If $\mathbf{u}\in\mathcal{U}$, then $\mathbf{u}$ is orthogonal to every vector in $\mathcal{U}^{\perp}$, so $\mathcal{U}\subseteq(\mathcal{U}^{\perp})^{\perp}$. Conversely, let $\mathbf{v}\in(\mathcal{U}^{\perp})^{\perp}$. By Theorem \ref{thm:orthogonal-direct-sum-decomposition}, write $\mathbf{v}=\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{U}^{\perp}$. Since $\mathcal{U}\subseteq(\mathcal{U}^{\perp})^{\perp}$, we have $\mathbf{w}=\mathbf{v}-\mathbf{u}\in(\mathcal{U}^{\perp})^{\perp}$. Hence $\mathbf{w}\in\mathcal{U}^{\perp}\cap(\mathcal{U}^{\perp})^{\perp}$, so $\mathbf{w}=\mathbf{0}$ and $\mathbf{v}=\mathbf{u}\in\mathcal{U}$.\\
+\hlt{Structural Commentary}: The orthogonal split leaves no extra direction beyond $\mathcal{U}$.\\
+\hlt{Key Insight}: Taking the orthogonal complement twice recovers the original finite-dimensional subspace.
+\end{proof}
+\end{corollary}
+
 \begin{theorem} \label{thm:orthonormal-basis-coordinates} \hlt{Coordinates in an Orthonormal Basis}\\
 Let $\mathcal{V}$ be finite-dimensional and let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$.\\
 Then for every $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}=\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$, $\norm{\mathbf{v}}^2=\sum\limits_{j=1}^{n}\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}^2$ and
@@ -267,167 +469,6 @@ Thus the displayed expansion and coordinate column follow. The norm identity fol
   \caption{An orthonormal basis resolves a vector into perpendicular coordinate components.}
   \label{fig:orthonormal-coordinates}
 \end{figure}
-
-\begin{theorem} \label{thm:parseval-identity-finite-dimensional} \hlt{Parseval's Identity}\\
-Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of an inner-product space $\mathcal{V}$.\\
-Then, for all $\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\innerprod{\mathbf{v},\mathbf{w}} =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_j}} =\innerprod[\mathbb{F}^n]{[\mathbf{v}]_{\beta},[\mathbf{w}]_{\beta}}$.
-\begin{proof}
-By Theorem \ref{thm:orthonormal-basis-coordinates}, $\mathbf{v}=\sum_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$ and $\mathbf{w}=\sum_{k=1}^{n}\innerprod{\mathbf{w},\mathbf{e}_k}\mathbf{e}_k$.\\
-Hence $\innerprod{\mathbf{v},\mathbf{w}} =\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_k}}\innerprod{\mathbf{e}_j,\mathbf{e}_k} =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_j}}$.\\
-The last expression is exactly the standard inner product of the coordinate columns in $\mathbb{F}^n$.\\
-\hlt{Structural Commentary}: Orthonormal coordinates make inner products coordinatewise.\\
-\hlt{Key Insight}: Orthonormal coordinates preserve angles and lengths, not just linear combinations.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:matrix-entries-from-orthonormal-codomain} \hlt{Matrix Entries from an Orthonormal Codomain Basis}\\
-Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional vector spaces over $\mathbb{F}$, with $\mathcal{W}$ an inner-product space. Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$ and let $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_m)$ be an orthonormal basis of $\mathcal{W}$. If $T\in\LL(\mathcal{V},\mathcal{W})$, then
-\begin{align}
-[T]_{\gamma\leftarrow\beta}
-=\begin{bmatrix}
-\innerprod{T\mathbf{v}_1,\mathbf{w}_1} & \cdots & \innerprod{T\mathbf{v}_n,\mathbf{w}_1}\\
-\vdots & \ddots & \vdots\\
-\innerprod{T\mathbf{v}_1,\mathbf{w}_m} & \cdots & \innerprod{T\mathbf{v}_n,\mathbf{w}_m}
-\end{bmatrix}.
-\nonumber
-\end{align}
-Conversely, for each $A\in\operatorname{Mat}(m,n,\mathbb{F})$, there is a unique $T\in\LL(\mathcal{V},\mathcal{W})$ such that $[T]_{\gamma\leftarrow\beta}=A$.
-\begin{proof}
-The $j$th column of $[T]_{\gamma\leftarrow\beta}$ is $[T\mathbf{v}_j]_{\gamma}$. Since $\gamma$ is orthonormal, Theorem \ref{thm:orthonormal-basis-coordinates} gives
-\begin{align}
-[T\mathbf{v}_j]_{\gamma}
-=\begin{bmatrix}
-\innerprod{T\mathbf{v}_j,\mathbf{w}_1}\\
-\vdots\\
-\innerprod{T\mathbf{v}_j,\mathbf{w}_m}
-\end{bmatrix}.
-\nonumber
-\end{align}
-This proves the displayed matrix formula. The converse is exactly the surjectivity and injectivity of the coordinate encoding in Theorem \ref{thm:linear-maps-and-matrices-same-data}.\\
-\hlt{Structural Commentary}: Columns are basis-image coordinates, read by inner products.\\
-\hlt{Key Insight}: Each entry measures $T\mathbf{v}_j$ against one output direction.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:inner-product-through-operator-matrix} \hlt{Inner Products Through an Operator Matrix}\\
-Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of a finite-dimensional inner-product space $\mathcal{V}$, and let $T\in\LL(\mathcal{V})$. Then, for all $\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\innerprod{T\mathbf{v},\mathbf{w}} =\innerprod[\mathbb{F}^n]{[T]_{\beta\leftarrow\beta}[\mathbf{v}]_{\beta},[\mathbf{w}]_{\beta}}$.
-\begin{proof}
-By Proposition \ref{prop:matrix-representation-action}, $[T\mathbf{v}]_{\beta}=[T]_{\beta\leftarrow\beta}[\mathbf{v}]_{\beta}$. Apply Parseval's Identity \ref{thm:parseval-identity-finite-dimensional} to $T\mathbf{v}$ and $\mathbf{w}$ gives result.\\
-\hlt{Structural Commentary}: Orthonormal coordinates turn $\innerprod{T\mathbf{v},\mathbf{w}}$ into matrix computation.\\
-\hlt{Key Insight}: Orthonormal coordinates make operator geometry computable by matrices.
-\end{proof}
-\end{corollary}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/orthonormal_matrix_entries.tikz}
-  \caption{The $j$th column of $[T]_{\gamma\leftarrow\beta}$ is obtained by resolving $T\mathbf{v}_j$ against the orthonormal basis of $\mathcal{W}$.}
-  \label{fig:orthonormal-matrix-entries}
-\end{figure}
-
-\begin{definition} \label{def:gram-matrix-and-determinant} \hlt{Gram Matrix}\\
-For vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in an inner-product space, the \hlt{Gram matrix} is
-\begin{align}
-G(\mathbf{u}_1,\ldots,\mathbf{u}_n)
-\defeq
-\begin{bmatrix}
-\innerprod{\mathbf{u}_1,\mathbf{u}_1} & \innerprod{\mathbf{u}_2,\mathbf{u}_1} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_1}\\
-\innerprod{\mathbf{u}_1,\mathbf{u}_2} & \innerprod{\mathbf{u}_2,\mathbf{u}_2} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_2}\\
-\vdots & \vdots & \ddots & \vdots\\
-\innerprod{\mathbf{u}_1,\mathbf{u}_n} & \innerprod{\mathbf{u}_2,\mathbf{u}_n} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_n}
-\end{bmatrix}.
-\nonumber
-\end{align}
-The \hlt{Gram determinant} is $g(\mathbf{u}_1,\ldots,\mathbf{u}_n)\defeq\det G(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.
-\end{definition}
-
-\begin{theorem} \label{thm:riesz-representation-finite-dimensional} \hlt{Riesz Representation Theorem}\\
-Let $\mathcal{V}$ be a finite-dimensional inner-product space and let $\varphi:\mathcal{V}\to\mathbb{F}$ be a linear functional. Then there is a unique vector $\mathbf{u}\in\mathcal{V}$ such that $\varphi(\mathbf{v})=\innerprod{\mathbf{v},\mathbf{u}}$ for every $\mathbf{v}\in\mathcal{V}$.
-\begin{proof}
-Let $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$.\\
-By Theorem \ref{thm:orthonormal-basis-coordinates}, $\varphi(\mathbf{v}) =\varphi\left(\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j\right) =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\varphi(\mathbf{e}_j)$. Set $\mathbf{u}=\sum\limits_{j=1}^{n}\overline{\varphi(\mathbf{e}_j)}\,\mathbf{e}_j$.\\
-Then orthonormality gives $\innerprod{\mathbf{v},\mathbf{u}}=\sum_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\varphi(\mathbf{e}_j)=\varphi(\mathbf{v})$.
-For uniqueness, suppose $\innerprod{\mathbf{v},\mathbf{u}_1}=\innerprod{\mathbf{v},\mathbf{u}_2}$ for every $\mathbf{v}\in\mathcal{V}$. Taking $\mathbf{v}=\mathbf{u}_1-\mathbf{u}_2$ gives $\norm{\mathbf{u}_1-\mathbf{u}_2}^2=0$, hence $\mathbf{u}_1=\mathbf{u}_2$.\\
-\hlt{Structural Commentary}: An orthonormal basis packages a functional as one representing vector.\\
-\hlt{Key Insight}: Finite-dimensional functionals are inner products with fixed vectors.
-\end{proof}
-\end{theorem}
-
-\begin{definition} \label{def:riesz-vector} \hlt{Riesz Vector}\\
-Let $\mathcal{V}$ be finite-dimensional and let $\varphi:\mathcal{V}\to\mathbb{F}$ be a linear functional. The unique vector $\mathbf{u}\in\mathcal{V}$ satisfying $\varphi(\mathbf{v})=\innerprod{\mathbf{v},\mathbf{u}}$ for every $\mathbf{v}\in\mathcal{V}$ is the \hlt{Riesz vector} representing $\varphi$.
-\end{definition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/riesz_representation_vector_functional.tikz}
-  \caption{Riesz identifies a functional with its representing vector.}
-  \label{fig:riesz-representation-vector-functional}
-\end{figure}
-
-\begin{perspective} \label{per:riesz-representation-coordinates} \hlt{Riesz as Coordinate Duality}\\
-The vector $\sum_{j=1}^{n}\overline{\varphi(\mathbf{e}_j)}\mathbf{e}_j$ seems to depend on the orthonormal basis, but Theorem \ref{thm:riesz-representation-finite-dimensional} shows that the resulting representing vector is intrinsic.
-\end{perspective}
-
-\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
-On $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product, the Riesz vector of the trace functional $A\mapsto\operatorname{tr}(A)$ is $I_n$, since $\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
-\end{example}
-
-\begin{definition} \label{def:orthogonal-complement} \hlt{Orthogonal Complement}\\
-If $\mathcal{U}\subseteq\mathcal{V}$, then the \hlt{orthogonal complement} of $\mathcal{U}$ is $\mathcal{U}^{\perp}\defeq\{\mathbf{v}\in\mathcal{V}:\innerprod{\mathbf{v},\mathbf{u}}=0\text{ for every }\mathbf{u}\in\mathcal{U}\}$
-\end{definition}
-
-\begin{proposition} \label{prop:basic-properties-orthogonal-complement} \hlt{Basic Properties of Orthogonal Complements}\\
-For subsets $\mathcal{U},\mathcal{W}\subseteq\mathcal{V}$,
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item $\mathcal{U}^{\perp}$ is a subspace of $\mathcal{V}$;
-\item $\{\mathbf{0}\}^{\perp}=\mathcal{V}$;
-\item $\mathcal{V}^{\perp}=\{\mathbf{0}\}$;
-\item $\mathcal{U}\cap\mathcal{U}^{\perp}\subseteq\{\mathbf{0}\}$;
-\item if $\mathcal{U}\subseteq\mathcal{W}$, then $\mathcal{W}^{\perp}\subseteq\mathcal{U}^{\perp}$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item We have $\mathbf{0}\in\mathcal{U}^{\perp}$. If $\mathbf{v},\mathbf{w}\in\mathcal{U}^{\perp}$ and $a\in\mathbb{F}$, then $\forall \ \mathbf{u}\in\mathcal{U}$, $\innerprod{a\mathbf{v}+\mathbf{w},\mathbf{u}}=a\innerprod{\mathbf{v},\mathbf{u}}+\innerprod{\mathbf{w},\mathbf{u}}=0$, $a\mathbf{v}+\mathbf{w}\in\mathcal{U}^{\perp}$.
-\item For every $\mathbf{v}\in\mathcal{V}$, $\innerprod{\mathbf{v},\mathbf{0}}=0$, so $\mathbf{v}\in\{\mathbf{0}\}^{\perp}$.
-\item If $\mathbf{v}\in\mathcal{V}^{\perp}$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$, so $\mathbf{v}=\mathbf{0}$.
-\item If $\mathbf{v}\in\mathcal{U}\cap\mathcal{U}^{\perp}$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$, so $\mathbf{v}=\mathbf{0}$.
-\item If $\mathbf{v}\in\mathcal{W}^{\perp}$, then $\mathbf{v}$ is orthogonal to every vector in $\mathcal{W}$, hence to every vector in $\mathcal{U}$.
-\end{enumerate}
-\hlt{Structural Commentary}: Orthogonal complements are solution spaces of homogeneous inner-product equations. Larger input sets impose more equations, so their complements become smaller.\\
-\hlt{Key Insight}: Orthogonality constraints are linear constraints.
-\end{proof}
-\end{proposition}
-
-\begin{theorem} \label{thm:orthogonal-direct-sum-decomposition} \hlt{Direct Sum with the Orthogonal Complement}\\
-If $\mathcal{U}$ is a finite-dimensional subspace of $\mathcal{V}$, then $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$.
-\begin{proof}
-Let $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ be an orthonormal basis of $\mathcal{U}$. For $\mathbf{v}\in\mathcal{V}$, define $\mathbf{u}=\sum\limits_{j=1}^{m}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$. Clearly $\mathbf{u}\in\mathcal{U}$.\\
-For each $k$, $\innerprod{\mathbf{w},\mathbf{e}_k} =\innerprod{\mathbf{v},\mathbf{e}_k} -\sum\limits_{j=1}^{m}\innerprod{\mathbf{v},\mathbf{e}_j}\innerprod{\mathbf{e}_j,\mathbf{e}_k} =0$.
-Thus $\mathbf{w}$ is orthogonal to every vector in $\mathcal{U}$, so $\mathbf{w}\in\mathcal{U}^{\perp}$ and $\mathbf{v}=\mathbf{u}+\mathbf{w}$. Hence $\mathcal{V}=\mathcal{U}+\mathcal{U}^{\perp}$. The intersection is $\{\mathbf{0}\}$ by Proposition \ref{prop:basic-properties-orthogonal-complement}, so the sum is direct.\\
-\hlt{Structural Commentary}: Each vector splits into a $\mathcal{U}$-component and an orthogonal residual.\\
-\hlt{Key Insight}: Projection plus residual gives the canonical direct-sum decomposition.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:dimension-of-orthogonal-complement} \hlt{Dimension of the Orthogonal Complement}\\
-If $\mathcal{V}$ is finite-dimensional and $\mathcal{U}$ is a subspace of $\mathcal{V}$, then $\dim(\mathcal{U}^{\perp})=\dim(\mathcal{V})-\dim(\mathcal{U})$.
-\begin{proof}
-Since $\mathcal{V}$ is finite-dimensional, $\mathcal{U}$ is finite-dimensional by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}. Theorem \ref{thm:orthogonal-direct-sum-decomposition} gives $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$. Thus Corollary \ref{cor:dimension-direct-sum} gives $\dim(\mathcal{V})=\dim(\mathcal{U})+\dim(\mathcal{U}^{\perp})$.\\
-\hlt{Structural Commentary}: Dimensions add across the orthogonal split.\\
-\hlt{Key Insight}: Orthogonal complements contain exactly the dimensions not used by $\mathcal{U}$.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:double-orthogonal-complement} \hlt{Double Orthogonal Complement}\\
-If $\mathcal{U}$ is a finite-dimensional subspace of $\mathcal{V}$, then $\mathcal{U}=(\mathcal{U}^{\perp})^{\perp}$.
-\begin{proof}
-If $\mathbf{u}\in\mathcal{U}$, then $\mathbf{u}$ is orthogonal to every vector in $\mathcal{U}^{\perp}$, so $\mathcal{U}\subseteq(\mathcal{U}^{\perp})^{\perp}$. Conversely, let $\mathbf{v}\in(\mathcal{U}^{\perp})^{\perp}$. By Theorem \ref{thm:orthogonal-direct-sum-decomposition}, write $\mathbf{v}=\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{U}^{\perp}$. Since $\mathcal{U}\subseteq(\mathcal{U}^{\perp})^{\perp}$, we have $\mathbf{w}=\mathbf{v}-\mathbf{u}\in(\mathcal{U}^{\perp})^{\perp}$. Hence $\mathbf{w}\in\mathcal{U}^{\perp}\cap(\mathcal{U}^{\perp})^{\perp}$, so $\mathbf{w}=\mathbf{0}$ and $\mathbf{v}=\mathbf{u}\in\mathcal{U}$.\\
-\hlt{Structural Commentary}: The orthogonal split leaves no extra direction beyond $\mathcal{U}$.\\
-\hlt{Key Insight}: Taking the orthogonal complement twice recovers the original finite-dimensional subspace.
-\end{proof}
-\end{corollary}
 
 \begin{remark} \label{rem:cross-terms} \hlt{Cross Terms}\\
 In an expansion such as $\norm{\mathbf{u}+\mathbf{v}}^2$, the terms involving both vectors, $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$, are called \hlt{cross terms}. The terms $\norm{\mathbf{u}}^2$ and $\norm{\mathbf{v}}^2$ are the pure squared-length terms.
@@ -473,137 +514,106 @@ Fix $\epsilon>0$. By Theorem \ref{thm:bessel-inequality-finite-orthonormal-list}
 \end{proof}
 \end{corollary}
 
-\begin{theorem} \label{thm:cauchy-schwarz-inequality} \hlt{Cauchy-Schwarz Inequality}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}\norm{\mathbf{v}}$.
-Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a scalar multiple of the other.
+\begin{theorem} \label{thm:parseval-identity-finite-dimensional} \hlt{Parseval's Identity}\\
+Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of an inner-product space $\mathcal{V}$.\\
+Then, for all $\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\innerprod{\mathbf{v},\mathbf{w}} =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_j}} =\innerprod[\mathbb{F}^n]{[\mathbf{v}]_{\beta},[\mathbf{w}]_{\beta}}$.
 \begin{proof}
-If $\mathbf{v}=\mathbf{0}$, both sides are $0$. Assume $\mathbf{v}\neq\mathbf{0}$. By Proposition \ref{prop:orthogonal-decomposition-one-vector}, $\mathbf{u}=\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}\mathbf{v}+\mathbf{w}$, $\mathbf{w}\perp\mathbf{v}$.\\
-The Pythagorean Theorem \ref{thm:pythagorean-inner-product} gives
+By Theorem \ref{thm:orthonormal-basis-coordinates}, $\mathbf{v}=\sum_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$ and $\mathbf{w}=\sum_{k=1}^{n}\innerprod{\mathbf{w},\mathbf{e}_k}\mathbf{e}_k$.\\
+Hence $\innerprod{\mathbf{v},\mathbf{w}} =\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_k}}\innerprod{\mathbf{e}_j,\mathbf{e}_k} =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\overline{\innerprod{\mathbf{w},\mathbf{e}_j}}$.\\
+The last expression is exactly the standard inner product of the coordinate columns in $\mathbb{F}^n$.\\
+\hlt{Structural Commentary}: Orthonormal coordinates make inner products coordinatewise.\\
+\hlt{Key Insight}: Orthonormal coordinates preserve angles and lengths, not just linear combinations.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:matrix-entries-from-orthonormal-codomain} \hlt{Matrix Entries from an Orthonormal Codomain Basis}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional vector spaces over $\mathbb{F}$, with $\mathcal{W}$ an inner-product space. Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$ and let $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_m)$ be an orthonormal basis of $\mathcal{W}$. If $T\in\LL(\mathcal{V},\mathcal{W})$, then
 \begin{align}
-\norm{\mathbf{u}}^2 = \norm{\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}\mathbf{v}}^2 +\norm{\mathbf{w}}^2 = \frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2} +\norm{\mathbf{w}}^2 \geq \frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2}.
+[T]_{\gamma\leftarrow\beta}
+=\begin{bmatrix}
+\innerprod{T\mathbf{v}_1,\mathbf{w}_1} & \cdots & \innerprod{T\mathbf{v}_n,\mathbf{w}_1}\\
+\vdots & \ddots & \vdots\\
+\innerprod{T\mathbf{v}_1,\mathbf{w}_m} & \cdots & \innerprod{T\mathbf{v}_n,\mathbf{w}_m}
+\end{bmatrix}.
 \nonumber
 \end{align}
-Multiplying by $\norm{\mathbf{v}}^2$ and taking square roots proves the inequality. Equality holds exactly when $\norm{\mathbf{w}}=0$, i.e. $\mathbf{w}=\mathbf{0}$, which is equivalent to $\mathbf{u}$ being a scalar multiple of $\mathbf{v}$. The case $\mathbf{v}=\mathbf{0}$ is also covered because $\mathbf{v}=0\mathbf{u}$.\\
-\hlt{Structural Commentary}: Decompose $\mathbf{u}$ into parallel and orthogonal parts relative to $\mathbf{v}$.\\
-\hlt{Key Insight}: The component of $\mathbf{u}$ along $\mathbf{v}$ cannot be longer than $\mathbf{u}$.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:triangle-inequality-inner-product} \hlt{Triangle Inequality}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}} \leq \norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
-Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a nonnegative scalar multiple of the other.
+Conversely, for each $A\in\operatorname{Mat}(m,n,\mathbb{F})$, there is a unique $T\in\LL(\mathcal{V},\mathcal{W})$ such that $[T]_{\gamma\leftarrow\beta}=A$.
 \begin{proof}
-We compute
+The $j$th column of $[T]_{\gamma\leftarrow\beta}$ is $[T\mathbf{v}_j]_{\gamma}$. Since $\gamma$ is orthonormal, Theorem \ref{thm:orthonormal-basis-coordinates} gives
 \begin{align}
-\norm{\mathbf{u}+\mathbf{v}}^2 &=\innerprod{\mathbf{u}+\mathbf{v},\mathbf{u}+\mathbf{v}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{v},\mathbf{u}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}} \nonumber\\
-&\leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\norm{\mathbf{u}}\norm{\mathbf{v}} =\bigl(\norm{\mathbf{u}}+\norm{\mathbf{v}}\bigr)^2.
+[T\mathbf{v}_j]_{\gamma}
+=\begin{bmatrix}
+\innerprod{T\mathbf{v}_j,\mathbf{w}_1}\\
+\vdots\\
+\innerprod{T\mathbf{v}_j,\mathbf{w}_m}
+\end{bmatrix}.
 \nonumber
 \end{align}
-Taking square roots gives the inequality. If either vector is $\mathbf{0}$, the equality condition is immediate. Otherwise, equality holds exactly when $\innerprod{\mathbf{u},\mathbf{v}}=\abs{\innerprod{\mathbf{u},\mathbf{v}}}$ and equality holds in Cauchy-Schwarz. Thus $\mathbf{u}=a\mathbf{v}$ for some $a\in\mathbb{F}$ and $a\norm{\mathbf{v}}^2=\innerprod{\mathbf{u},\mathbf{v}}$ is real nonnegative, so $a\geq 0$. Conversely, if $\mathbf{u}=a\mathbf{v}$ with $a\geq 0$, then $\norm{\mathbf{u}+\mathbf{v}}=(a+1)\norm{\mathbf{v}}=\norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
-\hlt{Structural Commentary}: Square the norm and bound the cross term by Cauchy-Schwarz.\\
-\hlt{Key Insight}: Equality means the two vectors point in the same direction.
+This proves the displayed matrix formula. The converse is exactly the surjectivity and injectivity of the coordinate encoding in Theorem \ref{thm:linear-maps-and-matrices-same-data}.\\
+\hlt{Structural Commentary}: Columns are basis-image coordinates, read by inner products.\\
+\hlt{Key Insight}: Each entry measures $T\mathbf{v}_j$ against one output direction.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/triangle_inequality_inner_product.tikz}
-  \caption{Triangle inequality: $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$.}
-  \label{fig:triangle-inequality-inner-product}
-\end{figure}
-
-\begin{definition} \label{def:norm-and-normed-vector-space} \hlt{Norm and Normed Vector Space}\\
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. A \hlt{norm} on $\mathcal{V}$ is a function $\norm{\cdot}:\mathcal{V}\to[0,\infty)$ s.t., for all $\mathbf{u},\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item $\norm{\mathbf{u}}\geq0$;
-\item $\norm{\mathbf{u}}=0$ if and only if $\mathbf{u}=\mathbf{0}$;
-\item $\norm{\lambda\mathbf{u}}=\abs{\lambda}\norm{\mathbf{u}}$;
-\item $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$.
-\end{enumerate}
-A \hlt{normed vector space} is a vector space equipped with a norm. Its \hlt{unit ball} is $\{\mathbf{v}\in\mathcal{V}:\norm{\mathbf{v}}\leq1\}$.
-\end{definition}
-
-\begin{theorem} \label{thm:parallelogram-identity-inner-product} \hlt{Parallelogram Identity}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2 = 2\bigl(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\bigr)$.
+\begin{corollary} \label{cor:inner-product-through-operator-matrix} \hlt{Inner Products Through an Operator Matrix}\\
+Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of a finite-dimensional inner-product space $\mathcal{V}$, and let $T\in\LL(\mathcal{V})$. Then, for all $\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\innerprod{T\mathbf{v},\mathbf{w}} =\innerprod[\mathbb{F}^n]{[T]_{\beta\leftarrow\beta}[\mathbf{v}]_{\beta},[\mathbf{w}]_{\beta}}$.
 \begin{proof}
-Expanding both squared norms gives
-\begin{align}
-\norm{\mathbf{u}+\mathbf{v}}^2 =\norm{\mathbf{u}}^2+\innerprod{\mathbf{u},\mathbf{v}} +\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2, \quad \norm{\mathbf{u}-\mathbf{v}}^2 =\norm{\mathbf{u}}^2-\innerprod{\mathbf{u},\mathbf{v}} -\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2. \nonumber
-\end{align}
-Adding the two identities cancels the cross terms and yields the result.\\
-\hlt{Structural Commentary}: Opposite cross terms cancel when the two diagonal norms are added.\\
-\hlt{Key Insight}: Inner-product norms remember parallelogram geometry through cancellation.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/parallelogram_identity_inner_product.tikz}
-  \caption{Parallelogram identity: $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2=2(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2)$.}
-  \label{fig:parallelogram-identity-inner-product}
-\end{figure}
-
-\begin{proposition} \label{prop:coordinate-norms-on-fn} \hlt{Coordinate Norms on $\mathbb{F}^n$}\\
-For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}^n$, $\norm{\mathbf{x}}_1=\sum\limits_{j=1}^{n}\abs{x_j}$, $\norm{\mathbf{x}}_2=\left(\sum\limits_{j=1}^{n}\abs{x_j}^2\right)^{1/2}$, $\norm{\mathbf{x}}_{\infty}=\max_{1\leq j\leq n}\abs{x_j}$ are norms on $\mathbb{F}^n$.
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item For $\norm{\cdot}_1$, nonnegativity, definiteness, and homogeneity follow from the corresponding facts for modulus. The triangle inequality follows from $\norm{\mathbf{x}+\mathbf{y}}_1=\sum\limits_{j=1}^{n}\abs{x_j+y_j}\leq\sum_{j=1}^{n}\bigl(\abs{x_j}+\abs{y_j}\bigr)=\norm{\mathbf{x}}_1+\norm{\mathbf{y}}_1$
-\item For $\norm{\cdot}_2$, induced by standard inner product, so axioms follow from Proposition \ref{prop:derived-norm-basic-properties}, Theorem \ref{thm:triangle-inequality-inner-product}.
-\item For $\norm{\cdot}_{\infty}$, nonnegativity, definiteness, and homogeneity are immediate from the maximum of finitely many moduli. If $k$ is chosen so that $\norm{\mathbf{x}+\mathbf{y}}_{\infty}=\abs{x_k+y_k}$, then $\norm{\mathbf{x}+\mathbf{y}}_{\infty}\leq\abs{x_k}+\abs{y_k}\leq\norm{\mathbf{x}}_{\infty}+\norm{\mathbf{y}}_{\infty}$,
-\end{enumerate}
-\hlt{Structural Commentary}: The $\ell_1$ norm sums coordinate magnitudes, $\ell_{\infty}$ keeps only the largest coordinate magnitude, and $\ell_2$ comes from the standard inner product.\\
-\hlt{Key Insight}: All three obey the same abstract axioms, even though their unit balls have different shapes.
-\end{proof}
-\end{proposition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/unit_balls_coordinate_norms.tikz}
-  \caption{The unit balls of $\norm{\cdot}_1$, $\norm{\cdot}_2$, and $\norm{\cdot}_{\infty}$ in $\mathbb{R}^2$.}
-  \label{fig:unit-balls-coordinate-norms}
-\end{figure}
-
-\begin{corollary} \label{cor:l1-linfty-not-inner-product-norms} \hlt{$\ell_1$ and $\ell_{\infty}$ Are Not Inner-Product Norms}\\
-If $n\geq2$, then the norms $\norm{\cdot}_1$ and $\norm{\cdot}_{\infty}$ on $\mathbb{F}^n$ are not induced by any inner product.
-\begin{proof}
-Let $\mathbf{e}_1,\mathbf{e}_2$ be the first two standard coordinate vectors.\\
-For $\norm{\cdot}_1$, $\norm{\mathbf{e}_1+\mathbf{e}_2}_1^2+\norm{\mathbf{e}_1-\mathbf{e}_2}_1^2=4+4=8$, but $2\norm{\mathbf{e}_1}_1^2+2\norm{\mathbf{e}_2}_1^2=4$.\\
-For $\norm{\cdot}_{\infty}$, $\norm{\mathbf{e}_1+\mathbf{e}_2}_{\infty}^2+\norm{\mathbf{e}_1-\mathbf{e}_2}_{\infty}^2=1+1=2$ but $2\norm{\mathbf{e}_1}_{\infty}^2+2\norm{\mathbf{e}_2}_{\infty}^2=4$.\\
-Both norms violate Theorem \ref{thm:parallelogram-identity-inner-product}, which every inner-product norm must satisfy.\\
-\hlt{Structural Commentary}: The parallelogram identity detects inner-product norms.\\
-\hlt{Key Insight}: Different unit-ball geometry can rule out hidden inner-product structure.
+By Proposition \ref{prop:matrix-representation-action}, $[T\mathbf{v}]_{\beta}=[T]_{\beta\leftarrow\beta}[\mathbf{v}]_{\beta}$. Applying Theorem \ref{thm:parseval-identity-finite-dimensional} to $T\mathbf{v}$ and $\mathbf{w}$ gives the result.\\
+\hlt{Structural Commentary}: Orthonormal coordinates turn $\innerprod{T\mathbf{v},\mathbf{w}}$ into matrix computation.\\
+\hlt{Key Insight}: Orthonormal coordinates make operator geometry computable by matrices.
 \end{proof}
 \end{corollary}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/orthonormal_matrix_entries.tikz}
+  \caption{The $j$th column of $[T]_{\gamma\leftarrow\beta}$ is obtained by resolving $T\mathbf{v}_j$ against the orthonormal basis of $\mathcal{W}$.}
+  \label{fig:orthonormal-matrix-entries}
+\end{figure}
 
-\begin{theorem} \label{thm:polarization-identities} \hlt{Polarization Identities}\\
-Let $\mathcal{V}$ be an inner-product space and let $\mathbf{u},\mathbf{v}\in\mathcal{V}$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item If $\mathbb{F}=\mathbb{R}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2\right)$
-\item If $\mathbb{F}=\mathbb{C}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2 +i\norm{\mathbf{u}+i\mathbf{v}}^2-i\norm{\mathbf{u}-i\mathbf{v}}^2\right)$
-\end{enumerate}
+\begin{theorem} \label{thm:riesz-representation-finite-dimensional} \hlt{Riesz Representation Theorem}\\
+Let $\mathcal{V}$ be a finite-dimensional inner-product space and let $\varphi:\mathcal{V}\to\mathbb{F}$ be a linear functional. Then there is a unique vector $\mathbf{u}\in\mathcal{V}$ such that $\varphi(\mathbf{v})=\innerprod{\mathbf{v},\mathbf{u}}$ for every $\mathbf{v}\in\mathcal{V}$.
 \begin{proof}
-Let $z\defeq\innerprod{\mathbf{u},\mathbf{v}}$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item If $\mathbb{F}=\mathbb{R}$, then expanding squared norms gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z=4z$, proving (i).
-\item If $\mathbb{F}=\mathbb{C}$, the first expansion gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z$. The same expansion with $i\mathbf{v}$ gives $\norm{\mathbf{u}+i\mathbf{v}}^2-\norm{\mathbf{u}-i\mathbf{v}}^2=4\operatorname{Im} z$. Combining the real and imaginary parts gives (ii).
-\end{enumerate}
-\hlt{Structural Commentary}: Two norm differences extract the real and imaginary parts.\\
-\hlt{Key Insight}: The norm determines the inner product because it determines both parts of every cross term.
+Let $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$.\\
+By Theorem \ref{thm:orthonormal-basis-coordinates}, $\varphi(\mathbf{v}) =\varphi\left(\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j\right) =\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\varphi(\mathbf{e}_j)$. Set $\mathbf{u}=\sum\limits_{j=1}^{n}\overline{\varphi(\mathbf{e}_j)}\,\mathbf{e}_j$.\\
+Then orthonormality gives $\innerprod{\mathbf{v},\mathbf{u}}=\sum_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\varphi(\mathbf{e}_j)=\varphi(\mathbf{v})$.
+For uniqueness, suppose $\innerprod{\mathbf{v},\mathbf{u}_1}=\innerprod{\mathbf{v},\mathbf{u}_2}$ for every $\mathbf{v}\in\mathcal{V}$. Taking $\mathbf{v}=\mathbf{u}_1-\mathbf{u}_2$ gives $\norm{\mathbf{u}_1-\mathbf{u}_2}^2=0$, hence $\mathbf{u}_1=\mathbf{u}_2$.\\
+\hlt{Structural Commentary}: An orthonormal basis packages a functional as one representing vector.\\
+\hlt{Key Insight}: Finite-dimensional functionals are inner products with fixed vectors.
 \end{proof}
 \end{theorem}
 
+\begin{definition} \label{def:riesz-vector} \hlt{Riesz Vector}\\
+Let $\mathcal{V}$ be finite-dimensional and let $\varphi:\mathcal{V}\to\mathbb{F}$ be a linear functional. The unique vector $\mathbf{u}\in\mathcal{V}$ satisfying $\varphi(\mathbf{v})=\innerprod{\mathbf{v},\mathbf{u}}$ for every $\mathbf{v}\in\mathcal{V}$ is the \hlt{Riesz vector} representing $\varphi$.
+\end{definition}
+
 \begin{figure}[H]
   \centering
-  \input{figures/linear_algebra/polarization_identity_inner_product.tikz}
-  \caption{Polarization identity: $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}$.}
-  \label{fig:polarization-identity-inner-product}
+  \input{figures/linear_algebra/riesz_representation_vector_functional.tikz}
+  \caption{Riesz identifies a functional with its representing vector.}
+  \label{fig:riesz-representation-vector-functional}
 \end{figure}
 
-\begin{principle} \label{pri:inner-product-geometry} \hlt{Geometry from Algebra}\\
-Most geometric statements in an inner-product space come from expanding $\norm{\mathbf{u}\pm\mathbf{v}}^2$ and then interpreting the cross terms $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$.
-\end{principle}
+\begin{perspective} \label{per:riesz-representation-coordinates} \hlt{Riesz as Coordinate Duality}\\
+The vector $\sum_{j=1}^{n}\overline{\varphi(\mathbf{e}_j)}\mathbf{e}_j$ seems to depend on the orthonormal basis, but Theorem \ref{thm:riesz-representation-finite-dimensional} shows that the resulting representing vector is intrinsic.
+\end{perspective}
+
+\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
+On $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product, the Riesz vector of the trace functional $A\mapsto\operatorname{tr}(A)$ is $I_n$, since $\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
+\end{example}
+
+\begin{definition} \label{def:gram-matrix-and-determinant} \hlt{Gram Matrix}\\
+For vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in an inner-product space, the \hlt{Gram matrix} is
+\begin{align}
+G(\mathbf{u}_1,\ldots,\mathbf{u}_n)
+\defeq
+\begin{bmatrix}
+\innerprod{\mathbf{u}_1,\mathbf{u}_1} & \innerprod{\mathbf{u}_2,\mathbf{u}_1} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_1}\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_2} & \innerprod{\mathbf{u}_2,\mathbf{u}_2} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_2}\\
+\vdots & \vdots & \ddots & \vdots\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_n} & \innerprod{\mathbf{u}_2,\mathbf{u}_n} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_n}
+\end{bmatrix}.
+\nonumber
+\end{align}
+The \hlt{Gram determinant} is $g(\mathbf{u}_1,\ldots,\mathbf{u}_n)\defeq\det G(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.
+\end{definition}

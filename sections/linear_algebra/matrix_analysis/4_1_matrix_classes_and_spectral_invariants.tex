@@ -71,6 +71,188 @@ To compute or simplify a determinant:
 \end{enumerate}
 \end{method}
 
+\begin{lemma} \label{lem:determinant-identity-direct-sum} \hlt{Identity Blocks Do Not Change Determinant}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and let $n\geq0$. Then $\det(I_n\oplus A)=\det(A)=\det(A\oplus I_n)$.
+\begin{proof}
+For $I_n\oplus A$, expand the determinant along the first $n$ rows. The only nonzero contribution chooses the diagonal entries of $I_n$, leaving the minor $A$, so $\det(I_n\oplus A)=\det(A)$. Expanding $A\oplus I_n$ along the last $n$ rows gives the same conclusion. The case $n=0$ is the empty identity block convention.\\
+\hlt{Structural Commentary}: Identity blocks add directions without changing volume.\\
+\hlt{Key Insight}: In a Laplace expansion through an identity block, exactly one minor survives.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:block-upper-triangular-determinant} \hlt{Determinant of an Upper Block-Triangular Matrix}\\
+Let $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$. Then
+\begin{align}
+\det
+\begin{bmatrix}
+A & B\\
+0 & D
+\end{bmatrix}
+=\det(A)\det(D).
+\nonumber
+\end{align}
+\begin{proof}
+Factor
+\begin{align}
+\begin{bmatrix}
+A & B\\
+0 & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_r & 0\\
+0 & D
+\end{bmatrix}
+\begin{bmatrix}
+I_r & B\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & 0\\
+0 & I_s
+\end{bmatrix}.
+\nonumber
+\end{align}
+The first and last factors have determinants $\det(D)$ and $\det(A)$ by Lemma \ref{lem:determinant-identity-direct-sum}.\\
+The middle factor is upper triangular with every diagonal entry equal to $1$, so its determinant is $1$. Multiplicativity of determinant gives the formula.\\
+\hlt{Structural Commentary}: Block upper triangular matrices separate determinant contribution into diagonal blocks. The off-diagonal block does not affect the determinant.\\
+\hlt{Key Insight}: Factor the matrix into two block diagonal pieces and one unit upper triangular piece.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:schur-complement-determinant-formula} \hlt{Schur Complement Determinant Formula}\\
+Let
+\begin{align}
+M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix},
+\qquad
+A\in\operatorname{Mat}(r,r,\mathbb{F}),
+\quad
+D\in\operatorname{Mat}(s,s,\mathbb{F}).
+\nonumber
+\end{align}
+If $A$ is invertible, then the \hlt{Schur complement of $A$ in $M$} is $M/A\defeq D-CA^{-1}B$, and $\det(M)=\det(A)\det(M/A)$.
+\begin{proof}
+Block Gaussian elimination gives
+\begin{align}
+\begin{bmatrix}
+I_r & 0\\
+-CA^{-1} & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A & B\\
+0 & D-CA^{-1}B
+\end{bmatrix}.
+\nonumber
+\end{align}
+The elimination matrix is lower block-triangular with identity diagonal blocks, so its determinant is $1$. Taking determinants and applying Theorem \ref{thm:block-upper-triangular-determinant} to the right-hand block triangular matrix gives $\det(M)=\det(A)\det(D-CA^{-1}B)$.\\
+\hlt{Structural Commentary}: Schur complementation is block Gaussian elimination.\\
+\hlt{Key Insight}: Eliminating $C$ splits the determinant into $\det(A)$ times the remaining block determinant.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
+If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
+\begin{proof}
+Block Gaussian elimination gives $\begin{bmatrix}
+I_r & -BD^{-1}\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A-BD^{-1}C & 0\\
+C & D
+\end{bmatrix}$.\\
+The elimination matrix has determinant $1$, and the matrix on the right is lower block-triangular, so Theorem \ref{thm:block-upper-triangular-determinant} applied after transposition gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
+\hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
+\hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
+Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
+\begin{proof}
+Let $M=
+\begin{bmatrix}
+I_n & -A\\
+B & I_m
+\end{bmatrix}$.\\
+Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$ gives $\det(M)=\det(I_n+AB)$. Using Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$ gives $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
+\hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
+\hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:bordered-determinant-formulas} \hlt{Bordered Determinant Formulas}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and let $c\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $c\neq0$, then
+\begin{align}
+\det
+\begin{bmatrix}
+c & \mathbf{x}^t\\
+\mathbf{y} & A
+\end{bmatrix}
+=
+c\det\left(A-\frac{1}{c}\mathbf{y}\mathbf{x}^t\right).
+\nonumber
+\end{align}
+\item If $A$ is invertible, then
+\begin{align}
+\det
+\begin{bmatrix}
+A & \mathbf{x}\\
+\mathbf{y}^t & c
+\end{bmatrix}
+=
+\left(c-\mathbf{y}^tA^{-1}\mathbf{x}\right)\det(A).
+\nonumber
+\end{align}
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is Proposition \ref{prop:schur-complement-determinant-formula} with the scalar block $c$ in the upper-left corner.
+\item This is Proposition \ref{prop:schur-complement-determinant-formula} with $A$ as the upper-left block and $D=c$.
+\end{enumerate}
+\hlt{Structural Commentary}: A bordered determinant is a one-row and one-column Schur complement. The large determinant reduces to a scalar correction or a rank-one correction.\\
+\hlt{Key Insight}: Treat the border as a $1\times1$ block and apply the Schur complement formula.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:bordered-determinant-adjugate-form} \hlt{Adjugate Form of the Bordered Formula}\\
+If $\operatorname{adj}(A)$ denotes the adjugate matrix, then the second formula in Proposition \ref{prop:bordered-determinant-formulas} can be written as
+\begin{align}
+\det
+\begin{bmatrix}
+A & \mathbf{x}\\
+\mathbf{y}^t & c
+\end{bmatrix}
+=
+c\det(A)-\mathbf{y}^t\operatorname{adj}(A)\mathbf{x}.
+\nonumber
+\end{align}
+This adjugate form remains meaningful even when $A$ is not invertible.
+\end{remark}
+
 \begin{theorem} \label{thm:similarity-preserves-trace-and-determinant} \hlt{Trace and Determinant Are Similarity Invariants}\\
 If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are similar, then $\operatorname{tr}(A)=\operatorname{tr}(B)$, $\det(A)=\det(B)$.
 \begin{proof}
@@ -118,13 +300,37 @@ Theorem \ref{thm:operator-matrix-trace-determinant-basis-independent} shows thes
   \label{fig:operator-trace-determinant-basis-invariance}
 \end{figure}
 
-\begin{proposition} \label{prop:isometry-determinant-absolute-one} \hlt{Isometries Have Determinant of Modulus One}\\
-Let $S\in\LL(\mathcal{V})$ be an isometry on a finite-dimensional inner-product space over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Then $\abs{\det S}=1$.
+\begin{proposition} \label{prop:operator-trace-determinant-characteristic-coefficients} \hlt{Trace and Determinant from $q_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, let $T\in\LL(\mathcal{V})$, $q_T(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$, $n=\dim\mathcal{V}$.\\
+Then $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$. If $\mathbb{F}=\mathbb{C}$ and $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $T$ with algebraic multiplicity, then $\operatorname{tr}T=\lambda_1+\cdots+\lambda_n$, $\det T=\lambda_1\cdots\lambda_n$.
 \begin{proof}
-Choose an orthonormal basis and let $U$ be the matrix of $S$ in this basis. Since $S$ is an isometry, $U^*U=I_n$.\\
-Taking determinants gives $1=\det(U^*U)=\det(U^*)\det(U)=\overline{\det U}\det U=\abs{\det U}^2$, thus $\abs{\det S}=\abs{\det U}=1$.\\
-\hlt{Structural Commentary}: In orthonormal coordinates, isometries are unitary or orthogonal.\\
-\hlt{Key Insight}: Determinants turn $U^*U=I$ into $\abs{\det U}^2=1$.
+Choose a basis $\beta$ and set $A=[T]_{\beta\leftarrow\beta}$.\\
+Then $q_T=p_A$, and by Definition \ref{def:operator-trace-and-determinant}, $\operatorname{tr}T=\operatorname{tr}A$, $\operatorname{tr}T=\operatorname{tr}A$.\\
+Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$.\\
+If $\mathbb{F}=\mathbb{C}$, then comparing $q_T(z)=(z-\lambda_1)\cdots(z-\lambda_n)$ with the displayed form of $q_T$ gives the formulas.\\
+\hlt{Structural Commentary}: Characteristic polynomial stores trace and determinant in first and last coefficients.\\
+\hlt{Key Insight}: Compare coefficients of $\det(zI-T)$.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:trace-determinant-invariant-computation} \hlt{Trace--Determinant Invariant Method}\\
+To get eigenvalue data without solving for eigenvalues:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item choose a basis in which $[T]_{\beta\leftarrow\beta}$ is easiest to compute;
+\item compute $\operatorname{tr}T$ and $\det T$ from this matrix;
+\item if the eigenvalues are $\lambda_1,\ldots,\lambda_n$, conclude $\lambda_1+\cdots+\lambda_n=\operatorname{tr}T$, and $\lambda_1\cdots\lambda_n=\det T$;
+\item for equations $ST-TS=A$, first test $\operatorname{tr}A=0$; otherwise no solution exists.
+\end{enumerate}
+\end{method}
+
+\begin{proposition} \label{prop:trace-determinant-from-eigenvalues} \hlt{Trace and Determinant from Eigenvalues}\\
+Let $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $A\in\operatorname{Mat}(n,n,\mathbb{C})$ according to $m_A$. Then $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j$ and $\det A=\prod\limits_{j=1}^{n}\lambda_j$.
+\begin{proof}
+By Fundamental Theorem of Algebra, $p_A(z)=\prod\limits_{j=1}^{n}(z-\lambda_j) =z^n-\left(\sum\limits_{j=1}^{n}\lambda_j\right)z^{n-1}+\cdots+(-1)^n\prod\limits_{j=1}^{n}\lambda_j$.\\
+Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$. Uniqueness of coefficients gives the identities.\\
+\hlt{Structural Commentary}: Coefficients of $p_A$ encode symmetric functions of the eigenvalues.\\
+\hlt{Key Insight}: Trace is the first root sum and determinant is the full root product.
 \end{proof}
 \end{proposition}
 
@@ -224,40 +430,6 @@ Taking traces and using Proposition \ref{prop:trace-cyclicity-two-factors}, $0=\
 \end{proof}
 \end{corollary}
 
-\begin{proposition} \label{prop:operator-trace-determinant-characteristic-coefficients} \hlt{Trace and Determinant from $q_T$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, let $T\in\LL(\mathcal{V})$, $q_T(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$, $n=\dim\mathcal{V}$.\\
-Then $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$. If $\mathbb{F}=\mathbb{C}$ and $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $T$ with algebraic multiplicity, then $\operatorname{tr}T=\lambda_1+\cdots+\lambda_n$, $\det T=\lambda_1\cdots\lambda_n$.
-\begin{proof}
-Choose a basis $\beta$ and set $A=[T]_{\beta\leftarrow\beta}$.\\
-Then $q_T=p_A$, and by Definition \ref{def:operator-trace-and-determinant}, $\operatorname{tr}T=\operatorname{tr}A$, $\operatorname{tr}T=\operatorname{tr}A$.\\
-Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$.\\
-If $\mathbb{F}=\mathbb{C}$, then comparing $q_T(z)=(z-\lambda_1)\cdots(z-\lambda_n)$ with the displayed form of $q_T$ gives the formulas.\\
-\hlt{Structural Commentary}: Characteristic polynomial stores trace and determinant in first and last coefficients.\\
-\hlt{Key Insight}: Compare coefficients of $\det(zI-T)$.
-\end{proof}
-\end{proposition}
-
-\begin{method} \label{meth:trace-determinant-invariant-computation} \hlt{Trace--Determinant Invariant Method}\\
-To get eigenvalue data without solving for eigenvalues:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item choose a basis in which $[T]_{\beta\leftarrow\beta}$ is easiest to compute;
-\item compute $\operatorname{tr}T$ and $\det T$ from this matrix;
-\item if the eigenvalues are $\lambda_1,\ldots,\lambda_n$, conclude $\lambda_1+\cdots+\lambda_n=\operatorname{tr}T$, and $\lambda_1\cdots\lambda_n=\det T$;
-\item for equations $ST-TS=A$, first test $\operatorname{tr}A=0$; otherwise no solution exists.
-\end{enumerate}
-\end{method}
-
-\begin{proposition} \label{prop:trace-determinant-from-eigenvalues} \hlt{Trace and Determinant from Eigenvalues}\\
-Let $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $A\in\operatorname{Mat}(n,n,\mathbb{C})$ according to $m_A$. Then $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j$ and $\det A=\prod\limits_{j=1}^{n}\lambda_j$.
-\begin{proof}
-By Fundamental Theorem of Algebra, $p_A(z)=\prod\limits_{j=1}^{n}(z-\lambda_j) =z^n-\left(\sum\limits_{j=1}^{n}\lambda_j\right)z^{n-1}+\cdots+(-1)^n\prod\limits_{j=1}^{n}\lambda_j$.\\
-Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$. Uniqueness of coefficients gives the identities.\\
-\hlt{Structural Commentary}: Coefficients of $p_A$ encode symmetric functions of the eigenvalues.\\
-\hlt{Key Insight}: Trace is the first root sum and determinant is the full root product.
-\end{proof}
-\end{proposition}
-
 \begin{definition} \label{def:positive-semidefinite-matrix} \hlt{Positive Semidefinite and Positive Definite Matrices}\\
 Let $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$ and let $A\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
 The matrix $A$ is \hlt{positive semidefinite}, written $A\succeq0$, if $A=A^*$ and $\mathbf{x}^*A\mathbf{x}\geq0$ for every $\mathbf{x}\in\mathbb{F}^n$.\\
@@ -337,31 +509,6 @@ Since $A$ is invertible, $A^{1/2}$ is invertible, and $A=(A^{1/2})^*A^{1/2}$.
 \end{proof}
 \end{theorem}
 
-\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
-A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
-\end{definition}
-
-\begin{theorem} \label{thm:sylvester-positive-definite-criterion-leading-minors} \hlt{Sylvester's Criterion}\\
-A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite if and only if all leading principal minors are positive.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $A\succ0$, then all leading principal submatrix is PSD by Corollary \ref{cor:positive-semidefinite-principal-block-column-inclusion}, so its determinant is positive.
-\item[$(\Leftarrow)$] Induct on $n$. The case $n=1$ is immediate. Write $A=
-\begin{bmatrix}
-B & \mathbf{y}\\
-\mathbf{y}^* & a
-\end{bmatrix}$, $B\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$\\
-The leading principal minors of $B$ are positive, so $B\succ0$.\\
-Cauchy interlacing gives $\lambda_1(A)\leq\lambda_1(B)\leq\lambda_2(A)\leq\cdots\leq\lambda_{n-1}(B)\leq\lambda_n(A)$.\\
-Thus $\lambda_2(A),\ldots,\lambda_n(A)>0$. Since $\det A=\prod_j\lambda_j(A)>0$, also $\lambda_1(A)>0$; hence $A\succ0$.
-\end{enumerate}
-\hlt{Structural Commentary}: Leading minors pass positivity from the leading block to almost all eigenvalues.\\
-\hlt{Key Insight}: The determinant fixes the last eigenvalue's sign.
-\end{proof}
-\end{theorem}
-
 \begin{proposition} \label{prop:trace-determinant-positive-semidefinite} \hlt{Trace and Determinant of Positive Semidefinite Matrices}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Then $\operatorname{tr}A\geq0$, with equality if and only if $A=0$, and $\det A\geq0$, with strict inequality if and only if $A$ is positive definite.
 \begin{proof}
@@ -430,6 +577,31 @@ A
   \caption{For $A\succeq0$, factorisation forces $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$.}
   \label{fig:principal-block-column-inclusion}
 \end{figure}
+
+\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
+A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
+\end{definition}
+
+\begin{theorem} \label{thm:sylvester-positive-definite-criterion-leading-minors} \hlt{Sylvester's Criterion}\\
+A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite if and only if all leading principal minors are positive.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A\succ0$, then all leading principal submatrix is PSD by Corollary \ref{cor:positive-semidefinite-principal-block-column-inclusion}, so its determinant is positive.
+\item[$(\Leftarrow)$] Induct on $n$. The case $n=1$ is immediate. Write $A=
+\begin{bmatrix}
+B & \mathbf{y}\\
+\mathbf{y}^* & a
+\end{bmatrix}$, $B\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$\\
+The leading principal minors of $B$ are positive, so $B\succ0$.\\
+Cauchy interlacing gives $\lambda_1(A)\leq\lambda_1(B)\leq\lambda_2(A)\leq\cdots\leq\lambda_{n-1}(B)\leq\lambda_n(A)$.\\
+Thus $\lambda_2(A),\ldots,\lambda_n(A)>0$. Since $\det A=\prod_j\lambda_j(A)>0$, also $\lambda_1(A)>0$; hence $A\succ0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Leading minors pass positivity from the leading block to almost all eigenvalues.\\
+\hlt{Key Insight}: The determinant fixes the last eigenvalue's sign.
+\end{proof}
+\end{theorem}
 
 \begin{corollary} \label{cor:positive-semidefinite-zero-quadratic-form} \hlt{Zero Quadratic Form Detects the Kernel}\\
 If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\mathbf{x}^*A\mathbf{x}=0$ if and only if $A\mathbf{x}=0$.
@@ -606,23 +778,14 @@ The entries $d_j=e^{i\theta}$ count exactly the eigenvalues on the ray $\{\rho e
 \end{proof}
 \end{proposition}
 
+\begin{perspective} \label{per:hermitian-inertia-as-real-phase-inertia} \hlt{Hermitian Inertia as Real Phase Inertia}\\
+For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes. Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
+\end{perspective}
+
 \begin{definition} \label{def:spectral-radius-and-convergent-matrix} \hlt{Spectral Radius and Convergent Matrix}\\
 For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, the \hlt{spectral radius} is $\rho(A)\defeq\max\{\abs{\lambda}:\lambda\in\operatorname{spec}(A)\}$.\\
 We say $A^p\to0$ if every entry of $A^p$ converges to $0$ as $p\to\infty$.
 \end{definition}
-
-\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
-For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
-\begin{proof} Formula follows from binomial theorem applied to $J_k(\lambda)=\lambda I_k+J_k(0)$, with truncation from $J_k(0)^k=0$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
-\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then each coefficient $\binom{p}{r}\lambda^{p-r} \rightarrow 0$ for fixed $r$; hence every term in finite expansion tends to $0$.
-\end{enumerate}
-\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
-\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
-\end{proof}
-\end{proposition}
 
 \begin{theorem} \label{thm:matrix-powers-converge-to-zero-spectral-radius} \hlt{Matrix Powers Converge to Zero}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A^p\to0$ if and only if $\rho(A)<1$.
@@ -714,7 +877,3 @@ The nonnegative powers $A^p$ imply $\mathbf{x}\geq0$; since $A^t\mathbf{x}=\math
   \caption{The line $\operatorname{span}(\mathbf{e})$ remains; all other Jordan directions decay, so $A^p\to\mathbf{e}\mathbf{x}^t$.}
   \label{fig:positive-markov-stationary-limit}
 \end{figure}
-
-\begin{perspective} \label{per:hermitian-inertia-as-real-phase-inertia} \hlt{Hermitian Inertia as Real Phase Inertia}\\
-For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes. Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
-\end{perspective}

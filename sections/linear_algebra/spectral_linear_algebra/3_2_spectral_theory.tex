@@ -2,57 +2,6 @@
 
 Spectral theory studies an operator through algebraic expressions in the operator and through bases that reveal invariant flags. Polynomial expressions produce eigenvalues over $\mathbb{C}$, and eigenvalues make upper-triangular representations possible.
 
-\begin{theorem} \label{thm:schur-triangularization} \hlt{Schur Triangularisation}\\
-Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
-\begin{proof}
-Proceed by induction on $n=\dim(\mathcal{V})$. The cases $n=0$ and $n=1$ are immediate.\\
-Suppose $n\geq2$ and the result holds for smaller dimensions. By Theorem \ref{thm:complex-operator-has-eigenvalue}, choose a unit eigenvector $\mathbf{e}_1$ of $T$, say $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Let $\mathcal{U}=\operatorname{span}(\mathbf{e}_1)$ and define $S\in\LL(\mathcal{U}^{\perp})$ by $S\mathbf{w}=P_{\mathcal{U}^{\perp}}(T\mathbf{w})$.\\
-By induction, choose an orthonormal basis $(\mathbf{e}_2,\ldots,\mathbf{e}_n)$ of $\mathcal{U}^{\perp}$ with respect to which $S$ has an upper-triangular matrix. Then $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal basis of $\mathcal{V}$.\\
-For $j\geq2$, the coordinates of $T\mathbf{e}_j$ along $\mathbf{e}_2,\ldots,\mathbf{e}_n$ are exactly the coordinates of $S\mathbf{e}_j$, hence have no entries below row $j$. Also $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Therefore $[T]_{\gamma\leftarrow\gamma}$ is upper triangular for $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$.\\
-\hlt{Structural Commentary}: Schur triangularisation builds an eigenline first, then triangularises the projected action on its orthogonal complement.\\
-\hlt{Key Insight}: The lower-right block is controlled by the compression $P_{\mathcal{U}^{\perp}}T|_{\mathcal{U}^{\perp}}$.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:matrix-schur-triangularization-ordered} \hlt{Matrix Schur Triangularisation with Ordered Diagonal}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$ in a prescribed order. If $A\mathbf{x}=\lambda_1\mathbf{x}$ and $\norm{\mathbf{x}}_2=1$, then there is a unitary $U=[\mathbf{x}\ U_2]$ such that $U^*AU$ is upper triangular with diagonal $\lambda_1,\ldots,\lambda_n$.\\
-If $A$ is real, all $\lambda_i\in\mathbb{R}$, and $\mathbf{x}\in\mathbb{R}^n$, then $U$ may be chosen real orthogonal.
-\begin{proof}
-Induct on $n$. The case $n=1$ is immediate. Extend $\mathbf{x}$ to an orthonormal basis and set $V=[\mathbf{x}\ V_2]$.\\
-Since $A\mathbf{x}=\lambda_1\mathbf{x}$, $V^*AV=
-\begin{bmatrix}
-\lambda_1 & *\\
-0 & A'
-\end{bmatrix}$ and $A'$ has eigenvalues $\lambda_2,\ldots,\lambda_n$ by block triangularity.\\
-By induction, choose unitary $W$ with $W^*A'W=T'$ upper triangular and diagonal $\lambda_2,\ldots,\lambda_n$.\\
-Then $U\defeq V(I_1\oplus W)$ has first column $\mathbf{x}$ and $U^*AU=
-\begin{bmatrix}
-\lambda_1 & *\\
-0 & T'
-\end{bmatrix}$.\\
-The real case uses the same argument with real orthonormal extensions.\\
-\hlt{Structural Commentary}: Isolate the chosen eigenline, then repeat on the lower-right block.\\
-\hlt{Key Insight}: The diagonal order is controlled by which eigenline is peeled off first.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/schur_ordered_triangularization.tikz}
-  \caption{Schur induction: isolate an eigenline, then triangularise the compressed block.}
-  \label{fig:schur-ordered-triangularization}
-\end{figure}
-
-\begin{corollary} \label{cor:eigenvalues-of-inverse-matrix} \hlt{Eigenvalues of the Inverse}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be invertible with eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity. Then $A^{-1}$ has eigenvalues $\lambda_1^{-1},\ldots,\lambda_n^{-1}$, counted with algebraic multiplicity.
-\begin{proof}
-Take a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
-Then $A^{-1}=UT^{-1}U^*$, and $T^{-1}$ is upper triangular with diagonal $\lambda_1^{-1},\ldots,\lambda_n^{-1}$.\\
-\hlt{Structural Commentary}: Invert the Schur form and read the diagonal.\\
-\hlt{Key Insight}: The inverse spectrum is the reciprocal spectrum.
-\end{proof}
-\end{corollary}
-
 \begin{lemma} \label{lem:complex-zero-quadratic-form-implies-zero-operator} \hlt{Zero Complex Quadratic Form}\\
 Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$.\\
 If $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
@@ -141,6 +90,114 @@ Hence $\alpha\innerprod{\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:self-adjoint-eigenvalues-real} \hlt{Eigenvalues of Self-Adjoint Operators Are Real}\\
+Every eigenvalue of a self-adjoint operator on a finite-dimensional inner-product space is real.
+\begin{proof}
+Let $T=T^*$ and $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $\lambda\norm{\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\innerprod{\mathbf{v},\lambda\mathbf{v}} =\overline{\lambda}\norm{\mathbf{v}}^2$.\\
+Since $\norm{\mathbf{v}}^2>0$, $\lambda=\overline{\lambda}$, so $\lambda\in\mathbb{R}$.\\
+\hlt{Structural Commentary}: Self-adjointness moves $T$ between inner-product slots without changing the value.\\
+\hlt{Key Insight}: An eigenvalue must equal its conjugate because the eigenvector has positive squared norm.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:invertible-quadratic-self-adjoint} \hlt{Invertible Quadratic Expressions}\\
+Let $T\in\LL(\mathcal{V})$ be self-adjoint on a finite-dimensional inner-product space.\\
+If $b,c\in\mathbb{R}$ and $b^2<4c$, then $T^2+bT+cI_{\mathcal{V}}$ is invertible.
+\begin{proof}
+Let $S=T^2+bT+cI_{\mathcal{V}}$. For $\mathbf{v}\neq\mathbf{0}$,
+\begin{align}
+\innerprod{S\mathbf{v},\mathbf{v}} &=\norm{T\mathbf{v}}^2+b\innerprod{T\mathbf{v},\mathbf{v}}+c\norm{\mathbf{v}}^2 \geq \norm{T\mathbf{v}}^2-\abs{b}\norm{T\mathbf{v}}\norm{\mathbf{v}}+c\norm{\mathbf{v}}^2 \nonumber \\
+&=\left(\norm{T\mathbf{v}}-\frac{\abs{b}}{2}\norm{\mathbf{v}}\right)^2+\left(c-\frac{b^2}{4}\right)\norm{\mathbf{v}}^2>0 \nonumber
+\end{align}
+Thus $S\mathbf{v}\neq\mathbf{0}$ for every nonzero $\mathbf{v}$, so $\ker(S)=\{\mathbf{0}\}$. In finite dimensions, injectivity implies invertibility.\\
+\hlt{Structural Commentary}: Negative discriminant keeps this self-adjoint quadratic positive.\\
+\hlt{Key Insight}: Self-adjointness converts $\innerprod{T^2\mathbf{v},\mathbf{v}}$ into $\norm{T\mathbf{v}}^2$, so completing the square controls the kernel.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:self-adjoint-operators-have-eigenvalues} \hlt{Self-Adjoint Operators Have Eigenvalues}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real inner-product space. Every self-adjoint $T\in\LL(\mathcal{V})$ has an eigenvalue.
+\begin{proof}
+Choose $\mathbf{v}\neq\mathbf{0}$ and set $n=\dim(\mathcal{V})$. The list $\mathbf{v},T\mathbf{v},\ldots,T^n\mathbf{v}$ is linearly dependent, so some nonzero real polynomial $p$ satisfies $p(T)\mathbf{v}=\mathbf{0}$. Factor $p$ over $\mathbb{R}$ as a product of real linear factors and irreducible real quadratic factors: $p(x)=a\prod\limits_{j=1}^{M}(x^2+b_jx+c_j)\prod\limits_{k=1}^{m}(x-\lambda_k)$, where $a\neq0$, $b_j^2<4c_j$, and $\lambda_k\in\mathbb{R}$.\\
+By Proposition \ref{prop:invertible-quadratic-self-adjoint}, every quadratic factor $T^2+b_jT+c_jI_{\mathcal{V}}$ is invertible. If $m=0$, then $p(T)$ would be invertible, contradicting $p(T)\mathbf{v}=0$ with $\mathbf{v}\neq0$. Hence $m\geq1$.\\
+After removing the invertible quadratic factors, the product $(T-\lambda_1I_{\mathcal{V}})\cdots(T-\lambda_mI_{\mathcal{V}})$ has nontrivial kernel. Therefore at least one factor $T-\lambda_kI_{\mathcal{V}}$ is not injective, and $\lambda_k$ is an eigenvalue of $T$.\\
+\hlt{Structural Commentary}: An annihilating polynomial remains; quadratic factors are invertible.\\
+\hlt{Key Insight}: The nontrivial kernel must come from a real linear factor, hence from an eigenvalue.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:self-adjoint-invariant-subspaces} \hlt{Self-Adjoint Operators and Invariant Subspaces}\\
+Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}$ be a subspace of $\mathcal{V}$ invariant under $T$. Then:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}^{\perp}$ is invariant under $T$;
+\item $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ is self-adjoint;
+\item $T|_{\mathcal{U}^{\perp}}\in\LL(\mathcal{U}^{\perp})$ is self-adjoint.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+If $\mathbf{v}\in\mathcal{U}^{\perp}$ and $\mathbf{u}\in\mathcal{U}$, then $\innerprod{T\mathbf{v},\mathbf{u}}=\innerprod{\mathbf{v},T\mathbf{u}}=0$ because $T\mathbf{u}\in\mathcal{U}$. Hence $T\mathbf{v}\in\mathcal{U}^{\perp}$.
+\item For $\mathbf{u},\mathbf{v}\in\mathcal{U}$, $\innerprod{(T|_{\mathcal{U}})\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T\mathbf{v}} =\innerprod{\mathbf{u},(T|_{\mathcal{U}})\mathbf{v}}$. Thus $T|_{\mathcal{U}}$ is self-adjoint.
+\item By (i), $\mathcal{U}^{\perp}$ is invariant, so (ii)'s argument applies to $T|_{\mathcal{U}^{\perp}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Self-adjointness preserves orthogonal complements of invariant subspaces.\\
+\hlt{Key Insight}: Move $T$ across the inner product; invariance of $\mathcal{U}$ then forces orthogonality to persist.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:schur-triangularization} \hlt{Schur Triangularisation}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\begin{proof}
+Proceed by induction on $n=\dim(\mathcal{V})$. The cases $n=0$ and $n=1$ are immediate.\\
+Suppose $n\geq2$ and the result holds for smaller dimensions. By Theorem \ref{thm:complex-operator-has-eigenvalue}, choose a unit eigenvector $\mathbf{e}_1$ of $T$, say $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Let $\mathcal{U}=\operatorname{span}(\mathbf{e}_1)$ and define $S\in\LL(\mathcal{U}^{\perp})$ by $S\mathbf{w}=P_{\mathcal{U}^{\perp}}(T\mathbf{w})$.\\
+By induction, choose an orthonormal basis $(\mathbf{e}_2,\ldots,\mathbf{e}_n)$ of $\mathcal{U}^{\perp}$ with respect to which $S$ has an upper-triangular matrix. Then $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal basis of $\mathcal{V}$.\\
+For $j\geq2$, the coordinates of $T\mathbf{e}_j$ along $\mathbf{e}_2,\ldots,\mathbf{e}_n$ are exactly the coordinates of $S\mathbf{e}_j$, hence have no entries below row $j$. Also $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Therefore $[T]_{\gamma\leftarrow\gamma}$ is upper triangular for $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$.\\
+\hlt{Structural Commentary}: Schur triangularisation builds an eigenline first, then triangularises the projected action on its orthogonal complement.\\
+\hlt{Key Insight}: The lower-right block is controlled by the compression $P_{\mathcal{U}^{\perp}}T|_{\mathcal{U}^{\perp}}$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:matrix-schur-triangularization-ordered} \hlt{Matrix Schur Triangularisation with Ordered Diagonal}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$ in a prescribed order. If $A\mathbf{x}=\lambda_1\mathbf{x}$ and $\norm{\mathbf{x}}_2=1$, then there is a unitary $U=[\mathbf{x}\ U_2]$ such that $U^*AU$ is upper triangular with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+If $A$ is real, all $\lambda_i\in\mathbb{R}$, and $\mathbf{x}\in\mathbb{R}^n$, then $U$ may be chosen real orthogonal.
+\begin{proof}
+Induct on $n$. The case $n=1$ is immediate. Extend $\mathbf{x}$ to an orthonormal basis and set $V=[\mathbf{x}\ V_2]$.\\
+Since $A\mathbf{x}=\lambda_1\mathbf{x}$, $V^*AV=
+\begin{bmatrix}
+\lambda_1 & *\\
+0 & A'
+\end{bmatrix}$ and $A'$ has eigenvalues $\lambda_2,\ldots,\lambda_n$ by block triangularity.\\
+By induction, choose unitary $W$ with $W^*A'W=T'$ upper triangular and diagonal $\lambda_2,\ldots,\lambda_n$.\\
+Then $U\defeq V(I_1\oplus W)$ has first column $\mathbf{x}$ and $U^*AU=
+\begin{bmatrix}
+\lambda_1 & *\\
+0 & T'
+\end{bmatrix}$.\\
+The real case uses the same argument with real orthonormal extensions.\\
+\hlt{Structural Commentary}: Isolate the chosen eigenline, then repeat on the lower-right block.\\
+\hlt{Key Insight}: The diagonal order is controlled by which eigenline is peeled off first.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/schur_ordered_triangularization.tikz}
+  \caption{Schur induction: isolate an eigenline, then triangularise the compressed block.}
+  \label{fig:schur-ordered-triangularization}
+\end{figure}
+
+\begin{corollary} \label{cor:eigenvalues-of-inverse-matrix} \hlt{Eigenvalues of the Inverse}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be invertible with eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity. Then $A^{-1}$ has eigenvalues $\lambda_1^{-1},\ldots,\lambda_n^{-1}$, counted with algebraic multiplicity.
+\begin{proof}
+Take a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+Then $A^{-1}=UT^{-1}U^*$, and $T^{-1}$ is upper triangular with diagonal $\lambda_1^{-1},\ldots,\lambda_n^{-1}$.\\
+\hlt{Structural Commentary}: Invert the Schur form and read the diagonal.\\
+\hlt{Key Insight}: The inverse spectrum is the reciprocal spectrum.
+\end{proof}
+\end{corollary}
+
 \begin{theorem} \label{thm:complex-spectral-theorem} \hlt{Complex Spectral Theorem}\\
 Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
 \begin{enumerate}[label=\roman*.]
@@ -168,9 +225,32 @@ If $[T]$ is diagonal in an orthonormal basis, then $[T^*]=[T]^*$ is diagonal as 
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/spectral_theorem_triangular_to_diagonal.tikz}
-  \caption{Normality turns Schur triangular form diagonal by forcing row tails to vanish.}
+\caption{Normality turns Schur triangular form diagonal by forcing row tails to vanish.}
   \label{fig:spectral-theorem-triangular-to-diagonal}
 \end{figure}
+
+\begin{theorem} \label{thm:real-spectral-theorem} \hlt{Real Spectral Theorem}\\
+Let $\mathcal{V}$ be a finite-dimensional real inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $T$ is self-adjoint;
+\item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$
+Assume $T=T^*$ and induct on $n=\dim(\mathcal{V})$; $n\leq1$ is clear. For $n\geq2$, Lemma \ref{lem:self-adjoint-operators-have-eigenvalues} gives a unit eigenvector $\mathbf{u}$. Set $\mathcal{U}=\operatorname{span}(\mathbf{u})$. Since $\mathcal{U}$ is invariant, Proposition \ref{prop:self-adjoint-invariant-subspaces} makes $\mathcal{U}^{\perp}$ invariant and $T|_{\mathcal{U}^{\perp}}$ self-adjoint. Induct on $\mathcal{U}^{\perp}$ and adjoin $\mathbf{u}$.
+\item[$(ii)$]$\Rightarrow (iii)$
+In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
+\item[$(iii)$]$\Rightarrow (i)$
+In an orthonormal basis where $[T]$ is real diagonal, $[T^*]=[T]^t=[T]$. Hence $T=T^*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Split off one eigendirection, then restrict to its orthogonal complement.\\
+\hlt{Key Insight}: One eigenvector reduces the dimension.
+\end{proof}
+\end{theorem}
 
 \begin{perspective} \label{per:normal-operators-coordinate-free-diagonal} \hlt{Normal Means Diagonal in Orthogonal Coordinates}\\
 Complex spectral theorem states that normal operators are precisely the operators whose full structure is visible in an orthonormal eigenbasis. This is why normality is the natural coordinate-free version of being diagonal.
@@ -301,10 +381,6 @@ Write the spectral resolution $T=\sum\limits_j\mu_jP_j$. Then $T^*=\sum\limits_j
 \end{proof}
 \end{theorem}
 
-\begin{definition} \label{def:increasing-hermitian-eigenvalue-ordering} \hlt{Increasing Hermitian Eigenvalue Order}\\
-For a Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$, write $\lambda_1(A)\leq\lambda_2(A)\leq\cdots\leq\lambda_n(A)$ for its eigenvalues counted with algebraic multiplicity. If only one Hermitian matrix is under discussion, we write $\lambda_i$ instead of $\lambda_i(A)$.
-\end{definition}
-
 \begin{proposition} \label{prop:cartesian-decomposition-normal-commuting-parts} \hlt{Cartesian Decomposition and Normality}\\
 Let $\mathcal{V}$ be a finite-dimensional complex inner-product space.\\
 For every $T\in\LL(\mathcal{V})$, there are unique self-adjoint operators $H,K\in\LL(\mathcal{V})$ such that $T=H+iK$.\\
@@ -430,86 +506,6 @@ Hence $B=(VP^*U^*)A(UPV^*)$, and $UPV^*$ is unitary.\\
 \hlt{Key Insight}: After diagonalising both matrices, only a permutation of diagonal entries remains.
 \end{proof}
 \end{corollary}
-
-\begin{theorem} \label{thm:self-adjoint-eigenvalues-real} \hlt{Eigenvalues of Self-Adjoint Operators Are Real}\\
-Every eigenvalue of a self-adjoint operator on a finite-dimensional inner-product space is real.
-\begin{proof}
-Let $T=T^*$ and $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $\lambda\norm{\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\innerprod{\mathbf{v},\lambda\mathbf{v}} =\overline{\lambda}\norm{\mathbf{v}}^2$.\\
-Since $\norm{\mathbf{v}}^2>0$, $\lambda=\overline{\lambda}$, so $\lambda\in\mathbb{R}$.\\
-\hlt{Structural Commentary}: Self-adjointness moves $T$ between inner-product slots without changing the value.\\
-\hlt{Key Insight}: An eigenvalue must equal its conjugate because the eigenvector has positive squared norm.
-\end{proof}
-\end{theorem}
-
-\begin{proposition} \label{prop:invertible-quadratic-self-adjoint} \hlt{Invertible Quadratic Expressions}\\
-Let $T\in\LL(\mathcal{V})$ be self-adjoint on a finite-dimensional inner-product space.\\
-If $b,c\in\mathbb{R}$ and $b^2<4c$, then $T^2+bT+cI_{\mathcal{V}}$ is invertible.
-\begin{proof}
-Let $S=T^2+bT+cI_{\mathcal{V}}$. For $\mathbf{v}\neq\mathbf{0}$,
-\begin{align}
-\innerprod{S\mathbf{v},\mathbf{v}} &=\norm{T\mathbf{v}}^2+b\innerprod{T\mathbf{v},\mathbf{v}}+c\norm{\mathbf{v}}^2 \geq \norm{T\mathbf{v}}^2-\abs{b}\norm{T\mathbf{v}}\norm{\mathbf{v}}+c\norm{\mathbf{v}}^2 \nonumber \\
-&=\left(\norm{T\mathbf{v}}-\frac{\abs{b}}{2}\norm{\mathbf{v}}\right)^2+\left(c-\frac{b^2}{4}\right)\norm{\mathbf{v}}^2>0 \nonumber
-\end{align}
-Thus $S\mathbf{v}\neq\mathbf{0}$ for every nonzero $\mathbf{v}$, so $\ker(S)=\{\mathbf{0}\}$. In finite dimensions, injectivity implies invertibility.\\
-\hlt{Structural Commentary}: Negative discriminant keeps this self-adjoint quadratic positive.\\
-\hlt{Key Insight}: Self-adjointness converts $\innerprod{T^2\mathbf{v},\mathbf{v}}$ into $\norm{T\mathbf{v}}^2$, so completing the square controls the kernel.
-\end{proof}
-\end{proposition}
-
-\begin{lemma} \label{lem:self-adjoint-operators-have-eigenvalues} \hlt{Self-Adjoint Operators Have Eigenvalues}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real inner-product space. Every self-adjoint $T\in\LL(\mathcal{V})$ has an eigenvalue.
-\begin{proof}
-Choose $\mathbf{v}\neq\mathbf{0}$ and set $n=\dim(\mathcal{V})$. The list $\mathbf{v},T\mathbf{v},\ldots,T^n\mathbf{v}$ is linearly dependent, so some nonzero real polynomial $p$ satisfies $p(T)\mathbf{v}=\mathbf{0}$. Factor $p$ over $\mathbb{R}$ as a product of real linear factors and irreducible real quadratic factors: $p(x)=a\prod\limits_{j=1}^{M}(x^2+b_jx+c_j)\prod\limits_{k=1}^{m}(x-\lambda_k)$, where $a\neq0$, $b_j^2<4c_j$, and $\lambda_k\in\mathbb{R}$.\\
-By Proposition \ref{prop:invertible-quadratic-self-adjoint}, every quadratic factor $T^2+b_jT+c_jI_{\mathcal{V}}$ is invertible. If $m=0$, then $p(T)$ would be invertible, contradicting $p(T)\mathbf{v}=0$ with $\mathbf{v}\neq0$. Hence $m\geq1$.\\
-After removing the invertible quadratic factors, the product $(T-\lambda_1I_{\mathcal{V}})\cdots(T-\lambda_mI_{\mathcal{V}})$ has nontrivial kernel. Therefore at least one factor $T-\lambda_kI_{\mathcal{V}}$ is not injective, and $\lambda_k$ is an eigenvalue of $T$.\\
-\hlt{Structural Commentary}: An annihilating polynomial remains; quadratic factors are invertible.\\
-\hlt{Key Insight}: The nontrivial kernel must come from a real linear factor, hence from an eigenvalue.
-\end{proof}
-\end{lemma}
-
-\begin{proposition} \label{prop:self-adjoint-invariant-subspaces} \hlt{Self-Adjoint Operators and Invariant Subspaces}\\
-Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}$ be a subspace of $\mathcal{V}$ invariant under $T$. Then:
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item $\mathcal{U}^{\perp}$ is invariant under $T$;
-\item $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ is self-adjoint;
-\item $T|_{\mathcal{U}^{\perp}}\in\LL(\mathcal{U}^{\perp})$ is self-adjoint.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-If $\mathbf{v}\in\mathcal{U}^{\perp}$ and $\mathbf{u}\in\mathcal{U}$, then $\innerprod{T\mathbf{v},\mathbf{u}}=\innerprod{\mathbf{v},T\mathbf{u}}=0$ because $T\mathbf{u}\in\mathcal{U}$. Hence $T\mathbf{v}\in\mathcal{U}^{\perp}$.
-\item For $\mathbf{u},\mathbf{v}\in\mathcal{U}$, $\innerprod{(T|_{\mathcal{U}})\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T\mathbf{v}} =\innerprod{\mathbf{u},(T|_{\mathcal{U}})\mathbf{v}}$. Thus $T|_{\mathcal{U}}$ is self-adjoint.
-\item By (i), $\mathcal{U}^{\perp}$ is invariant, so (ii)'s argument applies to $T|_{\mathcal{U}^{\perp}}$.
-\end{enumerate}
-\hlt{Structural Commentary}: Self-adjointness preserves orthogonal complements of invariant subspaces.\\
-\hlt{Key Insight}: Move $T$ across the inner product; invariance of $\mathcal{U}$ then forces orthogonality to persist.
-\end{proof}
-\end{proposition}
-
-\begin{theorem} \label{thm:real-spectral-theorem} \hlt{Real Spectral Theorem}\\
-Let $\mathcal{V}$ be a finite-dimensional real inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item $T$ is self-adjoint;
-\item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
-\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*).]
-\setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$
-Assume $T=T^*$ and induct on $n=\dim(\mathcal{V})$; $n\leq1$ is clear. For $n\geq2$, Lemma \ref{lem:self-adjoint-operators-have-eigenvalues} gives a unit eigenvector $\mathbf{u}$. Set $\mathcal{U}=\operatorname{span}(\mathbf{u})$. Since $\mathcal{U}$ is invariant, Proposition \ref{prop:self-adjoint-invariant-subspaces} makes $\mathcal{U}^{\perp}$ invariant and $T|_{\mathcal{U}^{\perp}}$ self-adjoint. Induct on $\mathcal{U}^{\perp}$ and adjoin $\mathbf{u}$.
-\item[$(ii)$]$\Rightarrow (iii)$
-In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
-\item[$(iii)$]$\Rightarrow (i)$
-In an orthonormal basis where $[T]$ is real diagonal, $[T^*]=[T]^t=[T]$. Hence $T=T^*$.
-\end{enumerate}
-\hlt{Structural Commentary}: Split off one eigendirection, then restrict to its orthogonal complement.\\
-\hlt{Key Insight}: One eigenvector reduces the dimension.
-\end{proof}
-\end{theorem}
 
 \begin{definition} \label{def:complexification-real-vector-space} \hlt{Complexification of a Real Vector Space}\\
 Let $\mathcal{V}$ be a real vector space. The \hlt{complexification} of $\mathcal{V}$ is $\mathcal{V}_{\mathbb{C}}\defeq \mathcal{V}\times\mathcal{V}$, where $(\mathbf{u},\mathbf{v})$ is written as $\mathbf{u}+i\mathbf{v}$.\\
