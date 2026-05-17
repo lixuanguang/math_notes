@@ -8,6 +8,129 @@ Let $T\in\LL(\mathcal{V})$. A subspace $\mathcal{U}$ of $\mathcal{V}$ is \hlt{in
 
 Equivalently, $\mathcal{U}$ is invariant under $T$ exactly when the restriction $T|_{\mathcal{U}}$ is an operator on $\mathcal{U}$.
 
+\begin{proposition} \label{prop:invariant-subspaces-and-block-form} \hlt{Invariant Subspaces and Block Form}\\
+Let $T \in \LL(\mathcal{V})$ and suppose $\mathcal{V} = \mathcal{U} \oplus \mathcal{W}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{U}$ is invariant under $T$, then in a basis adapted to $\mathcal{U} \oplus \mathcal{W}$, matrix of $T$ has upper block-triangular form
+\begin{align}
+\begin{bmatrix}
+A & B \\
+0 & D
+\end{bmatrix}. \nonumber
+\end{align}
+\item If both $\mathcal{U}$ and $\mathcal{W}$ are invariant under $T$, then the matrix of $T$ has the block-diagonal form
+\begin{align}
+\begin{bmatrix}
+A & 0 \\
+0 & D
+\end{bmatrix}. \nonumber
+\end{align}
+\end{enumerate}
+\begin{proof}
+Choose basis $(\mathbf{u}_1,\ldots,\mathbf{u}_p)$ of $\mathcal{U}$ and basis $(\mathbf{w}_1,\ldots,\mathbf{w}_q)$ of $\mathcal{W}$, and use concatenation as basis of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{U}$ is invariant, then each $T\mathbf{u}_j$ lies in $\mathcal{U}$, so its coordinates along $\mathbf{w}_1,\ldots,\mathbf{w}_q$ are zero. These entries form the lower-left block.
+\item If $\mathcal{W}$ is also invariant, then each $T\mathbf{w}_j$ lies in $\mathcal{W}$, so its coordinates along $\mathbf{u}_1,\ldots,\mathbf{u}_p$ are zero. These entries form the upper-right block.
+\end{enumerate}
+\hlt{Structural Commentary}: Block form records how an operator moves vectors between chosen summands. Invariant summands force the corresponding off-diagonal movement to vanish.\\
+\hlt{Key Insight}: Zero blocks are coordinate evidence of invariant subspaces.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \hlt{Matrix Viewpoint on Structure}\\
+Basic block matrices already capture important geometry. Upper block-triangular form records the presence of an invariant subspace; block diagonal form records a genuine decomposition into independent invariant pieces.
+\end{perspective}
+
+\begin{theorem} \label{thm:complex-operator-has-eigenvalue} \hlt{Complex Operators Have Eigenvalues}\\
+Every operator on a finite-dimensional, nonzero complex vector space has an eigenvalue.
+\begin{proof}
+Let $T\in\LL(\mathcal{V})$. By Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials}, $T$ has a nonconstant annihilating polynomial. Since $\mathcal{V}$ is complex and nonzero, Theorem \ref{thm:annihilating-polynomials-control-spectrum} implies that one root of this polynomial is an eigenvalue of $T$.\\
+\hlt{Structural Commentary}: Finite dimension gives an annihilating polynomial; over $\mathbb{C}$, it factors linearly.\\
+\hlt{Key Insight}: One noninjective factor produces an eigenvector.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:commuting-family-common-eigenvector} \hlt{Common Eigenvector for a Commuting Family}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $\mathcal{F}\subseteq\LL(\mathcal{V})$ be a nonempty commuting family: $ST=TS$ for all $S,T\in\mathcal{F}$. Then there exists $\mathbf{v}\neq\mathbf{0}$ that is an eigenvector of every operator in $\mathcal{F}$.
+\begin{proof} First suppose $\mathcal{F}=\{T_1,\ldots,T_m\}$ is finite, and induct on $m$. The case $m=1$ is Theorem \ref{thm:complex-operator-has-eigenvalue}.\\
+For $m>1$, choose $\lambda\in\operatorname{spec}(T_1)$ and set $\mathcal{U}=E_{\lambda}(T_1)$. If $\mathbf{u}\in\mathcal{U}$, $j\geq2$, then $(T_1-\lambda I_{\mathcal{V}})T_j\mathbf{u}=T_j(T_1-\lambda I_{\mathcal{V}})\mathbf{u}=\mathbf{0}$, so $\mathcal{U}$ is invariant under $T_2,\ldots,T_m$. Their commuting restrictions to $\mathcal{U}$ have, by induction, a common eigenvector $\mathbf{v}\in\mathcal{U}$; then $\mathbf{v}$ is also an eigenvector of $T_1$.\\
+For general $\mathcal{F}$, choose $T_1,\ldots,T_m\in\mathcal{F}$ spanning $\operatorname{span}(\mathcal{F})$. The finite case gives a common eigenvector $\mathbf{v}$ for them. If $S=\sum_j a_jT_j\in\mathcal{F}$ and $T_j\mathbf{v}=\mu_j\mathbf{v}$, then $S\mathbf{v}=(\sum_j a_j\mu_j)\mathbf{v}$, so $\mathbf{v}$ is common to all of $\mathcal{F}$.\\
+\hlt{Structural Commentary}: Commutation makes one eigenspace invariant, reducing the family by one.\\
+\hlt{Key Insight}: Find the common eigenvector inside an eigenspace.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:complex-upper-triangularization} \hlt{Complex Upper Triangularisation}\\
+Let $\mathcal{V}$ be a finite-dimensional complex vector space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some basis of $\mathcal{V}$.
+\begin{proof} Induct on $n=\dim(\mathcal{V})$. If $n\leq1$, the result is immediate.\\
+Suppose $n>1$ and the result holds in smaller dimensions. Choose an eigenvector $\mathbf{v}_1$ of $T$ by Theorem \ref{thm:complex-operator-has-eigenvalue}, and set $\mathcal{U}=\operatorname{span}(\mathbf{v}_1)$. Then $\mathcal{U}$ is $T$-invariant, so the quotient operator $T/\mathcal{U}$ is defined on $\mathcal{V}/\mathcal{U}$, which has dimension $n-1$. By induction, choose a basis $(\mathbf{v}_2+\mathcal{U},\ldots,\mathbf{v}_n+\mathcal{U})$ of $\mathcal{V}/\mathcal{U}$ with respect to which $T/\mathcal{U}$ is upper triangular, and choose representatives $\mathbf{v}_2,\ldots,\mathbf{v}_n\in\mathcal{V}$. Then $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ is a basis of $\mathcal{V}$: any relation descends to the quotient basis, forcing all coefficients of $\mathbf{v}_2,\ldots,\mathbf{v}_n$ to be zero, and then the coefficient of $\mathbf{v}_1$ is zero.\\
+Now $T\mathbf{v}_1\in\operatorname{span}(\mathbf{v}_1)$. For $j\geq2$, upper triangularity of $T/\mathcal{U}$ gives $(T/\mathcal{U})(\mathbf{v}_j+\mathcal{U}) \in\operatorname{span}(\mathbf{v}_2+\mathcal{U},\ldots,\mathbf{v}_j+\mathcal{U})$, so $T\mathbf{v}_j\in\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)$. Hence Theorem \ref{thm:upper-triangular-criteria} gives an upper-triangular matrix for $T$ in the basis $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$.\\
+\hlt{Structural Commentary}: Lift an upper-triangular quotient basis above an eigenline.\\
+\hlt{Key Insight}: The quotient builds the remaining invariant flag.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:upper-triangular-invertibility-criterion} \hlt{Invertibility from an Upper-Triangular Matrix}\\
+Suppose $T\in\LL(\mathcal{V})$ has an upper-triangular matrix with diagonal entries $\lambda_1,\ldots,\lambda_n$ with respect to some basis of $\mathcal{V}$. Then $T$ is invertible if and only if $\lambda_j\neq0$ for every $j$.
+\begin{proof}
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be such a basis.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Leftarrow)$]
+If every $\lambda_j\neq0$, then upper-triangular matrix $[T]_{\beta\leftarrow\beta}$ is invertible by Theorem \ref{thm:inverse-upper-triangular}, so $T$ is invertible.
+\item[$(\Rightarrow)$]
+Suppose $T$ is invertible. If $\lambda_j=0$ for some $j$, set $\mathcal{U}_j=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)$. Upper triangularity gives $T(\mathcal{U}_j)\subseteq\mathcal{U}_{j-1}$ because the coefficient of $\mathbf{v}_j$ in $T\mathbf{v}_j$ is $\lambda_j=0$ and $T\mathbf{v}_i\in\mathcal{U}_{j-1}$ for $i<j$. Since $\dim(\mathcal{U}_j)>\dim(\mathcal{U}_{j-1})$, the restriction $T|_{\mathcal{U}_j}:\mathcal{U}_j\to\mathcal{U}_{j-1}$ is not injective. Hence $T$ has a nonzero kernel vector, contradicting invertibility. Thus every $\lambda_j\neq0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Diagonal entries control each flag layer.\\
+\hlt{Key Insight}: A zero diagonal entry forces a kernel vector.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:eigenvalues-of-upper-triangular-operator} \hlt{Eigenvalues from an Upper-Triangular Matrix}\\
+Suppose $T\in\LL(\mathcal{V})$ has an upper-triangular matrix with diagonal entries $\lambda_1,\ldots,\lambda_n$ with respect to some basis of $\mathcal{V}$. Then the eigenvalues of $T$ are precisely $\lambda_1,\ldots,\lambda_n$.
+\begin{proof}
+For $\lambda\in\mathbb{F}$, the matrix of $T-\lambda I_{\mathcal{V}}$ in the same basis is upper triangular with diagonal entries $\lambda_1-\lambda,\ldots,\lambda_n-\lambda$. By Proposition \ref{prop:upper-triangular-invertibility-criterion}, $T-\lambda I_{\mathcal{V}}$ is not invertible if and only if $\lambda=\lambda_j$ for some $j$. By Theorem \ref{thm:equivalent-eigenvalue-conditions}, this is equivalent to $\lambda$ being an eigenvalue of $T$.\\
+\hlt{Structural Commentary}: Scalar shifts preserve triangular form.\\
+\hlt{Key Insight}: Eigenvalues occur exactly when one shifted diagonal entry becomes zero.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:upper-triangular-viewpoint} \hlt{Why Triangular Form Matters}\\
+Upper-triangular form is the first useful simplification beyond finding one eigenvector. It preserves enough of the operator to read eigenvalues from the diagonal while still allowing nontrivial coupling above the diagonal.
+
+\begin{theorem} \label{thm:simultaneous-schur-triangularization-commuting-family} \hlt{Simultaneous Schur Triangularisation}\\
+Let $\emptyset\neq\mathcal{F}\subseteq\operatorname{Mat}(n,n,\mathbb{C})$ be a commuting family.\\
+Then there is a unitary $U\in\operatorname{Mat}(n,n,\mathbb{C})$ such that $U^*AU$ is upper triangular for every $A\in\mathcal{F}$.\\
+If every matrix in $\mathcal{F}$ is real and has only real eigenvalues, then $U$ can be chosen real orthogonal.
+\begin{proof}
+Induct on $n$. Choose common unit eigenvector $\mathbf{x}$, extend to orthonormal basis, let $V=[\mathbf{x}\ V_2]$.\\
+For every $A\in\mathcal{F}$, $V^*AV=
+\begin{bmatrix}
+\lambda_A&*\\
+0&A'
+\end{bmatrix}$. The compressed blocks still commute, so induction triangularises them simultaneously; adjoining $\mathbf{x}$ gives the result. In the real case, use the same induction with real orthonormal extensions. A real common eigenvector exists because either all matrices are scalar, or a nonscalar $A_0\in\mathcal{F}$ has a proper real eigenspace invariant under all of $\mathcal{F}$.\\
+\hlt{Structural Commentary}: A common eigenline creates the first block; commutation descends to the compression.\\
+\hlt{Key Insight}: Simultaneous triangularisation is Schur induction with a common eigenvector at every step.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/simultaneous_triangularization_commuting.tikz}
+  \caption{A shared eigenline gives a simultaneous first block; lower-right compressions still commute.}
+  \label{fig:simultaneous-triangularization-commuting}
+\end{figure}
+
+\begin{corollary} \label{cor:commuting-sum-product-eigenvalues} \hlt{Eigenvalues of Sums and Products of Commuting Matrices}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ and $AB=BA$. Their eigenvalues can be ordered as $\lambda_1,\ldots,\lambda_n$ and $\mu_1,\ldots,\mu_n$ so that $A+B$ has eigenvalues $\lambda_i+\mu_i$ and $AB$ has eigenvalues $\lambda_i\mu_i$, counted with multiplicity.
+\begin{proof}
+Choose simultaneous Schur forms $T=U^*AU$ and $R=U^*BU$. Set $\lambda_i=t_{ii}$ and $\mu_i=r_{ii}$. Then $T+R$ and $TR$ are upper triangular with diagonals $\lambda_i+\mu_i$ and $\lambda_i\mu_i$, and are similar to $A+B$ and $AB$.\\
+\hlt{Structural Commentary}: Simultaneous Schur form aligns both spectra on one diagonal.\\
+\hlt{Key Insight}: In common triangular coordinates, diagonals add and multiply.
+\end{proof}
+
 \begin{definition} \label{def:eigenvalue-eigenvector} \hlt{Eigenvalue and Eigenvector}\\
 Let $T\in\LL(\mathcal{V})$. A scalar $\lambda\in\mathbb{F}$ is an \hlt{eigenvalue} of $T$ if there exists $\mathbf{v}\in\mathcal{V}$ with $\mathbf{v}\neq\mathbf{0}$ and $T\mathbf{v}=\lambda\mathbf{v}$. Such a vector $\mathbf{v}$ is an \hlt{eigenvector} of $T$ corresponding to $\lambda$.
 \end{definition}

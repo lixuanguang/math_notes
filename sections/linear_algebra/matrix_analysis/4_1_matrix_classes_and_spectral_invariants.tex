@@ -2,6 +2,93 @@
 
 Matrix spectral statements are operator statements written in the standard coordinates of $\mathbb{F}^n$. The coordinate viewpoint is useful because determinants, traces, transposes, and block patterns become visible.
 
+\begin{definition} \label{def:matrix-trace-and-determinant} \hlt{Trace and Determinant of a Matrix}\\
+For $A=[A_{j,k}]\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{trace} of $A$ is $\operatorname{tr}(A)\defeq A_{1,1}+\cdots+A_{n,n}$.\\
+Let $\mathfrak{S}_n$ denote the set of permutations of $\{1,\ldots,n\}$. The \hlt{sign} of $\sigma\in\mathfrak{S}_n$ is $\sign(\sigma)=1$ if the number of pairs $j<k$ with $\sigma(j)>\sigma(k)$ is even, and $\sign(\sigma)=-1$ otherwise.\\
+The \hlt{determinant} of $A$ is $\det A \defeq \sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.
+\end{definition}
+
+\begin{proposition} \label{prop:trace-cyclicity-two-factors} \hlt{Trace Is Cyclic for Two Factors}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,m,\mathbb{F})$, then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.
+\begin{proof}
+Expand both traces by entries: $\operatorname{tr}(AB) =\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{n}A_{j,k}B_{k,j} =\sum\limits_{k=1}^{n}\sum\limits_{j=1}^{m}B_{k,j}A_{j,k} =\operatorname{tr}(BA)$.\\
+\hlt{Structural Commentary}: Cyclicity is just reindexing the same double sum.\\
+\hlt{Key Insight}: The two double sums contain exactly the same scalar terms.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:determinant-basic-laws} \hlt{Basic Determinant Laws}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=1$.
+\item $\det(A)$ is linear as a function of each column of $A$ when the other columns are fixed.
+\item Swapping two columns negates the determinant; equal columns force $\det A=0$.
+\item If $A$ is triangular, then $\det A=A_{1,1}\cdots A_{n,n}$.
+\item $\det(AB)=\det(A)\det(B)$.
+\item $A$ is invertible if and only if $\det A\neq0$. In that case $\det(A^{-1})=(\det A)^{-1}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)(I_n)_{\sigma(1),1}\cdots (I_n)_{\sigma(n),n}=1$ as product is nonzero only when $\sigma(k)=k \ \forall k$.
+\item For fixed $k$, $\det(A_{\cdot,1},\ldots,\mathbf{x},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)x_{\sigma(k)}\prod\limits_{\ell\neq k}A_{\sigma(\ell),\ell}$, which is linear in $\mathbf{x}$.
+\item If $B_{\cdot,k}=A_{\cdot,\tau(k)}$ for transposition $\tau$, then $\det B=\sum\limits_{\rho\in\mathfrak{S}_n}\sign(\rho\tau)\prod\limits_{k=1}^n A_{\rho(k),k} =-\det A$.\\
+If the swapped columns are equal, then $B=A$, so $\det A=-\det A$ and $\det A=0$.
+\item If $A$ is upper triangular and $\prod_{k=1}^n A_{\sigma(k),k}\neq0$, then $\sigma(k)\leq k$ for all $k$, hence $\sigma(k)=k$ for all $k$.\\
+Thus $\det A=A_{1,1}\cdots A_{n,n}$. The lower triangular case is analogous.
+\item If $F$ is alternating, multilinear in columns, then
+\begin{align}
+F(A_{\cdot,1},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)F(I_n)A_{\sigma(1),1}\cdots A_{\sigma(n),n} =F(I_n)\det A \nonumber
+\end{align}
+For $G(B)=\det(AB)$, the map $G$ is alternating multilinear and $G(I_n)=\det A$.\\
+Hence $\det(AB)=G(B)=G(I_n)\det B=\det(A)\det(B)$.
+\item If $A$ is invertible, then $1=\det I_n=\det(AA^{-1})=\det(A)\det(A^{-1})$.\\
+If $A_{\cdot,k}=\sum\limits_{\ell\neq k}c_\ell A_{\cdot,\ell}$, then $\det A=\sum\limits_{\ell\neq k}c_\ell\det(A_{\cdot,1},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,n})=0$.\\
+Thus $\det A\neq0$ iff the columns of $A$ are independent, iff $A$ is invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: The determinant is the normalized alternating multilinear measure of columns.\\
+\hlt{Key Insight}: Multilinearity expands columns; alternation kills repeated directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/determinant_column_geometry.tikz}
+  \caption{Determinant is signed column-volume; swaps reverse orientation and dependence gives zero volume.}
+  \label{fig:determinant-column-geometry}
+\end{figure}
+
+\begin{method} \label{meth:determinant-by-structure} \hlt{Determinant by Structure}\\
+To compute or simplify a determinant:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item first look for triangular or block triangular form;
+\item use column linearity to split complicated columns only when it reduces structure;
+\item use column swaps to move useful pivots into position, tracking a factor of $-1$ for each swap;
+\item detect zero determinants from dependent columns or repeated columns;
+\item for products or changes of basis, use multiplicativity instead of expanding permutations.
+\end{enumerate}
+
+\begin{theorem} \label{thm:similarity-preserves-trace-and-determinant} \hlt{Trace and Determinant Are Similarity Invariants}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are similar, then $\operatorname{tr}(A)=\operatorname{tr}(B)$, $\det(A)=\det(B)$.
+\begin{proof}
+Write $B=PAP^{-1}$ with $P$ invertible. Proposition \ref{prop:trace-cyclicity-two-factors} gives
+\begin{align}
+\operatorname{tr}(B)=\operatorname{tr}\bigl(P(AP^{-1})\bigr)
+=\operatorname{tr}\bigl((AP^{-1})P\bigr)
+=\operatorname{tr}(A).
+\nonumber
+\end{align}
+Theorem \ref{thm:determinant-basic-laws} gives
+\begin{align}
+\det(B)=\det(P)\det(A)\det(P^{-1})=\det(A).
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: Trace and determinant ignore the coordinate system used to write an operator.\\
+\hlt{Key Insight}: Conjugating by $P$ inserts $P$ and $P^{-1}$, which cancel inside trace and determinant.
+\end{proof}
+
 \begin{principle} \label{princ:trace-determinant-coordinate-free} \hlt{Trace and Determinant Are Coordinate-Free}\\
 Trace and determinant are first computed from a matrix, but their real structural meaning is operator-level: changing basis conjugates the matrix, and conjugation preserves both quantities.
 \end{principle}
@@ -38,6 +125,91 @@ Taking determinants gives $1=\det(U^*U)=\det(U^*)\det(U)=\overline{\det U}\det U
 \hlt{Key Insight}: Determinants turn $U^*U=I$ into $\abs{\det U}^2=1$.
 \end{proof}
 \end{proposition}
+
+\begin{definition} \hlt{Commutator}\\
+For $S,T\in\LL(\mathcal{V})$, the \hlt{commutator} of $S$ and $T$ is $[S,T]\defeq ST-TS$. For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{matrix commutator} is $[A,B]\defeq AB-BA$.
+\end{definition}
+
+\begin{proposition} \label{prop:commutators-have-zero-trace} \hlt{Trace Obstruction for Commutators}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\operatorname{tr}([A,B])=0$.\\
+Consequently, if $n\cdot1_{\mathbb{F}}\neq0$, then no nonzero scalar matrix is a commutator.
+\begin{proof}
+Cyclicity of trace gives $\operatorname{tr}([A,B])=\operatorname{tr}(AB)-\operatorname{tr}(BA)=0$.\\
+If $cI_n=[A,B]$, then $nc=\operatorname{tr}(cI_n)=0$. Under $n\cdot1_{\mathbb{F}}\neq0$, this forces $c=0$.\\
+\hlt{Structural Commentary}: Trace detects the first unavoidable obstruction to being a commutator. Scalar matrices fail this obstruction unless the field characteristic makes $n$ vanish.\\
+\hlt{Key Insight}: The two products $AB$ and $BA$ have the same trace, so their difference has trace zero.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:scalar-matrix-dependent-orbits} \hlt{Scalar Matrices and One-Step Orbits}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $n\geq2$.\\
+Then $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}\in\mathbb{F}^n$ if and only if $A$ is a scalar matrix.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $A=cI_n$. Then $A\mathbf{x}=c\mathbf{x}$ for every $\mathbf{x}$, so $(\mathbf{x},A\mathbf{x})$ is linearly dependent.
+\item[$(\Leftarrow)$] Suppose $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}$. For each standard basis vector $\mathbf{e}_i$, there is $a_i\in\mathbb{F}$ such that $A\mathbf{e}_i=a_i\mathbf{e}_i$. For $i\geq2$, dependence of $\mathbf{e}_1+\mathbf{e}_i$ and $A(\mathbf{e}_1+\mathbf{e}_i)=a_1\mathbf{e}_1+a_i\mathbf{e}_i$ gives $a_1=a_i$.
+\end{enumerate}
+\hlt{Structural Commentary}: A scalar matrix preserves every one-dimensional coordinate direction and every diagonal line between two coordinates. These diagonal lines force all coordinate scalars to agree.\\
+\hlt{Key Insight}: If every vector is an eigenvector, then there can be only one eigenvalue.
+\end{proof}
+\end{lemma}
+
+\begin{lemma} \label{lem:nonscalar-similar-zero-entry} \hlt{Nonscalar Matrices Have a Zero Diagonal Entry After Similarity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $n\geq2$.\\
+If $A$ is not a scalar matrix, then $A$ is similar over $\mathbb{F}$ to a matrix whose $(1,1)$ entry is $0$.
+\begin{proof}
+By Lemma \ref{lem:scalar-matrix-dependent-orbits}, there is $\mathbf{x}\in\mathbb{F}^n$ such that $(\mathbf{x},A\mathbf{x})$ is linearly independent. Extend $(\mathbf{x},A\mathbf{x})$ to a basis $\beta$ of $\mathbb{F}^n$. In the basis $\beta$, the first column of the matrix of $A$ is the coordinate vector of $A\mathbf{x}$, namely $(0,1,0,\ldots,0)^t$. Thus the $(1,1)$ entry is $0$, and this matrix is similar to $A$.\\
+\hlt{Structural Commentary}: Nonscalarity produces a vector whose first iterate points in a genuinely new direction. Using these two vectors as the start of a basis forces a zero in the first diagonal position.\\
+\hlt{Key Insight}: Put $\mathbf{x}$ first and $A\mathbf{x}$ second in the basis.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:similar-to-constant-diagonal} \hlt{Similarity to a Constant-Diagonal Matrix}\\
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. Then $A$ is similar over $\mathbb{F}$ to a matrix whose diagonal entries are all equal to $\frac{1}{n}\operatorname{tr}(A)$.
+\begin{proof}
+Set $\tau=\frac{1}{n}\operatorname{tr}(A)$ and $B=A-\tau I_n$. Then $\operatorname{tr}(B)=0$. It is enough to show that every trace-zero matrix is similar to a matrix with zero diagonal, because Theorem \ref{thm:similarity-preserves-scalar-shifts} then adds $\tau I_n$ back to the diagonal.\\
+We prove the trace-zero claim by induction on $n$. The case $n=1$ is immediate. Let $n\geq2$ and let $\operatorname{tr}(B)=0$. If $B$ is scalar, then $B=cI_n$ and $0=\operatorname{tr}(B)=nc$, so $c=0$. If $B$ is not scalar, Lemma \ref{lem:nonscalar-similar-zero-entry} makes $B$ similar to
+\begin{align}
+\begin{bmatrix}
+0 & *\\
+* & B_1
+\end{bmatrix},
+\qquad
+\operatorname{tr}(B_1)=0.
+\nonumber
+\end{align}
+By induction, $B_1$ is similar to a matrix with zero diagonal. Conjugating by a block diagonal matrix that leaves the first coordinate fixed makes the whole matrix have zero diagonal.\\
+\hlt{Structural Commentary}: The proof removes one zero diagonal entry at a time.\\
+\hlt{Key Insight}: Similarity creates the first zero; trace zero handles the smaller block.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:shoda-trace-zero-commutators} \hlt{Shoda's Theorem in the Distinct-Diagonal Case}\\
+Let $n\geq1$ and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the matrix $A$ is a commutator in $\operatorname{Mat}(n,n,\mathbb{F})$ if and only if $\operatorname{tr}(A)=0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] This is Proposition \ref{prop:commutators-have-zero-trace}.
+\item[$(\Leftarrow)$] Suppose $\operatorname{tr}(A)=0$. By Theorem \ref{thm:similar-to-constant-diagonal}, there is an invertible $S$ such that $B=S^{-1}AS=[b_{ij}]$ has zero diagonal. Let $X=\operatorname{diag}(1,2,\ldots,n)$, viewing the integers as scalars in $\mathbb{F}$, and define $Y=[y_{ij}]$ by
+\begin{align}
+y_{ij}=
+\begin{cases}
+(i-j)^{-1}b_{ij}, & i\neq j,\\
+0, & i=j.
+\end{cases}
+\nonumber
+\end{align}
+The hypothesis ensures that $i-j\neq0$ in $\mathbb{F}$ whenever $i\neq j$. Thus $XY-YX=[(i-j)y_{ij}]=B$.\\
+Hence $A=(SXS^{-1})(SYS^{-1})-(SYS^{-1})(SXS^{-1})$, so $A$ is a commutator.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity reduces trace zero to zero diagonal form.\\
+\hlt{Key Insight}: A distinct diagonal commutator solves off-diagonal entries one at a time.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:shoda-field-hypothesis} \hlt{Field Hypothesis in the Diagonal Proof}\\
+The proof above uses that the integers $1,\ldots,n$ are distinct and that each smaller block size remains nonzero in $\mathbb{F}$. In small characteristic, this diagonal proof must be replaced by a more delicate argument.
 
 \begin{corollary} \label{cor:identity-is-not-operator-commutator} \hlt{The Identity Is Not a Commutator}\\
 Assume $\dim\mathcal{V}\cdot1_{\mathbb{F}}\neq0$. There do not exist $S,T\in\LL(\mathcal{V})$ such that $ST-TS=I_{\mathcal{V}}$.
@@ -162,7 +334,33 @@ Since $A$ is invertible, $A^{1/2}$ is invertible, and $A=(A^{1/2})^*A^{1/2}$.
 \end{proof}
 \end{theorem}
 
-\begin{proposition} \label{prop:trace-determinant-positive-semidefinite} \hlt{Trace and Determinant of Positive Semidefinite Matrices}\\
+\begin{proposition} \label{prop:trace-determinant-positive-semidefinite}
+\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
+A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
+\end{definition}
+
+\begin{theorem} \label{thm:sylvester-positive-definite-criterion-leading-minors} \hlt{Sylvester's Criterion}\\
+A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite if and only if all leading principal minors are positive.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A\succ0$, then all leading principal submatrix is PSD by Corollary \ref{cor:positive-semidefinite-principal-block-column-inclusion}, so its determinant is positive.
+\item[$(\Leftarrow)$] Induct on $n$. The case $n=1$ is immediate. Write $A=
+\begin{bmatrix}
+B & \mathbf{y}\\
+\mathbf{y}^* & a
+\end{bmatrix}$, $B\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$\\
+The leading principal minors of $B$ are positive, so $B\succ0$.\\
+Cauchy interlacing gives $\lambda_1(A)\leq\lambda_1(B)\leq\lambda_2(A)\leq\cdots\leq\lambda_{n-1}(B)\leq\lambda_n(A)$.\\
+Thus $\lambda_2(A),\ldots,\lambda_n(A)>0$. Since $\det A=\prod_j\lambda_j(A)>0$, also $\lambda_1(A)>0$; hence $A\succ0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Leading minors pass positivity from the leading block to almost all eigenvalues.\\
+\hlt{Key Insight}: The determinant fixes the last eigenvalue's sign.
+\end{proof}
+\end{theorem}
+
+ \hlt{Trace and Determinant of Positive Semidefinite Matrices}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Then $\operatorname{tr}A\geq0$, with equality if and only if $A=0$, and $\det A\geq0$, with strict inequality if and only if $A$ is positive definite.
 \begin{proof}
 List the eigenvalues of $A$ as $\lambda_1,\ldots,\lambda_n$. By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, each $\lambda_j\geq0$.\\
@@ -405,6 +603,115 @@ The entries $d_j=e^{i\theta}$ count exactly the eigenvalues on the ray $\{\rho e
 \hlt{Key Insight}: Only spectral phases survive.
 \end{proof}
 \end{proposition}
+
+\begin{definition} \label{def:spectral-radius-and-convergent-matrix} \hlt{Spectral Radius and Convergent Matrix}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, the \hlt{spectral radius} is $\rho(A)\defeq\max\{\abs{\lambda}:\lambda\in\operatorname{spec}(A)\}$.\\
+We say $A^p\to0$ if every entry of $A^p$ converges to $0$ as $p\to\infty$.
+\end{definition}
+
+\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
+For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
+\begin{proof} Formula follows from binomial theorem applied to $J_k(\lambda)=\lambda I_k+J_k(0)$, with truncation from $J_k(0)^k=0$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
+\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then each coefficient $\binom{p}{r}\lambda^{p-r} \rightarrow 0$ for fixed $r$; hence every term in finite expansion tends to $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
+\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:matrix-powers-converge-to-zero-spectral-radius} \hlt{Matrix Powers Converge to Zero}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A^p\to0$ if and only if $\rho(A)<1$.
+\begin{proof}
+Choose a Jordan form $A=SJS^{-1}$.\\
+Since $S$ and $S^{-1}$ are fixed, $A^p\to0$ if and only if every Jordan block power in $J^p$ converges to $0$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Each block power tends to $0$, so Proposition \ref{prop:powers-of-jordan-block} gives $\abs{\lambda}<1$ for every eigenvalue. Thus $\rho(A)<1$.
+\item[$(\Leftarrow)$] If $\rho(A)<1$, then every eigenvalue satisfies $\abs{\lambda}<1$. Proposition \ref{prop:powers-of-jordan-block} makes each block power tend to $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity reduces matrix-power convergence to Jordan block-power convergence.\\
+\hlt{Key Insight}: The largest eigenvalue modulus controls the asymptotic size of all blocks.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_spectral_radius_convergence.tikz}
+  \caption{The gray circle is $\abs{\lambda}=1$: inside it, powers decay; on or outside it, they do not.}
+  \label{fig:jordan-spectral-radius-convergence}
+\end{figure}
+
+\begin{definition} \label{def:power-bounded-matrix} \hlt{Power Bounded Matrix}\\
+A matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is \hlt{power bounded} if for each entry position $(i,j)$, the sequence of entries of $A^p$ in that position is bounded for $p=1,2,\ldots$.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-power-bounded-jordan-criterion} \hlt{Power Bounded Jordan Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is power bounded.
+\item $\rho(A)\leq1$, and every eigenvalue $\lambda$ with $\abs{\lambda}=1$ has only $1\times1$ Jordan blocks.
+\item $\rho(A)\leq1$, and $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$ with $\abs{\lambda}=1$.
+\end{enumerate}
+\begin{proof}
+Work in Jordan form.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$: If $\abs{\lambda}>1$, the diagonal entries $\lambda^p$ are unbounded.\\
+If $\abs{\lambda}=1$ and $J_k(\lambda)$ has $k\geq2$, then the first superdiagonal contains $p\lambda^{p-1}$, also unbounded.
+\item[$(ii)$]$\Rightarrow(i)$: Blocks with $\abs{\lambda}<1$ converge to $0$ by Proposition \ref{prop:powers-of-jordan-block}; $1\times1$ blocks with $\abs{\lambda}=1$ are bounded. Finite direct sums and fixed similarities preserve boundedness.
+\item[$(ii)$]$\Leftrightarrow(iii)$: For fixed $\lambda$, $\dim E_{\lambda}(A)$ counts Jordan blocks, while $m_A(\lambda)$ counts their total size.\\
+Equality holds exactly when every block has size $1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Unit-circle eigenvalues are harmless only when their nilpotent parts vanish.\\
+\hlt{Key Insight}: Nontrivial Jordan blocks on the unit circle create polynomial growth.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:probability-vector-and-markov-matrix} \hlt{Probability Vectors and Markov Matrices}\\
+A vector $\mathbf{x}\in\mathbb{R}^n$ is a \hlt{probability vector} if its entries are nonnegative and sum to $1$. Let $\mathbf{e}\defeq(1,\ldots,1)^t$. A matrix $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{R})$ is a \hlt{Markov matrix} if $a_{ij}\geq0$ for all $i,j$ and $A\mathbf{e}=\mathbf{e}$; equivalently, every row sum is $1$.
+\end{definition}
+
+\begin{lemma} \label{lem:markov-matrix-basic-properties} \hlt{Basic Properties of Markov Matrices}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{R})$ is Markov, then $1\in\operatorname{spec}(A)$, and each $A^p$ is Markov with entries in $[0,1]$.
+\begin{proof}
+Since $A\mathbf{e}=\mathbf{e}$, $1$ is an eigenvalue. Inductively, $A^p$ has nonnegative entries and $A^p\mathbf{e}=\mathbf{e}$, so $A^p$ is Markov. Each nonnegative row sums to $1$, so all entries lie in $[0,1]$.\\
+\hlt{Structural Commentary}: Markov structure is closed under powers.\\
+\hlt{Key Insight}: Nonnegative row sums of $1$ bound every entry.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:markov-matrix-unit-circle-semisimple} \hlt{Unit-Circle Spectrum of Markov Matrices}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{R})$ is Markov, then $\rho(A)=1$, and $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$ with $\abs{\lambda}=1$.
+\begin{proof}
+Lemma \ref{lem:markov-matrix-basic-properties} makes $A$ power bounded. Theorem \ref{thm:matrix-power-bounded-jordan-criterion} gives $\rho(A)\leq1$ and $\dim E_{\lambda}(A)=m_A(\lambda)$ on $\abs{\lambda}=1$. Since $A\mathbf{e}=\mathbf{e}$, $1\in\operatorname{spec}(A)$, so $\rho(A)\geq1$. Thus $\rho(A)=1$.\\
+\hlt{Structural Commentary}: Bounded Markov powers rule out unit-circle Jordan growth.\\
+\hlt{Key Insight}: $A\mathbf{e}=\mathbf{e}$ forces the eigenvalue $1$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:positive-markov-stationary-distribution} \hlt{Positive Markov Matrices Converge to a Stationary Distribution}\\
+Let $n\geq2$ and let $A\in\operatorname{Mat}(n,n,\mathbb{R})$ be a Markov matrix with positive entries. Then there is a unique probability vector $\mathbf{x}$ with $A^t\mathbf{x}=\mathbf{x}$; its entries are positive and $\lim\limits_{p\to\infty}A^p=\mathbf{e}\mathbf{x}^t$.
+\begin{proof}
+Let $A\mathbf{y}=\lambda\mathbf{y}$ with $\abs{\lambda}=1$, and choose $k$ with $\abs{y_k}=\norm{\mathbf{y}}_{\infty}$.\\
+Positivity and the $k$th row sum give $\norm{\mathbf{y}}_{\infty} =\abs{\lambda y_k} =\abs{\sum\limits_{j=1}^{n}a_{kj}y_j} \leq\sum\limits_{j=1}^{n}a_{kj}\abs{y_j} \leq\norm{\mathbf{y}}_{\infty}$.\\
+Equality forces all $\abs{y_j}=\norm{\mathbf{y}}_{\infty}$ and all $y_j$ to have the same argument. Hence $\mathbf{y}=c\mathbf{e}$, and $A\mathbf{e}=\mathbf{e}$ gives $\lambda=1$. Thus $E_1(A)=\operatorname{span}(\mathbf{e})$ and no other eigenvalue lies on the unit circle.\\
+By Theorem \ref{thm:markov-matrix-unit-circle-semisimple}, the Jordan form is $[1]\oplus J$ with $\rho(J)<1$. Choose $S=[\mathbf{e}\ Y]$ such that $A=S([1]\oplus J)S^{-1}$, and let $\mathbf{x}^t$ be the first row of $S^{-1}$. Then $\mathbf{x}^tA=\mathbf{x}^t$ and $\mathbf{x}^t\mathbf{e}=1$. Since $J^p\to0$, $A^p=S([1]\oplus J^p)S^{-1}\to \mathbf{e}\mathbf{x}^t$.\\
+The nonnegative powers $A^p$ imply $\mathbf{x}\geq0$; since $A^t\mathbf{x}=\mathbf{x}$ and $A^t$ has positive entries, in fact $\mathbf{x}>0$. Finally, $\dim E_1(A^t)=\dim E_1(A)=1$, so $\mathbf{x}^t\mathbf{e}=1$ gives uniqueness among probability vectors.\\
+\hlt{Structural Commentary}: Positivity leaves one simple unit-circle block; all other blocks decay.\\
+\hlt{Key Insight}: The limit is the rank-one projection $\mathbf{e}\mathbf{x}^t$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/positive_markov_stationary_limit.tikz}
+  \caption{The line $\operatorname{span}(\mathbf{e})$ remains; all other Jordan directions decay, so $A^p\to\mathbf{e}\mathbf{x}^t$.}
+  \label{fig:positive-markov-stationary-limit}
+\end{figure}
 
 \begin{perspective} \label{per:hermitian-inertia-as-real-phase-inertia} \hlt{Hermitian Inertia as Real Phase Inertia}\\
 For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes. Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
