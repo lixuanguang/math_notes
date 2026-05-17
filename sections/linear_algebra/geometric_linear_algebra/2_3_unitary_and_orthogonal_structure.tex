@@ -96,6 +96,36 @@ Taking orthogonal complements, using Corollary \ref{cor:double-orthogonal-comple
 \end{proof}
 \end{proposition}
 
+\begin{theorem} \label{thm:minimum-norm-solution-consistent-system} \hlt{Minimum Norm Solution of a Consistent Linear System}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\mathbf{y}\in\mathbb{F}^m$, and suppose $A\mathbf{x}=\mathbf{y}$ is consistent.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item There is a unique minimum norm solution $\mathbf{s}\in\mathbb{F}^n$, and $\mathbf{s}\in\operatorname{col}(A^*)$.
+\item $\mathbf{s}$ is the only solution of $A\mathbf{x}=\mathbf{y}$ that lies in $\operatorname{col}(A^*)$.
+\item The system $AA^*\mathbf{u}=\mathbf{y}$ is consistent. If $AA^*\mathbf{u}_0=\mathbf{y}$, then $\mathbf{s}=A^*\mathbf{u}_0$.
+\end{enumerate}
+\begin{proof}
+By Proposition \ref{prop:adjoint-kernel-range-orthogonality}, $\operatorname{col}(A^*)=(\ker A)^{\perp}$, so $\mathbb{F}^n=\operatorname{col}(A^*)\oplus\ker(A)$ orthogonally.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose a solution $\mathbf{x}_0$ of $A\mathbf{x}=\mathbf{y}$ and write $\mathbf{x}_0=\mathbf{s}+\mathbf{v}$, with $\mathbf{s}\in\operatorname{col}(A^*)$ and $\mathbf{v}\in\ker(A)$. Then $A\mathbf{s}=A\mathbf{x}_0=\mathbf{y}$. Every solution has the form $\mathbf{s}+\mathbf{w}$ with $\mathbf{w}\in\ker(A)$.\\
+Since $\mathbf{s}\perp\mathbf{w}$, $\norm{\mathbf{s}+\mathbf{w}}_2^2=\norm{\mathbf{s}}_2^2+\norm{\mathbf{w}}_2^2\geq\norm{\mathbf{s}}_2^2$, with equality only when $\mathbf{w}=\mathbf{0}$. 
+\item If $\mathbf{s}'\in\operatorname{col}(A^*)$ is another solution, then $\mathbf{s}'-\mathbf{s}\in\ker(A)\cap\operatorname{col}(A^*)=\{\mathbf{0}\}$, so $\mathbf{s}'=\mathbf{s}$.
+\item Since $\mathbf{s}\in\operatorname{col}(A^*)$, write $\mathbf{s}=A^*\mathbf{u}_0$. Then $AA^*\mathbf{u}_0=A\mathbf{s}=\mathbf{y}$.\\
+Conversely, if $AA^*\mathbf{u}_0=\mathbf{y}$, then $A^*\mathbf{u}_0$ is a solution in $\operatorname{col}(A^*)$, so $A^*\mathbf{u}_0=\mathbf{s}$ by (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Solutions are $\mathbf{s}+\ker(A)$; $\operatorname{col}(A^*)$ meets this set orthogonally.\\
+\hlt{Key Insight}: The minimum norm solution has no nullspace component.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/minimum_norm_solution.tikz}
+  \caption{Among all solutions $\mathbf{s}+\ker(A)$, the unique one in $\operatorname{col}(A^*)=(\ker A)^\perp$ has minimum norm.}
+  \label{fig:minimum-norm-solution}
+\end{figure}
+
 \begin{definition} \label{def:self-adjoint-hermitian} \hlt{Self-Adjoint and Hermitian}\\
 An operator $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space is \hlt{self-adjoint} if $T^*=T$. A square matrix $A$ is \hlt{Hermitian} if $A^*=A$. In orthonormal coordinates, these are the same condition by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}.
 \end{definition}
@@ -142,147 +172,6 @@ Then $U$ is unitary, and the matrix of $P$ in this orthonormal basis has the dis
   \caption{Adapted basis: $U^*PU=I_r\oplus0_{n-r}$, identity on $\operatorname{col}(P)$ and zero on $\operatorname{col}(P)^\perp$.}
   \label{fig:orthogonal-projection-unitary-block}
 \end{figure}
-
-\begin{theorem} \label{thm:matrix-invariant-subspace-projection-block-criteria} \hlt{Invariant Subspaces, Blocks, and Projections}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathcal{U}$ be an $r$-dimensional subspace of $\mathbb{F}^n$ with $1\leq r\leq n-1$, and let $Q=[Q_1\ Q_2]$ be unitary, where the columns of $Q_1$ and $Q_2$ are orthonormal bases of $\mathcal{U}$ and $\mathcal{U}^{\perp}$, respectively. Let $P=Q_1Q_1^*$ be the orthogonal projection onto $\mathcal{U}$. The following are equivalent:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\mathcal{U}$ is invariant under $A$;
-\item $Q^*AQ=\begin{bmatrix}B & X\\ 0 & C\end{bmatrix}$ for some compatible matrices $B,X,C$;
-\item $PAP=AP$.
-\end{enumerate}
-\begin{proof} Let $M=Q^*AQ=\begin{bmatrix}B&X\\Y&C\end{bmatrix}$, $E=Q^*PQ=I_r\oplus0_{n-r}$. Here $Y=Q_2^*AQ_1$ and $\ker(Q_2^*)=\operatorname{col}(Q_1)=\mathcal{U}$.
-\begin{enumerate}[label=(\roman*).]
-\setlength{\itemsep}{0pt}
-\item[$(i)$] $\Rightarrow (ii)$ If $A\mathcal{U}\subseteq\mathcal{U}$, then the columns of $AQ_1$ lie in $\ker(Q_2^*)$, so $Y=0$.
-\item[$(ii)$] $\Rightarrow (iii)$ If $Y=0$, then $EME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$.\\
-Thus $Q^*(PAP)Q=EME=ME=Q^*(AP)Q$, so $PAP=AP$.
-\item[$(iii)$] $\Rightarrow (i)$ If $PAP=AP$, then $EME=ME$. Since $EME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\Y&0\end{bmatrix}$, we get $Y=0$.\\
-Hence $AQ_1$ has columns in $\ker(Q_2^*)=\mathcal{U}$, so $A\mathcal{U}\subseteq\mathcal{U}$.
-\end{enumerate}
-\hlt{Structural Commentary}: In adapted coordinates, the lower-left block is the component of $A\mathcal{U}$ in $\mathcal{U}^{\perp}$.\\
-\hlt{Key Insight}: $PAP=AP$ exactly kills this component.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:reducing-subspace-projection-commutation} \hlt{Reducing Subspaces and Commuting Projections}\\
-Maintain the notation of Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}. The following are equivalent:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\mathcal{U}$ is invariant under both $A$ and $A^*$;
-\item $Q^*AQ=B\oplus C$ for some $B\in\operatorname{Mat}(r,r,\mathbb{F})$ and $C\in\operatorname{Mat}(n-r,n-r,\mathbb{F})$;
-\item $PA=AP$.
-\end{enumerate}
-\begin{proof} Let $M=Q^*AQ=\begin{bmatrix}B&X\\Y&C\end{bmatrix}$ and $E=Q^*PQ=I_r\oplus0_{n-r}$.\\
-Then $Q^*A^*Q=M^*$, $Q^*(PA)Q=EM$, and $Q^*(AP)Q=ME$.
-\begin{enumerate}[label=(\roman*).]
-\setlength{\itemsep}{0pt}
-\item[$(i)$] $\Rightarrow (ii)$ By Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}, $A$-invariance gives $Y=0$; apply to $A^*$ gives $X=0$. Thus $M=B\oplus C$.
-\item[$(ii)$] $\Rightarrow (iii)$ If $M=B\oplus C$, then $EM=ME$, hence $PA=AP$.
-\item[$(iii)$] $\Rightarrow (i)$ If $PA=AP$, then $EM=ME$. Since $EM=\begin{bmatrix}B&X\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\Y&0\end{bmatrix}$, we get $X=Y=0$.\\
-Hence $\mathcal{U}$ is invariant under both $A$ and $A^*$.
-\end{enumerate}
-\hlt{Structural Commentary}: Reducing subspaces are exactly block diagonal decompositions in adapted coordinates.\\
-\hlt{Key Insight}: Commutation with $P$ kills both off-diagonal blocks.
-\end{proof}
-\end{corollary}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/invariant_projection_block_form.tikz}
-  \caption{Adapted coordinates: invariance gives upper block form; $PA=AP$ gives block diagonal form.}
-  \label{fig:invariant-projection-block-form}
-\end{figure}
-
-\begin{definition} \label{def:minimum-norm-solution} \hlt{Minimum Norm Solution}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\operatorname{col}(A)$.\\
-A solution $\mathbf{s}$ of $A\mathbf{x}=\mathbf{y}$ is a \hlt{minimum norm solution} if $\norm{\mathbf{s}}_2\leq\norm{\mathbf{x}}_2$ for every solution $\mathbf{x}$ of $A\mathbf{x}=\mathbf{y}$.
-\end{definition}
-
-\begin{theorem} \label{thm:minimum-norm-solution-consistent-system} \hlt{Minimum Norm Solution of a Consistent Linear System}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\mathbf{y}\in\mathbb{F}^m$, and suppose $A\mathbf{x}=\mathbf{y}$ is consistent.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item There is a unique minimum norm solution $\mathbf{s}\in\mathbb{F}^n$, and $\mathbf{s}\in\operatorname{col}(A^*)$.
-\item $\mathbf{s}$ is the only solution of $A\mathbf{x}=\mathbf{y}$ that lies in $\operatorname{col}(A^*)$.
-\item The system $AA^*\mathbf{u}=\mathbf{y}$ is consistent. If $AA^*\mathbf{u}_0=\mathbf{y}$, then $\mathbf{s}=A^*\mathbf{u}_0$.
-\end{enumerate}
-\begin{proof}
-By Proposition \ref{prop:adjoint-kernel-range-orthogonality}, $\operatorname{col}(A^*)=(\ker A)^{\perp}$, so $\mathbb{F}^n=\operatorname{col}(A^*)\oplus\ker(A)$ orthogonally.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Choose a solution $\mathbf{x}_0$ of $A\mathbf{x}=\mathbf{y}$ and write $\mathbf{x}_0=\mathbf{s}+\mathbf{v}$, with $\mathbf{s}\in\operatorname{col}(A^*)$ and $\mathbf{v}\in\ker(A)$. Then $A\mathbf{s}=A\mathbf{x}_0=\mathbf{y}$. Every solution has the form $\mathbf{s}+\mathbf{w}$ with $\mathbf{w}\in\ker(A)$.\\
-Since $\mathbf{s}\perp\mathbf{w}$, $\norm{\mathbf{s}+\mathbf{w}}_2^2=\norm{\mathbf{s}}_2^2+\norm{\mathbf{w}}_2^2\geq\norm{\mathbf{s}}_2^2$, with equality only when $\mathbf{w}=\mathbf{0}$. 
-\item If $\mathbf{s}'\in\operatorname{col}(A^*)$ is another solution, then $\mathbf{s}'-\mathbf{s}\in\ker(A)\cap\operatorname{col}(A^*)=\{\mathbf{0}\}$, so $\mathbf{s}'=\mathbf{s}$.
-\item Since $\mathbf{s}\in\operatorname{col}(A^*)$, write $\mathbf{s}=A^*\mathbf{u}_0$. Then $AA^*\mathbf{u}_0=A\mathbf{s}=\mathbf{y}$.\\
-Conversely, if $AA^*\mathbf{u}_0=\mathbf{y}$, then $A^*\mathbf{u}_0$ is a solution in $\operatorname{col}(A^*)$, so $A^*\mathbf{u}_0=\mathbf{s}$ by (ii).
-\end{enumerate}
-\hlt{Structural Commentary}: Solutions are $\mathbf{s}+\ker(A)$; $\operatorname{col}(A^*)$ meets this set orthogonally.\\
-\hlt{Key Insight}: The minimum norm solution has no nullspace component.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/minimum_norm_solution.tikz}
-  \caption{Among all solutions $\mathbf{s}+\ker(A)$, the unique one in $\operatorname{col}(A^*)=(\ker A)^\perp$ has minimum norm.}
-  \label{fig:minimum-norm-solution}
-\end{figure}
-
-\begin{theorem} \label{thm:self-adjoint-eigenvalues-real} \hlt{Eigenvalues of Self-Adjoint Operators Are Real}\\
-Every eigenvalue of a self-adjoint operator on a finite-dimensional inner-product space is real.
-\begin{proof}
-Let $T=T^*$ and $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $\lambda\norm{\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\innerprod{\mathbf{v},\lambda\mathbf{v}} =\overline{\lambda}\norm{\mathbf{v}}^2$.\\
-Since $\norm{\mathbf{v}}^2>0$, $\lambda=\overline{\lambda}$, so $\lambda\in\mathbb{R}$.\\
-\hlt{Structural Commentary}: Self-adjointness moves $T$ between inner-product slots without changing the value.\\
-\hlt{Key Insight}: An eigenvalue must equal its conjugate because the eigenvector has positive squared norm.
-\end{proof}
-\end{theorem}
-
-\begin{lemma} \label{lem:complex-zero-quadratic-form-implies-zero-operator} \hlt{Zero Complex Quadratic Form}\\
-Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$.\\
-If $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
-\begin{proof}
-Set $Q(\mathbf{x})=\innerprod{T\mathbf{x},\mathbf{x}}$.\\
-For $\mathbf{u},\mathbf{w}\in\mathcal{V}$, expansion gives the polarization identity for the sesquilinear form $(\mathbf{u},\mathbf{w})\mapsto\innerprod{T\mathbf{u},\mathbf{w}}$:
-\begin{align}
-\innerprod{T\mathbf{u},\mathbf{w}} =\frac{Q(\mathbf{u}+\mathbf{w})-Q(\mathbf{u}-\mathbf{w})}{4} +i\,\frac{Q(\mathbf{u}+i\mathbf{w})-Q(\mathbf{u}-i\mathbf{w})}{4}. \nonumber
-\end{align}
-The hypothesis makes every term on the right zero, so $\innerprod{T\mathbf{u},\mathbf{w}}=0$ for all $\mathbf{u},\mathbf{w}$.\\
-Taking $\mathbf{w}=T\mathbf{u}$ gives $\norm{T\mathbf{u}}^2=0$, hence $T\mathbf{u}=\mathbf{0}$ for every $\mathbf{u}$.\\
-\hlt{Structural Commentary}: Over $\mathbb{C}$, diagonal values of a sesquilinear form determine all mixed values.\\
-\hlt{Key Insight}: Polarization turns the one-vector condition into a two-vector condition.
-\end{proof}
-\end{lemma}
-
-\begin{proposition} \label{prop:complex-quadratic-form-self-adjoint-characterization} \hlt{Self-Adjointness from Real Quadratic Values}\\
-Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$.\\
-Then $T$ is self-adjoint if and only if $\innerprod{T\mathbf{v},\mathbf{v}}\in\mathbb{R}$ for every $\mathbf{v}\in\mathcal{V}$.
-\begin{proof}
-For each $\mathbf{v}$, $\innerprod{(T-T^*)\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}}-\innerprod{T^*\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}}-\overline{\innerprod{T\mathbf{v},\mathbf{v}}}$.\\
-If all values $\innerprod{T\mathbf{v},\mathbf{v}}$ are real, this expression is zero for every $\mathbf{v}$, and Lemma \ref{lem:complex-zero-quadratic-form-implies-zero-operator} gives $T-T^*=0$.\\
-Conversely, if $T=T^*$, then $\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\overline{\innerprod{T\mathbf{v},\mathbf{v}}}$, so $\innerprod{T\mathbf{v},\mathbf{v}}$ is real.\\
-\hlt{Structural Commentary}: The imaginary part of $\innerprod{T\mathbf{v},\mathbf{v}}$ is exactly the diagonal trace of $T-T^*$.\\
-\hlt{Key Insight}: Over $\mathbb{C}$, real quadratic values force the operator to equal its adjoint.
-\end{proof}
-\end{proposition}
-
-\begin{proposition} \label{prop:self-adjoint-zero-quadratic-form-implies-zero} \hlt{Zero Quadratic Form for Self-Adjoint Operators}\\
-Let $T$ be a self-adjoint operator on a finite-dimensional inner-product space $\mathcal{V}$.\\
-If $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
-\begin{proof}
-If $\mathbb{F}=\mathbb{C}$, this is Lemma \ref{lem:complex-zero-quadratic-form-implies-zero-operator}. Assume $\mathbb{F}=\mathbb{R}$.\\
-For $\mathbf{u},\mathbf{w}\in\mathcal{V}$, self-adjointness gives $\innerprod{T\mathbf{w},\mathbf{u}}=\innerprod{\mathbf{w},T\mathbf{u}}=\innerprod{T\mathbf{u},\mathbf{w}}$, so the real polarization identity gives
-\begin{align}
-\innerprod{T\mathbf{u},\mathbf{w}}
-=\frac{\innerprod{T(\mathbf{u}+\mathbf{w}),\mathbf{u}+\mathbf{w}}-\innerprod{T(\mathbf{u}-\mathbf{w}),\mathbf{u}-\mathbf{w}}}{4}=0.
-\nonumber
-\end{align}
-Taking $\mathbf{w}=T\mathbf{u}$ gives $T\mathbf{u}=\mathbf{0}$ for every $\mathbf{u}$.\\
-\hlt{Structural Commentary}: Self-adjointness supplies the missing symmetry needed for real polarization.\\
-\hlt{Key Insight}: A self-adjoint operator is determined by its quadratic form.
-\end{proof}
-\end{proposition}
 
 \begin{definition} \label{def:isometry-linear-map} \hlt{Isometry}\\
 Let $\mathcal{V}$ be an inner-product space. An operator $T\in\LL(\mathcal{V})$ is an \hlt{isometry} if $\norm{T\mathbf{v}}=\norm{\mathbf{v}}$ for every $\mathbf{v}\in\mathcal{V}$.
