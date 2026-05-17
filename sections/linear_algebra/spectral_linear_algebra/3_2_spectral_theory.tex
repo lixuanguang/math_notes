@@ -188,6 +188,38 @@ The real case uses the same argument with real orthonormal extensions.\\
   \label{fig:schur-ordered-triangularization}
 \end{figure}
 
+\begin{theorem} \label{thm:simultaneous-schur-triangularization-commuting-family} \hlt{Simultaneous Schur Triangularisation}\\
+Let $\emptyset\neq\mathcal{F}\subseteq\operatorname{Mat}(n,n,\mathbb{C})$ be a commuting family.\\
+Then there is a unitary $U\in\operatorname{Mat}(n,n,\mathbb{C})$ such that $U^*AU$ is upper triangular for every $A\in\mathcal{F}$.\\
+If every matrix in $\mathcal{F}$ is real and has only real eigenvalues, then $U$ can be chosen real orthogonal.
+\begin{proof}
+Induct on $n$. Choose common unit eigenvector $\mathbf{x}$, extend to orthonormal basis, let $V=[\mathbf{x}\ V_2]$.\\
+For every $A\in\mathcal{F}$, $V^*AV=
+\begin{bmatrix}
+\lambda_A&*\\
+0&A'
+\end{bmatrix}$. The compressed blocks still commute, so induction triangularises them simultaneously; adjoining $\mathbf{x}$ gives the result. In the real case, use the same induction with real orthonormal extensions. A real common eigenvector exists because either all matrices are scalar, or a nonscalar $A_0\in\mathcal{F}$ has a proper real eigenspace invariant under all of $\mathcal{F}$.\\
+\hlt{Structural Commentary}: A common eigenline creates the first block; commutation descends to the compression.\\
+\hlt{Key Insight}: Simultaneous triangularisation is Schur induction with a common eigenvector at every step.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/simultaneous_triangularization_commuting.tikz}
+  \caption{A shared eigenline gives a simultaneous first block; lower-right compressions still commute.}
+  \label{fig:simultaneous-triangularization-commuting}
+\end{figure}
+
+\begin{corollary} \label{cor:commuting-sum-product-eigenvalues} \hlt{Eigenvalues of Sums and Products of Commuting Matrices}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ and $AB=BA$. Their eigenvalues can be ordered as $\lambda_1,\ldots,\lambda_n$ and $\mu_1,\ldots,\mu_n$ so that $A+B$ has eigenvalues $\lambda_i+\mu_i$ and $AB$ has eigenvalues $\lambda_i\mu_i$, counted with multiplicity.
+\begin{proof}
+Choose simultaneous Schur forms $T=U^*AU$ and $R=U^*BU$. Set $\lambda_i=t_{ii}$ and $\mu_i=r_{ii}$. Then $T+R$ and $TR$ are upper triangular with diagonals $\lambda_i+\mu_i$ and $\lambda_i\mu_i$, and are similar to $A+B$ and $AB$.\\
+\hlt{Structural Commentary}: Simultaneous Schur form aligns both spectra on one diagonal.\\
+\hlt{Key Insight}: In common triangular coordinates, diagonals add and multiply.
+\end{proof}
+\end{corollary}
+
 \begin{definition} \label{def:normal-operator} \hlt{Normal Operator}\\
 An operator $T\in\LL(\mathcal{V})$ on a finite-dim inner-product space is \hlt{normal} if it commutes with its adjoint: $TT^*=T^*T$.\\
 A square matrix $A$ is \hlt{normal} if $A^*A=AA^*$.\\
@@ -333,6 +365,29 @@ For the final assertion, choose the Lagrange polynomial $p_j$ satisfying $p_j(\m
 \hlt{Key Insight}: Polynomial functions of a normal operator act by scalar functions on each eigenspace.
 \end{proof}
 \end{corollary}
+
+\begin{lemma} \label{lem:adjoints-of-finitely-many-normal-matrices-polynomial} \hlt{Adjoints of Normal Matrices as One Polynomial}\\
+Let $A_1,\ldots,A_k$ be normal complex matrices. Then $\exists$ a polynomial $p\in\mathcal{P}(\mathbb{C})$ s.t. $p(A_j)=A_j^* \ \forall j=1,\ldots,k$.
+\begin{proof}
+Let $\Omega=\bigcup\limits_{j=1}^{k}\operatorname{spec}(A_j)$. Since $\Omega$ is finite, choose a Lagrange interpolation polynomial $p$ satisfying $p(\lambda)=\overline{\lambda}$ for every $\lambda\in\Omega$. For each $A_j$, Corollary \ref{cor:normal-spectral-resolution-functional-calculus} gives $p(A_j)=A_j^*$.\\
+\hlt{Structural Commentary}: One polynomial interpolates conjugation on all spectra.\\
+\hlt{Key Insight}: For normal matrices, $A^*$ is $p(A)$ with $p(\lambda)=\overline{\lambda}$.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:fuglede-putnam-normal-intertwining} \hlt{Fuglede--Putnam Theorem}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$ and $B\in\operatorname{Mat}(n,n,\mathbb{C})$ be normal, and let $X\in\operatorname{Mat}(m,n,\mathbb{C})$.\\
+Then $AX=XB$ $\Longleftrightarrow$ $A^*X=XB^*$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $AX=XB$. Then $A^rX=XB^r$ for every $r\geq0$, so $p(A)X=Xp(B)$ for every polynomial $p$. By Lemma \ref{lem:adjoints-of-finitely-many-normal-matrices-polynomial}, choose $p$ with $p(A)=A^*$ and $p(B)=B^*$. Thus $A^*X=XB^*$.
+\item[$(\Leftarrow)$] Assume $A^*X=XB^*$. Apply the same argument to the normal matrices $A^*$ and $B^*$, choosing $q$ with $q(A^*)=A$ and $q(B^*)=B$. Hence $AX=XB$.
+\end{enumerate}
+\hlt{Structural Commentary}: An intertwining relation passes through every polynomial in the two normal matrices.\\
+\hlt{Key Insight}: Normality makes adjoints polynomial, so intertwining transfers to adjoints.
+\end{proof}
+\end{theorem}
 
 \begin{method} \label{meth:finding-spectral-decomposition-normal-matrix} \hlt{Finding a Spectral Decomposition of a Normal Matrix}\\
 For a normal matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$:
