@@ -227,6 +227,105 @@ For $\lambda\in\operatorname{spec}(A)$, this is the \hlt{algebraic multiplicity}
   \label{fig:characteristic-polynomial-roots}
 \end{figure}
 
+\begin{proposition} \label{prop:upper-triangular-characteristic-polynomial} \hlt{Upper-Triangular Eigenvalues}\\
+If $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ is upper triangular, then $p_A(z)=\prod\limits_{j=1}^{n}(z-a_{jj})$.\\
+Thus $\operatorname{spec}(A)=\{a_{jj}:1\leq j\leq n\}$, and for $\lambda\in\operatorname{spec}(A)$, $m_A(\lambda)=\#\{j:a_{jj}=\lambda\}$.
+\begin{proof}
+The matrix $zI_n-A$ is upper triangular with diagonal entries $z-a_{11},\ldots,z-a_{nn}$. Its determinant is the product of those diagonal entries. The roots of this product are precisely the diagonal entries, with repetition.\\
+\hlt{Structural Commentary}: Triangular form removes all off-diagonal determinant contributions.\\
+\hlt{Key Insight}: Once a matrix is triangular, the spectrum is visible on the diagonal.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:similarity-preserves-characteristic-polynomial} \hlt{Similarity Preserves Characteristic Data}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ and suppose $B=SAS^{-1}$ for some invertible $S$. Then $p_B=p_A$. In particular, for each $\lambda\in\operatorname{spec}(A)$, $m_B(\lambda)=m_A(\lambda)$ and $\dim E_{\lambda}(B)=\dim E_{\lambda}(A)$.
+\begin{proof} $p_B(z) =\det(zI_n-SAS^{-1}) =\det(S(zI_n-A)S^{-1}) =\det(S)\det(zI_n-A)\det(S)^{-1} =p_A(z) \Rightarrow$\\
+$m_B(\lambda)=m_A(\lambda)$. Also $B-\lambda I_n=S(A-\lambda I_n)S^{-1}$, multiply by $S$ gives isomorphism $\ker(A-\lambda I_n)\to\ker(B-\lambda I_n)$.\\
+\hlt{Structural Commentary}: Similarity changes coordinates, not the shifted determinant or shifted kernel dimension.\\
+\hlt{Key Insight}: Conjugation inserts $S$ and $S^{-1}$, which cancel in determinants and identify kernels.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:block-upper-triangular-characteristic-polynomial} \hlt{Block Upper-Triangular Characteristic Polynomial}\\
+Let $A=
+\begin{bmatrix}
+B & C\\
+0 & D
+\end{bmatrix}$, $B$ and $D$ are square. Then $p_A(z)=p_B(z)p_D(z)$, so $m_A(\lambda)=m_B(\lambda)+m_D(\lambda) \ \forall\lambda\in\mathbb{F}$.
+\begin{proof}
+The shifted matrix is block upper triangular:
+\begin{align}
+zI-A=
+\begin{bmatrix}
+zI-B & -C\\
+0 & zI-D
+\end{bmatrix}.
+\nonumber
+\end{align}
+Theorem \ref{thm:block-upper-triangular-determinant} gives $p_A(z)=\det(zI-B)\det(zI-D)=p_B(z)p_D(z)$.\\
+Roots of a product are the roots of the factors, with multiplicity added.\\
+\hlt{Structural Commentary}: The off-diagonal block couples vectors but not determinant factors.\\
+\hlt{Key Insight}: In block upper-triangular form, spectral data lives on the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:geometric-multiplicity-bounded-by-algebraic-multiplicity} \hlt{Geometric Multiplicity Is at Most Algebraic Multiplicity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and let $\lambda\in\operatorname{spec}(A)$. Then $\dim E_{\lambda}(A)\leq m_A(\lambda)$.
+\begin{proof}
+Let $k=\dim E_{\lambda}(A)$ and choose a basis $\mathbf{x}_1,\ldots,\mathbf{x}_k$ of $E_{\lambda}(A)$. Extend it to a basis of $\mathbb{F}^n$, and let $S$ be the matrix whose columns are this basis. In the new basis,
+\begin{align}
+S^{-1}AS=
+\begin{bmatrix}
+\lambda I_k & *\\
+0 & C
+\end{bmatrix}.
+\nonumber
+\end{align}
+By Theorem \ref{thm:similarity-preserves-characteristic-polynomial} and Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}, $p_A(z)=p_{S^{-1}AS}(z)=(z-\lambda)^kp_C(z)$. Thus $m_A(\lambda)\geq k=\dim E_{\lambda}(A)$.\\
+\hlt{Structural Commentary}: An eigenspace-first basis exposes a $\lambda I_k$ block.\\
+\hlt{Key Insight}: Each independent eigenvector forces one visible factor $z-\lambda$ in the characteristic polynomial.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match} \hlt{Diagonalizability and Multiplicity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is diagonalizable if and only if $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is diagonalizable, then $A$ is similar to a diagonal matrix $D$. Theorem \ref{thm:similarity-preserves-characteristic-polynomial} gives $m_A(\lambda)=m_D(\lambda)$ and $\dim E_{\lambda}(A)=\dim E_{\lambda}(D)$. For diagonal $D$, both numbers count diagonal entries equal to $\lambda$.
+\item[$(\Leftarrow)$] Assume $\dim E_{\lambda}(A)=m_A(\lambda)$ for every eigenvalue.\\
+If $\mu_1,\ldots,\mu_d$ are distinct eigenvalues, then $\sum\limits_{i=1}^{d}m_A(\mu_i)=n$. Hence $\dim E_{\mu_1}(A)+\cdots+\dim E_{\mu_d}(A)=n$.\\
+Theorem \ref{thm:conditions-equivalent-to-diagonalizability} gives an eigenbasis, so $A$ is diagonalizable.
+\end{enumerate}
+\hlt{Structural Commentary}: Diagonalizability means root counts match eigenspace dimensions.\\
+\hlt{Key Insight}: No missing eigendirections means an eigenbasis.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:commutant-of-diagonalizable-matrix} \hlt{Commutant of a Diagonalizable Matrix}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be diagonalizable. Suppose its distinct eigenvalues are $\mu_1,\ldots,\mu_d$, and set $n_i=m_A(\mu_i)$.\\
+Write $A=S(\mu_1I_{n_1}\oplus\cdots\oplus\mu_dI_{n_d})S^{-1}$. Then $\{A\}'=\{S(X_1\oplus\cdots\oplus X_d)S^{-1}:X_i\in\operatorname{Mat}(n_i,n_i,\mathbb{C})\}$.\\
+In particular, $\dim\{A\}'=n_1^2+\cdots+n_d^2$.
+\begin{proof}
+Let $\Lambda=\mu_1I_{n_1}\oplus\cdots\oplus\mu_dI_{n_d}$. Matrix $B$ commutes with $A$ if and only if $S^{-1}BS$ commutes with $\Lambda$.\\
+By Lemma \ref{lem:block-diagonal-commutant-distinct-scalars}, this happens exactly when $S^{-1}BS=X_1\oplus\cdots\oplus X_d$ with $X_i\in\operatorname{Mat}(n_i,n_i,\mathbb{C})$.\\
+Dimension count follows because conjugation by $S$ is a vector-space isomorphism and $\dim\operatorname{Mat}(n_i,n_i,\mathbb{C})=n_i^2$.\\
+\hlt{Structural Commentary}: Diagonalizing $A$ reduces commutation to respecting equal-eigenvalue blocks.\\
+\hlt{Key Insight}: Distinct eigenvalue blocks cannot mix under a commuting matrix.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:commutant-distinct-eigenvalues-polynomials} \hlt{Simple Spectrum Commutants Are Polynomials}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{C})$ has $n$ distinct eigenvalues, then $\{A\}'=\{p(A):p\in\mathcal{P}(\mathbb{C})\}$, $\dim\{A\}'=n$.
+\begin{proof}
+Write $A=S\operatorname{diag}(\lambda_1,\ldots,\lambda_n)S^{-1}$ with distinct $\lambda_i$. Theorem \ref{thm:commutant-of-diagonalizable-matrix} says every $B\in\{A\}'$ has the form $S\operatorname{diag}(\xi_1,\ldots,\xi_n)S^{-1}$. Choose the Lagrange interpolation polynomial $p(z)=\sum\limits_{i=1}^{n}\xi_i\prod\limits_{j\neq i}\frac{z-\lambda_j}{\lambda_i-\lambda_j}$.\\
+Then $p(\lambda_i)=\xi_i$ for every $i$, so Theorem \ref{thm:polynomial-functional-calculus-diagonalizable-matrix} gives $B=p(A)$.\\
+The dimension statement is the case $n_1=\cdots=n_n=1$ of Theorem \ref{thm:commutant-of-diagonalizable-matrix}.\\
+\hlt{Structural Commentary}: Simple spectrum leaves one scalar choice per eigendirection.\\
+\hlt{Key Insight}: Interpolation converts arbitrary diagonal data into a polynomial in $A$.
+\end{proof}
+\end{corollary}
+
 \begin{definition} \label{def:operator-characteristic-polynomial} \hlt{Characteristic Polynomial of an Operator}\\
 Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $T\in\LL(\mathcal{V})$. If $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues of $T$ and $d_j=\dim G(\lambda_j,T)$, then the \hlt{characteristic polynomial} of $T$ is $q_T(z)\defeq\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$.
 \end{definition}
@@ -368,6 +467,43 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_
   \label{fig:minimal-polynomial-divisibility}
 \end{figure}
 
+\begin{theorem} \label{thm:similarity-preserves-minimal-polynomial} \hlt{Similarity Preserves the Minimal Polynomial}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are similar, then $p_A=p_B$ and $\mu_A=\mu_B$.
+\begin{proof}
+The identity $p_A=p_B$ is Theorem \ref{thm:similarity-preserves-characteristic-polynomial}. Let $A=SBS^{-1}$, then $f(A)=Sf(B)S^{-1}$ for every polynomial $f$, so $A$ and $B$ have the same annihilating polynomials. Hence $\mu_A=\mu_B$.\\
+\hlt{Structural Commentary}: Similarity preserves polynomial equations.\\
+\hlt{Key Insight}: Conjugation commutes with polynomial evaluation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:diagonalizable-iff-minimal-polynomial-squarefree} \hlt{Diagonalizability and the Minimal Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$. Then $A$ is diagonalizable if and only if
+\begin{align}
+\mu_A(z)=(z-\lambda_1)\cdots(z-\lambda_d).
+\nonumber
+\end{align}
+Equivalently, $A$ is diagonalizable if and only if $\mu_A$ is square-free.
+\begin{proof}
+Set $p(z)\defeq\prod_{i=1}^{d}(z-\lambda_i)$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A=S\Lambda S^{-1}$ is diagonalizable, then $p(\Lambda)=0$, so $p(A)=0$. Since $\mu_A$ contains every factor $z-\lambda_i$ and divides $p$, we have $\mu_A=p$.
+\item[$(\Leftarrow)$] Suppose $\mu_A=p$. On each primary summand $G(\lambda_i,A)$, the factors $A-\lambda_jI_n$ with $j\neq i$ are invertible by Lemma \ref{lem:scalar-plus-nilpotent-invertible}. Since $p(A)=0$, we get $A-\lambda_iI_n=0$ on $G(\lambda_i,A)$; hence every primary summand is an eigenspace, so $A$ is diagonalizable.
+\end{enumerate}
+\hlt{Structural Commentary}: Repeated factors of $\mu_A$ record nilpotent parts in primary blocks.\\
+\hlt{Key Insight}: Square-free $\mu_A$ kills each primary block in one step.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:squarefree-annihilator-implies-diagonalizable} \hlt{Square-Free Annihilator Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. If a polynomial $f$ with no repeated roots satisfies $f(A)=0$, then $A$ is diagonalizable.
+\begin{proof}
+Since $\mu_A\mid f$, the minimal polynomial is square-free; Theorem \ref{thm:diagonalizable-iff-minimal-polynomial-squarefree} applies.\\
+\hlt{Structural Commentary}: A square-free annihilator forces square-free $\mu_A$.\\
+\hlt{Key Insight}: Square-free $\mu_A$ means diagonalizable.
+\end{proof}
+\end{corollary}
+
 \begin{method} \label{meth:operator-minimal-polynomial-from-matrix} \hlt{Computing $\mu_T$ from a Matrix}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be the matrix of $T$ in some basis.
 \begin{enumerate}[label=(\roman*)]
@@ -391,6 +527,17 @@ a_0\\a_1\\ \vdots\\ a_{m-1}
   \caption{Solve $a_0I+\cdots+a_{m-1}A^{m-1}=-A^m$; the first solvable monic candidate is $\mu_T$.}
   \label{fig:minimal-polynomial-linear-system}
 \end{figure}
+
+\begin{method} \label{meth:minimal-polynomial-testing-from-characteristic-polynomial} \hlt{Testing a Minimal Polynomial from $p_A$}\\
+Suppose $p_A(z)=\prod_i(z-\lambda_i)^{a_i}$ is known.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item Write each candidate as $m_{\mathbf{q}}(z)=\prod_i(z-\lambda_i)^{q_i}$, where $1\leq q_i\leq a_i$.
+\item Test exponent vectors $\mathbf{q}=(q_i)$ in increasing total degree $\sum_iq_i$.
+\item For each $\mathbf{q}$, compute $m_{\mathbf{q}}(A)=\prod_i(A-\lambda_iI)^{q_i}$.
+\item The first candidate with $m_{\mathbf{q}}(A)=0$ is $\mu_A$, by Theorem \ref{thm:minimal-polynomial-basic-properties}.
+\end{enumerate}
+\end{method}
 
 \begin{theorem} \label{thm:operator-annihilator-iff-multiple-minimal-polynomial} \hlt{Annihilators Are Multiples of $\mu_T$}\\
 Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim, $T\in\LL(\mathcal{V})$, and $f\in\mathcal{P}(\mathbb{F})$ be nonzero. Then $f(T)=0$ if and only if $\mu_T$ divides $f$.
