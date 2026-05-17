@@ -39,10 +39,6 @@ Taking traces and using Proposition \ref{prop:trace-cyclicity-two-factors}, $0=\
 \end{proof}
 \end{corollary}
 
-\begin{definition} \label{def:matrix-characteristic-polynomial} \hlt{Characteristic Polynomial}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{characteristic polynomial} of $A$ is $p_A(z)\defeq\det(zI_n-A)$.
-\end{definition}
-
 \begin{theorem} \label{thm:matrix-characteristic-polynomial-basic-coefficients} \hlt{Basic Form of the Characteristic Polynomial}\\
 Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $p_A$ is monic of degree $n$ and $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$.\\
 Moreover, for $\lambda\in\mathbb{F}$, $\lambda\in\operatorname{spec}(A)$ if and only if $p_A(\lambda)=0$.
@@ -81,18 +77,6 @@ To get eigenvalue data without solving for eigenvalues:
 \item for equations $ST-TS=A$, first test $\operatorname{tr}A=0$; otherwise no solution exists.
 \end{enumerate}
 \end{method}
-
-\begin{definition} \label{def:matrix-algebraic-multiplicity} \hlt{Algebraic Multiplicity}\\
-For $\lambda\in\mathbb{F}$, let $m_A(\lambda)$ be the multiplicity of $\lambda$ as a root of $p_A$, with $m_A(\lambda)=0$ if $\lambda\notin\operatorname{spec}(A)$.\\
-For $\lambda\in\operatorname{spec}(A)$, this is the \hlt{algebraic multiplicity} of $\lambda$. Unqualified multiplicity means algebraic multiplicity.
-\end{definition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/characteristic_polynomial_roots.tikz}
-  \caption{Form $p_A(z)=\det(zI_n-A)$ and factor it; each root $\lambda$ is counted by $m_A(\lambda)$.}
-  \label{fig:characteristic-polynomial-roots}
-\end{figure}
 
 \begin{proposition} \label{prop:upper-triangular-characteristic-polynomial} \hlt{Upper-Triangular Eigenvalues}\\
 If $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ is upper triangular, then $p_A(z)=\prod\limits_{j=1}^{n}(z-a_{jj})$.\\
@@ -308,6 +292,11 @@ A
   \label{fig:principal-block-column-inclusion}
 \end{figure}
 
+\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
+A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
+\end{definition}
+
 \begin{corollary} \label{cor:positive-semidefinite-zero-quadratic-form} \hlt{Zero Quadratic Form Detects the Kernel}\\
 If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\mathbf{x}^*A\mathbf{x}=0$ if and only if $A\mathbf{x}=0$.
 \begin{proof}
@@ -417,6 +406,61 @@ To analyse a real quadratic form:
   \label{fig:quadratic-form-principal-axes}
 \end{figure}
 
+\begin{definition} \label{def:star-congruence-and-hermitian-inertia} \hlt{$*$-Congruence and Hermitian Inertia}\\
+Two matrices $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are \hlt{$*$-congruent} if $A=SBS^*$ for some invertible $S\in\operatorname{Mat}(n,n,\mathbb{C})$.\\
+For Hermitian $A$, its \hlt{inertia} is $\operatorname{in}(A)=(n_+(A),n_-(A),n_0(A))$, where these are the numbers of positive, negative, and zero eigenvalues of $A$, counted with multiplicity.
+\end{definition}
+
+\begin{lemma} \label{lem:positive-subspace-dimension-inertia} \hlt{Positive Subspaces and Inertia}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian. The maximal dimensions of subspaces on which $\mathbf{x}^*A\mathbf{x}$ is positive or negative for every nonzero $\mathbf{x}$ are $n_+(A)$ and $n_-(A)$, respectively.
+\begin{proof}
+Let $P_+$ and $P_{\leq0}$ be the positive and nonpositive spectral subspaces.\\
+Then $\dim P_+=n_+(A)$ and $P_+$ is positive for $A$. If $\dim\mathcal{U}>n_+(A)$, then $\mathcal{U}\cap P_{\leq0}$ contains a nonzero vector, so $\mathcal{U}$ cannot be positive. Apply this to $-A$ for the negative case.\\
+\hlt{Structural Commentary}: The positive spectral subspace is maximal; the nonpositive part blocks enlargement.\\
+\hlt{Key Insight}: Inertia counts maximal sign-definite dimensions.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:sylvester-inertia-theorem-hermitian} \hlt{Sylvester's Inertia Theorem}\\
+Hermitian matrices $A,B$ of the same size are $*$-congruent if and only if $n_+(A)=n_+(B)$ and $n_-(A)=n_-(B)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $A=SBS^*$ with $S$ invertible. Then $\mathbf{x}^*A\mathbf{x}=(S^*\mathbf{x})^*B(S^*\mathbf{x})$.\\
+Thus $S^*$ transports positive and negative subspaces, so Lemma \ref{lem:positive-subspace-dimension-inertia} gives $n_\pm(A)=n_\pm(B)$.
+\item[$(\Leftarrow)$] Let the common inertia be $(p,q,r)$ and set $D=I_p\oplus(-I_q)\oplus0_r$.\\
+By the spectral theorem, each of $A$ and $B$ is $*$-congruent to $D$, hence they are $*$-congruent to each other.
+\end{enumerate}
+\hlt{Structural Commentary}: $*$-congruence is a coordinate change for Hermitian quadratic forms.\\
+\hlt{Key Insight}: Spectral decomposition reduces the form to signed squares and zero directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/sylvester_inertia_congruence.tikz}
+  \caption{$*$-congruence reduces a Hermitian form to signed coordinate axes.}
+  \label{fig:sylvester-inertia-congruence}
+\end{figure}
+
+\begin{definition} \label{def:phase-inertia-matrix} \hlt{Phase Inertia Matrix}\\
+A \hlt{phase inertia matrix} is a diagonal complex matrix whose nonzero diagonal entries have modulus $1$.
+\end{definition}
+
+\begin{proposition} \label{prop:normal-matrix-phase-inertia-form} \hlt{Phase Inertia Form for Normal Matrices}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be normal. Then $A$ is $*$-congruent to a phase inertia matrix $D$, whose entries record the spectral rays of $A$.
+\begin{proof}
+Write $A=U\operatorname{diag}(\lambda_j)U^*$. Write $\lambda_j=r_jd_j$, where $r_j>0$ and $|d_j|=1$ if $\lambda_j\neq0$, while $r_j=1$ and $d_j=0$ if $\lambda_j=0$. Set $D=\operatorname{diag}(d_j)$, $S=U\operatorname{diag}(\sqrt{r_j})$. Then $S$ is invertible and $A=SDS^*$.\\
+The entries $d_j=e^{i\theta}$ count exactly the eigenvalues on the ray $\{\rho e^{i\theta}:\rho>0\}$.\\
+\hlt{Structural Commentary}: Normal diagonalization separates modulus from phase; $*$-congruence absorbs moduli.\\
+\hlt{Key Insight}: Only spectral phases survive.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:hermitian-inertia-as-real-phase-inertia} \hlt{Hermitian Inertia as Real Phase Inertia}\\
+For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes. Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
+\end{perspective}
+
 \begin{theorem} \label{thm:schur-inequality-defect-normality} \hlt{Schur's Inequality and Normality}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$, counted algebraically.\\
 Then $\sum\limits_{j=1}^{n}\abs{\lambda_j}^2\leq\norm{A}_F^2$ with equality if and only if $A$ is normal.
@@ -468,87 +512,6 @@ Then $A^{-1}=UT^{-1}U^*$, and $T^{-1}$ is upper triangular with diagonal $\lambd
 \end{proof}
 \end{corollary}
 
-\begin{theorem} \label{thm:cayley-hamilton-matrix} \hlt{Cayley--Hamilton Theorem}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have characteristic polynomial $p_A(z)=\det(zI_n-A)$. Then $p_A(A)=0$.
-\begin{proof}
-Choose a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
-Since $p_A(A)=Up_A(T)U^*$ and $p_A(z)=\prod_{i=1}^{n}(z-\lambda_i)$, it suffices to prove $(T-\lambda_1I_n)(T-\lambda_2I_n)\cdots(T-\lambda_nI_n)=0$.\\
-Let $P_j\defeq\prod\limits_{i=1}^{j}(T-\lambda_iI_n)$. Prove that first $j$ columns of $P_j$ are zero. This is clear for $j=1$.\\
-If true for $j$, then the first $j+1$ columns of $T-\lambda_{j+1}I_n$ lie in $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$, which $P_j$ kills. Hence $P_{j+1}$ has first $j+1$ zero columns, so $P_n=0$.\\
-\hlt{Structural Commentary}: Schur form reduces the theorem to a triangular column-killing induction.\\
-\hlt{Key Insight}: Each factor $T-\lambda_iI_n$ kills the next leading column.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/cayley_hamilton_triangular_killing.tikz}
-  \caption{In Schur form, the factors $T-\lambda_iI$ kill the leading columns one layer at a time.}
-  \label{fig:cayley-hamilton-triangular-killing}
-\end{figure}
-
-\begin{corollary} \label{cor:polynomial-reduction-by-characteristic-polynomial} \hlt{Reduction Modulo the Characteristic Polynomial}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and let $f\in\mathcal{P}(\mathbb{C})$. If $f=p_Aq+r$ with $\deg r<n$, then $f(A)=r(A)$.
-\begin{proof}
-Evaluate division identity at $A$: $f(A)=p_A(A)q(A)+r(A)=0q(A)+r(A)=r(A)$.\\
-Theorem \ref{thm:cayley-hamilton-matrix} gives $p_A(A)=0$.\\
-\hlt{Structural Commentary}: Cayley--Hamilton makes polynomial expressions in $A$ reducible modulo $p_A$.\\
-\hlt{Key Insight}: Every high power of $A$ can be rewritten using powers below $n$.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:powers-of-matrix-span-dimension-at-most-n} \hlt{Powers Span at Most $n$ Dimensions}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{span}(I_n,A,A^2,\ldots)=\operatorname{span}(I_n,A,\ldots,A^{n-1})$, so this has dimension at most $n$.
-\begin{proof}
-For each $k\geq0$, Corollary \ref{cor:polynomial-reduction-by-characteristic-polynomial} applied to $f(z)=z^{n+k}$ gives a polynomial $r_k$ of degree at most $n-1$ such that $A^{n+k}=r_k(A)$. Thus every power of $A$ lies in $\operatorname{span}(I_n,A,\ldots,A^{n-1})$.\\
-\hlt{Structural Commentary}: Polynomial reduction collapses the infinite power list to its first $n$ terms.\\
-\hlt{Key Insight}: Cayley--Hamilton gives the recurrence relation for powers of $A$.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:inverse-from-characteristic-polynomial} \hlt{Inverse from the Characteristic Polynomial}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have $p_A(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$.\\
-If $A$ is invertible, then $A^{-1}=-c_0^{-1}(A^{n-1}+c_{n-1}A^{n-2}+\cdots+c_2A+c_1I_n)$.
-\begin{proof}
-Since $A$ is invertible, $0\notin\operatorname{spec}(A)$, so $c_0=p_A(0)=(-1)^n\det A\neq0$.\\
-Cayley--Hamilton gives $A^n+c_{n-1}A^{n-1}+\cdots+c_1A+c_0I_n=0$.\\
-Move $c_0I_n$ to the other side and multiply by $-c_0^{-1}A^{-1}$.\\
-\hlt{Structural Commentary}: The characteristic equation contains an identity term exactly when $A$ is invertible.\\
-\hlt{Key Insight}: Solve Cayley--Hamilton for $A^{-1}$ after factoring out one $A$.
-\end{proof}
-\end{corollary}
-
-\begin{definition} \label{def:minimal-polynomial-matrix} \hlt{Minimal Polynomial of a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{minimal polynomial} of $A$, denoted $\mu_A$, is the unique monic polynomial of smallest positive degree such that $\mu_A(A)=0$.
-\end{definition}
-
-\begin{theorem} \label{thm:minimal-polynomial-basic-properties} \hlt{Basic Properties of the Minimal Polynomial}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_d$ be the distinct eigenvalues of $A$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\mu_A$ exists, is unique, and $\deg\mu_A\leq n$.
-\item If a nonzero polynomial $f$ annihilates $A$, then $\mu_A$ divides $f$. In particular, $\mu_A$ divides $p_A$.
-\item There are integers $q_i$ satisfying $1\leq q_i\leq m_A(\lambda_i)$ such that $\mu_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Cayley--Hamilton supplies the monic annihilator $p_A$, so a least-degree monic annihilator $\mu_A$ exists and has degree at most $n$. If $g$ is another one, write $g=h\mu_A+r$ with $\deg r<\deg\mu_A$. Then $r(A)=0$, so minimality gives $r=0$; monicity and equal degree give $g=\mu_A$.
-\item If $f(A)=0$, divide $f=q\mu_A+r$ with $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$, hence $r=0$ and $\mu_A\mid f$. Taking $f=p_A$ gives $\mu_A\mid p_A$.
-\item Since $\mu_A\mid p_A=\prod_{i=1}^{d}(z-\lambda_i)^{m_A(\lambda_i)}$, its roots are eigenvalues with exponents at most the algebraic multiplicities. If $A\mathbf{v}=\lambda_i\mathbf{v}$ and $\mathbf{v}\neq\mathbf{0}$, then $\mu_A(\lambda_i)\mathbf{v}=\mu_A(A)\mathbf{v}=0$, so every $\lambda_i$ occurs.
-\end{enumerate}
-\hlt{Structural Commentary}: Polynomial division makes $\mu_A$ the least monic generator of annihilators.\\
-\hlt{Key Insight}: Cayley--Hamilton gives existence; eigenvectors force the roots.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/minimal_polynomial_divisibility.tikz}
-  \caption{$\mu_A$ is the least monic annihilator; arrows indicate that $\mu_A$ divides $p_A$ and every annihilator $f$.}
-  \label{fig:minimal-polynomial-divisibility}
-\end{figure}
-
 \begin{theorem} \label{thm:similarity-preserves-minimal-polynomial} \hlt{Similarity Preserves the Minimal Polynomial}\\
 If $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are similar, then $p_A=p_B$ and $\mu_A=\mu_B$.
 \begin{proof}
@@ -585,35 +548,6 @@ Since $\mu_A\mid f$, the minimal polynomial is square-free; Theorem \ref{thm:dia
 \hlt{Key Insight}: Square-free $\mu_A$ means diagonalizable.
 \end{proof}
 \end{corollary}
-
-\begin{definition} \label{def:companion-matrix} \hlt{Companion Matrix}\\
-Let $f(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$ be monic. For $n\geq2$, the \hlt{companion matrix} of $f$ is
-\begin{align}
-C_f\defeq
-\begin{bmatrix}
-0&0&\cdots&0&-c_0\\
-1&0&\cdots&0&-c_1\\
-0&1&\cdots&0&-c_2\\
-\vdots&\vdots&\ddots&\vdots&\vdots\\
-0&0&\cdots&1&-c_{n-1}
-\end{bmatrix}.
-\nonumber
-\end{align}
-For $n=1$, set $C_f=[-c_0]$.
-\end{definition}
-
-\begin{theorem} \label{thm:companion-matrix-has-prescribed-minimal-polynomial} \hlt{Companion Matrix Realises a Polynomial}\\
-For every monic polynomial $f$, the companion matrix $C_f$ satisfies $p_{C_f}=f$ and $\mu_{C_f}=f$.
-\begin{proof}
-Let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis.\\
-For $j<n$, $C_f^j\mathbf{e}_1=\mathbf{e}_{j+1}$, and last column is $C_f^n\mathbf{e}_1=-c_0\mathbf{e}_1-c_1C_f\mathbf{e}_1-\cdots-c_{n-1}C_f^{n-1}\mathbf{e}_1$.\\
-Thus $f(C_f)\mathbf{e}_1=0$. Since $\mathbf{e}_j=C_f^{j-1}\mathbf{e}_1$ and $f(C_f)$ commutes with $C_f$, $f(C_f)=0$.\\
-If $g(z)=\sum\limits_{i=0}^{m}b_iz^i$ has $m<n$, then $g(C_f)\mathbf{e}_1=b_0\mathbf{e}_1+b_1\mathbf{e}_2+\cdots+b_m\mathbf{e}_{m+1}$, which is zero only when $g=0$.\\
-Hence no nonzero polynomial of degree $<n$ annihilates $C_f$. Therefore $\deg\mu_{C_f}=n$ and $\mu_{C_f}\mid f$, so $\mu_{C_f}=f$. Cayley--Hamilton makes $p_{C_f}$ a monic degree-$n$ annihilator, hence $p_{C_f}=f$.\\
-\hlt{Structural Commentary}: The cyclic vector $\mathbf{e}_1$ generates the basis, and last column imposes relation $f(C_f)=0$.\\
-\hlt{Key Insight}: The companion matrix makes $f$ the first possible annihilating relation.
-\end{proof}
-\end{theorem}
 
 \begin{method} \label{meth:minimal-polynomial-testing-from-characteristic-polynomial} \hlt{Testing a Minimal Polynomial from $p_A$}\\
 Suppose $p_A(z)=\prod_i(z-\lambda_i)^{a_i}$ is known.
