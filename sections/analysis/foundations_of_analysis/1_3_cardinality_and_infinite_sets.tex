@@ -1,16 +1,108 @@
 \subsubsection{Cardinality and Infinite Sets}
 
-% Sources mapped: Rudin Ch.2; Abbott Ch.1; Tao I Ch.8; Pugh Ch.1.
-% TODO(source unavailable): Add sourced material from the mapped sources.
+% Source pages provided: Rudin Ch.2, Defs. 2.1--2.14 and related examples/theorems.
+% Sources mapped: Abbott Ch.1.5-1.6; Tao I Ch.3.6, Ch.8; Pugh Ch.1.4-1.5; Grinberg Ch.7-8.
+% TODO(source pages unavailable): Add coverage from mapped non-Rudin sources.
 
-\begin{definition} \label{def:cardinality-core-definitions-source-todo} \hlt{Core Cardinality Definitions to Source}\\
-TODO(source unavailable): Add the sourced definitions of same cardinality, finite set, countable set, uncountable set, and the comparison of cardinalities.
+Cardinality begins with the idea that a set is counted by matching it with another set, not by naming its elements. The function language in Definition \ref{def:functions-images-preimages} and the bijection language in Definition \ref{def:injective-surjective-bijective} are the standing prerequisites for this subsection.
+
+\begin{definition} \label{def:cardinality-equivalence} \hlt{Same Cardinality}\\
+Two sets $A$ and $B$ have \hlt{same cardinality}, or are \hlt{equivalent}, if $\exists$ a bijection $f:A\to B$. Then $A\sim B$.\\
+The relation $\sim$ is an equivalence relation: $A\sim A$ by identity map, symmetry follows from Theorem \ref{thm:bijective-iff-invertible-function}, and transitivity follows by composing bijections.
 \end{definition}
 
-\begin{theorem} \label{thm:cardinality-main-results-source-todo} \hlt{Main Cardinality Results to Source}\\
-TODO(source unavailable): Add the compact theorem sequence on countability and uncountability only after the mapped source pages are available.
+\begin{definition} \label{def:finite-countable-uncountable}\label{def:cardinality-core-definitions-source-todo} \hlt{Finite, Countable, and Uncountable}\\
+For $n\in\N$, let $J_n\defeq\{1,2,\ldots,n\}$. A set $A$ is
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{finite} if $A=\emptyset$ or $A\sim J_n$ for some $n\in\N$;
+\item \hlt{infinite} if it is not finite;
+\item \hlt{countable} if $A\sim \N$;
+\item \hlt{uncountable} if it is neither finite nor countable;
+\item \hlt{at most countable} if it is finite or countable.
+\end{enumerate}
+Countable sets are also called enumerable or denumerable.
+\end{definition}
+
+\begin{definition} \label{def:sequence-as-enumeration} \hlt{Sequences as Enumerations}\\
+A \hlt{sequence} in set $A$ is $x:\N\to A$, written $(x_n)$, where $x_n\defeq x(n)$. Terms of sequence need not be distinct.\\
+If $A$ is countable, then its elements can be arranged as a sequence with distinct terms. Conversely, a sequence whose terms are distinct and whose range is $A$ gives a bijection $\N\to A$.
+\end{definition}
+
+\begin{example} \label{ex:integers-are-countable} \hlt{The Integers Are Countable}\\
+The set $\Z$ is countable. One explicit enumeration is given by
+\begin{align}
+f(n)=
+\begin{cases}
+\frac{n}{2}, & n \text{ even},\\[2mm]
+-\frac{n-1}{2}, & n \text{ odd},
+\end{cases}
+\qquad n\in\N. \nonumber
+\end{align}
+This lists $\Z$ as $0,1,-1,2,-2,3,-3,\ldots$.
+\end{example}
+
+\begin{theorem} \label{thm:infinite-subset-of-countable-is-countable} \hlt{Infinite Subsets of Countable Sets}\\
+Every infinite subset of a countable set is countable.
+\begin{proof}
+Let $E\subseteq A$ be infinite, and enumerate $A$ by distinct terms $(x_n)$. Let $n_1<n_2<\cdots$ be exactly the indices for which $x_{n_k}\in E$, listed in increasing order. Then $k\mapsto x_{n_k}$ is a bijection from $\N$ onto $E$.\\
+\hlt{Structural Commentary}: The proof keeps only the entries of the original enumeration that land in $E$.\\
+\hlt{Key Insight}: An infinite subset of an enumeration inherits an enumeration by first appearances.
+\end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:cardinality-proof-patterns-source-todo} \hlt{Proof Patterns to Source}\\
-TODO(source unavailable): Record the sourced proof patterns, such as building explicit maps or diagonal-style arguments, without adding unsourced details.
+\begin{theorem} \label{thm:countable-union-of-countable-sets}\label{thm:cardinality-main-results-source-todo} \hlt{Countable Union of Countable Sets}\\
+Let $(E_n)$ be a sequence of countable sets and put $S\defeq\bigcup\limits_{n=1}^{\infty}E_n$. Then $S$ is countable.
+\begin{proof}
+Enumerate each $E_n$ as $(x_{nk})_{k\in\N}$. Reading the array $(x_{nk})$ by diagonals gives a sequence containing every element of $S$. Deleting repetitions identifies $S$ with a subset of $\N$, so $S$ is at most countable by Theorem \ref{thm:infinite-subset-of-countable-is-countable}.\\
+Since $E_1\subseteq S$ and $E_1$ is countable, $S$ is infinite; hence $S$ is countable.\\
+\hlt{Structural Commentary}: The diagonal order turns a two-indexed list into a one-indexed list.\\
+\hlt{Key Insight}: Countably many countable rows can still be scanned by one sequence.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:at-most-countable-union-at-most-countable} \hlt{At Most Countable Unions}\\
+If $A$ is at most countable and $B_\alpha$ is at most countable for each $\alpha\in A$, then $\bigcup\limits_{\alpha\in A}B_\alpha$ is at most countable.
+\begin{proof}
+Let $T\defeq\bigcup\limits_{\alpha\in A}B_\alpha$. If $T=\emptyset$, we are done. Otherwise enumerate the nonempty sets among the $B_\alpha$ as $B_{\alpha_1},B_{\alpha_2},\ldots$, repeating indices if needed, and list each $B_{\alpha_j}$ as $(b_{jk})_{k\in\N}$. A diagonal scan of $(b_{jk})$ lists $T$; deleting repetitions embeds $T$ in $\N$. Hence $T$ is finite or countable by Theorem \ref{thm:infinite-subset-of-countable-is-countable}.\\
+\hlt{Structural Commentary}: Finite pieces cause no difficulty; they can be embedded into countable rows.\\
+\hlt{Key Insight}: At most countable indexing $+$ at most countable indexed sets gives at most countable total set.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:finite-tuples-over-countable-set-countable} \hlt{Finite Tuples over a Countable Set}\\
+Let $A$ be countable. For each fixed $n\in\N$, the set of all $n$-tuples $(a_1,\ldots,a_n)$ with $a_k\in A$ is countable.
+\begin{proof} Let $B_n\defeq \{(a_1,\ldots,a_n): a_k\in A\}$, $B_1=A$. If $B_{n-1}$ is countable, $B_n=\bigcup\limits_{b\in B_{n-1}}\{(b,a):a\in A\}$, each set $\{(b,a):a\in A\}$ is equivalent to $A$. Hence $B_n$ is countable by Theorem \ref{thm:countable-union-of-countable-sets}. The result follows by induction.\\
+\hlt{Structural Commentary}: Build an $n$-tuple by appending one coordinate to an $(n-1)$-tuple.\\
+\hlt{Key Insight}: Induction plus countable unions controls finite products.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:rationals-countable} \hlt{The Rationals Are Countable}\\
+The set $\Q$ is countable.
+\begin{proof}
+Let $D\defeq\{(a,b)\in\Z\times\Z:a\neq0\}$ and $\pi:D\to\Q$ by $\pi(a,b)=b/a$. By Example \ref{ex:integers-are-countable} and Theorem \ref{thm:finite-tuples-over-countable-set-countable}, $D$ is at most countable. Since $\pi(D)=\Q$, enumerating $D$ and applying $\pi$ lists $\Q$ with possible repetitions. Thus $\Q$ is at most countable; as $\Z\subseteq\Q$, it is countable.\\
+\hlt{Structural Commentary}: Repeated fractions only add repetitions to the list.\\
+\hlt{Key Insight}: Countable pairs produce countably many rational values.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:binary-sequences-uncountable} \hlt{Binary Sequences Are Uncountable}\\
+Let $A$ be the set of all sequences whose terms are the digits $0$ and $1$. Then $A$ is uncountable.
+\begin{proof}
+Suppose $A$ were countable, $A=\{s_1,s_2,\ldots\}$ with $s_n=(s_n(k))_{k\in\N}$. Define $s\in A$ by $s(k)\defeq 1-s_k(k)$.\\
+Then $s(n)\neq s_n(n)$ for every $n$, so $s\neq s_n$ for all $n$. Hence $s\notin A$, a contradiction. Thus $A$ is uncountable.\\
+\hlt{Structural Commentary}: The construction attacks the diagonal of a proposed enumeration.\\
+\hlt{Key Insight}: A sequence can be built to escape every row of a countable list.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:cardinality-proof-patterns}\label{meth:cardinality-proof-patterns-source-todo} \hlt{Cardinality Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Same cardinality: construct a bijection.
+\item Countable: construct a sequence whose range contains every element.
+\item Uncountable: show every proposed sequence misses some element.
+\end{enumerate}
+\hlt{Key Idea}: Cardinality proofs are enumeration proofs: a bijection gives perfect bookkeeping, a countable listing may repeat entries but must omit none, and an uncountability argument proves that no single list can exhaust the set.
 \end{method}
