@@ -1,4 +1,154 @@
 \subsubsection{Mathematical Language, Sets, and Functions}
 
-% Source map placeholder: Rudin Ch.1; Abbott Ch.1; Tao I Ch.3; Grinberg proof tools.
-% TODO: Fill in definitions, propositions, examples, and one visualization figure if useful.
+% Rudin Ch.1; Abbott Ch.1; Tao I Ch.3; Pugh Ch.1; Ross Ch.1.
+% Grinberg proof tools; Spivak Ch.1 for maps between Euclidean spaces.
+
+Analysis starts by making objects, claims, and functions precise; limits and later structures depend on this.
+
+\begin{principle} \label{princ:analysis-language-as-structure} \hlt{Language Carries Structure}\\
+Objects, hypotheses, conclusions, and quantifier order matter. For instance,
+\begin{align}
+\forall x\in X\ \exists y\in Y\ P(x,y), \qquad
+\exists y\in Y\ \forall x\in X\ P(x,y) \nonumber
+\end{align}
+are different: in the first $y$ may depend on $x$; in the second one $y$ works for all $x$.
+\end{principle}
+
+\begin{definition} \label{def:analysis-sets-and-operations} \hlt{Sets and Operations}\\
+A \hlt{set} is a collection of objects. We write $x\in E$ for membership, $x\notin E$ for non-membership, $\emptyset$ for the empty set, and $A\subseteq B$ when every element of $A$ lies in $B$.\\
+Equality of sets means mutual containment: $A=B$ iff $A\subseteq B$ and $B\subseteq A$.\\
+For $A,B\subseteq X$, define
+\begin{align}
+A\cup B &\defeq \{x\in X:x\in A\text{ or }x\in B\}, \nonumber\\
+A\cap B &\defeq \{x\in X:x\in A\text{ and }x\in B\}, \nonumber\\
+A\setminus B &\defeq \{x\in X:x\in A\text{ and }x\notin B\}, \nonumber\\
+A^c &\defeq X\setminus A. \nonumber
+\end{align}
+The \hlt{power set} of $X$ is $\mathcal{P}(X)\defeq\{A:A\subseteq X\}$.
+\end{definition}
+
+\begin{method} \label{meth:proof-by-containment} \hlt{Proof by Two Containments}\\
+To prove $A=B$, prove both inclusions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item To prove $A\subseteq B$, let $x\in A$ be arbitrary and use the definitions and hypotheses to show $x\in B$.
+\item To prove $B\subseteq A$, let $x\in B$ be arbitrary and use the definitions and hypotheses to show $x\in A$.
+\item Once both containments are proved, conclude $A=B$ by extensionality of sets.
+\end{enumerate}
+If both sides are described by membership conditions, this is a chain, $x\in A \Longleftrightarrow \cdots \Longleftrightarrow x\in B$.
+\end{method}
+
+\begin{proposition} \label{prop:analysis-set-algebra} \hlt{Basic Set Algebra}\\
+Let $A,B,C\subseteq X$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$;
+\item $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$;
+\item $(A\cup B)^c=A^c\cap B^c$;
+\item $(A\cap B)^c=A^c\cup B^c$.
+\end{enumerate}
+\begin{proof}
+It suffices to prove (i) and (iii); the others are similar. Let $x\in X$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[(i)] $x\in A\cap(B\cup C) \Longleftrightarrow x\in A \text{ and } (x\in B \text{ or } x\in C) \Longleftrightarrow (x\in A\cap B) \text{ or } (x\in A\cap C) \Longleftrightarrow x\in (A\cap B)\cup(A\cap C)$
+\item[(iii)] $x\in (A\cup B)^c \Longleftrightarrow x\notin A\cup B \Longleftrightarrow x\notin A \text{ and } x\notin B \Longleftrightarrow x\in A^c\cap B^c$
+\end{enumerate}
+\hlt{Structural Commentary}: Set algebra is membership logic.\\
+\hlt{Key Insight}: Translate sets into conditions on $x$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:relations-and-equivalence} \hlt{Relations and Equivalence}\\
+A \hlt{relation} from $X$ to $Y$ is a subset $R\subseteq X\times Y$. If $(x,y)\in R$, one often writes $xRy$.\\
+A relation $\sim$ on $X$ is an \hlt{equivalence relation} if, for all $x,y,z\in X$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $x\sim x$;
+\item $x\sim y$ implies $y\sim x$;
+\item $x\sim y$ and $y\sim z$ imply $x\sim z$.
+\end{enumerate}
+The equivalence class of $x$ is $[x]\defeq\{y\in X:y\sim x\}$.
+\end{definition}
+
+\begin{proposition} \label{prop:equivalence-relations-partitions} \hlt{Equivalence Classes Partition the Set}\\
+Let $\sim$ be an equivalence relation on $X$. Then the equivalence classes form a partition of $X$.
+\begin{proof}
+Every $x\in X$ lies in $[x]$ since $x\sim x$. If $[x]\cap[y]\neq\emptyset$, choose $z$ in the intersection.\\
+Then $x\sim z\sim y$, so $u\in[x]$ implies $u\sim y$ and $u\in[y]$. Hence $[x]\subseteq[y]$, and symmetry gives equality.\\
+\hlt{Structural Commentary}: Equivalence means partition.\\
+\hlt{Key Insight}: Touching classes coincide.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:functions-images-preimages} \hlt{Functions, Images, and Preimages}\\
+A \hlt{function} $f:X\to Y$ assigns to each $x\in X$ a unique element $f(x)\in Y$. The set $X$ is the domain and $Y$ is the codomain. The \hlt{range} of $f$ is $\operatorname{range}(f)\defeq f(X)\defeq\{f(x):x\in X\}$.\\
+If $A\subseteq X$, the \hlt{image} of $A$ under $f$ is $f(A)\defeq\{f(x):x\in A\}$.\\
+If $B\subseteq Y$, the \hlt{preimage} of $B$ under $f$ is $f^{-1}(B)\defeq\{x\in X:f(x)\in B\}$.\\
+This does not require $f$ to have an inverse function.\\
+If $A\subseteq X$, the \hlt{restriction} of $f$ to $A$ is denoted $f|_A:A\to Y$.\\
+If $g:Y\to Z$, the \hlt{composition} $g\circ f:X\to Z$ is defined by $(g\circ f)(x)=g(f(x))$.\\
+The \hlt{identity function} on $X$ is denoted $\operatorname{id}_X$.
+\end{definition}
+
+  \begin{figure}[H]
+  \centering
+  \input{figures/analysis/function_image_preimage.tikz}
+  \caption{Image--preimage containment: $f(A)\subseteq B \Longleftrightarrow A\subseteq f^{-1}(B)$.}
+  \label{fig:function-image-preimage}
+\end{figure}
+
+\begin{proposition} \label{prop:image-preimage-calculus} \hlt{Image and Preimage Calculus}\\
+Let $f:X\to Y$, let $\{A_i\}_{i\in I}$ be a nonempty family of subsets of $X$, and let $\{B_i\}_{i\in I}$ be a nonempty family of subsets of $Y$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\left(\bigcup_{i\in I}A_i\right)=\bigcup_{i\in I}f(A_i)$;
+\item $f\left(\bigcap_{i\in I}A_i\right)\subseteq\bigcap_{i\in I}f(A_i)$;
+\item $f^{-1}\left(\bigcup_{i\in I}B_i\right)=\bigcup_{i\in I}f^{-1}(B_i)$;
+\item $f^{-1}\left(\bigcap_{i\in I}B_i\right)=\bigcap_{i\in I}f^{-1}(B_i)$;
+\item $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$ for every $B\subseteq Y$;
+\item $f(f^{-1}(B))=B\cap\operatorname{range}(f)$ for every $B\subseteq Y$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $y\in f(\bigcup_i A_i)$ iff $y=f(x)$ for some $x\in A_i$ and some $i$, iff $y\in\bigcup_i f(A_i)$.
+\item If $y=f(x)$ with $x\in\bigcap_i A_i$, then $y\in f(A_i)$ for every $i$.
+\item $x\in f^{-1}(\bigcup_i B_i)$ iff $f(x)\in B_i$ for some $i$, iff $x\in\bigcup_i f^{-1}(B_i)$.
+\item $x\in f^{-1}(\bigcap_i B_i)$ iff $f(x)\in B_i$ for every $i$, iff $x\in\bigcap_i f^{-1}(B_i)$.
+\item For $x\in X$, $x\in f^{-1}(Y\setminus B) \Longleftrightarrow f(x)\notin B \Longleftrightarrow x\notin f^{-1}(B) \Longleftrightarrow x\in X\setminus f^{-1}(B)$
+\item $y\in f(f^{-1}(B))$ iff $y=f(x)$ for some $x$ with $f(x)\in B$, iff $y\in B\cap\operatorname{range}(f)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Preimages are Boolean-exact; images need not be.\\
+\hlt{Key Insight}: Pull back conditions through $f$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:injective-surjective-bijective} \hlt{Injective, Surjective, and Bijective Maps}\\
+Let $f:X\to Y$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $f$ is \hlt{injective} if $f(x_1)=f(x_2)$ implies $x_1=x_2$.
+\item $f$ is \hlt{surjective} if $\operatorname{range}(f)=Y$.
+\item $f$ is \hlt{bijective} if it is both injective and surjective.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:bijective-iff-invertible-function} \hlt{Bijective Means Invertible}\\
+A function $f:X\to Y$ is bijective iff there exists a function $g:Y\to X$ s.t. $g\circ f=\operatorname{id}_X$, $f\circ g=\operatorname{id}_Y$.\\
+When such a function exists, it is unique and is denoted $f^{-1}:Y\to X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f$ is bijective, define $g(y)$ as the unique $x$ with $f(x)=y$. Then $g\circ f=\operatorname{id}_X$ and $f\circ g=\operatorname{id}_Y$.
+\item[$(\Leftarrow)$] If such a $g$ exists, applying $g$ to $f(x_1)=f(x_2)$ gives $x_1=x_2$, and $y=f(g(y))$ gives surjectivity.
+\end{enumerate}
+If $g$ and $h$ are two-sided inverses, then $g(y)=g(f(h(y)))=h(y)$, so the inverse is unique.\\
+\hlt{Structural Commentary}: A true inverse undoes $f$ on both sides.\\
+\hlt{Key Insight}: Bijective means exactly one preimage per output.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:square-map-image-preimage} \hlt{Image and Preimage for the Square Map}\\
+Let $f:\R\to\R$ be given by $f(x)=x^2$. Then $f([-2,1])=[0,4]$, $f^{-1}([1,4])=[-2,-1]\cup[1,2]$. The map is not injective because $f(1)=f(-1)$, and it is not surjective as a map $\R\to\R$ because no real number maps to $-1$.
+\end{example}
