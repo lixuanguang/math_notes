@@ -69,16 +69,6 @@ Let $R_k$ be the leading $k\times k$ principal submatrix of $R$. Since $R$ is up
 \end{proof}
 \end{corollary}
 
-\begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
-Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
-\begin{proof}
-The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
-Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
-\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
-\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
-\end{proof}
-\end{proposition}
-
 \begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
 \begin{proof}
@@ -299,6 +289,18 @@ Since $V_n(\Sigma^*\Sigma)^{1/2}=V\Sigma$, $U\abs{A}=V_nW^*W(\Sigma^*\Sigma)^{1/
 \end{proof}
 \end{theorem}
 
+\begin{method} \label{meth:svd-polar-computation} \hlt{SVD and Polar Computation Method}\\
+To compute an SVD and the associated polar factors of $A\in\operatorname{Mat}(m,n,\mathbb{F})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Diagonalise $A^*A$; the square roots of its positive eigenvalues are the positive singular values.
+\item Choose orthonormal right singular vectors $\mathbf{w}_j$ for the positive eigenvalues and set $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$.
+\item Complete the $\mathbf{v}_j$ and $\mathbf{w}_j$ to unitary matrices $V,W$ to obtain $A=V\Sigma W^*$.\\
+Omit zero-singular directions for compact SVD.
+\item Use $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$ and merge $V,W$ as in Theorem \ref{thm:rectangular-polar-decomposition} to obtain the polar factor.
+\end{enumerate}
+\end{method}
+
 \begin{theorem} \label{thm:polar-factor-uniqueness} \hlt{Uniqueness of the Positive Polar Factor}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$.
 \begin{enumerate}[label=(\roman*)]
@@ -333,18 +335,6 @@ Thus $U$ commutes with $\abs{A}^2$, hence with its positive square root $\abs{A}
 \hlt{Key Insight}: Normality is commutation of polar motion and stretch.
 \end{proof}
 \end{theorem}
-
-\begin{method} \label{meth:svd-polar-computation} \hlt{SVD and Polar Computation Method}\\
-To compute an SVD and the associated polar factors of $A\in\operatorname{Mat}(m,n,\mathbb{F})$:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Diagonalise $A^*A$; the square roots of its positive eigenvalues are the positive singular values.
-\item Choose orthonormal right singular vectors $\mathbf{w}_j$ for the positive eigenvalues and set $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$.
-\item Complete the $\mathbf{v}_j$ and $\mathbf{w}_j$ to unitary matrices $V,W$ to obtain $A=V\Sigma W^*$.\\
-Omit zero-singular directions for compact SVD.
-\item Use $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$ and merge $V,W$ as in Theorem \ref{thm:rectangular-polar-decomposition} to obtain the polar factor.
-\end{enumerate}
-\end{method}
 
 \begin{proposition} \label{prop:absolute-determinant-positive-polar-factor} \hlt{Absolute Determinant Comes from the Positive Polar Factor}\\
 For $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\abs{\det T}=\det\sqrt{T^*T}$.
@@ -396,3 +386,102 @@ Thus area integrals acquire the factor $r\,dr\,d\theta$.\\
 For spherical coordinates $\sigma(\rho,\varphi,\theta) =(\rho\sin\varphi\cos\theta,\rho\sin\varphi\sin\theta,\rho\cos\varphi)$, and $\abs{\det D\sigma(\rho,\varphi,\theta)}=\rho^2\sin\varphi$.\\
 Thus volume integrals acquire the factor $\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$.
 \end{example}
+
+\begin{corollary} \label{cor:hermitian-products-and-conjugate-products} \hlt{Hermitian Products and Conjugate Products}\\
+Let $A,H,K\in\operatorname{Mat}(n,n,\mathbb{C})$, and suppose $H$ and $K$ are Hermitian.\\
+Then $HK$ is similar to $KH$, and $A\overline{A}$ is similar to $\overline{A}A$.
+\begin{proof}
+For each $p=1,\ldots,n$, $\operatorname{rank}\bigl((HK)^p\bigr) =\operatorname{rank}\bigl(((HK)^p)^*\bigr) = \operatorname{rank}\bigl((KH)^p\bigr)$.\\
+Also, $\operatorname{rank}\bigl((A\overline{A})^p\bigr) =\operatorname{rank}\bigl(\overline{(A\overline{A})^p}\bigr) =\operatorname{rank}\bigl((\overline{A}A)^p\bigr)$. Apply Corollary \ref{cor:ab-ba-similar-rank-power-criterion} in both cases.\\
+\hlt{Structural Commentary}: Adjoint and conjugation preserve rank and reverse product order.\\
+\hlt{Key Insight}: The rank-power test turns order reversal into similarity.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:reversal-matrix} \hlt{Reversal Matrix}\\
+For $k\geq1$, the \hlt{reversal matrix} $R_k\in\operatorname{Mat}(k,k,\mathbb{C})$ is defined by
+\begin{align}
+(R_k)_{ij}=
+\begin{cases}
+1,& i+j=k+1,\\
+0,& i+j\neq k+1.
+\end{cases}
+\nonumber
+\end{align}
+Thus $R_k^t=R_k$ and $R_k^2=I_k$.
+\end{definition}
+
+\begin{lemma} \label{lem:jordan-block-transpose-reversal-similarity} \hlt{Reversal Conjugates a Jordan Block to Its Transpose}\\
+For every $k\geq1$ and $\lambda\in\mathbb{C}$, $J_k(\lambda)^t=R_kJ_k(\lambda)R_k$. Moreover, $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.
+\begin{proof}
+Let $N=J_k(0)$. Since $R_k$ reverses standard basis order, $R_kNR_k=N^t$.\\
+Adding scalar gives $R_kJ_k(\lambda)R_k=J_k(\lambda)^t$. As $R_k=R_k^t=R_k^{-1}$, this identity gives $J_k(\lambda)^tR_k=R_kJ_k(\lambda)$ and $R_kJ_k(\lambda)^t=J_k(\lambda)R_k$, so $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.\\
+\hlt{Structural Commentary}: Reversal changes the superdiagonal shift into the subdiagonal shift.\\
+\hlt{Key Insight}: Transposition reads the same Jordan chain backwards.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:matrix-similar-to-transpose-and-symmetric-factorizations} \hlt{Transpose Similarity and Symmetric Factorisations}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $A^t$ via a symmetric similarity matrix.
+\item $A=BC=DE$, where $B,C,D,E$ are symmetric and $B,E$ are invertible.
+\end{enumerate}
+\begin{proof}
+Choose a Jordan form $A=SJS^{-1}$, and let $R$ be the direct sum of the reversal matrices matching the Jordan blocks of $J$. By Lemma \ref{lem:jordan-block-transpose-reversal-similarity}, $J^t=RJR$, $R^t=R$, $R^2=I_n$, and both $RJ$ and $JR$ are symmetric.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Set $P=(S^{-1})^tRS^{-1}$. Then $P^t=P$ and $PAP^{-1}=(S^{-1})^tRJR S^t=(S^{-1})^tJ^tS^t=A^t$.
+\item
+Using $R^2=I_n$, $A=(SRS^t)\bigl((S^{-1})^tRJ S^{-1}\bigr)$ and $A=(SJR S^t)\bigl((S^{-1})^tR S^{-1}\bigr)$.\\
+All four factors are symmetric because $R,RJ,JR$ are symmetric; $SRS^t$ and $(S^{-1})^tRS^{-1}$ are invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: Reduce to Jordan blocks, reverse chains, then conjugate back.\\
+\hlt{Key Insight}: Symmetric involutions produce both transpose similarity and symmetric factors.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_transpose_reversal.tikz}
+  \caption{Reversal gives $R_kJ_k(0)R_k=J_k(0)^t$: the same chain read backwards.}
+  \label{fig:jordan-transpose-reversal}
+\end{figure}
+
+\begin{theorem} \label{thm:conjugate-similarity-hermitian-product-equivalences} \hlt{Conjugate Similarity and Hermitian Products}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $\overline{A}$.
+\item $A$ is similar to $A^*$.
+\item $A$ is similar to $A^*$ via a Hermitian similarity matrix.
+\item $A=HK=LM$, where $H,K,L,M$ are Hermitian, and $H,M$ are invertible.
+\item $A=HK$ for some Hermitian matrices $H,K$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$ Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations} applied to $\overline{A}$ gives $\overline{A}\sim(\overline{A})^t=A^*$. Thus $A\sim A^*$.
+\item[$(ii)$]$\Rightarrow(iii)$ Choose invertible $S$ such that $A=SA^*S^{-1}$, so $AS=SA^*$. For $\theta\in\mathbb{R}$, put $S_{\theta}=e^{i\theta}S$.\\
+Then $AS_{\theta}=S_{\theta}A^*$ and, by taking adjoints, $AS_{\theta}^*=S_{\theta}^*A^*$. Hence $A(S_{\theta}+S_{\theta}^*)=(S_{\theta}+S_{\theta}^*)A^*$.\\
+The matrix $H_{\theta}=S_{\theta}+S_{\theta}^*$ is Hermitian. Also $S_{\theta}^{-1}H_{\theta}=I_n+e^{-2i\theta}S^{-1}S^*$. Only finitely many values of $-e^{2i\theta}$ can be eigenvalues of $S^{-1}S^*$, so choose $\theta$ for which $H_{\theta}$ is invertible. Then $A=H_{\theta}A^*H_{\theta}^{-1}$.
+\item[$(iii)$]$\Rightarrow(iv)$ Let $R$ be invertible Hermitian and satisfy $A=RA^*R^{-1}$. Then $AR=RA^*$ and $R^{-1}A=A^*R^{-1}$.\\
+Thus $A^*R^{-1}$ and $RA^*$ are Hermitian, and $A=R(A^*R^{-1})=(RA^*)R^{-1}$.\\
+This gives the two asserted Hermitian factorizations, with the first factor in the first product and the second factor in the second product invertible.
+\item[$(iv)$]$\Rightarrow(v)$ Immediate.
+\item[$(v)$]$\Rightarrow(i)$ If $A=HK$ with $H,K$ Hermitian, then Corollary \ref{cor:hermitian-products-and-conjugate-products} gives $HK\sim KH$.\\
+By Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations}, $KH\sim (KH)^t=H^tK^t=\overline{H}\,\overline{K}=\overline{A}$. Hence $A\sim\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The equivalences move between conjugation, adjoints, and Hermitian products by combining transpose similarity with a Hermitianized similarity matrix.\\
+\hlt{Key Insight}: A phase-rotated average $e^{i\theta}S+e^{-i\theta}S^*$ turns an arbitrary similarity to $A^*$ into a Hermitian one.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/conjugate_similarity_hermitian_products.tikz}
+  \caption{Conjugate similarity, adjoint similarity, and Hermitian product factorisations are equivalent.}
+  \label{fig:conjugate-similarity-hermitian-products}
+\end{figure}
