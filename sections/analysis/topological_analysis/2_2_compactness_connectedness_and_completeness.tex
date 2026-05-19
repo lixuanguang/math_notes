@@ -1,10 +1,10 @@
 \subsubsection{Compactness, Connectedness, and Completeness}
 
-% Source pages provided: Rudin Ch.2, Def. 2.18 and examples around 2.21 for bounded/perfect terminology only.
+% Source pages provided: Rudin Ch.2, Def. 2.18, Defs. 2.31--2.32, Thms. 2.33--2.43, Cantor-set discussion 2.44, Def. 2.45, Remark 2.46, and Thm. 2.47.
 % Sources mapped: Abbott Ch.3, Ch.8.2; Pugh Ch.2; Tao II Ch.1-2; Grinberg Ch.9-13.
-% TODO(source pages unavailable): Add compactness, connectedness, completeness, Heine-Borel, and Baire-category material once source pages are provided.
+% TODO(source pages unavailable): Add Cauchy sequences, completeness, and Baire-category material once source pages are provided.
 
-This subsection is reserved for global structure: compactness, connectedness, completeness, and the theorems that make them useful. The provided pages only support a few metric-set prerequisites, so the main compactness and connectedness sequence remains source-gated.
+Compactness and connectedness are global properties: they are not detected by one point alone, but by how all open sets, closed sets, limit points, and separations behave together. This subsection builds directly on the metric terminology in Definition \ref{def:metric-topology-core-definitions}, the relative-open characterization in Theorem \ref{thm:relative-open-intersection-with-open-set}, and the least-upper-bound tools from Theorem \ref{thm:real-field-existence-lub}.
 
 \begin{definition} \label{def:bounded-and-perfect-metric-sets} \hlt{Bounded and Perfect Metric Sets}\\
 Let $E$ be a subset of a metric space $X$.
@@ -16,14 +16,228 @@ Let $E$ be a subset of a metric space $X$.
 The definitions of closed set and limit point are in Definition \ref{def:metric-topology-core-definitions}.
 \end{definition}
 
-\begin{definition} \label{def:compact-connected-complete-core-source-todo} \hlt{Core Structural Definitions to Source}\\
-TODO(source pages unavailable): Add the sourced definitions of compactness, connectedness, Cauchy sequences, and completeness. Keep perfect-set terminology aligned with Definition \ref{def:bounded-and-perfect-metric-sets}.
+\begin{definition} \label{def:open-cover-and-compactness} \hlt{Open Covers and Compact Sets}\\
+Let $E\subseteq X$, where $X$ is a metric space.\\
+An \hlt{open cover} of $E$ is a collection $\{G_\alpha\}_{\alpha\in A}$ of open subsets of $X$ such that $E\subseteq\bigcup\limits_{\alpha\in A}G_\alpha$.\\
+A set $K\subseteq X$ is \hlt{compact} if every open cover of $K$ contains a finite subcover: whenever $\{G_\alpha\}_{\alpha\in A}$ covers $K$, there exist $\alpha_1,\ldots,\alpha_n$ such that $K\subseteq G_{\alpha_1}\cup\cdots\cup G_{\alpha_n}$.
 \end{definition}
 
-\begin{theorem} \label{thm:compact-connected-complete-main-source-todo} \hlt{Main Structural Theorems to Source}\\
-TODO(source pages unavailable): Add the sourced theorem sequence linking compactness, connectedness, and completeness in metric or Euclidean settings.
+\begin{theorem} \label{thm:compactness-independent-of-ambient-space} \hlt{Compactness Is Independent of the Ambient Space}\\
+Suppose $K\subseteq Y\subseteq X$, where $X$ is a metric space.\\
+Then $K$ is compact relative to $X$ if and only if $K$ is compact relative to $Y$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $\{V_\alpha\}_{\alpha\in A}$ be a relative-open cover of $K$ in $Y$.\\
+By Theorem \ref{thm:relative-open-intersection-with-open-set}, write $V_\alpha=Y\cap G_\alpha$ with $G_\alpha$ open in $X$. Since $\{G_\alpha\}_{\alpha\in A}$ covers $K$, compactness in $X$ gives a finite $F\subseteq A$ such that $K\subseteq\bigcup_{\alpha\in F}G_\alpha$. As $K\subseteq Y$, $K\subseteq\bigcup_{\alpha\in F}V_\alpha$.
+\item[$(\Leftarrow)$] Let $\{G_\alpha\}_{\alpha\in A}$ be an open cover of $K$ in $X$. Then $\{Y\cap G_\alpha\}_{\alpha\in A}$ is a relative-open cover of $K$ in $Y$.\\
+Compactness in $Y$ gives a finite $F\subseteq A$ such that $K\subseteq\bigcup_{\alpha\in F}(Y\cap G_\alpha)\subseteq\bigcup_{\alpha\in F}G_\alpha$.
+\end{enumerate}
+\hlt{Structural Commentary}: Relative covers are ambient covers intersected with $Y$.\\
+\hlt{Key Insight}: Openness depends on the ambient space, but compactness does not.
+\end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:compact-connected-complete-proof-patterns-source-todo} \hlt{Proof Patterns to Source}\\
-TODO(source pages unavailable): Add proof commentary for cover arguments, sequence arguments, and separation arguments only after source coverage is available.
+\begin{theorem} \label{thm:compact-subsets-of-metric-spaces-closed} \hlt{Compact Sets Are Closed}\\
+Every compact subset of a metric space is closed.
+\begin{proof}
+Let $K$ be compact in $X$. To prove $K^c$ is open.\\
+Fix $p\in K^c$. For each $q\in K$, put $V_q\defeq B_{\frac12d(p,q)}(p)$, $W_q\defeq B_{\frac12d(p,q)}(q)$.\\
+The sets $W_q$ form an open cover of $K$, so compactness gives $q_1,\ldots,q_n\in K$ with $K\subseteq W_{q_1}\cup\cdots\cup W_{q_n}$.\\
+Let $V\defeq V_{q_1}\cap\cdots\cap V_{q_n}$, which is open by Theorem \ref{thm:metric-open-closed-set-calculus}.\\
+No point of $V$ lies in any $W_{q_i}$, by the triangle inequality. Hence $V\cap K=\emptyset$, so $p$ is an interior point of $K^c$.\\
+\hlt{Structural Commentary}: Compactness makes the separation finite.\\
+\hlt{Key Insight}: A finite subcover lets local point-separations become one open neighborhood of the complement.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:closed-subsets-of-compact-sets-compact} \hlt{Closed Subsets of Compact Sets Are Compact}\\
+Suppose $F\subseteq K\subseteq X$, where $F$ is closed in $X$ and $K$ is compact. Then $F$ is compact.
+\begin{proof}
+Let $\{V_\alpha\}_{\alpha\in A}$ cover $F$. Since $F^c$ is open, $\{V_\alpha\}_{\alpha\in A}\cup\{F^c\}$ covers $K$.\\
+Thus $K\subseteq F^c\cup\bigcup\limits_{\alpha\in F_0}V_\alpha$ for some finite $F_0\subseteq A$, so $F\subseteq\bigcup\limits_{\alpha\in F_0}V_\alpha$.\\
+\hlt{Structural Commentary}: The open complement of a closed set covers exactly the part of $K$ not under discussion.\\
+\hlt{Key Insight}: Cover $K$, then discard the complement piece.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:closed-intersection-compact} \hlt{Closed Intersections with Compact Sets}\\
+If $F$ is closed in $X$ and $K$ is compact in $X$, then $F\cap K$ is compact.
+\begin{proof}
+By Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}, $K$ is closed in $X$. Since $F$ is closed, Theorem \ref{thm:metric-open-closed-set-calculus} gives that $F\cap K$ is closed in $X$. Also $F\cap K\subseteq K$, so Theorem \ref{thm:closed-subsets-of-compact-sets-compact} implies $F\cap K$ is compact.\\
+\hlt{Structural Commentary}: The intersection is closed inside a compact set.\\
+\hlt{Key Insight}: Closed subsets of compact sets remain compact.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:compact-finite-intersection-property} \hlt{Finite Intersection Property for Compact Sets}\\
+Let $\{K_\alpha\}_{\alpha\in A}$ be compact subsets of a metric space $X$, with $A\neq\emptyset$.\\
+If $\bigcap\limits_{\alpha\in F}K_\alpha\neq\emptyset$ for every finite nonempty $F\subseteq A$, then $\bigcap\limits_{\alpha\in A}K_\alpha\neq\emptyset$.
+\begin{proof}
+Choose $\alpha_0\in A$ and suppose $\bigcap\limits_{\alpha\in A}K_\alpha=\emptyset$. Then $K_{\alpha_0}\subseteq\bigcup\limits_{\alpha\in A}K_\alpha^c$. Since each $K_\alpha^c$ is open by Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}, compactness of $K_{\alpha_0}$ gives a finite $F\subseteq A$ with $K_{\alpha_0}\subseteq\bigcup\limits_{\alpha\in F}K_\alpha^c$. Hence $\bigcap\limits_{\alpha\in F\cup\{\alpha_0\}}K_\alpha=\emptyset$, a contradiction.\\
+\hlt{Structural Commentary}: Complements turn failure into a finite cover.\\
+\hlt{Key Insight}: For compact sets, failure of intersection is already witnessed finitely.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:nested-nonempty-compact-intersection} \hlt{Nested Nonempty Compact Sets Intersect}\\
+If $K_1\supseteq K_2\supseteq K_3\supseteq\cdots$ is a sequence of nonempty compact sets, then $\bigcap_{n=1}^{\infty}K_n\neq\emptyset$.
+\begin{proof}
+Let $\emptyset\neq F\subseteq\N$ be finite and put $m\defeq\max F$. Since the sequence is nested, $\bigcap\limits_{n\in F}K_n=K_m\neq\emptyset$.\\
+Thus $\{K_n\}_{n\in\N}$ has the finite intersection property, so Theorem \ref{thm:compact-finite-intersection-property} gives $\bigcap\limits_{n=1}^{\infty}K_n\neq\emptyset$.\\
+\hlt{Structural Commentary}: Nestedness reduces finite intersections to one term.\\
+\hlt{Key Insight}: A nested compact sequence has the finite intersection property.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:infinite-subset-of-compact-has-limit-point} \hlt{Infinite Subsets of Compact Sets Have Limit Points}\\
+Let $K\subseteq X$ be compact in a metric space $X$. If $E\subseteq K$ is infinite, then $E'\cap K\neq\emptyset$.
+\begin{proof}
+Suppose $E'\cap K=\emptyset$. For each $q\in K$, choose $r_q>0$ such that $B_{r_q}(q)\cap(E\setminus\{q\})=\emptyset$, so $\#(B_{r_q}(q)\cap E)\leq1$.\\
+Since $\{B_{r_q}(q):q\in K\}$ covers $K$, compactness gives $q_1,\ldots,q_n\in K$ with $K\subseteq\bigcup\limits_{i=1}^{n}B_{r_{q_i}}(q_i)$.\\
+As $E\subseteq K$, $E\subseteq\bigcup\limits_{i=1}^{n}B_{r_{q_i}}(q_i)$, finite union of sets meeting $E$ in at most one point. Thus $E$ is finite, contradiction.\\
+\hlt{Structural Commentary}: Compactness makes the local ``at most one point'' obstruction finite.\\
+\hlt{Key Insight}: Infinite subsets of compact sets must accumulate somewhere inside the compact set.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:nested-closed-intervals-intersect} \hlt{Nested Closed Intervals Intersect}\\
+If $I_1\supseteq I_2\supseteq I_3\supseteq\cdots$ is a sequence of closed intervals in $\R$, then $\bigcap_{n=1}^{\infty}I_n\neq\emptyset$.
+\begin{proof}
+Let $I_n=[a_n,b_n]$. The set $\{a_n:n\in\N\}$ is nonempty and bounded above by each $b_m$.\\
+Let $x=\sup\{a_n:n\in\N\}$. Then $a_m\leq x\leq b_m$ for every $m$, so $x\in I_m$ for all $m$.\\
+\hlt{Structural Commentary}: Completeness traps a common point.\\
+\hlt{Key Insight}: The least upper bound of the left endpoints lies in every interval.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:nested-k-cells-intersect} \hlt{Nested $k$-Cells Intersect}\\
+If $I_1\supseteq I_2\supseteq I_3\supseteq\cdots$ is a sequence of $k$-cells in $\R^k$, then $\bigcap_{n=1}^{\infty}I_n\neq\emptyset$.
+\begin{proof}
+Let $I_n=\{\mathbf{x}\in\R^k:a_{n,j}\leq x_j\leq b_{n,j},\ 1\leq j\leq k\}$. For each coordinate $j$, the intervals $[a_{n,j},b_{n,j}]$ are nested, so Theorem \ref{thm:nested-closed-intervals-intersect} gives a point $x_j^*$ lying in all of them. Then $\mathbf{x}^*=(x_1^*,\ldots,x_k^*)$ lies in every $I_n$.\\
+\hlt{Structural Commentary}: A nested cell problem reduces coordinatewise to nested intervals.\\
+\hlt{Key Insight}: Choose one persistent coordinate at a time.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:k-cells-compact} \hlt{$k$-Cells Are Compact}\\
+Every $k$-cell in $\R^k$ is compact.
+\begin{proof}
+Let $I=\{\mathbf{x}:a_j\leq x_j\leq b_j,\ 1\leq j\leq k\}$ and set $\delta\defeq\left(\sum
+\limits_{j=1}^{k}(b_j-a_j)^2\right)^{1/2}$. Suppose an open cover $\{G_\alpha\}$ of $I$ has no finite subcover. Bisect each coordinate interval. Among the resulting $2^k$ subcells, at least one cannot be finitely covered by the $G_\alpha$; call it $I_1$. Continue inductively, obtaining nested cells $I\supseteq I_1\supseteq I_2\supseteq\cdots$ such that no $I_n$ is finitely covered and every two points of $I_n$ are within $2^{-n}\delta$ of each other.\\
+By Theorem \ref{thm:nested-k-cells-intersect}, choose $\mathbf{x}^*\in\bigcap_n I_n$. Since $\{G_\alpha\}$ covers $I$, some $G_\alpha$ contains $\mathbf{x}^*$. Because $G_\alpha$ is open, $B_r(\mathbf{x}^*)\subseteq G_\alpha$ for some $r>0$. By the Archimedean property in Theorem \ref{thm:archimedean-and-rational-density}, choose $n$ with $n>\delta/r$; since $2^n\geq n$, we have $2^{-n}\delta<r$. Then $I_n\subseteq G_\alpha$, contradicting the construction of $I_n$.\\
+\hlt{Structural Commentary}: Repeated bisection traps a point in cells whose diameters shrink to zero.\\
+\hlt{Key Insight}: An open set around the trapped point eventually contains the whole small cell.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:heine-borel-rk} \hlt{Heine--Borel in $\R^k$}\\
+For $E\subseteq\R^k$, any one of the following three properties implies the other two:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E$ is closed and bounded;
+\item $E$ is compact;
+\item every infinite subset of $E$ has a limit point in $E$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$: Since $E$ is bounded, $E\subseteq I$ for some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact; since $E$ is closed, Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $E$ is compact.
+\item[$(ii)$]$\Rightarrow(iii)$: This is Theorem \ref{thm:infinite-subset-of-compact-has-limit-point}.
+\item[$(iii)$]$\Rightarrow(i)$: If $E$ is unbounded, choose $\mathbf{x}_n\in E$ with $\norm{\mathbf{x}_n}_2>n$ and set $S\defeq\{\mathbf{x}_n:n\in\N\}$. If $\mathbf{x}_n\in B_R(\mathbf{y})$, then $n<\norm{\mathbf{y}}_2+R$; hence $S$ has no limit point, contradicting (iii). Thus $E$ is bounded. If $E$ is not closed, choose $\mathbf{x}_0\in E'\setminus E$ and $\mathbf{x}_n\in E$ with $0<\norm{\mathbf{x}_n-\mathbf{x}_0}_2<1/n$. Then $S\defeq\{\mathbf{x}_n:n\in\N\}$ is infinite and $S'\subseteq\{\mathbf{x}_0\}\subseteq E^c$, contradicting (iii). Thus $E$ is closed.
+\end{enumerate}
+\hlt{Structural Commentary}: In $\R^k$, the three tests coincide.\\
+\hlt{Key Insight}: Heine--Borel is the bridge between open-cover compactness and Euclidean bounded geometry.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:weierstrass-limit-point-rk} \hlt{Weierstrass Limit-Point Theorem}\\
+Every bounded infinite subset of $\R^k$ has a limit point in $\R^k$.
+\begin{proof}
+A bounded set $E$ lies in some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
+Since $E$ is an infinite subset of $I$, Theorem \ref{thm:infinite-subset-of-compact-has-limit-point} gives a limit point of $E$ in $I\subseteq\R^k$.\\
+\hlt{Structural Commentary}: Boundedness places the set inside a compact cell.\\
+\hlt{Key Insight}: Compact cells force bounded infinite sets to accumulate.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:nonempty-perfect-subset-rk-uncountable} \hlt{Perfect Sets Are Uncountable}\\
+Every nonempty perfect subset of $\R^k$ is uncountable.
+\begin{proof}
+Assume $P=\{\mathbf{x}_1,\mathbf{x}_2,\ldots\}$. Choose a neighborhood $V_1$ with $V_1\cap P\neq\emptyset$.\\
+Inductively, since $P\cap V_n$ contains infinitely many points by Theorem \ref{thm:limit-point-neighborhoods-infinitely-many}, choose $\mathbf{y}_n\in P\cap V_n$ with $\mathbf{y}_n\neq\mathbf{x}_n$ and then a neighborhood $V_{n+1}$ of $\mathbf{y}_n$ such that $\overline{V}_{n+1}\subseteq V_n$ and $\mathbf{x}_n\notin\overline{V}_{n+1}$.\\
+Put $K_n\defeq\overline{V}_n\cap P$. Then $K_n$ is nonempty, compact, and $K_{n+1}\subseteq K_n$. By Corollary \ref{cor:nested-nonempty-compact-intersection}, choose $\mathbf{z}\in\bigcap\limits_{n=1}^{\infty}K_n$. For each $n$, $\mathbf{z}\in K_{n+1}$ but $\mathbf{x}_n\notin K_{n+1}$, so $\mathbf{z}\neq\mathbf{x}_n$ for all $n$, contradicting the enumeration.\\
+\hlt{Structural Commentary}: Nested compact sets dodge the list.\\
+\hlt{Key Insight}: Perfectness gives new points; compactness keeps one.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:closed-intervals-and-reals-uncountable} \hlt{Intervals and the Real Line Are Uncountable}\\
+Every interval $[a,b]\subseteq\R$ with $a<b$ is uncountable. In particular, $\R$ is uncountable.
+\begin{proof}
+The interval $I\defeq[a,b]$ is a nonempty $1$-cell, hence compact by Theorem \ref{thm:k-cells-compact} and closed by Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}. For every $x\in I$ and $\varepsilon>0$, $I\cap \bigl(B_{\varepsilon}(x)\setminus\{x\}\bigr)\neq\emptyset$, so $I$ is perfect. Theorem \ref{thm:nonempty-perfect-subset-rk-uncountable} gives that $I$ is uncountable. If $\R$ were countable, then $I\subseteq\R$ would be countable, a contradiction.\\
+\hlt{Structural Commentary}: Closed intervals are perfect compact sets.\\
+\hlt{Key Insight}: One closed interval already forces $\R$ to be uncountable.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/cantor_set_first_stages.tikz}
+  \caption{The first stages $E_0,E_1,E_2,E_3$ in the Cantor-set construction.}
+  \label{fig:cantor-set-first-stages}
+\end{figure}
+
+\begin{example} \label{ex:cantor-set} \hlt{The Cantor Set}\\
+Let $E_0=[0,1]$. Remove the open middle third $(1/3,2/3)$ and call the remaining set $E_1$. Continue by removing the open middle third from each interval component, so
+\begin{align}
+E_1&=[0,1/3]\cup[2/3,1], \nonumber\\
+E_2&=[0,1/9]\cup[2/9,3/9]\cup[6/9,7/9]\cup[8/9,1]. \nonumber
+\end{align}
+Then $E_n$ is a union of $2^n$ compact intervals of length $3^{-n}$ and $E_1\supseteq E_2\supseteq E_3\supseteq\cdots$.\\
+The \hlt{Cantor set} is $P\defeq\bigcap\limits_{n=1}^{\infty}E_n$. By Corollary \ref{cor:nested-nonempty-compact-intersection}, $P\neq\emptyset$. Since each $E_n$ is closed and $P\subseteq E_1$, $P$ is a closed subset of the compact set $E_1$, hence compact.\\
+If $J\subseteq[0,1]$ is nonempty open interval, for some $m\in\N$ and $k\geq0$, $R_{m,k}\defeq\left(\frac{3k+1}{3^m},\frac{3k+2}{3^m}\right)\subseteq J$ and $R_{m,k}\cap P=\emptyset$.\\
+Thus $P$ contains no nontrivial interval. Finally, let $x\in P$ and let $U$ be an interval neighborhood of $x$. If $I_n(x)$ is the component of $E_n$ containing $x$, choose $n$ with $I_n(x)\subseteq U$. An endpoint $y\neq x$ of $I_n(x)$ lies in $P$, so $U\cap(P\setminus\{x\})\neq\emptyset$. Hence $P$ is perfect.\\
+\hlt{Structural Commentary}: The Cantor set is built by nested compact deletion, not by listing points.\\
+\hlt{Key Insight}: It is compact and perfect, but contains no interval.
+\end{example}
+
+\begin{definition} \label{def:separated-and-connected-sets} \hlt{Separated and Connected Sets}\\
+Let $A$ and $B$ be subsets of a metric space $X$. They are \hlt{separated} if $A\cap\overline{B}=\emptyset$ and $\overline{A}\cap B=\emptyset$.\\
+A set $E\subseteq X$ is \hlt{connected} if it is not a union of two nonempty separated sets.
+\end{definition}
+
+\begin{remark} \label{rem:disjoint-versus-separated} \hlt{Disjoint Need Not Mean Separated}\\
+Separated sets are disjoint, but disjoint sets need not be separated. For example, $[0,1]$ and $(1,2)$ are disjoint but not separated because $1$ is a limit point of $(1,2)$. By contrast, $(0,1)$ and $(1,2)$ are separated.
+\end{remark}
+
+\begin{theorem} \label{thm:connected-subsets-of-real-line-interval-property} \hlt{Connected Subsets of the Real Line}\\
+A set $E\subseteq\R$ is connected if and only if $x,y\in E,\ x<y$ $\Longrightarrow$ $[x,y]\subseteq E$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If the interval property fails, choose $x,y\in E$ and $x<z<y$ with $z\notin E$. Then $A\defeq E\cap(-\infty,z)$ and $B\defeq E\cap(z,\infty)$ are nonempty separated sets with $E=A\cup B$, contradicting connectedness.
+\item[$(\Leftarrow)$] Suppose $E=A\cup B$ with $A,B$ nonempty separated. Choose $x\in A$, $y\in B$, $x<y$, and set $S\defeq A\cap[x,y]$, $z\defeq\sup S$. By Theorem \ref{thm:supremum-belongs-to-closure}, $z\in\overline{A}$; hence $z\notin B$ and $z<y$. If $z\notin A$, then $z\in[x,y]\setminus E$.\\
+If $z\in A$, then $z\notin\overline{B}$, so choose $z_1\in(z,y)$ with $z_1\notin B$; by maximality of $z$, also $z_1\notin A$. Thus $z_1\in[x,y]\setminus E$, contradicting $[x,y]\subseteq E$.
+\end{enumerate}
+\hlt{Structural Commentary}: On the real line, connectedness is exactly having no gaps between any two of its points.\\
+\hlt{Key Insight}: A separation creates a missing point by taking a supremum at the boundary of one side.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:compact-connected-proof-patterns} \hlt{Compactness and Connectedness Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Open-cover compactness}: for every cover $\{G_\alpha\}_{\alpha\in A}$, find finite $F\subseteq A$ with $K\subseteq\bigcup\limits_{\alpha\in F}G_\alpha$.
+\item \hlt{Euclidean closed-bounded compactness}: if $E\subseteq\R^k$ is closed and bounded, choose a compact $k$-cell $I\supseteq E$ and apply Theorem \ref{thm:closed-subsets-of-compact-sets-compact}.
+\item \hlt{Connectedness on $\R$}: replace connectedness of $E\subseteq\R$ by $x,y\in E, x<y$ $\Longrightarrow$ $[x,y]\subseteq E$.
+\end{enumerate}
 \end{method}
+
+\begin{definition} \label{def:completeness-source-todo} \hlt{Completeness Definitions to Source}\\
+TODO(source pages unavailable): Add the sourced definitions of Cauchy sequence and completeness, and then connect them to the sequence material in \S\ref{def:sequences-core-definitions-source-todo}.
+\end{definition}
+
+\begin{theorem} \label{thm:completeness-and-baire-source-todo} \hlt{Completeness Theorems to Source}\\
+TODO(source pages unavailable): Add the sourced theorem sequence for complete metric spaces and Baire-category arguments once source pages are available.
+\end{theorem}
