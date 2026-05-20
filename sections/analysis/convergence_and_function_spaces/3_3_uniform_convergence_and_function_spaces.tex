@@ -1,18 +1,235 @@
 \subsubsection{Uniform Convergence and Function Spaces}
 
+% Source pages provided: Rudin Ch.7, Defs. 7.1, 7.7, 7.14, 7.19, 7.22; Thms. 7.8--7.18, 7.23--7.25; Examples 7.2--7.6, 7.20--7.21, and surrounding discussion in the provided screenshots.
 % Sources mapped: Rudin Ch.7; Abbott Ch.6; Ross Ch.4; Pugh Ch.4.1, Ch.4.3; Tao II Ch.3.
-% TODO(source pages unavailable): Add sourced material from the mapped sources.
+% TODO(source pages unavailable): Add non-Rudin function-space material from the mapped sources only after pages are provided.
+% TODO(source dependency): Example 7.20 uses Rudin Thm. 11.32; keep the full proof deferred until the measure-theory source pages are available.
 
-This subsection should distinguish pointwise choices from uniform choices. The eventual theorem sequence should emphasize which structures survive uniform convergence and should cite continuity results rather than restating them.
+This subsection asks when limits of functions preserve structure. Pointwise convergence chooses $N$ after fixing $x$; uniform convergence chooses one $N$ for all $x$. This distinction controls when limits commute with continuity, integration, and differentiation.
 
-\begin{definition} \label{def:uniform-convergence-core-source-todo} \hlt{Core Function-Space Definitions to Source}\\
-TODO(source pages unavailable): Add the sourced definitions of pointwise convergence, uniform convergence, and the relevant function spaces.
+\begin{definition} \label{def:pointwise-convergence-functions} \hlt{Pointwise Limits of Functions}\\
+Let $(f_n)$ be complex-valued functions on $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f_n$ \hlt{converges pointwise} to $f$ on $E$ if $f_n(x)\to f(x)$ for every $x\in E$.
+\item $\sum f_n$ \hlt{converges pointwise} to $f$ on $E$ if $s_N(x)\defeq\sum\limits_{n=1}^{N}f_n(x)\to f(x)$ for every $x\in E$.
+\end{enumerate}
 \end{definition}
 
-\begin{theorem} \label{thm:uniform-convergence-main-source-todo} \hlt{Uniform Convergence Results to Source}\\
-TODO(source pages unavailable): Add the sourced theorem sequence on what uniform convergence preserves once the mapped pages are available.
+\begin{example} \label{ex:pointwise-limits-do-not-preserve-structure} \hlt{Pointwise Limits Can Lose Structure}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $s_{m,n}\defeq m/(m+n)$ gives $\lim_n\lim_m s_{m,n}=1$ but $\lim_m\lim_n s_{m,n}=0$.
+\item For $f_n(x)=x^2/(1+x^2)^n$, $\sum_{n=0}^{\infty}f_n$ equals $0$ at $0$ and $1+x^2$ otherwise, by Theorem \ref{thm:geometric-series-nonnegative}.
+\item $f_n(x)=\sin(nx)/\sqrt n$ satisfies $f_n\to0$ pointwise but $f_n'(0)=\sqrt n\to+\infty$.
+\item $f_n(x)=n^2x(1-x^2)^n$ on $[0,1]$ satisfies $f_n\to0$ pointwise, while $\int_0^1 f_n\,dx=n^2/(2n+2)\to+\infty$.
+\end{enumerate}
+\hlt{Key Insight}: Pointwise control can miss global spikes and oscillations.
+\end{example}
+
+\begin{definition} \label{def:uniform-convergence-core-source-todo}\label{def:uniform-convergence-functions} \hlt{Uniform Convergence}\\
+$f_n$ \hlt{converge uniformly} to $f$ on $E$ ($f_n\rightrightarrows f$), if $\forall \varepsilon>0$ $\exists$ $N \in \N$ s.t. $n\geq N,\ x\in E$ $\Longrightarrow$ $\abs{f_n(x)-f(x)}\leq\varepsilon$.\\
+Series $\sum f_n$ \hlt{converges uniformly} on $E$ if its partial sums do.
+\end{definition}
+
+\begin{theorem} \label{thm:uniform-cauchy-criterion} \hlt{Cauchy Criterion for Uniform Convergence}\\
+For complex-valued $f_n:E\to\C$, $f_n$ converges uniformly on $E$ if and only if
+\[
+\forall\varepsilon>0\ \exists N\in\N:\quad m,n\geq N,\ x\in E \Longrightarrow \abs{f_n(x)-f_m(x)}\leq\varepsilon.
+\]
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f_n\rightrightarrows f$, choose $N$ so that $\abs{f_k(x)-f(x)}\leq\varepsilon/2$ for $k\geq N$ and $x\in E$. Then $\abs{f_n(x)-f_m(x)}\leq\varepsilon$.
+\item[$(\Leftarrow)$] For each $x$, $(f_n(x))$ is Cauchy in $\C$, so define $f(x)\defeq\lim f_n(x)$.\\
+Fix $n\geq N$ and let $m\to\infty$ in the criterion; then $\abs{f_n(x)-f(x)}\leq\varepsilon$ for all $x\in E$, hence $f_n\rightrightarrows f$.
+\end{enumerate}
+\hlt{Structural Commentary}: The same $N$ gives Cauchy control simultaneously in every fiber $x\in E$.\\
+\hlt{Key Insight}: Uniform Cauchy tails are exactly uniform convergence.
+\end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:uniform-convergence-proof-patterns-source-todo} \hlt{Uniform Proof Patterns to Source}\\
-TODO(source pages unavailable): Add sourced proof commentary distinguishing pointwise choices from uniform choices.
+\begin{theorem} \label{thm:uniform-convergence-supremum-test} \hlt{Supremum Test for Uniform Convergence}\\
+Suppose $f_n(x)\to f(x) \ \forall x\in E$, and $M_n\defeq\sup_{x\in E}\abs{f_n(x)-f(x)}$. Then $f_n\rightrightarrows f$ on $E$ if and only if $M_n\to0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f_n\rightrightarrows f$, then $\forall \varepsilon>0$ $\exists$ $N$ such that $n\geq N$ implies $\abs{f_n(x)-f(x)}\leq\varepsilon$ for all $x\in E$. Hence $M_n\leq\varepsilon$.
+\item[$(\Leftarrow)$] If $M_n\to0$, then $\forall  \varepsilon>0$ $\exists$ $N$ such that $n\geq N$ implies $M_n\leq\varepsilon$. Hence $\abs{f_n(x)-f(x)}\leq\varepsilon$ for all $x\in E$.
+\end{enumerate}
+\hlt{Structural Commentary}: Uniform convergence is convergence in the supremum error.\\
+\hlt{Key Insight}: The pointwise errors must vanish as one global quantity.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:weierstrass-m-test} \hlt{Weierstrass $M$-Test}\\
+Let $f_n$ be functions on $E$ and suppose $\abs{f_n(x)}\leq M_n$ for every $x\in E$.\\
+If $\sum M_n$ converges, then $\sum f_n$ converges uniformly on $E$.
+\begin{proof}
+For $m\geq n$ and $x\in E$, $\abs{\sum\limits_{k=n}^{m}f_k(x)}\leq\sum\limits_{k=n}^{m}M_k$.\\
+Since $\sum M_k$ converges, Theorem \ref{thm:series-cauchy-criterion} makes the right-hand side $<\varepsilon$ for all large $m,n$.\\
+Thus the partial sums of $\sum f_k$ are uniformly Cauchy, so Theorem \ref{thm:uniform-cauchy-criterion} applies.\\
+\hlt{Structural Commentary}: Absolute numerical tails dominate functional tails.\\
+\hlt{Key Insight}: A summable uniform majorant gives uniform convergence of a function series.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:uniform-convergence-interchanges-function-limits} \hlt{Uniform Convergence Interchanges Limits}\\
+Let $E$ lie in a metric space, let $x$ be a limit point of $E$, and suppose $f_n\rightrightarrows f$ on $E$.\\
+If $A_n\defeq \lim\limits_{t\to x}f_n(t)$ exists for every $n$, then $(A_n)$ converges and $\lim\limits_{t\to x} f(t)=\lim\limits_{n\to\infty}A_n$.
+\begin{proof}
+By Theorem \ref{thm:uniform-cauchy-criterion}, $\forall \varepsilon>0$ $\exists$ $N$ such that $m,n\geq N$ and $t\in E$ imply $\abs{f_n(t)-f_m(t)}\leq\varepsilon$.\\
+Letting $t\to x$ gives $\abs{A_n-A_m}\leq\varepsilon$, hence $A_n\to A$ for some $A\in\C$.\\
+For any $n$, $\abs{f(t)-A}\leq \abs{f(t)-f_n(t)}+\abs{f_n(t)-A_n}+\abs{A_n-A}$. Given $\varepsilon>0$, choose $n$ so $\abs{f(t)-f_n(t)}<\varepsilon/3$ for all $t\in E$ and $\abs{A_n-A}<\varepsilon/3$; then take $t$ sufficiently close to $x$ so $\abs{f_n(t)-A_n}<\varepsilon/3$. Thus $\lim_{t\to x}f(t)=A$.\\
+\hlt{Structural Commentary}: Uniform convergence controls the outer two terms in the three-term estimate.\\
+\hlt{Key Insight}: Uniformity is precisely what allows the $n\to\infty$ limit to move past the $t\to x$ limit.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:uniform-convergence-preserves-continuity}\label{thm:uniform-convergence-main-source-todo} \hlt{Uniform Limits Preserve Continuity}\\
+If $(f_n)$ is a sequence of continuous functions on $E$ and $f_n\rightrightarrows f$ on $E$, then $f$ is continuous on $E$.
+\begin{proof}
+Let $x\in E$. If $x$ is isolated, $f$ is continuous at $x$.\\
+If $x$ is a limit point, then $\lim\limits_{t\to x}f_n(t)=f_n(x)$ for all $n$, so Theorem \ref{thm:uniform-convergence-interchanges-function-limits} gives $\lim\limits_{t\to x}f(t)=\lim\limits_{n\to\infty}f_n(x)=f(x)$.\\
+\hlt{Structural Commentary}: Uniform convergence passes continuity to the limit.\\
+\hlt{Key Insight}: Uniform convergence protects continuity from the failure modes in Example \ref{ex:pointwise-limits-do-not-preserve-structure}.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:dini-monotone-uniform-convergence} \hlt{Dini's Monotone Uniform Convergence Theorem}\\
+Let $K$ be compact and let $f_n,f:K\to\R$ be continuous. If $f_n(x)\downarrow f(x)$ for every $x\in K$, then $f_n\rightrightarrows f$ on $K$.
+\begin{proof}
+Set $g_n\defeq f_n-f$. Then $g_n$ is continuous, $g_n\downarrow0$, and $g_n\geq0$. Given $\varepsilon>0$, let $K_n\defeq\{x\in K:g_n(x)\geq\varepsilon\}$. Then $(K_n)$ is nested compact and $\bigcap_n K_n=\emptyset$, so Corollary \ref{cor:nested-nonempty-compact-intersection} gives $K_N=\emptyset$ for some $N$.\\
+Thus $0\leq f_n(x)-f(x)<\varepsilon$ for all $x\in K$ and $n\geq N$.\\
+\hlt{Structural Commentary}: Monotone convergence turns the bad sets into a nested compact sequence.\\
+\hlt{Key Insight}: Compactness turns pointwise eventual escape from every bad set into a uniform escape.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:supremum-norm-continuous-functions} \hlt{The Supremum Metric on Bounded Continuous Functions}\\
+For metric space $X$, let $C_b(X)$ be bounded complex-valued continuous functions and set $\norm{f}_{\infty}\defeq\sup_{x\in X}\abs{f(x)}$.\\
+Then $d(f,g)\defeq\norm{f-g}_{\infty}$ is a metric on $C_b(X)$, and its convergence is uniform convergence by Theorem \ref{thm:uniform-convergence-supremum-test}.
+\end{definition}
+
+\begin{theorem} \label{thm:complete-supremum-metric-space} \hlt{Completeness of the Supremum Metric}\\
+The metric space $C_b(X)$ with metric $d(f,g)=\norm{f-g}_{\infty}$ is complete.
+\begin{proof}
+Let $(f_n)$ be Cauchy in $C_b(X)$. Then Theorem \ref{thm:uniform-cauchy-criterion} gives a function $f$ with $f_n\rightrightarrows f$. By Theorem \ref{thm:uniform-convergence-preserves-continuity}, $f$ is continuous. For some $n$, $\norm{f-f_n}_{\infty}<1$, hence $f_n$ is bounded, thus $f\in C_b(X)$ and $\norm{f_n-f}_{\infty}\to0$.\\
+\hlt{Structural Commentary}: Uniform Cauchy convergence builds the limit inside the same function space.\\
+\hlt{Key Insight}: Completeness of $\C$ plus uniform convergence makes $C_b(X)$ complete.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:uniform-convergence-and-riemann-stieltjes-integration} \hlt{Uniform Convergence and Riemann--Stieltjes Integration}\\
+Let $\alpha$ be increasing on $[a,b]$. If $f_n\in\mathcal{R}(\alpha)$ on $[a,b]$ and $f_n\rightrightarrows f$, then $f\in\mathcal{R}(\alpha)$ and $\int_a^b f\,d\alpha=\lim_{n\to\infty}\int_a^b f_n\,d\alpha$.
+\begin{proof}
+Put $\varepsilon_n\defeq\sup_{a\leq x\leq b}\abs{f_n(x)-f(x)}$. Then $\varepsilon_n\to0$ by Theorem \ref{thm:uniform-convergence-supremum-test}, and $f_n-\varepsilon_n\leq f\leq f_n+\varepsilon_n$.\\
+Upper and lower integrals of $f$ are therefore squeezed between corresponding integrals of $f_n\pm\varepsilon_n$, and gap is at most $2\varepsilon_n[\alpha(b)-\alpha(a)]$. Thus $f\in\mathcal{R}(\alpha)$. Same estimate gives $\abs{\int_a^b f\,d\alpha-\int_a^b f_n\,d\alpha}\leq \varepsilon_n[\alpha(b)-\alpha(a)]\to0$.\\
+\hlt{Structural Commentary}: Uniform error becomes an integral error multiplied by the total $\alpha$-variation.\\
+\hlt{Key Insight}: Uniform convergence is strong enough to pass limits through the Riemann--Stieltjes integral.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:termwise-riemann-stieltjes-integration} \hlt{Termwise Integration of Uniformly Convergent Series}\\
+If $f_n\in\mathcal{R}(\alpha)$ on $[a,b]$ and $\sum f_n$ converges uniformly to $f$, then $\int_a^b f\,d\alpha=\sum\limits_{n=1}^{\infty}\int_a^b f_n\,d\alpha$.
+\begin{proof}
+Let $s_N\defeq\sum_{n=1}^{N}f_n$. By linearity, $s_N\in\mathcal{R}(\alpha)$ and $\int_a^b s_N\,d\alpha=\sum_{n=1}^{N}\int_a^b f_n\,d\alpha$.\\
+Since $s_N\rightrightarrows f$, Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration} gives $\int_a^b f\,d\alpha=\lim_{N\to\infty}\int_a^b s_N\,d\alpha=\sum\limits_{n=1}^{\infty}\int_a^b f_n\,d\alpha$.\\
+\hlt{Structural Commentary}: Reduce the series to its uniformly convergent partial sums.\\
+\hlt{Key Insight}: Uniform convergence lets integration be performed term by term.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:uniform-derivative-convergence} \hlt{Uniform Convergence and Differentiation}\\
+Let $f_n$ be differentiable on $[a,b]$, suppose $f_n(x_0)$ converges for some $x_0\in[a,b]$, and suppose $f_n'\rightrightarrows g$ on $[a,b]$. Then $f_n\rightrightarrows f$ for some $f$, and $f'=g$ on $[a,b]$ (one-sided at endpoints).
+\begin{proof}
+For $m,n$, MVT \ref{cor:mean-value-theorem} gives $\abs{f_n(x)-f_m(x)}\leq \abs{f_n(x_0)-f_m(x_0)}+(b-a)\sup\limits_{t\in[a,b]}\abs{f_n'(t)-f_m'(t)}$.\\
+Thus $(f_n)$ is uniformly Cauchy, so $f_n\rightrightarrows f$. Fix $x$ and set $\phi_n(t)\defeq\frac{f_n(t)-f_n(x)}{t-x}$, $\phi(t)\defeq\frac{f(t)-f(x)}{t-x}$.\\
+For $t\neq x$, the same estimate gives $\abs{\phi_n(t)-\phi_m(t)}\leq\norm{f_n'-f_m'}_{\infty}$, hence $\phi_n\rightrightarrows\phi$.\\
+By Theorem \ref{thm:uniform-convergence-interchanges-function-limits}, $f'(x)=\lim\limits_{t\to x}\phi(t)=\lim_{n\to\infty}f_n'(x)=g(x)$.\\
+\hlt{Structural Commentary}: Derivative control anchors functions, then quotients.\\
+\hlt{Key Insight}: Uniform derivative convergence plus one anchor passes derivatives to the limit.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:continuous-nowhere-differentiable-example} \hlt{A Continuous Nowhere Differentiable Function Exists}\\
+There exists a real continuous function on $\R$ which is nowhere differentiable.
+\begin{proof}
+Let $\varphi$ be the $2$-periodic extension of $\abs{x}$ on $[-1,1]$. Then $0\leq\varphi\leq1$ and $\abs{\varphi(s)-\varphi(t)}\leq\abs{s-t}$.\\
+Define $f(x)\defeq\sum\limits_{n=0}^{\infty}\left(\frac34\right)^n\varphi(4^n x)$, converges uniformly (Theorem \ref{thm:weierstrass-m-test}); hence $f$ is continuous  (Theorem \ref{thm:uniform-convergence-preserves-continuity}).\\
+Fix $x$ and $m\in\N$. Choose $\delta_m=\pm\frac12 4^{-m}$ so that no integer lies between $4^m x$ and $4^m(x+\delta_m)$.\\
+Set $\gamma_{n,m}\defeq\frac{\varphi(4^n(x+\delta_m))-\varphi(4^n x)}{\delta_m}$. If $n>m$, then $4^n\delta_m$ is an even integer, so $\gamma_{n,m}=0$.\\
+If $0\leq n\leq m$, then $\abs{\gamma_{n,m}}\leq4^n$, and the choice of $\delta_m$ gives $\abs{\gamma_{m,m}}=4^m$.\\
+Hence $\abs{\frac{f(x+\delta_m)-f(x)}{\delta_m}} =\abs{\sum\limits_{n=0}^{m}\left(\frac34\right)^n\gamma_{n,m}} \geq 3^m-\sum\limits_{n=0}^{m-1}3^n =\frac12(3^m+1)$\\
+Since $\delta_m\to0$, the difference quotients are unbounded near $x$; since $x$ was arbitrary, $f$ is nowhere differentiable.\\
+\hlt{Structural Commentary}: Uniform sums give continuity; scaled cusps force unbounded quotients.\\
+\hlt{Key Insight}: Uniform convergence preserves continuity, not differentiability.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:pointwise-uniform-bounded-equicontinuous} \hlt{Boundedness and Equicontinuity of Function Families}\\
+Let $\mathcal{F}$ be a family of complex-valued functions on $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(f_n)$ is \hlt{pointwise bounded} on $E$ if $(f_n(x))$ is bounded for each $x\in E$.
+\item $(f_n)$ is \hlt{uniformly bounded} on $E$ if $\exists M$ such that $\abs{f_n(x)}<M$ for all $x\in E,n\in\N$.
+\item If $E$ lies in a metric space $X$, then $\mathcal{F}$ is \hlt{equicontinuous} on $E$ if $\forall\varepsilon>0$ $\exists\delta>0$,\\
+such that $d(x,y)<\delta,\ x,y\in E,\ f\in\mathcal{F}$ $\Longrightarrow$ $\abs{f(x)-f(y)}<\varepsilon$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:uniform-boundedness-without-uniform-subsequence} \hlt{Uniform Boundedness Alone Is Not Enough}\\
+On $[0,1]$, let $f_n(x)\defeq \frac{x^2}{x^2+(1-nx)^2}$. Then $\abs{f_n}\leq1$ and $f_n\to0$ pointwise, but $f_n(1/n)=1$; hence no uniformly convergent subsequence. The missing hypothesis is equicontinuity.
+\end{example}
+
+\begin{theorem} \label{thm:diagonal-selection-countable-pointwise} \hlt{Diagonal Selection on a Countable Set}\\
+Every pointwise bounded sequence $(f_n)$ on countable $E$ has a subsequence converging pointwise on $E$.
+\begin{proof}
+List $E=\{x_1,x_2,\ldots\}$. Inductively choose nested subsequences $S_i$ so that $S_i(x_i)$ converges.\\
+The diagonal subsequence is eventually contained in each $S_i$, hence converges at every $x_i$.\\
+\hlt{Structural Commentary}: The diagonal keeps the $i$th convergence property after the $i$th step.\\
+\hlt{Key Insight}: Countability permits diagonal convergence.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:uniform-convergence-implies-equicontinuity-on-compact} \hlt{Uniform Convergence Implies Equicontinuity on Compact Sets}\\
+If $K$ is compact, $f_n\in C_b(K)$, and $f_n\rightrightarrows f$ on $K$, then $\{f_n:n\in\N\}$ is equicontinuous.
+\begin{proof}
+Choose $N$ so $\norm{f_n-f_N}_{\infty}<\varepsilon$ for $n>N$.\\
+By Theorem \ref{thm:compact-continuity-uniform-continuity}, choose one $\delta>0$ giving $\varepsilon$-control for $f_1,\ldots,f_N$.\\
+If $n>N$, $d(x,y)<\delta$, then $\abs{f_n(x)-f_n(y)} \leq \abs{f_n(x)-f_N(x)}+\abs{f_N(x)-f_N(y)}+\abs{f_N(y)-f_n(y)}<3\varepsilon$.\\
+Together with the finite initial family, $\{f_n\}$ is equicontinuous.\\
+\hlt{Structural Commentary}: A uniformly convergent tail stays close to one uniformly continuous function.\\
+\hlt{Key Insight}: Compactness handles finitely many functions; uniform convergence handles the tail.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:arzela-ascoli-compact-metric} \hlt{Arzela--Ascoli Selection Theorem}\\
+Let $K$ be compact. If $(f_n)\subset C_b(K)$ is pointwise bounded and equicontinuous on $K$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(f_n)$ is uniformly bounded on $K$;
+\item $(f_n)$ contains a uniformly convergent subsequence.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $\delta>0$ from equicontinuity with tolerance $1$, and cover $K$ by $B(p_j,\delta)$, $1\leq j\leq r$. Pointwise boundedness gives $M_j$ with $\abs{f_n(p_j)}\leq M_j$ for all $n$; hence $\abs{f_n(x)}<1+\max_j M_j$ for all $x\in K,n\in\N$.
+\item Let $E\subset K$ be countable dense as in the supplied source note. By Theorem \ref{thm:diagonal-selection-countable-pointwise}, some subsequence $(g_i)$ converges pointwise on $E$. Given $\varepsilon>0$, choose $\delta>0$ from equicontinuity with tolerance $\varepsilon/3$, and choose a finite $\delta$-net $x_1,\ldots,x_r\in E$ for $K$. For large $i,j$, $\abs{g_i(x_s)-g_j(x_s)}<\varepsilon/3$, $(1\leq s\leq r)$. If $d(x,x_s)<\delta$, then $\abs{g_i(x)-g_j(x)}<\varepsilon$; thus $(g_i)$ is uniformly Cauchy and converges uniformly by Theorem \ref{thm:uniform-cauchy-criterion}.
+\end{enumerate}
+\hlt{Structural Commentary}: Dense convergence plus equicontinuity becomes uniform convergence.\\
+\hlt{Key Insight}: Equicontinuity is exactly the compactness-compatible hypothesis missing from Example \ref{ex:uniform-boundedness-without-uniform-subsequence}.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:uniform-convergence-proof-patterns-source-todo} \hlt{Uniform Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Pointwise}: fix $x$, then choose $N=N(x,\varepsilon)$.
+\item \hlt{Uniform}: choose $N=N(\varepsilon)$; equivalently $\sup_E\abs{f_n-f}\to0$.
+\item \hlt{Uniform Cauchy}: prove $\sup_E\abs{f_n-f_m}\to0$ as $m,n\to\infty$.
+\item \hlt{Preservation}: use a three-term estimate and choose the uniform index first.
+\item \hlt{Compactness/equicontinuity}: pass from finite nets to all of $K$.
+\end{enumerate}
+\hlt{Key Insight}: Uniformity means $N$ or $\delta$ is chosen before $x$.
 \end{method}

@@ -1,18 +1,114 @@
 \subsubsection{Power Series, Approximation, and Fourier}
 
+% Source pages provided: Rudin Ch.7, Thms. 7.26--7.27, Defs. 7.28, 7.30, Thms. 7.29, 7.31--7.33, and surrounding Stone--Weierstrass discussion in the provided screenshots.
 % Sources mapped: Rudin Ch.8; Abbott Ch.6.5-6.7, Ch.8.3-8.5; Ross Ch.4, Ch.7; Pugh Ch.4.2, Ch.4.4, Ch.4.6; Tao II Ch.4-5.
-% TODO(source pages unavailable): Add sourced material from the mapped sources.
+% TODO(source pages unavailable): Add power-series, Taylor-method, Fourier, and non-Rudin approximation material only after source pages are provided.
 
-This subsection owns analytic approximation material: power series, Taylor methods, approximation theorems, and Fourier series. It should rely on uniform-convergence results from the preceding subsection when those results have been sourced.
+This subsection currently covers Rudin's Weierstrass and Stone--Weierstrass theory; power series and Fourier material remain source TODOs. The theme is uniform closure of algebraic building blocks.
 
 \begin{definition} \label{def:power-approx-fourier-core-source-todo} \hlt{Core Definitions to Source}\\
-TODO(source pages unavailable): Add the sourced definitions of power series, approximation framework, and Fourier objects relevant to the mapped sources.
+TODO(source pages unavailable): Add the sourced definitions of power series, Taylor-series framework, and Fourier objects relevant to the mapped sources.
 \end{definition}
 
-\begin{theorem} \label{thm:power-approx-fourier-main-source-todo} \hlt{Main Results to Source}\\
-TODO(source pages unavailable): Add the sourced theorem sequence for power series, approximation, and Fourier analysis after source material is available.
+\begin{theorem} \label{thm:weierstrass-polynomial-approximation}\label{thm:power-approx-fourier-main-source-todo} \hlt{Weierstrass Polynomial Approximation}\\
+If $f:[a,b]\to\C$ is continuous, then polynomials $P_n$ satisfy $P_n\rightrightarrows f$ on $[a,b]$. If $f$ is real-valued, take $P_n$ real.
+\begin{proof}
+By an affine change of variables and subtraction of the endpoint interpolant, assume $[a,b]=[0,1]$ and $f(0)=f(1)=0$; extend $f$ by $0$ outside $[0,1]$. For $n\geq1$, let $Q_n(x)\defeq c_n(1-x^2)^n$ and $\int_{-1}^{1}Q_n(x)\,dx=1$.\\
+Source estimates give $c_n<\sqrt n$ and $Q_n(t)\leq\sqrt n(1-\delta^2)^n$ for $\delta\leq\abs{t}\leq1$.\\
+Define $P_n(x)\defeq\int_{-1}^{1}f(x+t)Q_n(t)\,dt$, $(0\leq x\leq1)$. By change of variables, $P_n(x)=\int_0^1 f(u)Q_n(u-x)\,du$, so $P_n$ is a polynomial in $x$ (real if $f$ is real). Given $\varepsilon>0$, choose $\delta>0$ so $\abs{u-v}<\delta$ implies $\abs{f(u)-f(v)}<\varepsilon/2$, and set $M=\sup\abs{f}$. Since $Q_n\geq0$ and $\int Q_n=1$, $\abs{P_n(x)-f(x)} \leq \int_{-1}^{1}\abs{f(x+t)-f(x)}Q_n(t)\,dt \leq \frac{\varepsilon}{2}+4M\sqrt n(1-\delta^2)^n$.\\
+The last term tends to $0$, so $P_n\rightrightarrows f$ on $[0,1]$. Undoing the reductions proves the theorem.\\
+\hlt{Structural Commentary}: The kernels $Q_n$ form polynomial approximate identities.\\
+\hlt{Key Insight}: Uniform continuity controls the near part, and concentration of $Q_n$ kills the far part.
+\end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:power-approx-fourier-proof-patterns-source-todo} \hlt{Proof Patterns to Source}\\
-TODO(source pages unavailable): Add concise proof commentary for coefficient, approximation, and orthogonality arguments once sourced.
+\begin{corollary} \label{cor:absolute-value-polynomial-approximation} \hlt{Polynomial Approximation of $\abs{x}$}\\
+For every interval $[-a,a]$, there are real polynomials $P_n$ such that $P_n(0)=0$ and $P_n\rightrightarrows \abs{x}$ on $[-a,a]$.
+\begin{proof}
+By Theorem \ref{thm:weierstrass-polynomial-approximation}, choose real polynomials $P_n^\ast$ converging uniformly to $\abs{x}$ on $[-a,a]$.\\
+Since $P_n^\ast(0)\to0$, the polynomials $P_n(x)\defeq P_n^\ast(x)-P_n^\ast(0)$ have $P_n(0)=0$ and still converge uniformly to $\abs{x}$.\\
+\hlt{Structural Commentary}: Normalize the approximants at the base point.\\
+\hlt{Key Insight}: Subtracting the value at $0$ fixes the normalization without changing the uniform limit.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:algebra-uniform-closure-functions} \hlt{Algebras and Uniform Closure}\\
+Let $\mathcal{A}$ be a family of complex-valued functions on a set $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{A}$ is an \hlt{algebra} if it is closed under $+$, products, and scalar multiplication (real scalars in the real case).
+\item $\mathcal{A}$ is \hlt{uniformly closed} if $f_n\in\mathcal{A}$ and $f_n\rightrightarrows f$ on $E$ imply $f\in\mathcal{A}$.
+\item The \hlt{uniform closure} of $\mathcal{A}$ is $\{f:f_n\in\mathcal{A},\ f_n\rightrightarrows f\text{ on }E\}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:uniform-closure-algebra} \hlt{Uniform Closures Are Closed Algebras}\\
+The uniform closure of an algebra of bounded functions is a uniformly closed algebra.
+\begin{proof}
+If $f,g\in\mathcal{B}$, choose $f_n,g_n\in\mathcal{A}$ with $f_n\rightrightarrows f$ and $g_n\rightrightarrows g$.\\
+Boundedness and uniform convergence give $f_n+g_n\rightrightarrows f+g$; $f_ng_n\rightrightarrows fg$; and $cf_n\rightrightarrows cf$.
+Thus $\mathcal{B}$ is an algebra. If $h_n\in\mathcal{B}$ and $h_n\rightrightarrows h$, approximate each $h_n$ uniformly by some $a_n\in\mathcal{A}$ within $1/n$; then $a_n\rightrightarrows h$, so $h\in\mathcal{B}$.\\
+\hlt{Structural Commentary}: Uniform limits preserve algebraic operations for bounded functions.\\
+\hlt{Key Insight}: The uniform closure of an algebra has already absorbed all further uniform limits.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:separates-points-vanishes-nowhere-self-adjoint} \hlt{Separation, Nonvanishing, and Self-Adjointness}\\
+Let $\mathcal{A}$ be a family of functions on $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{A}$ \hlt{separates points} on $E$ if for every distinct $x_1,x_2\in E$ there is $f\in\mathcal{A}$ with $f(x_1)\neq f(x_2)$.
+\item $\mathcal{A}$ \hlt{vanishes at no point} of $E$ if for every $x\in E$ there is $g\in\mathcal{A}$ with $g(x)\neq0$.
+\item A complex algebra $\mathcal{A}$ is \hlt{self-adjoint} if $f\in\mathcal{A}$ implies $\overline{f}\in\mathcal{A}$, where $\overline{f}(x)\defeq\overline{f(x)}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:two-point-interpolation-in-separating-algebra} \hlt{Two-Point Interpolation in a Separating Algebra}\\
+If an algebra $\mathcal{A}$ on $E$ separates points and vanishes nowhere, then for distinct $x_1,x_2\in E$ and scalars $c_1,c_2$, there is $f\in\mathcal{A}$ with $f(x_i)=c_i$, $(i=1,2)$.
+\begin{proof}
+Choose $g,h,k\in\mathcal{A}$ with $g(x_1)\neq g(x_2)$, $h(x_1)\neq0$, and $k(x_2)\neq0$.\\
+Let $u\defeq gk-g(x_1)k$ and $v\defeq gh-g(x_2)h$. Then $u(x_1)=v(x_2)=0$ and $u(x_2)v(x_1)\neq0$.\\
+Hence $f\defeq \frac{c_1v}{v(x_1)}+\frac{c_2u}{u(x_2)}$ lies in $\mathcal{A}$ and satisfies $f(x_i)=c_i$.\\
+\hlt{Structural Commentary}: Separation and nonvanishing build two functions that isolate the two points.\\
+\hlt{Key Insight}: Once two point-isolating functions are in the algebra, interpolation is linear algebra.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:real-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Real Form}\\
+$\mathcal{A}\subset C(K,\R)$ is algebra on compact $K$ that separates points, vanishes nowhere, then uniform closure is $C(K,\R)$.
+\begin{proof}
+Let $\mathcal{B}$ be the uniform closure of $\mathcal{A}$; by Theorem \ref{thm:uniform-closure-algebra}, $\mathcal{B}$ is a uniformly closed algebra.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\in\mathcal{B}$, then $\abs{f}\in\mathcal{B}$: for $a=\norm{f}_{\infty}$, approximate $\abs{y}$ on $[-a,a]$ by polynomials $p_n$ with $p_n(0)=0$ using Corollary \ref{cor:absolute-value-polynomial-approximation}; then $p_n(f)\in\mathcal{B}$ and $p_n(f)\rightrightarrows\abs{f}$.
+\item Hence $\max(f,g),\min(f,g)\in\mathcal{B}$ whenever $f,g\in\mathcal{B}$, as $\max(f,g)=\frac{f+g}{2}+\frac{\abs{f-g}}{2}$; $\min(f,g)=\frac{f+g}{2}-\frac{\abs{f-g}}{2}$.
+\item Fix $f\in C(K,\R)$, $x\in K$, $\varepsilon>0$. $\forall y\in K$, Theorem \ref{thm:two-point-interpolation-in-separating-algebra} gives $h_y\in\mathcal{B}$, $h_y(x)=f(x)$, $h_y(y)=f(y)$. Compactness gives $y_1,\ldots,y_r$ s.t. $g_x\defeq\max(h_{y_1},\ldots,h_{y_r})$ satisfies $g_x(x)=f(x)$ and $g_x>f-\varepsilon$ on $K$.
+\item Compactness gives $x_1,\ldots,x_m$ such that $h\defeq\min(g_{x_1},\ldots,g_{x_m})$ satisfies $\abs{h-f}<\varepsilon$ on $K$. Thus every $f\in C(K,\R)$ is a uniform limit of members of $\mathcal{B}$, so $f\in\mathcal{B}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Local supports plus finite max/min give global approximation.\\
+\hlt{Key Insight}: Separation plus compactness gives uniform approximation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:complex-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Complex Form}\\
+If $\mathcal{A}\subset C_b(K)$ is self-adjoint, separates points, and vanishes nowhere on compact $K$, then $\overline{\mathcal{A}}=C_b(K)$.
+\begin{proof}
+Let $\mathcal{A}_{\R}\defeq\{f\in\mathcal{A}:f\text{ real-valued}\}$.\\
+If $f=u+iv\in\mathcal{A}$, self-adjointness gives $u=\frac{f+\overline{f}}{2}\in\mathcal{A}_{\R}$ and $v=\frac{f-\overline{f}}{2i}\in\mathcal{A}_{\R}$.\\
+Thus $\mathcal{A}_{\R}$ separates points; rescaling a nonzero value and taking real parts shows it vanishes nowhere.\\
+By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R)$. Approximate the real and imaginary parts separately, then combine.\\
+\hlt{Structural Commentary}: Self-adjointness lets the complex algebra expose enough real functions.\\
+\hlt{Key Insight}: The complex theorem is the real theorem applied to real and imaginary parts.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:power-approx-fourier-proof-patterns-source-todo} \hlt{Approximation Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Approximate identities}: use kernels $Q_n\geq0$, $\int Q_n=1$, with tails $\to0$ off $0$.
+\item \hlt{Uniform closure}: show $a_n\in\mathcal{A}$ and $a_n\rightrightarrows f$.
+\item \hlt{Lattice closure}: derive $\abs{f}$, then $\max,\min$ from algebraic formulas.
+\item \hlt{Stone--Weierstrass}: interpolate locally; use compactness and finite max/min to globalize.
+\end{enumerate}
+\hlt{Key Insight}: Compactness globalizes local algebraic approximation.
 \end{method}
