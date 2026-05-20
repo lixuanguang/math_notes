@@ -1,6 +1,6 @@
 \subsubsection{Several-Variable Differential Calculus}
 
-% Source pages provided: Rudin Ch.9, Secs. 9.1--9.38, including linear transformations, differentiation, contraction principle, inverse/implicit/rank theorems, determinants, and Jacobians in the provided screenshots.
+% Source pages provided: Rudin Ch.9, Secs. 9.1--9.43, including linear transformations, differentiation, contraction principle, inverse/implicit/rank theorems, determinants, Jacobians, higher-order partials, equality of mixed partials, and differentiation under the integral sign in the provided screenshots.
 % Sources mapped: Rudin Ch.9; Spivak Ch.1-2; Pugh Ch.5.1-5.6; Tao II Ch.6.
 % TODO(source pages unavailable): Add non-Rudin several-variable material from the mapped sources only after pages are provided.
 
@@ -90,6 +90,63 @@ Hence $Df(\x)$ has row matrix $[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$, Definition \re
 \hlt{Key Insight}: Coordinate-by-coordinate increments work only because the partials vary continuously.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:higher-order-partials-and-c2} \hlt{Second-Order Partials and $C^2$}\\
+For open $E\subseteq\R^n$ and $f:E\to\R$, define $D_{ij}f \defeq D_i(D_jf)$ whenever the right-hand side exists.\\
+If all $D_{ij}f$ exist and are continuous on $E$, then $f\in C^2(E)$; a map $\f:E\to\R^m$ is $C^2$ when each component is.
+\end{definition}
+
+\begin{theorem} \label{thm:rectangle-mean-value-mixed-partial} \hlt{Rectangle Mean Value Formula}\\
+Let $E\subseteq\R^2$ be open, and suppose $D_1f$ and $D_{21}f$ exist on $E$. For a closed coordinate rectangle $Q\subseteq E$ with opposite vertices $(a,b)$ and $(a+h,b+k)$, $h,k\neq0$, set $\Delta(f,Q)\defeq f(a+h,b+k)-f(a+h,b)-f(a,b+k)+f(a,b)$.\\
+Then some $(x,y)\in\operatorname{int}Q$ satisfies $\Delta(f,Q)=hk(D_{21}f)(x,y)$.
+\begin{proof}
+Set $u(t)=f(t,b+k)-f(t,b)$.\\
+By Corollary \ref{cor:mean-value-theorem}, for some $x \in (a, a+h)$, $\Delta(f,Q)=u(a+h)-u(a)=h\bigl[(D_1f)(x,b+k)-(D_1f)(x,b)\bigr]$.\\
+Apply same corollary to $s\mapsto(D_1f)(x,s)$; for some $y \in (b, b+k)$, the bracket equals $k(D_{21}f)(x,y)$.\\
+Hence $(x,y)\in\operatorname{int}Q$ and the formula follows.\\
+\hlt{Structural Commentary}: The rectangle difference is a two-step one-variable mean value calculation.\\
+\hlt{Key Insight}: Mixed second derivatives measure the first-order change of a first partial across the other coordinate.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:equality-of-mixed-partials} \hlt{Equality of Mixed Partials}\\
+Let $(a,b)$ lie in an open set $E\subseteq\R^2$. If $D_1f$, $D_2f$, and $D_{21}f$ exist on $E$, and $D_{21}f$ is continuous at $(a,b)$, then $D_{12}f(a,b)$ exists and
+\[
+(D_{12}f)(a,b)=(D_{21}f)(a,b).
+\]
+Hence $D_{12}f=D_{21}f$ when $f\in C^2(E)$.
+\begin{proof}
+Let $A=(D_{21}f)(a,b)$. Given $\varepsilon>0$, continuity of $D_{21}f$ and Theorem \ref{thm:rectangle-mean-value-mixed-partial} give, for all small $h,k\neq0$,
+\[
+\abs{\frac{\Delta(f,Q)}{hk}-A}<\varepsilon.
+\]
+Fix $h$ and let $k\to0$. Since $D_2f$ exists,
+\[
+\abs{\frac{(D_2f)(a+h,b)-(D_2f)(a,b)}{h}-A}\leq\varepsilon
+\]
+for all small $h\neq0$. Since $\varepsilon$ was arbitrary, $D_{12}f(a,b)=A$.\\
+\hlt{Structural Commentary}: Continuity of $D_{21}f$ controls local rectangle quotients.\\
+\hlt{Key Insight}: The missing mixed partial is recovered by taking the two one-variable limits in the reverse order.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:differentiation-under-riemann-stieltjes-integral} \hlt{Differentiation Under a Riemann--Stieltjes Integral}\\
+Let $\alpha$ be increasing on $[a,b]$, let $\varphi:[a,b]\times[c,d]\to\R$, and put $\varphi^t(x)\defeq\varphi(x,t)$.\\
+Assume $\varphi^t\in\mathcal{R}(\alpha)$ for all $t$ and $D_2\varphi(\cdot,t)\rightrightarrows D_2\varphi(\cdot,s)$ on $[a,b]$ as $t\to s\in(c,d)$.\\
+If $F(t)\defeq\int_a^b \varphi(x,t)\,d\alpha(x)$, then $(D_2\varphi)^s\in\mathcal{R}(\alpha)$ and $F'(s)=\int_a^b (D_2\varphi)(x,s)\,d\alpha(x)$.
+\begin{proof}
+For $t\neq s$, set $\psi_t=(\varphi^t-\varphi^s)/(t-s)$. Corollary \ref{cor:mean-value-theorem} and the uniform hypothesis give $\psi_t\rightrightarrows(D_2\varphi)^s$.\\
+Since $\psi_t\in\mathcal{R}(\alpha)$, Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration} gives $\frac{F(t)-F(s)}{t-s}=\int_a^b\psi_t\,d\alpha \longrightarrow \int_a^b(D_2\varphi)(x,s)\,d\alpha(x)$.\\
+\hlt{Structural Commentary}: Uniform parameter control lets limits pass under the integral.\\
+\hlt{Key Insight}: The theorem is exactly the commutation of a derivative limit with a Riemann--Stieltjes integral.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:gaussian-fourier-integral-differentiation} \hlt{A Gaussian Fourier Integral}\\
+Define $f(t)=\int_{-\infty}^{\infty}e^{-x^2}\cos(xt)\,dx$ and $g(t)=-\int_{-\infty}^{\infty}xe^{-x^2}\sin(xt)\,dx$.\\
+Then $f'(t)=g(t)$, and integration by parts gives $2f'(t)+tf(t)=0$. Since $f(0)=\sqrt{\pi}$, $f(t)=\sqrt{\pi}\exp\!\left(-\frac{t^2}{4}\right)$.
+% TODO(source dependency): Isolate the repo's improper-integral setup before expanding this example beyond the sourced Rudin application pattern.
+\end{example}
 
 \begin{definition} \label{def:jacobian-determinant} \hlt{Jacobian}\\
 If $\f:E\subseteq\R^n\to\R^n$ is differentiable at $\x$, define $J_{\f}(\x)\defeq \det D\f(\x) =\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}$ when $f=(y_1,\ldots,y_n)$.\\

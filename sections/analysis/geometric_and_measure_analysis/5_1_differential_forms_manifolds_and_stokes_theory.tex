@@ -1,18 +1,151 @@
 \subsubsection{Differential Forms, Manifolds, and Stokes Theory}
 
+% Source pages provided: Rudin Ch.10, Secs. 10.10--10.51, including differential forms, surfaces, wedge products, exterior differentiation, pullbacks, affine and differentiable chains, Stokes' theorem, closed and exact forms, Poincare's lemma, and vector-analysis special cases in the provided screenshots.
 % Sources mapped: Spivak Ch.4-5; Rudin Ch.10.5-10.9; Pugh Ch.5.8-5.9.
-% TODO(source pages unavailable): Add sourced material from the mapped sources.
+% TODO(source pages unavailable): Add non-Rudin manifold material from the mapped sources only after pages are provided.
 
-This subsection owns the geometric integration language: forms, chains, orientation, manifolds, and Stokes-type theorems. It should not absorb the basic change-of-variables material from the preceding subsection.
+This subsection develops forms, chains, orientation, manifolds, and Stokes-type theorems, building on determinant sign and laws from Definition \ref{def:matrix-trace-and-determinant} and Theorem \ref{thm:determinant-basic-laws}, and on change of variables, Theorem \ref{thm:change-of-variables-rk}.
 
-\begin{definition} \label{def:forms-manifolds-core-source-todo} \hlt{Core Geometric Definitions to Source}\\
-TODO(source pages unavailable): Add the sourced definitions of differential forms, manifolds, boundaries, and the operations needed for Stokes theory.
+\begin{definition} \label{def:forms-manifolds-core-source-todo}\label{def:k-surfaces-and-differential-forms} \hlt{$k$-Surfaces and Differential Forms}\\
+Let $E\subseteq\R^n$ be open. A \hlt{$k$-surface} in $E$ is a $C^1$ map $\Phi:D\to E$ from a compact \hlt{parameter domain} $D\subseteq\R^k$, here a $k$-cell or the simplex $Q^k$ of Definition \ref{def:support-and-compact-support-integral}.\\
+For compact $D$, $C^r$ means extension to an open neighborhood of $D$.\\
+A \hlt{$k$-form} in $E$, $k\geq1$, is $\omega=\sum a_{i_1\cdots i_k}(\x)\,dx_{i_1}\wedge\cdots\wedge dx_{i_k}$, with continuous real coefficients on $E$, and assigns to each $k$-surface $\Phi$ the number $\int_D \sum a_{i_1\cdots i_k}(\Phi(\mathbf{u})) \frac{\partial(x_{i_1},\ldots,x_{i_k})}{\partial(u_1,\ldots,u_k)}\,d\mathbf{u}$.\\
+A $0$-form is a continuous function; a form is $C^r$ if all coefficients are $C^r$.
 \end{definition}
 
-\begin{theorem} \label{thm:forms-manifolds-stokes-main-source-todo} \hlt{Stokes-Theory Results to Source}\\
-TODO(source pages unavailable): Add the sourced theorem sequence for forms, manifolds, and Stokes-type results once the mapped pages are available.
+\begin{proposition} \label{prop:basic-forms-standard-presentation} \hlt{Basic Forms and Standard Presentation}\\
+Swapping neighboring factors in $dx_{i_1}\wedge\cdots\wedge dx_{i_k}$ changes sign, and repeated indices give $0$. For an increasing $k$-index $I=(i_1,\ldots,i_k)$, write $dx_I\defeq dx_{i_1}\wedge\cdots\wedge dx_{i_k}$.\\
+Every $k$-form has a unique \hlt{standard presentation} $\omega=\sum_I b_I(\x)\,dx_I$, where $I$ ranges over increasing $k$-indices.
+\begin{proof}
+The sign rules follow from the determinant row-swap and repeated-row rules in Theorem \ref{thm:determinant-basic-laws}, applied to the Jacobian in Definition \ref{def:k-surfaces-and-differential-forms}. The sign needed to sort an index tuple is exactly the permutation sign of Definition \ref{def:matrix-trace-and-determinant}; hence every term either vanishes or reduces to an increasing index, giving existence.\\
+For uniqueness, suppose $\omega=\sum_I b_I(\x)\,dx_I$ is a zero $k$-form in standard presentation. If $b_J(\mathbf{v})\neq0$ for some increasing $J=(j_1,\ldots,j_k)$, continuity gives a small cell $D=[-h,h]^k$ such that, for $\Phi(\mathbf{u})=\mathbf{v}+\sum\limits_{r=1}^{k}u_r\mathbf{e}_{j_r}$, the coefficient $b_J(\Phi(\mathbf{u}))$ has constant nonzero sign on $D$. In the defining integral, the $J$-Jacobian is $1$ and every other standard Jacobian is $0$, so $0=\int_{\Phi}\omega=\int_D b_J(\Phi(\mathbf{u}))\,d\mathbf{u}$, a contradiction. Thus every $b_I$ is zero.\\
+\hlt{Structural Commentary}: Wedge signs are determinant signs.\\
+\hlt{Key Insight}: Standard presentation removes ordered-index redundancy.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:wedge-product-and-exterior-derivative} \hlt{Product and Exterior Derivative}\\
+For basic forms, define $dx_I\wedge dx_J$ by concatenating indices and reducing to standard presentation by Proposition \ref{prop:basic-forms-standard-presentation}; extend bilinearly. For a $C^1$ $0$-form $f$, set $df\defeq\sum\limits_{i=1}^{n}(D_if)(\x)\,dx_i$.\\
+For a $C^1$ $k$-form $\omega=\sum_I b_I(\x)\,dx_I$, set $d\omega\defeq\sum\limits_I (db_I)\wedge dx_I$.
+\end{definition}
+
+\begin{theorem} \label{thm:exterior-derivative-basic-laws} \hlt{Exterior Derivative Laws}\\
+If $\omega,\lambda$ are $C^1$ forms in $E$ and $\omega$ is a $k$-form, then $d(\omega\wedge\lambda)=(d\omega)\wedge\lambda+(-1)^k\omega\wedge d\lambda$. If $\omega$ is $C^2$, then $d^2\omega=0$.
+\begin{proof}
+By bilinearity, it suffices to take $\omega=f\,dx_I$ and $\lambda=g\,dx_J$.\\
+The ordinary product rule gives $d(fg)=f\,dg+g\,df$; moving $dg$ past $k$ factors in $dx_I$ gives the displayed sign.\\
+For a $C^2$ $0$-form $f$, $d^2f=\sum\limits_{i,j}(D_{ij}f)(\x)\,dx_i\wedge dx_j=0$, by Theorem \ref{thm:equality-of-mixed-partials} and antisymmetry.\\
+The general case follows from $\omega=\sum_I b_I\,dx_I$ and the product rule just proved.\\
+\hlt{Structural Commentary}: The exterior derivative is built to make mixed partial cancellation visible.\\
+\hlt{Key Insight}: Symmetric second derivatives meet antisymmetric wedge products, so $d^2=0$.
+\end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:forms-manifolds-proof-patterns-source-todo} \hlt{Proof Patterns to Source}\\
-TODO(source pages unavailable): Add sourced proof commentary for orientation, boundary, and pullback arguments after sourcing.
+\begin{definition} \label{def:pullback-of-differential-form} \hlt{Change of Variables for Forms}\\
+Let $T:E\subseteq\R^n\to V\subseteq\R^m$ be $C^1$, with $T=(t_1,\ldots,t_m)$. For a $k$-form $\omega=\sum_I b_I(\y)\,dy_I$ in $V$,\\
+define its \hlt{pullback} by $\omega_T\defeq T^\ast\omega\defeq \sum\limits_I b_I(T(\x))\,dt_{i_1}\wedge\cdots\wedge dt_{i_k}$, and $dt_i\defeq\sum\limits_{j=1}^{n}(D_jt_i)(\x)\,dx_j$.
+\end{definition}
+
+\begin{theorem} \label{thm:pullback-basic-laws} \hlt{Pullback Commutes with the Basic Operations}\\
+With $T:E\to V$ as in Definition \ref{def:pullback-of-differential-form},
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\omega+\lambda)_T=\omega_T+\lambda_T$ for forms of the same order;
+\item $(\omega\wedge\lambda)_T=\omega_T\wedge\lambda_T$;
+\item $d(\omega_T)=(d\omega)_T$ when $\omega$ is $C^1$ and $T$ is $C^2$;
+\item if $S:V\to W$ is $C^1$, then $(\omega_S)_T=\omega_{S\circ T}$.
+\end{enumerate}
+Moreover, if $\Phi$ is a $k$-surface in $E$ and $\omega$ is a $k$-form in $V$, then $\int_{T\circ\Phi}\omega=\int_{\Phi}\omega_T$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Addition is the linearity of Definition \ref{def:pullback-of-differential-form}.
+\item Pullback replaces each $dy_i$ by $dt_i$; bilinearity gives $(\omega\wedge\lambda)_T=\omega_T\wedge\lambda_T$.
+\item Let $\omega=\sum_I b_I\,dy_I$. Since $d(b_I\circ T)=(db_I)_T$ (Theorem \ref{thm:chain-rule-several-variables}) and $d(dt_i)=d^2t_i=0$, $d(\omega_T)=(d\omega)_T$.
+\item If $S=(s_1,\ldots,s_p)$, both $(\omega_S)_T$ and $\omega_{S\circ T}$ replace $dz_q$ by $d(s_q\circ T)$, by the chain rule.
+\end{enumerate}
+For the integral identity, write $\Phi:D\to E$. The defining integral over $D$ gives both sides the same integrand; equality of the Jacobian factors is the determinant chain rule from Theorems \ref{thm:chain-rule-several-variables} and \ref{thm:determinant-basic-laws}.\\
+\hlt{Structural Commentary}: Pullback translates forms before integration.\\
+\hlt{Key Insight}: Forms are defined so that composition of parameterizations becomes an algebraic substitution.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:affine-chains-and-boundaries} \hlt{Chains and Boundaries}\\
+For $\mathbf{p}_0,\ldots,\mathbf{p}_k\in\R^n$, oriented affine $k$-simplex $\sigma=[\mathbf{p}_0,\ldots,\mathbf{p}_k]$ is $k$-surface on $Q^k$: $\sigma(\mathbf{u})=\mathbf{p}_0+\sum\limits_{i=1}^{k}u_i(\mathbf{p}_i-\mathbf{p}_0)$.\\
+Permuting vertices multiplies $\sigma$ by the permutation sign. An \hlt{affine $k$-chain} is a finite formal sum of oriented affine $k$-simplices; integration is extended linearly.\\
+For $k\geq1$, define $\partial[\mathbf{p}_0,\ldots,\mathbf{p}_k] \defeq \sum\limits_{j=0}^{k}(-1)^j[\mathbf{p}_0,\ldots,\mathbf{p}_{j-1},\mathbf{p}_{j+1},\ldots,\mathbf{p}_k]$, and extend $\partial$ linearly. If $\Phi=T\circ\sigma$ is a $C^2$ oriented simplex, set $\partial\Phi\defeq T(\partial\sigma)$, again extended linearly to chains.
+\end{definition}
+
+\begin{theorem} \label{thm:stokes-theorem-differential-forms}\label{thm:forms-manifolds-stokes-main-source-todo} \hlt{Stokes' Theorem}\\
+If $\Psi$ is a $C^2$ $k$-chain in open $V\subseteq\R^m$ and $\omega$ is a $C^1$ $(k-1)$-form in $V$, then $\int_{\Psi}d\omega=\int_{\partial\Psi}\omega$.
+\begin{proof}
+By linearity, take $\Psi=\Phi=T\circ\sigma$, where $\sigma$ is the standard oriented $k$-simplex.\\
+By Theorem \ref{thm:pullback-basic-laws}, $\int_{\Phi}d\omega =\int_{\sigma}(d\omega)_T =\int_{\sigma}d(\omega_T)$; and $\int_{\partial\Phi}\omega =\int_{\partial\sigma}\omega_T$, so it remains to prove the formula on $\sigma$.\\
+By linearity, reduce to $\lambda=f\,dx_1\wedge\cdots\wedge\widehat{dx_r}\wedge\cdots\wedge dx_k$.\\
+The boundary formula in Definition \ref{def:affine-chains-and-boundaries} leaves only the two faces in the $x_r$ direction, and the resulting identity is the one-variable fundamental theorem of calculus inside the iterated integral.\\
+\hlt{Structural Commentary}: Pullback reduces Stokes' theorem to a computation on the standard simplex.\\
+\hlt{Key Insight}: The boundary signs are exactly the signs produced by the missing wedge factor.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:closed-and-exact-forms} \hlt{Closed and Exact Forms}\\
+A $k$-form $\omega$ in $E$ is \hlt{exact} if $\omega=d\lambda$ for some $(k-1)$-form $\lambda$ in $E$, and \hlt{closed} if $\omega$ is $C^1$ with $d\omega=0$.\\
+By Theorem \ref{thm:exterior-derivative-basic-laws}, exact $C^1$ forms are closed.
+\end{definition}
+
+\begin{theorem} \label{thm:poincare-lemma-convex-rudin} \hlt{Poincare Lemma on Convex Sets}\\
+If $E\subseteq\R^n$ is convex and open, then every closed $C^1$ $k$-form in $E$, $k\geq1$, is exact.\\
+The same holds on every open set $C^2$-equivalent to a convex open set.
+\begin{proof}
+Use the coordinate antiderivative lemma: on convex $E$, if $f\in C^1(E)$ and $D_jf=0$ for $j>p$, choose $F$ with $D_pF=f$ and $D_jF=0$ for $j>p$. Applied to the standard presentation, this removes the largest coordinate by induction and constructs $\lambda$ with $\omega=d\lambda$. For a $C^2$-equivalent set, pull back to the convex set, solve there, and push the primitive forward by Theorem \ref{thm:pullback-basic-laws}.\\
+\hlt{Structural Commentary}: Convexity lets coefficient-level antiderivatives be chosen consistently.\\
+\hlt{Key Insight}: Closed is local symmetry; convexity supplies the global primitive.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:vector-analysis-forms-dictionary} \hlt{Vector Analysis Dictionary in $\R^3$}\\
+For $\mathbf{F}=F_1\mathbf{e}_1+F_2\mathbf{e}_2+F_3\mathbf{e}_3$ on open $E\subseteq\R^3$,\\
+set $\lambda_{\mathbf{F}}\defeq F_1\,dx+F_2\,dy+F_3\,dz$ and $\omega_{\mathbf{F}}\defeq F_1\,dy\wedge dz+F_2\,dz\wedge dx+F_3\,dx\wedge dy$. Then\\
+$\mathbf{F}=\nabla u \Longleftrightarrow \lambda_{\mathbf{F}}=du$; and $\nabla\times\mathbf{F}=0 \Longleftrightarrow d\lambda_{\mathbf{F}}=0$; and\\
+$\mathbf{F}=\nabla\times\mathbf{G} \Longleftrightarrow \omega_{\mathbf{F}}=d\lambda_{\mathbf{G}}$; and $\nabla\cdot\mathbf{F}=0 \Longleftrightarrow d\omega_{\mathbf{F}}=0$.\\
+Hence $\nabla\times(\nabla u)=0$ and $\nabla\cdot(\nabla\times\mathbf{G})=0$; on sets $C^2$-equivalent to convex open sets, the converses hold.
+\begin{proof}
+Expand $d\lambda_{\mathbf{F}}$ and $d\omega_{\mathbf{F}}$ by Definition \ref{def:wedge-product-and-exterior-derivative}; their coefficients are exactly $\nabla\times\mathbf{F}$ and $\nabla\cdot\mathbf{F}$. Potentials and vector potentials are exactness of $\lambda_{\mathbf{F}}$ and $\omega_{\mathbf{F}}$; the converses follow from Theorem \ref{thm:poincare-lemma-convex-rudin}.\\
+\hlt{Structural Commentary}: Gradient, curl, and divergence are exterior derivative in degrees $0,1,2$.\\
+\hlt{Key Insight}: The familiar vector identities are $d^2=0$ written in $\R^3$ notation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:green-stokes-divergence-special-cases} \hlt{Green, Classical Stokes, and Divergence}\\
+The following are special cases of Theorem \ref{thm:stokes-theorem-differential-forms}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\Omega\subseteq\R^2$ has positively oriented boundary, $\alpha,\beta\in C^1$ near $\Omega$, then $\int_{\partial\Omega}(\alpha\,dx+\beta\,dy) = \int_{\Omega}\left(\frac{\partial\beta}{\partial x}-\frac{\partial\alpha}{\partial y}\right)\,dA$
+\item If $\Phi$ is a $C^2$ $2$-surface in $\R^3$ and $\mathbf{F}\in C^1$ near $\Phi$, then $\int_{\Phi}(\nabla\times\mathbf{F})\cdot\mathbf{n}\,dA = \int_{\partial\Phi}\mathbf{F}\cdot\mathbf{t}\,ds$.
+\item If $\Omega\subseteq\R^3$ has positively oriented boundary and $\mathbf{F}\in C^1$ near $\Omega$, then $\int_{\Omega}(\nabla\cdot\mathbf{F})\,dV =\int_{\partial\Omega}\mathbf{F}\cdot\mathbf{n}\,dA$
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $\lambda=\alpha\,dx+\beta\,dy$. Then $d\lambda=(\partial\beta/\partial x-\partial\alpha/\partial y)\,dA$.
+\item Put $\lambda=\lambda_{\mathbf{F}}$. By Theorem \ref{thm:vector-analysis-forms-dictionary}, $d\lambda=\omega_{\nabla\times\mathbf{F}}$.
+\item Put $\omega=\omega_{\mathbf{F}}$. Then $d\omega=(\nabla\cdot\mathbf{F})\,dx\wedge dy\wedge dz$.
+\end{enumerate}
+Theorem \ref{thm:stokes-theorem-differential-forms}, together with the line, area, and volume element translations, gives the three displayed formulas.\\
+\hlt{Structural Commentary}: Forms translate Stokes into the classical vector formulas.\\
+\hlt{Key Insight}: Boundary plus $d$ is the content; vector notation is translation.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:forms-manifolds-proof-patterns-source-todo}\label{meth:differential-forms-proof-patterns} \hlt{Differential-Forms Proof Patterns}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Signs}: compute wedge signs by determinant swaps and permutation parity.
+\item \hlt{Standard presentation}: remove repeated indices and sort the rest.
+\item \hlt{Pullback}: substitute $dt_i$ for $dy_i$ and apply the chain rule.
+\item \hlt{Stokes}: pull back to the standard simplex, prove the coordinate case, extend linearly.
+\item \hlt{Closed versus exact}: use $d^2=0$ for necessity; use convexity or $C^2$-equivalence for primitives.
+\item \hlt{Vector analysis}: translate fields to forms, apply Stokes, translate back.
+\end{enumerate}
+\hlt{Key Insight}: Forms package signs, orientation, and parameter changes.
 \end{method}
