@@ -1,14 +1,76 @@
 \subsubsection{Power Series, Approximation, and Fourier}
 
 % Source pages provided: Rudin Ch.7, Thms. 7.26--7.27, Defs. 7.28, 7.30, Thms. 7.29, 7.31--7.33, and surrounding Stone--Weierstrass discussion in the provided screenshots.
+% Source pages provided: Rudin Ch.8, Thms. 8.1--8.22, Defs. 8.9--8.10, and surrounding discussion on power series, exponential/logarithmic/trigonometric functions, Fourier series, and the gamma function in the provided screenshots.
 % Sources mapped: Rudin Ch.8; Abbott Ch.6.5-6.7, Ch.8.3-8.5; Ross Ch.4, Ch.7; Pugh Ch.4.2, Ch.4.4, Ch.4.6; Tao II Ch.4-5.
-% TODO(source pages unavailable): Add power-series, Taylor-method, Fourier, and non-Rudin approximation material only after source pages are provided.
+% TODO(source pages unavailable): Add non-Rudin approximation, power-series, Fourier, and special-function material only after source pages are provided.
 
-This subsection currently covers Rudin's Weierstrass and Stone--Weierstrass theory; power series and Fourier material remain source TODOs. The theme is uniform closure of algebraic building blocks.
+This subsection connects analytic functions, approximation, Fourier orthogonality, and the gamma function through power series, algebras, and convexity.
 
-\begin{definition} \label{def:power-approx-fourier-core-source-todo} \hlt{Core Definitions to Source}\\
-TODO(source pages unavailable): Add the sourced definitions of power series, Taylor-series framework, and Fourier objects relevant to the mapped sources.
+\begin{definition} \label{def:power-approx-fourier-core-source-todo}\label{def:power-approx-fourier-core-objects} \hlt{Core Objects: Power, Fourier, and Gamma}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A real \hlt{power series about $a$} is $\sum\limits_{n=0}^{\infty}c_n(x-a)^n$; a local representation of $f$ by one makes $f$ \hlt{analytic} at $a$.
+\item A \hlt{trigonometric polynomial} is a finite sum $a_0+\sum\limits_{n=1}^{N}(a_n\cos nx+b_n\sin nx)$, equivalently $\sum\limits_{n=-N}^{N}\alpha_ne^{inx}$.
+\item If $f$ is Riemann integrable on $[-\pi,\pi]$, its \hlt{Fourier coefficients} are $\widehat{f}(m)\defeq \frac{1}{2\pi}\int_{-\pi}^{\pi}f(x)e^{-imx}\,dx$, $m\in\Z$ and $f(x)\sim\sum\limits_{m=-\infty}^{\infty}\widehat{f}(m)e^{imx}$ records coefficients, not convergence.
+\item A sequence $(\phi_n)$ on $[a,b]$ is \hlt{orthonormal} if $\int_a^b \phi_n(x)\overline{\phi_m(x)}\,dx=0\quad(n\neq m)$ and $\int_a^b\abs{\phi_n(x)}^2\,dx=1$.\\
+Its Fourier coefficients are $c_n\defeq\int_a^b f(t)\overline{\phi_n(t)}\,dt$.
+\item For $x>0$, the \hlt{gamma function} is $\Gamma(x)\defeq\int_0^\infty t^{x-1}e^{-t}\,dt$ when the improper integral converges.
+\end{enumerate}
+\hlt{Key Insight}: Power series are local; Fourier series are orthogonal; $\Gamma$ extends factorials by integration.
 \end{definition}
+
+\begin{theorem} \label{thm:power-series-uniform-differentiation} \hlt{Power Series May Be Differentiated Term by Term}\\
+Let $f(x)=\sum_{n\ge0}c_nx^n$ have radius $R>0$, and $I_R=(-R,R)$. For $0<\rho<R$, let $K_\rho=[-\rho,\rho]$, a closed interval contained in $I_R$. Then $\sum c_nx^n$ converges uniformly on each $K_\rho$, and $f\in C^\infty(I_R)$.\\
+For $k\ge1$, $f^{(k)}(x)=\sum\limits_{n\ge k}\frac{n!}{(n-k)!}c_nx^{n-k}$, $(x\in I_R)$, and $f^{(k)}(0)=k!c_k$.
+\begin{proof}
+For $0<\rho<R$, Theorem \ref{thm:power-series-radius-convergence} and the root-test argument give $\sum\abs{c_n}\rho^n<\infty$; hence the Weierstrass $M$-test, Theorem \ref{thm:weierstrass-m-test}, gives uniform convergence on $K_\rho$.\\
+Since $\sqrt[n]{n}\to1$, polynomial factors in $n$ do not change the radius. Thus each differentiated series converges uniformly on $K_\rho$, and Theorem \ref{thm:uniform-derivative-convergence}, iterated, gives the formula and $f^{(k)}(0)=k!c_k$.\\
+\hlt{Structural Commentary}: On each $K_\rho$, termwise operations are justified.\\
+\hlt{Key Insight}: The derivative coefficients grow only by polynomial factors, which do not change the radius.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:abel-endpoint-theorem} \hlt{Abel's Endpoint Theorem}\\
+Let $s_n\defeq\sum_{k=0}^{n}c_k$ with $s_n\to s$, and let $f(x)=\sum_{n\ge0}c_nx^n$ on $(-1,1)$. Then $f(x)\to s$, for $x\to1^-$.
+\begin{proof}
+With $s_{-1}=0$, summation by parts, Theorem \ref{thm:summation-by-parts}, gives for $\abs{x}<1$, $f(x)=(1-x)\sum\limits_{n=0}^{\infty}s_nx^n$.\\
+Since $(1-x)\sum\limits_{n\ge0}x^n=1$, then $f(x)-s=(1-x)\sum\limits_{n\ge0}(s_n-s)x^n$. Choose $N$ so that $\abs{s_n-s}<\varepsilon/2$ for $n>N$.\\
+The tail is at most $\varepsilon/2$, and the finite part tends to $0$ after multiplication by $1-x$.\\
+\hlt{Structural Commentary}: Endpoint convergence becomes one-sided continuity.\\
+\hlt{Key Insight}: The factor $(1-x)$ averages the partial sums $s_n$ with geometric weights.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:abel-product-theorem} \hlt{Abel Product Theorem for Cauchy Products}\\
+Suppose $\sum a_n=A$, $\sum b_n=B$, $\sum c_n=C$, and $c_n=\sum\limits_{k=0}^{n}a_kb_{n-k}$. Then $C=AB$.
+\begin{proof}
+For $0\leq x<1$, set $f(x)\defeq\sum\limits_{n\ge0}a_nx^n$; $g(x)\defeq\sum\limits_{n\ge0}b_nx^n$; and $h(x)\defeq\sum\limits_{n\ge0}c_nx^n$.\\
+Since convergent series have bounded terms, $f,g,h$ converge absolutely for $\abs{x}<1$. Thus the Cauchy product gives $fg=h$ on $[0,1)$. By Theorem \ref{thm:abel-endpoint-theorem}, $f\to A$, $g\to B$, and $h\to C$ as $x\to1^-$. Hence $AB=C$.\\
+\hlt{Structural Commentary}: Prove $fg=h$ inside, then pass to $x=1$.\\
+\hlt{Key Insight}: Inside $\abs{x}<1$, the Cauchy product is safe; Abel then moves the identity to $x=1$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:power-series-reexpansion-and-identity} \hlt{Re-Expansion and Identity for Power Series}\\
+Let $f(x)=\sum_{n\ge0}c_nx^n$ have radius $R>0$, and set $S=(-R,R)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $a\in S$, then $f(x)=\sum\limits_{m\ge0}\frac{f^{(m)}(a)}{m!}(x-a)^m$, $(\abs{x-a}<R-\abs{a})$
+\item Let $F=\sum\limits_{n\ge0}a_nx^n$ and $G=\sum\limits_{n\ge0}b_nx^n$ on $S$.\\
+If $\mathcal{Z}_{F,G}\defeq\{x\in S:F(x)=G(x)\}$ has a limit point in $S$, then $a_n=b_n$ for all $n\ge0$, hence $F=G$ on $S$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write $x^n=((x-a)+a)^n$. If $\abs{x-a}+\abs{a}<R$, then $\sum\limits_{n\ge0}\abs{c_n}\bigl(\abs{x-a}+\abs{a}\bigr)^n<\infty$, so the resulting double sum may be rearranged. Theorem \ref{thm:power-series-uniform-differentiation} gives the coefficients $f^{(m)}(a)/m!$.
+\item Subtract the series and call the difference $f$. Let $Z=\{x\in S:f(x)=0\}$, and let $A$ be the set of limit points of $Z$ in $S$. Then $A\neq\emptyset$. For $x_0\in A$, part (i) gives $f(x)=\sum d_n(x-x_0)^n$.\\
+If $d_k$ were the first nonzero coefficient, then $f(x)=(x-x_0)^kg(x)$ with $g(x_0)\neq0$, contradicting $x_0\in A$. Hence $f=0$ near $x_0$, so $A$ is open. Also $S\setminus A$ is open; by connectedness, Theorem \ref{thm:connected-subsets-of-real-line-interval-property}, $A=S$. Since $Z$ is closed, $f=0$ on $S$, and evaluating derivatives at $0$ gives equality of coefficients.
+\end{enumerate}
+\hlt{Structural Commentary}: Power-series equality is local-to-global on an interval.\\
+\hlt{Key Insight}: A limit point of zeros forces all Taylor coefficients to vanish.
+\end{proof}
+\end{theorem}
 
 \begin{theorem} \label{thm:weierstrass-polynomial-approximation}\label{thm:power-approx-fourier-main-source-todo} \hlt{Weierstrass Polynomial Approximation}\\
 If $f:[a,b]\to\C$ is continuous, then polynomials $P_n$ satisfy $P_n\rightrightarrows f$ on $[a,b]$. If $f$ is real-valued, take $P_n$ real.
@@ -77,14 +139,13 @@ Hence $f\defeq \frac{c_1v}{v(x_1)}+\frac{c_2u}{u(x_2)}$ lies in $\mathcal{A}$ an
 \begin{theorem} \label{thm:real-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Real Form}\\
 $\mathcal{A}\subset C(K,\R)$ is algebra on compact $K$ that separates points, vanishes nowhere, then uniform closure is $C(K,\R)$.
 \begin{proof}
-Let $\mathcal{B}$ be the uniform closure of $\mathcal{A}$; by Theorem \ref{thm:uniform-closure-algebra}, $\mathcal{B}$ is a uniformly closed algebra.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item If $f\in\mathcal{B}$, then $\abs{f}\in\mathcal{B}$: for $a=\norm{f}_{\infty}$, approximate $\abs{y}$ on $[-a,a]$ by polynomials $p_n$ with $p_n(0)=0$ using Corollary \ref{cor:absolute-value-polynomial-approximation}; then $p_n(f)\in\mathcal{B}$ and $p_n(f)\rightrightarrows\abs{f}$.
-\item Hence $\max(f,g),\min(f,g)\in\mathcal{B}$ whenever $f,g\in\mathcal{B}$, as $\max(f,g)=\frac{f+g}{2}+\frac{\abs{f-g}}{2}$; $\min(f,g)=\frac{f+g}{2}-\frac{\abs{f-g}}{2}$.
-\item Fix $f\in C(K,\R)$, $x\in K$, $\varepsilon>0$. $\forall y\in K$, Theorem \ref{thm:two-point-interpolation-in-separating-algebra} gives $h_y\in\mathcal{B}$, $h_y(x)=f(x)$, $h_y(y)=f(y)$. Compactness gives $y_1,\ldots,y_r$ s.t. $g_x\defeq\max(h_{y_1},\ldots,h_{y_r})$ satisfies $g_x(x)=f(x)$ and $g_x>f-\varepsilon$ on $K$.
-\item Compactness gives $x_1,\ldots,x_m$ such that $h\defeq\min(g_{x_1},\ldots,g_{x_m})$ satisfies $\abs{h-f}<\varepsilon$ on $K$. Thus every $f\in C(K,\R)$ is a uniform limit of members of $\mathcal{B}$, so $f\in\mathcal{B}$.
-\end{enumerate}
+Let $\mathcal{B}$ be the uniform closure of $\mathcal{A}$; by Theorem \ref{thm:uniform-closure-algebra}, $\mathcal{B}$ is a uniformly closed algebra.\\
+If $f\in\mathcal{B}$, then $\abs{f}\in\mathcal{B}$: for $a=\norm{f}_{\infty}$, approximate $\abs{y}$ on $[-a,a]$ by polynomials $p_n$ with $p_n(0)=0$ using Corollary \ref{cor:absolute-value-polynomial-approximation}; then $p_n(f)\in\mathcal{B}$ and $p_n(f)\rightrightarrows\abs{f}$.\\
+Hence $\max(f,g),\min(f,g)\in\mathcal{B}$ whenever $f,g\in\mathcal{B}$, as $\max(f,g)=\frac{f+g}{2}+\frac{\abs{f-g}}{2}$; $\min(f,g)=\frac{f+g}{2}-\frac{\abs{f-g}}{2}$.\\
+Fix $f\in C(K,\R)$, $x\in K$, $\varepsilon>0$. $\forall y\in K$, Theorem \ref{thm:two-point-interpolation-in-separating-algebra} gives $h_y\in\mathcal{B}$, $h_y(x)=f(x)$, $h_y(y)=f(y)$.\\
+Compactness gives $y_1,\ldots,y_r$ s.t. $g_x\defeq\max(h_{y_1},\ldots,h_{y_r})$ satisfies $g_x(x)=f(x)$ and $g_x>f-\varepsilon$ on $K$.\\
+Compactness gives $x_1,\ldots,x_m$ such that $h\defeq\min(g_{x_1},\ldots,g_{x_m})$ satisfies $\abs{h-f}<\varepsilon$ on $K$.\\
+Thus every $f\in C(K,\R)$ is a uniform limit of members of $\mathcal{B}$, so $f\in\mathcal{B}$.\\
 \hlt{Structural Commentary}: Local supports plus finite max/min give global approximation.\\
 \hlt{Key Insight}: Separation plus compactness gives uniform approximation.
 \end{proof}
@@ -102,6 +163,135 @@ By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:exponential-logarithm-from-power-series} \hlt{Exponential and Logarithm from the Power Series}\\
+Define $\mathsf{E}(z)\defeq\sum\limits_{n=0}^{\infty}\frac{z^n}{n!}$ for $z\in\C$.\\
+Then, for $z,w\in\C$, $x\in\R$, $\mathsf{E}(z+w)=\mathsf{E}(z)\mathsf{E}(w)$, $\mathsf{E}(x)>0$, $\mathsf{E}'(x)=\mathsf{E}(x)$, $\mathsf{E}(x)=e^x$, and $\mathsf{E}$ is strictly increasing on $\R$. Its inverse $\mathsf{L}:(0,\infty)\to\R$ satisfies $\mathsf{L}'(y)=\frac1y$, $\mathsf{L}(uv)=\mathsf{L}(u)+\mathsf{L}(v)$ for $u,v>0$.\\
+For $x>0$ and $\alpha\in\R$, set $x^\alpha\defeq \mathsf{E}(\alpha \mathsf{L}(x))$; then $(x^\alpha)'=\alpha x^{\alpha-1}$.
+\begin{proof}
+The ratio test (Theorem \ref{thm:ratio-test}), gives convergence for all $z\in\C$.\\
+Absolute convergence and Cauchy product give $\mathsf{E}(z)\mathsf{E}(w)=\sum\limits_{n\ge0}\frac{(z+w)^n}{n!}=\mathsf{E}(z+w)$, hence $\mathsf{E}(z)\mathsf{E}(-z)=1$.\\
+Theorem \ref{thm:power-series-uniform-differentiation} gives $\mathsf{E}'=\mathsf{E}$ on $\R$. Thus $\mathsf{E}(x)>0$ $\forall$ real $x$ and $\mathsf{E}'>0$, so $\mathsf{E}$ is strictly increasing.\\
+Since $\mathsf{E}(1)=e$, the addition formula gives $\mathsf{E}(p)=e^p$ for $p\in\Q$; continuity extends this to $x\in\R$.\\
+Let $\mathsf{L}=\mathsf{E}^{-1}$. Differentiating $\mathsf{L}(\mathsf{E}(x))=x$ gives $\mathsf{L}'(y)=1/y$.\\
+If $u=\mathsf{E}(x)$ and $v=\mathsf{E}(y)$, then $\mathsf{L}(uv)=\mathsf{L}(\mathsf{E}(x+y))=\mathsf{L}(u)+\mathsf{L}(v)$.\\
+Finally, the chain rule, Theorem \ref{thm:chain-rule-one-variable}, gives $(x^\alpha)'=\alpha x^{\alpha-1}$.\\
+\hlt{Structural Commentary}: Power series define $\mathsf{E}$; inversion gives $\mathsf{L}$ and real powers.\\
+\hlt{Key Insight}: The addition formula is the bridge from coefficients to the logarithm law.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:trigonometric-functions-from-exponential} \hlt{Trigonometric Functions from the Exponential}\\
+For real $x$, define $\mathsf{C}(x)\defeq\frac{\mathsf{E}(ix)+\mathsf{E}(-ix)}{2}$ and $\mathsf{S}(x)\defeq\frac{\mathsf{E}(ix)-\mathsf{E}(-ix)}{2i}$.\\
+Then $\mathsf{E}(ix)=\mathsf{C}(x)+i\mathsf{S}(x)$, $\mathsf{C}^2+\mathsf{S}^2=1$; $\mathsf{C}'=-\mathsf{S}$, and $\mathsf{S}'=\mathsf{C}$.\\
+If $x_0=\min\{x>0:\mathsf{C}(x)=0\}$ and $\pi\defeq2x_0$, then $\mathsf{E}(\pi i)=-1$, $\mathsf{E}(2\pi i)=1$, $\mathsf{E}(z+2\pi i)=\mathsf{E}(z)$ for $z\in\C$.\\
+Thus $\mathsf{C},\mathsf{S}$ are $2\pi$-periodic, and $\gamma(t)\defeq \mathsf{E}(it)$ traces the unit circle once on $[0,2\pi]$.
+\begin{proof}
+The definitions give $\mathsf{E}(ix)=\mathsf{C}+i\mathsf{S}$. Since $\mathsf{E}(ix)\mathsf{E}(-ix)=1$, $\abs{\mathsf{E}(ix)}=1$, hence $\mathsf{C}^2+\mathsf{S}^2=1$.\\
+Differentiating the definitions and using Theorem \ref{thm:power-series-uniform-differentiation} gives $\mathsf{C}'=-\mathsf{S}$ and $\mathsf{S}'=\mathsf{C}$.\\
+If $\mathsf{C}$ had no positive zero, then $\mathsf{C}>0$ and $\mathsf{S}'>0$ on $(0,\infty)$.\\
+Thus, for $0<x<y$, $\mathsf{S}(x)(y-x)<\int_x^y \mathsf{S}(t)\,dt=\mathsf{C}(x)-\mathsf{C}(y)\leq2$, impossible for large $y$. Hence $x_0$ exists. On $(0,\pi/2)$, $\mathsf{C}>0$, so $\mathsf{S}$ increases from $0$ to $\mathsf{S}(\pi/2)=1$; thus $\mathsf{E}(\pi i/2)=i$, and the addition formula gives $\mathsf{E}(\pi i)=-1$, $\mathsf{E}(2\pi i)=1$, and the period.\\
+Finally, $\abs{\mathsf{E}(it)}=1$ and the source quadrant argument give the one-time traversal of the unit circle.\\
+\hlt{Structural Commentary}: Trigonometry comes from the path $\mathsf{E}(it)$.\\
+\hlt{Key Insight}: The identity $\mathsf{E}(ix)\mathsf{E}(-ix)=1$ puts the exponential path on the unit circle.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/exponential_unit_circle.tikz}
+  \caption{$\mathsf{E}(it)=\mathsf{C}(t)+i\mathsf{S}(t)$ traces the unit circle, defining sine and cosine analytically.}
+  \label{fig:exponential-unit-circle}
+\end{figure}
+
+\begin{theorem} \label{thm:fundamental-theorem-algebra-exponential-proof} \hlt{Algebraic Completeness of $\C$}\\
+Every nonconstant complex polynomial has a complex root.
+\begin{proof}
+Let $P(z)=\sum_{j=0}^{n}a_jz^j$, $n\geq1$, and normalize $a_n=1$.\\
+Since $\abs{P(z)}\to\infty$, Theorem \ref{thm:extreme-value-theorem-compact} gives $z_0$ with $\mu\defeq\abs{P(z_0)}=\min_{\C}\abs{P}$. If $\mu=0$, done.\\
+Assume $\mu>0$ and set $Q(w)\defeq P(z_0+w)/P(z_0)$. Then $Q(0)=1$ and $\abs{Q(w)}\geq1$.\\
+Write $Q(w)=1+\sum\limits_{j=k}^{n}b_jw^j$, where $b_k\neq0$ and $k$ is minimal. By Theorem \ref{thm:trigonometric-functions-from-exponential}, choose $\theta$ with $b_ke^{ik\theta}=-\abs{b_k}$.\\
+Then $Q(re^{i\theta})=1-\abs{b_k}r^k+r^{k+1}H(r)$, with $H$ bounded near $0$, so $\abs{Q(re^{i\theta})}<1$ for small $r>0$, contradiction.\\
+\hlt{Structural Commentary}: Minimize, translate, then perturb.\\
+\hlt{Key Insight}: Choose the phase that lowers the first nonzero term.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:orthonormal-fourier-best-approximation-bessel} \hlt{Fourier Coefficients Give Best Mean-Square Approximation}\\
+Let $\langle u,v\rangle\defeq\int_a^b u\overline v$ and $\norm{u}_2^2\defeq\langle u,u\rangle$.\\
+If $(\phi_n)$ is orthonormal, $c_m=\langle f,\phi_m\rangle$, $s_n=\sum\limits_{m=1}^{n}c_m\phi_m$, and $t_n=\sum\limits_{m=1}^{n}\gamma_m\phi_m$, then $\norm{f-s_n}_2\leq\norm{f-t_n}_2$, with equality iff $\gamma_m=c_m$ for $m=1,\ldots,n$. In particular, $\sum\limits_{m=1}^{\infty}\abs{c_m}^2\leq\norm{f}_2^2$ for $c_m\to0$.
+\begin{proof}
+For sums over $m=1,\ldots,n$, orthonormality gives\\
+$\norm{f-t_n}_2^2 =\norm{f}_2^2-2\operatorname{Re}\sum c_m\overline{\gamma_m}+\sum\abs{\gamma_m}^2 =\norm{f}_2^2-\sum\abs{c_m}^2+\sum\abs{\gamma_m-c_m}^2$.\\
+Thus the minimum occurs exactly when $\gamma_m=c_m$.\\
+Taking $t_n=s_n$ gives $\sum_{m=1}^{n}\abs{c_m}^2=\norm{s_n}_2^2\leq\norm{f}_2^2$; let $n\to\infty$ to get Bessel and $c_m\to0$.\\
+\hlt{Structural Commentary}: Orthogonality makes the error split into independent coefficient errors.\\
+\hlt{Key Insight}: Fourier coefficients are the coordinates of the orthogonal projection.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:trigonometric-fourier-dirichlet-localization} \hlt{Dirichlet Kernel and Local Fourier Convergence}\\
+Let $f$ be Riemann integrable and $2\pi$-periodic, with $\widehat{f}(m)\defeq\frac{1}{2\pi}\int_{-\pi}^{\pi}f(t)e^{-imt}\,dt$.\\
+Let $s_N(f;x)\defeq\sum\limits_{m=-N}^{N}\widehat{f}(m)e^{imx}$ and $D_N(t)\defeq\sum\limits_{m=-N}^{N}e^{imt}=\frac{\sin((N+\frac12)t)}{\sin(t/2)}$.\\
+Then $s_N(f;x)=\frac{1}{2\pi}\int_{-\pi}^{\pi}f(x-t)D_N(t)\,dt$.\\
+If, for some $x$, $\abs{f(x+t)-f(x)}\leq M\abs{t}$ whenever $\abs{t}<\delta$, then $s_N(f;x)\to f(x)$.\\
+Hence $f=g$ near $x$ implies $s_N(f;x)-s_N(g;x)\to0$.
+\begin{proof}
+The displayed form of $D_N$ is the finite geometric sum; substituting $\widehat f(m)$ gives the convolution formula.\\
+Also $\frac1{2\pi}\int_{-\pi}^{\pi}D_N=1$. Set $q_x(t)\defeq \frac{f(x-t)-f(x)}{\sin(t/2)}$, for $0<\abs t\leq\pi$,$q_x(0)\defeq0$.\\
+Then $s_N(f;x)-f(x)=\frac{1}{2\pi}\int_{-\pi}^{\pi} q_x(t)\sin\!\left(N+\frac12\right)t\,dt$.\\
+The hypothesis makes $q_x$ bounded near $0$; away from $0$ it is Riemann integrable.\\
+Since $\sin((N+\frac12)t)=\sin Nt\cos(t/2)+\cos Nt\sin(t/2)$, Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel} sends the two Fourier coefficients to $0$.\\
+Apply the result to $f-g$ for localization.\\
+\hlt{Structural Commentary}: The Dirichlet kernel rewrites Fourier partial sums as a local oscillatory integral.\\
+\hlt{Key Insight}: Pointwise convergence under a local Lipschitz condition depends only on nearby values of $f$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:trigonometric-polynomial-weierstrass} \hlt{Uniform Approximation by Trigonometric Polynomials}\\
+If $f\in C(\R)$ is $2\pi$-periodic, then for every $\varepsilon>0$ there is a trigonometric polynomial $P$ such that $\norm{f-P}_\infty<\varepsilon$.
+\begin{proof}
+Let $\mathbb{T}\defeq\{z\in\C:\abs z=1\}$ and set $F(e^{ix})\defeq f(x)$.\\
+The algebra $\mathcal{T}\defeq\operatorname{span}\{z^n:n\in\Z\}\subset C(\mathbb{T})$ is self-adjoint, separates points, and vanishes nowhere.\\
+By Theorem \ref{thm:complex-stone-weierstrass}, $\overline{\mathcal{T}}=C(\mathbb{T})$. Pulling approximants back by $z=e^{ix}$ gives the desired $P$.\\
+\hlt{Structural Commentary}: Periodic approximation is Stone--Weierstrass on the unit circle.\\
+\hlt{Key Insight}: The functions $e^{inx}$ are the algebraic coordinates on the circle.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:parseval-fourier-series} \hlt{Parseval's Theorem for Trigonometric Fourier Series}\\
+Let $f,g$ be Riemann integrable and $2\pi$-periodic. Let $\langle u,v\rangle_2\defeq\frac1{2\pi}\int_{-\pi}^{\pi}u(x)\overline{v(x)}\,dx$ and $\norm{u}_2^2\defeq\langle u,u\rangle_2$.\\
+If $f\sim\sum_{n\in\Z}\widehat{f}(n)e^{inx}$, and $g\sim\sum_{n\in\Z}\widehat{g}(n)e^{inx}$,\\
+then $\norm{f-s_N(f)}_2\to0$; $\langle f,g\rangle_2=\sum_{n\in\Z}\widehat{f}(n)\overline{\widehat{g}(n)}$; and $\norm{f}_2^2=\sum_{n\in\Z}\abs{\widehat{f}(n)}^2$.
+\begin{proof}
+If $f$ is continuous, Corollary \ref{cor:trigonometric-polynomial-weierstrass} gives trigonometric polynomials $P$ with $\norm{f-P}_2$ arbitrarily small.\\
+If $P$ has degree $N_0$, then Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel} gives $\norm{f-s_N(f)}_2\leq\norm{f-P}_2$ for $N\geq N_0$.\\
+For Riemann integrable $f$, approximate $f$ in $\norm{\cdot}_2$ by a continuous $2\pi$-periodic $h$.\\
+Then $\norm{f-s_N(f)}_2 \leq \norm{f-h}_2+\norm{h-s_N(h)}_2+\norm{s_N(h-f)}_2$ and $\norm{s_N(h-f)}_2\leq\norm{h-f}_2$ (Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel}).\\
+Hence $s_N(f)\to f$ in $\norm{\cdot}_2$. Finally, $\langle s_N(f),g\rangle_2 =\sum\limits_{\abs{n}\leq N}\widehat{f}(n)\overline{\widehat{g}(n)}$.\\
+Let $N\to\infty$ and use Schwarz' inequality; the last identity is $g=f$.\\
+\hlt{Structural Commentary}: Density upgrades Bessel to Parseval.\\
+\hlt{Key Insight}: Bessel gives one inequality; density of trigonometric polynomials gives equality.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:gamma-function-basic-theory} \hlt{Gamma Function, Beta Function, and Stirling Skeleton}\\
+For $x>0$, $\Gamma(x+1)=x\Gamma(x)$; $\Gamma(n+1)=n!$ for $n\in\N$; $\log\Gamma$ is convex on $(0,\infty)$.\\
+Moreover, $\Gamma$ is the unique $f:(0,\infty)\to(0,\infty)$ with $f(1)=1$, $f(x+1)=xf(x)$, and $\log f$ convex.\\
+For $x,y>0$, $\mathrm{B}(x,y)\defeq\int_0^1t^{x-1}(1-t)^{y-1}\,dt =\frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}$.\\
+Consequently, $\Gamma\!\left(\frac12\right)=\sqrt{\pi}$; $\int_{-\infty}^{\infty}e^{-s^2}\,ds=\sqrt{\pi}$; $\Gamma(x)=\frac{2^{x-1}}{\sqrt{\pi}}\Gamma\!\left(\frac{x}{2}\right)\Gamma\!\left(\frac{x+1}{2}\right)$; and $\lim_{x\to\infty}\frac{\Gamma(x+1)}{(x/e)^x\sqrt{2\pi x}}=1$.
+\begin{proof}
+Integration by parts gives $\Gamma(x+1)=x\Gamma(x)$; $\Gamma(1)=1$ gives $\Gamma(n+1)=n!$.\\
+Holder's inequality gives log-convexity. For uniqueness, let $\varphi=\log f$.\\
+If $0<x<1$, convexity and $\varphi(x+1)=\varphi(x)+\log x$ give $0\leq \varphi(x)-\log\!\frac{n!\,n^x}{x(x+1)\cdots(x+n)} \leq x\log\!\left(1+\frac1n\right)\to0$.\\
+Thus $f$ is uniquely determined on $(0,1)$, hence on $(0,\infty)$.\\
+For fixed $y>0$, $\mathrm{B}(1,y)=1/y$, $\mathrm{B}(x+1,y)=\frac{x}{x+y}\mathrm{B}(x,y)$, and Holder gives log-convexity in $x$.\\
+Hence $F_y(x)\defeq\frac{\Gamma(x+y)}{\Gamma(y)}\mathrm{B}(x,y)$ satisfies the three uniqueness conditions, so $F_y=\Gamma$.\\
+The consequences follow from $t=\sin^2\theta$, $t=s^2$, the duplication identity, and the substitution $t=x(1+u)$ in the asymptotic proof of Stirling's formula.\\
+\hlt{Structural Commentary}: Functional equation plus convexity gives uniqueness.\\
+\hlt{Key Insight}: Bohr--Mollerup uniqueness turns beta-function identities into gamma identities.
+\end{proof}
+\end{theorem}
+
 \begin{method} \label{meth:power-approx-fourier-proof-patterns-source-todo} \hlt{Approximation Proof Patterns}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -109,6 +299,9 @@ By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R
 \item \hlt{Uniform closure}: show $a_n\in\mathcal{A}$ and $a_n\rightrightarrows f$.
 \item \hlt{Lattice closure}: derive $\abs{f}$, then $\max,\min$ from algebraic formulas.
 \item \hlt{Stone--Weierstrass}: interpolate locally; use compactness and finite max/min to globalize.
+\item \hlt{Power series}: work on $K_\rho\Subset I_R$; use uniform convergence before termwise limits or derivatives.
+\item \hlt{Fourier series}: project onto orthonormal spans for $L^2$ control; use kernels for pointwise limits.
+\item \hlt{Gamma function}: use $\Gamma(x+1)=x\Gamma(x)$, $\Gamma(1)=1$, and log-convexity for uniqueness.
 \end{enumerate}
-\hlt{Key Insight}: Compactness globalizes local algebraic approximation.
+\hlt{Key Insight}: Compactness, orthogonality, and convexity globalize local control.
 \end{method}
