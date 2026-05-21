@@ -2,6 +2,9 @@
 
 Consolidated Math Notes
 
+Lean formalizations live under `MathNotes/` and mirror the corresponding
+LaTeX files under `sections/`. See `LEAN.md` for setup and naming details.
+
 Progress Status:
 
 | Section | Reference Book | Author | Progress | Other Notes |
