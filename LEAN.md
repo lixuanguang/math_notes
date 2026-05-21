@@ -54,10 +54,17 @@ The script creates only missing mirrored Lean files and updates `MathNotes.lean`
 
 ## LaTeX Linking Convention
 
-When a LaTeX theorem has a corresponding Lean declaration, add a nearby comment:
+Lean links are tracked with LeanBlueprint. When a LaTeX theorem, definition,
+lemma, proposition, or corollary has a corresponding Lean declaration, add
+LeanBlueprint markers inside the surrounding LaTeX environment:
 
 ```tex
-% Lean: MathNotes.sections.analysis.topological_analysis.«2_1_metric_spaces_and_euclidean_topology».metric_space_example
+\lean{MathNotes.Section.Namespace.declaration_name}
+\leanok
 ```
 
-This keeps the human exposition in LaTeX and the checked formalization in Lean aligned without forcing all notes to become literate Lean.
+Use `\uses{label-a,label-b}` when the blueprint dependency graph should record
+statement or proof dependencies.
+
+The blueprint source lives in `blueprint/src` and currently inputs prepared files
+from `sections/`, so the notes remain the source of truth.

@@ -3,7 +3,8 @@
 Consolidated Math Notes
 
 Lean formalizations live under `MathNotes/` and mirror the corresponding
-LaTeX files under `sections/`. See `LEAN.md` for setup and naming details.
+LaTeX files under `sections/`. Formalization progress is tracked with
+LeanBlueprint under `blueprint/`. See `LEAN.md` for setup and naming details.
 
 Progress Status:
 

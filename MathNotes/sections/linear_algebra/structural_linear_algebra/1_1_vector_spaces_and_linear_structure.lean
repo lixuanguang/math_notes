@@ -6,7 +6,7 @@ import MathNotes.sections.base
 Lean counterpart of `sections/linear_algebra/structural_linear_algebra/1_1_vector_spaces_and_linear_structure.tex`.
 -/
 
-namespace MathNotes
+namespace MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure
 
 section VectorSpaceDefinition
 
@@ -45,6 +45,18 @@ theorem vector_smul_add (a : F) (u v : V) : a • (u + v) = a • u + a • v :=
 theorem vector_add_smul (a b : F) (v : V) : (a + b) • v = a • v + b • v := by
   exact add_smul a b v
 
+theorem vector_space_axioms :
+    (∀ u v : V, u + v = v + u) ∧
+      (∀ u v w : V, (u + v) + w = u + (v + w)) ∧
+      (∀ v : V, 0 + v = v) ∧
+      (∀ v : V, v + (-v) = 0) ∧
+      (∀ v : V, (1 : F) • v = v) ∧
+      (∀ (a b : F) (v : V), (a * b) • v = a • (b • v)) ∧
+      (∀ (a : F) (u v : V), a • (u + v) = a • u + a • v) ∧
+      (∀ (a b : F) (v : V), (a + b) • v = a • v + b • v) := by
+  exact ⟨vector_add_comm, vector_add_assoc, vector_zero_add, vector_add_left_neg,
+    vector_one_smul, vector_mul_smul, vector_smul_add, vector_add_smul⟩
+
 end VectorSpaceDefinition
 
-end MathNotes
+end MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure
