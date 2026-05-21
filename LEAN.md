@@ -68,3 +68,11 @@ statement or proof dependencies.
 
 The blueprint source lives in `blueprint/src` and currently inputs prepared files
 from `sections/`, so the notes remain the source of truth.
+
+Use the `py311` conda environment for LeanBlueprint commands:
+
+```sh
+conda run -n py311 leanblueprint web
+conda run -n py311 leanblueprint checkdecls
+conda run -n py311 leanblueprint pdf
+```

@@ -10,22 +10,22 @@ uses the same markers to produce dependency and formalization status data.
 
 ## Local Workflow
 
-Install the external tools when you are ready to build the blueprint output:
+Install the external tools in the `py311` conda environment:
 
 ```sh
-pip install leanblueprint
+brew install graphviz
+CFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" \
+  conda run -n py311 python -m pip install pygraphviz
+conda run -n py311 python -m pip install leanblueprint
 ```
-
-LeanBlueprint also needs Graphviz/PyGraphviz support; on macOS this usually
-means installing Graphviz first, then installing LeanBlueprint.
 
 Then run from the repository root:
 
 ```sh
 lake build
-leanblueprint web
-leanblueprint checkdecls
-leanblueprint serve
+conda run -n py311 leanblueprint web
+conda run -n py311 leanblueprint checkdecls
+conda run -n py311 leanblueprint serve
 ```
 
 The current first linked item is `def:vector-space`, connected to the Lean
