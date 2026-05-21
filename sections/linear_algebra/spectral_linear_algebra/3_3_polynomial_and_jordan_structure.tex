@@ -120,8 +120,10 @@ The matrix $zI_n-A$ is upper triangular with diagonal entries $z-a_{11},\ldots,z
 
 \begin{theorem} \label{thm:similarity-preserves-characteristic-polynomial} \hlt{Similarity Preserves Characteristic Data}\\
 Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ and suppose $B=SAS^{-1}$ for some invertible $S$. Then $p_B=p_A$. In particular, for each $\lambda\in\operatorname{spec}(A)$, $m_B(\lambda)=m_A(\lambda)$ and $\dim E_{\lambda}(B)=\dim E_{\lambda}(A)$.
-\begin{proof} $p_B(z) =\det(zI_n-SAS^{-1}) =\det(S(zI_n-A)S^{-1}) =\det(S)\det(zI_n-A)\det(S)^{-1} =p_A(z) \Rightarrow$\\
-$m_B(\lambda)=m_A(\lambda)$. Also $B-\lambda I_n=S(A-\lambda I_n)S^{-1}$, multiply by $S$ gives isomorphism $\ker(A-\lambda I_n)\to\ker(B-\lambda I_n)$.\\
+\begin{proof}
+For every $z$, $p_B(z) =\det(zI_n-SAS^{-1}) =\det(S(zI_n-A)S^{-1}) =\det(S)\det(zI_n-A)\det(S)^{-1} =p_A(z)$.\\
+Thus roots and root multiplicities agree, so $m_B(\lambda)=m_A(\lambda)$. Also $B-\lambda I_n=S(A-\lambda I_n)S^{-1}$.\\
+Hence $\mathbf{x}\in\ker(A-\lambda I_n)$ if and only if $S\mathbf{x}\in\ker(B-\lambda I_n)$, $S$ restricts to isomorphism between two eigenspaces.\\
 \hlt{Structural Commentary}: Similarity changes coordinates, not the shifted determinant or shifted kernel dimension.\\
 \hlt{Key Insight}: Conjugation inserts $S$ and $S^{-1}$, which cancel in determinants and identify kernels.
 \end{proof}
@@ -134,10 +136,7 @@ Consequently, if $\lambda\in\operatorname{spec}(A)$, then $m_{A^t}(\lambda)=m_A(
 Use determinant identities:
 \begin{align}
 p_{A^t}(z)&=\det(zI_n-A^t)=\det((zI_n-A)^t)=p_A(z), \nonumber\\
-p_{\overline{A}}(z)&=\det(zI_n-\overline{A})
-=\det(\overline{\overline{z}I_n-A})
-=\overline{\det(\overline{z}I_n-A)}
-=\overline{p_A(\overline{z})}.
+p_{\overline{A}}(z)&=\det(zI_n-\overline{A}) =\det(\overline{\overline{z}I_n-A}) =\overline{\det(\overline{z}I_n-A)} =\overline{p_A(\overline{z})}.
 \nonumber
 \end{align}
 Since $A^*=\overline{A}^{\,t}$, the first identity applied to $\overline{A}$ gives the formula for $A^*$.\\
@@ -311,9 +310,9 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have characteristic polynomial $p_A
 \begin{proof}
 Choose a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
 Since $p_A(A)=Up_A(T)U^*$ and $p_A(z)=\prod_{i=1}^{n}(z-\lambda_i)$, it suffices to prove $(T-\lambda_1I_n)(T-\lambda_2I_n)\cdots(T-\lambda_nI_n)=0$.\\
-Let $P_j\defeq\prod\limits_{i=1}^{j}(T-\lambda_iI_n)$. Prove that first $j$ columns of $P_j$ are zero. This is clear for $j=1$.\\
-If true for $j$, then the first $j+1$ columns of $T-\lambda_{j+1}I_n$ lie in $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$, which $P_j$ kills.\\
-Hence $P_{j+1}$ has first $j+1$ zero columns, so $P_n=0$.\\
+Let $P_j\defeq\prod\limits_{i=1}^{j}(T-\lambda_iI_n)$. To prove that first $j$ columns of $P_j$ are zero. For $j=1$, first column of $T-\lambda_1I_n$ is zero as $T$ is upper triangular with first diagonal entry $\lambda_1$. Assume first $j$ columns of $P_j$ are zero.\\
+Since $T-\lambda_{j+1}I_n$ is upper triangular and its $(j+1,j+1)$ entry is zero, its first $j+1$ columns lie in $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$. By the induction hypothesis, $P_j$ kills this span, so $P_{j+1}=P_j(T-\lambda_{j+1}I_n)$ has first $j+1$ zero columns.\\
+At $j=n$, all columns of $P_n$ are zero, so $P_n=0$.\\
 \hlt{Structural Commentary}: Schur form reduces the theorem to a triangular column-killing induction.\\
 \hlt{Key Insight}: Each factor $T-\lambda_iI_n$ kills the next leading column.
 \end{proof}
@@ -337,7 +336,8 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Cayley--Hamilton supplies the monic annihilator $p_A$, so a least-degree monic annihilator $\mu_A$ exists and has degree at most $n$. If $g$ is another one, write $g=h\mu_A+r$ with $\deg r<\deg\mu_A$. Then $r(A)=0$, so minimality gives $r=0$; monicity and equal degree give $g=\mu_A$.
+\item Cayley--Hamilton supplies the monic annihilator $p_A$, so a least-degree monic annihilator $\mu_A$ exists and has degree at most $n$. If $g$ is another least-degree monic annihilator, write $g=h\mu_A+r$, where $r=0$ or $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$. If $r\neq0$, scaling $r$ to be monic would give a smaller-degree monic annihilator, a contradiction. Hence $r=0$, so $g=h\mu_A$.\\
+Since $g$ and $\mu_A$ are monic of the same degree, $h=1$ and $g=\mu_A$.
 \item If $f(A)=0$, divide $f=q\mu_A+r$ with $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$, hence $r=0$ and $\mu_A\mid f$. Taking $f=p_A$ gives $\mu_A\mid p_A$.
 \item Since $\mu_A\mid p_A=\prod_{i=1}^{d}(z-\lambda_i)^{m_A(\lambda_i)}$, its roots are eigenvalues with exponents at most the algebraic multiplicities. If $A\mathbf{v}=\lambda_i\mathbf{v}$ and $\mathbf{v}\neq\mathbf{0}$, then $\mu_A(\lambda_i)\mathbf{v}=\mu_A(A)\mathbf{v}=0$, so every $\lambda_i$ occurs.
 \end{enumerate}
@@ -356,7 +356,9 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_
 \begin{theorem} \label{thm:minimal-polynomial-direct-sum-disjoint-spectra} \hlt{Minimal Polynomial of a Spectrally Disjoint Direct Sum}\\
 Let $A=A_1\oplus\cdots\oplus A_d$, where the spectra of $A_1,\ldots,A_d$ are pairwise disjoint. Then $\mu_A=\mu_{A_1}\mu_{A_2}\cdots\mu_{A_d}$.
 \begin{proof}
-Let $f=\prod\limits_i\mu_{A_i}$. Since $f(A_i)=0$ for all $i$, $f(A)=0$ and $\mu_A\mid f$. Conversely, $\mu_A(A_i)=0$, so $\mu_{A_i}\mid\mu_A$ for each $i$. Disjoint spectra make the $\mu_{A_i}$ pairwise relatively prime, hence $f\mid\mu_A$. Thus $\mu_A=f$.\\
+Let $f=\prod\limits_i\mu_{A_i}$. Since $f(A_i)=0$ for all $i$, blockwise evaluation gives $f(A)=0$, and therefore $\mu_A\mid f$.\\
+Conversely, $\mu_A(A_i)=0$ for each $i$, so $\mu_{A_i}\mid\mu_A$ for each $i$. The roots of $\mu_{A_i}$ are exactly $\operatorname{spec}(A_i)$ by Theorem \ref{thm:operator-minimal-polynomial-roots-eigenvalues}, so the disjointness of the spectra makes the polynomials $\mu_{A_i}$ pairwise relatively prime.\\
+Hence their product $f$ divides $\mu_A$. Since $\mu_A\mid f$ and $f\mid\mu_A$, and both are monic, $\mu_A=f$.\\
 \hlt{Structural Commentary}: Direct sums are annihilated blockwise; disjoint spectra make the block factors coprime.\\
 \hlt{Key Insight}: Each spectral component contributes its own minimal-polynomial factor.
 \end{proof}
@@ -379,8 +381,11 @@ Equivalently, $A$ is diagonalizable if and only if $\mu_A$ is square-free.
 Set $p(z)\defeq\prod_{i=1}^{d}(z-\lambda_i)$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $A=S\Lambda S^{-1}$ is diagonalizable, then $p(\Lambda)=0$, so $p(A)=0$. Since $\mu_A$ contains every factor $z-\lambda_i$ and divides $p$, we have $\mu_A=p$.
-\item[$(\Leftarrow)$] Suppose $\mu_A=p$. On each primary summand $\mathcal{G}_{\lambda_i}(A)$, the factors $A-\lambda_jI_n$ with $j\neq i$ are invertible by Lemma \ref{lem:scalar-plus-nilpotent-invertible}. Since $p(A)=0$, we get $A-\lambda_iI_n=0$ on $\mathcal{G}_{\lambda_i}(A)$; hence every primary summand is an eigenspace, so $A$ is diagonalizable.
+\item[$(\Rightarrow)$] If $A=S\Lambda S^{-1}$ is diagonalizable, then $p(\Lambda)=0$, so $p(A)=0$.\\
+Since $\mu_A$ contains every factor $z-\lambda_i$ and divides $p$, we have $\mu_A=p$.
+\item[$(\Leftarrow)$] Suppose $\mu_A=p$. On the primary summand $\mathcal{G}_{\lambda_i}(A)$, the restriction of $A-\lambda_jI_n$ for $j\neq i$ is
+$(A-\lambda_iI_n)+(\lambda_i-\lambda_j)I$, a nonzero scalar plus a nilpotent operator. By Lemma \ref{lem:scalar-plus-nilpotent-invertible}, these restricted factors are invertible. Since $0=p(A)|_{\mathcal{G}_{\lambda_i}(A)} =\left(\prod\limits_{j\neq i}(A-\lambda_jI_n)\right)|_{\mathcal{G}_{\lambda_i}(A)} (A-\lambda_iI_n)|_{\mathcal{G}_{\lambda_i}(A)}$, the invertible product of the $j\neq i$ factors can be cancelled, giving $(A-\lambda_iI_n)=0$ on $\mathcal{G}_{\lambda_i}(A)$.\\
+Thus every primary summand is an eigenspace, so $A$ is diagonalizable.
 \end{enumerate}
 \hlt{Structural Commentary}: Repeated factors of $\mu_A$ record nilpotent parts in primary blocks.\\
 \hlt{Key Insight}: Square-free $\mu_A$ kills each primary block in one step.
@@ -505,11 +510,12 @@ For $n=1$, set $C_f=[-c_0]$.
 \begin{theorem} \label{thm:companion-matrix-has-prescribed-minimal-polynomial} \hlt{Companion Matrix Realises a Polynomial}\\
 For every monic polynomial $f$, the companion matrix $C_f$ satisfies $p_{C_f}=f$ and $\mu_{C_f}=f$.
 \begin{proof}
-Let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis.\\
-For $j<n$, $C_f^j\mathbf{e}_1=\mathbf{e}_{j+1}$, and last column is $C_f^n\mathbf{e}_1=-c_0\mathbf{e}_1-c_1C_f\mathbf{e}_1-\cdots-c_{n-1}C_f^{n-1}\mathbf{e}_1$.\\
-Thus $f(C_f)\mathbf{e}_1=0$. Since $\mathbf{e}_j=C_f^{j-1}\mathbf{e}_1$ and $f(C_f)$ commutes with $C_f$, $f(C_f)=0$.\\
-If $g(z)=\sum\limits_{i=0}^{m}b_iz^i$ has $m<n$, then $g(C_f)\mathbf{e}_1=b_0\mathbf{e}_1+b_1\mathbf{e}_2+\cdots+b_m\mathbf{e}_{m+1}$, which is zero only when $g=0$.\\
-Hence no nonzero polynomial of degree $<n$ annihilates $C_f$. Therefore $\deg\mu_{C_f}=n$ and $\mu_{C_f}\mid f$, so $\mu_{C_f}=f$. Cayley--Hamilton makes $p_{C_f}$ a monic degree-$n$ annihilator, hence $p_{C_f}=f$.\\
+Let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis. For $0\leq j<n$, $C_f^j\mathbf{e}_1=\mathbf{e}_{j+1}$.\\
+The last-column relation gives $C_f^n\mathbf{e}_1 =-c_0\mathbf{e}_1-c_1C_f\mathbf{e}_1-\cdots-c_{n-1}C_f^{n-1}\mathbf{e}_1$. Thus $f(C_f)\mathbf{e}_1=0$.\\
+Since $\mathbf{e}_j=C_f^{j-1}\mathbf{e}_1$ and $f(C_f)$ commutes with $C_f$, we get $f(C_f)\mathbf{e}_j=C_f^{j-1}f(C_f)\mathbf{e}_1=\mathbf{0} \ \forall j$, so $f(C_f)=0$.\\
+If $g(z)=\sum\limits_{i=0}^{m}b_iz^i$ has $m<n$, then $g(C_f)\mathbf{e}_1=b_0\mathbf{e}_1+b_1\mathbf{e}_2+\cdots+b_m\mathbf{e}_{m+1}$, which is zero only when all $b_i=0$. Hence no nonzero polynomial of degree $<n$ annihilates $C_f$. Therefore $\deg\mu_{C_f}=n$.\\
+Since $f$ is a monic degree-$n$ annihilator and $\mu_{C_f}\mid f$, we have $\mu_{C_f}=f$.\\
+Cayley--Hamilton makes $p_{C_f}$ a monic degree-$n$ annihilator, so $\mu_{C_f}\mid p_{C_f}$. Both $p_{C_f}$ and $f$ are monic of degree $n$, and both are multiples of the monic degree-$n$ polynomial $\mu_{C_f}=f$, hence $p_{C_f}=f$.\\
 \hlt{Structural Commentary}: The cyclic vector $\mathbf{e}_1$ generates the basis, and last column imposes relation $f(C_f)=0$.\\
 \hlt{Key Insight}: The companion matrix makes $f$ the first possible annihilating relation.
 \end{proof}
@@ -611,7 +617,7 @@ With $p=p_B$, Cayley--Hamilton gives $p_B(A)X=Xp_B(B)=0$. For every $\lambda\in\
 \end{figure}
 
 \begin{corollary} \label{cor:block-upper-triangular-remove-disjoint-coupling} \hlt{Removing a Spectrally Separated Off-Diagonal Block}\\
-Let $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$ and $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$ Then $M$ is similar to $A\oplus B$.
+Let $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$ and $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$. Then $M$ is similar to $A\oplus B$.
 \begin{proof}
 By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X$ such that $AX-XB=-C$. Then
 \begin{align}
@@ -841,20 +847,23 @@ Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{C}$, let $T\in\L
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$;
-\item each $\mathcal{G}_{\lambda_j}(T)$ is $T$-invariant;
 \item each $(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is nilpotent.
 \end{enumerate}
 \begin{proof}
 Let $n=\dim(\mathcal{V})$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Prove decomposition by induction on $n$. The case $n=1$ is immediate.\\
-\item Put $S=T-\lambda_1I_{\mathcal{V}}$. By Theorem \ref{thm:kernel-range-stable-direct-sum}, $\mathcal{V}=\ker(S^n)\oplus\operatorname{range}(S^n) =\mathcal{G}_{\lambda_1}(T)\oplus\mathcal{U}$, $\mathcal{U}\defeq\operatorname{range}(S^n)$.\\
-Here $\mathcal{U}$ is $T$-invariant by Proposition \ref{prop:kernel-range-polynomial-in-operator-invariant}, and $\dim(\mathcal{U})<n$. The eigenvalues of $T|_{\mathcal{U}}$ are $\lambda_2,\ldots,\lambda_m$: $\lambda_1$ is excluded by $\mathcal{G}_{\lambda_1}(T)\cap\mathcal{U}=\{\mathbf{0}\}$, and if $T\mathbf{v}=\lambda_j\mathbf{v}$ with $j\geq2$, then $S^n\mathbf{v}=(\lambda_j-\lambda_1)^n\mathbf{v}$, so $\mathbf{v}\in\mathcal{U}$.\\
-If $\mathcal{U}=\{\mathbf{0}\}$, then $m=1$. Otherwise, induction gives $\mathcal{U}=\mathcal{G}_{\lambda_2}(T|_{\mathcal{U}})\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T|_{\mathcal{U}})$.\\
-For $j\geq2$, $\mathcal{G}_{\lambda_j}(T|_{\mathcal{U}})=\mathcal{G}_{\lambda_j}(T)$. Indeed, the inclusion $\subseteq$ is clear; conversely, write $\mathbf{v}\in \mathcal{G}_{\lambda_j}(T)$ as $\mathbf{v}=\mathbf{g}+\mathbf{u}$ with $\mathbf{g}\in \mathcal{G}_{\lambda_1}(T)$ and $\mathbf{u}\in\mathcal{U}$. Invariance of both summands gives $\mathbf{g}\in \mathcal{G}_{\lambda_1}(T)\cap \mathcal{G}_{\lambda_j}(T)$, hence $\mathbf{g}=\mathbf{0}$ by Theorem \ref{thm:distinct-generalized-eigenvectors-independent}. Thus $\mathbf{v}\in \mathcal{G}_{\lambda_j}(T|_{\mathcal{U}})$, proving (i).
-\item This is Proposition \ref{prop:generalized-eigenspaces-invariant}.
-\item By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}, $(T-\lambda_jI_{\mathcal{V}})^n\mathbf{v}=\mathbf{0}$ for every $\mathbf{v}\in \mathcal{G}_{\lambda_j}(T)$; hence the restriction is nilpotent.
+\item
+Proceed by induction on $n$. If $n=1$, then $T$ has single eigenvalue $\lambda_1$ and $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)$.\\
+Assume $n>1$. Let $S=T-\lambda_1I_{\mathcal{V}}$, $\mathcal{U}\defeq\operatorname{range}(S^n)$.\\
+By Theorems \ref{thm:kernel-range-stable-direct-sum} and \ref{thm:generalized-eigenspace-stabilized-kernel}, $\mathcal{V} =\ker(S^n)\oplus\operatorname{range}(S^n) =\mathcal{G}_{\lambda_1}(T)\oplus\mathcal{U}$.
+The subspace $\mathcal{U}$ is $T$-invariant by Proposition \ref{prop:kernel-range-polynomial-in-operator-invariant}, and $\dim(\mathcal{U})<n$ because $\mathcal{G}_{\lambda_1}(T)\neq\{\mathbf{0}\}$. If $\mathcal{U}=\{\mathbf{0}\}$, then (i) follows.\\
+Otherwise distinct eigenvalues of $T|_{\mathcal{U}}$ are $\lambda_2,\ldots,\lambda_m$: every eigenvalue of $T|_{\mathcal{U}}$ is an eigenvalue of $T$ but not $\lambda_1$, while an eigenvector $\mathbf{v}$ of $T$ for $\lambda_j$, $j\geq2$, satisfies $S^n\mathbf{v}=(\lambda_j-\lambda_1)^n\mathbf{v}$ and hence lies in $\mathcal{U}$.\\
+Induction gives $\mathcal{U} =\mathcal{G}_{\lambda_2}(T|_{\mathcal{U}})\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T|_{\mathcal{U}})$. For $j\geq2$, $\mathcal{G}_{\lambda_j}(T|_{\mathcal{U}})=\mathcal{G}_{\lambda_j}(T)$.\\
+The inclusion $\subseteq$ follows from the definition. Conversely, if $\mathbf{v}\in\mathcal{G}_{\lambda_j}(T)$, write $\mathbf{v}=\mathbf{g}+\mathbf{u}$ with $\mathbf{g}\in\mathcal{G}_{\lambda_1}(T)$ and $\mathbf{u}\in\mathcal{U}$. For some $r$, $(T-\lambda_jI_{\mathcal{V}})^r\mathbf{v}=\mathbf{0}$. Since both summands are $T$-invariant, the two terms $(T-\lambda_jI_{\mathcal{V}})^r\mathbf{g}$ and $(T-\lambda_jI_{\mathcal{V}})^r\mathbf{u}$ remain in the two direct summands and have sum zero, so both are zero.\\
+Thus $\mathbf{g}\in\mathcal{G}_{\lambda_1}(T)\cap\mathcal{G}_{\lambda_j}(T)=\{\mathbf{0}\}$ by Theorem \ref{thm:distinct-generalized-eigenvectors-independent}, and $\mathbf{v}=\mathbf{u}\in\mathcal{G}_{\lambda_j}(T|_{\mathcal{U}})$. Hence (i) follows.
+\item
+By Proposition \ref{prop:generalized-eigenspaces-invariant}, the restriction is an operator on $\mathcal{G}_{\lambda_j}(T)$. By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}, $(T-\lambda_jI_{\mathcal{V}})^n\mathbf{v}=\mathbf{0} \ \forall \mathbf{v}\in\mathcal{G}_{\lambda_j}(T)$. Hence $n$th power of $(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is zero.
 \end{enumerate}
 \hlt{Structural Commentary}: Peel off one generalized eigenspace, then induct on the invariant range.\\
 \hlt{Key Insight}: Stable kernel-range splitting isolates one eigenvalue at a time.
@@ -908,7 +917,7 @@ where each $A_j\in\operatorname{Mat}(d_j,d_j,\mathbb{C})$ is upper triangular wi
 Set $\mathcal{U}_j=\mathcal{G}_{\lambda_j}(T)$ and $N_j=(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{U}_j}$.\\
 By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, the $\mathcal{U}_j$ form a $T$-invariant direct-sum decomposition and each $N_j$ is nilpotent.\\
 Choose a basis of each $\mathcal{U}_j$ in which $N_j$ is strictly upper triangular. Then $T|_{\mathcal{U}_j}=\lambda_jI_{\mathcal{U}_j}+N_j$ has an upper triangular matrix with diagonal $\lambda_j,\ldots,\lambda_j$. Concatenating these bases gives the desired block diagonal matrix.\\
-\hlt{Structural Commentary}: Primary decomposition gives the blocks; nilpotent triangularisation shapes them.\\
+\hlt{Structural Commentary}: Primary decomposition gives the blocks; nilpotent triangularisation shapes them. \\
 \hlt{Key Insight}: On each generalized eigenspace, $T$ is eigenvalue plus nilpotent.
 \end{proof}
 \end{theorem}
@@ -938,11 +947,11 @@ For $\lambda\in\mathbb{C}$, set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{J
 
 \begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
 For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
-\begin{proof} Formula follows from binomial theorem applied to $J_k(\lambda)=\lambda I_k+J_k(0)$, with truncation from $J_k(0)^k=0$.
+\begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
-\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then each coefficient $\binom{p}{r}\lambda^{p-r} \rightarrow 0$ for fixed $r$; hence every term in finite expansion tends to $0$.
+\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then for each fixed $0\leq r<k$ the scalar $\binom{p}{r}\lambda^{p-r}$ tends to $0$, because a polynomial in $p$ is dominated by the exponential decay of $\abs{\lambda}^{p}$.
 \end{enumerate}
 \hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
 \hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
@@ -950,13 +959,14 @@ For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambd
 \end{proposition}
 
 \begin{theorem} \label{thm:nilpotent-jordan-chain-basis} \hlt{Nilpotent Jordan Chain Basis}\\
-Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ s.t. $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
+Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ such that $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
 \begin{proof}
 Induct on $n=\dim(\mathcal{V})$. If $N=0$, any basis works with all $m_j=0$.\\
-Now assume $N\neq0$. Then $N$ is not injective, so $\operatorname{range}(N)$ is a proper subspace, and $N|_{\operatorname{range}(N)}$ is nilpotent. By induction, $\operatorname{range}(N)$ has a chain basis $\bigl(N^{m_1}\mathbf{u}_1,\ldots,N\mathbf{u}_1,\mathbf{u}_1,\ldots, N^{m_r}\mathbf{u}_r,\ldots,N\mathbf{u}_r,\mathbf{u}_r\bigr)$ with $N^{m_j+1}\mathbf{u}_j=\mathbf{0}$.\\
+Now assume $N\neq0$. Then $N$ is not injective, so $\operatorname{range}(N)$ is a proper subspace, and $N|_{\operatorname{range}(N)}$ is nilpotent.\\
+By induction, $\operatorname{range}(N)$ has a chain basis $\bigl(N^{m_1}\mathbf{u}_1,\ldots,N\mathbf{u}_1,\mathbf{u}_1,\ldots, N^{m_r}\mathbf{u}_r,\ldots,N\mathbf{u}_r,\mathbf{u}_r\bigr)$ with $N^{m_j+1}\mathbf{u}_j=\mathbf{0}$.\\
 Choose $\mathbf{v}_j\in\mathcal{V}$ such that $N\mathbf{v}_j=\mathbf{u}_j$, and lift the chains to $\mathcal{L}= \bigl(N^{m_1+1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r+1}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$.\\
-This is linearly independent: applying $N$ to any dependence among its vectors gives a dependence among range-chain basis. Only coefficients of $N^{m_j+1}\mathbf{v}_j$ may remain; but $N^{m_j+1}\mathbf{v}_j=N^{m_j}\mathbf{u}_j$, so those coefficients vanish too.\\
-Extend $\mathcal{L}$ to a basis by adding $\mathbf{w}_1,\ldots,\mathbf{w}_s$. For each $i$, choose $\mathbf{x}_i\in\operatorname{span}(\mathcal{L})$ s.t. $N\mathbf{x}_i=N\mathbf{w}_i$, and $\mathbf{z}_i=\mathbf{w}_i-\mathbf{x}_i$. Then $N\mathbf{z}_i=\mathbf{0}$, and replacing each $\mathbf{w}_i$ by $\mathbf{z}_i$ preserves the span. Thus $\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s$ is the desired chain basis.\\
+The list $\mathcal{L}$ is linearly independent. Indeed, applying $N$ to a dependence among vectors in $\mathcal{L}$ gives a dependence among the range-chain basis, so all coefficients except possibly those on the leading vectors $N^{m_j+1}\mathbf{v}_j$ vanish.\\
+The remaining relation is a relation among $N^{m_j+1}\mathbf{v}_j=N^{m_j}\mathbf{u}_j$, which are members of the range-chain basis, so those coefficients vanish too. Also $N(\operatorname{span}(\mathcal{L}))=\operatorname{range}(N)$: each range-chain basis vector $N^q\mathbf{u}_j$ is $N(N^q\mathbf{v}_j)$ for the corresponding lifted vector. Extend $\mathcal{L}$ to a basis by adding $\mathbf{w}_1,\ldots,\mathbf{w}_s$. For each $i$, choose $\mathbf{x}_i\in\operatorname{span}(\mathcal{L})$ such that $N\mathbf{x}_i=N\mathbf{w}_i$, and set $\mathbf{z}_i=\mathbf{w}_i-\mathbf{x}_i$. Then $N\mathbf{z}_i=\mathbf{0}$. Since each $\mathbf{x}_i$ lies in $\operatorname{span}(\mathcal{L})$, replacing $\mathbf{w}_i$ by $\mathbf{z}_i$ preserves the span and linear independence of the full basis. Thus $\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s$ is the desired chain basis.\\
 \hlt{Structural Commentary}: Build chains in $\operatorname{range}(N)$, lift them once, then add kernel chains.\\
 \hlt{Key Insight}: Applying $N$ turns lifted-chain dependences into known range-chain dependences.
 \end{proof}
@@ -1047,11 +1057,27 @@ Both sides are polynomials in $z$, so the identity holds for all $z$. The claime
 
 \begin{theorem} \label{thm:ab-ba-same-nonzero-jordan-blocks} \hlt{Nonzero Jordan Blocks of $AB$ and $BA$}\\
 Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. For every $\lambda\neq0$, the Jordan blocks of $AB$ and $BA$ at $\lambda$ coincide.
-\begin{proof} Set $X=\begin{bmatrix}AB&A\\0&0\end{bmatrix}$ and $Y=\begin{bmatrix}0&A\\0&BA\end{bmatrix}$. Then $\begin{bmatrix}I_n&0\\B&I_n\end{bmatrix}
+\begin{proof}
+Set $X=\begin{bmatrix}AB&A\\0&0\end{bmatrix}$ and $Y=\begin{bmatrix}0&A\\0&BA\end{bmatrix}$. Then $\begin{bmatrix}I_n&0\\B&I_n\end{bmatrix}
 X
 \begin{bmatrix}I_n&0\\-B&I_n\end{bmatrix}
 =Y$, so $X$ and $Y$ are similar.\\
-For $\lambda\neq0$ and $p\geq1$, the extra diagonal block in each shifted power is $(-\lambda)^pI_n$, hence invertible. Thus block row and column operations give
+For $\lambda\neq0$ and $p\geq1$, the shifted powers have block triangular forms
+\begin{align}
+(X-\lambda I_{2n})^p=
+\begin{bmatrix}
+(AB-\lambda I_n)^p&*\\
+0&(-\lambda)^pI_n
+\end{bmatrix},
+\qquad
+(Y-\lambda I_{2n})^p=
+\begin{bmatrix}
+(-\lambda)^pI_n&*\\
+0&(BA-\lambda I_n)^p
+\end{bmatrix} \nonumber
+\end{align}
+The diagonal block $(-\lambda)^pI_n$ is invertible.\\
+Block Gaussian elimination by invertible row and column operations removes the starred block, so
 \begin{align}
 \operatorname{rank}\bigl((X-\lambda I_{2n})^p\bigr)
 &=n+\operatorname{rank}\bigl((AB-\lambda I_n)^p\bigr), \nonumber\\
@@ -1122,9 +1148,9 @@ Thus $p(N)$ and $X$ agree on a basis, so $X=p(N)=q(J)$ for $q(z)=p(z-\lambda)$.\
 \begin{theorem} \label{thm:nonderogatory-commutant-polynomials} \hlt{Nonderogatory Commutants Are Polynomials}\\
 If $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is nonderogatory, then $\operatorname{Comm}(A)=\{p(A):p\in\mathbb{C}[z]\}$.
 \begin{proof}
-The inclusion $\{p(A):p\in\mathbb{C}[z]\}\subseteq\operatorname{Comm}(A)$ is immediate.\\
+The inclusion $\{p(A):p\in\mathbb{C}[z]\}\subseteq\operatorname{Comm}(A)$ follows from Proposition \ref{prop:operator-polynomial-products}.\\
 For the reverse inclusion, replace $A$ by its Jordan form $J=J_{m_1}(\lambda_1)\oplus\cdots\oplus J_{m_d}(\lambda_d)$, where the $\lambda_i$ are distinct. If $XJ=JX$ and $X=[X_{ij}]$ is partitioned conformally with $J$, Corollary \ref{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} gives $X_{ij}=0$ for $i\neq j$. Each diagonal block $X_{ii}$ commutes with $J_{m_i}(\lambda_i)$, so Lemma \ref{lem:single-jordan-block-commutant-polynomials} gives $X_{ii}=p_i(J_{m_i}(\lambda_i))$ for some $\deg p_i<m_i$.\\
-Because the polynomials $(z-\lambda_i)^{m_i}$ are pairwise coprime, Hermite interpolation gives a polynomial $p$ such that $p\equiv p_i\pmod{(z-\lambda_i)^{m_i}}$ for every $i$. Then $X=p(J)$. Conjugating back to $A$ proves the claim.\\
+Because the polynomials $(z-\lambda_i)^{m_i}$ are pairwise coprime, Hermite interpolation gives a polynomial $p$ such that $p\equiv p_i\pmod{(z-\lambda_i)^{m_i}}$ for every $i$. On the block $J_{m_i}(\lambda_i)$, the difference $p-p_i$ is a multiple of $(z-\lambda_i)^{m_i}$, and $(J_{m_i}(\lambda_i)-\lambda_iI)^{m_i}=0$. Hence $p(J_{m_i}(\lambda_i))=p_i(J_{m_i}(\lambda_i))$ for every $i$, so $X=p(J)$. Conjugating back to $A$ proves the claim.\\
 \hlt{Structural Commentary}: Disjoint eigenvalue blocks force block diagonality; one Jordan block per eigenvalue makes each diagonal commutant polynomial.\\
 \hlt{Key Insight}: Hermite interpolation glues the separate block polynomials into one polynomial in $A$.
 \end{proof}
@@ -1236,8 +1262,8 @@ Then $\Gamma$ is a conjugate-linear bijection, $\Gamma T_{\mathbb{C}}=T_{\mathbb
 Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
 If $\lambda$ is an eigenvalue of $T_{\mathbb{C}}$, then $\overline{\lambda}$ is an eigenvalue of $T_{\mathbb{C}}$, and $\dim_{\mathbb{C}}\mathcal{G}_{\lambda}(T_{\mathbb{C}}) =\dim_{\mathbb{C}}\mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$.
 \begin{proof}
-Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} with $k=1$ gives the eigenvalue pairing.\\
-With $k=\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$, the same lemma gives a conjugate-linear bijection $\mathcal{G}_{\lambda}(T_{\mathbb{C}})\longrightarrow \mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$, and $\mathbf{x}\longmapsto\Gamma\mathbf{x}$.
+Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} with $k=1$ sends a nonzero eigenvector for $\lambda$ to a nonzero eigenvector for $\overline{\lambda}$. Thus $\overline{\lambda}$ is an eigenvalue.\\
+With $k=\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$, Theorem \ref{thm:generalized-eigenspace-stabilized-kernel} identifies generalized eigenspaces with the corresponding stabilized kernels. Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} then shows that $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$ restricts to conjugate-linear bijection $\mathcal{G}_{\lambda}(T_{\mathbb{C}}) \longrightarrow \mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$.\\
 Conjugate-linear bijections preserve complex dimension, so the multiplicities agree.\\
 \hlt{Structural Commentary}: Conjugation mirrors generalized eigenspaces.\\
 \hlt{Key Insight}: Nonreal spectral data of a real operator arrives in equal-sized conjugate pairs.
@@ -1273,8 +1299,9 @@ Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space, l
 \setlength{\itemsep}{0pt}
 \item Factor $q_{T_{\mathbb{C}}}$ over $\mathbb{C}$. Real eigenvalues give real linear factors. If $\lambda\notin\mathbb{R}$ has multiplicity $m$, then $\overline{\lambda}$ has multiplicity $m$ by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, and $(z-\lambda)^m(z-\overline{\lambda})^m=\bigl(z^2-2\operatorname{Re}(\lambda)z+\abs{\lambda}^2\bigr)^m$, which is real.
 \item Proposition \ref{prop:operator-characteristic-polynomial-degree-roots} and Proposition \ref{prop:complexification-vector-space-basis} give $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
-\item The real zeros of $q_T=q_{T_{\mathbb{C}}}$ are the real eigenvalues of $T_{\mathbb{C}}$ by Proposition \ref{prop:operator-characteristic-polynomial-degree-roots}, hence the eigenvalues of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.
-\item Cayley--Hamilton over $\mathbb{C}$ gives $q_T(T_{\mathbb{C}})=0$. By (i), Proposition \ref{prop:complexification-operator-basic-properties}, $q_T(T_{\mathbb{C}})=(q_T(T))_{\mathbb{C}}$, so $q_T(T)=0$.
+\item Real zeros of $q_T=q_{T_{\mathbb{C}}}$ are real eigenvalues of $T_{\mathbb{C}}$  (Prop \ref{prop:operator-characteristic-polynomial-degree-roots}), hence eigenvalues of $T$ (Prop \ref{prop:real-eigenvalues-complexification}).
+\item Cayley--Hamilton over $\mathbb{C}$ gives $q_T(T_{\mathbb{C}})=0$. By (i) and Proposition \ref{prop:complexification-operator-basic-properties}, $q_T(T_{\mathbb{C}})=(q_T(T))_{\mathbb{C}}$.\\
+If $q_T(T)$ were nonzero on some $\mathbf{u}\in\mathcal{V}$, then $(q_T(T))_{\mathbb{C}}(\mathbf{u}+i\mathbf{0})=q_T(T)\mathbf{u}+i\mathbf{0}$ would be nonzero, a contradiction. Hence $q_T(T)=0$.
 \end{enumerate}
 \hlt{Structural Commentary}: Nonreal factors pair into real quadratics.\\
 \hlt{Key Insight}: Complexify, then pair conjugates.

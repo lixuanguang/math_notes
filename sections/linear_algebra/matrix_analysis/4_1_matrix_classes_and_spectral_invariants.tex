@@ -27,6 +27,7 @@ Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
 \item If $A$ is triangular, then $\det A=A_{1,1}\cdots A_{n,n}$.
 \item $\det(AB)=\det(A)\det(B)$.
 \item $A$ is invertible if and only if $\det A\neq0$. In that case $\det(A^{-1})=(\det A)^{-1}$.
+\item $\det(A^t)=\det(A)$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
@@ -37,15 +38,15 @@ Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
 If the swapped columns are equal, then $B=A$, so $\det A=-\det A$ and $\det A=0$.
 \item If $A$ is upper triangular and $\prod_{k=1}^n A_{\sigma(k),k}\neq0$, then $\sigma(k)\leq k$ for all $k$, hence $\sigma(k)=k$ for all $k$.\\
 Thus $\det A=A_{1,1}\cdots A_{n,n}$. The lower triangular case is analogous.
-\item If $F$ is alternating, multilinear in columns, then
-\begin{align}
-F(A_{\cdot,1},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)F(I_n)A_{\sigma(1),1}\cdots A_{\sigma(n),n} =F(I_n)\det A \nonumber
-\end{align}
-For $H(B)=\det(AB)$, the map $H$ is alternating multilinear and $H(I_n)=\det A$.\\
+\item If $F$ is alternating and multilinear in columns, then expanding each column in the standard basis gives\\
+$F(A_{\cdot,1},\ldots,A_{\cdot,n}) =\sum\limits_{i_1,\ldots,i_n}A_{i_1,1}\cdots A_{i_n,n}F(\mathbf{e}_{i_1},\ldots,\mathbf{e}_{i_n}) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)F(I_n)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.\\
+The terms with repeated $i_j$ vanish by alternation, and the surviving ordered bases differ from $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ by sign of permutation. For $H(B)=\det(AB)$, map $H$ is alternating multilinear and $H(I_n)=\det A$.\\
 Hence $\det(AB)=H(B)=H(I_n)\det B=\det(A)\det(B)$.
 \item If $A$ is invertible, then $1=\det I_n=\det(AA^{-1})=\det(A)\det(A^{-1})$.\\
 If $A_{\cdot,k}=\sum\limits_{\ell\neq k}c_\ell A_{\cdot,\ell}$, then $\det A=\sum\limits_{\ell\neq k}c_\ell\det(A_{\cdot,1},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,n})=0$.\\
 Thus $\det A\neq0$ iff the columns of $A$ are independent, iff $A$ is invertible.
+\item Using the permutation definition and replacing $\sigma$ by $\sigma^{-1}$,\\
+$\det(A^t) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)A_{1,\sigma(1)}\cdots A_{n,\sigma(n)} =\sum\limits_{\tau\in\mathfrak{S}_n}\sign(\tau)A_{\tau(1),1}\cdots A_{\tau(n),n} =\det(A)$; $\sign(\tau^{-1})=\sign(\tau)$.
 \end{enumerate}
 \hlt{Structural Commentary}: The determinant is the normalized alternating multilinear measure of columns.\\
 \hlt{Key Insight}: Multilinearity expands columns; alternation kills repeated directions.
@@ -74,9 +75,11 @@ To compute or simplify a determinant:
 \begin{lemma} \label{lem:determinant-identity-direct-sum} \hlt{Identity Blocks Do Not Change Determinant}\\
 Let $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and let $n\geq0$. Then $\det(I_n\oplus A)=\det(A)=\det(A\oplus I_n)$.
 \begin{proof}
-For $I_n\oplus A$, expand the determinant along the first $n$ rows. The only nonzero contribution chooses the diagonal entries of $I_n$, leaving the minor $A$, so $\det(I_n\oplus A)=\det(A)$. Expanding $A\oplus I_n$ along the last $n$ rows gives the same conclusion. The case $n=0$ is the empty identity block convention.\\
+In the permutation formula for $I_n\oplus A$, a nonzero term must satisfy $\sigma(k)=k$ for $1\leq k\leq n$. Remaining choices are exactly permutations of $\{n+1,\ldots,n+m\}$, after relabeling, gives $\det(A)$. Hence $\det(I_n\oplus A)=\det(A)$.\\
+The same argument applied to the last $n$ coordinates gives $\det(A\oplus I_n)=\det(A)$.\\
+The case $n=0$ is the empty identity block convention.\\
 \hlt{Structural Commentary}: Identity blocks add directions without changing volume.\\
-\hlt{Key Insight}: In a Laplace expansion through an identity block, exactly one minor survives.
+\hlt{Key Insight}: In the determinant expansion, the identity block forces the matching coordinates to be fixed.
 \end{proof}
 \end{lemma}
 
@@ -106,7 +109,8 @@ A & 0\\
 0 & I_s
 \end{bmatrix}$.\\
 The first and last factors have determinants $\det(D)$ and $\det(A)$ by Lemma \ref{lem:determinant-identity-direct-sum}.\\
-The middle factor is upper triangular with every diagonal entry equal to $1$, so its determinant is $1$. Multiplicativity of determinant gives the formula.\\
+The middle factor is upper triangular with every diagonal entry equal to $1$, so its determinant is $1$.\\
+Multiplicativity of determinant gives the formula.\\
 \hlt{Structural Commentary}: Block upper triangular matrices separate determinant contribution into diagonal blocks. The off-diagonal block does not affect the determinant.\\
 \hlt{Key Insight}: Factor the matrix into two block diagonal pieces and one unit upper triangular piece.
 \end{proof}
@@ -160,7 +164,7 @@ C & D
 A-BD^{-1}C & 0\\
 C & D
 \end{bmatrix}$.\\
-The elimination matrix has determinant $1$, and the matrix on the right is lower block-triangular, so Theorem \ref{thm:block-upper-triangular-determinant} applied after transposition gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
+The elimination matrix has determinant $1$. The transpose of the matrix on the right is upper block-triangular, and $\det(X^t)=\det(X)$ by Theorem \ref{thm:determinant-basic-laws}. Therefore Theorem \ref{thm:block-upper-triangular-determinant} gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
 \hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
 \hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
 \end{proof}
@@ -268,7 +272,7 @@ Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}\in\{\mathbb{R
 Then $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$. If $\mathbb{F}=\mathbb{C}$ and $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $T$ with algebraic multiplicity, then $\operatorname{tr}T=\lambda_1+\cdots+\lambda_n$, $\det T=\lambda_1\cdots\lambda_n$.
 \begin{proof}
 Choose a basis $\beta$ and set $A=[T]_{\beta\leftarrow\beta}$.\\
-Then $q_T=p_A$, and by Definition \ref{def:operator-trace-and-determinant}, $\operatorname{tr}T=\operatorname{tr}A$, $\operatorname{tr}T=\operatorname{tr}A$.\\
+Then $q_T=p_A$, and by Definition \ref{def:operator-trace-and-determinant}, $\operatorname{tr}T=\operatorname{tr}A$ and $\det T=\det A$.\\
 Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$.\\
 If $\mathbb{F}=\mathbb{C}$, then comparing $q_T(z)=(z-\lambda_1)\cdots(z-\lambda_n)$ with the displayed form of $q_T$ gives the formulas.\\
 \hlt{Structural Commentary}: Characteristic polynomial stores trace and determinant in first and last coefficients.\\
@@ -320,7 +324,8 @@ Then $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}\in\m
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] Suppose $A=cI_n$. Then $A\mathbf{x}=c\mathbf{x}$ for every $\mathbf{x}$, so $(\mathbf{x},A\mathbf{x})$ is linearly dependent.
-\item[$(\Leftarrow)$] Suppose $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}$. For each standard basis vector $\mathbf{e}_i$, there is $a_i\in\mathbb{F}$ such that $A\mathbf{e}_i=a_i\mathbf{e}_i$. For $i\geq2$, dependence of $\mathbf{e}_1+\mathbf{e}_i$ and $A(\mathbf{e}_1+\mathbf{e}_i)=a_1\mathbf{e}_1+a_i\mathbf{e}_i$ gives $a_1=a_i$.
+\item[$(\Leftarrow)$] Suppose $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}$.\\
+For each standard basis vector $\mathbf{e}_i$, $\exists a_i\in\mathbb{F}$ such that $A\mathbf{e}_i=a_i\mathbf{e}_i$. For $i\geq2$, dependence of $\mathbf{e}_1+\mathbf{e}_i$ and $A(\mathbf{e}_1+\mathbf{e}_i)=a_1\mathbf{e}_1+a_i\mathbf{e}_i$ means $a_1\mathbf{e}_1+a_i\mathbf{e}_i=b(\mathbf{e}_1+\mathbf{e}_i)$ for some $b\in\mathbb{F}$. Comparing the independent vectors $\mathbf{e}_1,\mathbf{e}_i$ gives $a_1=b=a_i$. Hence every $a_i$ equals $a_1$, so $A=a_1I_n$.
 \end{enumerate}
 \hlt{Structural Commentary}: A scalar matrix preserves every one-dimensional coordinate direction and every diagonal line between two coordinates. These diagonal lines force all coordinate scalars to agree.\\
 \hlt{Key Insight}: If every vector is an eigenvector, then there can be only one eigenvalue.
@@ -341,16 +346,11 @@ By Lemma \ref{lem:scalar-matrix-dependent-orbits}, there is $\mathbf{x}\in\mathb
 Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. Then $A$ is similar over $\mathbb{F}$ to a matrix whose diagonal entries are all equal to $\frac{1}{n}\operatorname{tr}(A)$.
 \begin{proof}
 Set $\tau=\frac{1}{n}\operatorname{tr}(A)$ and $B=A-\tau I_n$. Then $\operatorname{tr}(B)=0$. It is enough to show that every trace-zero matrix is similar to a matrix with zero diagonal, because Theorem \ref{thm:similarity-preserves-scalar-shifts} then adds $\tau I_n$ back to the diagonal.\\
-We prove the trace-zero claim by induction on $n$. The case $n=1$ is immediate. Let $n\geq2$ and let $\operatorname{tr}(B)=0$. If $B$ is scalar, then $B=cI_n$ and $0=\operatorname{tr}(B)=nc$, so $c=0$. If $B$ is not scalar, Lemma \ref{lem:nonscalar-similar-zero-entry} makes $B$ similar to
-\begin{align}
-\begin{bmatrix}
+Prove trace-zero claim by induction on $n$. If $n=1$, a trace-zero matrix is $[0]$. Let $n\geq2$ and let $\operatorname{tr}(B)=0$. If $B$ is scalar, then $B=cI_n$ and $0=\operatorname{tr}(B)=nc$, so $c=0$.\\
+If $B$ is not scalar, Lemma \ref{lem:nonscalar-similar-zero-entry} makes $B$ similar to $\begin{bmatrix}
 0 & *\\
 * & B_1
-\end{bmatrix},
-\qquad
-\operatorname{tr}(B_1)=0.
-\nonumber
-\end{align}
+\end{bmatrix}$, and $\operatorname{tr}(B_1)=0$.\\
 By induction, $B_1$ is similar to a matrix with zero diagonal. Conjugating by a block diagonal matrix that leaves the first coordinate fixed makes the whole matrix have zero diagonal.\\
 \hlt{Structural Commentary}: The proof removes one zero diagonal entry at a time.\\
 \hlt{Key Insight}: Similarity creates the first zero; trace zero handles the smaller block.
@@ -461,12 +461,12 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\
 \begin{proof}
 \begin{enumerate}[label=(\roman*).]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ If $(\lambda,\mathbf{v})$ is an eigenpair with $\mathbf{v}\neq\mathbf{0}$, then $\lambda\norm{\mathbf{v}}_2^2=\mathbf{v}^*A\mathbf{v}>0$, so every eigenvalue is positive.
+\item[$(i)$]$\Rightarrow (ii)$ By definition $A$ is Hermitian. If $(\lambda,\mathbf{v})$ is an eigenpair with $\mathbf{v}\neq\mathbf{0}$, then $\lambda\norm{\mathbf{v}}_2^2=\mathbf{v}^*A\mathbf{v}>0$, so every eigenvalue is positive.
 \item[$(ii)$]$\Rightarrow (iii)$ Positive eigenvalues imply $A\succeq0$ by Theorem \ref{thm:positive-semidefinite-matrix-equivalences}; they also exclude $0$, so $A$ is invertible.
 \item[$(iii)$]$\Rightarrow (iv)$ By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, $A$ has a positive semidefinite square root $A^{1/2}$.\\
 Since $A$ is invertible, $A^{1/2}$ is invertible, and $A=(A^{1/2})^*A^{1/2}$.
 \item[$(iv)$]$\Rightarrow (i)$ If $A=B^*B$ and $B$ is invertible, then for every nonzero $\mathbf{x}$, $\mathbf{x}^*A\mathbf{x}=\norm{B\mathbf{x}}_2^2>0$.
-\item[$(ii)$]$\Leftrightarrow (v)$ Hermitian-ness is preserved by inversion, and eigenvalues of $A^{-1}$ are reciprocal eigenvalues of $A$.
+\item[$(ii)$]$\Leftrightarrow (v)$ Hermitian-ness is preserved by inversion, and eigenvalues of $A^{-1}$ are reciprocal eigenvalues of $A$. Thus positive eigenvalues of $A$ are equivalent to positive eigenvalues of $A^{-1}$.
 \end{enumerate}
 \hlt{Structural Commentary}: Positive definite matrices are the invertible part of the positive semidefinite cone.\\
 \hlt{Key Insight}: Positive definite means every eigenvalue is strictly on the positive side of zero.
@@ -500,8 +500,9 @@ Let $B\in\operatorname{Mat}(m,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\
 \item Positive semidefiniteness follows from Theorem \ref{thm:positive-semidefinite-matrix-equivalences}.
 \item If $B\mathbf{x}=0$, then $A\mathbf{x}=0$. Conversely, if $A\mathbf{x}=0$, then $0=\mathbf{x}^*A\mathbf{x}=\norm{B\mathbf{x}}_2^2$ so $B\mathbf{x}=0$.
 \item Since $A$ and $B$ both have $n$ columns, rank-nullity and (ii) give $\operatorname{rank}(A)=\operatorname{rank}(B)$.
-\item By Proposition \ref{prop:adjoint-kernel-range-orthogonality} and (ii), $\operatorname{col}(A)=\ker(A)^{\perp}=\ker(B)^{\perp}=\operatorname{col}(B^*)$
-\item This follows from (iii), since a matrix is zero if and only if its rank is zero.
+\item Since $A=A^*$, Proposition \ref{prop:adjoint-kernel-range-orthogonality} and (ii) give $\operatorname{col}(A)=\ker(A)^{\perp}=\ker(B)^{\perp}=\operatorname{col}(B^*)$.
+\item By (iii), $\operatorname{rank}(A)=0$ if and only if $\operatorname{rank}(B)=0$.\\
+A matrix has rank zero exactly when it is the zero matrix, so $A=0$ if and only if $B=0$.
 \end{enumerate}
 \hlt{Structural Commentary}: The Gram product $B^*B$ preserves the kernel of $B$.\\
 \hlt{Key Insight}: The identity $\mathbf{x}^*B^*B\mathbf{x}=\norm{B\mathbf{x}}_2^2$ is the whole mechanism.
@@ -509,27 +510,19 @@ Let $B\in\operatorname{Mat}(m,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\
 \end{theorem}
 
 \begin{corollary} \label{cor:positive-semidefinite-principal-block-column-inclusion} \hlt{Principal Blocks and Column Inclusion}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and partition
-\begin{align}
-A=
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be PSD, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and partition $A=
 \begin{bmatrix}
 A_{11} & A_{12}\\
 A_{12}^* & A_{22}
-\end{bmatrix},
-\qquad A_{11}\in\operatorname{Mat}(k,k,\mathbb{F}).
-\nonumber
-\end{align}
+\end{bmatrix}$, $A_{11}\in\operatorname{Mat}(k,k,\mathbb{F})$.\\
 Then $A_{11}\succeq0$, $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$, and $\operatorname{rank}(A_{12})\leq\operatorname{rank}(A_{11})$. If $A\succ0$, then $A_{11}\succ0$.
 \begin{proof}
 Write $A=B^*B$ and partition $B=[B_1\ B_2]$ conformally. Then $A_{11}=B_1^*B_1$ and $A_{12}=B_1^*B_2$.\\
-Hence $A_{11}\succeq0$ and $\operatorname{col}(A_{12})=\operatorname{col}(B_1^*B_2)\subseteq\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)=\operatorname{col}(A_{11})$, last equality is Theorem \ref{thm:gram-factor-kernel-rank-column-data}. The rank inequality follows by taking dimensions. If $A\succ0$ and $\mathbf{x}\neq0$ in $\mathbb{F}^k$, then
-\begin{align}
-\mathbf{x}^*A_{11}\mathbf{x}=
+Hence $A_{11}\succeq0$ and $\operatorname{col}(A_{12})=\operatorname{col}(B_1^*B_2)\subseteq\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)=\operatorname{col}(A_{11})$, equality $\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)$ follows from Theorem \ref{thm:gram-factor-kernel-rank-column-data}. The rank inequality follows by taking dimensions\\
+If $A\succ0$ and $\mathbf{x}\neq0$ in $\mathbb{F}^k$, then $\mathbf{x}^*A_{11}\mathbf{x}=
 \begin{bmatrix}\mathbf{x}\\0\end{bmatrix}^*
 A
-\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}>0,
-\nonumber
-\end{align}\\
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}>0$, so $A_{11}\succ0$.\\
 \hlt{Structural Commentary}: In a positive block matrix, cross-block columns lie in principal block's column space.\\
 \hlt{Key Insight}: Factor first; then column inclusion is immediate from $A_{12}=B_1^*B_2$.
 \end{proof}
@@ -552,18 +545,21 @@ A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $A\succ0$, then all leading principal submatrix is PSD by Corollary \ref{cor:positive-semidefinite-principal-block-column-inclusion}, so its determinant is positive.
-\item[$(\Leftarrow)$] Induct on $n$. The case $n=1$ is immediate. Write $A=
+\item[$(\Rightarrow)$] If $A\succ0$, then each leading principal submatrix is positive definite by Corollary \ref{cor:positive-semidefinite-principal-block-column-inclusion}. Its eigenvalues are positive, so its determinant is positive.
+\item[$(\Leftarrow)$] Induct on $n$. If $n=1$, the single leading principal minor is the only diagonal entry, so positivity of that minor is exactly positive definiteness. Assume $n\geq2$ and write $A=
 \begin{bmatrix}
 B & \mathbf{y}\\
 \mathbf{y}^* & a
 \end{bmatrix}$, $B\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$\\
 The leading principal minors of $B$ are positive, so $B\succ0$.\\
-Cauchy interlacing gives $\lambda_1(A)\leq\lambda_1(B)\leq\lambda_2(A)\leq\cdots\leq\lambda_{n-1}(B)\leq\lambda_n(A)$.\\
-Thus $\lambda_2(A),\ldots,\lambda_n(A)>0$. Since $\det A=\prod_j\lambda_j(A)>0$, also $\lambda_1(A)>0$; hence $A\succ0$.
+Since $\det(B)>0$ and $\det(A)>0$, Proposition \ref{prop:schur-complement-determinant-formula} gives $a-\mathbf{y}^*B^{-1}\mathbf{y}=\frac{\det(A)}{\det(B)}>0$.\\
+For $\mathbf{u}\in\mathbb{C}^{n-1}$ and $t\in\mathbb{C}$, $\begin{bmatrix}\mathbf{u}\\ t\end{bmatrix}^*
+A
+\begin{bmatrix}\mathbf{u}\\ t\end{bmatrix} =(\mathbf{u}+B^{-1}\mathbf{y}t)^*B(\mathbf{u}+B^{-1}\mathbf{y}t) +\left(a-\mathbf{y}^*B^{-1}\mathbf{y}\right)\abs{t}^2$.\\
+First term is nonnegative as $B\succ0$, and second coefficient is positive. If displayed vector is nonzero, then either $t\neq0$ and second term is positive, or $t=0$ and then $\mathbf{u}\neq0$, making first term positive. Thus $A\succ0$.
 \end{enumerate}
-\hlt{Structural Commentary}: Leading minors pass positivity from the leading block to almost all eigenvalues.\\
-\hlt{Key Insight}: The determinant fixes the last eigenvalue's sign.
+\hlt{Structural Commentary}: Leading minors make each leading block positive and final Schur complement positive.\\
+\hlt{Key Insight}: Complete the square with the leading block.
 \end{proof}
 \end{theorem}
 
@@ -592,9 +588,9 @@ Let $A,B\succeq0$ over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Whenever the ex
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\mathbf{x}^*(aA+bB)\mathbf{x}=a\mathbf{x}^*A\mathbf{x}+b\mathbf{x}^*B\mathbf{x}\geq0$; strictness follows from a positive definite summand.
+\item $\mathbf{x}^*(aA+bB)\mathbf{x}=a\mathbf{x}^*A\mathbf{x}+b\mathbf{x}^*B\mathbf{x}\geq0$. If, for example, $A\succ0$ and $a>0$, then for every nonzero $\mathbf{x}$ the first summand is positive and the second is nonnegative, so $aA+bB\succ0$; the case $B\succ0$ is identical.
 \item $\mathbf{x}^*S^*AS\mathbf{x}=(S\mathbf{x})^*A(S\mathbf{x})\geq0$. By Corollary \ref{cor:positive-semidefinite-zero-quadratic-form}, equality occurs exactly when $S\mathbf{x}\in\ker(A)$.
-\item $(\mathbf{x}\oplus\mathbf{y})^*(A\oplus B)(\mathbf{x}\oplus\mathbf{y})=\mathbf{x}^*A\mathbf{x}+\mathbf{y}^*B\mathbf{y}$; the strict case is immediate.
+\item $(\mathbf{x}\oplus\mathbf{y})^*(A\oplus B)(\mathbf{x}\oplus\mathbf{y})=\mathbf{x}^*A\mathbf{x}+\mathbf{y}^*B\mathbf{y}\geq0$. This expression is positive for every nonzero $\mathbf{x}\oplus\mathbf{y}$ exactly when each summand is positive on its own nonzero vectors, namely when $A\succ0$ and $B\succ0$.
 \end{enumerate}
 \hlt{Structural Commentary}: The PSD cone is stable under sums, pullbacks, and direct sums.\\
 \hlt{Key Insight}: Test the quadratic form after each construction.
@@ -603,7 +599,7 @@ Let $A,B\succeq0$ over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Whenever the ex
 
 \begin{proposition} \label{prop:two-by-two-positive-semidefinite-square-root} \hlt{Explicit Square Root for a $2\times2$ Positive Semidefinite Matrix}\\
 Let $A\in\operatorname{Mat}(2,2,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, be positive semidefinite and nonzero. Set $\tau=\bigl(\operatorname{tr}A+2\sqrt{\det A}\bigr)^{1/2}$.\\
-Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$
+Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$.
 \begin{proof}
 Let $C=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$. By Proposition \ref{prop:trace-determinant-positive-semidefinite}, $\det A\geq0$ and $\operatorname{tr}A>0$, hence $\tau>0$; by Theorem \ref{thm:positive-semidefinite-stability-rules}, $C\succeq0$. Cayley--Hamilton gives $A^2-(\operatorname{tr}A)A+(\det A)I_2=0$, so
 \begin{align}
@@ -699,8 +695,9 @@ For Hermitian $A$, its \hlt{inertia} is $\operatorname{in}(A)=(n_+(A),n_-(A),n_0
 \begin{lemma} \label{lem:positive-subspace-dimension-inertia} \hlt{Positive Subspaces and Inertia}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian. The maximal dimensions of subspaces on which $\mathbf{x}^*A\mathbf{x}$ is positive or negative for every nonzero $\mathbf{x}$ are $n_+(A)$ and $n_-(A)$, respectively.
 \begin{proof}
-Let $P_+$ and $P_{\leq0}$ be the positive and nonpositive spectral subspaces.\\
-Then $\dim P_+=n_+(A)$ and $P_+$ is positive for $A$. If $\dim\mathcal{U}>n_+(A)$, then $\mathcal{U}\cap P_{\leq0}$ contains a nonzero vector, so $\mathcal{U}$ cannot be positive. Apply this to $-A$ for the negative case.\\
+Let $P_+$, $P_{\leq0}$ be positive, nonpositive spectral subspaces. Then $\dim P_+=n_+(A)$, $P_+$ is positive for $A$.\\
+If $\dim\mathcal{U}>n_+(A)$, then $\dim\mathcal{U}+\dim P_{\leq0}>n_+(A)+n_-(A)+n_0(A)=n$, so $\mathcal{U}\cap P_{\leq0}$ contains a nonzero vector.\\
+On this vector quadratic form is nonpositive, so $\mathcal{U}$ cannot be positive. Apply this to $-A$ for negative case.\\
 \hlt{Structural Commentary}: The positive spectral subspace is maximal; the nonpositive part blocks enlargement.\\
 \hlt{Key Insight}: Inertia counts maximal sign-definite dimensions.
 \end{proof}
@@ -733,7 +730,8 @@ A \hlt{phase inertia matrix} is a diagonal complex matrix whose nonzero diagonal
 \end{definition}
 
 \begin{proposition} \label{prop:normal-matrix-phase-inertia-form} \hlt{Phase Inertia Form for Normal Matrices}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be normal. Then $A$ is $*$-congruent to a phase inertia matrix $D$, whose entries record the spectral rays of $A$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be normal.\\
+Then $A$ is $*$-congruent to a phase inertia matrix $D$, whose entries record the spectral rays of $A$.
 \begin{proof}
 Write $A=U\operatorname{diag}(\lambda_j)U^*$. Write $\lambda_j=r_jd_j$, where $r_j>0$ and $|d_j|=1$ if $\lambda_j\neq0$, while $r_j=1$ and $d_j=0$ if $\lambda_j=0$. Set $D=\operatorname{diag}(d_j)$, $S=U\operatorname{diag}(\sqrt{r_j})$. Then $S$ is invertible and $A=SDS^*$.\\
 The entries $d_j=e^{i\theta}$ count exactly the eigenvalues on the ray $\{\rho e^{i\theta}:\rho>0\}$.\\
@@ -743,7 +741,8 @@ The entries $d_j=e^{i\theta}$ count exactly the eigenvalues on the ray $\{\rho e
 \end{proposition}
 
 \begin{perspective} \label{per:hermitian-inertia-as-real-phase-inertia} \hlt{Hermitian Inertia as Real Phase Inertia}\\
-For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes. Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
+For Hermitian matrices, the only nonzero spectral rays are the positive and negative real axes.\\
+Sylvester's inertia theorem is therefore the real-ray version of phase inertia.
 \end{perspective}
 
 \begin{definition} \label{def:spectral-radius-and-convergent-matrix} \hlt{Spectral Radius and Convergent Matrix}\\
@@ -827,9 +826,9 @@ Let $n\geq2$ and let $A\in\operatorname{Mat}(n,n,\mathbb{R})$ be a Markov matrix
 \begin{proof}
 Let $A\mathbf{y}=\lambda\mathbf{y}$ with $\abs{\lambda}=1$, and choose $k$ with $\abs{y_k}=\norm{\mathbf{y}}_{\infty}$.\\
 Positivity and the $k$th row sum give $\norm{\mathbf{y}}_{\infty} =\abs{\lambda y_k} =\abs{\sum\limits_{j=1}^{n}a_{kj}y_j} \leq\sum\limits_{j=1}^{n}a_{kj}\abs{y_j} \leq\norm{\mathbf{y}}_{\infty}$.\\
-Equality forces all $\abs{y_j}=\norm{\mathbf{y}}_{\infty}$ and all $y_j$ to have the same argument. Hence $\mathbf{y}=c\mathbf{e}$, and $A\mathbf{e}=\mathbf{e}$ gives $\lambda=1$. Thus $E_1(A)=\operatorname{span}(\mathbf{e})$ and no other eigenvalue lies on the unit circle.\\
+Because every $a_{kj}$ is positive, equality in the last inequality forces $\abs{y_j}=\norm{\mathbf{y}}_{\infty}$ for all $j$. Equality in the triangle inequality then forces all nonzero $y_j$ to have the same argument. Hence $\mathbf{y}=c\mathbf{e}$, and $A\mathbf{e}=\mathbf{e}$ gives $\lambda=1$. Thus $E_1(A)=\operatorname{span}(\mathbf{e})$ and no other eigenvalue lies on the unit circle.\\
 By Theorem \ref{thm:markov-matrix-unit-circle-semisimple}, the Jordan form is $[1]\oplus J$ with $\rho(J)<1$. Choose $S=[\mathbf{e}\ Y]$ such that $A=S([1]\oplus J)S^{-1}$, and let $\mathbf{x}^t$ be the first row of $S^{-1}$. Then $\mathbf{x}^tA=\mathbf{x}^t$ and $\mathbf{x}^t\mathbf{e}=1$. Since $J^p\to0$, $A^p=S([1]\oplus J^p)S^{-1}\to \mathbf{e}\mathbf{x}^t$.\\
-The nonnegative powers $A^p$ imply $\mathbf{x}\geq0$; since $A^t\mathbf{x}=\mathbf{x}$ and $A^t$ has positive entries, in fact $\mathbf{x}>0$. Finally, $\dim E_1(A^t)=\dim E_1(A)=1$, so $\mathbf{x}^t\mathbf{e}=1$ gives uniqueness among probability vectors.\\
+The nonnegative powers $A^p$ imply $\mathbf{e}\mathbf{x}^t\geq0$, so $\mathbf{x}\geq0$. Since $A^t\mathbf{x}=\mathbf{x}$, $\mathbf{x}\neq0$, and $A^t$ has positive entries, in fact $\mathbf{x}>0$. Finally, $\dim E_1(A^t)=\dim E_1(A)=1$ because $A-I_n$ and $(A-I_n)^t$ have the same rank, so $\mathbf{x}^t\mathbf{e}=1$ gives uniqueness among probability vectors.\\
 \hlt{Structural Commentary}: Positivity leaves one simple unit-circle block; all other blocks decay.\\
 \hlt{Key Insight}: The limit is the rank-one projection $\mathbf{e}\mathbf{x}^t$.
 \end{proof}
