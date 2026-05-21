@@ -56,7 +56,7 @@ Let $X$ be a metric space, and let all points and sets below be understood as po
 \item The \hlt{complement} of $E$ is $E^c\defeq X\setminus E$.
 \item A set $E$ is \hlt{dense} in $X$ if every point of $X$ is either a limit point of $E$, a point of $E$, or both.
 \end{enumerate}
-TODO(source pages unavailable): Add the sourced definition of boundary and reconcile notation with $\partial E$ in the notation list.
+TODO(source pages unavailable): Add the sourced definition of boundary and reconcile notation with $\operatorname{bd}(E)$ in the notation list.
 \end{definition}
 
 \begin{theorem} \label{thm:every-neighborhood-open} \hlt{Every Neighborhood Is Open}\\
@@ -147,7 +147,7 @@ Each $F_i^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$
 \end{theorem}
 
 \begin{definition} \label{def:metric-closure} \hlt{Closure}\\
-If $E\subseteq X$ and $E'$ denotes the set of all limit points of $E$ in $X$, then the \hlt{closure} of $E$ is $\overline{E}\defeq E\cup E'$.
+If $E\subseteq X$ and $E^{\operatorname{acc}}$ denotes the set of all limit points of $E$ in $X$, then the \hlt{closure} of $E$ is $\overline{E}\defeq E\cup E^{\operatorname{acc}}$.
 \end{definition}
 
 \begin{theorem} \label{thm:closure-smallest-closed-containing-set} \hlt{Closure Is the Smallest Closed Superset}\\
@@ -162,9 +162,9 @@ Thus $\overline{E}$ is the smallest closed subset of $X$ that contains $E$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $p\notin\overline{E}$. Then $p\notin E$ and $p$ is not a limit point of $E$, so $B_r(p)\cap E=\emptyset$ for some $r>0$. If $q\in B_r(p)$, then $q\notin E$ and $B_{r-d(p,q)}(q)\subseteq B_r(p)$, so $q\notin E'$. Hence $B_r(p)\subseteq(\overline{E})^c$, and $\overline{E}$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
-\item If $\overline{E}=E$, then $E$ is closed by (i). Conversely, if $E$ is closed, then $E'\subseteq E$, so $\overline{E}=E\cup E'=E$.
-\item If $F$ is closed and $E\subseteq F$, then $E'\subseteq F'\subseteq F$. Thus $\overline{E}=E\cup E'\subseteq F$.
+\item Let $p\notin\overline{E}$. Then $p\notin E$ and $p$ is not a limit point of $E$, so $B_r(p)\cap E=\emptyset$ for some $r>0$. If $q\in B_r(p)$, then $q\notin E$ and $B_{r-d(p,q)}(q)\subseteq B_r(p)$, so $q\notin E^{\operatorname{acc}}$. Hence $B_r(p)\subseteq(\overline{E})^c$, and $\overline{E}$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
+\item If $\overline{E}=E$, then $E$ is closed by (i). Conversely, if $E$ is closed, then $E^{\operatorname{acc}}\subseteq E$, so $\overline{E}=E\cup E^{\operatorname{acc}}=E$.
+\item If $F$ is closed and $E\subseteq F$, then $E^{\operatorname{acc}}\subseteq F^{\operatorname{acc}}\subseteq F$. Thus $\overline{E}=E\cup E^{\operatorname{acc}}\subseteq F$.
 \end{enumerate}
 \hlt{Structural Commentary}: Closure adds exactly the limit points forced by $E$.\\
 \hlt{Key Insight}: Closed supersets must contain all limit points, so they must contain $\overline{E}$.
@@ -174,7 +174,7 @@ Thus $\overline{E}$ is the smallest closed subset of $X$ that contains $E$.
 \begin{theorem} \label{thm:supremum-belongs-to-closure} \hlt{Suprema Belong to Closures}\\
 Let $\emptyset\neq E\subseteq\R$ be bounded above and let $y\defeq\sup E$. Then $y\in\overline{E}$; if $E$ is closed, then $y\in E$.
 \begin{proof}
-If $y\in E$, then $y\in\overline{E}$. If $y\notin E$, then for every $h>0$, $y-h$ is not an upper bound of $E$, so choose $x_h\in E$ with $y-h<x_h\leq y$. Then $x_h\neq y$ and $\abs{x_h-y}<h$, hence $B_h(y)\cap(E\setminus\{y\})\neq\emptyset$. Thus $y\in E'\subseteq\overline{E}$. If $E$ is closed, Theorem \ref{thm:closure-smallest-closed-containing-set}(ii) gives $\overline{E}=E$.\\
+If $y\in E$, then $y\in\overline{E}$. If $y\notin E$, then for every $h>0$, $y-h$ is not an upper bound of $E$, so choose $x_h\in E$ with $y-h<x_h\leq y$. Then $x_h\neq y$ and $\abs{x_h-y}<h$, hence $B_h(y)\cap(E\setminus\{y\})\neq\emptyset$. Thus $y\in E^{\operatorname{acc}}\subseteq\overline{E}$. If $E$ is closed, Theorem \ref{thm:closure-smallest-closed-containing-set}(ii) gives $\overline{E}=E$.\\
 \hlt{Structural Commentary}: LUB gives points of $E$ arbitrarily close below $\sup E$.\\
 \hlt{Key Insight}: A supremum is either attained or approached.
 \end{proof}
@@ -202,7 +202,7 @@ Hence $B_r(p)\cap Y\subseteq G\cap Y=E$, so $E$ is open relative to $Y$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item To prove $G$ is open, fix $x\in G$ and find $r>0$ with $B_r(x)\subseteq G$.
-\item To prove $F$ is closed, show $F'\subseteq F$, or equivalently show $F^c$ is open.
+\item To prove $F$ is closed, show $F^{\operatorname{acc}}\subseteq F$, or equivalently show $F^c$ is open.
 \item To prove $C=\overline{E}$, show $E\subseteq C$, $C$ is closed, and $C\subseteq F$ for every closed $F\supseteq E$.
 \end{enumerate}
 \end{method}

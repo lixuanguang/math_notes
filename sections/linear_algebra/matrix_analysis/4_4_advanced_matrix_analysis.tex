@@ -203,19 +203,19 @@ To bound eigenvalue movement for a diagonalizable matrix:
 \end{method}
 
 \begin{definition} \label{def:gersgorin-disks} \hlt{Gersgorin Disks}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{deleted absolute row sum} in row $k$ is $R'_k(A)\defeq\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
-The \hlt{$k$th Gersgorin disk} of $A$ is $G_k(A)\defeq\{z\in\mathbb{C}:\abs{z-a_{kk}}\leq R'_k(A)\}$, where $G(A)\defeq\bigcup\limits_{k=1}^{n}G_k(A)$
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{deleted absolute row sum} in row $k$ is $R_k^{\mathrm{off}}(A)\defeq\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
+The \hlt{$k$th Gersgorin disk} of $A$ is $\operatorname{Ger}_k(A)\defeq\{z\in\mathbb{C}:\abs{z-a_{kk}}\leq R_k^{\mathrm{off}}(A)\}$, where $\operatorname{Ger}(A)\defeq\bigcup\limits_{k=1}^{n}\operatorname{Ger}_k(A)$.
 \end{definition}
 
 \begin{theorem} \label{thm:gersgorin-disk-theorem} \hlt{Gersgorin Disk Theorem}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq G(A)=\bigcup\limits_{k=1}^{n}G_k(A)$.
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)=\bigcup\limits_{k=1}^{n}\operatorname{Ger}_k(A)$.
 \begin{proof}
 Let $\lambda\in\operatorname{spec}(A)$ and choose an eigenvector $\mathbf{x}=[x_1\ \cdots\ x_n]^t$.\\
 Pick $k$ such that $\abs{x_k}=\max_j\abs{x_j}$; then $x_k\neq0$. The $k$th row of $A\mathbf{x}=\lambda\mathbf{x}$ gives $(\lambda-a_{kk})x_k=\sum\limits_{j\neq k}a_{kj}x_j$.\\
-Divide by $x_k$ and use $\abs{x_j/x_k}\leq1$: $\abs{\lambda-a_{kk}} =\abs{\sum\limits_{j\neq k}a_{kj}\frac{x_j}{x_k}} \leq\sum\limits_{j\neq k}\abs{a_{kj}}\abs{\frac{x_j}{x_k}} \leq R'_k(A)$.\\
-Thus $\lambda\in G_k(A)\subseteq G(A)$.\\
+Divide by $x_k$ and use $\abs{x_j/x_k}\leq1$: $\abs{\lambda-a_{kk}} =\abs{\sum\limits_{j\neq k}a_{kj}\frac{x_j}{x_k}} \leq\sum\limits_{j\neq k}\abs{a_{kj}}\abs{\frac{x_j}{x_k}} \leq R_k^{\mathrm{off}}(A)$.\\
+Thus $\lambda\in \operatorname{Ger}_k(A)\subseteq \operatorname{Ger}(A)$.\\
 \hlt{Structural Commentary}: Normalize by a largest component; all row ratios have modulus at most one.\\
-\hlt{Key Insight}: Row $k$ traps $\lambda$ in the disk centered at $a_{kk}$ with radius $R'_k(A)$.
+\hlt{Key Insight}: Row $k$ traps $\lambda$ in the disk centered at $a_{kk}$ with radius $R_k^{\mathrm{off}}(A)$.
 \end{proof}
 \end{theorem}
 
@@ -223,10 +223,10 @@ Thus $\lambda\in G_k(A)\subseteq G(A)$.\\
 For $A=[a_{ij}]$, Gersgorin localisation gives a disk enclosure for the spectrum.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For each row $k$, place a disk at the diagonal entry $a_{kk}$ with radius $R'_k(A)=\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
-The row enclosure is $G(A)=\bigcup_{k=1}^{n}G_k(A)$.
-\item Theorem \ref{thm:gersgorin-disk-theorem} guarantees that every eigenvalue of $A$ lies in $G(A)$.
-\item For a sharper enclosure, repeat the same construction for $A^t$. The centers are still $a_{kk}$, while the radii becomes deleted column sums of $A$. Then use $\operatorname{spec}(A)\subseteq G(A)\cap G(A^t)$.
+\item For each row $k$, place a disk at the diagonal entry $a_{kk}$ with radius $R_k^{\mathrm{off}}(A)=\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
+The row enclosure is $\operatorname{Ger}(A)=\bigcup_{k=1}^{n}\operatorname{Ger}_k(A)$.
+\item Theorem \ref{thm:gersgorin-disk-theorem} guarantees that every eigenvalue of $A$ lies in $\operatorname{Ger}(A)$.
+\item For a sharper enclosure, repeat the same construction for $A^t$. The centers are still $a_{kk}$, while the radii becomes deleted column sums of $A$. Then use $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$.
 This is the intersection of two unions of disks; an eigenvalue need not lie in the overlap of each individual row-column disk pair.
 \end{enumerate}
 \end{method}
@@ -234,24 +234,24 @@ This is the intersection of two unions of disks; an eigenvalue need not lie in t
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/gersgorin_disk_method.tikz}
-  \caption{Blue row disks contain the spectrum; green dashed column disks give the sharper row-column enclosure $G(A)\cap G(A^t)$. Red points illustrate possible eigenvalue locations.}
+  \caption{Blue row disks contain the spectrum; green dashed column disks give the sharper row-column enclosure $\operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$. Red points illustrate possible eigenvalue locations.}
   \label{fig:gersgorin-disk-method}
 \end{figure}
 
 \begin{corollary} \label{cor:gersgorin-row-column-refinement} \hlt{Row-Column Gersgorin Refinement}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq G(A)\cap G(A^t)$.\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$.\\
 If $R_k(A)=\sum\limits_{j=1}^{n}\abs{a_{kj}}$ and $R_{\max}(A)=\max_{1\leq k\leq n}R_k(A)$, then $\operatorname{spec}(A)\subseteq\{z\in\mathbb{C}:\abs{z}\leq \min(R_{\max}(A),R_{\max}(A^t))\}$.
 \begin{proof}
-Theorem \ref{thm:gersgorin-disk-theorem} gives $\operatorname{spec}(A)\subseteq G(A)$.\\
-Proposition \ref{prop:transpose-preserves-spectrum-and-geometric-multiplicity} gives $\operatorname{spec}(A)=\operatorname{spec}(A^t)$, so applying Gersgorin to $A^t$ gives $\operatorname{spec}(A)\subseteq G(A^t)$.\\
-Also $G_k(A)\subseteq\{z:\abs{z}\leq \abs{a_{kk}}+R'_k(A)=R_k(A)\}$, and similarly for $A^t$.\\
+Theorem \ref{thm:gersgorin-disk-theorem} gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)$.\\
+Proposition \ref{prop:transpose-preserves-spectrum-and-geometric-multiplicity} gives $\operatorname{spec}(A)=\operatorname{spec}(A^t)$, so applying Gersgorin to $A^t$ gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A^t)$.\\
+Also $\operatorname{Ger}_k(A)\subseteq\{z:\abs{z}\leq \abs{a_{kk}}+R_k^{\mathrm{off}}(A)=R_k(A)\}$, and similarly for $A^t$.\\
 \hlt{Structural Commentary}: Row disks and column disks are both valid because $A$ and $A^t$ have the same spectrum.\\
 \hlt{Key Insight}: Intersecting independent enclosures usually sharpens the eigenvalue search region.
 \end{proof}
 \end{corollary}
 
 \begin{definition} \label{def:diagonal-dominance} \hlt{Diagonal Dominance}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. Matrix $A$ is \hlt{diagonally dominant} if $\abs{a_{kk}}\geq R'_k(A)$ for every $k$, and \hlt{strictly diagonally dominant} if $\abs{a_{kk}}>R'_k(A)$ for every $k$.
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. Matrix $A$ is \hlt{diagonally dominant} if $\abs{a_{kk}}\geq R_k^{\mathrm{off}}(A)$ for every $k$, and \hlt{strictly diagonally dominant} if $\abs{a_{kk}}>R_k^{\mathrm{off}}(A)$ for every $k$.
 \end{definition}
 
 \begin{corollary} \label{cor:strict-diagonal-dominance-invertible} \hlt{Strict Diagonal Dominance Implies Invertibility}\\
@@ -264,9 +264,9 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Strict dominance gives $0\notin G_k(A)$ for every $k$, since $\abs{a_{kk}}>R'_k(A)$.\\
+\item Strict dominance gives $0\notin \operatorname{Ger}_k(A)$ for every $k$, since $\abs{a_{kk}}>R_k^{\mathrm{off}}(A)$.\\
 Thus $0\notin\operatorname{spec}(A)$ by Gersgorin, so $A$ is invertible by Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}.
-\item If $a_{kk}\geq0$ and $a_{kk}\geq R'_k(A)$, then each $G_k(A)$ lies in the closed right half-plane. In the strict case, each disk lies in the open right half-plane. Gersgorin and the real-spectrum hypothesis give the claim.
+\item If $a_{kk}\geq0$ and $a_{kk}\geq R_k^{\mathrm{off}}(A)$, then each $\operatorname{Ger}_k(A)$ lies in the closed right half-plane. In the strict case, each disk lies in the open right half-plane. Gersgorin and the real-spectrum hypothesis give the claim.
 \end{enumerate}
 \hlt{Structural Commentary}: Gersgorin converts diagonal dominance into disk placement.\\
 \hlt{Key Insight}: The disks control whether eigenvalues can reach $0$ or the left half-plane.
@@ -296,10 +296,10 @@ Hermitian matrices have real spectrum.
 
 \begin{theorem} \label{thm:weak-diagonal-dominance-invertible-with-one-strict-row} \hlt{Weak Diagonal Dominance Criterion}\\
 Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$ be diagonally dominant with no zero entries.\\
-If $\abs{a_{kk}}>R'_k(A)$ for some $k$, then $A$ is invertible.
+If $\abs{a_{kk}}>R_k^{\mathrm{off}}(A)$ for some $k$, then $A$ is invertible.
 \begin{proof}
 Assume $A\mathbf{x}=0$ with $\mathbf{x}\neq\mathbf{0}$, and choose $k$ with $\abs{x_k}=\norm{\mathbf{x}}_{\infty}$.\\
-Row $k$ gives $\abs{a_{kk}}\norm{\mathbf{x}}_{\infty} =\abs{-\sum\limits_{j\neq k}a_{kj}x_j} \leq\sum\limits_{j\neq k}\abs{a_{kj}}\abs{x_j} \leq R'_k(A)\norm{\mathbf{x}}_{\infty} \leq \abs{a_{kk}}\norm{\mathbf{x}}_{\infty}$.\\
+Row $k$ gives $\abs{a_{kk}}\norm{\mathbf{x}}_{\infty} =\abs{-\sum\limits_{j\neq k}a_{kj}x_j} \leq\sum\limits_{j\neq k}\abs{a_{kj}}\abs{x_j} \leq R_k^{\mathrm{off}}(A)\norm{\mathbf{x}}_{\infty} \leq \abs{a_{kk}}\norm{\mathbf{x}}_{\infty}$.\\
 Hence all inequalities are equalities. Since no $a_{kj}$ vanishes, $\abs{x_j}=\norm{\mathbf{x}}_{\infty}$ for every $j$. Applying the same chain to any row $i$ gives $\abs{a_{ii}}=R'_i(A)$ for every $i$, contradicting the strict row. Thus $\ker(A)=\{\mathbf{0}\}$, so $A$ is invertible.\\
 \hlt{Structural Commentary}: A zero vector in the kernel would force equality in every Gersgorin row.\\
 \hlt{Key Insight}: One strict row breaks that equality pattern.
@@ -340,7 +340,7 @@ For a Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$, write $\lambda_
 \end{definition}
 
 \begin{theorem} \label{thm:rayleigh-quotient-spectral-interval} \hlt{Rayleigh Quotient on a Spectral Interval}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$. If $1\leq p\leq q\leq n$ and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ is a unit vector, then $\lambda_p\leq \mathbf{x}^*A\mathbf{x}\leq \lambda_q$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$. For a unit vector, write $\operatorname{Ray}_A(\mathbf{x})\defeq\mathbf{x}^*A\mathbf{x}$. If $1\leq p\leq q\leq n$ and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ is a unit vector, then $\lambda_p\leq \operatorname{Ray}_A(\mathbf{x})\leq \lambda_q$.
 \begin{proof}
 Write $\mathbf{x}=\sum_{i=p}^{q}c_i\mathbf{u}_i$. Orthonormality gives $\sum_{i=p}^{q}\abs{c_i}^2=1$, and $\mathbf{x}^*A\mathbf{x} =\sum\limits_{i=p}^{q}\lambda_i\abs{c_i}^2$.\\
 This is a convex combination of $\lambda_p,\ldots,\lambda_q$, so it lies between the smallest and largest of them.\\
@@ -372,7 +372,7 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian.
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/rayleigh_quotient_convex_combination.tikz}
-  \caption{For $\mathbf{x}\in\mathcal{U}_{p,q}$, $R_A(\mathbf{x})$ is a convex combination of $\lambda_p,\ldots,\lambda_q$.}
+  \caption{For $\mathbf{x}\in\mathcal{U}_{p,q}$, $\operatorname{Ray}_A(\mathbf{x})$ is a convex combination of $\lambda_p,\ldots,\lambda_q$.}
   \label{fig:rayleigh-quotient-convex-combination}
 \end{figure}
 
