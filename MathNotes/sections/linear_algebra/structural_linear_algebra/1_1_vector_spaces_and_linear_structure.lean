@@ -205,4 +205,41 @@ theorem subspace_inherited_vector_space (U : Subspace F V) :
 
 end SubspaceDefinition
 
+section SubspaceTest
+
+/-!
+## Subspace Test
+
+The usual one-line subspace test: a nonempty subset is a subspace exactly when
+it is closed under expressions of the form `c • u + v`.
+-/
+
+variable {F V : Type*} [Field F] [AddCommGroup V] [Module F V]
+
+theorem subspace_test {U : Set V} (hU : U.Nonempty) :
+    (∃ S : Subspace F V, U = S) ↔
+      (∀ (c : F) ⦃u v : V⦄, u ∈ U → v ∈ U → c • u + v ∈ U) := by
+  constructor
+  · rintro ⟨S, rfl⟩ c u v hu hv
+    exact S.add_mem (S.smul_mem c hu) hv
+  · intro hclosed
+    rcases hU with ⟨u₀, hu₀⟩
+    have hzero : (0 : V) ∈ U := by
+      have hneg_add : (-1 : F) • u₀ + u₀ ∈ U := hclosed (-1) hu₀ hu₀
+      simpa [negative_one_smul_eq_neg_vector] using hneg_add
+    let S : Subspace F V :=
+      { carrier := U
+        zero_mem' := hzero
+        add_mem' := by
+          intro u v hu hv
+          have h : (1 : F) • u + v ∈ U := hclosed 1 hu hv
+          simpa using h
+        smul_mem' := by
+          intro c u hu
+          have h : c • u + 0 ∈ U := hclosed c hu hzero
+          simpa using h }
+    exact ⟨S, rfl⟩
+
+end SubspaceTest
+
 end MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure

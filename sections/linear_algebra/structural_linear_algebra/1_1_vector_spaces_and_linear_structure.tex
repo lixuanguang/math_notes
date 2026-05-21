@@ -78,8 +78,11 @@ A \hlt{subspace} of a vector space $\mathcal{V}$ over $\mathbb{F}$ is a subset $
 \end{definition}
 
 \begin{theorem} \label{thm:subspacetest} \hlt{Subspace Test}\\
+\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.subspace_test}
+\leanok
 Let $\mathcal{V}$ be a vector space over $\mathbb{F}$ and let $\mathcal{U}$ be a nonempty subset of $\mathcal{V}$. Then $\mathcal{U}$ is a subspace of $\mathcal{V}$ if and only if $c\mathbf{u} + \mathbf{v} \in \mathcal{U}$ for all $\mathbf{u}, \mathbf{v} \in \mathcal{U}$ and all $c \in \mathbb{F}$.
 \begin{proof}
+\leanok
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] If $\mathcal{U}$ is a subspace, then $c\mathbf{u}+\mathbf{v} \in \mathcal{U}$ for all $\mathbf{u}, \mathbf{v} \in \mathcal{U}$ and all $c \in \mathbb{F}$ because $\mathcal{U}$ is closed under scalar multiplication and vector addition.
@@ -194,7 +197,7 @@ Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a list in $\mathcal{V}$. Write
 
 \begin{lemma} \label{lem:replacement-lemma} \hlt{Replacement Lemma}\\
 Let $\mathcal{V}\neq\{\mathbf{0}\}$, let $\beta=(\mathbf{u}_1,\ldots,\mathbf{u}_r)$ span $\mathcal{V}$, and let $\mathbf{0}\neq\mathbf{v}=\sum\limits_{i=1}^r c_i\mathbf{u}_i$.\\
-For $j\in\{1,\ldots,r\}$, set $\beta_{j\leftarrow\mathbf{v}}\defeq(\mathbf{v},\mathbf{u}_1,\ldots,\widehat{\mathbf{u}_j},\ldots,\mathbf{u}_r)$.
+For $j\in\{1,\ldots,r\}$, set $\beta_{j\leftarrow\mathbf{v}}\defeq(\mathbf{u}_1,\ldots,\mathbf{u}_{j-1},\mathbf{v},\mathbf{u}_{j+1},\ldots,\mathbf{u}_r)$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $c_j\neq0$ for some $j$.
@@ -205,7 +208,8 @@ For $j\in\{1,\ldots,r\}$, set $\beta_{j\leftarrow\mathbf{v}}\defeq(\mathbf{v},\m
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If all $c_j=0$, then $\mathbf{v}=\mathbf{0}$.
-\item Since $\mathbf{u}_j=c_j^{-1}\left(\mathbf{v}-\sum\limits_{i\neq j}c_i\mathbf{u}_i\right)$, the spans agree. If $\beta$ is a basis and $a\mathbf{v}+\sum\limits_{i\neq j}b_i\mathbf{u}_i=\mathbf{0}$, substitution gives $\sum\limits_{i\neq j}(ac_i+b_i)\mathbf{u}_i+ac_j\mathbf{u}_j=\mathbf{0}$; hence $a=0$ and all $b_i=0$.
+\item Since $\mathbf{u}_j=c_j^{-1}\left(\mathbf{v}-\sum\limits_{i\neq j}c_i\mathbf{u}_i\right)$, every vector of $\beta$ lies in $\operatorname{span}(\beta_{j\leftarrow\mathbf{v}})$, while every vector of $\beta_{j\leftarrow\mathbf{v}}$ lies in $\operatorname{span}(\beta)$. Hence $\operatorname{span}(\beta_{j\leftarrow\mathbf{v}})=\mathcal{V}$. If $\beta$ is a basis and $\sum\limits_{i<j}b_i\mathbf{u}_i+a\mathbf{v}+\sum\limits_{i>j}b_i\mathbf{u}_i=\mathbf{0}$, then substitution gives $\sum\limits_{i\neq j}(b_i+ac_i)\mathbf{u}_i+ac_j\mathbf{u}_j=\mathbf{0}$. Linear independence of $\beta$ gives $ac_j=0$ and $b_i+ac_i=0$ for $i\neq j$.\\
+Since $c_j\neq0$, $a=0$, and then every $b_i=0$. Thus $\beta_{j\leftarrow\mathbf{v}}$ is also linearly independent.
 \item If $c_i=0 \ \forall i>k$, then $\mathbf{v}\in\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, contradiction. Thus some $c_j\neq0$ with $j>k$, and (ii) applies.
 \end{enumerate}
 \hlt{Structural Commentary}: Replacement preserves span.\\
@@ -218,8 +222,11 @@ For $j\in\{1,\ldots,r\}$, set $\beta_{j\leftarrow\mathbf{v}}\defeq(\mathbf{v},\m
 Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be linearly dependent with $\mathbf{v}_1\neq\mathbf{0}$, and set $\beta_{\widehat{j}}\defeq(\mathbf{v}_1,\ldots,\widehat{\mathbf{v}_j},\ldots,\mathbf{v}_m)$.\\
 Then $\exists j\in\{2,\ldots,m\}$ such that $\mathbf{v}_j\in\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{j-1})$ and $\operatorname{span}(\beta_{\widehat{j}})=\operatorname{span}(\beta)$.
 \begin{proof}
-Choose a nontrivial relation $\sum\limits_{i=1}^m a_i\mathbf{v}_i=\mathbf{0}$ and let $j=\max\{i:a_i\neq0\}$. Since $\mathbf{v}_1\neq\mathbf{0}$, $j\geq2$.\\
-Then $\mathbf{v}_j=-\sum\limits_{i=1}^{j-1}\frac{a_i}{a_j}\mathbf{v}_i$, so $\mathbf{v}_j\in\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{j-1})$. Proposition \ref{prop:adjoiningandremovingvectors} gives $\operatorname{span}(\beta_{\widehat{j}})=\operatorname{span}(\beta)$.\\
+Choose a nontrivial relation $\sum\limits_{i=1}^m a_i\mathbf{v}_i=\mathbf{0}$ and let $j=\max\{i:a_i\neq0\}$.\\
+If $j=1$, then $a_1\mathbf{v}_1=\mathbf{0}$ with $a_1\neq0$, so $\mathbf{v}_1=\mathbf{0}$, contrary to hypothesis. Hence $j\geq2$.\\
+Since $a_i=0$ for $i>j$, we have $\mathbf{v}_j=-\sum\limits_{i=1}^{j-1}\frac{a_i}{a_j}\mathbf{v}_i$, so $\mathbf{v}_j\in\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{j-1})$.\\
+Therefore every linear combination of $\beta$ can be rewritten without $\mathbf{v}_j$, which gives $\operatorname{span}(\beta)\subseteq\operatorname{span}(\beta_{\widehat{j}})$.\\
+The reverse inclusion is immediate because $\beta_{\widehat{j}}$ is a sublist of $\beta$.\\
 \hlt{Structural Commentary}: The last nonzero coefficient gives the removable vector.\\
 \hlt{Key Insight}: Dependence gives a later vector removable without losing span.
 \end{proof}
@@ -228,8 +235,10 @@ Then $\mathbf{v}_j=-\sum\limits_{i=1}^{j-1}\frac{a_i}{a_j}\mathbf{v}_i$, so $\ma
 \begin{theorem} \label{thm:finitedimlenofvec} \hlt{Independent Lists Are No Longer Than Spanning Lists}\\
 If $\mathcal{V}$ is finite-dimensional, $\alpha=(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ is linearly independent, and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ spans $\mathcal{V}$, then $m\leq n$.
 \begin{proof}
-Suppose $m>n$. Starting from $\gamma$, inductively keep a spanning list of length $n$ whose first $k$ entries are $\mathbf{u}_1,\ldots,\mathbf{u}_k$. For $k<n$, write $\mathbf{u}_{k+1}$ in this list.\\
-Some coefficient after position $k$ is nonzero, since $\mathbf{u}_{k+1}\notin\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$. Lemma \ref{lem:replacement-lemma}(ii) replaces that entry by $\mathbf{u}_{k+1}$ and preserves span. After $n$ steps, $(\mathbf{u}_1,\ldots,\mathbf{u}_n)$ spans $\mathcal{V}$, so $\mathbf{u}_{n+1}\in\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$, contradicting the linear independence of $\alpha$.\\
+Suppose $m>n$. If $n=0$, then $\operatorname{span}(\gamma)=\{\mathbf{0}\}$, so $\mathcal{V}=\{\mathbf{0}\}$ and no nonempty independent list exists; hence $n\geq1$. Starting from $\gamma$, we construct for each $0\leq k\leq n$ a spanning list of length $n$ containing $\mathbf{u}_1,\ldots,\mathbf{u}_k$.\\
+The case $k=0$ is $\gamma$. Suppose the list has been constructed for some $k<n$. Write $\mathbf{u}_{k+1}$ as a linear combination of its entries. If all coefficients of entries other than $\mathbf{u}_1,\ldots,\mathbf{u}_k$ were zero, then $\mathbf{u}_{k+1}\in\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, contradicting the linear independence of $\alpha$. Thus some remaining entry has nonzero coefficient; replacing that entry by $\mathbf{u}_{k+1}$ preserves span by Lemma \ref{lem:replacement-lemma}(ii). This proves the induction.\\
+For $k=n$, the resulting spanning list has length $n$ and contains $\mathbf{u}_1,\ldots,\mathbf{u}_n$; hence it is exactly these vectors, up to order. Thus $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)=\mathcal{V}$.\\
+Since $m>n$, this puts $\mathbf{u}_{n+1}$ in $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$, contradicting the linear independence of $\alpha$.\\
 \hlt{Structural Commentary}: Independent length is bounded by spanning length.\\
 \hlt{Key Insight}: Independent lists cannot be longer than spanning lists in finite dimensions.
 \end{proof}
@@ -256,7 +265,8 @@ Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$. Then $\beta$ is a basis of $\mat
 \begin{theorem} \label{thm:reducing-spanning-lists} \hlt{Reducing Spanning Lists}\\
 Every spanning list in a finite-dimensional vector space contains a sublist that is a basis.
 \begin{proof}
-Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a spanning list of $\mathcal{V}$. If $\beta$ is linearly independent, then $\beta$ is already a basis. Otherwise, remove a redundant vector without changing the span: if $\mathbf{v}_1=\mathbf{0}$, remove $\mathbf{v}_1$; if $\mathbf{v}_1\neq\mathbf{0}$, apply Lemma \ref{lem:lineardependencelemma}. Repeating this finite process gives a sublist that still spans $\mathcal{V}$ and is linearly independent.\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a spanning list of $\mathcal{V}$. If $\beta$ is linearly independent, it is a basis. Otherwise, remove one vector without changing the span: if $\mathbf{v}_1=\mathbf{0}$, omit $\mathbf{v}_1$; if $\mathbf{v}_1\neq\mathbf{0}$, Lemma \ref{lem:lineardependencelemma} gives a removable $\mathbf{v}_j$. The new list is a sublist of $\beta$, still spans $\mathcal{V}$, and has length one less.\\
+Repeat this step while the current spanning list is dependent. Since the length decreases each time, the process stops after at most $n$ removals. At termination the remaining sublist still spans $\mathcal{V}$ and is linearly independent, hence is a basis.\\
 \hlt{Structural Commentary}: A spanning list may contain redundant vectors. Removing only vectors forced by the others preserves span until a basis remains.\\
 \hlt{Key Insight}: Spanning gives enough vectors; reduction deletes exactly the unnecessary ones.
 \end{proof}
@@ -265,7 +275,9 @@ Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a spanning list of $\mathcal{V
 \begin{theorem} \label{thm:extending-independent-lists} \hlt{Extending Independent Lists}\\
 Every linearly independent list in a finite-dimensional vector space can be extended to a basis.
 \begin{proof}
-Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be linearly independent in $\mathcal{V}$, and choose a spanning list $(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ of $\mathcal{V}$. Starting with $\mathcal{B}=\beta$, inspect $\mathbf{w}_1,\ldots,\mathbf{w}_n$ in order and append $\mathbf{w}_j$ exactly when $\mathbf{w}_j\notin\operatorname{span}(\mathcal{B})$. Each append preserves linear independence by Proposition \ref{prop:adjoiningandremovingvectors}. After all $\mathbf{w}_j$ have been inspected, every vector in the spanning list lies in $\operatorname{span}(\mathcal{B})$, so $\mathcal{B}$ spans $\mathcal{V}$.\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be linearly independent in $\mathcal{V}$, and choose a spanning list $(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ of $\mathcal{V}$.\\
+Starting with $\mathcal{B}=\beta$, inspect $\mathbf{w}_1,\ldots,\mathbf{w}_n$ in order and append $\mathbf{w}_j$ exactly when $\mathbf{w}_j\notin\operatorname{span}(\mathcal{B})$. Each append preserves linear independence by Proposition \ref{prop:adjoiningandremovingvectors}.\\
+After the inspection, each $\mathbf{w}_j$ lies in $\operatorname{span}(\mathcal{B})$: it was either already there when inspected, or it was appended to $\mathcal{B}$. Since the $\mathbf{w}_j$ span $\mathcal{V}$, every vector of $\mathcal{V}$ is a linear combination of vectors in $\operatorname{span}(\mathcal{B})$, and hence lies in $\operatorname{span}(\mathcal{B})$. Thus $\mathcal{B}$ is a spanning independent list, so it is a basis.\\
 \hlt{Structural Commentary}: An independent list has no redundancy, but may miss directions. Appending only vectors outside its span fills those directions while preserving independence.\\
 \hlt{Key Insight}: A finite-dimensional independent list becomes a basis once enough new directions are added.
 \end{proof}
@@ -274,8 +286,9 @@ Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be linearly independent in $\math
 \begin{corollary} \label{cor:finite-dimensional-spaces-and-subspaces-have-bases}
 Every finite-dimensional vector space has a basis, and every subspace of a finite-dimensional vector space is finite-dimensional.
 \begin{proof}
-Since $\mathcal{V}$ is finite-dimensional, it has a finite spanning list; Theorem \ref{thm:reducing-spanning-lists} reduces it to a basis. Let $\mathcal{U}\subseteq\mathcal{V}$ be a subspace. If $\mathcal{U}=\{\mathbf{0}\}$, then $\mathcal{U}$ is finite-dimensional. Otherwise, build a linearly independent list in $\mathcal{U}$ by adjoining vectors outside the current span.\\
-Theorem \ref{thm:finitedimlenofvec} bounds the length of this list by the length of any spanning list of $\mathcal{V}$, so the process must terminate. At termination, the list spans $\mathcal{U}$ and hence is a basis of $\mathcal{U}$.\\
+Since $\mathcal{V}$ is finite-dimensional, it has a finite spanning list; Theorem \ref{thm:reducing-spanning-lists} reduces it to a basis.\\
+Let $\mathcal{U}\subseteq\mathcal{V}$ be a subspace. If $\mathcal{U}=\{\mathbf{0}\}$, then the empty list is a basis of $\mathcal{U}$.\\
+Otherwise, begin with any nonzero vector of $\mathcal{U}$, and repeatedly append a vector of $\mathcal{U}$ outside the span of the current list if such a vector exists. Proposition \ref{prop:adjoiningandremovingvectors} keeps the list linearly independent. Theorem \ref{thm:finitedimlenofvec} bounds its length by the length of any spanning list of $\mathcal{V}$, so this finite process must terminate. When it terminates, no vector of $\mathcal{U}$ lies outside the span of the list; hence the list spans $\mathcal{U}$ and is a basis of $\mathcal{U}$.\\
 \hlt{Structural Commentary}: Finite-dimensional spaces have finite coordinate systems, and subspaces cannot contain longer independent lists than the ambient space permits.\\
 \hlt{Key Insight}: Finite-dimensionality passes downward to subspaces.
 \end{proof}
@@ -297,16 +310,20 @@ The zero vector space has \hlt{dimension} $0$. If $\mathcal{V}$ has a basis of p
 \begin{proposition} \label{prop:dimension-bounds-and-basis-criteria} \hlt{Dimension Bounds and Basis Criteria}\\
 If $\mathcal{V}$ is finite-dimensional and $\mathcal{U} \subseteq \mathcal{V}$ is a subspace, then $\dim(\mathcal{U}) \leq \dim(\mathcal{V})$, with equality if and only if $\mathcal{U}=\mathcal{V}$. Moreover, a spanning list of length $\dim(\mathcal{V})$ is automatically a basis, and a linearly independent list of length $\dim(\mathcal{V})$ is automatically a basis.
 \begin{proof}
-Let $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ be a basis of $\mathcal{U}$ and $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ a basis of $\mathcal{V}$. Theorem \ref{thm:finitedimlenofvec} gives $m\leq n$, so $\dim(\mathcal{U})\leq\dim(\mathcal{V})$. If $\mathcal{U}=\mathcal{V}$, equality is clear. Conversely, if $m=n$, then the basis of $\mathcal{U}$ is an independent list in $\mathcal{V}$ of length $\dim(\mathcal{V})$; extending it to a basis of $\mathcal{V}$ adds no vectors, so it already spans $\mathcal{V}$. Hence $\mathcal{U}=\mathcal{V}$.\\
-A spanning list of length $\dim(\mathcal{V})$ reduces to a basis without removing vectors, and an independent list of that length extends to a basis without adding vectors.\\
+Let $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ be a basis of $\mathcal{U}$ and $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ a basis of $\mathcal{V}$.\\
+Theorem \ref{thm:finitedimlenofvec} gives $m\leq n$, so $\dim(\mathcal{U})\leq\dim(\mathcal{V})$. If $\mathcal{U}=\mathcal{V}$, equality is clear.\\
+Conversely, if $m=n$, then the basis of $\mathcal{U}$ is an independent list in $\mathcal{V}$ of length $\dim(\mathcal{V})$; extending it to a basis of $\mathcal{V}$ adds no vectors, so it already spans $\mathcal{V}$. Hence $\mathcal{U}=\mathcal{V}$. Let $\gamma$ be a spanning list of length $n=\dim(\mathcal{V})$.\\
+By Theorem \ref{thm:reducing-spanning-lists}, $\gamma$ contains a sublist that is a basis of $\mathcal{V}$. Any proper sublist has length $<n$, impossible by Theorem \ref{thm:basis-length-well-defined}; hence no vector was removed and $\gamma$ is itself a basis.\\
+Let $\alpha$ be a linearly independent list of length $n$. By Theorem \ref{thm:extending-independent-lists}, $\alpha$ extends to a basis of $\mathcal{V}$.\\
+Adding any vector would produce a basis of length $>n$, again contradicting Theorem \ref{thm:basis-length-well-defined}; hence no vector was added and $\alpha$ is itself a basis.\\
 \hlt{Structural Commentary}: Dimension bounds subspaces and detects full-size lists. Equality of dimensions forces a subspace to be the whole space.\\
 \hlt{Key Insight}: In dimension $n$, $n$ independent or $n$ spanning vectors already form a basis.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \hlt{Sums of Subspaces}\\
-If $\mathcal{U}_1, \ldots, \mathcal{U}_m$ are subspaces of $\mathcal{V}$, define $\mathcal{U}_1 + \cdots + \mathcal{U}_m \defeq \left\{ \mathbf{u}_1 + \cdots + \mathbf{u}_m : \mathbf{u}_j \in \mathcal{U}_j \right\}$.
-In particular, for subspaces $\mathcal{U},\mathcal{W}\subseteq\mathcal{V}$, $\mathcal{U}+\mathcal{W} = \operatorname{span}(\mathcal{U}\cup\mathcal{W}) = \left\{ \mathbf{u}+\mathbf{w} : \mathbf{u}\in\mathcal{U},\ \mathbf{w}\in\mathcal{W} \right\}$.
+If $\mathcal{U}_1, \ldots, \mathcal{U}_m$ are subspaces of $\mathcal{V}$, define $\mathcal{U}_1 + \cdots + \mathcal{U}_m \defeq \left\{ \mathbf{u}_1 + \cdots + \mathbf{u}_m : \mathbf{u}_j \in \mathcal{U}_j \right\}$.\\
+In particular, for subspaces $\mathcal{U},\mathcal{W}\subseteq\mathcal{V}$, $\mathcal{U}+\mathcal{W} = \operatorname{span}(\mathcal{U}\cup\mathcal{W}) = \left\{ \mathbf{u}+\mathbf{w} : \mathbf{u}\in\mathcal{U},\ \mathbf{w}\in\mathcal{W} \right\}$.\\
 If every vector in this sum has a unique such decomposition, then the sum is direct and we write $\mathcal{U}_1 \oplus \cdots \oplus \mathcal{U}_m$.\\
 For two subspaces, $\mathcal{U}+\mathcal{W}$ is direct if and only if $\mathcal{U}\cap\mathcal{W}=\{\mathbf{0}\}$; in this case it is denoted $\mathcal{U}\oplus\mathcal{W}$.
 \end{definition}
