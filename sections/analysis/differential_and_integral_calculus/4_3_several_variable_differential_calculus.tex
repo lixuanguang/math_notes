@@ -84,8 +84,8 @@ Let $E\subseteq\R^n$ be open. A differentiable map $\f:E\to\R^m$ is \hlt{continu
 A map $\f:E\subseteq\R^n\to\R^m$ is $C^1$ iff all $D_jf_i$ exist and are continuous on $E$.
 \begin{proof}
 If $\f$ is $C^1$, Theorem \ref{thm:total-derivative-matrix-partials} makes each $D_jf_i$ a continuous matrix entry of $D\f$.\\
-Conversely reduce componentwise to $m=1$. For $\h=\sum\limits_jh_j\mathbf{e}_j$, telescoping along coordinate increments and applying Corollary \ref{cor:mean-value-theorem} gives, by continuity of the partials near $\x$, $f(\x+\h)-f(\x)-\sum\limits_{j=1}^nh_j(D_jf)(\x)=o(\norm{\h}_2)$.\\
-Hence $Df(\x)$ has row matrix $[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$, Definition \ref{def:operator-norm-rn-rm} turns this into continuity of $Df$.\\
+Conversely reduce componentwise to $m=1$. Fix $\x\in E$ and take $\h$ small enough that the coordinate polygon from $\x$ to $\x+\h$ lies in $E$. Put $\x^{(0)}=\x$ and $\x^{(j)}=\x+h_1\mathbf{e}_1+\cdots+h_j\mathbf{e}_j$. By one-variable MVT on each coordinate segment, $f(\x+\h)-f(\x)=\sum\limits_{j=1}^{n}h_j(D_jf)(\xi_j)$ for points $\xi_j$ on corresponding segments. Continuity of partials at $\x$ gives $\abs{f(\x+\h)-f(\x)-\sum\limits_{j=1}^{n}h_j(D_jf)(\x)} \leq \sum\limits_{j=1}^{n}\abs{h_j}\abs{(D_jf)(\xi_j)-(D_jf)(\x)} =o(\norm{\h}_2)$.\\
+Hence $Df(\x)$ has row matrix $[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$. Since operator norm is controlled by the Euclidean norm of the matrix entries, continuity of the partials gives continuity of $\x\mapsto Df(\x)$.\\
 \hlt{Structural Commentary}: Continuous partial derivatives assemble into a continuous total derivative.\\
 \hlt{Key Insight}: Coordinate-by-coordinate increments work only because the partials vary continuously.
 \end{proof}
@@ -114,8 +114,9 @@ Let $(a,b)$ lie in an open set $E\subseteq\R^2$. If $D_1f$, $D_2f$, and $D_{21}f
 \begin{proof}
 Let $A=(D_{21}f)(a,b)$.\\
 Given $\varepsilon>0$, continuity of $D_{21}f$ and Theorem \ref{thm:rectangle-mean-value-mixed-partial} give, for all small $h,k\neq0$, $\abs{\frac{\Delta(f,Q)}{hk}-A}<\varepsilon$.\\
-Fix $h$ and let $k\to0$. Since $D_2f$ exists, $\abs{\frac{(D_2f)(a+h,b)-(D_2f)(a,b)}{h}-A}\leq\varepsilon$ for all small $h\neq0$. \\
-ince $\varepsilon$ was arbitrary, $D_{12}f(a,b)=A$.\\
+Fix such an $h$ and let $k\to0$. Since $D_2f$ exists at $(a+h,b)$ and $(a,b)$, $\frac{\Delta(f,Q)}{hk}\to \frac{(D_2f)(a+h,b)-(D_2f)(a,b)}{h}$.\\
+Thus this last quotient differs from $A$ by at most $\varepsilon$ for all sufficiently small $h\neq0$.\\
+Since $\varepsilon$ was arbitrary, the quotient tends to $A$ as $h\to0$, so $D_{12}f(a,b)$ exists and equals $A$.\\
 \hlt{Structural Commentary}: Continuity of $D_{21}f$ controls local rectangle quotients.\\
 \hlt{Key Insight}: The missing mixed partial is recovered by taking the two one-variable limits in the reverse order.
 \end{proof}
@@ -147,11 +148,11 @@ By Theorem \ref{thm:determinant-basic-laws}, $D\f(\x)$ is invertible if and only
 \begin{theorem} \label{thm:inverse-function-theorem-rn} \hlt{Inverse Function Theorem}\\
 Let $\f:E\subseteq\R^n\to\R^n$ be $C^1$, let $\a\in E$, and suppose $D\f(\a)$ is invertible. With $\b=\f(\a)$, $\f$ restricts to a bijection $U\to V$ between open neighborhoods of $\a$ and $\b$; inverse $\g:V\to U$ is $C^1$, and $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$, $\y\in V$.
 \begin{proof}
-Put $A=D\f(\a)$. On a small ball, $\normop{D\f-A}$ is small compared with $\normop{A^{-1}}^{-1}$.\\
-For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
-By Theorem \ref{thm:bounded-derivative-convex-mean-value}, $\varphi_{\y}$ is a contraction on a suitable complete closed ball; Theorem \ref{thm:contraction-principle} gives the local solution and uniqueness. If $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$, the same estimates give $\norm{\h}_2=O(\norm{\mathbf{k}}_2)$ and\\
-$\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k} =-\bigl(D\f(\x)\bigr)^{-1}\bigl[\f(\x+\h)-\f(\x)-D\f(\x)\h\bigr]$.\\
-Dividing by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=(D\f(\x))^{-1}$; continuity follows from $D\f$, $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.\\
+Put $A=D\f(\a)$ and choose $0<\theta<1$. By continuity of $D\f$, choose $r>0$ with $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on this closed ball. For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
+Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. The contraction principle gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
+For $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$ in $V$, the same derivative bound gives $\norm{\h}_2\leq C\norm{\mathbf{k}}_2$ for a local constant $C$. Moreover $\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k} =-\bigl(D\f(\x)\bigr)^{-1}\bigl[\f(\x+\h)-\f(\x)-D\f(\x)\h\bigr]$.\\
+Since $\f$ is differentiable at $\x$ and $\norm{\h}_2=O(\norm{\mathbf{k}}_2)$, division by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=(D\f(\x))^{-1}$.\\
+Continuity of $D\g$ follows from continuity of $D\f$, continuity of $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.\\
 \hlt{Structural Commentary}: Local inversion is a contraction built from $A^{-1}$.\\
 \hlt{Key Insight}: Small derivative variation preserves local invertibility.
 \end{proof}
@@ -179,8 +180,10 @@ Points with $\f(\x,\y)=0$ are exactly those sent to $(0,\y)$, so $\Phi^{-1}(0,\y
 \begin{theorem} \label{thm:constant-rank-theorem-rudin} \hlt{Rank Theorem}\\
 Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$. Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse, there is a $C^1$ map $\varphi:A(V)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
 \begin{proof}
-If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant. For $r>0$, choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$ and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\
-From $AG=P\mathbf{F}$ we get $P\mathbf{F}(H(\x))=A\x$. The remaining component $(I-P)\mathbf{F}(H(\x))$ is constant when $A\x$ is fixed, by the constant-rank hypothesis and the mean-value estimate, so it equals $\varphi(A\x)$.\\
+If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant. Assume $r>0$. Choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$ and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\
+Let $\Psi=\mathbf{F}\circ H$. From $AG=P\mathbf{F}$ we get $P\Psi(\x)=A\x$. Hence $PD\Psi(\x)=A$. The rank of $D\Psi(\x)$ is $r$ because $DH(\x)$ is invertible and $\mathbf{F}$ has constant rank $r$; the rank of $PD\Psi(\x)$ is also $r$.\\
+Therefore $P$ is injective on $\operatorname{range}D\Psi(\x)$, and $D\Psi(\x)\mathbf{v}=0$ whenever $A\mathbf{v}=0$.\\
+On a small convex coordinate neighborhood, any two points with the same $A\x$ differ by a vector in $\ker(A)$ and can be joined inside that affine fiber. The preceding derivative vanishing and Theorem \ref{thm:bounded-derivative-convex-mean-value} show that $\Psi$ is constant on such fibers. Thus $(I-P)\Psi(\x)$ depends only on $A\x$; call it $\varphi(A\x)$. Then $\mathbf{F}(H(\x))=\Psi(\x)=A\x+\varphi(A\x)$, and $\varphi$ is $C^1$ because $\Psi$ is $C^1$ and the dependence is through the coordinate $A\x$.\\
 \hlt{Structural Commentary}: Constant rank gives a local graph normal form.\\
 \hlt{Key Insight}: Same rank, same local level-set geometry.
 \end{proof}

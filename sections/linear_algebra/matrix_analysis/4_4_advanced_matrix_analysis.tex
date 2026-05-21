@@ -323,9 +323,10 @@ Numerical linear algebra also replaces a matrix by a unitarily similar one with 
 \begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
 Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
 \begin{proof}
-Set $A_0=A$. For $k=1,\ldots,n-2$, assume columns $1,\ldots,k-1$ are already Hessenberg.\\
-Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$. Choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$, by Corollary \ref{cor:householder-unitary-annihilator}. Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Since $U_k$ acts only on trailing coordinates, previous zeros remain and column $k$ gains zeros below row $k+1$.\\
-After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$.\\
+Set $A_0=A$. For $k=1,\ldots,n-2$, suppose columns $1,\ldots,k-1$ of $A_{k-1}$ already have zeros below the first subdiagonal. Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$.\\
+By Corollary \ref{cor:householder-unitary-annihilator}, choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$.\\
+Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Right multiplication by $U_k$ changes only columns $k+1,\ldots,n$, so columns $1,\ldots,k-1$ keep their existing Hessenberg zeros. Left multiplication by $U_k^*$ acts only on rows $k+1,\ldots,n$; those rows are already zero in columns $1,\ldots,k-1$, so the zeros remain. In column $k$, the tail becomes $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, so entries below row $k+1$ are zero and the new subdiagonal entry is real nonnegative.\\
+After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$ is unitary.\\
 \hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
 \hlt{Key Insight}: Kill one column tail at a time.
 \end{proof}
@@ -435,8 +436,10 @@ B & \mathbf{y}\\
 Then, for $1\leq i\leq n$, $\lambda_i(A)\leq\lambda_i(B)\leq\lambda_{i+1}(A)$.
 \begin{proof}
 Let $\mathbf{u}_j$ and $\mathbf{v}_j$ be orthonormal eigenvectors of $A$ and $B$, respectively, in increasing eigenvalue order. Identify $\mathbb{C}^n$ with $\{(\mathbf{z},0)\}\subseteq\mathbb{C}^{n+1}$, so $(\mathbf{z},0)^*A(\mathbf{z},0)=\mathbf{z}^*B\mathbf{z}$.\\
-For the lower bound, choose a unit $\mathbf{x}=(\mathbf{z},0)\in \operatorname{span}((\mathbf{v}_1,0),\ldots,(\mathbf{v}_i,0)) \cap \operatorname{span}(\mathbf{u}_i,\ldots,\mathbf{u}_{n+1})$, possible because the dimensions sum to $n+2$. Then $\lambda_i(A)\leq \mathbf{x}^*A\mathbf{x}=\mathbf{z}^*B\mathbf{z}\leq\lambda_i(B)$.\\
-For the upper bound, choose a unit $\mathbf{x}=(\mathbf{z},0)\in \operatorname{span}((\mathbf{v}_i,0),\ldots,(\mathbf{v}_n,0)) \cap \operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+1})$. The same dimension count applies, and $\lambda_i(B)\leq \mathbf{z}^*B\mathbf{z}=\mathbf{x}^*A\mathbf{x}\leq\lambda_{i+1}(A)$.\\
+For the lower bound, set $\mathcal{S}=\operatorname{span}((\mathbf{v}_1,0),\ldots,(\mathbf{v}_i,0))$ and $\mathcal{T}=\operatorname{span}(\mathbf{u}_i,\ldots,\mathbf{u}_{n+1})$. Their dimensions are $i$ and $n+2-i$, so $\dim\mathcal{S}+\dim\mathcal{T}>n+1$ and $\mathcal{S}\cap\mathcal{T}$ contains a nonzero vector.\\
+Choose a unit $\mathbf{x}=(\mathbf{z},0)$ in the intersection. The spectral expansion in the $\mathbf{u}_j$ gives $\mathbf{x}^*A\mathbf{x}\geq\lambda_i(A)$, while the expansion in the $\mathbf{v}_j$ gives $\mathbf{z}^*B\mathbf{z}\leq\lambda_i(B)$. Hence $\lambda_i(A)\leq\lambda_i(B)$.\\
+For the upper bound, take $\mathcal{S}'=\operatorname{span}((\mathbf{v}_i,0),\ldots,(\mathbf{v}_n,0))$ and $\mathcal{T}'=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+1})$. Again the dimensions sum to $n+2$, so choose a unit $\mathbf{x}=(\mathbf{z},0)\in\mathcal{S}'\cap\mathcal{T}'$.\\
+Now $\mathbf{z}^*B\mathbf{z}\geq\lambda_i(B)$ and $\mathbf{x}^*A\mathbf{x}\leq\lambda_{i+1}(A)$, giving $\lambda_i(B)\leq\lambda_{i+1}(A)$.\\
 \hlt{Structural Commentary}: A principal submatrix is a coordinate slice of the larger quadratic form.\\
 \hlt{Key Insight}: Deleting one coordinate costs one dimension, so eigenvalues shift by at most one index.
 \end{proof}
@@ -444,9 +447,10 @@ For the upper bound, choose a unit $\mathbf{x}=(\mathbf{z},0)\in \operatorname{s
 
 \begin{corollary} \label{cor:singular-values-interlace-after-deleting-row-or-column} \hlt{Singular Values Interlace After Deleting a Row or Column}\\
 Let $B$ be obtained from $A\in\operatorname{Mat}(n,n,\mathbb{C})$ by deleting one row or column.\\
-With singular values ordered decreasingly, $sigma_i(A)\geq\sigma_i(B)\geq\sigma_{i+1}(A)\quad(1\leq i<n)$.
+With singular values ordered decreasingly, $\sigma_i(A)\geq\sigma_i(B)\geq\sigma_{i+1}(A)\quad(1\leq i<n)$.
 \begin{proof}
-For a row deletion, permute rows so that $PA=\begin{bmatrix}B\\ \mathbf{y}^*\end{bmatrix}$. Then $PA$ has the same singular values as $A$, and $BB^*$ is a principal submatrix of $(PA)(PA)^*$.\\
+For a row deletion, permute rows so that $PA=\begin{bmatrix}B\\ \mathbf{y}^*\end{bmatrix}$. \\
+Then $PA$ has the same singular values as $A$, and $BB^*$ is a principal submatrix of $(PA)(PA)^*$.\\
 Cauchy interlacing applied to these Gram matrices gives the result after taking square roots and reversing the increasing eigenvalue order. A column deletion follows by applying the row case to $A^*$.\\
 \hlt{Structural Commentary}: Row deletion makes $BB^*$ a principal submatrix of a permuted $AA^*$.\\
 \hlt{Key Insight}: Singular-value interlacing is Cauchy interlacing applied to Gram matrices.
