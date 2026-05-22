@@ -1,17 +1,30 @@
 \subsubsection{Several-Variable Differential Calculus}
 
 % Source pages provided: Rudin Ch.9, Secs. 9.1--9.43, including linear transformations, differentiation, contraction principle, inverse/implicit/rank theorems, determinants, Jacobians, higher-order partials, equality of mixed partials, and differentiation under the integral sign in the provided screenshots.
+% Rudin Ch.9 overlap note: linear-operator preliminaries are recorded in Linear Algebra at Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}, and Definition \ref{def:implicit-derivative-blocks}.
 % Sources mapped: Rudin Ch.9; Spivak Ch.1-2; Pugh Ch.5.1-5.6; Tao II Ch.6.
 % TODO(source pages unavailable): Add non-Rudin several-variable material from the mapped sources only after pages are provided.
 
-Several-variable differentiation treats the derivative at a point as the linear map that best approximates the function there. The needed finite-dimensional linear algebra is kept in the Linear Algebra chapter: matrices of maps in Proposition \ref{prop:matrix-representation-action}, operator norms in Definition \ref{def:operator-norm-rn-rm}, determinant invertibility in Theorem \ref{thm:determinant-basic-laws}, and block splitting for implicit equations in Definition \ref{def:implicit-derivative-blocks}.
+Several-variable differentiation studies the best linear approximation to a function at a point; the main questions are how this linear part varies, composes, and controls local geometry.
 
 \begin{definition} \label{def:several-variable-differentiation-core-source-todo}\label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
-Let $E\subseteq\R^n$ be open, let $\f:E\to\R^m$, and let $\x\in E$.\\
+Let $E\subseteq\R^n$ be open, let $\f:E\to\R^m$, $\x\in E$, $\LL(\R^n,\R^m)$ be linear space map (Definition \ref{def:linear-map}) \\
 If $\exists A\in\LL(\R^n,\R^m)$ s.t. $\lim\limits_{\h\to\ze}\frac{\norm{\f(\x+\h)-\f(\x)-A\h}_2}{\norm{\h}_2}=0$, then $\f$ is \hlt{differentiable at $\x$}, and $A$ denoted $D\f(\x)$ or $\f'(\x)$.\\
 Equivalently, $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$, and $\frac{\norm{\mathbf{r}(\h)}_2}{\norm{\h}_2}\to0$.\\
 If this holds for every $\x\in E$, then $\f$ is differentiable on $E$.
 \end{definition}
+
+\begin{perspective} \label{per:total-derivative-linear-map-first} \hlt{Derivative First, Matrix Second}\\
+The total derivative is a linear map first; the Jacobian is its matrix in chosen bases.
+\end{perspective}
+
+% Visual source: Rudin Ch.9 differentiability definition, with operator-norm language from Definition \ref{def:operator-norm-rn-rm}; redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/total_derivative_linear_approximation.tikz}
+  \caption{$D\f(\x)\h$ is the linear part; $\mathbf{r}(\h)=o(\norm{\h}_2)$ is the error.}
+  \label{fig:total-derivative-linear-approximation}
+\end{figure}
 
 \begin{theorem} \label{thm:total-derivative-unique-and-continuous}\label{thm:several-variable-differentiation-main-source-todo} \hlt{Basic Consequences of Total Differentiability}\\
 If $\f:E\to\R^m$ is differentiable at $\x\in E$, then $D\f(\x)$ is unique and $\f$ is continuous at $\x$.
@@ -59,7 +72,8 @@ If $\f:E\to\R^m$ is differentiable at $\x$, then every $(D_jf_i)(\x)$ exists and
 \end{align}
 If $m=1$ and $f$ is differentiable at $\x$, then $(D_{\mathbf{u}}f)(\x)=(\nabla f)(\x)\cdot\mathbf{u}$ for every unit vector $\mathbf{u}$.
 \begin{proof}
-Set $\h=t\mathbf{e}_j$ in Definition \ref{def:total-derivative-rn-rm}; the limit is $D\f(\x)\mathbf{e}_j$, so its components form column $j$ by Proposition \ref{prop:matrix-representation-action}. For $m=1$, set $\h=t\mathbf{u}$ and identify the linear functional with dot product against $\nabla f(\x)$.\\
+Set $\h=t\mathbf{e}_j$ in Definition \ref{def:total-derivative-rn-rm}; limit is $D\f(\x)\mathbf{e}_j$, so components form column $j$ (Proposition \ref{prop:matrix-representation-action}).\\
+For $m=1$, set $\h=t\mathbf{u}$, identify linear functional with dot product against $\nabla f(\x)$ (Theorem \ref{thm:riesz-representation-finite-dimensional}).\\
 \hlt{Structural Commentary}: Partials are coordinate columns of $D\f(\x)$.\\
 \hlt{Key Insight}: Differentiability controls all directions at once; partial derivatives record its coordinate columns.
 \end{proof}
@@ -178,9 +192,10 @@ Points with $\f(\x,\y)=0$ are exactly those sent to $(0,\y)$, so $\Phi^{-1}(0,\y
 \end{theorem}
 
 \begin{theorem} \label{thm:constant-rank-theorem-rudin} \hlt{Rank Theorem}\\
-Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$. Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse, there is a $C^1$ map $\varphi:A(V)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
+Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$ (Definition \ref{def:orthogonal-projection-subspace}). Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse, there is a $C^1$ map $\varphi:A(V)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
 \begin{proof}
-If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant. Assume $r>0$. Choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$ and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\
+If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant.\\
+Assume $r>0$. Choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$, possible by choosing preimages of a basis of $Y_1$, and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\
 Let $\Psi=\mathbf{F}\circ H$. From $AG=P\mathbf{F}$ we get $P\Psi(\x)=A\x$. Hence $PD\Psi(\x)=A$. The rank of $D\Psi(\x)$ is $r$ because $DH(\x)$ is invertible and $\mathbf{F}$ has constant rank $r$; the rank of $PD\Psi(\x)$ is also $r$.\\
 Therefore $P$ is injective on $\operatorname{range}D\Psi(\x)$, and $D\Psi(\x)\mathbf{v}=0$ whenever $A\mathbf{v}=0$.\\
 On a small convex coordinate neighborhood, any two points with the same $A\x$ differ by a vector in $\ker(A)$ and can be joined inside that affine fiber. The preceding derivative vanishing and Theorem \ref{thm:bounded-derivative-convex-mean-value} show that $\Psi$ is constant on such fibers. Thus $(I-P)\Psi(\x)$ depends only on $A\x$; call it $\varphi(A\x)$. Then $\mathbf{F}(H(\x))=\Psi(\x)=A\x+\varphi(A\x)$, and $\varphi$ is $C^1$ because $\Psi$ is $C^1$ and the dependence is through the coordinate $A\x$.\\
@@ -195,8 +210,9 @@ On a small convex coordinate neighborhood, any two points with the same $A\x$ di
 \item \hlt{Linear approximation}: write $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$ with $\norm{\mathbf{r}(\h)}_2=o(\norm{\h}_2)$.
 \item \hlt{Norm estimates}: use $\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ and the product estimate from Proposition \ref{prop:spectral-norm-basic-properties}.
 \item \hlt{Line-segment reduction}: on convex sets, restrict to $\gamma(t)=(1-t)\a+t\b$ and apply one-variable results.
-\item \hlt{Local inversion}: compare $D\f(\x)$ with an invertible $D\f(\a)$, build a contraction, and invoke Theorem \ref{thm:contraction-principle}; linear implicit steps use Theorem \ref{thm:linear-implicit-function-theorem}.
+\item \hlt{Local inversion}: if $A=D\f(\a)$ is invertible, write $D\f(\x)=A+E_\x$ with $\normop{E_\x}$ small and solve by contraction (Theorem \ref{thm:contraction-principle}); linear block equations use Theorem \ref{thm:linear-implicit-function-theorem}.
 \item \hlt{Coordinates}: read partial derivatives as the entries of the matrix of $D\f(\x)$, using Theorem \ref{thm:total-derivative-matrix-partials}.
+\item \hlt{Rank normal forms}: for $A=D\mathbf{F}(\a)$ with $\operatorname{rank}A=r$, use $\ker A$, $\operatorname{range}(A)$, and $P_{\operatorname{range}(A)}$ to isolate the rank-$r$ directions.
 \end{enumerate}
 \hlt{Key Insight}: Several-variable calculus is one-variable limiting plus finite-dimensional linear algebra.
 \end{method}
