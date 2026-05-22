@@ -1,10 +1,11 @@
 \subsubsection{Riemann and Riemann--Stieltjes Integration}
 
 % Source pages provided: Rudin Ch.6, Defs. 6.1--6.3, 6.14, 6.23, 6.26; Thms. 6.4--6.13, 6.15--6.17, 6.19--6.22, 6.24--6.25, 6.27; Remarks 6.18 and the surrounding discussion in the provided screenshots.
+% Additional screenshot source: Abbott Ch.8.1 motivates tagged partitions, $\delta$-fine partitions, gauges, and generalized Riemann integrability.
 % Sources mapped: Rudin Ch.6; Abbott Ch.7, Ch.8.1; Ross Ch.6; Tao I Ch.11; Pugh Ch.3.2.
-% TODO(source pages unavailable): Add non-Rudin integration material from the mapped sources only after pages are provided.
+% TODO(source): If the generalized Riemann integral is promoted from perspective to main text, add the full gauge definitions and proofs in a separate conservative block.
 
-This subsection owns Riemann-type integration. The order structure of the real line supplies partitions, upper sums, and lower sums; the Riemann--Stieltjes integral keeps the same partition logic but measures each subinterval by the increment of an increasing function $\alpha$. Lebesgue integration is left to the measure section.
+This subsection owns Riemann-type integration. The order structure of the real line supplies partitions, upper sums, and lower sums; the Riemann--Stieltjes integral keeps the same partition logic but measures each subinterval by the increment of an increasing function $\alpha$. The ordinary Riemann integral should be read as area approximation rather than antidifferentiation: derivatives have the Darboux property by Corollary \ref{cor:derivatives-no-simple-discontinuities}, while simple jump functions can still be integrated. Lebesgue integration is left to the measure section.
 
 \begin{definition} \label{def:partition-and-riemann-upper-lower-sums}\label{def:riemann-stieltjes-core-source-todo} \hlt{Partitions and Riemann Upper/Lower Sums}\\
 A \hlt{partition} of $[a,b]$ is $\Pi=\{x_0,\ldots,x_n\}$ with $a=x_0\leq x_1\leq\cdots\leq x_n=b$, $\Delta x_i\defeq x_i-x_{i-1}$.\\
@@ -15,6 +16,26 @@ If these agree, $f$ is \hlt{Riemann integrable}, written $f\in\mathcal{R}$, and 
 For $m\leq f\leq M$, $m(b-a)\leq L(\Pi,f)\leq U(\Pi,f)\leq M(b-a)$, upper and lower integrals exist for bounded $f$.
 \end{definition}
 
+% Visual note: schematic redraw of Definition \ref{def:tagged-partitions-and-riemann-sums}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/riemann_tagged_sum.tikz}
+  \caption{A tagged Riemann sum uses one sample value $f(c_i)$ on each subinterval $[x_{i-1},x_i]$.}
+  \label{fig:riemann-tagged-sum}
+\end{figure}
+
+\begin{definition} \label{def:tagged-partitions-and-riemann-sums} \hlt{Tagged Partitions and Riemann Sums}\\
+A \hlt{tagged partition} of $[a,b]$ is a partition $\Pi=\{x_0,\ldots,x_n\}$ together with tags $c_i\in[x_{i-1},x_i]$.\\
+For the ordinary Riemann integral, the corresponding \hlt{Riemann sum} is $R(f,\Pi,\{c_i\})\defeq\sum\limits_{i=1}^{n}f(c_i)\Delta x_i$.\\
+For every tagged partition, $L(\Pi,f)\leq R(f,\Pi,\{c_i\})\leq U(\Pi,f)$.
+\end{definition}
+
+\begin{perspective} \label{per:gauge-integral-context} \hlt{Tagged Sums and Gauges}\\
+Gauge integration keeps tagged sums but replaces one mesh bound $\delta$ with a local bound $\delta(c_i)$.\\
+Thus fineness may vary by tag, giving a stronger framework for FTC-type results.
+\end{perspective}
+
+% Visual note: schematic redraw of Definition \ref{def:partition-and-riemann-upper-lower-sums}.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/riemann_upper_lower_partition.tikz}
@@ -68,6 +89,10 @@ Their common refinement $\Pi$ satisfies the displayed inequality by Theorem \ref
 \end{proof}
 \end{theorem}
 
+\begin{perspective} \label{per:darboux-and-riemann-sum-definitions} \hlt{Darboux Gaps and Riemann Sums}\\
+For $\alpha(x)=x$, a small Darboux gap $U(\Pi,f)-L(\Pi,f)$ traps every tagged sum for $\Pi$ near the integral.
+\end{perspective}
+
 \begin{theorem} \label{thm:tagged-riemann-stieltjes-sums} \hlt{Tagged Sums}\\
 Let $\Pi=\{x_0,\ldots,x_n\}$ satisfy $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$, and choose tags $t_i\in[x_{i-1},x_i]$.
 \begin{enumerate}[label=(\roman*)]
@@ -108,6 +133,14 @@ If $f$ is decreasing, use the same partition. Then the suprema and infima on $[x
 \end{proof}
 \end{theorem}
 
+% Visual note: schematic redraw of the isolation step in Theorem \ref{thm:finitely-many-discontinuities-integrable}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/discontinuity_isolation_partition.tikz}
+  \caption{Isolate the discontinuity in a short interval; control the compact pieces outside it.}
+  \label{fig:discontinuity-isolation-partition}
+\end{figure}
+
 \begin{theorem} \label{thm:finitely-many-discontinuities-integrable} \hlt{Finitely Many Discontinuities}\\
 Suppose $f$ is bounded on $[a,b]$, the discontinuity set $E\defeq\{x\in[a,b]:f\text{ is discontinuous at }x\}$ is finite, and $\alpha$ is continuous at each point of $E$. Then $f\in\mathcal{R}(\alpha)$.
 \begin{proof}
@@ -120,6 +153,15 @@ Since $\eta$ is arbitrary, Theorem \ref{thm:riemann-stieltjes-integrability-crit
 \hlt{Key Insight}: Finitely many discontinuities do not matter unless $\alpha$ also jumps there.
 \end{proof}
 \end{theorem}
+
+\begin{example} \label{ex:dirichlet-function-not-riemann-integrable} \hlt{Dirichlet's Function Is Not Riemann Integrable}\\
+Let $g=\mathbf{1}_{\Q}$ on $[0,1]$. Every nondegenerate subinterval contains rationals and irrationals by Corollary \ref{cor:rationals-and-irrationals-dense}, so for every partition $\Pi$, $M_i=1$ and $m_i=0$ on each nonzero-width subinterval.\\
+Thus $U(\Pi,g)=1$ and $L(\Pi,g)=0$, hence $g\notin\mathcal{R}$.
+\end{example}
+
+\begin{remark} \label{rem:small-discontinuity-sets-riemann-preview} \hlt{Small Discontinuity Sets}\\
+The finite-discontinuity proof previews Theorem \ref{thm:riemann-lebesgue-comparison}: cover the bad set by short intervals, then use uniform continuity off them. Dirichlet's function fails because every point is bad.
+\end{remark}
 
 \begin{theorem} \label{thm:continuous-composition-preserves-riemann-stieltjes-integrability} \hlt{Continuous Composition Preserves Integrability}\\
 Let $\alpha$ be increasing on $[a,b]$. Suppose $f\in\mathcal{R}(\alpha)$, $m\leq f(x)\leq M$ on $[a,b]$, and $\phi:[m,M]\to\R$ is continuous.\\
@@ -315,6 +357,7 @@ Summing gives $\int_a^b\norm{\gamma'}\leq\ell(\gamma)+2\varepsilon(b-a)$; let $\
 \item \hlt{Definitions}: fix $\Pi=\{x_i\}_{i=0}^n$ before defining $M_i,m_i,\Delta x_i,\Delta\alpha_i$.
 \item \hlt{Refinement}: prove the one-point insertion case; iterate.
 \item \hlt{Integrability}: find $\Pi$ with $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$.
+\item \hlt{Bad sets}: cover $E$ by $I_j=[u_j,v_j]$ with $\sum_j[\alpha(v_j)-\alpha(u_j)]<\varepsilon$; control $K=[a,b]\setminus\bigcup_j(u_j,v_j)$ uniformly.
 \item \hlt{Properties}: pass to a common refinement before comparing sums.
 \item \hlt{Calculus}: use the mean value theorem to form tagged sums, then apply Theorem \ref{thm:tagged-riemann-stieltjes-sums}.
 \end{enumerate}
