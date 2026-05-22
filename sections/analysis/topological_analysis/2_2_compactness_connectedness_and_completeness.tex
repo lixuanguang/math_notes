@@ -2,6 +2,7 @@
 
 % Source pages provided: Rudin Ch.2, Def. 2.18, Defs. 2.31--2.32, Thms. 2.33--2.43, Cantor-set discussion 2.44, Def. 2.45, Remark 2.46, and Thm. 2.47.
 % Additional screenshot source: Abbott Ch.8.2 develops metric spaces, compactness in $C[0,1]$, and the complete-metric-space Baire Category Theorem.
+% Visual note: the k-cell diagrams below illustrate the Rudin Ch.2 compactness arguments already recorded in this subsection; they do not add new source material.
 % Sources mapped: Abbott Ch.3, Ch.8.2; Pugh Ch.2; Tao II Ch.1-2; Grinberg Ch.9-13.
 % TODO(source pages unavailable): Add broader non-Rudin compactness and connectedness material only after pages are provided.
 
@@ -141,6 +142,14 @@ Let $I_n=\{\mathbf{x}\in\R^k:a_{n,j}\leq x_j\leq b_{n,j},\ 1\leq j\leq k\}$. For
 \end{proof}
 \end{theorem}
 
+% Visual note: schematic redraw of Definition \ref{def:euclidean-intervals-cells-balls-convex}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/k_cell_low_dimensional_examples.tikz}
+  \caption{A $1$-cell is a closed interval, a $2$-cell is a coordinate rectangle, and a $3$-cell is a coordinate box.}
+  \label{fig:k-cell-low-dimensional-examples}
+\end{figure}
+
 \begin{theorem} \label{thm:k-cells-compact} \hlt{$k$-Cells Are Compact}\\
 Every $k$-cell in $\R^k$ is compact.
 \begin{proof}
@@ -152,7 +161,25 @@ By Theorem \ref{thm:nested-k-cells-intersect}, choose $\mathbf{x}^*\in\bigcap_n 
 \end{proof}
 \end{theorem}
 
+% Visual note: schematic redraw of the bisection argument in Theorem \ref{thm:k-cells-compact}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/k_cell_bisection_compactness.tikz}
+  \caption{Repeated bisection traps a point.}
+  \label{fig:k-cell-bisection-compactness}
+\end{figure}
+
+\begin{lemma} \label{lem:bounded-rk-set-contained-in-k-cell} \hlt{Bounded Euclidean Sets Fit in $k$-Cells}\\
 Every bounded subset $E\subseteq\R^k$ is contained in some $k$-cell.
+\begin{proof}
+If $E=\emptyset$, any $k$-cell contains $E$. Suppose $E\neq\emptyset$. By Definition \ref{def:bounded-and-perfect-metric-sets}, choose $\mathbf{q}=(q_1,\ldots,q_k)\in\R^k$ and $M>0$ such that $\norm{\mathbf{p}-\mathbf{q}}_2<M$ for all $\mathbf{p}\in E$. Let $I\defeq\{\mathbf{x}=(x_1,\ldots,x_k):q_j-M\leq x_j\leq q_j+M,\ 1\leq j\leq k\}$.\\
+For $\mathbf{p}=(p_1,\ldots,p_k)\in E$, $\abs{p_j-q_j}\leq\norm{\mathbf{p}-\mathbf{q}}_2<M$ for each $j$, so $\mathbf{p}\in I$.\\
+Thus $E\subseteq I$, and $I$ is a $k$-cell by Definition \ref{def:euclidean-intervals-cells-balls-convex}.\\
+\hlt{Structural Commentary}: A Euclidean ball centered at $\mathbf{q}$ sits inside the coordinate box with side half-length $M$.\\
+\hlt{Key Insight}: Boundedness supplies one radius; coordinates turn it into interval bounds.
+\end{proof}
+\end{lemma}
+
 \begin{theorem} \label{thm:heine-borel-rk} \hlt{Heine--Borel in $\R^k$}\\
 For $E\subseteq\R^k$, any one of the following three properties implies the other two:
 \begin{enumerate}[label=(\roman*)]
@@ -164,7 +191,7 @@ For $E\subseteq\R^k$, any one of the following three properties implies the othe
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow(ii)$: Since $E$ is bounded, $E\subseteq I$ for some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact; since $E$ is closed, Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $E$ is compact.
+\item[$(i)$]$\Rightarrow(ii)$: Since $E$ is bounded, Lemma \ref{lem:bounded-rk-set-contained-in-k-cell} gives $E\subseteq I$ for some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact; since $E$ is closed, Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $E$ is compact.
 \item[$(ii)$]$\Rightarrow(iii)$: This is Theorem \ref{thm:infinite-subset-of-compact-has-limit-point}.
 \item[$(iii)$]$\Rightarrow(i)$: If $E$ is unbounded, choose $\mathbf{x}_n\in E$ with $\norm{\mathbf{x}_n}_2>n$ and set $S\defeq\{\mathbf{x}_n:n\in\N\}$. If $\mathbf{x}_n\in B_R(\mathbf{y})$, then $n<\norm{\mathbf{y}}_2+R$; hence $S$ has no limit point, contradicting (iii). Thus $E$ is bounded. If $E$ is not closed, choose $\mathbf{x}_0\in E^{\operatorname{acc}}\setminus E$ and $\mathbf{x}_n\in E$ with $0<\norm{\mathbf{x}_n-\mathbf{x}_0}_2<1/n$. Then $S\defeq\{\mathbf{x}_n:n\in\N\}$ is infinite and $S^{\operatorname{acc}}\subseteq\{\mathbf{x}_0\}\subseteq E^c$, contradicting (iii). Thus $E$ is closed.
 \end{enumerate}
@@ -176,7 +203,7 @@ For $E\subseteq\R^k$, any one of the following three properties implies the othe
 \begin{theorem} \label{thm:weierstrass-limit-point-rk} \hlt{Weierstrass Limit-Point Theorem}\\
 Every bounded infinite subset of $\R^k$ has a limit point in $\R^k$.
 \begin{proof}
-A bounded set $E$ lies in some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
+By Lemma \ref{lem:bounded-rk-set-contained-in-k-cell}, a bounded set $E$ lies in some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
 Since $E$ is an infinite subset of $I$, Theorem \ref{thm:infinite-subset-of-compact-has-limit-point} gives a limit point of $E$ in $I\subseteq\R^k$.\\
 \hlt{Structural Commentary}: Boundedness places the set inside a compact cell.\\
 \hlt{Key Insight}: Compact cells force bounded infinite sets to accumulate.
