@@ -1,6 +1,8 @@
 \subsubsection{Metric Spaces and Euclidean Topology}
 
 % Source pages provided: Rudin Ch.2, Defs. 2.15--2.30 and related examples/theorems.
+% Supplementary screenshot note: Abbott Ch.2.2 uses the real-line notation $V_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$.
+% Additional screenshot source: Abbott Ch.8.2 uses metric-space neighborhoods, closed balls, completeness, and the supremum metric on $C[0,1]$.
 % Sources mapped: Pugh Ch.2; Tao II Ch.1; Abbott Ch.3; Ross Ch.2.13, Ch.3.21.
 % TODO(source pages unavailable): Add boundary terminology and non-Rudin coverage from the mapped sources.
 
@@ -47,7 +49,8 @@ The same proof with $\leq r$ gives closed balls. For a $k$-cell, each coordinate
 Let $X$ be a metric space, and let all points and sets below be understood as points of $X$ and subsets of $X$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A \hlt{neighborhood} of $p$ with radius $r>0$ is $B_r(p)\defeq\{q\in X:d(p,q)<r\}$.
+\item A \hlt{neighborhood} of $p$ with radius $r>0$ is $B_r(p)\defeq\{q\in X:d(p,q)<r\}$.\\
+The corresponding \hlt{closed ball} is $\overline{B}_r(p)\defeq\{q\in X:d(p,q)\leq r\}$.
 \item A point $p$ is a \hlt{limit point} of $E$ if every neighborhood of $p$ contains a point $q\neq p$ with $q\in E$.
 \item If $p\in E$ and $p$ is not a limit point of $E$, then $p$ is an \hlt{isolated point} of $E$.
 \item A set $E$ is \hlt{closed} if every limit point of $E$ is a point of $E$.
@@ -56,6 +59,7 @@ Let $X$ be a metric space, and let all points and sets below be understood as po
 \item The \hlt{complement} of $E$ is $E^c\defeq X\setminus E$.
 \item A set $E$ is \hlt{dense} in $X$ if every point of $X$ is either a limit point of $E$, a point of $E$, or both.
 \end{enumerate}
+For $X=\R$, this gives $B_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$.\\
 TODO(source pages unavailable): Add the sourced definition of boundary and reconcile notation with $\operatorname{bd}(E)$ in the notation list.
 \end{definition}
 
@@ -170,6 +174,32 @@ Thus $\overline{E}$ is the smallest closed subset of $X$ that contains $E$.
 \hlt{Key Insight}: Closed supersets must contain all limit points, so they must contain $\overline{E}$.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:dense-closure-criterion} \hlt{Density and Closure}\\
+Let $X$ be a metric space and let $E\subseteq X$. Then $E$ is dense in $X$ if and only if $\overline{E}=X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is dense in $X$. Let $p\in X$. By Definition \ref{def:metric-topology-core-definitions}, $p$ is either a point of $E$ or a limit point of $E$. Hence $p\in E\cup E^{\operatorname{acc}}=\overline{E}$ by Definition \ref{def:metric-closure}. Thus $X\subseteq\overline{E}$. Since $\overline{E}\subseteq X$, $\overline{E}=X$.
+\item[$(\Leftarrow)$] Suppose $\overline{E}=X$. Let $p\in X$. Then $p\in\overline{E}=E\cup E^{\operatorname{acc}}$, so $p$ is either a point of $E$ or a limit point of $E$. Therefore $E$ is dense in $X$ by Definition \ref{def:metric-topology-core-definitions}.
+\end{enumerate}
+\hlt{Structural Commentary}: Density says every point is already in $E$ or is forced by nearby points of $E$.\\
+\hlt{Key Insight}: The closure packages exactly those two possibilities.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:dense-closure-and-interval-test} \hlt{Real-Line Density Interval Test}\\
+Let $E\subseteq\R$. Then $E$ is dense in $\R$ if and only if every nonempty open interval $(a,b)$ satisfies $(a,b)\cap E\neq\emptyset$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is dense in $\R$, and let $(a,b)$ be a nonempty open interval. Choose $p\in(a,b)$ and put $r\defeq\frac12\min\{p-a,b-p\}>0$. If $p\in E$, then $(a,b)\cap E\neq\emptyset$. If $p\notin E$, then $p$ is a limit point of $E$ by Definition \ref{def:metric-topology-core-definitions}, so $B_r(p)$ contains a point $q\in E$ with $q\neq p$. Since $B_r(p)\subseteq(a,b)$, again $(a,b)\cap E\neq\emptyset$.
+\item[$(\Leftarrow)$] Suppose every nonempty open interval meets $E$. Let $p\in\R$. If $p\in E$, there is nothing to prove. If $p\notin E$, then for every $\varepsilon>0$, the interval $(p-\varepsilon,p+\varepsilon)$ contains a point $q\in E$. Since $p\notin E$, $q\neq p$, so every ball $B_\varepsilon(p)$ contains a point of $E$ distinct from $p$. Thus $p$ is a limit point of $E$. Hence every $p\in\R$ is either in $E$ or is a limit point of $E$, and $E$ is dense in $\R$.
+\end{enumerate}
+\hlt{Structural Commentary}: On $\R$, balls and open intervals test the same local condition.\\
+\hlt{Key Insight}: Density means no interval can avoid the set.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:supremum-belongs-to-closure} \hlt{Suprema Belong to Closures}\\
 Let $\emptyset\neq E\subseteq\R$ be bounded above and let $y\defeq\sup E$. Then $y\in\overline{E}$; if $E$ is closed, then $y\in E$.

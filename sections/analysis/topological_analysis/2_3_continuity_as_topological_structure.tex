@@ -4,12 +4,20 @@
 % Sources mapped: Rudin Ch.4; Abbott Ch.4; Ross Ch.3; Tao I Ch.9; Tao II Ch.2; Pugh Ch.2.2.
 % TODO(source pages unavailable): Add non-Rudin continuity material from the mapped sources only after pages are provided.
 
-This subsection treats continuity as structure preservation: function limits describe local behavior, continuity matches the limit to the function value, and continuous maps preserve compactness and connectedness through inverse images.
+This subsection treats continuity as structure preservation: function limits describe local behavior, continuity matches the limit to the function value, and continuous maps preserve compactness and connectedness through inverse images. The sequence machinery from Definition \ref{def:sequence-convergence-metric}, compactness from Definition \ref{def:open-cover-and-compactness}, and connectedness from Definition \ref{def:separated-and-connected-sets} are used repeatedly below.
 
 \begin{definition} \label{def:function-limit-metric}\label{def:continuity-core-definitions-source-todo} \hlt{Limit of a Function Between Metric Spaces}\\
 Let $X,Y$ be metric spaces, $E\subseteq X$, $f:E\to Y$, and let $p$ be a limit point of $E$. For $q\in Y$, $\lim_{x\to p} f(x)=q$ means that, for every $\varepsilon>0$, there exists $\delta>0$ such that $x\in E$, $0<d_X(x,p)<\delta$ $\Longrightarrow$ $d_Y(f(x),q)<\varepsilon$.\\
 The point $p$ need not belong to $E$, and $f(p)$ is irrelevant when it does.
 \end{definition}
+
+% Visual note: schematic redraw of Definition \ref{def:function-limit-metric} in the real one-variable case.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/function_limit_epsilon_delta.tikz}
+  \caption{The epsilon--delta geometry for \(\lim\limits_{x\to p} f(x)=q\).}
+  \label{fig:function-limit-epsilon-delta}
+\end{figure}
 
 \begin{theorem} \label{thm:function-limit-sequential-characterization} \hlt{Sequential Characterization of Function Limits}\\
 Let $X,Y$ be metric spaces, $E\subseteq X$, $f:E\to Y$, and let $p$ be a limit point of $E$. For $q\in Y$, $\lim_{x\to p}f(x)=q$ if and only if $f(p_n)\to q$ for every sequence $(p_n)\subseteq E\setminus\{p\}$ with $p_n\to p$.
@@ -23,6 +31,10 @@ Let $X,Y$ be metric spaces, $E\subseteq X$, $f:E\to Y$, and let $p$ be a limit p
 \hlt{Key Insight}: The negation of an epsilon--delta limit manufactures a bad sequence.
 \end{proof}
 \end{theorem}
+
+\begin{principle} \label{pri:continuity-challenge-response} \hlt{Challenge--Response Order}\\
+Limits and continuity are controlled by quantifier order. In Definition \ref{def:function-limit-metric}, the $\varepsilon$-challenge at the range point must be answered by a $\delta$-restriction near the domain point. Uniform continuity, Definition \ref{def:uniform-continuity}, strengthens the same pattern by requiring one $\delta$ to work for all relevant domain points at once.
+\end{principle}
 
 \begin{corollary} \label{cor:function-limits-are-unique} \hlt{Uniqueness of Function Limits}\\
 If a function has a limit at $p$, then that limit is unique.
@@ -189,7 +201,8 @@ Since $f$ is bijective, $f(V)=Y\setminus f(V^c)$ is open.\\
 \end{theorem}
 
 \begin{definition} \label{def:uniform-continuity} \hlt{Uniform Continuity}\\
-A mapping $f:X\to Y$ between metric spaces is \hlt{uniformly continuous} on $X$ if $\forall$ $\varepsilon>0$ $\exists$ $\delta>0$ such that $d_X(p,q)<\delta$ $\Longrightarrow$ $d_Y(f(p),f(q))<\varepsilon$ $\forall p,q\in X$. The same $\delta$ must work for every point of $X$.
+A mapping $f:X\to Y$ between metric spaces is \hlt{uniformly continuous} on $X$ if $\forall$ $\varepsilon>0$ $\exists$ $\delta>0$ such that $d_X(p,q)<\delta$ $\Longrightarrow$ $d_Y(f(p),f(q))<\varepsilon$ $\forall p,q\in X$. The same $\delta$ must work for every point of $X$.\\
+\hlt{Structural Commentary}: Ordinary continuity chooses $\delta$ pointwise; uniform continuity chooses it globally.
 \end{definition}
 
 \begin{theorem} \label{thm:compact-continuity-uniform-continuity} \hlt{Continuity on Compact Sets Is Uniform}\\
@@ -255,8 +268,17 @@ Simple discontinuities are jumps, $f(x+)\neq f(x-)$, or removable value mismatch
 
 \begin{example} \label{ex:basic-discontinuity-types} \hlt{Basic Discontinuity Types}\\
 Dirichlet's function $\mathbf{1}_{\Q}$ has a discontinuity of the second kind at every point.\\
-The function $f(x)=x$ on $\Q$ and $f(x)=0$ off $\Q$ is continuous only at $0$; elsewhere its discontinuities are of the second kind. A jump in a piecewise linear function is a simple discontinuity.
+The function $f(x)=x$ on $\Q$ and $f(x)=0$ off $\Q$ is continuous only at $0$; elsewhere its discontinuities are of the second kind. A jump in a piecewise linear function is a simple discontinuity.\\
+Use Corollary \ref{cor:rationals-and-irrationals-dense}: every interval contains rational and irrational points.
 \end{example}
+
+% Visual note: schematic support for Example \ref{ex:basic-discontinuity-types}, using Corollary \ref{cor:rationals-and-irrationals-dense}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/dirichlet_dense_rows.tikz}
+  \caption{For $g=\mathbf{1}_{\Q}$, interval around $c$ has rational inputs value $1$ and irrational inputs value $0$.}
+  \label{fig:dirichlet-dense-rows}
+\end{figure}
 
 \begin{definition} \label{def:monotone-real-function} \hlt{Monotone Functions}\\
 Let $f$ be real-valued on $(a,b)$. The function is \hlt{monotonically increasing} if $a<x<y<b$ implies $f(x)\leq f(y)$. Reversing the inequality gives \hlt{monotonically decreasing}. A \hlt{monotone} function is one of these two types.

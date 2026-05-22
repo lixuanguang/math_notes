@@ -1,8 +1,9 @@
 \subsubsection{Number Systems, Order, and Completeness}
 
 % Rudin Ch.1, Secs. 1.1--1.35 and Appendix proof of Theorem 1.19.
+% Additional screenshot source: Abbott Ch.8.6 constructs $\R$ from $\Q$ by Dedekind cuts and verifies least upper bounds.
 % Sources mapped: Abbott Ch.1; Ross Ch.1; Tao I Ch.4-5; Pugh Ch.1; Grinberg Ch.4-6.
-% TODO(source pages unavailable): Add sourced coverage from the mapped non-Rudin sources.
+% TODO(source pages unavailable): Add broader sourced coverage from the mapped non-Rudin sources.
 
 The real and complex number systems supply the ordered and algebraic background for the rest of Analysis. The main thread here is: $\Q$ has order and algebra but has gaps; $\R$ repairs those gaps by completeness; $\C$ keeps field algebra while giving up order.
 
@@ -15,6 +16,14 @@ Hence $n^2=2k^2$, so $n$ is even, a contradiction.\\
 \hlt{Key Insight}: $\sqrt{2}$ is not rational.
 \end{proof}
 \end{proposition}
+
+% Visual note: schematic redraw of the geometric interpretation of Proposition \ref{prop:rational-square-root-two-gap}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/unit_square_sqrt_two.tikz}
+  \caption{The diagonal of a unit square has length $\sqrt{2}$, so the rational gap is geometric as well as algebraic.}
+  \label{fig:unit-square-sqrt-two}
+\end{figure}
 
 \begin{example} \label{ex:rational-cut-around-square-root-two} \hlt{No Largest Lower Side and No Smallest Upper Side}\\
 Let $A\defeq\{p\in\Q:p>0,\ p^2<2\}$, and $B\defeq\{p\in\Q:p>0,\ p^2>2\}$.\\
@@ -33,6 +42,14 @@ An \hlt{order} on $S$ is a relation $<$ such that exactly one of $x<y$, $x=y$, o
 \begin{definition} \label{def:supremum-infimum-lub-property} \hlt{Supremum, Infimum, and Least-Upper-Bound Property}\\
 For $E\subseteq S$, $\sup E$ is least upper bound of $E$, and $\inf E$ is greatest lower bound of $E$, when these exist. Ordered set $S$ has \hlt{least-upper-bound property} if every nonempty bounded-above subset of $S$ has a supremum in $S$.
 \end{definition}
+
+% Visual note: schematic redraw of Definition \ref{def:ordered-sets-bounds-supremum}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/supremum_infimum_bounds.tikz}
+  \caption{The supremum is the least upper bound, while the infimum is the greatest lower bound.}
+  \label{fig:supremum-infimum-bounds}
+\end{figure}
 
 \begin{example} \label{ex:supremum-need-not-be-attained} \hlt{Suprema Need Not Be Elements}\\
 In $\Q$, the set $E_1=\{r\in\Q:r<0\}$ and the set $E_2=\{r\in\Q:r\leq0\}$ both have supremum $0$, but $0\notin E_1$ and $0\in E_2$. If $E=\{1/n:n=1,2,3,\ldots\}$, then $\sup E=1$ while $\inf E=0$, and the infimum is not a member of $E$.
@@ -89,6 +106,42 @@ In every ordered field,
 \end{proof}
 \end{proposition}
 
+\begin{definition} \label{def:real-absolute-value-and-distance} \hlt{Real Absolute Value and Distance}\\
+For $x\in\R$, define $\abs{x}\defeq
+\begin{cases}
+x, & x\geq0,\\
+-x, & x<0.
+\end{cases}$.\\
+For $a,b\in\R$, the distance between $a$ and $b$ on the real line is $\abs{a-b}$.
+\end{definition}
+
+\begin{proposition} \label{prop:real-absolute-value-triangle-inequality} \hlt{Real Absolute-Value Laws}\\
+For $x,y,a,b,c\in\R$,
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\abs{x}\geq0$, $\abs{x}=0$ iff $x=0$, and $-\abs{x}\leq x\leq\abs{x}$;
+\item $\abs{xy}=\abs{x}\abs{y}$;
+\item $\abs{x+y}\leq\abs{x}+\abs{y}$;
+\item $\abs{a-b}\leq\abs{a-c}+\abs{c-b}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Immediate from Definition \ref{def:real-absolute-value-and-distance}.
+\item Check the four sign cases for $x$ and $y$.
+\item Add $-\abs{x}\leq x\leq\abs{x}$ and $-\abs{y}\leq y\leq\abs{y}$, then $-(\abs{x}+\abs{y})\leq x+y\leq\abs{x}+\abs{y}$.\\
+Since $\abs{x}+\abs{y}\geq0$, this gives $\abs{x+y}\leq\abs{x}+\abs{y}$.
+\item Apply (iii) to $a-b=(a-c)+(c-b)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Absolute value turns order bounds into distance estimates.\\
+\hlt{Key Insight}: The triangle inequality on $\R$ is the inequality $\abs{(a-c)+(c-b)}\leq\abs{a-c}+\abs{c-b}$.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:dedekind-construction-as-completeness-proof} \hlt{Completeness Becomes a Theorem}\\
+Dedekind cuts build completeness from $\Q$: real numbers are rational cuts, rational cuts embed $\Q$, and least upper bounds arise by taking unions of cuts.
+\end{perspective}
+
 \begin{definition} \label{def:dedekind-cuts-and-order} \hlt{Dedekind Cuts and Their Order}\\
 A \hlt{cut} is a set $\alpha\subseteq\Q$ such that
 \begin{enumerate}[label=(\roman*)]
@@ -97,26 +150,15 @@ A \hlt{cut} is a set $\alpha\subseteq\Q$ such that
 \item if $p\in\alpha$, $q\in\Q$, and $q<p$, then $q\in\alpha$;
 \item if $p\in\alpha$, then some $r\in\alpha$ satisfies $p<r$.
 \end{enumerate}
-Let $\mathscr{D}$ be the set of all cuts. For $\alpha,\beta\in\mathscr{D}$, define $\alpha<\beta$ to mean $\alpha\subsetneq\beta$.
+Let $\mathscr{D}$ be the set of all cuts. For $\alpha,\beta\in\mathscr{D}$, define $\alpha<\beta$ to mean $\alpha\subsetneq\beta$.\\
 Rational letters $p,q,r,\ldots$ denote elements of $\Q$; Greek letters $\alpha,\beta,\gamma,\ldots$ denote cuts.\\
 A cut is the rational left side of a real number: a proper initial segment with no last point.
 \end{definition}
 
 \begin{definition} \label{def:cut-arithmetic} \hlt{Arithmetic of Cuts}\\
-For cuts $\alpha,\beta$, define
-\begin{gather}
-\alpha+\beta\defeq\{r+s:r\in\alpha,\ s\in\beta\},\qquad
-0^*\defeq\{q\in\Q:q<0\}. \nonumber
-\end{gather}
-Define the candidate additive inverse of $\alpha$ by
-\begin{gather}
--\alpha\defeq\{p\in\Q:\exists r\in\Q,\ r>0,\ -p-r\notin\alpha\}. \nonumber
-\end{gather}
-Let $\mathscr{D}^+\defeq\{\alpha\in\mathscr{D}:\alpha>0^*\}$. For $\alpha,\beta\in\mathscr{D}^+$, define
-\begin{gather}
-\alpha\beta\defeq\{p\in\Q:\exists r\in\alpha,\ \exists s\in\beta,\ r>0,\ s>0,\ p\leq rs\},\qquad
-1^*\defeq\{q\in\Q:q<1\}. \nonumber
-\end{gather}
+For cuts $\alpha,\beta$, define $\alpha+\beta\defeq\{r+s:r\in\alpha,\ s\in\beta\}$ and $0^*\defeq\{q\in\Q:q<0\}$.\\
+Let candidate additive inverse of $\alpha$ be $-\alpha\defeq\{p\in\Q:\exists r\in\Q,\ r>0,\ -p-r\notin\alpha\}$. Let $\mathscr{D}^+\defeq\{\alpha\in\mathscr{D}:\alpha>0^*\}$.\\
+For $\alpha,\beta\in\mathscr{D}^+$, define $\alpha\beta\defeq\{p\in\Q:\exists r\in\alpha,\ \exists s\in\beta,\ r>0,\ s>0,\ p\leq rs\}$ and $1^*\defeq\{q\in\Q:q<1\}$.\\
 Extend multiplication to all cuts by setting $\alpha0^*=0^*\alpha=0^*$ and, for nonzero signs,
 \begin{align}
 \alpha\beta \defeq
@@ -203,6 +245,14 @@ Thus $nx<m\leq nx+1<ny$, so $x<m/n<y$ and $m/n\in\Q$.
 \end{proof}
 \end{theorem}
 
+% Visual note: schematic redraw of the grid step in Theorem \ref{thm:archimedean-and-rational-density}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/rational_density_step_size.tikz}
+  \caption{Choose $n$ so the spacing $1/n$ is smaller than $b-a$; then one grid point $m/n$ falls inside $(a,b)$.}
+  \label{fig:rational-density-step-size}
+\end{figure}
+
 \begin{theorem} \label{thm:nth-roots-positive-reals} \hlt{Existence and Uniqueness of Positive $n$th Roots}\\
 For every $x\in\R$ with $x>0$ and every positive integer $n$, $\exists$ a unique positive real number $y$ such that $y^n=x$.
 \begin{proof}
@@ -222,6 +272,17 @@ Hence $y-k$ is an upper bound for $E$, contradicting $y=\sup E$. Therefore $y^n=
 \hlt{Key Insight}: Completeness supplies the missing root.
 \end{proof}
 \end{theorem}
+
+\begin{corollary} \label{cor:rationals-and-irrationals-dense} \hlt{Density of Rational and Irrational Points}\\
+If $x<y$ in $\R$, then there exist $r\in\Q$ and $s\in\R\setminus\Q$ such that $x<r<y$ and $x<s<y$.
+\begin{proof}
+The rational point $r$ is supplied by Theorem \ref{thm:archimedean-and-rational-density}. Let $\eta=\sqrt{2}$.\\
+Choose $n\in\N$ with $0<\eta/n<y-x$, and choose $q\in\Q$ with $x-\eta/n<q<y-\eta/n$.\\
+Then $s\defeq q+\eta/n$ lies in $(x,y)$ and is irrational, since $s\in\Q$ would imply $\eta=n(s-q)\in\Q$.\\
+\hlt{Structural Commentary}: Irrational density is rational density shifted by a small irrational amount.\\
+\hlt{Key Insight}: Once one irrational is known, every interval contains irrational translates of rational points.
+\end{proof}
+\end{corollary}
 
 \begin{corollary} \label{cor:nth-root-product-positive-reals} \hlt{Product Rule for Positive Roots}\\
 If $a,b>0$ and $n$ is a positive integer, then $(ab)^{1/n}=a^{1/n}b^{1/n}$.
