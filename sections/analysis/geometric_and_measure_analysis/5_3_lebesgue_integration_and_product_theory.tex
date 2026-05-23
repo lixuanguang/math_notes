@@ -1,6 +1,7 @@
 \subsubsection{Lebesgue Integration and Product Theory}
 
 % Source pages provided: Rudin Ch.11, Secs. 11.19--11.45, including simple functions, Lebesgue integration, null-set invariance, monotone convergence, Fatou's theorem, dominated convergence, comparison with the Riemann integral, complex integration, L^2, Parseval, Riesz--Fischer, and complete orthonormal sets.
+% Supplementary screenshot source: provided Pugh Ch.3, Sec. 2 pages support the zero-set/oscillation proof idea for the Riemann--Lebesgue criterion.
 % Sources mapped: Rudin Ch.11.5-11.9; Pugh Ch.6.6-6.10; Tao II Ch.8.
 % TODO(source pages unavailable): Add product-measure and Fubini/Tonelli material only after source pages are provided.
 
@@ -108,18 +109,28 @@ Fatou applied to $g-f_n$ gives $\limsup\limits_n\int_E f_n\,d\mu\leq\int_E f\,d\
 \end{theorem}
 
 \begin{theorem} \label{thm:riemann-lebesgue-comparison} \hlt{Comparison with the Riemann Integral}\\
-On $[a,b]$ with Lebesgue measure, Riemann integrability implies Lebesgue integrability with the same integral. If $f$ is bounded, then $f$ is Riemann integrable iff $f$ is continuous a.e.
+On $[a,b]$ with Lebesgue measure $\mu$, $f\in\mathcal{R}$ implies $f\in\mathscr{L}^1(\mu)$ and the integrals agree. If $f$ is bounded with discontinuity set $D$, then $f\in\mathcal{R}\iff\mu(D)=0$.
 \begin{proof}
-For refining partitions, let $L_k\uparrow L$ and $U_k\downarrow U$ be the lower and upper step envelopes, with $L_k\leq f\leq U_k$.\\
-Monotone convergence identifies $\int L$ and $\int U$ with the lower and upper Riemann integrals.\\
-Thus $f\in\mathcal{R}$ iff $L=U$ a.e.; away from partition points, $L=U$ iff $f$ is continuous.\\
-\hlt{Structural Commentary}: Riemann integrability is a zero-gap condition.\\
+For refining partitions, let $L_n\uparrow L$ and $U_n\downarrow U$ be lower and upper step envelopes.\\
+Monotone convergence identifies $\int L$ and $\int U$ with the lower and upper Riemann integrals; if $f\in\mathcal{R}$, then $L=U$ a.e., so the common Lebesgue integral equals the Riemann integral.\\
+For bounded $f$, put $\omega_f(x)\defeq \lim_{r\downarrow0}\diam f\bigl([a,b]\cap(x-r,x+r)\bigr)$, where $D_k\defeq\{x:\omega_f(x)\geq1/k\}$.\\
+Then $f$ is continuous at $x$ iff $\omega_f(x)=0$, and its discontinuity set is $D=\bigcup_{k\geq1}D_k$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Fix $k$ and $\varepsilon>0$. Choose $P$ with $U(P,f)-L(P,f)<\varepsilon/k$.\\
+Intervals of $P$ whose interiors meet $D_k$ have total length $<\varepsilon$; adding the finitely many partition points, null by Proposition \ref{prop:finite-countable-cantor-null-sets}, covers $D_k$ by arbitrarily short intervals.\\
+Thus $\mu(D_k)=0$ by Definition \ref{def:null-sets-and-real-line-measure-zero}, and $\mu(D)=0$.
+\item[$(\Leftarrow)$] Suppose $\mu(D)=0$ and $\abs{f}\leq B$. If $B=0$, there is nothing to prove. Given $\varepsilon>0$, choose $k$ with $(b-a)/k<\varepsilon/2$ and cover $D_k$ by intervals of total length $<\varepsilon/(4B)$.\\
+On the compact complement, $\omega_f<1/k$, so a finite refinement makes the good intervals contribute $<\varepsilon/2$ to $U-L$; the covered intervals contribute $<2B\cdot\varepsilon/(4B)=\varepsilon/2$.\\
+Hence $U(P,f)-L(P,f)<\varepsilon$, and Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with $\alpha(x)=x$ gives $f\in\mathcal{R}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Darboux gap measures oscillation sets.\\
 \hlt{Key Insight}: Lebesgue measure turns ``bad discontinuities'' into a null-set condition.
 \end{proof}
 \end{theorem}
 
 \begin{perspective} \label{per:lebesgue-criterion-riemann-roadmap} \hlt{Lebesgue's Criterion as a Roadmap}\\
-Theorem \ref{thm:riemann-lebesgue-comparison} gives the threshold: a bounded function is Riemann integrable exactly when its discontinuities form a null set. Thus finite, countable, and Cantor-type exceptional sets are allowed, while Dirichlet's function fails.
+Theorem \ref{thm:riemann-lebesgue-comparison} gives the threshold: a bounded function is Riemann integrable exactly when its discontinuities are null. Finite, countable, and Cantor-type exceptions are allowed; Dirichlet's function fails.
 \end{perspective}
 
 \begin{definition} \label{def:complex-integrable-and-l2} \hlt{Complex Integrals and $L^2$}\\
