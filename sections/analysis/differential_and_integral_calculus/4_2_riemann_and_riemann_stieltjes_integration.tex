@@ -2,10 +2,12 @@
 
 % Source pages provided: Rudin Ch.6, Defs. 6.1--6.3, 6.14, 6.23, 6.26; Thms. 6.4--6.13, 6.15--6.17, 6.19--6.22, 6.24--6.25, 6.27; Remarks 6.18 and the surrounding discussion in the provided screenshots.
 % Additional screenshot source: Abbott Ch.8.1 motivates tagged partitions, $\delta$-fine partitions, gauges, and generalized Riemann integrability.
+% Supplementary screenshot source: Ross Ch.6, Secs. 32--35 supports Darboux sums, Riemann-sum equivalence, basic integral properties, the Fundamental Theorem of Calculus, integration by parts, change of variable, and Riemann--Stieltjes step-integrator examples.
+% Supplementary screenshot source: Ross Ch.6, Sec. 36 supports improper Riemann integrals, improper Riemann--Stieltjes integrals, distribution functions, densities, and the normal-distribution visual.
 % Sources mapped: Rudin Ch.6; Abbott Ch.7, Ch.8.1; Ross Ch.6; Tao I Ch.11; Pugh Ch.3.2.
 % TODO(source): If the generalized Riemann integral is promoted from perspective to main text, add the full gauge definitions and proofs in a separate conservative block.
 
-This subsection owns Riemann-type integration. The order structure of the real line supplies partitions, upper sums, and lower sums; the Riemann--Stieltjes integral keeps the same partition logic but measures each subinterval by the increment of an increasing function $\alpha$. The ordinary Riemann integral should be read as area approximation rather than antidifferentiation: derivatives have the Darboux property by Corollary \ref{cor:derivatives-no-simple-discontinuities}, while simple jump functions can still be integrated. Lebesgue integration is left to the measure section.
+This subsection treats Riemann-type integration through partitions, upper/lower sums, and tagged sums. Riemann--Stieltjes integration uses the same partition logic, weighting each interval by an increment of an increasing function $\alpha$. The Fundamental Theorem of Calculus later reconnects this area theory with antiderivatives; Lebesgue integration is left to the measure section.
 
 \begin{definition} \label{def:partition-and-riemann-upper-lower-sums}\label{def:riemann-stieltjes-core-source-todo} \hlt{Partitions and Riemann Upper/Lower Sums}\\
 A \hlt{partition} of $[a,b]$ is $\Pi=\{x_0,\ldots,x_n\}$ with $a=x_0\leq x_1\leq\cdots\leq x_n=b$, $\Delta x_i\defeq x_i-x_{i-1}$.\\
@@ -35,7 +37,7 @@ Gauge integration keeps tagged sums but replaces one mesh bound $\delta$ with a 
 Thus fineness may vary by tag, giving a stronger framework for FTC-type results.
 \end{perspective}
 
-% Visual note: schematic redraw of Definition \ref{def:partition-and-riemann-upper-lower-sums}.
+% Visual source: Ross Ch.6, Sec. 32, Fig. 32.1 in the provided screenshots; redrawn as a schematic upper/lower Darboux picture.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/riemann_upper_lower_partition.tikz}
@@ -90,7 +92,7 @@ Their common refinement $\Pi$ satisfies the displayed inequality by Theorem \ref
 \end{theorem}
 
 \begin{perspective} \label{per:darboux-and-riemann-sum-definitions} \hlt{Darboux Gaps and Riemann Sums}\\
-For $\alpha(x)=x$, a small Darboux gap $U(\Pi,f)-L(\Pi,f)$ traps every tagged sum for $\Pi$ near the integral.
+For $\alpha(x)=x$, a small Darboux gap $U(\Pi,f)-L(\Pi,f)$ traps every tagged sum for $\Pi$ near the integral. This is the local reason the Darboux definition above and the tagged Riemann-sum definition give the same number. The same estimate works with Stieltjes weights $\Delta\alpha_i$ whenever the upper--lower gap is small.
 \end{perspective}
 
 \begin{theorem} \label{thm:tagged-riemann-stieltjes-sums} \hlt{Tagged Sums}\\
@@ -223,6 +225,7 @@ The \hlt{unit step function} $I$ is $I(x)=
 \end{cases}$.
 \end{definition}
 
+% Visual source: Ross Ch.6, Sec. 35, Fig. 35.1 in the provided screenshots; redrawn as a finite step-integrator schematic.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/riemann_stieltjes_step_integrator.tikz}
@@ -308,6 +311,64 @@ Thus $H'=Fg+fG\in\mathcal{R}$, and Theorem \ref{thm:fundamental-theorem-calculus
 \end{proof}
 \end{theorem}
 
+\begin{definition} \label{def:improper-riemann-integral} \hlt{Improper Riemann Integrals}\\
+Let $f\in\mathcal{R}$ on every compact subinterval of its domain.\\
+Set $\int_a^b f(x)\,dx\defeq\lim\limits_{d\to b^-}\int_a^d f(x)\,dx$ at a right endpoint, and $\int_a^b f(x)\,dx\defeq\lim\limits_{c\to a^+}\int_c^b f(x)\,dx$ at a left endpoint.\\
+If both endpoints are improper, choose $\xi\in(a,b)$ and set $\int_a^b f(x)\,dx \defeq \int_a^\xi f(x)\,dx+\int_\xi^b f(x)\,dx$, provided both one-sided integrals exist and the sum is not indeterminate.\\
+A finite value means the improper integral \hlt{converges}; otherwise it diverges to $+\infty$ or $-\infty$.
+\end{definition}
+
+\begin{theorem} \label{thm:nonnegative-improper-integral-supremum} \hlt{Nonnegative Improper Integrals}\\
+Let $f\geq0$ and $f\in\mathcal{R}$ on every $[a,d]$, $a<d<b$. Then $\int_a^b f(x)\,dx=\sup\left\{\int_a^d f(x)\,dx:a<d<b\right\}$.\\
+Thus $\int_a^b f$ exists in $[0,+\infty]$ and converges exactly when this supremum is finite.
+\begin{proof}
+For $a<d_1<d_2<b$, $\int_a^{d_2}f-\int_a^{d_1}f=\int_{d_1}^{d_2}f\geq0$.\\
+Hence $d\mapsto\int_a^d f$ is increasing, so its extended limit exists and equals its supremum.\\
+\hlt{Structural Commentary}: Nonnegative area can only accumulate.\\
+\hlt{Key Insight}: Improper convergence for $f\geq0$ is boundedness of all finite truncations.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:cauchy-principal-value-not-improper-integral} \hlt{Principal Value Is Different}\\
+Improper integrals over $(-\infty,\infty)$ require separate one-sided limits.\\
+A symmetric limit such as $\lim_{A\to\infty}\int_{-A}^{A}\sin x\,dx$ may still exist (Cauchy principal value, not Definition \ref{def:improper-riemann-integral}).
+\end{perspective}
+
+\begin{definition} \label{def:improper-riemann-stieltjes-real-line} \hlt{Improper Riemann--Stieltjes Integrals on $\R$}\\
+Let $\alpha:\R\to\R$ be increasing and $f\in\mathcal{R}(\alpha)$ on every finite interval.\\
+Define, when the limits exist, $\int_0^\infty f\,d\alpha\defeq\lim_{b\to\infty}\int_0^b f\,d\alpha$; and $\int_{-\infty}^{0} f\,d\alpha\defeq\lim_{a\to-\infty}\int_a^0 f\,d\alpha$.\\
+If their sum is not indeterminate, set $\int_{-\infty}^{\infty}f\,d\alpha \defeq \int_{-\infty}^{0}f\,d\alpha+\int_0^\infty f\,d\alpha$.\\
+Finite value means $f$ is \hlt{$\alpha$-integrable on $\R$}. Write $\alpha(\pm\infty)\defeq\lim_{t\to\pm\infty}\alpha(t)$ when these extended limits are used.
+\end{definition}
+
+\begin{theorem} \label{thm:improper-riemann-stieltjes-nonnegative-bounded-mass} \hlt{Nonnegative and Bounded-Mass Stieltjes Integrals}\\
+Let $\alpha:\R\to\R$ be increasing, and suppose $f\in\mathcal{R}(\alpha)$ on every finite interval.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\geq0$, then either $f$ is $\alpha$-integrable on $\R$ or $\int_{-\infty}^{\infty}f\,d\alpha=+\infty$.
+\item If $-\infty<\alpha(-\infty)<\alpha(\infty)<+\infty$ and $f$ is bounded, then $f$ is $\alpha$-integrable on $\R$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+By additivity and order preservation, $\int_0^b f\,d\alpha$ and $\int_a^0 f\,d\alpha$ are monotone under outward truncation.\\
+Hence both extended one-sided limits exist, so their sum is finite or $+\infty$.
+\item
+Let $\abs{f}\leq M$. For finite $a<b$, Theorem \ref{thm:riemann-stieltjes-integral-properties} gives $\abs{\int_a^b f\,d\alpha}\leq M\bigl[\alpha(b)-\alpha(a)\bigr]$.\\
+Since $\alpha(\infty)$ and $\alpha(-\infty)$ are finite, the right and left tails have vanishing $\alpha$-increment.\\
+Thus the one-sided truncations are Cauchy and have finite limits.
+\end{enumerate}
+\hlt{Structural Commentary}: Positivity gives monotone limits; finite mass bounds tails.\\
+\hlt{Key Insight}: A bounded increasing integrator behaves like finite total mass.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:distribution-function-and-density} \hlt{Distribution Functions and Densities}\\
+A \hlt{distribution function} is an increasing right-continuous $F:\R\to\R$ with $F(-\infty)=0$ and $F(\infty)=1$.\\
+A \hlt{density} for $F$ is an integrable $g\geq0$ with $\int_{-\infty}^{\infty}g=1$ and $F(t)=\int_{-\infty}^{t}g(x)\,dx$, in which case continuous $g$ gives $F'(t)=g(t)$ by Theorem \ref{thm:integral-function-continuity-and-derivative}.
+\end{definition}
+
 \begin{definition} \label{def:vector-valued-riemann-stieltjes-integral} \hlt{Vector-Valued Riemann--Stieltjes Integral}\\
 For $\mathbf{f}=(f_1,\ldots,f_k):[a,b]\to\R^k$, define $\mathbf{f}\in\mathcal{R}(\alpha)$ iff $f_j\in\mathcal{R}(\alpha) \ \forall j$, and set $\int_a^b \mathbf{f}\,d\alpha \defeq \left(\int_a^b f_1\,d\alpha,\ldots,\int_a^b f_k\,d\alpha\right)$.
 \end{definition}
@@ -321,10 +382,12 @@ For $\mathbf{f}=(f_1,\ldots,f_k):[a,b]\to\R^k$, define $\mathbf{f}\in\mathcal{R}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Write $\mathbf{f}=(f_1,\ldots,f_k)$ and $\mathbf{F}=(F_1,\ldots,F_k)$. Since $F_j'=f_j$ and $f_j\in\mathcal{R}$,\\
-Theorem \ref{thm:fundamental-theorem-calculus-riemann} gives $\int_a^b f_j(t)\,dt=F_j(b)-F_j(a)$, $(1\leq j\leq k)$. Thus $\int_a^b\mathbf{f}(t)\,dt=\mathbf{F}(b)-\mathbf{F}(a)$.
-\item Write $\mathbf{f}=(f_1,\ldots,f_k)$. Since $\norm{\mathbf{f}}=(f_1^2+\cdots+f_k^2)^{1/2}$, Theorems \ref{thm:products-and-absolute-values-riemann-stieltjes} and \ref{thm:continuous-composition-preserves-riemann-stieltjes-integrability} give $\norm{\mathbf{f}}\in\mathcal{R}(\alpha)$.\\
-Let $\mathbf{y}\defeq\int_a^b\mathbf{f}\,d\alpha$. Then $\norm{\mathbf{y}}^2=\int_a^b\sum\limits_{j=1}^{k}y_j f_j\,d\alpha \leq \int_a^b \norm{\mathbf{y}}\norm{\mathbf{f}}\,d\alpha = \norm{\mathbf{y}}\int_a^b\norm{\mathbf{f}}\,d\alpha$ by Theorem \ref{thm:finite-schwarz-inequality-complex-scalars} and order preservation. Divide by $\norm{\mathbf{y}}$ if $\mathbf{y}\neq0$; otherwise the result is immediate.
+\item
+Write $\mathbf{f}=(f_1,\ldots,f_k)$ and $\mathbf{F}=(F_1,\ldots,F_k)$. For each $j$, Theorem \ref{thm:fundamental-theorem-calculus-riemann} gives $\int_a^b f_j(t)\,dt=F_j(b)-F_j(a)$. The vector identity follows componentwise.
+\item
+Write $\mathbf{f}=(f_1,\ldots,f_k)$. Since $\norm{\mathbf{f}}=(f_1^2+\cdots+f_k^2)^{1/2}$, Theorems \ref{thm:products-and-absolute-values-riemann-stieltjes} and \ref{thm:continuous-composition-preserves-riemann-stieltjes-integrability} give $\norm{\mathbf{f}}\in\mathcal{R}(\alpha)$.\\
+Let $\mathbf{y}\defeq\int_a^b\mathbf{f}\,d\alpha$. If $\mathbf{y}=0$, the inequality is immediate.\\
+Otherwise, $\norm{\mathbf{y}}^2 =\sum\limits_{j=1}^{k}y_j\int_a^b f_j\,d\alpha =\int_a^b\sum\limits_{j=1}^{k}y_jf_j\,d\alpha \leq\int_a^b\norm{\mathbf{y}}\norm{\mathbf{f}}\,d\alpha =\norm{\mathbf{y}}\int_a^b\norm{\mathbf{f}}\,d\alpha$, by Theorem \ref{thm:finite-schwarz-inequality-complex-scalars} and order preservation. Divide by $\norm{\mathbf{y}}$.
 \end{enumerate}
 \hlt{Structural Commentary}: Coordinatewise integration; Schwarz controls norms.\\
 \hlt{Key Insight}: Integrate the projection of $\mathbf{f}$ onto the resulting vector.
@@ -360,6 +423,7 @@ Summing gives $\int_a^b\norm{\gamma'}\leq\ell(\gamma)+2\varepsilon(b-a)$; let $\
 \item \hlt{Bad sets}: cover $E$ by $I_j=[u_j,v_j]$ with $\sum_j[\alpha(v_j)-\alpha(u_j)]<\varepsilon$; control $K=[a,b]\setminus\bigcup_j(u_j,v_j)$ uniformly.
 \item \hlt{Properties}: pass to a common refinement before comparing sums.
 \item \hlt{Calculus}: use the mean value theorem to form tagged sums, then apply Theorem \ref{thm:tagged-riemann-stieltjes-sums}.
+\item \hlt{Improper integrals}: truncate endpoints; use monotonicity or tail bounds.
 \end{enumerate}
 \hlt{Key Insight}: Riemann--Stieltjes integration is Darboux approximation plus a choice of interval weights $\Delta\alpha_i$.
 \end{method}
