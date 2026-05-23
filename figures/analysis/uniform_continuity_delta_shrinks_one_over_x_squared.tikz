@@ -1,0 +1,32 @@
+\begin{tikzpicture}[
+  scale=0.95,
+  >=Stealth,
+  every node/.style={font=\scriptsize},
+  axis/.style={->, gray!70, line width=0.45pt},
+  curve/.style={blue!70!black, line width=0.9pt},
+  guide/.style={gray!55, dashed, line width=0.4pt},
+  epsmark/.style={orange!80!black, line width=0.65pt},
+  bracket/.style={teal!75!black, line width=0.8pt},
+  sample/.style={blue!70!black}
+]
+  \draw[axis] (-0.25,0) -- (4.00,0) node[right] {$x$};
+  \draw[axis] (0,-0.45) -- (0,2.65) node[above] {$y$};
+
+  \draw[curve, domain=0.66:3.45, samples=120] plot ({\x},{1/(\x*\x)});
+
+  \foreach \x/\name/\d/\dlabel in {2.85/$x_1$/0.46/$\delta_1$,1.75/$x_2$/0.26/$\delta_2$,1.03/$x_3$/0.11/$\delta_3$} {
+    \pgfmathsetmacro{\y}{1/(\x*\x)}
+    \fill[sample] (\x,\y) circle (0.035);
+    \draw[guide] (\x,0) -- (\x,\y);
+    \node[above] at (\x,0.03) {\name};
+    \draw[bracket] ({\x-\d},-0.12) -- ({\x+\d},-0.12);
+    \draw[bracket] ({\x-\d},-0.18) -- ({\x-\d},-0.06);
+    \draw[bracket] ({\x+\d},-0.18) -- ({\x+\d},-0.06);
+    \node[teal!75!black, below] at (\x,-0.19) {\dlabel};
+  }
+
+  \draw[guide] (3.35,0.45) -- (3.70,0.45);
+  \draw[guide] (3.35,1.20) -- (3.70,1.20);
+  \draw[<->, epsmark] (3.60,0.45) -- (3.60,1.20);
+  \node[orange!80!black, right] at (3.60,0.825) {$2\varepsilon$};
+\end{tikzpicture}
