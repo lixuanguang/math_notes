@@ -6,7 +6,7 @@
 % Supplementary screenshot source: Grinberg Ch.19 pages on series as partial sums, the Cauchy criterion, comparison tests, geometric series, Cauchy condensation, and p-series; Grinberg Ch.20 contributes proof-pattern reminders only.
 % Sources mapped: Rudin Ch.3; Abbott Ch.2.7-2.8; Ross Ch.2.14-16; Tao I Ch.7-8; Pugh Ch.3.3; Grinberg Ch.19.
 % TODO(source pages unavailable): Add non-Rudin series material not covered by the provided Abbott/Ross/Grinberg screenshots only after pages are provided.
-% TODO(prerequisite): Ross Sec. 15 supports integral tests; add them after the local integration prerequisites are in scope.
+% Source dependency resolved: Ross Sec. 15 integral-test material is connected below to improper integrals in Definition \ref{def:improper-riemann-integral} and Theorem \ref{thm:nonnegative-improper-integral-supremum}.
 
 This subsection treats a series as a sequence of partial sums, so convergence and tests such as comparison, condensation, root, ratio, summation by parts, and absolute convergence should lean on Definition \ref{def:sequence-convergence-metric} and Theorem \ref{thm:cauchy-convergence-criterion}. Decimal-expansion material belongs here when sourced, by the section ownership in the map.
 
@@ -107,6 +107,29 @@ This geometric series converges exactly when $2^{1-p}<1$, i.e. $p>1$, by Theorem
 \hlt{Key Insight}: The boundary is $p=1$ because the condensed ratio is $2^{1-p}$.
 \end{proof}
 \end{corollary}
+
+% Visual source: provided Ross Sec. 15 integral-test screenshots; redrawn as the rectangle comparison behind Theorem \ref{thm:integral-test-series}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/integral_test_step_functions.tikz}
+  \caption{Left and right endpoint estimates for decreasing $f\geq0$.}
+  \label{fig:integral-test-step-functions}
+\end{figure}
+
+\begin{theorem} \label{thm:integral-test-series} \hlt{Integral Test}\\
+Let $N\in\N$ and let $f:[N,\infty)\to[0,\infty)$ be decreasing and Riemann integrable on compact subintervals.\\
+Then $\sum\limits_{k=N}^{\infty}f(k)$ converges iff $\int_N^\infty f(x)\,dx$ converges.\\
+For $M\geq N$, $\int_N^{M+1} f(x)\,dx \leq \sum\limits_{k=N}^{M}f(k) \leq f(N)+\int_N^M f(x)\,dx$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] For $x\in[k,k+1]$, monotonicity gives $f(x)\leq f(k)$. Hence $\int_N^{M+1}f(x)\,dx\leq\sum_{k=N}^{M}f(k)$. If the series converges, these truncations are bounded, so $\int_N^\infty f$ converges by Theorem \ref{thm:nonnegative-improper-integral-supremum}.
+\item[$(\Leftarrow)$] For $k\geq N+1$ and $x\in[k-1,k]$, monotonicity gives $f(k)\leq f(x)$. Hence $\sum_{k=N}^{M}f(k)\leq f(N)+\int_N^M f(x)\,dx$. If $\int_N^\infty f$ converges, the partial sums are bounded, so the series converges by Theorem \ref{thm:nonnegative-series-bounded-partial-sums}.
+\end{enumerate}
+\hlt{Structural Commentary}: A monotone sequence can be compared to neighboring unit-width areas.\\
+\hlt{Key Insight}: The integral test is comparison of two infinite accumulations with the same tail size.
+\end{proof}
+\end{theorem}
 
 \begin{definition} \label{def:number-e-by-series} \hlt{The Number $e$}\\
 Define $e\defeq\sum\limits_{n=0}^{\infty}\frac{1}{n!}$, where $0!\defeq1$; convergence follows by comparison with the geometric series.
@@ -225,6 +248,14 @@ For $N\leq p\leq q$, $\abs{\sum\limits_{n=p}^{q}a_nb_n}\leq M\left(\sum\limits_{
 \end{proof}
 \end{theorem}
 
+% Visual source: provided Ross Sec. 15 alternating-convergence screenshot; redrawn as interval lengths in the positive line.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/alternating_series_intervals.tikz}
+  \caption{The intervals $I_j=[a_{2j},a_{2j-1}]$ are disjoint inside $(0,a_1)$.}
+  \label{fig:alternating-series-intervals}
+\end{figure}
+
 \begin{corollary} \label{cor:alternating-series-test} \hlt{Alternating Series Test}\\
 Suppose $\abs{c_1}\geq\abs{c_2}\geq\abs{c_3}\geq\cdots$, the signs alternate, and $c_n\to0$. Then $\sum c_n$ converges.
 \begin{proof}
@@ -233,6 +264,10 @@ After shifting indices to start at $0$ if desired, apply Theorem \ref{thm:dirich
 \hlt{Key Insight}: Alternating convergence is Dirichlet convergence in its simplest form.
 \end{proof}
 \end{corollary}
+
+\begin{perspective} \label{per:alternating-series-interval-picture} \hlt{Alternating Partial Sums as Nested Control}\\
+The interval picture explains the boundedness in Corollary \ref{cor:alternating-series-test}: the even partial sums collect disjoint lengths inside a fixed interval, while the odd partial sums differ from the even ones by the next term, which tends to $0$.
+\end{perspective}
 
 \begin{theorem} \label{thm:power-series-boundary-dirichlet} \hlt{A Boundary Test for Power Series}\\
 If $\sum c_nz^n$ has radius $1$, $c_n\downarrow0$, and $c_n\geq0$, then it converges for $\abs{z}=1$, except possibly at $z=1$.
