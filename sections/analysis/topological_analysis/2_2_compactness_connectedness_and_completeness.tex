@@ -2,6 +2,10 @@
 
 % Source pages provided: Rudin Ch.2, Def. 2.18, Defs. 2.31--2.32, Thms. 2.33--2.43, Cantor-set discussion 2.44, Def. 2.45, Remark 2.46, and Thm. 2.47.
 % Additional screenshot source: Abbott Ch.8.2 develops metric spaces, compactness in $C[0,1]$, and the complete-metric-space Baire Category Theorem.
+% Supplementary screenshot source: Ross Ch.2, Sec. 13 supports compactness via open covers, nested closed bounded sets, the Cantor-set construction, and Heine--Borel in $\R^k$.
+% Supplementary screenshot source: Ross Ch.7, Sec. 38 supports first-category language in complete function spaces and its application to nowhere differentiability.
+% Visual note: the k-cell diagrams below illustrate the Rudin Ch.2 compactness arguments already recorded in this subsection; they do not add new source material.
+% Supplementary screenshot source: provided Pugh Ch.2 pages support sequential compactness, covering compactness, nested compact sets, connectedness via clopen subsets, path-connectedness, total boundedness, and completion.
 % Sources mapped: Abbott Ch.3, Ch.8.2; Pugh Ch.2; Tao II Ch.1-2; Grinberg Ch.9-13.
 % TODO(source pages unavailable): Add broader non-Rudin compactness and connectedness material only after pages are provided.
 
@@ -141,6 +145,14 @@ Let $I_n=\{\mathbf{x}\in\R^k:a_{n,j}\leq x_j\leq b_{n,j},\ 1\leq j\leq k\}$. For
 \end{proof}
 \end{theorem}
 
+% Visual note: schematic redraw of Definition \ref{def:euclidean-intervals-cells-balls-convex}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/k_cell_low_dimensional_examples.tikz}
+  \caption{A $1$-cell is a closed interval, a $2$-cell is a coordinate rectangle, and a $3$-cell is a coordinate box.}
+  \label{fig:k-cell-low-dimensional-examples}
+\end{figure}
+
 \begin{theorem} \label{thm:k-cells-compact} \hlt{$k$-Cells Are Compact}\\
 Every $k$-cell in $\R^k$ is compact.
 \begin{proof}
@@ -151,6 +163,25 @@ By Theorem \ref{thm:nested-k-cells-intersect}, choose $\mathbf{x}^*\in\bigcap_n 
 \hlt{Key Insight}: An open set around the trapped point eventually contains the whole small cell.
 \end{proof}
 \end{theorem}
+
+% Visual note: schematic redraw of the bisection argument in Theorem \ref{thm:k-cells-compact}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/k_cell_bisection_compactness.tikz}
+  \caption{Repeated bisection traps a point.}
+  \label{fig:k-cell-bisection-compactness}
+\end{figure}
+
+\begin{lemma} \label{lem:bounded-rk-set-contained-in-k-cell} \hlt{Bounded Euclidean Sets Fit in $k$-Cells}\\
+Every bounded subset $E\subseteq\R^k$ is contained in some $k$-cell.
+\begin{proof}
+If $E=\emptyset$, any $k$-cell contains $E$. Suppose $E\neq\emptyset$. By Definition \ref{def:bounded-and-perfect-metric-sets}, choose $\mathbf{q}=(q_1,\ldots,q_k)\in\R^k$ and $M>0$ such that $\norm{\mathbf{p}-\mathbf{q}}_2<M$ for all $\mathbf{p}\in E$. Let $I\defeq\{\mathbf{x}=(x_1,\ldots,x_k):q_j-M\leq x_j\leq q_j+M,\ 1\leq j\leq k\}$.\\
+For $\mathbf{p}=(p_1,\ldots,p_k)\in E$, $\abs{p_j-q_j}\leq\norm{\mathbf{p}-\mathbf{q}}_2<M$ for each $j$, so $\mathbf{p}\in I$.\\
+Thus $E\subseteq I$, and $I$ is a $k$-cell by Definition \ref{def:euclidean-intervals-cells-balls-convex}.\\
+\hlt{Structural Commentary}: A Euclidean ball centered at $\mathbf{q}$ sits inside the coordinate box with side half-length $M$.\\
+\hlt{Key Insight}: Boundedness supplies one radius; coordinates turn it into interval bounds.
+\end{proof}
+\end{lemma}
 
 \begin{theorem} \label{thm:heine-borel-rk} \hlt{Heine--Borel in $\R^k$}\\
 For $E\subseteq\R^k$, any one of the following three properties implies the other two:
@@ -163,7 +194,7 @@ For $E\subseteq\R^k$, any one of the following three properties implies the othe
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow(ii)$: Since $E$ is bounded, $E\subseteq I$ for some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact; since $E$ is closed, Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $E$ is compact.
+\item[$(i)$]$\Rightarrow(ii)$: Since $E$ is bounded, Lemma \ref{lem:bounded-rk-set-contained-in-k-cell} gives $E\subseteq I$ for some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact; since $E$ is closed, Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $E$ is compact.
 \item[$(ii)$]$\Rightarrow(iii)$: This is Theorem \ref{thm:infinite-subset-of-compact-has-limit-point}.
 \item[$(iii)$]$\Rightarrow(i)$: If $E$ is unbounded, choose $\mathbf{x}_n\in E$ with $\norm{\mathbf{x}_n}_2>n$ and set $S\defeq\{\mathbf{x}_n:n\in\N\}$. If $\mathbf{x}_n\in B_R(\mathbf{y})$, then $n<\norm{\mathbf{y}}_2+R$; hence $S$ has no limit point, contradicting (iii). Thus $E$ is bounded. If $E$ is not closed, choose $\mathbf{x}_0\in E^{\operatorname{acc}}\setminus E$ and $\mathbf{x}_n\in E$ with $0<\norm{\mathbf{x}_n-\mathbf{x}_0}_2<1/n$. Then $S\defeq\{\mathbf{x}_n:n\in\N\}$ is infinite and $S^{\operatorname{acc}}\subseteq\{\mathbf{x}_0\}\subseteq E^c$, contradicting (iii). Thus $E$ is closed.
 \end{enumerate}
@@ -175,7 +206,7 @@ For $E\subseteq\R^k$, any one of the following three properties implies the othe
 \begin{theorem} \label{thm:weierstrass-limit-point-rk} \hlt{Weierstrass Limit-Point Theorem}\\
 Every bounded infinite subset of $\R^k$ has a limit point in $\R^k$.
 \begin{proof}
-A bounded set $E$ lies in some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
+By Lemma \ref{lem:bounded-rk-set-contained-in-k-cell}, a bounded set $E$ lies in some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
 Since $E$ is an infinite subset of $I$, Theorem \ref{thm:infinite-subset-of-compact-has-limit-point} gives a limit point of $E$ in $I\subseteq\R^k$.\\
 \hlt{Structural Commentary}: Boundedness places the set inside a compact cell.\\
 \hlt{Key Insight}: Compact cells force bounded infinite sets to accumulate.
@@ -241,6 +272,11 @@ A set $E\subseteq X$ is \hlt{connected} if it is not a union of two nonempty sep
 Separated sets are disjoint, but disjoint sets need not be separated. For example, $[0,1]$ and $(1,2)$ are disjoint but not separated because $1$ is a limit point of $(1,2)$. By contrast, $(0,1)$ and $(1,2)$ are separated.
 \end{remark}
 
+\begin{remark} \label{rem:connectedness-and-clopen-subsets} \hlt{Connectedness and Clopen Sets}\\
+A subset is \hlt{clopen} if it is both open and closed; $\sqcup$ denotes disjoint union. A metric space is disconnected iff it has a nonempty proper clopen subset: $U$ gives $X=U\sqcup U^c$, and every separation has clopen pieces.\\
+By Theorem \ref{thm:continuity-open-preimages}, continuous maps pull clopen separations back to clopen separations.
+\end{remark}
+
 \begin{theorem} \label{thm:connected-subsets-of-real-line-interval-property} \hlt{Connected Subsets of the Real Line}\\
 A set $E\subseteq\R$ is connected if and only if $x,y\in E,\ x<y$ $\Longrightarrow$ $[x,y]\subseteq E$.
 \begin{proof}
@@ -278,6 +314,11 @@ For subsets of a metric space $X$:
 \item $E$ is \hlt{nowhere dense} if $(\overline{E})^\circ=\emptyset$; equivalently, no nonempty open set is contained in $\overline{E}$.
 \end{enumerate}
 For $X=\R$, this says exactly that $\overline{E}$ contains no nonempty open interval.
+\end{definition}
+
+\begin{definition} \label{def:first-category-set} \hlt{First Category}\\
+A set $E\subseteq X$ is \hlt{of first category} if it is covered by countably many nowhere-dense sets: $E\subseteq \bigcup\limits_{n=1}^{\infty}E_n$\\
+The Baire Category Theorem states that a nonempty complete metric space is not first category in itself.
 \end{definition}
 
 % Source note: Rudin Ch.2, Thm. 2.47; specialized here to the real line.
@@ -358,6 +399,7 @@ Each $H_n$ is dense open, so Theorem \ref{thm:dense-open-baire-real-line} gives 
 \item \hlt{Dense-open intersection}: build nested closed intervals $I_n\subseteq G_n$ and apply Theorem \ref{thm:nested-closed-intervals-intersect}.
 \item \hlt{Complete metric version}: build nested closed balls $C_{n+1}\subseteq C_n$ with $r_n\to0$ and use completeness.
 \item \hlt{Nowhere dense}: replace $E$ by the dense open set $(\overline{E})^c$.
+\item \hlt{First category}: show the exceptional set is contained in $\bigcup_n E_n$ with each $E_n$ nowhere dense.
 \item \hlt{$F_\sigma/G_\delta$ complements}: pass between countable unions and intersections by De Morgan's laws.
 \end{enumerate}
 \end{method}

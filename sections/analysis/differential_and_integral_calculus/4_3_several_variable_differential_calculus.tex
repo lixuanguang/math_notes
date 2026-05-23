@@ -1,21 +1,21 @@
 \subsubsection{Several-Variable Differential Calculus}
 
 % Source pages provided: Rudin Ch.9, Secs. 9.1--9.43, including linear transformations, differentiation, contraction principle, inverse/implicit/rank theorems, determinants, Jacobians, higher-order partials, equality of mixed partials, and differentiation under the integral sign in the provided screenshots.
-% Rudin Ch.9 overlap note: linear-operator preliminaries are recorded in Linear Algebra at Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}, and Definition \ref{def:implicit-derivative-blocks}.
+% Rudin Ch.9 overlap note: linear-operator preliminaries are recorded in Linear Algebra at Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}, Definition \ref{def:implicit-derivative-blocks}, and Theorem \ref{thm:linear-implicit-function-theorem}.
 % Sources mapped: Rudin Ch.9; Spivak Ch.1-2; Pugh Ch.5.1-5.6; Tao II Ch.6.
 % TODO(source pages unavailable): Add non-Rudin several-variable material from the mapped sources only after pages are provided.
 
-Several-variable differentiation studies the best linear approximation to a function at a point; the main questions are how this linear part varies, composes, and controls local geometry.
+Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:determinant-basic-laws}, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.
 
 \begin{definition} \label{def:several-variable-differentiation-core-source-todo}\label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
-Let $E\subseteq\R^n$ be open, let $\f:E\to\R^m$, $\x\in E$, $\LL(\R^n,\R^m)$ be linear space map (Definition \ref{def:linear-map}) \\
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\x\in E$, and $\LL(\R^n,\R^m)$ denote space of linear maps (Definition \ref{def:linear-map}).\\
 If $\exists A\in\LL(\R^n,\R^m)$ s.t. $\lim\limits_{\h\to\ze}\frac{\norm{\f(\x+\h)-\f(\x)-A\h}_2}{\norm{\h}_2}=0$, then $\f$ is \hlt{differentiable at $\x$}, and $A$ denoted $D\f(\x)$ or $\f'(\x)$.\\
 Equivalently, $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$, and $\frac{\norm{\mathbf{r}(\h)}_2}{\norm{\h}_2}\to0$.\\
 If this holds for every $\x\in E$, then $\f$ is differentiable on $E$.
 \end{definition}
 
 \begin{perspective} \label{per:total-derivative-linear-map-first} \hlt{Derivative First, Matrix Second}\\
-The total derivative is a linear map first; the Jacobian is its matrix in chosen bases.
+The total derivative is a linear map first; the Jacobian is its matrix in chosen bases. This keeps coordinate formulas subordinate to the intrinsic estimate $\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ from Definition \ref{def:operator-norm-rn-rm}.
 \end{perspective}
 
 % Visual source: Rudin Ch.9 differentiability definition, with operator-norm language from Definition \ref{def:operator-norm-rn-rm}; redrawn as TikZ.
@@ -81,7 +81,7 @@ For $m=1$, set $\h=t\mathbf{u}$, identify linear functional with dot product aga
 
 \begin{theorem} \label{thm:bounded-derivative-convex-mean-value} \hlt{Mean-Value Inequality on Convex Sets}\\
 Let $E\subseteq\R^n$ be open and convex.\\
-If $\f:E\to\R^m$ is differentiable and $\normop{D\f}\leq M$ on $E$, then $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$, and $\a,\b\in E$.\\
+If $\f:E\to\R^m$ is differentiable and $\normop{D\f}\leq M$ on $E$, then for all $\a,\b\in E$, $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$.\\
 If $D\f=0$ on $E$, then $\f$ is constant.
 \begin{proof}
 Fix $\a,\b\in E$, set $\gamma(t)=(1-t)\a+t\b$, and let $\mathbf{g}=\f\circ\gamma$. Then $\gamma([0,1])\subseteq E$ and $\norm{\mathbf{g}'(t)}_2=\norm{D\f(\gamma(t))(\b-\a)}_2\leq M\norm{\b-\a}_2$. Apply Theorem \ref{thm:vector-valued-mean-value-inequality}; the constant case is $M=0$.\\
@@ -151,19 +151,22 @@ Since $\psi_t\in\mathcal{R}(\alpha)$, Theorem \ref{thm:uniform-convergence-and-r
 \begin{example} \label{ex:gaussian-fourier-integral-differentiation} \hlt{A Gaussian Fourier Integral}\\
 Define $f(t)=\int_{-\infty}^{\infty}e^{-x^2}\cos(xt)\,dx$ and $g(t)=-\int_{-\infty}^{\infty}xe^{-x^2}\sin(xt)\,dx$.\\
 Then $f'(t)=g(t)$, and integration by parts gives $2f'(t)+tf(t)=0$. Since $f(0)=\sqrt{\pi}$, $f(t)=\sqrt{\pi}\exp\!\left(-\frac{t^2}{4}\right)$.
-% TODO(source dependency): Isolate the repo's improper-integral setup before expanding this example beyond the sourced Rudin application pattern.
+% Improper-integral dependency: use Definition \ref{def:improper-riemann-integral}; expand details only when this example becomes a main proof dependency.
 \end{example}
 
 \begin{definition} \label{def:jacobian-determinant} \hlt{Jacobian}\\
 If $\f:E\subseteq\R^n\to\R^n$ is differentiable at $\x$, define $J_{\f}(\x)\defeq \det D\f(\x) =\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}$ when $f=(y_1,\ldots,y_n)$.\\
-By Theorem \ref{thm:determinant-basic-laws}, $D\f(\x)$ is invertible if and only if $J_{\f}(\x)\neq0$.
+By Theorem \ref{thm:determinant-basic-laws}, $D\f(\x)$ is invertible if and only if $J_{\f}(\x)\neq0$. The absolute value $\abs{J_{\f}(\x)}$ is the local version of determinant volume scaling from Theorem \ref{thm:linear-map-volume-scaling-determinant}, used again in the change-of-variables theorem.
 \end{definition}
 
+% Rudin Ch.9 overlap: the proof below uses operator-norm openness of invertible maps from Theorem \ref{thm:invertible-operators-open-and-inversion-continuous} and the contraction principle from Theorem \ref{thm:contraction-principle}.
 \begin{theorem} \label{thm:inverse-function-theorem-rn} \hlt{Inverse Function Theorem}\\
 Let $\f:E\subseteq\R^n\to\R^n$ be $C^1$, let $\a\in E$, and suppose $D\f(\a)$ is invertible. With $\b=\f(\a)$, $\f$ restricts to a bijection $U\to V$ between open neighborhoods of $\a$ and $\b$; inverse $\g:V\to U$ is $C^1$, and $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$, $\y\in V$.
 \begin{proof}
-Put $A=D\f(\a)$ and choose $0<\theta<1$. By continuity of $D\f$, choose $r>0$ with $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on this closed ball. For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
-Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. The contraction principle gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
+Put $A=D\f(\a)$ and choose $0<\theta<1$.\\
+By continuity of $D\f$, choose $r>0$ with $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on this closed ball.\\
+For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
+Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. The contraction principle, Theorem \ref{thm:contraction-principle}, gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
 For $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$ in $V$, the same derivative bound gives $\norm{\h}_2\leq C\norm{\mathbf{k}}_2$ for a local constant $C$. Moreover $\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k} =-\bigl(D\f(\x)\bigr)^{-1}\bigl[\f(\x+\h)-\f(\x)-D\f(\x)\h\bigr]$.\\
 Since $\f$ is differentiable at $\x$ and $\norm{\h}_2=O(\norm{\mathbf{k}}_2)$, division by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=(D\f(\x))^{-1}$.\\
 Continuity of $D\g$ follows from continuity of $D\f$, continuity of $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.\\
@@ -181,8 +184,9 @@ Let $W\subseteq E$ be open and let $\y\in\f(W)$. Choose $\x\in W$ with $\f(\x)=\
 \end{proof}
 \end{corollary}
 
+% Linear-algebra dependency: the block maps $A_x,A_y$ are defined once in Definition \ref{def:implicit-derivative-blocks}, and the corresponding linear model is Theorem \ref{thm:linear-implicit-function-theorem}.
 \begin{theorem} \label{thm:implicit-function-theorem-rn-rm} \hlt{Implicit Function Theorem}\\
-Let $\f:E\subseteq\R^{n+m}\to\R^n$ be $C^1$, $\f(\a,\b)=0$, $A=D\f(\a,\b)$. If $A_x$ (Definition \ref{def:implicit-derivative-blocks}) is invertible, then near $\b$, the equation $\f(\x,\y)=0$ has unique local solution $\x=\g(\y)$, where $\g$ is $C^1$, $\g(\b)=\a$, $D\g(\b)=-(A_x)^{-1}A_y$.
+Let $\f:E\subseteq\R^{n+m}\to\R^n$ be $C^1$, $\f(\a,\b)=0$, $A=D\f(\a,\b)$, and let $A_x,A_y$ be the block maps of Definition \ref{def:implicit-derivative-blocks}. If $A_x$ is invertible, then near $\b$, the equation $\f(\x,\y)=0$ has unique local solution $\x=\g(\y)$, where $\g$ is $C^1$, $\g(\b)=\a$, $D\g(\b)=-(A_x)^{-1}A_y$.
 \begin{proof}
 Set $\Phi(\x,\y)=(\f(\x,\y),\y)$. Then $D\Phi(\a,\b)(\h,\mathbf{k})=(A_x\h+A_y\mathbf{k},\mathbf{k})$, whose kernel is zero since $A_x$ is invertible; hence $D\Phi(\a,\b)$ is invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}. Theorem \ref{thm:inverse-function-theorem-rn} makes $\Phi$ locally invertible.\\
 Points with $\f(\x,\y)=0$ are exactly those sent to $(0,\y)$, so $\Phi^{-1}(0,\y)=(\g(\y),\y)$ gives the unique local solution. Differentiating $\f(\g(\y),\y)=0$ at $\b$ gives $A_xD\g(\b)+A_y=0$.\\
@@ -192,7 +196,7 @@ Points with $\f(\x,\y)=0$ are exactly those sent to $(0,\y)$, so $\Phi^{-1}(0,\y
 \end{theorem}
 
 \begin{theorem} \label{thm:constant-rank-theorem-rudin} \hlt{Rank Theorem}\\
-Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$ (Definition \ref{def:orthogonal-projection-subspace}). Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse, there is a $C^1$ map $\varphi:A(V)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
+Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$ (Definition \ref{def:orthogonal-projection-subspace}). Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse on a small coordinate neighborhood $V_0$, there is a $C^1$ map $\varphi:A(V_0)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
 \begin{proof}
 If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant.\\
 Assume $r>0$. Choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$, possible by choosing preimages of a basis of $Y_1$, and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\

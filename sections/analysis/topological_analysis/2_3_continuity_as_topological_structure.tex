@@ -1,6 +1,10 @@
 \subsubsection{Continuity as Topological Structure}
 
 % Source pages provided: Rudin Ch.4, Defs. 4.1, 4.3, 4.5, 4.13, 4.18, 4.25--4.26, 4.28, 4.32--4.33; Thms. 4.2, 4.4, 4.6--4.10, 4.14--4.17, 4.19--4.20, 4.22--4.23, 4.29--4.30; Examples 4.11, 4.21, 4.27; Remarks 4.12, 4.24, 4.31; Thm. 4.34.
+% Internal dependency note: relative topology and compactness from the previous topology subsections are structural hypotheses used below.
+% Supplementary screenshot source: Ross Ch.3, Secs. 17--19 supports sequential continuity, epsilon--delta equivalence, IVT and extreme-value applications, and uniform continuity on closed intervals.
+% Supplementary screenshot source: Ross Ch.3, Secs. 20--22 supports limits along one-sided domains, extended real limits, metric-space continuity, path-connectedness, and convex examples.
+% Supplementary screenshot source: provided Pugh Ch.2 pages support sequential continuity, the epsilon-delta and open-set conditions, homeomorphisms, compact-domain inverse continuity, connectedness, and uniform continuity on compact sets.
 % Sources mapped: Rudin Ch.4; Abbott Ch.4; Ross Ch.3; Tao I Ch.9; Tao II Ch.2; Pugh Ch.2.2.
 % TODO(source pages unavailable): Add non-Rudin continuity material from the mapped sources only after pages are provided.
 
@@ -8,7 +12,8 @@ This subsection treats continuity as structure preservation: function limits des
 
 \begin{definition} \label{def:function-limit-metric}\label{def:continuity-core-definitions-source-todo} \hlt{Limit of a Function Between Metric Spaces}\\
 Let $X,Y$ be metric spaces, $E\subseteq X$, $f:E\to Y$, and let $p$ be a limit point of $E$. For $q\in Y$, $\lim_{x\to p} f(x)=q$ means that, for every $\varepsilon>0$, there exists $\delta>0$ such that $x\in E$, $0<d_X(x,p)<\delta$ $\Longrightarrow$ $d_Y(f(x),q)<\varepsilon$.\\
-The point $p$ need not belong to $E$, and $f(p)$ is irrelevant when it does.
+The point $p$ need not belong to $E$, and $f(p)$ is irrelevant when it does.\\
+\hlt{Key Insight}: Domain $E$ controls approach: $J\setminus\{a\}$ gives two-sided limit,  $(a,b)$ or $(c,a)$ gives one-sided limits.
 \end{definition}
 
 % Visual note: schematic redraw of Definition \ref{def:function-limit-metric} in the real one-variable case.
@@ -88,6 +93,10 @@ If $p$ is a limit point of $E$, then $f$ is continuous at $p$ if and only if $\l
 \end{proof}
 \end{theorem}
 
+\begin{remark} \label{rem:sequential-continuity-real-line} \hlt{The Sequence-First View}\\
+For functions on subsets of $\R$, continuity at limit points is equivalently sequential: $x_n\to p$ in the domain implies $f(x_n)\to f(p)$; isolated points are automatic by Theorems \ref{thm:function-limit-sequential-characterization} and \ref{thm:continuity-as-limit-at-limit-point}.
+\end{remark}
+
 \begin{theorem} \label{thm:continuous-composition} \hlt{Composition of Continuous Functions}\\
 Let $E\subseteq X$ and let $f:E\to Y$, $g:f(E)\to Z$ be maps between metric spaces.\\
 If $f$ is continuous at $p\in E$ and $g$ is continuous at $f(p)$, then $g\circ f$ is continuous at $p$.
@@ -126,6 +135,32 @@ For metric spaces $X,Y$, map $f:X\to Y$ is continuous if and only if $f^{-1}(C)$
 \hlt{Key Insight}: $f^{-1}(Y\setminus C)=X\setminus f^{-1}(C)$ transfers open and closed formulations.
 \end{proof}
 \end{corollary}
+
+\begin{definition} \label{def:homeomorphism} \hlt{Homeomorphism}\\
+A \hlt{homeomorphism} from $X$ to $Y$ is a bijection $f:X\to Y$ such that both $f$ and $f^{-1}$ are continuous.\\
+If such a map exists, $X$ and $Y$ are \hlt{homeomorphic}, written $X\simeq Y$.
+\end{definition}
+
+\begin{proposition} \label{prop:homeomorphisms-preserve-topology} \hlt{Homeomorphisms Preserve Topology}\\
+If $f:X\to Y$ is a homeomorphism, then $U\mapsto f(U)$ bijects open subsets of $X$ with open subsets of $Y$.
+\begin{proof}
+If $U\subseteq X$ is open, then $f(U)=(f^{-1})^{-1}(U)$ is open in $Y$ since $f^{-1}$ is continuous. If $V\subseteq Y$ is open, then $f^{-1}(V)$ is open in $X$ since $f$ is continuous. These two assignments are inverse because $f$ is bijective.\\
+\hlt{Structural Commentary}: A homeomorphism preserves open sets in both directions.\\
+\hlt{Key Insight}: Topological sameness is continuity plus continuous reversibility.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:circle-param-continuous-bijection-not-homeomorphism} \hlt{Continuous Bijection Need Not Be a Homeomorphism}\\
+Let $f:[0,2\pi)\to S^1$, and $f(t)=(\cos t,\sin t)$. This continuous bijection is not a homeomorphism: points of $S^1$ approaching $(1,0)$ from below have preimages tending to $2\pi$, not $0$.
+\end{example}
+
+% Visual source: provided Pugh Ch.2 screenshot, Fig. 31; redrawn as TikZ.
+\begin{figure}[htbp]
+  \centering
+  \input{figures/analysis/circle_interval_wrap_not_homeomorphism.tikz}
+  \caption{The parametrization $[0,2\pi)\to S^1$ wraps continuously and bijectively, but the inverse jumps at $(1,0)$.}
+  \label{fig:circle-interval-wrap-not-homeomorphism}
+\end{figure}
 
 \begin{remark} \label{rem:continuity-domain-only} \hlt{Continuity Only Uses the Domain Metric}\\
 For $f:E\to Y$ with $E\subseteq X$, continuity on $E$ depends only on the restricted metric on $E$, not on $X\setminus E$.
@@ -202,8 +237,16 @@ Since $f$ is bijective, $f(V)=Y\setminus f(V^c)$ is open.\\
 
 \begin{definition} \label{def:uniform-continuity} \hlt{Uniform Continuity}\\
 A mapping $f:X\to Y$ between metric spaces is \hlt{uniformly continuous} on $X$ if $\forall$ $\varepsilon>0$ $\exists$ $\delta>0$ such that $d_X(p,q)<\delta$ $\Longrightarrow$ $d_Y(f(p),f(q))<\varepsilon$ $\forall p,q\in X$. The same $\delta$ must work for every point of $X$.\\
-\hlt{Structural Commentary}: Ordinary continuity chooses $\delta$ pointwise; uniform continuity chooses it globally.
+\hlt{Structural Commentary}: Uniform continuity is setwise: for each $\varepsilon$, one $\delta$ must work for all pairs in the set.
 \end{definition}
+
+% Visual source: provided Ross Ch.3, Sec. 19 screenshot of $f(x)=1/x^2$ and shrinking pointwise deltas, redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/uniform_continuity_delta_shrinks_one_over_x_squared.tikz}
+  \caption{For $f(x)=1/x^2$ near $0$, a fixed vertical tolerance forces smaller pointwise horizontal tolerances.}
+  \label{fig:uniform-continuity-delta-shrinks-one-over-x-squared}
+\end{figure}
 
 \begin{theorem} \label{thm:compact-continuity-uniform-continuity} \hlt{Continuity on Compact Sets Is Uniform}\\
 If $f:X\to Y$ is continuous and $X$ is compact, then $f$ is uniformly continuous.
@@ -253,6 +296,31 @@ Connected subsets of $\R$ contain every value between any two of their points; h
 \hlt{Key Insight}: Continuous real functions on intervals cannot jump over a value.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:path-connected-set} \hlt{Path-Connected Set}\\
+A set $E$ in a metric space is \hlt{path-connected} if for every $p,q\in E$ there is a continuous map $\gamma:[a,b]\to E$ with $\gamma(a)=p$ and $\gamma(b)=q$. Such a map $\gamma$ is a \hlt{path} from $p$ to $q$.
+\end{definition}
+
+\begin{theorem} \label{thm:path-connected-implies-connected} \hlt{Path-Connected Sets Are Connected}\\
+Every path-connected set is connected.
+\begin{proof}
+Suppose $E=A\cup B$ with $A,B$ nonempty separated.\\
+Choose $p\in A$, $q\in B$, and a path $\gamma:[a,b]\to E$ from $p$ to $q$. Since $[a,b]$ is connected, so is $\gamma([a,b])$.\\
+But $\gamma([a,b])$ meets both $A$ and $B$, which separate it, a contradiction.\\
+\hlt{Structural Commentary}: A path transports connectedness from an interval to the set.\\
+\hlt{Key Insight}: To connect two points by a path, the path image cannot be split into two separated pieces.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:convex-sets-path-connected} \hlt{Convex Sets Are Path-Connected}\\
+Every convex subset of $\R^k$ is path-connected.
+\begin{proof}
+For $\mathbf{x},\mathbf{y}\in E$, set $\gamma(t)=(1-t)\mathbf{x}+t\mathbf{y}$ on $[0,1]$. Convexity gives $\gamma([0,1])\subseteq E$, with $\gamma(0)=\mathbf{x}$ and $\gamma(1)=\mathbf{y}$.\\
+Since the coordinates of $\gamma$ are affine in $t$, $\gamma$ is continuous. Hence $E$ is path-connected.\\
+\hlt{Structural Commentary}: Convexity supplies the whole straight path between any two points.\\
+\hlt{Key Insight}: In Euclidean space, line segments are continuous paths.
+\end{proof}
+\end{corollary}
 
 \begin{definition} \label{def:one-sided-limits-and-discontinuities} \hlt{One-Sided Limits and Types of Discontinuity}\\
 Let $f:(a,b)\to\R$.
@@ -325,7 +393,8 @@ For countable $E=\{x_n:n\in\N\}\subset(a,b)$ and positive summable $(c_n)$, $f(x
 \begin{definition} \label{def:extended-real-function-limits} \hlt{Extended Limits and Limits at Infinity}\\
 Neighborhoods of $+\infty$ are intervals $(c,+\infty)$; neighborhoods of $-\infty$ are $(-\infty,c)$.\\
 For $f:E\to\R$ and extended real $A,x$, $f(t)\to A$ as $t\to x$ means: every neighborhood $U$ of $A$ contains $f(t)$ for all punctured $t\in E$ sufficiently near $x$, i.e. $\exists V\ni x$ such that $t\in V\cap E,\ t\neq x$ $\Longrightarrow$ $f(t)\in U$.\\
-For real $A,x$, this agrees with Definition \ref{def:function-limit-metric}.
+For real $A,x$, this agrees with Definition \ref{def:function-limit-metric}.\\
+\hlt{Structural Commentary}: Extended limits use same neighborhood test, $\pm\infty$ allowed as input or output limits.
 \end{definition}
 
 \begin{theorem} \label{thm:extended-limit-algebra} \hlt{Algebra of Extended Limits}\\

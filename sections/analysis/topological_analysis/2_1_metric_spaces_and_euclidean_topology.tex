@@ -1,12 +1,16 @@
 \subsubsection{Metric Spaces and Euclidean Topology}
 
 % Source pages provided: Rudin Ch.2, Defs. 2.15--2.30 and related examples/theorems.
+% Supplementary screenshot source: provided Pugh Ch.2 pages support metric-space framing, inherited and discrete metrics, sequence-first continuity, product metrics, open/closed sets, closure, relative topology, compactness, connectedness, coverings, and completion.
 % Supplementary screenshot note: Abbott Ch.2.2 uses the real-line notation $V_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$.
 % Additional screenshot source: Abbott Ch.8.2 uses metric-space neighborhoods, closed balls, completeness, and the supremum metric on $C[0,1]$.
+% Supplementary screenshot source: Ross Ch.2, Sec. 13 supports metric-space axioms, the Euclidean metric on $\R^k$, coordinatewise convergence/Cauchy criteria, and open/closed/compact terminology.
+% Supplementary screenshot source: Pugh Ch.1, Sec. 3 supports Euclidean-space vocabulary: Cartesian products, coordinate axes, integer lattice, orthants, boxes, balls, spheres, convex combinations, and triangle-inequality geometry.
 % Sources mapped: Pugh Ch.2; Tao II Ch.1; Abbott Ch.3; Ross Ch.2.13, Ch.3.21.
-% TODO(source pages unavailable): Add boundary terminology and non-Rudin coverage from the mapped sources.
+% TODO(source pages unavailable): Add remaining non-Rudin coverage from mapped sources not supplied in the screenshots.
 
-Metric topology replaces coordinate formulas by a distance function. Neighborhoods then define open and closed sets, limit points, closure, and relative openness through small balls.
+Metric topology studies sets through small balls: openness, closure, and limit points come from distance.
+In Euclidean space, this distance comes from the norm in Example \ref{ex:norms-induced-by-inner-products}; the estimates below use Cauchy--Schwarz and the triangle inequality.
 
 \begin{definition} \label{def:metric-space} \hlt{Metric Space}\\
 A \hlt{metric space} is a set $X$ equipped with a function $d:X\times X\to\R$ such that, for all $p,q,r\in X$,
@@ -24,6 +28,15 @@ The Euclidean space $\R^k$ is a metric space with $d(\mathbf{x},\mathbf{y})\defe
 Every subset $Y$ of a metric space $X$ is a metric space by restricting the same distance function to points of $Y$.
 \end{example}
 
+\begin{example} \label{ex:discrete-metric} \hlt{Discrete Metric}\\
+On any set $X$, define $d(x,y)=
+\begin{cases}
+0, & x=y,\\
+1, & x\neq y.
+\end{cases}$.\\
+This is the \hlt{discrete metric}: distinct points are all distance $1$ apart.
+\end{example}
+
 \begin{definition} \label{def:euclidean-intervals-cells-balls-convex} \hlt{Euclidean Intervals, Cells, Balls, and Convexity}\\
 In $\R$, $(a,b)\defeq\{x\in\R:a<x<b\}$ and $[a,b]\defeq\{x\in\R:a\leq x\leq b\}$; $[a,b)$ and $(a,b]$ use the mixed inequalities.\\
 If $a_i<b_i$ for $i=1,\ldots,k$, the \hlt{$k$-cell} is $\{\mathbf{x}=(x_1,\ldots,x_k)\in\R^k:a_i\leq x_i\leq b_i,\ 1\leq i\leq k\}$.\\
@@ -32,18 +45,50 @@ and \hlt{closed ball} is $\overline{B}_r(\mathbf{x})\defeq\{\mathbf{y}\in\R^k:\n
 A set $E\subseteq\R^k$ is \hlt{convex} if $\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\in E$ whenever $\mathbf{x},\mathbf{y}\in E$ and $0<\lambda<1$.
 \end{definition}
 
+\begin{remark} \label{rem:euclidean-vocabulary-from-linear-algebra} \hlt{Euclidean Vocabulary}\\
+\hlt{Integer lattice} is $\Z^k$. \hlt{First orthant} are points with nonnegative coordinates.\\
+\hlt{Unit ball} is $B^k\defeq\{\mathbf{x}\in\R^k:\norm{\mathbf{x}}_2\leq1\}$; and \hlt{unit sphere} is $S^{k-1}\defeq\{\mathbf{x}\in\R^k:\norm{\mathbf{x}}_2=1\}$.\\
+$\lambda\mathbf{x}+(1-\lambda)\mathbf{y}$, $0\leq\lambda\leq1$, is a \hlt{convex combination}; all such points form the line segment from $\mathbf{x}$ to $\mathbf{y}$.
+\end{remark}
+
 \begin{proposition} \label{prop:balls-and-cells-convex} \hlt{Balls and Cells Are Convex}\\
 Open balls, closed balls, and $k$-cells in $\R^k$ are convex.
 \begin{proof}
-Let $\mathbf{y},\mathbf{z}\in B_r(\mathbf{x})$ and $0<\lambda<1$. Then
-\begin{align}
-\norm{\lambda\mathbf{y}+(1-\lambda)\mathbf{z}-\mathbf{x}}_2 =\norm{\lambda(\mathbf{y}-\mathbf{x})+(1-\lambda)(\mathbf{z}-\mathbf{x})}_2 \leq \lambda\norm{\mathbf{y}-\mathbf{x}}_2+(1-\lambda)\norm{\mathbf{z}-\mathbf{x}}_2<r. \nonumber
-\end{align}
+Let $\mathbf{y},\mathbf{z}\in B_r(\mathbf{x})$ and $0<\lambda<1$.\\
+Then $\norm{\lambda\mathbf{y}+(1-\lambda)\mathbf{z}-\mathbf{x}}_2 =\norm{\lambda(\mathbf{y}-\mathbf{x})+(1-\lambda)(\mathbf{z}-\mathbf{x})}_2 \leq \lambda\norm{\mathbf{y}-\mathbf{x}}_2+(1-\lambda)\norm{\mathbf{z}-\mathbf{x}}_2<r$.\\
 The same proof with $\leq r$ gives closed balls. For a $k$-cell, each coordinate of $\lambda\mathbf{y}+(1-\lambda)\mathbf{z}$ lies between the corresponding coordinates of $\mathbf{y}$ and $\mathbf{z}$, hence remains in the same interval $[a_i,b_i]$.\\
 \hlt{Structural Commentary}: Convexity is checked by following the line segment between two points.\\
 \hlt{Key Insight}: Balls use the triangle inequality; cells use coordinate inequalities.
 \end{proof}
 \end{proposition}
+
+\begin{definition} \label{def:product-metrics} \hlt{Product Metrics}\\
+For metric spaces $(X,d_X)$ and $(Y,d_Y)$, and $p=(x,y)$, $p'=(x',y')$ in $X\times Y$, define
+\begin{align}
+d_E(p,p')&\defeq\sqrt{d_X(x,x')^2+d_Y(y,y')^2},\nonumber \\
+d_{\max}(p,p')&\defeq\max\{d_X(x,x'),d_Y(y,y')\},\nonumber \\
+d_{\mathrm{sum}}(p,p')&\defeq d_X(x,x')+d_Y(y,y') \nonumber
+\end{align}
+These are the Euclidean, maximum, and sum product metrics; the sum metric is often simplest for estimates.
+\end{definition}
+
+\begin{proposition} \label{prop:product-metric-comparison} \hlt{Comparing Product Metrics}\\
+On $X\times Y$, $d_{\max}\leq d_E\leq d_{\mathrm{sum}}\leq2d_{\max}$. Hence the three product metrics have same convergent sequences.
+\begin{proof}
+Let $a=d_X(x,x')$ and $b=d_Y(y,y')$.\\
+Then $\max\{a,b\}\leq\sqrt{a^2+b^2}\leq a+b\leq2\max\{a,b\}$; convergence follows by squeezing.\\
+\hlt{Structural Commentary}: The three product metrics differ by controlled constants.\\
+\hlt{Key Insight}: Equivalent metric estimates preserve convergence.
+\end{proof}
+\end{proposition}
+
+% Visual source: provided Pugh Ch.2 screenshot, Fig. 37; redrawn as TikZ.
+\begin{figure}[htbp]
+  \centering
+  \input{figures/analysis/product_metric_unit_balls.tikz}
+  \caption{Unit balls in $\R^2$: \textcolor{blue!60!black}{$\max\{\abs{x},\abs{y}\}<1$} and \textcolor{orange!80!black}{$\abs{x}+\abs{y}<1$}.}
+  \label{fig:product-metric-unit-balls}
+\end{figure}
 
 \begin{definition} \label{def:metric-topology-core-definitions}\label{def:metric-topology-core-definitions-source-todo} \hlt{Metric Topology Terminology}\\
 Let $X$ be a metric space, and let all points and sets below be understood as points of $X$ and subsets of $X$.
@@ -60,8 +105,11 @@ The corresponding \hlt{closed ball} is $\overline{B}_r(p)\defeq\{q\in X:d(p,q)\l
 \item A set $E$ is \hlt{dense} in $X$ if every point of $X$ is either a limit point of $E$, a point of $E$, or both.
 \end{enumerate}
 For $X=\R$, this gives $B_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$.\\
-TODO(source pages unavailable): Add the sourced definition of boundary and reconcile notation with $\operatorname{bd}(E)$ in the notation list.
 \end{definition}
+
+\begin{remark} \label{rem:open-closed-ambient-and-not-opposites} \hlt{Ambient Space Matters}\\
+Openness and closedness depend on the ambient metric space; they are not opposites.
+\end{remark}
 
 \begin{theorem} \label{thm:every-neighborhood-open} \hlt{Every Neighborhood Is Open}\\
 Every neighborhood in a metric space is an open set.
@@ -174,6 +222,12 @@ Thus $\overline{E}$ is the smallest closed subset of $X$ that contains $E$.
 \hlt{Key Insight}: Closed supersets must contain all limit points, so they must contain $\overline{E}$.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:interior-closure-boundary} \hlt{Interior and Boundary Notation}\\
+Let $E$ be a subset of a metric space $X$. The \hlt{interior} of $E$ is $E^\circ\defeq\{p\in E:p\text{ is an interior point of }E\}$.\\
+The \hlt{boundary} of $E$ is $\operatorname{bd}(E)\defeq\overline{E}\setminus E^\circ$.\\
+Equivalently, boundary points are exactly the points of $\overline{E}$ that are not interior to $E$.
+\end{definition}
 
 \begin{proposition} \label{prop:dense-closure-criterion} \hlt{Density and Closure}\\
 Let $X$ be a metric space and let $E\subseteq X$. Then $E$ is dense in $X$ if and only if $\overline{E}=X$.

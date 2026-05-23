@@ -13,3 +13,6 @@ Progress Status:
 | Linear Algebra | A Second Course in Linear Algebra | Stephan Ramon Garcia | Completed | |
 | Linear Algebra | Linear Algebra Done Right | Sheldon Axler | Completed | |
 | Analysis | Principles of Mathematical Analysis (Baby Rudin) | Walter Rudin | Completed | Integrated in Section 2: Analysis |
+| Analysis | The Real Analysis Lifesaver | Raffi Grinberg | Completed | |
+| Analysis | Understanding Analysis | Stephen Abbott | Completed | |
+| Analysis | Elementary Analysis | Kenneth A. Ross | Completed | |

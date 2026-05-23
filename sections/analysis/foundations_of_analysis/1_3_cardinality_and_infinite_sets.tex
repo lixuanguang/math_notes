@@ -1,8 +1,10 @@
 \subsubsection{Cardinality and Infinite Sets}
 
 % Source pages provided: Rudin Ch.2, Defs. 2.1--2.14 and related examples/theorems.
+% Coverage note: Grinberg Ch.7--8 in the source map supports equivalence relations, cardinality, countability of $\Z$ and $\Q$, diagonal arguments, countable unions, and finite products.
+% Supplementary screenshot source: Pugh Ch.1, Secs. 4--5 supports function terminology, cardinality by bijections, Cantor diagonalization, interval uncountability, and the Schroeder--Bernstein theorem.
 % Sources mapped: Abbott Ch.1.5-1.6; Tao I Ch.3.6, Ch.8; Pugh Ch.1.4-1.5; Grinberg Ch.7-8.
-% TODO(source pages unavailable): Add coverage from mapped non-Rudin sources.
+% TODO(source pages unavailable): Add remaining coverage from mapped sources not supplied in the screenshots.
 
 Cardinality begins with the idea that a set is counted by matching it with another set, not by naming its elements. The function language in Definition \ref{def:functions-images-preimages} and the bijection language in Definition \ref{def:injective-surjective-bijective} are the standing prerequisites for this subsection.
 
@@ -72,7 +74,7 @@ Let $T\defeq\bigcup\limits_{\alpha\in A}B_\alpha$. If $T=\emptyset$, we are done
 
 \begin{theorem} \label{thm:finite-tuples-over-countable-set-countable} \hlt{Finite Tuples over a Countable Set}\\
 Let $A$ be countable. For each fixed $n\in\N$, the set of all $n$-tuples $(a_1,\ldots,a_n)$ with $a_k\in A$ is countable.
-\begin{proof} Let $B_n\defeq \{(a_1,\ldots,a_n): a_k\in A\}$, $B_1=A$. If $B_{n-1}$ is countable, $B_n=\bigcup\limits_{b\in B_{n-1}}\{(b,a):a\in A\}$, each set $\{(b,a):a\in A\}$ is equivalent to $A$. Hence $B_n$ is countable by Theorem \ref{thm:countable-union-of-countable-sets}. The result follows by induction.\\
+\begin{proof} Let $B_n\defeq \{(a_1,\ldots,a_n): a_k\in A\}$, $B_1=A$. If $B_{n-1}$ is countable, $B_n=\bigcup\limits_{b\in B_{n-1}}\{(b,a):a\in A\}$, each set $\{(b,a):a\in A\}$ is equivalent to $A$. Hence $B_n$ is countable by Theorem \ref{thm:countable-union-of-countable-sets}.\\
 \hlt{Structural Commentary}: Build an $n$-tuple by appending one coordinate to an $(n-1)$-tuple.\\
 \hlt{Key Insight}: Induction plus countable unions controls finite products.
 \end{proof}
@@ -87,6 +89,14 @@ Let $D\defeq\{(a,b)\in\Z\times\Z:a\neq0\}$ and $\pi:D\to\Q$ by $\pi(a,b)=b/a$. B
 \end{proof}
 \end{corollary}
 
+% Visual source: provided Pugh Ch.1, Sec. 4 Cantor diagonal figure, redrawn as TikZ for Theorem \ref{thm:binary-sequences-uncountable}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/cantor_diagonal_binary_sequences.tikz}
+  \caption{Cantor diagonalization: $s(n)=1-a_{nn}$ differs from row $s_n$ at position $n$.}
+  \label{fig:cantor-diagonal-binary-sequences}
+\end{figure}
+
 \begin{theorem} \label{thm:binary-sequences-uncountable} \hlt{Binary Sequences Are Uncountable}\\
 Let $A$ be the set of all sequences whose terms are the digits $0$ and $1$. Then $A$ is uncountable.
 \begin{proof}
@@ -94,6 +104,34 @@ Suppose $A$ were countable, $A=\{s_1,s_2,\ldots\}$ with $s_n=(s_n(k))_{k\in\N}$.
 Then $s(n)\neq s_n(n)$ for every $n$, so $s\neq s_n$ for all $n$. Hence $s\notin A$, a contradiction. Thus $A$ is uncountable.\\
 \hlt{Structural Commentary}: The construction attacks the diagonal of a proposed enumeration.\\
 \hlt{Key Insight}: A sequence can be built to escape every row of a countable list.
+\end{proof}
+\end{theorem}
+
+% Visual source: provided Pugh Ch.1, Sec. 5 crossed-ladder proof diagram, redrawn schematically as TikZ for Theorem \ref{thm:schroeder-bernstein}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/schroeder_bernstein_ladder.tikz}
+  \caption{Schroeder--Bernstein: alternating images leave a remainder paired by $g^{-1}$.}
+  \label{fig:schroeder-bernstein-ladder}
+\end{figure}
+
+
+\begin{theorem} \label{thm:schroeder-bernstein} \hlt{Schroeder--Bernstein Theorem}\\
+If there are injections $f:A\to B$ and $g:B\to A$, then there is a bijection $h:A\to B$.
+\begin{proof}
+Let $A_0\defeq A\setminus g(B)$, and recursively define $B_n\defeq f(A_n)$ and $A_{n+1}\defeq g(B_n)$.\\
+The sets $A_n$ are pairwise disjoint: if $A_i\cap A_j\neq\emptyset$ with $i<j$, then $i=0$ already contradicts $A_j\subseteq g(B)$; if $i>0$, injectivity of $g$ and then $f$ steps backward to $A_{i-1}\cap A_{j-1}\neq\emptyset$, and iteration gives the same contradiction.\\
+Since $f$ is injective, the sets $B_n=f(A_n)$ are pairwise disjoint as well.\\
+Let $A_*\defeq A\setminus\bigcup\limits_{n\geq0}A_n$ and $B_*\defeq B\setminus\bigcup\limits_{n\geq0}B_n$. The map $g$ restricts to a bijection $B_*\to A_*$.\\
+Indeed, $g(B_*)$ avoids every $A_n$, while if $a\in A_*$ then $a\notin A_0$, so $a=g(b)$ for a unique $b\in B$; this $b$ cannot lie in any $B_n$, otherwise $a\in A_{n+1}$.\\
+Define $h(x)\defeq
+\begin{cases}
+f(x), & x\in\bigcup_{n\geq0}A_n,\\
+g^{-1}(x), & x\in A_*,
+\end{cases}$, where $g^{-1}$ denotes the inverse of $g:B_*\to A_*$.\\
+This maps each $A_n$ bijectively onto $B_n$ and maps $A_*$ bijectively onto $B_*$. Hence $h$ is a bijection $A\to B$.\\
+\hlt{Structural Commentary}: Two injections carve both sets into matched layers plus a common remainder.\\
+\hlt{Key Insight}: Use $f$ on the escaping layers and $g^{-1}$ on the stable remainder.
 \end{proof}
 \end{theorem}
 

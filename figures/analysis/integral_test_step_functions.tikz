@@ -1,0 +1,32 @@
+\begin{tikzpicture}[
+  x=0.78cm,
+  y=0.72cm,
+  >=Stealth,
+  every node/.style={font=\scriptsize},
+  axis/.style={->, black!55, line width=0.45pt},
+  curve/.style={black!85, line width=0.9pt},
+  upper/.style={draw=black!55, line width=0.45pt},
+  lower/.style={fill=gray!18, draw=black!55, line width=0.45pt},
+  guide/.style={black!18, dashed, line width=0.35pt}
+]
+  \draw[axis] (-0.25,0) -- (5.65,0) node[right] {$x$};
+  \draw[axis] (0,-0.15) -- (0,3.20);
+
+  \foreach \x in {0,1,2,3,4,5} {
+    \draw[guide] (\x,0) -- (\x,3.0);
+  }
+  \foreach \x/\lab in {0/$N$,1/$N+1$,4/$M$,5/$M+1$} {
+    \node[below] at (\x,0) {\lab};
+  }
+  \node[below] at (2.55,0) {$\cdots$};
+
+  \foreach \xl/\xr in {0/1,1/2,2/3,3/4,4/5} {
+    \pgfmathsetmacro{\hleft}{2.55/(1+0.42*\xl)+0.35}
+    \pgfmathsetmacro{\hright}{2.55/(1+0.42*\xr)+0.35}
+    \draw[lower] (\xl,0) rectangle (\xr,\hright);
+    \draw[upper] (\xl,0) rectangle (\xr,\hleft);
+  }
+
+  \draw[curve, domain=0:5.15, samples=120]
+    plot (\x,{2.55/(1+0.42*\x)+0.35}) node[right] {$f$};
+\end{tikzpicture}
