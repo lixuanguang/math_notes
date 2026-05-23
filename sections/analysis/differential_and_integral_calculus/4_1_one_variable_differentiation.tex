@@ -1,10 +1,11 @@
 \subsubsection{One-Variable Differentiation}
 
 % Source pages provided: Rudin Ch.5, Defs. 5.1, 5.7, 5.14; Thms. 5.2--5.3, 5.5, 5.8--5.13, 5.15, 5.19; Examples/remarks 5.4, 5.6, 5.16--5.18, and surrounding discussion in the provided screenshots.
+% Supplementary screenshot source: Ross Ch.5, Secs. 28--31 supports derivative definitions, algebra and chain rules, mean-value consequences, inverse-function differentiation, L'Hospital's rule, Taylor remainders, and Newton/secant motivation.
 % Sources mapped: Rudin Ch.5; Abbott Ch.5; Ross Ch.5; Tao I Ch.10; Pugh Ch.3.1.
-% TODO(source pages unavailable): Add non-Rudin differentiation material, inverse-function material, and further examples only after source pages are provided.
+% TODO(source pages unavailable): Add remaining non-Rudin differentiation material beyond the supplied Ross pages only after source pages are provided.
 
-This subsection studies real functions on intervals, with vector-valued functions treated at the end. Derivatives are limits of difference quotients, and mean-value theorems turn local derivative information into global control.
+This subsection studies real functions on intervals, with vector-valued functions treated at the end. Derivatives are limits of difference quotients, and mean-value theorems turn local derivative information into global control. The vector-valued estimate at the end uses the finite-dimensional Schwarz inequality, Theorem \ref{thm:finite-schwarz-inequality-complex-scalars}; the several-variable derivative in Definition \ref{def:total-derivative-rn-rm} later recasts this one-variable slope as a linear approximation.
 
 \begin{definition} \label{def:derivative-real-function}\label{def:one-variable-differentiation-core-source-todo} \hlt{Derivative of a Real Function}\\
 Let $f$ be real-valued on $[a,b]$ and let $x\in[a,b]$. For $a<t<b$ and $t\neq x$, set $\phi_x(t)\defeq\frac{f(t)-f(x)}{t-x}$.\\
@@ -165,6 +166,19 @@ If $f'(c-)\neq f'(c+)$, choose $\lambda$ strictly between these limits, $\lambda
 \end{proof}
 \end{corollary}
 
+% Source note: Ross Ch.5, Sec. 29.9 proves the stronger interval version after establishing continuity of the inverse for continuous one-to-one functions on intervals. The local form below records the reusable difference-quotient calculation without duplicating that earlier interval theorem.
+\begin{theorem} \label{thm:inverse-function-derivative-one-variable} \hlt{Derivative of an Inverse Function}\\
+Let $f:I\to\R$ be one-to-one on an open interval $I$, let $x_0\in I$, and put $y_0=f(x_0)$. Suppose $f$ is differentiable at $x_0$, $f'(x_0)\neq0$, and $g=f^{-1}:f(I)\to I$ is continuous at $y_0$. Then $g$ is differentiable at $y_0$ and $g'(y_0)=\frac{1}{f'(x_0)}$.
+\begin{proof}
+For $y\in f(I)$ with $y\neq y_0$, write $x=g(y)$. Then $x\neq x_0$ and $\frac{g(y)-g(y_0)}{y-y_0} =\frac{x-x_0}{f(x)-f(x_0)} =\left(\frac{f(x)-f(x_0)}{x-x_0}\right)^{-1}$.\\
+As $y\to y_0$, the assumed continuity of $g$ gives $x=g(y)\to x_0$.\\
+The difference quotient for $f$ tends to $f'(x_0)\neq0$, so the reciprocal tends to $1/f'(x_0)$ by Theorem \ref{thm:function-limit-algebra}.\\
+\hlt{Structural Commentary}: Matched inverse quotients are reciprocal.\\
+\hlt{Key Insight}: Continuity of the inverse converts the limit $y\to y_0$ back into $x\to x_0$.
+\end{proof}
+\end{theorem}
+
+% Source note: Ross Ch.5, Sec. 30 stresses that the indeterminate-form hypotheses must be checked before applying L'Hospital's rule.
 \begin{theorem} \label{thm:lhospital-one-sided} \hlt{L'Hospital's Rule}\\
 Let $f,g$ be differentiable on $(a,b)$, $g'\neq0$, and $-\infty\leq a<b\leq+\infty$.\\
 If $\frac{f'}{g'}\to A\in\overline{\R}$ as $x\to a$, and either $f,g\to0$ or $g\to+\infty$, then $\frac{f}{g}\to A$ as $x\to a$.\\
@@ -193,6 +207,18 @@ Then $G(\alpha)=G'(\alpha)=\cdots=G^{(n-1)}(\alpha)=G(\beta)=0$. Repeated applic
 \hlt{Key Insight}: Repeated Rolle-style arguments turn endpoint cancellation into a precise remainder.
 \end{proof}
 \end{theorem}
+
+\begin{method} \label{meth:newton-and-secant-iterations} \hlt{Newton and Secant Iterations}\\
+To solve $f(x)=0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Newton uses tangent-line zero: $x_n=x_{n-1}-\frac{f(x_{n-1})}{f'(x_{n-1})}$, $n\geq1$ when $f'(x_{n-1})\neq0$.
+\item
+Secant uses two-point slope: $x_n=x_{n-1}-\frac{f(x_{n-1})(x_{n-2}-x_{n-1})}{f(x_{n-2})-f(x_{n-1})}$, $n\geq2$ when the denominator is nonzero.
+\end{enumerate}
+These define iterates only; local convergence is proved with Taylor's theorem (Theorem \ref{thm:taylor-theorem-lagrange-remainder}).
+\end{method}
 
 \begin{definition} \label{def:vector-valued-derivative-one-variable} \hlt{Vector-Valued Derivative}\\
 For $\mathbf{f}:[a,b]\to\R^k$, set $\mathbf{f}'(x)=\mathbf{L}$ when $\lim\limits_{t\to x}\norm{\frac{\mathbf{f}(t)-\mathbf{f}(x)}{t-x}-\mathbf{L}}_2=0$.\\
