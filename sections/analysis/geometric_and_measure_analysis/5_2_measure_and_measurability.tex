@@ -2,10 +2,11 @@
 
 % Source pages provided: Rudin Ch.11, Secs. 11.1--11.18, including rings and sigma-rings, additive and countably additive set functions, elementary subsets of \R^p, regularity, outer measure, measurable sets, measure spaces, measurable functions, and closure of measurable functions under pointwise and continuous operations.
 % Supplementary screenshot source: provided Pugh Ch.3, Sec. 2 pages support the real-line zero-set covering formulation used in the Riemann--Lebesgue criterion.
+% Supplementary screenshot source: provided Pugh Ch.6, Secs. 1--4 support Lebesgue outer measure by open interval/box covers, zero sets, Caratheodory clean-division measurability, abstract outer measures, measure continuity, regularity sandwiches, and affine-motion invariance.
 % Sources mapped: Rudin Ch.11.1-11.4; Pugh Ch.6.1-6.5; Tao II Ch.7; Abbott Ch.7.6 as motivation.
-% TODO(source pages unavailable): Add non-Rudin measure-theory material from the mapped sources only after pages are provided.
+% TODO(source pages unavailable): Add remaining non-Rudin measure-theory material not covered by the supplied Pugh screenshots only after pages are provided.
 
-This subsection owns measurable sets before measurable integrals. The construction starts from the set algebra in Definition \ref{def:analysis-sets-and-operations}, adds countable closure, builds Lebesgue measure from elementary Euclidean pieces, and then records the measurable-function closure facts used in integration.
+This subsection builds measurable sets before measurable integrals: set algebra, countable closure, Lebesgue measure, then measurable-function closure. Geometrically, outer measure covers from outside; measurability splits every test set without losing measure.
 
 \begin{definition} \label{def:measure-measurability-core-source-todo}\label{def:ring-sigma-ring-set-function} \hlt{Rings, $\sigma$-Rings, and Set Functions}\\
 A \hlt{ring} of sets is closed under finite unions and relative complements.\\
@@ -65,6 +66,19 @@ A set is \hlt{finitely $\mu$-measurable} if it is a $d_\mu$-limit of elementary 
 It is \hlt{$\mu$-measurable} if it is a countable union of such sets; denote the classes by $\mathcal{M}_F(\mu)$ and $\mathcal{M}(\mu)$.
 \end{definition}
 
+% Visual source: provided Pugh Ch.6, Sec. 1, Fig. 136; redrawn schematically for the geometric reading of Definition \ref{def:outer-measure-and-rudin-measurable-sets}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/outer_measure_rectangle_cover.tikz}
+  \caption{Cover $A\subseteq\bigcup_k B_k$ by squares; minimize $\sum_k\abs{B_k}$.}
+  \label{fig:outer-measure-rectangle-cover}
+\end{figure}
+
+\begin{perspective} \label{per:outer-measure-geometric-box-covers} \hlt{Outer Measure as Outside Approximation}\\
+Outer measure covers $A$ from outside; $d_\mu(A,B)=\mu^\ast(A\triangle B)$ measures closeness.\\
+\hlt{Key Insight}: Countable subadditivity collects near-optimal covers.
+\end{perspective}
+
 \begin{theorem} \label{thm:measure-measurability-main-source-todo}\label{thm:rudin-measure-extension} \hlt{Extension to a Measure}\\
 Let $\mu$ be additive, regular, nonnegative, and finite on $\mathcal{E}$. Form $\mu^\ast$ from open elementary covers, set $d_\mu(A,B)=\mu^\ast(A\triangle B)$, and let $\mathcal{M}(\mu)$ be the countable unions of $d_\mu$-limits of elementary sets. Then:
 \begin{enumerate}[label=(\roman*)]
@@ -95,11 +109,49 @@ The \hlt{extended measure} is $\mu^\ast|_{\mathcal{M}(\mu)}$, denoted again by $
 For the elementary volume $m$, it is \hlt{Lebesgue measure} on $\R^p$.
 \end{definition}
 
+\begin{definition} \label{def:abstract-outer-measure-clean-division} \hlt{Abstract Outer Measure and Clean Division}\\
+An \hlt{abstract outer measure} on $M$ is a monotone, countably subadditive function $\omega:2^M\to[0,+\infty]$ with $\omega(\emptyset)=0$.\\
+A set $E\subseteq M$ is \hlt{$\omega$-measurable} if it cleanly splits every $X\subseteq M$:
+\[
+\omega(X)=\omega(X\cap E)+\omega(X\cap E^c).
+\]
+For Lebesgue outer measure, this is Caratheodory measurability.
+\end{definition}
+
+% Visual source: provided Pugh Ch.6, Sec. 2, Fig. 138; redrawn schematically for the four-region bookkeeping in Theorem \ref{thm:caratheodory-measurable-sets-sigma-algebra}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/measurable_difference_four_regions.tikz}
+  \caption{Two cuts split $X$ into four regions; $E_1\setminus E_2$ is region $2$.}
+  \label{fig:measurable-difference-four-regions}
+\end{figure}
+
+\begin{theorem} \label{thm:caratheodory-measurable-sets-sigma-algebra} \hlt{Caratheodory Measurable Sets}\\
+For any abstract outer measure $\omega$ on $M$, the $\omega$-measurable sets form a $\sigma$-algebra, and $\omega$ is countably additive there. Zero sets are measurable and may be added to or removed from measurable sets without changing measure.
+\begin{proof}
+If $\omega(Z)=0$, then for every $X\subseteq M$, $\omega(X)\leq\omega(X\cap Z)+\omega(X\cap Z^c)\leq0+\omega(X)$, so $Z$ is measurable; the same estimate handles changes by zero sets.\\
+Complements are immediate, clean splitting is stable under differences, hence finite unions. If $E=\bigsqcup_iE_i$ with each $E_i$ measurable, finite additivity on partial unions and subadditivity give $\omega(X)=\sum\limits_{i=1}^{\infty}\omega(X\cap E_i)+\omega(X\cap E^c)$.\\
+With $X=E$ this is countable additivity; for arbitrary $X$ it proves $E$ is measurable.\\
+Disjointizing reduces general countable unions to this case.\\
+\hlt{Structural Commentary}: Measurable sets preserve countable additivity.\\
+\hlt{Key Insight}: Measurable cuts turn subadditivity into equality.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:measure-continuity-up-down} \hlt{Measure Continuity}\\
+Let $\mu$ be a measure. If $E_k\uparrow E$, then $\mu(E_k)\uparrow\mu(E)$. If $F_k\downarrow F$ and $\mu(F_1)<+\infty$, then $\mu(F_k)\downarrow\mu(F)$.
+\begin{proof}
+Disjointize $E_k\uparrow E$ by $E'_1=E_1$ and $E'_k=E_k\setminus E_{k-1}$; countable additivity makes $\mu(E_k)$ the $k$th partial sum for $\mu(E)$. For $F_k\downarrow F$, apply this to $F_1\setminus F_k\uparrow F_1\setminus F$ and subtract from finite $\mu(F_1)$.\\
+\hlt{Structural Commentary}: Monotone set limits are disjoint series or complements of such series.\\
+\hlt{Key Insight}: Downward continuity needs one finite anchor so subtraction is legal.
+\end{proof}
+\end{corollary}
+
 \begin{definition} \label{def:null-sets-and-real-line-measure-zero} \hlt{Null Sets and Real-Line Measure Zero}\\
-In a measure space, a measurable set $N$ is \hlt{null} if $\mu(N)=0$.\\
-For $A\subseteq\R$, the real-line covering formulation says that $A$ has \hlt{measure zero} if for every $\varepsilon>0$ there are open intervals $O_n$ such that $A\subseteq\bigcup\limits_{n=1}^{\infty}O_n,$ and $\sum\limits_{n=1}^{\infty}\abs{O_n}\leq\varepsilon$, where $\abs{O_n}$ denotes interval length.\\
-In the Riemann-integration setting of Theorem \ref{thm:riemann-lebesgue-comparison}, such a set is also called a \hlt{zero set}.\\
-Subset of compact interval has \hlt{content zero} if same condition can be satisfied with finitely many open intervals.
+In a measure space, $N$ is \hlt{null} if it is measurable and $\mu(N)=0$.\\
+A set $A\subseteq\R$ has \hlt{measure zero} if, for every $\varepsilon>0$, open intervals $O_n$ cover $A$ and satisfy $\sum_{n=1}^{\infty}\abs{O_n}\leq\varepsilon$.\\
+For Lebesgue measure, null sets are also \hlt{zero sets}.\\
+A subset of a compact interval has \hlt{content zero} if the same condition holds with finitely many intervals.
 \end{definition}
 
 \begin{proposition} \label{prop:finite-countable-cantor-null-sets} \hlt{Basic Measure-Zero Examples on $\R$}\\
@@ -114,12 +166,23 @@ For $P$, choose $N$ with $(2/3)^N<\varepsilon/2$. Write $E_N=\bigcup_{k=1}^{2^N}
 \end{proposition}
 
 \begin{remark} \label{rem:borel-null-regular-measurable-sets} \hlt{Borel Sets, Null Sets, and Regular Approximation}\\
-Open, closed, and hence Borel subsets of $\R^p$ are $\mu$-measurable. For each $A\in\mathcal{M}(\mu)$ and $\varepsilon>0$, there are closed $F$ and open $G$ with $F\subseteq A\subseteq G$ and $\mu(G\setminus A)<\varepsilon$, $\mu(A\setminus F)<\varepsilon$.\\
-Also, $F,G$ may be chosen Borel with $\mu(G\setminus A)=\mu(A\setminus F)=0$.\\
-Null sets form a $\sigma$-ring; under Lebesgue measure, every countable subset of $\R^p$ is null.\\
+Open, closed, and Borel subsets of $\R^p$ are measurable. Each $A\in\mathcal{M}(\mu)$ admits closed--open approximations $F\subseteq A\subseteq G$ with $\mu(G\setminus A)$ and $\mu(A\setminus F)$ arbitrarily small. In Lebesgue measure, one may take $F_\sigma\subseteq A\subseteq G_\delta$ with $\mu(G_\delta\setminus F_\sigma)=0$. Null sets form a $\sigma$-ring, and countable subsets of $\R^p$ are null.\\
 \hlt{Structural Commentary}: Measurable sets are Borel sets modified by null sets.\\
 \hlt{Key Insight}: Regularity explains why open and closed approximations are enough for integration.
 \end{remark}
+
+\begin{definition} \label{def:borel-and-lebesgue-measurability} \hlt{Borel versus Lebesgue Measurability}\\
+The \hlt{Borel $\sigma$-algebra} on $\R^p$ is generated by open sets; its elements are \hlt{Borel sets}. A function is \hlt{Borel measurable} if inverse images of Borel sets are Borel. Lebesgue measurability contains all Borel sets and all subsets of Lebesgue null sets; this completion goes beyond the Borel $\sigma$-algebra.
+\end{definition}
+
+\begin{perspective} \label{per:borel-lebesgue-tradeoff} \hlt{Topology versus Completion}\\
+Borel measurability tracks topology; Lebesgue measurability completes measure by adding subsets of null sets.\\
+\hlt{Key Insight}: Borel sets are topological; Lebesgue sets are complete.
+\end{perspective}
+
+% TODO(source dependency): Add nonmeasurable-set examples only after the
+% relevant source pages are supplied and translation invariance, density
+% points, and Steinhaus' theorem have been established locally.
 
 \begin{definition} \label{def:measure-space-and-measurable-functions} \hlt{Measure Spaces and Measurable Functions}\\
 A \hlt{measure space} is a set $X$ together with a $\sigma$-ring $\mathcal{M}$ of subsets of $X$ and a nonnegative countably additive set function $\mu$ on $\mathcal{M}$. If $X\in\mathcal{M}$, then $X$ is a \hlt{measurable space}.\\
