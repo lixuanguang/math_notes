@@ -1,11 +1,12 @@
 \subsubsection{Several-Variable Differential Calculus}
 
 % Source pages provided: Rudin Ch.9, Secs. 9.1--9.43, including linear transformations, differentiation, contraction principle, inverse/implicit/rank theorems, determinants, Jacobians, higher-order partials, equality of mixed partials, and differentiation under the integral sign in the provided screenshots.
-% Rudin Ch.9 overlap note: linear-operator preliminaries are recorded in Linear Algebra at Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}, Definition \ref{def:implicit-derivative-blocks}, and Theorem \ref{thm:linear-implicit-function-theorem}.
+% Supplementary screenshot source: provided Pugh Ch.5, Secs. 1--6* pages support the linear-map-first derivative viewpoint, operator-norm stretch estimates, componentwise differentiation, the coordinate-polygon proof for continuous partials, higher derivatives as multilinear maps, the signed-parallelogram symmetry proof, implicit/inverse/rank normal-form pictures, and the Lagrange multiplier coordinate proof.
+% Rudin Ch.9 overlap note: linear-operator preliminaries are recorded in Linear Algebra at Definition \ref{def:operator-norm-rn-rm}, Theorems \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} and \ref{thm:invertible-operators-open-and-inversion-continuous}, Definition \ref{def:implicit-derivative-blocks}, and Theorem \ref{thm:linear-implicit-function-theorem}.
 % Sources mapped: Rudin Ch.9; Spivak Ch.1-2; Pugh Ch.5.1-5.6; Tao II Ch.6.
 % TODO(source pages unavailable): Add non-Rudin several-variable material from the mapped sources only after pages are provided.
 
-Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:determinant-basic-laws}, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.
+Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}, Theorem \ref{thm:determinant-basic-laws}, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.
 
 \begin{definition} \label{def:several-variable-differentiation-core-source-todo}\label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
 Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\x\in E$, and $\LL(\R^n,\R^m)$ denote space of linear maps (Definition \ref{def:linear-map}).\\
@@ -53,6 +54,23 @@ For $\mathbf{k}=\f(\x_0+\h)-\f(\x_0)$, differentiability of $\f$ gives $\mathbf{
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:several-variable-componentwise-differentiability} \hlt{Componentwise Differentiability}\\
+Let $\f=(f_1,\ldots,f_m):E\subseteq\R^n\to\R^m$ and let $\pi_i:\R^m\to\R$ be the $i$th coordinate projection. Then $\f$ is differentiable at $\x\in E$ iff each $f_i$ is differentiable at $\x$, and $D f_i(\x)=\pi_i\circ D\f(\x)$ when these derivatives exist.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\f$ is differentiable, write $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf r(\h)$ with $\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$.\\
+Applying $\pi_i$ gives $f_i(\x+\h)-f_i(\x)=\pi_i(D\f(\x)\h)+\pi_i(\mathbf r(\h))$ and $\abs{\pi_i(\mathbf r(\h))}\leq\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$.\\
+Thus $D f_i(\x)=\pi_i\circ D\f(\x)$.
+\item[$(\Leftarrow)$] Suppose $D f_i(\x)=A_i\in\LL(\R^n,\R)$ for each $i$. Define $A\in\LL(\R^n,\R^m)$ by $A\h=(A_1\h,\ldots,A_m\h)$.\\
+With $r_i(\h)=f_i(\x+\h)-f_i(\x)-A_i\h$, each $r_i(\h)=o(\norm{\h}_2)$.\\
+So $\mathbf r(\h)=(r_1(\h),\ldots,r_m(\h))$ satisfies $\norm{\mathbf r(\h)}_2\leq\sum_i\abs{r_i(\h)}=o(\norm{\h}_2)$. Definition \ref{def:total-derivative-rn-rm} gives $D\f(\x)=A$.
+\end{enumerate}
+\hlt{Structural Commentary}: Component derivatives assemble into one linear map.\\
+\hlt{Key Insight}: Components test the derivative; the total derivative packages the tests together.
+\end{proof}
+\end{theorem}
+
 \begin{definition} \label{def:partials-gradient-directional-derivatives} \hlt{Partial, Gradient, and Directional Derivatives}\\
 Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, and let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis of $\R^n$.\\
 If indicated limits exist, \hlt{partial derivative} is $(D_jf_i)(\x)\defeq\lim_{t\to0}\frac{f_i(\x+t\mathbf{e}_j)-f_i(\x)}{t}$ for $1\leq i\leq m,\ 1\leq j\leq n$.\\
@@ -94,6 +112,14 @@ Fix $\a,\b\in E$, set $\gamma(t)=(1-t)\a+t\b$, and let $\mathbf{g}=\f\circ\gamma
 Let $E\subseteq\R^n$ be open. A differentiable map $\f:E\to\R^m$ is \hlt{continuously differentiable}, or $C^1$, if $\x\mapsto D\f(\x)$ is continuous from $E$ into $\LL(\R^n,\R^m)$ in operator norm.
 \end{definition}
 
+% Visual note: schematic redraw of the coordinate-polygon proof idea in Theorem \ref{thm:c1-iff-continuous-partials}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/coordinate_polygon_partial_path.tikz}
+  \caption{Coordinate increments telescope $\x$ to $\x+\h$.}
+  \label{fig:coordinate-polygon-partial-path}
+\end{figure}
+
 \begin{theorem} \label{thm:c1-iff-continuous-partials} \hlt{$C^1$ Means Continuous Partials}\\
 A map $\f:E\subseteq\R^n\to\R^m$ is $C^1$ iff all $D_jf_i$ exist and are continuous on $E$.
 \begin{proof}
@@ -105,10 +131,71 @@ Hence $Df(\x)$ has row matrix $[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$. Since operator
 \end{proof}
 \end{theorem}
 
-\begin{definition} \label{def:higher-order-partials-and-c2} \hlt{Second-Order Partials and $C^2$}\\
-For open $E\subseteq\R^n$ and $f:E\to\R$, define $D_{ij}f \defeq D_i(D_jf)$ whenever the right-hand side exists.\\
-If all $D_{ij}f$ exist and are continuous on $E$, then $f\in C^2(E)$; a map $\f:E\to\R^m$ is $C^2$ when each component is.
+Higher derivatives repeat the same idea: once $D\f$ is itself a map into the finite-dimensional vector space $\LL(\R^n,\R^m)$, we differentiate it again. The linear-algebra viewpoint matters here because the second derivative is naturally bilinear, not merely an array of second partial derivatives.
+
+\begin{definition} \label{def:higher-order-partials-and-c2} \hlt{Higher Derivatives and $C^r$}\\
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\LL^r(\R^n,\R^m)$ be space of $r$-linear maps $(\R^n)^r\to\R^m$. Set $D^1\f\defeq D\f$. Recursively, if $D^{r-1}\f:E\to\LL^{r-1}(\R^n,\R^m)$ differentiable at $\x$, let $D^r\f(\x)(\mathbf{v}_1,\ldots,\mathbf{v}_r) \defeq \bigl(D(D^{r-1}\f)(\x)\mathbf{v}_1\bigr)(\mathbf{v}_2,\ldots,\mathbf{v}_r)$.\\
+For real-valued $f$, write $D_{ij}f\defeq D_i(D_jf)$ when defined. The map $\f$ is $C^r$ if derivatives through order $r$ exist and $D^r\f:E\to\LL^r(\R^n,\R^m)$ is continuous; it is $C^\infty$ if it is $C^r$ for all $r$.
 \end{definition}
+
+\begin{theorem} \label{thm:second-derivative-partials-and-continuity} \hlt{Second Derivatives and Second Partials}\\
+Let $\f=(f_1,\ldots,f_m):E\subseteq\R^n\to\R^m$ and $p\in E$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $D^2\f(p)$ exists, then each $D_{ij}f_\ell(p)$ exists and $D^2 f_\ell(p)(\mathbf{e}_i,\mathbf{e}_j)=D_{ij}f_\ell(p)$.
+\item[$(\Leftarrow)$] If all $D_{ij}f_\ell$ exist near $p$ and are continuous at $p$, then $D^2\f(p)$ exists.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Apply Theorem \ref{thm:several-variable-componentwise-differentiability} to $D\f:E\to\LL(\R^n,\R^m)$. The entries of $D\f$ are $D_jf_\ell$ by Theorem \ref{thm:total-derivative-matrix-partials}; differentiating the $(\ell,j)$ entry in the $\mathbf{e}_i$ direction gives $D_{ij}f_\ell(p)$ and the displayed formula.
+\item[$(\Leftarrow)$] Matrix entries of $D\f$ are functions $D_jf_\ell$. Since first partials $D_i(D_jf_\ell)=D_{ij}f_\ell$ exist near $p$ and are continuous at $p$, coordinate criterion at $p$ gives differentiability of $D\f$ there. Hence $D^2\f(p)$ exists.
+\end{enumerate}
+\hlt{Structural Commentary}: Second partials are matrix entries of the derivative of the first-derivative matrix.\\
+\hlt{Key Insight}: Continuous second partials make the first-derivative matrix differentiable.
+\end{proof}
+\end{theorem}
+
+% Supplementary visual source: provided Pugh Ch.5 screenshot, Fig. 109; redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/signed_parallelogram_second_derivative.tikz}
+  \caption{The signed vertex sum on a small parallelogram is symmetric in $\mathbf{v}$ and $\mathbf{w}$.}
+  \label{fig:signed-parallelogram-second-derivative}
+\end{figure}
+
+\begin{theorem} \label{thm:second-derivative-symmetric} \hlt{Symmetry of the Second Derivative}\\
+If $D^2\f(p)$ exists, then $D^2\f(p)(\mathbf{v},\mathbf{w})=D^2\f(p)(\mathbf{w},\mathbf{v})$ for all $\mathbf{v},\mathbf{w}\in\R^n$.
+\begin{proof}
+Reduce to scalar $f$ by Theorem \ref{thm:several-variable-componentwise-differentiability}.\\
+For small $t$, set $\Delta(t,\mathbf{v},\mathbf{w})\defeq f(p+t\mathbf{v}+t\mathbf{w})-f(p+t\mathbf{v})-f(p+t\mathbf{w})+f(p)$.\\
+Then $\Delta(t,\mathbf{v},\mathbf{w})=\Delta(t,\mathbf{w},\mathbf{v})$; see Figure \ref{fig:signed-parallelogram-second-derivative}. The one-variable mean value theorem and differentiability of $Df$ at $p$ give $D^2 f(p)(\mathbf{v},\mathbf{w}) =\lim\limits_{t\to0}\frac{\Delta(t,\mathbf{v},\mathbf{w})}{t^2}$. The same formula with $\mathbf{v},\mathbf{w}$ reversed proves symmetry.\\
+\hlt{Structural Commentary}: A pointwise second derivative is already forced to be a symmetric bilinear form.\\
+\hlt{Key Insight}: The parallelogram difference is symmetric in the two directions.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:mixed-partials-from-second-derivative} \hlt{Mixed Partials from $D^2$}\\
+If $D^2\f(p)$ exists, then $D_{ij}f_\ell(p)=D_{ji}f_\ell(p)$ for all components and all $i,j$.
+\begin{proof}
+By Theorem \ref{thm:second-derivative-partials-and-continuity}, $D_{ij}f_\ell(p)=D^2f_\ell(p)(\mathbf{e}_i,\mathbf{e}_j)$; and $D_{ji}f_\ell(p)=D^2f_\ell(p)(\mathbf{e}_j,\mathbf{e}_i)$.\\
+Theorem \ref{thm:second-derivative-symmetric} makes the two right-hand sides equal.\\
+\hlt{Structural Commentary}: Mixed partials are coordinate values of one bilinear map.\\
+\hlt{Key Insight}: Symmetry of $D^2f_\ell(p)$ gives equality of mixed entries.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:higher-derivatives-symmetric} \hlt{Symmetry of Higher Derivatives}\\
+If $D^r\f(p)$ exists, then the $r$-linear map $D^r\f(p)$ is unchanged by permuting its arguments.
+\begin{proof}
+It suffices to prove invariance under adjacent transpositions. Fix all arguments except positions $k,k+1$.\\
+Resulting two-variable second derivative is $(\mathbf{u},\mathbf{v})\longmapsto D^r\f(p)(\mathbf{v}_1,\ldots,\mathbf{v}_{k-1},\mathbf{u},\mathbf{v},\mathbf{v}_{k+2},\ldots,\mathbf{v}_r)$, so Theorem \ref{thm:second-derivative-symmetric} allows $\mathbf{u}$ and $\mathbf{v}$ to be swapped. Since adjacent transpositions generate all permutations, $D^r\f(p)$ is symmetric.\\
+\hlt{Structural Commentary}: Higher derivatives are iterated second-derivative symmetries.\\
+\hlt{Key Insight}: Adjacent swaps generate every permutation.
+\end{proof}
+\end{corollary}
+
+The next rectangle argument is the classical coordinate route to equality of mixed partials. It is weaker in hypothesis than global $C^2$, but it proves the same compatibility of coordinate second derivatives.
 
 \begin{theorem} \label{thm:rectangle-mean-value-mixed-partial} \hlt{Rectangle Mean Value Formula}\\
 Let $E\subseteq\R^2$ be open, and suppose $D_1f$ and $D_{21}f$ exist on $E$. For a closed coordinate rectangle $Q\subseteq E$ with opposite vertices $(a,b)$ and $(a+h,b+k)$, $h,k\neq0$, set $\Delta(f,Q)\defeq f(a+h,b+k)-f(a+h,b)-f(a,b+k)+f(a,b)$.\\
@@ -159,6 +246,19 @@ If $\f:E\subseteq\R^n\to\R^n$ is differentiable at $\x$, define $J_{\f}(\x)\defe
 By Theorem \ref{thm:determinant-basic-laws}, $D\f(\x)$ is invertible if and only if $J_{\f}(\x)\neq0$. The absolute value $\abs{J_{\f}(\x)}$ is the local version of determinant volume scaling from Theorem \ref{thm:linear-map-volume-scaling-determinant}, used again in the change-of-variables theorem.
 \end{definition}
 
+\begin{perspective} \label{per:linear-inverse-lower-bound} \hlt{Linear Inverse Estimate}\\
+For invertible $A\in\LL(\R^n)$, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} gives $c\norm{\h}_2\leq\norm{A\h}_2\leq\normop{A}\norm{\h}_2$; and $\qquad c\defeq\frac{1}{\normop{A^{-1}}}$.\\
+The inverse function theorem preserves this lower stretch under small derivative changes.
+\end{perspective}
+
+% Visual note: schematic redraw of the finite-dimensional inverse estimate in Perspective \ref{per:linear-inverse-lower-bound}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/linear_isomorphism_conorm.tikz}
+  \caption{Invertibility keeps $A(S^{n-1})$ a positive distance from $0$.}
+  \label{fig:linear-isomorphism-conorm}
+\end{figure}
+
 % Rudin Ch.9 overlap: the proof below uses operator-norm openness of invertible maps from Theorem \ref{thm:invertible-operators-open-and-inversion-continuous} and the contraction principle from Theorem \ref{thm:contraction-principle}.
 \begin{theorem} \label{thm:inverse-function-theorem-rn} \hlt{Inverse Function Theorem}\\
 Let $\f:E\subseteq\R^n\to\R^n$ be $C^1$, let $\a\in E$, and suppose $D\f(\a)$ is invertible. With $\b=\f(\a)$, $\f$ restricts to a bijection $U\to V$ between open neighborhoods of $\a$ and $\b$; inverse $\g:V\to U$ is $C^1$, and $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$, $\y\in V$.
@@ -185,6 +285,16 @@ Let $W\subseteq E$ be open and let $\y\in\f(W)$. Choose $\x\in W$ with $\f(\x)=\
 \end{corollary}
 
 % Linear-algebra dependency: the block maps $A_x,A_y$ are defined once in Definition \ref{def:implicit-derivative-blocks}, and the corresponding linear model is Theorem \ref{thm:linear-implicit-function-theorem}.
+The implicit theorem below is the nonlinear counterpart of the block equation theorem. The invertible block is the set of variables one can solve for, just as in Theorem \ref{thm:linear-implicit-function-theorem}.
+
+% Supplementary visual source: provided Pugh Ch.5 screenshot, Fig. 110; redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/implicit_locus_as_graph.tikz}
+  \caption{Near a regular point, the zero locus is the graph of an implicit function.}
+  \label{fig:implicit-locus-as-graph}
+\end{figure}
+
 \begin{theorem} \label{thm:implicit-function-theorem-rn-rm} \hlt{Implicit Function Theorem}\\
 Let $\f:E\subseteq\R^{n+m}\to\R^n$ be $C^1$, $\f(\a,\b)=0$, $A=D\f(\a,\b)$, and let $A_x,A_y$ be the block maps of Definition \ref{def:implicit-derivative-blocks}. If $A_x$ is invertible, then near $\b$, the equation $\f(\x,\y)=0$ has unique local solution $\x=\g(\y)$, where $\g$ is $C^1$, $\g(\b)=\a$, $D\g(\b)=-(A_x)^{-1}A_y$.
 \begin{proof}
@@ -196,7 +306,8 @@ Points with $\f(\x,\y)=0$ are exactly those sent to $(0,\y)$, so $\Phi^{-1}(0,\y
 \end{theorem}
 
 \begin{theorem} \label{thm:constant-rank-theorem-rudin} \hlt{Rank Theorem}\\
-Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$ (Definition \ref{def:orthogonal-projection-subspace}). Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse on a small coordinate neighborhood $V_0$, there is a $C^1$ map $\varphi:A(V_0)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
+Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$ (Definition \ref{def:orthogonal-projection-subspace}). Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse on a small coordinate neighborhood $V_0$, there is a $C^1$ map $\varphi:A(V_0)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.\\
+In coordinates adapted to $\ker A$ and $\operatorname{range}(A)$, this is the same local geometry as a projection onto $r$ coordinates.
 \begin{proof}
 If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant.\\
 Assume $r>0$. Choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$, possible by choosing preimages of a basis of $Y_1$, and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\
@@ -208,6 +319,30 @@ On a small convex coordinate neighborhood, any two points with the same $A\x$ di
 \end{proof}
 \end{theorem}
 
+Rank-nullity (Theorem \ref{thm:rank-nullity}) says that the domain directions split into rank directions and fiber directions. The rank theorem says a constant-rank map has, locally, the same split after $C^1$ changes of coordinates.
+
+% Supplementary visual source: provided Pugh Ch.5 screenshots, Figs. 113--115; redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/rank_theorem_projection_normal_form.tikz}
+  \caption{After local coordinate changes, a constant-rank map looks like projection onto the rank directions.}
+  \label{fig:rank-theorem-projection-normal-form}
+\end{figure}
+
+\begin{theorem} \label{thm:lagrange-multiplier-one-constraint} \hlt{One-Constraint Lagrange Multiplier}\\
+Let $E\subseteq\R^n$ be open, $f,g:E\to\R$ be $C^1$, and $S=\{\x:g(\x)=c\}$.\\
+If $p\in S$, $\nabla g(p)\neq\ze$, and $f|_S$ has a local extremum at $p$, then $\exists\lambda\in\R$ with $\nabla f(p)=\lambda\nabla g(p)$.
+\begin{proof}
+If $Df(p)=0$, take $\lambda=0$. Otherwise suppose $Df(p)$ is not a multiple of $Dg(p)$.\\
+Complete $Dg(p),Df(p)$ to a dual basis $Dg(p),\quad Df(p),\quad \ell_3,\ldots,\ell_n$ by Theorem \ref{thm:dual-basis-and-dimension},\\
+and set $\Phi(\x)=\bigl(g(\x)-c,\ f(\x)-f(p),\ \ell_3(\x-p),\ldots,\ell_n(\x-p)\bigr)$.\\
+Then $D\Phi(p)$ is invertible, so Theorem \ref{thm:inverse-function-theorem-rn} makes $\Phi$ locally invertible. In these coordinates, $S$ is locally the slice with first coordinate $0$, while the second coordinate is $f-f(p)$. Local invertibility gives nearby points of $S$ with this second coordinate of both signs, contradicting extremality.\\
+Hence $Df(p)=\lambda Dg(p)$; Riesz representation, Theorem \ref{thm:riesz-representation-finite-dimensional}, gives the gradient form.\\
+\hlt{Structural Commentary}: The constraint kills first-order variation along $S$.\\
+\hlt{Key Insight}: If $Df$ were independent of $Dg$, $f$ would be a free constraint coordinate.
+\end{proof}
+\end{theorem}
+
 \begin{method} \label{meth:several-variable-differentiation-proof-patterns-source-todo}\label{meth:several-variable-differentiation-proof-patterns} \hlt{Several-Variable Differentiation Proof Patterns}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -216,7 +351,8 @@ On a small convex coordinate neighborhood, any two points with the same $A\x$ di
 \item \hlt{Line-segment reduction}: on convex sets, restrict to $\gamma(t)=(1-t)\a+t\b$ and apply one-variable results.
 \item \hlt{Local inversion}: if $A=D\f(\a)$ is invertible, write $D\f(\x)=A+E_\x$ with $\normop{E_\x}$ small and solve by contraction (Theorem \ref{thm:contraction-principle}); linear block equations use Theorem \ref{thm:linear-implicit-function-theorem}.
 \item \hlt{Coordinates}: read partial derivatives as the entries of the matrix of $D\f(\x)$, using Theorem \ref{thm:total-derivative-matrix-partials}.
-\item \hlt{Rank normal forms}: for $A=D\mathbf{F}(\a)$ with $\operatorname{rank}A=r$, use $\ker A$, $\operatorname{range}(A)$, and $P_{\operatorname{range}(A)}$ to isolate the rank-$r$ directions.
+\item \hlt{Higher derivatives}: regard $D^r\f(p)$ as an $r$-linear map; recover coordinate partials via Theorem \ref{thm:second-derivative-partials-and-continuity}.
+\item \hlt{Rank normal forms}: for $A=D\mathbf{F}(\a)$, split domain by $\ker A$ and image by $\operatorname{range}A$; project with $P_{\operatorname{range}A}$.
 \end{enumerate}
 \hlt{Key Insight}: Several-variable calculus is one-variable limiting plus finite-dimensional linear algebra.
 \end{method}

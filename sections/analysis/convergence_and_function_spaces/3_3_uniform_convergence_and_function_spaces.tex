@@ -4,11 +4,12 @@
 % Supplementary screenshot source: Ross Ch.4, Secs. 24--25 supports the pointwise/uniform quantifier contrast, epsilon-strip picture, uniformly Cauchy criterion, and Weierstrass M-test.
 % Supplementary screenshot source: Ross Ch.7, Sec. 38 supports the van der Waerden-style continuous nowhere-differentiable construction and the Baire-category comparison with differentiable functions.
 % Supplementary screenshot source: provided Pugh Ch.4, Secs. 1 and 3 supports the epsilon-tube view of uniform convergence, the supremum-metric function-space viewpoint, equicontinuity, Arzela--Ascoli, and compactness criteria in $C^0$.
+% Additional screenshot source: provided Secs. 7*--8* pages support the explicit sawtooth nowhere-differentiable construction, Baire-generic nowhere differentiability on $C([a,b],\R)$, bounded metrics for unbounded function spaces, and sigma-compact Arzela--Ascoli variants.
 % Sources mapped: Rudin Ch.7; Abbott Ch.6; Ross Ch.4; Pugh Ch.4.1, Ch.4.3; Tao II Ch.3.
 % TODO(source pages unavailable): Add non-Rudin function-space material from the mapped sources only after pages are provided.
 % Source dependency resolved: Rudin Thm. 11.32 is recorded in Theorem \ref{thm:dominated-convergence-lebesgue}; expand Example 7.20 only when a local rewrite is needed.
 
-This subsection asks when limits of functions preserve structure. Pointwise convergence chooses $N$ after fixing $x$; uniform convergence chooses one $N$ for all $x$. This distinction controls when limits commute with continuity, integration, and differentiation.
+This subsection asks when limits of functions preserve structure. Pointwise convergence chooses $N$ after fixing $x$; uniform convergence chooses one $N$ for all $x$. This distinction controls when limits commute with continuity, integration, and differentiation. The function-space viewpoint uses the norm language of Definition \ref{def:norm-and-normed-vector-space} and the Baire-category language of Definitions \ref{def:first-category-set} and \ref{def:residual-thick-generic-set}.
 
 \begin{definition} \label{def:pointwise-convergence-functions} \hlt{Pointwise Limits of Functions}\\
 Let $(f_n)$ be complex-valued functions on $E$.
@@ -141,9 +142,9 @@ Thus $0\leq f_n(x)-f(x)<\varepsilon$ for all $x\in K$ and $n\geq N$.\\
 \end{theorem}
 
 \begin{definition} \label{def:supremum-norm-continuous-functions} \hlt{The Supremum Metric on Bounded Continuous Functions}\\
-For metric space $X$, let $C_b(X)$ be bounded complex-valued continuous functions and set $\norm{f}_{\infty}\defeq\sup_{x\in X}\abs{f(x)}$.\\
-Then $d(f,g)\defeq\norm{f-g}_{\infty}$ is a metric on $C_b(X)$, and its convergence is uniform convergence by Theorem \ref{thm:uniform-convergence-supremum-test}.
-The supremum norm is a norm in the sense of Definition \ref{def:norm-and-normed-vector-space}; the only new feature is that the largest coordinate has been replaced by a supremum over the domain.
+For a metric space $X$, let $C_b(X)$ be the bounded complex-valued continuous functions and\\
+define $\norm{f}_{\infty}\defeq\sup_{x\in X}\abs{f(x)}$; $d(f,g)\defeq\norm{f-g}_{\infty}$.\\
+Then $d$ is a metric on $C_b(X)$, induced by the norm of Definition \ref{def:norm-and-normed-vector-space}; $d$-convergence is uniform convergence by Theorem \ref{thm:uniform-convergence-supremum-test}. If $X$ is compact, then $C(X)=C_b(X)$ by Corollary \ref{cor:continuous-rk-image-compact-closed-bounded}.
 \end{definition}
 
 \begin{perspective} \label{per:supremum-metric-function-space-lens} \hlt{A Metric Space Whose Points Are Functions}\\
@@ -156,6 +157,35 @@ The metric space $C_b(X)$ with metric $d(f,g)=\norm{f-g}_{\infty}$ is complete.
 Let $(f_n)$ be Cauchy in $C_b(X)$. Then Theorem \ref{thm:uniform-cauchy-criterion} gives a function $f$ with $f_n\rightrightarrows f$. By Theorem \ref{thm:uniform-convergence-preserves-continuity}, $f$ is continuous. For some $n$, $\norm{f-f_n}_{\infty}<1$, hence $f_n$ is bounded, thus $f\in C_b(X)$ and $\norm{f_n-f}_{\infty}\to0$.\\
 \hlt{Structural Commentary}: Uniform Cauchy convergence builds the limit inside the same function space.\\
 \hlt{Key Insight}: Completeness of $\C$ plus uniform convergence makes $C_b(X)$ complete.
+\end{proof}
+\end{theorem}
+
+% Source note: provided Sec. 8* screenshots on spaces of unbounded functions; the bounded target metric lets all maps $X\to Y$ share one complete uniform metric.
+\begin{definition} \label{def:bounded-target-metric-function-space} \hlt{Bounded Target Metric for All Functions}\\
+For metric spaces $(X,d_X)$ and $(Y,d_Y)$, let $\mathcal{F}=Y^X$ and set $\rho(y,z)\defeq\frac{d_Y(y,z)}{1+d_Y(y,z)}$ and $d_\rho(f,g)\defeq\sup_{x\in X}\rho(f(x),g(x))$.\\
+Then $\rho<1$, so $d_\rho$ is finite on all of $\mathcal{F}$; $d_\rho$-convergence is uniform convergence measured by $d_Y$.
+\end{definition}
+
+\begin{theorem} \label{thm:bounded-target-metric-function-space-completeness} \hlt{Completeness and Closed Subspaces for $d_\rho$}\\
+If the target metric space $(Y,d_Y)$ is complete, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\mathcal{F},d_\rho)$ is complete;
+\item $\mathcal{F}_b\defeq\{f\in\mathcal{F}:f(X)\text{ is }d_Y\text{-bounded}\}$ is closed in $\mathcal{F}$;
+\item $C(X,Y)$ is closed in $\mathcal{F}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $(f_n)$ be $d_\rho$-Cauchy. For each $x\in X$, $(f_n(x))$ is Cauchy in $Y$; define $f(x)\defeq\lim_nf_n(x)$.\\
+Given $\varepsilon>0$, choose $N$ with $d_\rho(f_n,f_m)<\varepsilon$ for $m,n\geq N$. Letting $m\to\infty$ gives $d_\rho(f_n,f)\leq\varepsilon$ for $n\geq N$.
+\item If $f_n\in\mathcal{F}_b$ and $d_\rho(f_n,f)\to0$, choose $N$ with $d_\rho(f_N,f)<1/2$.\\
+Then $d_Y(f_N(x),f(x))<1$ for all $x$. Since $f_N(X)$ is bounded, so is $f(X)$.
+\item If $f_n\in C(X,Y)$ and $d_\rho(f_n,f)\to0$, then $f_n\to f$ uniformly in $d_Y$.\\
+Given $x_0\in X$ and $\varepsilon>0$, choose $N$ with $d_Y(f_N(x),f(x))<\varepsilon/3$ for all $x$, then use continuity of $f_N$ at $x_0$ and the triangle inequality. Thus $f$ is continuous.
+\end{enumerate}
+\hlt{Structural Commentary}: Compress the target metric; then close the useful subspaces.\\
+\hlt{Key Insight}: Completeness and uniform control make boundedness and continuity closed.
 \end{proof}
 \end{theorem}
 
@@ -191,6 +221,7 @@ By Theorem \ref{thm:uniform-convergence-interchanges-function-limits}, $f'(x)=\l
 \end{proof}
 \end{theorem}
 
+% Source note: provided Sec. 7*, Theorem 31 and Fig. 104; the notation below uses the same compressed sawtooth idea while retaining the existing $\varphi$ notation.
 \begin{theorem} \label{thm:continuous-nowhere-differentiable-example} \hlt{A Continuous Nowhere Differentiable Function Exists}\\
 There exists a real continuous function on $\R$ which is nowhere differentiable.
 \begin{proof}
@@ -206,40 +237,67 @@ Since $\delta_m\to0$, the difference quotients are unbounded near $x$; since $x$
 \end{proof}
 \end{theorem}
 
-% Visual note: schematic redraw of the periodic building block in Theorem \ref{thm:continuous-nowhere-differentiable-example}.
+% Visual source: provided Sec. 7*, Fig. 104; redrawn schematically for Theorem \ref{thm:continuous-nowhere-differentiable-example}.
 \begin{figure}[H]
   \centering
-  \input{figures/analysis/takagi_sawtooth_building_block.tikz}
-  \caption{The sawtooth block $h(x)=\abs{x}$ on $[-1,1]$, extended by $h(x+2)=h(x)$.}
+  \input{figures/analysis/compressed_sawtooth_family.tikz}
+  \caption{The first compressed sawtooth terms $\sigma_k(x)=(3/4)^k\varphi(4^kx)$: heights shrink, slopes grow.}
   \label{fig:takagi-sawtooth-building-block}
 \end{figure}
 
 \begin{perspective} \label{per:nowhere-differentiability-explicit-and-generic} \hlt{Explicit Versus Generic Pathology}\\
-In $C_b(\R)$ with the complete supremum metric, functions differentiable anywhere form a first-category set. Uniform convergence preserves continuity, not typical differentiability.
+The sawtooth series proves existence; Baire category shows nowhere differentiability is residual in $C([a,b],\R)$.
 \end{perspective}
 
-\begin{theorem} \label{thm:differentiable-somewhere-first-category} \hlt{Differentiable Somewhere Is First Category}\\
-Let $\mathcal{D}\defeq\{f\in C_b(\R):f\text{ is differentiable somewhere}\}$. With $d(f,g)\defeq\norm{f-g}_\infty$ on $C_b(\R)$, $\mathcal{D}$ is first category.
+% Source note: provided Sec. 7* screenshots, Theorem 33; recorded as a compact theorem-driven skeleton to avoid duplicating the full category proof.
+\begin{theorem} \label{thm:differentiable-somewhere-first-category} \hlt{Generic Nowhere Differentiability on Compact Intervals}\\
+Let $a<b$, and let $C=C([a,b],\R)$ with the supremum metric. There exists a residual set $\mathcal{G}\subseteq C$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item no $f\in\mathcal{G}$ has an available one-sided derivative at any point of $[a,b]$;
+\item no $f\in\mathcal{G}$ is monotone on any nondegenerate subinterval of $[a,b]$;
+\item the set $\{f\in C:f\text{ is differentiable at some point of }[a,b]\}$ is first category.
+\end{enumerate}
 \begin{proof}
-For $n\in\N$, let $\mathcal{F}_n$ be set of $f\in C_b(\R)$, some $x\in[-n,n]$ satisfies $\abs{f(x+h)-f(x)}\leq nh$ for $0<h<\frac1n$.\\
-If $f$ differentiable at $x$, choose $n$ s.t. $\abs{x}\leq n$ and displayed bound holds for $0<h<1/n$; hence $\mathcal{D}\subseteq\bigcup_n\mathcal{F}_n$.\\
-Each $\mathcal{F}_n$ is closed and nowhere dense: closedness uses uniform limits and compactness of $[-n,n]$; nowhere denseness uses small sawtooth perturbations of piecewise linear approximants.\\
-Therefore $\mathcal{D}$ is first category by Definition \ref{def:first-category-set}.\\
-\hlt{Structural Commentary}: $\mathcal{D}$ is a countable union of closed nowhere dense sets.\\
-\hlt{Key Insight}: In the supremum metric, nowhere differentiability is not just possible; it is category-large.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write $\Delta_hf(x)\defeq f(x+h)-f(x)$, and choose $N_0$ with $1/N_0<b-a$. For $n\geq N_0$, define
+\begin{align}
+R_n&\defeq\left\{f\in C:\forall x\in[a,b-1/n]\ \exists h>0\text{ with }\left|\frac{\Delta_hf(x)}{h}\right|>n\right\}, \nonumber\\
+L_n&\defeq\left\{f\in C:\forall x\in[a+1/n,b]\ \exists h<0\text{ with }\left|\frac{\Delta_hf(x)}{h}\right|>n\right\}, \nonumber\\
+G_n&\defeq\{f\in C:f\text{ is nonmonotone on every subinterval of length }1/n\}. \nonumber
+\end{align}
+Each $R_n,L_n,G_n$ is open and dense in $C$ (Weierstrass Approximation Theorem \ref{thm:weierstrass-polynomial-approximation}), plus small high-slope sawtooth perturbation; openness follows from compactness and uniform perturbation estimates.
+\item Set $\mathcal{G}\defeq\bigcap_{n\geq N_0}(R_n\cap L_n\cap G_n)$. By Definition \ref{def:residual-thick-generic-set}, $\mathcal{G}$ is residual. If $f\in\mathcal{G}$, then the $R_n$ and $L_n$ conditions give one-sided difference quotients of arbitrarily large absolute value; since $f$ is bounded, the corresponding increments tend to $0$. Thus no available one-sided derivative exists.
+\item Let $f\in\mathcal{G}$. Every nondegenerate subinterval contains a subinterval of length $1/n$ for all sufficiently large $n$, so the $G_n$ conditions make $f$ nonmonotone on every nondegenerate subinterval. If $f$ is differentiable somewhere, then $f\notin\mathcal{G}$; hence the differentiable-somewhere set lies in $C\setminus\mathcal{G}$, which is first category.
+\end{enumerate}
+\hlt{Structural Commentary}: Baire category turns dense sawtooth perturbability into a generic regularity failure.\\
+\hlt{Key Insight}: The explicit construction shows existence; the category proof shows typicality.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:pointwise-uniform-bounded-equicontinuous} \hlt{Boundedness and Equicontinuity of Function Families}\\
-Let $\mathcal{F}$ be a family of complex-valued functions on $E$.
+Let $\mathcal{F}$ be a family of functions from $E$ into a metric space $(Y,d_Y)$; in scalar cases, take $d_Y(u,v)=\abs{u-v}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $(f_n)$ is \hlt{pointwise bounded} on $E$ if $(f_n(x))$ is bounded for each $x\in E$.
-\item $(f_n)$ is \hlt{uniformly bounded} on $E$ if $\exists M$ such that $\abs{f_n(x)}<M$ for all $x\in E,n\in\N$.
-\item If $E$ lies in a metric space $X$, then $\mathcal{F}$ is \hlt{equicontinuous} on $E$ if $\forall\varepsilon>0$ $\exists\delta>0$,\\
-such that $d(x,y)<\delta,\ x,y\in E,\ f\in\mathcal{F}$ $\Longrightarrow$ $\abs{f(x)-f(y)}<\varepsilon$.
+\item $(f_n)$ is \hlt{pointwise bounded} on $E$ if $(f_n(x))$ is bounded in $Y$ for each $x\in E$.
+\item A scalar sequence $(f_n)$ is \hlt{uniformly bounded} on $E$ if $\exists M$ such that $\abs{f_n(x)}<M$ for all $x\in E,n\in\N$.
+\item If $E$ lies in a metric space $(X,d_X)$, then $\mathcal{F}$ is \hlt{equicontinuous} on $E$ if $\forall\varepsilon>0$ $\exists\delta>0$,\\
+such that $d_X(x,y)<\delta,\ x,y\in E,\ f\in\mathcal{F}$ $\Longrightarrow$ $d_Y(f(x),f(y))<\varepsilon$.
+\item The family is \hlt{pointwise equicontinuous} if for every $p\in E$ and $\varepsilon>0$ there is $\delta=\delta(p,\varepsilon)>0$ such that $d_X(p,y)<\delta,\ y\in E,\ f\in\mathcal{F}$ implies $d_Y(f(p),f(y))<\varepsilon$.
 \end{enumerate}
 \end{definition}
+
+\begin{theorem} \label{thm:pointwise-equicontinuity-compact-uniform} \hlt{Pointwise Equicontinuity Becomes Uniform on Compact Sets}\\
+Every pointwise equicontinuous family $\mathcal{F}\subset C(K,\C)$ on compact $K$ is equicontinuous.
+\begin{proof}
+Otherwise, choose $\varepsilon>0$, $f_n\in\mathcal{F}$, and $x_n,t_n\in K$ with $d(x_n,t_n)<1/n$ but $\abs{f_n(x_n)-f_n(t_n)}\geq\varepsilon$.\\
+By Theorem \ref{thm:compact-sequential-subsequence}, pass to $x_n\to x_0$; then $t_n\to x_0$ too.\\
+Pointwise equicontinuity at $x_0$ gives $\abs{f_n(x_n)-f_n(t_n)}<\varepsilon$ for large $n$, a contradiction.\\
+\hlt{Structural Commentary}: Compactness turns moving counterexamples into one base point.\\
+\hlt{Key Insight}: The local $\delta(x,\varepsilon)$ becomes one uniform $\delta$ only after compactness prevents escape.
+\end{proof}
+\end{theorem}
 
 \begin{example} \label{ex:uniform-boundedness-without-uniform-subsequence} \hlt{Uniform Boundedness Alone Is Not Enough}\\
 On $[0,1]$, let $f_n(x)\defeq \frac{x^2}{x^2+(1-nx)^2}$. Then $\abs{f_n}\leq1$ and $f_n\to0$ pointwise, but $f_n(1/n)=1$; hence no uniformly convergent subsequence. The missing hypothesis is equicontinuity.
@@ -289,6 +347,30 @@ Thus $(g_i)$ is uniformly Cauchy and converges uniformly by Theorem \ref{thm:uni
 \end{proof}
 \end{theorem}
 
+\begin{definition} \label{def:sigma-compact-metric-space} \hlt{$\sigma$-Compact Metric Space}\\
+A metric space $X$ is \hlt{$\sigma$-compact} if $X=\bigcup\limits_{j=1}^{\infty}K_j$ for compact subsets $K_j\subseteq X$.
+\end{definition}
+
+\begin{theorem} \label{thm:arzela-ascoli-sigma-compact-locally-uniform} \hlt{Arzela--Ascoli on $\sigma$-Compact Spaces}\\
+Let $X$ be $\sigma$-compact, $Y$ a metric space, and $(f_n)$ pointwise equicontinuous maps $X\to Y$. If each orbit $\{f_n(x):n\in\N\}$ lies in a compact subset of $Y$, then some subsequence converges uniformly on compact subsets of $X$.
+\begin{proof}
+Choose an increasing compact exhaustion $X=\bigcup_jK_j$.\\
+By Theorem \ref{thm:pointwise-equicontinuity-compact-uniform}, each restriction $f_n|_{K_j}$ is uniformly equicontinuous. Applying Theorem \ref{thm:arzela-ascoli-compact-metric} on $K_1,K_2,\ldots$ and diagonalizing gives a subsequence $(g_m)$ converging uniformly on every $K_j$, hence pointwise on $X$.\\
+If $K\subseteq X$ is compact, then $(g_m|_K)$ is uniformly equicontinuous, and a finite-net argument upgrades pointwise convergence on $K$ to uniform convergence on $K$.\\
+\hlt{Structural Commentary}: Exhaust $X$ by compact pieces and diagonalize the compact theorem.\\
+\hlt{Key Insight}: Local uniform convergence replaces global uniform convergence.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:arzela-ascoli-real-line-locally-uniform} \hlt{Real-Line Local Uniform Subsequence}\\
+If $(f_n)$ is pointwise equicontinuous on $\R$ and bounded at one point, then it has a subsequence converging uniformly on compact subsets of $\R$.
+\begin{proof}
+Let $(f_n(x_0))$ be bounded. On any compact interval containing $x_0$, Theorem \ref{thm:pointwise-equicontinuity-compact-uniform} gives uniform equicontinuity; finitely many $\delta$-steps from $x_0$ to $x$ bound each orbit $(f_n(x))$. Hence Theorem \ref{thm:arzela-ascoli-sigma-compact-locally-uniform} applies on $\R$.
+\hlt{Structural Commentary}: One bounded anchor propagates across compact intervals.\\
+\hlt{Key Insight}: Pointwise equicontinuity turns local boundedness into compactwise compactness.
+\end{proof}
+\end{corollary}
+
 \begin{method} \label{meth:uniform-convergence-proof-patterns-source-todo} \hlt{Uniform Proof Patterns}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -297,6 +379,7 @@ Thus $(g_i)$ is uniformly Cauchy and converges uniformly by Theorem \ref{thm:uni
 \item \hlt{Uniform Cauchy}: prove $\sup_E\abs{f_n-f_m}\to0$ as $m,n\to\infty$.
 \item \hlt{Preservation}: use a three-term estimate and choose the uniform index first.
 \item \hlt{Compactness/equicontinuity}: pass from finite nets to all of $K$.
+\item \hlt{Locally uniform}: exhaust a $\sigma$-compact domain by compact sets and diagonalize.
 \end{enumerate}
 \hlt{Key Insight}: Uniformity means $N$ or $\delta$ is chosen before $x$.
 \end{method}

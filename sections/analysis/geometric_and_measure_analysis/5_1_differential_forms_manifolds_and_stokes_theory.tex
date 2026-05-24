@@ -1,10 +1,24 @@
 \subsubsection{Differential Forms, Manifolds, and Stokes Theory}
 
 % Source pages provided: Rudin Ch.10, Secs. 10.10--10.51, including differential forms, surfaces, wedge products, exterior differentiation, pullbacks, affine and differentiable chains, Stokes' theorem, closed and exact forms, Poincare's lemma, and vector-analysis special cases in the provided screenshots.
+% Supplementary screenshot source: provided Differential Forms and General Stokes pages support the functional-on-cells viewpoint, weighted coordinate variation, reparametrization naturality, pullback/pushforward duality, closed/exact forms, the Poincare lemma, and vector-calculus special cases.
+% Linear-algebra dependency: pullback of $k$-forms uses the Cauchy--Binet minor formula, Theorem \ref{thm:cauchy-binet-minors}; its direction reversal is the same dual-map reversal as Definition \ref{def:dual-map}.
 % Sources mapped: Spivak Ch.4-5; Rudin Ch.10.5-10.9; Pugh Ch.5.8-5.9.
 % TODO(source pages unavailable): Add non-Rudin manifold material from the mapped sources only after pages are provided.
 
-This subsection develops forms, chains, orientation, manifolds, and Stokes-type theorems, building on determinant sign and laws from Definition \ref{def:matrix-trace-and-determinant} and Theorem \ref{thm:determinant-basic-laws}, and on change of variables, Theorem \ref{thm:change-of-variables-rk}.
+This subsection builds Stokes theory from forms, chains, orientation, and manifolds. It uses determinant sign and laws (Definition \ref{def:matrix-trace-and-determinant}, Theorems \ref{thm:determinant-basic-laws}, \ref{thm:cauchy-binet-minors}) and change of variables (Theorem \ref{thm:change-of-variables-rk}); conceptually, forms test oriented cells.
+
+\begin{perspective} \label{per:differential-forms-as-functionals} \hlt{Forms as Functionals}\\
+The notation $\int f\,dx$ treats $dx$ as directed coordinate variation. Differential forms make this precise: a $1$-form such as $f\,dx+g\,dy$ assigns a number to an oriented path; $dx$ records net $x$-variation, and $f\,dx$ weights it by $f$.
+\end{perspective}
+
+% Visual source: provided Differential Forms screenshot, Fig. 121; redrawn schematically as TikZ for Perspective \ref{per:differential-forms-as-functionals}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/forms_weighted_variation_paths.tikz}
+  \caption{$y\,dx$ records signed, $y$-weighted $x$-variation.}
+  \label{fig:forms-weighted-variation-paths}
+\end{figure}
 
 \begin{definition} \label{def:forms-manifolds-core-source-todo}\label{def:k-surfaces-and-differential-forms} \hlt{$k$-Surfaces and Differential Forms}\\
 Let $E\subseteq\R^n$ be open. A \hlt{$k$-surface} in $E$ is a $C^1$ map $\Phi:D\to E$ from a compact \hlt{parameter domain} $D\subseteq\R^k$, here a $k$-cell or the simplex $Q^k$ of Definition \ref{def:support-and-compact-support-integral}.\\
@@ -12,6 +26,10 @@ For compact $D$, $C^r$ means extension to an open neighborhood of $D$.\\
 A \hlt{$k$-form} in $E$, $k\geq1$, is $\omega=\sum a_{i_1\cdots i_k}(\x)\,dx_{i_1}\wedge\cdots\wedge dx_{i_k}$, with continuous real coefficients on $E$, and assigns to each $k$-surface $\Phi$ the number $\int_D \sum a_{i_1\cdots i_k}(\Phi(\mathbf{u})) \frac{\partial(x_{i_1},\ldots,x_{i_k})}{\partial(u_1,\ldots,u_k)}\,d\mathbf{u}$.\\
 A $0$-form is a continuous function; a form is $C^r$ if all coefficients are $C^r$.
 \end{definition}
+
+\begin{remark} \label{rem:parametrized-cells-not-images} \hlt{Parametrized Cells, Not Just Images}\\
+Parametrizations may fail to be injective or regular. Forms therefore act on parametrized cells, not just images; this matters for orientation, multiplicity, and cancellation.
+\end{remark}
 
 \begin{proposition} \label{prop:basic-forms-standard-presentation} \hlt{Basic Forms and Standard Presentation}\\
 Swapping neighboring factors in $dx_{i_1}\wedge\cdots\wedge dx_{i_k}$ changes sign, and repeated indices give $0$. For an increasing $k$-index $I=(i_1,\ldots,i_k)$, write $dx_I\defeq dx_{i_1}\wedge\cdots\wedge dx_{i_k}$.\\
@@ -23,6 +41,16 @@ For uniqueness, suppose $\omega=\sum_I b_I(\x)\,dx_I$ is a zero $k$-form in stan
 \hlt{Key Insight}: Standard presentation removes ordered-index redundancy.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:forms-reparametrization-naturality} \hlt{Naturality Under Reparametrization}\\
+Let $\Phi:D\to E\subseteq\R^n$ be a $C^1$ $k$-surface and let $R:D'\to D$ be a $C^1$ diffeomorphism.\\
+For every $k$-form $\omega$, $\int_{\Phi\circ R}\omega=\operatorname{sgn}(\det DR)\int_{\Phi}\omega$, with constant sign on $D'$.
+\begin{proof}
+It suffices to take $\omega=f\,dx_I$. By Theorem \ref{thm:cauchy-binet-minors}, the relevant minor of $D(\Phi\circ R)$ contributes the corresponding minor of $D\Phi$ times $\det DR$. Change of variables (Theorem \ref{thm:change-of-variables-rk}) cancels $\abs{\det DR}$ and leaves $\operatorname{sgn}(\det DR)$; linearity handles general forms.\\
+\hlt{Structural Commentary}: Reparametrization changes coordinates, not the oriented cell.\\
+\hlt{Key Insight}: The same determinant sign controls orientation and the sign of the form integral.
+\end{proof}
+\end{theorem}
 
 \begin{definition} \label{def:wedge-product-and-exterior-derivative} \hlt{Product and Exterior Derivative}\\
 For basic forms, define $dx_I\wedge dx_J$ by concatenating indices and reducing to standard presentation by Proposition \ref{prop:basic-forms-standard-presentation}; extend bilinearly. For a $C^1$ $0$-form $f$, set $df\defeq\sum\limits_{i=1}^{n}(D_if)(\x)\,dx_i$.\\
@@ -46,6 +74,16 @@ Let $T:E\subseteq\R^n\to V\subseteq\R^m$ be $C^1$, with $T=(t_1,\ldots,t_m)$. Fo
 define its \hlt{pullback} by $\omega_T\defeq T^\ast\omega\defeq \sum\limits_I b_I(T(\x))\,dt_{i_1}\wedge\cdots\wedge dt_{i_k}$, and $dt_i\defeq\sum\limits_{j=1}^{n}(D_jt_i)(\x)\,dx_j$.
 \end{definition}
 
+Pullback is the differential-form analogue of the dual map in Definition \ref{def:dual-map}: cells move forward by composition with $T$, while forms move backward so they can be evaluated before or after that forward motion.
+
+% Visual source: provided Differential Forms screenshot, Fig. 125; redrawn schematically as TikZ for Definition \ref{def:pullback-of-differential-form}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/forms_pushforward_pullback_duality.tikz}
+  \caption{Cells push forward with $T$; forms pull back with $T^\ast$, so $T^\ast\alpha(\varphi)=\alpha(T_\ast\varphi)$.}
+  \label{fig:forms-pushforward-pullback-duality}
+\end{figure}
+
 \begin{theorem} \label{thm:pullback-basic-laws} \hlt{Pullback Commutes with the Basic Operations}\\
 With $T:E\to V$ as in Definition \ref{def:pullback-of-differential-form},
 \begin{enumerate}[label=(\roman*)]
@@ -64,7 +102,7 @@ Moreover, if $\Phi$ is a $k$-surface in $E$ and $\omega$ is a $k$-form in $V$, t
 \item Let $\omega=\sum_I b_I\,dy_I$. Since $d(b_I\circ T)=(db_I)_T$ (Theorem \ref{thm:chain-rule-several-variables}) and $d(dt_i)=d^2t_i=0$, $d(\omega_T)=(d\omega)_T$.
 \item If $S=(s_1,\ldots,s_p)$, both $(\omega_S)_T$ and $\omega_{S\circ T}$ replace $dz_q$ by $d(s_q\circ T)$, by the chain rule.
 \end{enumerate}
-For the integral identity, write $\Phi:D\to E$. The defining integral over $D$ gives both sides the same integrand; equality of the Jacobian factors is the determinant chain rule from Theorems \ref{thm:chain-rule-several-variables} and \ref{thm:determinant-basic-laws}.\\
+For the integral identity, expand both sides over $D$; the Jacobian minors agree by Theorem \ref{thm:cauchy-binet-minors}, since $D(T\circ\Phi)=DT(\Phi)D\Phi$.\\
 \hlt{Structural Commentary}: Pullback translates forms before integration.\\
 \hlt{Key Insight}: Forms are defined so that composition of parameterizations becomes an algebraic substitution.
 \end{proof}
@@ -80,7 +118,7 @@ For $k\geq1$, define $\partial_{\mathrm{ch}}[\mathbf{p}_0,\ldots,\mathbf{p}_k] \
 If $\Psi$ is a $C^2$ $k$-chain in open $V\subseteq\R^m$ and $\omega$ is a $C^1$ $(k-1)$-form in $V$, then $\int_{\Psi}d\omega=\int_{\partial_{\mathrm{ch}}\Psi}\omega$.
 \begin{proof}
 By linearity, take $\Psi=\Phi=T\circ\sigma$, where $\sigma$ is the standard oriented $k$-simplex.\\
-By Theorem \ref{thm:pullback-basic-laws}, $\int_{\Phi}d\omega =\int_{\sigma}(d\omega)_T =\int_{\sigma}d(\omega_T)$; and $\int_{\partial_{\mathrm{ch}}\Phi}\omega =\int_{\partial_{\mathrm{ch}}\sigma}\omega_T$, so it remains to prove the formula on $\sigma$.\\
+By Theorem \ref{thm:pullback-basic-laws}, $\int_{\Phi}d\omega =\int_{\sigma}(d\omega)_T =\int_{\sigma}d(\omega_T)$; and $\int_{\partial_{\mathrm{ch}}\Phi}\omega =\int_{\partial_{\mathrm{ch}}\sigma}\omega_T$, remains to prove formula on $\sigma$.\\
 By linearity, reduce to $\lambda=f\,dx_1\wedge\cdots\wedge\widehat{dx_r}\wedge\cdots\wedge dx_k$.\\
 The boundary formula in Definition \ref{def:affine-chains-and-boundaries} leaves only the two faces in the $x_r$ direction, and the resulting identity is the one-variable fundamental theorem of calculus inside the iterated integral.\\
 \hlt{Structural Commentary}: Pullback reduces Stokes' theorem to a computation on the standard simplex.\\
@@ -92,6 +130,12 @@ The boundary formula in Definition \ref{def:affine-chains-and-boundaries} leaves
 A $k$-form $\omega$ in $E$ is \hlt{exact} if $\omega=d\lambda$ for some $(k-1)$-form $\lambda$ in $E$, and \hlt{closed} if $\omega$ is $C^1$ with $d\omega=0$.\\
 By Theorem \ref{thm:exterior-derivative-basic-laws}, exact $C^1$ forms are closed.
 \end{definition}
+
+\begin{perspective} \label{per:closed-exact-local-global} \hlt{Closed Is Local, Exact Is Global}\\
+Exact $\Rightarrow$ closed is just $d^2=0$; the converse depends on the domain.\\
+On $\R^2\setminus\{\ze\}$ the standard warning example is $\omega=\frac{-y}{x^2+y^2}\,dx+\frac{x}{x^2+y^2}\,dy$, which is closed but not exact.\\
+Holes can obstruct global antiderivatives even when local derivative tests vanish.
+\end{perspective}
 
 \begin{theorem} \label{thm:poincare-lemma-convex-rudin} \hlt{Poincare Lemma on Convex Sets}\\
 If $E\subseteq\R^n$ is convex and open, then every closed $C^1$ $k$-form in $E$, $k\geq1$, is exact.\\
