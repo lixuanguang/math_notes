@@ -7,8 +7,11 @@
 % Supplementary screenshot source: Ross Ch.2, Secs. 11--12 supports subsequences, selection maps, subsequential limits, Bolzano--Weierstrass, and limsup/liminf as extremal subsequential limits.
 % Supplementary screenshot source: Grinberg Ch.17--18 pages on divergence to infinity, subsequential limits, upper/lower limits, pinching, and special sequence limits.
 % Supplementary screenshot source: provided Pugh Ch.2 pages support metric-space convergence, subsequences, Cauchy sequences, completeness of Euclidean space, a noncomplete rational metric example, and the Cauchy-sequence construction of completions.
+% Internal dependency note: discrete-metric and coordinate-metric convergence facts below are immediate consequences of Definition \ref{def:metric-space} and the coordinate metrics in Example \ref{ex:coordinate-norm-metrics-rk}; expand Tao II Ch.1 sequence coverage only when those pages are supplied.
 % Supplementary screenshot source: provided Pugh Ch.4, Sec. 5 supports the contraction picture and its later fixed-point use in ODE/Picard iteration.
+% Source-map note: Tao II Ch.6 is mapped in the several-variable calculus source coverage for fixed-point and inverse-function applications; this subsection keeps only the reusable contraction tool.
 % Visual note: the tail-diameter schematic below illustrates Proposition \ref{prop:cauchy-tail-diameters}; it does not add new source material.
+% Additional screenshot source: provided Tao I Ch.1, Example 1.2.3 motivates treating sequence limits as hypotheses, not as formal symbols that can always be shifted or cancelled.
 % Sources mapped: Rudin Ch.3; Abbott Ch.2; Ross Ch.2; Tao I Ch.6; Grinberg Ch.14-18; Pugh Ch.4.5 for contraction applications.
 % TODO(source pages unavailable): Add non-Rudin sequence material not covered by the provided Abbott/Ross/Grinberg screenshots only after pages are provided.
 
@@ -55,6 +58,21 @@ Let $(p_n)$ be a sequence in a metric space $X$.
 \end{proof}
 \end{theorem}
 
+\begin{proposition} \label{prop:discrete-metric-convergence-eventually-constant} \hlt{Discrete-Metric Convergence}\\
+Let $X$ carry the discrete metric $d(x,y)=0$ if $x=y$ and $d(x,y)=1$ if $x\neq y$.\\
+For $(p_n)\subset X$ and $p\in X$, $p_n\to p$ if and only if $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n=p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $p_n\to p$. For $\varepsilon=1/2$, choose $N\in\N$ such that $n\geq N\Longrightarrow d(p_n,p)<1/2$.\\
+Since $d$ takes only the values $0,1$, $d(p_n,p)=0$, hence $p_n=p$ for all $n\geq N$.
+\item[$(\Leftarrow)$] Suppose $\exists N\in\N$ s.t. $n\geq N\Longrightarrow p_n=p$. Then $\forall \varepsilon>0$, $n\geq N$ gives $d(p_n,p)=0<\varepsilon$, so $p_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: The discrete metric has no room for distinct points to approach one another.\\
+\hlt{Key Insight}: In the discrete metric, $d(x,y)<1\Longleftrightarrow x=y$.
+\end{proof}
+\end{proposition}
+
 \begin{theorem} \label{thm:complex-sequence-limit-algebra} \hlt{Limit Algebra for Complex Sequences}\\
 Suppose $(s_n)$ and $(t_n)$ are complex sequences with $s_n\to s$ and $t_n\to t$. Then, for every $c\in\C$,
 \begin{enumerate}[label=(\roman*)]
@@ -93,6 +111,11 @@ The algebraic conclusions follow coordinatewise from Theorem \ref{thm:complex-se
 \hlt{Key Insight}: The norm packages finitely many coordinate estimates into one estimate.
 \end{proof}
 \end{theorem}
+
+\begin{remark} \label{rem:coordinate-metric-convergence-equivalence} \hlt{Coordinate Metrics Give the Same Limits}\\
+For $k\in\N$ and $x,y\in\R^k$, set $d_1(x,y)=\sum\limits_{j=1}^k\abs{x_j-y_j}$, $d_2(x,y)=\big(\sum\limits_{j=1}^k\abs{x_j-y_j}^2\big)^{1/2}$,  $d_\infty(x,y)=\max\limits_{1\leq j\leq k}\abs{x_j-y_j}$.\\
+Since $d_\infty\leq d_2\leq d_1\leq k d_\infty$, these have same convergent sequences, equivalently same coordinatewise criterion.
+\end{remark}
 
 \begin{definition} \label{def:subsequence-and-subsequential-limit} \hlt{Subsequences and Subsequential Limits}\\
 Let $(p_n)$ be a sequence. If $n_1<n_2<n_3<\cdots$ is a strictly increasing sequence of positive integers, then $(p_{n_k})$ is a \hlt{subsequence} of $(p_n)$. If $p_{n_k}\to p$, then $p$ is a \hlt{subsequential limit} of $(p_n)$.
@@ -204,23 +227,40 @@ If $x,y\in I$ with $x\neq y$, then $\diam K_n\geq d(x,y)>0$ for all $n$, contrad
 \end{proof}
 \end{theorem}
 
+\begin{lemma} \label{lem:cauchy-sequence-with-convergent-subsequence} \hlt{A Cauchy Sequence with a Convergent Subsequence Converges}\\
+Let $(p_n)$ be a Cauchy sequence in a metric space $X$. If some subsequence $(p_{n_j})$ converges to $p\in X$, then $p_n\to p$.
+\begin{proof}
+Given $\varepsilon>0$, choose $N_0$ so that $m,n\geq N_0$ implies $d(p_m,p_n)<\varepsilon/2$. Choose $j$ with $n_j\geq N_0$ and $d(p_{n_j},p)<\varepsilon/2$. Then for every $n\geq N_0$, $d(p_n,p)\leq d(p_n,p_{n_j})+d(p_{n_j},p)<\varepsilon$.\\
+\hlt{Structural Commentary}: The Cauchy tail follows any convergent subsequence to the same limit.\\
+\hlt{Key Insight}: Mutual closeness plus one convergent thread forces the whole tail to converge.
+\end{proof}
+\end{lemma}
+
 \begin{definition} \label{def:complete-metric-space} \hlt{Complete Metric Space}\\
 A metric space $X$ is \hlt{complete} if every Cauchy sequence in $X$ converges to a point of $X$.\\
 Compact metric spaces and $\R^k$ are complete (by Theorem \ref{thm:cauchy-convergence-criterion}).
 \end{definition}
 
-\begin{proposition} \label{prop:basic-completeness-consequences} \hlt{Closed Subsets of Complete Spaces}\\
-Every closed subset of a complete metric space is complete.
+\begin{proposition} \label{prop:basic-completeness-consequences} \hlt{Completeness and Closed Subspaces}\\
+Let $X$ be a complete metric space and let $E\subseteq X$ carry the inherited metric.\\
+Then $E$ is complete if and only if $E$ is closed in $X$.
 \begin{proof}
-Let $E\subseteq X$ be closed, $X$ complete. If $(p_n)\subseteq E$ is Cauchy, then $p_n\to p\in X$; since $E$ is closed, $p\in E$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is complete. If $p\in\overline{E}$, choose $p_n\in E$ with $d(p_n,p)<1/n$.\\
+Then $p_n\to p$ in $X$, so $(p_n)$ is Cauchy in $E$ and hence $p_n\to q$ for some $q\in E$. Uniqueness of limits in $X$ gives $p=q\in E$; thus $\overline{E}\subseteq E$, so $E$ is closed.
+\item[$(\Leftarrow)$] Suppose $E$ is closed. If $(p_n)\subseteq E$ is Cauchy, completeness of $X$ gives $p_n\to p\in X$.\\
+Since $E$ is closed, $p\in E$, so $E$ is complete.
+\end{enumerate}
 \hlt{Structural Commentary}: Completeness gives the limit in $X$; closedness keeps it in $E$.\\
-\hlt{Key Insight}: Closed subspaces inherit limits of their own Cauchy sequences.
+\hlt{Key Insight}: In a complete ambient space, $E$ is complete exactly when $\overline{E}=E$.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:contraction-mapping} \hlt{Contraction}\\
 Let $X$ be a metric space with metric $d$.\\
-A map $\varphi:X\to X$ is a \hlt{contraction} if $\exists$ a constant $0\leq c<1$ such that $d(\varphi(x),\varphi(y))\leq c\,d(x,y)$ for $x,y\in X$.
+A map $\varphi:X\to X$ is a \hlt{contraction} if $\exists$ a constant $0\leq c<1$ such that $d(\varphi(x),\varphi(y))\leq c\,d(x,y)$ for $x,y\in X$.\\
+\hlt{Structural Commentary}: Bound $c<1$ excludes nonexpansive maps and is the hypothesis in Theorem \ref{thm:contraction-principle}.
 \end{definition}
 
 % Visual source: provided Pugh Ch.4, Fig. 100 contraction schematic; redrawn as TikZ for Theorem \ref{thm:contraction-principle}.
