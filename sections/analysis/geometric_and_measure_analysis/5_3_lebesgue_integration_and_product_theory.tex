@@ -2,10 +2,11 @@
 
 % Source pages provided: Rudin Ch.11, Secs. 11.19--11.45, including simple functions, Lebesgue integration, null-set invariance, monotone convergence, Fatou's theorem, dominated convergence, comparison with the Riemann integral, complex integration, L^2, Parseval, Riesz--Fischer, and complete orthonormal sets.
 % Supplementary screenshot source: provided Pugh Ch.3, Sec. 2 pages support the zero-set/oscillation proof idea for the Riemann--Lebesgue criterion.
+% Supplementary screenshot source: provided Pugh Ch.6, Secs. 5--6 support measurable products, zero slices, undergraph intuition for nonnegative Lebesgue integrals, convergence-theorem pictures, and the vertical-translation proof idea for additivity.
 % Sources mapped: Rudin Ch.11.5-11.9; Pugh Ch.6.6-6.10; Tao II Ch.8.
-% TODO(source pages unavailable): Add product-measure and Fubini/Tonelli material only after source pages are provided.
+% TODO(source pages unavailable): Add Fubini/Tonelli, Vitali covering, density-point, and Lebesgue differentiation material only after source pages are provided.
 
-After measurability is fixed in Definition \ref{def:measure-space-and-measurable-functions}, build Lebesgue integral from simple functions, extend it through suprema and signs, and end with null sets, convergence theorems, and $L^2$ geometry linked to Definition \ref{def:inner-product-space}.
+With measurability fixed, this subsection builds the integral from simple functions, then treats convergence, products, slices, and $L^2$ geometry.
 
 \begin{definition} \label{def:lebesgue-product-core-source-todo}\label{def:simple-functions-and-lebesgue-integral} \hlt{Simple Functions and the Lebesgue Integral}\\
 Let $(X,\mathcal{M},\mu)$ be measure space. For $E\subseteq X$, set $\mathbf{1}_E(x)\defeq
@@ -20,6 +21,19 @@ For measurable real $f$, put $f^+=\max(f,0)$ and $f^-=-\min(f,0)$.\\
 If at least one of $\int_E f^+\,d\mu,\int_E f^-\,d\mu$ is finite, set $\int_E f\,d\mu\defeq\int_E f^+\,d\mu-\int_E f^-\,d\mu$.\\
 If both are finite, $f$ is \hlt{Lebesgue integrable} on $E$, written $f\in\mathscr{L}^1(\mu)$ on $E$.
 \end{definition}
+
+\begin{perspective} \label{per:undergraph-geometric-integral} \hlt{Undergraph Picture for Nonnegative Functions}\\
+For $f:\R\to[0,+\infty)$, set $\mathcal{U}f=\{(x,y)\in\R\times[0,+\infty):0\leq y<f(x)\}$.\\
+Geometrically, $\int f=m(\mathcal{U}f)$; formally, Definition \ref{def:simple-functions-and-lebesgue-integral} defines the integral.
+\end{perspective}
+
+% Visual source: provided Pugh Ch.6, Sec. 6, Fig. 143; redrawn schematically for Perspective \ref{per:undergraph-geometric-integral}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/lebesgue_undergraph.tikz}
+  \caption{The integral of $f\geq0$ is modeled by the measure of its undergraph.}
+  \label{fig:lebesgue-undergraph}
+\end{figure}
 
 \begin{theorem} \label{thm:simple-approximation-measurable-functions} \hlt{Approximation by Simple Functions}\\
 Every real $f$ on $X$ is the pointwise limit of simple functions $s_n$.\\
@@ -108,6 +122,15 @@ Fatou applied to $g-f_n$ gives $\limsup\limits_n\int_E f_n\,d\mu\leq\int_E f\,d\
 \end{proof}
 \end{theorem}
 
+\begin{proposition} \label{prop:lebesgue-integral-linearity} \hlt{Linearity of the Lebesgue Integral}\\
+If $f,g\in\mathscr{L}^1(\mu)$ on $E$ and $a,b\in\R$, then $af+bg\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(af+bg)\,d\mu=a\int_Ef\,d\mu+b\int_Eg\,d\mu$.
+\begin{proof}
+For $f,g\geq0$, choose simple $s_n\uparrow f$ and $t_n\uparrow g$. Simple-function additivity gives the formula for $s_n+t_n$, and monotone convergence passes to $f+g$. The signed case follows by positive--negative parts and Proposition \ref{prop:basic-lebesgue-integral-properties}; scalar multiplication is included there.\\
+\hlt{Structural Commentary}: Simple additivity plus monotone convergence gives linearity.\\
+\hlt{Key Insight}: Reduce additivity to simple functions before splitting signs.
+\end{proof}
+\end{proposition}
+
 \begin{theorem} \label{thm:riemann-lebesgue-comparison} \hlt{Comparison with the Riemann Integral}\\
 On $[a,b]$ with Lebesgue measure $\mu$, $f\in\mathcal{R}$ implies $f\in\mathscr{L}^1(\mu)$ and the integrals agree. If $f$ is bounded with discontinuity set $D$, then $f\in\mathcal{R}\iff\mu(D)=0$.
 \begin{proof}
@@ -132,6 +155,46 @@ Hence $U(P,f)-L(P,f)<\varepsilon$, and Theorem \ref{thm:riemann-stieltjes-integr
 \begin{perspective} \label{per:lebesgue-criterion-riemann-roadmap} \hlt{Lebesgue's Criterion as a Roadmap}\\
 Theorem \ref{thm:riemann-lebesgue-comparison} gives the threshold: a bounded function is Riemann integrable exactly when its discontinuities are null. Finite, countable, and Cantor-type exceptions are allowed; Dirichlet's function fails.
 \end{perspective}
+
+% TODO(source dependency): Add any sharper undergraph-boundary comparison only
+% after the relevant source pages and envelope definitions are supplied.
+
+\begin{definition} \label{def:lebesgue-product-slices} \hlt{Products and Slices}\\
+For $A\subseteq\R^n$, $B\subseteq\R^k$, set $A\times B\subseteq\R^{n+k}$.\\
+For $E\subseteq\R^n\times\R^k$ define $E_x\defeq\{y\in\R^k:(x,y)\in E\}$ as \hlt{$x$-slice}, and  $E^y\defeq\{x\in\R^n:(x,y)\in E\}$ as \hlt{$y$-slice}.\\
+For $f:E\to\R$, write $f_x(y)=f^y(x)\defeq f(x,y)$ where defined.
+\end{definition}
+
+\begin{theorem} \label{thm:measurable-products-product-measure} \hlt{Measurable Products}\\
+If $A\subseteq\R^n$, $B\subseteq\R^k$ Lebesgue measurable, then $A\times B$ measurable, $m(A\times B)=m(A)m(B)$; $0\cdot\infty=\infty\cdot0=0$.
+\begin{proof}
+For boxes $I,J$, $m(I\times J)=m(I)m(J)$; disjoint box decompositions extend this to open sets.\\
+First assume $A,B$ are bounded with finite measure.\\
+By regularity choose closed $F_A\subseteq A$, $F_B\subseteq B$ and open $G_A\supseteq A$, $G_B\supseteq B$ such that $m(G_A\setminus F_A),\ m(G_B\setminus F_B)<\varepsilon$.\\
+Then $F_A\times F_B\subseteq A\times B\subseteq G_A\times G_B$, and the open/closed product formula squeezes $m(A\times B)$ to $m(A)m(B)$.\\
+For general $A,B$, set $A_N=A\cap[-N,N]^n$ and $B_N=B\cap[-N,N]^k$. Since $A_N\times B_N\uparrow A\times B$, continuity from below gives $m(A\times B)=\lim_N m(A_N\times B_N)=\lim_N m(A_N)m(B_N)=m(A)m(B)$ with $0\cdot\infty=\infty\cdot0=0$.\\
+\hlt{Structural Commentary}: Product measure comes from boxes and regularity.\\
+\hlt{Key Insight}: Regularity turns rough measurable products into box products plus zero-set errors.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:zero-slices-null-set-criterion} \hlt{Zero Slices}\\
+If $E\subseteq\R^n\times\R^k$ is Lebesgue measurable, then $E$ is null iff $E_x$ is null for a.e. $x$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $m(E)=0$, cover $E$ by an open $W$ with small measure.\\
+For $X_\alpha(W)=\{x:m(W_x)>\alpha\}$, $m(W)\geq \alpha m(X_\alpha(W))$; letting $m(W)\to0$ gives $m(E_x)=0$ for a.e. $x$.
+\item[$(\Leftarrow)$] Remove the exceptional null base so every slice is null. For compact $K\subseteq E$, cover each $K_x$ by a small-measure slice neighborhood; compactness gives finitely many product neighborhoods covering $K$, whose total measure is arbitrarily small by Theorem \ref{thm:measurable-products-product-measure}. Thus $m(K)=0$, hence $m(E)=0$ by regularity.
+\end{enumerate}
+\hlt{Structural Commentary}: Nullity can be checked fiberwise after removing an exceptional base set.\\
+\hlt{Key Insight}: Product measure turns small slice covers into small total measure.
+\end{proof}
+\end{theorem}
+
+% TODO(source pages unavailable): Add Cavalieri/Fubini--Tonelli,
+% Vitali/density-point, and Lebesgue differentiation material only after
+% supporting source pages are supplied.
 
 \begin{definition} \label{def:complex-integrable-and-l2} \hlt{Complex Integrals and $L^2$}\\
 For $f=u+iv$, measurability means measurability of $u$ and $v$.\\
@@ -184,7 +247,8 @@ Schwarz passes coefficients to the limit.
 \item \hlt{Ignore null sets}: if $f\sim_{\mathrm{a.e.}}g$ on $E$, replace $f$ by $g$ inside integrals over measurable $A\subseteq E$.
 \item \hlt{Split signs}: use $f=f^+-f^-$ and $h=u+iv$.
 \item \hlt{Exchange limits}: reduce Fatou and dominated convergence to $0\leq f_n\uparrow f$.
+\item \hlt{Slice}: prove boxes first; use regularity and null errors for products and zero-slice tests.
 \end{enumerate}
-TODO(source): add product-measure patterns once Fubini/Tonelli coverage is sourced.\\
-\hlt{Key Insight}: Reduce to simple functions, monotone convergence, and null sets.
+% TODO(source): add Fubini/Tonelli patterns once that coverage is sourced.\\
+\hlt{Key Insight}: Reduce to simple functions, monotone convergence, null sets, and product boxes.
 \end{method}
