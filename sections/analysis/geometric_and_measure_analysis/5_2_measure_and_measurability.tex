@@ -3,10 +3,11 @@
 % Source pages provided: Rudin Ch.11, Secs. 11.1--11.18, including rings and sigma-rings, additive and countably additive set functions, elementary subsets of \R^p, regularity, outer measure, measurable sets, measure spaces, measurable functions, and closure of measurable functions under pointwise and continuous operations.
 % Supplementary screenshot source: provided Pugh Ch.3, Sec. 2 pages support the real-line zero-set covering formulation used in the Riemann--Lebesgue criterion.
 % Supplementary screenshot source: provided Pugh Ch.6, Secs. 1--4 support Lebesgue outer measure by open interval/box covers, zero sets, Caratheodory clean-division measurability, abstract outer measures, measure continuity, regularity sandwiches, and affine-motion invariance.
+% Supplementary screenshot source: provided Tao II Ch.7 pages support the Lebesgue-measure wish list, open-box volume, countable box-cover outer measure, the failure of outer-measure additivity before measurability is imposed, Caratheodory measurability, countable box decompositions of open sets, and Euclidean-target measurable functions.
 % Sources mapped: Rudin Ch.11.1-11.4; Pugh Ch.6.1-6.5; Tao II Ch.7; Abbott Ch.7.6 as motivation.
-% TODO(source pages unavailable): Add remaining non-Rudin measure-theory material not covered by the supplied Pugh screenshots only after pages are provided.
+% TODO(source pages unavailable): Add remaining non-Rudin measure-theory material not covered by the supplied Pugh/Tao screenshots only after pages are provided.
 
-This subsection builds measurable sets before measurable integrals: set algebra, countable closure, Lebesgue measure, then measurable-function closure. Geometrically, outer measure covers from outside; measurability splits every test set without losing measure.
+This subsection builds measurable sets before measurable integrals: set algebra, countable closure, Lebesgue measure, then measurable functions. Outer measure covers from outside; measurability splits test sets without losing measure.
 
 \begin{definition} \label{def:measure-measurability-core-source-todo}\label{def:ring-sigma-ring-set-function} \hlt{Rings, $\sigma$-Rings, and Set Functions}\\
 A \hlt{ring} of sets is closed under finite unions and relative complements.\\
@@ -58,12 +59,25 @@ If $A=I_1\cup\cdots\cup I_n$ is disjoint, set $m(A)\defeq m(I_1)+\cdots+m(I_n)$.
 A nonnegative additive set function $\mu$ on $\mathcal{E}$ is \hlt{regular} if for every $A\in\mathcal{E}$ and $\varepsilon>0$ there are elementary sets $F\subseteq A\subseteq G$, with $F$ closed and $G$ open, such that $\mu(G)-\varepsilon\leq\mu(A)\leq\mu(F)+\varepsilon$. The source verifies that $\mathcal{E}$ is a ring, every elementary set has a disjoint interval decomposition, and $m$ is well defined, additive, and regular.
 \end{definition}
 
+\begin{perspective} \label{per:box-volume-and-linear-algebra} \hlt{Box Volume and Linear Algebra}\\
+For a box $B=\prod_i(a_i,b_i)$ or $\prod_i[a_i,b_i]$, $m(B)=\prod_i(b_i-a_i)$, the diagonal case of determinant volume scaling.\\
+Measure extends this product rule beyond boxes.\\
+\hlt{Key Insight}: Lebesgue measure starts from determinant-style coordinate volume.
+\end{perspective}
+
 \begin{definition} \label{def:outer-measure-and-rudin-measurable-sets} \hlt{Outer Measure and $\mu$-Measurable Sets}\\
 Let $\mu$ be additive, regular, nonnegative, and finite on $\mathcal{E}$.\\
 For $E\subseteq\R^p$, define $\mu^\ast(E)\defeq\inf\sum\limits_{n=1}^{\infty}\mu(A_n)$, where infimum is over open elementary covers $E\subseteq\bigcup\limits_{n=1}^{\infty}A_n$.\\
 For $A,B\subseteq\R^p$, set $A\triangle B\defeq(A\setminus B)\cup(B\setminus A)$ and $d_\mu(A,B)\defeq\mu^\ast(A\triangle B)$.\\
 A set is \hlt{finitely $\mu$-measurable} if it is a $d_\mu$-limit of elementary sets.\\
 It is \hlt{$\mu$-measurable} if it is a countable union of such sets; denote the classes by $\mathcal{M}_F(\mu)$ and $\mathcal{M}(\mu)$.
+\end{definition}
+
+% Supplementary source: provided Tao II Ch.7, Sec. 7.2 pages define open boxes, their volumes, and the countable box-cover outer measure.
+\begin{definition} \label{def:tao-box-cover-outer-measure} \hlt{Box-Cover Outer Measure Model}\\
+An \hlt{open box} in $\R^n$ is $B=\prod\limits_{i=1}^{n}(a_i,b_i)=\{(x_1,\ldots,x_n)\in\R^n:x_i\in(a_i,b_i) \ \forall i \}$, $b_i\geq a_i$, $\operatorname{vol}_n(B)\defeq\prod\limits_{i=1}^{n}(b_i-a_i)$.\\
+For $\Omega\subseteq\R^n$, the \hlt{box-cover outer measure} is $m_n^\ast(\Omega)\defeq\inf\left\{\sum_{j\in J}\operatorname{vol}_n(B_j):(B_j)_{j\in J}\text{ covers }\Omega,\ J\text{ at most countable}\right\}$.\\
+This is Definition \ref{def:outer-measure-and-rudin-measurable-sets} for Lebesgue box volume.
 \end{definition}
 
 % Visual source: provided Pugh Ch.6, Sec. 1, Fig. 136; redrawn schematically for the geometric reading of Definition \ref{def:outer-measure-and-rudin-measurable-sets}.
@@ -78,6 +92,22 @@ It is \hlt{$\mu$-measurable} if it is a countable union of such sets; denote the
 Outer measure covers $A$ from outside; $d_\mu(A,B)=\mu^\ast(A\triangle B)$ measures closeness.\\
 \hlt{Key Insight}: Countable subadditivity collects near-optimal covers.
 \end{perspective}
+
+\begin{method} \label{meth:lebesgue-measure-construction} \hlt{Lebesgue Measure Construction}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Cover from outside}\\
+For $A\subseteq\R^n$, define $m_n^\ast(A)\defeq\inf\left\{\sum_{j\in J}\operatorname{vol}_n(B_j):(B_j)_{j\in J}\text{ covers }A,\ J\text{ at most countable}\right\}$.\\
+This is defined for every set, but it is only countably subadditive in general.
+\item \hlt{Keep the clean splitters}\\
+Call $A$ measurable when every test set $X\subseteq\R^n$ splits additively: $m_n^\ast(X)=m_n^\ast(X\cap A)+m_n^\ast(X\cap A^c)$.\\
+These measurable sets form a $\sigma$-algebra.
+\item \hlt{Restrict the outer measure}\\
+Define Lebesgue measure on measurable sets by $m(A)\defeq m_n^\ast(A)$.\\
+On this restricted class, $m$ is countably additive.
+\end{enumerate}
+\hlt{Key Insight}: Outer measure sizes all sets; clean splitting restores additivity.
+\end{method}
 
 \begin{theorem} \label{thm:measure-measurability-main-source-todo}\label{thm:rudin-measure-extension} \hlt{Extension to a Measure}\\
 Let $\mu$ be additive, regular, nonnegative, and finite on $\mathcal{E}$. Form $\mu^\ast$ from open elementary covers, set $d_\mu(A,B)=\mu^\ast(A\triangle B)$, and let $\mathcal{M}(\mu)$ be the countable unions of $d_\mu$-limits of elementary sets. Then:
@@ -138,6 +168,34 @@ Disjointizing reduces general countable unions to this case.\\
 \end{proof}
 \end{theorem}
 
+% Supplementary source: provided Tao II Ch.7, Lemma 7.4.10, adapted to the notation of this subsection.
+\begin{lemma} \label{lem:open-sets-countable-unions-rational-boxes} \hlt{Open Sets Are Countable Unions of Rational Boxes}\\
+Every open set $G\subseteq\R^n$ can be written as a finite or countable union of open boxes with rational endpoints.
+\begin{proof}
+The rational boxes are countable: each is determined by $2n$ rationals, and Corollary \ref{cor:rationals-countable} with Theorem \ref{thm:finite-tuples-over-countable-set-countable} makes finite rational tuples countable. Let $\Sigma$ be the rational boxes contained in $G$. Then $\bigcup_{B\in\Sigma}B\subseteq G$. If $\x\in G$, choose $r>0$ with $B_r(\x)\subseteq G$. By Corollary \ref{cor:rationals-and-irrationals-dense}, pick rationals $a_i,b_i$ satisfying $x_i-r/n<a_i<x_i<b_i<x_i+r/n$. Then $\x\in\prod_i(a_i,b_i)\subseteq B_r(\x)\subseteq G$, so $\x\in\bigcup_{B\in\Sigma}B$.\\
+\hlt{Structural Commentary}: Rational boxes give a countable Euclidean base.\\
+\hlt{Key Insight}: Openness supplies a ball; density of $\Q$ supplies rational box endpoints inside it.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:lebesgue-measure-basic-properties-checklist} \hlt{Lebesgue Measure Basic Properties}\\
+Let $\mathcal{L}^n$ be the Lebesgue measurable subsets of $\R^n$, let $\mathcal{B}(\R^n)$ be the Borel $\sigma$-algebra, and set $m=m_n^\ast|_{\mathcal{L}^n}$.\\
+Then $\mathcal{B}(\R^n)\subseteq\mathcal{L}^n$, and for $E,E_k\in\mathcal{L}^n$, $E^c$, $\bigcup\limits_{k=1}^{\infty}E_k$, $\bigcap\limits_{k=1}^{\infty}E_k\in\mathcal{L}^n$.\\
+For $E,F,E_k\in\mathcal{L}^n$ and $t\in\R^n$, $0\leq m(E)$, $E\subseteq F\Longrightarrow m(E)\leq m(F)$, and $m\!\left(\bigcup_{k=1}^{\infty}E_k\right)\leq\sum\limits_{k=1}^{\infty}m(E_k)$.\\
+Hence  $E_i\cap E_j=\emptyset\ (i\neq j)\Longrightarrow m\!\left(\bigsqcup\limits_{k=1}^{\infty}E_k\right)=\sum\limits_{k=1}^{\infty}m(E_k)$; $m([0,1]^n)=1$; $E+t\in\mathcal{L}^n$; and $m(E+t)=m(E)$.
+\begin{proof}
+Theorems \ref{thm:rudin-measure-extension} and \ref{thm:caratheodory-measurable-sets-sigma-algebra} make $\mathcal{L}^n$ a $\sigma$-algebra and make $m$ nonnegative and countably additive on it; monotonicity and subadditivity follow from the outer measure $m_n^\ast$. Open boxes are elementary, hence measurable, so Lemma \ref{lem:open-sets-countable-unions-rational-boxes} puts every open set in $\mathcal{L}^n$; therefore $\mathcal{B}(\R^n)=\sigma(\text{open sets})\subseteq\mathcal{L}^n$, and closed sets follow by complements. Definition \ref{def:tao-box-cover-outer-measure} gives $m([0,1]^n)=1$. Since box volume is translation invariant, translating covers gives $m_n^\ast(A+t)=m_n^\ast(A)$ for every $A\subseteq\R^n$; the Caratheodory equality is translation invariant, hence $E+t\in\mathcal{L}^n$ and $m(E+t)=m(E)$.\\
+\hlt{Structural Commentary}: The wish list is recovered only after restricting outer measure to measurable sets.\\
+\hlt{Key Insight}: The box-cover construction gives size; the measurable-set condition restores additivity.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:outer-measure-not-enough} \hlt{Why Not Measure Every Subset?}\\
+Vitali-type constructions show that $m_1^\ast$ cannot be additive on all subsets of $\R$: disjoint sets can violate countable additivity, and refinements can violate finite additivity.\\
+Measurability keeps only the clean splitters, where additivity survives.\\
+\hlt{Key Insight}: Outer measure exists for all sets, but measure is reserved for sets that split every test set cleanly.
+\end{perspective}
+
 \begin{corollary} \label{cor:measure-continuity-up-down} \hlt{Measure Continuity}\\
 Let $\mu$ be a measure. If $E_k\uparrow E$, then $\mu(E_k)\uparrow\mu(E)$. If $F_k\downarrow F$ and $\mu(F_1)<+\infty$, then $\mu(F_k)\downarrow\mu(F)$.
 \begin{proof}
@@ -180,15 +238,43 @@ Borel measurability tracks topology; Lebesgue measurability completes measure by
 \hlt{Key Insight}: Borel sets are topological; Lebesgue sets are complete.
 \end{perspective}
 
-% TODO(source dependency): Add nonmeasurable-set examples only after the
-% relevant source pages are supplied and translation invariance, density
-% points, and Steinhaus' theorem have been established locally.
+% TODO(source dependency): The supplied Tao II Ch.7 pages support the
+% outer-measure nonadditivity warning above. Add a full nonmeasurable-set
+% theorem only after a source page proves the measurability failure directly,
+% or after the local exercise chain has been developed.
 
 \begin{definition} \label{def:measure-space-and-measurable-functions} \hlt{Measure Spaces and Measurable Functions}\\
 A \hlt{measure space} is a set $X$ together with a $\sigma$-ring $\mathcal{M}$ of subsets of $X$ and a nonnegative countably additive set function $\mu$ on $\mathcal{M}$. If $X\in\mathcal{M}$, then $X$ is a \hlt{measurable space}.\\
 For $\bowtie\in\{>,\geq,<,\leq\}$, write $\{f\bowtie a\}\defeq\{x\in X:f(x)\bowtie a\}$.\\
 An extended-real-valued $f$ on $X$ is \hlt{measurable} if $\{f>a\}\in\mathcal{M}$ for every $a\in\R$.
 \end{definition}
+
+\begin{proposition} \label{prop:measurable-function-open-set-test} \hlt{Open-Set Test for Euclidean Targets}\\
+Let $\Omega\subseteq\R^n$ be Lebesgue measurable and let $f:\Omega\to\R^m$. The following tests are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f^{-1}(V)$ is measurable for every open $V\subseteq\R^m$;
+\item $f^{-1}(B)$ is measurable for every open box $B\subseteq\R^m$;
+\item every coordinate function $f_j:\Omega\to\R$ is measurable in the threshold-set sense of Definition \ref{def:measure-space-and-measurable-functions}.
+\end{enumerate}
+In particular, every continuous $f:\Omega\to\R^m$ is measurable.
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$. Open boxes are open.
+\item[$(ii)$]$\Rightarrow (i)$. By Lemma \ref{lem:open-sets-countable-unions-rational-boxes}, write $V=\bigcup_kB_k$ with rational boxes $B_k$.\\
+Then $f^{-1}(V)=\bigcup_kf^{-1}(B_k)$ is measurable.
+\item[$(ii)$]$\Rightarrow (iii)$. By the previous implication, $f^{-1}(U)$ is measurable for every open $U\subseteq\R^m$.\\
+Hence $\{f_j>a\}=f^{-1}(\{y:y_j>a\})$ is measurable.
+\item[$(iii)$]$\Rightarrow (ii)$. If $B=\prod_{j=1}^{m}(a_j,b_j)$, then $f^{-1}(B)=\bigcap\limits_{j=1}^{m}\bigl(\{f_j>a_j\}\cap\{f_j<b_j\}\bigr)$,\\
+where $\{f_j<b_j\}=\Omega\setminus\bigcap\limits_{\ell=1}^{\infty}\{f_j>b_j-1/\ell\}$. Thus each factor is measurable, hence so is $f^{-1}(B)$.
+\end{enumerate}
+If $f$ is continuous, Theorem \ref{thm:continuity-open-preimages} makes $f^{-1}(V)$ open relative to $\Omega$.\\
+By Theorem \ref{thm:relative-open-intersection-with-open-set}, it is $W\cap\Omega$ for some open $W\subseteq\R^n$, hence measurable by Theorem \ref{thm:lebesgue-measure-basic-properties-checklist}.\\
+\hlt{Structural Commentary}: Euclidean-valued measurability is just countable box algebra applied to inverse images.\\
+\hlt{Key Insight}: Open sets reduce to rational boxes; vector functions reduce to coordinate threshold tests.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:measurable-function-closure} \hlt{Closure Properties of Measurable Functions}\\
 Let $(X,\mathcal{M})$ be a measurable space.
@@ -219,7 +305,7 @@ Then $\{F(f,g)>a\}=\bigcup\limits_k\bigl(\{\alpha_k<f<\beta_k\}\cap\{\gamma_k<g<
 \item \hlt{Disjointize}. If $A_1\subseteq A_2\subseteq\cdots$, set $B_1=A_1$ and $B_n=A_n\setminus A_{n-1}$.\\
 Then $A_n=\bigcup\limits_{k=1}^nB_k$ and $\bigcup\limits_nA_n=\bigcup\limits_nB_n$ are disjoint decompositions.
 \item \hlt{Approximate}. Prove identities on $\mathcal{E}$; if $A_n\to A$ and $B_n\to B$ in $d_\mu(A,B)=\mu^\ast(A\triangle B)$, pass through the symmetric-difference estimates for $\cup,\cap,\setminus$.
-\item \hlt{Threshold}. To prove $f$ measurable, verify $\{f>a\}\in\mathcal{M}$ for all $a\in\R$; obtain the other threshold sets by countable unions, intersections, and complements.
+\item \hlt{Threshold}. To prove real-valued $f$ measurable, verify $\{f>a\}\in\mathcal{M}$ for all $a\in\R$; for Euclidean-valued maps, use Proposition \ref{prop:measurable-function-open-set-test}.
 \item \hlt{Topological bridge}. Use Theorem \ref{thm:continuity-open-preimages}: open inverse images reduce continuous constructions to countable unions of interval or rectangle preimages.
 \end{enumerate}
 \hlt{Key Insight}: Measure theory alternates between countable set algebra and approximation by elementary sets.
