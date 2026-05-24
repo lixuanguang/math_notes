@@ -3,8 +3,11 @@
 % Source pages provided: Rudin Ch.11, Secs. 11.19--11.45, including simple functions, Lebesgue integration, null-set invariance, monotone convergence, Fatou's theorem, dominated convergence, comparison with the Riemann integral, complex integration, L^2, Parseval, Riesz--Fischer, and complete orthonormal sets.
 % Supplementary screenshot source: provided Pugh Ch.3, Sec. 2 pages support the zero-set/oscillation proof idea for the Riemann--Lebesgue criterion.
 % Supplementary screenshot source: provided Pugh Ch.6, Secs. 5--6 support measurable products, zero slices, undergraph intuition for nonnegative Lebesgue integrals, convergence-theorem pictures, and the vertical-translation proof idea for additivity.
+% Supplementary screenshot source: provided Tao II Ch.7 opening pages motivate Lebesgue integration by first asking how to measure domains, and by contrasting Riemann integrability with the larger measurable-function class.
+% Supplementary screenshot source: provided Tao II Ch.8 pages support simple functions, characteristic functions, simple-function integration, nonnegative and absolutely integrable functions, monotone convergence, Fatou, dominated convergence, comparison with the Riemann integral, and the two-dimensional Fubini theorem.
+% Additional screenshot source: provided Tao I Ch.1, Example 1.2.9 motivates domination-type hypotheses before interchanging limits and integrals over noncompact domains.
 % Sources mapped: Rudin Ch.11.5-11.9; Pugh Ch.6.6-6.10; Tao II Ch.8.
-% TODO(source pages unavailable): Add Fubini/Tonelli, Vitali covering, density-point, and Lebesgue differentiation material only after source pages are provided.
+% TODO(source pages unavailable): Add Vitali covering, density-point, and Lebesgue differentiation material only after source pages are provided.
 
 With measurability fixed, this subsection builds the integral from simple functions, then treats convergence, products, slices, and $L^2$ geometry.
 
@@ -21,6 +24,8 @@ For measurable real $f$, put $f^+=\max(f,0)$ and $f^-=-\min(f,0)$.\\
 If at least one of $\int_E f^+\,d\mu,\int_E f^-\,d\mu$ is finite, set $\int_E f\,d\mu\defeq\int_E f^+\,d\mu-\int_E f^-\,d\mu$.\\
 If both are finite, $f$ is \hlt{Lebesgue integrable} on $E$, written $f\in\mathscr{L}^1(\mu)$ on $E$.
 \end{definition}
+
+Simple functions are finite linear combinations of indicators of measurable sets: coefficients carry size, while the level sets carry measurability.
 
 \begin{perspective} \label{per:undergraph-geometric-integral} \hlt{Undergraph Picture for Nonnegative Functions}\\
 For $f:\R\to[0,+\infty)$, set $\mathcal{U}f=\{(x,y)\in\R\times[0,+\infty):0\leq y<f(x)\}$.\\
@@ -122,6 +127,10 @@ Fatou applied to $g-f_n$ gives $\limsup\limits_n\int_E f_n\,d\mu\leq\int_E f\,d\
 \end{proof}
 \end{theorem}
 
+\begin{perspective} \label{per:domination-as-limit-integral-safeguard} \hlt{Domination Is the Safeguard}\\
+Pointwise convergence lose mass; Theorem \ref{thm:dominated-convergence-lebesgue} prevents by keeping every $f_n$ under one integrable envelope.
+\end{perspective}
+
 \begin{proposition} \label{prop:lebesgue-integral-linearity} \hlt{Linearity of the Lebesgue Integral}\\
 If $f,g\in\mathscr{L}^1(\mu)$ on $E$ and $a,b\in\R$, then $af+bg\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(af+bg)\,d\mu=a\int_Ef\,d\mu+b\int_Eg\,d\mu$.
 \begin{proof}
@@ -192,15 +201,37 @@ For $X_\alpha(W)=\{x:m(W_x)>\alpha\}$, $m(W)\geq \alpha m(X_\alpha(W))$; letting
 \end{proof}
 \end{theorem}
 
-% TODO(source pages unavailable): Add Cavalieri/Fubini--Tonelli,
-% Vitali/density-point, and Lebesgue differentiation material only after
-% supporting source pages are supplied.
+% Visual note: schematic slice picture for Definition \ref{def:lebesgue-product-slices} and Theorem \ref{thm:fubini-absolutely-integrable-functions}; the supplied Tao II Ch.8 Fubini screenshots are text-only.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/cavalieri_slicing_planar_set.tikz}
+  \caption{A planar set can be read by vertical slices; Fubini integrates the slice data over the base variable.}
+  \label{fig:cavalieri-slicing-planar-set}
+\end{figure}
+
+\begin{perspective} \label{per:fubini-proof-ladder} \hlt{Fubini Proof Ladder}\\
+Prove Fubini first for indicators, extend to simple functions, pass to nonnegative functions by monotone convergence, then split $f=f^+-f^-$ under absolute integrability.\\
+\hlt{Key Insight}: Fubini is a slice theorem, proof runs through indicators, simple functions, monotone convergence.
+\end{perspective}
+
+\begin{theorem} \label{thm:fubini-absolutely-integrable-functions} \hlt{Fubini for $L^1$ Functions}\\
+If $f\in L^1(\R^2)$, then $f(x,\cdot)\in L^1(\R)$ for a.e. $x$ and $f(\cdot,y)\in L^1(\R)$ for a.e. $y$. Defining $F(x)\defeq\int_{\R}f(x,y)\,dy$; $G(y)\defeq\int_{\R}f(x,y)\,dx$ on those sets and as $0$ elsewhere gives $F,G\in L^1(\R)$ and $\int_{\R}F(x)\,dx=\int_{\R^2}f=\int_{\R}G(y)\,dy$
+\begin{proof}
+Let $E_x=\{y:(x,y)\in E\}$ and $E^y=\{x:(x,y)\in E\}$. For measurable $E\subseteq\R^2$, the box/regularity argument and Theorems \ref{thm:measurable-products-product-measure}--\ref{thm:zero-slices-null-set-criterion} give $\int_{\R}m(E_x)\,dx=m(E)=\int_{\R}m(E^y)\,dy$.\\
+Hence Fubini holds for $\mathbf{1}_E$, and by linearity for every nonnegative simple function.\\
+Let $0\leq h$ be measurable and choose $0\leq s_n\uparrow h$ by Theorem \ref{thm:simple-approximation-measurable-functions}.\\
+Monotone convergence gives $\int_{\R}\!\left(\int_{\R}h(x,y)\,dy\right)dx =\lim_n\int_{\R}\!\left(\int_{\R}s_n(x,y)\,dy\right)dx =\lim_n\int_{\R^2}s_n =\int_{\R^2}h$ and the same argument with $x,y$ interchanged. Now let $f\in L^1(\R^2)$.\\
+Applying the nonnegative case to $\abs{f}$ yields $\int_{\R}\!\left(\int_{\R}\abs{f(x,y)}\,dy\right)dx =\int_{\R^2}\abs{f}<\infty$, so $f(x,\cdot)\in L^1(\R)$ for a.e. $x$; similarly $f(\cdot,y)\in L^1(\R)$ for a.e. $y$. With $f=f^+-f^-$, define, up to null-set choices, $F=F^+-F^-$, $F^\pm(x)=\int_{\R}f^\pm(x,y)\,dy$, and analogously $G=G^+-G^-$. Then $\int_{\R}\abs{F}\leq\int_{\R}(F^++F^-)=\int_{\R^2}\abs{f}<\infty$, and similarly $G\in L^1(\R)$. Subtracting the nonnegative identities for $f^+$ and $f^-$ gives $\int_{\R}F=\int_{\R^2}f=\int_{\R}G$.\\
+\hlt{Structural Commentary}: Prove identity for $\mathbf{1}_E$, extend by linearity and monotone convergence, apply to $f^\pm$.\\
+\hlt{Key Insight}: $\int\abs{f}<\infty$ makes the positive and negative slice integrals finite a.e., so subtraction is legitimate.
+\end{proof}
+\end{theorem}
 
 \begin{definition} \label{def:complex-integrable-and-l2} \hlt{Complex Integrals and $L^2$}\\
 For $f=u+iv$, measurability means measurability of $u$ and $v$.\\
 On $E\in\mathcal{M}$, $f\in\mathscr{L}^1(\mu)$ on $E$ $\iff$ $f$ is measurable and $\int_E\abs{f}\,d\mu<+\infty$.\\
 On $X$, $f\in L^2(\mu)$ $\iff$ $f$ is complex measurable and $\int_X\abs{f}^2\,d\mu<+\infty$; $\norm{f}_2\defeq\left(\int_X\abs{f}^2\,d\mu\right)^{1/2}$.\\
-Metric and inner-product structure identify functions equal a.e.
+Modulo equality a.e., define $\innerprod[L^2]{f,g}\defeq\int_X f\overline{g}\,d\mu$. This is the infinite-dimensional analogue of the inner-product structure from Definition \ref{def:inner-product}; the norm it induces is $\norm{f}_2$.
 \end{definition}
 
 \begin{theorem} \label{thm:l2-schwarz-minkowski-and-completeness} \hlt{$L^2$ Geometry}\\
@@ -247,8 +278,7 @@ Schwarz passes coefficients to the limit.
 \item \hlt{Ignore null sets}: if $f\sim_{\mathrm{a.e.}}g$ on $E$, replace $f$ by $g$ inside integrals over measurable $A\subseteq E$.
 \item \hlt{Split signs}: use $f=f^+-f^-$ and $h=u+iv$.
 \item \hlt{Exchange limits}: reduce Fatou and dominated convergence to $0\leq f_n\uparrow f$.
-\item \hlt{Slice}: prove boxes first; use regularity and null errors for products and zero-slice tests.
+\item \hlt{Slice}: prove boxes first; use regularity and null slices to pass to products and Fubini.
 \end{enumerate}
-% TODO(source): add Fubini/Tonelli patterns once that coverage is sourced.\\
 \hlt{Key Insight}: Reduce to simple functions, monotone convergence, null sets, and product boxes.
 \end{method}

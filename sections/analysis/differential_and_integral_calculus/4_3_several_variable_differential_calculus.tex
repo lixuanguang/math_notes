@@ -2,11 +2,13 @@
 
 % Source pages provided: Rudin Ch.9, Secs. 9.1--9.43, including linear transformations, differentiation, contraction principle, inverse/implicit/rank theorems, determinants, Jacobians, higher-order partials, equality of mixed partials, and differentiation under the integral sign in the provided screenshots.
 % Supplementary screenshot source: provided Pugh Ch.5, Secs. 1--6* pages support the linear-map-first derivative viewpoint, operator-norm stretch estimates, componentwise differentiation, the coordinate-polygon proof for continuous partials, higher derivatives as multilinear maps, the signed-parallelogram symmetry proof, implicit/inverse/rank normal-form pictures, and the Lagrange multiplier coordinate proof.
+% Supplementary screenshot source: provided Tao II Ch.6 pages support the row-vector review of linear transformations, the derivative-as-linear-map definition, partial and directional derivatives, the continuous-partials criterion, chain rule, contraction principle, inverse function theorem, and implicit function theorem.
 % Rudin Ch.9 overlap note: linear-operator preliminaries are recorded in Linear Algebra at Definition \ref{def:operator-norm-rn-rm}, Theorems \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} and \ref{thm:invertible-operators-open-and-inversion-continuous}, Definition \ref{def:implicit-derivative-blocks}, and Theorem \ref{thm:linear-implicit-function-theorem}.
+% Additional screenshot source: provided Tao I Ch.1, Examples 1.2.10--1.2.11 motivate the need for hypotheses when interchanging limits with derivatives or swapping mixed partials.
 % Sources mapped: Rudin Ch.9; Spivak Ch.1-2; Pugh Ch.5.1-5.6; Tao II Ch.6.
-% TODO(source pages unavailable): Add non-Rudin several-variable material from the mapped sources only after pages are provided.
+% TODO(source pages unavailable): Add remaining non-Rudin several-variable material beyond the supplied Pugh/Tao pages only after pages are provided.
 
-Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}, Theorem \ref{thm:determinant-basic-laws}, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.
+Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}, Theorem \ref{thm:determinant-basic-laws}, Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}, and the metric background from Example \ref{ex:coordinate-norm-metrics-rk}.
 
 \begin{definition} \label{def:several-variable-differentiation-core-source-todo}\label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
 Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\x\in E$, and $\LL(\R^n,\R^m)$ denote space of linear maps (Definition \ref{def:linear-map}).\\
@@ -74,8 +76,7 @@ So $\mathbf r(\h)=(r_1(\h),\ldots,r_m(\h))$ satisfies $\norm{\mathbf r(\h)}_2\le
 \begin{definition} \label{def:partials-gradient-directional-derivatives} \hlt{Partial, Gradient, and Directional Derivatives}\\
 Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, and let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis of $\R^n$.\\
 If indicated limits exist, \hlt{partial derivative} is $(D_jf_i)(\x)\defeq\lim_{t\to0}\frac{f_i(\x+t\mathbf{e}_j)-f_i(\x)}{t}$ for $1\leq i\leq m,\ 1\leq j\leq n$.\\
-\hlt{Directional derivative} is $(D_{\mathbf{u}}f)(\x)\defeq\lim_{t\to0}\frac{f(\x+t\mathbf{u})-f(\x)}{t}$ for $\norm{\mathbf{u}}_2=1$.\\
-If $m=1$ and all partials exist, the \hlt{gradient} is $(\nabla f)(\x)\defeq \sum\limits_{j=1}^{n}(D_jf)(\x)\mathbf{e}_j$.
+\hlt{Directional derivative} is $(D_{\mathbf{u}}f)(\x)\defeq\lim_{t\to0}\frac{f(\x+t\mathbf{u})-f(\x)}{t}$ for $\mathbf{u}\in\R^n$; when only the direction is meant, one often assumes $\norm{\mathbf{u}}_2=1$. If $m=1$ and all partials exist, the \hlt{gradient} is $(\nabla f)(\x)\defeq \sum\limits_{j=1}^{n}(D_jf)(\x)\mathbf{e}_j$.
 \end{definition}
 
 \begin{theorem} \label{thm:total-derivative-matrix-partials} \hlt{Matrix of the Total Derivative}\\
@@ -88,7 +89,7 @@ If $\f:E\to\R^m$ is differentiable at $\x$, then every $(D_jf_i)(\x)$ exists and
 (D_1f_m)(\x) & \cdots & (D_nf_m)(\x)
 \end{bmatrix} \nonumber
 \end{align}
-If $m=1$ and $f$ is differentiable at $\x$, then $(D_{\mathbf{u}}f)(\x)=(\nabla f)(\x)\cdot\mathbf{u}$ for every unit vector $\mathbf{u}$.
+If $m=1$ and $f$ is differentiable at $\x$, then $(D_{\mathbf{u}}f)(\x)=(\nabla f)(\x)\cdot\mathbf{u}$ for every $\mathbf{u}\in\R^n$.
 \begin{proof}
 Set $\h=t\mathbf{e}_j$ in Definition \ref{def:total-derivative-rn-rm}; limit is $D\f(\x)\mathbf{e}_j$, so components form column $j$ (Proposition \ref{prop:matrix-representation-action}).\\
 For $m=1$, set $\h=t\mathbf{u}$, identify linear functional with dot product against $\nabla f(\x)$ (Theorem \ref{thm:riesz-representation-finite-dimensional}).\\
@@ -96,6 +97,10 @@ For $m=1$, set $\h=t\mathbf{u}$, identify linear functional with dot product aga
 \hlt{Key Insight}: Differentiability controls all directions at once; partial derivatives record its coordinate columns.
 \end{proof}
 \end{theorem}
+
+\begin{remark} \label{rem:several-variable-row-column-conventions} \hlt{Row and Column Conventions}\\
+With the coordinate-column convention from Proposition \ref{prop:matrix-representation-action}, the Jacobian matrix above is the standard-basis matrix of the linear map $D\f(\x)$, and its $j$th column is $D\f(\x)\mathbf{e}_j$.
+\end{remark}
 
 \begin{theorem} \label{thm:bounded-derivative-convex-mean-value} \hlt{Mean-Value Inequality on Convex Sets}\\
 Let $E\subseteq\R^n$ be open and convex.\\
@@ -223,6 +228,10 @@ Since $\varepsilon$ was arbitrary, the quotient tends to $A$ as $h\to0$, so $D_{
 \end{proof}
 \end{theorem}
 
+\begin{perspective} \label{per:mixed-partials-need-hypotheses} \hlt{Mixed Partials Need Hypotheses}\\
+$D_{12}f$ and $D_{21}f$ are different iterated limits. Theorems \ref{thm:second-derivative-symmetric} and \ref{thm:equality-of-mixed-partials} give hypotheses for equality.
+\end{perspective}
+
 \begin{theorem} \label{thm:differentiation-under-riemann-stieltjes-integral} \hlt{Differentiation Under a Riemann--Stieltjes Integral}\\
 Let $\alpha$ be increasing on $[a,b]$, let $\varphi:[a,b]\times[c,d]\to\R$, and put $\varphi^t(x)\defeq\varphi(x,t)$.\\
 Assume $\varphi^t\in\mathcal{R}(\alpha)$ for all $t$ and $D_2\varphi(\cdot,t)\rightrightarrows D_2\varphi(\cdot,s)$ on $[a,b]$ as $t\to s\in(c,d)$.\\
@@ -266,7 +275,8 @@ Let $\f:E\subseteq\R^n\to\R^n$ be $C^1$, let $\a\in E$, and suppose $D\f(\a)$ is
 Put $A=D\f(\a)$ and choose $0<\theta<1$.\\
 By continuity of $D\f$, choose $r>0$ with $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on this closed ball.\\
 For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
-Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. The contraction principle, Theorem \ref{thm:contraction-principle}, gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
+Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. Since $\overline{B}_r(\a)$ is a closed subset of complete $\R^n$, Proposition \ref{prop:basic-completeness-consequences} makes it complete.\\
+The contraction principle, Theorem \ref{thm:contraction-principle}, gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
 For $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$ in $V$, the same derivative bound gives $\norm{\h}_2\leq C\norm{\mathbf{k}}_2$ for a local constant $C$. Moreover $\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k} =-\bigl(D\f(\x)\bigr)^{-1}\bigl[\f(\x+\h)-\f(\x)-D\f(\x)\h\bigr]$.\\
 Since $\f$ is differentiable at $\x$ and $\norm{\h}_2=O(\norm{\mathbf{k}}_2)$, division by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=(D\f(\x))^{-1}$.\\
 Continuity of $D\g$ follows from continuity of $D\f$, continuity of $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.\\
