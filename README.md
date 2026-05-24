@@ -17,3 +17,5 @@ Progress Status:
 | Analysis | Understanding Analysis | Stephen Abbott | Completed | |
 | Analysis | Elementary Analysis | Kenneth A. Ross | Completed | |
 | Analysis | Real Mathematical Analysis | Charles Chapman Pugh | Completed | |
+| Analysis | Analysis I | Terence Tao | Completed | |
+| Analysis | Analysis II | Terence Tao | Completed | |
