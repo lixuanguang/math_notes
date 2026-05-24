@@ -7,6 +7,7 @@
 % Supplementary screenshot source: Ross Ch.7, Sec. 38 supports first-category language in complete function spaces and its application to nowhere differentiability.
 % Visual note: the k-cell diagrams below illustrate the Rudin Ch.2 compactness arguments already recorded in this subsection; they do not add new source material.
 % Supplementary screenshot source: provided Pugh Ch.2 pages support sequential compactness, covering compactness, nested compact sets, connectedness via clopen subsets, path-connectedness, total boundedness, and completion.
+% Supplementary screenshot source: provided Tao II Ch.1, Sec. 1.5 and Ch.2, Secs. 2.3--2.5 support sequential compactness, open-cover compactness, nested compact intersections, total boundedness, continuity on compact sets, connectedness, path-connectedness, and optional topology.
 % Sources mapped: Abbott Ch.3, Ch.8.2; Pugh Ch.2; Tao II Ch.1-2; Grinberg Ch.9-13.
 % TODO(source pages unavailable): Add broader non-Rudin compactness and connectedness material only after pages are provided.
 
@@ -21,10 +22,59 @@ Let $E$ be a subset of a metric space $X$.
 \end{enumerate}
 \end{definition}
 
+\begin{remark} \label{rem:boundedness-and-intrinsic-metric-properties} \hlt{Boundedness and Ambient Space}\\
+Equivalently, $E$ is bounded iff $E\subseteq B_M(q)$ for some ball in $X$. Boundedness, compactness, and completeness are intrinsic to the restricted metric; openness and closedness depend on the ambient space.
+\end{remark}
+
 \begin{definition} \label{def:open-cover-and-compactness} \hlt{Open Covers and Compact Sets}\\
 Let $E\subseteq X$, where $X$ is a metric space.\\
 An \hlt{open cover} of $E$ is a collection $\{G_\alpha\}_{\alpha\in A}$ of open subsets of $X$ such that $E\subseteq\bigcup\limits_{\alpha\in A}G_\alpha$. A set $K\subseteq X$ is \hlt{compact} if every open cover of $K$ has a finite subcover: $K\subseteq G_{\alpha_1}\cup\cdots\cup G_{\alpha_n}$ for some finite subcollection.
 \end{definition}
+
+\begin{definition} \label{def:sequentially-compact-metric-space} \hlt{Sequential Compactness}\\
+A metric space is \hlt{sequentially compact} if every sequence has a convergent subsequence.
+\end{definition}
+
+% Visual note: schematic redraw of Definition \ref{def:totally-bounded-metric-space}.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/total_boundedness_finite_cover.tikz}
+  \caption{Finite $\varepsilon$- and $\delta$-nets cover $E$, with $0<\delta<\varepsilon$.}
+  \label{fig:total-boundedness-finite-cover}
+\end{figure}
+
+\begin{definition} \label{def:totally-bounded-metric-space} \hlt{Total Boundedness}\\
+Let $(X,d)$ be a metric space. It is \hlt{totally bounded} if, $\forall \varepsilon>0$, $\exists$ a finite set $F\subseteq X$ such that $X\subseteq\bigcup\limits_{x\in F}B_\varepsilon(x)$.\\
+$F$ is a finite $\varepsilon$-net. $E\subseteq X$ totally bounded if same condition holds with finite $F\subseteq E$ and $X$.
+\end{definition}
+
+% Source note: provided Tao II Ch.1, Exercise 1.5.10.
+\begin{theorem} \label{thm:total-bounded-implies-bounded} \hlt{Total Boundedness Implies Boundedness}\\
+Let $X$ be a metric space.
+If $X$ is totally bounded, then $X$ is bounded.
+\begin{proof}
+If $X=\emptyset$, this is trivial. Otherwise cover $X$ by finitely many $1$-balls $B_1(x_i)$ and fix $x_1$.\\
+Then $d(x,x_1)<1+\max_i d(x_i,x_1)$ for every $x\in X$.\\
+\hlt{Structural Commentary}: One finite cover at scale $1$ gives one global bound.\\
+\hlt{Key Insight}: Total boundedness is boundedness with finite control at every scale.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:compact-complete-totally-bounded} \hlt{Compactness as Complete Finite Resolution}\\
+Let $X$ be a metric space. Then, $X$ is compact $\Longleftrightarrow$ $X$ is complete and totally bounded.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $(p_k)$ be Cauchy in $X$. By Theorem \ref{thm:cauchy-convergence-criterion}, compactness forces $(p_k)$ to converge, so $X$ is complete.\\
+Given $\varepsilon>0$, cover $\{B_\varepsilon(x):x\in X\}$ has finite subcover $B_\varepsilon(y_1),\ldots,B_\varepsilon(y_m)$; hence $X$ is totally bounded.
+\item[$(\Leftarrow)$] Let $(x_n)\subseteq X$. Choose nested subsequences $(x_k^{(j)})_{k\geq1}$ and points $a_j\in X$ with $x_k^{(j)}\in B_{1/j}(a_j) \ \forall k$.\\
+Diagonal $y_j\defeq x_j^{(j)}$ satisfies $y_k,y_\ell\in B_{1/j}(a_j)$ for $k,\ell\geq j$, so it is Cauchy and converges by completeness; hence $X$ is sequentially compact. Now let $\{U_\alpha\}$ cover $X$. If no $\delta>0$ has every $B_\delta(x)$ contained in some $U_\alpha$, choose $x_n$ with $B_{1/n}(x_n)\nsubseteq U_\alpha \ \forall\alpha$. Passing to $x_{n_k}\to x\in U_{\alpha_0}$, and openness gives $B_{1/n_k}(x_{n_k})\subseteq U_{\alpha_0}$ for large $k$, a contradiction. Thus such $\delta$ exists.\\
+Choose a finite $\delta/2$-net $\{z_i\}_{i=1}^m$ and $\alpha_i$ with $B_\delta(z_i)\subseteq U_{\alpha_i}$; then $\{U_{\alpha_i}\}_{i=1}^m$ covers $X$.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite nets plus completeness force compactness.\\
+\hlt{Key Insight}: Compact metric spaces are exactly complete spaces visible at every finite scale.
+\end{proof}
+\end{theorem}
 
 % Local example: illustrates Definition \ref{def:open-cover-and-compactness}; TODO(source): compare with mapped non-Rudin compactness sources when available.
 \begin{example} \label{ex:open-interval-cover-without-finite-subcover} \hlt{An Open Cover Without a Finite Subcover}\\
@@ -276,6 +326,10 @@ Separated sets are disjoint, but disjoint sets need not be separated. For exampl
 \begin{remark} \label{rem:connectedness-and-clopen-subsets} \hlt{Connectedness and Clopen Sets}\\
 A subset is \hlt{clopen} if it is both open and closed; $\sqcup$ denotes disjoint union. A metric space is disconnected iff it has a nonempty proper clopen subset: $U$ gives $X=U\sqcup U^c$, and every separation has clopen pieces.\\
 By Theorem \ref{thm:continuity-open-preimages}, continuous maps pull clopen separations back to clopen separations.
+\end{remark}
+
+\begin{remark} \label{rem:path-connectedness-placed-with-continuity} \hlt{Path-Connectedness Uses Continuity}\\
+The supplied Tao II Ch.2 exercises introduce path-connectedness immediately after connectedness. Here the definition and main theorem are placed later as Definition \ref{def:path-connected-set} and Theorem \ref{thm:path-connected-implies-connected}, after continuity has been developed.
 \end{remark}
 
 \begin{theorem} \label{thm:connected-subsets-of-real-line-interval-property} \hlt{Connected Subsets of the Real Line}\\
