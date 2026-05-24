@@ -1,17 +1,47 @@
 \subsubsection{Multiple Integration and Change of Variables}
 
 % Source pages provided: Rudin Ch.10, Secs. 10.1--10.9, including integration over cells, order independence, compact support, simplex integration, primitive mappings, partitions of unity, and the change-of-variables theorem in the provided screenshots.
+% Supplementary screenshot source: provided Pugh Ch.5, Sec. 7 pages support rectangular grids, sample points, lower/upper slice integrals, Fubini/Cavalieri intuition, and the change-of-variables grid-warp picture.
 % Linear-algebra dependency: determinant laws and volume scaling are recorded in Theorem \ref{thm:determinant-basic-laws} and Theorem \ref{thm:linear-map-volume-scaling-determinant}.
 % Sources mapped: Spivak Ch.3; Rudin Ch.10.1-10.4; Pugh Ch.5.7; Tao II Ch.8.5.
 % TODO(source pages unavailable): Add non-Rudin multiple-integration material from the mapped sources only after pages are provided.
 
-This subsection treats Euclidean-region integration and change of variables, with determinant volume scaling from Theorem \ref{thm:linear-map-volume-scaling-determinant}; forms and Stokes theory begin in the next section.
+This subsection treats Euclidean-region integration and change of variables. The nonlinear theorem uses determinant volume scaling (Theorem \ref{thm:linear-map-volume-scaling-determinant}), the Jacobian (Definition \ref{def:jacobian-determinant}), local inversion (Theorem \ref{thm:inverse-function-theorem-rn}), and determinant laws (Theorem \ref{thm:determinant-basic-laws}); forms and Stokes theory begin next.
 
 \begin{definition} \label{def:multiple-integration-core-source-todo}\label{def:k-cell-and-multiple-integral} \hlt{$k$-Cells and Multiple Integrals}\\
 A \hlt{$k$-cell} is $I^k\defeq\prod\limits_{i=1}^k[a_i,b_i]\subseteq\R^k$ or $I^j\defeq\prod\limits_{i=1}^j[a_i,b_i]$.\\
 For $f\in C(I^k)$, set $f_k=f$ and, for $j=k,\ldots,1$, define $f_{j-1}(x_1,\ldots,x_{j-1})\defeq\int_{a_j}^{b_j}f_j(x_1,\ldots,x_j)\,dx_j$.\\
 The \hlt{integral of $f$ over $I^k$} is $\int_{I^k}f(\x)\,d\x\defeq f_0$, also written $\int_{I^k}f$.
 \end{definition}
+
+For bounded functions on rectangles, the Darboux picture from Definition \ref{def:partition-and-riemann-upper-lower-sums} generalizes by replacing intervals with grid rectangles.
+
+\begin{definition} \label{def:rectangular-grid-riemann-sum} \hlt{Rectangular Grids and Riemann Sums}\\
+For $R=[a,b]\times[c,d]\subseteq\R^2$ and partitions $P:a=x_0<\cdots<x_m=b$; and $Q:c=y_0<\cdots<y_n=d$,\\
+put $G=P\times Q$, where $R_{ij}\defeq[x_{i-1},x_i]\times[y_{j-1},y_j]$ and $\abs{R_{ij}}\defeq (x_i-x_{i-1})(y_j-y_{j-1})$.\\
+For sample points $(s_{ij},t_{ij})\in R_{ij}$, $R(f,G,S)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n} f(s_{ij},t_{ij})\abs{R_{ij}}$. For bounded real $f$, with $m_{ij}\defeq\inf_{R_{ij}}f$ and $M_{ij}\defeq\sup_{R_{ij}}f$, set $L(f,G)\defeq\sum\limits_{i,j}m_{ij}\abs{R_{ij}}$ and $U(f,G)\defeq\sum\limits_{i,j}M_{ij}\abs{R_{ij}}$.\\
+The lower and upper integrals over $R$ are $\sup_G L(f,G)$ and $\inf_G U(f,G)$. If equal, their common value is $\int_R f$.
+\end{definition}
+
+% Supplementary visual source: provided Pugh Ch.5 screenshot, Fig. 117; redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/riemann_grid_sample_rectangle.tikz}
+  \caption{A grid rectangle $R_{ij}$ and sample point $(s_{ij},t_{ij})$.}
+  \label{fig:riemann-grid-sample-rectangle}
+\end{figure}
+
+\begin{theorem} \label{thm:fubini-riemann-rectangle-slices} \hlt{Fubini on a Rectangle, Darboux Form}\\
+Let $R=[a,b]\times[c,d]$ and let $f:R\to\R$ be Riemann integrable.\\
+For $y\in[c,d]$, set $f_y(x)\defeq f(x,y)$ and $\underline{F}(y)\defeq \sup_P L(P,f_y)$; $\overline{F}(y)\defeq \inf_P U(P,f_y)$, where $P$ ranges over partitions of $[a,b]$. Then $\underline{F},\overline{F}$ are Riemann integrable on $[c,d]$ and $\int_R f=\int_c^d \underline{F}(y)\,dy=\int_c^d \overline{F}(y)\,dy$.\\
+If $\int_a^b f(x,y)\,dx$ exists for every $y$, this is the usual iterated integral formula.
+\begin{proof}
+For $G=P\times Q$, horizontal slice sums give $L(f,G)\leq L(Q,\underline{F})\leq U(Q,\overline{F})\leq U(f,G)$.\\
+As $f$ is integrable on $R$, the outer terms can be made arbitrarily close. The upper--lower criterion, Theorem \ref{thm:riemann-stieltjes-integrability-criterion}, squeezes $\underline{F}$ and $\overline{F}$ to the common value $\int_R f$.\\
+\hlt{Structural Commentary}: Product grids turn area sums into slice sums.\\
+\hlt{Key Insight}: Fubini is a squeeze between lower and upper sums before it is an equality of iterated integrals.
+\end{proof}
+\end{theorem}
 
 \begin{theorem} \label{thm:iterated-integrals-order-independent} \hlt{Order Independence on Cells}\\
 For $f\in C(I^k)$, all iterated orders defining $\int_{I^k}f$ give the same value.
@@ -73,6 +103,16 @@ Multiplying by $f$ gives the final assertion.
 \end{proof}
 \end{theorem}
 
+The nonlinear change-of-variables theorem is the local volume-scaling formula from Theorem \ref{thm:linear-map-volume-scaling-determinant} applied cell by cell after a fine grid has been warped by a $C^1$ diffeomorphism.
+
+% Supplementary visual source: provided Pugh Ch.5 screenshot, Fig. 119; redrawn as TikZ.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/change_of_variables_grid_warp.tikz}
+  \caption{A $C^1$ change of variables turns a fine grid into curvilinear cells; $\abs{J_T}$ records local volume scaling.}
+  \label{fig:change-of-variables-grid-warp}
+\end{figure}
+
 \begin{theorem} \label{thm:change-of-variables-rk}\label{thm:multiple-integration-main-source-todo} \hlt{Change of Variables in $\R^k$}\\
 Let $T:E\to\R^k$ be one-to-one and $C^1$ on open $E\subseteq\R^k$, with $J_T\neq0$ on $E$.\\
 If $f\in C(\R^k)$ and $\operatorname{supp}(f)$ is compact in $T(E)$, then $\int_{\R^k}f(\y)\,d\y = \int_{\R^k}f(T(\x))\,\abs{J_T(\x)}\,d\x$.
@@ -91,6 +131,7 @@ For a multiple-integration identity:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Products}: prove product cases, then pass by uniform approximation;
+\item \hlt{Grids}: compare product-grid upper and lower sums with one-variable slice sums;
 \item \hlt{Support}: enclose compact support in a cell and check cell-independence;
 \item \hlt{Local form}: reduce $C^1$ coordinate changes to primitive maps and flips;
 \item \hlt{Determinants}: use multiplicativity and Theorem \ref{thm:determinant-basic-laws};
