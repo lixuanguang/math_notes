@@ -16,3 +16,4 @@ Progress Status:
 | Analysis | The Real Analysis Lifesaver | Raffi Grinberg | Completed | |
 | Analysis | Understanding Analysis | Stephen Abbott | Completed | |
 | Analysis | Elementary Analysis | Kenneth A. Ross | Completed | |
+| Analysis | Real Mathematical Analysis | Charles Chapman Pugh | Completed | |
