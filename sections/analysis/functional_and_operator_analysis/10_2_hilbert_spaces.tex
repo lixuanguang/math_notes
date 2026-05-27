@@ -7,19 +7,32 @@
 Hilbert spaces are complete inner-product spaces. They extend orthogonal geometry to function and sequence spaces, supporting projection, Fourier expansion, and Riesz representation.
 
 \begin{definition} \label{def:hilbert-space} \hlt{Hilbert Space}\\
-An inner-product space $\mathcal{H}$ is a \hlt{Hilbert space} if the norm $\norm{x}\defeq\sqrt{\innerprod{x,x}}$ makes $\mathcal{H}$ complete. A subset $M\subseteq\mathcal{H}$ is \hlt{orthonormal} if $\innerprod{e_i,e_j}=\delta_{ij}$ for all indexed vectors in $M$.
+An inner-product space $\mathcal{H}$ is a \hlt{Hilbert space} if the norm $\norm{x}\defeq\sqrt{\innerprod{x,x}}$ makes $\mathcal{H}$ complete.\\
+A subset $M\subseteq\mathcal{H}$ is \hlt{orthonormal} if $\innerprod{e_i,e_j}=\delta_{ij}$ for all indexed vectors in $M$.
 \end{definition}
 
 \begin{theorem} \label{thm:hilbert-projection-theorem} \hlt{Hilbert Projection Theorem}\\
-Let $C\subseteq\mathcal{H}$ be nonempty, closed, and convex. For every $x\in\mathcal{H}$ there is a unique $p\in C$ minimizing $\norm{x-p}$. If $M\subseteq\mathcal{H}$ is a closed subspace, then $x=p+(x-p)$ with $p\in M$ and $x-p\in M^\perp$.
+Let $C\subseteq\mathcal{H}$ be nonempty, closed, and convex. For every $x\in\mathcal{H}$ there is a unique $p\in C$ minimizing $\norm{x-p}$.\\
+If $M\subseteq\mathcal{H}$ is a closed subspace, then $x=p+(x-p)$ with $p\in M$ and $x-p\in M^\perp$.
+\begin{proof}
+Let $d=\inf_{q\in C}\norm{x-q}$ and choose $q_n\in C$ with $\norm{x-q_n}\to d$.\\
+Since $C$ is convex, $(q_n+q_m)/2\in C$. The parallelogram identity gives\\
+$\norm{q_n-q_m}^2 =2\norm{x-q_n}^2+2\norm{x-q_m}^2-4\norm{x-\frac{q_n+q_m}{2}}^2 \leq2\norm{x-q_n}^2+2\norm{x-q_m}^2-4d^2$, so $(q_n)$ is Cauchy. Completeness and closedness give $q_n\to p\in C$, and continuity of the norm gives $\norm{x-p}=d$. If $p_1,p_2$ both minimize, the same identity with $q_n=p_1$, $q_m=p_2$ gives $\norm{p_1-p_2}=0$. Now let $C=M$ and $r=x-p$.\\
+For $y\in M$ and $t\in\mathbb{R}$, minimality of $p+ty\in M$ gives $0\leq\norm{r-ty}^2-\norm{r}^2=-2t\operatorname{Re}\innerprod{r,y}+t^2\norm{y}^2$, hence $\operatorname{Re}\innerprod{r,y}=0$. Replacing $y$ by $iy$ in the complex case gives $\innerprod{r,y}=0$. Thus $r\in M^\perp$ and $x=p+r$.\\
+\hlt{Structural Commentary}: Convexity makes minimizing sequences Cauchy; closedness keeps the limit.\\
+\hlt{Key Insight}: The nearest point is characterized by an orthogonal error.
+\end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:riesz-representation-hilbert-space} \hlt{Riesz Representation for Hilbert Spaces}\\
-For every bounded linear functional $\varphi:\mathcal{H}\to\mathbb{F}$ there exists a unique $y\in\mathcal{H}$ such that
-\[
-\varphi(x)=\innerprod{x,y}\qquad(x\in\mathcal{H}).
-\]
-Moreover, $\normop{\varphi}=\norm{y}$.
+$\forall$ bounded linear functional $\varphi:\mathcal{H}\to\mathbb{F}$ $\exists$ unique $y\in\mathcal{H}$ s.t. $\varphi(x)=\innerprod{x,y}$, $x\in\mathcal{H}$. Moreover, $\normop{\varphi}=\norm{y}$.
+\begin{proof}
+If $\varphi=0$, take $y=0$. Otherwise let $M=\ker\varphi$, a closed subspace, and choose $a\notin M$. By Theorem \ref{thm:hilbert-projection-theorem}, $a=p+u$ with $p\in M$ and $0\neq u\in M^\perp$, so $\varphi(u)=\varphi(a)\neq0$.\\
+For $x\in\mathcal{H}$, $x-\frac{\varphi(x)}{\varphi(u)}u\in M$, hence $\innerprod{x,u}=\frac{\varphi(x)}{\varphi(u)}\norm{u}^2$. Set $y=\frac{\overline{\varphi(u)}}{\norm{u}^2}u$. Since the second slot is conjugate linear, $\innerprod{x,y}=\varphi(x)$ for all $x$.\\
+If $z$ also represents $\varphi$, then $\innerprod{x,y-z}=0$ for all $x$; taking $x=y-z$ gives $y=z$. Finally, Cauchy-Schwarz gives $\normop{\varphi}\leq\norm{y}$, while $y\neq0$ gives $\normop{\varphi}\geq\abs{\varphi(y)}/\norm{y}=\norm{y}$; the case $y=0$ is trivial.\\
+\hlt{Structural Commentary}: The kernel is a hyperplane; its orthogonal direction represents the functional.\\
+\hlt{Key Insight}: Bounded functionals are exactly inner products with fixed vectors.
+\end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:l2-orthonormal-systems-riesz-fischer-parseval} \hlt{Orthonormal Systems in $L^2$}\\
@@ -27,18 +40,19 @@ Let $(\phi_n)$ be orthonormal in $L^2(\mu)$: $\int_X\phi_n\overline{\phi_m}\,d\m
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $f\in L^2(\mu)$, $c_n=\int_Xf\overline{\phi_n}\,d\mu$ defines $f\sim_{\mathrm{coef}}\sum c_n\phi_n$.
-\item If $\sum\abs{c_n}^2<+\infty$, then $s_n=\sum_{k=1}^{n}c_k\phi_k$ converges in $L^2$ to some $f$.
+\item If $\sum\abs{c_n}^2<+\infty$, then $s_n=\sum\limits_{k=1}^{n}c_k\phi_k$ converges in $L^2$ to some $f$.
 \item If $(\phi_n)$ is complete and $f\sim_{\mathrm{coef}}\sum c_n\phi_n$, then $\int_X\abs{f}^2\,d\mu=\sum\limits_{n=1}^{\infty}\abs{c_n}^2$.
 \end{enumerate}
 For the trigonometric system on $[-\pi,\pi]$, this is $L^2$ Parseval and a.e. uniqueness.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Orthonormality gives finite coordinate identities behind Theorems \ref{thm:bessel-inequality-finite-orthonormal-list} and \ref{thm:parseval-identity-finite-dimensional}.\\
-In particular, $\norm{s_n-s_m}_2^2=\sum\limits_{k=m+1}^{n}\abs{c_k}^2$.
-\item $\sum\abs{c_n}^2<+\infty$ makes $(s_n)$ Cauchy, so Theorem \ref{thm:l2-schwarz-minkowski-and-completeness} gives $s_n\to f$ in $L^2$.\\
-Schwarz passes coefficients to the limit.
-\item For complete $(\phi_n)$, Bessel gives $\sum\abs{c_n}^2<+\infty$. The limit $g\sim_{\mathrm{coef}}\sum c_n\phi_n$ from (ii) satisfies $f-g\perp\phi_n$ for all $n$, hence $\norm{f-g}_2=0$; finite Parseval then gives the displayed identity.
+\item For $c_n=\int_X f\overline{\phi_n}\,d\mu$, finite orthonormality gives $\norm{f-\sum\limits_{k=1}^{N}c_k\phi_k}_2^2=\norm{f}_2^2-\sum\limits_{k=1}^{N}\abs{c_k}^2$.\\
+Thus $\sum\limits_{n=1}^{\infty}\abs{c_n}^2\leq\norm{f}_2^2$, and these coefficients are denoted $f\sim_{\mathrm{coef}}\sum c_n\phi_n$.
+\item If $\sum\abs{c_n}^2<+\infty$ and $m<n$, then $\norm{s_n-s_m}_2^2=\sum\limits_{k=m+1}^{n}\abs{c_k}^2$.\\
+Thus $(s_n)$ is Cauchy, so Theorem \ref{thm:l2-schwarz-minkowski-and-completeness} gives $s_n\to g$ in $L^2$.
+\item If $(\phi_n)$ is complete, Bessel gives $\sum\abs{c_n}^2<+\infty$, so (ii) gives $s_n\to g$.\\
+$\forall j$, $\innerprod{f-g,\phi_j}=c_j-\lim_n\innerprod{s_n,\phi_j}=0$; completeness gives $f=g$. Hence $\norm{f}_2^2=\lim_n\norm{s_n}_2^2=\sum\limits_{n=1}^{\infty}\abs{c_n}^2$.
 \end{enumerate}
 \hlt{Structural Commentary}: Complete orthonormal systems coordinatize $L^2$ by square-summable sequences.\\
 \hlt{Key Insight}: Parseval is Pythagoras after passing from finite coordinates to an $L^2$ limit.
