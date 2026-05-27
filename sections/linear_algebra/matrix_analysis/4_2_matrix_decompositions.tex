@@ -1,6 +1,6 @@
-\subsubsection{Matrix Factorizations and Decompositions}
+\subsubsection{Matrix Decompositions}
 
-Factorizations expose the geometry hidden inside a matrix or operator. QR and Cholesky turn column geometry and positivity into triangular structure; SVD and compact SVD isolate singular directions and rank-bearing subspaces; polar decomposition and matrix modulus separate stretching from isometric motion; and the algorithms themselves reveal structural consequences.
+Decompositions expose the geometry hidden inside a matrix or operator. LU, QR, and Cholesky turn elimination, column geometry, and positivity into triangular structure; SVD and compact SVD isolate singular directions and rank-bearing subspaces; polar decomposition and matrix modulus separate stretching from isometric motion.
 
 \begin{definition} \label{def:full-rank-factorization} \hlt{Full-Rank Factorization}\\
 A factorization $A=XY$ with $X$ full column rank and $Y$ full row rank is called a \hlt{full-rank factorization} of $A$.
@@ -13,6 +13,40 @@ Write $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$. Since the columns of $X$ form a 
 By Theorem \ref{thm:rank-product-and-concatenation-bounds}, $r=\operatorname{rank}(A)=\operatorname{rank}(XY)\leq \operatorname{rank}(Y)\leq r$ because $Y$ has only $r$ rows. Hence $\operatorname{rank}(Y)=r$.\\
 \hlt{Structural Commentary}: A matrix factors through a basis of its column space.\\
 \hlt{Key Insight}: Full-rank factorization separates column directions from their coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:lu-factorization} \hlt{LU Factorisation}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, an \hlt{LU factorisation} is a product $A=LU$, where $L$ is lower triangular and $U$ is upper triangular. It is \hlt{unit lower triangular} if every diagonal entry of $L$ is $1$.
+\end{definition}
+
+\begin{theorem} \label{thm:lu-factorization-leading-principal-minors} \hlt{LU Factorisation from Nonzero Leading Principal Minors}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. If every leading principal minor of $A$ is nonzero, then $A=LU$ for a unique unit lower triangular $L$ and a unique upper triangular $U$.
+\begin{proof}
+Induct on $n$. The case $n=1$ is immediate. Write
+\[
+A=
+\begin{bmatrix}
+a & \mathbf{r}\\
+\mathbf{c} & B
+\end{bmatrix},
+\qquad a\neq0.
+\]
+Set $\boldsymbol{\ell}=a^{-1}\mathbf{c}$ and $S=B-a^{-1}\mathbf{c}\mathbf{r}$. For each leading $k\times k$ principal block of $A$, the block determinant formula gives determinant $a$ times the corresponding leading $(k-1)\times(k-1)$ principal minor of $S$. Hence all leading principal minors of $S$ are nonzero. By induction, $S=L_1U_1$ with $L_1$ unit lower triangular and $U_1$ upper triangular. Then
+\[
+A=
+\begin{bmatrix}
+1 & 0\\
+\boldsymbol{\ell} & L_1
+\end{bmatrix}
+\begin{bmatrix}
+a & \mathbf{r}\\
+0 & U_1
+\end{bmatrix}.
+\]
+For uniqueness, comparing the first row and first column of $LU$ determines $a$, $\mathbf{r}$, and $\boldsymbol{\ell}$, then reduces uniqueness to the lower-right Schur complement.\\
+\hlt{Structural Commentary}: Gaussian elimination peels off one pivot and passes to a Schur complement.\\
+\hlt{Key Insight}: Nonzero leading principal minors are exactly the no-row-swap pivot condition.
 \end{proof}
 \end{theorem}
 

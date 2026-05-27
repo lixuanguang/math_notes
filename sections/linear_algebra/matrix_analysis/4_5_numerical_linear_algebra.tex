@@ -1,0 +1,82 @@
+\subsubsection{Numerical Linear Algebra}
+
+Numerical linear algebra turns matrix structure into algorithms. QR and SVD methods stabilize least squares and eigenvalue computation; Hessenberg reduction makes QR iteration efficient; Krylov, iterative, and preconditioned methods exploit matrix-vector products when direct decompositions are too expensive.
+
+\begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
+Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
+\begin{proof}
+The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
+Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
+\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
+\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:normal-equations-squaring-condition-number} \hlt{Why Normal Equations Can Be Numerically Fragile}\\
+For full-column-rank least squares, solving $A^*A\mathbf{x}=A^*\mathbf{y}$ squares the spectral condition number because $\kappa_2(A^*A)=\kappa_2(A)^2$. QR-based methods avoid this squaring and therefore preserve conditioning better.
+\end{perspective}
+
+\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if $a_{ij}=0$ whenever $i>j+1$.\\
+Equivalently, all entries below the first subdiagonal are zero.
+\end{definition}
+
+Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
+  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
+  \label{fig:upper-hessenberg-pattern}
+\end{figure}
+
+\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
+Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
+\begin{proof}
+Set $A_0=A$. For $k=1,\ldots,n-2$, suppose columns $1,\ldots,k-1$ of $A_{k-1}$ already have zeros below the first subdiagonal. Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$.\\
+By Corollary \ref{cor:householder-unitary-annihilator}, choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$.\\
+Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Right multiplication by $U_k$ changes only columns $k+1,\ldots,n$, so columns $1,\ldots,k-1$ keep their existing Hessenberg zeros. Left multiplication by $U_k^*$ acts only on rows $k+1,\ldots,n$; those rows are already zero in columns $1,\ldots,k-1$, so the zeros remain. In column $k$, the tail becomes $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, so entries below row $k+1$ are zero and the new subdiagonal entry is real nonnegative.\\
+After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$ is unitary.\\
+\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
+\hlt{Key Insight}: Kill one column tail at a time.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
+Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
+\end{perspective}
+
+\begin{method} \label{meth:qr-eigenvalue-algorithm-preview} \hlt{QR Eigenvalue Algorithm Preview}\\
+A basic QR eigenvalue iteration starts from a square matrix $A_0$ and repeats
+\[
+A_k=Q_kR_k,\qquad A_{k+1}=R_kQ_k=Q_k^*A_kQ_k.
+\]
+Each step is a unitary similarity, so the spectrum is preserved. In practice, one first reduces to Hessenberg form by Theorem \ref{thm:unitary-upper-hessenberg-reduction}, then applies shifted QR steps so that the iteration remains cheap and converges more rapidly.
+\end{method}
+
+\begin{method} \label{meth:svd-numerics-preview} \hlt{SVD Numerics Preview}\\
+Numerical SVD algorithms avoid forming $A^*A$ when possible, because that can square the condition number in the same way normal equations do. Stable routes use orthogonal or unitary transformations to reduce $A$ to bidiagonal form and then compute singular values from that smaller structured problem. The computed singular values control low-rank approximation, pseudoinverse truncation, and least-squares diagnostics through Theorem \ref{thm:eckart-young-frobenius-spectral} and Definition \ref{def:spectral-condition-number}.
+\end{method}
+
+\begin{definition} \label{def:krylov-subspace} \hlt{Krylov Subspace}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and a vector $\mathbf{b}\in\mathbb{F}^n$, the $m$th \hlt{Krylov subspace} generated by $(A,\mathbf{b})$ is
+\[
+\mathcal{K}_m(A,\mathbf{b})\defeq\operatorname{span}\{\mathbf{b},A\mathbf{b},\ldots,A^{m-1}\mathbf{b}\}.
+\]
+\end{definition}
+
+\begin{perspective} \label{per:krylov-methods-preview} \hlt{Krylov Methods Preview}\\
+Krylov methods search for approximate solutions or eigenvectors inside $\mathcal{K}_m(A,\mathbf{b})$ instead of using the whole ambient space. Arnoldi and Lanczos build orthonormal bases for these spaces; conjugate gradient, GMRES, and related methods impose projection or residual-minimization conditions there. The point is computational: repeated matrix-vector products can reveal useful low-dimensional structure without forming dense decompositions.
+\end{perspective}
+
+\begin{definition} \label{def:stationary-iterative-method} \hlt{Stationary Iterative Method}\\
+For a linear system $A\mathbf{x}=\mathbf{b}$, a stationary iteration has the form
+\[
+\mathbf{x}_{k+1}=M\mathbf{x}_k+\mathbf{c},
+\]
+where $M$ and $\mathbf{c}$ are fixed. When the exact solution $\mathbf{x}_*$ exists, the error satisfies $\mathbf{x}_{k+1}-\mathbf{x}_*=M(\mathbf{x}_k-\mathbf{x}_*)$, so convergence is governed by powers of $M$ and therefore by the spectral-radius criterion in Theorem \ref{thm:matrix-powers-converge-to-zero-spectral-radius}.
+\end{definition}
+
+\begin{perspective} \label{per:preconditioning-preview} \hlt{Preconditioning Preview}\\
+A preconditioner replaces $A\mathbf{x}=\mathbf{b}$ by a related system such as $M^{-1}A\mathbf{x}=M^{-1}\mathbf{b}$ or $AM^{-1}\mathbf{y}=\mathbf{b}$, with $\mathbf{x}=M^{-1}\mathbf{y}$. The goal is not to change the solution, but to improve conditioning, cluster eigenvalues, or make Krylov and iterative methods converge faster. A good preconditioner is therefore an approximate inverse that is much cheaper to apply than $A^{-1}$.
+\end{perspective}
