@@ -1,22 +1,14 @@
 \subsubsection{Infinite Series and Summability}
 
-% Source pages provided: Rudin Ch.3, Def. 3.21, Thms. 3.22--3.55, Examples 3.35, 3.40, 3.49, 3.53, and surrounding remarks in the provided screenshots.
-% Supplementary screenshot source: Abbott Ch.2.1, Ch.2.4, Ch.2.7--2.9 pages on partial sums, rearrangements, condensation, double summations, and products of series.
-% Supplementary screenshot source: Ross Ch.2, Secs. 14--16 supports series as partial sums, the Cauchy criterion, comparison/root/ratio tests, alternating and integral-test motivation, and decimal expansions as series.
-% Supplementary screenshot source: Grinberg Ch.19 pages on series as partial sums, the Cauchy criterion, comparison tests, geometric series, Cauchy condensation, and p-series; Grinberg Ch.20 contributes proof-pattern reminders only.
-% Additional screenshot source: provided Tao I Ch.1, Sec. 1.2 motivates divergent-series and double-sum warnings before the convergence and absolute-convergence hypotheses are stated.
-% Sources mapped: Rudin Ch.3; Abbott Ch.2.7-2.8; Ross Ch.2.14-16; Tao I Ch.7-8; Pugh Ch.3.3; Grinberg Ch.19.
-% TODO(source pages unavailable): Add non-Rudin series material not covered by the provided Abbott/Ross/Grinberg screenshots only after pages are provided.
-% Source dependency resolved: Ross Sec. 15 integral-test material is connected below to improper integrals in Definition \ref{def:improper-riemann-integral} and Theorem \ref{thm:nonnegative-improper-integral-supremum}.
 
 This subsection treats a series as a sequence of partial sums, so convergence and tests such as comparison, condensation, root, ratio, summation by parts, and absolute convergence should lean on Definition \ref{def:sequence-convergence-metric} and Theorem \ref{thm:cauchy-convergence-criterion}. Decimal-expansion material belongs here when sourced, by the section ownership in the map.
 
 \begin{definition} \label{def:series-core-definitions-source-todo}\label{def:series-and-partial-sums} \hlt{Series and Partial Sums}\\
 Let $(a_n)$ be a complex sequence, and for $p\leq q$ put $\sum\limits_{n=p}^{q}a_n\defeq a_p+a_{p+1}+\cdots+a_q$.\\
+The index $n$ in the displayed finite sum is a bound variable, in the sense of Principle \ref{princ:well-formed-statements-and-bound-variables}; it may be renamed when its scope is unchanged.\\
 The \hlt{series} $\sum_{n=1}^{\infty}a_n$ (or $a_1+a_2+\cdots$) is the partial-sum sequence $s_n\defeq\sum\limits_{k=1}^{n}a_k$. If $s_n\to s$, then $\sum\limits_{n=1}^{\infty}a_n=s$ and series \hlt{converges}; otherwise it \hlt{diverges}. The same convention applies to series starting at $n=0$.
 \end{definition}
 
-% TODO(source expansion): The provided Ross Sec. 16 screenshots also support long-division construction, nonuniqueness by terminal $0$'s and $9$'s, and the rational iff repeating-decimal theorem.
 
 \begin{motivation} \label{mot:partial-sums-remember-order} \hlt{Partial Sums Remember Order}\\
 An infinite sum is a limit of partial sums. For alternating harmonic series, odd and even partial sums approach the same value from opposite sides; see Corollary \ref{cor:alternating-series-test} and Theorem \ref{thm:absolute-convergence-rearrangements}.
@@ -92,6 +84,24 @@ If $x=1$, the partial sums are $n+1$, so they diverge.\\
 \end{proof}
 \end{theorem}
 
+\begin{definition} \label{def:real-decimal-as-series} \hlt{Real Decimals as Series}\\
+For digits $b_N,\ldots,b_0,a_1,a_2,\ldots\in\{0,\ldots,9\}$, with $b_N\neq0$ unless the integer part is $0$,\\
+$b_N\cdots b_0.a_1a_2\cdots \defeq \sum\limits_{i=0}^{N}b_i10^i+\sum\limits_{j=1}^{\infty}a_j10^{-j}$. The fractional series converges absolutely since $0\leq a_j10^{-j}\leq9\cdot10^{-j}$ and $\sum 9\cdot10^{-j}$ is geometric. A minus sign denotes the negative of this value.
+\end{definition}
+
+\begin{proposition} \label{prop:decimal-terminal-nine-nonuniqueness} \hlt{Terminal Nines Are Nonunique}\\
+The same real number can have two decimal representations: $1.000\ldots=0.999\ldots$.
+\begin{proof}
+By Definition \ref{def:real-decimal-as-series} and Theorem \ref{thm:geometric-series-nonnegative}, $1.000\ldots=1$; $0.999\ldots=\sum\limits_{j=1}^{\infty}9\cdot10^{-j} =9\cdot\frac{10^{-1}}{1-10^{-1}}=1$.\\
+\hlt{Structural Commentary}: The two digit strings have the same partial-sum limit.\\
+\hlt{Key Insight}: Uniqueness requires excluding terminal $9$ tails.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:decimal-expansions-as-series} \hlt{Decimal Expansions Are Series}\\
+Proposition \ref{prop:decimal-truncations-squeeze-real} gives decimal truncations that converge to a real number, while Definition \ref{def:real-decimal-as-series} interprets the infinite digit string as a series. Proposition \ref{prop:decimal-terminal-nine-nonuniqueness} explains the standard terminal-$9$ ambiguity.
+\end{perspective}
+
 \begin{theorem} \label{thm:cauchy-condensation-test} \hlt{Cauchy Condensation Test}\\
 Suppose $a_1\geq a_2\geq a_3\geq\cdots\geq0$. Then $\sum_{n=1}^{\infty}a_n$ converges if and only if $\sum\limits_{k=0}^{\infty}2^k a_{2^k}$ converges.
 \begin{proof}
@@ -114,7 +124,6 @@ This geometric series converges exactly when $2^{1-p}<1$, i.e. $p>1$, by Theorem
 \end{proof}
 \end{corollary}
 
-% Visual source: provided Ross Sec. 15 integral-test screenshots; redrawn as the rectangle comparison behind Theorem \ref{thm:integral-test-series}.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/integral_test_step_functions.tikz}
@@ -127,6 +136,7 @@ Let $N\in\N$ and let $f:[N,\infty)\to[0,\infty)$ be decreasing and Riemann integ
 Then $\sum\limits_{k=N}^{\infty}f(k)$ converges iff $\int_N^\infty f(x)\,dx$ converges.\\
 For $M\geq N$, $\int_N^{M+1} f(x)\,dx \leq \sum\limits_{k=N}^{M}f(k) \leq f(N)+\int_N^M f(x)\,dx$.
 \begin{proof}
+For a monotone function, compact-subinterval Riemann integrability follows from Theorem \ref{thm:monotone-functions-integrable-continuous-integrator} with $\alpha(x)=x$; it is kept in the statement to make the improper-integral dependency explicit.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] For $x\in[k,k+1]$, monotonicity gives $f(x)\leq f(k)$. Hence $\int_N^{M+1}f(x)\,dx\leq\sum_{k=N}^{M}f(k)$. If the series converges, these truncations are bounded, so $\int_N^\infty f$ converges by Theorem \ref{thm:nonnegative-improper-integral-supremum}.
@@ -175,14 +185,14 @@ But $q!e$ and $q!s_q$ are integers, so $q!(e-s_q)$ is an integer strictly betwee
 For a series $\sum a_n$, put $\alpha\defeq\limsup\limits_{n\to\infty}\sqrt[n]{\abs{a_n}}$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item if $\alpha<1$, then $\sum a_n$ converges;
+\item if $\alpha<1$, then $\sum a_n$ converges absolutely;
 \item if $\alpha>1$, then $\sum a_n$ diverges;
 \item if $\alpha=1$, the test gives no information.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Choose $\alpha<\beta<1$. Eventually $\abs{a_n}<\beta^n$, so $\sum a_n$ converges by comparison with $\sum\beta^n$.
+\item Choose $\alpha<\beta<1$. Eventually $\abs{a_n}<\beta^n$, so $\sum\abs{a_n}$ converges by comparison with $\sum\beta^n$.
 \item Since $\alpha>1$, $\abs{a_n}>1$ for infinitely many $n$, so $a_n\not\to0$; use Corollary \ref{cor:series-terms-tend-to-zero}.
 \item $\sum1/n$ and $\sum1/n^2$ both have $\alpha=1$, but behave differently by Corollary \ref{cor:p-series-test}.
 \end{enumerate}
@@ -195,17 +205,21 @@ For a series $\sum a_n$, put $\alpha\defeq\limsup\limits_{n\to\infty}\sqrt[n]{\a
 Assume $a_n\neq0$ for all sufficiently large $n$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\limsup\limits_{n\to\infty}\abs{\frac{a_{n+1}}{a_n}}<1$, then $\sum a_n$ converges.
-\item If $\abs{\frac{a_{n+1}}{a_n}}\geq1$ for all $n\geq n_0$, then $\sum a_n$ diverges.
+\item If $\limsup\limits_{n\to\infty}\abs{\frac{a_{n+1}}{a_n}}<1$, then $\sum a_n$ converges absolutely.
+\item If $\liminf\limits_{n\to\infty}\abs{\frac{a_{n+1}}{a_n}}>1$, then $\sum a_n$ diverges.
+\item In the remaining cases, the test gives no information.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Choose $\beta<1$ with $\abs{a_{n+1}/a_n}<\beta$. Then $\abs{a_n}=O(\beta^n)$, so comparison with a geometric series applies.
-\item The tail $\abs{a_n}$ is nondecreasing, so $a_n\not\to0$.
+\item Choose $\beta<1$ with $\abs{a_{n+1}/a_n}<\beta$ eventually.\\
+Then $\abs{a_n}=O(\beta^n)$, so $\sum\abs{a_n}$ converges by comparison with a geometric series.
+\item Choose $\beta>1$ with $\abs{a_{n+1}/a_n}>\beta$ eventually.\\
+Then the tail $\abs{a_n}$ is eventually increasing and bounded away from $0$, so $a_n\not\to0$.
+\item The series $\sum 1/n$ and $\sum 1/n^2$ both have ratio limit $1$, but behave differently by Corollary \ref{cor:p-series-test}.
 \end{enumerate}
 \hlt{Structural Commentary}: Ratios turn successive terms into a geometric majorant.\\
-\hlt{Key Insight}: Ratios detect geometric decay.
+\hlt{Key Insight}: Ratios below $1$ force geometric decay; ratios above $1$ prevent terms from tending to zero.
 \end{proof}
 \end{theorem}
 
@@ -254,7 +268,6 @@ For $N\leq p\leq q$, $\abs{\sum\limits_{n=p}^{q}a_nb_n}\leq M\left(\sum\limits_{
 \end{proof}
 \end{theorem}
 
-% Visual source: provided Ross Sec. 15 alternating-convergence screenshot; redrawn as interval lengths in the positive line.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/alternating_series_intervals.tikz}
@@ -312,7 +325,6 @@ Apply Theorem \ref{thm:complex-sequence-limit-algebra} to the corresponding part
 Given $\sum a_n$, $\sum b_n$, define $c_n\defeq\sum\limits_{k=0}^{n}a_kb_{n-k}$, $(n=0,1,2,\ldots)$. Series $\sum c_n$ is \hlt{Cauchy product} of given series.
 \end{definition}
 
-% Visual source: provided Abbott Ch.2.8 screenshots on double summations and products of series, redrawn as TikZ.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/cauchy_product_diagonals.tikz}
@@ -363,6 +375,38 @@ For $n>p$, $s_n-s'_n$ uses only tail terms, hence $\abs{s_n-s'_n}\leq\varepsilon
 \end{proof}
 \end{theorem}
 
+\begin{definition} \label{def:absolute-summation-over-countable-set} \hlt{Absolute Summation over Countable Sets}\\
+Let $X$ be countable, $f:X\to\C$, and $g:\N\to X$ be a bijection, $g_n\defeq g(n)$.\\
+If $\sum\limits_{n=1}^{\infty}\abs{f(g_n)}<\infty$, then $\sum\limits_{x\in X}f(x)$ is \hlt{absolutely convergent}, and $\sum\limits_{x\in X}f(x)\defeq\sum\limits_{n=1}^{\infty}f(g_n)$.
+\end{definition}
+
+\begin{theorem} \label{thm:absolute-countable-sums-well-defined} \hlt{Countable Sums Are Order-Free Under Absolute Convergence}\\
+Let $X,Y$ be countable, $f:X\to\C$ be absolutely summable, and $h:Y\to X$ be a bijection.\\
+Then $f\circ h$ is absolutely summable and $\sum\limits_{y\in Y}f(h(y))=\sum\limits_{x\in X}f(x)$.\\
+In particular, a countable absolutely convergent sum is independent of the enumeration.
+\begin{proof}
+Let $g:\N\to X$ and $k:\N\to Y$ be enumerations, and set $\sigma\defeq g^{-1}\circ h\circ k:\N\to\N$.\\
+Then $\sigma$ is a bijection and $h(k_n)=g_{\sigma(n)}$. Hence $\sum\limits_{n=1}^{\infty}\abs{f(h(k_n))} =\sum\limits_{n=1}^{\infty}\abs{f(g_{\sigma(n)})}<\infty$.\\
+Thus $\sum\limits_{y\in Y}f(h(y)) =\sum\limits_{n=1}^{\infty}f(g_{\sigma(n)}) =\sum\limits_{n=1}^{\infty}f(g_n) =\sum\limits_{x\in X}f(x)$, where the middle equality is Theorem \ref{thm:absolute-convergence-rearrangements}.\\
+Taking $Y=\N$ and $h$ to be any enumeration of $X$ gives enumeration independence.\\
+\hlt{Structural Commentary}: Absolute convergence turns an enumeration into harmless bookkeeping.\\
+\hlt{Key Insight}: Once absolute tails are controlled, the order of a countable listing no longer changes the sum.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:fubini-countable-absolute-series} \hlt{Fubini for Absolutely Summable Arrays}\\
+Let $a_{mn}\in\C$ and suppose $L\defeq\sum\limits_{(m,n)\in\N\times\N}\abs{a_{mn}}<\infty$. Then each row and column is absolutely summable.\\
+With $r_m\defeq\sum\limits_{n=1}^{\infty}a_{mn}$ and $c_n\defeq\sum\limits_{m=1}^{\infty}a_{mn}$, the row-total and column-total series are absolutely convergent,\\
+where $\sum\limits_{m=1}^{\infty}\abs{r_m}<\infty$; $\sum\limits_{n=1}^{\infty}\abs{c_n}<\infty$, and $\sum\limits_{m=1}^{\infty}r_m =\sum\limits_{(m,n)\in\N\times\N}a_{mn} =\sum\limits_{n=1}^{\infty}c_n$.
+\begin{proof}
+For finite $F\subseteq\N\times\N$, $\sum_{(m,n)\in F}\abs{a_{mn}}\leq L$. Hence each row and column has bounded absolute partial sums, so rows and columns converge absolutely by Theorem \ref{thm:nonnegative-series-bounded-partial-sums}.\\
+Moreover, for $M\geq1$, $\sum\limits_{m=1}^{M}\abs{r_m} \leq \sum\limits_{m=1}^{M}\sum\limits_{n=1}^{\infty}\abs{a_{mn}} =\lim\limits_{N\to\infty}\sum\limits_{m=1}^{M}\sum\limits_{n=1}^{N}\abs{a_{mn}} \leq L$, so $\sum\limits_m\abs{r_m}<\infty$.\\
+Similarly $\sum\limits_n\abs{c_n}<\infty$. Let $\varepsilon>0$. Choose finite $F\subseteq\N\times\N$ with $\sum\limits_{(m,n)\in(\N\times\N)\setminus F}\abs{a_{mn}}<\varepsilon$, and choose a rectangle $R=\{1,\ldots,M\}\times\{1,\ldots,N\}\supseteq F$. The full sum, row-iterated sum, and column-iterated sum each differ from $\sum\limits_{(m,n)\in R}a_{mn}$ by at most $\sum\limits_{(m,n)\in(\N\times\N)\setminus R}\abs{a_{mn}}\leq\varepsilon$. Let $\varepsilon\downarrow0$.\\
+\hlt{Structural Commentary}: Finite rectangles plus absolute tails justify Fubini.\\
+\hlt{Key Insight}: Double sums can be rearranged only after the entire array is absolutely summable.
+\end{proof}
+\end{theorem}
+
 \begin{method} \label{meth:series-proof-patterns-source-todo}\label{meth:series-proof-patterns} \hlt{Series Proof Patterns}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -371,6 +415,8 @@ For $n>p$, $s_n-s'_n$ uses only tail terms, hence $\abs{s_n-s'_n}\leq\varepsilon
 \item \hlt{Nonnegative terms}: replace convergence by boundedness of partial sums.
 \item \hlt{Comparison}: dominate only the tail; finitely many early terms are irrelevant.
 \item \hlt{Absolute convergence}: use $\sum\abs{a_n}$ when cancellation should not matter.
+\item \hlt{Countable index sets}: choose a bijection $g:\N\to X$; use Theorem \ref{thm:absolute-countable-sums-well-defined} so $\sum_{x\in X}a_x$ is independent of $g$.
+\item \hlt{Double sums}: prove identities on $R_{M,N}\defeq\{1,\ldots,M\}\times\{1,\ldots,N\}$; pass to $\infty$ arrays (Theorem \ref{thm:fubini-countable-absolute-series}).
 \item \hlt{Conditional convergence}: order matters; use summation by parts or rearrangements.
 \end{enumerate}
 \hlt{Key Insight}: Series arguments are sequence arguments with special notation for tails.

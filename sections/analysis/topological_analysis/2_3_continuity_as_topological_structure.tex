@@ -1,14 +1,5 @@
 \subsubsection{Continuity as Topological Structure}
 
-% Source pages provided: Rudin Ch.4, Defs. 4.1, 4.3, 4.5, 4.13, 4.18, 4.25--4.26, 4.28, 4.32--4.33; Thms. 4.2, 4.4, 4.6--4.10, 4.14--4.17, 4.19--4.20, 4.22--4.23, 4.29--4.30; Examples 4.11, 4.21, 4.27; Remarks 4.12, 4.24, 4.31; Thm. 4.34.
-% Internal dependency note: relative topology and compactness from the previous topology subsections are structural hypotheses used below.
-% Supplementary screenshot source: Ross Ch.3, Secs. 17--19 supports sequential continuity, epsilon--delta equivalence, IVT and extreme-value applications, and uniform continuity on closed intervals.
-% Supplementary screenshot source: Ross Ch.3, Secs. 20--22 supports limits along one-sided domains, extended real limits, metric-space continuity, path-connectedness, and convex examples.
-% Supplementary screenshot source: provided Pugh Ch.2 pages support sequential continuity, the epsilon-delta and open-set conditions, homeomorphisms, compact-domain inverse continuity, connectedness, and uniform continuity on compact sets.
-% Supplementary screenshot source: provided Tao II Ch.2, Secs. 2.1--2.5 support continuity between metric spaces, sequential and open-set characterizations, product-space/direct-sum maps, compactness and connectedness preservation, uniform continuity on compact domains, and optional topological-space formulations.
-% Source-map note: Tao II Ch.3 is mapped for limiting values of functions; the adherent-point convention below is kept as a compact comparison and should be expanded only when those pages are supplied.
-% Sources mapped: Rudin Ch.4; Abbott Ch.4; Ross Ch.3; Tao I Ch.9; Tao II Ch.2 and Ch.3.1 for limiting-value conventions; Pugh Ch.2.2.
-% TODO(source pages unavailable): Add non-Rudin continuity material from the mapped sources only after pages are provided.
 
 This subsection treats continuity as structure preservation: function limits describe local behavior, continuity matches the limit to the function value, and continuous maps preserve compactness and connectedness through inverse images. The sequence machinery from Definition \ref{def:sequence-convergence-metric}, compactness from Definition \ref{def:open-cover-and-compactness}, and connectedness from Definition \ref{def:separated-and-connected-sets} are used repeatedly below.
 
@@ -23,7 +14,6 @@ The adherent-point convention takes $p\in\overline{E}$ and allows $x=p$ in the $
 \hlt{Key Insight}: Punctured limits study nearby values; continuity adds compatibility with the value at the point.
 \end{remark}
 
-% Visual note: schematic redraw of Definition \ref{def:function-limit-metric} in the real one-variable case.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/function_limit_epsilon_delta.tikz}
@@ -80,6 +70,21 @@ The vector laws follow by the same sequential characterization and Theorem \ref{
 \hlt{Key Insight}: Sequential characterization lets previous sequence theorems do the work.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:function-limits-are-local} \hlt{Function Limits Are Local}\\
+Let $X,Y$ be metric spaces, let $E\subseteq X$, let $f:E\to Y$, let $p$ be a limit point of $E$, and let $q\in Y$.\\
+For every $r>0$, $\lim\limits_{x\to p;\,x\in E}f(x)=q$ $\Longleftrightarrow$ $\lim\limits_{x\to p;\,x\in E\cap B_r(p)}f(x)=q$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Since $E\cap B_r(p)\subseteq E$, any $\delta$ witnessing the limit on $E$ also witnesses the limit on $E\cap B_r(p)$.
+\item[$(\Leftarrow)$] Assume the restricted limit. Given $\varepsilon>0$, choose $\delta_0>0$ such that $x\in E\cap B_r(p)$ and $0<d_X(x,p)<\delta_0$ imply $d_Y(f(x),q)<\varepsilon$. Let $\delta\defeq\min\{\delta_0,r\}$.\\
+If $x\in E$ and $0<d_X(x,p)<\delta$, then $x\in E\cap B_r(p)$, so $d_Y(f(x),q)<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: Values away from $p$ cannot affect the limit at $p$.\\
+\hlt{Key Insight}: Shrink $\delta$ until every tested point lies in the chosen local neighborhood.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \label{def:continuity-at-a-point-and-on-a-set} \hlt{Continuity at a Point and on a Set}\\
 For metric spaces $X,Y$, $E\subseteq X$, $p\in E$, and $f:E\to Y$, the function $f$ is \hlt{continuous at $p$} if $\forall \varepsilon>0\ \exists \delta>0$, $x\in E$, $d_X(x,p)<\delta$ $\Longrightarrow$ $d_Y(f(x),f(p))<\varepsilon$.\\
@@ -170,7 +175,6 @@ If $U\subseteq X$ is open, then $f(U)=(f^{-1})^{-1}(U)$ is open in $Y$ since $f^
 Let $f:[0,2\pi)\to S^1$, and $f(t)=(\cos t,\sin t)$. This continuous bijection is not a homeomorphism: points of $S^1$ approaching $(1,0)$ from below have preimages tending to $2\pi$, not $0$.
 \end{example}
 
-% Visual source: provided Pugh Ch.2 screenshot, Fig. 31; redrawn as TikZ.
 \begin{figure}[htbp]
   \centering
   \input{figures/analysis/circle_interval_wrap_not_homeomorphism.tikz}
@@ -277,7 +281,26 @@ A mapping $f:X\to Y$ between metric spaces is \hlt{uniformly continuous} on $X$ 
 \hlt{Structural Commentary}: Uniform continuity is setwise: for each $\varepsilon$, one $\delta$ must work for all pairs in the set.
 \end{definition}
 
-% Visual source: provided Ross Ch.3, Sec. 19 screenshot of $f(x)=1/x^2$ and shrinking pointwise deltas, redrawn as TikZ.
+\begin{proposition} \label{prop:uniform-continuity-sequential-test} \hlt{Sequential Test for Uniform Continuity}\\
+Let $X,Y$ be metric spaces and let $f:X\to Y$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f$ is uniformly continuous on $X$;
+\item whenever $(p_n)$ and $(q_n)$ are sequences in $X$ with $d_X(p_n,q_n)\to0$, one has $d_Y(f(p_n),f(q_n))\to0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ Given $\varepsilon>0$, choose $\delta>0$ such that $d_X(x,y)<\delta$ implies $d_Y(f(x),f(y))<\varepsilon$ for all $x,y\in X$.\\
+Since $d_X(p_n,q_n)\to0$, eventually $d_X(p_n,q_n)<\delta$, hence eventually $d_Y(f(p_n),f(q_n))<\varepsilon$.
+\item[$(ii)$]$\Rightarrow (i)$ Prove the contrapositive. If $f$ is not uniformly continuous, then $\exists \varepsilon_0>0$ such that $\forall n\geq1$, $\exists p_n,q_n\in X$ with $d_X(p_n,q_n)<1/n$ and $d_Y(f(p_n),f(q_n))\geq\varepsilon_0$.\\
+Thus $d_X(p_n,q_n)\to0$ but $d_Y(f(p_n),f(q_n))\not\to0$, contradicting (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Uniform continuity preserves vanishing pairwise distances.\\
+\hlt{Key Insight}: Failure of one global $\delta$ manufactures two close input sequences with separated outputs.
+\end{proof}
+\end{proposition}
+
 \begin{figure}[H]
   \centering
   \input{figures/analysis/uniform_continuity_delta_shrinks_one_over_x_squared.tikz}
@@ -360,15 +383,14 @@ Since the coordinates of $\gamma$ are affine in $t$, $\gamma$ is continuous. Hen
 \end{corollary}
 
 \begin{definition} \label{def:one-sided-limits-and-discontinuities} \hlt{One-Sided Limits and Types of Discontinuity}\\
-Let $f:(a,b)\to\R$.
+Let $X\subseteq\R$, $f:X\to\R$, and $x_0\in\R$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $a\leq x<b$, $f(x+)=q$ means $f(t_n)\to q$ whenever $t_n\in(x,b)$ and $t_n\to x$.
-\item For $a<x\leq b$, $f(x-)=q$ means the analogous limit through $(a,x)$.
-\item For $x\in(a,b)$, $\lim_{t\to x}f(t)$ exists if and only if $f(x+)=f(x-)$.
+\item If $x_0$ is a limit point of $X\cap(x_0,\infty)$, then $f(x_0+)=q$ means $\lim\limits_{x\to x_0;\,x\in X\cap(x_0,\infty)}f(x)=q$.
+\item If $x_0$ is a limit point of $X\cap(-\infty,x_0)$, then $f(x_0-)=q$ means $\lim\limits_{x\to x_0;\,x\in X\cap(-\infty,x_0)}f(x)=q$.
+\item When $X$ approaches $x_0$ from both sides, the two-sided punctured limit through $X$ exists if and only if the two one-sided limits exist and are equal.
 \end{enumerate}
-A discontinuity with both one-sided limits is of the \hlt{first kind}, or \hlt{simple}; otherwise it is of the \hlt{second kind}\\
-Simple discontinuities are jumps, $f(x+)\neq f(x-)$, or removable value mismatches.
+For functions on an interval, a discontinuity with both one-sided limits is of the \hlt{first kind}, or \hlt{simple}; otherwise it is of the \hlt{second kind}. Simple discontinuities are jumps, $f(x_0+)\neq f(x_0-)$, or removable value mismatches.
 \end{definition}
 
 \begin{example} \label{ex:basic-discontinuity-types} \hlt{Basic Discontinuity Types}\\
@@ -377,7 +399,6 @@ The function $f(x)=x$ on $\Q$ and $f(x)=0$ off $\Q$ is continuous only at $0$; e
 Use Corollary \ref{cor:rationals-and-irrationals-dense}: every interval contains rational and irrational points.
 \end{example}
 
-% Visual note: schematic support for Example \ref{ex:basic-discontinuity-types}, using Corollary \ref{cor:rationals-and-irrationals-dense}.
 \begin{figure}[H]
   \centering
   \input{figures/analysis/dirichlet_dense_rows.tikz}
