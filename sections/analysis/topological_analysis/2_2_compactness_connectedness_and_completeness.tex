@@ -25,6 +25,239 @@ An \hlt{open cover} of $E$ is a collection $\{G_\alpha\}_{\alpha\in A}$ of open 
 A metric space is \hlt{sequentially compact} if every sequence has a convergent subsequence.
 \end{definition}
 
+\begin{perspective} \label{per:metric-sequences-as-topological-tests} \hlt{Metric Sequences as Topological Tests}\\
+Cardinality used sequences as enumerations in Definition \ref{def:sequence-as-enumeration}. In metric spaces, sequences become convergence probes: they test local topology, compactness, and whether Cauchy approximations have internal limits.
+\end{perspective}
+
+\begin{definition} \label{def:sequence-convergence-metric}\label{def:sequences-core-definitions-source-todo} \hlt{Convergent Sequence in a Metric Space}\\
+Let $(p_n)$ be a sequence in a metric space $X$.\\
+Then $(p_n)$ \hlt{converges} to $p\in X$ if for every $\varepsilon>0$ there is an integer $N$ such that $n\geq N$ $\Longrightarrow$ $d(p_n,p)<\varepsilon$.\\
+Notation is $p_n\to p$ or $\lim\limits_{n\to\infty}p_n=p$. If no such point $p\in X$ exists, the sequence \hlt{diverges}.
+\end{definition}
+
+\begin{definition} \label{def:sequence-range-and-boundedness} \hlt{Range and Boundedness of a Sequence}\\
+The \hlt{range} of $(p_n)$ is the set $\{p_n:n\in\N\}$.\\
+A sequence in a metric space is \hlt{bounded} if its range is bounded in the sense of Definition \ref{def:bounded-and-perfect-metric-sets}.
+\end{definition}
+
+\begin{definition} \label{def:eventually-and-frequently-in-a-set} \hlt{Eventually and Frequently in a Set}\\
+Let $(p_n)$ be a sequence in $X$, and let $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(p_n)$ is \hlt{eventually in $E$} if $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n\in E$.
+\item $(p_n)$ is \hlt{frequently in $E$} if $\forall N\in\N$ $\exists n\geq N$ such that $p_n\in E$.
+\end{enumerate}
+Eventually means tail containment; frequently means arbitrarily late visits.
+\end{definition}
+
+\begin{theorem} \label{thm:metric-sequence-basic-properties} \hlt{Basic Properties of Metric Convergence}\\
+Let $(p_n)$ be a sequence in a metric space $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_n\to p$ if and only if every neighborhood of $p$ contains $p_n$ for all but finitely many $n$; equivalently, $(p_n)$ is eventually in every neighborhood of $p$.
+\item If $p_n\to p$ and $p_n\to p'$, then $p=p'$.
+\item If $E\subseteq X$ and $p$ is a limit point of $E$, then there is a sequence $(p_n)$ in $E$ such that $p_n\to p$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is the $\varepsilon$-$N$ definition, since every neighborhood of $p$ contains a ball about $p$.
+\item Given $\varepsilon>0$, choose $N,N'$ so that $d(p_n,p)<\varepsilon/2$ for $n\geq N$ and $d(p_n,p')<\varepsilon/2$ for $n\geq N'$. For $n\geq\max\{N,N'\}$, the triangle inequality gives $d(p,p')<\varepsilon$. Hence $d(p,p')=0$.
+\item For each $n$, choose $p_n\in E$ with $p_n\neq p$ and $d(p_n,p)<1/n$, using Definition \ref{def:metric-topology-core-definitions}. Then $p_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: Eventual containment gives convergence; triangle inequality gives uniqueness.\\
+\hlt{Key Insight}: A limit point can always be approached by a sequence of points from the set.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:discrete-metric-convergence-eventually-constant} \hlt{Discrete-Metric Convergence}\\
+Let $X$ carry the discrete metric $d(x,y)=0$ if $x=y$ and $d(x,y)=1$ if $x\neq y$.\\
+For $(p_n)\subset X$ and $p\in X$, $p_n\to p$ if and only if $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n=p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $p_n\to p$. For $\varepsilon=1/2$, choose $N\in\N$ such that $n\geq N\Longrightarrow d(p_n,p)<1/2$.\\
+Since $d$ takes only the values $0,1$, $d(p_n,p)=0$, hence $p_n=p$ for all $n\geq N$.
+\item[$(\Leftarrow)$] Suppose $\exists N\in\N$ s.t. $n\geq N\Longrightarrow p_n=p$. Then $\forall \varepsilon>0$, $n\geq N$ gives $d(p_n,p)=0<\varepsilon$, so $p_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: The discrete metric has no room for distinct points to approach one another.\\
+\hlt{Key Insight}: In the discrete metric, $d(x,y)<1\Longleftrightarrow x=y$.
+\end{proof}
+\end{proposition}
+
+
+\begin{theorem} \label{thm:compact-sequential-subsequence} \hlt{Compactness Produces Convergent Subsequences}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $(p_n)$ is a sequence in a compact metric space $X$, then $p_{n_i}\to p$ for some subsequence and some $p\in X$.
+\item If $(\mathbf{x}_n)$ is bounded in $\R^k$, then it has a convergent subsequence.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $E=\{p_n:n\in\N\}$. If $E$ is finite, choose a value $p$ attained infinitely often; the corresponding constant subsequence converges. If $E$ is infinite, Theorem \ref{thm:infinite-subset-of-compact-has-limit-point} gives a limit point $p\in X$ of $E$. By Theorem \ref{thm:limit-point-neighborhoods-infinitely-many}, choose $n_i>n_{i-1}$ with $d(p_{n_i},p)<1/i$. Then $p_{n_i}\to p$.
+\item The range of $(\mathbf{x}_n)$ has compact closure by Theorem \ref{thm:heine-borel-rk}; apply (i) in that closure.
+\end{enumerate}
+\hlt{Structural Commentary}: Compactness turns arbitrary infinite behavior into an accumulating subsequence.\\
+\hlt{Key Insight}: In $\R^k$, boundedness is enough because bounded sets sit inside compact closed cells.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:subsequential-limits-closed} \hlt{Subsequential Limits Form a Closed Set}\\
+For a sequence $(p_n)$ in a metric space $X$, the set of all subsequential limits is closed.
+\begin{proof}
+Let $E^*$ be the set of subsequential limits and let $q$ be a limit point of $E^*$. Set $n_0=0$.\\
+For each $i$, choose $x_i\in E^*$ with $d(x_i,q)<2^{-i}$. Since $x_i$ is a subsequential limit, choose $n_i>n_{i-1}$ such that $d(p_{n_i},x_i)<2^{-i}$. Then $d(p_{n_i},q)<2^{1-i}$, so $p_{n_i}\to q$, and $q\in E^*$.\\
+\hlt{Structural Commentary}: A limit of subsequential limits is reached by diagonalizing through those subsequences.\\
+\hlt{Key Insight}: Choose later and closer terms at the same time.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:cauchy-sequence} \hlt{Cauchy Sequence}\\
+A sequence $(p_n)$ in a metric space $X$ is \hlt{Cauchy} if $\forall \varepsilon>0$  $\exists$ integer $N$ s.t. $n\geq N,\ m\geq N$ $\Longrightarrow$ $d(p_n,p_m)<\varepsilon$.
+\end{definition}
+
+\begin{definition} \label{def:diameter-of-metric-set} \hlt{Diameter}\\
+Let $E$ be a nonempty subset of a metric space $X$. The \hlt{diameter} of $E$ is $\diam E\defeq\sup\{d(p,q):p,q\in E\}$, with the supremum interpreted in the extended real sense when the set of distances is unbounded.
+\end{definition}
+
+\begin{proposition} \label{prop:cauchy-tail-diameters} \hlt{Cauchy Sequences and Tail Diameters}\\
+For $(p_n)$ in a metric space $X$, set $E_N\defeq\{p_j:j\geq N\}$. Then $(p_n)$ is Cauchy if and only if $\diam E_N\to0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Given $\varepsilon>0$, choose $N_0$ so that $m,n\geq N_0$ implies $d(p_m,p_n)<\varepsilon/2$.\\
+If $N\geq N_0$, then every pair in $E_N$ has distance $<\varepsilon/2$, so $\diam E_N<\varepsilon$.
+\item[$(\Leftarrow)$] Given $\varepsilon>0$, choose $N_0$ with $\diam E_{N_0}<\varepsilon$.\\
+If $m,n\geq N_0$, then $p_m,p_n\in E_{N_0}$, hence $d(p_m,p_n)\leq\diam E_{N_0}<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: Cauchy behavior is shrinking diameter of sequence tails.\\
+\hlt{Key Insight}: The limit is not named; only mutual closeness is measured.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/cauchy_tail_diameters.tikz}
+  \caption{Tail diameters $\diam E_N$ shrink toward $0$.}
+  \label{fig:cauchy-tail-diameters}
+\end{figure}
+
+\begin{theorem} \label{thm:nested-compact-diameters-singleton} \hlt{Nested Compact Sets with Shrinking Diameter}\\
+Let $X$ be a metric space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\overline{E}$ is the closure of $E$ in a metric space, then $\diam\overline{E}=\diam E$.
+\item If $K_1\supseteq K_2\supseteq K_3\supseteq\cdots$ is a sequence of nonempty compact sets in $X$ and $\diam K_n\to0$, then $\bigcap_{n=1}^{\infty}K_n$ consists of exactly one point.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $E\subseteq\overline{E}$, $\diam E\leq\diam\overline{E}$. For $p,q\in\overline{E}$ and $\varepsilon>0$, choose $p',q'\in E$ with $d(p,p'),d(q,q')<\varepsilon$.\\
+Then $d(p,q)\leq\diam E+2\varepsilon$, so $\diam\overline{E}\leq\diam E$.
+\item Put $I\defeq\bigcap_{n\geq1}K_n$. Corollary \ref{cor:nested-nonempty-compact-intersection} gives $I\neq\varnothing$.\\
+If $x,y\in I$ with $x\neq y$, then $\diam K_n\geq d(x,y)>0$ for all $n$, contradicting $\diam K_n\to0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Closure preserves $\diam$; $K_n\downarrow$ with $\diam K_n\to0$ forces a singleton.\\
+\hlt{Key Insight}: Compactness gives existence; shrinking diameter gives uniqueness.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:cauchy-convergence-criterion}\label{thm:sequences-completeness-main-source-todo} \hlt{Cauchy Criterion and Completeness Results}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item In any metric space, every convergent sequence is Cauchy.
+\item If $X$ is a compact metric space, then every Cauchy sequence in $X$ converges to a point of $X$.
+\item In $\R^k$, every Cauchy sequence converges.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $p_n\to p$, choose $N$ with $d(p_n,p)<\varepsilon/2$ for $n\geq N$. For $m,n\geq N$, $d(p_n,p_m)<\varepsilon$.
+\item Let $E_N\defeq\{p_j:j\geq N\}$ and $F_N\defeq\overline{E_N}$. Then $\diam F_N\to0$, the $F_N$ are compact and nested, and Theorem \ref{thm:nested-compact-diameters-singleton} gives $\bigcap_NF_N=\{p\}$. If $\diam F_N<\varepsilon$, then $p,p_n\in F_N$ for $n\geq N$, so $d(p_n,p)<\varepsilon$.
+\item For Cauchy $(\mathbf{x}_n)\subseteq\R^k$, choose $N$ with $\diam\{\mathbf{x}_j:j\geq N\}<1$. Its range is bounded, hence has compact closure by Theorem \ref{thm:heine-borel-rk}; apply (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Cauchy controls $\diam E_N$; compactness turns $\bigcap_NF_N$ into the limit.\\
+\hlt{Key Insight}: In $\R^k$, the Cauchy criterion is equivalent to convergence.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:cauchy-sequence-with-convergent-subsequence} \hlt{A Cauchy Sequence with a Convergent Subsequence Converges}\\
+Let $(p_n)$ be a Cauchy sequence in a metric space $X$. If some subsequence $(p_{n_j})$ converges to $p\in X$, then $p_n\to p$.
+\begin{proof}
+Given $\varepsilon>0$, choose $N_0$ so that $m,n\geq N_0$ implies $d(p_m,p_n)<\varepsilon/2$. Choose $j$ with $n_j\geq N_0$ and $d(p_{n_j},p)<\varepsilon/2$. Then for every $n\geq N_0$, $d(p_n,p)\leq d(p_n,p_{n_j})+d(p_{n_j},p)<\varepsilon$.\\
+\hlt{Structural Commentary}: The Cauchy tail follows any convergent subsequence to the same limit.\\
+\hlt{Key Insight}: Mutual closeness plus one convergent thread forces the whole tail to converge.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:complete-metric-space} \hlt{Complete Metric Space}\\
+A metric space $X$ is \hlt{complete} if every Cauchy sequence in $X$ converges to a point of $X$.\\
+Compact metric spaces and $\R^k$ are complete (by Theorem \ref{thm:cauchy-convergence-criterion}).
+\end{definition}
+
+\begin{proposition} \label{prop:basic-completeness-consequences} \hlt{Completeness and Closed Subspaces}\\
+Let $X$ be a complete metric space and let $E\subseteq X$ carry the inherited metric.\\
+Then $E$ is complete if and only if $E$ is closed in $X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is complete. If $p\in\overline{E}$, choose $p_n\in E$ with $d(p_n,p)<1/n$.\\
+Then $p_n\to p$ in $X$, so $(p_n)$ is Cauchy in $E$ and hence $p_n\to q$ for some $q\in E$. Uniqueness of limits in $X$ gives $p=q\in E$; thus $\overline{E}\subseteq E$, so $E$ is closed.
+\item[$(\Leftarrow)$] Suppose $E$ is closed. If $(p_n)\subseteq E$ is Cauchy, completeness of $X$ gives $p_n\to p\in X$.\\
+Since $E$ is closed, $p\in E$, so $E$ is complete.
+\end{enumerate}
+\hlt{Structural Commentary}: Completeness gives the limit in $X$; closedness keeps it in $E$.\\
+\hlt{Key Insight}: In a complete ambient space, $E$ is complete exactly when $\overline{E}=E$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:contraction-mapping} \hlt{Contraction}\\
+Let $X$ be a metric space with metric $d$.\\
+A map $\varphi:X\to X$ is a \hlt{contraction} if $\exists$ a constant $0\leq c<1$ such that $d(\varphi(x),\varphi(y))\leq c\,d(x,y)$ for $x,y\in X$.\\
+\hlt{Structural Commentary}: Bound $c<1$ excludes nonexpansive maps and is the hypothesis in Theorem \ref{thm:contraction-principle}.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/contraction_fixed_point_iteration.tikz}
+  \caption{A contraction pulls iterates toward the unique fixed point.}
+  \label{fig:contraction-fixed-point-iteration}
+\end{figure}
+
+\begin{theorem} \label{thm:contraction-principle} \hlt{Contraction Principle}\\
+If $X$ is a complete metric space and $\varphi:X\to X$ is a contraction, then $\exists$ a unique $x\in X$ such that $\varphi(x)=x$.
+\begin{proof}
+Choose $x_0\in X$ and define $x_{n+1}=\varphi(x_n)$.\\
+If $c<1$ is a contraction constant, induction gives $d(x_{n+1},x_n)\leq c^n d(x_1,x_0)$.\\
+For $n<m$, the triangle inequality and the finite geometric sum give $d(x_n,x_m)\leq \sum\limits_{j=n}^{m-1}d(x_j,x_{j+1}) \leq \frac{c^n}{1-c}d(x_1,x_0)$.\\
+Thus $(x_n)$ is Cauchy, so completeness gives $x_n\to x\in X$.\\
+Since a contraction is continuous, $\varphi(x)=\lim\varphi(x_n)=\lim x_{n+1}=x$.\\
+If $\varphi(x)=x$ and $\varphi(y)=y$, then $d(x,y)\leq c\,d(x,y)$, hence $d(x,y)=0$ and $x=y$.\\
+\hlt{Structural Commentary}: Iteration turns the contraction estimate into a geometric Cauchy estimate.\\
+\hlt{Key Insight}: Completeness supplies the limiting point; the strict constant $c<1$ forces uniqueness.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:contractions-feed-local-analysis} \hlt{Fixed Points as Existence Proofs}\\
+A contraction proof solves $x=\varphi(x)$ by iteration in a complete metric space. This is the template behind the inverse function theorem, Theorem \ref{thm:inverse-function-theorem-rn}.
+\end{perspective}
+
+\begin{example} \label{ex:rational-metric-not-complete} \hlt{A Noncomplete Metric Space}\\
+The rational numbers with $d(x,y)=\abs{x-y}$ are not complete.\\
+Let $(r_n)$ be the decimal truncation sequence $1.4,\ 1.41,\ 1.414,\ 1.4142,\ldots$, for $\sqrt{2}$.\\
+This is a concrete instance of the truncation squeeze in Proposition \ref{prop:decimal-truncations-squeeze-real}. If $k,n\geq N$, then $\abs{r_k-r_n}\leq10^{-N}$, so $(r_n)$ is Cauchy in $\Q$. As a sequence in $\R$, it converges to $\sqrt{2}$.\\
+If it converged to some $r\in\Q$ in the inherited metric, uniqueness of limits in $\R$ would force $r=\sqrt{2}$, contradicting Proposition \ref{prop:rational-square-root-two-gap}. Thus $\Q$ is not complete in the inherited metric.
+\hlt{Structural Commentary}: The decimal approximants are Cauchy before their missing limit is available inside $\Q$.\\
+\hlt{Key Insight}: Completeness asks whether every internally Cauchy approximation has an internal endpoint.
+\end{example}
+
+\begin{perspective} \label{per:cauchy-completion-skeleton} \hlt{Completion by Cauchy Sequences}\\
+Complete by identifying Cauchy sequences with $d(p_n,q_n)\to0$ and setting $D([(p_n)],[(q_n)])=\lim_{n\to\infty}d(p_n,q_n)$.\\
+Constant sequences embed the original space; triangle inequalities and diagonals give a complete metric.
+\end{perspective}
+
+
 \begin{figure}[H]
   \centering
   \input{figures/analysis/total_boundedness_finite_cover.tikz}
@@ -357,9 +590,6 @@ Thus $z_1\in[x,y]\setminus E$, contradicting $[x,y]\subseteq E$.
 \end{enumerate}
 \end{method}
 
-\begin{definition} \label{def:completeness-source-todo} \hlt{Completeness Cross-Reference}\\
-Cauchy sequences and complete metric spaces are defined in Definition \ref{def:cauchy-sequence} and Definition \ref{def:complete-metric-space}. The compactness-to-completeness direction is proved in Theorem \ref{thm:cauchy-convergence-criterion}; this subsection keeps the open-cover compactness and connectedness material separate from the later sequence methods.
-\end{definition}
 
 \begin{definition} \label{def:fsigma-gdelta-nowhere-dense} \hlt{$F_\sigma$, $G_\delta$, and Nowhere-Dense Sets}\\
 For subsets of a metric space $X$:
