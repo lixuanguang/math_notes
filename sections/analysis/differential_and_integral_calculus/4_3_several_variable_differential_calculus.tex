@@ -1,6 +1,6 @@
 \subsubsection{Several-Variable Differential Calculus}
 
-Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}, Theorem \ref{thm:determinant-basic-laws}, Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}, and the metric background from Example \ref{ex:coordinate-norm-metrics-rk}.
+Several-variable differentiation studies best linear approximations and their local geometry. We use the linear-map, operator-norm, determinant, and invertibility tools from Proposition \ref{prop:matrix-representation-action}, Definition \ref{def:operator-norm-rn-rm}, Theorem \ref{thm:determinant-basic-laws}, and the metric background from Example \ref{ex:coordinate-norm-metrics-rk}. The operator-norm topology of invertible linear maps is developed here because it drives local inversion.
 
 \begin{definition} \label{def:several-variable-differentiation-core-source-todo}\label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
 Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\x\in E$, and $\LL(\R^n,\R^m)$ denote space of linear maps (Definition \ref{def:linear-map}).\\
@@ -246,6 +246,30 @@ Define $f(t)=\int_{-\infty}^{\infty}e^{-x^2}\cos(xt)\,dx$ and $g(t)=-\int_{-\inf
 Then $f'(t)=g(t)$, and integration by parts gives $2f'(t)+tf(t)=0$. Since $f(0)=\sqrt{\pi}$, $f(t)=\sqrt{\pi}\exp\!\left(-\frac{t^2}{4}\right)$.
 \end{example}
 
+\begin{theorem} \label{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} \hlt{Finite-Dimensional Linear Maps Are Lipschitz}\\
+Let $A\in\LL(\R^n,\R^m)$. Then $A$ is $\normop{A}$-Lipschitz: $\norm{A\x}_2\leq\normop{A}\norm{\x}_2$ for $\x\in\R^n$.\\
+If $A\in\LL(\R^n)$ is invertible, then $\frac{1}{\normop{A^{-1}}}\norm{\x}_2\leq\norm{A\x}_2\leq\normop{A}\norm{\x}_2$, so $A$ is a homeomorphism of $\R^n$.
+\begin{proof}
+The upper estimate follows from Definition \ref{def:operator-norm-rn-rm}: apply it to $\x/\norm{\x}_2$ when $\x\neq\ze$, while $\x=\ze$ is trivial. If $A$ is invertible, apply the same estimate to $A^{-1}$ with $\y=A\x$: $\norm{\x}_2=\norm{A^{-1}\y}_2\leq\normop{A^{-1}}\norm{A\x}_2$.\\
+Thus $A$ and $A^{-1}$ are continuous.\\
+\hlt{Structural Commentary}: Linear maps have finite stretch; invertible ones have positive lower stretch.\\
+\hlt{Key Insight}: The operator norm turns linear algebra into uniform metric estimates.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:invertible-operators-open-and-inversion-continuous} \hlt{Invertible Operators Form an Open Set}\\
+Let $\Omega\subseteq\LL(\R^n)$ be the set of invertible linear operators. If $A\in\Omega$, $B\in\LL(\R^n)$, $\normop{B-A}\,\normop{A^{-1}}<1$, then $B\in\Omega$. Consequently, $\Omega$ is open in $\LL(\R^n)$ and the map $A\mapsto A^{-1}$ is continuous on $\Omega$.
+\begin{proof}
+Put $\alpha=1/\normop{A^{-1}}$ and $\beta=\normop{B-A}$.\\
+For every $\x\in\R^n$, $\alpha\norm{\x}_2\leq \norm{A\x}_2 \leq \norm{(A-B)\x}_2+\norm{B\x}_2 \leq \beta\norm{\x}_2+\norm{B\x}_2$.\\
+Since $\beta<\alpha$, this shows $B\x\neq0$ for $\x\neq0$; hence $B$ is injective and therefore invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+Replacing $\x$ by $B^{-1}\y$ gives $\normop{B^{-1}}\leq(\alpha-\beta)^{-1}$.\\
+Finally, $B^{-1}-A^{-1}=B^{-1}(A-B)A^{-1}$, Proposition \ref{prop:spectral-norm-basic-properties} gives the continuity of inversion.\\
+\hlt{Structural Commentary}: Small operator-norm perturbations of an invertible map remain invertible.\\
+\hlt{Key Insight}: The inverse changes continuously because the difference of inverses factors through $A-B$.
+\end{proof}
+\end{theorem}
+
 \begin{definition} \label{def:jacobian-determinant} \hlt{Jacobian}\\
 If $\f:E\subseteq\R^n\to\R^n$ is differentiable at $\x$, define $J_{\f}(\x)\defeq \det D\f(\x) =\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}$ when $f=(y_1,\ldots,y_n)$.\\
 By Theorem \ref{thm:determinant-basic-laws}, $D\f(\x)$ is invertible if and only if $J_{\f}(\x)\neq0$. The absolute value $\abs{J_{\f}(\x)}$ is the local version of determinant volume scaling from Theorem \ref{thm:linear-map-volume-scaling-determinant}, used again in the change-of-variables theorem.
@@ -287,6 +311,23 @@ Let $W\subseteq E$ be open and let $\y\in\f(W)$. Choose $\x\in W$ with $\f(\x)=\
 \hlt{Key Insight}: A local inverse turns nearby domain points into a full image neighborhood.
 \end{proof}
 \end{corollary}
+
+\begin{definition} \label{def:implicit-derivative-blocks} \hlt{Block Splitting of a Linear Map}\\
+For $A\in\LL(\R^{n+m},\R^n)$ and $(\h,\mathbf{k})\in\R^n\times\R^m$, define $A_x\h\defeq A(\h,\ze)$ and $A_y\mathbf{k}\defeq A(\ze,\mathbf{k})$.\\
+Then $A_x\in\LL(\R^n)$, $A_y\in\LL(\R^m,\R^n)$, and $A(\h,\mathbf{k})=A_x\h+A_y\mathbf{k}$.
+\end{definition}
+
+\begin{theorem} \label{thm:linear-implicit-function-theorem} \hlt{Linear Implicit Function Theorem}\\
+If $A\in\LL(\R^{n+m},\R^n)$, $A_x$ invertible, then $\forall \mathbf{k}\in\R^m$ $\exists$ unique $\h\in\R^n$ s.t. $A(\h,\mathbf{k})=0$, that $\h=-(A_x)^{-1}A_y\mathbf{k}$.
+\begin{proof}
+Fix $\mathbf{k}\in\R^m$ and set $\h_0\defeq-(A_x)^{-1}A_y\mathbf{k}$.\\
+By Definition \ref{def:implicit-derivative-blocks}, $A(\h_0,\mathbf{k}) =A_x\h_0+A_y\mathbf{k} =-A_y\mathbf{k}+A_y\mathbf{k} =0$, so a solution exists.\\
+If $\h\in\R^n$ also satisfies $A(\h,\mathbf{k})=0$, then $A_x\h+A_y\mathbf{k}=0$, hence $A_x\h=-A_y\mathbf{k}$.\\
+Applying $(A_x)^{-1}$ gives $\h=-(A_x)^{-1}A_y\mathbf{k}=\h_0$. Thus the solution exists and is unique.\\
+\hlt{Structural Commentary}: Splitting $A$ separates the unknown variable from the parameter.\\
+\hlt{Key Insight}: Invertibility of $A_x$ turns constraint $A(\h,\mathbf{k})=0$ into a uniquely solvable linear equation for $\h$.
+\end{proof}
+\end{theorem}
 
 The implicit theorem below is the nonlinear counterpart of the block equation theorem. The invertible block is the set of variables one can solve for, just as in Theorem \ref{thm:linear-implicit-function-theorem}.
 
