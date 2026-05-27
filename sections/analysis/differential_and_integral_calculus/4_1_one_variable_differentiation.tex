@@ -5,6 +5,7 @@
 % Supplementary screenshot source: provided exercise screenshot supports the higher-order Leibniz product rule.
 % Supplementary screenshot source: provided Pugh Ch.3, Sec. 1 pages support differentiation rules, the mean-value and ratio mean-value theorems, L'Hospital's rule, Darboux's theorem for derivatives, smoothness classes, nonanalytic smooth functions, Taylor approximation, and the one-dimensional inverse-function theorem.
 % Additional screenshot source: provided Tao I Ch.1, Example 1.2.12 motivates checking L'Hospital hypotheses rather than treating derivative quotients as a formal replacement.
+% Additional screenshot source: provided Tao Analysis I Ch.10, Secs. 10.1--10.5 pages support the domain-dependent derivative convention, Newton approximation, local extrema, Rolle and mean-value theorems, monotonicity tests, inverse-function differentiation, and L'Hospital's rule.
 % Sources mapped: Rudin Ch.5; Abbott Ch.5; Ross Ch.5; Tao I Ch.10; Pugh Ch.3.1.
 % TODO(source pages unavailable): Add remaining non-Rudin differentiation material beyond the supplied Ross/Pugh pages only after source pages are provided.
 
@@ -16,6 +17,19 @@ If $\lim_{t\to x}\phi_x(t)$ exists, denote \hlt{derivative} by $f'(x)$; then $f$
 If this holds for every $x\in E\subseteq[a,b]$, then $f$ is \hlt{differentiable on $E$}.
 \end{definition}
 
+% Visual source: provided Tao Analysis I Ch.10, Sec. 10.1 discussion of isolated domain points and restricted domains; redrawn schematically.
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/one_variable_domain_restriction.tikz}
+  \caption{Domain matters: isolated points give no punctured approach; $[x_0,\infty)$ gives a right-hand one.}
+  \label{fig:one-variable-domain-restriction}
+\end{figure}
+
+\begin{perspective} \label{per:one-variable-domain-of-differentiability} \hlt{Derivative Depends on the Domain}\\
+For $f:X\to\R$, $f'(x_0)$ is the limit of $\frac{f(x)-f(x_0)}{x-x_0}$ as $x\to x_0$ in $X\setminus\{x_0\}$; see Definition \ref{def:function-limit-metric}. Hence $x_0$ must be a limit point of $X$: isolated points give no derivative, while half-interval domains give one-sided derivatives.
+\end{perspective}
+
+
 % Visual note: schematic redraw of Definition \ref{def:derivative-real-function}.
 \begin{figure}[H]
   \centering
@@ -23,6 +37,20 @@ If this holds for every $x\in E\subseteq[a,b]$, then $f$ is \hlt{differentiable 
   \caption{The derivative is the limiting slope of secant lines through $(x,f(x))$.}
   \label{fig:derivative-secant-to-tangent}
 \end{figure}
+
+\begin{proposition} \label{prop:one-variable-first-order-approximation} \hlt{First-Order Approximation Form}\\
+Let $X\subseteq\R$, let $x_0\in X$ be a limit point, let $f:X\to\R$, and let $L\in\R$. Then $f'(x_0)=L$ relative to $X$ iff $\forall \varepsilon>0$ $\exists \delta>0$ such that $\abs{f(x)-f(x_0)-L(x-x_0)}\leq \varepsilon\abs{x-x_0}$ whenever $x\in X$ and $\abs{x-x_0}<\delta$.
+\begin{proof}
+For $x\neq x_0$, $\frac{\abs{f(x)-f(x_0)-L(x-x_0)}}{\abs{x-x_0}} = \abs{\frac{f(x)-f(x_0)}{x-x_0}-L}$, while $x=x_0$ makes approx. estimate automatic.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f'(x_0)=L$, then the displayed right-hand side is at most $\varepsilon$ for all $x\in X\setminus\{x_0\}$ sufficiently near $x_0$. Multiplying by $\abs{x-x_0}$ gives the approximation estimate.
+\item[$(\Leftarrow)$] If the approximation estimate holds, then division by $\abs{x-x_0}$ gives $\abs{\frac{f(x)-f(x_0)}{x-x_0}-L}\leq\varepsilon$ for all $x\in X\setminus\{x_0\}$ sufficiently near $x_0$. Hence $f'(x_0)=L$.
+\end{enumerate}
+\hlt{Structural Commentary}: Differentiability is first-order linear approximation.\\
+\hlt{Key Insight}: Multiply or divide by $\abs{x-x_0}$.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:differentiable-implies-continuous}\label{thm:one-variable-differentiation-main-source-todo} \hlt{Differentiability Implies Continuity}\\
 If $f$ is differentiable at $x$, then $f$ is continuous at $x$.
@@ -89,6 +117,10 @@ However, for $x\neq0$, $f_2'(x)=2x\sin(1/x)-\cos(1/x)$, so $f_2'$ is not continu
 Let $f$ be a real-valued function on a metric space $X$. The function has a \hlt{local maximum} at $p\in X$ if there is $\delta>0$ such that $f(q)\leq f(p)$ whenever $d(p,q)<\delta$. Local minima are defined by reversing the inequality.
 \end{definition}
 
+\begin{remark} \label{rem:local-versus-global-extrema} \hlt{Local and Global Extrema}\\
+Global extrema are local, but local extrema depend on domain: isolated points are automatic extrema. Derivative tests therefore need an interior interval point; compactness supplies global extrema (Theorem \ref{thm:extreme-value-theorem-compact}).
+\end{remark}
+
 \begin{theorem} \label{thm:interior-extremum-derivative-zero} \hlt{Interior Extremum Has Zero Derivative}\\
 If $f$ has a local extremum at $x\in(a,b)$ and $f'(x)$ exists, then $f'(x)=0$.
 \begin{proof}
@@ -100,11 +132,20 @@ Since $(-f)'(x)=-f'(x)$, we get $-f'(x)=0$, hence $f'(x)=0$.\\
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:rolles-theorem-one-variable} \hlt{Rolle's Theorem}\\
+If $f:[a,b]\to\R$ continuous on $[a,b]$, differentiable on $(a,b)$, and $f(a)=f(b)$, then $\exists x\in(a,b)$ s.t. $f'(x)=0$.
+\begin{proof}
+If $f$ is constant, any $x\in(a,b)$ works. Otherwise, by Theorem \ref{thm:extreme-value-theorem-compact}, $f$ attains a nonendpoint extremum at some $x\in(a,b)$. Theorem \ref{thm:interior-extremum-derivative-zero} gives $f'(x)=0$.\\
+\hlt{Structural Commentary}: Equal endpoints force any nonconstant height change to turn around inside.\\
+\hlt{Key Insight}: Compactness gives the extremum; differentiability makes the interior extremum stationary.
+\end{proof}
+\end{theorem}
+
 \begin{theorem} \label{thm:cauchy-mean-value-theorem} \hlt{Cauchy Mean Value Theorem}\\
 Let $f,g$ be continuous on $[a,b]$, differentiable on $(a,b)$. $\exists$ $x\in(a,b)$, $\bigl(f(b)-f(a)\bigr)g'(x)=\bigl(g(b)-g(a)\bigr)f'(x)$.
 \begin{proof}
-Set $h(t)\defeq\bigl(f(b)-f(a)\bigr)g(t)-\bigl(g(b)-g(a)\bigr)f(t)$. Then $h(a)=h(b)$, $h$ is continuous on $[a,b]$, differentiable on $(a,b)$. If $h$ is nonconstant, an interior extremum exists; otherwise any interior point works.\\
-In either case, Theorem \ref{thm:interior-extremum-derivative-zero} gives $h'(x)=0$, which is the displayed identity.\\
+Set $h(t)\defeq\bigl(f(b)-f(a)\bigr)g(t)-\bigl(g(b)-g(a)\bigr)f(t)$.\\
+Then $h(a)=h(b)$, $h$ is continuous on $[a,b]$, and $h$ is differentiable on $(a,b)$. By Theorem \ref{thm:rolles-theorem-one-variable}, $h'(x)=0$ for some $x\in(a,b)$. Since $h'(x)=\bigl(f(b)-f(a)\bigr)g'(x)-\bigl(g(b)-g(a)\bigr)f'(x)$, the identity follows.\\
 \hlt{Structural Commentary}: Build one auxiliary function whose endpoint values agree.\\
 \hlt{Key Insight}: Equal endpoints force an interior horizontal tangent.
 \end{proof}
@@ -125,6 +166,16 @@ Let $g(t)=t$. Then $g'(x)=1$, $g(b)-g(a)=b-a$.\\
 Hence Theorem \ref{thm:cauchy-mean-value-theorem} gives $f(b)-f(a)=(b-a)f'(x)$ for some $x\in(a,b)$.\\
 \hlt{Structural Commentary}: This is Cauchy's theorem with $g(t)=t$.\\
 \hlt{Key Insight}: A secant slope is achieved as a tangent slope somewhere inside.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:bounded-derivative-lipschitz-one-variable} \hlt{Bounded Derivative Gives Lipschitz Control}\\
+If $f:[a,b]\to\R$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $\abs{f'}\leq M$ on $(a,b)$, then $f$ is $M$-Lipschitz on $[a,b]$, hence uniformly continuous.
+\begin{proof}
+For $x<y$, Corollary \ref{cor:mean-value-theorem} gives $f(y)-f(x)=(y-x)f'(c)$ for some $c\in(x,y)$,\\
+so $\abs{f(y)-f(x)}\leq M(y-x)$. Symmetry handles $x>y$, and $x=y$ is trivial.\\
+\hlt{Structural Commentary}: A derivative bound controls every secant slope.\\
+\hlt{Key Insight}: Local slope bounds become global Lipschitz bounds through the Mean Value Theorem.
 \end{proof}
 \end{corollary}
 
@@ -290,7 +341,7 @@ If $\mathbf{f}:[a,b]\to\R^k$ is continuous on $[a,b]$ and differentiable on $(a,
 Then for some $x\in(a,b)$, $\norm{\mathbf{f}(b)-\mathbf{f}(a)}_2\leq (b-a)\norm{\mathbf{f}'(x)}_2$.
 \begin{proof}
 Set $\mathbf{z}\defeq\mathbf{f}(b)-\mathbf{f}(a)$ and $\varphi(t)\defeq\mathbf{z}\cdot\mathbf{f}(t)$.\\
-Corollary \ref{cor:mean-value-theorem} gives $\varphi(b)-\varphi(a)=(b-a)\varphi'(x)=(b-a)\mathbf{z}\cdot\mathbf{f}'(x)$ for some $x\in(a,b)$. Since $\varphi(b)-\varphi(a)=\norm{\mathbf{z}}_2^2$, Theorem \ref{thm:finite-schwarz-inequality-complex-scalars} gives $\norm{\mathbf{z}}_2^2\leq(b-a)\norm{\mathbf{z}}_2\norm{\mathbf{f}'(x)}_2,$, and the result follows by cancellation, with $\mathbf{z}=0$ trivial.\\
+Corollary \ref{cor:mean-value-theorem} gives $\varphi(b)-\varphi(a)=(b-a)\varphi'(x)=(b-a)\mathbf{z}\cdot\mathbf{f}'(x)$ for some $x\in(a,b)$. Since $\varphi(b)-\varphi(a)=\norm{\mathbf{z}}_2^2$, Theorem \ref{thm:finite-schwarz-inequality-complex-scalars} gives $\norm{\mathbf{z}}_2^2\leq(b-a)\norm{\mathbf{z}}_2\norm{\mathbf{f}'(x)}_2$, and the result follows by cancellation, with $\mathbf{z}=0$ trivial.\\
 \hlt{Structural Commentary}: A scalar projection yields the vector norm bound.\\
 \hlt{Key Insight}: Project onto the displacement vector, then use Schwarz to return to norms.
 \end{proof}
@@ -299,7 +350,9 @@ Corollary \ref{cor:mean-value-theorem} gives $\varphi(b)-\varphi(a)=(b-a)\varphi
 \begin{method} \label{meth:one-variable-differentiation-no-overlap-source-todo}\label{meth:one-variable-differentiation-proof-patterns} \hlt{Differentiation Proof Patterns}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
+\item \hlt{Domain}: require $x_0$ to be a limit point of $X$; isolated points have no derivative by Perspective \ref{per:one-variable-domain-of-differentiability}.
 \item \hlt{Definition}: factor $f(t)-f(x)=(t-x)Q_x(t)$ and take $Q_x(t)\to f'(x)$.
+\item \hlt{Approximation}: use Proposition \ref{prop:one-variable-first-order-approximation} to replace quotient limits by first-order error bounds.
 \item \hlt{Algebra}: prove quotient identities first; use continuity to pass to limits.
 \item \hlt{Mean values}: choose $h$ with equal endpoint values and apply Theorem \ref{thm:interior-extremum-derivative-zero}.
 \item \hlt{Taylor}: set $G=f-P-M(t-\alpha)^n$ and iterate the mean value theorem.
