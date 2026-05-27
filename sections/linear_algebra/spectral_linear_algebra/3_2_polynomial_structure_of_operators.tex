@@ -1,0 +1,809 @@
+\subsection{Polynomial Structure of Operators}
+
+% **Role:** structure revealed by invariant subspaces and eigenbehavior.
+%
+% Characteristic polynomial, minimal polynomial, Cayley--Hamilton, generalized eigenvectors, nilpotent parts.
+
+Polynomial structure records the equations an operator satisfies and turns them into invariant pieces through characteristic and minimal polynomials, Cayley--Hamilton, generalized eigenspaces, and nilpotent parts.
+
+\begin{definition} \label{def:operator-powers} \hlt{Powers of an Operator}\\
+Let $T\in\LL(\mathcal{V})$. For a positive integer $m$, $T^m\defeq \underbrace{T\cdots T}_{m\text{ times}}$ and $T^0\defeq I_{\mathcal{V}}$.\\
+If $T$ is invertible, then $T^{-m}\defeq(T^{-1})^m$ for positive integers $m$.
+\end{definition}
+
+\begin{definition} \label{def:polynomial-applied-to-operator} \hlt{Polynomial Applied to an Operator}\\
+Let $T\in\LL(\mathcal{V})$ and let $p\in\mathbb{F}[z]$ be $p(z)=a_0+a_1z+\cdots+a_mz^m$. Then $p(T)\defeq a_0I_{\mathcal{V}}+a_1T+\cdots+a_mT^m$.
+\end{definition}
+
+\begin{definition} \label{def:annihilating-polynomial} \hlt{Annihilating Polynomial}\\
+Let $T\in\LL(\mathcal{V})$. A nonzero polynomial $p\in\mathbb{F}[z]$ \hlt{annihilates} $T$ if $p(T)=0$.
+\end{definition}
+
+\begin{definition} \label{def:product-of-polynomials} \hlt{Product of Polynomials}\\
+If $p,q\in\mathbb{F}[z]$, their product $pq\in\mathbb{F}[z]$ is defined by $(pq)(z)=p(z)q(z)$ for $z\in\mathbb{F}$.
+\end{definition}
+
+\begin{proposition} \label{prop:operator-polynomial-products} \hlt{Multiplicative Properties of Operator Polynomials}\\
+Let $p,q\in\mathbb{F}[z]$ and $T\in\LL(\mathcal{V})$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(pq)(T)=p(T)q(T)$;
+\item $p(T)q(T)=q(T)p(T)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write $p(z)=\sum_{j=0}^{m}a_jz^j$ and $q(z)=\sum_{k=0}^{n}b_kz^k$. Then $(pq)(z)=\sum\limits_{j=0}^{m}\sum\limits_{k=0}^{n}a_jb_kz^{j+k}$.\\
+Substituting $T$ gives $(pq)(T)=\sum\limits_{j=0}^{m}\sum\limits_{k=0}^{n}a_jb_kT^{j+k} =\left(\sum\limits_{j=0}^{m}a_jT^j\right)\left(\sum\limits_{k=0}^{n}b_kT^k\right) =p(T)q(T)$.
+\item Since polynomial multiplication is commutative, $pq=qp$.\\
+By part (i), $p(T)q(T)=(pq)(T)=(qp)(T)=q(T)p(T)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial evaluation preserves products.\\
+\hlt{Key Insight}: Expanding a polynomial product works the same with $T$ as with $z$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:finite-dimensional-operators-have-annihilating-polynomials} \hlt{Existence of Annihilating Polynomials}\\
+Let $\mathcal{V}$ be finite-dimensional with $n=\dim(\mathcal{V})>0$, and let $T\in\LL(\mathcal{V})$.\\
+Then $T$ has a nonconstant annihilating polynomial of degree at most $n^2$.
+\begin{proof}
+By Theorem \ref{thm:linear-maps-and-matrices-same-data}, the vector space $\LL(\mathcal{V})$ has dimension $n^2$, so the $n^2+1$ operators $I_{\mathcal{V}},T,T^2,\ldots,T^{n^2}$ are linearly dependent. Hence there are scalars $a_0,\ldots,a_{n^2}$, not all zero, such that $\sum_{j=0}^{n^2}a_jT^j=0$.\\
+If $a_1=\cdots=a_{n^2}=0$, then $a_0I_{\mathcal{V}}=0$, forcing $a_0=0$ because $\mathcal{V}\neq\{\mathbf{0}\}$, a contradiction. Thus $p(z)=\sum_{j=0}^{n^2}a_jz^j$ is a nonconstant annihilating polynomial.\\
+\hlt{Structural Commentary}: Finite-dimensionality makes the powers of one operator linearly dependent inside $\LL(\mathcal{V})$.\\
+\hlt{Key Insight}: A dependence among $I_{\mathcal{V}},T,\ldots,T^{n^2}$ is exactly a polynomial equation satisfied by $T$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:polynomial-eigenvector-evaluation} \hlt{Polynomial Evaluation on Eigenvectors}\\
+Let $T\in\LL(\mathcal{V})$, let $p\in\mathbb{F}[z]$, and suppose $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $p(T)\mathbf{v}=p(\lambda)\mathbf{v}$.
+\begin{proof}
+Induct on $j$ to get $T^j\mathbf{v}=\lambda^j\mathbf{v}$ for every $j\geq0$.\\
+If $p(z)=\sum\limits_{j=0}^{m}a_jz^j$, then $p(T)\mathbf{v} =\sum\limits_{j=0}^{m}a_jT^j\mathbf{v} =\sum\limits_{j=0}^{m}a_j\lambda^j\mathbf{v} =p(\lambda)\mathbf{v}$.\\
+\hlt{Structural Commentary}: On a one-dimensional eigenspace, $T$ acts like the scalar $\lambda$.\\
+\hlt{Key Insight}: Polynomial expressions in $T$ reduce to the same polynomial evaluated at $\lambda$.
+\end{proof}
+\end{proposition}
+
+\begin{motivation} \label{mot:characteristic-and-minimal-polynomials} \hlt{Two Spectral Polynomials}\\
+The characteristic polynomial records the whole primary decomposition with dimensions.\\
+The minimal polynomial records the shortest polynomial relation satisfied by the operator.
+\end{motivation}
+
+\begin{definition} \label{def:matrix-characteristic-polynomial} \hlt{Characteristic Polynomial}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{characteristic polynomial} of $A$ is $p_A(z)\defeq\det(zI_n-A)$.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-characteristic-polynomial-basic-coefficients} \hlt{Basic Form of the Characteristic Polynomial}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $p_A$ is monic of degree $n$ and $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$.\\
+Moreover, for $\lambda\in\mathbb{F}$, $\lambda\in\operatorname{spec}(A)$ if and only if $p_A(\lambda)=0$.
+\begin{proof}
+The only determinant term of degree greater than $n-2$ comes from the identity permutation:
+\begin{align}
+(z-a_{11})(z-a_{22})\cdots(z-a_{nn})=z^n-(a_{11}+\cdots+a_{nn})z^{n-1}+\cdots.
+\nonumber
+\end{align}
+Thus $p_A$ is monic and the coefficient of $z^{n-1}$ is $-\operatorname{tr}A$; also $p_A(0)=\det(-A)=(-1)^n\det A$. Finally, $p_A(\lambda)=0$ if and only if $\lambda I_n-A$ is singular, equivalently $\ker(A-\lambda I_n)\neq\{\mathbf{0}\}$.\\
+\hlt{Structural Commentary}: The diagonal product determines the top two coefficients.\\
+\hlt{Key Insight}: Eigenvalues are precisely the roots of $\det(zI_n-A)$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:matrix-algebraic-multiplicity} \hlt{Algebraic Multiplicity}\\
+For $\lambda\in\mathbb{F}$, let $m_A(\lambda)$ be the multiplicity of $\lambda$ as a root of $p_A$, with $m_A(\lambda)=0$ if $\lambda\notin\operatorname{spec}(A)$.\\
+For $\lambda\in\operatorname{spec}(A)$, this is the \hlt{algebraic multiplicity} of $\lambda$. Unqualified multiplicity means algebraic multiplicity.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/characteristic_polynomial_roots.tikz}
+  \caption{Form $p_A(z)=\det(zI_n-A)$ and factor it; each root $\lambda$ is counted by $m_A(\lambda)$.}
+  \label{fig:characteristic-polynomial-roots}
+\end{figure}
+
+\begin{proposition} \label{prop:upper-triangular-characteristic-polynomial} \hlt{Upper-Triangular Eigenvalues}\\
+If $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ is upper triangular, then $p_A(z)=\prod\limits_{j=1}^{n}(z-a_{jj})$.\\
+Thus $\operatorname{spec}(A)=\{a_{jj}:1\leq j\leq n\}$, and for $\lambda\in\operatorname{spec}(A)$, $m_A(\lambda)=\#\{j:a_{jj}=\lambda\}$.
+\begin{proof}
+The matrix $zI_n-A$ is upper triangular with diagonal entries $z-a_{11},\ldots,z-a_{nn}$. Its determinant is the product of those diagonal entries. The roots of this product are precisely the diagonal entries, with repetition.\\
+\hlt{Structural Commentary}: Triangular form removes all off-diagonal determinant contributions.\\
+\hlt{Key Insight}: Once a matrix is triangular, the spectrum is visible on the diagonal.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:similarity-preserves-characteristic-polynomial} \hlt{Similarity Preserves Characteristic Data}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ and suppose $B=SAS^{-1}$ for some invertible $S$. Then $p_B=p_A$. In particular, for each $\lambda\in\operatorname{spec}(A)$, $m_B(\lambda)=m_A(\lambda)$ and $\dim E_{\lambda}(B)=\dim E_{\lambda}(A)$.
+\begin{proof}
+For every $z$, $p_B(z) =\det(zI_n-SAS^{-1}) =\det(S(zI_n-A)S^{-1}) =\det(S)\det(zI_n-A)\det(S)^{-1} =p_A(z)$.\\
+Thus roots and root multiplicities agree, so $m_B(\lambda)=m_A(\lambda)$. Also $B-\lambda I_n=S(A-\lambda I_n)S^{-1}$.\\
+Hence $\mathbf{x}\in\ker(A-\lambda I_n)$ if and only if $S\mathbf{x}\in\ker(B-\lambda I_n)$, $S$ restricts to isomorphism between two eigenspaces.\\
+\hlt{Structural Commentary}: Similarity changes coordinates, not the shifted determinant or shifted kernel dimension.\\
+\hlt{Key Insight}: Conjugation inserts $S$ and $S^{-1}$, which cancel in determinants and identify kernels.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:block-upper-triangular-characteristic-polynomial} \hlt{Block Upper-Triangular Characteristic Polynomial}\\
+Let $A=
+\begin{bmatrix}
+B & C\\
+0 & D
+\end{bmatrix}$, $B$ and $D$ are square. Then $p_A(z)=p_B(z)p_D(z)$, so $m_A(\lambda)=m_B(\lambda)+m_D(\lambda) \ \forall\lambda\in\mathbb{F}$.
+\begin{proof}
+The shifted matrix is block upper triangular:
+\begin{align}
+zI-A=
+\begin{bmatrix}
+zI-B & -C\\
+0 & zI-D
+\end{bmatrix}.
+\nonumber
+\end{align}
+Theorem \ref{thm:block-upper-triangular-determinant} gives $p_A(z)=\det(zI-B)\det(zI-D)=p_B(z)p_D(z)$.\\
+Roots of a product are the roots of the factors, with multiplicity added.\\
+\hlt{Structural Commentary}: The off-diagonal block couples vectors but not determinant factors.\\
+\hlt{Key Insight}: In block upper-triangular form, spectral data lives on the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:geometric-multiplicity-bounded-by-algebraic-multiplicity} \hlt{Geometric Multiplicity Is at Most Algebraic Multiplicity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and let $\lambda\in\operatorname{spec}(A)$. Then $\dim E_{\lambda}(A)\leq m_A(\lambda)$.
+\begin{proof}
+Let $k=\dim E_{\lambda}(A)$ and choose a basis $\mathbf{x}_1,\ldots,\mathbf{x}_k$ of $E_{\lambda}(A)$. Extend it to a basis of $\mathbb{F}^n$, and let $S$ be the matrix whose columns are this basis. In the new basis,
+\begin{align}
+S^{-1}AS=
+\begin{bmatrix}
+\lambda I_k & *\\
+0 & C
+\end{bmatrix}.
+\nonumber
+\end{align}
+By Theorem \ref{thm:similarity-preserves-characteristic-polynomial}, Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}, $p_A(z)=p_{S^{-1}AS}(z)=(z-\lambda)^kp_C(z)$. Thus $m_A(\lambda)\geq k=\dim E_{\lambda}(A)$.\\
+\hlt{Structural Commentary}: An eigenspace-first basis exposes a $\lambda I_k$ block.\\
+\hlt{Key Insight}: Each independent eigenvector forces one visible factor $z-\lambda$ in the characteristic polynomial.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match} \hlt{Diagonalizability and Multiplicity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is diagonalizable if and only if $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is diagonalizable, then $A$ is similar to a diagonal matrix $D$. Theorem \ref{thm:similarity-preserves-characteristic-polynomial} gives $m_A(\lambda)=m_D(\lambda)$ and $\dim E_{\lambda}(A)=\dim E_{\lambda}(D)$. For diagonal $D$, both numbers count diagonal entries equal to $\lambda$.
+\item[$(\Leftarrow)$] Assume $\dim E_{\lambda}(A)=m_A(\lambda)$ for every eigenvalue.\\
+If $\mu_1,\ldots,\mu_d$ are distinct eigenvalues, then $\sum\limits_{i=1}^{d}m_A(\mu_i)=n$. Hence $\dim E_{\mu_1}(A)+\cdots+\dim E_{\mu_d}(A)=n$.\\
+Theorem \ref{thm:conditions-equivalent-to-diagonalizability} gives an eigenbasis, so $A$ is diagonalizable.
+\end{enumerate}
+\hlt{Structural Commentary}: Diagonalizability means root counts match eigenspace dimensions.\\
+\hlt{Key Insight}: No missing eigendirections means an eigenbasis.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:operator-characteristic-polynomial} \hlt{Characteristic Polynomial of an Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $T\in\LL(\mathcal{V})$. If $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues of $T$ and $d_j=\dim \mathcal{G}_{\lambda_j}(T)$, then the \hlt{characteristic polynomial} of $T$ is $q_T(z)\defeq\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$.
+\end{definition}
+
+\begin{proposition} \label{prop:operator-characteristic-polynomial-degree-roots} \hlt{Degree and Roots of $q_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $q_T$ be the characteristic polynomial of $T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\deg q_T=\dim(\mathcal{V})$.
+\item The roots of $q_T$ are precisely the eigenvalues of $T$.
+\end{enumerate}
+\begin{proof}
+Write $q_T(z)=\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$, where $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues and $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities} gives $\deg q_T=\sum_jd_j=\dim(\mathcal{V})$.
+\item The displayed factorization has exactly the roots $\lambda_1,\ldots,\lambda_m$.
+\end{enumerate}
+\hlt{Structural Commentary}: Each primary summand contributes one root factor.\\
+\hlt{Key Insight}: Multiplicity is dimension.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/operator_characteristic_polynomial_primary_blocks.tikz}
+  \caption{Each primary summand contributes $(z-\lambda_j)^{d_j}$, where $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.}
+  \label{fig:operator-characteristic-polynomial-primary-blocks}
+\end{figure}
+
+\begin{definition} \label{def:monic-polynomial} \hlt{Monic Polynomial}\\
+A nonzero polynomial is \hlt{monic} if its highest-degree coefficient is $1$.
+\end{definition}
+
+\begin{theorem} \label{thm:operator-minimal-polynomial-existence} \hlt{Existence of the Minimal Polynomial}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then $T$ has a unique least-degree monic annihilator $\mu_T$.
+\begin{proof}
+Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} gives a nonzero annihilator; scaling makes it monic, so a least-degree monic annihilator exists. If $p$ and $q$ are two of them, then $(p-q)(T)=0$ and $\deg(p-q)<\deg p$.\\
+If $p\neq q$, scaling $p-q$ gives a smaller monic annihilator, impossible. Hence $p=q$.\\
+\hlt{Structural Commentary}: Existence comes from finite-dimensional dependence; uniqueness from minimality.\\
+\hlt{Key Insight}: Two least monic annihilators cannot differ.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:operator-minimal-polynomial} \hlt{Minimal Polynomial of an Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} of $T$, denoted $\mu_T$, is the unique monic polynomial of smallest degree such that $\mu_T(T)=0$.
+\end{definition}
+
+\begin{definition} \label{def:minimal-polynomial-matrix} \hlt{Minimal Polynomial of a Matrix}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{minimal polynomial} of $A$, denoted $\mu_A$, is the unique monic polynomial of smallest positive degree such that $\mu_A(A)=0$.
+\end{definition}
+
+\begin{theorem} \label{thm:cayley-hamilton-operator} \hlt{Cayley--Hamilton Theorem for Operators}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, $q_T$ be characteristic polynomial of $T\in\LL(\mathcal{V})$. Then $q_T(T)=0$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues and set $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.\\
+It suffices, by primary decomposition, to show $q_T(T)$ kills each $\mathcal{G}_{\lambda_j}(T)$.\\
+On $\mathcal{G}_{\lambda_j}(T)$, the operator $T-\lambda_jI_{\mathcal{V}}$ is nilpotent, so Corollary \ref{cor:nilpotent-power-dimension-zero} gives $(T-\lambda_jI_{\mathcal{V}})^{d_j}=0$ on $\mathcal{G}_{\lambda_j}(T)$.\\
+Since the factors of $q_T(T)$ commute, this factor kills the whole product on $\mathcal{G}_{\lambda_j}(T)$. Hence $q_T(T)=0$.\\
+\hlt{Structural Commentary}: Check the polynomial on each primary summand.\\
+\hlt{Key Insight}: One factor of $q_T(T)$ kills each summand.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:cayley-hamilton-matrix} \hlt{Cayley--Hamilton Theorem}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have characteristic polynomial $p_A(z)=\det(zI_n-A)$. Then $p_A(A)=0$.
+\begin{proof}
+Choose a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+Since $p_A(A)=Up_A(T)U^*$ and $p_A(z)=\prod_{i=1}^{n}(z-\lambda_i)$, it suffices to prove $(T-\lambda_1I_n)(T-\lambda_2I_n)\cdots(T-\lambda_nI_n)=0$.\\
+Let $Q_j\defeq\prod\limits_{i=1}^{j}(T-\lambda_iI_n)$. We show that the first $j$ columns of $Q_j$ are zero. For $j=1$, the first column of $T-\lambda_1I_n$ is zero as $T$ is upper triangular with first diagonal entry $\lambda_1$. Assume the first $j$ columns of $Q_j$ are zero.\\
+Since $T-\lambda_{j+1}I_n$ is upper triangular and its $(j+1,j+1)$ entry is zero, its first $j+1$ columns lie in $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$. By the induction hypothesis, $Q_j$ kills this span, so $Q_{j+1}=Q_j(T-\lambda_{j+1}I_n)$ has first $j+1$ zero columns.\\
+At $j=n$, all columns of $Q_n$ are zero, so $Q_n=0$.\\
+\hlt{Structural Commentary}: Schur form reduces the theorem to a triangular column-killing induction.\\
+\hlt{Key Insight}: Each factor $T-\lambda_iI_n$ kills the next leading column.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/cayley_hamilton_triangular_killing.tikz}
+\caption{In Schur form, the factors $T-\lambda_iI$ kill the leading columns one layer at a time.}
+  \label{fig:cayley-hamilton-triangular-killing}
+\end{figure}
+
+\begin{theorem} \label{thm:minimal-polynomial-basic-properties} \hlt{Basic Properties of the Minimal Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_d$ be the distinct eigenvalues of $A$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mu_A$ exists, is unique, and $\deg\mu_A\leq n$.
+\item If a nonzero polynomial $f$ annihilates $A$, then $\mu_A$ divides $f$. In particular, $\mu_A$ divides $p_A$.
+\item There are integers $q_i$ satisfying $1\leq q_i\leq m_A(\lambda_i)$ such that $\mu_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Cayley--Hamilton supplies the monic annihilator $p_A$, so a least-degree monic annihilator $\mu_A$ exists and has degree at most $n$. If $g$ is another least-degree monic annihilator, write $g=h\mu_A+r$, where $r=0$ or $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$. If $r\neq0$, scaling $r$ to be monic would give a smaller-degree monic annihilator, a contradiction. Hence $r=0$, so $g=h\mu_A$.\\
+Since $g$ and $\mu_A$ are monic of the same degree, $h=1$ and $g=\mu_A$.
+\item If $f(A)=0$, divide $f=q\mu_A+r$ with $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$, hence $r=0$ and $\mu_A\mid f$. Taking $f=p_A$ gives $\mu_A\mid p_A$.
+\item Since $\mu_A\mid p_A=\prod_{i=1}^{d}(z-\lambda_i)^{m_A(\lambda_i)}$, its roots are eigenvalues with exponents at most the algebraic multiplicities. If $A\mathbf{v}=\lambda_i\mathbf{v}$ and $\mathbf{v}\neq\mathbf{0}$, then $\mu_A(\lambda_i)\mathbf{v}=\mu_A(A)\mathbf{v}=0$, so every $\lambda_i$ occurs.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial division makes $\mu_A$ the least monic generator of annihilators.\\
+\hlt{Key Insight}: Cayley--Hamilton gives existence; eigenvectors force the roots.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/minimal_polynomial_divisibility.tikz}
+  \caption{$\mu_A$ is the least monic annihilator; arrows indicate that $\mu_A$ divides $p_A$ and every annihilator $f$.}
+  \label{fig:minimal-polynomial-divisibility}
+\end{figure}
+
+\begin{theorem} \label{thm:minimal-polynomial-direct-sum-disjoint-spectra} \hlt{Minimal Polynomial of a Spectrally Disjoint Direct Sum}\\
+Let $A=A_1\oplus\cdots\oplus A_d$, where the spectra of $A_1,\ldots,A_d$ are pairwise disjoint. Then $\mu_A=\mu_{A_1}\mu_{A_2}\cdots\mu_{A_d}$.
+\begin{proof}
+Let $f=\prod\limits_i\mu_{A_i}$. Since $f(A_i)=0$ for all $i$, blockwise evaluation gives $f(A)=0$, and therefore $\mu_A\mid f$.\\
+Conversely, $\mu_A(A_i)=0$ for each $i$, so $\mu_{A_i}\mid\mu_A$ for each $i$. The roots of $\mu_{A_i}$ are exactly $\operatorname{spec}(A_i)$ by Theorem \ref{thm:operator-minimal-polynomial-roots-eigenvalues}, so the disjointness of the spectra makes the polynomials $\mu_{A_i}$ pairwise relatively prime.\\
+Hence their product $f$ divides $\mu_A$. Since $\mu_A\mid f$ and $f\mid\mu_A$, and both are monic, $\mu_A=f$.\\
+\hlt{Structural Commentary}: Direct sums are annihilated blockwise; disjoint spectra make the block factors coprime.\\
+\hlt{Key Insight}: Each spectral component contributes its own minimal-polynomial factor.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:similarity-preserves-minimal-polynomial} \hlt{Similarity Preserves the Minimal Polynomial}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are similar, then $p_A=p_B$ and $\mu_A=\mu_B$.
+\begin{proof}
+The identity $p_A=p_B$ is Theorem \ref{thm:similarity-preserves-characteristic-polynomial}. Let $A=SBS^{-1}$, then $f(A)=Sf(B)S^{-1}$ for every polynomial $f$, so $A$ and $B$ have the same annihilating polynomials. Hence $\mu_A=\mu_B$.\\
+\hlt{Structural Commentary}: Similarity preserves polynomial equations.\\
+\hlt{Key Insight}: Conjugation commutes with polynomial evaluation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:diagonalizable-iff-minimal-polynomial-squarefree} \hlt{Diagonalizability and the Minimal Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$.\\
+Then $A$ is diagonalizable if and only if $\mu_A(z)=(z-\lambda_1)\cdots(z-\lambda_d)$.\\
+Equivalently, $A$ is diagonalizable if and only if $\mu_A$ is square-free.
+\begin{proof}
+Set $p(z)\defeq\prod_{i=1}^{d}(z-\lambda_i)$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A=S\Lambda S^{-1}$ is diagonalizable, then $p(\Lambda)=0$, so $p(A)=0$.\\
+Since $\mu_A$ contains every factor $z-\lambda_i$ and divides $p$, we have $\mu_A=p$.
+\item[$(\Leftarrow)$] Suppose $\mu_A=p$. On the primary summand $\mathcal{G}_{\lambda_i}(A)$, the restriction of $A-\lambda_jI_n$ for $j\neq i$ is
+$(A-\lambda_iI_n)+(\lambda_i-\lambda_j)I$, a nonzero scalar plus a nilpotent operator. By Lemma \ref{lem:scalar-plus-nilpotent-invertible}, these restricted factors are invertible. Since $0=p(A)|_{\mathcal{G}_{\lambda_i}(A)} =\left(\prod\limits_{j\neq i}(A-\lambda_jI_n)\right)|_{\mathcal{G}_{\lambda_i}(A)} (A-\lambda_iI_n)|_{\mathcal{G}_{\lambda_i}(A)}$, the invertible product of the $j\neq i$ factors can be cancelled, giving $(A-\lambda_iI_n)=0$ on $\mathcal{G}_{\lambda_i}(A)$.\\
+Thus every primary summand is an eigenspace, so $A$ is diagonalizable.
+\end{enumerate}
+\hlt{Structural Commentary}: Repeated factors of $\mu_A$ record nilpotent parts in primary blocks.\\
+\hlt{Key Insight}: Square-free $\mu_A$ kills each primary block in one step.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:squarefree-annihilator-implies-diagonalizable} \hlt{Square-Free Annihilator Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. If a polynomial $f$ with no repeated roots satisfies $f(A)=0$, then $A$ is diagonalizable.
+\begin{proof}
+Since $\mu_A\mid f$, the minimal polynomial is square-free; Theorem \ref{thm:diagonalizable-iff-minimal-polynomial-squarefree} applies.\\
+\hlt{Structural Commentary}: A square-free annihilator forces square-free $\mu_A$.\\
+\hlt{Key Insight}: Square-free $\mu_A$ means diagonalizable.
+\end{proof}
+\end{corollary}
+
+\begin{method} \label{meth:operator-minimal-polynomial-from-matrix} \hlt{Computing $\mu_T$ from a Matrix}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be the matrix of $T$ in some basis.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $m=1,2,\ldots$, test the monic candidate $p_m(z)=a_0+a_1z+\cdots+a_{m-1}z^{m-1}+z^m$.
+\item Solve linear system by comparing matrix entries in $a_0I+a_1A+\cdots+a_{m-1}A^{m-1}=-A^m$ for $a_0,\ldots,a_{m-1}$.
+\item If no solution exists, increase $m$. The first solvable candidate is $\mu_T$.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/minimal_polynomial_linear_system.tikz}
+  \caption{Solve $a_0I+\cdots+a_{m-1}A^{m-1}=-A^m$; the first solvable monic candidate is $\mu_T$.}
+  \label{fig:minimal-polynomial-linear-system}
+\end{figure}
+
+\begin{method} \label{meth:minimal-polynomial-testing-from-characteristic-polynomial} \hlt{Testing a Minimal Polynomial from $p_A$}\\
+Suppose $p_A(z)=\prod_i(z-\lambda_i)^{a_i}$ is known.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item Write each candidate as $m_{\mathbf{q}}(z)=\prod_i(z-\lambda_i)^{q_i}$, where $1\leq q_i\leq a_i$.
+\item Test exponent vectors $\mathbf{q}=(q_i)$ in increasing total degree $\sum_iq_i$.
+\item For each $\mathbf{q}$, compute $m_{\mathbf{q}}(A)=\prod_i(A-\lambda_iI)^{q_i}$.
+\item The first candidate with $m_{\mathbf{q}}(A)=0$ is $\mu_A$, by Theorem \ref{thm:minimal-polynomial-basic-properties}.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:operator-annihilator-iff-multiple-minimal-polynomial} \hlt{Annihilators Are Multiples of $\mu_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim, $T\in\LL(\mathcal{V})$, and $f\in\mathbb{F}[z]$ be nonzero. Then $f(T)=0$ if and only if $\mu_T$ divides $f$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $f(T)=0$. Divide $f=s\mu_T+r$, where $r=0$ or $\deg r<\deg\mu_T$.\\
+Then $r(T)=0$, so minimality forces $r=0$. Hence $\mu_T$ divides $f$.
+\item[$(\Leftarrow)$] If $f=\mu_Ts$, then $f(T)=\mu_T(T)s(T)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial division reduces every annihilator to its remainder modulo $\mu_T$.\\
+\hlt{Key Insight}: Minimality forces that remainder to be zero.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:operator-characteristic-multiple-minimal-polynomial} \hlt{$q_T$ Is a Multiple of $\mu_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$.\\
+Then the characteristic polynomial $q_T$ is a polynomial multiple of the minimal polynomial $\mu_T$.
+\begin{proof}
+Theorem \ref{thm:cayley-hamilton-operator} gives $q_T(T)=0$. Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial} then implies that $\mu_T$ divides $q_T$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton turns the characteristic polynomial into an annihilator.\\
+\hlt{Key Insight}: The minimal polynomial divides every annihilator, hence divides $q_T$.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:operator-minimal-polynomial-roots-eigenvalues} \hlt{Roots of $\mu_T$ Are Eigenvalues}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. Then the roots of $\mu_T$ are precisely the eigenvalues of $T$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mu_T(\lambda)=0$, write $\mu_T(z)=(z-\lambda)g(z)$. Since $\deg g<\deg\mu_T$, minimality gives $g(T)\neq0$; choose $\mathbf{v}$ with $\mathbf{u}=g(T)\mathbf{v}\neq\mathbf{0}$. Then $(T-\lambda I_{\mathcal{V}})\mathbf{u}=\mu_T(T)\mathbf{v}=\mathbf{0}$.
+\item[$(\Leftarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $0=\mu_T(T)\mathbf{v}=\mu_T(\lambda)\mathbf{v}$, so $\mu_T(\lambda)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: A root splits off one shifted operator.\\
+\hlt{Key Insight}: The quotient cannot already annihilate $T$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:characteristic-versus-minimal-polynomial} \hlt{Characteristic vs. Minimal Polynomial}\\
+The characteristic polynomial records every primary block with its dimension. The minimal polynomial records the least polynomial needed to annihilate all blocks at once.
+\end{perspective}
+
+\begin{proposition} \label{prop:minimal-polynomial-complexification} \hlt{Minimal Polynomial Survives Complexification}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$. Then $\mu_{T_{\mathbb{C}}}=\mu_T$ in $\mathbb{C}[z]$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Since $\mu_T(T)=0$, Proposition \ref{prop:complexification-operator-basic-properties} gives $\mu_T(T_{\mathbb{C}})=(\mu_T(T))_{\mathbb{C}}=0$. Hence $\mu_{T_{\mathbb{C}}}$ divides $\mu_T$ in $\mathbb{C}[z]$.
+\item[$(\Leftarrow)$] Let $q=\mu_{T_{\mathbb{C}}}=r+is$, with $r,s\in\mathbb{R}[z]$. Since $q$ is monic, $r$ is monic and $\deg r=\deg q$.\\
+For every $\mathbf{u}\in\mathcal{V}$, $0=q(T_{\mathbb{C}})(\mathbf{u}+i\mathbf{0})=r(T)\mathbf{u}+is(T)\mathbf{u}$. Thus $r(T)=0$, so $\deg\mu_T\leq\deg r=\deg q$. The first part gives opposite degree inequality. As $q$ divides $\mu_T$ and both are monic with equal degree, $q=\mu_T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Annihilation passes to complexification and back by real-part extraction.\\
+\hlt{Key Insight}: Evaluate $q(T_{\mathbb{C}})$ on $\mathbf{u}+i\mathbf{0}$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:companion-matrix} \hlt{Companion Matrix}\\
+Let $f(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$ be monic. For $n\geq2$, the \hlt{companion matrix} of $f$ is
+\begin{align}
+C_f\defeq
+\begin{bmatrix}
+0&0&\cdots&0&-c_0\\
+1&0&\cdots&0&-c_1\\
+0&1&\cdots&0&-c_2\\
+\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&\cdots&1&-c_{n-1}
+\end{bmatrix}.
+\nonumber
+\end{align}
+For $n=1$, set $C_f=[-c_0]$.
+\end{definition}
+
+\begin{theorem} \label{thm:companion-matrix-has-prescribed-minimal-polynomial} \hlt{Companion Matrix Realises a Polynomial}\\
+For every monic polynomial $f$, the companion matrix $C_f$ satisfies $p_{C_f}=f$ and $\mu_{C_f}=f$.
+\begin{proof}
+Let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis. For $0\leq j<n$, $C_f^j\mathbf{e}_1=\mathbf{e}_{j+1}$.\\
+The last-column relation gives $C_f^n\mathbf{e}_1 =-c_0\mathbf{e}_1-c_1C_f\mathbf{e}_1-\cdots-c_{n-1}C_f^{n-1}\mathbf{e}_1$. Thus $f(C_f)\mathbf{e}_1=0$.\\
+Since $\mathbf{e}_j=C_f^{j-1}\mathbf{e}_1$ and $f(C_f)$ commutes with $C_f$, we get $f(C_f)\mathbf{e}_j=C_f^{j-1}f(C_f)\mathbf{e}_1=\mathbf{0} \ \forall j$, so $f(C_f)=0$.\\
+If $g(z)=\sum\limits_{i=0}^{m}b_iz^i$ has $m<n$, then $g(C_f)\mathbf{e}_1=b_0\mathbf{e}_1+b_1\mathbf{e}_2+\cdots+b_m\mathbf{e}_{m+1}$, which is zero only when all $b_i=0$. Hence no nonzero polynomial of degree $<n$ annihilates $C_f$. Therefore $\deg\mu_{C_f}=n$.\\
+Since $f$ is a monic degree-$n$ annihilator and $\mu_{C_f}\mid f$, we have $\mu_{C_f}=f$.\\
+Cayley--Hamilton makes $p_{C_f}$ a monic degree-$n$ annihilator, so $\mu_{C_f}\mid p_{C_f}$. Both $p_{C_f}$ and $f$ are monic of degree $n$, and both are multiples of the monic degree-$n$ polynomial $\mu_{C_f}=f$, hence $p_{C_f}=f$.\\
+\hlt{Structural Commentary}: The cyclic vector $\mathbf{e}_1$ generates the basis, and last column imposes relation $f(C_f)=0$.\\
+\hlt{Key Insight}: The companion matrix makes $f$ the first possible annihilating relation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:annihilating-polynomials-control-spectrum} \hlt{Annihilating Polynomials Control the Spectrum}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $p$ be a nonconstant annihilating polynomial for $T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Every eigenvalue of $T$ is a root of $p$.
+\item If $\mathbb{F}=\mathbb{C}$, then at least one root of $p$ is an eigenvalue of $T$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then Proposition \ref{prop:polynomial-eigenvector-evaluation} gives $0=p(T)\mathbf{v}=p(\lambda)\mathbf{v}$. Since $\mathbf{v}\neq\mathbf{0}$, $p(\lambda)=0$.
+\item Factor $p(z)=c(z-\lambda_1)\cdots(z-\lambda_m)$ over $\mathbb{C}$, with $c\neq0$. Then $0=p(T)=c(T-\lambda_1I_{\mathcal{V}})\cdots(T-\lambda_mI_{\mathcal{V}})$. At least one factor $T-\lambda_jI_{\mathcal{V}}$ is not injective; otherwise product would be injective. Hence $\lambda_j$ is an eigenvalue.
+\end{enumerate}
+\hlt{Structural Commentary}: Annihilating polynomial restricts spectrum to its roots; over $\mathbb{C}$, one root must appear.\\
+\hlt{Key Insight}: Eigenvectors turn $p(T)$ into $p(\lambda)$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:kernel-range-polynomial-in-operator-invariant} \label{prop:kernel-of-polynomial-in-operator-is-invariant} \hlt{Kernel and Range of a Polynomial in an Operator Are Invariant}\\
+Let $T\in\LL(\mathcal{V})$ and $p\in\mathbb{F}[z]$. Then $\ker(p(T))$ and $\operatorname{range}(p(T))$ are invariant under $T$.
+\begin{proof}
+If $\mathbf{v}\in\ker(p(T))$, then $p(T)\mathbf{v}=\mathbf{0}$.\\
+Since $p(T)$ commutes with $T$ by Proposition \ref{prop:operator-polynomial-products}, $p(T)(T\mathbf{v})=T(p(T)\mathbf{v})=T\mathbf{0}=\mathbf{0}$.\\
+If $\mathbf{v}\in\operatorname{range}(p(T))$, write $\mathbf{v}=p(T)\mathbf{u}$. Then $T\mathbf{v}=Tp(T)\mathbf{u}=p(T)(T\mathbf{u})$, so $T\mathbf{v}\in\operatorname{range}(p(T))$.\\
+\hlt{Structural Commentary}: Polynomial kernels and ranges are stable under the original operator.\\
+\hlt{Key Insight}: Since $T$ commutes with $p(T)$, it preserves both $\ker p(T)$ and $\operatorname{range}p(T)$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:sylvester-linear-matrix-equation} \hlt{Sylvester Linear Matrix Equation}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$ and $B\in\operatorname{Mat}(n,n,\mathbb{C})$. If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then for every $C\in\operatorname{Mat}(m,n,\mathbb{C})$ the equation $AX-XB=C$ has a unique solution $X\in\operatorname{Mat}(m,n,\mathbb{C})$.
+\begin{proof}
+Let $L(X)=AX-XB$. Since $L$ has equal finite-dimensional domain and codomain, it suffices to show $\ker L=\{0\}$. If $AX=XB$, then $p(A)X=Xp(B)$ for every polynomial $p$. \\
+With $p=p_B$, Cayley--Hamilton gives $p_B(A)X=Xp_B(B)=0$. For every $\lambda\in\operatorname{spec}(A)$, disjointness gives $p_B(\lambda)\neq0$; hence $p_B(A)$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test}. Thus $X=0$, so $L$ is bijective.\\
+\hlt{Structural Commentary}: Polynomial calculus pass through homogeneous solutions; disjoint spectra invert $p_B(A)$.\\
+\hlt{Key Insight}: Spectral separation turns an intertwining relation into the zero relation.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/sylvester_equation_spectral_gap.tikz}
+  \caption{Disjoint spectra make $p_B(A)$ invertible, so the Sylvester map $L(X)=AX-XB$ is invertible.}
+  \label{fig:sylvester-equation-spectral-gap}
+\end{figure}
+
+\begin{corollary} \label{cor:block-upper-triangular-remove-disjoint-coupling} \hlt{Removing a Spectrally Separated Off-Diagonal Block}\\
+Let $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$ and $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$. Then $M$ is similar to $A\oplus B$.
+\begin{proof}
+By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X$ such that $AX-XB=-C$. Then
+\begin{align}
+\begin{bmatrix}I&-X\\0&I\end{bmatrix}
+\begin{bmatrix}A&C\\0&B\end{bmatrix}
+\begin{bmatrix}I&X\\0&I\end{bmatrix}
+=
+\begin{bmatrix}A&AX+C-XB\\0&B\end{bmatrix}
+=
+\begin{bmatrix}A&0\\0&B\end{bmatrix}.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: A block shear cancels the off-diagonal block via Sylvester's equation.\\
+\hlt{Key Insight}: Spectrally separated diagonal blocks cannot carry essential upper-right coupling.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:schur-block-form-by-eigenvalue-groups} \hlt{Schur Form Grouped by Eigenvalues}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$ with algebraic multiplicities $n_1,\ldots,n_d$.\\
+Then $A$ is unitarily similar to a block upper-triangular matrix
+\begin{align}
+T=
+\begin{bmatrix}
+T_{11}&T_{12}&\cdots&T_{1d}\\
+0&T_{22}&\cdots&T_{2d}\\
+\vdots&\vdots&\ddots&\vdots\\
+0&0&\cdots&T_{dd}
+\end{bmatrix},
+\qquad
+T_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C}),
+\nonumber
+\end{align}
+where each $T_{ii}$ is upper triangular with all diagonal entries equal to $\lambda_i$. Moreover, $A$ is similar to $T_{11}\oplus\cdots\oplus T_{dd}$.
+\begin{proof}
+Order the Schur diagonal as $\lambda_1,\ldots,\lambda_1,\lambda_2,\ldots,\lambda_2,\ldots,\lambda_d,\ldots,\lambda_d$.\\
+Theorem \ref{thm:matrix-schur-triangularization-ordered} gives the displayed block Schur form. Since $\operatorname{spec}(T_{11})$ is disjoint from the trailing block spectrum, Corollary \ref{cor:block-upper-triangular-remove-disjoint-coupling} splits off $T_{11}$. Iterating splits off every diagonal block.\\
+\hlt{Structural Commentary}: Grouped Schur form isolates spectral blocks; Sylvester shears split disjoint groups.\\
+\hlt{Key Insight}: Cross-group upper blocks are coordinate artefacts.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} \hlt{Commuting with Disjoint Blocks}\\
+Let $A=A_{11}\oplus\cdots\oplus A_{dd}$, where the spectra of $A_{11},\ldots,A_{dd}$ are pairwise disjoint.\\
+Partition $B=[B_{ij}]$ conformally with $A$. If $AB=BA$, then $B_{ij}=0$ for all $i\neq j$.
+\begin{proof}
+Equating $(i,j)$ blocks in $AB=BA$ gives $A_{ii}B_{ij}-B_{ij}A_{jj}=0$.\\
+For $i\neq j$, the spectra of $A_{ii}$ and $A_{jj}$ are disjoint, so Theorem \ref{thm:sylvester-linear-matrix-equation} with $C=0$ gives $B_{ij}=0$.\\
+\hlt{Structural Commentary}: A commuting matrix cannot mix direct-sum blocks with disjoint spectra.\\
+\hlt{Key Insight}: The off-diagonal block solves a homogeneous Sylvester equation, whose only solution is zero.
+\end{proof}
+\end{corollary}
+
+Generalized eigenvectors repair the main defect of ordinary eigenvectors: an operator may not have enough eigendirections to form a basis. The replacement is to study vectors killed by powers of shifted operators.
+
+\begin{definition} \label{def:generalized-eigenvector-and-eigenspace} \hlt{Generalized Eigenvectors and Generalized Eigenspaces}\\
+Let $T\in\LL(\mathcal{V})$, $\lambda\in\mathbb{F}$. Nonzero vector $\mathbf{v}\in\mathcal{V}$ is a \hlt{generalized eigenvector} of $T$ to $\lambda$ if $(T-\lambda I_{\mathcal{V}})^j\mathbf{v}=\mathbf{0}$ for some positive integer $j$. The \hlt{generalized eigenspace} corresponding to $\lambda$ is
+\begin{align}
+\mathcal{G}_{\lambda}(T)\defeq \{\mathbf{0}\}\cup\{\mathbf{v}\neq\mathbf{0}:\mathbf{v}\text{ is a generalized eigenvector of }T\text{ corresponding to }\lambda\}.
+\nonumber
+\end{align}
+\end{definition}
+
+Every eigenvector is a generalized eigenvector by taking $j=1$. The point is that higher powers of $T-\lambda I_{\mathcal{V}}$ may reveal directions that are not eigenvectors but are eventually pushed into the eigenspace.
+
+\begin{proposition} \label{prop:kernels-of-powers-increase} \hlt{Kernels of Powers Increase}\\
+Let $T\in\LL(\mathcal{V})$. Then $\{\mathbf{0}\}=\ker(T^0)\subseteq\ker(T)\subseteq\ker(T^2)\subseteq\cdots\subseteq\ker(T^k)\subseteq\ker(T^{k+1})\subseteq\cdots$.
+\begin{proof}
+If $\mathbf{v}\in\ker(T^k)$, then $T^k\mathbf{v}=\mathbf{0}$, hence $T^{k+1}\mathbf{v}=T(T^k\mathbf{v})=\mathbf{0}$. Thus $\ker(T^k)\subseteq\ker(T^{k+1})$ for every $k\geq0$.\\
+\hlt{Structural Commentary}: Powers of $T$ form an increasing chain of kernels.\\
+\hlt{Key Insight}: Once a vector is killed by $T^k$, applying one more $T$ cannot revive it.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:kernel-power-stabilization-after-equality} \hlt{Equality Forces Stabilization}\\
+Let $T\in\LL(\mathcal{V})$ and $m\geq0$. If $\ker(T^m)=\ker(T^{m+1})$, then $\ker(T^m)=\ker(T^{m+1})=\ker(T^{m+2})=\cdots$.
+\begin{proof}
+By Proposition \ref{prop:kernels-of-powers-increase}, it suffices to prove $\ker(T^{m+k+1})\subseteq\ker(T^{m+k})$ for every $k\geq0$.\\
+Take $\mathbf{v}\in\ker(T^{m+k+1})$. Then $T^{m+1}(T^k\mathbf{v})=T^{m+k+1}\mathbf{v}=\mathbf{0}$, so $T^k\mathbf{v}\in\ker(T^{m+1})=\ker(T^m)$.\\
+Hence $T^{m+k}\mathbf{v}=T^m(T^k\mathbf{v})=\mathbf{0}$, proving the reverse inclusion.\\
+\hlt{Structural Commentary}: Stabilization at one step propagates through the whole tail.\\
+\hlt{Key Insight}: A later kernel vector can be shifted down into the already-stable kernel.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:kernel-powers-stabilize-by-dimension} \hlt{Kernels Stop Growing by $\dim(\mathcal{V})$}\\
+If $\mathcal{V}$ is finite-dimensional, $T\in\LL(\mathcal{V})$, and $n=\dim(\mathcal{V})$, then $\ker(T^n)=\ker(T^{n+1})=\ker(T^{n+2})=\cdots$.
+\begin{proof}
+If $\ker(T^n)\neq\ker(T^{n+1})$, Prop \ref{prop:kernel-power-stabilization-after-equality} implies all inclusions $\{\mathbf{0}\}=\ker(T^0)\subsetneq\ker(T)\subsetneq\cdots\subsetneq\ker(T^{n+1})$
+are strict. Each strict inclusion raises dimension by at least $1$, so $\dim\ker(T^{n+1})\geq n+1$, impossible because $\ker(T^{n+1})\subseteq\mathcal{V}$. Thus $\ker(T^n)=\ker(T^{n+1})$, and Proposition \ref{prop:kernel-power-stabilization-after-equality} gives the tail equality.\\
+\hlt{Structural Commentary}: Strict kernel growth is dimension-limited.\\
+\hlt{Key Insight}: Dimension bounds force the kernel chain to stabilize no later than step $\dim(\mathcal{V})$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/kernel_power_filtration.tikz}
+  \caption{The kernel filtration grows until it stabilizes; after equality appears once, the tail is constant.}
+  \label{fig:kernel-power-filtration}
+\end{figure}
+
+\begin{theorem} \label{thm:ranks-of-matrix-powers-stabilize} \hlt{Ranks of Matrix Powers Stabilize}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{rank}(A^k)\geq\operatorname{rank}(A^{k+1})$ for $k=1,2,\ldots$;
+\item if $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+1})$, then $\operatorname{col}(A^k)=\operatorname{col}(A^{k+p})$ and $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+p})$ for every $p=1,2,\ldots$;
+\item if $A$ is not invertible, then there is a least positive integer $q\leq n$ such that $\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $A^{k+1}=A^kA$, each column of $A^{k+1}$ is a linear combination of the columns of $A^k$. Hence $\operatorname{col}(A^{k+1})\subseteq\operatorname{col}(A^k)$, so $\operatorname{rank}(A^{k+1})\leq\operatorname{rank}(A^k)$.
+\item The inclusion $\operatorname{col}(A^{k+1})\subseteq\operatorname{col}(A^k)$ and equality of dimensions give $\operatorname{col}(A^{k+1})=\operatorname{col}(A^k)$. Let $U=\operatorname{col}(A^k)$. Then multiplication by $A$ maps $U$ onto $U$, so induction gives $\operatorname{col}(A^{k+p})=U$ for every $p\geq1$.
+\item If $A$ is not invertible, then Corollary \ref{cor:square-matrix-invertible-iff-full-rank} gives $\operatorname{rank}(A)\leq n-1$. If all inequalities $\operatorname{rank}(A^k)>\operatorname{rank}(A^{k+1})$ held for $k=1,\ldots,n$, then $\operatorname{rank}(A^{n+1})\leq\operatorname{rank}(A)-n<0$, impossible. Hence equality occurs for some $q\leq n$; choose the least such $q$.
+\end{enumerate}
+\hlt{Structural Commentary}: The column spaces of powers form a decreasing chain. In finite dimensions, a decreasing chain cannot keep losing dimension forever.\\
+\hlt{Key Insight}: Once two consecutive ranks agree, the image has stabilized under multiplication by $A$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:matrix-index} \hlt{Index of a Matrix}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, define its \hlt{index} to be $0$. If $A$ is not invertible, its index is the least positive integer $q$ such that $\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$.
+\end{definition}
+
+\begin{theorem} \label{thm:kernel-range-stable-direct-sum} \hlt{Stable Kernel-Range Decomposition}\\
+Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and set $n=\dim(\mathcal{V})$. Then $\mathcal{V}=\ker(T^n)\oplus\operatorname{range}(T^n)$.
+\begin{proof}
+First show the intersection is trivial. If $\mathbf{v}\in\ker(T^n)\cap\operatorname{range}(T^n)$, then $\mathbf{v}=T^n\mathbf{u}$ and $T^n\mathbf{v}=\mathbf{0}$. Hence $T^{2n}\mathbf{u}=\mathbf{0}$, so $\mathbf{u}\in\ker(T^{2n})=\ker(T^n)$ by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}. Thus $\mathbf{v}=T^n\mathbf{u}=\mathbf{0}$.\\
+By Rank-Nullity Theorem \ref{thm:rank-nullity}, $\dim\ker(T^n)+\dim\operatorname{range}(T^n)=\dim(\mathcal{V})$.\\
+The zero intersection and the dimension count imply the sum is direct and equals $\mathcal{V}$.\\
+\hlt{Structural Commentary}: At the stable power, killed directions and surviving image directions separate cleanly.\\
+\hlt{Key Insight}: Stabilization turns the usual rank-nullity count into an actual direct-sum decomposition.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:generalized-eigenspace-stabilized-kernel} \hlt{Description of Generalized Eigenspaces}\\
+Let $\mathcal{V}$ be finite-dimensional, $T\in\LL(\mathcal{V})$, $\lambda\in\mathbb{F}$, and $n=\dim(\mathcal{V})$. Then $\mathcal{G}_{\lambda}(T)=\ker\bigl((T-\lambda I_{\mathcal{V}})^n\bigr)$.\\
+In particular, $\mathcal{G}_{\lambda}(T)$ is a subspace of $\mathcal{V}$.
+\begin{proof}
+Set $S=T-\lambda I_{\mathcal{V}}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{v}\in \mathcal{G}_{\lambda}(T)$, then $S^j\mathbf{v}=\mathbf{0}$ for some $j\geq1$. If $j\leq n$, Proposition \ref{prop:kernels-of-powers-increase} gives $\mathbf{v}\in\ker(S^n)$; if $j>n$, Theorem \ref{thm:kernel-powers-stabilize-by-dimension} gives $\ker(S^j)=\ker(S^n)$.
+\item[$(\Leftarrow)$] If $\mathbf{v}\in\ker(S^n)$, then either $\mathbf{v}=\mathbf{0}$ or $\mathbf{v}$ is a generalized eigenvector of $T$ corresponding to $\lambda$.
+\end{enumerate}
+Thus $\mathcal{G}_{\lambda}(T)=\ker(S^n)$, which is a subspace.\\
+\hlt{Structural Commentary}: Generalized eigenspaces are stable shifted kernels.\\
+\hlt{Key Insight}: Finite dimension makes exponent $\dim(\mathcal{V})$ enough.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:generalized-eigenspaces-invariant} \hlt{Generalized Eigenspaces Are Invariant}\\
+Let $\mathcal{V}$ be finite-dimensional and $T\in\LL(\mathcal{V})$. Then $\mathcal{G}_{\lambda}(T)$ is invariant under $T$ for every $\lambda\in\mathbb{F}$.
+\begin{proof}
+By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}, $\mathcal{G}_{\lambda}(T)=\ker((T-\lambda I_{\mathcal{V}})^n)$, where $n=\dim(\mathcal{V})$.\\
+This is the kernel of a polynomial in $T$, so it is invariant under $T$ by Proposition \ref{prop:kernel-of-polynomial-in-operator-is-invariant}.\\
+\hlt{Structural Commentary}: A generalized eigenspace is cut out by a polynomial equation in $T$.\\
+\hlt{Key Insight}: Polynomial kernels commute with the operator that defines them.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:nilpotent-operator} \hlt{Nilpotent Operator}\\
+An operator $N\in\LL(\mathcal{V})$ is \hlt{nilpotent} if $N^m=0$ for some positive integer $m$.
+\end{definition}
+
+\begin{corollary} \label{cor:nilpotent-power-dimension-zero} \hlt{Nilpotent Power Bound}\\
+If $\mathcal{V}$ is finite-dimensional, $N\in\LL(\mathcal{V})$ is nilpotent, and $n=\dim(\mathcal{V})$, then $N^n=0$.
+\begin{proof}
+Since $N$ is nilpotent, $\ker(N^m)=\mathcal{V}$ for some $m$.\\
+The kernel chain has stabilized by the $n$th step by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}, so $\ker(N^n)=\mathcal{V}$. Hence $N^n=0$.\\
+\hlt{Structural Commentary}: Nilpotence says some kernel in the chain is already the whole space.\\
+\hlt{Key Insight}: The stabilization bound pulls that full-kernel conclusion back to exponent $\dim(\mathcal{V})$.
+\end{proof}
+\end{corollary}
+
+\begin{lemma} \label{lem:scalar-plus-nilpotent-invertible} \hlt{Nonzero Scalar Plus Nilpotent Is Invertible}\\
+Let $N\in\LL(\mathcal{V})$ be nilpotent and let $a\in\mathbb{F}$ with $a\neq0$. Then $aI_{\mathcal{V}}+N$ is invertible.
+\begin{proof}
+Choose $m$ such that $N^m=0$. Then $(aI_{\mathcal{V}}+N)\left(a^{-1}\sum\limits_{r=0}^{m-1}(-a^{-1}N)^r\right) =I_{\mathcal{V}}-(-a^{-1}N)^m=I_{\mathcal{V}}$,
+and the same computation in the reverse order gives a two-sided inverse.\\
+\hlt{Structural Commentary}: A nilpotent perturbation has a finite geometric-series inverse.\\
+\hlt{Key Insight}: Nilpotence truncates the Neumann series exactly.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:distinct-generalized-eigenvectors-independent} \hlt{Generalized Eigenvectors for Distinct Eigenvalues Are Independent}\\
+Let $\mathcal{V}$ be finite-dimensional and $T\in\LL(\mathcal{V})$. Suppose $\lambda_1,\ldots,\lambda_m$ are distinct eigenvalues of $T$, and let $\mathbf{v}_1,\ldots,\mathbf{v}_m$ be corresponding generalized eigenvectors. Then $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is linearly independent.
+\begin{proof}
+Let $n=\dim(\mathcal{V})$ and suppose $a_1\mathbf{v}_1+\cdots+a_m\mathbf{v}_m=\mathbf{0}$.\\
+Fix $r\in\{1,\ldots,m\}$ and apply $Q_r(T)\defeq\prod\limits_{i\neq r}(T-\lambda_iI_{\mathcal{V}})^n$ to the relation.\\
+For $i\neq r$, Theorem \ref{thm:generalized-eigenspace-stabilized-kernel} gives $Q_r(T)\mathbf{v}_i=\mathbf{0}$, so $a_rQ_r(T)\mathbf{v}_r=\mathbf{0}$.\\
+On $\mathcal{G}_{\lambda_r}(T)$, the operator $T-\lambda_iI_{\mathcal{V}}$ equals $(T-\lambda_rI_{\mathcal{V}})+(\lambda_r-\lambda_i)I_{\mathcal{V}}$. The first term is nilpotent on $\mathcal{G}_{\lambda_r}(T)$ and $\lambda_r-\lambda_i\neq0$, so Lemma \ref{lem:scalar-plus-nilpotent-invertible} makes each factor invertible on $\mathcal{G}_{\lambda_r}(T)$. Thus $Q_r(T)\mathbf{v}_r\neq\mathbf{0}$, forcing $a_r=0$. Since $r$ was arbitrary, all coefficients vanish.\\
+\hlt{Structural Commentary}: Polynomial filters isolate one generalized eigenspace at a time.\\
+\hlt{Key Insight}: Distinct eigenvalues let polynomial filters kill the other components and preserve the target one.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:nilpotent-strictly-upper-triangular-matrix} \hlt{Nilpotent Operators and Strictly Upper-Triangular Matrices}\\
+Let $\mathcal{V}$ be finite-dimensional and $N\in\LL(\mathcal{V})$. Then $N$ is nilpotent if and only if $N$ has a strictly upper-triangular matrix in some basis.
+\begin{proof}
+Let $n=\dim(\mathcal{V})$. By Corollary \ref{cor:nilpotent-power-dimension-zero}, $\{\mathbf{0}\}\subseteq\ker(N)\subseteq\ker(N^2)\subseteq\cdots\subseteq\ker(N^n)=\mathcal{V}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Choose a basis of $\ker(N)$, extend it to a basis of $\ker(N^2)$, and continue until obtaining a basis of $\mathcal{V}$.\\
+If $\mathbf{v}$ first appears in $\ker(N^k)$, then $N\mathbf{v}\in\ker(N^{k-1})$, which is spanned by earlier basis vectors. Hence the matrix of $N$ is strictly upper triangular.
+\item[$(\Leftarrow)$] If the matrix of $N$ is $n\times n$ strictly upper triangular, then $N$ sends each basis vector into the span of earlier basis vectors. After $n$ applications every basis vector is sent to $\mathbf{0}$, so $N^n=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Kernel filtration gives adapted basis; triangular form records motion to earlier layers.\\
+\hlt{Key Insight}: Nilpotence is strict upper-triangularity in a suitable basis.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/nilpotent_filtration_basis.tikz}
+  \caption{Extending bases through the kernel filtration makes $N$ move vectors to earlier layers.}
+  \label{fig:nilpotent-filtration-basis}
+\end{figure}
+
+\begin{perspective} \label{per:generalized-eigenvectors-as-nilpotent-data} \hlt{Eigenvalue Plus Nilpotent Part}\\
+On $\mathcal{G}_{\lambda}(T)$, the operator $T$ behaves as $\lambda I_{\mathcal{V}}$ plus the nilpotent operator $T-\lambda I_{\mathcal{V}}$. Generalized eigenvectors are therefore ordinary eigenvectors enriched by nilpotent chain data.
+\end{perspective}
+
+\begin{theorem} \label{thm:complex-primary-decomposition-generalized-eigenspaces} \hlt{Primary Decomposition over $\mathbb{C}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$;
+\item each $(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is nilpotent.
+\end{enumerate}
+\begin{proof}
+Let $n=\dim(\mathcal{V})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Proceed by induction on $n$. If $n=1$, then $T$ has single eigenvalue $\lambda_1$ and $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)$.\\
+Assume $n>1$. Let $S=T-\lambda_1I_{\mathcal{V}}$, $\mathcal{U}\defeq\operatorname{range}(S^n)$.\\
+By Theorems \ref{thm:kernel-range-stable-direct-sum} and \ref{thm:generalized-eigenspace-stabilized-kernel}, $\mathcal{V} =\ker(S^n)\oplus\operatorname{range}(S^n) =\mathcal{G}_{\lambda_1}(T)\oplus\mathcal{U}$.
+The subspace $\mathcal{U}$ is $T$-invariant by Proposition \ref{prop:kernel-range-polynomial-in-operator-invariant}, and $\dim(\mathcal{U})<n$ because $\mathcal{G}_{\lambda_1}(T)\neq\{\mathbf{0}\}$. If $\mathcal{U}=\{\mathbf{0}\}$, then (i) follows.\\
+Otherwise distinct eigenvalues of $T|_{\mathcal{U}}$ are $\lambda_2,\ldots,\lambda_m$: every eigenvalue of $T|_{\mathcal{U}}$ is an eigenvalue of $T$ but not $\lambda_1$, while an eigenvector $\mathbf{v}$ of $T$ for $\lambda_j$, $j\geq2$, satisfies $S^n\mathbf{v}=(\lambda_j-\lambda_1)^n\mathbf{v}$ and hence lies in $\mathcal{U}$.\\
+Induction gives $\mathcal{U} =\mathcal{G}_{\lambda_2}(T|_{\mathcal{U}})\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T|_{\mathcal{U}})$. For $j\geq2$, $\mathcal{G}_{\lambda_j}(T|_{\mathcal{U}})=\mathcal{G}_{\lambda_j}(T)$.\\
+The inclusion $\subseteq$ follows from the definition. Conversely, if $\mathbf{v}\in\mathcal{G}_{\lambda_j}(T)$, write $\mathbf{v}=\mathbf{g}+\mathbf{u}$ with $\mathbf{g}\in\mathcal{G}_{\lambda_1}(T)$ and $\mathbf{u}\in\mathcal{U}$. For some $r$, $(T-\lambda_jI_{\mathcal{V}})^r\mathbf{v}=\mathbf{0}$. Since both summands are $T$-invariant, the two terms $(T-\lambda_jI_{\mathcal{V}})^r\mathbf{g}$ and $(T-\lambda_jI_{\mathcal{V}})^r\mathbf{u}$ remain in the two direct summands and have sum zero, so both are zero.\\
+Thus $\mathbf{g}\in\mathcal{G}_{\lambda_1}(T)\cap\mathcal{G}_{\lambda_j}(T)=\{\mathbf{0}\}$ by Theorem \ref{thm:distinct-generalized-eigenvectors-independent}, and $\mathbf{v}=\mathbf{u}\in\mathcal{G}_{\lambda_j}(T|_{\mathcal{U}})$. Hence (i) follows.
+\item
+By Proposition \ref{prop:generalized-eigenspaces-invariant}, the restriction is an operator on $\mathcal{G}_{\lambda_j}(T)$. By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}, $(T-\lambda_jI_{\mathcal{V}})^n\mathbf{v}=\mathbf{0} \ \forall \mathbf{v}\in\mathcal{G}_{\lambda_j}(T)$. Hence $n$th power of $(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is zero.
+\end{enumerate}
+\hlt{Structural Commentary}: Peel off one generalized eigenspace, then induct on the invariant range.\\
+\hlt{Key Insight}: Stable kernel-range splitting isolates one eigenvalue at a time.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/primary_decomposition_generalized_eigenspaces.tikz}
+  \caption{Primary decomposition: on $\mathcal{G}_{\lambda_j}(T)$, $T=\lambda_j I$ plus nilpotent.}
+  \label{fig:primary-decomposition-generalized-eigenspaces}
+\end{figure}
+
+\begin{corollary} \label{cor:complex-basis-of-generalized-eigenvectors} \hlt{Basis of Generalized Eigenvectors}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and $T\in\LL(\mathcal{V})$. Then $\mathcal{V}$ has a generalized-eigenvector basis for $T$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$. Choose a basis of each generalized eigenspace and concatenate the bases. Directness makes the concatenated list a basis of $\mathcal{V}$, and every nonzero vector in each list is a generalized eigenvector.\\
+\hlt{Structural Commentary}: A direct sum basis is obtained by choosing bases in each summand.\\
+\hlt{Key Insight}: Bases of the direct-sum pieces concatenate.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:eigenvalue-multiplicity-generalized-eigenspace} \hlt{Multiplicity of an Eigenvalue}\\
+Let $\mathcal{V}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$.\\
+The \hlt{multiplicity} of an eigenvalue $\lambda$ of $T$ is $\dim \mathcal{G}_{\lambda}(T)=\dim\ker\bigl((T-\lambda I_{\mathcal{V}})^{\dim(\mathcal{V})}\bigr)$.\\
+This is the algebraic multiplicity in generalized-eigenspace language.
+\end{definition}
+
+\begin{proposition} \label{prop:sum-of-complex-eigenvalue-multiplicities} \hlt{Sum of Multiplicities}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional complex vector space and let $T\in\LL(\mathcal{V})$. Then the sum of the multiplicities of all eigenvalues of $T$ equals $\dim(\mathcal{V})$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$.\\
+Taking dimensions, by Corollary \ref{cor:dimension-direct-sum}, $\dim(\mathcal{V})=\sum\limits_{j=1}^{m}\dim \mathcal{G}_{\lambda_j}(T)$, exactly the sum of the multiplicities.\\
+\hlt{Structural Commentary}: Multiplicity is dimension of the generalized-eigenspace summand.\\
+\hlt{Key Insight}: Multiplicities are dimensions of the direct-sum pieces.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:complex-block-diagonal-generalized-eigenbasis} \hlt{Block Diagonal Form with Upper-Triangular Primary Blocks}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T\in\LL(\mathcal{V})$, with multiplicities $d_1,\ldots,d_m$. Then $T$ has a matrix of the form
+\begin{equation*}
+\begin{bmatrix}
+A_1 & & 0\\
+& \ddots & \\
+0 & & A_m
+\end{bmatrix},
+\end{equation*}
+where each $A_j\in\operatorname{Mat}(d_j,d_j,\mathbb{C})$ is upper triangular with diagonal $\lambda_j,\ldots,\lambda_j$.
+\begin{proof}
+Set $\mathcal{U}_j=\mathcal{G}_{\lambda_j}(T)$ and $N_j=(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{U}_j}$.\\
+By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, the $\mathcal{U}_j$ form a $T$-invariant direct-sum decomposition and each $N_j$ is nilpotent.\\
+Choose a basis of each $\mathcal{U}_j$ in which $N_j$ is strictly upper triangular. Then $T|_{\mathcal{U}_j}=\lambda_jI_{\mathcal{U}_j}+N_j$ has an upper triangular matrix with diagonal $\lambda_j,\ldots,\lambda_j$. Concatenating these bases gives the desired block diagonal matrix.\\
+\hlt{Structural Commentary}: Primary decomposition gives the blocks; nilpotent triangularisation shapes them. \\
+\hlt{Key Insight}: On each generalized eigenspace, $T$ is eigenvalue plus nilpotent.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/primary_block_diagonal_form.tikz}
+  \caption{Primary blocks: $A_j=\lambda_jI+N_j$, with $N_j$ strictly upper triangular.}
+  \label{fig:primary-block-diagonal-form}
+\end{figure}

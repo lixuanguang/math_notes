@@ -1,0 +1,134 @@
+\subsection{Least Squares and Metric Optimization}
+
+% **Role:** linear algebra with metric and angle structure.
+%
+% Least squares, normal equations, full-rank formulas, minimum-norm solutions.
+
+Least squares is projection theory as optimization: normal equations, full-rank formulas, and minimum-norm solutions.
+
+\begin{principle} \label{pri:least-squares-projection-principle} \hlt{Least Squares as Orthogonal Projection}\\
+In an inner-product space, the best approximation to $\mathbf{v}$ from a finite-dimensional subspace $\mathcal{U}$ is $P_{\mathcal{U}}\mathbf{v}$. The residual $\mathbf{v}-P_{\mathcal{U}}\mathbf{v}$ is orthogonal to every allowable correction inside $\mathcal{U}$.
+\end{principle}
+
+\begin{theorem} \label{thm:normal-equations-for-projection} \hlt{Normal Equations for Projection}\\
+Let $\mathcal{U}$ be a finite-dimensional subspace of an inner-product space $\mathcal{V}$, and suppose $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.\\
+For $\mathbf{v}\in\mathcal{V}$, the projection has the form $P_{\mathcal{U}}\mathbf{v}=\sum\limits_{j=1}^{n}c_j\mathbf{u}_j$, where $(c_1,\ldots,c_n)$ solves the normal equations
+\begin{align}
+\begin{bmatrix}
+\innerprod{\mathbf{u}_1,\mathbf{u}_1} & \innerprod{\mathbf{u}_2,\mathbf{u}_1} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_1}\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_2} & \innerprod{\mathbf{u}_2,\mathbf{u}_2} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_2}\\
+\vdots & \vdots & \ddots & \vdots\\
+\innerprod{\mathbf{u}_1,\mathbf{u}_n} & \innerprod{\mathbf{u}_2,\mathbf{u}_n} & \cdots & \innerprod{\mathbf{u}_n,\mathbf{u}_n}
+\end{bmatrix}
+\begin{bmatrix}
+c_1\\ c_2\\ \vdots\\ c_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+\innerprod{\mathbf{v},\mathbf{u}_1}\\
+\innerprod{\mathbf{v},\mathbf{u}_2}\\
+\vdots\\
+\innerprod{\mathbf{v},\mathbf{u}_n}
+\end{bmatrix}.
+\nonumber
+\end{align}
+This system is consistent. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, then the solution is unique.
+\begin{proof}
+Since $P_{\mathcal{U}}\mathbf{v}\in\mathcal{U}$, write $P_{\mathcal{U}}\mathbf{v}=\sum_{j=1}^{n}c_j\mathbf{u}_j$.\\
+The residual $\mathbf{v}-P_{\mathcal{U}}\mathbf{v}$ lies in $\mathcal{U}^{\perp}$, so for each $i$, $0=\innerprod{\mathbf{v}-\sum\limits_{j=1}^{n}c_j\mathbf{u}_j,\mathbf{u}_i} =\innerprod{\mathbf{v},\mathbf{u}_i}-\sum\limits_{j=1}^{n}c_j\innerprod{\mathbf{u}_j,\mathbf{u}_i}$.\\
+These equations are exactly the displayed system, so consistency follows from the existence of $P_{\mathcal{U}}\mathbf{v}$.\\
+Conversely, if $(d_1,\ldots,d_n)$ solves displayed system and $\mathbf{q}\defeq\sum_{j=1}^{n}d_j\mathbf{u}_j$, then $\innerprod{\mathbf{v}-\mathbf{q},\mathbf{u}_i}=0$ for every $i$.\\
+Since $\mathbf{u}_i$ span $\mathcal{U}$, it follows that $\mathbf{v}-\mathbf{q}\in\mathcal{U}^{\perp}$, hence $\mathbf{q}=P_{\mathcal{U}}\mathbf{v}$ by uniqueness of the decomposition. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, they form a basis of $\mathcal{U}$, so the coordinates of this projection in that basis are unique.\\
+\hlt{Structural Commentary}: Normal equations express residual orthogonality.\\
+\hlt{Key Insight}: The projection error is perpendicular to $\mathcal{U}$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/normal_equations_projection.tikz}
+  \caption{Normal equations impose $\innerprod{\mathbf{v}-P_{\mathcal{U}}\mathbf{v},\mathbf{u}_i}=0$ for each spanning vector.}
+  \label{fig:normal-equations-projection}
+\end{figure}
+
+\begin{theorem} \label{thm:matrix-least-squares-normal-equations} \hlt{Matrix Least Squares and Normal Equations}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\mathbb{F}^m$, where $A^*$ denotes the conjugate transpose of $A$.\\
+A vector $\mathbf{x}_0\in\mathbb{F}^n$ satisfies $\norm{\mathbf{y}-A\mathbf{x}_0}_2=\min_{\mathbf{x}\in\mathbb{F}^n}\norm{\mathbf{y}-A\mathbf{x}}_2$ if and only if $A^*A\mathbf{x}_0=A^*\mathbf{y}$.\\
+The normal equations are always consistent, and their solution is unique if and only if $\operatorname{rank}(A)=n$.
+\begin{proof}
+Let $\mathcal{U}=\operatorname{col}(A)$, and write $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$. Since $\{A\mathbf{x}:\mathbf{x}\in\mathbb{F}^n\}=\mathcal{U}$, Theorem \ref{thm:orthogonal-projection-minimizes-distance} shows that $\mathbf{x}_0$ is least-squares optimal exactly when $A\mathbf{x}_0=P_{\mathcal{U}}\mathbf{y}$, or equivalently when $\mathbf{y}-A\mathbf{x}_0\in\mathcal{U}^{\perp}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{x}_0$ is least-squares optimal, then $\mathbf{y}-A\mathbf{x}_0\in\mathcal{U}^{\perp}$. Hence $\innerprod{\mathbf{y}-A\mathbf{x}_0,\mathbf{a}_j}=0$, $j=1,\ldots,n$.\\
+These are the entries of $A^*(\mathbf{y}-A\mathbf{x}_0)$, so $A^*(\mathbf{y}-A\mathbf{x}_0)=\mathbf{0}$ and $A^*A\mathbf{x}_0=A^*\mathbf{y}$.
+\item[$(\Leftarrow)$] If $A^*A\mathbf{x}_0=A^*\mathbf{y}$, then $A^*(\mathbf{y}-A\mathbf{x}_0)=\mathbf{0}$. Thus $\innerprod{\mathbf{y}-A\mathbf{x}_0,\mathbf{a}_j}=0$ for every $j$, so $\mathbf{y}-A\mathbf{x}_0$ is orthogonal to every linear combination of the columns of $A$. Hence $\mathbf{y}-A\mathbf{x}_0\in\mathcal{U}^{\perp}$.\\
+Hence $A\mathbf{x}_0=P_{\mathcal{U}}\mathbf{y}$, so $\mathbf{x}_0$ is least-squares optimal.
+\end{enumerate}
+Consistency follows by choosing $\mathbf{x}_0$ such that $A\mathbf{x}_0=P_{\mathcal{U}}\mathbf{y}$.\\
+If $\mathbf{x}_0,\mathbf{x}_1$ solve the normal equations, then $\norm{A(\mathbf{x}_0-\mathbf{x}_1)}_2^2 =\innerprod{\mathbf{x}_0-\mathbf{x}_1,A^*A(\mathbf{x}_0-\mathbf{x}_1)}=0$, so $\mathbf{x}_0-\mathbf{x}_1\in\ker(A)$.\\
+Conversely, if $\mathbf{z}\in\ker(A)$ and $\mathbf{x}_0$ solves the normal equations, then $\mathbf{x}_0+\mathbf{z}$ also solves them. Thus uniqueness is equivalent to $\ker(A)=\{\mathbf{0}\}$, equivalently $\operatorname{rank}(A)=n$.\\
+\hlt{Structural Commentary}: Least squares is orthogonal projection onto the column space of $A$.\\
+\hlt{Key Insight}: The normal equations say exactly that the residual is orthogonal to every column of $A$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/least_squares_column_projection.tikz}
+  \caption{Fitted vector and orthogonal residual: $A\mathbf{x}_0=P_{\operatorname{col}(A)}\mathbf{y}$ and $\mathbf{r}=\mathbf{y}-A\mathbf{x}_0\in\operatorname{col}(A)^{\perp}=\ker(A^*)$.}
+  \label{fig:least-squares-column-projection}
+\end{figure}
+
+\begin{corollary} \label{cor:full-column-rank-projection-formula} \hlt{Projection Formula for Full Column Rank}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $n$.\\
+Then $A^*A$ is invertible and the orthogonal projection onto $\operatorname{col}(A)$ is $P_{\operatorname{col}(A)}=A(A^*A)^{-1}A^*$.
+\begin{proof}
+If $A^*A\mathbf{x}=\mathbf{0}$, then $\norm{A\mathbf{x}}_2^2=\innerprod{\mathbf{x},A^*A\mathbf{x}}=0$, so $A\mathbf{x}=\mathbf{0}$.\\
+Since $\operatorname{rank}(A)=n$, we get $\mathbf{x}=\mathbf{0}$. Hence $A^*A$ is invertible. By Theorem \ref{thm:matrix-least-squares-normal-equations}, the least-squares solution is $\mathbf{x}_0=(A^*A)^{-1}A^*\mathbf{y}$. The fitted vector is $P_{\operatorname{col}(A)}\mathbf{y}=A\mathbf{x}_0=A(A^*A)^{-1}A^*\mathbf{y}$.\\
+Since this holds for every $\mathbf{y}$, the displayed operator formula follows.\\
+\hlt{Structural Commentary}: Full column rank makes the normal-equation coordinates unique.\\
+\hlt{Key Insight}: Solve for coefficients, then map back by $A$.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:minimum-norm-solution} \hlt{Minimum Norm Solution}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\operatorname{col}(A)$.\\
+A solution $\mathbf{s}$ of $A\mathbf{x}=\mathbf{y}$ is a \hlt{minimum norm solution} if $\norm{\mathbf{s}}_2\leq\norm{\mathbf{x}}_2$ for every solution $\mathbf{x}$ of $A\mathbf{x}=\mathbf{y}$.
+\end{definition}
+
+\begin{theorem} \label{thm:minimum-norm-solution-consistent-system} \hlt{Minimum Norm Solution of a Consistent Linear System}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\mathbf{y}\in\mathbb{F}^m$, and suppose $A\mathbf{x}=\mathbf{y}$ is consistent.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item There is a unique minimum norm solution $\mathbf{s}\in\mathbb{F}^n$, and $\mathbf{s}\in\operatorname{col}(A^*)$.
+\item $\mathbf{s}$ is the only solution of $A\mathbf{x}=\mathbf{y}$ that lies in $\operatorname{col}(A^*)$.
+\item The system $AA^*\mathbf{u}=\mathbf{y}$ is consistent. If $AA^*\mathbf{u}_0=\mathbf{y}$, then $\mathbf{s}=A^*\mathbf{u}_0$.
+\end{enumerate}
+\begin{proof}
+First note that $\operatorname{col}(A^*)=(\ker A)^{\perp}$. Indeed, if $\mathbf{z}=A^*\mathbf{u}$ and $\mathbf{x}\in\ker(A)$, then $\innerprod{\mathbf{x},\mathbf{z}}=\innerprod{A\mathbf{x},\mathbf{u}}=0$, so $\mathbf{z}$ is orthogonal to every vector in $\ker(A)$. Thus $\operatorname{col}(A^*)\subseteq(\ker A)^{\perp}$. Also,
+\begin{align}
+\dim(\operatorname{col}(A^*))=\operatorname{rank}(A^*)=\operatorname{rank}(A)
+=n-\dim(\ker(A))
+=\dim((\ker A)^{\perp}), \nonumber
+\end{align}
+so the two subspaces are equal. Hence $\mathbb{F}^n=\operatorname{col}(A^*)\oplus\ker(A)$ orthogonally.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose a solution $\mathbf{x}_0$ of $A\mathbf{x}=\mathbf{y}$ and write $\mathbf{x}_0=\mathbf{s}+\mathbf{v}$, with $\mathbf{s}\in\operatorname{col}(A^*)$ and $\mathbf{v}\in\ker(A)$.\\
+Then $A\mathbf{s}=A\mathbf{x}_0=\mathbf{y}$. If $\mathbf{x}$ is any solution, then $\mathbf{x}-\mathbf{s}\in\ker(A)$, so every solution has the form $\mathbf{s}+\mathbf{w}$ with $\mathbf{w}\in\ker(A)$. Since $\mathbf{s}\perp\mathbf{w}$, $\norm{\mathbf{s}+\mathbf{w}}_2^2=\norm{\mathbf{s}}_2^2+\norm{\mathbf{w}}_2^2\geq\norm{\mathbf{s}}_2^2$, with equality only when $\mathbf{w}=\mathbf{0}$.\\
+Thus $\mathbf{s}$ is the unique solution of minimum norm.
+\item If $\mathbf{s}'\in\operatorname{col}(A^*)$ is another solution, then $\mathbf{s}'-\mathbf{s}\in\ker(A)\cap\operatorname{col}(A^*)=\{\mathbf{0}\}$, so $\mathbf{s}'=\mathbf{s}$.
+\item Since $\mathbf{s}\in\operatorname{col}(A^*)$, write $\mathbf{s}=A^*\mathbf{z}$. Then $AA^*\mathbf{z}=A\mathbf{s}=\mathbf{y}$, so $AA^*\mathbf{u}=\mathbf{y}$ is consistent.\\
+Conversely, if $AA^*\mathbf{u}_0=\mathbf{y}$, then $A^*\mathbf{u}_0$ is a solution in $\operatorname{col}(A^*)$, so $A^*\mathbf{u}_0=\mathbf{s}$ by (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Solutions are $\mathbf{s}+\ker(A)$; $\operatorname{col}(A^*)$ meets this set orthogonally.\\
+\hlt{Key Insight}: The minimum norm solution has no nullspace component.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/minimum_norm_solution.tikz}
+  \caption{Among all solutions $\mathbf{s}+\ker(A)$, the unique one in $\operatorname{col}(A^*)=(\ker A)^\perp$ has minimum norm.}
+  \label{fig:minimum-norm-solution}
+\end{figure}

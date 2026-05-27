@@ -1,0 +1,395 @@
+\subsection{Metric Spaces and Euclidean Topology}
+
+% **Role:** abstract structure behind limits and continuity.
+%
+% Metrics, open/closed sets, neighborhoods, closure, interior, boundary, limit points, relative topology.
+
+
+Metric topology studies sets through balls: openness, closure, and limit points come from distance. Euclidean estimates rely on norms, Cauchy--Schwarz, and the triangle inequality.
+
+\begin{definition} \label{def:metric-space} \hlt{Metric Space}\\
+A \hlt{metric space} is a set $X$ equipped with a function $d:X\times X\to\R$ such that, for all $p,q,r\in X$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $d(p,q)>0$ if $p\neq q$, and $d(p,p)=0$;
+\item $d(p,q)=d(q,p)$;
+\item $d(p,q)\leq d(p,r)+d(r,q)$.
+\end{enumerate}
+The function $d$ is called a \hlt{distance function} or \hlt{metric}.
+\end{definition}
+
+\begin{example} \label{ex:euclidean-metric-and-subspaces} \hlt{Euclidean Metric and Subspaces}\\
+The Euclidean space $\R^k$ is a metric space with $d(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_2,\qquad \mathbf{x},\mathbf{y}\in\R^k$.\\
+Every subset $Y$ of a metric space $X$ is a metric space by restricting the same distance function to points of $Y$.
+\end{example}
+
+\begin{example} \label{ex:discrete-metric} \hlt{Discrete Metric}\\
+On any set $X$, define $d(x,y)=
+\begin{cases}
+0, & x=y,\\
+1, & x\neq y.
+\end{cases}$.\\
+This is the \hlt{discrete metric}: distinct points are all distance $1$ apart.
+\end{example}
+
+\begin{example} \label{ex:coordinate-norm-metrics-rk} \hlt{Coordinate Norm Metrics on $\R^k$}\\
+By Proposition \ref{prop:coordinate-norms-on-fn} and Theorem \ref{thm:cauchy-schwarz-inequality}, $d_1(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_1$; $d_2(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_2$; $d_\infty(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_\infty$ are metrics on $\R^k$, and $\forall \mathbf{x},\mathbf{y}\in\R^k$, $d_\infty(\mathbf{x},\mathbf{y})\leq d_2(\mathbf{x},\mathbf{y})\leq d_1(\mathbf{x},\mathbf{y})\leq \sqrt{k}\,d_2(\mathbf{x},\mathbf{y})$; $d_2(\mathbf{x},\mathbf{y})\leq \sqrt{k}\,d_\infty(\mathbf{x},\mathbf{y})$.\\
+Hence $d_1,d_2,d_\infty$ have the same convergent sequences.
+\end{example}
+
+\begin{definition} \label{def:euclidean-intervals-cells-balls-convex} \hlt{Euclidean Intervals, Cells, Balls, and Convexity}\\
+In $\R$, $(a,b)\defeq\{x\in\R:a<x<b\}$ and $[a,b]\defeq\{x\in\R:a\leq x\leq b\}$; $[a,b)$ and $(a,b]$ use the mixed inequalities.\\
+If $a_i<b_i$ for $i=1,\ldots,k$, the \hlt{$k$-cell} is $\{\mathbf{x}=(x_1,\ldots,x_k)\in\R^k:a_i\leq x_i\leq b_i,\ 1\leq i\leq k\}$.\\
+For $\mathbf{x}\in\R^k$ and $r>0$, the \hlt{open ball} is $B_r(\mathbf{x})\defeq\{\mathbf{y}\in\R^k:\norm{\mathbf{y}-\mathbf{x}}_2<r\}$,\\
+and \hlt{closed ball} is $\overline{B}_r(\mathbf{x})\defeq\{\mathbf{y}\in\R^k:\norm{\mathbf{y}-\mathbf{x}}_2\leq r\}$.\\
+A set $E\subseteq\R^k$ is \hlt{convex} if $\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\in E$ whenever $\mathbf{x},\mathbf{y}\in E$ and $0<\lambda<1$.
+\end{definition}
+
+\begin{remark} \label{rem:euclidean-vocabulary-from-linear-algebra} \hlt{Euclidean Vocabulary}\\
+\hlt{Integer lattice} is $\Z^k$. \hlt{First orthant} are points with nonnegative coordinates.\\
+\hlt{Unit ball} is $B^k\defeq\{\mathbf{x}\in\R^k:\norm{\mathbf{x}}_2\leq1\}$; and \hlt{unit sphere} is $S^{k-1}\defeq\{\mathbf{x}\in\R^k:\norm{\mathbf{x}}_2=1\}$.\\
+$\lambda\mathbf{x}+(1-\lambda)\mathbf{y}$, $0\leq\lambda\leq1$, is a \hlt{convex combination}; all such points form the line segment from $\mathbf{x}$ to $\mathbf{y}$.
+\end{remark}
+
+\begin{proposition} \label{prop:balls-and-cells-convex} \hlt{Balls and Cells Are Convex}\\
+Open balls, closed balls, and $k$-cells in $\R^k$ are convex.
+\begin{proof}
+Let $\mathbf{y},\mathbf{z}\in B_r(\mathbf{x})$ and $0<\lambda<1$.\\
+Then $\norm{\lambda\mathbf{y}+(1-\lambda)\mathbf{z}-\mathbf{x}}_2 =\norm{\lambda(\mathbf{y}-\mathbf{x})+(1-\lambda)(\mathbf{z}-\mathbf{x})}_2 \leq \lambda\norm{\mathbf{y}-\mathbf{x}}_2+(1-\lambda)\norm{\mathbf{z}-\mathbf{x}}_2<r$.\\
+The same proof with $\leq r$ gives closed balls. For a $k$-cell, each coordinate of $\lambda\mathbf{y}+(1-\lambda)\mathbf{z}$ lies between the corresponding coordinates of $\mathbf{y}$ and $\mathbf{z}$, hence remains in the same interval $[a_i,b_i]$.\\
+\hlt{Structural Commentary}: Convexity is checked by following the line segment between two points.\\
+\hlt{Key Insight}: Balls use the triangle inequality; cells use coordinate inequalities.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:product-metrics} \hlt{Product Metrics}\\
+For metric spaces $(X,d_X)$ and $(Y,d_Y)$, and $p=(x,y)$, $p'=(x',y')$ in $X\times Y$, define
+\begin{align}
+d_E(p,p')&\defeq\sqrt{d_X(x,x')^2+d_Y(y,y')^2},\nonumber \\
+d_{\max}(p,p')&\defeq\max\{d_X(x,x'),d_Y(y,y')\},\nonumber \\
+d_{\mathrm{sum}}(p,p')&\defeq d_X(x,x')+d_Y(y,y') \nonumber
+\end{align}
+These are the Euclidean, maximum, and sum product metrics; the sum metric is often simplest for estimates.
+\end{definition}
+
+\begin{proposition} \label{prop:product-metric-comparison} \hlt{Comparing Product Metrics}\\
+On $X\times Y$, $d_{\max}\leq d_E\leq d_{\mathrm{sum}}\leq2d_{\max}$. Hence the three product metrics have same convergent sequences.
+\begin{proof}
+Let $a=d_X(x,x')$ and $b=d_Y(y,y')$.\\
+Then $\max\{a,b\}\leq\sqrt{a^2+b^2}\leq a+b\leq2\max\{a,b\}$; convergence follows by squeezing.\\
+\hlt{Structural Commentary}: The three product metrics differ by controlled constants.\\
+\hlt{Key Insight}: Equivalent metric estimates preserve convergence.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/analysis/product_metric_unit_balls.tikz}
+  \caption{Unit balls in $\R^2$: \textcolor{blue!60!black}{$\max\{\abs{x},\abs{y}\}<1$} and \textcolor{orange!80!black}{$\abs{x}+\abs{y}<1$}.}
+  \label{fig:product-metric-unit-balls}
+\end{figure}
+
+\begin{definition} \label{def:metric-topology-core-definitions}\label{def:metric-topology-core-definitions-source-todo} \hlt{Metric Topology Terminology}\\
+Let $X$ be a metric space, and let all points and sets below be understood as points of $X$ and subsets of $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{neighborhood} of $p$ with radius $r>0$ is $B_r(p)\defeq\{q\in X:d(p,q)<r\}$.\\
+The corresponding \hlt{closed ball} is $\overline{B}_r(p)\defeq\{q\in X:d(p,q)\leq r\}$.
+\item A point $p$ is a \hlt{limit point} of $E$ if every neighborhood of $p$ contains a point $q\neq p$ with $q\in E$.
+\item If $p\in E$ and $p$ is not a limit point of $E$, then $p$ is an \hlt{isolated point} of $E$.
+\item A set $E$ is \hlt{closed} if every limit point of $E$ is a point of $E$.
+\item A point $p$ is an \hlt{interior point} of $E$ if some neighborhood of $p$ is contained in $E$.
+\item A set $E$ is \hlt{open} if every point of $E$ is an interior point of $E$.
+\item The \hlt{complement} of $E$ is $E^c\defeq X\setminus E$.
+\item A set $E$ is \hlt{dense} in $X$ if every point of $X$ is either a limit point of $E$, a point of $E$, or both.
+\end{enumerate}
+For $X=\R$, this gives $B_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$.\\
+\end{definition}
+
+\begin{remark} \label{rem:open-closed-ambient-and-not-opposites} \hlt{Ambient Space Matters}\\
+Openness and closedness depend on the ambient metric space; they are not opposites.
+\end{remark}
+
+\begin{theorem} \label{thm:every-neighborhood-open} \hlt{Every Neighborhood Is Open}\\
+Every neighborhood in a metric space is an open set.
+\begin{proof}
+Let $E=B_r(p)$, and choose $q\in E$. Put $h\defeq r-d(p,q)>0$.\\
+If $s\in B_h(q)$, then $d(p,s)\leq d(p,q)+d(q,s)<d(p,q)+h=r$.\\
+Thus $B_h(q)\subseteq E$, so $q$ is an interior point of $E$. Since $q$ was arbitrary, $E$ is open.\\
+\hlt{Structural Commentary}: Around any point inside a ball, the leftover distance to boundary gives a smaller ball.\\
+\hlt{Key Insight}: The triangle inequality turns radius slack into openness.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:limit-point-neighborhoods-infinitely-many} \hlt{Limit Points Force Infinitely Many Nearby Points}\\
+If $p$ is a limit point of $E$, then every neighborhood of $p$ contains infinitely many points of $E$.
+\begin{proof}
+Suppose some neighborhood $N$ of $p$ contains only finitely many points of $E$ distinct from $p$, say $q_1,\ldots,q_n$. If there are none, then $N$ itself contradicts that $p$ is a limit point. Otherwise put $\rho\defeq\min\limits_{1\leq m\leq n}d(p,q_m)>0$.\\
+The neighborhood $B_\rho(p)$ contains no point $q\in E$ with $q\neq p$, contradicting the definition of limit point.\\
+\hlt{Structural Commentary}: A finite list of nearby exceptions has a smallest positive distance from $p$.\\
+\hlt{Key Insight}: Limit points cannot be witnessed by only finitely many neighboring points.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:finite-point-set-no-limit-points} \hlt{Finite Point Sets Have No Limit Points}\\
+A finite point set in a metric space has no limit points.
+\begin{proof}
+Let $E\subseteq X$ be finite. If $p$ were a limit point of $E$, then by Theorem \ref{thm:limit-point-neighborhoods-infinitely-many}, every neighborhood of $p$ would contain infinitely many distinct points of $E$, impossible as $E$ is finite. Hence $E$ has no limit points.\\
+\hlt{Structural Commentary}: This corollary is the finite obstruction to accumulation.\\
+\hlt{Key Insight}: A limit point requires infinitely many nearby witnesses.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:metric-de-morgan-laws} \hlt{Arbitrary De Morgan Laws}\\
+Let $X$ be a set. For any collection $\{E_\alpha\}$ of subsets of $X$, $\left(\bigcup\limits_\alpha E_\alpha\right)^c=\bigcap\limits_\alpha E_\alpha^c$ and $\left(\bigcap\limits_\alpha E_\alpha\right)^c=\bigcup\limits_\alpha E_\alpha^c$.
+\begin{proof}
+The first identity follows from membership: $x\in\left(\bigcup\limits_\alpha E_\alpha\right)^c$ $\Longleftrightarrow$ $x\notin E_\alpha \ \forall \alpha$ $\Longleftrightarrow$ $x\in\bigcap\limits_\alpha E_\alpha^c$.\\
+The second follows by applying the first identity to the complements $E_\alpha^c$, or by the same membership argument.\\
+\hlt{Structural Commentary}: Complements exchange unions and intersections.\\
+\hlt{Key Insight}: Negating ``for some'' gives ``for every'', and conversely.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:open-iff-complement-closed} \hlt{Open Sets and Closed Complements}\\
+A set $E$ is open if and only if its complement $E^c$ is closed.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is open. If $x$ is a limit point of $E^c$ and $x\in E$, then some neighborhood $N$ of $x$ satisfies $N\subseteq E$, contradicting $N\cap(E^c\setminus\{x\})\neq\emptyset$. Hence $x\in E^c$, so $E^c$ is closed.
+\item[$(\Leftarrow)$] Suppose $E^c$ is closed. If $x\in E$, then $x\notin E^c$, hence $x$ is not a limit point of $E^c$. Thus some neighborhood $N$ of $x$ has $N\cap E^c=\emptyset$, i.e. $N\subseteq E$. Hence $E$ is open.
+\end{enumerate}
+\hlt{Structural Commentary}: Openness of a set is equivalent to closure of the outside.\\
+\hlt{Key Insight}: Interior points of $E$ cannot be limit points of $E^c$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:closed-iff-complement-open} \hlt{Closed Sets and Open Complements}\\
+A set $F$ is closed if and only if $F^c$ is open.
+\begin{proof}
+Apply Theorem \ref{thm:open-iff-complement-closed} with $E=F^c$. Then $F^c$ is open if and only if $(F^c)^c$ is closed. Since $(F^c)^c=F$, this is exactly the assertion that $F^c$ is open if and only if $F$ is closed.\\
+\hlt{Structural Commentary}: This is the same open--closed duality after taking complements.\\
+\hlt{Key Insight}: Closedness of $F$ is openness of the outside $F^c$.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:metric-open-closed-set-calculus}\label{prop:metric-topology-basic-calculus-source-todo} \hlt{Basic Topological Calculus}\\
+In a metric space:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item any union of open sets is open;
+\item any intersection of closed sets is closed;
+\item any finite intersection of open sets is open;
+\item any finite union of closed sets is closed.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $G\defeq\bigcup_\alpha G_\alpha$. If $x\in G$, then $x\in G_\alpha$ for some $\alpha$.\\
+Since $G_\alpha$ is open, some neighborhood of $x$ lies in $G_\alpha\subseteq G$. Hence $G$ is open.
+\item Let $F\defeq\bigcap_\alpha F_\alpha$. By Theorem \ref{thm:metric-de-morgan-laws}, $F^c=\bigcup\limits_\alpha F_\alpha^c$.\\
+Each $F_\alpha^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$ is open by (i). Hence $F$ is closed.
+\item Let $H\defeq\bigcap\limits_{i=1}^nG_i$. If $x\in H$, let $r_i>0$, $B_{r_i}(x)\subseteq G_i$, $r\defeq\min_{1\leq i\leq n}r_i$. Then $B_r(x)\subseteq H$, so $H$ is open.
+\item Let $F\defeq\bigcup_{i=1}^nF_i$. By Theorem \ref{thm:metric-de-morgan-laws}, $F^c=\bigcap\limits_{i=1}^nF_i^c$.\\
+Each $F_i^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$ is open by (iii). Hence $F$ is closed.
+\end{enumerate}
+\hlt{Structural Commentary}: Arbitrary unions are easy for open sets; finite intersections require a minimum radius.\\
+\hlt{Key Insight}: The finite minimum is the reason infinite intersections of open sets need not be open.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:metric-closure} \hlt{Closure}\\
+If $E\subseteq X$ and $E^{\operatorname{acc}}$ denotes the set of all limit points of $E$ in $X$, then the \hlt{closure} of $E$ is $\overline{E}\defeq E\cup E^{\operatorname{acc}}$.
+\end{definition}
+
+\begin{theorem} \label{thm:closure-smallest-closed-containing-set} \hlt{Closure Is the Smallest Closed Superset}\\
+If $X$ is a metric space and $E\subseteq X$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\overline{E}$ is closed;
+\item $\overline{E}=E$ if and only if $E$ is closed;
+\item $\overline{E}\subseteq F$ for every closed set $F\subseteq X$ such that $E\subseteq F$.
+\end{enumerate}
+Thus $\overline{E}$ is the smallest closed subset of $X$ that contains $E$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $p\notin\overline{E}$. Then $p\notin E$ and $p$ is not a limit point of $E$, so $B_r(p)\cap E=\emptyset$ for some $r>0$. If $q\in B_r(p)$, then $q\notin E$ and $B_{r-d(p,q)}(q)\subseteq B_r(p)$, so $q\notin E^{\operatorname{acc}}$. Hence $B_r(p)\subseteq(\overline{E})^c$, and $\overline{E}$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
+\item If $\overline{E}=E$, then $E$ is closed by (i). Conversely, if $E$ is closed, then $E^{\operatorname{acc}}\subseteq E$, so $\overline{E}=E\cup E^{\operatorname{acc}}=E$.
+\item If $F$ is closed and $E\subseteq F$, then $E^{\operatorname{acc}}\subseteq F^{\operatorname{acc}}\subseteq F$. Thus $\overline{E}=E\cup E^{\operatorname{acc}}\subseteq F$.
+\end{enumerate}
+\hlt{Structural Commentary}: Closure adds exactly the limit points forced by $E$.\\
+\hlt{Key Insight}: Closed supersets must contain all limit points, so they must contain $\overline{E}$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:interior-closure-boundary} \hlt{Interior and Boundary Notation}\\
+Let $E$ be a subset of a metric space $X$. The \hlt{interior} of $E$ is $E^\circ\defeq\{p\in E:p\text{ is an interior point of }E\}$.\\
+The \hlt{exterior} of $E$ is the interior of $E^c$: equivalently, the points $p\in X$ for which some ball $B_r(p)$ misses $E$.\\
+The \hlt{boundary} of $E$ is $\operatorname{bd}(E)\defeq\overline{E}\setminus E^\circ$.\\
+Equivalently, boundary points are exactly the points of $\overline{E}$ that are not interior to $E$.
+\end{definition}
+
+\begin{definition} \label{def:adherent-points-and-closure} \hlt{Adherent Points}\\
+A point $p\in X$ is \hlt{adherent} to $E$ if every ball about $p$ meets $E$. Equivalently, $p\in\overline{E}$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/adherent_limit_isolated_points.tikz}
+  \caption{Adherent endpoints need not lie in $E$; isolated points are adherent but not limit points.}
+  \label{fig:adherent-limit-isolated-points}
+\end{figure}
+
+\begin{definition} \label{def:bounded-and-perfect-metric-sets} \hlt{Bounded and Perfect Metric Sets}\\
+Let $E$ be a subset of a metric space $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E$ is \hlt{bounded} if there exist $M\in\R$ and $q\in X$ such that $d(p,q)<M$ for all $p\in E$.
+\item $E$ is \hlt{perfect} if $E$ is closed and every point of $E$ is a limit point of $E$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:boundedness-and-intrinsic-metric-properties} \hlt{Boundedness and Ambient Space}\\
+Equivalently, $E$ is bounded iff $E\subseteq B_M(q)$ for some ball in $X$. Boundedness, compactness, and completeness are intrinsic to the restricted metric; openness and closedness depend on the ambient space.
+\end{remark}
+
+\begin{perspective} \label{per:metric-sequences-as-topological-tests} \hlt{Metric Sequences as Topological Tests}\\
+Cardinality used sequences as enumerations in Definition \ref{def:sequence-as-enumeration}. In metric spaces, sequences become convergence probes: they test local topology, compactness, and whether Cauchy approximations have internal limits.
+\end{perspective}
+
+\begin{definition} \label{def:sequence-convergence-metric}\label{def:sequences-core-definitions-source-todo} \hlt{Convergent Sequence in a Metric Space}\\
+Let $(p_n)$ be a sequence in a metric space $X$.\\
+Then $(p_n)$ \hlt{converges} to $p\in X$ if for every $\varepsilon>0$ there is an integer $N$ such that $n\geq N$ $\Longrightarrow$ $d(p_n,p)<\varepsilon$.\\
+Notation is $p_n\to p$ or $\lim\limits_{n\to\infty}p_n=p$. If no such point $p\in X$ exists, the sequence \hlt{diverges}.
+\end{definition}
+
+\begin{definition} \label{def:sequence-range-and-boundedness} \hlt{Range and Boundedness of a Sequence}\\
+The \hlt{range} of $(p_n)$ is the set $\{p_n:n\in\N\}$.\\
+A sequence in a metric space is \hlt{bounded} if its range is bounded in the sense of Definition \ref{def:bounded-and-perfect-metric-sets}.
+\end{definition}
+
+\begin{definition} \label{def:eventually-and-frequently-in-a-set} \hlt{Eventually and Frequently in a Set}\\
+Let $(p_n)$ be a sequence in $X$, and let $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(p_n)$ is \hlt{eventually in $E$} if $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n\in E$.
+\item $(p_n)$ is \hlt{frequently in $E$} if $\forall N\in\N$ $\exists n\geq N$ such that $p_n\in E$.
+\end{enumerate}
+Eventually means tail containment; frequently means arbitrarily late visits.
+\end{definition}
+
+\begin{theorem} \label{thm:metric-sequence-basic-properties} \hlt{Basic Properties of Metric Convergence}\\
+Let $(p_n)$ be a sequence in a metric space $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_n\to p$ if and only if every neighborhood of $p$ contains $p_n$ for all but finitely many $n$; equivalently, $(p_n)$ is eventually in every neighborhood of $p$.
+\item If $p_n\to p$ and $p_n\to p'$, then $p=p'$.
+\item If $E\subseteq X$ and $p$ is a limit point of $E$, then there is a sequence $(p_n)$ in $E$ such that $p_n\to p$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is the $\varepsilon$-$N$ definition, since every neighborhood of $p$ contains a ball about $p$.
+\item Given $\varepsilon>0$, choose $N,N'$ so that $d(p_n,p)<\varepsilon/2$ for $n\geq N$ and $d(p_n,p')<\varepsilon/2$ for $n\geq N'$. For $n\geq\max\{N,N'\}$, the triangle inequality gives $d(p,p')<\varepsilon$. Hence $d(p,p')=0$.
+\item For each $n$, choose $p_n\in E$ with $p_n\neq p$ and $d(p_n,p)<1/n$, using Definition \ref{def:metric-topology-core-definitions}. Then $p_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: Eventual containment gives convergence; triangle inequality gives uniqueness.\\
+\hlt{Key Insight}: A limit point can always be approached by a sequence of points from the set.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:discrete-metric-convergence-eventually-constant} \hlt{Discrete-Metric Convergence}\\
+Let $X$ carry the discrete metric $d(x,y)=0$ if $x=y$ and $d(x,y)=1$ if $x\neq y$.\\
+For $(p_n)\subset X$ and $p\in X$, $p_n\to p$ if and only if $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n=p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $p_n\to p$. For $\varepsilon=1/2$, choose $N\in\N$ such that $n\geq N\Longrightarrow d(p_n,p)<1/2$.\\
+Since $d$ takes only the values $0,1$, $d(p_n,p)=0$, hence $p_n=p$ for all $n\geq N$.
+\item[$(\Leftarrow)$] Suppose $\exists N\in\N$ s.t. $n\geq N\Longrightarrow p_n=p$. Then $\forall \varepsilon>0$, $n\geq N$ gives $d(p_n,p)=0<\varepsilon$, so $p_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: The discrete metric has no room for distinct points to approach one another.\\
+\hlt{Key Insight}: In the discrete metric, $d(x,y)<1\Longleftrightarrow x=y$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:sequential-closure-criterion} \hlt{Sequential Closure Criterion}\\
+Let $E\subseteq X$, where $X$ is a metric space, and let $p\in X$. Then $p\in\overline{E}$ $\Longleftrightarrow$ $\exists (p_n)_{n\geq1}$ with $p_n\in E\ \forall n,\ \ p_n\to p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $p\in\overline{E}$, choose $p_n\in E\cap B_{1/n}(p)$ for $n\geq1$ by Principle \ref{princ:axiom-of-choice-analysis}. Then $d(p_n,p)<1/n$, so $p_n\to p$.
+\item[$(\Leftarrow)$] If $p_n\in E$ and $p_n\to p$, then every ball $B_r(p)$ contains some $p_n$.\\
+Thus $p$ is adherent to $E$ by Definition \ref{def:adherent-points-and-closure}, so $p\in\overline{E}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Closure can be read either by neighborhoods or by sequences.\\
+\hlt{Key Insight}: Adherence supplies one witness at every scale.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:dense-closure-criterion} \hlt{Density and Closure}\\
+Let $X$ be a metric space and let $E\subseteq X$. Then $E$ is dense in $X$ if and only if $\overline{E}=X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is dense in $X$. Let $p\in X$. By Definition \ref{def:metric-topology-core-definitions}, $p$ is either a point of $E$ or a limit point of $E$. Hence $p\in E\cup E^{\operatorname{acc}}=\overline{E}$ by Definition \ref{def:metric-closure}. Thus $X\subseteq\overline{E}$. Since $\overline{E}\subseteq X$, $\overline{E}=X$.
+\item[$(\Leftarrow)$] Suppose $\overline{E}=X$. Let $p\in X$. Then $p\in\overline{E}=E\cup E^{\operatorname{acc}}$, so $p$ is either a point of $E$ or a limit point of $E$. Therefore $E$ is dense in $X$ by Definition \ref{def:metric-topology-core-definitions}.
+\end{enumerate}
+\hlt{Structural Commentary}: Density says every point is already in $E$ or is forced by nearby points of $E$.\\
+\hlt{Key Insight}: The closure packages exactly those two possibilities.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:dense-closure-and-interval-test} \hlt{Real-Line Density Interval Test}\\
+Let $E\subseteq\R$. Then $E$ is dense in $\R$ if and only if every nonempty open interval $(a,b)$ satisfies $(a,b)\cap E\neq\emptyset$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $E$ is dense in $\R$, and let $(a,b)$ be a nonempty open interval. Choose $p\in(a,b)$ and put $r\defeq\frac12\min\{p-a,b-p\}>0$. If $p\in E$, then $(a,b)\cap E\neq\emptyset$. If $p\notin E$, then $p$ is a limit point of $E$ by Definition \ref{def:metric-topology-core-definitions}, so $B_r(p)$ contains a point $q\in E$ with $q\neq p$. Since $B_r(p)\subseteq(a,b)$, again $(a,b)\cap E\neq\emptyset$.
+\item[$(\Leftarrow)$] Suppose every nonempty open interval meets $E$. Let $p\in\R$. If $p\in E$, there is nothing to prove. If $p\notin E$, then for every $\varepsilon>0$, the interval $(p-\varepsilon,p+\varepsilon)$ contains a point $q\in E$. Since $p\notin E$, $q\neq p$, so every ball $B_\varepsilon(p)$ contains a point of $E$ distinct from $p$. Thus $p$ is a limit point of $E$. Hence every $p\in\R$ is either in $E$ or is a limit point of $E$, and $E$ is dense in $\R$.
+\end{enumerate}
+\hlt{Structural Commentary}: On $\R$, balls and open intervals test the same local condition.\\
+\hlt{Key Insight}: Density means no interval can avoid the set.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:supremum-belongs-to-closure} \hlt{Suprema Belong to Closures}\\
+Let $\emptyset\neq E\subseteq\R$ be bounded above and let $y\defeq\sup E$. Then $y\in\overline{E}$; if $E$ is closed, then $y\in E$.
+\begin{proof}
+If $y\in E$, then $y\in\overline{E}$. If $y\notin E$, then for every $h>0$, $y-h$ is not an upper bound of $E$, so choose $x_h\in E$ with $y-h<x_h\leq y$. Then $x_h\neq y$ and $\abs{x_h-y}<h$, hence $B_h(y)\cap(E\setminus\{y\})\neq\emptyset$. Thus $y\in E^{\operatorname{acc}}\subseteq\overline{E}$. If $E$ is closed, Theorem \ref{thm:closure-smallest-closed-containing-set}(ii) gives $\overline{E}=E$.\\
+\hlt{Structural Commentary}: LUB gives points of $E$ arbitrarily close below $\sup E$.\\
+\hlt{Key Insight}: A supremum is either attained or approached.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:relative-open-subset} \hlt{Relative Openness}\\
+Suppose $E\subseteq Y\subseteq X$, where $X$ is a metric space. The set $E$ is \hlt{open relative to $Y$} if for each $p\in E$ there is an $r>0$ such that $q\in E$ whenever $q\in Y$ and $d(p,q)<r$.
+\end{definition}
+
+\begin{theorem} \label{thm:relative-open-intersection-with-open-set} \hlt{Relative Opens Are Intersections}\\
+Suppose $Y\subseteq X$. A subset $E$ of $Y$ is open relative to $Y$ if and only if $E=Y\cap G$ for some open subset $G$ of $X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] For each $p\in E$, choose $r_p>0$ with $B_{r_p}(p)\cap Y\subseteq E$, and set $G\defeq\bigcup\limits_{p\in E}B_{r_p}(p)$. Then $G$ is open in $X$, and $E\subseteq G\cap Y$. If $q\in G\cap Y$, then $q\in B_{r_p}(p)\cap Y$ for some $p\in E$, so $q\in E$. Thus $E=G\cap Y$.
+\item[$(\Leftarrow)$] If $E=G\cap Y$ with $G$ open in $X$, then for each $p\in E$ choose $r>0$ with $B_r(p)\subseteq G$.\\
+Hence $B_r(p)\cap Y\subseteq G\cap Y=E$, so $E$ is open relative to $Y$.
+\end{enumerate}
+\hlt{Structural Commentary}: Relative openness is ordinary openness viewed through the ambient subset $Y$.\\
+\hlt{Key Insight}: Intersect open sets in $X$ with $Y$ to get exactly the open sets of $Y$.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:relative-topology-ambient-examples} \hlt{Relative Topology Depends on the Ambient Space}\\
+Let $X=\{(x,0):x\in\R\}\subseteq\R^2$ with the metric inherited from $\R^2$. The set $E=\{(x,0):-1<x<1\}$ is not open as a subset of $\R^2$, but it is open relative to $X$, since $E=X\cap\bigl((-1,1)\times(-1,1)\bigr)$.\\
+Likewise, $[0,1)$ is not closed in $\R$, but it is closed relative to $(-1,1)$ because $[0,1)=(-1,1)\cap[0,\infty)$.
+\end{example}
+
+\begin{method} \label{meth:metric-topology-proof-patterns}\label{meth:metric-topology-proof-patterns-source-todo} \hlt{Metric Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item To prove $G$ is open, fix $x\in G$ and find $r>0$ with $B_r(x)\subseteq G$.
+\item To prove $F$ is closed, show $F^{\operatorname{acc}}\subseteq F$, or equivalently show $F^c$ is open.
+\item To prove $C=\overline{E}$, show $E\subseteq C$, $C$ is closed, and $C\subseteq F$ for every closed $F\supseteq E$.
+\end{enumerate}
+\end{method}

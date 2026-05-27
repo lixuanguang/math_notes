@@ -1,0 +1,351 @@
+\subsection{Matrix Norms and Conditioning}
+
+% **Role:** quantitative matrix behavior and computation.
+%
+% Operator norms, Frobenius norm, singular values, condition numbers, norm inequalities.
+
+Matrix norms measure stretch, energy, approximation quality, and sensitivity. Singular values organize norms, low-rank approximation, pseudoinverses, conditioning, and error bounds.
+
+\begin{definition} \label{def:spectral-norm-and-singular-extremes} \hlt{Spectral Norm and Extreme Singular Values}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, define the \hlt{spectral norm} $\norm{A}_2\defeq\max\limits_{\norm{\mathbf{x}}_2=1}\norm{A\mathbf{x}}_2$.\\
+If the singular values of $A$ are $\sigma_1\geq\cdots\geq\sigma_q\geq0$, $q=\min(m,n)$, set $\sigma_{\max}(A)\defeq\sigma_1$.\\
+When $A$ is square, $\sigma_{\min}(A)\defeq\sigma_n$.
+\end{definition}
+
+\begin{theorem} \label{thm:spectral-norm-largest-singular-value} \hlt{Spectral Norm is the Largest Singular Value}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$. Then $\norm{A}_2=\sigma_{\max}(A)$.\\
+Moreover, if $A=V\Sigma W^*$ is an SVD and $\mathbf{w}_1$ is the first column of $W$, then $\norm{A\mathbf{w}_1}_2=\sigma_1$.
+\begin{proof}
+Let $\mathbf{w}_1,\ldots,\mathbf{w}_n$ be the columns of $W$. For $\mathbf{x}=\sum_{j=1}^{n}c_j\mathbf{w}_j$ with $\norm{\mathbf{x}}_2=1$, unitary invariance of the Euclidean norm gives $\norm{A\mathbf{x}}_2^2 =\norm{\Sigma W^*\mathbf{x}}_2^2 =\sum\limits_{j=1}^{q}\sigma_j^2\abs{c_j}^2 \leq \sigma_1^2\sum\limits_{j=1}^{n}\abs{c_j}^2 =\sigma_1^2$.\\
+Thus $\norm{A}_2\leq\sigma_1$. Taking $\mathbf{x}=\mathbf{w}_1$ gives equality.\\
+\hlt{Structural Commentary}: The right singular basis diagonalises the stretching computation.\\
+\hlt{Key Insight}: The largest stretch occurs in a top right singular direction.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:spectral-norm-basic-properties} \hlt{Basic Properties of the Spectral Norm}\\
+For compatible matrices $A,B$ and scalar $c$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\norm{A}_2\geq0$, and $\norm{A}_2=0$ if and only if $A=0$;
+\item $\norm{cA}_2=\abs{c}\norm{A}_2$;
+\item $\norm{A+B}_2\leq\norm{A}_2+\norm{B}_2$;
+\item $\norm{AB}_2\leq\norm{A}_2\norm{B}_2$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\norm{A\mathbf{x}}_2\geq0$, $\norm{A}_2\geq0$. Also $\norm{A}_2=0$ iff $A\mathbf{x}=0$ for every unit $\mathbf{x}$, iff $A=0$.
+\item $\norm{cA}_2=\max_{\norm{\mathbf{x}}_2=1}\norm{cA\mathbf{x}}_2=\abs{c}\norm{A}_2$.
+\item For $\norm{\mathbf{x}}_2=1$, $\norm{(A+B)\mathbf{x}}_2\leq\norm{A\mathbf{x}}_2+\norm{B\mathbf{x}}_2\leq\norm{A}_2+\norm{B}_2$. Maximize over unit $\mathbf{x}$.
+\item For $\norm{\mathbf{x}}_2=1$, $\norm{AB\mathbf{x}}_2\leq\norm{A}_2\norm{B\mathbf{x}}_2\leq\norm{A}_2\norm{B}_2$. Maximize over unit $\mathbf{x}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The spectral norm is the operator norm induced by Euclidean geometry.\\
+\hlt{Key Insight}: Bound each output vector first, then take the worst case.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:operator-norm-rn-rm} \hlt{Operator Norm on $\LL(\R^n,\R^m)$}\\
+For $A\in\LL(\R^n,\R^m)$, define $\normop{A}\defeq \sup_{\norm{\h}_2\leq1}\norm{A\h}_2$.\\
+Equivalently, after standard bases identify $A$ with its matrix, $\normop{A}$ is the spectral norm from Definition \ref{def:spectral-norm-and-singular-extremes}.\\
+Thus $\norm{A\h}_2\leq\normop{A}\norm{\h}_2$, and sums and products obey the norm estimates in Proposition \ref{prop:spectral-norm-basic-properties}.\\
+The induced metric on $\LL(\R^n,\R^m)$ is $d(A,B)\defeq\normop{A-B}$; this is the metric used for continuity of derivative maps in Definition \ref{def:c1-map}.
+\end{definition}
+
+\begin{proposition} \label{prop:frobenius-and-spectral-norm-comparison} \hlt{Frobenius and Spectral Norm Comparison}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$. Then $\norm{A}_F^2=\sum_{j=1}^{q}\sigma_j^2$ and $\norm{A}_2\leq\norm{A}_F$.\\
+If $A\neq0$, equality $\norm{A}_2=\norm{A}_F$ holds if and only if $\operatorname{rank}(A)=1$.
+\begin{proof}
+The Frobenius identity is Proposition \ref{prop:basic-singular-value-identities}. Hence $\norm{A}_2^2=\sigma_1^2\leq\sum_{j=1}^{q}\sigma_j^2=\norm{A}_F^2$. Assume $A\neq0$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\norm{A}_2=\norm{A}_F$, then $\sum_{j=2}^{q}\sigma_j^2=0$, so only $\sigma_1$ is nonzero and $\operatorname{rank}(A)=1$.
+\item[$(\Leftarrow)$] If $\operatorname{rank}(A)=1$, then $\sigma_2=\cdots=\sigma_q=0$, so $\norm{A}_2=\norm{A}_F$.
+\end{enumerate}
+\hlt{Structural Commentary}: Frobenius counts all singular energy; spectral keeps the largest part.\\
+\hlt{Key Insight}: Equality means exactly one nonzero singular value.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:frobenius-and-spectral-submultiplicativity} \hlt{Submultiplicativity of Frobenius and Spectral Norms}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(n,k,\mathbb{F})$. Then $\norm{AB}_F\leq\norm{A}_2\norm{B}_F\leq\norm{A}_F\norm{B}_F$ and $\norm{AB}_2\leq\norm{A}_2\norm{B}_2$.
+\begin{proof}
+Write $B=[\mathbf{b}_1\ \cdots\ \mathbf{b}_k]$. Then $\norm{AB}_F^2 =\sum\limits_{j=1}^{k}\norm{A\mathbf{b}_j}_2^2 \leq\norm{A}_2^2\sum\limits_{j=1}^{k}\norm{\mathbf{b}_j}_2^2 =\norm{A}_2^2\norm{B}_F^2$.\\
+Proposition \ref{prop:frobenius-and-spectral-norm-comparison} gives $\norm{A}_2\leq\norm{A}_F$. The spectral-norm inequality is Proposition \ref{prop:spectral-norm-basic-properties}.\\
+\hlt{Structural Commentary}: Frobenius norm is column energy; each column of $AB$ is $A$ applied to a column of $B$.\\
+\hlt{Key Insight}: Control every column by the spectral norm of $A$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:unitary-invariance-of-singular-values} \hlt{Unitary Invariance of Singular Values}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, and let $U\in\operatorname{Mat}(m,m,\mathbb{F})$ and $V\in\operatorname{Mat}(n,n,\mathbb{F})$ be unitary. Then $A$ and $UAV$ have the same singular values. In particular, $\norm{UAV}_2=\norm{A}_2$ and $\norm{UAV}_F=\norm{A}_F$.
+\begin{proof}
+Since $(UAV)^*(UAV)=V^*A^*AV$, the Gram matrices of $A$ and $UAV$ are unitarily similar, hence have the same eigenvalues. Singular values are the nonnegative square roots of these eigenvalues. The two norm identities follow from Theorem \ref{thm:spectral-norm-largest-singular-value} and Proposition \ref{prop:frobenius-and-spectral-norm-comparison}.\\
+\hlt{Structural Commentary}: Left and right unitary factors change coordinates, not singular-value data.\\
+\hlt{Key Insight}: Singular values are spectral data of $A^*A$, and unitary conjugation preserves that spectrum.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:similarity-need-not-preserve-singular-values} \hlt{Similarity Need Not Preserve Singular Values}\\
+Let $A=\begin{bmatrix}1&1\\0&1\end{bmatrix}$ and $B=\begin{bmatrix}1&2\\0&1\end{bmatrix}$. Then $B=DAD^{-1}$ with $D=\operatorname{diag}(2,1)$, so $A$ and $B$ are similar.\\
+However $A^*A=\begin{bmatrix}1&1\\1&2\end{bmatrix}$, $B^*B=\begin{bmatrix}1&2\\2&5\end{bmatrix}$ have different eigenvalues, so $A$ and $B$ have different singular values.\\
+Singular values are preserved by unitary left-right equivalence, not by arbitrary similarity.
+\end{example}
+
+\begin{theorem} \label{thm:schur-inequality-defect-normality} \hlt{Schur's Inequality and Normality}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$, counted algebraically.\\
+Then $\sum\limits_{j=1}^{n}\abs{\lambda_j}^2\leq\norm{A}_F^2$ with equality if and only if $A$ is normal.
+\begin{proof}
+Let $A=UTU^*$ be a Schur form, where $T=[t_{ij}]$ is upper triangular and $t_{jj}=\lambda_j$.\\
+Then $\norm{A}_F^2=\operatorname{tr}(T^*T)=\sum_{j=1}^{n}\abs{\lambda_j}^2+\sum_{i<j}\abs{t_{ij}}^2$.
+Inequality holds. Equality holds exactly when $T$ is diagonal.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If equality holds, then $T$ is diagonal, so $A$ is unitarily diagonalizable and hence normal.
+\item[$(\Leftarrow)$] If $A$ is normal, then $T$ is normal and upper triangular, hence diagonal by Lemma \ref{lem:upper-triangular-normal-matrix-is-diagonal}.
+\end{enumerate}
+\hlt{Structural Commentary}: Schur form splits Frobenius norm into eigenvalue mass plus off-diagonal mass.\\
+\hlt{Key Insight}: Normality means the Schur off-diagonal part vanishes.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:defect-from-normality} \hlt{Defect from Normality}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity.\\
+The \hlt{defect from normality} of $A$ is $\Delta(A)\defeq\norm{A}_F^2-\sum\limits_{j=1}^{n}\abs{\lambda_j}^2$.\\
+By Theorem \ref{thm:schur-inequality-defect-normality}, $\Delta(A)\geq0$, with equality if and only if $A$ is normal.
+\end{definition}
+
+\begin{theorem} \label{thm:eigenvalues-versus-singular-values} \hlt{Eigenvalues Versus Singular Values}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$ ordered so that $\abs{\lambda_1}\geq\cdots\geq\abs{\lambda_n}$,\\
+and singular values $\sigma_1\geq\cdots\geq\sigma_n\geq0$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\abs{\det A}=\prod_{j=1}^{n}\abs{\lambda_j}=\prod_{j=1}^{n}\sigma_j$;
+\item $\rho(A)\leq\norm{A}_2$;
+\item $\sigma_n\leq\abs{\lambda_n}$;
+\item $A$ is normal if and only if $\abs{\lambda_j}=\sigma_j$ for every $j$;
+\item $A$ is positive semidefinite if and only if $\lambda_j=\sigma_j$ for every $j$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The eigenvalue product gives $\abs{\det A}=\prod_j\abs{\lambda_j}$.\\
+If $A=V\Sigma W^*$ is an SVD, then $\abs{\det V}=\abs{\det W}=1$, so $\abs{\det A}=\abs{\det\Sigma}=\prod_j\sigma_j$.
+\item If $A\mathbf{x}=\lambda\mathbf{x}$ with $\norm{\mathbf{x}}_2=1$, then $\abs{\lambda}=\norm{A\mathbf{x}}_2\leq\norm{A}_2$. Maximize over eigenvalues.
+\item If $A$ is singular, both sides are $0$ or the inequality is immediate.\\
+If $A$ is invertible, apply (ii) to $A^{-1}$: $\frac{1}{\abs{\lambda_n}}=\rho(A^{-1})\leq\norm{A^{-1}}_2=\frac{1}{\sigma_n}$.
+\item If $A$ is normal, the spectral theorem gives $\sigma_j=\abs{\lambda_j}$. Conversely, equality gives $\sum_j\abs{\lambda_j}^2=\sum_j\sigma_j^2=\norm{A}_F^2$, so Theorem \ref{thm:schur-inequality-defect-normality} gives normality.
+\item If $A\succeq0$, then $A$ is normal and $\lambda_j\geq0$, so (iv) gives $\lambda_j=\sigma_j$. Conversely, equality gives normality with nonnegative real eigenvalues, hence $A\succeq0$ by Theorem \ref{thm:positive-semidefinite-matrix-equivalences}.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality aligns eigenvalue moduli with singular values; positivity removes the moduli.\\
+\hlt{Key Insight}: Normality is the bridge that turns spectral data into singular-value data.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:trace-bounded-by-singular-values} \hlt{Trace Bound by Singular Values}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{C})$, then $\abs{\operatorname{tr}A}\leq\sum\limits_{j=1}^{n}\sigma_j(A)$. Consequently, $\sum\limits_{j=1}^{n}\abs{\lambda_j(A)}\leq\sum\limits_{j=1}^{n}\sigma_j(A)$ and $\sum\limits_{j=1}^{n}\abs{a_{jj}}\leq\sum\limits_{j=1}^{n}\sigma_j(A)$.
+\begin{proof}
+Let $A=V\Sigma W^*$ be an SVD.\\
+Writing $\mathbf{v}_k,\mathbf{w}_k$ for the columns of $V,W$, $\operatorname{tr}A =\sum\limits_{k=1}^{n}\sigma_k\mathbf{w}_k^*\mathbf{v}_k$, $\abs{\mathbf{w}_k^*\mathbf{v}_k}\leq1$, so $\abs{\operatorname{tr}A}\leq\sum\limits_k\sigma_k$.\\
+For eigenvalues, take a Schur form $T$ of $A$ and a diagonal unitary $D$ with $\operatorname{tr}(DT)=\sum\limits_j\abs{\lambda_j}$.\\
+For diagonal entries, take diagonal unitary $D$ with $\operatorname{tr}(DA)=\sum\limits_j\abs{a_{jj}}$.\\
+In both cases, unitary invariance of singular values and the trace bound give the result.\\
+\hlt{Structural Commentary}: Phase rotations turn trace estimates into eigenvalue and diagonal estimates.\\
+\hlt{Key Insight}: Prove $\abs{\operatorname{tr}A}\leq\sum\limits_j\sigma_j$ once, then rotate phases.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:rank-one-svd-orthogonality-and-truncation-error} \hlt{Rank-One SVD Terms and Truncation Error}\\
+Let $A=X\Sigma_rY^*=\sum_{j=1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$ be a compact SVD, with $\sigma_1\geq\cdots\geq\sigma_r>0$.\\
+For $0\leq k\leq r$, set $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, $A_0\defeq0$.\\
+Then the rank-one summands are mutually orthogonal in the Frobenius inner product, and
+\begin{align}
+\norm{A}_F^2=\sum_{j=1}^{r}\sigma_j^2,
+\qquad
+\norm{A-A_k}_F^2=\sum_{j=k+1}^{r}\sigma_j^2,
+\qquad
+\norm{A-A_k}_2=
+\begin{cases}
+\sigma_{k+1},&k<r,\\
+0,&k=r.
+\end{cases}
+\nonumber
+\end{align}
+\begin{proof}
+For $i,j\in\{1,\ldots,r\}$, $\innerprod[F]{\sigma_i\mathbf{x}_i\mathbf{y}_i^*,\sigma_j\mathbf{x}_j\mathbf{y}_j^*} =\sigma_i\sigma_j\operatorname{tr}(\mathbf{y}_i\mathbf{x}_i^*\mathbf{x}_j\mathbf{y}_j^*) =\sigma_i\sigma_j\delta_{ij}$.\\
+Pythagoras in the Frobenius inner product gives the two Frobenius formulas. The residual $A-A_k$ has compact SVD $\sum_{j=k+1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, so Theorem \ref{thm:spectral-norm-largest-singular-value} gives the spectral-norm formula.\\
+\hlt{Structural Commentary}: Compact SVD decomposes a matrix into orthogonal rank-one energy packets.\\
+\hlt{Key Insight}: Truncation error is exactly the energy left in the discarded singular directions.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/truncated_svd_energy.tikz}
+  \caption{Blue bars form $A_k$; red bars are discarded, with $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$.}
+  \label{fig:truncated-svd-energy}
+\end{figure}
+
+\begin{theorem} \label{thm:eckart-young-frobenius-spectral} \hlt{Eckart--Young Low-Rank Approximation}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$ and $\sigma_j=0$ for $j>q$. If $A_k$ is the rank-$k$ truncated SVD, $0\leq k<q$, and $B\in\operatorname{Mat}(m,n,\mathbb{F})$ has $\operatorname{rank}(B)\leq k$, then
+\begin{align}
+\norm{A-A_k}_2\leq\norm{A-B}_2,
+\qquad
+\norm{A-A_k}_F\leq\norm{A-B}_F.
+\nonumber
+\end{align}
+\begin{proof}
+Let $\mathbf{w}_1,\ldots,\mathbf{w}_n$ be right singular vectors for $A$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item Since $\operatorname{rank}(B)\leq k$, rank-nullity gives $\dim\ker(B)\geq n-k$. The subspaces $\ker(B)$ and $\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{k+1})$ in $\mathbb{F}^n$ have dimensions summing at least $n+1$, so their intersection contains a nonzero vector.\\
+Choose unit $\mathbf{x}$ in this intersection. Let $\mathbf{x}=\sum\limits_{i=1}^{k+1}c_i\mathbf{w}_i$ gives $\sum\limits_i\abs{c_i}^2=1$ and $\norm{A\mathbf{x}}_2^2=\sum\limits_{i=1}^{k+1}\sigma_i^2\abs{c_i}^2\geq\sigma_{k+1}^2$.\\
+Thus $\norm{A-B}_2\geq\norm{(A-B)\mathbf{x}}_2=\norm{A\mathbf{x}}_2\geq\sigma_{k+1}=\norm{A-A_k}_2$.
+\item Choose an $(n-k)$-dimensional subspace $\mathcal{U}\subseteq\ker(B)$, with projection $P$ and orthonormal basis $\mathbf{z}_1,\ldots,\mathbf{z}_{n-k}$.\\
+Since $B\mathbf{z}_j=0$, $\norm{A-B}_F^2\geq\sum\limits_{j=1}^{n-k}\norm{(A-B)\mathbf{z}_j}_2^2=\sum\limits_{j=1}^{n-k}\norm{A\mathbf{z}_j}_2^2=\sum\limits_{i=1}^{n}\sigma_i^2\norm{P\mathbf{w}_i}_2^2$.\\
+Put $\alpha_i=\norm{P\mathbf{w}_i}_2^2$. Then $0\leq\alpha_i\leq1$ and $\sum_i\alpha_i=\operatorname{tr}(P)=n-k$.\\
+Among all such weights, the sum $\sum_i\sigma_i^2\alpha_i$ is minimized by placing weight $1$ on the $n-k$ smallest values of the decreasing sequence $\sigma_i^2$, hence $\sum\limits_i\sigma_i^2\alpha_i\geq\sum\limits_{i=k+1}^{n}\sigma_i^2=\norm{A-A_k}_F^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rank-$k$ competitors vanish on at least $n-k$ directions.\\
+\hlt{Key Insight}: The optimal loss is precisely the singular-value tail.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:truncated-svd-approximation} \hlt{Truncated SVD Approximation Method}\\
+To compress or approximate $A$ by rank $k$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item compute or estimate the leading singular triples $(\sigma_j,\mathbf{x}_j,\mathbf{y}_j)$;
+\item keep $A_k=\sum_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$;
+\item use $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$ and $\norm{A-A_k}_2=\sigma_{k+1}$ to quantify the lost information.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:moore-penrose-pseudoinverse} \hlt{Moore--Penrose Pseudoinverse}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. If $A=0$, define $A^{\dagger}=0_{n,m}$.\\
+If $\operatorname{rank}(A)=r\geq1$ and $A=X\Sigma_rY^*$ is a compact SVD, define $A^{\dagger}\defeq Y\Sigma_r^{-1}X^*\in\operatorname{Mat}(n,m,\mathbb{F})$.\\
+This is the \hlt{pseudoinverse} or \hlt{Moore--Penrose pseudoinverse} of $A$.
+\end{definition}
+
+\begin{proposition} \label{prop:pseudoinverse-well-defined} \hlt{Pseudoinverse is Well Defined}\\
+The definition of $A^{\dagger}$ does not depend on the chosen compact SVD of $A$.
+\begin{proof}
+Let $A=X_1\Sigma_rY_1^*=X_2\Sigma_rY_2^*$. By Theorem \ref{thm:compact-svd-unitary-ambiguity}, $X_1=X_2U$, $Y_1=Y_2U$, and $U\Sigma_r^{-1}U^*=\Sigma_r^{-1}$.\\
+Hence $Y_1\Sigma_r^{-1}X_1^* =Y_2U\Sigma_r^{-1}U^*X_2^* =Y_2\Sigma_r^{-1}X_2^*$.\\
+\hlt{Structural Commentary}: Compact SVD ambiguity cancels in $Y\Sigma_r^{-1}X^*$.\\
+\hlt{Key Insight}: Inverting the singular values preserves the same block symmetries.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:moore-penrose-basic-properties} \hlt{Basic Properties of the Pseudoinverse}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{col}(A^{\dagger})=\operatorname{col}(A^*)$ and $\ker(A^{\dagger})=\ker(A^*)$;
+\item $AA^{\dagger}$ is the orthogonal projection of $\mathbb{F}^m$ onto $\operatorname{col}(A)$;
+\item $A^{\dagger}A$ is the orthogonal projection of $\mathbb{F}^n$ onto $\operatorname{col}(A^*)$;
+\item $AA^{\dagger}A=A$ and $A^{\dagger}AA^{\dagger}=A^{\dagger}$;
+\item $(A^{\dagger})^{\dagger}=A$;
+\item if $m=n$ and $A$ is invertible, then $A^{\dagger}=A^{-1}$.
+\end{enumerate}
+\begin{proof}
+The zero case is immediate. Let $A=X\Sigma_rY^*$ be a compact SVD; then $A^{\dagger}=Y\Sigma_r^{-1}X^*$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{col}(A^{\dagger})=\operatorname{col}(Y)=\operatorname{col}(A^*)$ and $\ker(A^{\dagger})=\ker(X^*)=\ker(A^*)$.
+\item $AA^{\dagger}=XX^*$, the orthogonal projection onto $\operatorname{col}(X)=\operatorname{col}(A)$.
+\item $A^{\dagger}A=YY^*$, the orthogonal projection onto $\operatorname{col}(Y)=\operatorname{col}(A^*)$.
+\item These follow from $XX^*X=X$ and $YY^*Y=Y$.
+\item The compact SVD of $A^{\dagger}$ is $Y\Sigma_r^{-1}X^*$, so $(A^{\dagger})^{\dagger}=A$.
+\item If $A$ is square and invertible, then $AA^{\dagger}=A^{\dagger}A=I_n$, hence $A^{\dagger}=A^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The pseudoinverse inverts nonzero singular directions and projects away null directions.\\
+\hlt{Key Insight}: Replace each $\sigma_j>0$ by $\sigma_j^{-1}$ on the same singular subspaces.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/pseudoinverse_four_spaces.tikz}
+  \caption{$A$ and $A^{\dagger}$ invert the nonzero singular subspaces; they vanish on $\ker(A)$ and $\ker(A^*)$, respectively.}
+  \label{fig:pseudoinverse-four-spaces}
+\end{figure}
+
+\begin{theorem} \label{thm:pseudoinverse-minimum-norm-least-squares} \hlt{Pseudoinverse and Minimum-Norm Least Squares}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $\mathbf{y}\in\mathbb{F}^m$, and set $\mathbf{x}_0=A^{\dagger}\mathbf{y}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A\mathbf{x}=\mathbf{y}$ is consistent, then $A\mathbf{x}_0=\mathbf{y}$ and $\mathbf{x}_0$ is the unique solution of smallest Euclidean norm.
+\item For arbitrary $\mathbf{y}$, $\mathbf{x}_0$ is a least-squares solution of $A\mathbf{x}\approx\mathbf{y}$, and it is the unique least-squares solution of smallest Euclidean norm.
+\end{enumerate}
+\begin{proof}
+Let $P=AA^{\dagger}=P_{\operatorname{col}(A)}$ and note that $\mathbf{x}_0\in\operatorname{col}(A^{\dagger})=\operatorname{col}(A^*)=(\ker A)^{\perp}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathbf{y}\in\operatorname{col}(A)$, then $A\mathbf{x}_0=P\mathbf{y}=\mathbf{y}$. For any solution $\mathbf{x}$, $\mathbf{x}-\mathbf{x}_0\in\ker(A)$,\\
+so $\norm{\mathbf{x}}_2^2 =\norm{\mathbf{x}_0+(\mathbf{x}-\mathbf{x}_0)}_2^2 =\norm{\mathbf{x}_0}_2^2+\norm{\mathbf{x}-\mathbf{x}_0}_2^2$ with equality only when $\mathbf{x}=\mathbf{x}_0$.
+\item For arbitrary $\mathbf{y}$, $A\mathbf{x}_0=P\mathbf{y}$, so $\mathbf{y}-A\mathbf{x}_0\perp\operatorname{col}(A)$ and $\mathbf{x}_0$ is least-squares optimal by Theorem \ref{thm:matrix-least-squares-normal-equations}. Any least-squares solution $\mathbf{x}$ satisfies $A\mathbf{x}=P\mathbf{y}=A\mathbf{x}_0$, hence the same orthogonal decomposition gives $\norm{\mathbf{x}}_2\geq\norm{\mathbf{x}_0}_2$, with equality only for $\mathbf{x}=\mathbf{x}_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Least squares projects onto $\operatorname{col}(A)$, then removes the $\ker(A)$ component.\\
+\hlt{Key Insight}: $A^{\dagger}\mathbf{y}$ is the fitted solution orthogonal to $\ker(A)$.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:pseudoinverse-solution-method} \hlt{Pseudoinverse Solution Method}\\
+For a system $A\mathbf{x}\approx\mathbf{y}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item compute a compact SVD $A=X\Sigma_rY^*$;
+\item form $A^{\dagger}=Y\Sigma_r^{-1}X^*$;
+\item set $\mathbf{x}_0=A^{\dagger}\mathbf{y}$;
+\item interpret $A\mathbf{x}_0=P_{\operatorname{col}(A)}\mathbf{y}$ and $\mathbf{x}_0\in(\ker A)^{\perp}$.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:spectral-condition-number} \hlt{Spectral Condition Number}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, its \hlt{spectral condition number} is $\kappa_2(A)\defeq\norm{A}_2\norm{A^{-1}}_2$.\\
+Equivalently, $\kappa_2(A)=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$. If $A$ is singular, $\kappa_2(A)$ is undefined.
+\end{definition}
+
+\begin{proposition} \label{prop:spectral-condition-number-properties} \hlt{Properties of the Spectral Condition Number}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\kappa_2(AB)\leq\kappa_2(A)\kappa_2(B)$;
+\item $\kappa_2(A)\geq1$, with equality if and only if $A$ is a nonzero scalar multiple of a unitary matrix;
+\item $\kappa_2(cA)=\kappa_2(A)$ for every nonzero scalar $c$;
+\item $\kappa_2(A)=\kappa_2(A^*)=\kappa_2(\overline{A})=\kappa_2(A^t)=\kappa_2(A^{-1})$ over $\mathbb{C}$, with the evident real special cases;
+\item $\kappa_2(A^*A)=\kappa_2(A)^2$;
+\item if $U,V$ are unitary, then $\kappa_2(UAV)=\kappa_2(A)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Use submultiplicativity: $\kappa_2(AB)=\norm{AB}_2\norm{B^{-1}A^{-1}}_2\leq\norm{A}_2\norm{B}_2\norm{B^{-1}}_2\norm{A^{-1}}_2$.
+\item Since $I_n=AA^{-1}$, $1=\norm{I_n}_2\leq\kappa_2(A)$. Equality means $\sigma_{\max}(A)=\sigma_{\min}(A)$, equivalently every singular value is the same positive number $s$. If $A=V\Sigma W^*$, then $\Sigma=sI_n$, so $A=sVW^*$ is a nonzero scalar multiple of a unitary matrix. The converse is immediate.
+\item This follows from $\norm{cA}_2=\abs{c}\norm{A}_2$ and $(cA)^{-1}=c^{-1}A^{-1}$.
+\item These matrices have the same singular values as $A$, except $A^{-1}$ has singular values $\sigma_n^{-1}\geq\cdots\geq\sigma_1^{-1}$.
+\item The singular values of $A^*A$ are $\sigma_1(A)^2,\ldots,\sigma_n(A)^2$.
+\item This follows from Proposition \ref{prop:unitary-invariance-of-singular-values}.
+\end{enumerate}
+\hlt{Structural Commentary}: Condition number compares largest and smallest singular stretches.\\
+\hlt{Key Insight}: A well-conditioned matrix stretches every direction by nearly the same factor.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:linear-system-relative-error-condition-number} \hlt{Condition Number and Linear-System Error}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible, let $\mathbf{y}\neq\mathbf{0}$, and let $A\mathbf{x}=\mathbf{y}$.\\
+If $A(\Delta\mathbf{x})=\Delta\mathbf{y}$, then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}}_2} \leq \kappa_2(A)\frac{\norm{\Delta\mathbf{y}}_2}{\norm{\mathbf{y}}_2}$
+\begin{proof}
+From $\mathbf{y}=A\mathbf{x}$, we have $\norm{\mathbf{y}}_2\leq\norm{A}_2\norm{\mathbf{x}}_2$, hence $1/\norm{\mathbf{x}}_2\leq\norm{A}_2/\norm{\mathbf{y}}_2$. Also $\Delta\mathbf{x}=A^{-1}\Delta\mathbf{y}$, so $\norm{\Delta\mathbf{x}}_2\leq\norm{A^{-1}}_2\norm{\Delta\mathbf{y}}_2$. Multiplying the two estimates gives the displayed bound.\\
+\hlt{Structural Commentary}: Solution error is controlled by the ratio of extreme singular stretches.\\
+\hlt{Key Insight}: $\kappa_2(A)$ measures worst-case error magnification.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/condition_number_error_bound.tikz}
+  \caption{$A$ maps a unit error ball to an ellipse; $\kappa_2(A)=\sigma_{\max}/\sigma_{\min}$ is the long/short semiaxis ratio.}
+  \label{fig:condition-number-error-bound}
+\end{figure}

@@ -1,0 +1,644 @@
+\subsection{Jordan and Canonical Forms}
+
+% **Role:** structure revealed by invariant subspaces and eigenbehavior.
+%
+% Jordan form, rational/canonical form if desired, complexification, real block forms.
+
+Jordan and canonical forms turn primary decomposition into explicit blocks. Jordan chains, complexification, and real block forms organize the nilpotent and real spectral structure.
+
+\begin{definition} \label{def:jordan-chain-block-and-matrix} \hlt{Jordan Chains, Blocks, and Matrices}\\
+For $k\geq1$, the \hlt{nilpotent Jordan block} $J_k(0)$ is the $k\times k$ matrix with $1$ on the first superdiagonal and $0$ elsewhere:
+\begin{align}
+J_k(0)=
+\begin{bmatrix}
+0&1&0&\cdots&0\\
+0&0&1&\ddots&\vdots\\
+\vdots&\ddots&\ddots&\ddots&0\\
+0&\cdots&0&0&1\\
+0&\cdots&\cdots&0&0
+\end{bmatrix}.
+\nonumber
+\end{align}
+For $\lambda\in\mathbb{C}$, set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
+\end{definition}
+
+\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
+For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
+\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then for each fixed $0\leq r<k$ the scalar $\binom{p}{r}\lambda^{p-r}$ tends to $0$, because a polynomial in $p$ is dominated by the exponential decay of $\abs{\lambda}^{p}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
+\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:nilpotent-jordan-chain-basis} \hlt{Nilpotent Jordan Chain Basis}\\
+Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ such that $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
+\begin{proof}
+Induct on $n=\dim(\mathcal{V})$. If $N=0$, any basis works with all $m_j=0$.\\
+Now assume $N\neq0$. Then $N$ is not injective, so $\operatorname{range}(N)$ is a proper subspace, and $N|_{\operatorname{range}(N)}$ is nilpotent.\\
+By induction, $\operatorname{range}(N)$ has a chain basis $\bigl(N^{m_1}\mathbf{u}_1,\ldots,N\mathbf{u}_1,\mathbf{u}_1,\ldots, N^{m_r}\mathbf{u}_r,\ldots,N\mathbf{u}_r,\mathbf{u}_r\bigr)$ with $N^{m_j+1}\mathbf{u}_j=\mathbf{0}$.\\
+Choose $\mathbf{v}_j\in\mathcal{V}$ such that $N\mathbf{v}_j=\mathbf{u}_j$, and lift the chains to $\mathcal{L}= \bigl(N^{m_1+1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r+1}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$.\\
+The list $\mathcal{L}$ is linearly independent. Indeed, applying $N$ to a dependence among vectors in $\mathcal{L}$ gives a dependence among the range-chain basis, so all coefficients except possibly those on the leading vectors $N^{m_j+1}\mathbf{v}_j$ vanish.\\
+The remaining relation is a relation among $N^{m_j+1}\mathbf{v}_j=N^{m_j}\mathbf{u}_j$, which are members of the range-chain basis, so those coefficients vanish too. Also $N(\operatorname{span}(\mathcal{L}))=\operatorname{range}(N)$: each range-chain basis vector $N^q\mathbf{u}_j$ is $N(N^q\mathbf{v}_j)$ for the corresponding lifted vector. Extend $\mathcal{L}$ to a basis by adding $\mathbf{w}_1,\ldots,\mathbf{w}_s$. For each $i$, choose $\mathbf{x}_i\in\operatorname{span}(\mathcal{L})$ such that $N\mathbf{x}_i=N\mathbf{w}_i$, and set $\mathbf{z}_i=\mathbf{w}_i-\mathbf{x}_i$. Then $N\mathbf{z}_i=\mathbf{0}$. Since each $\mathbf{x}_i$ lies in $\operatorname{span}(\mathcal{L})$, replacing $\mathbf{w}_i$ by $\mathbf{z}_i$ preserves the span and linear independence of the full basis. Thus $\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s$ is the desired chain basis.\\
+\hlt{Structural Commentary}: Build chains in $\operatorname{range}(N)$, lift them once, then add kernel chains.\\
+\hlt{Key Insight}: Applying $N$ turns lifted-chain dependences into known range-chain dependences.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_chain_nilpotent_basis.tikz}
+  \caption{A nilpotent chain shifts left under $N$; in this basis order it becomes one Jordan block.}
+  \label{fig:jordan-chain-nilpotent-basis}
+\end{figure}
+
+\begin{theorem} \label{thm:complex-jordan-form} \hlt{Jordan Form over $\mathbb{C}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$. Then $\mathcal{V}$ has a Jordan basis for $T$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$, and each $N_j\defeq(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is nilpotent. Apply Theorem \ref{thm:nilpotent-jordan-chain-basis} to $N_j$ on each generalized eigenspace.\\
+The resulting chain basis of $\mathcal{G}_{\lambda_j}(T)$ is a basis of that summand, and the direct-sum decomposition makes the concatenation of these bases a basis of $\mathcal{V}$. In a chain of length $r$ for $N_j$, the matrix of $N_j$ is $J_r(0)$, so the matrix of $T|_{\mathcal{G}_{\lambda_j}(T)}=\lambda_jI+N_j$ on the same chain is $J_r(\lambda_j)$. Therefore the concatenated basis is a Jordan basis for $T$.\\
+\hlt{Structural Commentary}: Primary pieces decompose into nilpotent chains.\\
+\hlt{Key Insight}: Jordan form is ``eigenvalue plus nilpotent chains'' on every generalized eigenspace.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_form_primary_chains.tikz}
+  \caption{Primary pieces $\mathcal{G}_{\lambda_j}(T)$ give nilpotent chains, hence Jordan blocks.}
+  \label{fig:jordan-form-primary-chains}
+\end{figure}
+
+\begin{lemma} \label{lem:nilpotent-jordan-block-power-rank} \hlt{Powers of a Nilpotent Jordan Block}\\
+For $k\geq1$ and $p\geq0$, $\operatorname{rank}\bigl(J_k(0)^p\bigr)=\max(k-p,0)$ and $\dim\ker\bigl(J_k(0)^p\bigr)=\min(p,k)$.
+\begin{proof}
+Let $N=J_k(0)$. In the standard basis, $N\mathbf{e}_1=\mathbf{0}$ and $N\mathbf{e}_j=\mathbf{e}_{j-1}$ for $2\leq j\leq k$. Iterating gives
+\begin{align}
+N^p\mathbf{e}_j=
+\begin{cases}
+\mathbf{0}, & j\leq p,\\
+\mathbf{e}_{j-p}, & j>p.
+\end{cases} \nonumber
+\end{align}
+If $p<k$, the image is $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{k-p})$, so the rank is $k-p$; if $p\geq k$, the image is $\{\mathbf{0}\}$, so the rank is $0$.\\
+Hence $\operatorname{rank}(N^p)=\max(k-p,0)$. Rank-nullity gives $\dim\ker(N^p)=k-\max(k-p,0)=\min(p,k)$.\\
+\hlt{Structural Commentary}: A nilpotent Jordan block is a left-shift on the standard basis.\\
+\hlt{Key Insight}: Each power deletes one more leading layer of the chain.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:weyr-characteristic} \hlt{Weyr Characteristic}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\lambda\in\operatorname{spec}(A)$.\\
+For $p\geq1$, define $w_p(\lambda,A)\defeq \operatorname{rank}\bigl((A-\lambda I_n)^{p-1}\bigr) - \operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$.\\
+The positive part of the sequence $w_1,w_2,\ldots$ is the \hlt{Weyr characteristic} of $A$ associated with $\lambda$.
+\end{definition}
+
+\begin{theorem} \label{thm:jordan-block-sizes-from-rank-drops} \hlt{Jordan Block Sizes from Rank Drops}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda\in\operatorname{spec}(A)$, and $p\geq1$. Then $w_p(\lambda,A)$ is the number of $\lambda$-Jordan blocks of size at least $p$; hence $w_p(\lambda,A)-w_{p+1}(\lambda,A)$ is the number of $\lambda$-blocks of size exactly $p$.
+\begin{proof}
+Rank is similarity-invariant, so assume $A$ is in Jordan form.\\
+Blocks $J_k(\mu)$ with $\mu\neq\lambda$ contribute $0$ to the rank drop because $J_k(\mu)-\lambda I_k$ is invertible.\\
+A block $J_k(\lambda)$ contributes $\operatorname{rank}\bigl(J_k(0)^{p-1}\bigr)-\operatorname{rank}\bigl(J_k(0)^p\bigr)$, which is $1$ exactly when $p\leq k$ by Lemma \ref{lem:nilpotent-jordan-block-power-rank}.\\
+Summing over blocks proves the first claim; subtracting the $p+1$ count gives the exact-size count.\\
+\hlt{Structural Commentary}: Rank drops count surviving chain lengths.\\
+\hlt{Key Insight}: A length-$k$ block contributes to drops $1,\ldots,k$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/weyr_rank_drops_jordan_blocks.tikz}
+  \caption{For $r_p=\operatorname{rank}((A-\lambda I)^p)$, drops count surviving chains; $w_p-w_{p+1}$ counts size-$p$ blocks.}
+  \label{fig:weyr-rank-drops-jordan-blocks}
+\end{figure}
+
+\begin{method} \label{meth:jordan-form-from-rank-drops} \hlt{Computing Jordan Blocks by Rank Drops}\\
+For each eigenvalue $\lambda$ of $A\in\operatorname{Mat}(n,n,\mathbb{C})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $r_p=\operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$ for $p=0,1,2,\ldots$ until the differences stabilize at $0$.
+\item Set $w_p=r_{p-1}-r_p$. Then $w_p$ is the number of $\lambda$-blocks of size at least $p$.
+\item The number of blocks $J_p(\lambda)$ is $w_p-w_{p+1}$.
+\item Assemble the Jordan form by taking the direct sum over all eigenvalues.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:ab-ba-nonzero-eigenvalues} \hlt{Nonzero Eigenvalues of $AB$ and $BA$}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, $B\in\operatorname{Mat}(n,m,\mathbb{C})$, and suppose $n\geq m$. Then $p_{BA}(z)=z^{n-m}p_{AB}(z)$.\\
+Consequently, for $\lambda\neq0$, $m_{AB}(\lambda)=m_{BA}(\lambda)$. If $m_{AB}(0)=k$, then $m_{BA}(0)=k+n-m$.
+\begin{proof}
+For $z\neq0$, Sylvester's determinant identity gives
+\begin{align}
+\det(zI_n-BA) =z^n\det(I_n-z^{-1}BA) =z^n\det(I_m-z^{-1}AB) =z^{n-m}\det(zI_m-AB).
+\nonumber
+\end{align}
+Both sides are polynomials in $z$, so the identity holds for all $z$. The claimed multiplicities follow by factoring $p_{AB}$ and comparing with $p_{BA}=z^{n-m}p_{AB}$.\\
+\hlt{Structural Commentary}: Sylvester's determinant identity moves the rectangular product across the determinant.\\
+\hlt{Key Insight}: Passing from $AB$ to $BA$ only adds the necessary extra zero roots when the sizes differ.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:ab-ba-same-nonzero-jordan-blocks} \hlt{Nonzero Jordan Blocks of $AB$ and $BA$}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. For every $\lambda\neq0$, the Jordan blocks of $AB$ and $BA$ at $\lambda$ coincide.
+\begin{proof}
+Set $X=\begin{bmatrix}AB&A\\0&0\end{bmatrix}$ and $Y=\begin{bmatrix}0&A\\0&BA\end{bmatrix}$. Then $\begin{bmatrix}I_n&0\\B&I_n\end{bmatrix}
+X
+\begin{bmatrix}I_n&0\\-B&I_n\end{bmatrix}
+=Y$, so $X$ and $Y$ are similar.\\
+For $\lambda\neq0$ and $p\geq1$, the shifted powers have block triangular forms
+\begin{align}
+(X-\lambda I_{2n})^p=
+\begin{bmatrix}
+(AB-\lambda I_n)^p&*\\
+0&(-\lambda)^pI_n
+\end{bmatrix},
+\qquad
+(Y-\lambda I_{2n})^p=
+\begin{bmatrix}
+(-\lambda)^pI_n&*\\
+0&(BA-\lambda I_n)^p
+\end{bmatrix} \nonumber
+\end{align}
+The diagonal block $(-\lambda)^pI_n$ is invertible.\\
+Block Gaussian elimination by invertible row and column operations removes the starred block, so
+\begin{align}
+\operatorname{rank}\bigl((X-\lambda I_{2n})^p\bigr)
+&=n+\operatorname{rank}\bigl((AB-\lambda I_n)^p\bigr), \nonumber\\
+\operatorname{rank}\bigl((Y-\lambda I_{2n})^p\bigr)
+&=n+\operatorname{rank}\bigl((BA-\lambda I_n)^p\bigr).
+\nonumber
+\end{align}
+Since $X$ and $Y$ are similar, these left sides agree for all $p$.\\
+Hence the shifted rank drops of $AB$ and $BA$ at $\lambda$ agree, so Theorem \ref{thm:jordan-block-sizes-from-rank-drops} gives the same Jordan blocks.\\
+\hlt{Structural Commentary}: Similar block embeddings make the nonzero shifted ranks match.\\
+\hlt{Key Insight}: At $\lambda\neq0$, the extra block is invertible and splits off.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/ab_ba_nonzero_jordan_blocks.tikz}
+  \caption{For $\lambda\neq0$, the auxiliary similarity reduces the comparison to shifted ranks of $AB$ and $BA$.}
+  \label{fig:ab-ba-nonzero-jordan-blocks}
+\end{figure}
+
+\begin{corollary} \label{cor:jordan-form-unique-up-to-block-permutation} \hlt{Uniqueness of Jordan Form}\\
+If $J$ and $J'$ are Jordan matrices similar to $A\in\operatorname{Mat}(n,n,\mathbb{C})$, they differ only by a permutation of Jordan blocks.
+\begin{proof}
+Similarity preserves spectra and the ranks of $(X-\lambda I_n)^p$. Thus $J$ and $J'$ have the same Weyr characteristic for each eigenvalue. Theorem \ref{thm:jordan-block-sizes-from-rank-drops} then gives the same block multiplicities, so only block order may differ.\\
+\hlt{Structural Commentary}: Weyr data is similarity-invariant and fixes block multiplicities.\\
+\hlt{Key Insight}: Jordan form is unique modulo block order.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:ab-ba-similar-rank-power-criterion} \hlt{Similarity Criterion for $AB$ and $BA$}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. $AB$ is similar to $BA$ if and only if $\operatorname{rank}\bigl((AB)^p\bigr)=\operatorname{rank}\bigl((BA)^p\bigr)$, $p=1,\ldots,n$.
+\begin{proof}
+If $AB$ and $BA$ are similar, then their powers are similar and have equal rank.\\
+Conversely, Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks} gives equality of all nonzero Jordan blocks. The displayed rank equalities, together with the trivial equality at $p=0$, give the same Weyr characteristic at $\lambda=0$ by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}. Hence the nilpotent Jordan blocks also agree, so the two Jordan forms are identical up to block order.\\
+\hlt{Structural Commentary}: Nonzero blocks agree automatically; only the nilpotent blocks must be tested.\\
+\hlt{Key Insight}: Powers of $AB$ and $BA$ measure exactly the zero-Jordan-block data.
+\end{proof}
+\end{corollary}
+
+\begin{method} \label{meth:checking-ab-ba-similarity} \hlt{Checking Whether $AB$ and $BA$ Are Similar}\\
+For $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The nonzero Jordan blocks of $AB$ and $BA$ already match.
+\item Compute $\operatorname{rank}\bigl((AB)^p\bigr)$ and $\operatorname{rank}\bigl((BA)^p\bigr)$ for $p=1,\ldots,n$.
+\item If all ranks agree, then $AB\sim BA$; if some rank differs, then only the nilpotent Jordan structure differs.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:nonderogatory-matrix} \hlt{Nonderogatory Matrix}\\
+A matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is \hlt{nonderogatory} if its Jordan form has exactly one Jordan block for each distinct eigenvalue. Equivalently, $\dim E_{\lambda}(A)=1$ for every $\lambda\in\operatorname{spec}(A)$.
+\end{definition}
+
+\begin{lemma} \label{lem:single-jordan-block-commutant-polynomials} \hlt{Commutant of One Jordan Block}\\
+If $J=J_m(\lambda)$ and $XJ=JX$, then $X=p(J)$ for some polynomial $p$ with $\deg p<m$.
+\begin{proof}
+It suffices to treat $N=J_m(0)$, since $J_m(\lambda)=\lambda I_m+N$.\\
+The vector $\mathbf{e}_m$ is cyclic for $N$: $(\mathbf{e}_m,N\mathbf{e}_m,\ldots,N^{m-1}\mathbf{e}_m)$ is the standard basis in reverse order.\\
+Choose the unique polynomial $p$ with $\deg p<m$ such that $p(N)\mathbf{e}_m=X\mathbf{e}_m$.\\
+For every $r=0,\ldots,m-1$, $p(N)N^r\mathbf{e}_m=N^rp(N)\mathbf{e}_m=N^rX\mathbf{e}_m=XN^r\mathbf{e}_m$.\\
+Thus $p(N)$ and $X$ agree on a basis, so $X=p(N)=q(J)$ for $q(z)=p(z-\lambda)$.\\
+\hlt{Structural Commentary}: A single Jordan block is generated by one cyclic vector.\\
+\hlt{Key Insight}: The cyclic vector determines the commutant.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:nonderogatory-commutant-polynomials} \hlt{Nonderogatory Commutants Are Polynomials}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is nonderogatory, then $\operatorname{Comm}(A)=\{p(A):p\in\mathbb{C}[z]\}$.
+\begin{proof}
+The inclusion $\{p(A):p\in\mathbb{C}[z]\}\subseteq\operatorname{Comm}(A)$ follows from Proposition \ref{prop:operator-polynomial-products}.\\
+For reverse inclusion, first replace $A$ by its Jordan form $J=J_{m_1}(\lambda_1)\oplus\cdots\oplus J_{m_d}(\lambda_d)$, where $\lambda_i$ are distinct.\\
+If $XJ=JX$ and $X=[X_{ij}]$ is partitioned conformally with $J$, the block equation is $X_{ij}J_{m_j}(\lambda_j)=J_{m_i}(\lambda_i)X_{ij}$. Corollary \ref{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} gives $X_{ij}=0$ for $i\neq j$. Each diagonal block $X_{ii}$ commutes with $J_{m_i}(\lambda_i)$, so Lemma \ref{lem:single-jordan-block-commutant-polynomials} gives $X_{ii}=p_i(J_{m_i}(\lambda_i))$ for some polynomial $p_i$ with $\deg p_i<m_i$. The ideals generated by $(z-\lambda_i)^{m_i}$ are pairwise coprime, so Hermite interpolation gives a polynomial $p$ with $p\equiv p_i\pmod{(z-\lambda_i)^{m_i}}$ for every $i$.\\
+On the $i$th block, $p-p_i=(z-\lambda_i)^{m_i}q_i$ for some $q_i$, and $(J_{m_i}(\lambda_i)-\lambda_iI)^{m_i}=0$. Hence $p(J_{m_i}(\lambda_i))=p_i(J_{m_i}(\lambda_i))=X_{ii}$ for every $i$, so $X=p(J)$. Conjugating back to $A$ proves the claim.\\
+\hlt{Structural Commentary}: Disjoint eigenvalue blocks force block diagonality; one Jordan block per eigenvalue makes each diagonal commutant polynomial.\\
+\hlt{Key Insight}: Hermite interpolation glues the separate block polynomials into one polynomial in $A$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/nonderogatory_commutant_polynomial.tikz}
+  \caption{Blockwise commutant polynomials glue by interpolation.}
+  \label{fig:nonderogatory-commutant-polynomial}
+\end{figure}
+
+\begin{theorem} \label{thm:conjugate-similarity-jordan-block-criterion} \hlt{Conjugate Similarity Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is similar to $\overline{A}$ if and only if each $J_k(\lambda)$ occurs in the Jordan form of $A$ with the same multiplicity as $J_k(\overline{\lambda})$.
+\begin{proof}
+Let $J$ be a Jordan form of $A$. Then $\overline{J}$ is a Jordan form of $\overline{A}$, obtained by replacing each $J_k(\lambda)$ by $J_k(\overline{\lambda})$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is similar to $\overline{A}$, then $J$ and $\overline{J}$ are similar.\\
+By Corollary \ref{cor:jordan-form-unique-up-to-block-permutation}, their Jordan blocks have same multiplicities.
+\item[$(\Leftarrow)$] If the multiplicities agree, then $J$ and $\overline{J}$ differ only by a permutation of blocks. Hence $A$ is similar to $\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation changes eigenvalue labels but not block sizes.\\
+\hlt{Key Insight}: Non-real Jordan blocks must occur in conjugate pairs.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:hermitian-products-and-conjugate-products} \hlt{Hermitian Products and Conjugate Products}\\
+Let $A,H,K\in\operatorname{Mat}(n,n,\mathbb{C})$, and suppose $H$ and $K$ are Hermitian.\\
+Then $HK$ is similar to $KH$, and $A\overline{A}$ is similar to $\overline{A}A$.
+\begin{proof}
+For each $p=1,\ldots,n$, adjoints preserves rank, $((HK)^p)^*=(KH)^p$. Hence $\operatorname{rank}\bigl((HK)^p\bigr)=\operatorname{rank}\bigl((KH)^p\bigr)$.\\
+Similarly, entrywise conjugation preserves rank and gives $\overline{(A\overline{A})^p}=(\overline{A}A)^p$, so $\operatorname{rank}\bigl((A\overline{A})^p\bigr)=\operatorname{rank}\bigl((\overline{A}A)^p\bigr)$.\\
+Apply Corollary \ref{cor:ab-ba-similar-rank-power-criterion} in both cases.\\
+\hlt{Structural Commentary}: Adjoint and conjugation preserve rank and reverse product order.\\
+\hlt{Key Insight}: The rank-power test turns order reversal into similarity.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:reversal-matrix} \hlt{Reversal Matrix}\\
+For $k\geq1$, \hlt{reversal matrix} $R_k\in\operatorname{Mat}(k,k,\mathbb{C})$ defined $(R_k)_{ij}=
+\begin{cases}
+1,& i+j=k+1,\\
+0,& i+j\neq k+1
+\end{cases}$, thus $R_k^t=R_k$, $R_k^2=I_k$.
+\end{definition}
+
+\begin{lemma} \label{lem:jordan-block-transpose-reversal-similarity} \hlt{Reversal Conjugates a Jordan Block to Its Transpose}\\
+For every $k\geq1$ and $\lambda\in\mathbb{C}$, $J_k(\lambda)^t=R_kJ_k(\lambda)R_k$. Moreover, $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.
+\begin{proof}
+Let $N=J_k(0)$. Since $R_k$ reverses standard basis order, $R_kNR_k=N^t$.\\
+Adding scalar gives $R_kJ_k(\lambda)R_k=J_k(\lambda)^t$. As $R_k=R_k^t=R_k^{-1}$, this identity gives $J_k(\lambda)^tR_k=R_kJ_k(\lambda)$ and $R_kJ_k(\lambda)^t=J_k(\lambda)R_k$, so $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.\\
+\hlt{Structural Commentary}: Reversal changes the superdiagonal shift into the subdiagonal shift.\\
+\hlt{Key Insight}: Transposition reads the same Jordan chain backwards.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:matrix-similar-to-transpose-and-symmetric-factorizations} \hlt{Transpose Similarity and Symmetric Factorisations}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $A^t$ via a symmetric similarity matrix.
+\item $A=BC=DE$, where $B,C,D,E$ are symmetric and $B,E$ are invertible.
+\end{enumerate}
+\begin{proof}
+Choose a Jordan form $A=SJS^{-1}$, and let $R$ be the direct sum of the reversal matrices matching the Jordan blocks of $J$. By Lemma \ref{lem:jordan-block-transpose-reversal-similarity}, $J^t=RJR$, $R^t=R$, $R^2=I_n$, and both $RJ$ and $JR$ are symmetric.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Set $P=(S^{-1})^tRS^{-1}$. Then $P^t=P$, $P^{-1}=SRS^t$, and $PAP^{-1}=(S^{-1})^tRJR S^t=(S^{-1})^tJ^tS^t=A^t$.
+\item
+Using $R^2=I_n$, $A=(SRS^t)\bigl((S^{-1})^tRJ S^{-1}\bigr)$ and $A=(SJR S^t)\bigl((S^{-1})^tR S^{-1}\bigr)$.\\
+The products equal $SJS^{-1}$ because $S^t(S^{-1})^t=I_n$ and $R^2=I_n$. All four factors are symmetric because $R,RJ,JR$ are symmetric; $SRS^t$ and $(S^{-1})^tRS^{-1}$ are invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: Reduce to Jordan blocks, reverse chains, then conjugate back.\\
+\hlt{Key Insight}: Symmetric involutions produce both transpose similarity and symmetric factors.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_transpose_reversal.tikz}
+  \caption{Reversal gives $R_kJ_k(0)R_k=J_k(0)^t$: the same chain read backwards.}
+  \label{fig:jordan-transpose-reversal}
+\end{figure}
+
+\begin{theorem} \label{thm:conjugate-similarity-hermitian-product-equivalences} \hlt{Conjugate Similarity and Hermitian Products}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $\overline{A}$.
+\item $A$ is similar to $A^*$.
+\item $A$ is similar to $A^*$ via a Hermitian similarity matrix.
+\item $A=HK=LM$, where $H,K,L,M$ are Hermitian, and $H,M$ are invertible.
+\item $A=HK$ for some Hermitian matrices $H,K$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$ Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations} applied to $\overline{A}$ gives $\overline{A}\sim(\overline{A})^t=A^*$. Thus $A\sim A^*$.
+\item[$(ii)$]$\Rightarrow(iii)$ Choose invertible $S$ such that $A=SA^*S^{-1}$, so $AS=SA^*$. For $\theta\in\mathbb{R}$, put $S_{\theta}=e^{i\theta}S$.\\
+Then $AS_{\theta}=S_{\theta}A^*$ and, by taking adjoints, $AS_{\theta}^*=S_{\theta}^*A^*$. Hence $A(S_{\theta}+S_{\theta}^*)=(S_{\theta}+S_{\theta}^*)A^*$.\\
+The matrix $H_{\theta}=S_{\theta}+S_{\theta}^*$ is Hermitian. Also $S_{\theta}^{-1}H_{\theta}=I_n+e^{-2i\theta}S^{-1}S^*$. Thus $H_{\theta}$ is singular exactly when $-e^{2i\theta}$ is an eigenvalue of $S^{-1}S^*$. There are only finitely many such values, so choose $\theta$ for which $H_{\theta}$ is invertible. Then $A=H_{\theta}A^*H_{\theta}^{-1}$.
+\item[$(iii)$]$\Rightarrow(iv)$ Let $R$ be invertible Hermitian and satisfy $A=RA^*R^{-1}$. Then $AR=RA^*$ and $R^{-1}A=A^*R^{-1}$.\\
+Thus $A^*R^{-1}$ and $RA^*$ are Hermitian, and $A=R(A^*R^{-1})=(RA^*)R^{-1}$.\\
+This gives the two asserted Hermitian factorizations, with the first factor in the first product and the second factor in the second product invertible.
+\item[$(iv)$]$\Rightarrow(v)$ The first factorization in (iv) already has the form $A=HK$ with $H$ and $K$ Hermitian.
+\item[$(v)$]$\Rightarrow(i)$ If $A=HK$ with $H,K$ Hermitian, then Corollary \ref{cor:hermitian-products-and-conjugate-products} gives $HK\sim KH$.\\
+By Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations}, $KH\sim (KH)^t=H^tK^t=\overline{H}\,\overline{K}=\overline{A}$. Hence $A\sim\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The equivalences move between conjugation, adjoints, and Hermitian products by combining transpose similarity with a Hermitianized similarity matrix.\\
+\hlt{Key Insight}: A phase-rotated average $e^{i\theta}S+e^{-i\theta}S^*$ turns an arbitrary similarity to $A^*$ into a Hermitian one.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/conjugate_similarity_hermitian_products.tikz}
+  \caption{Conjugate similarity, adjoint similarity, and Hermitian product factorisations are equivalent.}
+  \label{fig:conjugate-similarity-hermitian-products}
+\end{figure}
+
+\begin{definition} \label{def:complexification-real-vector-space} \hlt{Complexification of a Real Vector Space}\\
+Let $\mathcal{V}$ be a real vector space. The \hlt{complexification} of $\mathcal{V}$ is $\mathcal{V}_{\mathbb{C}}\defeq \mathcal{V}\times\mathcal{V}$, where $(\mathbf{u},\mathbf{v})$ is written as $\mathbf{u}+i\mathbf{v}$.\\
+Addition and complex scalar multiplication are defined by
+\begin{align}
+(\mathbf{u}_1+i\mathbf{v}_1)+(\mathbf{u}_2+i\mathbf{v}_2)
+&=(\mathbf{u}_1+\mathbf{u}_2)+i(\mathbf{v}_1+\mathbf{v}_2), \nonumber\\
+(a+bi)(\mathbf{u}+i\mathbf{v})
+&=(a\mathbf{u}-b\mathbf{v})+i(b\mathbf{u}+a\mathbf{v}),
+\qquad a,b\in\mathbb{R}.
+\nonumber
+\end{align}
+We identify $\mathcal{V}$ with the real subspace $\{\mathbf{u}+i\mathbf{0}:\mathbf{u}\in\mathcal{V}\}$.
+\end{definition}
+
+\begin{proposition} \label{prop:complexification-vector-space-basis} \hlt{Complexification Preserves Bases}\\
+Let $\mathcal{V}$ be real. Then $\mathcal{V}_{\mathbb{C}}$ is complex, and every real basis $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ of $\mathcal{V}$ is a complex basis of $\mathcal{V}_{\mathbb{C}}$.\\
+Thus $\dim_{\mathbb{C}}(\mathcal{V}_{\mathbb{C}})=\dim_{\mathbb{R}}(\mathcal{V})$.
+\begin{proof}
+The vector-space axioms follow componentwise from those of $\mathcal{V}$.\\
+For $\mathbf{u},\mathbf{v}\in\mathcal{V}$, write $\mathbf{u}=\sum\limits_{j=1}^{n}a_j\mathbf{v}_j$ and $\mathbf{v}=\sum\limits_{j=1}^{n}b_j\mathbf{v}_j$, $a_j,b_j\in\mathbb{R}$. Then $\mathbf{u}+i\mathbf{v}=\sum\limits_{j=1}^{n}(a_j+ib_j)\mathbf{v}_j$, so the list spans.\\
+If $\sum\limits_{j=1}^{n}\lambda_j\mathbf{v}_j=\mathbf{0}$ and $\lambda_j=a_j+ib_j$, then $\sum\limits_{j=1}^{n}a_j\mathbf{v}_j=\mathbf{0}$ and $\sum\limits_{j=1}^{n}b_j\mathbf{v}_j=\mathbf{0}$.\\
+Real linear independence gives $a_j=b_j=0$ for all $j$, hence $\lambda_j=0$ for all $j$.\\
+\hlt{Structural Commentary}: Complexification keeps the basis length unchanged.\\
+\hlt{Key Insight}: Separate real and imaginary parts.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:complexification-real-operator} \hlt{Complexification of a Real Operator}\\
+Let $\mathcal{V}$ be a real vector space and let $T\in\LL(\mathcal{V})$.\\
+The \hlt{complexification} of $T$ is the operator $T_{\mathbb{C}}\in\LL(\mathcal{V}_{\mathbb{C}})$ defined by $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})\defeq T\mathbf{u}+iT\mathbf{v}$.
+\end{definition}
+
+\begin{proposition} \label{prop:complexification-operator-basic-properties} \hlt{Complexification Preserves Operator Data}\\
+Let $\mathcal{V}$ be a real vector space and let $T\in\LL(\mathcal{V})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T_{\mathbb{C}}\in\LL(\mathcal{V}_{\mathbb{C}})$.
+\item $(T_{\mathbb{C}})^k(\mathbf{u}+i\mathbf{v})=T^k\mathbf{u}+iT^k\mathbf{v}$ for every integer $k\geq0$.
+\item If $\beta$ is a real basis of $\mathcal{V}$, then $[T_{\mathbb{C}}]_{\beta\leftarrow\beta}=[T]_{\beta\leftarrow\beta}$, now regarded as a complex matrix.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Additivity is immediate. For $\alpha=a+bi\in\mathbb{C}$,
+\begin{align}
+T_{\mathbb{C}}\bigl(\alpha(\mathbf{u}+i\mathbf{v})\bigr) =T(a\mathbf{u}-b\mathbf{v})+iT(b\mathbf{u}+a\mathbf{v}) =(aT\mathbf{u}-bT\mathbf{v})+i(bT\mathbf{u}+aT\mathbf{v}) =\alpha T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v}),
+\nonumber
+\end{align}
+so $T_{\mathbb{C}}$ is complex-linear.
+\item For $k=0$, the claim is the identity. If it holds for $k$, then
+\begin{align}
+(T_{\mathbb{C}})^{k+1}(\mathbf{u}+i\mathbf{v}) =T_{\mathbb{C}}(T^k\mathbf{u}+iT^k\mathbf{v}) =T^{k+1}\mathbf{u}+iT^{k+1}\mathbf{v}.
+\nonumber
+\end{align}
+Thus the formula holds for all $k\geq0$.
+\item If $T\mathbf{v}_j=\sum\limits_i a_{ij}\mathbf{v}_i$ with $a_{ij}\in\mathbb{R}$, then $T_{\mathbb{C}}\mathbf{v}_j=\sum\limits_i a_{ij}\mathbf{v}_i$. Hence the coordinate matrix is unchanged.
+\end{enumerate}
+\hlt{Structural Commentary}: Complexification keeps the coordinate matrix unchanged.\\
+\hlt{Key Insight}: Same real entries; larger scalar field.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/complexification_real_operator.tikz}
+  \caption{Complexification packages two real vectors: $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=T\mathbf{u}+iT\mathbf{v}$.}
+  \label{fig:complexification-real-operator}
+\end{figure}
+
+\begin{method} \label{meth:complexify-real-matrix} \hlt{Complexifying a Real Matrix}\\
+To use complex eigenvalues for a real matrix $A\in\operatorname{Mat}(n,n,\mathbb{R})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Regard the same real matrix $A$ as a complex matrix on $\mathbb{C}^n$.
+\item Find complex eigenpairs or invariant data for this complexified operator.
+\item If $A(\mathbf{u}+i\mathbf{v})=(a+bi)(\mathbf{u}+i\mathbf{v})$, separate parts: $A\mathbf{u}=a\mathbf{u}-b\mathbf{v}$, $A\mathbf{v}=b\mathbf{u}+a\mathbf{v}$
+\item Conclude that $\operatorname{span}(\mathbf{u},\mathbf{v})\subseteq\mathbb{R}^n$ is an invariant line or plane.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:real-operator-invariant-line-or-plane} \hlt{Invariant Line or Plane over $\mathbb{R}$}\\
+Every operator on a nonzero finite-dimensional real vector space has an invariant subspace of dimension $1$ or $2$.
+\begin{proof}
+Let $\mathcal{V}$ be a nonzero finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+By Theorem \ref{thm:complex-operator-has-eigenvalue}, $T_{\mathbb{C}}$ has an eigenvalue $\lambda=a+bi$ with eigenvector $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$.\\
+The equation $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=(a+bi)(\mathbf{u}+i\mathbf{v})$ gives $T\mathbf{u}=a\mathbf{u}-b\mathbf{v}$ and $T\mathbf{v}=b\mathbf{u}+a\mathbf{v}$.\\
+Thus $\mathcal{U}=\operatorname{span}(\mathbf{u},\mathbf{v})$ is nonzero, has dimension $1$ or $2$, and is invariant under $T$.\\
+\hlt{Structural Commentary}: A complex eigenvector decomposes into two real directions that are closed under $T$.\\
+\hlt{Key Insight}: Nonreal eigenvalues become real invariant planes; real eigenvalues become invariant lines.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_invariant_plane_from_complex_eigenpair.tikz}
+  \caption{Separate a complex eigenpair into a real invariant plane.}
+  \label{fig:real-invariant-plane-from-complex-eigenpair}
+\end{figure}
+
+\begin{perspective} \label{per:real-normal-operators-planes} \hlt{Real Normal Operators Use Planes}\\
+Over $\mathbb{R}$, normal operators need not have enough eigenvectors. The replacement for a missing conjugate eigenpair is a two-dimensional invariant plane carrying a rotation-dilation block.
+\end{perspective}
+
+\begin{proposition} \label{prop:two-dimensional-real-normal-block} \hlt{Two-Dimensional Real Normal Blocks}\\
+Let $\dim(\mathcal{V})=2$ over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
+Then $T$ is normal but not self-adjoint if and only if, in every orthonormal basis, $[T]=
+\begin{bmatrix}
+a&-b\\
+b&a
+\end{bmatrix}$, $b\neq0$.\\
+Moreover, some orthonormal basis makes $b>0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] In an orthonormal basis, write $A=[T]=
+\begin{bmatrix}
+a&c\\
+b&d
+\end{bmatrix}$.\\
+Normality gives $A^tA=AA^t$. Comparing the $(1,1)$ and $(2,2)$ entries gives $b^2=c^2$. If $c=b$, then $A=A^t$, impossible because $T$ is not self-adjoint. Thus $c=-b$ and $b\neq0$. Comparing off-diagonal entries gives $-ab+bd=ab-bd$, so $d=a$. Since the original orthonormal basis was arbitrary, every orthonormal basis has the displayed form.
+\item[$(\Leftarrow)$] A matrix $\begin{bmatrix}a&-b\\ b&a\end{bmatrix}$ with $b\neq0$ satisfies $A^tA=AA^t$ and is not symmetric. Hence $T$ is normal but not self-adjoint. If $b<0$, replace the second basis vector by its negative to make $b>0$.
+\end{enumerate}
+\hlt{Structural Commentary}: In real dimension $2$, non-self-adjoint normality is exactly a scalar plus a rotation block.\\
+\hlt{Key Insight}: Normality forces $c=-b$ and $d=a$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:real-normal-operator-block-diagonal-form} \hlt{Real Normal Operator Block Form}\\
+Let $\mathcal{V}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$. Then $T$ is normal if and only if some orthonormal basis makes $[T]$ block diagonal, with each diagonal block either $1$-by-$1$ or of the form $\begin{bmatrix}
+a&-b\\
+b&a
+\end{bmatrix}$, $b > 0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Induct on $n=\dim(\mathcal{V})$. The cases $n\leq1$ are immediate.\\
+For $n\geq2$, Theorem \ref{thm:real-operator-invariant-line-or-plane} gives an invariant subspace $\mathcal{U}$ with $\dim(\mathcal{U})\in\{1,2\}$.\\
+By Corollary \ref{cor:normal-operator-invariant-subspaces-reduce}, $\mathcal{U}^{\perp}$ is invariant under $T$ and both restrictions are normal.\\
+If $\dim(\mathcal{U})=1$, take a unit vector in $\mathcal{U}$. If $\dim(\mathcal{U})=2$, use the Real Spectral Theorem \ref{thm:real-spectral-theorem} when $T|_{\mathcal{U}}$ is self-adjoint, giving scalar $1$-by-$1$ blocks on $\mathcal{U}$, and use Proposition \ref{prop:two-dimensional-real-normal-block} otherwise.\\
+By induction, choose the required orthonormal block basis on $\mathcal{U}^{\perp}$. Concatenating it with the basis chosen on $\mathcal{U}$ gives an orthonormal basis of $\mathcal{V}$ because $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$.
+\item[$(\Leftarrow)$] Each allowed block is normal. If $[T]$ is the block diagonal sum of these blocks, then $[T]^*[T]$ and $[T][T]^*$ are the corresponding block diagonal sums of $B^*B$ and $BB^*$, hence are equal block by block.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality lets invariant lines or planes split orthogonally.\\
+\hlt{Key Insight}: Real normal operators split into scalar lines and rotation-dilation planes.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_normal_block_structure.tikz}
+  \caption{Orthogonal line/plane split into scalar and rotation blocks.}
+  \label{fig:real-normal-block-structure}
+\end{figure}
+
+\begin{example} \label{ex:plane-rotation-isometry} \hlt{Plane Rotations}\\
+For $\theta\in\mathbb{R}$, the real matrix $R_{\theta}=
+\begin{bmatrix}
+\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta
+\end{bmatrix}$ is an isometry of $\mathbb{R}^2$. If $\theta$ is not an integer multiple of $\pi$, then $R_{\theta}$ has no real eigenvalue, which is why real isometries require two-dimensional rotation blocks.
+\end{example}
+
+\begin{theorem} \label{thm:real-isometry-block-diagonal-form} \hlt{Real Isometry Block Form}\\
+Let $\mathcal{V}$ be finite-dimensional over $\mathbb{R}$ and let $S\in\LL(\mathcal{V})$. Then $S$ is an isometry if and only if some orthonormal basis makes $[S]$ block diagonal, with each diagonal block one of $[1]$, $[-1]$, $\begin{bmatrix}
+\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta
+\end{bmatrix}$ with $0<\theta<\pi$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Since $S$ is an isometry, $S^*S=I_{\mathcal{V}}$ by Theorem \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity}. Finite-dimensional invertibility gives $SS^*=I_{\mathcal{V}}$, so $S$ is normal. Apply Theorem \ref{thm:real-normal-operator-block-diagonal-form}. A $1$-by-$1$ block $[\lambda]$ has $\lambda^2=1$, so $\lambda=\pm1$.\\
+A $2$-by-$2$ block $\begin{bmatrix}a&-b\\b&a\end{bmatrix}$ has $a^2+b^2=1$ and $b>0$, so $a=\cos\theta$ and $b=\sin\theta$ for a unique $\theta\in(0,\pi)$.
+\item[$(\Leftarrow)$] Each displayed block $B$ satisfies $B^tB=I$ on its coordinate subspace. Therefore the block diagonal matrix satisfies $[S]^t[S]=I$, so $S$ preserves norms and is an isometry.
+\end{enumerate}
+\hlt{Structural Commentary}: Isometries are the unit-length special case of real normal blocks.\\
+\hlt{Key Insight}: Scalar blocks reduce to $\pm1$, and planar normal blocks reduce to rotations.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_isometry_blocks.tikz}
+  \caption{Normal form: fixed/flipped lines and rotation planes.}
+  \label{fig:real-isometry-blocks}
+\end{figure}
+
+\begin{proposition} \label{prop:real-eigenvalues-complexification} \hlt{Real Eigenvalues of a Complexification}\\
+Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, and let $\lambda\in\mathbb{R}$. Then $\lambda$ is an eigenvalue of $T$ if and only if it is an eigenvalue of $T_{\mathbb{C}}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $T_{\mathbb{C}}(\mathbf{v}+i\mathbf{0})=\lambda(\mathbf{v}+i\mathbf{0})$.
+\item[$(\Leftarrow)$] If $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=\lambda(\mathbf{u}+i\mathbf{v})$ and $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$, then $T\mathbf{u}=\lambda\mathbf{u}$ and $T\mathbf{v}=\lambda\mathbf{v}$.\\
+Since $\mathbf{u}$ or $\mathbf{v}$ is nonzero, $T$ has eigenvalue $\lambda$.
+\end{enumerate}
+\hlt{Structural Commentary}: Real eigenvalues survive complexification exactly.\\
+\hlt{Key Insight}: For real $\lambda$, real and imaginary parts decouple.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:complexification-conjugate-generalized-eigenspaces} \hlt{Conjugation Transfers Generalized Eigenspaces}\\
+Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, let $\lambda\in\mathbb{C}$, and let $k\geq0$. Then $(T_{\mathbb{C}}-\lambda I)^k(\mathbf{u}+i\mathbf{v})=\mathbf{0}$ $\Longleftrightarrow$ $(T_{\mathbb{C}}-\overline{\lambda} I)^k(\mathbf{u}-i\mathbf{v})=\mathbf{0}$.
+\begin{proof}
+Let $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$.\\
+Then $\Gamma$ is a conjugate-linear bijection, $\Gamma T_{\mathbb{C}}=T_{\mathbb{C}}\Gamma$, and $\Gamma\bigl((T_{\mathbb{C}}-\lambda I)^k\mathbf{x}\bigr) =(T_{\mathbb{C}}-\overline{\lambda} I)^k\Gamma\mathbf{x}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Apply the displayed identity to $\mathbf{x}=\mathbf{u}+i\mathbf{v}$.
+\item[$(\Leftarrow)$] Apply the first direction with $\overline{\lambda}$ in place of $\lambda$ and $\mathbf{u}-i\mathbf{v}$ in place of $\mathbf{u}+i\mathbf{v}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation commutes with $T_{\mathbb{C}}$ and conjugates scalars.\\
+\hlt{Key Insight}: Conjugation pairs generalized eigenspaces.
+\end{proof}
+\end{lemma}
+
+\begin{corollary} \label{cor:complexification-conjugate-eigenvalue-multiplicities} \hlt{Conjugate Eigenvalues Have Equal Multiplicity}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
+If $\lambda$ is an eigenvalue of $T_{\mathbb{C}}$, then $\overline{\lambda}$ is an eigenvalue of $T_{\mathbb{C}}$, and $\dim_{\mathbb{C}}\mathcal{G}_{\lambda}(T_{\mathbb{C}}) =\dim_{\mathbb{C}}\mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$.
+\begin{proof}
+Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} with $k=1$ sends a nonzero eigenvector for $\lambda$ to a nonzero eigenvector for $\overline{\lambda}$. Thus $\overline{\lambda}$ is an eigenvalue. With $k=\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$, Theorem \ref{thm:generalized-eigenspace-stabilized-kernel} identifies generalized eigenspaces with the corresponding stabilized kernels. By Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces}, $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$ restricts to conjugate-linear bijection $\mathcal{G}_{\lambda}(T_{\mathbb{C}}) \longrightarrow \mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$.\\
+Conjugate-linear bijections preserve complex dimension, so the multiplicities agree.\\
+\hlt{Structural Commentary}: Conjugation mirrors generalized eigenspaces.\\
+\hlt{Key Insight}: Nonreal spectral data of a real operator arrives in equal-sized conjugate pairs.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:odd-dimensional-real-operator-has-eigenvalue} \hlt{Odd-Dimensional Real Operators Have Eigenvalues}\\
+Every operator on a nonzero odd-dimensional real vector space has a real eigenvalue.
+\begin{proof}
+Let $T\in\LL(\mathcal{V})$, where $\dim_{\mathbb{R}}\mathcal{V}$ is odd. By Proposition \ref{prop:complexification-vector-space-basis}, $\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$ is odd.\\
+The sum of the multiplicities of all eigenvalues of $T_{\mathbb{C}}$ equals this odd dimension by Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities}. Nonreal eigenvalues contribute in conjugate pairs of equal multiplicity by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, hence contribute an even total. Therefore $T_{\mathbb{C}}$ has at least one real eigenvalue, which is an eigenvalue of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.\\
+\hlt{Structural Commentary}: Odd dimension forces a real eigenvalue.\\
+\hlt{Key Insight}: Parity forces at least one real spectral direction.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:real-operator-characteristic-polynomial} \hlt{Characteristic Polynomial of a Real Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+The \hlt{characteristic polynomial} of $T$ is $q_T\defeq q_{T_{\mathbb{C}}}$, the characteristic polynomial of its complexification.
+\end{definition}
+
+\begin{theorem} \label{thm:real-operator-characteristic-polynomial-properties} \hlt{Characteristic Polynomial over $\mathbb{R}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space, let $T\in\LL(\mathcal{V})$, and let $q_T$ be its characteristic polynomial.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $q_T\in\mathbb{R}[z]$.
+\item $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
+\item The real zeros of $q_T$ are precisely the eigenvalues of $T$.
+\item $q_T(T)=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Factor $q_{T_{\mathbb{C}}}$ over $\mathbb{C}$. Real eigenvalues give real linear factors. If $\lambda\notin\mathbb{R}$ has multiplicity $m$, then $\overline{\lambda}$ has multiplicity $m$ by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, and $(z-\lambda)^m(z-\overline{\lambda})^m=\bigl(z^2-2\operatorname{Re}(\lambda)z+\abs{\lambda}^2\bigr)^m$, which is real.
+\item Proposition \ref{prop:operator-characteristic-polynomial-degree-roots} and Proposition \ref{prop:complexification-vector-space-basis} give $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
+\item Real zeros of $q_T=q_{T_{\mathbb{C}}}$ are real eigenvalues of $T_{\mathbb{C}}$  (Prop \ref{prop:operator-characteristic-polynomial-degree-roots}), hence eigenvalues of $T$ (Prop \ref{prop:real-eigenvalues-complexification}).
+\item Cayley--Hamilton over $\mathbb{C}$ gives $q_T(T_{\mathbb{C}})=0$. By (i) and Proposition \ref{prop:complexification-operator-basic-properties}, $q_T(T_{\mathbb{C}})=(q_T(T))_{\mathbb{C}}$.\\
+If $q_T(T)$ were nonzero on some $\mathbf{u}\in\mathcal{V}$, then $(q_T(T))_{\mathbb{C}}(\mathbf{u}+i\mathbf{0})=q_T(T)\mathbf{u}+i\mathbf{0}$ would be nonzero, a contradiction. Hence $q_T(T)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Nonreal factors pair into real quadratics.\\
+\hlt{Key Insight}: Complexify, then pair conjugates.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_characteristic_conjugate_pairs.tikz}
+  \caption{Conjugate factors pair into real quadratics.}
+  \label{fig:real-characteristic-conjugate-pairs}
+\end{figure}
+
+\begin{corollary} \label{cor:real-characteristic-polynomial-multiple-minimal-polynomial} \hlt{$q_T$ Is a Multiple of $\mu_T$ over $\mathbb{R}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+Then $\deg\mu_T\leq\dim_{\mathbb{R}}\mathcal{V}$, and $q_T$ is a polynomial multiple of $\mu_T$ in $\mathbb{R}[z]$.
+\begin{proof}
+Theorem \ref{thm:real-operator-characteristic-polynomial-properties} gives $q_T(T)=0$.\\
+By Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial}, $\mu_T$ divides $q_T$ in $\mathbb{R}[z]$. The degree bound follows from $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton makes $q_T$ a real annihilator of $T$.\\
+\hlt{Key Insight}: The minimal polynomial divides every real annihilator.
+\end{proof}
+\end{corollary}

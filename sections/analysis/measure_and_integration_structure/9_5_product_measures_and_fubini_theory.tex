@@ -1,0 +1,65 @@
+\subsection{Product Measures and Fubini Theory}
+
+% **Role:** modern integration and almost-everywhere analysis.
+%
+% Product measures, Tonelli, Fubini, iterated integration, applications.
+
+Product measure builds measurable rectangles and reads higher-dimensional integrals through slices.
+
+\begin{definition} \label{def:lebesgue-product-slices} \hlt{Products and Slices}\\
+For $A\subseteq\R^n$, $B\subseteq\R^k$, set $A\times B\subseteq\R^{n+k}$.\\
+For $E\subseteq\R^n\times\R^k$ define $E_x\defeq\{y\in\R^k:(x,y)\in E\}$ as \hlt{$x$-slice}, and  $E^y\defeq\{x\in\R^n:(x,y)\in E\}$ as \hlt{$y$-slice}.\\
+For $f:E\to\R$, write $f_x(y)=f^y(x)\defeq f(x,y)$ where defined.
+\end{definition}
+
+\begin{theorem} \label{thm:measurable-products-product-measure} \hlt{Measurable Products}\\
+If $A\subseteq\R^n$, $B\subseteq\R^k$ Lebesgue measurable, then $A\times B$ measurable, $m(A\times B)=m(A)m(B)$; $0\cdot\infty=\infty\cdot0=0$.
+\begin{proof}
+For boxes $I,J$, $m(I\times J)=m(I)m(J)$; disjoint box decompositions extend this to open sets.\\
+First assume $A,B$ are bounded with finite measure.\\
+By regularity choose closed $F_A\subseteq A$, $F_B\subseteq B$ and open $G_A\supseteq A$, $G_B\supseteq B$ such that $m(G_A\setminus F_A),\ m(G_B\setminus F_B)<\varepsilon$.\\
+Then $F_A\times F_B\subseteq A\times B\subseteq G_A\times G_B$, and the open/closed product formula squeezes $m(A\times B)$ to $m(A)m(B)$.\\
+For general $A,B$, set $A_N=A\cap[-N,N]^n$ and $B_N=B\cap[-N,N]^k$. Since $A_N\times B_N\uparrow A\times B$, continuity from below gives $m(A\times B)=\lim_N m(A_N\times B_N)=\lim_N m(A_N)m(B_N)=m(A)m(B)$ with $0\cdot\infty=\infty\cdot0=0$.\\
+\hlt{Structural Commentary}: Product measure comes from boxes and regularity.\\
+\hlt{Key Insight}: Regularity turns rough measurable products into box products plus zero-set errors.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:zero-slices-null-set-criterion} \hlt{Zero Slices}\\
+If $E\subseteq\R^n\times\R^k$ is Lebesgue measurable, then $E$ is null iff $E_x$ is null for a.e. $x$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $m(E)=0$, cover $E$ by an open $W$ with small measure.\\
+For $X_\alpha(W)=\{x:m(W_x)>\alpha\}$, $m(W)\geq \alpha m(X_\alpha(W))$; letting $m(W)\to0$ gives $m(E_x)=0$ for a.e. $x$.
+\item[$(\Leftarrow)$] Remove the exceptional null base so every slice is null. For compact $K\subseteq E$, cover each $K_x$ by a small-measure slice neighborhood; compactness gives finitely many product neighborhoods covering $K$, whose total measure is arbitrarily small by Theorem \ref{thm:measurable-products-product-measure}. Thus $m(K)=0$, hence $m(E)=0$ by regularity.
+\end{enumerate}
+\hlt{Structural Commentary}: Nullity can be checked fiberwise after removing an exceptional base set.\\
+\hlt{Key Insight}: Product measure turns small slice covers into small total measure.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/cavalieri_slicing_planar_set.tikz}
+  \caption{A planar set can be read by vertical slices; Fubini integrates the slice data over the base variable.}
+  \label{fig:cavalieri-slicing-planar-set}
+\end{figure}
+
+\begin{perspective} \label{per:fubini-proof-ladder} \hlt{Fubini Proof Ladder}\\
+Prove Fubini first for indicators, extend to simple functions, pass to nonnegative functions by monotone convergence, then split $f=f^+-f^-$ under absolute integrability.\\
+\hlt{Key Insight}: Fubini is a slice theorem, proof runs through indicators, simple functions, monotone convergence.
+\end{perspective}
+
+\begin{theorem} \label{thm:fubini-absolutely-integrable-functions} \hlt{Fubini for $L^1$ Functions}\\
+If $f\in L^1(\R^2)$, then $f(x,\cdot)\in L^1(\R)$ for a.e. $x$ and $f(\cdot,y)\in L^1(\R)$ for a.e. $y$. Defining $F(x)\defeq\int_{\R}f(x,y)\,dy$; $G(y)\defeq\int_{\R}f(x,y)\,dx$ on those sets and as $0$ elsewhere gives $F,G\in L^1(\R)$ and $\int_{\R}F(x)\,dx=\int_{\R^2}f=\int_{\R}G(y)\,dy$
+\begin{proof}
+Let $E_x=\{y:(x,y)\in E\}$ and $E^y=\{x:(x,y)\in E\}$. For measurable $E\subseteq\R^2$, the box/regularity argument and Theorems \ref{thm:measurable-products-product-measure}--\ref{thm:zero-slices-null-set-criterion} give $\int_{\R}m(E_x)\,dx=m(E)=\int_{\R}m(E^y)\,dy$.\\
+Hence Fubini holds for $\mathbf{1}_E$, and by linearity for every nonnegative simple function.\\
+Let $0\leq h$ be measurable and choose $0\leq s_n\uparrow h$ by Theorem \ref{thm:simple-approximation-measurable-functions}.\\
+Monotone convergence gives $\int_{\R}\!\left(\int_{\R}h(x,y)\,dy\right)dx =\lim_n\int_{\R}\!\left(\int_{\R}s_n(x,y)\,dy\right)dx =\lim_n\int_{\R^2}s_n =\int_{\R^2}h$ and the same argument with $x,y$ interchanged. Now let $f\in L^1(\R^2)$.\\
+Applying the nonnegative case to $\abs{f}$ yields $\int_{\R}\!\left(\int_{\R}\abs{f(x,y)}\,dy\right)dx =\int_{\R^2}\abs{f}<\infty$, so $f(x,\cdot)\in L^1(\R)$ for a.e. $x$; similarly $f(\cdot,y)\in L^1(\R)$ for a.e. $y$. With $f=f^+-f^-$, define, up to null-set choices, $F=F^+-F^-$, $F^\pm(x)=\int_{\R}f^\pm(x,y)\,dy$, and analogously $G=G^+-G^-$. Then $\int_{\R}\abs{F}\leq\int_{\R}(F^++F^-)=\int_{\R^2}\abs{f}<\infty$, and similarly $G\in L^1(\R)$. Subtracting the nonnegative identities for $f^+$ and $f^-$ gives $\int_{\R}F=\int_{\R^2}f=\int_{\R}G$.\\
+\hlt{Structural Commentary}: Prove identity for $\mathbf{1}_E$, extend by linearity and monotone convergence, apply to $f^\pm$.\\
+\hlt{Key Insight}: $\int\abs{f}<\infty$ makes the positive and negative slice integrals finite a.e., so subtraction is legitimate.
+\end{proof}
+\end{theorem}
