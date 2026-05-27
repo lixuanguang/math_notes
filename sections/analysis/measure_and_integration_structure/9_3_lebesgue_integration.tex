@@ -1,0 +1,107 @@
+\subsubsection{Lebesgue Integration}
+
+Lebesgue integration starts from simple measurable functions and then extends by monotone approximation and positive--negative decomposition.
+
+\begin{definition} \label{def:lebesgue-product-core-source-todo}\label{def:simple-functions-and-lebesgue-integral} \hlt{Lebesgue Integral}\\
+Let $(X,\mathcal{M},\mu)$ be a measure space. Simple measurable functions are as in Definition \ref{def:simple-functions-measurable}.
+For $s=\sum_{i=1}^{n}c_i\mathbf{1}_{E_i}\geq0$ simple measurable and $E\in\mathcal{M}$, define $\mathcal{I}_E(s)\defeq\sum\limits_{i=1}^{n}c_i\mu(E\cap E_i)$.\\
+For $f\geq0$ measurable, let $\mathcal{S}^+(f)\defeq\{s:0\leq s\leq f,\ s\text{ simple measurable}\}$ and define $\int_E f\,d\mu\defeq\sup\limits_{s\in\mathcal{S}^+(f)}\mathcal{I}_E(s)$.\\
+For measurable real $f$, put $f^+=\max(f,0)$ and $f^-=-\min(f,0)$.\\
+If at least one of $\int_E f^+\,d\mu,\int_E f^-\,d\mu$ is finite, set $\int_E f\,d\mu\defeq\int_E f^+\,d\mu-\int_E f^-\,d\mu$.\\
+If both are finite, $f$ is \hlt{Lebesgue integrable} on $E$, written $f\in\mathscr{L}^1(\mu)$ on $E$.
+\end{definition}
+
+Simple functions are finite linear combinations of indicators of measurable sets: coefficients carry size, while the level sets carry measurability.
+
+\begin{perspective} \label{per:undergraph-geometric-integral} \hlt{Undergraph Picture for Nonnegative Functions}\\
+For $f:\R\to[0,+\infty)$, set $\mathcal{U}f=\{(x,y)\in\R\times[0,+\infty):0\leq y<f(x)\}$.\\
+Geometrically, $\int f=m(\mathcal{U}f)$; formally, Definition \ref{def:simple-functions-and-lebesgue-integral} defines the integral.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/lebesgue_undergraph.tikz}
+  \caption{The integral of $f\geq0$ is modeled by the measure of its undergraph.}
+  \label{fig:lebesgue-undergraph}
+\end{figure}
+
+\begin{proposition} \label{prop:basic-lebesgue-integral-properties} \hlt{Basic Integral Properties}\\
+Let $E\in\mathcal{M}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f$ is measurable and bounded on $E$, and $\mu(E)<+\infty$, then $f\in\mathscr{L}^1(\mu)$ on $E$.
+\item If $a\leq f(x)\leq b$ on $E$ and $\mu(E)<+\infty$, then $a\mu(E)\leq\int_E f\,d\mu\leq b\mu(E)$.
+\item If $f,g\in\mathscr{L}^1(\mu)$ on $E$ and $f\leq g$ on $E$, then $\int_E f\,d\mu\leq\int_E g\,d\mu$.
+\item If $f\in\mathscr{L}^1(\mu)$ on $E$, then $cf\in\mathscr{L}^1(\mu)$ on $E$ for finite $c$, and $\int_E cf\,d\mu=c\int_E f\,d\mu$.
+\item If $\mu(E)=0$ and $f$ is measurable, then $\int_E f\,d\mu=0$.
+\item If $f\in\mathscr{L}^1(\mu)$ on $E$, $A\in\mathcal{M}$, and $A\subseteq E$, then $f\in\mathscr{L}^1(\mu)$ on $A$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\abs{f}\leq M$ on $E$, then $0\leq f^\pm\leq M\mathbf{1}_E$ on $E$, so $\int_Ef^\pm\,d\mu\leq M\mu(E)<+\infty$.
+\item Since $a\mathbf{1}_E\leq f\leq b\mathbf{1}_E$ on $E$, order for the positive integral gives $a\mu(E)\leq\int_Ef\,d\mu\leq b\mu(E)$.
+\item Since $g-f\geq0$ on $E$, $\int_E(g-f)\,d\mu\geq0$, hence $\int_Ef\,d\mu\leq\int_Eg\,d\mu$.
+\item For $c\geq0$, scale the simple approximants. For $c<0$, use $(cf)^+=(-c)f^-$ and $(cf)^-=(-c)f^+$.
+\item If $\mu(E)=0$, then $\mathcal{I}_E(s)=0$ for every $s\geq0$ simple, so $\int_Ef^\pm\,d\mu=0$.
+\item Since $A\subseteq E$, $\mathcal{I}_A(s)\leq \mathcal{I}_E(s)$ for $s\geq0$ simple; hence $\int_Af^\pm\,d\mu\leq\int_Ef^\pm\,d\mu<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: Estimate $f^\pm$ by simpler functions.\\
+\hlt{Key Insight}: Monotonicity makes bounds, null sets, and restrictions immediate.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:integral-countably-additive-set-function} \hlt{The Integral as a Countably Additive Set Function}\\
+For $f\geq0$ measurable, or $f\in\mathscr{L}^1(\mu)$, set function $\phi_f(A)\defeq\int_A f\,d\mu$ for $A\in\mathcal{M}$ is countably additive on $\mathcal{M}$.
+\begin{proof}
+For $\mathbf{1}_B$, $\phi_{\mathbf{1}_B}(A)=\mu(A\cap B)$; linearity gives simple $f$.\\
+If $f\geq0$ and $A=\dot\bigcup_nA_n$, then for $s\in\mathcal{S}^+(f)$, $\mathcal{I}_A(s)=\sum\limits_n\mathcal{I}_{A_n}(s)\leq\sum\limits_n\phi_f(A_n)$, so $\phi_f(A)\leq\sum\limits_n\phi_f(A_n)$.\\
+Finite additivity gives $\sum\limits_{n=1}^{N}\phi_f(A_n)=\phi_f(\bigcup\limits_{n=1}^{N}A_n)\leq\phi_f(A)$; let $N\to\infty$. For signed $f$, use $\phi_f=\phi_{f^+}-\phi_{f^-}$.\\
+\hlt{Structural Commentary}: Integrating over the set variable produces a new measure.\\
+\hlt{Key Insight}: Countable additivity is first true for indicators, then simple functions, then suprema.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:absolute-integrability-and-domination} \hlt{Absolute Integrability and Domination}\\
+If $f\in\mathscr{L}^1(\mu)$ on $E$, then $\abs{f}\in\mathscr{L}^1(\mu)$ and $\abs{\int_E f\,d\mu}\leq\int_E\abs{f}\,d\mu$.\\
+If $f$ is measurable and $\abs{f}\leq g\in\mathscr{L}^1(\mu)$ on $E$, then $f\in\mathscr{L}^1(\mu)$ on $E$.
+\begin{proof}
+Use $\abs{f}=f^++f^-$, $f\leq\abs{f}$, and $-f\leq\abs{f}$. If $\abs{f}\leq g$, then $0\leq f^\pm\leq g$, so $\int_Ef^\pm\,d\mu<+\infty$.\\
+\hlt{Structural Commentary}: Lebesgue integrability is absolute integrability.\\
+\hlt{Key Insight}: A single integrable majorant controls both signs.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:lebesgue-integral-linearity} \hlt{Linearity of the Lebesgue Integral}\\
+If $f,g\in\mathscr{L}^1(\mu)$ on $E$ and $a,b\in\R$, then $af+bg\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(af+bg)\,d\mu=a\int_Ef\,d\mu+b\int_Eg\,d\mu$.
+\begin{proof}
+For $f,g\geq0$, choose simple $s_n\uparrow f$ and $t_n\uparrow g$. Simple-function additivity gives the formula for $s_n+t_n$, and monotone convergence passes to $f+g$. The signed case follows by positive--negative parts and Proposition \ref{prop:basic-lebesgue-integral-properties}; scalar multiplication is included there.\\
+\hlt{Structural Commentary}: Simple additivity plus monotone convergence gives linearity.\\
+\hlt{Key Insight}: Reduce additivity to simple functions before splitting signs.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:riemann-lebesgue-comparison} \hlt{Comparison with the Riemann Integral}\\
+On $[a,b]$ with Lebesgue measure $\mu$, $f\in\mathcal{R}$ implies $f\in\mathscr{L}^1(\mu)$ and the integrals agree. If $f$ is bounded with discontinuity set $D$, then $f\in\mathcal{R}\iff\mu(D)=0$.
+\begin{proof}
+For refining partitions, let $L_n\uparrow L$ and $U_n\downarrow U$ be lower and upper step envelopes.\\
+Monotone convergence identifies $\int L$ and $\int U$ with the lower and upper Riemann integrals; if $f\in\mathcal{R}$, then $L=U$ a.e., so the common Lebesgue integral equals the Riemann integral.\\
+For bounded $f$, put $\omega_f(x)\defeq \lim_{r\downarrow0}\diam f\bigl([a,b]\cap(x-r,x+r)\bigr)$, where $D_k\defeq\{x:\omega_f(x)\geq1/k\}$.\\
+Then $f$ is continuous at $x$ iff $\omega_f(x)=0$, and its discontinuity set is $D=\bigcup_{k\geq1}D_k$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Fix $k$ and $\varepsilon>0$. Choose $P$ with $U(P,f)-L(P,f)<\varepsilon/k$.\\
+Intervals of $P$ whose interiors meet $D_k$ have total length $<\varepsilon$; adding the finitely many partition points, null by Proposition \ref{prop:finite-countable-cantor-null-sets}, covers $D_k$ by arbitrarily short intervals.\\
+Thus $\mu(D_k)=0$ by Definition \ref{def:null-sets-and-real-line-measure-zero}, and $\mu(D)=0$.
+\item[$(\Leftarrow)$] Suppose $\mu(D)=0$ and $\abs{f}\leq B$. If $B=0$, there is nothing to prove. Given $\varepsilon>0$, choose $k$ with $(b-a)/k<\varepsilon/2$ and cover $D_k$ by intervals of total length $<\varepsilon/(4B)$.\\
+On the compact complement, $\omega_f<1/k$, so a finite refinement makes the good intervals contribute $<\varepsilon/2$ to $U-L$; the covered intervals contribute $<2B\cdot\varepsilon/(4B)=\varepsilon/2$.\\
+Hence $U(P,f)-L(P,f)<\varepsilon$, and Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with $\alpha(x)=x$ gives $f\in\mathcal{R}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Darboux gap measures oscillation sets.\\
+\hlt{Key Insight}: Lebesgue measure turns ``bad discontinuities'' into a null-set condition.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:lebesgue-criterion-riemann-roadmap} \hlt{Lebesgue's Criterion as a Roadmap}\\
+Theorem \ref{thm:riemann-lebesgue-comparison} gives the threshold: a bounded function is Riemann integrable exactly when its discontinuities are null. Finite, countable, and Cantor-type exceptions are allowed; Dirichlet's function fails.
+\end{perspective}

@@ -1,0 +1,141 @@
+\subsubsection{Fourier Structure}
+
+
+Fourier structure studies trigonometric series through orthogonality, projection, convolution kernels, and convergence modes. The finite-dimensional inner-product picture from geometric linear algebra reappears here as Fourier coefficients, Bessel estimates, Fejer approximation, local Dirichlet convergence, and Parseval identities.
+
+\begin{definition} \label{def:fourier-core-objects} \hlt{Core Fourier Objects}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{trigonometric polynomial} is a finite sum $a_0+\sum\limits_{n=1}^{N}(a_n\cos nx+b_n\sin nx)$, equivalently $\sum\limits_{n=-N}^{N}\alpha_ne^{inx}$.
+\item If $f$ is Riemann integrable on $[-\pi,\pi]$, its \hlt{Fourier coefficients} are $\widehat{f}(m)\defeq \frac{1}{2\pi}\int_{-\pi}^{\pi}f(x)e^{-imx}\,dx$, $m\in\Z$, and $f(x)\sim_{\mathrm{coef}}\sum\limits_{m=-\infty}^{\infty}\widehat{f}(m)e^{imx}$ records coefficients, not convergence.
+\item A sequence $(\phi_n)$ on $[a,b]$ is \hlt{orthonormal} if $\int_a^b \phi_n(x)\overline{\phi_m(x)}\,dx=0\quad(n\neq m)$ and $\int_a^b\abs{\phi_n(x)}^2\,dx=1$. Its Fourier coefficients are $c_n\defeq\int_a^b f(t)\overline{\phi_n(t)}\,dt$.
+\end{enumerate}
+\hlt{Key Insight}: Fourier coefficients are orthonormal coordinates; convergence is a separate analytic question.
+\end{definition}
+
+\begin{definition} \label{def:period-one-fourier-normalization} \hlt{Period-One Fourier Normalization}\\
+Let $C(\R/\Z;\C)$ denote the continuous functions $f:\R\to\C$ satisfying $f(x+1)=f(x)$ for all $x$. \\
+For $f,g\in C(\R/\Z;\C)$, set $\innerprod[\mathbb{T}]{f,g}\defeq \int_0^1 f(x)\overline{g(x)}\,dx$; $\norm{f}_{L^2(\mathbb{T})}\defeq \sqrt{\innerprod[\mathbb{T}]{f,f}}$; and $e_n(x)\defeq e^{2\pi i n x}$ for $n\in\Z$.\\
+The \hlt{period-one Fourier coefficient} is $\widehat{f}_{\mathbb{T}}(n)\defeq \innerprod[\mathbb{T}]{f,e_n}=\int_0^1 f(x)e^{-2\pi i n x}\,dx$.\\
+A period-one trigonometric polynomial is a finite sum $\sum_{n=-N}^{N}c_ne_n$.
+\end{definition}
+
+\begin{perspective} \label{per:period-one-versus-two-pi-fourier} \hlt{Two Equivalent Fourier Clocks}\\
+The period-one and $2\pi$-periodic conventions differ by $t=2\pi x$; only normalizing constants change.\\
+\hlt{Key Insight}: Changing Fourier clocks changes constants, not the projection geometry.
+\end{perspective}
+
+\begin{proposition} \label{prop:period-one-characters-orthonormal} \hlt{Characters Are an Orthonormal System}\\
+For $m,n\in\Z$, $\innerprod[\mathbb{T}]{e_n,e_m}=1$ if $n=m$ and $0$ otherwise.\\
+Hence, if $P=\sum\limits_{n=-N}^{N}c_ne_n$, then $c_n=\innerprod[\mathbb{T}]{P,e_n}$ and $\norm{P}_{L^2(\mathbb{T})}^2=\sum_{n=-N}^{N}\abs{c_n}^2$.
+\begin{proof}
+If $n=m$, the integrand is $1$. If $n\neq m$, then $\int_0^1e^{2\pi i(n-m)x}\,dx=0$.\\
+The coefficient and norm identities are the finite orthonormal-coordinate identities from Theorems \ref{thm:orthonormal-basis-coordinates} and \ref{thm:parseval-identity-finite-dimensional}, applied inside the finite-dimensional span of $e_{-N},\ldots,e_N$.\\
+\hlt{Structural Commentary}: Fourier coefficients are orthonormal coordinates in a finite trigonometric subspace.\\
+\hlt{Key Insight}: The exponential characters make cross terms vanish.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:periodic-convolution-and-fejer-kernel} \hlt{Periodic Convolution and Fejer Kernels}\\
+For $f,g\in C(\R/\Z;\C)$, define their \hlt{periodic convolution} as $(f*g)(x)\defeq\int_0^1 f(y)g(x-y)\,dy$.\\
+For $N\geq1$, the \hlt{Fejer kernel} is $F_N(x)\defeq \sum\limits_{n=-N}^{N}\left(1-\frac{\abs{n}}{N}\right)e_n(x) =\frac{1}{N}\abs{\sum\limits_{n=0}^{N-1}e_n(x)}^2$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/fejer_kernel_periodic_approx_identity.tikz}
+  \caption{The Fejer kernels are nonnegative trigonometric polynomial approximate identities on $\R/\Z$.}
+  \label{fig:fejer-kernel-periodic-approx-identity}
+\end{figure}
+
+\begin{theorem} \label{thm:fejer-periodic-approximation-identity} \hlt{Fejer Approximation on $\R/\Z$}\\
+For $N\geq1$, $F_N$ is a nonnegative trigonometric polynomial with $\int_0^1F_N=1$. For each $0<\delta<1/2$, $F_N\to0$ uniformly on $[\delta,1-\delta]$. If $f\in C(\R/\Z;\C)$, then $f*F_N$ is a trigonometric polynomial and $f*F_N\rightrightarrows f$.
+\begin{proof}
+From Definition \ref{def:periodic-convolution-and-fejer-kernel}, $F_N$ is a finite linear combination of $e_n$ and $F_N=\frac1N\abs{\sum_{n=0}^{N-1}e_n}^2\geq0$.\\
+Since $\int_0^1e_n=0$ for $n\neq0$, the $e_0$ coefficient gives $\int_0^1F_N=1$.\\
+For $x\notin\Z$, $F_N(x)=\frac{\sin^2(\pi Nx)}{N\sin^2(\pi x)}$. If $m_\delta\defeq\min_{\delta\leq x\leq1-\delta}\sin^2(\pi x)>0$, then $0\leq F_N(x)\leq (Nm_\delta)^{-1}$ on $[\delta,1-\delta]$.\\
+Also $f*e_n=\widehat f_{\mathbb{T}}(n)e_n$, so $f*F_N$ is a trigonometric polynomial. For uniform convergence, write $(f*F_N)(x)=\int_0^1f(x-t)F_N(t)\,dt$. Let $M=\norm{f}_\infty$ and choose $\delta$ so $\abs{f(x-t)-f(x)}<\varepsilon$ whenever $t\in[0,\delta]\cup[1-\delta,1]$.\\
+By $F_N\geq0$ and $\int_0^1F_N=1$, uniformly in $x$, $\abs{(f*F_N)(x)-f(x)} \leq \varepsilon+2M\sup_{\delta\leq t\leq1-\delta}F_N(t)\to \varepsilon$.\\
+\hlt{Structural Commentary}: Fejer kernels concentrate mass near the identity element of $\R/\Z$.\\
+\hlt{Key Insight}: Positivity plus concentration turns convolution into uniform approximation.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:fourier-plancherel-roadmap-tao} \hlt{Fourier and Plancherel Roadmap}\\
+Path: orthonormal characters, Fejer density, best $L^2$ projection, then Parseval/Plancherel.\\
+\hlt{Key Insight}: Fourier theory is finite-dimensional orthogonal projection plus an approximation theorem.
+\end{perspective}
+
+\begin{perspective} \label{per:fourier-coefficients-as-projections} \hlt{Fourier Coefficients as Projections}\\
+Fourier coefficients are projections onto orthonormal directions, modeled finitely by Theorems \ref{thm:orthogonal-direct-sum-decomposition}, \ref{thm:orthonormal-basis-coordinates}, and \ref{thm:bessel-inequality-finite-orthonormal-list}; infinite directions make convergence separate.
+\end{perspective}
+
+\begin{theorem} \label{thm:orthonormal-fourier-best-approximation-bessel} \hlt{Fourier Coefficients Give Best Mean-Square Approximation}\\
+Let $\langle u,v\rangle\defeq\int_a^b u\overline v$ and $\norm{u}_2^2\defeq\langle u,u\rangle$.\\
+If $(\phi_n)$ is orthonormal, $c_m=\langle f,\phi_m\rangle$, $s_n=\sum\limits_{m=1}^{n}c_m\phi_m$, and $t_n=\sum\limits_{m=1}^{n}\gamma_m\phi_m$, then $\norm{f-s_n}_2\leq\norm{f-t_n}_2$, with equality iff $\gamma_m=c_m$ for $m=1,\ldots,n$. In particular, $\sum\limits_{m=1}^{\infty}\abs{c_m}^2\leq\norm{f}_2^2$ for $c_m\to0$.
+\begin{proof}
+For sums over $m=1,\ldots,n$, orthonormality gives\\
+$\norm{f-t_n}_2^2 =\norm{f}_2^2-2\operatorname{Re}\sum c_m\overline{\gamma_m}+\sum\abs{\gamma_m}^2 =\norm{f}_2^2-\sum\abs{c_m}^2+\sum\abs{\gamma_m-c_m}^2$.\\
+Thus the minimum occurs exactly when $\gamma_m=c_m$.\\
+Taking $t_n=s_n$ gives $\sum_{m=1}^{n}\abs{c_m}^2=\norm{s_n}_2^2\leq\norm{f}_2^2$; let $n\to\infty$ to get Bessel and $c_m\to0$.\\
+\hlt{Structural Commentary}: Orthogonality makes the error split into independent coefficient errors.\\
+\hlt{Key Insight}: Fourier coefficients are the coordinates of the orthogonal projection.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:trigonometric-fourier-dirichlet-localization} \hlt{Dirichlet Kernel and Local Fourier Convergence}\\
+Let $f$ be Riemann integrable and $2\pi$-periodic, with $\widehat{f}(m)\defeq\frac{1}{2\pi}\int_{-\pi}^{\pi}f(t)e^{-imt}\,dt$.\\
+Let $s_N(f;x)\defeq\sum\limits_{m=-N}^{N}\widehat{f}(m)e^{imx}$ and $D_N(t)\defeq\sum\limits_{m=-N}^{N}e^{imt}=\frac{\sin((N+\frac12)t)}{\sin(t/2)}$.\\
+Then $s_N(f;x)=\frac{1}{2\pi}\int_{-\pi}^{\pi}f(x-t)D_N(t)\,dt$.\\
+If, for some $x$, $\abs{f(x+t)-f(x)}\leq M\abs{t}$ whenever $\abs{t}<\delta$, then $s_N(f;x)\to f(x)$.\\
+Hence $f=g$ near $x$ implies $s_N(f;x)-s_N(g;x)\to0$.
+\begin{proof}
+The displayed form of $D_N$ is the finite geometric sum; substituting $\widehat f(m)$ gives the convolution formula.\\
+Also $\frac1{2\pi}\int_{-\pi}^{\pi}D_N=1$. Set $q_x(t)\defeq \frac{f(x-t)-f(x)}{\sin(t/2)}$, for $0<\abs t\leq\pi$,$q_x(0)\defeq0$.\\
+Then $s_N(f;x)-f(x)=\frac{1}{2\pi}\int_{-\pi}^{\pi} q_x(t)\sin\!\left(N+\frac12\right)t\,dt$.\\
+The hypothesis makes $q_x$ bounded near $0$; away from $0$ it is Riemann integrable.\\
+Since $\sin((N+\frac12)t)=\sin Nt\cos(t/2)+\cos Nt\sin(t/2)$, Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel} sends the two Fourier coefficients to $0$.\\
+Apply the result to $f-g$ for localization.\\
+\hlt{Structural Commentary}: The Dirichlet kernel rewrites Fourier partial sums as a local oscillatory integral.\\
+\hlt{Key Insight}: Pointwise convergence under a local Lipschitz condition depends only on nearby values of $f$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:trigonometric-polynomial-weierstrass} \hlt{Uniform Approximation by Trigonometric Polynomials}\\
+If $f\in C(\R)$ is $2\pi$-periodic, then for every $\varepsilon>0$ there is a trigonometric polynomial $P$ such that $\norm{f-P}_\infty<\varepsilon$.
+\begin{proof}
+Let $\mathbb{T}\defeq\{z\in\C:\abs z=1\}$ and set $F(e^{ix})\defeq f(x)$.\\
+The algebra $\mathcal{T}\defeq\operatorname{span}\{z^n:n\in\Z\}\subset C(\mathbb{T})$ is self-adjoint, separates points, and vanishes nowhere.\\
+By Theorem \ref{thm:complex-stone-weierstrass}, $\overline{\mathcal{T}}=C(\mathbb{T})$. Pulling approximants back by $z=e^{ix}$ gives the desired $P$.\\
+\hlt{Structural Commentary}: Periodic approximation is Stone--Weierstrass on the unit circle.\\
+\hlt{Key Insight}: The functions $e^{inx}$ are the algebraic coordinates on the circle.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:parseval-fourier-series} \hlt{Parseval's Theorem for Trigonometric Fourier Series}\\
+Let $f,g$ be Riemann integrable and $2\pi$-periodic. Let $\langle u,v\rangle_2\defeq\frac1{2\pi}\int_{-\pi}^{\pi}u(x)\overline{v(x)}\,dx$ and $\norm{u}_2^2\defeq\langle u,u\rangle_2$.\\
+If $f\sim_{\mathrm{coef}}\sum_{n\in\Z}\widehat{f}(n)e^{inx}$, and $g\sim_{\mathrm{coef}}\sum_{n\in\Z}\widehat{g}(n)e^{inx}$,\\
+then $\norm{f-s_N(f)}_2\to0$; $\langle f,g\rangle_2=\sum_{n\in\Z}\widehat{f}(n)\overline{\widehat{g}(n)}$; and $\norm{f}_2^2=\sum_{n\in\Z}\abs{\widehat{f}(n)}^2$.
+\begin{proof}
+If $f$ is continuous, Corollary \ref{cor:trigonometric-polynomial-weierstrass} gives trigonometric polynomials $P$ with $\norm{f-P}_2$ arbitrarily small.\\
+If $P$ has degree $N_0$, then Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel} gives $\norm{f-s_N(f)}_2\leq\norm{f-P}_2$ for $N\geq N_0$.\\
+For Riemann integrable $f$, approximate $f$ in $\norm{\cdot}_2$ by a continuous $2\pi$-periodic $h$.\\
+Then $\norm{f-s_N(f)}_2 \leq \norm{f-h}_2+\norm{h-s_N(h)}_2+\norm{s_N(h-f)}_2$ and $\norm{s_N(h-f)}_2\leq\norm{h-f}_2$ (Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel}).\\
+Hence $s_N(f)\to f$ in $\norm{\cdot}_2$. Finally, $\langle s_N(f),g\rangle_2 =\sum\limits_{\abs{n}\leq N}\widehat{f}(n)\overline{\widehat{g}(n)}$.\\
+Let $N\to\infty$ and use Schwarz' inequality; the last identity is $g=f$.\\
+\hlt{Structural Commentary}: Density upgrades Bessel to Parseval.\\
+\hlt{Key Insight}: Bessel gives one inequality; density of trigonometric polynomials gives equality.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:fourier-structure-proof-patterns} \hlt{Fourier Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Characters}: use orthogonality of $e_n$ to compute coefficients and finite-dimensional projections.
+\item \hlt{Kernels}: rewrite partial sums or averages as convolutions with Dirichlet or Fejer kernels.
+\item \hlt{Approximation}: use Fejer positivity or Stone--Weierstrass to approximate continuous periodic functions by trigonometric polynomials.
+\item \hlt{$L^2$ control}: project onto finite orthonormal spans, then pass to limits by density.
+\item \hlt{Localization}: express the error as an oscillatory integral and use local regularity near the point.
+\end{enumerate}
+\hlt{Key Insight}: Fourier theory is finite-dimensional orthogonal projection plus an approximation theorem.
+\end{method}

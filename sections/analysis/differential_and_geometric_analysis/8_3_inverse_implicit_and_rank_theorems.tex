@@ -1,0 +1,154 @@
+\subsubsection{Inverse, Implicit, and Rank Theorems}
+
+\begin{theorem} \label{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} \hlt{Finite-Dimensional Linear Maps Are Lipschitz}\\
+Let $A\in\LL(\R^n,\R^m)$. Then $A$ is $\normop{A}$-Lipschitz: $\norm{A\x}_2\leq\normop{A}\norm{\x}_2$ for $\x\in\R^n$.\\
+If $A\in\LL(\R^n)$ is invertible, then $\frac{1}{\normop{A^{-1}}}\norm{\x}_2\leq\norm{A\x}_2\leq\normop{A}\norm{\x}_2$, so $A$ is a homeomorphism of $\R^n$.
+\begin{proof}
+The upper estimate follows from Definition \ref{def:operator-norm-rn-rm}: apply it to $\x/\norm{\x}_2$ when $\x\neq\ze$, while $\x=\ze$ is trivial. If $A$ is invertible, apply the same estimate to $A^{-1}$ with $\y=A\x$: $\norm{\x}_2=\norm{A^{-1}\y}_2\leq\normop{A^{-1}}\norm{A\x}_2$.\\
+Thus $A$ and $A^{-1}$ are continuous.\\
+\hlt{Structural Commentary}: Linear maps have finite stretch; invertible ones have positive lower stretch.\\
+\hlt{Key Insight}: The operator norm turns linear algebra into uniform metric estimates.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:invertible-operators-open-and-inversion-continuous} \hlt{Invertible Operators Form an Open Set}\\
+Let $\Omega\subseteq\LL(\R^n)$ be the set of invertible linear operators. If $A\in\Omega$, $B\in\LL(\R^n)$, $\normop{B-A}\,\normop{A^{-1}}<1$, then $B\in\Omega$. Consequently, $\Omega$ is open in $\LL(\R^n)$ and the map $A\mapsto A^{-1}$ is continuous on $\Omega$.
+\begin{proof}
+Put $\alpha=1/\normop{A^{-1}}$ and $\beta=\normop{B-A}$.\\
+For every $\x\in\R^n$, $\alpha\norm{\x}_2\leq \norm{A\x}_2 \leq \norm{(A-B)\x}_2+\norm{B\x}_2 \leq \beta\norm{\x}_2+\norm{B\x}_2$.\\
+Since $\beta<\alpha$, this shows $B\x\neq0$ for $\x\neq0$; hence $B$ is injective and therefore invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+Replacing $\x$ by $B^{-1}\y$ gives $\normop{B^{-1}}\leq(\alpha-\beta)^{-1}$.\\
+Finally, $B^{-1}-A^{-1}=B^{-1}(A-B)A^{-1}$, Proposition \ref{prop:spectral-norm-basic-properties} gives the continuity of inversion.\\
+\hlt{Structural Commentary}: Small operator-norm perturbations of an invertible map remain invertible.\\
+\hlt{Key Insight}: The inverse changes continuously because the difference of inverses factors through $A-B$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:linear-inverse-lower-bound} \hlt{Linear Inverse Estimate}\\
+For invertible $A\in\LL(\R^n)$, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} gives $c\norm{\h}_2\leq\norm{A\h}_2\leq\normop{A}\norm{\h}_2$; and $\qquad c\defeq\frac{1}{\normop{A^{-1}}}$.\\
+The inverse function theorem preserves this lower stretch under small derivative changes.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/linear_isomorphism_conorm.tikz}
+  \caption{Invertibility keeps $A(S^{n-1})$ a positive distance from $0$.}
+  \label{fig:linear-isomorphism-conorm}
+\end{figure}
+
+\begin{theorem} \label{thm:inverse-function-theorem-rn} \hlt{Inverse Function Theorem}\\
+Let $\f:E\subseteq\R^n\to\R^n$ be $C^1$, let $\a\in E$, and suppose $D\f(\a)$ is invertible. With $\b=\f(\a)$, $\f$ restricts to a bijection $U\to V$ between open neighborhoods of $\a$ and $\b$; inverse $\g:V\to U$ is $C^1$, and $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$, $\y\in V$.
+\begin{proof}
+Put $A=D\f(\a)$ and choose $0<\theta<1$.\\
+By continuity of $D\f$, choose $r>0$ with $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on this closed ball.\\
+For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
+Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. Since $\overline{B}_r(\a)$ is a closed subset of complete $\R^n$, Proposition \ref{prop:basic-completeness-consequences} makes it complete.\\
+The contraction principle, Theorem \ref{thm:contraction-principle}, gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
+For $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$ in $V$, the same derivative bound gives $\norm{\h}_2\leq C\norm{\mathbf{k}}_2$ for a local constant $C$. Moreover $\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k} =-\bigl(D\f(\x)\bigr)^{-1}\bigl[\f(\x+\h)-\f(\x)-D\f(\x)\h\bigr]$.\\
+Since $\f$ is differentiable at $\x$ and $\norm{\h}_2=O(\norm{\mathbf{k}}_2)$, division by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=(D\f(\x))^{-1}$.\\
+Continuity of $D\g$ follows from continuity of $D\f$, continuity of $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.\\
+\hlt{Structural Commentary}: Local inversion is a contraction built from $A^{-1}$.\\
+\hlt{Key Insight}: Small derivative variation preserves local invertibility.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:local-diffeomorphism-open-map} \hlt{Local Diffeomorphisms Are Open}\\
+If $\f:E\subseteq\R^n\to\R^n$ is $C^1$ and $D\f$ is everywhere invertible, then $\f$ is an open map (locally one-to-one).
+\begin{proof}
+Let $W\subseteq E$ be open and let $\y\in\f(W)$. Choose $\x\in W$ with $\f(\x)=\y$. Applying Theorem \ref{thm:inverse-function-theorem-rn} to $\f|_W$ at $\x$ gives open neighborhoods $U\subseteq W$ of $\x$ and $V$ of $\y$ with $\f(U)=V$. Hence $V\subseteq\f(W)$, so $\y$ is interior to $\f(W)$. Since $\y$ was arbitrary, $\f(W)$ is open. Local one-to-one-ness is the same theorem applied pointwise.\\
+\hlt{Structural Commentary}: Openness is checked one image point at a time.\\
+\hlt{Key Insight}: A local inverse turns nearby domain points into a full image neighborhood.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:implicit-derivative-blocks} \hlt{Block Splitting of a Linear Map}\\
+For $A\in\LL(\R^{n+m},\R^n)$ and $(\h,\mathbf{k})\in\R^n\times\R^m$, define $A_x\h\defeq A(\h,\ze)$ and $A_y\mathbf{k}\defeq A(\ze,\mathbf{k})$.\\
+Then $A_x\in\LL(\R^n)$, $A_y\in\LL(\R^m,\R^n)$, and $A(\h,\mathbf{k})=A_x\h+A_y\mathbf{k}$.
+\end{definition}
+
+\begin{theorem} \label{thm:linear-implicit-function-theorem} \hlt{Linear Implicit Function Theorem}\\
+If $A\in\LL(\R^{n+m},\R^n)$, $A_x$ invertible, then $\forall \mathbf{k}\in\R^m$ $\exists$ unique $\h\in\R^n$ s.t. $A(\h,\mathbf{k})=0$, that $\h=-(A_x)^{-1}A_y\mathbf{k}$.
+\begin{proof}
+Fix $\mathbf{k}\in\R^m$ and set $\h_0\defeq-(A_x)^{-1}A_y\mathbf{k}$.\\
+By Definition \ref{def:implicit-derivative-blocks}, $A(\h_0,\mathbf{k}) =A_x\h_0+A_y\mathbf{k} =-A_y\mathbf{k}+A_y\mathbf{k} =0$, so a solution exists.\\
+If $\h\in\R^n$ also satisfies $A(\h,\mathbf{k})=0$, then $A_x\h+A_y\mathbf{k}=0$, hence $A_x\h=-A_y\mathbf{k}$.\\
+Applying $(A_x)^{-1}$ gives $\h=-(A_x)^{-1}A_y\mathbf{k}=\h_0$. Thus the solution exists and is unique.\\
+\hlt{Structural Commentary}: Splitting $A$ separates the unknown variable from the parameter.\\
+\hlt{Key Insight}: Invertibility of $A_x$ turns constraint $A(\h,\mathbf{k})=0$ into a uniquely solvable linear equation for $\h$.
+\end{proof}
+\end{theorem}
+
+The implicit theorem below is the nonlinear counterpart of the block equation theorem. The invertible block is the set of variables one can solve for, just as in Theorem \ref{thm:linear-implicit-function-theorem}.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/implicit_locus_as_graph.tikz}
+  \caption{Near a regular point, the zero locus is the graph of an implicit function.}
+  \label{fig:implicit-locus-as-graph}
+\end{figure}
+
+\begin{theorem} \label{thm:implicit-function-theorem-rn-rm} \hlt{Implicit Function Theorem}\\
+Let $\f:E\subseteq\R^{n+m}\to\R^n$ be $C^1$, $\f(\a,\b)=0$, $A=D\f(\a,\b)$, and let $A_x,A_y$ be the block maps of Definition \ref{def:implicit-derivative-blocks}. If $A_x$ is invertible, then near $\b$, the equation $\f(\x,\y)=0$ has unique local solution $\x=\g(\y)$, where $\g$ is $C^1$, $\g(\b)=\a$, $D\g(\b)=-(A_x)^{-1}A_y$.
+\begin{proof}
+Set $\Phi(\x,\y)=(\f(\x,\y),\y)$. Then $D\Phi(\a,\b)(\h,\mathbf{k})=(A_x\h+A_y\mathbf{k},\mathbf{k})$, whose kernel is zero since $A_x$ is invertible; hence $D\Phi(\a,\b)$ is invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}. Theorem \ref{thm:inverse-function-theorem-rn} makes $\Phi$ locally invertible.\\
+Points with $\f(\x,\y)=0$ are exactly those sent to $(0,\y)$, so $\Phi^{-1}(0,\y)=(\g(\y),\y)$ gives the unique local solution. Differentiating $\f(\g(\y),\y)=0$ at $\b$ gives $A_xD\g(\b)+A_y=0$.\\
+\hlt{Structural Commentary}: Add $\y$ as a coordinate, then invert.\\
+\hlt{Key Insight}: Invertibility of the $x$-block is precisely the linear ability to solve for $x$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:rank-theorem-linear-model} \hlt{Rank Theorem Linear Model}\\
+Theorem \ref{thm:quotient-by-kernel-is-range} reduces a linear map to its kernel--range split.\\
+The constant-rank theorem is the local $C^1$ analogue after coordinate changes.
+\end{perspective}
+
+\begin{theorem} \label{thm:constant-rank-theorem-rudin} \hlt{Rank Theorem}\\
+Let $\mathbf{F}:E\subseteq\R^n\to\R^m$ be $C^1$ with constant rank $r$. At $\a\in E$, put $A=D\mathbf{F}(\a)$, $Y_1=\operatorname{range}(A)$, and let $P$ be the orthogonal projection onto $Y_1$ (Definition \ref{def:orthogonal-projection-subspace}). Locally, after a $C^1$ coordinate change $H$ with $C^1$ inverse on a small coordinate neighborhood $V_0$, there is a $C^1$ map $\varphi:A(V_0)\subseteq Y_1\to\ker(P)$ such that $\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.\\
+In coordinates adapted to $\ker A$ and $\operatorname{range}(A)$, this is the same local geometry as a projection onto $r$ coordinates.
+\begin{proof}
+If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant.\\
+Assume $r>0$. Choose $S:Y_1\to\R^n$ with $AS=I_{Y_1}$, possible by choosing preimages of a basis of $Y_1$, and set $G(\x)=\x+SP(\mathbf{F}(\x)-A\x)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local inverse $H=G^{-1}$.\\
+Let $\Psi=\mathbf{F}\circ H$. From $AG=P\mathbf{F}$ we get $P\Psi(\x)=A\x$. Hence $PD\Psi(\x)=A$. The rank of $D\Psi(\x)$ is $r$ because $DH(\x)$ is invertible and $\mathbf{F}$ has constant rank $r$; the rank of $PD\Psi(\x)$ is also $r$.\\
+Therefore $P$ is injective on $\operatorname{range}D\Psi(\x)$, and $D\Psi(\x)\mathbf{v}=0$ whenever $A\mathbf{v}=0$.\\
+On a small convex coordinate neighborhood, any two points with the same $A\x$ differ by a vector in $\ker(A)$ and can be joined inside that affine fiber. The preceding derivative vanishing and Theorem \ref{thm:bounded-derivative-convex-mean-value} show that $\Psi$ is constant on such fibers. Thus $(I-P)\Psi(\x)$ depends only on $A\x$; call it $\varphi(A\x)$. Then $\mathbf{F}(H(\x))=\Psi(\x)=A\x+\varphi(A\x)$, and $\varphi$ is $C^1$ because $\Psi$ is $C^1$ and the dependence is through the coordinate $A\x$.\\
+\hlt{Structural Commentary}: Constant rank gives a local graph normal form.\\
+\hlt{Key Insight}: Same rank, same local level-set geometry.
+\end{proof}
+\end{theorem}
+
+Rank-nullity (Theorem \ref{thm:rank-nullity}) says that the domain directions split into rank directions and fiber directions. The rank theorem says a constant-rank map has, locally, the same split after $C^1$ changes of coordinates.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/rank_theorem_projection_normal_form.tikz}
+  \caption{After local coordinate changes, a constant-rank map looks like projection onto the rank directions.}
+  \label{fig:rank-theorem-projection-normal-form}
+\end{figure}
+
+\begin{theorem} \label{thm:lagrange-multiplier-one-constraint} \hlt{One-Constraint Lagrange Multiplier}\\
+Let $E\subseteq\R^n$ be open, $f,g:E\to\R$ be $C^1$, and $S=\{\x:g(\x)=c\}$.\\
+If $p\in S$, $\nabla g(p)\neq\ze$, and $f|_S$ has a local extremum at $p$, then $\exists\lambda\in\R$ with $\nabla f(p)=\lambda\nabla g(p)$.
+\begin{proof}
+If $Df(p)=0$, take $\lambda=0$. Otherwise suppose $Df(p)$ is not a multiple of $Dg(p)$.\\
+Complete $Dg(p),Df(p)$ to a dual basis $Dg(p),\quad Df(p),\quad \ell_3,\ldots,\ell_n$ by Theorem \ref{thm:dual-basis-and-dimension},\\
+and set $\Phi(\x)=\bigl(g(\x)-c,\ f(\x)-f(p),\ \ell_3(\x-p),\ldots,\ell_n(\x-p)\bigr)$.\\
+Then $D\Phi(p)$ is invertible, so Theorem \ref{thm:inverse-function-theorem-rn} makes $\Phi$ locally invertible. In these coordinates, $S$ is locally the slice with first coordinate $0$, while the second coordinate is $f-f(p)$. Local invertibility gives nearby points of $S$ with this second coordinate of both signs, contradicting extremality.\\
+Hence $Df(p)=\lambda Dg(p)$; Riesz representation, Theorem \ref{thm:riesz-representation-finite-dimensional}, gives the gradient form.\\
+\hlt{Structural Commentary}: The constraint kills first-order variation along $S$.\\
+\hlt{Key Insight}: If $Df$ were independent of $Dg$, $f$ would be a free constraint coordinate.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:several-variable-differentiation-proof-patterns-source-todo}\label{meth:several-variable-differentiation-proof-patterns} \hlt{Several-Variable Differentiation Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Linear approximation}: write $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$ with $\norm{\mathbf{r}(\h)}_2=o(\norm{\h}_2)$.
+\item \hlt{Norm estimates}: use $\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ and the product estimate from Proposition \ref{prop:spectral-norm-basic-properties}.
+\item \hlt{Line-segment reduction}: on convex sets, restrict to $\gamma(t)=(1-t)\a+t\b$ and apply one-variable results.
+\item \hlt{Local inversion}: if $A=D\f(\a)$ is invertible, write $D\f(\x)=A+E_\x$ with $\normop{E_\x}$ small and solve by contraction (Theorem \ref{thm:contraction-principle}); linear block equations use Theorem \ref{thm:linear-implicit-function-theorem}.
+\item \hlt{Coordinates}: read partial derivatives as the entries of the matrix of $D\f(\x)$, using Theorem \ref{thm:total-derivative-matrix-partials}.
+\item \hlt{Higher derivatives}: regard $D^r\f(p)$ as an $r$-linear map; recover coordinate partials via Theorem \ref{thm:second-derivative-partials-and-continuity}.
+\item \hlt{Rank normal forms}: for $A=D\mathbf{F}(\a)$, split domain by $\ker A$ and image by $\operatorname{range}A$; use the quotient-by-kernel picture from Theorem \ref{thm:quotient-by-kernel-is-range} and project with $P_{\operatorname{range}A}$.
+\end{enumerate}
+\hlt{Key Insight}: Several-variable calculus is one-variable limiting plus finite-dimensional linear algebra.
+\end{method}
