@@ -8,6 +8,10 @@ Let $\mathfrak{S}_n$ denote the set of permutations of $\{1,\ldots,n\}$. The \hl
 The \hlt{determinant} of $A$ is $\det A \defeq \sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.
 \end{definition}
 
+\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
+On $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product from Example \ref{ex:function-and-matrix-inner-products}, the Riesz vector of the trace functional $A\mapsto\operatorname{tr}(A)$ is $I_n$, since $\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
+\end{example}
+
 \begin{proposition} \label{prop:trace-cyclicity-two-factors} \hlt{Trace Is Cyclic for Two Factors}\\
 If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,m,\mathbb{F})$, then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.
 \begin{proof}
@@ -272,6 +276,20 @@ Let $\mathcal{V}$ be finite-dim, let $T\in\LL(\mathcal{V})$. Choose any basis $\
 Theorem \ref{thm:operator-matrix-trace-determinant-basis-independent} shows these definitions do not depend on chosen basis.
 \end{definition}
 
+\begin{proposition} \label{prop:isometry-determinant-absolute-one} \hlt{Unitary Matrices and Isometries Have Determinant of Modulus One}\\
+Let $U\in\operatorname{Mat}(n,n,\mathbb{F})$ be unitary. Then $\abs{\det U}=1$. More generally, if $S\in\LL(\mathcal{V})$ is an isometry on a finite-dimensional inner-product space over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\abs{\det S}=1$.
+\begin{proof}
+The permutation definition gives $\det(U^*)=\overline{\det U}$. By Theorem \ref{thm:determinant-basic-laws}, taking determinants in $U^*U=I_n$ gives
+\[
+1=\det(U^*)\det(U)=\overline{\det U}\det U=\abs{\det U}^2.
+\]
+Hence $\abs{\det U}=1$.\\
+For an isometry $S$, choose an orthonormal basis and let $U$ be the matrix of $S$ in that basis. Then $U$ is unitary by Theorem \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity}, and $\det S=\det U$.\\
+\hlt{Structural Commentary}: In orthonormal coordinates, isometries are unitary or orthogonal, so the determinant calculation is the matrix one.\\
+\hlt{Key Insight}: Determinants turn $U^*U=I$ into $\abs{\det U}^2=1$.
+\end{proof}
+\end{proposition}
+
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/operator_trace_determinant_basis_invariance.tikz}
@@ -299,6 +317,38 @@ By Fundamental Theorem of Algebra, $p_A(z)=\prod\limits_{j=1}^{n}(z-\lambda_j) =
 Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$. Uniqueness of coefficients gives the identities.\\
 \hlt{Structural Commentary}: Coefficients of $p_A$ encode symmetric functions of the eigenvalues.\\
 \hlt{Key Insight}: Trace is the first root sum and determinant is the full root product.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:transpose-conjugate-adjoint-characteristic-polynomial} \hlt{Transpose, Conjugate, and Adjoint Spectra}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $p_{A^t}(z)=p_A(z)$, $p_{\overline{A}}(z)=\overline{p_A(\overline{z})}$, and $p_{A^*}(z)=\overline{p_A(\overline{z})}$.\\
+Consequently, if $\lambda\in\operatorname{spec}(A)$, then $m_{A^t}(\lambda)=m_A(\lambda)$ and $m_{\overline{A}}(\overline{\lambda})=m_{A^*}(\overline{\lambda})=m_A(\lambda)$.
+\begin{proof}
+Use determinant identities:
+\begin{align}
+p_{A^t}(z)&=\det(zI_n-A^t)=\det((zI_n-A)^t)=p_A(z), \nonumber\\
+p_{\overline{A}}(z)&=\det(zI_n-\overline{A}) =\det(\overline{\overline{z}I_n-A}) =\overline{\det(\overline{z}I_n-A)} =\overline{p_A(\overline{z})}.
+\nonumber
+\end{align}
+Since $A^*=\overline{A}^{\,t}$, the first identity applied to $\overline{A}$ gives the formula for $A^*$.\\
+Multiplicity is preserved because conjugating a polynomial sends a factor $(z-\lambda)^k$ to $(z-\overline{\lambda})^k$.\\
+\hlt{Structural Commentary}: Transpose preserves $p_A$; conjugation conjugates its roots.\\
+\hlt{Key Insight}: The adjoint combines conjugation with transposition, so its spectrum is conjugated.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:transpose-preserves-spectrum-and-geometric-multiplicity} \hlt{Transpose Preserves Spectrum and Geometric Multiplicity}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and $\lambda\in\mathbb{F}$. Then $\lambda\in\operatorname{spec}(A)$ $\Longleftrightarrow$ $\lambda\in\operatorname{spec}(A^t)$, and $\dim E_{\lambda}(A)=\dim E_{\lambda}(A^t)$.
+\begin{proof}
+Since $(A-\lambda I_n)^t=A^t-\lambda I_n$, Theorem \ref{thm:row-rank-equals-column-rank} gives $\operatorname{rank}(A-\lambda I_n)=\operatorname{rank}(A^t-\lambda I_n)$.\\
+Matrix rank-nullity then gives $\dim E_{\lambda}(A) =n-\operatorname{rank}(A-\lambda I_n) =n-\operatorname{rank}(A^t-\lambda I_n) =\dim E_{\lambda}(A^t)$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\lambda\in\operatorname{spec}(A)$, then $E_{\lambda}(A)\neq\{\mathbf{0}\}$, so $E_{\lambda}(A^t)\neq\{\mathbf{0}\}$ and $\lambda\in\operatorname{spec}(A^t)$.
+\item[$(\Leftarrow)$] The same argument with $A$ and $A^t$ interchanged gives the converse.
+\end{enumerate}
+\hlt{Structural Commentary}: Transposition preserves rank, so shifted kernels have the same dimension.\\
+\hlt{Key Insight}: Spectrum and geometric multiplicity are kernel facts for $A-\lambda I_n$.
 \end{proof}
 \end{proposition}
 
@@ -414,17 +464,6 @@ The matrix $A$ is \hlt{positive semidefinite}, written $A\succeq0$, if $A=A^*$ a
 It is \hlt{positive definite}, written $A\succ0$, if $A=A^*$ and $\mathbf{x}^*A\mathbf{x}>0$ for every nonzero $\mathbf{x}\in\mathbb{F}^n$.\\
 Negative semidefinite and negative definite mean $-A\succeq0$ and $-A\succ0$, respectively.
 \end{definition}
-
-\begin{proposition} \label{prop:gram-matrix-positive-semidefinite} \hlt{Gram Matrices Are Hermitian Positive Semidefinite}\\
-For any vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$, the Gram matrix $\operatorname{Gram}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$ is Hermitian and positive semidefinite. If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, then it is positive definite.
-\begin{proof}
-Hermitian symmetry follows from conjugate symmetry of the inner product.\\
-For $\mathbf{c}=[c_1\ \cdots\ c_n]^t$, $\mathbf{c}^*\operatorname{Gram}(\mathbf{u}_1,\ldots,\mathbf{u}_n)\mathbf{c} =\norm{\sum\limits_{j=1}^{n}c_j\mathbf{u}_j}^2\geq0$.\\
-If $\mathbf{u}_1,\ldots,\mathbf{u}_n$ are linearly independent, the squared norm above is $0$ only when all $c_j=0$, so the Gram matrix is positive definite.\\
-\hlt{Structural Commentary}: A Gram matrix records every pairwise inner product in a list of vectors.\\
-\hlt{Key Insight}: The quadratic form of a Gram matrix is exactly the squared norm of a linear combination.
-\end{proof}
-\end{proposition}
 
 \begin{theorem} \label{thm:positive-semidefinite-matrix-equivalences} \hlt{Equivalent Forms of Positive Semidefiniteness}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. The following are equivalent:
