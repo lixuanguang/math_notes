@@ -7,12 +7,19 @@
 Sequences are the first testing ground for limits, order, and completeness. The main tools are subsequences, Cauchy criteria, monotone convergence, limsup/liminf, and Bolzano--Weierstrass.
 
 \begin{definition} \label{def:real-complex-sequence-convergence} \hlt{Convergent Real and Complex Sequences}\\
-A real or complex sequence $(s_n)$ \hlt{converges} to $s$ if, for every $\varepsilon>0$, there is $N\in\N$ such that $n\geq N$ implies $\abs{s_n-s}<\varepsilon$.\\
+A real or complex sequence $(s_n)$ \hlt{converges} to $s$ if, $\forall \varepsilon>0$, $\exists N\in\N$ s.t. $n\geq N$ implies $\abs{s_n-s}<\varepsilon$.\\
 Notation is $s_n\to s$ or $\lim\limits_{n\to\infty}s_n=s$. If no such $s$ exists, the sequence \hlt{diverges}.
 \end{definition}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/sequence_epsilon_neighborhood.tikz}
+  \caption{For all $n\geq N$, the terms $s_n$ stay inside $(s-\varepsilon,s+\varepsilon)$.}
+  \label{fig:sequence-epsilon-neighborhood}
+\end{figure}
+
 \begin{definition} \label{def:real-sequence-range-and-boundedness} \hlt{Range and Boundedness of a Real Sequence}\\
-The \hlt{range} of $(s_n)$ is the set $\{s_n:n\in\N\}$. A real sequence is \hlt{bounded} if its range is bounded above and below in $\R$.
+The \hlt{range} of $(s_n)$ is set $\{s_n:n\in\N\}$. Real sequence is \hlt{bounded} if its range is bounded above and below in $\R$.
 \end{definition}
 
 \begin{theorem} \label{thm:complex-sequence-limit-algebra} \hlt{Limit Algebra for Complex Sequences}\\
@@ -161,6 +168,13 @@ Conversely, a subsequence tending to $\pm\infty$ is unbounded, so $(s_n)$ is unb
 \end{proof}
 \end{proposition}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/limsup_extended_subsequences.tikz}
+  \caption{For $s_n=[(-1)^n+1]n$, odd terms (orange) stay at $0$, while even terms (blue) diverge to $+\infty$.}
+  \label{fig:limsup-extended-subsequences}
+\end{figure}
+
 \begin{definition} \label{def:upper-and-lower-limits} \hlt{Upper and Lower Limits}\\
 For real sequence $(s_n)$, let $E\defeq\{x\in\overline{\R}:\exists\, n_1<n_2<\cdots,\ s_{n_k}\to x\}$, allowing $x=\pm\infty$.\\
 Set $s^*\defeq\sup E$ and $s_*\defeq\inf E$; equivalently, $\limsup_{n\to\infty}s_n=s^*$ and $\liminf_{n\to\infty}s_n=s_*$.
@@ -187,6 +201,25 @@ Apply the same argument to $(-s_n)$ for $s_*$.\\
 \hlt{Key Insight}: Limsup combines subsequences with eventual upper bounds.
 \end{proof}
 \end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/limsup_liminf_tail_bounds.tikz}
+  \caption{Blue tail suprema $u_N$ decrease to $s^*=\limsup s_n$; orange tail infima $\ell_N$ increase to $s_*=\liminf s_n$.}
+  \label{fig:limsup-liminf-tail-bounds}
+\end{figure}
+
+\begin{proposition} \label{prop:limsup-liminf-tail-suprema} \hlt{Tail Suprema Formula}\\
+For a real sequence $(s_n)$, put $T_N\defeq\{s_n:n\geq N\}$ and, in $\overline{\R}$, $u_N\defeq\sup T_N$, $\ell_N\defeq\inf T_N$.\\
+Then $u_N\downarrow$, $\ell_N\uparrow$, and $\limsup\limits_{n\to\infty}s_n=\inf_Nu_N$ and $\liminf\limits_{n\to\infty}s_n=\sup_N\ell_N$.
+\begin{proof}
+Since $T_{N+1}\subseteq T_N$, $u_N\downarrow$ and $\ell_N\uparrow$. Let $s^*=\limsup s_n$ and $u=\inf_Nu_N$.\\
+If $x>s^*$, then $s_n<x$ eventually, so $u\leq u_N\leq x$ for some $N$. If $y<s^*$, then $s^*\in E$ gives a subsequence tending to $s^*$; hence every tail meets $(y,\infty)$, so $u_N\geq y$ for all $N$ and $u\geq y$. Thus $u=s^*$.\\
+Apply the same formula to $(-s_n)$ and use Corollary \ref{cor:infimum-as-negative-supremum}.\\
+\hlt{Structural Commentary}: Tail envelopes converge to $\limsup$ and $\liminf$.\\
+\hlt{Key Insight}: Shrinking tails compute the extremal subsequential limits.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:convergence-iff-limsup-liminf-equal} \hlt{Convergence and Equal Upper/Lower Limits}\\
 A real sequence $(s_n)$ converges to a finite number $s\in\R$ if and only if $\limsup_{n\to\infty}s_n=\liminf_{n\to\infty}s_n=s$.
