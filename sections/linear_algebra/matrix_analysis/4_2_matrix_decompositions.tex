@@ -6,6 +6,11 @@
 
 Decompositions expose usable structure in a matrix. LU, QR, Cholesky, SVD, compact SVD, and polar decomposition separate elimination, geometry, positivity, rank, and stretching.
 
+\begin{perspective} \label{per:matrix-factorization-roadmap} \hlt{Matrix Factorisation Roadmap}\\
+Factorisations expose structure by task: elimination gives $LU$ and $LDL^t$ (Theorem \ref{thm:lu-factorization-leading-principal-minors}, Corollary \ref{cor:symmetric-lu-gives-ldlt}); positivity gives Cholesky (Theorem \ref{thm:cholesky-factorization}); geometry gives $QR$ (Theorem \ref{thm:qr-factorization}); singular directions give SVD, compact SVD, and the pseudoinverse (Theorems \ref{thm:matrix-singular-value-decomposition}, \ref{thm:compact-singular-value-decomposition}, Definition \ref{def:moore-penrose-pseudoinverse}); polar decomposition separates motion from stretch (Theorem \ref{thm:rectangular-polar-decomposition}). Spectral factorisations appeared earlier: diagonalisation, spectral theorems, Jordan form, and Schur form (Theorems \ref{thm:conditions-equivalent-to-diagonalizability}, \ref{thm:complex-spectral-theorem}, \ref{thm:real-spectral-theorem}, \ref{thm:complex-jordan-form}, \ref{thm:matrix-schur-triangularization-ordered}).\\
+\hlt{Key Insight}: Choose the factorisation that exposes the needed structure.
+\end{perspective}
+
 \begin{definition} \label{def:full-rank-factorization} \hlt{Full-Rank Factorization}\\
 A factorization $A=XY$ with $X$ full column rank and $Y$ full row rank is called a \hlt{full-rank factorization} of $A$.
 \end{definition}
@@ -46,6 +51,17 @@ a & \mathbf{r}\\
 \hlt{Key Insight}: Nonzero leading principal minors are exactly the no-row-swap pivot condition.
 \end{proof}
 \end{theorem}
+
+\begin{corollary} \label{cor:symmetric-lu-gives-ldlt} \hlt{Symmetric LU Gives an $LDL^t$ Factorisation}\\
+Let $A=A^t\in\operatorname{Mat}(n,n,\mathbb{R})$ have nonzero leading principal minors.\\
+Then $A=LDL^t$, with $L$ unit lower triangular and $D$ diagonal invertible.
+\begin{proof}
+By Theorem \ref{thm:lu-factorization-leading-principal-minors}, write $A=LU$ uniquely with $L$ unit lower triangular and $U$ upper triangular.\\
+Since the leading principal minors are nonzero, each $u_{ii}\neq0$. Put $D=\operatorname{diag}(u_{11},\ldots,u_{nn})$ and $U_0=D^{-1}U$; then $U_0$ is unit upper triangular and $A=LDU_0$. Since $A=A^t$, also $A=U_0^tDL^t$. This is another LU factorisation with unit lower factor $U_0^t$, so uniqueness gives $L=U_0^t$. Hence $A=LDL^t$.\\
+\hlt{Structural Commentary}: Symmetry makes the upper triangular unit factor the transpose of the lower one.\\
+\hlt{Key Insight}: Once the pivots are separated into $D$, the two triangular halves mirror each other.
+\end{proof}
+\end{corollary}
 
 \begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
 For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, factorisation $A=V\begin{bmatrix}R\\0\end{bmatrix}$, $V\in\operatorname{Mat}(m,m,\mathbb{F})$ unitary, $R\in\operatorname{Mat}(n,n,\mathbb{F})$ upper triangular is called a \hlt{wide QR factorisation}. Writing $V=[Q\ Q']$ gives the \hlt{narrow QR factorisation} $A=QR$.
@@ -218,6 +234,30 @@ Since a matrix and its transpose have the same characteristic polynomial, the sp
 \hlt{Key Insight}: Reduce each claim to $\Sigma^*\Sigma$ and $\Sigma\Sigma^*$.
 \end{proof}
 \end{proposition}
+
+\begin{corollary} \label{cor:square-invertibility-singular-value-dictionary} \hlt{Square Invertibility and Singular Values}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, have singular values $\sigma_1\geq\cdots\geq\sigma_n\geq0$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is invertible;
+\item $\operatorname{rank}(A)=n$;
+\item $\sigma_n>0$;
+\item $A^*A\succ0$.
+\end{enumerate}
+If $r=\operatorname{rank}(A)<n$, then $\sigma_1,\ldots,\sigma_r>0$ and $\sigma_{r+1}=\cdots=\sigma_n=0$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ By Corollary \ref{cor:square-matrix-invertible-iff-full-rank}, invertibility gives full rank.
+\item[$(ii)$]$\Rightarrow (iii)$ By Definition \ref{def:matrix-singular-values}, the number of positive singular values is $\operatorname{rank}(A)$.
+\item[$(iii)$]$\Rightarrow (iv)$ If $\sigma_n>0$, then $A$ has full column rank, so Proposition \ref{prop:rectangular-gram-products-are-psd} gives $A^*A\succ0$.
+\item[$(iv)$]$\Rightarrow (i)$ If $A\mathbf{x}=\mathbf{0}$, then $\mathbf{x}^*A^*A\mathbf{x}=0$; PSD gives $\mathbf{x}=\mathbf{0}$. Thus $\ker(A)=\{\mathbf{0}\}$, so $A$ is invertible.
+\end{enumerate}
+The rank-defect statement follows again from Definition \ref{def:matrix-singular-values}.\\
+\hlt{Structural Commentary}: SVD sees nonsingularity as the absence of zero stretch directions.\\
+\hlt{Key Insight}: A zero singular value is exactly a nonzero vector sent to zero.
+\end{proof}
+\end{corollary}
 
 \begin{definition} \label{def:compact-singular-value-decomposition} \hlt{Compact Singular Value Decomposition}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq1$.\\
