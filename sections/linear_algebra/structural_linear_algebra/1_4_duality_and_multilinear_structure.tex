@@ -124,6 +124,52 @@ where the last equality uses Theorems \ref{thm:dual-basis-and-dimension} and \re
 \end{proof}
 \end{theorem}
 
+% Source note: the prompt-supplied linear-programming screenshots state the equality-only alternative as $A\mathbf{x}=\mathbf{b}$ versus a row-vector certificate. The cone and inequality versions are not used here.
+\begin{theorem} \label{thm:range-membership-dual-alternative} \hlt{Range Membership Dual Alternative}\\
+Let $\mathcal{V},\mathcal{W}$ be finite-dimensional, $T\in\LL(\mathcal{V},\mathcal{W})$, and $\mathbf{w}\in\mathcal{W}$. Exactly one holds:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbf{w}\in\operatorname{range}(T)$;
+\item there exists $\psi\in\mathcal{W}'$ such that $\psi T=0$ and $\psi(\mathbf{w})\neq0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The alternatives are incompatible: if $\mathbf{w}=T\mathbf{v}$ and $\psi T=0$, then $\psi(\mathbf{w})=\psi(T\mathbf{v})=0$.
+\item Suppose $\mathbf{w}\notin\operatorname{range}(T)$. Let $\mathcal{U}=\operatorname{range}(T)$, choose a basis $(\mathbf{u}_1,\ldots,\mathbf{u}_r)$ of $\mathcal{U}$, and extend $(\mathbf{u}_1,\ldots,\mathbf{u}_r,\mathbf{w})$ to a basis of $\mathcal{W}$. Define $\psi\in\mathcal{W}'$ by $\psi(\mathbf{u}_j)=0$, $\psi(\mathbf{w})=1$, and $\psi=0$ on the added basis vectors.\\
+Then $\psi$ vanishes on $\operatorname{range}(T)$, so $\psi T=0$, while $\psi(\mathbf{w})=1$.
+\end{enumerate}
+\hlt{Structural Commentary}: A missing range vector is detected by a dual test that vanishes on the whole range.\\
+\hlt{Key Insight}: Either a vector is reached by the map, or a functional separates it from the range.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/range_membership_dual_certificate.tikz}
+  \caption{A dual certificate detects a vector outside the range.}
+  \label{fig:range-membership-dual-certificate}
+\end{figure}
+
+\begin{corollary} \label{cor:matrix-equation-left-nullspace-alternative} \hlt{Matrix Equation Alternative}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{b}\in\mathbb{F}^m$. Exactly one holds:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\mathbf{x}=\mathbf{b}$ for some $\mathbf{x}\in\mathbb{F}^n$;
+\item $\mathbf{y}^tA=\mathbf{0}^t$ and $\mathbf{y}^t\mathbf{b}\neq0$ for some $\mathbf{y}\in\mathbb{F}^m$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:range-membership-dual-alternative}, for $T_A:\mathbb{F}^n\to\mathbb{F}^m$ and $\mathbf{w}=\mathbf{b}$, $\mathbf{b}\in\operatorname{range}(T_A)$ is exactly $A\mathbf{x}=\mathbf{b}$ for some $\mathbf{x}\in\mathbb{F}^n$.
+\item Under the standard dual identification, $\psi\in(\mathbb{F}^m)'$ has the form $\psi(\mathbf{z})=\mathbf{y}^t\mathbf{z}$.\\
+Thus $\psi T_A=0$ iff $\mathbf{y}^tA=\mathbf{0}^t$, and $\psi(\mathbf{b})\neq0$ iff $\mathbf{y}^t\mathbf{b}\neq0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Inconsistency is certified by a left-null vector.\\
+\hlt{Key Insight}: Left null vectors are the coordinate form of dual separating functionals.
+\end{proof}
+\end{corollary}
+
 \begin{corollary} \label{cor:surjective-iff-dual-injective} \hlt{Surjectivity and Dual Injectivity}\\
 Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional, and let $T\in\LL(\mathcal{V},\mathcal{W})$. Then $T$ is surjective if and only if $T'$ is injective.
 \begin{proof}
@@ -161,6 +207,74 @@ Since $T\mathbf{v}_k=\sum\limits_{r=1}^m A_{r,k}\mathbf{w}_r$, we get $\psi_j(T\
 \hlt{Key Insight}: Coefficients of $T\mathbf{v}_k$ become values of the dual basis functionals on $T\mathbf{v}_k$.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:bilinear-form-and-matrix} \hlt{Bilinear Forms and Matrices}\\
+A map $B:\mathcal{V}\times\mathcal{W}\to\mathbb{F}$ is \hlt{bilinear} if it is linear in each variable separately.\\
+For bases $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ of $\mathcal{V}$ and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ of $\mathcal{W}$, the \hlt{matrix of $B$ in the bases $\beta,\gamma$} is $[B]_{\beta,\gamma}=[B(\mathbf{v}_i,\mathbf{w}_j)]$. If $\mathbf{x}=[\mathbf{v}]_{\beta}$ and $\mathbf{y}=[\mathbf{w}]_{\gamma}$, then $B(\mathbf{v},\mathbf{w})=\mathbf{x}^t [B]_{\beta,\gamma}\mathbf{y}$.
+\end{definition}
+
+\begin{proposition} \label{prop:bilinear-forms-linearize-through-duals} \hlt{Bilinear Forms Linearize through Duals}\\
+Let $B:\mathcal{V}\times\mathcal{W}\to\mathbb{F}$ be bilinear, and define $\Phi_B:\mathcal{V}\to\mathcal{W}'$ where $(\Phi_B\mathbf{v})(\mathbf{w})=B(\mathbf{v},\mathbf{w})$,\\
+and $\Psi_B:\mathcal{W}\to\mathcal{V}'$ where $(\Psi_B\mathbf{w})(\mathbf{v})=B(\mathbf{v},\mathbf{w})$. Then $\Phi_B,\Psi_B$ are linear.\\
+For bases $\beta,\gamma$ and $M=[B]_{\beta,\gamma}$, $[\Phi_B]_{\gamma'\leftarrow\beta}=M^t$; and $[\Psi_B]_{\beta'\leftarrow\gamma}=M$.
+\begin{proof}
+For fixed $\mathbf{v}$ and $\mathbf{w}$, bilinearity gives $\Phi_B\mathbf{v}\in\mathcal{W}'$ and $\Psi_B\mathbf{w}\in\mathcal{V}'$. For $\mathbf{v}_1,\mathbf{v}_2\in\mathcal{V}$, $a\in\mathbb{F}$, and every $\mathbf{w}\in\mathcal{W}$, $(\Phi_B(a\mathbf{v}_1+\mathbf{v}_2))(\mathbf{w}) =B(a\mathbf{v}_1+\mathbf{v}_2,\mathbf{w}) =a(\Phi_B\mathbf{v}_1)(\mathbf{w})+(\Phi_B\mathbf{v}_2)(\mathbf{w})$, so $\Phi_B$ is linear.\\
+For $\mathbf{w}_1,\mathbf{w}_2\in\mathcal{W}$, $a\in\mathbb{F}$, and every $\mathbf{v}\in\mathcal{V}$, $(\Psi_B(a\mathbf{w}_1+\mathbf{w}_2))(\mathbf{v}) =B(\mathbf{v},a\mathbf{w}_1+\mathbf{w}_2) =a(\Psi_B\mathbf{w}_1)(\mathbf{v})+(\Psi_B\mathbf{w}_2)(\mathbf{v})$,  so $\Psi_B$ is linear. Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$.\\
+The $j$th $\gamma'$-coordinate of $\Phi_B(\mathbf{v}_i)$ is $(\Phi_B\mathbf{v}_i)(\mathbf{w}_j)=B(\mathbf{v}_i,\mathbf{w}_j)=M_{i,j}$, so column $i$ of $[\Phi_B]_{\gamma'\leftarrow\beta}$ is row $i$ of $M$ transposed, hence $[\Phi_B]_{\gamma'\leftarrow\beta}=M^t$. Likewise, the $i$th $\beta'$-coordinate of $\Psi_B(\mathbf{w}_j)$ is $M_{i,j}$, so $[\Psi_B]_{\beta'\leftarrow\gamma}=M$.\\
+\hlt{Structural Commentary}: A bilinear form becomes linear once one input is frozen. Tracking both freezes gives two dual-valued linear maps whose matrices are transposes of one another.\\
+\hlt{Key Insight}: Bilinearity is linearity into a dual space.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:bilinear-forms-before-tensor-products} \hlt{Bilinear Forms before Tensor Products}\\
+The maps $\Phi_B$ and $\Psi_B$ place bilinear forms inside dual-space and transpose machinery. The tensor model below is only a finite-coordinate tool; the full tensor product belongs later.
+\end{perspective}
+
+\begin{perspective} \label{per:subspace-sums-products-and-tensor-scaffold} \hlt{Sums, Products, and Tensor Scaffolds}\\
+Direct sums and products separate coordinates; the tensor scaffold below separates paired basis directions as rank-one matrix slots.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/subspace_sum_product_schematic.tikz}
+  \caption{Intersection, sum, and product of subspaces.}
+  \label{fig:subspace-sum-product-schematic}
+\end{figure}
+
+\begin{definition} \label{def:finite-coordinate-tensor-product-model} \hlt{Finite-Coordinate Tensor Product Model}\\
+Let $\mathcal{V},\mathcal{W}$ have ordered bases $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$.\\
+The \hlt{coordinate tensor model} for $(\beta,\gamma)$ is $\operatorname{Mat}(m,n,\mathbb{F})$, with $\mathbf{v}_i\otimes_{\beta,\gamma}\mathbf{w}_j$ represented by $E_{i,j}$.\\
+For $\mathbf{v}=\sum_i x_i\mathbf{v}_i$ and $\mathbf{w}=\sum_j y_j\mathbf{w}_j$, set $\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w} \defeq \sum\limits_{i=1}^m\sum\limits_{j=1}^n x_i y_j E_{i,j} \in\operatorname{Mat}(m,n,\mathbb{F})$.
+\end{definition}
+
+\begin{proposition} \label{prop:tensor-product-matrix-basis-model} \hlt{Tensor Model Basis and Bilinear Evaluation}\\
+In the coordinate tensor model associated to bases $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item the matrices $E_{i,j}=\mathbf{v}_i\otimes_{\beta,\gamma}\mathbf{w}_j$ form a basis;
+\item the map $(\mathbf{v},\mathbf{w})\mapsto\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w}$ is bilinear;
+\item every bilinear form $B:\mathcal{V}\times\mathcal{W}\to\mathbb{F}$ determines a unique linear functional $\Theta_B$ on $\operatorname{Mat}(m,n,\mathbb{F})$ such that\\
+$\Theta_B(\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w})=B(\mathbf{v},\mathbf{w})$ for all $\mathbf{v}\in\mathcal{V}$ and $\mathbf{w}\in\mathcal{W}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is the standard entry-matrix basis of $\operatorname{Mat}(m,n,\mathbb{F})$ from Proposition \ref{prop:matrix-spaces-are-vector-spaces}.
+\item The coordinates of $a\mathbf{v}_1+\mathbf{v}_2$ are the same linear combination of the coordinates of $\mathbf{v}_1$ and $\mathbf{v}_2$, and the displayed formula is linear in those coordinates. The same argument applies in the second variable.
+\item Define $\Theta_B(E_{i,j})=B(\mathbf{v}_i,\mathbf{w}_j)$ on the basis from (i), and extend linearly by Proposition \ref{prop:linear-map-determined-by-basis}. If $\mathbf{v}=\sum_i x_i\mathbf{v}_i$ and $\mathbf{w}=\sum_j y_j\mathbf{w}_j$, then $\Theta_B(\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w}) =\sum\limits_{i=1}^m\sum\limits_{j=1}^n x_i y_j B(\mathbf{v}_i,\mathbf{w}_j) =B(\mathbf{v},\mathbf{w})$, by bilinearity of $B$.\\
+Uniqueness follows since the values on basis matrices $E_{i,j}$ are forced by $\mathbf{v}_i,\mathbf{w}_j$.
+\end{enumerate}
+\hlt{Structural Commentary}: The coordinate tensor model stores each pair of basis directions in its own matrix slot, so a bilinear form can be evaluated by a single linear functional on those slots.\\
+\hlt{Key Insight}: Tensor coordinates turn products of coordinates into linear coordinates.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/tensor_product_matrix_basis.tikz}
+  \caption{A basis pair occupies the $(i,j)$ matrix slot.}
+  \label{fig:tensor-product-matrix-basis}
+\end{figure}
 
 \begin{definition} \hlt{Double Dual Space}\\
 The \hlt{double dual space} of $\mathcal{V}$ is $\mathcal{V}''\defeq(\mathcal{V}')'$. Define $\Lambda_{\mathcal{V}}:\mathcal{V}\to\mathcal{V}''$ by $(\Lambda_{\mathcal{V}}\mathbf{v})(\varphi)=\varphi(\mathbf{v}), \mathbf{v}\in\mathcal{V},\ \varphi\in\mathcal{V}'$.
