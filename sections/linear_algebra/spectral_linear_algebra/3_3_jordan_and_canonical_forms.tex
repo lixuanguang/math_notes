@@ -22,6 +22,32 @@ J_k(0)=
 For $\lambda\in\mathbb{C}$, set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
 \end{definition}
 
+\begin{perspective} \label{per:jordan-strings-as-columns} \hlt{Jordan Strings as Columns}\\
+A length-$k$ Jordan string for $A$ at $\lambda$ is $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ with $(A-\lambda I)\mathbf{x}_1=\mathbf{0}$; $(A-\lambda I)\mathbf{x}_j=\mathbf{x}_{j-1}$, $2\leq j\leq k$.\\
+For $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_k]$, $AX=XJ_k(\lambda)$.\\
+If all strings form the columns of a basis matrix $M$, then $AM=MJ$ and $M^{-1}AM=J$.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_string_columns_similarity.tikz}
+  \caption{Jordan chain for $N=A-\lambda I$; columns give $AX=XJ_k(\lambda)$.}
+  \label{fig:jordan-string-columns-similarity}
+\end{figure}
+
+\begin{method} \label{meth:filippov-column-space-jordan-strings} \hlt{Filippov Column-Space Jordan Strings}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $\lambda\in\operatorname{spec}(A)$, and set $N=A-\lambda I_n$ on the generalized eigenspace $\mathcal{G}_{\lambda}(A)=\ker(N^n)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Work first inside $\operatorname{range}(N)\cap\mathcal{G}_{\lambda}(A)$, where $N$ is again nilpotent.
+\item Build Jordan strings for this smaller nilpotent operator.
+\item For each string ending in $\mathbf{u}$, solve $N\mathbf{v}=\mathbf{u}$ in $\mathcal{G}_{\lambda}(A)$ and lift the string by appending $\mathbf{v}$.
+\item Add enough vectors from $\ker(N)$ to complete a basis of $\mathcal{G}_{\lambda}(A)$; these added vectors are length-one strings.
+\item Repeat the process recursively until all of $\mathcal{G}_{\lambda}(A)$ is covered, then concatenate the strings for all eigenvalues.
+\end{enumerate}
+Theorem \ref{thm:nilpotent-jordan-chain-basis} justifies the lifts; Perspective \ref{per:jordan-strings-as-columns} turns the resulting columns into $AM=MJ$.
+\end{method}
+
 \begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
 For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
 \begin{proof}
@@ -72,6 +98,16 @@ The resulting chain basis of $\mathcal{G}_{\lambda_j}(T)$ is a basis of that sum
   \caption{Primary pieces $\mathcal{G}_{\lambda_j}(T)$ give nilpotent chains, hence Jordan blocks.}
   \label{fig:jordan-form-primary-chains}
 \end{figure}
+
+\begin{corollary} \label{cor:jordan-blocks-diagonalizability} \hlt{Diagonalizability in Jordan Form}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have Jordan form $J$. For each eigenvalue $\lambda$, $\dim E_{\lambda}(A)$ equals the number of $\lambda$-blocks in $J$. Hence $A$ is diagonalizable if and only if every Jordan block has size $1$.
+\begin{proof}
+Write $A=SJS^{-1}$. Then $S:E_{\lambda}(J)\to E_{\lambda}(A)$ is an isomorphism. A block $J_k(\mu)$ contributes to $E_{\lambda}(J)$ only when $\mu=\lambda$, and then $\dim\ker(J_k(\lambda)-\lambda I_k)=\dim\ker J_k(0)=1$.\\
+Thus $\dim E_{\lambda}(A)$ is the number of $\lambda$-blocks. By Theorem \ref{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match}, diagonalizability means geometric and algebraic multiplicities agree for every $\lambda$; here this holds exactly when every block has size $1$.\\
+\hlt{Structural Commentary}: Each Jordan block contributes one eigenvector direction.\\
+\hlt{Key Insight}: Missing eigenvectors are measured by block sizes greater than $1$.
+\end{proof}
+\end{corollary}
 
 \begin{lemma} \label{lem:nilpotent-jordan-block-power-rank} \hlt{Powers of a Nilpotent Jordan Block}\\
 For $k\geq1$ and $p\geq0$, $\operatorname{rank}\bigl(J_k(0)^p\bigr)=\max(k-p,0)$ and $\dim\ker\bigl(J_k(0)^p\bigr)=\min(p,k)$.
