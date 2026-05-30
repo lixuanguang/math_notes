@@ -17,6 +17,10 @@ For two subspaces, $\mathcal{U}+\mathcal{W}$ is direct if and only if $\mathcal{
 The union $\mathcal{U}\cup\mathcal{W}$ keeps vectors from either subspace; the sum $\mathcal{U}+\mathcal{W}$ adds vectors from both. Unless one subspace contains the other, $\mathcal{U}\cup\mathcal{W}$ is not closed under addition.
 \end{perspective}
 
+\begin{perspective} \label{per:sum-versus-direct-sum-existence} \hlt{Sums Always Exist; Directness Is Extra}\\
+For subspaces $\mathcal{U},\mathcal{W}\subseteq\mathcal{V}$, the sum $\mathcal{U}+\mathcal{W}$ is always a subspace by Proposition \ref{prop:sum-subspaces-smallest-containing-subspace}. Writing $\mathcal{U}\oplus\mathcal{W}$ asserts the extra condition $\mathcal{U}\cap\mathcal{W}=\{\mathbf{0}\}$, equivalently uniqueness of the decomposition $\mathbf{u}+\mathbf{w}$.
+\end{perspective}
+
 \begin{proposition} \label{prop:uniqueness-direct-sum-two-subspaces} \hlt{Uniqueness in a Direct Sum}\\
 Let $\mathcal{U}$ and $\mathcal{W}$ be subspaces of $\mathcal{V}$ with $\mathcal{U}\cap\mathcal{W}=\{\mathbf{0}\}$. Then each vector in $\mathcal{U}\oplus\mathcal{W}$ has a unique representation $\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$.
 \begin{proof}
@@ -35,6 +39,28 @@ Each $\mathcal{U}_j$ is contained in $\mathcal{U}_1+\cdots+\mathcal{U}_m$ by tak
 \hlt{Key Insight}: The sum adds no extra structure beyond the linear combinations forced by the given subspaces.
 \end{proof}
 \end{proposition}
+
+\begin{definition} \label{def:subspace-meet-and-join} \hlt{Meet and Join of Subspaces}\\
+For subspaces $\{\mathcal{U}_i:i\in I\}$ of $\mathcal{V}$, define $\bigwedge\limits_{i\in I}\mathcal{U}_i\defeq\bigcap\limits_{i\in I}\mathcal{U}_i$; and $\bigvee\limits_{i\in I}\mathcal{U}_i\defeq\sum\limits_{i\in I}\mathcal{U}_i\defeq\operatorname{span}\left(\bigcup\limits_{i\in I}\mathcal{U}_i\right)$.\\
+The empty meet is $\mathcal{V}$, and the empty join is $\{\mathbf{0}\}$.
+\end{definition}
+
+\begin{proposition} \label{prop:subspaces-form-complete-lattice} \hlt{Subspace Meet and Join}\\
+For subspaces $\{\mathcal{U}_i:i\in I\}$ of $\mathcal{V}$, ordered by inclusion, $\bigwedge\limits_{i\in I}\mathcal{U}_i=\inf\{\mathcal{U}_i:i\in I\}$; and $\bigvee\limits_{i\in I}\mathcal{U}_i=\sup\{\mathcal{U}_i:i\in I\}$.
+\begin{proof}
+If $I=\emptyset$, conventions give vacuous bounds $\mathcal{V}$ and $\{\mathbf{0}\}$. Assume $I\neq\emptyset$.\\
+The meet $M=\bigcap_{i\in I}\mathcal{U}_i$ is a subspace by Proposition \ref{prop:intersectionsubspaces}; moreover $M\subseteq\mathcal{U}_i$ for all $i$, and any subspace $\mathcal{W}$ with $\mathcal{W}\subseteq\mathcal{U}_i$ for all $i$ satisfies $\mathcal{W}\subseteq M$. The join $J=\operatorname{span}\left(\bigcup_{i\in I}\mathcal{U}_i\right)$ is a subspace by Theorem \ref{thm:span-smallest-containing-subspace}; moreover $\mathcal{U}_i\subseteq J$ for all $i$, and any subspace $\mathcal{W}$ with $\mathcal{U}_i\subseteq\mathcal{W}$ for all $i$ contains $\bigcup_{i\in I}\mathcal{U}_i$, hence contains $J$.\\
+\hlt{Structural Commentary}: Meet enforces common constraints; join closes the combined directions under span.\\
+\hlt{Key Insight}: Meet is intersection, while join is span of the union.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/subspace_lattice_meet_join.tikz}
+  \caption{For two subspaces, intersection is the meet and sum is the join under inclusion.}
+  \label{fig:subspace-lattice-meet-join}
+\end{figure}
 
 \begin{proposition} \label{prop:direct-sum-equivalent-conditions} \hlt{Equivalent Conditions for a Direct Sum}\\
 For subspaces $\mathcal{U}_1, \ldots, \mathcal{U}_m \subseteq \mathcal{V}$, the following are equivalent:
@@ -164,6 +190,27 @@ Let $\mathcal{W}=\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_n)$. Every v
 \end{proof}
 \end{proposition}
 
+\begin{definition} \label{def:projection-onto-subspace-along-complement} \hlt{Projection Along a Complement}\\
+Let $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$.\\
+The \hlt{projection onto $\mathcal{U}$ along $\mathcal{W}$} is the operator $\rho_{\mathcal{U},\mathcal{W}}\in\LL(\mathcal{V})$ defined by $\rho_{\mathcal{U},\mathcal{W}}(\mathbf{u}+\mathbf{w})\defeq \mathbf{u}$, $\mathbf{u}\in\mathcal{U}$, $\mathbf{w}\in\mathcal{W}$.
+\end{definition}
+
+\begin{proposition} \label{prop:algebraic-projection-range-kernel-idempotent} \hlt{Algebraic Projections Are Idempotents}\\
+For $P\in\LL(\mathcal{V})$, $P^2=P$ $\Longleftrightarrow$ $\mathcal{V}=\operatorname{range}(P)\oplus\ker(P)$ and $P=\rho_{\operatorname{range}(P),\ker(P)}$.\\
+In particular, if $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$ and $\rho=\rho_{\mathcal{U},\mathcal{W}}$, then $\rho^2=\rho$, $\operatorname{range}(\rho)=\mathcal{U}$, $\ker(\rho)=\mathcal{W}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $P^2=P$. For every $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}=P\mathbf{v}+(\mathbf{v}-P\mathbf{v})$, with $P\mathbf{v}\in\operatorname{range}(P)$ and $\mathbf{v}-P\mathbf{v}\in\ker(P)$. If $\mathbf{x}\in\operatorname{range}(P)\cap\ker(P)$, then $\mathbf{x}=P\mathbf{y}$ and $\mathbf{0}=P\mathbf{x}=P^2\mathbf{y}=\mathbf{x}$. Thus the sum is direct.\\
+Also $P$ fixes $\operatorname{range}(P)$ and kills $\ker(P)$, so $P=\rho_{\operatorname{range}(P),\ker(P)}$.
+\item[$(\Leftarrow)$] Assume the right-hand side. For $\mathbf{v}=\mathbf{x}+\mathbf{y}$ with $\mathbf{x}\in\operatorname{range}(P)$ and $\mathbf{y}\in\ker(P)$, $P^2\mathbf{v}=P\mathbf{x}=\mathbf{x}=P\mathbf{v}$.\\
+For $\rho_{\mathcal{U},\mathcal{W}}$, the formula $\rho_{\mathcal{U},\mathcal{W}}(\mathbf{u}+\mathbf{w})=\mathbf{u}$ gives range $\mathcal{U}$ and kernel $\mathcal{W}$; the implication gives $\rho^2=\rho$.
+\end{enumerate}
+\hlt{Structural Commentary}: Idempotents keep one summand and kill its complement.\\
+\hlt{Key Insight}: Direct-sum coordinates turn a projection into $I\oplus0$.
+\end{proof}
+\end{proposition}
+
 \begin{definition} \hlt{Affine Subset and Parallel Subspaces}\\
 Let $\mathcal{U}$ be a subspace of $\mathcal{V}$. For $\mathbf{v}\in\mathcal{V}$, the subset $\mathbf{v}+\mathcal{U}\defeq\{\mathbf{v}+\mathbf{u}:\mathbf{u}\in\mathcal{U}\}$ is an \hlt{affine subset} of $\mathcal{V}$ parallel to $\mathcal{U}$.
 \end{definition}
@@ -193,6 +240,10 @@ Let $\mathcal{U}$ be a subspace of $\mathcal{V}$.\\
 The \hlt{quotient space} $\mathcal{V}/\mathcal{U}$ is the set of all affine subsets of $\mathcal{V}$ parallel to $\mathcal{U}$: $\mathcal{V}/\mathcal{U}\defeq\{\mathbf{v}+\mathcal{U}:\mathbf{v}\in\mathcal{V}\}$.
 \end{definition}
 
+\begin{perspective} \label{per:quotient-cosets-as-equivalence-classes} \hlt{Cosets as Equivalence Classes}\\
+The quotient relation is $\mathbf{v}\sim\mathbf{w}$ when $\mathbf{v}-\mathbf{w}\in\mathcal{U}$. Proposition \ref{prop:parallel-affine-subsets-equal-or-disjoint} shows that the equivalence class of $\mathbf{v}$ is exactly the coset $\mathbf{v}+\mathcal{U}$. Thus the quotient space remembers vectors only up to directions in $\mathcal{U}$.
+\end{perspective}
+
 \begin{proposition} \label{prop:quotient-space-structure} \hlt{Structure of the Quotient}\\
 Let $\mathcal{U}$ be a subspace of $\mathcal{V}$. Addition and scalar multiplication on $\mathcal{V}/\mathcal{U}$ defined by $(\mathbf{v} + \mathcal{U}) + (\mathbf{w} + \mathcal{U}) \defeq (\mathbf{v} + \mathbf{w}) + \mathcal{U}$ and $a(\mathbf{v} + \mathcal{U}) \defeq a\mathbf{v} + \mathcal{U}$ are well-defined, and with these operations $\mathcal{V}/\mathcal{U}$ is a vector space.
 \begin{proof}
@@ -215,6 +266,46 @@ For $\mathbf{v},\mathbf{w}\in\mathcal{V}$ and $a\in\mathbb{F}$, $\pi(a\mathbf{v}
 \hlt{Key Insight}: Quotient maps realise subspaces as kernels.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:subspace-correspondence-quotient} \hlt{Subspace Correspondence for Quotients}\\
+Let $\pi:\mathcal{V}\to\mathcal{V}/\mathcal{U}$ be the quotient map. The assignments $\mathcal{T}\longmapsto \mathcal{T}/\mathcal{U}$ and $\mathcal{Y}\longmapsto \pi^{-1}(\mathcal{Y})$ are inverse inclusion-preserving bijections between $\{\mathcal{T}$ subspace of $\mathcal{V}:\mathcal{U}\subseteq\mathcal{T}\}$ and $\{\mathcal{Y}$ subspace of $\mathcal{V}/\mathcal{U}\}$.
+\begin{proof}
+If $\mathcal{U}\subseteq\mathcal{T}\subseteq\mathcal{V}$, then $\mathcal{T}/\mathcal{U}$ is a subspace of $\mathcal{V}/\mathcal{U}$.\\
+If $\mathcal{Y}\subseteq\mathcal{V}/\mathcal{U}$ is a subspace, then $\pi^{-1}(\mathcal{Y})$ is a subspace of $\mathcal{V}$ and contains $\ker(\pi)=\mathcal{U}$.\\
+For $\mathcal{U}\subseteq\mathcal{T}\subseteq\mathcal{V}$, $\pi^{-1}(\mathcal{T}/\mathcal{U})=\mathcal{T}$, since $\mathbf{v}+\mathcal{U}=\mathbf{t}+\mathcal{U}$ with $\mathbf{t}\in\mathcal{T}$ implies $\mathbf{v}-\mathbf{t}\in\mathcal{U}\subseteq\mathcal{T}$.\\
+For $\mathcal{Y}\subseteq\mathcal{V}/\mathcal{U}$, surjectivity gives $\pi\left(\pi^{-1}(\mathcal{Y})\right)=\mathcal{Y}$, that is, $\pi^{-1}(\mathcal{Y})/\mathcal{U}=\mathcal{Y}$\\
+Both assignments preserve inclusion by monotonicity of images and preimages.\\
+\hlt{Structural Commentary}: Subspaces above $\mathcal{U}$ are exactly the subspaces visible after collapsing $\mathcal{U}$.\\
+\hlt{Key Insight}: The quotient map translates containment above $\mathcal{U}$ into containment inside $\mathcal{V}/\mathcal{U}$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/quotient_correspondence_subspaces.tikz}
+  \caption{Intermediate subspaces above $\mathcal{U}$ correspond to subspaces of the quotient.}
+  \label{fig:quotient-correspondence-subspaces}
+\end{figure}
+
+\begin{theorem} \label{thm:quotient-universal-property} \hlt{Universal Property of Quotients}\\
+Let $\pi:\mathcal{V}\to\mathcal{V}/\mathcal{U}$ be the quotient map.\\
+If $L\in\LL(\mathcal{V},\mathcal{W})$ and $\mathcal{U}\subseteq\ker(L)$, then $\exists!\,\overline{L}\in\LL(\mathcal{V}/\mathcal{U},\mathcal{W})$ such that $\overline{L}\pi=L$, $\overline{L}(\mathbf{v}+\mathcal{U})=L\mathbf{v}$.\\
+Moreover, $\ker(\overline{L})=\ker(L)/\mathcal{U}$ and $\operatorname{range}(\overline{L})=\operatorname{range}(L)$.
+\begin{proof}
+If $\mathbf{v}+\mathcal{U}=\mathbf{w}+\mathcal{U}$, then $\mathbf{v}-\mathbf{w}\in\mathcal{U}\subseteq\ker(L)$, so $L\mathbf{v}=L\mathbf{w}$. Hence the formula defines a linear map $\overline{L}$ and gives $\overline{L}\pi=L$. If $M\pi=L$, then $M(\mathbf{v}+\mathcal{U})=M\pi(\mathbf{v})=L\mathbf{v}=\overline{L}(\mathbf{v}+\mathcal{U})$, so $M=\overline{L}$.\\
+Finally, $\mathbf{v}+\mathcal{U}\in\ker(\overline{L}) \iff L\mathbf{v}=\mathbf{0} \iff \mathbf{v}\in\ker(L)$, giving $\ker(\overline{L})=\ker(L)/\mathcal{U}$.\\
+The range equality follows from $\overline{L}(\mathbf{v}+\mathcal{U})=L\mathbf{v}$.\\
+\hlt{Structural Commentary}: Maps killing $\mathcal{U}$ descend uniquely to $\mathcal{V}/\mathcal{U}$.\\
+\hlt{Key Insight}: Quotients are the natural domain for maps whose ambiguity contains $\mathcal{U}$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/quotient_universal_property.tikz}
+  \caption{If $\mathcal{U}\subseteq\ker(L)$, then $L=\overline{L}\pi$ uniquely.}
+  \label{fig:quotient-universal-property}
+\end{figure}
 
 
 \begin{definition} \hlt{Induced Map on a Quotient}\\
@@ -247,6 +338,54 @@ Conversely, every vector in $\operatorname{range}(T)$ has the form $T\mathbf{v}=
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:first-isomorphism-theorem-vector-spaces} \hlt{First Isomorphism Theorem}\\
+Let $T\in\LL(\mathcal{V},\mathcal{W})$. Then $\widehat{T}:\mathcal{V}/\ker(T)\to\operatorname{range}(T)$; $\widehat{T}(\mathbf{v}+\ker(T))=T\mathbf{v}$ is a well-defined linear isomorphism.
+\begin{proof}
+If $\mathbf{v}+\ker(T)=\mathbf{w}+\ker(T)$, then $\mathbf{v}-\mathbf{w}\in\ker(T)$, so $T\mathbf{v}=T\mathbf{w}$; hence $\widehat{T}$ is well-defined.\\
+Linearity follows from the quotient operations, $\widehat{T}(a(\mathbf{v}+\ker(T))+(\mathbf{w}+\ker(T)))=aT\mathbf{v}+T\mathbf{w}$.\\
+Also, $\widehat{T}(\mathbf{v}+\ker(T))=\mathbf{0} \iff T\mathbf{v}=\mathbf{0} \iff \mathbf{v}\in\ker(T) \iff \mathbf{v}+\ker(T)=\ker(T)$, so $\widehat{T}$ is injective.\\
+If $\mathbf{y}\in\operatorname{range}(T)$, then $\mathbf{y}=T\mathbf{v}=\widehat{T}(\mathbf{v}+\ker(T))$ for some $\mathbf{v}\in\mathcal{V}$, so $\widehat{T}$ is surjective. Thus $\widehat{T}$ is linear isomorphism.\\
+\hlt{Structural Commentary}: The quotient by the kernel is the part of the domain actually seen by $T$.\\
+\hlt{Key Insight}: Image is domain modulo kernel.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:second-isomorphism-vector-spaces} \hlt{Second Isomorphism Theorem}\\
+Let $\mathcal{S}$ and $\mathcal{T}$ be subspaces of $\mathcal{V}$. Then $(\mathcal{S}+\mathcal{T})/\mathcal{T}\cong \mathcal{S}/(\mathcal{S}\cap\mathcal{T})$.
+\begin{proof}
+Define $L:\mathcal{S}\to(\mathcal{S}+\mathcal{T})/\mathcal{T}$ by $L\mathbf{s}=\mathbf{s}+\mathcal{T}$. Then $L$ is linear by the quotient operations.\\
+Moreover, $\ker(L)=\{\mathbf{s}\in\mathcal{S}:\mathbf{s}+\mathcal{T}=\mathcal{T}\} =\mathcal{S}\cap\mathcal{T}$.
+If $(\mathbf{s}+\mathbf{t})+\mathcal{T}\in(\mathcal{S}+\mathcal{T})/\mathcal{T}$, with $\mathbf{s}\in\mathcal{S}$ and $\mathbf{t}\in\mathcal{T}$, then $(\mathbf{s}+\mathbf{t})+\mathcal{T}=\mathbf{s}+\mathcal{T}=L\mathbf{s}$, so $L$ is surjective. Theorem \ref{thm:first-isomorphism-theorem-vector-spaces} gives the stated isomorphism.\\
+\hlt{Structural Commentary}: Modding out by $\mathcal{T}$ leaves only the part of $\mathcal{S}$ not already inside $\mathcal{T}$.\\
+\hlt{Key Insight}: In a quotient by $\mathcal{T}$, adding $\mathcal{T}$ to $\mathcal{S}$ costs nothing.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:third-isomorphism-vector-spaces} \hlt{Third Isomorphism Theorem}\\
+If $\mathcal{U}\subseteq\mathcal{T}\subseteq\mathcal{V}$ are subspaces, then $(\mathcal{V}/\mathcal{U})/(\mathcal{T}/\mathcal{U})\cong \mathcal{V}/\mathcal{T}$.
+\begin{proof}
+Define $L:\mathcal{V}/\mathcal{U}\to\mathcal{V}/\mathcal{T}$ by $L(\mathbf{v}+\mathcal{U})=\mathbf{v}+\mathcal{T}$.\\
+If $\mathbf{v}+\mathcal{U}=\mathbf{w}+\mathcal{U}$, then $\mathbf{v}-\mathbf{w}\in\mathcal{U}\subseteq\mathcal{T}$, so $L$ is well-defined.\\
+It is linear by the quotient operations, and it is surjective since $L(\mathbf{v}+\mathcal{U})=\mathbf{v}+\mathcal{T}$ for every coset $\mathbf{v}+\mathcal{T}$.\\
+Moreover, $\ker(L)=\{\mathbf{v}+\mathcal{U}: \mathbf{v}+\mathcal{T}=\mathcal{T}\} =\{\mathbf{v}+\mathcal{U}: \mathbf{v}\in\mathcal{T}\} =\mathcal{T}/\mathcal{U}$. Theorem \ref{thm:first-isomorphism-theorem-vector-spaces} gives $(\mathcal{V}/\mathcal{U})/(\mathcal{T}/\mathcal{U})\cong\mathcal{V}/\mathcal{T}$.\\
+\hlt{Structural Commentary}: Collapsing $\mathcal{U}$ and then collapsing $\mathcal{T}/\mathcal{U}$ is the same as collapsing $\mathcal{T}$ at once.\\
+\hlt{Key Insight}: Quotients of quotients cancel only when the nesting is explicit.
+\end{proof}
+\end{theorem}
+
+
+\begin{proposition} \label{prop:quotient-by-complement-is-complement} \hlt{Quotient by a Complemented Subspace}\\
+Let $\mathcal{U}$ and $\mathcal{W}$ be subspaces of $\mathcal{V}$ with $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$. Then $J:\mathcal{W}\to\mathcal{V}/\mathcal{U}$, $J(\mathbf{w})=\mathbf{w}+\mathcal{U}$ is an isomorphism.\\
+Hence every complement of $\mathcal{U}$ is isomorphic to $\mathcal{V}/\mathcal{U}$.
+\begin{proof}
+The map is linear by the quotient operations from Proposition \ref{prop:quotient-space-structure}.\\
+If $J(\mathbf{w})=\mathcal{U}$, then $\mathbf{w}\in\mathcal{U}\cap\mathcal{W}=\{\mathbf{0}\}$, so $J$ is injective.\\
+If $\mathbf{v}+\mathcal{U}\in\mathcal{V}/\mathcal{U}$, write $\mathbf{v}=\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$. Then $\mathbf{v}+\mathcal{U}=\mathbf{w}+\mathcal{U}=J(\mathbf{w})$, so $J$ is surjective.\\
+\hlt{Structural Commentary}: A complement gives canonical representatives for quotient cosets.\\
+\hlt{Key Insight}: Collapsing $\mathcal{U}$ leaves exactly the complementary directions visible.
+\end{proof}
+\end{proposition}
+
 
 \begin{theorem} \label{thm:dimension-of-quotient} \hlt{Dimension of a Quotient}\\
 If $\mathcal{V}$ is finite-dimensional and $\mathcal{U}$ is a subspace, then $\dim(\mathcal{V}/\mathcal{U}) = \dim(\mathcal{V}) - \dim(\mathcal{U})$.
@@ -258,5 +397,16 @@ If $a_1(\mathbf{w}_1+\mathcal{U})+\cdots+a_k(\mathbf{w}_k+\mathcal{U})=\mathcal{
 \hlt{Key Insight}: Passing to $\mathcal{V}/\mathcal{U}$ subtracts the collapsed dimension.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:codimension-subspace} \hlt{Codimension}\\
+If $\mathcal{U}$ is a subspace of $\mathcal{V}$ and $\dim(\mathcal{V}/\mathcal{U})<\infty$, define $\operatorname{codim}_{\mathcal{V}}(\mathcal{U})\defeq\dim(\mathcal{V}/\mathcal{U})$.\\
+Thus, if $\mathcal{V}$ is finite-dimensional, Theorem \ref{thm:dimension-of-quotient} gives $\operatorname{codim}_{\mathcal{V}}(\mathcal{U})=\dim(\mathcal{V})-\dim(\mathcal{U})$.\\
+If $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$, Proposition \ref{prop:quotient-by-complement-is-complement} gives $\operatorname{codim}_{\mathcal{V}}(\mathcal{U})=\dim(\mathcal{W})$.
+\end{definition}
+
+% Source note: existing module-comparison notes relate quotients to complements and direct summands. The following only points back to vector-space results already proved in this subsection.
+\begin{perspective} \label{per:quotients-split-over-fields} \hlt{Quotients Split Over Fields}\\
+In finite-dimensional vector spaces, choosing a complement $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$ identifies $\mathcal{V}/\mathcal{U}$ with $\mathcal{W}$. The quotient map collapses $\mathcal{U}$ and keeps the complementary directions.
+\end{perspective}
 
 This block develops two complementary ways to organise a vector space: build from smaller pieces by spans and direct sums, or collapse a chosen subspace by passing to a quotient. Bases and dimension measure exactly what is added, split off, or made invisible.
