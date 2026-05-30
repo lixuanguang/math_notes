@@ -1,5 +1,203 @@
 \subsection{Sets, Maps, Relations, and Universal Properties}
 
+\begin{definition} \label{def:analysis-sets-and-operations} \hlt{Sets and Operations}\\
+A \hlt{set} is a collection. Write $x\in E$, $x\notin E$, $\emptyset$, and $A\subseteq B$; $A=B$ iff $A\subseteq B$ and $B\subseteq A$. For $A,B\subseteq X$,
+\begin{align}
+A\cup B &\defeq \{x\in X:x\in A\text{ or }x\in B\}, \nonumber\\
+A\cap B &\defeq \{x\in X:x\in A\text{ and }x\in B\}, \nonumber\\
+A\setminus B &\defeq \{x\in X:x\in A\text{ and }x\notin B\}, \nonumber\\
+A^c &\defeq X\setminus A. \nonumber
+\end{align}
+The \hlt{power set} is $\mathcal{P}(X)\defeq\{A:A\subseteq X\}$.
+\end{definition}
+
+\begin{remark} \label{rem:set-builder-notation} \hlt{Set-Builder Notation}\\
+$\{x\in X:P(x)\}$ means all $x\in X$ satisfying $P(x)$.\\
+For sets $(A_n)$, $\bigcup_nA_n$ means membership in some $A_n$; $\bigcap_nA_n$, membership in every $A_n$.\\
+\hlt{Key Insight}: Expand membership conditions.
+\end{remark}
+
+\begin{definition} \label{def:indexed-families-unions-intersections} \hlt{Indexed Families of Sets}\\
+An \hlt{indexed family} $\{A_i\}_{i\in I}$ is one set $A_i\subseteq X$ for each index $i\in I$. Define
+\begin{align}
+\bigcup_{i\in I}A_i&\defeq\{x\in X:x\in A_i\text{ for some }i\in I\}, \nonumber\\
+\bigcap_{i\in I}A_i&\defeq\{x\in X:x\in A_i\text{ for every }i\in I\}. \nonumber
+\end{align}
+\hlt{Key Insight}: Union means ``some index''; intersection means ``every index''.
+\end{definition}
+
+\begin{method} \label{meth:proof-by-containment} \hlt{Proof by Two Containments}\\
+To prove $A=B$, prove both inclusions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item To prove $A\subseteq B$, let $x\in A$ be arbitrary and use the definitions and hypotheses to show $x\in B$.
+\item To prove $B\subseteq A$, let $x\in B$ be arbitrary and use the definitions and hypotheses to show $x\in A$.
+\item Once both containments are proved, conclude $A=B$ by extensionality of sets.
+\end{enumerate}
+If both sides are described by membership conditions, this is a chain, $x\in A \Longleftrightarrow \cdots \Longleftrightarrow x\in B$.
+\end{method}
+
+\begin{proposition} \label{prop:analysis-set-algebra} \hlt{Basic Set Algebra}\\
+Let $A,B,C\subseteq X$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$;
+\item $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$;
+\item $(A\cup B)^c=A^c\cap B^c$;
+\item $(A\cap B)^c=A^c\cup B^c$.
+\end{enumerate}
+\begin{proof}
+It suffices to prove (i) and (iii); the others are similar. Let $x\in X$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[(i)] $x\in A\cap(B\cup C) \Longleftrightarrow x\in A \text{ and } (x\in B \text{ or } x\in C) \Longleftrightarrow (x\in A\cap B) \text{ or } (x\in A\cap C) \Longleftrightarrow x\in (A\cap B)\cup(A\cap C)$
+\item[(iii)] $x\in (A\cup B)^c \Longleftrightarrow x\notin A\cup B \Longleftrightarrow x\notin A \text{ and } x\notin B \Longleftrightarrow x\in A^c\cap B^c$
+\end{enumerate}
+\hlt{Structural Commentary}: Set algebra is membership logic.\\
+\hlt{Key Insight}: Translate sets into conditions on $x$.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+    \centering
+    \input{figures/analysis/de_morgan_complement_union.tikz}
+    \caption{De Morgan's law says that being outside a union is the same as being outside each set.}
+    \label{fig:de-morgan-complement-union}
+\end{figure}
+
+\begin{definition} \label{def:cartesian-product} \hlt{Cartesian Product}\\
+For sets $X$ and $Y$, the \hlt{Cartesian product} is $X\times Y\defeq\{(x,y):x\in X,\ y\in Y\}$.\\
+The order matters: the first coordinate comes from $X$, and the second comes from $Y$.
+\end{definition}
+
+\begin{figure}[H]
+    \centering
+    \input{figures/analysis/cartesian_product_rectangle.tikz}
+    \caption{$A\times B$: first coordinate in $A$, second in $B$.}
+    \label{fig:cartesian-product-rectangle}
+\end{figure}
+
+\begin{definition} \label{def:relations-and-equivalence} \hlt{Relations and Equivalence}\\
+A \hlt{relation} from $X$ to $Y$ is a subset $R\subseteq X\times Y$. If $(x,y)\in R$, one often writes $xRy$.\\
+A relation $\sim$ on $X$ is an \hlt{equivalence relation} if, for all $x,y,z\in X$,
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $x\sim x$;
+\item $x\sim y$ implies $y\sim x$;
+\item $x\sim y$ and $y\sim z$ imply $x\sim z$.
+\end{enumerate}
+The equivalence class of $x$ is $[x]\defeq\{y\in X:y\sim x\}$.
+\end{definition}
+
+\begin{proposition} \label{prop:equivalence-relations-partitions} \hlt{Equivalence Classes Partition the Set}\\
+Let $\sim$ be an equivalence relation on $X$. Then the equivalence classes form a partition of $X$.
+\begin{proof}
+Every $x\in X$ lies in $[x]$ since $x\sim x$. If $[x]\cap[y]\neq\emptyset$, choose $z$ in the intersection.\\
+Then $x\sim z\sim y$, so $u\in[x]$ implies $u\sim y$ and $u\in[y]$. Hence $[x]\subseteq[y]$, and symmetry gives equality.\\
+\hlt{Structural Commentary}: Equivalence means partition.\\
+\hlt{Key Insight}: Touching classes coincide.
+\end{proof}
+\end{proposition}
+
+\begin{principle} \label{princ:axiom-of-choice-analysis} \hlt{Choice Principle}\\
+For nonempty sets $\{X_i\}_{i\in I}$, the axiom of choice asserts $\exists c:I\to\bigcup\limits_{i\in I}X_i$ such that $c(i)\in X_i\ \forall i\in I$.\\
+Use direct construction for finite or explicit choices; use choice only for arbitrary simultaneous choices.
+\end{principle}
+
+\begin{definition} \label{def:ordered-set-vocabulary} \hlt{Ordered Set Vocabulary}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\leq_X$ is a \hlt{partial order} if it is reflexive, anti-symmetric, and transitive.
+\item $C\subseteq X$ is a \hlt{chain} if any two points of $C$ are comparable.
+\item $X$ is \hlt{well-ordered} if every nonempty $Y\subseteq X$ has a least element.
+\item For $Y\subseteq X$, $u\in X$ is a \hlt{upper bound} if $y\leq_Xu$ for all $y\in Y$.
+\item $m\in Y$ is \hlt{maximal} if no $y\in Y$ satisfies $m<_Xy$; minimal is dual.
+\end{enumerate}
+\end{definition}
+
+\begin{principle} \label{princ:zorns-lemma} \hlt{Zorn's Lemma}\\
+If a nonempty partially ordered set $X$ has the property that every chain in $X$ has an upper bound in $X$, then $X$ contains a maximal element. This is equivalent in strength to the axiom of choice, Principle \ref{princ:axiom-of-choice-analysis}.
+\end{principle}
+
+\begin{definition} \label{def:functions-images-preimages} \hlt{Functions, Images, and Preimages}\\
+A \hlt{function} $f:X\to Y$ assigns to each $x\in X$ a unique element $f(x)\in Y$. The set $X$ is the domain and $Y$ is the codomain. The \hlt{range} of $f$ is $\operatorname{range}(f)\defeq f(X)\defeq\{f(x):x\in X\}$.\\
+If $A\subseteq X$, the \hlt{image} of $A$ under $f$ is $f(A)\defeq\{f(x):x\in A\}$.\\
+If $B\subseteq Y$, the \hlt{preimage} of $B$ under $f$ is $f^{-1}(B)\defeq\{x\in X:f(x)\in B\}$.\\
+This does not require $f$ to have an inverse function.\\
+If $A\subseteq X$, the \hlt{restriction} of $f$ to $A$ is denoted $f|_A:A\to Y$.\\
+If $g:Y\to Z$, the \hlt{composition} $g\circ f:X\to Z$ is defined by $(g\circ f)(x)=g(f(x))$.\\
+The \hlt{identity function} on $X$ is denoted $\operatorname{id}_X$.
+\end{definition}
+
+  \begin{figure}[H]
+  \centering
+  \input{figures/analysis/function_image_preimage.tikz}
+  \caption{Image--preimage containment: $f(A)\subseteq B \Longleftrightarrow A\subseteq f^{-1}(B)$.}
+  \label{fig:function-image-preimage}
+\end{figure}
+
+\begin{proposition} \label{prop:image-preimage-calculus} \hlt{Image and Preimage Calculus}\\
+Let $f:X\to Y$, let $\{A_i\}_{i\in I}$ be a nonempty family of subsets of $X$, and let $\{B_i\}_{i\in I}$ be a nonempty family of subsets of $Y$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\left(\bigcup_{i\in I}A_i\right)=\bigcup_{i\in I}f(A_i)$;
+\item $f\left(\bigcap_{i\in I}A_i\right)\subseteq\bigcap_{i\in I}f(A_i)$;
+\item $f^{-1}\left(\bigcup_{i\in I}B_i\right)=\bigcup_{i\in I}f^{-1}(B_i)$;
+\item $f^{-1}\left(\bigcap_{i\in I}B_i\right)=\bigcap_{i\in I}f^{-1}(B_i)$;
+\item $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$ for every $B\subseteq Y$;
+\item $f(f^{-1}(B))=B\cap\operatorname{range}(f)$ for every $B\subseteq Y$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $y\in f(\bigcup_i A_i)$ iff $y=f(x)$ for some $x\in A_i$ and some $i$, iff $y\in\bigcup_i f(A_i)$.
+\item If $y=f(x)$ with $x\in\bigcap_i A_i$, then $y\in f(A_i)$ for every $i$.
+\item $x\in f^{-1}(\bigcup_i B_i)$ iff $f(x)\in B_i$ for some $i$, iff $x\in\bigcup_i f^{-1}(B_i)$.
+\item $x\in f^{-1}(\bigcap_i B_i)$ iff $f(x)\in B_i$ for every $i$, iff $x\in\bigcap_i f^{-1}(B_i)$.
+\item For $x\in X$, $x\in f^{-1}(Y\setminus B) \Longleftrightarrow f(x)\notin B \Longleftrightarrow x\notin f^{-1}(B) \Longleftrightarrow x\in X\setminus f^{-1}(B)$
+\item $y\in f(f^{-1}(B))$ iff $y=f(x)$ for some $x$ with $f(x)\in B$, iff $y\in B\cap\operatorname{range}(f)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Preimages are Boolean-exact; images need not be.\\
+\hlt{Key Insight}: Pull back conditions through $f$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:injective-surjective-bijective} \hlt{Injective, Surjective, and Bijective Maps}\\
+Let $f:X\to Y$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $f$ is \hlt{injective} if $f(x_1)=f(x_2)$ implies $x_1=x_2$.
+\item $f$ is \hlt{surjective} if $\operatorname{range}(f)=Y$.
+\item $f$ is \hlt{bijective} if it is both injective and surjective.
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/injective_surjective_bijective_maps.tikz}
+  \caption{Surjective: covers codomain; injective: no collisions; bijective: both.}
+  \label{fig:injective-surjective-bijective-maps}
+\end{figure}
+
+\begin{theorem} \label{thm:bijective-iff-invertible-function} \hlt{Bijective Means Invertible}\\
+A function $f:X\to Y$ is bijective iff there exists a function $g:Y\to X$ s.t. $g\circ f=\operatorname{id}_X$, $f\circ g=\operatorname{id}_Y$.\\
+When such a function exists, it is unique and is denoted $f^{-1}:Y\to X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f$ is bijective, define $g(y)$ as the unique $x$ with $f(x)=y$. Then $g\circ f=\operatorname{id}_X$ and $f\circ g=\operatorname{id}_Y$.
+\item[$(\Leftarrow)$] If such a $g$ exists, applying $g$ to $f(x_1)=f(x_2)$ gives $x_1=x_2$, and $y=f(g(y))$ gives surjectivity.
+\end{enumerate}
+If $g$ and $h$ are two-sided inverses, then $g(y)=g(f(h(y)))=h(y)$, so the inverse is unique.\\
+\hlt{Structural Commentary}: A true inverse undoes $f$ on both sides.\\
+\hlt{Key Insight}: Bijective means exactly one preimage per output.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:square-map-image-preimage} \hlt{Image and Preimage for the Square Map}\\
+Let $f:\R\to\R$ be given by $f(x)=x^2$. Then $f([-2,1])=[0,4]$, $f^{-1}([1,4])=[-2,-1]\cup[1,2]$. The map is not injective because $f(1)=f(-1)$, and it is not surjective as a map $\R\to\R$ because no real number maps to $-1$.
+\end{example}
+
 \begin{theorem} \label{thm:quotient-universal-property} \hlt{Universal Property of Quotients}\\
 Let $\pi:\mathcal{V}\to\mathcal{V}/\mathcal{U}$ be the quotient map.\\
 If $L\in\LL(\mathcal{V},\mathcal{W})$ and $\mathcal{U}\subseteq\ker(L)$, then $\exists!\,\overline{L}\in\LL(\mathcal{V}/\mathcal{U},\mathcal{W})$ such that $\overline{L}\pi=L$, $\overline{L}(\mathbf{v}+\mathcal{U})=L\mathbf{v}$.\\
