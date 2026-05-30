@@ -108,21 +108,6 @@ The model parameters $w_{i}^{(A)}$ should be close to  $w_{i}^{(B)}$ $\forall i$
 \end{enumerate}
 \end{remark}
 
-\begin{remark} \hlt{Sparse Representations}\\
-Representation sparsity is where elements of the representation are zero, accomplished by same sort of mechanisms used in parameter regularisation.\\
-Given a linear regression $\bm{y} = \bm{B} \bm{h}$, where $\bm{y} \in \R^m, \bm{B} \in \R^{m \times n}, \bm{h} \in \R^n$, and $\bm{h}$ is the representation of data $\bm{x}$, add to loss function $J$ a norm penalty on the representation ($\Omega(\bm{h}))$):
-\begin{align}
-\tilde{J}(\bm{\theta}; \bm{X}, \bm{y}) = J(\bm{\theta}; \bm{X}, \bm{y}) + \alpha \Omega (\bm{h}) \nonumber
-\end{align}
-where $\alpha \in [0, \infty)$ weights relative contribution of norm penalty, with larger values of $\alpha$ for more regularisation.\\
-$L^1$ penalty on elements of representation induces sparsity, $\Omega(\bm{h}) = \norm{\bm{h}}_1 = \sum_i \abs{h_i}$. For representations with elements constrained to lie on unit interval, may use Student-$t$ prior or KL divergence penalties.\\
-Other approaches such as hard constraint on activation values may also work. \hlt{Orthogonal matching pursuit} encodes an input $\bm{x}$ with representation $\bm{h}$ that solves the constrained optimisation problem
-\begin{align}
-\arg \min_{\bm{h}, \norm{\bm{h}}_0 < k} \norm{\bm{x} - \bm{W} \bm{h}}^2 \nonumber
-\end{align}
-where $\norm{\bm{h}}_0$ is the number of non-zero entries of $\bm{h}$. If $\bm{W}$ is constrained to be orthogonal, this can be solved efficiently with OMP-$k$ method, where $k$ is number of non-zero features allowed.
-\end{remark}
-
 \begin{remark} \hlt{Dropout}\\
 Dropout trains the ensemble consisting of all sub-networks that can be formed by removing non-output units from the base network by multiplying its output value by zero. To train a neural network with dropout, use minibatch-based learning algorithms (i.e., Stochastic Gradient Descent). Each time an example is loaded into minibatch, randomly (and independently) sample a different binary mask $\bm{\mu}$ to apply to all of input and hidden units in the network, where the probability of sampling a mask value of one is the dropout rate.\\
 Let $J(\bm{\theta}, \bm{\mu})$ be cost of model defined by parameters $\bm{\theta}$ and mask $\bm{\mu}$. Dropout training is minimising $\mathbb{E}_{\bm{\mu}}J(\bm{\theta}, \bm{\mu})$. Each model inherits different subset of parameters from parent neural network, and a tiny fraction of possible sub-networks are trained for a single step. Parameter sharing allows sub-networks to arrive at good parameter settings. Each sub-network given by $\bm{\mu}$ defines a probability distribution $p(y \ | \ \bm{x}, \bm{\mu})$. The arithmetic mean over all masks is then given by
