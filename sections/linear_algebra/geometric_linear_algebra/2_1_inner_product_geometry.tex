@@ -154,6 +154,16 @@ Conversely, if $\mathbf{u}=a\mathbf{v}$ with $a\geq0$, then $\norm{\mathbf{u}+\m
 \end{proof}
 \end{theorem}
 
+\begin{proposition} \label{prop:reverse-triangle-inequality-inner-product} \hlt{Reverse Triangle Inequality}\\
+For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\abs{\norm{\mathbf{u}}-\norm{\mathbf{v}}}\leq \norm{\mathbf{u}-\mathbf{v}}$.
+\begin{proof}
+The triangle inequality gives $\norm{\mathbf{u}}\leq\norm{\mathbf{u}-\mathbf{v}}+\norm{\mathbf{v}}$, hence $\norm{\mathbf{u}}-\norm{\mathbf{v}}\leq\norm{\mathbf{u}-\mathbf{v}}$.\\
+Interchanging $\mathbf{u}$ and $\mathbf{v}$ gives $\norm{\mathbf{v}}-\norm{\mathbf{u}}\leq\norm{\mathbf{u}-\mathbf{v}}$. Combining the two inequalities gives the result.\\
+\hlt{Structural Commentary}: Distances control changes in length.\\
+\hlt{Key Insight}: The ordinary triangle inequality applied twice gives the reverse one.
+\end{proof}
+\end{proposition}
+
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/triangle_inequality_inner_product.tikz}
@@ -197,6 +207,11 @@ The function $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}$ is a metric
 \hlt{Key Insight}: Metric triangle inequalities are norm triangle inequalities applied to differences.
 \end{proof}
 \end{proposition}
+
+\begin{perspective} \label{per:inner-product-metric-topology-finite-dimensional} \hlt{Metric Viewpoint}\\
+Define $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}$. Then $\mathbf{v}_n\to\mathbf{v}$ iff $\norm{\mathbf{v}_n-\mathbf{v}}\to0$.\\
+In finite-dimensional inner-product spaces, subspaces are closed, linear maps are continuous, and the ambient space is complete. Infinite-dimensional analogues require additional hypotheses; subsequent projection and basis results therefore state finite-dimensional assumptions explicitly.
+\end{perspective}
 
 \begin{theorem} \label{thm:parallelogram-identity-inner-product} \hlt{Parallelogram Identity}\\
 For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2 = 2\bigl(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\bigr)$.
@@ -278,6 +293,31 @@ Let $z\defeq\innerprod{\mathbf{u},\mathbf{v}}$.
   \label{fig:polarization-identity-inner-product}
 \end{figure}
 
+\begin{proposition} \label{prop:operator-zero-tests-inner-products} \hlt{Operator Zero Tests from Inner Products}\\
+Let $T\in\LL(\mathcal{V})$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item If $\innerprod{T\mathbf{v},\mathbf{w}}=0$ for every $\mathbf{v},\mathbf{w}\in\mathcal{V}$, then $T=0$.
+\item If $\mathbb{F}=\mathbb{C}$ and $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
+\item The preceding diagonal test can fail over $\mathbb{R}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Taking $\mathbf{w}=T\mathbf{v}$ gives $\norm{T\mathbf{v}}^2=0$ for every $\mathbf{v}$.
+\item Put $Q(\mathbf{x})=\innerprod{T\mathbf{x},\mathbf{x}}$. For $\mathbf{x},\mathbf{y}\in\mathcal{V}$ and $r\in\mathbb{C}$, the hypothesis applied to $r\mathbf{x}+\mathbf{y}$ gives
+\begin{align}
+0=Q(r\mathbf{x}+\mathbf{y}) =\abs{r}^2Q(\mathbf{x})+Q(\mathbf{y})+r\innerprod{T\mathbf{x},\mathbf{y}}+\overline{r}\innerprod{T\mathbf{y},\mathbf{x}} =r\innerprod{T\mathbf{x},\mathbf{y}}+\overline{r}\innerprod{T\mathbf{y},\mathbf{x}}.
+\nonumber
+\end{align}
+Taking $r=1,i$ gives $\innerprod{T\mathbf{x},\mathbf{y}}=0$ for all $\mathbf{x},\mathbf{y}$; by (i), $T=0$.
+\item On standard $\mathbb{R}^2$, a $90^\circ$ rotation has $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for all $\mathbf{v}$, yet $T\neq0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Complex scalar directions recover mixed inner products from diagonal values.\\
+\hlt{Key Insight}: Over $\mathbb{R}$, a skew-symmetric operator can hide on the diagonal; over $\mathbb{C}$, polarization detects it.
+\end{proof}
+\end{proposition}
+
 \begin{principle} \label{pri:inner-product-geometry} \hlt{Geometry from Algebra}\\
 Most geometric statements in an inner-product space come from expanding $\norm{\mathbf{u}\pm\mathbf{v}}^2$ and then interpreting the cross terms $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$.
 \end{principle}
@@ -343,6 +383,11 @@ A list $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ of vectors in an inner-product space
 Equivalently, every $\mathbf{e}_j$ has norm $1$ and distinct vectors in the list are orthogonal.
 \end{definition}
 
+\begin{definition} \label{def:orthogonal-and-orthonormal-sets} \hlt{Orthogonal and Orthonormal Sets}\\
+An indexed family $(\mathbf{u}_i)_{i\in I}$ is \hlt{orthogonal} if $\innerprod{\mathbf{u}_i,\mathbf{u}_j}=0$ for $i\neq j$, and \hlt{orthonormal} if $\innerprod{\mathbf{u}_i,\mathbf{u}_j}=\delta_{ij}$, $i,j\in I$.\\
+A nonzero orthogonal family becomes orthonormal after replacing each $\mathbf{u}_i$ by $\mathbf{u}_i/\norm{\mathbf{u}_i}$.
+\end{definition}
+
 \begin{proposition} \label{prop:orthonormal-linear-combination-norm} \hlt{Norm of an Orthonormal Linear Combination}\\
 If $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ is an orthonormal list in $\mathcal{V}$, then $\norm{a_1\mathbf{e}_1+\cdots+a_m\mathbf{e}_m}^2=\abs{a_1}^2+\cdots+\abs{a_m}^2$ for all $a_1,\ldots,a_m\in\mathbb{F}$.
 \begin{proof}
@@ -393,12 +438,50 @@ Combining this with the induction hypothesis gives equality of the two spans at 
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:gram-schmidt-arbitrary-list} \hlt{Gram--Schmidt for Arbitrary Finite Lists}\\
+Let $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a finite list in an inner-product space.\\
+Define $\mathbf{u}_1=\mathbf{v}_1$ and, for $2\leq k\leq m$, $\mathbf{u}_k=\mathbf{v}_k-\sum\limits_{\substack{1\leq j<k\\ \mathbf{u}_j\neq\mathbf{0}}} \frac{\innerprod{\mathbf{v}_k,\mathbf{u}_j}}{\innerprod{\mathbf{u}_j,\mathbf{u}_j}}\mathbf{u}_j$.\\
+Set $U_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$ and $V_k=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_k)$, with $U_0=V_0=\{\mathbf{0}\}$.\\
+Then $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ is orthogonal, $U_k=V_k$ for $1\leq k\leq m$.\\
+\begin{proof}
+Induct on $k$. The case $k=0$ is trivial. Assume $(\mathbf{u}_1,\ldots,\mathbf{u}_{k-1})$ is orthogonal and $U_{k-1}=V_{k-1}$.\\
+For $i<k$ with $\mathbf{u}_i\neq\mathbf{0}$, $\innerprod{\mathbf{u}_k,\mathbf{u}_i} =\innerprod{\mathbf{v}_k,\mathbf{u}_i} -\frac{\innerprod{\mathbf{v}_k,\mathbf{u}_i}}{\innerprod{\mathbf{u}_i,\mathbf{u}_i}}\innerprod{\mathbf{u}_i,\mathbf{u}_i} =0$, while $\mathbf{u}_i=\mathbf{0}$ is trivial.\\
+Hence the list remains orthogonal. Also $\mathbf{u}_k\in V_k$ and $\mathbf{v}_k\in U_k$, so $U_k=V_k$.\\
+\hlt{Structural Commentary}: Gram--Schmidt preserves every prefix span.\\
+\hlt{Key Insight}: Each step subtracts previous orthogonal directions.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:gram-schmidt-zero-remainders} \hlt{Zero Remainders Detect Dependence}\\
+Let $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ be constructed from $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ by Theorem \ref{thm:gram-schmidt-arbitrary-list},\\
+and set $U_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, $V_k=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_k)$, with $U_0=V_0=\{\mathbf{0}\}$.\\
+Then $\mathbf{u}_k=\mathbf{0}\Longleftrightarrow \mathbf{v}_k\in V_{k-1}$, $1\leq k\leq m$.
+\begin{proof}
+The case $k=1$ follows from $\mathbf{u}_1=\mathbf{v}_1$ and $V_0=\{\mathbf{0}\}$. Let $2\leq k\leq m$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{u}_k=\mathbf{0}$, the recursion gives $\mathbf{v}_k\in U_{k-1}=V_{k-1}$.
+\item[$(\Leftarrow)$] If $\mathbf{v}_k\in V_{k-1}=U_{k-1}$, write $\mathbf{v}_k=\sum_{\substack{1\leq j<k\\ \mathbf{u}_j\neq\mathbf{0}}}a_j\mathbf{u}_j$. Orthogonality gives $a_j=\frac{\innerprod{\mathbf{v}_k,\mathbf{u}_j}}{\innerprod{\mathbf{u}_j,\mathbf{u}_j}}$, recursion gives $\mathbf{u}_k=\mathbf{0}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Zero remainders certify dependence.\\
+\hlt{Key Insight}: A nonzero remainder is a new direction.
+\end{proof}
+\end{corollary}
+
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/gram_schmidt_step.tikz}
   \caption{One Gram--Schmidt step: subtract the previous-span component, then normalize.}
   \label{fig:gram-schmidt-step}
 \end{figure}
+
+\begin{example} \label{ex:gram-schmidt-legendre-polynomials} \hlt{Legendre Polynomials from Gram--Schmidt}\\
+Let $\mathbb{R}[x]$ have inner product $\innerprod{p,q}=\int_{-1}^{1}p(x)q(x)\,dx$, and apply Gram--Schmidt to $(1,x,x^2,x^3,\ldots)$.\\
+The first unnormalized vectors are $u_1(x)=1$, $u_2(x)=x$, $u_3(x)=x^2-\frac{1}{3}$, $u_4(x)=x^3-\frac{3}{5}x$.\\
+Thus $(u_n)$ is, up to nonzero scalar multiples, the Legendre sequence.\\
+\hlt{Structural Commentary}: Orthogonal polynomials are orthogonalized monomials.\\
+\hlt{Key Insight}: Changing the inner product changes the polynomial family produced by Gram--Schmidt.
+\end{example}
 
 \begin{lemma} \label{lem:gram-schmidt-preserves-orthogonal-lists} \hlt{Gram--Schmidt on Orthogonal Lists}\\
 If $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is a nonzero mutually orthogonal list, then Gram--Schmidt produces $\mathbf{e}_j=\frac{\mathbf{v}_j}{\norm{\mathbf{v}_j}}$, $j=1,\ldots,m$.\\
@@ -438,6 +521,35 @@ In infinite dimensions, a \hlt{Hilbert basis} usually means a maximal orthonorma
 For example, the standard $(\mathbf{e}_j)$ in $\ell^2(\mathbb{F})$ is maximal orthonormal, but $\operatorname{span}\{\mathbf{e}_j:j\geq1\}=\mathbb{F}^{(\mathbb{N})}\subsetneq\ell^2(\mathbb{F})$.
 \end{perspective}
 
+\begin{definition} \label{def:hilbert-basis-versus-hamel-basis} \hlt{Hilbert Basis}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{Hilbert basis} is a maximal orthonormal set under inclusion.
+\item A \hlt{Hamel basis} is a vector-space basis.
+\item An \hlt{orthonormal basis} is an orthonormal Hamel basis.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:finite-hilbert-basis-hamel-basis} \hlt{Finite Hilbert Bases Are Orthonormal Bases}\\
+Let $\mathcal{O}=\{\mathbf{e}_1,\ldots,\mathbf{e}_m\}$ be orthonormal in $\mathcal{V}$ and set $W=\operatorname{span}(\mathcal{O})$.\\
+Then $\mathcal{O}$ is a Hilbert basis $\Longleftrightarrow$ $W=\mathcal{V}$ $\Longleftrightarrow$ $\mathcal{O}$ is an orthonormal Hamel basis.
+\begin{proof}
+Since $\mathcal{O}$ is orthonormal, Corollary \ref{cor:orthonormal-list-linearly-independent} gives independence; hence $W=\mathcal{V}$ iff $\mathcal{O}$ is an orthonormal Hamel basis. It remains to prove maximality iff spanning.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $\mathcal{O}$ is a Hilbert basis. If $W\neq\mathcal{V}$, choose $\mathbf{v}\notin W$ and set $\mathbf{u}=\mathbf{v}-\sum_j\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$. Then $\innerprod{\mathbf{u},\mathbf{e}_i}=0 \ \forall i$, and $\mathbf{u}\neq\mathbf{0}$ since $\mathbf{v}\notin W$. Thus $\mathcal{O}\cup\{\mathbf{u}/\norm{\mathbf{u}}\}$ is orthonormal, contradicting maximality. Hence $W=\mathcal{V}$.
+\item[$(\Leftarrow)$] Suppose $W=\mathcal{V}$. If $\mathbf{w}\perp\mathcal{O}$, write $\mathbf{w}=\sum_j a_j\mathbf{e}_j$. Then $a_j=\innerprod{\mathbf{w},\mathbf{e}_j}=0$ for all $j$, so $\mathbf{w}=\mathbf{0}$.\\
+Hence no nonzero vector can be adjoined, and $\mathcal{O}$ is maximal orthonormal.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite maximal orthonormal sets span.\\
+\hlt{Key Insight}: Missing directions can be orthogonalized and adjoined.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:hilbert-basis-not-hamel-basis-l2} \hlt{A Hilbert Basis Need Not Be a Hamel Basis}\\
+In $\ell^2(\mathbb{F})$, let $\mathbf{e}_j=(0,\ldots,0,1,0,\ldots)$. Then $\{\mathbf{e}_j:j\geq1\}$ is orthonormal and maximal, since $\mathbf{x}\perp\mathbf{e}_j$ for all $j$ implies $x_j=\innerprod{\mathbf{x},\mathbf{e}_j}=0$ for all $j$. Its finite span is $\mathbb{F}^{(\mathbb{N})}\subsetneq\ell^2(\mathbb{F})$, so it is a Hilbert basis but not a Hamel basis.
+\end{example}
+
 \begin{theorem} \label{thm:orthonormal-basis-coordinates} \hlt{Coordinates in an Orthonormal Basis}\\
 Let $\mathcal{V}$ be finite-dimensional and let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$.\\
 Then for every $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}=\sum\limits_{j=1}^{n}\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$, $\norm{\mathbf{v}}^2=\sum\limits_{j=1}^{n}\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}^2$ and $[\mathbf{v}]_{\beta}=
@@ -449,7 +561,7 @@ Then for every $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}=\sum\limits_{j=1}^{n}\inn
 \begin{proof}
 Since $\beta$ is a basis, write $\mathbf{v}=\sum\limits_{j=1}^{n}a_j\mathbf{e}_j$. Taking inner product with $\mathbf{e}_k$ gives $\innerprod{\mathbf{v},\mathbf{e}_k}=\sum\limits_{j=1}^{n}a_j\innerprod{\mathbf{e}_j,\mathbf{e}_k}=a_k$.\\
 Thus the displayed expansion and coordinate column follow.\\
-Applying Proposition \ref{prop:orthonormal-linear-combination-norm} to the same expansion gives $\norm{\mathbf{v}}^2=\sum\limits_{j=1}^{n}\abs{a_j}^2=\sum\limits_{j=1}^{n}\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}^2$.
+Applying Proposition \ref{prop:orthonormal-linear-combination-norm} to the same expansion gives $\norm{\mathbf{v}}^2=\sum\limits_{j=1}^{n}\abs{a_j}^2=\sum\limits_{j=1}^{n}\abs{\innerprod{\mathbf{v},\mathbf{e}_j}}^2$.\\
 \hlt{Structural Commentary}: An orthonormal basis makes coordinate extraction an inner-product computation.\\
 \hlt{Key Insight}: Pairing with $\mathbf{e}_k$ isolates the $k$th coordinate.
 \end{proof}
@@ -479,6 +591,20 @@ Since $\mathbf{u}\perp\mathbf{v}$, Proposition \ref{prop:orthogonality-and-zero}
 \hlt{Key Insight}: Perpendicular components add in squared length, not in length.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:pythagorean-converse-real-inner-products} \hlt{Pythagorean Converse over $\mathbb{R}$}\\
+In a real inner-product space, $\mathbf{u}\perp\mathbf{v}$ $\Longleftrightarrow$ $\norm{\mathbf{u}+\mathbf{v}}^2=\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2$.
+\begin{proof}
+Use $\norm{\mathbf{u}+\mathbf{v}}^2 =\norm{\mathbf{u}}^2+2\innerprod{\mathbf{u},\mathbf{v}}+\norm{\mathbf{v}}^2$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{u}\perp\mathbf{v}$, then $\innerprod{\mathbf{u},\mathbf{v}}=0$, so the identity follows.
+\item[$(\Leftarrow)$] If the identity holds, then $2\innerprod{\mathbf{u},\mathbf{v}}=0$, hence $\mathbf{u}\perp\mathbf{v}$.
+\end{enumerate}
+\hlt{Structural Commentary}: In real inner-product spaces, the cross term has no hidden imaginary part.\\
+\hlt{Key Insight}: The Pythagorean identity detects orthogonality exactly over $\mathbb{R}$.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:bessel-inequality-finite-orthonormal-list} \hlt{Bessel's Inequality}\\
 Let $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ be an orthonormal list in an inner-product space $\mathcal{V}$.\\
@@ -577,6 +703,20 @@ For uniqueness, suppose $\innerprod{\mathbf{v},\mathbf{u}_1}=\innerprod{\mathbf{
 \begin{definition} \label{def:riesz-vector} \hlt{Riesz Vector}\\
 Let $\mathcal{V}$ be finite-dimensional and let $\varphi:\mathcal{V}\to\mathbb{F}$ be a linear functional. The unique vector $\mathbf{u}\in\mathcal{V}$ satisfying $\varphi(\mathbf{v})=\innerprod{\mathbf{v},\mathbf{u}}$ for every $\mathbf{v}\in\mathcal{V}$ is the \hlt{Riesz vector} representing $\varphi$.
 \end{definition}
+
+\begin{theorem} \label{thm:riesz-map-conjugate-isomorphism} \hlt{Riesz Map}\\
+Let $\mathcal{V}$ be finite-dimensional inner-product space, $\tau:\mathcal{V}\to\mathcal{V}'$, $\tau(\mathbf{u})=\innerprod{\cdot,\mathbf{u}}$. Then $\tau$ is bijective, conjugate-linear.\\
+Hence $R=\tau^{-1}$ is conjugate-linear, $R(a\varphi+\psi)=\overline{a}\,R(\varphi)+R(\psi)$, $a\in\mathbb{F},\ \varphi,\psi\in\mathcal{V}'$.\\
+Over $\mathbb{R}$ this is ordinary linearity.
+\begin{proof}
+For $a\in\mathbb{F}$ and $\mathbf{u},\mathbf{w}\in\mathcal{V}$, $\tau(a\mathbf{u}+\mathbf{w}) =\overline{a}\tau(\mathbf{u})+\tau(\mathbf{w})$, so $\tau$ is conjugate-linear.\\
+If $\tau(\mathbf{u})=0$, then $\norm{\mathbf{u}}^2=\tau(\mathbf{u})(\mathbf{u})=0$, so $\tau$ is injective. Surjectivity is Theorem \ref{thm:riesz-representation-finite-dimensional}.\\
+For $a\in\mathbb{F}$, $\varphi,\psi\in\mathcal{V}'$, and $\mathbf{v}\in\mathcal{V}$, $\innerprod{\mathbf{v},\overline{a}R(\varphi)+R(\psi)} =a\innerprod{\mathbf{v},R(\varphi)}+\innerprod{\mathbf{v},R(\psi)} =(a\varphi+\psi)(\mathbf{v})$.\\
+Uniqueness gives $R(a\varphi+\psi)=\overline{a}R(\varphi)+R(\psi)$.\\
+\hlt{Structural Commentary}: Riesz identifies $\mathcal{V}$ with $\mathcal{V}'$ conjugate-linearly.\\
+\hlt{Key Insight}: The representing slot conjugates scalars.
+\end{proof}
+\end{theorem}
 
 \begin{figure}[H]
   \centering
