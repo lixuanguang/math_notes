@@ -12,6 +12,19 @@ A function $T : \mathcal{V} \to \mathcal{W}$ is \hlt{linear} if for all $\mathbf
 Set of all linear maps from $\mathcal{V}$ to $\mathcal{W}$ is denoted $\LL(\mathcal{V}, \mathcal{W})$. If $\mathcal{V} = \mathcal{W}$, then elements of $\LL(\mathcal{V})$ are \hlt{operators} on $\mathcal{V}$.
 \end{definition}
 
+\begin{definition} \label{def:linear-map-morphism-terminology-vector-spaces} \hlt{Morphism Terminology for Linear Maps}\\
+For $T\in\LL(\mathcal{V},\mathcal{W})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T$ is a \hlt{homomorphism}.
+\item If $\mathcal{V}=\mathcal{W}$, then $T$ is an \hlt{endomorphism}.
+\item If $\ker(T)=\{\mathbf{0}\}$, then $T$ is a \hlt{monomorphism}.
+\item If $\operatorname{range}(T)=\mathcal{W}$, then $T$ is an \hlt{epimorphism}.
+\item If $\ker(T)=\{\mathbf{0}\}$ and $\operatorname{range}(T)=\mathcal{W}$, then $T$ is an \hlt{isomorphism}.
+\item If $\mathcal{V}=\mathcal{W}$ and $T^{-1}\in\LL(\mathcal{V})$, then $T$ is an \hlt{automorphism}.
+\end{enumerate}
+\end{definition}
+
 \begin{definition} \hlt{Zero and Identity Maps}\\
 The \hlt{zero map} from $\mathcal{V}$ to $\mathcal{W}$ is the function $0_{\mathcal{V},\mathcal{W}}:\mathcal{V}\to\mathcal{W}$ defined by $0_{\mathcal{V},\mathcal{W}}\mathbf{v}=\mathbf{0}_{\mathcal{W}}$.\\
 The \hlt{identity map} on $\mathcal{V}$ is $I_{\mathcal{V}}:\mathcal{V}\to\mathcal{V}$ defined by $I_{\mathcal{V}}\mathbf{v}=\mathbf{v}$.
@@ -371,6 +384,14 @@ Thus the $mn$ matrices $E_{j,k}$ form a basis, so $\dim(\operatorname{Mat}(m,n,\
 \end{proof}
 \end{proposition}
 
+\begin{example} \label{ex:matrix-space-symmetric-skew-direct-sum} \hlt{Symmetric and Skew-Symmetric Decomposition}\\
+Assume $\operatorname{char}(\mathbb{F})\neq2$, $M=\operatorname{Mat}(n,n,\mathbb{F})$, let $\operatorname{Sym}_n(\mathbb{F})=\{A\in M:A^t=A\}$, $\operatorname{Skew}_n(\mathbb{F})=\{A\in M:A^t=-A\}$.\\
+For the linear map $\tau:M\to M$, $\tau(A)=A^t$, $\operatorname{Sym}_n(\mathbb{F})=\ker(\tau-I)$, $\operatorname{Skew}_n(\mathbb{F})=\ker(\tau+I)$, so both are subspaces of $M$. For every $A\in M$, $A=\frac12(A+A^t)+\frac12(A-A^t) \in\operatorname{Sym}_n(\mathbb{F})+\operatorname{Skew}_n(\mathbb{F})$.\\
+Also $A\in\operatorname{Sym}_n(\mathbb{F})\cap\operatorname{Skew}_n(\mathbb{F})$ implies $A=A^t=-A$, hence $A=0$. Thus $M=\operatorname{Sym}_n(\mathbb{F})\oplus\operatorname{Skew}_n(\mathbb{F})$.\\
+\hlt{Structural Commentary}: Transpose splits a matrix into its even and odd parts.\\
+\hlt{Key Insight}: The directness of the split uses the ability to divide by $2$.
+\end{example}
+
 \begin{proposition} \label{prop:matrix-product-entry-row-column} \hlt{Matrix Product Entries Are Row Times Column}\\
 If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,p,\mathbb{F})$, then $(AB)_{j,k}=A_{j,\cdot}B_{\cdot,k}$ for $1\leq j\leq m$ and $1\leq k\leq p$.
 \begin{proof}
@@ -620,6 +641,85 @@ The induced map $T_A:\mathbb{F}^n\to\mathbb{F}^m$ has domain dimension smaller t
 \end{proof}
 \end{corollary}
 
+\begin{definition} \label{def:elementary-row-operations-and-matrices} \hlt{Elementary Row Operations and Elementary Matrices}\\
+For row symbols $R_i$, the \hlt{elementary row operations} are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Row scaling}: $R_i\leftarrow cR_i$, $c\in\mathbb{F}^{\times}$;
+\item \hlt{Row swap}: $R_i\leftrightarrow R_j$, $i\neq j$;
+\item \hlt{Row replacement}: $R_i\leftarrow R_i+cR_j$, $i\neq j$, $c\in\mathbb{F}$.
+\end{enumerate}
+An \hlt{elementary matrix} is $E=\epsilon(I_m)$, where $\epsilon$ is one elementary row operation.
+\end{definition}
+
+\begin{proposition} \label{prop:elementary-matrices-perform-row-operations} \hlt{Elementary Matrices Perform Row Operations}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\epsilon$ is an elementary row operation and $E_{\epsilon}=\epsilon(I_m)$, then $E_{\epsilon}A=\epsilon(A)$.
+\item $E_{\epsilon}^{-1}=E_{\epsilon^{-1}}$; hence every elementary matrix is invertible with elementary inverse.
+\item If $F=E_{\epsilon}^t\in\operatorname{Mat}(n,n,\mathbb{F})$, then $AF=(\epsilon(A^t))^t$.\\
+Hence right multiplication performs the corresponding column operation.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each row index $r$, $\operatorname{row}_r(E_{\epsilon}A)=\operatorname{row}_r(E_{\epsilon})A$.\\
+So the rows of $E_{\epsilon}A$ are exactly the $\epsilon$-linear combinations of the rows of $A$.
+\item Since $\epsilon^{-1}$ is elementary, $E_{\epsilon^{-1}}E_{\epsilon} =E_{\epsilon^{-1}}\epsilon(I_m) =\epsilon^{-1}(\epsilon(I_m)) =I_m$, and similarly $E_{\epsilon}E_{\epsilon^{-1}}=I_m$.
+\item By (i) and Proposition \ref{prop:transpose-reverses-products}, $(AF)^t=E_{\epsilon}A^t=\epsilon(A^t)$, so $AF=(\epsilon(A^t))^t$.
+\end{enumerate}
+\hlt{Structural Commentary}: Elementary matrices encode row and column operations by multiplication.\\
+\hlt{Key Insight}: Row operations are left multiplication; column operations are right multiplication.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:row-equivalence-and-rref} \hlt{Row Equivalence and Reduced Row Echelon Form}\\
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, write $A\sim_{\mathrm{row}}B$ if $B=E_k\cdots E_1A$ for elementary $E_i\in\operatorname{Mat}(m,m,\mathbb{F})$ and some $k\geq0$.\\
+A matrix $R=[r_{ij}]$ is in \hlt{reduced row echelon form} if its nonzero rows have pivot columns $p_1,\ldots,p_s$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item rows $1,\ldots,s$ are nonzero and rows $s+1,\ldots,m$ are zero;
+\item $r_{i,p_i}=1$ and $r_{i,j}=0$ for $j<p_i$;
+\item $p_1<\cdots<p_s$;
+\item $r_{\ell,p_i}=0$ for all $\ell\neq i$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:rref-existence-uniqueness-and-elementary-factorization} \hlt{Reduced Row Echelon Form}\\
+For every $A\in\operatorname{Mat}(m,n,\mathbb{F})$, there is a unique RREF matrix $\operatorname{rref}(A)$ with $A\sim_{\mathrm{row}}\operatorname{rref}(A)$.\\
+If $R=\operatorname{rref}(A)$, then $R=E_k\cdots E_1A$ for elementary $E_i\in\operatorname{Mat}(m,m,\mathbb{F})$.
+\begin{proof}
+Gaussian elimination successively chooses a pivot column, swaps/scales to a pivot $1$, clears the pivot column, and continues on the remaining submatrix. Proposition \ref{prop:elementary-matrices-perform-row-operations} gives $R=E_k\cdots E_1A$ with $R$ in RREF.\\
+For uniqueness, row operations preserve $\ker(A)=\{\mathbf{x}:A\mathbf{x}=\mathbf{0}\}$. For an RREF matrix, the pivot set and pivot-variable formulas are determined by this kernel.\\
+Hence two row-equivalent RREF matrices have the same pivot columns and rows.\\
+\hlt{Structural Commentary}: RREF is the canonical row-operation representative of a matrix.\\
+\hlt{Key Insight}: Elimination gives existence; the solution space pins down the reduced representative.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:row-equivalence-characterization} \hlt{Row Equivalence Characterization}\\
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\sim_{\mathrm{row}}B$.
+\item $\operatorname{rref}(A)=\operatorname{rref}(B)$.
+\item $\exists\,P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$ such that $B=PA$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ Row-equivalent matrices have the same unique RREF by Theorem \ref{thm:rref-existence-uniqueness-and-elementary-factorization}.
+\item[$(ii)$]$\Rightarrow (iii)$ If $R=\operatorname{rref}(A)=\operatorname{rref}(B)$, then $R=E_k\cdots E_1A=F_{\ell}\cdots F_1B$.\\
+Since each $F_j$ is invertible, $B=(F_{\ell}\cdots F_1)^{-1}E_k\cdots E_1A$.
+\item[$(iii)$]$\Rightarrow (i)$ If $B=PA$ and $P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$, row-reduce $P$ to $I_m$: $E_k\cdots E_1P=I_m$.\\
+Hence $P=E_1^{-1}\cdots E_k^{-1}$, so $B$ is obtained from $A$ by elementary row operations.
+\end{enumerate}
+\hlt{Structural Commentary}: Row equivalence is invertible left multiplication.\\
+\hlt{Key Insight}: Products of elementary matrices are the coordinate record of row reduction.
+\end{proof}
+\end{corollary}
+
 \begin{proposition} \label{prop:matrix-representation-action} \hlt{Matrix Representation Acts on Coordinates}\\
 Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$, let $\gamma$ be a basis of $\mathcal{W}$, and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
 Then for every $\mathbf{v} \in \mathcal{V}$, $[T(\mathbf{v})]_{\gamma} = [T]_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}$.
@@ -763,6 +863,83 @@ Corollary \ref{cor:square-matrix-invertible-iff-full-rank} gives the result.\\
 \end{proof}
 \end{corollary}
 
+\begin{theorem} \label{thm:two-sided-change-of-basis-for-linear-maps} \hlt{Change of Bases for a Linear Map}\\
+Let $T\in\LL(\mathcal{V},\mathcal{W})$. Let $\beta,\beta'$ be bases of $\mathcal{V}$ and let $\gamma,\gamma'$ be bases of $\mathcal{W}$. Then $[T]_{\gamma'\leftarrow\beta'} =C_{\gamma'\leftarrow\gamma}[T]_{\gamma\leftarrow\beta}C_{\beta\leftarrow\beta'}$.
+\begin{proof}
+For every $\mathbf{v}\in\mathcal{V}$, $[T\mathbf{v}]_{\gamma'} =C_{\gamma'\leftarrow\gamma}[T\mathbf{v}]_{\gamma} =C_{\gamma'\leftarrow\gamma}[T]_{\gamma\leftarrow\beta}[\mathbf{v}]_{\beta} =C_{\gamma'\leftarrow\gamma}[T]_{\gamma\leftarrow\beta}C_{\beta\leftarrow\beta'}[\mathbf{v}]_{\beta'}$.\\
+Since $[\cdot]_{\beta'}$ is onto, the representing matrices are equal.\\
+\hlt{Structural Commentary}: Basis changes act by $C_{\gamma'\leftarrow\gamma}$ on the left and $C_{\beta\leftarrow\beta'}$ on the right.\\
+\hlt{Key Insight}: Domain changes act on input coordinates; codomain changes act on output coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:matrix-equivalence}\label{def:matrix-equivalence-row-column} \hlt{Matrix Equivalence}\\
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, $A\sim_{\mathrm{eq}} B$ $\Longleftrightarrow$ $\exists\,P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times},\ Q\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ such that $B=PAQ$.\\
+Equivalently, $A\sim_{\mathrm{eq}}B$ iff $A$ and $B$ differ by finitely many elementary row and column operations.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-equivalence-same-linear-map} \hlt{Equivalent Matrices Represent the Same Linear Map}\\
+Let $\dim\mathcal{V}=n$, $\dim\mathcal{W}=m$, and $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
+Then $A\sim_{\mathrm{eq}}B$ $\Longleftrightarrow$ $\exists\,T\in\LL(\mathcal{V},\mathcal{W})$ with $A=[T]_{\gamma\leftarrow\beta},\ B=[T]_{\gamma'\leftarrow\beta'}$ for some bases $\beta,\beta'$ of $\mathcal{V}$ and $\gamma,\gamma'$ of $\mathcal{W}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $B=PAQ$ with $P,Q$ invertible. Choose bases $\beta,\gamma$ and define $T\in\LL(\mathcal{V},\mathcal{W})$ by $[T]_{\gamma\leftarrow\beta}=A$.\\
+By Theorem \ref{thm:change-of-basis-matrices}, choose bases $\gamma',\beta'$ with $P=C_{\gamma'\leftarrow\gamma}$; $Q=C_{\beta\leftarrow\beta'}$.\\
+Then Theorem \ref{thm:two-sided-change-of-basis-for-linear-maps} gives $[T]_{\gamma'\leftarrow\beta'}=PAQ=B$.
+\item[$(\Leftarrow)$] If $A=[T]_{\gamma\leftarrow\beta}$ and $B=[T]_{\gamma'\leftarrow\beta'}$, then $B=C_{\gamma'\leftarrow\gamma}AC_{\beta\leftarrow\beta'}$, so $A\sim_{\mathrm{eq}}B$.
+\end{enumerate}
+\hlt{Structural Commentary}: Equivalence is two-sided basis change.\\
+\hlt{Key Insight}: Same map; different coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:rank-classifies-matrix-equivalence}\label{thm:matrix-equivalence-rank-normal-form} \hlt{Rank Classifies Matrix Equivalence}\\
+For $0\leq r\leq\min(m,n)$, set $J_r^{m,n}\defeq
+\begin{bmatrix}
+I_r & 0\\
+0 & 0
+\end{bmatrix}
+\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, $A\sim_{\mathrm{eq}}J_{\operatorname{rank}(A)}^{m,n}$ and $A\sim_{\mathrm{eq}}B\Longleftrightarrow \operatorname{rank}(A)=\operatorname{rank}(B)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $B=PAQ$ with $P,Q$ invertible, then $\operatorname{rank}(B)=\operatorname{rank}(A)$ by Theorem \ref{thm:full-rank-products-preserve-rank}.
+\item[$(\Leftarrow)$] For any $X$ with $\operatorname{rank}(X)=r$, let $T_X:\mathbb{F}^n\to\mathbb{F}^m$ be $T_X(\mathbf{x})=X\mathbf{x}$.\\
+Choose $\mathcal{M}_X$ with $\mathbb{F}^n=\ker(T_X)\oplus\mathcal{M}_X$; then $T_X|_{\mathcal{M}_X}:\mathcal{M}_X\to\operatorname{range}(T_X)$ is an isomorphism.\\
+Choose a basis $(\mathbf{u}_1,\ldots,\mathbf{u}_r)$ of $\mathcal{M}_X$, extend it by a basis of $\ker(T_X)$ to $\beta_X$, and choose $\gamma_X$ beginning with $T_X\mathbf{u}_1,\ldots,T_X\mathbf{u}_r$. Then $[T_X]_{\gamma_X\leftarrow\beta_X}=J_r^{m,n}$, so $X\sim_{\mathrm{eq}}J_r^{m,n}$.\\
+If $\operatorname{rank}(A)=\operatorname{rank}(B)=r$, then $A\sim_{\mathrm{eq}}J_r^{m,n}\sim_{\mathrm{eq}}B$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rank is the invariant of two-sided equivalence.\\
+\hlt{Key Insight}: Adapt bases to kernel and range.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:linear-map-rank-normal-form} \hlt{Rank Normal Form for Linear Maps}\\
+Let $T\in\LL(\mathcal{V},\mathcal{W})$, $\dim\mathcal{V}=n$, $\dim\mathcal{W}=m$, and $\operatorname{rank}(T)=r$. Then $\exists$ bases $\beta,\gamma$ with $[T]_{\gamma\leftarrow\beta}=J_r^{m,n}$.
+\begin{proof}
+For initial bases $\beta_0,\gamma_0$, let $A=[T]_{\gamma_0\leftarrow\beta_0}$.\\
+By Theorem \ref{thm:rank-classifies-matrix-equivalence}, $A\sim_{\mathrm{eq}}J_r^{m,n}$; Theorem \ref{thm:matrix-equivalence-same-linear-map} gives bases $\beta,\gamma$ with $[T]_{\gamma\leftarrow\beta}=J_r^{m,n}$.\\
+\hlt{Structural Commentary}: Rank gives the two-basis normal form.\\
+\hlt{Key Insight}: Rank normalizes the map.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:linear-map-equivalence-by-rank} \hlt{Linear Maps Classified by Rank}\\
+For $S,T\in\LL(\mathcal{V},\mathcal{W})$, write $S\sim_{\mathrm{bc}}T$ if $\exists$ bases $\beta_S,\beta_T$ of $\mathcal{V}$ and $\gamma_S,\gamma_T$ of $\mathcal{W}$ such that $[S]_{\gamma_S\leftarrow\beta_S}=[T]_{\gamma_T\leftarrow\beta_T}$.\\
+Then $S\sim_{\mathrm{bc}}T$ $\Longleftrightarrow$ $\operatorname{rank}(S)=\operatorname{rank}(T)$
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $[S]_{\gamma_S\leftarrow\beta_S}=[T]_{\gamma_T\leftarrow\beta_T}$, then the two maps have the same matrix rank, hence the same rank.
+\item[$(\Leftarrow)$] If $\operatorname{rank}(S)=\operatorname{rank}(T)=r$, Corollary \ref{cor:linear-map-rank-normal-form} gives bases with $[S]_{\gamma_S\leftarrow\beta_S}=J_r^{m,n}=[T]_{\gamma_T\leftarrow\beta_T}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rank is the invariant of basis-change equivalence.\\
+\hlt{Key Insight}: Same rank means same normal form.
+\end{proof}
+\end{corollary}
+
 \begin{theorem} \label{thm:change-of-basis-formula} \hlt{Change of Basis Formula}\\
 Let $\mathcal{V}$ be finite-dimensional, let $T \in \LL(\mathcal{V})$, and let $\beta$ be a basis of $\mathcal{V}$.
 \begin{enumerate}[label=(\roman*)]
@@ -820,6 +997,27 @@ Let $\mathcal{V}=\mathbb{F}^n$, let $\beta$ be the standard basis, and let $T_A(
 \hlt{Key Insight}: Conjugation records a change of basis.
 \end{proof}
 \end{corollary}
+
+\begin{definition} \label{def:similar-linear-operators} \hlt{Similarity of Operators}\\
+For $T\in\LL(\mathcal{V})$ and $S\in\LL(\mathcal{W})$, $T\sim S$ $\Longleftrightarrow$ $\exists\,\Phi:\mathcal{V}\xrightarrow{\sim}\mathcal{W}$ such that $ S=\Phi T\Phi^{-1}$.\\
+If $\mathcal{V}=\mathcal{W}$, then $\Phi\in\operatorname{Aut}(\mathcal{V})$ and similarity is conjugacy in $\LL(\mathcal{V})$.
+\end{definition}
+
+\begin{proposition} \label{prop:operator-similarity-and-common-matrices} \hlt{Operator Similarity and Common Matrix Representatives}\\
+Let $\dim\mathcal{V}=\dim\mathcal{W}=n$, $T\in\LL(\mathcal{V})$, and $S\in\LL(\mathcal{W})$.\\
+Then $T\sim S$ $\Longleftrightarrow$ $\exists\,A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $A=[T]_{\beta\leftarrow\beta}=[S]_{\gamma\leftarrow\gamma}$ for some bases $\beta$ of $\mathcal{V}$ and $\gamma$ of $\mathcal{W}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $S=\Phi T\Phi^{-1}$ and $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$. Put $\gamma=(\Phi\mathbf{v}_1,\ldots,\Phi\mathbf{v}_n)$.\\
+Then $\gamma$ is a basis and, for all $j$, $S(\Phi\mathbf{v}_j)=\Phi T\mathbf{v}_j$, so $[S]_{\gamma\leftarrow\gamma}=[T]_{\beta\leftarrow\beta}$.
+\item[$(\Leftarrow)$] Suppose $[T]_{\beta\leftarrow\beta}=[S]_{\gamma\leftarrow\gamma}$. Define $\Phi:\mathcal{V}\to\mathcal{W}$ by $\Phi(\beta_j)=\gamma_j$.\\
+Then $\Phi$ is an isomorphism and $\Phi T\beta_j=S\Phi\beta_j$ for every $j$, hence $\Phi T=S\Phi$. Thus $S=\Phi T\Phi^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity is equality of matrices after identifying bases.\\
+\hlt{Key Insight}: A common matrix is an operator-level conjugacy written in bases.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:similarity-preserves-scalar-shifts} \hlt{Similarity and Scalar Shifts}\\
 Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
