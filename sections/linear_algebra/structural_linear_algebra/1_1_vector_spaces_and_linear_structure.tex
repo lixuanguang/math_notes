@@ -42,6 +42,22 @@ The zero sequence belongs to $\mathbb{F}^{(\mathbb{N})}$. If $\mathbf{x}=(x_1,x_
 \end{proof}
 \end{proposition}
 
+\begin{example} \label{ex:roman-vector-space-examples} \hlt{Standard Vector Space Models}\\
+Let $\mathbb{F}$ be a field and let $X$ be a set. The following are $\mathbb{F}$-vector spaces.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{F}^{X}=\{f:X\to\mathbb{F}\}$, with pointwise operations
+$(f+g)(x)=f(x)+g(x)$ and $(af)(x)=a f(x)$.
+\item $\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbb{F}^n$, with entrywise operations. For $\mathbb{F}=\mathbb{F}_q$, set $V(n,q):=\mathbb{F}_q^n$.
+\item $\operatorname{Seq}(\mathbb{F})=\mathbb{F}^{\mathbb{N}}$, with componentwise operations; $\mathbb{F}^{(\mathbb{N})}$ is its finite-support subspace.
+\item Over $\mathbb{C}$, the sequence spaces $c_0=\{(z_n):z_n\to0\}$, $\ell^\infty=\{(z_n):\sup_n\abs{z_n}<\infty\}$, and, for $1\leq p<\infty$,\\
+$\ell^p=\left\{(z_n):\sum\limits_{n=1}^{\infty}\abs{z_n}^{p}<\infty\right\}$ are vector spaces under componentwise operations.\\
+For $\ell^p$, closure under addition follows from Minkowski's inequality.
+\end{enumerate}
+\hlt{Structural Commentary}: The vector-space axioms are independent of finite-dimensional coordinates; function and sequence spaces give canonical infinite-dimensional models.\\
+\hlt{Key Insight}: Pointwise or componentwise operations inherit linear structure from the scalar field.
+\end{example}
+
 \begin{theorem} \label{thm:basicvectorspaceconsequences} \hlt{Basic Consequences of Vector Space Axioms}\\
 \lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.basic_vector_space_consequences}
 \leanok
@@ -103,6 +119,19 @@ Let $\mathcal{V}$ be a vector space over $\mathbb{F}$ and let $\mathcal{U}$ be a
 \item If $S$ fails the test, the smallest subspace containing it is $\operatorname{span}(S) =\left\{\sum\limits_{i=1}^{n} a_i s_i : n\in\mathbb N,\ a_i\in\mathbb F,\ s_i\in S\right\}$.
 \end{enumerate}
 \end{method}
+
+\begin{definition} \label{def:linear-code-and-hamming-weight} \hlt{Linear Code and Hamming Weight}\\
+Let $V(n,q)=\mathbb{F}_q^n$. A \hlt{linear code} of length $n$ over $\mathbb{F}_q$ is a subspace $C\subseteq V(n,q)$.\\
+The \hlt{Hamming weight} of $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}_q^n$ is $\operatorname{wt}(\mathbf{x})=\#\{j:1\leq j\leq n,\ x_j\neq0\}$.
+\end{definition}
+
+\begin{example} \label{ex:linear-codes-even-weight-subspace} \hlt{Even-Weight Code}\\
+In $V(n,2)=\mathbb{F}_2^n$, let $E_n=\left\{\mathbf{x}\in\mathbb{F}_2^n:\sum\limits_{j=1}^{n}x_j=0\right\}$.
+Then $E_n$ is a linear code.\\
+This is equivalent to $\operatorname{wt}(\mathbf{x})$ being even, and $E_n=\ker(\mathbf{x}\mapsto\sum_{j=1}^{n}x_j)$, so $E_n$ is a subspace of $V(n,2)$.\\
+\hlt{Structural Commentary}: The even-weight code is the parity kernel in $V(n,2)$.\\
+\hlt{Key Insight}: Parity is linear over $\mathbb{F}_2$.
+\end{example}
 
 \begin{proposition} \label{prop:intersectionsubspaces} \hlt{Intersection of Subspaces}\\
 Let $\mathcal{U}$ and $\mathcal{W}$ be subspaces of $\mathcal{V}$. Then $\mathcal{U}\cap\mathcal{W} = \left\{ \mathbf{v} : \mathbf{v}\in\mathcal{U} \text{ and } \mathbf{v}\in\mathcal{W} \right\}$ is a subspace of $\mathcal{V}$.
@@ -319,10 +348,6 @@ Let $\beta_1=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ and $\beta_2=(\mathbf{w}_1,\ldo
 The zero vector space has \hlt{dimension} $0$. If $\mathcal{V}$ has a basis of positive integer length $n$, then $\mathcal{V}$ is \hlt{$n$-dimensional} and $\dim(\mathcal{V})=n$. A vector space is \hlt{finite-dimensional} if it has finite dimension; otherwise it is \hlt{infinite-dimensional}.
 \end{definition}
 
-\begin{perspective} \label{per:dimension-as-field-case-of-rank} \hlt{Dimension as the Field Case of Rank}\\
-Vector spaces over $\mathbb{F}$ are the field case of free modules. Theorem \ref{thm:basis-length-well-defined} makes finite basis length intrinsic, so dimension is well-defined; over general rings, the analogous rank theorem needs extra hypotheses.
-\end{perspective}
-
 \begin{proposition} \label{prop:dimension-bounds-and-basis-criteria} \hlt{Dimension Bounds and Basis Criteria}\\
 If $\mathcal{V}$ is finite-dimensional and $\mathcal{U} \subseteq \mathcal{V}$ is a subspace, then $\dim(\mathcal{U}) \leq \dim(\mathcal{V})$, with equality if and only if $\mathcal{U}=\mathcal{V}$. Moreover, a spanning list of length $\dim(\mathcal{V})$ is automatically a basis, and a linearly independent list of length $\dim(\mathcal{V})$ is automatically a basis.
 \begin{proof}
@@ -336,3 +361,55 @@ Adding any vector would produce a basis of length $>n$, again contradicting Theo
 \hlt{Key Insight}: In dimension $n$, $n$ independent or $n$ spanning vectors already form a basis.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:basis-equivalent-characterizations} \hlt{Basis Characterizations}\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a finite list in $\mathcal{V}$, and write $\beta^\frown\mathbf{x}=(\mathbf{v}_1,\ldots,\mathbf{v}_n,\mathbf{x})$. Then the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\beta$ is a basis of $\mathcal{V}$;
+\item $\forall\,\mathbf{x}\in\mathcal{V}$, $\exists!\,(a_1,\ldots,a_n)\in\mathbb{F}^n$ such that $\mathbf{x}=\sum_{j=1}^{n}a_j\mathbf{v}_j$;
+\item $\operatorname{span}(\beta)=\mathcal{V}$ and $\operatorname{span}(\gamma)\neq\mathcal{V}$ for every proper sublist $\gamma\subsetneq\beta$;
+\item $\beta$ is linearly independent and $\beta^\frown\mathbf{x}$ is linearly dependent for every $\mathbf{x}\in\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ This is Proposition \ref{prop:basis-unique-coordinate-representation}.
+\item[$(ii)$]$\Rightarrow (iii)$ Uniqueness gives $\operatorname{span}(\beta)=\mathcal{V}$. If $\gamma\subsetneq\beta$ spanned $\mathcal{V}$ and $\mathbf{v}_j\notin\gamma$, then $\mathbf{v}_j$ would have its standard $\beta$-coordinate representation and one using only $\gamma$, contradicting uniqueness.
+\item[$(iii)$]$\Rightarrow (iv)$ If $\beta$ were dependent, Proposition \ref{prop:adjoiningandremovingvectors} would remove some $\mathbf{v}_j$ without changing $\operatorname{span}(\beta)$, contradicting minimality. Thus $\beta$ is independent. Since $\operatorname{span}(\beta)=\mathcal{V}$, every $\beta^\frown\mathbf{x}$ is dependent.
+\item[$(iv)$]$\Rightarrow (i)$ If $\operatorname{span}(\beta)\neq\mathcal{V}$, choose $\mathbf{x}\notin\operatorname{span}(\beta)$. Then Proposition \ref{prop:adjoiningandremovingvectors} makes $\beta^\frown\mathbf{x}$ independent, contradicting (iv). Hence $\beta$ spans $\mathcal{V}$, and with independence from (iv), it is a basis.
+\end{enumerate}
+\hlt{Structural Commentary}: A basis is simultaneously just enough to span and too large to extend independently.\\
+\hlt{Key Insight}: Spanning and independence are dual minimality and maximality conditions.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:hamel-basis} \hlt{Hamel Basis}\\
+A subset $\mathcal{B}\subseteq\mathcal{V}$ is a \hlt{Hamel basis} of $\mathcal{V}$ if it is linearly independent and $\operatorname{span}(\mathcal{B})=\mathcal{V}$. Equivalently, every $\mathbf{v}\in\mathcal{V}$ has a unique finitely supported coefficient function $a:\mathcal{B}\to\mathbb{F}$ such that $\mathbf{v}=\sum\limits_{\mathbf{b}\in\mathcal{B}}a(\mathbf{b})\mathbf{b}$.\\
+Finite ordered bases are orderings of finite Hamel bases.
+\end{definition}
+
+\begin{theorem} \label{thm:hamel-basis-extension} \hlt{Hamel Basis Extension}\\
+Let $I\subseteq S\subseteq\mathcal{V}$, with $I$ linearly independent and $\operatorname{span}(S)=\mathcal{V}$.\\
+Assuming Zorn's lemma, there exists a Hamel basis $\mathcal{B}$ of $\mathcal{V}$ such that $I\subseteq\mathcal{B}\subseteq S$. Consequently, every nonzero vector space has a basis; every independent set extends to a basis; every spanning set contains a basis.
+\begin{proof}
+Let $\mathscr{P}=\{E:I\subseteq E\subseteq S,\ E\ \text{linearly independent}\}$, ordered by inclusion. Then $I\in\mathscr{P}$.\\
+If $\mathcal{C}\subseteq\mathscr{P}$ is a chain, put $U=\bigcup
+\limits_{E\in\mathcal{C}}E$. Any relation $\sum\limits_{k=1}^{m}a_k\mathbf{u}_k=\mathbf{0}$ in $U$ has all $\mathbf{u}_k$ in one $E\in\mathcal{C}$, hence all $a_k=0$; so $U\in\mathscr{P}$. By Zorn's lemma, Principle \ref{princ:zorns-lemma}, choose maximal $\mathcal{B}\in\mathscr{P}$.\\
+If $s\in S\setminus\operatorname{span}(\mathcal{B})$, then $\mathcal{B}\cup\{s\}\in\mathscr{P}$, contradiction. Hence $S\subseteq\operatorname{span}(\mathcal{B})$, so $\operatorname{span}(\mathcal{B})=\mathcal{V}$ and $\mathcal{B}$ is a Hamel basis. The consequences follow from $S=\mathcal{V}$ or $I=\emptyset$.\\
+\hlt{Structural Commentary}: Finite extension uses exchange; arbitrary extension uses maximality.\\
+\hlt{Key Insight}: Maximal independence inside a spanning set forces spanning.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:arbitrary-bases-same-cardinality} \hlt{Dimension as Basis Cardinality}\\
+If $\mathcal{B}$ and $\mathcal{C}$ are Hamel bases of $\mathcal{V}$, then $\abs{\mathcal{B}}=\abs{\mathcal{C}}$. Hence $\dim(\mathcal{V}):=\abs{\mathcal{B}}$ is well-defined for any Hamel basis $\mathcal{B}$.
+\begin{proof}
+The finite case is Theorem \ref{thm:basis-length-well-defined}; assume both bases are infinite.\\
+For $\mathbf{c}\in\mathcal{C}$, let $\operatorname{supp}_{\mathcal{B}}(\mathbf{c})\subseteq\mathcal{B}$ be its finite $\mathcal{B}$-support.\\
+Since $\mathcal{C}$ spans $\mathcal{V}$, $\mathcal{B}\subseteq\bigcup\limits_{\mathbf{c}\in\mathcal{C}}\operatorname{supp}_{\mathcal{B}}(\mathbf{c})$, otherwise some $\mathbf{b}\in\mathcal{B}$ has zero $\mathbf{b}$-coordinate in every vector of $\operatorname{span}(\mathcal{C})$.\\
+Thus $\abs{\mathcal{B}}\leq\sum\limits_{\mathbf{c}\in\mathcal{C}}\abs{\operatorname{supp}_{\mathcal{B}}(\mathbf{c})} \leq \abs{\mathcal{C}}\aleph_0=\abs{\mathcal{C}}$. Interchanging $\mathcal{B}$ and $\mathcal{C}$ gives $\abs{\mathcal{C}}\leq\abs{\mathcal{B}}$; Theorem \ref{thm:schroeder-bernstein} gives equality.\\
+\hlt{Structural Commentary}: Even in infinite dimensions, a basis size is intrinsic.\\
+\hlt{Key Insight}: Each basis vector is detected inside finite supports relative to the other basis.
+\end{proof}
+\end{theorem}
