@@ -237,6 +237,27 @@ Hence $Y_1\Sigma_r^{-1}X_1^* =Y_2U\Sigma_r^{-1}U^*X_2^* =Y_2\Sigma_r^{-1}X_2^*$.
 \end{proof}
 \end{proposition}
 
+\begin{corollary} \label{cor:pseudoinverse-from-full-svd} \hlt{Pseudoinverse from a Full SVD}\\
+Let $A=V\Sigma W^*$ be a full SVD of $A\in\operatorname{Mat}(m,n,\mathbb{F})$, with rank $r$ and positive singular values $\sigma_1,\ldots,\sigma_r$.\\
+Write $V=[X\ X_0]$, $W=[Y\ Y_0]$, and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$.\\
+In conformal blocks, $\Sigma=
+\begin{bmatrix}
+\Sigma_r&0\\
+0&0
+\end{bmatrix}$, $\Sigma^{\dagger}\defeq
+\begin{bmatrix}
+\Sigma_r^{-1}&0\\
+0&0
+\end{bmatrix}
+\in\operatorname{Mat}(n,m,\mathbb{F})$. Then $A^{\dagger}=W\Sigma^{\dagger}V^*$.
+\begin{proof}
+If $r=0$, then $A=0$ and $W\Sigma^{\dagger}V^*=0$.\\
+If $r>0$, the block form gives $A=X\Sigma_rY^*$; $A^{\dagger}=Y\Sigma_r^{-1}X^*$; and $W\Sigma^{\dagger}V^*=Y\Sigma_r^{-1}X^*$. Thus $A^{\dagger}=W\Sigma^{\dagger}V^*$.\\
+\hlt{Structural Commentary}: Full SVD pads compact SVD by zero blocks.\\
+\hlt{Key Insight}: The pseudoinverse flips $V$ and $W$ and inverts only the positive singular values.
+\end{proof}
+\end{corollary}
+
 \begin{theorem} \label{thm:moore-penrose-basic-properties} \hlt{Basic Properties of the Pseudoinverse}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. Then:
 \begin{enumerate}[label=(\roman*)]
@@ -270,6 +291,32 @@ The zero case is immediate. Let $A=X\Sigma_rY^*$ be a compact SVD; then $A^{\dag
   \caption{$A$ and $A^{\dagger}$ invert the nonzero singular subspaces; they vanish on $\ker(A)$ and $\ker(A^*)$, respectively.}
   \label{fig:pseudoinverse-four-spaces}
 \end{figure}
+
+\begin{theorem} \label{thm:penrose-equations-characterize-pseudoinverse} \hlt{Penrose Characterization of the Pseudoinverse}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\mathcal{C}=\operatorname{col}(A)$, and $\mathcal{D}=\operatorname{col}(A^*)=(\ker A)^{\perp}$. Then $A^{\dagger}$ is unique $B\in\operatorname{Mat}(n,m,\mathbb{F})$ satisfying
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $ABA=A$;
+\item $BAB=B$;
+\item $AB$ is Hermitian;
+\item $BA$ is Hermitian.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Theorem \ref{thm:moore-penrose-basic-properties} gives $AA^{\dagger}A=A$; $A^{\dagger}AA^{\dagger}=A^{\dagger}$, and $AA^{\dagger}$, $A^{\dagger}A$ are orthogonal projections.\\
+Hence $A^{\dagger}$ satisfies the four equations.
+\item Let $B$ satisfy the four equations. Then $(AB)^2=ABAB=AB$; $(AB)^*=AB$.\\
+Also $\operatorname{range}(AB)=\mathcal{C}$, since $\operatorname{range}(AB)\subseteq\mathcal{C}$ and $AB(A\mathbf{x})=ABA\mathbf{x}=A\mathbf{x}$. By Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}, $AB=P_{\mathcal{C}}$.
+\item $(BA)^2=BABA=BA$; $(BA)^*=BA$. Also $\ker(BA)=\ker(A)$, as $BA\mathbf{x}=0\Rightarrow A\mathbf{x}=ABA\mathbf{x}=0$ and the reverse inclusion is immediate. By Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}, $BA=P_{\mathcal{D}}$.
+\item For $\mathbf{y}\in\mathbb{F}^m$, write $\mathbf{y}=\mathbf{p}+\mathbf{z}$ with $\mathbf{p}\in\mathcal{C}$ and $\mathbf{z}\in\mathcal{C}^{\perp}=\ker(A^*)$. Since $AB\mathbf{z}=0$, $B\mathbf{z}=BAB\mathbf{z}=0$.\\
+If $\mathbf{p}=A\mathbf{x}$, then $B\mathbf{p}=BA\mathbf{x}=P_{\mathcal{D}}\mathbf{x}$, independent of the choice of $\mathbf{x}$ because $\ker(P_{\mathcal{D}})=\mathcal{D}^{\perp}=\ker(A)$.\\
+Thus the four equations determine $B$ uniquely. Since $A^{\dagger}$ satisfies them, $B=A^{\dagger}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Penrose equations force the two projection factors.\\
+\hlt{Key Insight}: Once $AB$ and $BA$ are projections, $B$ is forced.
+\end{proof}
+\end{theorem}
 
 \begin{theorem} \label{thm:pseudoinverse-minimum-norm-least-squares} \hlt{Pseudoinverse and Minimum-Norm Least Squares}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $\mathbf{y}\in\mathbb{F}^m$, and set $\mathbf{x}_0=A^{\dagger}\mathbf{y}$.
