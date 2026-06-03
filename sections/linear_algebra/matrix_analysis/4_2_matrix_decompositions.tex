@@ -107,6 +107,12 @@ Gram--Schmidt gives orthonormal columns $\mathbf{q}_1,\ldots,\mathbf{q}_n$ s.t. 
 Hence $A=QR$ with $Q^*Q=I$ and $R$ upper triangular. The Householder construction gives the same factorization via unitary transformations, which is the numerically stable form.
 \end{perspective}
 
+\begin{perspective} \label{per:rank-deficient-gram-schmidt-qr} \hlt{Rank-Deficient QR from Gram--Schmidt}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$, $m\geq n$, and let $\mathbf{u}_j$ be the arbitrary-list Gram--Schmidt remainders from Theorem \ref{thm:gram-schmidt-arbitrary-list}. Set $\mathcal{J}=\{j:\mathbf{u}_j\neq\mathbf{0}\}$. For $j\in\mathcal{J}$ put $\mathbf{q}_j=\mathbf{u}_j/\norm{\mathbf{u}_j}$; for $j\notin\mathcal{J}$ choose $\mathbf{q}_j\in\operatorname{col}(A)^\perp$ so that $Q=[\mathbf{q}_1\ \cdots\ \mathbf{q}_n]$ has orthonormal columns. With $R=Q^*A$, one has $A=QR$, $R$ upper triangular, and $r_{jj}=0$ exactly when $\mathbf{u}_j=\mathbf{0}$. Thus uniqueness fails unless $\mathcal{J}=\{1,\ldots,n\}$ and $r_{jj}>0$ for all $j$.\\
+\hlt{Structural Commentary}: Rank defect becomes zero QR pivots.\\
+\hlt{Key Insight}: The full-rank hypothesis in uniqueness is a statement about nonzero orthogonal remainders.
+\end{perspective}
+
 \begin{corollary} \label{cor:qr-prefix-column-spaces} \hlt{Prefix Column Spaces in QR Factorisation}\\
 Let $A=QR$ be the narrow QR factorisation of $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $\operatorname{rank}(A)=n$ and positive diagonal entries in $R$. For $k=1,\ldots,n$, let $A_k$ and $Q_k$ be the first $k$ columns of $A$ and $Q$, respectively. Then $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.\\
 Thus the columns of $Q_k$ form an orthonormal basis of $\operatorname{col}(A_k)$.
@@ -147,6 +153,29 @@ Then $SP\mathbf{v}=S_1(P\mathbf{v})=T\mathbf{v}$ for every $\mathbf{v}$, so $T=S
 \end{proof}
 \end{theorem}
 
+\begin{corollary} \label{cor:operator-polar-decomposition-uniqueness} \hlt{Uniqueness in Operator Polar Decomposition}\\
+Let $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, and put $\abs{T}\defeq\sqrt{T^*T}$ and $\abs{T^*}\defeq\sqrt{TT^*}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T=SP$, $S^*S=I_{\mathcal{V}}$, and $P\succeq0$, then $P=\abs{T}$. Hence the positive right polar factor is unique.
+\item $\exists$ left polar decomposition $T=\abs{T^*}R$ with $R$ an isometry, and $\abs{T^*}$ is unique positive left polar factor.
+\item If $T$ is invertible, then both isometric factors are unique:
+$S=T\abs{T}^{-1}$ and $R=\abs{T^*}^{-1}T$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T=SP$, then $T^*T=P S^*S P=P^2$. Since $P\succeq0$, Proposition \ref{prop:positive-square-root-unique} gives $P=\sqrt{T^*T}=\abs{T}$.
+\item Apply Theorem \ref{thm:polar-decomposition} to $T^*$. There is an isometry $S_0$ such that $T^*=S_0\abs{T^*}$.\\
+Taking adjoints gives $T=\abs{T^*}S_0^*$. Set $R=S_0^*$. If also $T=QR$ with $Q\succeq0$ and $R$ an isometry, then $RR^*=I_{\mathcal{V}}$ in finite dimensions, so $TT^*=QRR^*Q=Q^2$. Hence $Q=\abs{T^*}$.
+\item If $T$ is invertible, then $\abs{T}$ and $\abs{T^*}$ are positive definite, hence invertible.\\
+Therefore any right and left polar decompositions force $S=T\abs{T}^{-1}$, $R=\abs{T^*}^{-1}T$.
+\end{enumerate}
+\hlt{Structural Commentary}: The positive polar factor is canonical.\\
+\hlt{Key Insight}: Invertibility removes the kernel complement, so the whole factorisation becomes unique.
+\end{proof}
+\end{corollary}
+
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/polar_decomposition_operator.tikz}
@@ -161,7 +190,7 @@ In $T=S\sqrt{T^*T}$, the positive factor $\sqrt{T^*T}$ determines the metric str
 \end{perspective}
 
 \begin{definition} \label{def:singular-values} \hlt{Singular Values}\\
-For $T\in\LL(\mathcal{V})$, \hlt{singular values} of $T$ are eigenvalues of $\sqrt{T^*T}$, where each eigenvalue $\lambda$ is repeated $\dim E_{\lambda}(\sqrt{T^*T})$.
+For finite-dimensional inner-product spaces $\mathcal{U},\mathcal{V}$ and $T\in\LL(\mathcal{U},\mathcal{V})$, the \hlt{singular values} of $T$ are the eigenvalues of $\sqrt{T^*T}\in\LL(\mathcal{U})$, where each eigenvalue $\lambda$ is repeated $\dim E_{\lambda}(\sqrt{T^*T})$.
 \end{definition}
 
 \begin{theorem} \label{thm:singular-value-decomposition} \hlt{Singular Value Decomposition}\\
@@ -182,7 +211,7 @@ By Theorem \ref{thm:polar-decomposition}, $T=S\abs{T}$ for some isometry $S$. Pu
 \end{figure}
 
 \begin{proposition} \label{prop:singular-values-from-t-star-t} \hlt{Singular Values from $T^*T$}\\
-The singular values of $T\in\LL(\mathcal{V})$ are the nonnegative square roots of the eigenvalues of $T^*T$, with the same eigenspace multiplicities.
+The singular values of $T\in\LL(\mathcal{U},\mathcal{V})$ are the nonnegative square roots of the eigenvalues of $T^*T$, with the same eigenspace multiplicities.
 \begin{proof}
 By the spectral theorem, choose an orthonormal basis $\mathbf{e}_1,\ldots,\mathbf{e}_n$ and nonnegative scalars $\lambda_1,\ldots,\lambda_n$ such that $T^*T\mathbf{e}_j=\lambda_j\mathbf{e}_j$. The unique positive square root of $T^*T$ sends $\mathbf{e}_j$ to $\sqrt{\lambda_j}\mathbf{e}_j$.\\
 Thus the singular values are $\sqrt{\lambda_j}$, with the same eigenspace multiplicities.\\
@@ -190,6 +219,34 @@ Thus the singular values are $\sqrt{\lambda_j}$, with the same eigenspace multip
 \hlt{Key Insight}: Singular values can be read from $T^*T$ directly.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:rectangular-operator-singular-vector-decomposition} \hlt{Singular Vectors for a Linear Map}\\
+Let $\mathcal{U},\mathcal{V}$ be finite-dimensional inner-product spaces over $\mathbb{R}$ or $\mathbb{C}$, and let $T\in\LL(\mathcal{U},\mathcal{V})$ have rank $r$.\\
+Put $n=\dim\mathcal{U}$, $m=\dim\mathcal{V}$, and $\mathcal{U}_+=\operatorname{range}(T^*),\quad \mathcal{U}_0=\ker(T)$; $\mathcal{V}_+=\operatorname{range}(T),\quad \mathcal{V}_0=\ker(T^*)$.\\
+Then $\exists$ ordered orthonormal bases $\beta=(\mathbf{u}_1,\ldots,\mathbf{u}_r,\mathbf{u}_{r+1},\ldots,\mathbf{u}_n)$; $\gamma=(\mathbf{v}_1,\ldots,\mathbf{v}_r,\mathbf{v}_{r+1},\ldots,\mathbf{v}_m)$\\
+with $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_r)=\mathcal{U}_+$; $\operatorname{span}(\mathbf{u}_{r+1},\ldots,\mathbf{u}_n)=\mathcal{U}_0$; $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_r)=\mathcal{V}_+$; $\operatorname{span}(\mathbf{v}_{r+1},\ldots,\mathbf{v}_m)=\mathcal{V}_0$,\\
+and numbers $s_1,\ldots,s_r>0$ such that $T\mathbf{u}_k=s_k\mathbf{v}_k$; $T^*\mathbf{v}_k=s_k\mathbf{u}_k$, for $1\leq k\leq r$.\\
+The $s_k$ are the positive singular values; $\mathbf{u}_k$ and $\mathbf{v}_k$ are right and left singular vectors.
+\begin{proof}
+Let $A=T^*T$. Then $A\succeq0$, $A=A^*$, and $\ker(A)=\ker(T)$. By spectral theorem, choose rthonormal eigenbasis $\mathbf{u}_1,\ldots,\mathbf{u}_n$ s.t. $A\mathbf{u}_k=s_k^2\mathbf{u}_k$ for $1\leq k\leq r$; $A\mathbf{u}_k=0$ for $k>r$; $s_k>0$.\\
+Thus $\operatorname{span}(\mathbf{u}_{r+1},\ldots,\mathbf{u}_n)=\mathcal{U}_0$, and Proposition \ref{prop:adjoint-kernel-range-orthogonality} gives $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_r)=\mathcal{U}_+$. For $1\leq k\leq r$,\\
+set $\mathbf{v}_k=s_k^{-1}T\mathbf{u}_k$. Then $\innerprod{\mathbf{v}_i,\mathbf{v}_j} =\frac{1}{s_is_j}\innerprod{T\mathbf{u}_i,T\mathbf{u}_j} =\frac{1}{s_is_j}\innerprod{T^*T\mathbf{u}_i,\mathbf{u}_j} =\delta_{ij}$; $T^*\mathbf{v}_k=s_k^{-1}A\mathbf{u}_k=s_k\mathbf{u}_k$.\\
+Hence $\mathbf{v}_1,\ldots,\mathbf{v}_r$ are orthonormal and span $\mathcal{V}_+=T(\mathcal{U}_+)$. Complete them by an orthonormal basis of $\mathcal{V}_0=\mathcal{V}_+^\perp$.\\
+\hlt{Structural Commentary}: $T^*T$ gives right directions; $T$ gives left directions.\\
+\hlt{Key Insight}: Away from the two kernels, $T$ and $T^*$ act symmetrically by the same positive scalars.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/singular_subspaces_adjoint_symmetry.tikz}
+  \caption{The singular-vector bases split the domain and codomain into active singular subspaces and kernels.}
+  \label{fig:singular-subspaces-adjoint-symmetry}
+\end{figure}
+
+\begin{perspective} \label{per:operator-to-matrix-svd-bridge} \hlt{Operator-to-Matrix SVD Bridge}\\
+In the bases from Theorem \ref{thm:rectangular-operator-singular-vector-decomposition}, the matrix of $T$ is rectangular diagonal with diagonal entries $s_1,\ldots,s_r$ and zeros elsewhere. Returning to standard orthonormal bases gives the matrix form $A=V\Sigma W^*$ in Theorem \ref{thm:matrix-singular-value-decomposition}.
+\end{perspective}
 
 \begin{definition} \label{def:matrix-singular-values} \hlt{Matrix Singular Values}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $q=\min(m,n)$, and let $r=\operatorname{rank}(A)$. The \hlt{positive singular values} of $A$ are the positive eigenvalues of $\abs{A}=(A^*A)^{1/2}$, written $\sigma_1\geq\sigma_2\geq\cdots\geq\sigma_r>0$.\\
