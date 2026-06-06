@@ -13,6 +13,7 @@ Progress Status:
 | Linear and Operator Structures | A Second Course in Linear Algebra | Stephan Ramon Garcia | Completed |
 | Linear and Operator Structures | Linear Algebra Done Right | Sheldon Axler | Completed |
 | Linear and Operator Structures | Linear Algebra and Its Applications | Gilbert Strang | Completed |
+| Linear and Operator Structures | Advanced Linear Algebra, Third Edition | Steven Roman | Completed |
 | Analysis and Continuous Structure | Principles of Mathematical Analysis (Baby Rudin) | Walter Rudin | Completed |
 | Analysis and Continuous Structure | The Real Analysis Lifesaver | Raffi Grinberg | Completed |
 | Analysis and Continuous Structure | Understanding Analysis | Stephen Abbott | Completed |
