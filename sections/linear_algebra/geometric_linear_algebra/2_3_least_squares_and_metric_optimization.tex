@@ -10,6 +10,12 @@ Least squares is projection theory as optimization: normal equations, full-rank 
 In an inner-product space, the best approximation to $\mathbf{v}$ from a finite-dimensional subspace $\mathcal{U}$ is $P_{\mathcal{U}}\mathbf{v}$. The residual $\mathbf{v}-P_{\mathcal{U}}\mathbf{v}$ is orthogonal to every allowable correction inside $\mathcal{U}$.
 \end{principle}
 
+\begin{definition} \label{def:matrix-least-squares-solution} \hlt{Matrix Least-Squares Solution}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\mathbb{F}^m$.\\
+A vector $\mathbf{x}_0\in\mathbb{F}^n$ is a \hlt{least-squares solution} of $A\mathbf{x}=\mathbf{y}$ if $\norm{A\mathbf{x}_0-\mathbf{y}}_2=\min\limits_{\mathbf{x}\in\mathbb{F}^n}\norm{A\mathbf{x}-\mathbf{y}}_2$.\\
+The vector $A\mathbf{x}_0$ is the fitted vector, and $\mathbf{y}-A\mathbf{x}_0$ is the residual.
+\end{definition}
+
 \begin{theorem} \label{thm:normal-equations-for-projection} \hlt{Normal Equations for Projection}\\
 Let $\mathcal{U}$ be a finite-dimensional subspace of an inner-product space $\mathcal{V}$, and suppose $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.\\
 For $\mathbf{v}\in\mathcal{V}$, the projection has the form $P_{\mathcal{U}}\mathbf{v}=\sum\limits_{j=1}^{n}c_j\mathbf{u}_j$, where $(c_1,\ldots,c_n)$ solves the normal equations
@@ -79,6 +85,20 @@ Conversely, if $\mathbf{z}\in\ker(A)$ and $\mathbf{x}_0$ solves the normal equat
   \label{fig:least-squares-column-projection}
 \end{figure}
 
+\begin{proposition} \label{prop:least-squares-affine-set-and-minimum-norm} \hlt{Least-Squares Solution Set and Minimum Norm}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\mathbf{y}\in\mathbb{F}^m$, and $\mathcal{L}(A,\mathbf{y})=\operatorname*{arg\,min}\limits_{\mathbf{x}\in\mathbb{F}^n}\norm{A\mathbf{x}-\mathbf{y}}_2$. If $\mathbf{x}_0\in\mathcal{L}(A,\mathbf{y})$, then $\mathcal{L}(A,\mathbf{y})=\mathbf{x}_0+\ker(A)$.\\
+Also $\mathcal{L}(A,\mathbf{y})\cap(\ker A)^{\perp}=\{\mathbf{s}\}$, where $\mathbf{s}=P_{(\ker A)^{\perp}}\mathbf{x}_0\in\operatorname{col}(A^*)$, and $\mathbf{s}$ is unique minimizer of $\norm{\cdot}_2$ on $\mathcal{L}(A,\mathbf{y})$.
+\begin{proof}
+Set $\mathbf{b}=P_{\operatorname{col}(A)}\mathbf{y}$. By Theorem \ref{thm:matrix-least-squares-normal-equations}, $\mathcal{L}(A,\mathbf{y})=\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{b}\}$.\\
+Thus, for $\mathbf{x}_0\in\mathcal{L}(A,\mathbf{y})$, $\mathcal{L}(A,\mathbf{y})=\{\mathbf{x}:A(\mathbf{x}-\mathbf{x}_0)=\mathbf{0}\} =\mathbf{x}_0+\ker(A)$.\\
+Write $\mathbf{x}_0=\mathbf{s}+\mathbf{k}$ with $\mathbf{s}\in(\ker A)^{\perp}$ and $\mathbf{k}\in\ker(A)$. Since $A\mathbf{s}=A\mathbf{x}_0$, $\mathbf{s}\in\mathcal{L}(A,\mathbf{y})\cap(\ker A)^{\perp}$.\\
+If $\mathbf{u}$ is another element of this intersection, then $\mathbf{u}-\mathbf{s}\in\ker(A)\cap(\ker A)^{\perp}=\{\mathbf{0}\}$.\\
+Finally, any $\mathbf{x}\in\mathcal{L}(A,\mathbf{y})$ has $\mathbf{x}=\mathbf{s}+\mathbf{z}$ with $\mathbf{z}\in\ker(A)$, so $\norm{\mathbf{x}}_2^2=\norm{\mathbf{s}}_2^2+\norm{\mathbf{z}}_2^2\ge\norm{\mathbf{s}}_2^2$, with equality iff $\mathbf{z}=\mathbf{0}$.\\
+\hlt{Structural Commentary}: Least-squares solutions form an affine translate of the nullspace.\\
+\hlt{Key Insight}: The minimum-norm representative is the one with no nullspace component.
+\end{proof}
+\end{proposition}
+
 \begin{corollary} \label{cor:full-column-rank-projection-formula} \hlt{Projection Formula for Full Column Rank}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $n$.\\
 Then $A^*A$ is invertible and the orthogonal projection onto $\operatorname{col}(A)$ is $P_{\operatorname{col}(A)}=A(A^*A)^{-1}A^*$.
@@ -134,5 +154,6 @@ Conversely, if $AA^*\mathbf{u}_0=\mathbf{y}$, then $A^*\mathbf{u}_0$ is a soluti
 \end{figure}
 
 \begin{perspective} \label{per:least-squares-pseudoinverse-roadmap} \hlt{Roadmap to the Pseudoinverse}\\
-Theorem \ref{thm:matrix-least-squares-normal-equations} projects $\mathbf{y}$ onto $\operatorname{col}(A)$; Theorem \ref{thm:minimum-norm-solution-consistent-system} selects the minimum-norm preimage in $\operatorname{col}(A^*)$. Definition \ref{def:moore-penrose-pseudoinverse} and Theorem \ref{thm:pseudoinverse-minimum-norm-least-squares} package both choices as $A^{\dagger}\mathbf{y}$.
+Theorem \ref{thm:matrix-least-squares-normal-equations} projects $\mathbf{y}$ onto $\operatorname{col}(A)$; Proposition \ref{prop:least-squares-affine-set-and-minimum-norm} selects the minimum-norm preimage in $\operatorname{col}(A^*)$.\\
+Definition \ref{def:moore-penrose-pseudoinverse} and Theorem \ref{thm:pseudoinverse-minimum-norm-least-squares} package both choices as $A^{\dagger}\mathbf{y}$.
 \end{perspective}

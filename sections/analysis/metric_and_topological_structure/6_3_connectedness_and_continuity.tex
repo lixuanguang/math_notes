@@ -1,4 +1,4 @@
-\subsection{Connectedness and Continuity}
+\subsection{Connectedness and Continuity}\label{subsec:connectedness-and-continuity}
 
 % **Role:** abstract structure behind limits and continuity.
 %
@@ -8,22 +8,16 @@
 Connectedness prevents a space from splitting into separated pieces; continuity transports topological structure through maps. This subsection also records IVT/EVT, uniform continuity, and real-line refinements.
 
 \begin{definition} \label{def:separated-and-connected-sets} \hlt{Separated and Connected Sets}\\
-Let $A$ and $B$ be subsets of a metric space $X$. They are \hlt{separated} if $A\cap\overline{B}=\emptyset$ and $\overline{A}\cap B=\emptyset$.\\
-A set $E\subseteq X$ is \hlt{connected} if it is not a union of two nonempty separated sets.
+Let $X$ be a metric space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Subsets $A,B\subseteq X$ are \hlt{separated} if $A\cap\overline{B}=\overline{A}\cap B=\emptyset$.
+\item A subset $E\subseteq X$ is \hlt{connected} if no nonempty separated subsets $A,B\subseteq E$ satisfy $E=A\cup B$.
+\item A subset $U\subseteq X$ is \hlt{clopen} if it is both open and closed.
+\end{enumerate}
+\hlt{Structural Commentary}: Separated sets avoid each other's closures.\\
+\hlt{Key Insight}: Disconnected means a nontrivial clopen split; continuous preimages preserve such splits.
 \end{definition}
-
-\begin{remark} \label{rem:disjoint-versus-separated} \hlt{Disjoint Need Not Mean Separated}\\
-Separated sets are disjoint, but disjoint sets need not be separated. For example, $[0,1]$ and $(1,2)$ are disjoint but not separated because $1$ is a limit point of $(1,2)$. By contrast, $(0,1)$ and $(1,2)$ are separated.
-\end{remark}
-
-\begin{remark} \label{rem:connectedness-and-clopen-subsets} \hlt{Connectedness and Clopen Sets}\\
-A subset is \hlt{clopen} if it is both open and closed; $\sqcup$ denotes disjoint union. A metric space is disconnected iff it has a nonempty proper clopen subset: $U$ gives $X=U\sqcup U^c$, and every separation has clopen pieces.\\
-By Theorem \ref{thm:continuity-open-preimages}, continuous maps pull clopen separations back to clopen separations.
-\end{remark}
-
-\begin{remark} \label{rem:path-connectedness-placed-with-continuity} \hlt{Path-Connectedness Uses Continuity}\\
-The supplied Tao II Ch.2 exercises introduce path-connectedness immediately after connectedness. Here the definition and main theorem are placed later as Definition \ref{def:path-connected-set} and Theorem \ref{thm:path-connected-implies-connected}, after continuity has been developed.
-\end{remark}
 
 \begin{theorem} \label{thm:connected-subsets-of-real-line-interval-property} \hlt{Connected Subsets of the Real Line}\\
 A set $E\subseteq\R$ is connected if and only if $x,y\in E,\ x<y$ $\Longrightarrow$ $[x,y]\subseteq E$.
@@ -133,9 +127,22 @@ If $x\in E$ and $0<d_X(x,p)<\delta$, then $x\in E\cap B_r(p)$, so $d_Y(f(x),q)<\
 \end{proposition}
 
 \begin{definition} \label{def:continuity-at-a-point-and-on-a-set} \hlt{Continuity at a Point and on a Set}\\
-For metric spaces $X,Y$, $E\subseteq X$, $p\in E$, and $f:E\to Y$, the function $f$ is \hlt{continuous at $p$} if $\forall \varepsilon>0\ \exists \delta>0$, $x\in E$, $d_X(x,p)<\delta$ $\Longrightarrow$ $d_Y(f(x),f(p))<\varepsilon$.\\
-It is \hlt{continuous on $E$} if continuous at every point of $E$; isolated points are automatic.
+Let $(X,d_X),(Y,d_Y)$ be metric spaces, $E\subseteq X$, and $f:E\to Y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $p\in E$, $f$ is \hlt{continuous at $p$} if $\forall\varepsilon>0\ \exists\delta>0\ \forall x\in E$, $d_X(x,p)<\delta\Longrightarrow d_Y(f(x),f(p))<\varepsilon$.
+\item $f$ is \hlt{continuous on $E$} if $\forall p\in E$, $f$ is continuous at $p$.
+\item If $p$ is isolated in $E$, then $f$ is continuous at $p$.
+\end{enumerate}
 \end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/metric_continuity_ball_mapping.tikz}
+  \caption{Continuity at $x_0$: for every $\varepsilon>0$, choose
+  $\delta>0$ with $f(B_\delta(x_0))\subset B_\varepsilon(f(x_0))$.}
+  \label{fig:metric-continuity-ball-mapping}
+\end{figure}
 
 \begin{theorem} \label{thm:continuity-as-limit-at-limit-point} \hlt{Continuity as Equality with the Function Limit}\\
 Let $X,Y$ be metric spaces, $E\subseteq X$, $p\in E$, and $f:E\to Y$.\\
@@ -155,9 +162,26 @@ If $p$ is a limit point of $E$, then $f$ is continuous at $p$ if and only if $\l
 For functions on subsets of $\R$, continuity at limit points is equivalently sequential: $x_n\to p$ in the domain implies $f(x_n)\to f(p)$; isolated points are automatic by Theorems \ref{thm:function-limit-sequential-characterization} and \ref{thm:continuity-as-limit-at-limit-point}.
 \end{remark}
 
+\begin{theorem} \label{thm:metric-continuity-sequential-characterization} \hlt{Sequential Characterization of Continuity}\\
+Let $(X,d_X),(Y,d_Y)$ be metric spaces, $f:X\to Y$, and $p\in X$.\\
+Then $f$ is continuous at $p$ if and only if $\forall(x_n)\subseteq X$, $x_n\to p\Longrightarrow f(x_n)\to f(p)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $f$ is continuous at $p$ and let $x_n\to p$.\\
+Given $\varepsilon>0$, choose $\delta>0$ such that $d_X(x,p)<\delta\Longrightarrow d_Y(f(x),f(p))<\varepsilon$.\\
+Since $x_n\to p$, eventually $d_X(x_n,p)<\delta$, hence eventually $d_Y(f(x_n),f(p))<\varepsilon$. Thus $f(x_n)\to f(p)$.
+\item[$(\Leftarrow)$] Suppose the sequential condition holds. If $f$ is not continuous at $p$, then $\exists\varepsilon_0>0$ such that $\forall\delta>0$, $\exists x\in X$ with $d_X(x,p)<\delta$ and $d_Y(f(x),f(p))\geq\varepsilon_0$. Taking $\delta=1/n$ gives $x_n\in X$ with $d_X(x_n,p)<1/n$ and $d_Y(f(x_n),f(p))\geq\varepsilon_0$. Then $x_n\to p$, but $f(x_n)\nrightarrow f(p)$, a contradiction.
+\end{enumerate}
+\hlt{Structural Commentary}: Failure of epsilon--delta continuity manufactures a bad sequence.\\
+\hlt{Key Insight}: In metric spaces, sequences detect continuity at points.
+\end{proof}
+\end{theorem}
+
 \begin{perspective} \label{per:three-views-of-continuity} \hlt{Three Views of Continuity}\\
-For maps between metric spaces, continuity has three equivalent views: $\varepsilon$--$\delta$ control, preservation of sequence limits, and open inverse images; see Definition \ref{def:continuity-at-a-point-and-on-a-set} and Theorems \ref{thm:function-limit-sequential-characterization}, \ref{thm:continuity-as-limit-at-limit-point}, and \ref{thm:continuity-open-preimages}.\\
-\hlt{Key Insight}: Continuity moves local nearness forward, but tests open-set structure by pulling sets backward.
+For metric-space maps, continuity is equivalently $\varepsilon$--$\delta$ control, $x_n\to x\Rightarrow f(x_n)\to f(x)$,\\
+and $V\subseteq Y$ open $\Rightarrow f^{-1}(V)$ open; see Definition \ref{def:continuity-at-a-point-and-on-a-set} and Theorems \ref{thm:metric-continuity-sequential-characterization}, \ref{thm:continuity-open-preimages}.\\
+\hlt{Key Insight}: Continuity sends near points forward and pulls open sets back.
 \end{perspective}
 
 \begin{theorem} \label{thm:continuous-composition} \hlt{Composition of Continuous Functions}\\
@@ -168,6 +192,15 @@ Given $\varepsilon>0$, choose $\eta>0$ for $g$ at $f(p)$, then choose $\delta>0$
 If $x\in E$ and $d_X(x,p)<\delta$, then $d_Y(f(x),f(p))<\eta$, hence $d_Z(g(f(x)),g(f(p)))<\varepsilon$.\\
 \hlt{Structural Commentary}: The output tolerance for $g$ becomes the input tolerance for $f$.\\
 \hlt{Key Insight}: Continuity composes by passing epsilon through an intermediate eta.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:distance-function-is-continuous} \hlt{The Distance Function Is Continuous}\\
+Let $(X,d)$ be a metric space and $D:X\times X\to\R$, $D(x,y)\defeq d(x,y)$. For $d_\times\in\{d_1,d_2,d_\infty\}$ on $X\times X$, $D:(X\times X,d_\times)\to\R$ is continuous. Equivalently, $x_n\to x$ and $y_n\to y$ in $X$ imply $d(x_n,y_n)\to d(x,y)$.
+\begin{proof}
+For $x,y,u,v\in X$, $\abs{D(x,y)-D(u,v)}=\abs{d(x,y)-d(u,v)}\leq d(x,u)+d(y,v)$. Hence $x_n\to x$ and $y_n\to y$ imply $D(x_n,y_n)\to D(x,y)$. Proposition \ref{prop:product-metric-comparison} and Theorem \ref{thm:metric-continuity-sequential-characterization} give continuity for each product metric.\\
+\hlt{Structural Commentary}: Distance changes continuously when both endpoints move.\\
+\hlt{Key Insight}: The triangle inequality controls distance error by endpoint errors.
 \end{proof}
 \end{theorem}
 
@@ -223,6 +256,40 @@ If $U\subseteq X$ is open, then $f(U)=(f^{-1})^{-1}(U)$ is open in $Y$ since $f^
 \hlt{Key Insight}: Topological sameness is continuity plus continuous reversibility.
 \end{proof}
 \end{proposition}
+
+\begin{definition} \label{def:metric-isometry} \hlt{Metric Isometry}\\
+Let $(X,d_X),(Y,d_Y)$ be metric spaces.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A map $f:X\to Y$ is an \hlt{isometry} if $\forall x,y\in X$, $d_Y(f(x),f(y))=d_X(x,y)$.
+\item $X$ and $Y$ are \hlt{isometric} if $\exists$ a bijective isometry $f:X\to Y$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:metric-isometry-basic-properties} \hlt{Basic Properties of Metric Isometries}\\
+Let $f:(X,d_X)\to(Y,d_Y)$ be an isometry.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f$ is injective.
+\item $f$ is continuous.
+\item $f^{-1}:(f(X),d_Y|_{f(X)\times f(X)})\to(X,d_X)$ is an isometry.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f(x)=f(y)$, then $d_X(x,y)=d_Y(f(x),f(y))=0$, hence $x=y$.
+\item If $x_n\to x$ in $X$, then $d_Y(f(x_n),f(x))=d_X(x_n,x)\to0$; by Theorem \ref{thm:metric-continuity-sequential-characterization}, $f$ is continuous.
+\item For $u=f(x),v=f(y)\in f(X)$, $d_X(f^{-1}(u),f^{-1}(v))=d_X(x,y)=d_Y(f(x),f(y))=d_Y(u,v)$; QED.
+\end{enumerate}
+\hlt{Structural Commentary}: An isometry preserves all distances, so injectivity and continuity are automatic.\\
+\hlt{Key Insight}: Distance preservation is stronger than topological equivalence.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:metric-versus-linear-isometries} \hlt{Metric Versus Linear Isometries}\\
+Metric isometry is purely distance-theoretic. If $T:V\to W$ is linear between inner-product spaces, then\\
+$\norm{Tv}=\norm v\ \forall v\in V\Longleftrightarrow d_W(Tu,Tv)=d_V(u,v)\ \forall u,v\in V$.
+\end{remark}
 
 \begin{example} \label{ex:circle-param-continuous-bijection-not-homeomorphism} \hlt{Continuous Bijection Need Not Be a Homeomorphism}\\
 Let $f:[0,2\pi)\to S^1$, and $f(t)=(\cos t,\sin t)$. This continuous bijection is not a homeomorphism: points of $S^1$ approaching $(1,0)$ from below have preimages tending to $2\pi$, not $0$.
@@ -344,9 +411,9 @@ Let $X,Y$ be metric spaces and let $f:X\to Y$. The following are equivalent:
 \begin{proof}
 \begin{enumerate}[label=(\roman*).]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ Given $\varepsilon>0$, choose $\delta>0$ such that $d_X(x,y)<\delta$ implies $d_Y(f(x),f(y))<\varepsilon$ for all $x,y\in X$.\\
+\item[$(i)$]$\Rightarrow(ii)$ Given $\varepsilon>0$, choose $\delta>0$ such that $d_X(x,y)<\delta$ implies $d_Y(f(x),f(y))<\varepsilon$ for all $x,y\in X$.\\
 Since $d_X(p_n,q_n)\to0$, eventually $d_X(p_n,q_n)<\delta$, hence eventually $d_Y(f(p_n),f(q_n))<\varepsilon$.
-\item[$(ii)$]$\Rightarrow (i)$ Prove the contrapositive. If $f$ is not uniformly continuous, then $\exists \varepsilon_0>0$ such that $\forall n\geq1$, $\exists p_n,q_n\in X$ with $d_X(p_n,q_n)<1/n$ and $d_Y(f(p_n),f(q_n))\geq\varepsilon_0$.\\
+\item[$(ii)$]$\Rightarrow(i)$ Prove the contrapositive. If $f$ is not uniformly continuous, then $\exists \varepsilon_0>0$ such that $\forall n\geq1$, $\exists p_n,q_n\in X$ with $d_X(p_n,q_n)<1/n$ and $d_Y(f(p_n),f(q_n))\geq\varepsilon_0$.\\
 Thus $d_X(p_n,q_n)\to0$ but $d_Y(f(p_n),f(q_n))\not\to0$, contradicting (ii).
 \end{enumerate}
 \hlt{Structural Commentary}: Uniform continuity preserves vanishing pairwise distances.\\

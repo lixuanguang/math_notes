@@ -101,10 +101,10 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is invertible if and only
 \end{corollary}
 
 \begin{definition} \label{def:invariant-subspace} \hlt{Invariant Subspace}\\
-Let $T\in\LL(\mathcal{V})$. A subspace $\mathcal{U}$ of $\mathcal{V}$ is \hlt{invariant under $T$} if $T\mathbf{u}\in\mathcal{U}$ for every $\mathbf{u}\in\mathcal{U}$.
+Let $T\in\LL(\mathcal{V})$. A subspace $\mathcal{U}$ of $\mathcal{V}$ is \hlt{invariant under $T$} if $T\mathbf{u}\in\mathcal{U}$ for every $\mathbf{u}\in\mathcal{U}$.\\
+The set of all $T$-invariant subspaces is $\operatorname{Inv}(T)\defeq\{\mathcal{U}\leq\mathcal{V}:T\mathcal{U}\subseteq\mathcal{U}\}$.\\
+\hlt{Key Insight}: $\mathcal{U}$ is invariant under $T$ iff $T|_{\mathcal{U}}\in\LL(\mathcal{U})$.
 \end{definition}
-
-Equivalently, $\mathcal{U}$ is invariant under $T$ exactly when the restriction $T|_{\mathcal{U}}$ is an operator on $\mathcal{U}$.
 
 \begin{proposition} \label{prop:one-dimensional-invariant-subspaces-and-eigenvectors} \hlt{One-Dimensional Invariant Subspaces and Eigenvectors}\\
 Let $T\in\LL(\mathcal{V})$, $\mathbf{v}\neq\mathbf{0}$. Then $\operatorname{span}(\mathbf{v})$ is invariant under $T$ if and only if there exists $\lambda\in\mathbb{F}$ such that $T\mathbf{v}=\lambda\mathbf{v}$.
@@ -174,6 +174,18 @@ If $\mathbf{w}\in\mathcal{W}$, then $\rho(T\mathbf{w})=T(\rho\mathbf{w})=\mathbf
 \end{enumerate}
 \hlt{Structural Commentary}: Commutation with $\rho$ means $T$ preserves the two projection components.\\
 \hlt{Key Insight}: Reducing pairs are exactly decompositions whose projection commutes with $T$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:invariant-subspace-projection-criterion} \hlt{Invariant Subspaces and Algebraic Projections}\\
+Let $T\in\LL(\mathcal{V})$, let $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$, and let $\rho=\rho_{\mathcal{U},\mathcal{W}}$. Then $\mathcal{U}\in\operatorname{Inv}(T)$ $\Longleftrightarrow$ $\rho T\rho=T\rho$.\\
+Consequently, if $\mathcal{U}\in\operatorname{Inv}(T)$, then $\rho_{\mathcal{U},\mathcal{Z}}T\rho_{\mathcal{U},\mathcal{Z}}=T\rho_{\mathcal{U},\mathcal{Z}}$ for every complement $\mathcal{Z}$ of $\mathcal{U}$.
+\begin{proof}
+For $\mathbf{v}=\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$, $\mathcal{U}\in\operatorname{Inv}(T)$ gives $(\rho T\rho-T\rho)\mathbf{v}=\rho T\mathbf{u}-T\mathbf{u}=\mathbf{0}$.\\
+Thus $\rho T\rho=T\rho$. Conversely, if $\rho T\rho=T\rho$ and $\mathbf{u}\in\mathcal{U}$, then $\rho T\mathbf{u}=\rho T\rho\mathbf{u}=T\rho\mathbf{u}=T\mathbf{u}$.\\
+Hence $T\mathbf{u}\in\operatorname{range}(\rho)=\mathcal{U}$, so $\mathcal{U}\in\operatorname{Inv}(T)$.\\
+\hlt{Structural Commentary}: A projection onto $\mathcal{U}$ tests whether the $\mathcal{W}$-component of $T\mathbf{u}$ vanishes.\\
+\hlt{Key Insight}: Invariance says applying $T$ after projecting into $\mathcal{U}$ needs no further correction by $\rho$.
 \end{proof}
 \end{proposition}
 
@@ -361,6 +373,51 @@ For $j\geq2$, upper triangularity of $T/\mathcal{U}$ gives $T\mathbf{v}_j+\mathc
 \end{proof}
 \end{theorem}
 
+\begin{definition} \label{def:almost-upper-triangular-real-matrix} \hlt{Almost Upper-Triangular Real Matrices}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{R})$. The matrix $A$ is \hlt{almost upper triangular} if there exist $d_1,\ldots,d_m\in\{1,2\}$ with $\sum_jd_j=n$ such that, in the corresponding block form $A=[A_{ij}]_{i,j=1}^{m}$,
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A_{ij}=0$ for $i>j$;
+\item each diagonal block is either $A_{jj}=[\lambda_j]$, $\lambda_j\in\mathbb{R}$, or $A_{jj}=
+\begin{bmatrix}
+a_j&-b_j\\
+b_j&a_j
+\end{bmatrix}$, $a_j,b_j\in\mathbb{R},\ b_j\neq0$.
+\end{enumerate}
+The matrix $A$ is in \hlt{real Schur block form} if only (i) holds for some such block sizes $d_j\in\{1,2\}$.
+\end{definition}
+
+\begin{theorem} \label{thm:real-almost-upper-triangularization} \hlt{Real Almost Upper Triangularisation}\\
+Let $\dim_{\mathbb{R}}\mathcal{V}<\infty$ and let $T\in\LL(\mathcal{V})$. Then $\exists$ a basis $\beta$ of $\mathcal{V}$ such that $[T]_{\beta\leftarrow\beta}$ is almost upper triangular.
+\begin{proof}
+Induct on $n=\dim_{\mathbb{R}}\mathcal{V}$. If $n\leq1$, clear.\\
+For $n\geq2$, Theorem \ref{thm:complex-operator-has-eigenvalue} gives an eigenpair $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=(a+bi)(\mathbf{u}+i\mathbf{v})$, where $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$.\\
+Thus $T\mathbf{u}=a\mathbf{u}-b\mathbf{v}$ and $T\mathbf{v}=b\mathbf{u}+a\mathbf{v}$.\\
+If $b=0$, choose $\mathbf{0}\neq\mathbf{x}\in\{\mathbf{u},\mathbf{v}\}$, set $\mathcal{U}=\operatorname{span}(\mathbf{x})$, $\alpha=(\mathbf{x})$, so $[T|_{\mathcal{U}}]_{\alpha\leftarrow\alpha}=[a]$.\\
+If $b\neq0$, set $\mathcal{U}=\operatorname{span}(\mathbf{u},\mathbf{v})$, $\alpha=(\mathbf{u},-\mathbf{v})$; then $\mathbf{u},\mathbf{v}$ are independent and $[T|_{\mathcal{U}}]_{\alpha\leftarrow\alpha}=
+\begin{bmatrix}
+a&-b\\
+b&a
+\end{bmatrix}$.\\
+In either case, $T(\mathcal{U})\subseteq\mathcal{U}$, $\dim\mathcal{U}\in\{1,2\}$, and the first diagonal block is admissible.\\
+By induction, $T/\mathcal{U}$ has an almost upper-triangular matrix in some quotient basis $\overline{\gamma}$.\\
+Lift $\overline{\gamma}$ to $\gamma\subseteq\mathcal{V}$ and set $\beta=(\alpha,\gamma)$. Then $[T]_{\beta\leftarrow\beta}$ is block upper triangular with first block $[T|_{\mathcal{U}}]_{\alpha\leftarrow\alpha}$ and quotient block $[T/\mathcal{U}]_{\overline{\gamma}\leftarrow\overline{\gamma}}$, hence is almost upper triangular.\\
+\hlt{Structural Commentary}: Real triangularisation starts with an invariant line or plane.\\
+\hlt{Key Insight}: Complex eigenvectors split into real and imaginary parts; those parts form the first real block.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:real-schur-block-form-orthonormal} \hlt{Orthonormal Real Schur Block Form}\\
+Let $\dim_{\mathbb{R}}\mathcal{V}<\infty$ and let $T\in\LL(\mathcal{V})$. Then $\exists$ an orthonormal basis $\gamma$ of $\mathcal{V}$ s.t. $[T]_{\gamma\leftarrow\gamma}$ is in real Schur block form.
+\begin{proof}
+By Theorem \ref{thm:real-almost-upper-triangularization}, choose $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ with block sizes $d_j\in\{1,2\}$.\\
+Put $s_k=d_1+\cdots+d_k$ and $\mathcal{U}_k=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{s_k})$. Then $T(\mathcal{U}_k)\subseteq\mathcal{U}_k$ for all $k$.\\
+Apply Gram--Schmidt to $\beta$ and obtain an orthonormal basis $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ with $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{s_k})=\mathcal{U}_k$, $1\leq k\leq m$. Thus $[T]_{\gamma\leftarrow\gamma}$ is block upper triangular for the same $d_j\in\{1,2\}$, hence is in real Schur block form.\\
+\hlt{Structural Commentary}: Gram--Schmidt preserves the invariant block flag.\\
+\hlt{Key Insight}: Orthonormalization changes blocks, not the flag.
+\end{proof}
+\end{corollary}
+
 \begin{proposition} \label{prop:upper-triangular-invertibility-criterion} \hlt{Invertibility from an Upper-Triangular Matrix}\\
 Suppose $T\in\LL(\mathcal{V})$ has an upper-triangular matrix with diagonal entries $\lambda_1,\ldots,\lambda_n$ with respect to some basis of $\mathcal{V}$. Then $T$ is invertible if and only if $\lambda_j\neq0$ for every $j$.
 \begin{proof}
@@ -436,6 +493,61 @@ Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $\l
 \begin{perspective} \label{per:diagonalizability-viewpoint} \hlt{Diagonalization as Exhaustion by Eigenspaces}\\
 Distinct eigenspaces are already separated by Proposition \ref{prop:eigenspaces-for-distinct-eigenvalues-form-direct-sum}. Thus diagonalizability is the stronger statement that these separated pieces account for every direction in $\mathcal{V}$.
 \end{perspective}
+
+\begin{theorem} \label{thm:algebraic-spectral-resolution-diagonalizable} \hlt{Algebraic Spectral Resolution}\\
+Let $0\neq\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $\Lambda=\{\lambda_1,\ldots,\lambda_m\}\subseteq\mathbb{F}$ with $\lambda_i\neq\lambda_j$ for $i\neq j$. The following are equivalent:
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item $T$ is diagonalizable and $\operatorname{spec}(T)=\Lambda$.
+\item $\exists$ nonzero projections $\rho_1,\ldots,\rho_m\in\LL(\mathcal{V})$ s.t. $\rho_i\rho_j=0\ (i\neq j)$, $\sum\limits_{i=1}^{m}\rho_i=I_{\mathcal{V}}$, $T=\sum\limits_{i=1}^{m}\lambda_i\rho_i$.
+\end{enumerate}
+In this case, for each $i$, $\operatorname{range}(\rho_i)=E_{\lambda_i}(T)$; $\ker(\rho_i)=\bigoplus_{j\neq i}E_{\lambda_j}(T)$; and $\rho_i=\prod\limits_{j\neq i}\frac{T-\lambda_jI_{\mathcal{V}}}{\lambda_i-\lambda_j}$
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ By Theorem \ref{thm:conditions-equivalent-to-diagonalizability}, $\mathcal{V}=\bigoplus\limits_{i=1}^{m}E_{\lambda_i}(T)$. Let $\rho_i=\rho_{E_{\lambda_i}(T),\,\bigoplus_{j\neq i}E_{\lambda_j}(T)}$.\\
+Then $\rho_i\rho_j=0$ for $i\neq j$, $\sum\limits_{i=1}^{m}\rho_i=I_{\mathcal{V}}$, and $T=\sum\limits_{i=1}^{m}\lambda_i\rho_i$. Also $\operatorname{range}(\rho_i)$ and $\ker(\rho_i)$ are as displayed.\\
+For $\ell_i(z)=\prod\limits_{j\neq i}\frac{z-\lambda_j}{\lambda_i-\lambda_j}$, we have $\ell_i(\lambda_k)=\delta_{ik}$, hence $\ell_i(T)=\rho_i$.
+\item[$(ii)$]$\Rightarrow (i)$ Put $\mathcal{V}_i=\operatorname{range}(\rho_i)$. By Theorem \ref{thm:resolution-of-identity-gives-direct-sum}, $\mathcal{V}=\bigoplus\limits_{i=1}^{m}\mathcal{V}_i$.\\
+If $\mathbf{x}\in\mathcal{V}_i$, then $\rho_i\mathbf{x}=\mathbf{x}$ and $\rho_j\mathbf{x}=\mathbf{0}$ for $j\neq i$, so $T\mathbf{x}=\lambda_i\mathbf{x}$. Thus $\mathcal{V}_i\subseteq E_{\lambda_i}(T)$.\\
+Conversely, if $T\mathbf{x}=\lambda_i\mathbf{x}$ and $\mathbf{x}=\sum\limits_{j=1}^{m}\mathbf{x}_j$ with $\mathbf{x}_j\in\mathcal{V}_j$, then $\sum\limits_{j=1}^{m}(\lambda_j-\lambda_i)\mathbf{x}_j=\mathbf{0}$, so $\mathbf{x}_j=\mathbf{0}$ for $j\neq i$.\\
+Hence $\mathcal{V}_i=E_{\lambda_i}(T)$. Since each $\mathcal{V}_i\neq0$, each $\lambda_i\in\operatorname{spec}(T)$; concatenating bases of the $\mathcal{V}_i$ gives an eigenbasis, so $T$ is diagonalizable and $\operatorname{spec}(T)=\Lambda$.\\
+The kernel and polynomial formulas follow from $\mathcal{V}=\bigoplus\limits_{i=1}^{m}\mathcal{V}_i$ and $\ell_i(\lambda_k)=\delta_{ik}$.
+\end{enumerate}
+\hlt{Structural Commentary}: A diagonalizable operator is a weighted sum of the projections onto its eigenspaces.\\
+\hlt{Key Insight}: Spectral projections are Lagrange polynomials in the operator.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:diagonalizable-restriction-to-invariant-subspace} \hlt{Diagonalizable Restrictions to Invariant Subspaces}\\
+Let $T\in\LL(\mathcal{V})$ be diagonalizable and let $\mathcal{U}\in\operatorname{Inv}(T)$. For $\lambda\in\operatorname{spec}(T)$, set $\mathcal{U}_{\lambda}=\mathcal{U}\cap E_{\lambda}(T)$.\\
+Then $\mathcal{U}=\bigoplus\limits_{\lambda\in\operatorname{spec}(T)}\mathcal{U}_{\lambda}$, where $T|_{\mathcal{U}}$ is diagonalizable.
+\begin{proof}
+Let $\rho_{\lambda}=p_{\lambda}(T)$ be the spectral projection from Theorem \ref{thm:algebraic-spectral-resolution-diagonalizable}. Since $\mathcal{U}\in\operatorname{Inv}(T)$, $\rho_{\lambda}(\mathcal{U})\subseteq\mathcal{U}$.\\
+Hence, for $\mathbf{u}\in\mathcal{U}$, $\mathbf{u}=\sum\limits_{\lambda\in\operatorname{spec}(T)}\rho_{\lambda}\mathbf{u}$, where $\rho_{\lambda}\mathbf{u}\in\mathcal{U}_{\lambda}$. Thus $\mathcal{U}=\sum\limits_{\lambda\in\operatorname{spec}(T)}\mathcal{U}_{\lambda}$, and the sum is direct since $\mathcal{U}_{\lambda}\subseteq E_{\lambda}(T)$. Bases of the nonzero $\mathcal{U}_{\lambda}$ concatenate to an eigenbasis for $T|_{\mathcal{U}}$.\\
+\hlt{Structural Commentary}: Invariant subspaces inherit spectral projections.\\
+\hlt{Key Insight}: Polynomial spectral projections cannot move vectors out of a $T$-invariant subspace.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:simultaneous-diagonalization-commuting-diagonalizable-family} \hlt{Simultaneous Diagonalisation of Commuting Diagonalizable Operators}\\
+Let $\dim\mathcal{V}<\infty$, and let $\emptyset\neq\mathcal{F}\subseteq\LL(\mathcal{V})$ be finite with every $T\in\mathcal{F}$ diagonalizable.\\
+Then $\forall S,T\in\mathcal{F},\ ST=TS$ $\Longleftrightarrow$ $\exists$ a basis $\beta$ of $\mathcal{V}$ such that $[T]_{\beta\leftarrow\beta}$ is diagonal $\forall T\in\mathcal{F}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Induct on $n=\dim\mathcal{V}$. If every $T\in\mathcal{F}$ is scalar, any basis works. Otherwise choose nonscalar $S\in\mathcal{F}$.\\
+By Theorem \ref{thm:algebraic-spectral-resolution-diagonalizable}, $\mathcal{V}=\bigoplus\limits_{\lambda\in\operatorname{spec}(S)}E_{\lambda}(S)$, with at least two nonzero summands of dimension $<n$.\\
+If $T\in\mathcal{F}$ and $\mathbf{x}\in E_{\lambda}(S)$, then $S(T\mathbf{x})=T(S\mathbf{x})=\lambda T\mathbf{x}$, so $E_{\lambda}(S)\in\operatorname{Inv}(T)$.\\
+By Lemma \ref{lem:diagonalizable-restriction-to-invariant-subspace}, each $T|_{E_{\lambda}(S)}$ is diagonalizable; the restricted family still commutes.\\
+Induction gives a common eigenbasis of each $E_{\lambda}(S)$; concatenate over $\lambda$.
+\item[$(\Leftarrow)$] For $S,T\in\mathcal{F}$, set $D_S=[S]_{\beta\leftarrow\beta}$ and $D_T=[T]_{\beta\leftarrow\beta}$.\\
+Since $D_S,D_T$ are diagonal, $[ST]_{\beta\leftarrow\beta}=D_SD_T=D_TD_S=[TS]_{\beta\leftarrow\beta}$. Thus $ST=TS$.
+\end{enumerate}
+\hlt{Structural Commentary}: Commutation preserves eigenspaces.\\
+\hlt{Key Insight}: Diagonalize one operator, then restrict.
+\end{proof}
+\end{theorem}
 
 \begin{corollary} \label{cor:enough-eigenvalues-implies-diagonalizable} \hlt{Enough Eigenvalues Imply Diagonalizability}\\
 If $\mathcal{V}$ is finite-dimensional and $T\in\LL(\mathcal{V})$ has $\dim(\mathcal{V})$ distinct eigenvalues, then $T$ is diagonalizable.

@@ -1,4 +1,4 @@
-\subsection{Compactness and Completeness}
+\subsection{Compactness and Completeness}\label{subsec:compactness-and-completeness}
 
 % **Role:** abstract structure behind limits and continuity.
 %
@@ -58,6 +58,30 @@ A sequence $(p_n)$ in a metric space $X$ is \hlt{Cauchy} if $\forall \varepsilon
 Let $E$ be a nonempty subset of a metric space $X$. The \hlt{diameter} of $E$ is $\diam E\defeq\sup\{d(p,q):p,q\in E\}$, with the supremum interpreted in the extended real sense when the set of distances is unbounded.
 \end{definition}
 
+\begin{proposition} \label{prop:diameter-basic-properties} \hlt{Basic Diameter Properties}\\
+Let $\emptyset\ne E,F\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E$ is bounded $\Longleftrightarrow\diam E<\infty\Longleftrightarrow\exists q\in X,\exists M>0$ such that $E\subseteq B_M(q)$.
+\item $\diam E=0\Longleftrightarrow |E|=1$.
+\item $E\subseteq F\Longrightarrow\diam E\leq\diam F$.
+\item $E,F$ bounded $\Longrightarrow E\cup F$ bounded.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $E\subseteq B_M(q)$, then $d(x,y)\leq d(x,q)+d(q,y)<2M$ for $x,y\in E$, so $\diam E<\infty$.\\
+If $\diam E<\infty$ and $q\in E$, then $E\subseteq B_{\diam E+1}(q)$.
+\item $\diam E=0\Longleftrightarrow d(x,y)=0$ for all $x,y\in E\Longleftrightarrow x=y$ for all $x,y\in E$; since $E\ne\emptyset$, this is $|E|=1$.
+\item $\{d(x,y):x,y\in E\}\subseteq\{d(x,y):x,y\in F\}$, so monotonicity of $\sup$ gives $\diam E\leq\diam F$.
+\item Choose $e\in E$, $f\in F$, and set $D\defeq\diam E+d(e,f)+\diam F<\infty$. For $x,y\in E\cup F$, either $x,y$ lie in the same set, or after swapping, $x\in E$, $y\in F$, and $d(x,y)\leq d(x,e)+d(e,f)+d(f,y)\leq D$.\\
+Thus $\diam(E\cup F)<\infty$, so $E\cup F$ is bounded by (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Diameter is a single-number form of boundedness for nonempty sets.\\
+\hlt{Key Insight}: Cross-distances between two bounded sets are controlled by one bridge distance.
+\end{proof}
+\end{proposition}
+
 \begin{proposition} \label{prop:cauchy-tail-diameters} \hlt{Cauchy Sequences and Tail Diameters}\\
 For $(p_n)$ in a metric space $X$, set $E_N\defeq\{p_j:j\geq N\}$. Then $(p_n)$ is Cauchy if and only if $\diam E_N\to0$.
 \begin{proof}
@@ -84,16 +108,14 @@ If $m,n\geq N_0$, then $p_m,p_n\in E_{N_0}$, hence $d(p_m,p_n)\leq\diam E_{N_0}<
 Let $X$ be a metric space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\overline{E}$ is the closure of $E$ in a metric space, then $\diam\overline{E}=\diam E$.
-\item If $K_1\supseteq K_2\supseteq K_3\supseteq\cdots$ is a sequence of nonempty compact sets in $X$ and $\diam K_n\to0$, then $\bigcap_{n=1}^{\infty}K_n$ consists of exactly one point.
+\item If $\emptyset\ne E\subseteq X$, then $\diam\overline{E}=\diam E$.
+\item If $K_1\supseteq K_2\supseteq\cdots$ are nonempty compact subsets of $X$ and $\diam K_n\to0$, then $\abs{\bigcap_{n=1}^{\infty}K_n}=1$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Since $E\subseteq\overline{E}$, $\diam E\leq\diam\overline{E}$. For $p,q\in\overline{E}$ and $\varepsilon>0$, choose $p',q'\in E$ with $d(p,p'),d(q,q')<\varepsilon$.\\
-Then $d(p,q)\leq\diam E+2\varepsilon$, so $\diam\overline{E}\leq\diam E$.
-\item Put $I\defeq\bigcap_{n\geq1}K_n$. Corollary \ref{cor:nested-nonempty-compact-intersection} gives $I\neq\varnothing$.\\
-If $x,y\in I$ with $x\neq y$, then $\diam K_n\geq d(x,y)>0$ for all $n$, contradicting $\diam K_n\to0$.
+\item Since $E\subseteq\overline{E}$, $\diam E\leq\diam\overline{E}$. For $p,q\in\overline{E}$ and $\varepsilon>0$, choose $p',q'\in E$ with $d(p,p'),d(q,q')<\varepsilon$; then $d(p,q)\leq\diam E+2\varepsilon$. Hence $\diam\overline{E}\leq\diam E$.
+\item Set $I\defeq\bigcap_{n\geq1}K_n$. Corollary \ref{cor:nested-nonempty-compact-intersection} gives $I\ne\emptyset$. If $x,y\in I$, then $d(x,y)\leq\diam K_n$ for all $n$, so $d(x,y)=0$ as $\diam K_n\to0$. Thus $x=y$, hence $\abs I=1$.
 \end{enumerate}
 \hlt{Structural Commentary}: Closure preserves $\diam$; $K_n\downarrow$ with $\diam K_n\to0$ forces a singleton.\\
 \hlt{Key Insight}: Compactness gives existence; shrinking diameter gives uniqueness.
@@ -122,11 +144,33 @@ If $x,y\in I$ with $x\neq y$, then $\diam K_n\geq d(x,y)>0$ for all $n$, contrad
 \begin{lemma} \label{lem:cauchy-sequence-with-convergent-subsequence} \hlt{A Cauchy Sequence with a Convergent Subsequence Converges}\\
 Let $(p_n)$ be a Cauchy sequence in a metric space $X$. If some subsequence $(p_{n_j})$ converges to $p\in X$, then $p_n\to p$.
 \begin{proof}
-Given $\varepsilon>0$, choose $N_0$ so that $m,n\geq N_0$ implies $d(p_m,p_n)<\varepsilon/2$. Choose $j$ with $n_j\geq N_0$ and $d(p_{n_j},p)<\varepsilon/2$. Then for every $n\geq N_0$, $d(p_n,p)\leq d(p_n,p_{n_j})+d(p_{n_j},p)<\varepsilon$.\\
+Given $\varepsilon>0$, choose $N_0$ so that $m,n\geq N_0$ implies $d(p_m,p_n)<\varepsilon/2$.\\
+Choose $j$ with $n_j\geq N_0$ and $d(p_{n_j},p)<\varepsilon/2$. Then for every $n\geq N_0$, $d(p_n,p)\leq d(p_n,p_{n_j})+d(p_{n_j},p)<\varepsilon$.\\
 \hlt{Structural Commentary}: The Cauchy tail follows any convergent subsequence to the same limit.\\
 \hlt{Key Insight}: Mutual closeness plus one convergent thread forces the whole tail to converge.
 \end{proof}
 \end{lemma}
+
+\begin{proposition} \label{prop:cauchy-sequences-bounded-distance-converges} \hlt{Boundedness and Distances of Cauchy Sequences}\\
+Let $(p_n),(q_n)$ be Cauchy sequences in a metric space $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Cauchy boundedness}: the range of $n\mapsto p_n$, $\operatorname{ran}(p_n)\defeq\{p_n:n\in\N\}$ is bounded.
+\item \hlt{distance convergence}: the sequence $n\mapsto d(p_n,q_n)$ converges in $\R$.
+\item \hlt{nonconverse}: there exists a bounded sequence in $\R$ that is not Cauchy.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $N$ with $m,n\geq N\Longrightarrow d(p_m,p_n)<1$.\\
+Then $\{p_n:n\geq N\}\subseteq B_1(p_N)$, and $\{p_1,\ldots,p_{N-1}\}$ is finite, so $\operatorname{ran}(p_n)$ is bounded.
+\item For $m,n\in\N$, $\abs{d(p_n,q_n)-d(p_m,q_m)}\leq d(p_n,p_m)+d(q_n,q_m)$. Hence $(d(p_n,q_n))$ Cauchy in $\R$, converges.
+\item Let $a_n\defeq(-1)^n$. Then $\abs{a_n}\leq1$ for all $n$, but with $\varepsilon=1$, for every $N$ there exist $m,n\geq N$ with $\abs{a_m-a_n}=2$; hence $(a_n)$ is bounded but not Cauchy.
+\end{enumerate}
+\hlt{Structural Commentary}: Cauchy tails are bounded; Cauchy-pair distances converge.\\
+\hlt{Key Insight}: The four-point triangle estimate controls distance sequences.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \label{def:complete-metric-space} \hlt{Complete Metric Space}\\
 A metric space $X$ is \hlt{complete} if every Cauchy sequence in $X$ converges to a point of $X$.\\
@@ -134,20 +178,77 @@ Compact metric spaces and $\R^k$ are complete (by Theorem \ref{thm:cauchy-conver
 \end{definition}
 
 \begin{proposition} \label{prop:basic-completeness-consequences} \hlt{Completeness and Closed Subspaces}\\
-Let $X$ be a complete metric space and let $E\subseteq X$ carry the inherited metric.\\
-Then $E$ is complete if and only if $E$ is closed in $X$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+Let $(X,d)$ be a metric space, $E\subseteq X$, and $d_E:=d|_{E\times E}$.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $E$ is complete. If $p\in\overline{E}$, choose $p_n\in E$ with $d(p_n,p)<1/n$.\\
-Then $p_n\to p$ in $X$, so $(p_n)$ is Cauchy in $E$ and hence $p_n\to q$ for some $q\in E$. Uniqueness of limits in $X$ gives $p=q\in E$; thus $\overline{E}\subseteq E$, so $E$ is closed.
-\item[$(\Leftarrow)$] Suppose $E$ is closed. If $(p_n)\subseteq E$ is Cauchy, completeness of $X$ gives $p_n\to p\in X$.\\
-Since $E$ is closed, $p\in E$, so $E$ is complete.
+\item If $(E,d_E)$ is complete, then $E$ is closed in $X$, equivalently $E=\overline{E}^{\,X}$.
+\item If $(X,d)$ is complete, then $(E,d_E)$ is complete if and only if $E$ is closed in $X$, equivalently $E=\overline{E}^{\,X}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Assume $(E,d_E)$ complete. Let $p\in\overline{E}^{\,X}$. Choose $(p_n)\subseteq E$ with $d(p_n,p)<1/n$.\\
+Then $p_n\to p$ in $X$, hence $(p_n)$ is Cauchy in $(E,d_E)$. Thus $p_n\to q\in E$ in $(E,d_E)$, hence also in $X$.\\
+Uniqueness in $X$ gives $p=q\in E$. Therefore $\overline{E}^{\,X}\subseteq E$, so $E=\overline{E}^{\,X}$.
+\item Assume $(X,d)$ complete. By (i), $(E,d_E)$ complete $\Rightarrow E=\overline{E}^{\,X}$.\\
+Conversely, if $E=\overline{E}^{\,X}$ and $(p_n)\subseteq E$ is Cauchy in $(E,d_E)$, then $(p_n)$ is Cauchy in $X$, so $p_n\to p\in X$.\\
+Since $p\in\overline{E}^{\,X}=E$, every Cauchy sequence in $(E,d_E)$ converges in $(E,d_E)$.
 \end{enumerate}
 \hlt{Structural Commentary}: Completeness gives the limit in $X$; closedness keeps it in $E$.\\
 \hlt{Key Insight}: In a complete ambient space, $E$ is complete exactly when $\overline{E}=E$.
 \end{proof}
 \end{proposition}
+
+\begin{example} \label{ex:finite-dimensional-complete-metric-spaces} \hlt{Finite-Dimensional Complete Metric Spaces}\\
+For $k\in\N$, $(\R^k,d_2)$ and $(\C^k,d_2)$ are complete; in particular, so are $\R$ and $\C$.
+\begin{proof}
+Completeness of $\R$ is Theorem \ref{thm:real-cauchy-convergence-criterion}.\\
+If $z_n=x_n+iy_n$ is Cauchy in $\C$, then $(x_n)$ and $(y_n)$ are Cauchy in $\R$, so $z_n\to x+iy\in\C$.\\
+Theorem \ref{thm:cauchy-convergence-criterion} gives completeness of $\R^k$, and the isometry $\C^k\cong\R^{2k}$ gives completeness of $\C^k$.\\
+\hlt{Structural Commentary}: Finite-dimensional completeness is coordinatewise completeness.\\
+\hlt{Key Insight}: A Cauchy sequence in finitely many coordinates converges coordinate by coordinate.
+\end{proof}
+\end{example}
+
+\begin{example} \label{ex:continuous-functions-sup-complete-integral-not-complete} \hlt{Two Metrics on $C[0,1]$}\\
+For $\mathbb{F}\in\{\R,\C\}$, $C_{\mathbb{F}}:=C([0,1],\mathbb{F})$ is complete under $d_\infty(f,g):=\sup_{x\in[0,1]}\abs{f(x)-g(x)}$ by Theorem \ref{thm:complete-supremum-metric-space}, but not under $d_1(f,g):=\int_0^1\abs{f(x)-g(x)}\,dx$.
+\begin{proof}
+For $n\ge2$, define $f_n\in C_{\mathbb{F}}$ by
+\begin{equation*}
+f_n(x)\defeq
+\begin{cases}
+0,&0\le x\le \frac12,\\
+n(x-\frac12),&\frac12\le x\le \frac12+\frac1n,\\
+1,&\frac12+\frac1n\le x\le1.
+\end{cases}
+\end{equation*}
+Let $s:=\mathbf{1}_{(1/2,1]}$. Then $d_1(f_n,s)=1/(2n)$, hence $(f_n)$ is $d_1$-Cauchy. If $f_n\to g\in C_{\mathbb{F}}$ in $d_1$, then $d_1(g,s)=0$, so $g=s$ a.e. Continuity forces $g=0$ on $[0,1/2]$ and $g=1$ on $(1/2,1]$, impossible at $1/2$.\\
+\hlt{Structural Commentary}: The integral metric permits a continuous ramp to collapse to a jump.\\
+\hlt{Key Insight}: Supremum control preserves continuity; integral control can miss jumps.
+\end{proof}
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/continuous_functions_integral_metric_not_complete.tikz}
+  \caption{The continuous ramps $f_n$ converge in the integral metric to a
+  discontinuous step function.}
+  \label{fig:continuous-functions-integral-metric-not-complete}
+\end{figure}
+
+\begin{example} \label{ex:sequence-spaces-complete} \hlt{Completeness of $\ell^\infty$ and $\ell^p$}\\
+For $\mathbb{F}\in\{\R,\C\}$, $(\ell^\infty(\mathbb{F}),\norm{\cdot}_\infty)$ and $(\ell^p(\mathbb{F}),\norm{\cdot}_p)$, $1\leq p<\infty$, are complete.
+\begin{proof}
+For $\ell^\infty$, let $\mathbf{x}^{(n)}=(x_j^{(n)})_j$ be Cauchy. Then $x_j^{(n)}\to y_j\in\mathbb{F}$ for each $j$.\\
+If $\norm{\mathbf{x}^{(n)}-\mathbf{x}^{(m)}}_\infty<\varepsilon$ for $m,n\geq N$, then $\abs{x_j^{(n)}-y_j}\leq\varepsilon$ for all $j$, so $\norm{\mathbf{x}^{(n)}-\mathbf{y}}_\infty\leq\varepsilon$.\\
+Taking $n=N$ gives $\mathbf{y}\in\ell^\infty$, hence $\mathbf{x}^{(n)}\to\mathbf{y}$.\\
+For $\ell^p$, let $\mathbf{x}^{(n)}$ be Cauchy and define $\mathbf{y}=(y_j)$ by coordinatewise limits.\\
+If $\norm{\mathbf{x}^{(n)}-\mathbf{x}^{(m)}}_p<\varepsilon$ for $m,n\geq N$, then for each $r$, $\sum\limits_{j=1}^{r}\abs{x_j^{(n)}-y_j}^{p}=\lim\limits_{m\to\infty}\sum\limits_{j=1}^{r}\abs{x_j^{(n)}-x_j^{(m)}}^{p}\leq\varepsilon^p$.\\
+Letting $r\to\infty$ gives $\norm{\mathbf{x}^{(n)}-\mathbf{y}}_p\leq\varepsilon$ for $n\geq N$. Taking $n=N$ gives $\mathbf{y}\in\ell^p$, hence $\mathbf{x}^{(n)}\to\mathbf{y}$.\\
+\hlt{Structural Commentary}: Completeness of scalar coordinates combines with uniform tail control.\\
+\hlt{Key Insight}: Norm-Cauchy control keeps coordinatewise limits inside the space.
+\end{proof}
+\end{example}
 
 \begin{definition} \label{def:contraction-mapping} \hlt{Contraction}\\
 Let $X$ be a metric space with metric $d$.\\
@@ -193,6 +294,40 @@ If it converged to some $r\in\Q$ in the inherited metric, uniqueness of limits i
 Complete by identifying Cauchy sequences with $d(p_n,q_n)\to0$ and setting $D([(p_n)],[(q_n)])=\lim_{n\to\infty}d(p_n,q_n)$.\\
 Constant sequences embed the original space; triangle inequalities and diagonals give a complete metric.
 \end{perspective}
+
+\begin{theorem} \label{thm:metric-completion-existence-uniqueness} \hlt{Metric Completion}\\
+For every metric space $(X,d)$, $\exists$ complete metric space $(\widehat{X},\widehat{d})$, isometry $\iota:X\to\widehat{X}$ with $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$.\\
+If $(Y,d_Y,\tau)$, $(Z,d_Z,\sigma)$ are two such completions, then $\exists!$ bijective isometry $\Phi:Y\to Z$ s.t. $\Phi\circ\tau=\sigma$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item \hlt{Existence}. Let $\operatorname{CS}(X)$ be the Cauchy sequences in $X$.\\
+For $a=(a_n),b=(b_n)\in\operatorname{CS}(X)$, $\abs{d(a_n,b_n)-d(a_m,b_m)}\leq d(a_n,a_m)+d(b_n,b_m)$, so $D(a,b)\defeq\lim\limits_{n\to\infty} d(a_n,b_n)$ exists. Put $a\sim b\Leftrightarrow D(a,b)=0$, $\widehat{X}\defeq\operatorname{CS}(X)/{\sim}$, and $\widehat{d}([a],[b])\defeq D(a,b)$.\\
+The estimate gives well-definedness; metric axioms pass to limits. Map $\iota(x)\defeq[(x,x,\ldots)]$ is an isometry.\\
+If $a=(a_n)$ and $d(a_n,a_N)<\varepsilon$ for $n\geq N$, then $\widehat{d}(\iota(a_N),[a])\leq\varepsilon$, hence $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$.\\
+Let $([a^{(k)}])$ be Cauchy in $\widehat{X}$. Choose $x_k\in X$ with $\widehat{d}(\iota(x_k),[a^{(k)}])<1/k$.\\
+Since $d(x_k,x_l)\leq1/k+\widehat{d}([a^{(k)}],[a^{(l)}])+1/l$, $(x_k)$ is Cauchy in $X$,\\
+and $\widehat{d}([a^{(k)}],[(x_j)])\leq1/k+\limsup_{j\to\infty}d(x_k,x_j)\to0$. Thus $([a^{(k)}])\to[(x_j)]$, so $(\widehat{X},\widehat{d})$ is complete.
+\item \hlt{Uniqueness}. Let $(Y,d_Y,\tau)$ and $(Z,d_Z,\sigma)$ be completions.\\
+Define $\rho_0:\tau(X)\to\sigma(X)$ by $\rho_0(\tau x)\defeq\sigma x$; it is an isometry.\\
+For $y\in Y$, choose $y_n\in\tau(X)$ with $y_n\to y$. Since $\rho_0(y_n)$ is Cauchy in $Z$, define $\Phi(y)\defeq\lim\limits_{n\to\infty}\rho_0(y_n)$.\\
+If $z_n\in\tau(X)$ and $z_n\to y$, then $d_Z(\rho_0(y_n),\rho_0(z_n))=d_Y(y_n,z_n)\to0$, so $\Phi$ is well defined.\\
+If $y_n'\to y'$, then $d_Z(\Phi(y),\Phi(y'))=\lim\limits_{n\to\infty} d_Z(\rho_0(y_n),\rho_0(y_n'))=\lim\limits_{n\to\infty} d_Y(y_n,y_n')=d_Y(y,y')$.\\
+Hence $\Phi$ is an isometry extending $\rho_0$. Its image is complete, hence closed in $Z$, and contains the dense set $\sigma(X)$; therefore $\Phi(Y)=Z$. Uniqueness follows from continuity and density of $\tau(X)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Missing limits are installed as equivalence classes of Cauchy approximations.\\
+\hlt{Key Insight}: Completion adds Cauchy limits and is unique over the dense copy of $X$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/metric_completion_uniqueness.tikz}
+  \caption{For completions $Y,Z$, the dense-copy isometry
+  $\sigma\tau^{-1}:\tau(X)\to\sigma(X)$ extends uniquely to
+  $\overline{\rho}:Y\cong Z$.}
+  \label{fig:metric-completion-uniqueness}
+\end{figure}
 
 
 \begin{figure}[H]
