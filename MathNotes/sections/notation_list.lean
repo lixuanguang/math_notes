@@ -5,9 +5,14 @@ import MathNotes.sections.base
 
 Lean counterpart of `sections/notation_list.tex`.
 
-The LaTeX notation list treats undecorated Latin and calligraphic letters as
-local, and reserves decorated forms for persistent meanings.  Recent
-collision-cleanup conventions include:
+The LaTeX notation list is organized as a collision index, global conventions,
+and then top-level part notation.  It treats undecorated Latin and calligraphic
+letters as local, and reserves decorated forms for persistent meanings.  Current
+part-level files cover linear algebra, algebraic structures, algebraic geometry
+and commutative algebra, analysis, probability, and numerical computation.
+PDE and machine-learning notation are intentionally omitted for now.
+
+Recent collision-cleanup conventions include:
 
 * `\mathcal{P}(X)` for power sets, but `\mathscr{P} = C[x]` only for the umbral
   polynomial algebra in the TeX source.
