@@ -4,7 +4,7 @@ Use this phase after organization and dependency flow are stable.
 
 ## Goal
 
-Refine mathematical writing section by section:
+Refine mathematical writing section by section, resolving one section-bounded issue batch at a time:
 
 - Formalize wording.
 - Make prose more succinct.
@@ -42,11 +42,13 @@ If a cursor is provided, start there and treat earlier material as intentionally
 - Do not process multiple sections in one pass.
 - Do not skip ahead unless the user gives a `Start from:` cursor.
 - Do not continue to another section until the user approves.
-- Each approval authorizes only one loop:
+- Each approval authorizes one section-bounded issue batch:
 
 ```text
-identify and analyse section -> check content -> edit current section -> validate -> seek permission again
+identify and analyse section -> group issues into one section-bounded batch -> edit current section -> validate -> seek permission again
 ```
+
+A section-bounded issue batch may include multiple related refinements inside the current section, such as formalizing prose, tightening proof structure, normalizing displayed operators with `\limits`, consolidating duplicate labels, removing improper references to remarks/examples/numbered definitions, and expanding prose that became too terse. Do not request separate approval for each individual sentence, formula, label, or proof step when they belong to the same current-section batch.
 
 ## Writing Checks
 
@@ -73,7 +75,8 @@ Before editing, report:
 
 - File path and section heading.
 - Brief summary of what the section is doing.
-- Passages that should be more formal, succinct, notation-driven, or precise.
+- Section-bounded issue batch summary.
+- Passages that should be more formal, succinct, notation-driven, or precise, grouped by issue type.
 - Whether any theorem, proposition, lemma, corollary, or method references a remark or example.
 - How you will fix any forbidden reference to a remark or example.
 - Whether the refactor can avoid explicit references to remarks, examples, or numbered definitions while preserving clarity.
@@ -81,13 +84,13 @@ Before editing, report:
 - Whether any proof should be segmented using one of the standard proof-style blocks.
 - Any place where succinctness would make the content too implicit, and how you will keep the needed assumptions, definitions, or proof steps explicit.
 - Whether any environment or object has multiple labels, the proposed canonical label to keep, and which references would need updating.
-- Intended edits, stated before applying them.
+- Intended edits, grouped as one section-bounded issue batch and stated before applying them.
 
 ## Approval Loop
 
 After presenting the section analysis:
 
-- If the user says `approve`, edit only the current section.
+- If the user says `approve`, apply only the approved section-bounded issue batch in the current section.
 - If the user says `skip`, leave it untouched and ask whether to continue.
 - If the user says `revise`, adjust the proposed edits and present them again.
 - If the user says `stop`, stop.
@@ -98,6 +101,7 @@ After presenting the section analysis:
 When editing an approved section:
 
 - Make focused edits only within the current section.
+- Apply all approved items in the section-bounded issue batch together.
 - Preserve mathematical meaning unless the original is ambiguous or incorrect.
 - Prefer concise formal language and standard notation.
 - Do not edit later sections.

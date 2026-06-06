@@ -78,12 +78,14 @@ Global workflow:
 
 - Work incrementally.
 - Do not audit or edit the whole repository at once.
-- Do not make changes without approval for the specific source insertion batch, topic batch, dependency-flow fix, or section refinement.
+- Do not make changes without approval for the specific section-bounded source insertion batch, topic batch, dependency-flow issue batch, or refinement issue batch.
 - Each approval authorizes only one loop from the relevant phase README.
+- Each loop should resolve one approved issue batch inside one current section or subsection, rather than one isolated content piece at a time.
+- A section-bounded issue batch may contain multiple related fixes in the current section, such as placement, dependency order, labels, references, displayed-operator notation, proof segmentation, and clarity/succinctness adjustments.
 - After completing one loop, stop and ask whether to continue, revise, jump to another cursor, or stop.
 - If the user gives a new `Start from:` cursor, jump there and treat earlier material as intentionally skipped.
 - In Phase 0, use only attached/provided source material and existing repository content. Do not search elsewhere or add unsupported material from memory.
-- In Phase 0, do not insert source material until the user approves the specific insertion batch.
+- In Phase 0, do not insert source material until the user approves the specific section-bounded insertion batch.
 
 Global mathematical rules:
 
@@ -109,7 +111,7 @@ Begin by reporting:
 1. The source chapter/sections, if provided.
 2. The cursor you will use.
 3. The phase you will start with.
-4. The first source batch, topic batch, or section you propose to inspect.
+4. The first section-bounded source batch, topic batch, dependency-flow issue batch, or refinement issue batch you propose to inspect.
 
 Then follow the relevant phase README exactly.
 ```

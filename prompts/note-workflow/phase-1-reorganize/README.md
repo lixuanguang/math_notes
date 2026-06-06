@@ -4,7 +4,7 @@ Use this phase when the notes may need structural changes before prose refinemen
 
 ## Goal
 
-Reorganize the repository topic by topic:
+Reorganize the repository topic by topic, using section-bounded issue batches rather than moving one content piece at a time:
 
 - Decide file order, chapter order, and section hierarchy.
 - Move definitions before results that use them.
@@ -37,13 +37,16 @@ If a cursor is provided, start there and treat earlier material as intentionally
 
 ## Batch Rules
 
-- Work in small topic batches.
+- Work in small section-bounded topic batches.
 - Use one mathematical topic per batch.
+- Prefer one current target section or subsection per batch. If a reorganization issue spans multiple sections, propose the part affecting the current target section first unless the user approves a broader batch.
 - Prefer 1-3 source files per batch.
 - Prefer complete logical blocks: definitions, examples, propositions, proofs, remarks, methods, or subsections.
 - Avoid batches larger than roughly 300-500 lines unless the user approves.
 - Do not audit or migrate the whole repository at once.
 - Do not apply any move until the user approves the specific batch.
+
+A section-bounded issue batch may include multiple related reorganization fixes for the selected section, such as moving several definitions before their uses, consolidating duplicate local blocks, fixing local label issues, and updating the relevant `\input` or `\include` order. Do not request separate approval for each individual block when the blocks belong to the same section-level issue batch.
 
 ## Audit Priorities
 
@@ -63,6 +66,7 @@ For the current topic only, check:
 Before editing, present:
 
 - Topic name.
+- Current target section or subsection.
 - Target file(s).
 - Source file(s).
 - Exact block(s) proposed for movement, with file paths and line ranges.
@@ -92,6 +96,7 @@ After presenting a batch:
 When applying an approved batch:
 
 - Preserve moved content verbatim.
+- Apply all approved items in the section-bounded issue batch together.
 - Do not rewrite prose.
 - Do not change mathematical statements.
 - Do not rename labels unless the approved batch explicitly includes duplicate-label consolidation.

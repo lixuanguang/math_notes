@@ -4,7 +4,7 @@ Use this phase after the broad organization is stable, but before prose refineme
 
 ## Goal
 
-Check that mathematical dependencies are introduced in the right order:
+Check that mathematical dependencies are introduced in the right order, resolving one section-bounded issue batch at a time:
 
 - Each section should only use concepts already introduced.
 - Definitions should precede results that use them.
@@ -37,9 +37,12 @@ If a cursor is provided, start there and treat earlier material as intentionally
 
 - Work section by section or topic by topic.
 - Do not check the whole repository at once.
-- Keep each batch focused on one dependency-flow issue or one coherent section.
-- Do not edit until the user approves the proposed fix.
-- Each approval authorizes only one dependency-flow loop.
+- Keep each batch focused on one coherent section and the related dependency-flow issues inside that section.
+- Do not split related issues inside the same section into one approval per content piece.
+- Do not edit until the user approves the proposed section-bounded issue batch.
+- Each approval authorizes one section-bounded dependency-flow issue batch.
+
+A section-bounded issue batch may include multiple related fixes in the current section, such as moving a needed definition earlier, introducing notation before use, promoting content out of a remark/example, consolidating duplicate labels, and updating local references. Keep the batch limited to the current section unless a cross-section prerequisite fix is necessary and explicitly included in the proposal.
 
 ## Dependency Checks
 
@@ -62,6 +65,7 @@ Before editing, report:
 
 - File path and section heading.
 - Mathematical role of the section.
+- Section-bounded issue batch summary.
 - Dependencies used in the section.
 - Whether each dependency was introduced earlier.
 - Any notation introduced too late.
@@ -69,24 +73,25 @@ Before editing, report:
 - Any content that unnecessarily relies on explicit references to remarks, examples, or numbered definitions.
 - Any content that should be promoted from a remark or example into formal exposition.
 - Any single environment or object with multiple labels, the proposed canonical label to keep, and which references would need updating.
-- Proposed minimal fix.
-- Whether the fix requires moving content, adding a short definition, adding a placeholder, or adjusting include order.
+- Proposed minimal fixes grouped as one section-bounded issue batch.
+- Whether the batch requires moving content, adding a short definition, adding a placeholder, consolidating labels, updating references, or adjusting include order.
 
 ## Approval Loop
 
 After presenting findings:
 
-- If the user says `approve`, apply only the proposed fix.
+- If the user says `approve`, apply only the proposed section-bounded issue batch.
 - If the user says `skip`, leave it untouched and ask whether to check another section or topic.
-- If the user says `revise`, adjust the proposed fix and present it again.
+- If the user says `revise`, adjust the proposed section-bounded issue batch and present it again.
 - If the user says `stop`, stop.
 - If the user gives a new `Start from:` cursor, jump there and treat earlier material as intentionally skipped.
 
 ## Applying Approved Fixes
 
-When applying an approved dependency-flow fix:
+When applying an approved dependency-flow issue batch:
 
-- Make the smallest structural change needed.
+- Apply all approved items in the section-bounded issue batch together.
+- Make the smallest structural changes needed.
 - Preserve mathematical meaning.
 - Avoid prose refinement unless necessary for dependency clarity.
 - Do not process later sections.
@@ -98,7 +103,7 @@ Do not consolidate labels that refer to genuinely distinct anchors, such as subf
 
 ## Validation
 
-After applying a fix:
+After applying an issue batch:
 
 - Re-check dependency order in affected files.
 - Re-check references and labels.
@@ -106,4 +111,4 @@ After applying a fix:
 - Re-check that formal results and methods do not depend on remarks or examples.
 - Run a lightweight validation if available.
 - Summarize changes.
-- Ask: `Next step: continue dependency-flow checks, revise this fix, jump to a specific cursor, or stop?`
+- Ask: `Next step: continue dependency-flow checks, revise this issue batch, jump to a specific cursor, or stop?`

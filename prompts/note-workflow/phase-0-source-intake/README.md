@@ -13,7 +13,7 @@ Phase 0: Source Intake
 -> Phase 3: Refine Section By Section
 ```
 
-Do not treat source intake as final refinement. This phase should extract, classify, place, and insert supported content carefully, then leave deeper organization and polish to later phases.
+Do not treat source intake as final refinement. This phase should extract, classify, place, and insert supported content carefully, then leave deeper organization and polish to later phases. Work by section-bounded insertion batches rather than inserting one content piece at a time.
 
 ## Starting Command
 
@@ -139,7 +139,9 @@ If a new file is needed, propose the file path and the relevant overview/input u
 
 ## Step 5: Present Proposed Insertion Batch
 
-Do not insert content immediately. Present one small insertion batch first.
+Do not insert content immediately. Present one small section-bounded insertion batch first.
+
+A section-bounded insertion batch may contain several related extracted blocks for the same target section, such as definitions, propositions, examples, proof ideas, notation, and figures. Do not split a coherent section insertion into separate approvals for each individual content piece.
 
 Before editing, report:
 
@@ -161,6 +163,7 @@ Before editing, report:
 Use small batches:
 
 - One coherent topic per batch.
+- One target section or subsection per batch unless the user approves a broader insertion.
 - Prefer complete logical blocks.
 - Avoid large multi-section integrations unless the user approves.
 
@@ -179,6 +182,7 @@ After presenting a proposed insertion batch:
 When applying an approved insertion:
 
 - Add a clean but minimally refined first-pass draft.
+- Apply all approved items in the section-bounded insertion batch together.
 - Preserve existing mathematical substance, labels, comments, and structure unless a local improvement is clearly needed for integration.
 - Do not delete existing content.
 - Do not overwrite or replace files wholesale.
