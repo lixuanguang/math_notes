@@ -8,6 +8,7 @@ Reorganize the repository topic by topic, using section-bounded issue batches ra
 
 - Decide file order, chapter order, and section hierarchy.
 - Move definitions before results that use them.
+- Resolve dependency issues by structural reordering, not by inserting ad hoc prerequisite paragraphs before usage.
 - Ensure formal results and methods do not depend on remarks or examples.
 - Split oversized sections.
 - Merge duplicated material.
@@ -57,6 +58,7 @@ For the current topic only, check:
 - Multiple labels on one object: a single `\begin{...}...\end{...}` block or mathematical object should not carry multiple `\label{...}` commands unless the labels refer to genuinely distinct subobjects.
 - Display-operator notation candidates: note displayed equation contexts where indexed operators such as `\sum`, `\prod`, `\bigoplus`, `\coprod`, `\bigcup`, `\bigcap`, `\lim`, `\inf`, `\sup`, `\min`, or `\max` may need `\limits` during later refinement.
 - Logical order: definitions before use, notation before use, examples after supporting content.
+- Dependency structure: prefer moving, splitting, or promoting existing content into the correct earlier location over adding a local unnumbered prerequisite paragraph before use.
 - Formal dependency: theorems, propositions, lemmas, corollaries, and methods must not reference or depend on remarks or examples.
 - Figure placement: figures should remain near the text that introduces, explains, or uses them.
 - Consecutive figures: avoid back-to-back figure blocks unless they form an intentional comparison and the user explicitly approves.

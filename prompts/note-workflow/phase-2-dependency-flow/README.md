@@ -9,6 +9,7 @@ Check that mathematical dependencies are introduced in the right order, resolvin
 - Each section should only use concepts already introduced.
 - Definitions should precede results that use them.
 - Notation should be introduced before use.
+- Dependency issues should be fixed by structural reordering, moving, splitting, or promoting content, not by inserting ad hoc unnumbered prerequisite paragraphs before usage.
 - Formal results and methods must not depend on remarks or examples.
 - Essential content inside remarks or examples should be promoted into formal exposition if later results depend on it.
 - A single LaTeX environment or mathematical object should have one canonical label unless multiple labels refer to genuinely distinct anchors.
@@ -42,7 +43,7 @@ If a cursor is provided, start there and treat earlier material as intentionally
 - Do not edit until the user approves the proposed section-bounded issue batch.
 - Each approval authorizes one section-bounded dependency-flow issue batch.
 
-A section-bounded issue batch may include multiple related fixes in the current section, such as moving a needed definition earlier, introducing notation before use, promoting content out of a remark/example, consolidating duplicate labels, and updating local references. Keep the batch limited to the current section unless a cross-section prerequisite fix is necessary and explicitly included in the proposal.
+A section-bounded issue batch may include multiple related fixes in the current section, such as moving a needed definition earlier, introducing notation before use, promoting content out of a remark/example, consolidating duplicate labels, and updating local references. Keep the batch limited to the current section unless a cross-section prerequisite fix is necessary and explicitly included in the proposal. Do not solve dependency issues by adding a local unnumbered prerequisite paragraph before the first use; propose the structurally correct reordering instead.
 
 ## Dependency Checks
 
@@ -51,6 +52,8 @@ For the current section or topic, check:
 - Definitions used before they are stated.
 - Notation used before it is introduced.
 - Results that depend on later results.
+- Places where a dependency problem would be better solved by moving, splitting, or promoting content rather than adding local explanatory text.
+- Any ad hoc prerequisite paragraph that should instead become formal earlier exposition or be eliminated through reordering.
 - Methods that rely on examples or remarks.
 - Theorems, propositions, lemmas, and corollaries that reference examples or remarks.
 - Refactored content that explicitly references a remark, example, or numbered definition where the needed condition should instead be stated directly or supplied by prior exposition.
@@ -74,7 +77,8 @@ Before editing, report:
 - Any content that should be promoted from a remark or example into formal exposition.
 - Any single environment or object with multiple labels, the proposed canonical label to keep, and which references would need updating.
 - Proposed minimal fixes grouped as one section-bounded issue batch.
-- Whether the batch requires moving content, adding a short definition, adding a placeholder, consolidating labels, updating references, or adjusting include order.
+- Whether the batch requires moving content, splitting content, promoting content into formal exposition, creating a formal definition/result in an appropriate earlier location, consolidating labels, updating references, or adjusting include order.
+- Why the proposed fix is a structural dependency fix rather than a shortcut prerequisite paragraph.
 
 ## Approval Loop
 
@@ -91,9 +95,11 @@ After presenting findings:
 When applying an approved dependency-flow issue batch:
 
 - Apply all approved items in the section-bounded issue batch together.
-- Make the smallest structural changes needed.
+- Make the smallest coherent structural changes needed, while preserving the bigger-picture dependency order.
 - Preserve mathematical meaning.
 - Avoid prose refinement unless necessary for dependency clarity.
+- Do not add ad hoc unnumbered prerequisite paragraphs before usage as a shortcut.
+- If prerequisite content is missing or late, move, split, or promote it into the appropriate earlier formal location instead.
 - Do not process later sections.
 - Do not rename labels unless explicitly approved.
 - If duplicate-label consolidation is approved, keep one canonical existing label where possible, update all references to removed labels, and remove only the redundant labels.
@@ -106,6 +112,7 @@ Do not consolidate labels that refer to genuinely distinct anchors, such as subf
 After applying an issue batch:
 
 - Re-check dependency order in affected files.
+- Re-check that dependency issues were resolved structurally rather than by shortcut prerequisite paragraphs.
 - Re-check references and labels.
 - Confirm each affected environment or object has at most one label unless distinct anchors justify multiple labels.
 - Re-check that formal results and methods do not depend on remarks or examples.

@@ -132,7 +132,7 @@ Check whether the extracted material:
 - Fills an existing placeholder.
 - Duplicates existing notes.
 - Depends on prerequisites that already exist.
-- Requires a small conservative prerequisite note in an earlier location.
+- Requires prerequisite material to be placed, moved, or promoted into an appropriate earlier formal location.
 - Should instead be recorded as a TODO/source note because prerequisites are missing or the source is unclear.
 
 If a new file is needed, propose the file path and the relevant overview/input update before editing.
@@ -156,6 +156,7 @@ Before editing, report:
 - Whether any content duplicates existing notes.
 - Existing results or definitions that should be cited instead of duplicated.
 - Missing prerequisites, uncertainties, or TODO/source notes.
+- Whether missing or late prerequisites require structural reordering, promotion into formal exposition, or a new formal definition/result in an appropriate earlier location.
 - Whether any figure, table, or TikZ redraw is useful.
 - Whether new labels are needed, with proposed label names.
 - Whether any theorem, proposition, lemma, corollary, or method would improperly depend on a remark or example.
@@ -190,7 +191,8 @@ When applying an approved insertion:
 - Do not deep-polish prose in this phase.
 - Do not rename existing labels unless explicitly approved.
 - Do not duplicate earlier results; cite existing material with `\ref{...}` only when the reference is appropriate and already introduced.
-- If new material depends on missing prerequisites and the provided source supports them, add a small conservative prerequisite note in the appropriate earlier location with approval.
+- Do not resolve missing prerequisites by adding an ad hoc unnumbered prerequisite paragraph immediately before usage.
+- If new material depends on missing prerequisites and the provided source supports them, propose the bigger-picture structural fix: place, move, or promote the prerequisite content into the appropriate earlier formal location, such as a definition, proposition, lemma, method, notation paragraph, or surrounding exposition.
 - If prerequisites are missing or uncertain, leave a concise TODO/source note.
 
 The inserted draft should cover supported:
