@@ -69,9 +69,13 @@ import MathNotes.sections.machine_learning.dl.opt
 import MathNotes.sections.machine_learning.dl.overview
 import MathNotes.sections.machine_learning.dl.reg
 import MathNotes.sections.machine_learning.overallstruct
-import MathNotes.sections.notation.analysis
-import MathNotes.sections.notation.general
-import MathNotes.sections.notation.linear_algebra
+import MathNotes.sections.notation.algebraic_geometry_commutative_algebra
+import MathNotes.sections.notation.algebraic_structures
+import MathNotes.sections.notation.analysis_continuous_structure
+import MathNotes.sections.notation.global_conventions
+import MathNotes.sections.notation.linear_operator_structures
+import MathNotes.sections.notation.numerical_computational_mathematics
+import MathNotes.sections.notation.probability_stochastic_structure
 import MathNotes.sections.notation_list
 import MathNotes.sections.time_series_analysis.fundamentals.diffeqns
 import MathNotes.sections.time_series_analysis.fundamentals.overview
