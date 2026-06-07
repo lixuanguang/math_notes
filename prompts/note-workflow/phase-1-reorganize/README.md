@@ -1,123 +1,85 @@
 # Phase 1: Reorganize Content
 
-Use this phase when the notes may need structural changes before prose refinement.
+Use this phase when structure, placement, file order, or section hierarchy may
+need work before dependency checks or prose refinement.
+
+Read `prompts/note-workflow/README.md` before this file.
 
 ## Goal
 
-Reorganize the repository topic by topic, using section-bounded issue batches rather than moving one content piece at a time:
+For one section-bounded topic batch:
 
-- Decide file order, chapter order, and section hierarchy.
-- Move definitions before results that use them.
-- Resolve dependency issues by structural reordering, not by inserting ad hoc prerequisite paragraphs before usage.
-- Ensure formal results and methods do not depend on remarks or examples.
-- Split oversized sections.
-- Merge duplicated material.
+- Decide whether material belongs in a different file, subsection, or order.
+- Move definitions and notation before results that use them.
+- Split oversized sections or merge duplicated local material.
 - Fill placeholder files where suitable.
-- Move misplaced topic blocks to more natural locations.
-- Preserve moved mathematical content exactly.
-- Consolidate multiple labels on a single LaTeX environment or mathematical object into one approved canonical label.
+- Move misplaced blocks to more natural locations.
+- Consolidate duplicate labels only when explicitly approved.
 
-## Cursor
+Preserve moved mathematical content verbatim.
 
-The user may specify where to begin with:
+## Batch Limits
 
-```text
-Start from: <section number, file path, topic, or section heading>
-```
+- One mathematical topic per batch.
+- Prefer one target section or subsection.
+- Prefer 1-3 source files and roughly 300-500 lines or less.
+- Do not migrate broad multi-section structures unless the user approves that
+  scope.
 
-Examples:
-
-```text
-Start from: Section 1
-Start from: Section 2
-Start from: sections/topology/compactness.tex
-Start from: Compactness
-```
-
-If a cursor is provided, start there and treat earlier material as intentionally skipped. If the cursor is ambiguous, stop and ask for clarification before proposing edits.
-
-## Batch Rules
-
-- Work in small section-bounded topic batches.
-- Use one mathematical topic per batch.
-- Prefer one current target section or subsection per batch. If a reorganization issue spans multiple sections, propose the part affecting the current target section first unless the user approves a broader batch.
-- Prefer 1-3 source files per batch.
-- Prefer complete logical blocks: definitions, examples, propositions, proofs, remarks, methods, or subsections.
-- Avoid batches larger than roughly 300-500 lines unless the user approves.
-- Do not audit or migrate the whole repository at once.
-- Do not apply any move until the user approves the specific batch.
-
-A section-bounded issue batch may include multiple related reorganization fixes for the selected section, such as moving several definitions before their uses, consolidating duplicate local blocks, fixing local label issues, and updating the relevant `\input` or `\include` order. Do not request separate approval for each individual block when the blocks belong to the same section-level issue batch.
-
-## Audit Priorities
+## Audit Checklist
 
 For the current topic only, check:
 
-- Placeholder files: empty or mostly-empty `.tex` files with comments describing intended content.
-- Reference-before-label issues: `\ref`, `\eqref`, `\autoref`, `\cref`, `\Cref`, `\pageref`, `\nameref`.
-- Multiple labels on one object: a single `\begin{...}...\end{...}` block or mathematical object should not carry multiple `\label{...}` commands unless the labels refer to genuinely distinct subobjects.
-- Display-operator notation candidates: note displayed equation contexts where indexed operators such as `\sum`, `\prod`, `\bigoplus`, `\coprod`, `\bigcup`, `\bigcap`, `\lim`, `\inf`, `\sup`, `\min`, or `\max` may need `\limits` during later refinement.
-- Logical order: definitions before use, notation before use, examples after supporting content.
-- Dependency structure: prefer moving, splitting, or promoting existing content into the correct earlier location over adding a local unnumbered prerequisite paragraph before use.
-- Formal dependency: theorems, propositions, lemmas, corollaries, and methods must not reference or depend on remarks or examples.
-- Figure placement: figures should remain near the text that introduces, explains, or uses them.
-- Consecutive figures: avoid back-to-back figure blocks unless they form an intentional comparison and the user explicitly approves.
+- Placeholder files.
+- Reference-before-label issues.
+- Multiple labels on one environment or mathematical object.
+- Logical order of definitions, notation, examples, results, and proofs.
+- Dependency problems that require moving, splitting, or promoting content.
+- Formal results or methods that depend on remarks or examples.
+- Figures that are far from the text that introduces or uses them.
+- Back-to-back figures that are not an intentional comparison.
+- Displayed indexed operators that should be normalized later in Phase 3.
 
-## Proposal Format
-
-Before editing, present:
+## Proposal Must Include
 
 - Topic name.
 - Current target section or subsection.
-- Target file(s).
-- Source file(s).
-- Exact block(s) proposed for movement, with file paths and line ranges.
-- Short reason each block belongs in the target location.
+- Target file(s) and source file(s).
+- Exact blocks proposed for movement, with file paths and line ranges.
+- Where each block would move and why.
 - Whether the move fills a placeholder.
-- Whether it improves reference-before-label order.
-- Whether any moved block has multiple labels for a single environment or object, the proposed canonical label to keep, and which references would need updating.
-- Whether any moved block has displayed indexed operators that should be normalized with `\limits` during Phase 3.
-- Whether it improves logical order.
+- Whether it improves reference-before-label or logical order.
+- Any duplicate-label consolidation proposed, including canonical label and
+  references to update.
+- Any displayed indexed-operator candidates to revisit in Phase 3.
 - Whether figure placement remains logical.
-- Whether the move avoids unintended consecutive figures.
-- Any ambiguous candidates under `Needs Human Review`.
-- Whether any theorem, proposition, lemma, corollary, or method currently references a remark or example, and how the move would fix it.
+- Ambiguous candidates under `Needs Human Review`.
+- Whether any formal dependency on a remark/example exists and how the move
+  would fix it.
 
-## Approval Loop
+## Approved Edit Rules
 
-After presenting a batch:
-
-- If the user says `approve`, apply only that batch.
-- If the user says `skip`, leave it untouched and ask whether to find another topic.
-- If the user says `revise`, adjust the batch and present it again.
-- If the user says `stop`, stop.
-- If the user gives a new `Start from:` cursor, jump there and treat earlier material as intentionally skipped.
-
-## Applying Approved Moves
-
-When applying an approved batch:
-
-- Preserve moved content verbatim.
-- Apply all approved items in the section-bounded issue batch together.
-- Do not rewrite prose.
-- Do not change mathematical statements.
-- Do not rename labels unless the approved batch explicitly includes duplicate-label consolidation.
-- If duplicate-label consolidation is approved, keep one canonical existing label where possible, update all references to removed labels, and remove only the redundant labels.
-- Do not alter equations, theorem environments, definitions, examples, methods, or proofs.
+- Apply only the approved batch.
 - Move complete logical blocks where possible.
-- Only update surrounding structure, such as `\input` or `\include` order, if needed.
-
-Do not consolidate labels that refer to genuinely distinct anchors, such as subfigures, separate numbered lines in an `align`-type environment, or nested environments. Put ambiguous cases under `Needs Human Review`.
+- Preserve moved content verbatim.
+- Do not rewrite prose or change mathematical statements.
+- Do not rename labels unless explicitly approved.
+- Only update surrounding structure, such as `\input` or `\include` order, when
+  needed by the approved move.
 
 ## Validation
 
-After applying a batch:
+After editing:
 
 - Re-check affected references and labels.
-- Confirm each moved environment or object has at most one label unless distinct anchors justify multiple labels.
-- Re-check figure placement.
-- Confirm no unintended consecutive figures were created.
+- Confirm moved environments or objects have at most one label unless distinct
+  anchors justify multiple labels.
+- Re-check figure placement and unintended consecutive figures.
 - Run a lightweight validation if available.
-- Summarize what moved.
-- Confirm moved content was preserved verbatim.
-- Ask: `Next step: continue to another topic batch, revise this one, jump to a specific cursor, or stop?`
+- Summarize what moved and confirm content was preserved verbatim.
+
+Ask:
+
+```text
+Next step: continue to another topic batch, revise this one, jump to a cursor, or stop?
+```

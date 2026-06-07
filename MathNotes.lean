@@ -58,7 +58,7 @@ import MathNotes.sections.linear_algebra.spectral_linear_algebra.overview
 import MathNotes.sections.linear_algebra.structural_linear_algebra.«1_1_vector_spaces_and_linear_structure»
 import MathNotes.sections.linear_algebra.structural_linear_algebra.«1_2_direct_sums_quotients_and_decomposition»
 import MathNotes.sections.linear_algebra.structural_linear_algebra.«1_3_linear_maps_and_representations»
-import MathNotes.sections.linear_algebra.structural_linear_algebra.«1_4_duality_and_multilinear_structure»
+import MathNotes.sections.linear_algebra.structural_linear_algebra.«1_5_duality_and_multilinear_structure»
 import MathNotes.sections.linear_algebra.structural_linear_algebra.overview
 import MathNotes.sections.machine_learning.cml.ensemble
 import MathNotes.sections.machine_learning.cml.overview

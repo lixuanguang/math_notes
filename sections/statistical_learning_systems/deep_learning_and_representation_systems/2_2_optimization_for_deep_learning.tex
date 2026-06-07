@@ -416,15 +416,6 @@ Solving optimisation problems by minimising the objective function $f(\bm{x})$ w
  Coordinate descent works when different variables can be clearly separated into groups that play relatively isolated roles, or when optimisation with respect to one group of variables is significantly more efficient than optimisation with respect to all of the variables.
 \end{remark}
 
-\begin{example} \hlt{Sparse Encoding with Coordinate Descent}\\
-Consider the cost function
-\begin{align}
-J(\bm{H}, \bm{W}) = \sum\limits_{i,j} \abs{H_{ij}} + \sum\limits_{i,j} (\bm{X} - \bm{W}^T \bm{H})^2_{i,j} \nonumber
-\end{align}
-To find weight matrix $\bm{W}$ that can linearly decode a matrix of activation values $\bm{H}$ to reconstruct training set $\bm{X}$. Most applications also include weight decay or constraint on norms of columns of $\bm{W}$ to prevent the pathological solution with extremely small $\bm{H}$ and large $\bm{W}$.\\
-Note $J$ is not convex, but inputs may be divided into the dictionary parameters $\bm{W}$ and the code representations $\bm{H}$. Minimising object function with respect to either set is a convex problem.
-\end{example}
-
 \begin{remark} \hlt{Polyak Averaging}\\
 Average several points in trajectory through parameter space visited by optimisation algorithm.\\
 If $t$ iterations of gradient descent visit points $\bm{\theta}^{(1)}, \ldots, \bm{\theta}^{(t)}$, then the output is $\hat{\bm{\theta}}^{(t)} = \frac{1}{t} \sum_i \bm{\theta}^{(i)}$.\\
@@ -434,23 +425,6 @@ For non-convex problems, an exponentially decaying running average is used:
 \begin{align}
 \hat{\bm{\theta}}^{(t)} = \alpha \hat{\bm{\theta}}^{(t-1)} + (1- \alpha)\bm{\theta}^{(t)} \nonumber
 \end{align}
-\end{remark}
-
-\begin{remark} \hlt{Supervised Pre-training}\\
-Pre-training refers to training simple models on simple tasks before training the desired model on desired task.\\
-Greedy algorithms break problem into many components, then solve for optimal version of each component in isolation, which is must cheaper than algorithms that solve for best joint solution. Fine-tuning on joint optimisation algorithm searches for optimal solution to the full problem.\\
-Greedy supervised training breaks supervised learning problems into other simpler supervised learning problems.\\
-Transfer learning refers to pre-training a deep network on a set of tasks, then initialise a same-size network with first $k$ layers of first net. The layers of second networks (upper layers initialised randomly) are then jointly trained to perform a different set of tasks with fewer training examples than for first set of tasks.\\
-FitNets approach begins by training a network with low depth and high width, which becomes a teacher for a second network (the student), which is much deeper and thinner. Student network is trained to not only predict the output on original task, but also on value of middle layer of teacher network.
-\end{remark}
-
-\begin{remark} \hlt{Neural Network Design Choice: Linear Transformation}\\
-Model units have generally moved towards using more linear functions, which allow model to have nice properties that make optimisation easier. The model's local gradient information corresponds reasonably well to moving towards a distant solution.
-\end{remark}
-
-\begin{remark} \hlt{Neural Network Design Choice: Linear Paths and Skip Connections}\\
-Linear paths and skip connections between layers reduce length of shortest path from lower layer's parameters to the output, mitigating vanishing gradient problem.\\
-Adding extra copies of output that are attached to intermediate hidden layers is an alternative to pre-training, where these 'auxiliary heads' are trained to perform the same task as primary output at the top of the network to ensure that the lower layers receive a large gradient. After training, these may be discarded.
 \end{remark}
 
 \begin{remark} \hlt{Continuation Methods}\\
