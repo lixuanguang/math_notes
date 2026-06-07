@@ -1,260 +1,108 @@
 # Phase 0: Source Intake
 
-Use this phase when adding new notes from attached screenshots, source images, PDFs, or other provided source files.
+Use this phase to turn provided screenshots, source images, PDFs, or other
+source files into a conservative first-pass LaTeX draft.
+
+Read `prompts/note-workflow/README.md` before this file.
 
 ## Goal
 
-Convert provided source material into a conservative first-pass LaTeX draft that can then enter the normal workflow:
+Extract, classify, place, and insert source-supported material so it can later
+enter:
 
 ```text
-Phase 0: Source Intake
--> Phase 1: Reorganize Content
--> Phase 2: Check Dependency Flow
--> Phase 3: Refine Section By Section
+Phase 1 -> Phase 2 -> Phase 3
 ```
 
-Do not treat source intake as final refinement. This phase should extract, classify, place, and insert supported content carefully, then leave deeper organization and polish to later phases. Work by section-bounded insertion batches rather than inserting one content piece at a time.
-
-## Starting Command
-
-The user may specify the source and cursor with:
-
-```text
-Source chapter/sections:
-<state the chapter or sections extracted here>
-
-Start from: <part-scoped section, file path, topic, or section heading>
-```
-
-Examples:
-
-```text
-Source chapter/sections:
-Chapter 4, Sections 4.1-4.2
-
-Start from: Part II Section 2
-```
-
-```text
-Source chapter/sections:
-Screenshots on compactness and sequential compactness
-
-Start from: topology/compactness
-```
-
-Prefer part-scoped section cursors such as `Part II Section 1`. A bare cursor such as `Section 1` is ambiguous whenever more than one part has a Section 1; ask for the part before proposing edits. Resolve part and section numbers from the compiled LaTeX order beginning at `math.tex`.
-
-If the source files or screenshots are not accessible, stop and ask the user to attach them or provide file paths before proposing edits.
+Do not polish deeply in this phase.
 
 ## Source Rules
 
-- Use only the attached screenshots, source images, PDFs, and existing repository content.
+- Use only attached/provided source material and existing repository content.
 - Do not search elsewhere.
 - Do not add unsupported material from memory.
-- Use the sources as mathematical guidance, not as text to copy.
+- Use sources as mathematical guidance, not text to copy.
 - Do not paste or closely paraphrase long textbook passages.
-- If the source is copyrighted, convert it into original notes in the repository's style.
-- Mark uncertain OCR, unreadable formulas, missing hypotheses, unclear diagrams, and ambiguous proof steps clearly.
-
-## Step 1: Extract
-
-Read the provided screenshots, source images, or PDFs. Extract:
-
-- Formulas.
-- Definitions.
-- Claims.
-- Theorems.
-- Propositions.
-- Lemmas.
-- Corollaries.
-- Examples.
-- Methods.
-- Remarks.
-- Exercises.
-- Diagrams.
-- Tables.
-- Proof ideas.
-- Notation.
-- Dependencies and prerequisites.
-
-For uncertain transcription, use a clear marker such as:
+- For copyrighted sources, write original notes in the repository's style.
+- Do not silently guess missing mathematical content.
+- Mark uncertain OCR, unreadable formulas, missing hypotheses, unclear diagrams,
+  and ambiguous proof steps with comments such as:
 
 ```latex
 % TODO(source): verify transcription of ...
 ```
 
-Do not silently guess missing mathematical content.
+If source files are inaccessible, stop and ask for attachments or paths.
 
-## Step 2: Classify
+## Workflow
 
-Classify each extracted block as one of:
+1. Extract formulas, definitions, claims, theorems, propositions, lemmas,
+   corollaries, examples, methods, remarks, exercises, diagrams, tables, proof
+   ideas, notation, and prerequisites.
+2. Classify each block as `definition`, `theorem`, `proposition`, `lemma`,
+   `corollary`, `example`, `remark`, `method`, `proof`, `motivation`,
+   `exercise`, `notation`, `figure`, `table`, or `todo/source note`.
+   Report ambiguous classifications before insertion.
+3. Inspect existing notes around the cursor: section organization, nearby topic
+   files, comments, notation, labels, theorem style, figures, and overview/input
+   files.
+4. Choose the target location. Check for duplicates, placeholders, missing
+   prerequisites, and whether a new file or overview/input update is needed.
+5. Present one section-bounded insertion batch and wait for approval.
+6. If approved, insert a clean first-pass draft only for that batch.
+7. Validate and report.
 
-- `definition`
-- `theorem`
-- `proposition`
-- `lemma`
-- `corollary`
-- `example`
-- `remark`
-- `method`
-- `proof`
-- `motivation`
-- `exercise`
-- `notation`
-- `figure`
-- `table`
-- `todo/source note`
-
-If a block could belong to more than one class, report the ambiguity before insertion.
-
-## Step 3: Inspect Existing Notes
-
-Before proposing amendments, inspect the repository enough to understand:
-
-- Repo structure and section organization.
-- Earlier prerequisite material.
-- Surrounding topic files.
-- Existing style, notation, labels, and cross-references.
-- Opening comments in relevant part, section, subsection, or topic files.
-- Existing theorem/proof conventions and reusable macros.
-- Relevant notation files.
-- Relevant overview, `\input`, or `\include` files.
-- Existing figures and figure directory conventions.
-
-Do not assume the user has chosen the target location.
-
-## Step 4: Place
-
-Choose the most appropriate location yourself.
-
-Check whether the extracted material:
-
-- Fits an existing part, section, subsection, or topic file.
-- Should create a new subsection or topic file under an existing part or section.
-- Fills an existing placeholder.
-- Duplicates existing notes.
-- Depends on prerequisites that already exist.
-- Requires prerequisite material to be placed, moved, or promoted into an appropriate earlier formal location.
-- Should instead be recorded as a TODO/source note because prerequisites are missing or the source is unclear.
-
-If a new file is needed, propose the file path and the relevant overview/input update before editing.
-
-## Step 5: Present Proposed Insertion Batch
-
-Do not insert content immediately. Present one small section-bounded insertion batch first.
-
-A section-bounded insertion batch may contain several related extracted blocks for the same target section, such as definitions, propositions, examples, proof ideas, notation, and figures. Do not split a coherent section insertion into separate approvals for each individual content piece.
-
-Before editing, report:
+## Proposal Must Include
 
 - Source chapter/sections used.
 - Proposed topic name.
-- Target file(s).
-- New file(s), if any.
-- Existing file(s) inspected.
-- Extracted blocks to insert, grouped by classification.
-- Where each block should be inserted and why.
-- Whether the insertion fills a placeholder.
-- Whether any content duplicates existing notes.
+- Target file(s), and new file(s) if any.
+- Existing files inspected.
+- Extracted blocks grouped by classification.
+- Where each block would be inserted and why.
+- Whether the batch fills a placeholder or duplicates existing notes.
 - Existing results or definitions that should be cited instead of duplicated.
-- Missing prerequisites, uncertainties, or TODO/source notes.
-- Whether missing or late prerequisites require structural reordering, promotion into formal exposition, or a new formal definition/result in an appropriate earlier location.
+- Missing prerequisites, uncertainties, and TODO/source notes.
+- Needed structural fixes for missing or late prerequisites.
 - Whether any figure, table, or TikZ redraw is useful.
-- Whether new labels are needed, with proposed label names.
-- Whether any theorem, proposition, lemma, corollary, or method would improperly depend on a remark or example.
+- Proposed new labels.
+- Whether any formal result or method would improperly depend on a remark or
+  example.
 
-Use small batches:
+## Approved Edit Rules
 
-- One coherent topic per batch.
-- One target section or subsection per batch unless the user approves a broader insertion.
-- Prefer complete logical blocks.
-- Avoid large multi-section integrations unless the user approves.
-
-## Step 6: Approval Loop
-
-After presenting a proposed insertion batch:
-
-- If the user says `approve`, apply only that batch.
-- If the user says `skip`, leave it untouched and ask whether to inspect another source batch.
-- If the user says `revise`, adjust the proposal and present it again.
-- If the user says `stop`, stop.
-- If the user gives a new `Start from:` cursor, jump there and treat earlier material as intentionally skipped.
-
-## Step 7: Insert Draft
-
-When applying an approved insertion:
-
-- Add a clean but minimally refined first-pass draft.
-- Apply all approved items in the section-bounded insertion batch together.
-- Preserve existing mathematical substance, labels, comments, and structure unless a local improvement is clearly needed for integration.
+- Apply all approved items in the batch together.
+- Preserve existing content, labels, comments, and structure unless a local
+  integration change is needed.
 - Do not delete existing content.
-- Do not overwrite or replace files wholesale.
+- Do not overwrite files wholesale.
 - Do not reorganize unrelated material.
-- Do not deep-polish prose in this phase.
 - Do not rename existing labels unless explicitly approved.
-- Do not duplicate earlier results; cite existing material with `\ref{...}` only when the reference is appropriate and already introduced.
-- Do not resolve missing prerequisites by adding an ad hoc unnumbered prerequisite paragraph immediately before usage.
-- If new material depends on missing prerequisites and the provided source supports them, propose the bigger-picture structural fix: place, move, or promote the prerequisite content into the appropriate earlier formal location, such as a definition, proposition, lemma, method, notation paragraph, or surrounding exposition.
-- If prerequisites are missing or uncertain, leave a concise TODO/source note.
+- Do not duplicate earlier results; cite existing material only when the
+  reference is appropriate and already introduced.
+- If prerequisites are missing or unclear, leave a concise TODO/source note or
+  propose the structural fix for a later approved batch.
 
-The inserted draft should cover supported:
+## Figures
 
-- Definitions.
-- Theorems.
-- Propositions.
-- Lemmas.
-- Corollaries.
-- Examples.
-- Methods.
-- Proof ideas.
-- Cross-references.
-- Notation.
-- Useful figures.
-
-## Figure Rule
-
-If the source contains useful diagrams, geometric intuition, schematic relationships, tables, or visual proof ideas:
-
-- Add a figure only when it genuinely clarifies the material.
-- Prefer clean TikZ redraws for mathematical diagrams or structures.
-- Do not add decorative figures.
-- Do not reproduce screenshots that are merely text.
+- Add a figure only when it clarifies the mathematics.
+- Prefer clean TikZ redraws for mathematical diagrams.
+- Do not add decorative figures or reproduce text screenshots.
 - Put TikZ files under the appropriate `figures/` directory.
-- Use clear captions, labels, and nearby source comments.
-- Keep figures close to the text that introduces, explains, or uses them.
+- Keep figures near the text that introduces or uses them.
 
-## Style Rules
+## Validation Report
 
-Follow the surrounding notes:
+After insertion, report:
 
-- Topic files should begin with the repository's established sectioning command.
-- Use short guiding paragraphs.
-- Use theorem environments naturally: definitions, propositions, lemmas, corollaries, theorems, examples, methods, remarks.
-- Use `\hlt{...}`, labels, concise proofs, and proof commentary consistently with nearby files.
-- Use existing macros such as `\N`, `\R`, `\mathcal{...}`, `\operatorname{...}`, and `\defeq`.
-- Prefer repository-style `$...$` equation blocks for standalone displayed formulas whenever possible. Use `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline` only when numbering, labels, cross-references, alignment, multi-line layout, or another environment feature is actually needed.
-- Add notation to a notation file only if it recurs across major sections.
-
-## Validation
-
-After applying an approved insertion:
-
-- Re-check affected references and labels.
-- Re-check relevant overview, `\input`, or `\include` updates.
-- Re-check that inserted formal results and methods do not depend on remarks or examples.
-- Re-check figure placement if figures were added.
-- Do not build with LaTeX unless the user explicitly asks.
-
-Report:
-
-1. Where the new content was placed and why.
-2. Which source chapter/sections were integrated.
+1. Where the content was placed and why.
+2. Which source material was integrated.
 3. Which files changed.
-4. What major definitions, results, methods, examples, figures, or TODO/source notes were added.
-5. Any remaining gaps or uncertainties.
+4. Major definitions, results, methods, examples, figures, or TODO notes added.
+5. Remaining gaps or uncertainties.
 
 Then ask:
 
 ```text
-Next step: continue source intake, proceed to Phase 1 reorganization, jump to a specific cursor, or stop?
+Next step: continue source intake, proceed to Phase 1, jump to a cursor, or stop?
 ```
