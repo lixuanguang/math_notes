@@ -4,12 +4,12 @@
 %
 % Fields, vector spaces, subspaces, span, independence, bases, dimension, coordinates.
 
-Vector spaces are objects that can be added and scaled. Subspaces, spans, bases, dimension, and coordinates describe how they are generated and measured.
+Vector spaces encode addition and scalar multiplication. Subspaces, spans, bases, dimension, and coordinates describe how linear structure is generated and measured.
 
 \begin{definition} \label{def:vector-space} \hlt{Vector Space}
 \lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.vector_space_axioms}
 \leanok\\
-Let $\mathbb{F}$ be a field. A vector space over $\mathbb{F}$ is a set $\mathcal{V}$ together with operations of vector addition and scalar multiplication such that, for all $\mathbf{u}, \mathbf{v}, \mathbf{w} \in \mathcal{V}$ and all $a,b \in \mathbb{F}$, the following axioms hold:
+Let $\mathbb{F}$ be a field. A vector space over $\mathbb{F}$ is a set $\mathcal{V}$ with vector addition and scalar multiplication such that, $\forall\,\mathbf{u}, \mathbf{v}, \mathbf{w} \in \mathcal{V}$ and $\forall\,a,b \in \mathbb{F}$, the following axioms hold:
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item vector addition is commutative: $\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$;
@@ -21,7 +21,7 @@ Let $\mathbb{F}$ be a field. A vector space over $\mathbb{F}$ is a set $\mathcal
 \item scalar multiplication distributes over vector addition: $a(\mathbf{u} + \mathbf{v}) = a\mathbf{u} + a\mathbf{v}$;
 \item scalar multiplication distributes over addition in $\mathbb{F}$: $(a+b)\mathbf{v} = a\mathbf{v} + b\mathbf{v}$.
 \end{enumerate}
-If $\mathcal{V} = \{ \mathbf{0} \}$, then $\mathcal{V}$ is a \hlt{zero vector space}; if $\mathcal{V} \neq \{ \mathbf{0} \}$, then $\mathcal{V}$ is a \hlt{nonzero vector space}.
+If $\mathcal{V}=\{\mathbf{0}\}$, then $\mathcal{V}$ is a \hlt{zero vector space}; otherwise $\mathcal{V}$ is a \hlt{nonzero vector space}.
 \end{definition}
 
 \begin{definition} \label{def:finitely-nonzero-sequence-space} \hlt{Finitely Nonzero Sequence Space}
@@ -36,7 +36,9 @@ Let $\mathbb{F}^{(\mathbb{N})}$ denote the set of sequences $(x_1,x_2,\ldots)$ i
 The set $\mathbb{F}^{(\mathbb{N})}$ is a vector space over $\mathbb{F}$ under componentwise addition and scalar multiplication.
 \begin{proof}
 \leanok
-The zero sequence has finite support. If $\mathbf{x},\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$ and $a\in\mathbb{F}$, then the nonzero entries of $a\mathbf{x}+\mathbf{y}$ occur only where $\mathbf{x}$ or $\mathbf{y}$ is nonzero, a finite set of indices. Hence $a\mathbf{x}+\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$, and the vector space axioms are inherited componentwise from $\mathbb{F}$.\\
+The zero sequence has finite support.\\
+If $\mathbf{x},\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$ and $a\in\mathbb{F}$, then $a\mathbf{x}+\mathbf{y}$ can be nonzero only where $\mathbf{x}$ or $\mathbf{y}$ is nonzero, a finite set of indices.\\
+Hence $a\mathbf{x}+\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$, and the vector space axioms are inherited componentwise from $\mathbb{F}$.\\
 \hlt{Structural Commentary}: Finite support is preserved by finite linear combinations.\\
 \hlt{Key Insight}: Componentwise operations cannot create infinitely many new nonzero entries.
 \end{proof}
@@ -70,18 +72,15 @@ Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then:
 \end{enumerate}
 \begin{proof}
 \leanok
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $\mathbf{0}$ and $\mathbf{0}'$ are additive identities, then $\mathbf{0}=\mathbf{0}+\mathbf{0}'=\mathbf{0}'$.
 \item If $\mathbf{w},\mathbf{w}'$ are additive inverses of $\mathbf{v}$, then $\mathbf{w}=\mathbf{w}+\mathbf{0}=\mathbf{w}+(\mathbf{v}+\mathbf{w}') =(\mathbf{w}+\mathbf{v})+\mathbf{w}'=\mathbf{0}+\mathbf{w}'=\mathbf{w}'$.
 \item $0\mathbf{v}=(0+0)\mathbf{v}=0\mathbf{v}+0\mathbf{v}$; adding $-(0\mathbf{v})$ gives $0\mathbf{v}=\mathbf{0}$.
 \item $a\mathbf{0}=a(\mathbf{0}+\mathbf{0})=a\mathbf{0}+a\mathbf{0}$; adding $-(a\mathbf{0})$ gives $a\mathbf{0}=\mathbf{0}$.
-\item For (v), prove both implications.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $a\mathbf{v}=\mathbf{0}$. If $a=0$, the first alternative holds. If $a\neq0$, then $\mathbf{v}=1\mathbf{v}=(a^{-1}a)\mathbf{v}=a^{-1}(a\mathbf{v})=a^{-1}\mathbf{0}=\mathbf{0}$.
-\item[$(\Leftarrow)$] If $a=0$ or $\mathbf{v}=\mathbf{0}$, then (iii) or (iv) gives $a\mathbf{v}=\mathbf{0}$.
-\end{enumerate}
+\item[$(v)$] ($\Rightarrow$) Suppose $a\mathbf{v}=\mathbf{0}$. If $a=0$, the first alternative holds.\\
+If $a\neq0$, then $\mathbf{v}=1\mathbf{v}=(a^{-1}a)\mathbf{v}=a^{-1}(a\mathbf{v})=a^{-1}\mathbf{0}=\mathbf{0}$.
+\item[$(v)$] ($\Leftarrow$) If $a=0$ or $\mathbf{v}=\mathbf{0}$, then (iii) or (iv) gives $a\mathbf{v}=\mathbf{0}$.
 \end{enumerate}
 \hlt{Structural Commentary}: These identities make cancellation, zeros, and inverses available.\\
 \hlt{Key Insight}: The vector space axioms force the zero and inverse behaviour to be rigid, not optional structure.
@@ -91,7 +90,7 @@ Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then:
 \begin{corollary} \label{cor:negativeoneactsasinverse} \hlt{Scalar Multiplication by $-1$ Is Negation}\\
 \lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.negative_one_smul_eq_neg_vector}
 \leanok
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then $\forall \mathbf{v}\in\mathcal{V}$, $(-1)\mathbf{v} = -\mathbf{v}$.
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then $\forall\,\mathbf{v}\in\mathcal{V}$, $(-1)\mathbf{v}=-\mathbf{v}$.
 \begin{proof}
 \leanok
 For $\mathbf{v}\in\mathcal{V}$, $(-1)\mathbf{v} + \mathbf{v} = (-1)\mathbf{v} + 1\mathbf{v} = (-1+1)\mathbf{v} = 0\mathbf{v} = \mathbf{0}$.\\
@@ -114,10 +113,10 @@ Let $\mathcal{V}$ be a vector space over $\mathbb{F}$ and let $\mathcal{U}$ be a
 Then $\mathcal{U}$ is a subspace of $\mathcal{V}$ iff $\forall\,\mathbf{u},\mathbf{v}\in\mathcal{U}$ and $\forall\,c\in\mathbb{F}$, one has $c\mathbf{u}+\mathbf{v}\in\mathcal{U}$.
 \begin{proof}
 \leanok
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] If $\mathcal{U}\leq\mathcal{V}$, then closure under scalar multiplication and addition gives $c\mathbf{u}+\mathbf{v}\in\mathcal{U}$ for all $\mathbf{u},\mathbf{v}\in\mathcal{U}$ and $c\in\mathbb{F}$.
-\item[$(\Leftarrow)$] Assume the stated closure condition. Choose $\mathbf{u}_0\in\mathcal{U}$. Then $\mathbf{0}=(-1)\mathbf{u}_0+\mathbf{u}_0\in\mathcal{U}$. For $\mathbf{u},\mathbf{v}\in\mathcal{U}$ and $c\in\mathbb{F}$, the identities $-\mathbf{u}=(-1)\mathbf{u}+\mathbf{0}$, $c\mathbf{u}=c\mathbf{u}+\mathbf{0}$, and $\mathbf{u}+\mathbf{v}=1\mathbf{u}+\mathbf{v}$ show that $\mathcal{U}$ is closed under additive inverses, scalar multiplication, and addition. The remaining axioms are inherited from $\mathcal{V}$, so $\mathcal{U}\leq\mathcal{V}$.
+\item[$(\Leftarrow)$] Assume the stated closure condition. Choose $\mathbf{u}_0\in\mathcal{U}$. Then $\mathbf{0}=(-1)\mathbf{u}_0+\mathbf{u}_0\in\mathcal{U}$. For $\mathbf{u},\mathbf{v}\in\mathcal{U}$ and $c\in\mathbb{F}$, the identities $-\mathbf{u}=(-1)\mathbf{u}+\mathbf{0}$, $c\mathbf{u}=c\mathbf{u}+\mathbf{0}$, and $\mathbf{u}+\mathbf{v}=1\mathbf{u}+\mathbf{v}$ give closure under additive inverses, scalar multiplication, and addition. The remaining axioms are inherited from $\mathcal{V}$, so $\mathcal{U}\leq\mathcal{V}$.
 \end{enumerate}
 \hlt{Structural Commentary}: One closure condition captures the subspace axioms.\\
 \hlt{Key Insight}: To prove a subset is a subspace, prove it survives one affine-looking linear combination.
@@ -129,8 +128,7 @@ Then $\mathcal{U}$ is a subspace of $\mathcal{V}$ iff $\forall\,\mathbf{u},\math
 \setlength{\itemsep}{0pt}
 \item The \hlt{ambient code space} is $V(n,q)\defeq\mathbb{F}_q^n$.
 \item A \hlt{linear code} of length $n$ over $\mathbb{F}_q$ is a \hlt{subspace} $C\leq V(n,q)$.
-\item For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}_q^n$, its \hlt{Hamming weight} is
-$\operatorname{wt}(\mathbf{x})\defeq\#\{j:1\leq j\leq n,\ x_j\neq0\}$.
+\item For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}_q^n$, its \hlt{Hamming weight} is $\operatorname{wt}(\mathbf{x})\defeq\#\{j:1\leq j\leq n,\ x_j\neq0\}$.
 \end{enumerate}
 \end{definition}
 
@@ -145,7 +143,8 @@ The condition $\sum\limits_{j=1}^{n}x_j=0$ is equivalent to $\operatorname{wt}(\
 Let $\mathcal{U}$ and $\mathcal{W}$ be subspaces of $\mathcal{V}$. Then $\mathcal{U}\cap\mathcal{W} = \left\{ \mathbf{v} : \mathbf{v}\in\mathcal{U} \text{ and } \mathbf{v}\in\mathcal{W} \right\}$ is a subspace of $\mathcal{V}$.
 \begin{proof}
 Since $\mathbf{0}\in\mathcal{U}$ and $\mathbf{0}\in\mathcal{W}$, we have $\mathbf{0}\in\mathcal{U}\cap\mathcal{W}$, so the intersection is nonempty.\\
-If $\mathbf{u},\mathbf{v}\in\mathcal{U}\cap\mathcal{W}$ and $c\in\mathbb{F}$, then $c\mathbf{u}+\mathbf{v}$ lies in both $\mathcal{U}$ and $\mathcal{W}$ because each is a subspace. Thus $c\mathbf{u}+\mathbf{v}\in\mathcal{U}\cap\mathcal{W}$, and Theorem \ref{thm:subspacetest} gives $\mathcal{U}\cap\mathcal{W}\leq\mathcal{V}$.\\
+If $\mathbf{u},\mathbf{v}\in\mathcal{U}\cap\mathcal{W}$ and $c\in\mathbb{F}$, then $c\mathbf{u}+\mathbf{v}$ lies in both $\mathcal{U}$ and $\mathcal{W}$ because each is a subspace.\\
+Thus $c\mathbf{u}+\mathbf{v}\in\mathcal{U}\cap\mathcal{W}$, and Theorem \ref{thm:subspacetest} gives $\mathcal{U}\cap\mathcal{W}\leq\mathcal{V}$.\\
 \hlt{Structural Commentary}: Intersections inherit shared closure.\\
 \hlt{Key Insight}: Common vectors remain closed under linear combinations.
 \end{proof}
@@ -196,8 +195,7 @@ Suppose $\mathcal{U}\neq\emptyset$. Every vector in $\operatorname{span}(\mathca
 \begin{definition} \label{def:linear-independence-basis-dimension} \hlt{Linear Independence, Bases, and Dimension}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A list $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is \hlt{linearly independent} if
-$\sum\limits_{j=1}^{m}a_j\mathbf{v}_j=\mathbf{0}\Rightarrow a_1=\cdots=a_m=0$.\\
+\item A list $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is \hlt{linearly independent} if $\sum\limits_{j=1}^{m}a_j\mathbf{v}_j=\mathbf{0}\Rightarrow a_1=\cdots=a_m=0$.\\
 Otherwise it is \hlt{linearly dependent}. The empty list is linearly independent.
 \item A list $\beta$ is a \hlt{basis} of $\mathcal{V}$ if $\beta$ is linearly independent and $\operatorname{span}(\beta)=\mathcal{V}$.
 \item $\mathcal{V}$ is \hlt{finite-dimensional} if some finite list $\beta$ satisfies $\operatorname{span}(\beta)=\mathcal{V}$; otherwise $\mathcal{V}$ is \hlt{infinite-dimensional}.
@@ -208,7 +206,7 @@ Otherwise it is \hlt{linearly dependent}. The empty list is linearly independent
 Let $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ be a linearly independent list in $\mathcal{V}$.\\
 Then $a_1\mathbf{v}_1 + \cdots + a_m\mathbf{v}_m = b_1\mathbf{v}_1 + \cdots + b_m\mathbf{v}_m$ iff $a_j=b_j$ for each $j=1,\ldots,m$.
 \begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] Subtracting the two sides gives $(a_1-b_1)\mathbf{v}_1+\cdots+(a_m-b_m)\mathbf{v}_m=\mathbf{0}$.\\
 Linear independence forces $a_j-b_j=0$ for each $j$, hence $a_j=b_j$.
@@ -223,7 +221,7 @@ Linear independence forces $a_j-b_j=0$ for each $j$, hence $a_j=b_j$.
 Let $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ be a linearly dependent list in $\mathcal{V}$.\\
 Then for each $\mathbf{v}\in\mathcal{V}$, the list $(\mathbf{v}_1, \ldots, \mathbf{v}_m, \mathbf{v})$ is linearly dependent.
 \begin{proof}
-Since $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly dependent, there are scalars $a_1,\ldots,a_m$, not all zero, with $a_1\mathbf{v}_1 + \cdots + a_m\mathbf{v}_m = \mathbf{0}$.\\
+Since $(\mathbf{v}_1, \ldots, \mathbf{v}_m)$ is linearly dependent, $\exists$ scalars $a_1,\ldots,a_m$, not all zero, with $a_1\mathbf{v}_1 + \cdots + a_m\mathbf{v}_m = \mathbf{0}$.\\
 Appending coefficient $0$ gives $a_1\mathbf{v}_1 + \cdots + a_m\mathbf{v}_m + 0\mathbf{v} = \mathbf{0}$, and the scalars $a_1,\ldots,a_m,0$ are not all zero.\\
 \hlt{Structural Commentary}: Longer lists inherit dependence; set new coefficients to $0$.\\
 \hlt{Key Insight}: Once a list has a redundancy, adding more vectors cannot remove it.
@@ -249,12 +247,14 @@ Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a list in $\mathcal{V}$. Write
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $\beta$ is linearly independent and $\mathbf{v}\notin\operatorname{span}(\beta)$, then $(\beta,\mathbf{v})$ is linearly independent.
-\item If $\sum\limits_{i=1}^m a_i\mathbf{v}_i=\mathbf{0}$ is nontrivial and $a_j\neq 0$, then $\operatorname{span}(\beta_{\widehat{j}})=\operatorname{span}(\beta)$. Hence $\operatorname{span}(\beta)=\mathcal{V}$ implies $\operatorname{span}(\beta_{\widehat{j}})=\mathcal{V}$.
+\item If $\sum\limits_{i=1}^m a_i\mathbf{v}_i=\mathbf{0}$ is nontrivial and $a_j\neq 0$, then $\operatorname{span}(\beta_{\widehat{j}})=\operatorname{span}(\beta)$.\\
+Hence $\operatorname{span}(\beta)=\mathcal{V}$ implies $\operatorname{span}(\beta_{\widehat{j}})=\mathcal{V}$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Suppose $\sum\limits_{i=1}^m a_i\mathbf{v}_i+a\mathbf{v}=\mathbf{0}$. If $a\neq0$, then $\mathbf{v}=-a^{-1}\sum\limits_{i=1}^m a_i\mathbf{v}_i\in\operatorname{span}(\beta)$, a contradiction. Hence $a=0$, and independence of $\beta$ gives $a_1=\cdots=a_m=0$.
+\item Suppose $\sum\limits_{i=1}^m a_i\mathbf{v}_i+a\mathbf{v}=\mathbf{0}$. If $a\neq0$, then $\mathbf{v}=-a^{-1}\sum\limits_{i=1}^m a_i\mathbf{v}_i\in\operatorname{span}(\beta)$, a contradiction.\\
+Hence $a=0$, and independence of $\beta$ gives $a_1=\cdots=a_m=0$.
 \item Solving the relation for $\mathbf{v}_j$ gives $\mathbf{v}_j=-a_j^{-1}\sum\limits_{i\neq j}a_i\mathbf{v}_i\in\operatorname{span}(\beta_{\widehat{j}})$. Thus every vector of $\beta$ lies in $\operatorname{span}(\beta_{\widehat{j}})$, so $\operatorname{span}(\beta)\subseteq\operatorname{span}(\beta_{\widehat{j}})$. The reverse inclusion is immediate because $\beta_{\widehat{j}}$ is a sublist of $\beta$.
 \end{enumerate}
 \hlt{Structural Commentary}: New directions preserve independence; redundant vectors preserve span.\\
@@ -275,9 +275,12 @@ For $j\in\{1,\ldots,r\}$, set $\beta_{j\leftarrow\mathbf{v}}\defeq(\mathbf{u}_1,
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If all $c_j=0$, then $\mathbf{v}=\mathbf{0}$.
-\item Since $\mathbf{u}_j=c_j^{-1}\left(\mathbf{v}-\sum\limits_{i\neq j}c_i\mathbf{u}_i\right)$, every vector of $\beta$ lies in $\operatorname{span}(\beta_{j\leftarrow\mathbf{v}})$. Conversely, $\mathbf{v}\in\operatorname{span}(\beta)$, so every vector of $\beta_{j\leftarrow\mathbf{v}}$ lies in $\operatorname{span}(\beta)$. Hence $\operatorname{span}(\beta_{j\leftarrow\mathbf{v}})=\mathcal{V}$.\\
-If $\beta$ is a basis and $\sum\limits_{i<j}b_i\mathbf{u}_i+a\mathbf{v}+\sum\limits_{i>j}b_i\mathbf{u}_i=\mathbf{0}$, substitution gives $\sum\limits_{i\neq j}(b_i+ac_i)\mathbf{u}_i+ac_j\mathbf{u}_j=\mathbf{0}$. Independence of $\beta$ gives $ac_j=0$ and $b_i+ac_i=0$ for $i\neq j$. Since $c_j\neq0$, $a=0$, and then every $b_i=0$. Thus $\beta_{j\leftarrow\mathbf{v}}$ is linearly independent.
-\item Since $\mathbf{v}\notin\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, some coefficient among $c_{k+1},\ldots,c_r$ is nonzero. Choose $j>k$ with $c_j\neq0$; by (ii), $\beta_{j\leftarrow\mathbf{v}}$ is a basis.
+\item Since $\mathbf{u}_j=c_j^{-1}\left(\mathbf{v}-\sum\limits_{i\neq j}c_i\mathbf{u}_i\right)$, every vector of $\beta$ lies in $\operatorname{span}(\beta_{j\leftarrow\mathbf{v}})$.\\
+Conversely, $\mathbf{v}\in\operatorname{span}(\beta)$, so every vector of $\beta_{j\leftarrow\mathbf{v}}$ lies in $\operatorname{span}(\beta)$. Hence $\operatorname{span}(\beta_{j\leftarrow\mathbf{v}})=\mathcal{V}$.\\
+If $\beta$ is a basis and $\sum\limits_{i<j}b_i\mathbf{u}_i+a\mathbf{v}+\sum\limits_{i>j}b_i\mathbf{u}_i=\mathbf{0}$, substitution gives $\sum\limits_{i\neq j}(b_i+ac_i)\mathbf{u}_i+ac_j\mathbf{u}_j=\mathbf{0}$. Independence of $\beta$ gives $ac_j=0$ and $b_i+ac_i=0$ for $i\neq j$.\\
+Since $c_j\neq0$, $a=0$, and then every $b_i=0$. Thus $\beta_{j\leftarrow\mathbf{v}}$ is linearly independent.
+\item Since $\mathbf{v}\notin\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, some coefficient among $c_{k+1},\ldots,c_r$ is nonzero.\\
+Choose $j>k$ with $c_j\neq0$; by (ii), $\beta_{j\leftarrow\mathbf{v}}$ is a basis.
 \end{enumerate}
 \hlt{Structural Commentary}: Replacement preserves span.\\
 \hlt{Key Insight}: Replace where the coefficient is nonzero.
@@ -304,7 +307,8 @@ If $\mathcal{V}$ is finite-dimensional, $\alpha=(\mathbf{u}_1,\ldots,\mathbf{u}_
 Suppose $m>n$.\\
 If $n=0$, then $\mathcal{V}=\operatorname{span}(\gamma)=\{\mathbf{0}\}$, contradicting independence of the nonempty list $\alpha$; hence $n\geq1$.\\
 Construct spanning lists $\gamma_k$ of length $n$ that contain $\mathbf{u}_1,\ldots,\mathbf{u}_k$ for $0\leq k\leq n$. Set $\gamma_0=\gamma$. Given $\gamma_k$ with $k<n$, write $\mathbf{u}_{k+1}$ in $\operatorname{span}(\gamma_k)$. Since $\mathbf{u}_{k+1}\notin\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, some coefficient on an entry of $\gamma_k$ outside $\mathbf{u}_1,\ldots,\mathbf{u}_k$ is nonzero. Replacing that entry by $\mathbf{u}_{k+1}$ preserves span by Lemma \ref{lem:replacement-lemma}(ii); call the result $\gamma_{k+1}$.\\
-Then $\gamma_n$ spans $\mathcal{V}$ and contains $\mathbf{u}_1,\ldots,\mathbf{u}_n$, so $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)=\mathcal{V}$. Since $m>n$, this puts $\mathbf{u}_{n+1}$ in the span of earlier vectors, contradicting independence of $\alpha$.\\
+Then $\gamma_n$ spans $\mathcal{V}$ and contains $\mathbf{u}_1,\ldots,\mathbf{u}_n$, so $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_n)=\mathcal{V}$.\\
+Since $m>n$, this puts $\mathbf{u}_{n+1}$ in the span of earlier vectors, contradicting independence of $\alpha$.\\
 \hlt{Structural Commentary}: Independent length is bounded by spanning length.\\
 \hlt{Key Insight}: Independent lists cannot be longer than spanning lists in finite dimensions.
 \end{proof}
@@ -313,7 +317,7 @@ Then $\gamma_n$ spans $\mathcal{V}$ and contains $\mathbf{u}_1,\ldots,\mathbf{u}
 \begin{proposition} \label{prop:basis-unique-coordinate-representation} \hlt{Unique Coordinate Representation}\\
 $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ is a basis of $\mathcal{V}$ iff each $\mathbf{v}\in\mathcal{V}$ has a unique coefficient vector $(a_1,\ldots,a_n)\in\mathbb{F}^n$ with $\mathbf{v}=\sum\limits_{j=1}^n a_j\mathbf{v}_j$.
 \begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] Spanning gives a representation of each $\mathbf{v}\in\mathcal{V}$. If $\mathbf{v}=\sum\limits_{j=1}^{n}a_j\mathbf{v}_j=\sum\limits_{j=1}^{n}b_j\mathbf{v}_j$, then Proposition \ref{prop:uniquecoefficientsindependentlist} gives $a_j=b_j$ for each $j$.
 \item[$(\Leftarrow)$] Existence gives $\operatorname{span}(\beta)=\mathcal{V}$. If $\sum\limits_{j=1}^{n}a_j\mathbf{v}_j=\mathbf{0}$, compare with $\mathbf{0}=\sum\limits_{j=1}^{n}0\mathbf{v}_j$; uniqueness gives $a_j=0$ for each $j$, so $\beta$ is independent.
@@ -326,8 +330,7 @@ $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ is a basis of $\mathcal{V}$ iff each 
 \begin{theorem} \label{thm:reducing-spanning-lists} \hlt{Reducing Spanning Lists}\\
 Every spanning list in a finite-dimensional vector space contains a sublist that is a basis.
 \begin{proof}
-Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a spanning list of $\mathcal{V}$. If $\beta$ is independent, it is a basis. Otherwise remove one vector without changing span: omit $\mathbf{v}_1$ if $\mathbf{v}_1=\mathbf{0}$, and otherwise use Lemma \ref{lem:lineardependencelemma} to remove a suitable $\mathbf{v}_j$. The resulting sublist still spans $\mathcal{V}$ and has length one less.\\
-Repeat this step. The length strictly decreases, so the process stops with a spanning independent sublist, hence a basis.\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a spanning list of $\mathcal{V}$. If $\beta$ is independent, it is a basis. Otherwise remove one vector without changing span: omit $\mathbf{v}_1$ if $\mathbf{v}_1=\mathbf{0}$, and otherwise use Lemma \ref{lem:lineardependencelemma} to remove a suitable $\mathbf{v}_j$. The resulting sublist still spans $\mathcal{V}$ and has length one less. Repeat this step. The length strictly decreases, so the process stops with a spanning independent sublist, hence a basis.\\
 \hlt{Structural Commentary}: Delete redundant vectors while preserving span.\\
 \hlt{Key Insight}: Spanning gives enough vectors; reduction deletes exactly the unnecessary ones.
 \end{proof}
@@ -338,7 +341,8 @@ Every linearly independent list in a finite-dimensional vector space can be exte
 \begin{proof}
 Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be linearly independent in $\mathcal{V}$, and choose a spanning list $(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ of $\mathcal{V}$.\\
 Initialize $\mathcal{B}=\beta$. Inspect $\mathbf{w}_1,\ldots,\mathbf{w}_n$ in order, appending $\mathbf{w}_j$ exactly when $\mathbf{w}_j\notin\operatorname{span}(\mathcal{B})$. Each append preserves independence by Proposition \ref{prop:adjoiningandremovingvectors}.\\
-After the inspection, each $\mathbf{w}_j$ lies in $\operatorname{span}(\mathcal{B})$: it was either already there or was appended. Since the $\mathbf{w}_j$ span $\mathcal{V}$ and $\operatorname{span}(\mathcal{B})$ is a subspace, every vector of $\mathcal{V}$ lies in $\operatorname{span}(\mathcal{B})$. Thus $\mathcal{B}$ is a spanning independent list, hence a basis.\\
+After the inspection, each $\mathbf{w}_j$ lies in $\operatorname{span}(\mathcal{B})$: it was either already there or was appended. Since the $\mathbf{w}_j$ span $\mathcal{V}$ and $\operatorname{span}(\mathcal{B})$ is a subspace, every vector of $\mathcal{V}$ lies in $\operatorname{span}(\mathcal{B})$.\\
+Thus $\mathcal{B}$ is a spanning independent list, hence a basis.\\
 \hlt{Structural Commentary}: An independent list has no redundancy, but may miss directions. Appending only vectors outside its span fills those directions while preserving independence.\\
 \hlt{Key Insight}: A finite-dimensional independent list becomes a basis once enough new directions are added.
 \end{proof}
@@ -395,7 +399,7 @@ Let $\mathcal{V}$ be finite-dimensional and set $n\defeq\dim(\mathcal{V})$. Then
 \item if $\alpha$ is linearly independent in $\mathcal{V}$ and has length $n$, then $\alpha$ is a basis.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(i)$] By Theorem \ref{thm:reducing-spanning-lists}, $\gamma$ contains a basis sublist. Since every basis has length $n$, no proper sublist can have length $n$; hence $\gamma$ itself is a basis.
 \item[$(ii)$] Extend $\alpha$ to a basis of $\mathcal{V}$ by Theorem \ref{thm:extending-independent-lists}. Since every basis has length $n$ and $\alpha$ already has length $n$, no vector is added; hence $\alpha$ is a basis.
@@ -415,11 +419,13 @@ Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a finite list in $\mathcal{V}$
 \item $\beta$ is linearly independent, and $\beta^\frown\mathbf{x}$ is linearly dependent for each $\mathbf{x}\in\mathcal{V}$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(i)$]$\Rightarrow (ii)$ This is Proposition \ref{prop:basis-unique-coordinate-representation}.
-\item[$(ii)$]$\Rightarrow (iii)$ Existence gives $\operatorname{span}(\beta)=\mathcal{V}$. If a proper sublist $\gamma\subsetneq\beta$ spanned $\mathcal{V}$ and omitted the occurrence $\mathbf{v}_j$, then $\mathbf{v}_j$ would have both its standard $\beta$-coordinate representation and one using only $\gamma$, contradicting uniqueness.
-\item[$(iii)$]$\Rightarrow (iv)$ If $\beta$ were dependent, Proposition \ref{prop:adjoiningandremovingvectors} would remove some $\mathbf{v}_j$ without changing $\operatorname{span}(\beta)$, contradicting minimality. Thus $\beta$ is independent. Since $\operatorname{span}(\beta)=\mathcal{V}$, writing $\mathbf{x}$ as a linear combination of $\beta$ gives a nontrivial relation on $\beta^\frown\mathbf{x}$.
+\item[$(ii)$]$\Rightarrow (iii)$ Existence gives $\operatorname{span}(\beta)=\mathcal{V}$.\\
+If a proper sublist $\gamma\subsetneq\beta$ spanned $\mathcal{V}$ and omitted the occurrence $\mathbf{v}_j$, then $\mathbf{v}_j$ would have both its standard $\beta$-coordinate representation and one using only $\gamma$, contradicting uniqueness.
+\item[$(iii)$]$\Rightarrow (iv)$ If $\beta$ were dependent, Proposition \ref{prop:adjoiningandremovingvectors} would remove some $\mathbf{v}_j$ without changing $\operatorname{span}(\beta)$, contradicting minimality. Thus $\beta$ is independent.\\
+Since $\operatorname{span}(\beta)=\mathcal{V}$, writing $\mathbf{x}$ as a linear combination of $\beta$ gives a nontrivial relation on $\beta^\frown\mathbf{x}$.
 \item[$(iv)$]$\Rightarrow (i)$ If $\operatorname{span}(\beta)\neq\mathcal{V}$, choose $\mathbf{x}\notin\operatorname{span}(\beta)$. Then Proposition \ref{prop:adjoiningandremovingvectors} makes $\beta^\frown\mathbf{x}$ independent, contradicting (iv). Hence $\beta$ spans $\mathcal{V}$, and with independence from (iv), it is a basis.
 \end{enumerate}
 \hlt{Structural Commentary}: A basis is simultaneously just enough to span and too large to extend independently.\\
@@ -437,7 +443,9 @@ Let $I\subseteq S\subseteq\mathcal{V}$, with $I$ linearly independent and $\oper
 Assuming Zorn's lemma, there exists a Hamel basis $\mathcal{B}$ of $\mathcal{V}$ such that $I\subseteq\mathcal{B}\subseteq S$. Consequently, every nonzero vector space has a basis; every independent set extends to a basis; every spanning set contains a basis.
 \begin{proof}
 Let $\mathscr{P}=\{E:I\subseteq E\subseteq S,\ E\ \text{linearly independent}\}$, ordered by inclusion. Then $I\in\mathscr{P}$.\\
-If $\mathcal{C}\subseteq\mathscr{P}$ is a nonempty chain, put $U=\bigcup\limits_{E\in\mathcal{C}}E$. In any finite relation $\sum\limits_{k=1}^{m}a_k\mathbf{u}_k=\mathbf{0}$ in $U$, the finitely many vectors $\mathbf{u}_k$ lie in one member of the chain; independence there gives $a_k=0$ for all $k$. Thus $U\in\mathscr{P}$ and is an upper bound for $\mathcal{C}$. The empty chain is bounded by $I$. By Zorn's lemma, Principle \ref{princ:zorns-lemma}, choose maximal $\mathcal{B}\in\mathscr{P}$.\\
+If $\mathcal{C}\subseteq\mathscr{P}$ is a nonempty chain, put $U=\bigcup\limits_{E\in\mathcal{C}}E$. In any finite relation $\sum\limits_{k=1}^{m}a_k\mathbf{u}_k=\mathbf{0}$ in $U$, the finitely many vectors $\mathbf{u}_k$ lie in one member of the chain; independence there gives $a_k=0$ for all $k$.\\
+Thus $U\in\mathscr{P}$ and is an upper bound for $\mathcal{C}$. The empty chain is bounded by $I$.\\
+By Zorn's lemma, Principle \ref{princ:zorns-lemma}, choose maximal $\mathcal{B}\in\mathscr{P}$.\\
 If $s\in S\setminus\operatorname{span}(\mathcal{B})$, then $\mathcal{B}\cup\{s\}$ is linearly independent, contradicting maximality. Hence $S\subseteq\operatorname{span}(\mathcal{B})$, so $\operatorname{span}(\mathcal{B})=\mathcal{V}$ and $\mathcal{B}$ is a Hamel basis. The consequences follow by taking $S=\mathcal{V}$ or $I=\emptyset$.\\
 \hlt{Structural Commentary}: Finite extension uses exchange; arbitrary extension uses maximality.\\
 \hlt{Key Insight}: Maximal independence inside a spanning set forces spanning.
@@ -447,10 +455,8 @@ If $s\in S\setminus\operatorname{span}(\mathcal{B})$, then $\mathcal{B}\cup\{s\}
 \begin{theorem} \label{thm:arbitrary-bases-same-cardinality} \hlt{Dimension as Basis Cardinality}\\
 If $\mathcal{B}$ and $\mathcal{C}$ are Hamel bases of $\mathcal{V}$, then $\abs{\mathcal{B}}=\abs{\mathcal{C}}$. Hence $\dim(\mathcal{V}):=\abs{\mathcal{B}}$ is well-defined for any Hamel basis $\mathcal{B}$.
 \begin{proof}
-If one basis is finite, say $\abs{\mathcal{B}}=n$, then $\mathcal{C}$ cannot contain $n+1$ distinct vectors, since such a finite sublist would be independent while $\mathcal{B}$ spans $\mathcal{V}$, contradicting Theorem \ref{thm:finitedimlenofvec}. Hence $\mathcal{C}$ is finite, and Theorem \ref{thm:basis-length-well-defined} gives $\abs{\mathcal{C}}=n$. Thus assume both bases are infinite.\\
-For $\mathbf{c}\in\mathcal{C}$, let $\operatorname{supp}_{\mathcal{B}}(\mathbf{c})\subseteq\mathcal{B}$ be its finite $\mathcal{B}$-support.\\
-Every $\mathbf{b}\in\mathcal{B}$ appears in some $\operatorname{supp}_{\mathcal{B}}(\mathbf{c})$: otherwise all vectors in $\operatorname{span}(\mathcal{C})$ would have zero $\mathbf{b}$-coordinate, contradicting $\operatorname{span}(\mathcal{C})=\mathcal{V}$. Hence $\mathcal{B}\subseteq\bigcup\limits_{\mathbf{c}\in\mathcal{C}}\operatorname{supp}_{\mathcal{B}}(\mathbf{c})$.\\
-Thus $\abs{\mathcal{B}}\leq\sum\limits_{\mathbf{c}\in\mathcal{C}}\abs{\operatorname{supp}_{\mathcal{B}}(\mathbf{c})}\leq\abs{\mathcal{C}}\aleph_0=\abs{\mathcal{C}}$ by Theorem \ref{thm:infinite-cardinal-absorption-reference}. Interchanging $\mathcal{B}$ and $\mathcal{C}$ gives $\abs{\mathcal{C}}\leq\abs{\mathcal{B}}$; Theorem \ref{thm:schroeder-bernstein} gives equality.\\
+If one basis is finite, say $\abs{\mathcal{B}}=n$, then $\mathcal{C}$ cannot contain $n+1$ distinct vectors, since such a finite sublist would be independent while $\mathcal{B}$ spans $\mathcal{V}$, contradicting Theorem \ref{thm:finitedimlenofvec}. Hence $\mathcal{C}$ is finite, and Theorem \ref{thm:basis-length-well-defined} gives $\abs{\mathcal{C}}=n$. Thus assume both bases are infinite. For $\mathbf{c}\in\mathcal{C}$, let $\operatorname{supp}_{\mathcal{B}}(\mathbf{c})\subseteq\mathcal{B}$ be its finite $\mathcal{B}$-support.\\
+Every $\mathbf{b}\in\mathcal{B}$ appears in some $\operatorname{supp}_{\mathcal{B}}(\mathbf{c})$: otherwise all vectors in $\operatorname{span}(\mathcal{C})$ would have zero $\mathbf{b}$-coordinate, contradicting $\operatorname{span}(\mathcal{C})=\mathcal{V}$. Hence $\mathcal{B}\subseteq\bigcup\limits_{\mathbf{c}\in\mathcal{C}}\operatorname{supp}_{\mathcal{B}}(\mathbf{c})$. Thus $\abs{\mathcal{B}}\leq\sum\limits_{\mathbf{c}\in\mathcal{C}}\abs{\operatorname{supp}_{\mathcal{B}}(\mathbf{c})}\leq\abs{\mathcal{C}}\aleph_0=\abs{\mathcal{C}}$ by Theorem \ref{thm:infinite-cardinal-absorption-reference}. Interchanging $\mathcal{B}$ and $\mathcal{C}$ gives $\abs{\mathcal{C}}\leq\abs{\mathcal{B}}$; Theorem \ref{thm:schroeder-bernstein} gives equality.\\
 \hlt{Structural Commentary}: Even in infinite dimensions, a basis size is intrinsic.\\
 \hlt{Key Insight}: Each basis vector is detected inside finite supports relative to the other basis.
 \end{proof}
