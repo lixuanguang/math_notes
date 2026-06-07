@@ -18,6 +18,7 @@ Refine mathematical writing section by section, resolving one section-bounded is
 - Consolidate multiple labels on a single LaTeX environment or mathematical object into one approved canonical label.
 - Prefer repository-style `$...$` equation blocks over `\[...\]`, `$$...$$`, `equation`, `align`, and related display environments whenever the displayed formula does not need numbering, labels, cross-references, alignment, multi-line layout, or another environment feature.
 - Normalize displayed indexed operators so they use `\limits` where appropriate.
+- Detect and repair visually short final lines or isolated formula fragments when a semantic rewrite can improve readability.
 - Make content concise without making it under-explained.
 
 ## Cursor
@@ -70,11 +71,26 @@ For the current section, check:
 - Proof endings that merely restate the claim, such as "This proves the theorem"; replace them with the automatic QED marker or with `\qedhere`/`\qed` only when placement requires it.
 - Proofs of equivalences or lists of conditions that should be segmented with the standard enumerate blocks below.
 - Passages that became too terse or would become too terse after refactoring; make the mathematical content explicit first, then compress it using notation.
+- Rendered or likely rendered short final lines: paragraphs, definitions, proof items, or explanatory sentences whose final visual line contains only a few words or a lone inline formula fragment.
 - Examples or remarks that contain formal content needed by later results.
 - Theorems, propositions, lemmas, corollaries, or methods that reference remarks or examples.
 - Refactored content that explicitly references remarks, examples, or numbered definitions where the needed condition should instead be stated directly or supplied by prior exposition.
 - Any dependency issue that should be sent back to Phase 1 or Phase 2 for structural reordering instead of being patched with a local unnumbered prerequisite paragraph.
 - Multiple labels on one object: a single `\begin{...}...\end{...}` block or mathematical object should not carry multiple `\label{...}` commands unless the labels refer to genuinely distinct subobjects.
+
+## Short-Line Cleanup
+
+During Phase 3, treat short final visual lines as readability candidates when they are visible in the compiled output or strongly suggested by the source. Flag a paragraph, definition, proof item, or explanatory sentence if its final rendered line has only a few words, a single equation fragment, or a stranded relation such as `$B = PAQ$` after a long preceding clause.
+
+Prefer semantic repairs over spacing tricks:
+
+- First make the mathematical content explicit, then compress it with notation.
+- Pull an isolated relation into the preceding clause when it remains readable, using forms such as `with $B = PAQ$`, `where $B = PAQ$`, or `i.e. $B = PAQ$`.
+- Introduce notation or quantifiers that shorten a wordy setup without hiding assumptions, e.g. replace repeated prose by `$P,Q$ invertible` when the objects are already clear.
+- Split an overlong sentence into balanced sentences if that prevents a tiny trailing line and improves the logic.
+- Move a central formula to a repository-style `$...$` equation block only when the formula genuinely benefits from display treatment.
+- Reorder clauses so the condition, notation, or conclusion is not stranded at the end of a line.
+- Avoid cosmetic fixes such as manual `\\`, `\newline`, arbitrary `\hspace`, forced breaks, or spacing tweaks unless the mathematical layout itself requires them.
 
 ## Analysis Format
 
@@ -92,6 +108,7 @@ Before editing, report:
 - Whether any displayed equation context needs `\limits` normalization for indexed operators.
 - Whether any proof should be segmented using one of the standard proof-style blocks.
 - Any place where succinctness would make the content too implicit, and how you will keep the needed assumptions, definitions, or proof steps explicit.
+- Any short final rendered lines or isolated formula fragments, and the intended prose, notation, clause-order, or display-structure repair.
 - Whether any environment or object has multiple labels, the proposed canonical label to keep, and which references would need updating.
 - Intended edits, grouped as one section-bounded issue batch and stated before applying them.
 
@@ -125,6 +142,7 @@ When editing an approved section:
 - In displayed equation contexts, normalize indexed operators to use `\limits` where appropriate. This includes `equation`, `equation*`, `align`, `align*`, `gather`, `multline`, `\[...\]`, `$$...$$`, and any repository-specific `$...$` display-style equation blocks. Do not force `\limits` into ordinary inline prose unless the repository convention clearly treats that math as display-style.
 - For indexed direct sums, use the size-appropriate operator, e.g. `\bigoplus\limits_{i \in I}`, rather than forcing limits onto an ordinary binary `\oplus` unless that is already the local convention.
 - Use a two-pass refinement when prose is unclear: first make the mathematical content explicit, then make it succinct with notation. Do not remove assumptions, quantifiers, dependencies, or proof steps merely to shorten the prose.
+- When repairing short final lines or stranded formula fragments, prefer prose, notation, clause-order, or display-structure revisions over manual line breaks or spacing adjustments.
 - Use the standard proof-style blocks below when a proof is naturally an equivalence, a chain of equivalent conditions, a list of equivalence proofs, or a list of condition proofs. Do not force these blocks onto proofs that are clearer as a single direct argument.
 - Prefer the proof environment's automatic QED marker to a final sentence that reiterates the statement just proved; use `\qedhere` or `\qed` only when the marker needs explicit placement.
 
@@ -188,6 +206,7 @@ For a list of condition-type proofs, use:
 - Keep notation consistent within each file and across related files.
 - Use repository-style `$...$` equation blocks for standalone displayed formulas whenever possible, reserving display environments for labels, numbering, cross-references, alignment, multi-line layout, or other needed environment behavior.
 - Standardize displayed indexed operators with `\limits` where appropriate.
+- Avoid leaving a definition, proof item, or explanatory paragraph with a tiny final line or isolated formula fragment when a semantic rewrite can fix it.
 - Avoid explicit references to remarks, examples, and numbered definitions in the refactored content unless the user explicitly approves an exception.
 - Do not change mathematical content unless the original is ambiguous, incorrect, or structurally misplaced.
 
@@ -201,6 +220,7 @@ After editing a section:
 - Re-check that any segmented equivalence or condition-list proof uses the appropriate standard proof-style block.
 - Re-check that proof endings use the QED marker where possible and do not simply iterate the statement just proved.
 - Re-check that succinct rewrites remain explicit enough to preserve assumptions, quantifiers, dependencies, and proof logic.
+- Re-check any visible or likely short final lines introduced or touched by the edit, and confirm they were fixed semantically rather than by spacing hacks where possible.
 - Re-check that no dependency-order issue was hidden by adding a shortcut prerequisite paragraph.
 - Re-check references and labels affected by the edit.
 - Confirm each affected environment or object has at most one label unless distinct anchors justify multiple labels.
