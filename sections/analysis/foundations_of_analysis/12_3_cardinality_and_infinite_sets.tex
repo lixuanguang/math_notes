@@ -6,28 +6,7 @@
 
 
 Cardinality counts sets by matching them with other sets, using the earlier language of functions, power sets, and bijections.
-
-\begin{definition} \label{def:cardinality-equivalence} \hlt{Same Cardinality}\\
-Two sets $A$ and $B$ have \hlt{same cardinality}, or are \hlt{equivalent}, if $\exists$ a bijection $f:A\to B$. Then $A\sim_{\#}B$.\\
-The relation $\sim_{\#}$ is an equivalence relation: $A\sim_{\#}A$ by identity map, symmetry follows from Theorem \ref{thm:bijective-iff-invertible-function}, and transitivity follows by composing bijections.
-\end{definition}
-
-\begin{definition} \label{def:finite-countable-uncountable}\label{def:cardinality-core-definitions-source-todo} \hlt{Finite, Countable, and Uncountable}\\
-Set $J_0\defeq\emptyset$, and for $n\geq1$ set $J_n\defeq\{1,2,\ldots,n\}$. A set $A$ is
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{finite} if $A\sim_{\#} J_n$ for some $n\in\N$;
-\item \hlt{infinite} if it is not finite;
-\item \hlt{countable} if $A\sim_{\#} \N$;
-\item \hlt{uncountable} if it is neither finite nor countable;
-\item \hlt{at most countable} if it is finite or countable.
-\end{enumerate}
-Countable sets are also called enumerable or denumerable.
-\end{definition}
-
-\begin{principle} \label{princ:well-ordering-natural-numbers} \hlt{Well-Ordering of $\N$}\\
-Every nonempty subset of $\N$ has a least element, justifying first unused indices, first repeated values, and increasing listings of infinite subsets of $\N$.
-\end{principle}
+The foundational prerequisites collect same cardinality, finite/countable vocabulary, Cantor's theorem, Schroeder--Bernstein, and basic cardinal arithmetic; this subsection develops countability, diagonal arguments, finite-set summation, and the continuum.
 
 \begin{proposition} \label{prop:finite-cardinality-well-defined} \hlt{Finite Cardinality is Well Defined}\\
 If $A\sim_{\#}J_m$ and $A\sim_{\#}J_n$, then $m=n$. Thus $\#A=n$ is well defined for finite sets.
@@ -186,17 +165,6 @@ Since $\Z$ is countable, Corollary \ref{cor:countable-cartesian-products} and Pr
 \end{proof}
 \end{corollary}
 
-\begin{theorem} \label{thm:cantor-power-set-theorem} \hlt{Cantor's Theorem}\\
-For every set $X$, no function $f:X\to\mathcal{P}(X)$ is surjective. Hence $X$ and $\mathcal{P}(X)$ cannot have the same cardinality.
-\begin{proof}
-Suppose $f:X\to\mathcal{P}(X)$ were surjective, and set $D\defeq\{x\in X:x\notin f(x)\}$.\\
-Since $D\subseteq X$, we have $D\in\mathcal{P}(X)$, so surjectivity gives $D=f(a)$ for some $a\in X$.\\
-But then $a\in D \Longleftrightarrow a\notin f(a) \Longleftrightarrow a\notin D$, a contradiction.\\
-\hlt{Structural Commentary}: The diagonal set is defined to disagree with each proposed row at its own index.\\
-\hlt{Key Insight}: Power sets are too large to be exhausted by their base set.
-\end{proof}
-\end{theorem}
-
 \begin{figure}[H]
   \centering
   \input{figures/analysis/cantor_diagonal_binary_sequences.tikz}
@@ -211,81 +179,6 @@ Suppose $A$ were countable, $A=\{s_1,s_2,\ldots\}$ with $s_n=(s_n(k))_{k\in\N}$.
 Then $s(n)\neq s_n(n)$ for every $n$, so $s\neq s_n$ for all $n$. Hence $s\notin A$, a contradiction. Thus $A$ is uncountable.\\
 \hlt{Structural Commentary}: The construction attacks the diagonal of a proposed enumeration.\\
 \hlt{Key Insight}: A sequence can be built to escape every row of a countable list.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/schroeder_bernstein_ladder.tikz}
-  \caption{Schroeder--Bernstein: alternating images leave a remainder paired by $g^{-1}$.}
-  \label{fig:schroeder-bernstein-ladder}
-\end{figure}
-
-
-\begin{theorem} \label{thm:schroeder-bernstein} \hlt{Schroeder--Bernstein Theorem}\\
-If there are injections $f:A\to B$ and $g:B\to A$, then there is a bijection $h:A\to B$.
-\begin{proof}
-Let $A_0\defeq A\setminus g(B)$, and recursively define $B_n\defeq f(A_n)$ and $A_{n+1}\defeq g(B_n)$.\\
-The sets $A_n$ are pairwise disjoint: if $A_i\cap A_j\neq\emptyset$ with $i<j$, then $i=0$ already contradicts $A_j\subseteq g(B)$; if $i>0$, injectivity of $g$ and then $f$ steps backward to $A_{i-1}\cap A_{j-1}\neq\emptyset$, and iteration gives the same contradiction.\\
-Since $f$ is injective, the sets $B_n=f(A_n)$ are pairwise disjoint as well.\\
-Let $A_*\defeq A\setminus\bigcup\limits_{n\geq0}A_n$ and $B_*\defeq B\setminus\bigcup\limits_{n\geq0}B_n$. The map $g$ restricts to a bijection $B_*\to A_*$.\\
-Indeed, $g(B_*)$ avoids every $A_n$, while if $a\in A_*$ then $a\notin A_0$, so $a=g(b)$ for a unique $b\in B$; this $b$ cannot lie in any $B_n$, otherwise $a\in A_{n+1}$.\\
-Define $h(x)\defeq
-\begin{cases}
-f(x), & x\in\bigcup_{n\geq0}A_n,\\
-g^{-1}(x), & x\in A_*,
-\end{cases}$, where $g^{-1}$ denotes the inverse of $g:B_*\to A_*$.\\
-This maps each $A_n$ bijectively onto $B_n$ and maps $A_*$ bijectively onto $B_*$. Hence $h$ is a bijection $A\to B$.\\
-\hlt{Structural Commentary}: Two injections carve both sets into matched layers plus a common remainder.\\
-\hlt{Key Insight}: Use $f$ on the escaping layers and $g^{-1}$ on the stable remainder.
-\end{proof}
-\end{theorem}
-
-\begin{definition} \label{def:cardinal-comparison-and-arithmetic} \hlt{Cardinal Comparison and Arithmetic}\\
-Let $A,B$ be sets, and let $\kappa=\abs{A}$, $\lambda=\abs{B}$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Cardinal comparison}: $\abs{A}\leq\abs{B}$ iff $\exists$ an injection $A\to B$.
-\item \hlt{Strict cardinal comparison}: $\abs{A}<\abs{B}$ iff $\abs{A}\leq\abs{B}$ and $A\not\sim_{\#}B$.
-\item If $A\cap B=\emptyset$, the \hlt{cardinal sum} is $\kappa+\lambda\defeq\abs{A\cup B}$.
-\item The \hlt{cardinal product} is $\kappa\lambda\defeq\abs{A\times B}$.
-\item The \hlt{function set} is $A^B\defeq\{f:B\to A\}$, and the \hlt{cardinal power} is $\kappa^\lambda\defeq\abs{A^B}$.
-\end{enumerate}
-\end{definition}
-
-\begin{proposition} \label{prop:cardinal-arithmetic-reference-laws} \hlt{Cardinal Arithmetic Reference Laws}\\
-Let $\kappa,\lambda,\mu$ be cardinal numbers.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\kappa+\lambda=\lambda+\kappa$ and $\kappa\lambda=\lambda\kappa$;
-\item $\kappa+(\lambda+\mu)=(\kappa+\lambda)+\mu$ and $\kappa(\lambda\mu)=(\kappa\lambda)\mu$;
-\item $\kappa(\lambda+\mu)=\kappa\lambda+\kappa\mu$;
-\item $\kappa^{\lambda+\mu}=\kappa^\lambda\kappa^\mu$, $(\kappa^\lambda)^\mu=\kappa^{\lambda\mu}$, and $(\kappa\lambda)^\mu=\kappa^\mu\lambda^\mu$.
-\end{enumerate}
-\begin{proof}
-Choose pairwise disjoint sets $A,B,C$ with $\abs{A}=\kappa$, $\abs{B}=\lambda$, and $\abs{C}=\mu$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Use $A\cup B\cong B\cup A$ and $A\times B\cong B\times A$.
-\item Use $A\cup(B\cup C)\cong(A\cup B)\cup C$ and $A\times(B\times C)\cong(A\times B)\times C$.
-\item Use $A\times(B\cup C)\cong(A\times B)\cup(A\times C)$.
-\item Use $A^{B\cup C}\cong A^B\times A^C$, $(A^B)^C\cong A^{B\times C}$, and $(A\times B)^C\cong A^C\times B^C$.
-\end{enumerate}
-Taking cardinalities gives (i)--(iv).\\
-\hlt{Structural Commentary}: The laws are canonical bijections.\\
-\hlt{Key Insight}: Cardinal arithmetic is set construction up to bijection.
-\end{proof}
-\end{proposition}
-
-\begin{theorem} \label{thm:infinite-cardinal-absorption-reference} \hlt{Infinite Cardinal Absorption}\\
-Let $\kappa,\lambda$ be cardinals and set $\mu\defeq\max\{\kappa,\lambda\}$. If $\mu$ is infinite, then $\kappa+\lambda=\mu$.\\
-If also $\kappa,\lambda>0$, then $\kappa\lambda=\mu$. In particular, $\aleph_0+\aleph_0=\aleph_0\cdot\aleph_0=\aleph_0$.
-\begin{proof}
-For every infinite cardinal $\nu$, the standard square law gives $\nu+\nu=\nu^2=\nu$.\\
-Since $\kappa,\lambda\leq\mu$, $\mu\leq \kappa+\lambda\leq\mu+\mu=\mu$, so $\kappa+\lambda=\mu$.\\
-If $\kappa,\lambda>0$, choose nonempty representatives $\abs{A}=\kappa$ and $\abs{B}=\lambda$; fixing one point in the smaller factor injects the larger factor into $A\times B$, so $\mu\leq\kappa\lambda$. Also $\kappa\lambda\leq\mu^2=\mu$, so $\kappa\lambda=\mu$.\\
-\hlt{Structural Commentary}: Infinite cardinals absorb smaller summands and nonzero factors.\\
-\hlt{Key Insight}: Squeeze between $\mu$ and $\mu^2=\mu$.
 \end{proof}
 \end{theorem}
 

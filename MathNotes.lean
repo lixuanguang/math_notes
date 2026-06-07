@@ -10,7 +10,6 @@ import MathNotes.sections.analysis.differential_and_geometric_analysis.«15_3_in
 import MathNotes.sections.analysis.differential_and_geometric_analysis.«15_4_differential_forms_and_manifolds»
 import MathNotes.sections.analysis.differential_and_geometric_analysis.«15_5_stokes_theory»
 import MathNotes.sections.analysis.differential_and_geometric_analysis.overview
-import MathNotes.sections.analysis.foundations_of_analysis.«12_1_mathematical_language_sets_and_functions»
 import MathNotes.sections.analysis.foundations_of_analysis.«12_2_number_systems_and_completeness»
 import MathNotes.sections.analysis.foundations_of_analysis.«12_3_cardinality_and_infinite_sets»
 import MathNotes.sections.analysis.foundations_of_analysis.«12_4_real_sequences_and_completeness_methods»
