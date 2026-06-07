@@ -72,6 +72,8 @@ For the current section, check:
 - Proofs of equivalences or lists of conditions that should be segmented with the standard enumerate blocks below.
 - Proof items whose visible content is mostly labels or proof-direction markers, such as an outer `$(v)$` line followed immediately by a nested `$(\Rightarrow)$` or `$(\Leftarrow)$` line.
 - Proof-direction items, especially `$(\Rightarrow)$` and `$(\Leftarrow)$`, whose body wraps into a tiny continuation line or strands a side condition such as `$c \in \mathbb{F}$`.
+- Inline equation or relation chains that visibly break after an unfinished relation symbol, such as a line ending with `=`, `\le`, `\ge`, `\sim`, `\iff`, `\Rightarrow`, or another binary relation before the expression continues on the next line.
+- Enumerate label style: definition or method lists may use `\begin{enumerate}[label=\roman*.]`; proof, equivalence, implication, and condition-list blocks should use `\begin{enumerate}[label=(\roman*)]`.
 - Passages that became too terse or would become too terse after refactoring; make the mathematical content explicit first, then compress it using notation.
 - Rendered or likely rendered short final lines: paragraphs, definitions, proof items, or explanatory sentences whose final visual line contains only a few words or a lone inline formula fragment.
 - Examples or remarks that contain formal content needed by later results.
@@ -88,6 +90,8 @@ Also flag proof-marker artifacts: lines whose main visible content is an enumera
 
 For direction-labeled proof items, inspect the whole rendered item, not only the label line. A `$(\Rightarrow)$` or `$(\Leftarrow)$` item is still a cleanup candidate when its body has enough content but wraps so that the final or continuation line contains only a short side condition, a bound such as `$c \in \mathbb{F}$`, or a few trailing words after a long quantified sentence.
 
+Also flag unfinished relation wraps: a proof item or paragraph should not leave a displayed line ending with a binary relation while the right-hand side starts on the next line, as in a long inline chain ending with `=`, followed by `$a^{-1}0 = 0$` on the next line.
+
 Prefer semantic repairs over spacing tricks:
 
 - First make the mathematical content explicit, then compress it with notation.
@@ -95,6 +99,7 @@ Prefer semantic repairs over spacing tricks:
 - Introduce notation or quantifiers that shorten a wordy setup without hiding assumptions, e.g. replace repeated prose by `$P,Q$ invertible` when the objects are already clear.
 - Replace label-only proof scaffolding with content-bearing text: state the actual implication or equivalence in the parent item, or flatten the directions into sibling items in the same enumerate, repeating the condition label and putting the direction marker in the item body, such as `\item[$(v)$] ($\Rightarrow$)` and `\item[$(v)$] ($\Leftarrow$)`.
 - Repair direction-item wrap problems by moving quantifier bounds earlier, tightening repeated terms, or splitting the sentence before the quantified conclusion; for example, avoid ending a `$(\Rightarrow)$` item with a stranded `$c \in \mathbb{F}$` line after `for all $\mathbf{u},\mathbf{v} \in \mathcal{U}$`.
+- Repair unfinished relation wraps by shortening the chain, naming an intermediate equality in prose, splitting the argument before the chain, or moving the chain to a repository-style `$...$` equation block when the chain is central and genuinely benefits from display treatment.
 - Split an overlong sentence into balanced sentences if that prevents a tiny trailing line and improves the logic.
 - Move a central formula to a repository-style `$...$` equation block only when the formula genuinely benefits from display treatment.
 - Reorder clauses so the condition, notation, or conclusion is not stranded at the end of a line.
@@ -117,6 +122,8 @@ Before editing, report:
 - Whether any proof should be segmented using one of the standard proof-style blocks.
 - Whether any proof item has label-only or direction-marker-only scaffolding, and whether it should be rewritten as content-bearing parent text or flat repeated-label direction items.
 - Whether any `$(\Rightarrow)$` or `$(\Leftarrow)$` item wraps into a short continuation line, and the intended quantifier, notation, sentence-splitting, or clause-order repair.
+- Whether any inline equation chain visibly breaks after an unfinished relation symbol, and whether the fix should be compression, prose splitting, an intermediate named step, or a repository-style `$...$` equation block.
+- Whether any enumerate block uses the wrong label style for its role: `label=\roman*.` only for definition/method lists, and `label=(\roman*)` for proof, equivalence, implication, or condition-list blocks.
 - Any place where succinctness would make the content too implicit, and how you will keep the needed assumptions, definitions, or proof steps explicit.
 - Any short final rendered lines or isolated formula fragments, and the intended prose, notation, clause-order, or display-structure repair.
 - Whether any environment or object has multiple labels, the proposed canonical label to keep, and which references would need updating.
@@ -155,6 +162,8 @@ When editing an approved section:
 - When repairing short final lines or stranded formula fragments, prefer prose, notation, clause-order, or display-structure revisions over manual line breaks or spacing adjustments.
 - When a proof item is followed immediately by `$(\Rightarrow)$` or `$(\Leftarrow)$`, do not leave the outer item as a short placeholder such as `For (v), prove both implications.`; make the outer item substantive or flatten the proof directions into repeated-label sibling items in the same enumerate if that reads better.
 - When a `$(\Rightarrow)$` or `$(\Leftarrow)$` item itself has a short continuation line, rewrite the item semantically: move bounds such as `$c \in \mathbb{F}$` before the conclusion, compress repeated variables with notation, or split the item into clearer sentences.
+- Do not leave an inline equation chain with a rendered line ending in an unfinished binary relation. Rewrite the argument so each rendered line ends after a complete expression, or promote a long equality chain to a repository-style `$...$` equation block when display layout is the clearest form.
+- Use `\begin{enumerate}[label=(\roman*)]` for proof, equivalence, implication, and condition-list blocks. Reserve `\begin{enumerate}[label=\roman*.]` for definition or method lists where the bare roman-with-period style is intentional.
 - Use the standard proof-style blocks below when a proof is naturally an equivalence, a chain of equivalent conditions, a list of equivalence proofs, or a list of condition proofs. Do not force these blocks onto proofs that are clearer as a single direct argument.
 - Prefer the proof environment's automatic QED marker to a final sentence that reiterates the statement just proved; use `\qedhere` or `\qed` only when the marker needs explicit placement.
 
@@ -224,6 +233,8 @@ When one condition in a condition-list proof requires both directions, do not in
 - Segment equivalence and condition-list proofs using the standard proof-style blocks when doing so improves readability.
 - Avoid label-only proof scaffolding such as a short `$(v)$` line followed immediately by a nested `$(\Rightarrow)$` line; prefer flat repeated-label direction items.
 - Avoid direction-labeled proof items whose content strands a tiny continuation line after the proof marker.
+- Avoid unfinished inline equality or implication chains whose rendered line ends with a binary relation and continues on the next line.
+- Keep enumerate label style role-sensitive: bare `\roman*.` for definition/method lists, parenthesized `(\roman*)` for proof/equivalence/condition-list structures.
 - Keep concise writing explicit enough that assumptions, quantifiers, dependencies, and proof logic remain recoverable without guessing.
 - State assumptions explicitly.
 - Remove redundant phrasing.
@@ -244,6 +255,8 @@ After editing a section:
 - Re-check that any segmented equivalence or condition-list proof uses the appropriate standard proof-style block.
 - Re-check that segmented proofs do not leave label-only outer items or nested direction-marker artifacts such as a bare `$(v)$` line followed by `$(\Rightarrow)$`; use flat repeated-label direction items instead where appropriate.
 - Re-check that `$(\Rightarrow)$` and `$(\Leftarrow)$` items do not strand short continuation lines such as a lone quantified bound or side condition.
+- Re-check that no touched inline equation chain renders with a line ending in an unfinished relation symbol such as `=`, `\iff`, or `\Rightarrow`.
+- Re-check enumerate label styles: definition/method lists may use `label=\roman*.`, while proof/equivalence/condition-list blocks use `label=(\roman*)`.
 - Re-check that proof endings use the QED marker where possible and do not simply iterate the statement just proved.
 - Re-check that succinct rewrites remain explicit enough to preserve assumptions, quantifiers, dependencies, and proof logic.
 - Re-check any visible or likely short final lines introduced or touched by the edit, and confirm they were fixed semantically rather than by spacing hacks where possible.
