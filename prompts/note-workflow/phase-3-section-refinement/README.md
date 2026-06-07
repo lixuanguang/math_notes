@@ -70,6 +70,8 @@ For the current section, check:
 - Proofs that can be tightened without changing meaning.
 - Proof endings that merely restate the claim, such as "This proves the theorem"; replace them with the automatic QED marker or with `\qedhere`/`\qed` only when placement requires it.
 - Proofs of equivalences or lists of conditions that should be segmented with the standard enumerate blocks below.
+- Proof items whose visible content is mostly labels or proof-direction markers, such as an outer `$(v)$` line followed immediately by a nested `$(\Rightarrow)$` or `$(\Leftarrow)$` line.
+- Proof-direction items, especially `$(\Rightarrow)$` and `$(\Leftarrow)$`, whose body wraps into a tiny continuation line or strands a side condition such as `$c \in \mathbb{F}$`.
 - Passages that became too terse or would become too terse after refactoring; make the mathematical content explicit first, then compress it using notation.
 - Rendered or likely rendered short final lines: paragraphs, definitions, proof items, or explanatory sentences whose final visual line contains only a few words or a lone inline formula fragment.
 - Examples or remarks that contain formal content needed by later results.
@@ -82,11 +84,17 @@ For the current section, check:
 
 During Phase 3, treat short final visual lines as readability candidates when they are visible in the compiled output or strongly suggested by the source. Flag a paragraph, definition, proof item, or explanatory sentence if its final rendered line has only a few words, a single equation fragment, or a stranded relation such as `$B = PAQ$` after a long preceding clause.
 
+Also flag proof-marker artifacts: lines whose main visible content is an enumerate label, a repeated condition number, or a direction marker rather than mathematical content. This includes patterns such as an outer `$(v)$` item containing only `For (v), prove both implications.` followed immediately by nested `$(\Rightarrow)$` and `$(\Leftarrow)$` items.
+
+For direction-labeled proof items, inspect the whole rendered item, not only the label line. A `$(\Rightarrow)$` or `$(\Leftarrow)$` item is still a cleanup candidate when its body has enough content but wraps so that the final or continuation line contains only a short side condition, a bound such as `$c \in \mathbb{F}$`, or a few trailing words after a long quantified sentence.
+
 Prefer semantic repairs over spacing tricks:
 
 - First make the mathematical content explicit, then compress it with notation.
 - Pull an isolated relation into the preceding clause when it remains readable, using forms such as `with $B = PAQ$`, `where $B = PAQ$`, or `i.e. $B = PAQ$`.
 - Introduce notation or quantifiers that shorten a wordy setup without hiding assumptions, e.g. replace repeated prose by `$P,Q$ invertible` when the objects are already clear.
+- Replace label-only proof scaffolding with content-bearing text: state the actual implication or equivalence in the parent item, or flatten the directions into sibling items in the same enumerate, repeating the condition label and putting the direction marker in the item body, such as `\item[$(v)$] ($\Rightarrow$)` and `\item[$(v)$] ($\Leftarrow$)`.
+- Repair direction-item wrap problems by moving quantifier bounds earlier, tightening repeated terms, or splitting the sentence before the quantified conclusion; for example, avoid ending a `$(\Rightarrow)$` item with a stranded `$c \in \mathbb{F}$` line after `for all $\mathbf{u},\mathbf{v} \in \mathcal{U}$`.
 - Split an overlong sentence into balanced sentences if that prevents a tiny trailing line and improves the logic.
 - Move a central formula to a repository-style `$...$` equation block only when the formula genuinely benefits from display treatment.
 - Reorder clauses so the condition, notation, or conclusion is not stranded at the end of a line.
@@ -107,6 +115,8 @@ Before editing, report:
 - Whether any displayed formula can be converted to repository-style `$...$` equation format without losing numbering, labels, cross-references, alignment, multi-line layout, or other environment-specific behavior.
 - Whether any displayed equation context needs `\limits` normalization for indexed operators.
 - Whether any proof should be segmented using one of the standard proof-style blocks.
+- Whether any proof item has label-only or direction-marker-only scaffolding, and whether it should be rewritten as content-bearing parent text or flat repeated-label direction items.
+- Whether any `$(\Rightarrow)$` or `$(\Leftarrow)$` item wraps into a short continuation line, and the intended quantifier, notation, sentence-splitting, or clause-order repair.
 - Any place where succinctness would make the content too implicit, and how you will keep the needed assumptions, definitions, or proof steps explicit.
 - Any short final rendered lines or isolated formula fragments, and the intended prose, notation, clause-order, or display-structure repair.
 - Whether any environment or object has multiple labels, the proposed canonical label to keep, and which references would need updating.
@@ -143,6 +153,8 @@ When editing an approved section:
 - For indexed direct sums, use the size-appropriate operator, e.g. `\bigoplus\limits_{i \in I}`, rather than forcing limits onto an ordinary binary `\oplus` unless that is already the local convention.
 - Use a two-pass refinement when prose is unclear: first make the mathematical content explicit, then make it succinct with notation. Do not remove assumptions, quantifiers, dependencies, or proof steps merely to shorten the prose.
 - When repairing short final lines or stranded formula fragments, prefer prose, notation, clause-order, or display-structure revisions over manual line breaks or spacing adjustments.
+- When a proof item is followed immediately by `$(\Rightarrow)$` or `$(\Leftarrow)$`, do not leave the outer item as a short placeholder such as `For (v), prove both implications.`; make the outer item substantive or flatten the proof directions into repeated-label sibling items in the same enumerate if that reads better.
+- When a `$(\Rightarrow)$` or `$(\Leftarrow)$` item itself has a short continuation line, rewrite the item semantically: move bounds such as `$c \in \mathbb{F}$` before the conclusion, compress repeated variables with notation, or split the item into clearer sentences.
 - Use the standard proof-style blocks below when a proof is naturally an equivalence, a chain of equivalent conditions, a list of equivalence proofs, or a list of condition proofs. Do not force these blocks onto proofs that are clearer as a single direct argument.
 - Prefer the proof environment's automatic QED marker to a final sentence that reiterates the statement just proved; use `\qedhere` or `\qed` only when the marker needs explicit placement.
 
@@ -192,6 +204,16 @@ For a list of condition-type proofs, use:
 \end{enumerate}
 ```
 
+When one condition in a condition-list proof requires both directions, do not insert a nested enumerate below a placeholder item such as `For (v), prove both implications.` Keep the proof flat by repeating the condition label in the same enumerate and putting the direction marker at the start of the item body:
+
+```latex
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(v)$] ($\Rightarrow$)
+\item[$(v)$] ($\Leftarrow$)
+\end{enumerate}
+```
+
 ## Writing Goals
 
 - Replace informal explanations with precise mathematical language.
@@ -200,6 +222,8 @@ For a list of condition-type proofs, use:
 - Make definitions, propositions, methods, examples, and proofs concise.
 - End proofs with QED where possible instead of a final prose repetition of the proved statement.
 - Segment equivalence and condition-list proofs using the standard proof-style blocks when doing so improves readability.
+- Avoid label-only proof scaffolding such as a short `$(v)$` line followed immediately by a nested `$(\Rightarrow)$` line; prefer flat repeated-label direction items.
+- Avoid direction-labeled proof items whose content strands a tiny continuation line after the proof marker.
 - Keep concise writing explicit enough that assumptions, quantifiers, dependencies, and proof logic remain recoverable without guessing.
 - State assumptions explicitly.
 - Remove redundant phrasing.
@@ -218,6 +242,8 @@ After editing a section:
 - Re-check that standalone displayed formulas use repository-style `$...$` equation format whenever possible, and that any remaining display environment has a concrete reason such as numbering, labels, cross-references, alignment, or multi-line layout.
 - Re-check displayed indexed operators for appropriate `\limits` usage.
 - Re-check that any segmented equivalence or condition-list proof uses the appropriate standard proof-style block.
+- Re-check that segmented proofs do not leave label-only outer items or nested direction-marker artifacts such as a bare `$(v)$` line followed by `$(\Rightarrow)$`; use flat repeated-label direction items instead where appropriate.
+- Re-check that `$(\Rightarrow)$` and `$(\Leftarrow)$` items do not strand short continuation lines such as a lone quantified bound or side condition.
 - Re-check that proof endings use the QED marker where possible and do not simply iterate the statement just proved.
 - Re-check that succinct rewrites remain explicit enough to preserve assumptions, quantifiers, dependencies, and proof logic.
 - Re-check any visible or likely short final lines introduced or touched by the edit, and confirm they were fixed semantically rather than by spacing hacks where possible.
