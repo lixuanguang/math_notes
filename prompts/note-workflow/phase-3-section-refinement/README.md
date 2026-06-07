@@ -165,7 +165,7 @@ Do not consolidate labels that refer to genuinely distinct anchors, such as subf
 For an if-and-only-if proof, use:
 
 ```latex
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$]
 \item[$(\Leftarrow)$]
@@ -175,7 +175,7 @@ For an if-and-only-if proof, use:
 For a proof cycling through a list of equivalent conditions, use:
 
 ```latex
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(i)$]$\Rightarrow (ii)$
 \item[$(ii)$]$\Rightarrow (iii)$
@@ -187,7 +187,7 @@ Add further implication steps as needed, including the final implication back to
 For a list of if-and-only-if type proofs, use:
 
 ```latex
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item
 \item
@@ -207,7 +207,7 @@ For a list of condition-type proofs, use:
 When one condition in a condition-list proof requires both directions, do not insert a nested enumerate below a placeholder item such as `For (v), prove both implications.` Keep the proof flat by repeating the condition label in the same enumerate and putting the direction marker at the start of the item body:
 
 ```latex
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(v)$] ($\Rightarrow$)
 \item[$(v)$] ($\Leftarrow$)
