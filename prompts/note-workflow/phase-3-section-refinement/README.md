@@ -14,6 +14,7 @@ Refine mathematical writing section by section, resolving one section-bounded is
 - Standardize segmented proof structure for equivalence and condition-list arguments.
 - Preserve the established organization from earlier phases.
 - Consolidate multiple labels on a single LaTeX environment or mathematical object into one approved canonical label.
+- Prefer repository-style `$...$` equation blocks over `\[...\]`, `$$...$$`, `equation`, `align`, and related display environments whenever the displayed formula does not need numbering, labels, cross-references, alignment, multi-line layout, or another environment feature.
 - Normalize displayed indexed operators so they use `\limits` where appropriate.
 - Make content concise without making it under-explained.
 
@@ -60,6 +61,7 @@ For the current section, check:
 - Undefined terms.
 - Inconsistent notation.
 - Notation that could replace wordy prose.
+- Displayed formulas that can use repository-style `$...$` equation blocks instead of `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline`.
 - Displayed indexed operators that should use `\limits`, such as `\sum\limits`, `\prod\limits`, `\bigoplus\limits`, `\coprod\limits`, `\bigcup\limits`, `\bigcap\limits`, `\lim\limits`, `\inf\limits`, `\sup\limits`, `\min\limits`, and `\max\limits`.
 - Proofs that can be tightened without changing meaning.
 - Proofs of equivalences or lists of conditions that should be segmented with the standard enumerate blocks below.
@@ -82,6 +84,7 @@ Before editing, report:
 - How you will fix any forbidden reference to a remark or example.
 - Whether the refactor can avoid explicit references to remarks, examples, or numbered definitions while preserving clarity.
 - Whether any clarity issue is actually a dependency-order problem that should be resolved by moving, splitting, or promoting content rather than adding a shortcut prerequisite paragraph.
+- Whether any displayed formula can be converted to repository-style `$...$` equation format without losing numbering, labels, cross-references, alignment, multi-line layout, or other environment-specific behavior.
 - Whether any displayed equation context needs `\limits` normalization for indexed operators.
 - Whether any proof should be segmented using one of the standard proof-style blocks.
 - Any place where succinctness would make the content too implicit, and how you will keep the needed assumptions, definitions, or proof steps explicit.
@@ -113,6 +116,7 @@ When editing an approved section:
 - If necessary, promote essential content from a remark or example into formal exposition or a formal result.
 - Avoid adding explicit references to remarks, examples, or numbered definitions during content refactor. Use established terms and notation directly; if clarity would otherwise require a reference, state the needed condition or move/promote the needed content with approval.
 - Do not patch dependency-order problems by adding an ad hoc unnumbered prerequisite paragraph before usage. If refinement reveals a dependency problem, propose returning to Phase 1 or Phase 2 to reorder, split, move, or promote the relevant content.
+- Prefer repository-style `$...$` equation blocks for standalone displayed formulas whenever possible. Use `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline` only when the formula genuinely needs numbering, labels, cross-references, alignment, multi-line layout, or another environment feature.
 - In displayed equation contexts, normalize indexed operators to use `\limits` where appropriate. This includes `equation`, `equation*`, `align`, `align*`, `gather`, `multline`, `\[...\]`, `$$...$$`, and any repository-specific `$...$` display-style equation blocks. Do not force `\limits` into ordinary inline prose unless the repository convention clearly treats that math as display-style.
 - For indexed direct sums, use the size-appropriate operator, e.g. `\bigoplus\limits_{i \in I}`, rather than forcing limits onto an ordinary binary `\oplus` unless that is already the local convention.
 - Use a two-pass refinement when prose is unclear: first make the mathematical content explicit, then make it succinct with notation. Do not remove assumptions, quantifiers, dependencies, or proof steps merely to shorten the prose.
@@ -174,6 +178,7 @@ For a list of condition-type proofs, use:
 - State assumptions explicitly.
 - Remove redundant phrasing.
 - Keep notation consistent within each file and across related files.
+- Use repository-style `$...$` equation blocks for standalone displayed formulas whenever possible, reserving display environments for labels, numbering, cross-references, alignment, multi-line layout, or other needed environment behavior.
 - Standardize displayed indexed operators with `\limits` where appropriate.
 - Avoid explicit references to remarks, examples, and numbered definitions in the refactored content unless the user explicitly approves an exception.
 - Do not change mathematical content unless the original is ambiguous, incorrect, or structurally misplaced.
@@ -183,6 +188,7 @@ For a list of condition-type proofs, use:
 After editing a section:
 
 - Re-check notation consistency within the section and nearby dependencies.
+- Re-check that standalone displayed formulas use repository-style `$...$` equation format whenever possible, and that any remaining display environment has a concrete reason such as numbering, labels, cross-references, alignment, or multi-line layout.
 - Re-check displayed indexed operators for appropriate `\limits` usage.
 - Re-check that any segmented equivalence or condition-list proof uses the appropriate standard proof-style block.
 - Re-check that succinct rewrites remain explicit enough to preserve assumptions, quantifiers, dependencies, and proof logic.

@@ -230,6 +230,7 @@ Follow the surrounding notes:
 - Use theorem environments naturally: definitions, propositions, lemmas, corollaries, theorems, examples, methods, remarks.
 - Use `\hlt{...}`, labels, concise proofs, and proof commentary consistently with nearby files.
 - Use existing macros such as `\N`, `\R`, `\mathcal{...}`, `\operatorname{...}`, and `\defeq`.
+- Prefer repository-style `$...$` equation blocks for standalone displayed formulas whenever possible. Use `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline` only when numbering, labels, cross-references, alignment, multi-line layout, or another environment feature is actually needed.
 - Add notation to a notation file only if it recurs across major sections.
 
 ## Validation

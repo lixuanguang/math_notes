@@ -102,6 +102,7 @@ Global mathematical rules:
 - During content refactor, avoid adding explicit references to remarks, examples, or numbered definitions. Use established terms and notation directly; if clarity would otherwise require such a reference, state the needed condition or propose moving/promoting the needed content.
 - Remarks and examples may clarify formal content, but formal content should not rely on them.
 - If essential content appears only in a remark or example, propose moving or promoting it before it is referenced by a formal result or method.
+- Prefer repository-style `$...$` equation blocks for standalone displayed formulas whenever possible. Use `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline` only when the formula genuinely needs numbering, labels, cross-references, alignment, multi-line layout, or another environment feature.
 - In displayed equation contexts, normalize indexed operators with `\limits` where appropriate, such as `\sum\limits`, `\prod\limits`, `\bigoplus\limits`, `\coprod\limits`, `\bigcup\limits`, `\bigcap\limits`, `\lim\limits`, `\inf\limits`, `\sup\limits`, `\min\limits`, and `\max\limits`.
 - Do not force `\limits` into ordinary inline prose unless the repository convention clearly treats that math as display-style.
 - Keep succinct rewrites explicit enough that assumptions, quantifiers, dependencies, and proof logic remain clear. If a passage is too implicit, first make it explicit, then compress it using notation.
