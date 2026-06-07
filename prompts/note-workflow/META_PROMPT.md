@@ -4,12 +4,12 @@ Use this prompt to run the notes workflow from a chosen starting point, includin
 
 ## Starting Command
 
-Copy this command and edit the cursor:
+Prefer a part-scoped cursor so the starting point is unambiguous:
 
 ```text
 Run the notes workflow.
 
-Start from: Section 1
+Start from: Part II Section 1
 ```
 
 For source intake, use:
@@ -20,7 +20,7 @@ Run the notes workflow with source intake.
 Source chapter/sections:
 <state the chapter or sections extracted here>
 
-Start from: Section 1
+Start from: Part II Section 1
 ```
 
 Other examples:
@@ -28,7 +28,7 @@ Other examples:
 ```text
 Run the notes workflow.
 
-Start from: Section 2
+Start from: Part II Section 2
 ```
 
 ```text
@@ -42,6 +42,25 @@ Run the notes workflow.
 
 Start from: Phase 3, Spectral Theorem
 ```
+
+## Cursor Syntax
+
+Use one of these forms:
+
+- `Start from: Part <roman-or-arabic-number> Section <number>`
+- `Start from: Part <exact or partial part title> Section <number>`
+- `Start from: <file path>`
+- `Start from: Phase <number>, <file path/topic/heading>`
+- `Start from: <unique topic or section heading>`
+
+Interpretation rules:
+
+- Resolve part and section numbers from the actual LaTeX order, starting at `math.tex`, following `\input{...}` files, and using the `\part{...}` and `\section{...}` sequence that appears in the compiled notes.
+- Treat `Part II Section 1` as: the second `\part{...}` in `math.tex` order, then the first `\section{...}` inside that part. In the current repository, this resolves to Part II, Linear and Operator Structures, Section 1, Structural Linear Algebra.
+- If a part is specified, do not match a same-numbered section in any other part.
+- If only `Section <number>` is given, it is ambiguous whenever more than one part has that section number; ask for the part before proposing edits.
+- If a topic or heading matches multiple files or multiple section levels, report the candidates and ask for clarification before proposing edits.
+- After resolving the cursor, report the resolved part title, section title, overview file, and first target content file before starting the phase workflow.
 
 ## Meta-Prompt
 
@@ -60,19 +79,23 @@ Run the notes workflow using the four phase READMEs:
 Source chapter/sections:
 <state the chapter or sections extracted here, if adding new source material>
 
-Start from: <section number, file path, topic, or section heading>
+Start from: <part-scoped section, file path, topic, or section heading>
 
 Instructions:
 
 - First read the four phase READMEs.
 - Use the `Start from:` cursor to determine where to begin.
+- Resolve `Start from: Part <roman-or-arabic-number> Section <number>` by reading `math.tex` in compiled order, following `\input{...}` files, and matching the specified `\part{...}` and `\section{...}` in that order.
+- Treat `Part II Section 1` as the first `\section{...}` inside the second `\part{...}` in `math.tex` order; in the current repository, this is Part II, Linear and Operator Structures, Section 1, Structural Linear Algebra.
+- If only `Section <number>` is given and more than one part has that section number, stop and ask which part the user means.
+- If a topic, section heading, or file-like cursor matches more than one candidate, stop and ask the user to choose among the candidates before proposing edits.
 - If a phase is specified in the cursor, begin in that phase.
 - If no phase is specified, decide which phase is appropriate:
   - Use Phase 0 if screenshots, source images, PDFs, or other source files are attached or source intake is requested.
   - Use Phase 1 if structural organization may still need work.
   - Use Phase 2 if organization is stable but dependency flow needs checking.
   - Use Phase 3 if organization and dependency flow are stable and the section is ready for prose refinement.
-- If the cursor is ambiguous, stop and ask for clarification before proposing edits.
+- If the cursor is ambiguous after applying the rules above, stop and ask for clarification before proposing edits.
 
 Global workflow:
 
@@ -114,7 +137,7 @@ Global mathematical rules:
 Begin by reporting:
 
 1. The source chapter/sections, if provided.
-2. The cursor you will use.
+2. The cursor you will use, including the resolved part title, section title, overview file, and first target content file when applicable.
 3. The phase you will start with.
 4. The first section-bounded source batch, topic batch, dependency-flow issue batch, or refinement issue batch you propose to inspect.
 

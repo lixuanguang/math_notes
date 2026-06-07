@@ -25,19 +25,19 @@ Refine mathematical writing section by section, resolving one section-bounded is
 The user may specify where to begin with:
 
 ```text
-Start from: <section number, file path, topic, or section heading>
+Start from: <part-scoped section, file path, topic, or section heading>
 ```
 
 Examples:
 
 ```text
-Start from: Section 1
-Start from: Section 2
-Start from: sections/linear_algebra/eigenvalues.tex
+Start from: Part II Section 1
+Start from: Part II Section 2
+Start from: sections/linear_algebra/spectral_linear_algebra/3_1_eigenstructure_and_invariant_subspaces.tex
 Start from: Spectral Theorem
 ```
 
-If a cursor is provided, start there and treat earlier material as intentionally skipped. If the cursor is ambiguous, stop and ask for clarification before proposing edits.
+If a cursor is provided, start there and treat earlier material as intentionally skipped. Resolve part and section numbers from the compiled LaTeX order beginning at `math.tex`. If a cursor is ambiguous, including a bare `Section <number>` that appears in multiple parts, stop and ask for clarification before proposing edits.
 
 ## Section Rules
 

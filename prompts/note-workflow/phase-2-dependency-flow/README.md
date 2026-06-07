@@ -20,19 +20,19 @@ Check that mathematical dependencies are introduced in the right order, resolvin
 The user may specify where to begin with:
 
 ```text
-Start from: <section number, file path, topic, or section heading>
+Start from: <part-scoped section, file path, topic, or section heading>
 ```
 
 Examples:
 
 ```text
-Start from: Section 1
-Start from: Section 2
-Start from: sections/analysis/sequences.tex
+Start from: Part II Section 1
+Start from: Part V Section 2
+Start from: sections/analysis/foundations_of_analysis/1_3_real_sequences_and_completeness_methods.tex
 Start from: Monotone Convergence Theorem
 ```
 
-If a cursor is provided, start there and treat earlier material as intentionally skipped. If the cursor is ambiguous, stop and ask for clarification before proposing edits.
+If a cursor is provided, start there and treat earlier material as intentionally skipped. Resolve part and section numbers from the compiled LaTeX order beginning at `math.tex`. If a cursor is ambiguous, including a bare `Section <number>` that appears in multiple parts, stop and ask for clarification before proposing edits.
 
 ## Batch Rules
 

@@ -23,7 +23,7 @@ The user may specify the source and cursor with:
 Source chapter/sections:
 <state the chapter or sections extracted here>
 
-Start from: <section number, file path, topic, or section heading>
+Start from: <part-scoped section, file path, topic, or section heading>
 ```
 
 Examples:
@@ -32,7 +32,7 @@ Examples:
 Source chapter/sections:
 Chapter 4, Sections 4.1-4.2
 
-Start from: Section 2
+Start from: Part II Section 2
 ```
 
 ```text
@@ -41,6 +41,8 @@ Screenshots on compactness and sequential compactness
 
 Start from: topology/compactness
 ```
+
+Prefer part-scoped section cursors such as `Part II Section 1`. A bare cursor such as `Section 1` is ambiguous whenever more than one part has a Section 1; ask for the part before proposing edits. Resolve part and section numbers from the compiled LaTeX order beginning at `math.tex`.
 
 If the source files or screenshots are not accessible, stop and ask the user to attach them or provide file paths before proposing edits.
 
