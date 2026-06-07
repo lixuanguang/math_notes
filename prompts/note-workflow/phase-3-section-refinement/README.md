@@ -9,8 +9,10 @@ Refine mathematical writing section by section, resolving one section-bounded is
 - Formalize wording.
 - Make prose more succinct.
 - Introduce notation where useful.
+- Use compact standard notation such as `\forall`, `\exists`, `\implies`/`\Rightarrow`, and `\iff` where it tightens mathematical prose without obscuring the argument.
 - Standardize terminology.
 - Tighten proofs and explanations.
+- Let the proof environment's QED marker end proofs where possible instead of repeating the proved statement in prose.
 - Standardize segmented proof structure for equivalence and condition-list arguments.
 - Preserve the established organization from earlier phases.
 - Consolidate multiple labels on a single LaTeX environment or mathematical object into one approved canonical label.
@@ -61,9 +63,11 @@ For the current section, check:
 - Undefined terms.
 - Inconsistent notation.
 - Notation that could replace wordy prose.
+- Wordy quantifier or connective phrases that can become compact math notation, such as "for every" to `\forall`, "there exists" to `\exists`, "implies" to `\implies`/`\Rightarrow`, and "if and only if" to `\iff`.
 - Displayed formulas that can use repository-style `$...$` equation blocks instead of `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline`.
 - Displayed indexed operators that should use `\limits`, such as `\sum\limits`, `\prod\limits`, `\bigoplus\limits`, `\coprod\limits`, `\bigcup\limits`, `\bigcap\limits`, `\lim\limits`, `\inf\limits`, `\sup\limits`, `\min\limits`, and `\max\limits`.
 - Proofs that can be tightened without changing meaning.
+- Proof endings that merely restate the claim, such as "This proves the theorem"; replace them with the automatic QED marker or with `\qedhere`/`\qed` only when placement requires it.
 - Proofs of equivalences or lists of conditions that should be segmented with the standard enumerate blocks below.
 - Passages that became too terse or would become too terse after refactoring; make the mathematical content explicit first, then compress it using notation.
 - Examples or remarks that contain formal content needed by later results.
@@ -109,6 +113,7 @@ When editing an approved section:
 - Apply all approved items in the section-bounded issue batch together.
 - Preserve mathematical meaning unless the original is ambiguous or incorrect.
 - Prefer concise formal language and standard notation.
+- Use notation for quantifiers and logical connectives when it shortens the prose naturally; keep it in math mode, and do not replace readable explanatory sentences with dense symbolic strings.
 - Do not edit later sections.
 - Do not rename labels unless explicitly approved.
 - If duplicate-label consolidation is approved, keep one canonical existing label where possible, update all references to removed labels, and remove only the redundant labels.
@@ -121,6 +126,7 @@ When editing an approved section:
 - For indexed direct sums, use the size-appropriate operator, e.g. `\bigoplus\limits_{i \in I}`, rather than forcing limits onto an ordinary binary `\oplus` unless that is already the local convention.
 - Use a two-pass refinement when prose is unclear: first make the mathematical content explicit, then make it succinct with notation. Do not remove assumptions, quantifiers, dependencies, or proof steps merely to shorten the prose.
 - Use the standard proof-style blocks below when a proof is naturally an equivalence, a chain of equivalent conditions, a list of equivalence proofs, or a list of condition proofs. Do not force these blocks onto proofs that are clearer as a single direct argument.
+- Prefer the proof environment's automatic QED marker to a final sentence that reiterates the statement just proved; use `\qedhere` or `\qed` only when the marker needs explicit placement.
 
 Do not consolidate labels that refer to genuinely distinct anchors, such as subfigures, separate numbered lines in an `align`-type environment, or nested environments. Put ambiguous cases under `Needs Human Review`.
 
@@ -172,7 +178,9 @@ For a list of condition-type proofs, use:
 
 - Replace informal explanations with precise mathematical language.
 - Use standard notation where it improves clarity.
+- Prefer compact logical notation in mathematical clauses, including `\forall`, `\exists`, `\implies`/`\Rightarrow`, and `\iff`, whenever it makes the prose tighter and still readable.
 - Make definitions, propositions, methods, examples, and proofs concise.
+- End proofs with QED where possible instead of a final prose repetition of the proved statement.
 - Segment equivalence and condition-list proofs using the standard proof-style blocks when doing so improves readability.
 - Keep concise writing explicit enough that assumptions, quantifiers, dependencies, and proof logic remain recoverable without guessing.
 - State assumptions explicitly.
@@ -191,6 +199,7 @@ After editing a section:
 - Re-check that standalone displayed formulas use repository-style `$...$` equation format whenever possible, and that any remaining display environment has a concrete reason such as numbering, labels, cross-references, alignment, or multi-line layout.
 - Re-check displayed indexed operators for appropriate `\limits` usage.
 - Re-check that any segmented equivalence or condition-list proof uses the appropriate standard proof-style block.
+- Re-check that proof endings use the QED marker where possible and do not simply iterate the statement just proved.
 - Re-check that succinct rewrites remain explicit enough to preserve assumptions, quantifiers, dependencies, and proof logic.
 - Re-check that no dependency-order issue was hidden by adding a shortcut prerequisite paragraph.
 - Re-check references and labels affected by the edit.

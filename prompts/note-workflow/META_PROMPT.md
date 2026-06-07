@@ -105,9 +105,11 @@ Global mathematical rules:
 - Prefer repository-style `$...$` equation blocks for standalone displayed formulas whenever possible. Use `\[...\]`, `$$...$$`, `equation`, `equation*`, `align`, `align*`, `gather`, or `multline` only when the formula genuinely needs numbering, labels, cross-references, alignment, multi-line layout, or another environment feature.
 - In displayed equation contexts, normalize indexed operators with `\limits` where appropriate, such as `\sum\limits`, `\prod\limits`, `\bigoplus\limits`, `\coprod\limits`, `\bigcup\limits`, `\bigcap\limits`, `\lim\limits`, `\inf\limits`, `\sup\limits`, `\min\limits`, and `\max\limits`.
 - Do not force `\limits` into ordinary inline prose unless the repository convention clearly treats that math as display-style.
+- Use mathematical notation to tighten prose whenever it improves clarity, especially standard quantifiers and connectives such as `\forall`, `\exists`, `\implies`/`\Rightarrow`, and `\iff` for "if and only if"; keep notation inside math mode and avoid turning readable arguments into opaque symbol strings.
 - Keep succinct rewrites explicit enough that assumptions, quantifiers, dependencies, and proof logic remain clear. If a passage is too implicit, first make it explicit, then compress it using notation.
 - During Phase 3, segment if-and-only-if proofs, chains of equivalent conditions, lists of equivalence proofs, and lists of condition proofs using the standard proof-style blocks from `prompts/note-workflow/phase-3-section-refinement/README.md`.
 - Do not force segmented enumerate blocks onto proofs that are clearer as a single direct argument.
+- Prefer letting the proof environment's QED marker close a proof, using `\qedhere` or `\qed` only when needed for placement; avoid final sentences that merely restate the theorem, proposition, lemma, or claim.
 
 Begin by reporting:
 
