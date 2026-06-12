@@ -22,3 +22,4 @@ Progress Status:
 | Analysis and Continuous Structure | Analysis I | Terence Tao | Completed |
 | Analysis and Continuous Structure | Analysis II | Terence Tao | Completed |
 | Analysis and Continuous Structure | The Elements of Integration and Lebesgue Measure | Robert G. Bartle | Completed |
+| Statistical and Learning Systems | All of Statistics: A Concise Course in Statistical Inference | Larry Wasserman | Completed |
