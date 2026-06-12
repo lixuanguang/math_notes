@@ -1,0 +1,36 @@
+% Source: attached Chapter 7, Example 7.4; clean redraw of the interval
+% enumeration behind the typewriter sequence.
+\begin{tikzpicture}[
+  x=8.6cm,
+  y=0.78cm,
+  >=Stealth,
+  every node/.style={font=\scriptsize},
+  base/.style={black!65, line width=0.55pt},
+  tick/.style={black!45, line width=0.45pt},
+  interval/.style={fill=blue!8, draw=blue!45!black, line width=0.5pt},
+  active/.style={fill=blue!28, draw=blue!70!black, line width=0.7pt},
+  hit/.style={red!70!black, dashed, line width=0.7pt}
+]
+  \def\xhit{0.63}
+  \foreach \m/\y in {1/4,2/3,3/2,4/1,5/0} {
+    \draw[base] (0,\y) -- (1,\y);
+    \node[left=7pt] at (0,\y) {$m=\m$};
+    \pgfmathtruncatemacro{\hitj}{floor(\m*\xhit)+1}
+    \foreach \j in {1,...,\m} {
+      \pgfmathsetmacro{\a}{(\j-1)/\m}
+      \pgfmathsetmacro{\b}{\j/\m}
+      \ifnum\j=\hitj
+        \filldraw[active] (\a,\y-0.13) rectangle (\b,\y+0.13);
+      \else
+        \filldraw[interval] (\a,\y-0.13) rectangle (\b,\y+0.13);
+      \fi
+      \draw[tick] (\a,\y-0.22) -- (\a,\y+0.22);
+    }
+    \draw[tick] (1,\y-0.22) -- (1,\y+0.22);
+  }
+
+  \draw[hit] (\xhit,-0.35) -- (\xhit,4.38);
+  \node[red!70!black, above] at (\xhit,4.38) {fixed $x$};
+  \node[below] at (0,-0.34) {$0$};
+  \node[below] at (1,-0.34) {$1$};
+\end{tikzpicture}
