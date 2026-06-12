@@ -21,3 +21,4 @@ Progress Status:
 | Analysis and Continuous Structure | Real Mathematical Analysis | Charles Chapman Pugh | Completed |
 | Analysis and Continuous Structure | Analysis I | Terence Tao | Completed |
 | Analysis and Continuous Structure | Analysis II | Terence Tao | Completed |
+| Analysis and Continuous Structure | The Elements of Integration and Lebesgue Measure | Robert G. Bartle | Completed |
