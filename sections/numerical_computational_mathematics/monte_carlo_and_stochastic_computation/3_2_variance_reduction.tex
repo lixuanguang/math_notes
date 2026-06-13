@@ -1,2 +1,34 @@
 \subsection{Variance Reduction}
 % Antithetic variables, control variates, importance sampling, stratification.
+
+\begin{method} \label{method:importance-sampling} \hlt{Importance Sampling}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $I=\int h(x)f(x)\,dx$, choose a tractable proposal density $g$ with $g(x)>0$ wherever $h(x)f(x)\neq0$.
+\item Then $I=\int h(x)f(x)g(x)^{-1}g(x)\,dx=\mathbb{E}_g[h(X)f(X)/g(X)]$.
+\item For IID draws $X_1,\ldots,X_N\sim g$, use $\widehat{I}_N=N^{-1}\sum_{i=1}^{N}h(X_i)f(X_i)/g(X_i)$.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:importance-sampling-tail-rule} \hlt{Choosing the Proposal}\\
+The importance weights have large, possibly infinite, variance when $g$ is too small on regions where $\abs{h}f$ is large.\\
+Choose $g$ to approximate the shape of $\abs{h}f$ while giving it tails at least as thick as the target integrand.
+\end{remark}
+
+\begin{theorem} \label{thm:optimal-importance-density} \hlt{Optimal Importance Density}\\
+Let $I=\int h(x)f(x)\,dx$ and $A=\int \abs{h(x)}f(x)\,dx\in(0,\infty)$.\\
+For proposal densities $g$ with $g(x)>0$ wherever $\abs{h(x)}f(x)>0$, define $W_g=h(X)f(X)/g(X)$ for $X\sim g$.\\
+The variance $\operatorname{Var}_g(W_g)$ is minimised by $g^*(x)=\abs{h(x)}f(x)/A$, and the minimum variance is $A^2-I^2$.
+\begin{proof} For each admissible $g$, $\mathbb{E}_g W_g=I$, so $\operatorname{Var}_g(W_g)=M(g)-I^2$, where $M(g)=\mathbb{E}_g(W_g^2)=\int h(x)^2f(x)^2/g(x)\,dx$.\\
+For any admissible $g$, Cauchy-Schwarz gives $A^2=(\int \abs{h(x)}f(x)g(x)^{-1/2}g(x)^{1/2}\,dx)^2\leq M(g)\int g(x)\,dx=M(g)$.\\
+Equality holds precisely when $\abs{h(x)}f(x)g(x)^{-1/2}=c\,g(x)^{1/2}$ a.e., equivalently $g(x)\propto \abs{h(x)}f(x)$.\\
+Normalization gives $g^*(x)=\abs{h(x)}f(x)/A$, hence $M(g)\geq M(g^*)=A^2$ and $\operatorname{Var}_g(W_g)\geq A^2-I^2=\operatorname{Var}_{g^*}(W_{g^*})$.\\
+\hlt{Structural Commentary}: Fixed mean reduces variance to second-moment minimization.\\
+\hlt{Key Insight}: Cauchy-Schwarz is sharp exactly when the proposal is proportional to $\abs{h}f$.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:tail-probability-importance-sampling} \hlt{Rare Tail Probability}\\
+For $Z\sim N(0,1)$, write $I=\mathbb{P}(Z>3)=\int \mathbf{1}\{x>3\}f(x)\,dx$.\\
+If $g$ is centered near the right tail and $X_1,\ldots,X_N\sim g$, estimate $I$ by $\widehat{I}_N=N^{-1}\sum_{i=1}^{N}\mathbf{1}\{X_i>3\}f(X_i)/g(X_i)$.
+\end{example}
