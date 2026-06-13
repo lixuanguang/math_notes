@@ -1,9 +1,261 @@
 \subsection{Probability Spaces and Random Variables}
 % Probability spaces, events, random variables, distributions, pushforward measures, independence.
+% Source integration: attached screenshots from introductory chapters on probability and random variables.
 
-\begin{definition} \label{def:distribution-function-and-density} \hlt{Distribution Functions and Densities}\\
-A \hlt{distribution function} is an increasing right-continuous $F:\R\to\R$ with $F(-\infty)=0$ and $F(\infty)=1$.\\
-A \hlt{density} for $F$ is an integrable $g\geq0$ with $\int_{-\infty}^{\infty}g=1$ and $F(t)=\int_{-\infty}^{t}g(x)\,dx$, in which case continuous $g$ gives $F'(t)=g(t)$ by Theorem \ref{thm:integral-function-continuity-and-derivative}.
+Probability turns a data-generating experiment into numerical statements about its outcomes. The elementary language is set-theoretic; the measure-theoretic form is obtained by choosing which subsets are measurable events.
+
+\begin{definition} \label{def:probability-space-random-variable-law}\label{def:sample-space-events-and-probability-space} \hlt{Sample Spaces, Events, and Probability Spaces}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{sample space} is a set $\Omega$ of possible outcomes.
+\item An \hlt{outcome} or \hlt{realization} is a point $\omega\in\Omega$.
+\item An \hlt{event} is a subset $A\subseteq\Omega$; the admissible events form a \hlt{$\sigma$-algebra} $\mathcal{F}\subseteq\mathcal{P}(\Omega)$.
+\item A \hlt{probability measure} on $(\Omega,\mathcal{F})$ is a measure $\mathbb{P}:\mathcal{F}\to[0,1]$ with $\mathbb{P}(\Omega)=1$.
+\item The triple $(\Omega,\mathcal{F},\mathbb{P})$ is a \hlt{probability space}.
+\end{enumerate}
+\hlt{Key Insight}: Probability is countably additive size normalized so that the whole sample space has mass $1$.
+\end{definition}
+
+\begin{method} \label{meth:first-sample-spaces} \hlt{Sample Space Construction Method}\\
+Choose $\Omega$ as the set of complete outcomes and encode the target condition as an event $A\subseteq\Omega$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Finite product method}: for $m$ discrete trials with state set $S$, use $\Omega=S^m$ and coordinate constraints.\\
+For two coin tosses, $S=\{H,T\}$, $\Omega=S^2$, and first toss heads gives $A=\{\omega\in\Omega:\omega_1=H\}=\{HH,HT\}$.
+\item \hlt{Interval method}: for real-valued measurements, use $\Omega=\R$ and translate inequalities into intervals.\\
+$10<\omega\leq23$ gives $A=(10,23]$.
+\item \hlt{Cylinder method}: for infinite sequences with state set $S$, use $\Omega=S^{\N}$ and constrain finitely many coordinates; for coin tosses, $S=\{H,T\}$ and first head on toss $3$ gives $A=\{\omega\in\Omega:\omega_1=T,\omega_2=T,\omega_3=H\}$.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:event-algebra-indicators-and-monotone-events} \hlt{Event Algebra, Indicators, and Monotone Events}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $A\in\mathcal{F}$, the \hlt{complement} is $A^c\defeq\Omega\setminus A$.
+\item For $A,B\in\mathcal{F}$, the \hlt{union} and \hlt{intersection} are $A\cup B$ and $A\cap B$.
+\item For $A,B\in\mathcal{F}$, the \hlt{difference} is $A\setminus B\defeq A\cap B^c$.
+\item \hlt{Commutativity}: $A\cup B=B\cup A$ and $A\cap B=B\cap A$.
+\item \hlt{Associativity}: $(A\cup B)\cup C=A\cup(B\cup C)$ and $(A\cap B)\cap C=A\cap(B\cap C)$.
+\item \hlt{Distributivity}: $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$ and $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$.
+\item \hlt{De Morgan laws}: $(A\cup B)^c=A^c\cap B^c$ and $(A\cap B)^c=A^c\cup B^c$.
+\item Events $(A_i)_{i\in I}$ are \hlt{disjoint} or \hlt{mutually exclusive} if $A_i\cap A_j=\emptyset$ for $i\neq j$.
+\item Events $(A_i)_{i\in I}$ form a \hlt{partition} of $\Omega$ if $A_i\cap A_j=\emptyset$ for $i\neq j$ and $\bigcup_{i\in I}A_i=\Omega$.
+\item The \hlt{indicator} of $A\in\mathcal{F}$ is $\mathbf{1}_A:\Omega\to\{0,1\}$, where $\mathbf{1}_A(\omega)=1$ for $\omega\in A$ and $\mathbf{1}_A(\omega)=0$ for $\omega\notin A$.
+\item A sequence $(A_n)$ is \hlt{increasing} to $A$, written $A_n\uparrow A$, if $A_1\subseteq A_2\subseteq\cdots$ and $A=\bigcup_{n\geq1}A_n$.
+\item A sequence $(A_n)$ is \hlt{decreasing} to $A$, written $A_n\downarrow A$, if $A_1\supseteq A_2\supseteq\cdots$ and $A=\bigcap_{n\geq1}A_n$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:monotone-event-limits-on-real-line} \hlt{Endpoint Sensitivity in Monotone Limits}\\
+Let $\Omega=\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A_i=[0,1/i]$, then $\bigcup_{i=1}^{\infty}A_i=[0,1]$ and $\bigcap_{i=1}^{\infty}A_i=\{0\}$.
+\item If $A_i=(0,1/i)$, then $\bigcup_{i=1}^{\infty}A_i=(0,1)$ and $\bigcap_{i=1}^{\infty}A_i=\emptyset$.
+\end{enumerate}
+\hlt{Key Insight}: Monotone set limits remember whether boundary points are included.
+\end{example}
+
+\begin{proposition} \label{prop:probability-axiom-consequences} \hlt{First Consequences of the Probability Axioms}\\
+For events $A,B\in\mathcal{F}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Null event}: $\mathbb{P}(\emptyset)=0$.
+\item \hlt{Monotonicity}: $A\subseteq B\Rightarrow\mathbb{P}(A)\leq\mathbb{P}(B)$.
+\item \hlt{Bounds}: $0\leq\mathbb{P}(A)\leq1$.
+\item \hlt{Complement}: $\mathbb{P}(A^c)=1-\mathbb{P}(A)$.
+\item \hlt{Disjoint additivity}: $A\cap B=\emptyset\Rightarrow\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)$.
+\item \hlt{Two-set inclusion-exclusion}: $\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Countable additivity on $\Omega=\Omega\sqcup\emptyset\sqcup\emptyset\sqcup\cdots$ gives $1=1+\sum_{n\geq1}\mathbb{P}(\emptyset)$, hence $\mathbb{P}(\emptyset)=0$.
+\item If $A\subseteq B$, then $B=A\sqcup(B\setminus A)$, so $\mathbb{P}(B)=\mathbb{P}(A)+\mathbb{P}(B\setminus A)\geq\mathbb{P}(A)$.
+\item Since $\emptyset\subseteq A\subseteq\Omega$, (i) and (ii) give $0=\mathbb{P}(\emptyset)\leq\mathbb{P}(A)\leq\mathbb{P}(\Omega)=1$.
+\item Since $\Omega=A\sqcup A^c$, $1=\mathbb{P}(\Omega)=\mathbb{P}(A)+\mathbb{P}(A^c)$, so $\mathbb{P}(A^c)=1-\mathbb{P}(A)$.
+\item If $A\cap B=\emptyset$, then $A\cup B=A\sqcup B$, so $\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)$.
+\item Decompose $A\cup B=(A\setminus B)\sqcup(A\cap B)\sqcup(B\setminus A)$, $A=(A\setminus B)\sqcup(A\cap B)$, and $B=(A\cap B)\sqcup(B\setminus A)$.\\
+Hence $\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)$.
+\end{enumerate}
+\hlt{Structural Commentary}: The algebraic identities are set partitions in disguise.\\
+\hlt{Key Insight}: Split overlapping sets into disjoint pieces before adding probabilities.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:two-coin-inclusion-exclusion} \hlt{Two Coin Tosses and Inclusion-Exclusion}\\
+Let $\Omega=\{HH,HT,TH,TT\}$ with $\mathbb{P}(\{\omega\})=1/4$ for all $\omega\in\Omega$. Set $H_1=\{HH,HT\}$ and $H_2=\{HH,TH\}$.\\
+Since $H_1\cap H_2=\{HH\}$, $\mathbb{P}(H_1\cup H_2) =\mathbb{P}(H_1)+\mathbb{P}(H_2)-\mathbb{P}(H_1\cap H_2) =\frac12+\frac12-\frac14 =\frac34$.
+\end{example}
+
+\begin{theorem} \label{thm:probability-continuity-monotone-events} \hlt{Continuity of Probabilities}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Continuity from below}: if $A_n\uparrow A$, then $\lim_{n\to\infty}\mathbb{P}(A_n)=\mathbb{P}(A)$.
+\item \hlt{Continuity from above}: if $A_n\downarrow A$, then $\lim_{n\to\infty}\mathbb{P}(A_n)=\mathbb{P}(A)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $B_1=A_1$ and $B_n=A_n\setminus A_{n-1}$ for $n\geq2$. Then $(B_n)$ is disjoint, $A_n=\bigcup_{j=1}^{n}B_j$, and $A=\bigcup_{j=1}^{\infty}B_j$, so countable additivity gives $\mathbb{P}(A_n)=\sum_{j=1}^{n}\mathbb{P}(B_j)\to\sum_{j=1}^{\infty}\mathbb{P}(B_j)=\mathbb{P}(A)$.
+\item Set $C_n=A_1\setminus A_n$. Then $C_n\uparrow A_1\setminus A$, so (i) gives $\mathbb{P}(C_n)\to\mathbb{P}(A_1\setminus A)$; since $A_1=A_n\sqcup C_n$ and $A_1=A\sqcup(A_1\setminus A)$, finite additivity gives $\mathbb{P}(A_n)=\mathbb{P}(A_1)-\mathbb{P}(C_n)\to\mathbb{P}(A_1)-\mathbb{P}(A_1\setminus A)=\mathbb{P}(A)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Monotone limits convert countable additivity into limit rules.\\
+\hlt{Key Insight}: Increasing uses increments; decreasing uses complements.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:limsup-liminf-events} \hlt{Events Occurring Infinitely Often and Eventually Always}\\
+For events $(A_n)_{n\geq1}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Tail union}: $B_n\defeq\bigcup_{i=n}^{\infty}A_i$.
+\item \hlt{Tail intersection}: $C_n\defeq\bigcap_{i=n}^{\infty}A_i$.
+\item \hlt{Limsup}: $\limsup_{n\to\infty}A_n\defeq\bigcap_{n=1}^{\infty}B_n=\bigcap_{n=1}^{\infty}\bigcup_{i=n}^{\infty}A_i$.
+\item \hlt{Liminf}: $\liminf_{n\to\infty}A_n\defeq\bigcup_{n=1}^{\infty}C_n=\bigcup_{n=1}^{\infty}\bigcap_{i=n}^{\infty}A_i$.
+\item \hlt{Infinitely often}: $\omega\in\limsup_nA_n$ iff $\omega\in A_n$ for infinitely many $n$.
+\item \hlt{Eventually always}: $\omega\in\liminf_nA_n$ iff $\omega\in A_n$ for all but finitely many $n$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:event-limsup-liminf-monotonicity} \hlt{Tail Monotonicity}\\
+For events $(A_n)_{n\geq1}$ with tail union $B_n$ and tail intersection $C_n$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Tail unions}: $B_{n+1}\subseteq B_n$ for all $n$, hence $B_n\downarrow\bigcap_{n\geq1}B_n$.
+\item \hlt{Tail intersections}: $C_n\subseteq C_{n+1}$ for all $n$, hence $C_n\uparrow\bigcup_{n\geq1}C_n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\{i:i\geq n+1\}\subseteq\{i:i\geq n\}$, $B_{n+1}=\bigcup_{i=n+1}^{\infty}A_i\subseteq\bigcup_{i=n}^{\infty}A_i=B_n$.
+\item Since $\{i:i\geq n+1\}\subseteq\{i:i\geq n\}$, $C_n=\bigcap_{i=n}^{\infty}A_i\subseteq\bigcap_{i=n+1}^{\infty}A_i=C_{n+1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Tail shifts turn recurrence and permanence into monotone limits.\\
+\hlt{Key Insight}: Tail unions track recurrence; tail intersections track permanence.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:union-bound-and-full-probability-intersections} \hlt{Union Bound and Countable Intersections of Almost-Sure Events}\\
+For events $(A_n)_{n\geq1}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Union bound}: $\mathbb{P}(\bigcup_{n=1}^{\infty}A_n)\leq\sum_{n=1}^{\infty}\mathbb{P}(A_n)$.
+\item \hlt{Countable almost-sure intersection}: if $\mathbb{P}(A_n)=1$ for all $n$, then $\mathbb{P}(\bigcap_{n=1}^{\infty}A_n)=1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $B_n\defeq A_n\setminus\bigcup_{j<n}A_j$. Then $(B_n)$ is disjoint, $\bigcup_nB_n=\bigcup_nA_n$, and $B_n\subseteq A_n$.\\
+Hence $\mathbb{P}(\bigcup_nA_n)=\sum_n\mathbb{P}(B_n)\leq\sum_n\mathbb{P}(A_n)$.
+\item If $\mathbb{P}(A_n)=1$ for all $n$, then $\mathbb{P}(A_n^c)=0$ for all $n$.\\
+By (i), $\mathbb{P}((\bigcap_nA_n)^c)=\mathbb{P}(\bigcup_nA_n^c)\leq\sum_n\mathbb{P}(A_n^c)=0$, so $\mathbb{P}(\bigcap_nA_n)=1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Countable subadditivity is countable additivity after disjointization.\\
+\hlt{Key Insight}: Almost sure statements survive countable intersections.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:uniform-probability-countable-space} \hlt{Uniform Probability on a Countable Space}\\
+Let $\Omega$ be countable.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A probability measure $\mathbb{P}$ on $(\Omega,\mathcal{P}(\Omega))$ is \hlt{uniform} if $\exists c\in[0,1]$ such that $\mathbb{P}(\{\omega\})=c$ for all $\omega\in\Omega$.
+\item The constant $c$ is the \hlt{common atom mass}.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:no-uniform-probability-on-countably-infinite-set} \hlt{No Uniform Probability on a Countably Infinite Set}\\
+Let $\Omega=\{0,1,2,\ldots\}$. No \hlt{uniform probability measure} exists on $(\Omega,\mathcal{P}(\Omega))$.
+\begin{proof}
+Assume uniform $\mathbb{P}$ exists, and let $c$ be its common atom mass.\\
+Since $\Omega=\bigsqcup_{n=0}^{\infty}\{n\}$, countable additivity gives $1=\mathbb{P}(\Omega)=\sum_{n=0}^{\infty}\mathbb{P}(\{n\})=\sum_{n=0}^{\infty}c$.\\
+If $c=0$, the sum is $0$; if $c>0$, the sum diverges. Both contradict $1=\mathbb{P}(\Omega)$.\\
+\hlt{Structural Commentary}: Countable additivity forces total mass to equal the sum of the atom masses.\\
+\hlt{Key Insight}: Equal mass on countably many atoms is incompatible with total mass $1$.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:finite-uniform-probability-by-counting} \hlt{Finite Uniform Probability by Counting}\\
+Let $0<|\Omega|<\infty$ and assume the \hlt{uniform model} $\mathbb{P}(\{\omega\})=|\Omega|^{-1}$ for all $\omega\in\Omega$.\\
+For $A\subseteq\Omega$, $\mathbb{P}(A)=\sum_{\omega\in A}\mathbb{P}(\{\omega\})=|A|/|\Omega|$, so probability reduces to counting.
+\end{method}
+
+\begin{definition} \label{def:independent-events-and-families} \hlt{Independent Events}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Events $A,B\in\mathcal{F}$ are \hlt{independent}, written $A\perp\!\!\!\perp B$, if $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B)$.
+\item A family $(A_i)_{i\in I}\subseteq\mathcal{F}$ is \hlt{independent} if $\mathbb{P}(\bigcap_{i\in J}A_i)=\prod_{i\in J}\mathbb{P}(A_i)$ for every finite $J\subseteq I$.
+\end{enumerate}
+\hlt{Key Insight}: Independence is multiplicative probability for simultaneous occurrence.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-independence-tests} \hlt{Basic Independence Tests}\\
+Let $A,B\in\mathcal{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A\cap B=\emptyset$ and $\mathbb{P}(A)\mathbb{P}(B)>0$, then $A\not\perp\!\!\!\perp B$.
+\item If $A\perp\!\!\!\perp B$, then $A^c\perp\!\!\!\perp B$, $A\perp\!\!\!\perp B^c$, and $A^c\perp\!\!\!\perp B^c$.
+\item If $\mathbb{P}(A)\in\{0,1\}$, then $A\perp\!\!\!\perp C$ for every $C\in\mathcal{F}$.
+\item If $A\perp\!\!\!\perp A$, then $\mathbb{P}(A)\in\{0,1\}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $A\cap B=\emptyset$, $\mathbb{P}(A\cap B)=0\neq\mathbb{P}(A)\mathbb{P}(B)$.
+\item If $A\perp\!\!\!\perp B$, then $\mathbb{P}(A^c\cap B)=\mathbb{P}(B)-\mathbb{P}(A\cap B)=(1-\mathbb{P}(A))\mathbb{P}(B)=\mathbb{P}(A^c)\mathbb{P}(B)$\\
+and $\mathbb{P}(A\cap B^c)=\mathbb{P}(A)-\mathbb{P}(A\cap B)=\mathbb{P}(A)(1-\mathbb{P}(B))=\mathbb{P}(A)\mathbb{P}(B^c)$.\\
+Applying the first identity to $A\perp\!\!\!\perp B^c$ gives $A^c\perp\!\!\!\perp B^c$.
+\item Let $C\in\mathcal{F}$. If $\mathbb{P}(A)=0$, then $0\leq\mathbb{P}(A\cap C)\leq\mathbb{P}(A)=0$, so $\mathbb{P}(A\cap C)=0=\mathbb{P}(A)\mathbb{P}(C)$.\\
+If $\mathbb{P}(A)=1$, then $\mathbb{P}(A^c)=0$, hence $A^c\perp\!\!\!\perp C$ by the previous case and $A\perp\!\!\!\perp C$ by (ii).
+\item Let $p=\mathbb{P}(A)$. From $A\perp\!\!\!\perp A$, $p=\mathbb{P}(A\cap A)=p^2$, hence $p\in\{0,1\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Independence is probabilistic, not visual; disjointness usually means strong dependence.\\
+\hlt{Key Insight}: Complements preserve independence because $B$ splits into $A\cap B$ and $A^c\cap B$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:independence-complement-first-success-examples} \hlt{Independence, Complements, and First Success}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Independence by counting}: for a fair die, $\Omega=\{1,\ldots,6\}$, $A=\{2,4,6\}$, and $B=\{1,2,3,4\}$.\\
+Then $\mathbb{P}(A\cap B)=2/6=(3/6)(4/6)=\mathbb{P}(A)\mathbb{P}(B)$, hence $A\perp\!\!\!\perp B$.
+\item \hlt{Complement method}: for independent fair tosses $X_1,\ldots,X_{10}$, let $A=\{\exists j\leq10:X_j=H\}$\\
+and $T_j=\{X_j=T\}$. Then $A^c=\bigcap_{j=1}^{10}T_j$ and $\mathbb{P}(A)=1-\mathbb{P}(A^c)=1-\prod_{j=1}^{10}\mathbb{P}(T_j)=1-(1/2)^{10}$.
+\item \hlt{First-success decomposition}: let $p_1=1/3$, $p_2=1/4$.\\
+Let $A_j$ be player $1$'s first success on turn $j$ before player $2$ succeeds.\\
+Then $E=\bigsqcup_{j\geq1}A_j$, $\mathbb{P}(A_j)=((1-p_1)(1-p_2))^{j-1}p_1=(1/2)^{j-1}/3$, and $\mathbb{P}(E)=\sum_{j\geq1}\mathbb{P}(A_j)=2/3$.
+\end{enumerate}
+\hlt{Key Insight}: Verify independence by products, use complements for at-least-one events, and decompose first successes into disjoint geometric pieces.
+\end{example}
+
+\begin{method} \label{meth:independence-complement-disjoint-decomposition} \hlt{Independence, Complement, and Decomposition Methods}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Verify independence}: compute $\mathbb{P}(A)$, $\mathbb{P}(B)$, and $\mathbb{P}(A\cap B)$; conclude $A\perp\!\!\!\perp B$ iff $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B)$.
+\item \hlt{Use complements}: if $A^c$ is simpler, compute $\mathbb{P}(A)=1-\mathbb{P}(A^c)$; if $A^c=\bigcap_{j=1}^{n}C_j$ with independent $C_j$.\\
+Then $\mathbb{P}(A)=1-\prod_{j=1}^{n}\mathbb{P}(C_j)$.
+\item \hlt{Disjoint decomposition}: write $E=\bigsqcup_jA_j$ with disjoint $A_j$, then $\mathbb{P}(E)=\sum_j\mathbb{P}(A_j)$.
+\item \hlt{Geometric summation}: if $\mathbb{P}(A_j)=ar^{j-1}$ for $j\geq1$ and $|r|<1$, then $\mathbb{P}(E)=\sum_{j\geq1}ar^{j-1}=a/(1-r)$.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:random-variable-law-and-cdf} \hlt{Random Variables, Laws, and Distribution Functions}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{real-valued random variable} on $(\Omega,\mathcal{F},\mathbb{P})$ is map $X:\Omega\to\R$ s.t. $\{\omega\in\Omega:X(\omega)\in B\}\in\mathcal{F}$ $\forall B\in\mathcal{B}(\R)$.
+\item Its \hlt{law} or \hlt{distribution} is $\mathcal{L}(X):\mathcal{B}(\R)\to[0,1]$ given by $\mathcal{L}(X)(B)\defeq\mathbb{P}(X^{-1}(B))=\mathbb{P}(X\in B)$.
+\item Its \hlt{cumulative distribution function} is $F_X:\R\to[0,1]$ given by $F_X(x)\defeq\mathbb{P}(X\leq x)=\mathcal{L}(X)((-\infty,x])$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:distribution-function-and-density} \hlt{Distribution Functions and Densities}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Distribution function} is nondecreasing right-continuous $F:\R\to[0,1]$, $\lim_{x\to-\infty}F(x)=0$, $\lim_{x\to\infty}F(x)=1$.
+\item A \hlt{density} for $F$ is an integrable $g:\R\to[0,\infty)$ with $\int_{-\infty}^{\infty}g(x)\,dx=1$ and $F(t)=\int_{-\infty}^{t}g(x)\,dx$ $\forall t\in\R$.\\
+If $g$ is continuous, then $F'(t)=g(t)$.
+\end{enumerate}
 \end{definition}
 
 \begin{figure}[H]
@@ -12,3 +264,270 @@ A \hlt{density} for $F$ is an integrable $g\geq0$ with $\int_{-\infty}^{\infty}g
   \caption{A normal density accumulates area into the distribution function $\Phi(t)=\int_{-\infty}^{t}g(x)\,dx$.}
   \label{fig:normal-distribution-cdf}
 \end{figure}
+
+\begin{definition} \label{def:discrete-and-continuous-random-variables} \hlt{Discrete and Continuous Random Variables}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X$ is \hlt{discrete} if $X(\Omega)\subseteq S$ for some finite or countable $S=\{x_1,x_2,\ldots\}\subseteq\R$.
+\item The \hlt{probability mass function} of discrete $X$ is $f_X:S\to[0,1]$, $f_X(x)\defeq\mathbb{P}(X=x)$, $\sum_{x\in S}f_X(x)=1$.
+\item The \hlt{discrete CDF} is $F_X(x)=\mathbb{P}(X\leq x)=\sum_{x_i\leq x}f_X(x_i)$.
+\item $X$ is \hlt{continuous} if its law has a density $f_X:\R\to[0,\infty)$.
+\item The \hlt{continuous probabilities} satisfy $\mathbb{P}(a<X<b)=\int_a^b f_X(t)\,dt$ and $F_X(x)=\int_{-\infty}^{x}f_X(t)\,dt$.
+\item The \hlt{point-mass distinction}: for continuous $X$, $\mathbb{P}(X=x)=0$ for every fixed $x$, so $f_X(x)\neq\mathbb{P}(X=x)$.
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/coin_count_cdf_pmf.tikz}
+  \caption{CDF and PMF for the number of heads in two independent fair coin tosses.}
+  \label{fig:coin-count-cdf-pmf}
+\end{figure}
+
+\begin{example} \label{ex:two-coin-count-random-variable} \hlt{Counting Heads in Two Tosses}\\
+Let $\Omega=\{H,T\}^2$ with $\mathbb{P}(\{\omega\})=1/4$, and set $X(\omega)=|\{j\in\{1,2\}:\omega_j=H\}|$.\\
+Then $f_X(k)=\mathbb{P}(X=k)=\binom{2}{k}2^{-2}$ for $k\in\{0,1,2\}$, so $(f_X(0),f_X(1),f_X(2))=(1/4,1/2,1/4)$.\\
+Hence $F_X(x)=0$ for $x<0$, $F_X(x)=1/4$ for $0\leq x<1$, $F_X(x)=3/4$ for $1\leq x<2$, $F_X(x)=1$ for $x\geq2$.\\
+\hlt{Key Insight}: A CDF is defined for every real $x$, even when a discrete random variable takes only a few values.
+\end{example}
+
+\begin{proposition} \label{prop:cdf-probability-calculus} \hlt{CDF Probability Calculus}\\
+Let $X$ have CDF $F$ and define $F(x^-)\defeq\lim_{y\uparrow x}F(y)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Point mass}: $\mathbb{P}(X=x)=F(x)-F(x^-)$.
+\item \hlt{Half-open interval}: if $x<y$, then $\mathbb{P}(x<X\leq y)=F(y)-F(x)$.
+\item \hlt{Right tail}: $\mathbb{P}(X>x)=1-F(x)$.
+\item \hlt{Continuous endpoints}: if $X$ is continuous and $a<b$,\\
+then $\mathbb{P}(a<X<b)=\mathbb{P}(a\leq X<b)=\mathbb{P}(a<X\leq b)=\mathbb{P}(a\leq X\leq b)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $E_n=\{x-1/n<X\leq x\}$. Then $E_n\downarrow\{X=x\}$ and $\mathbb{P}(E_n)=F(x)-F(x-1/n)$.\\
+Hence $\mathbb{P}(X=x)=\lim_n\mathbb{P}(E_n)=F(x)-F(x^-)$.
+\item Since $\{X\leq y\}=\{X\leq x\}\sqcup\{x<X\leq y\}$, $F(y)=F(x)+\mathbb{P}(x<X\leq y)$.
+\item Since $\{X>x\}=\{X\leq x\}^c$, $\mathbb{P}(X>x)=1-\mathbb{P}(X\leq x)=1-F(x)$.
+\item If $X$ is continuous, then $\mathbb{P}(X=t)=0$ for all $t\in\R$. For $I_1=(a,b)$, $I_2=[a,b)$, $I_3=(a,b]$, and $I_4=[a,b]$, each $X^{-1}(I_j)\setminus X^{-1}(I_1)\subseteq\{X=a\}\cup\{X=b\}$, hence all four probabilities are equal.
+\end{enumerate}
+\hlt{Structural Commentary}: CDF calculus subtracts nested lower-level events.\\
+\hlt{Key Insight}: CDF jumps are point masses; continuous laws have none.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:quantile-and-equality-in-distribution} \hlt{Quantiles and Equality in Distribution}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{quantile function} of a CDF $F$ is $F^{-1}(q)\defeq\inf\{x\in\R:F(x)\geq q\}$ for $q\in[0,1]$.
+\item If $F$ is strictly increasing and continuous, then \hlt{inverse CDF} satisfies $F(F^{-1}(q))=q$ and $F^{-1}(F(x))=x$.
+\item Random variables $X,Y$ are \hlt{equal in distribution}, written $X\disteq Y$, if $F_X(x)=F_Y(x)$ for all $x\in\R$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:core-discrete-distributions} \hlt{Core Discrete Distributions}\\
+Common discrete laws include:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Point mass}: $X\sim\delta_a$ for $a\in\R$ if $\mathbb{P}(X=a)=1$.
+\item \hlt{Discrete uniform}: $X\sim\operatorname{Unif}\{1,\ldots,k\}$ for $k\in\N$ if $\mathbb{P}(X=x)=1/k$ for $x=1,\ldots,k$.
+\item \hlt{Bernoulli}: $X\sim\operatorname{Bernoulli}(p)$ for $p\in[0,1]$ if $\mathbb{P}(X=1)=p$ and $\mathbb{P}(X=0)=1-p$.
+\item \hlt{Binomial}: $X\sim\operatorname{Binomial}(n,p)$ for $n\in\N$ and $p\in[0,1]$ if $\mathbb{P}(X=x)=\binom{n}{x}p^x(1-p)^{n-x}$ for $x=0,\ldots,n$.
+\item \hlt{Geometric}: $X\sim\operatorname{Geom}(p)$ for $p\in(0,1]$ if $\mathbb{P}(X=k)=p(1-p)^{k-1}$ for $k\geq1$.
+\item \hlt{Poisson}: $X\sim\operatorname{Poisson}(\lambda)$ for $\lambda\geq0$ if $\mathbb{P}(X=x)=e^{-\lambda}\lambda^x/x!$ for $x=0,1,2,\ldots$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:core-continuous-distributions} \hlt{Core Continuous Distributions}\\
+Common continuous laws include:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Uniform}: $X\sim\operatorname{Uniform}(a,b)$ for $a<b$ if $f_X(x)=(b-a)^{-1}\mathbf{1}_{[a,b]}(x)$.
+\item \hlt{Normal}: $X\sim N(\mu,\sigma^2)$ for $\mu\in\R$, $\sigma>0$, if $f_X(x)=(\sigma\sqrt{2\pi})^{-1}\exp(-(x-\mu)^2/(2\sigma^2))$ for $x\in\R$.\\
+$N(0,1)$ has density $\phi$ and CDF $\Phi$.
+\item \hlt{Exponential}: $X\sim\operatorname{Exp}(\beta)$ for $\beta>0$ if $f_X(x)=\beta^{-1}e^{-x/\beta}\mathbf{1}_{(0,\infty)}(x)$.
+\item \hlt{Gamma}: $X\sim\operatorname{Gamma}(\alpha,\beta)$ for $\alpha,\beta>0$ if $f_X(x)=\beta^{-\alpha}\Gamma(\alpha)^{-1}x^{\alpha-1}e^{-x/\beta}\mathbf{1}_{(0,\infty)}(x)$; $\operatorname{Exp}(\beta)=\operatorname{Gamma}(1,\beta)$.
+\item \hlt{Beta}: $X\sim\operatorname{Beta}(\alpha,\beta)$ for $\alpha,\beta>0$ if $f_X(x)=\Gamma(\alpha+\beta)(\Gamma(\alpha)\Gamma(\beta))^{-1}x^{\alpha-1}(1-x)^{\beta-1}\mathbf{1}_{(0,1)}(x)$.
+\item \hlt{Cauchy}: $X\sim\operatorname{Cauchy}(0,1)$ if $f_X(x)=(\pi(1+x^2))^{-1}$ for $x\in\R$.
+\item \hlt{$\chi^2$}: $X\sim\chi_p^2$ for $p>0$ if $f_X(x)=(\Gamma(p/2)2^{p/2})^{-1}x^{p/2-1}e^{-x/2}\mathbf{1}_{(0,\infty)}(x)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:normal-standardization-and-sums} \hlt{Standardizing Normal Variables}\\
+For $\sigma,\sigma_i>0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Standardization}: if $X\sim N(\mu,\sigma^2)$, then $(X-\mu)/\sigma\sim N(0,1)$.
+\item \hlt{Affine reconstruction}: if $Z\sim N(0,1)$, then $\mu+\sigma Z\sim N(\mu,\sigma^2)$.
+\item \hlt{Independent sums}: if $X_i\sim N(\mu_i,\sigma_i^2)$ are independent, then $\sum_{i=1}^{n}X_i\sim N(\sum_{i=1}^{n}\mu_i,\sum_{i=1}^{n}\sigma_i^2)$.
+\item \hlt{Interval probabilities}: if $X\sim N(\mu,\sigma^2)$ and $a<b$, then $\mathbb{P}(a<X<b)=\Phi((b-\mu)/\sigma)-\Phi((a-\mu)/\sigma)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $Y=(X-\mu)/\sigma$. By change of variables, $f_Y(z)=\sigma f_X(\mu+\sigma z)=(2\pi)^{-1/2}e^{-z^2/2}$, so $Y\sim N(0,1)$.
+\item Let $Y=\mu+\sigma Z$. Then $f_Y(y)=\sigma^{-1}\phi((y-\mu)/\sigma)=(\sigma\sqrt{2\pi})^{-1}\exp(-(y-\mu)^2/(2\sigma^2))$, hence $Y\sim N(\mu,\sigma^2)$.
+\item Let $S=X+Y$, $m_s=(v_2\mu_1+v_1(s-\mu_2))/(v_1+v_2)$, and $w=v_1v_2/(v_1+v_2)$.\\
+Since $(u-\mu_1)^2/v_1+(s-u-\mu_2)^2/v_2=(s-\mu_1-\mu_2)^2/(v_1+v_2)+(u-m_s)^2/w$,\\
+convolution gives $f_S(s)=(2\pi(v_1+v_2))^{-1/2}\exp(-(s-\mu_1-\mu_2)^2/(2(v_1+v_2)))$; induction gives (iii).
+\item Let $Z=(X-\mu)/\sigma$. Since $\sigma>0$, $\{a<X<b\}=\{(a-\mu)/\sigma<Z<(b-\mu)/\sigma\}$.\\
+Hence $\mathbb{P}(a<X<b)=\Phi((b-\mu)/\sigma)-\Phi((a-\mu)/\sigma)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Normal laws are stable under affine maps and independent addition.\\
+\hlt{Key Insight}: Standardize to $N(0,1)$, compute with $\Phi$, then transform back.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:normal-tail-and-quantile-standardization} \hlt{Normal Tail and Quantile Standardization}\\
+Let $X\sim N(3,5)$ and $Z=(X-3)/\sqrt5\sim N(0,1)$. Then $\mathbb{P}(X>1)=\mathbb{P}(Z>-2/\sqrt5)=1-\Phi(-2/\sqrt5)\approx0.81$.\\
+If $\mathbb{P}(X<q)=0.2$, then $\Phi((q-3)/\sqrt5)=0.2$, so $q=3+\sqrt5\,\Phi^{-1}(0.2)\approx3-0.8416\sqrt5\approx1.1181$.
+\end{example}
+
+\begin{definition} \label{def:joint-distributions-and-marginals} \hlt{Joint and Marginal Distributions}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{joint mass function} of discrete $X,Y$ is $f_{X,Y}(x,y)\defeq\mathbb{P}(X=x,Y=y)$.
+\item The \hlt{discrete marginals} are $f_X(x)=\sum_y f_{X,Y}(x,y)$\\
+and $f_Y(y)=\sum_x f_{X,Y}(x,y)$.
+\item If $(X,Y)$ has joint density $f_{X,Y}$, the \hlt{continuous marginals} are $f_X(x)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dy$\\
+and $f_Y(y)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dx$.
+\item The \hlt{joint CDF} is $F_{X,Y}(x,y)\defeq\mathbb{P}(X\leq x,Y\leq y)$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:independent-random-variables-and-iid-samples} \hlt{Independent Random Variables and IID Samples}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Random variables $X_1,\ldots,X_n$ are \hlt{independent}\\
+if $\mathbb{P}(X_1\in B_1,\ldots,X_n\in B_n)=\prod_{i=1}^{n}\mathbb{P}(X_i\in B_i)$ for all $B_i\in\mathcal{B}(\R)$.
+\item They are \hlt{identically distributed} if $\mathcal{L}(X_1)=\cdots=\mathcal{L}(X_n)$.
+\item They are \hlt{iid} if they are independent and identically distributed.
+\item The \hlt{random vector} $X=(X_1,\ldots,X_n)$ is a \hlt{random sample} when $X_1,\ldots,X_n$ are iid from a common law.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:factorization-tests-for-random-variable-independence} \hlt{Factorization Tests for Independence}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Discrete factorization}: discrete $X,Y$ are independent iff $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ for all $x,y$.
+\item \hlt{Density factorization}: if $(X,Y)$ has joint density $f_{X,Y}$ and marginals $f_X,f_Y$,\\
+then $X,Y$ are independent iff $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ a.e.
+\item \hlt{Rectangular support test}: if $f_{X,Y}(x,y)=g(x)h(y)\mathbf{1}_{A\times B}(x,y)$ for measurable $A,B$,\\
+then $X,Y$ are independent after normalization.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) If $X\perp\!\!\!\perp Y$, then $f_{X,Y}(x,y)=\mathbb{P}(X=x,Y=y)=\mathbb{P}(X=x)\mathbb{P}(Y=y)=f_X(x)f_Y(y)$.
+\item[$(i)$] ($\Leftarrow$) If $f_{X,Y}=f_Xf_Y$, then for $A,B$, $\mathbb{P}(X\in A,Y\in B)=\sum_{x\in A}\sum_{y\in B}f_X(x)f_Y(y)=\mathbb{P}(X\in A)\mathbb{P}(Y\in B)$.
+\item[$(ii)$] ($\Rightarrow$) If $X\perp\!\!\!\perp Y$, the product law has density $f_Xf_Y$, so uniqueness of densities gives $f_{X,Y}=f_Xf_Y$ a.e.
+\item[$(ii)$] ($\Leftarrow$) If $f_{X,Y}=f_Xf_Y$ a.e., then for Borel $A,B$,\\
+$\mathbb{P}(X\in A,Y\in B)=\int_A\int_Bf_X(x)f_Y(y)\,dy\,dx=\mathbb{P}(X\in A)\mathbb{P}(Y\in B)$.
+\item[$(iii)$] Let $G=\int_Ag$ and $H=\int_Bh$. Normalization gives $GH=1$, while $f_X(x)=g(x)H\mathbf{1}_A(x)$ and\\
+$f_Y(y)=h(y)G\mathbf{1}_B(y)$, hence $f_X(x)f_Y(y)=f_{X,Y}(x,y)$ a.e.; apply (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Independence is product structure of the joint law.\\
+\hlt{Key Insight}: Independence means the joint law factors.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:bivariate-density-nonrectangular-region} \hlt{A Non-Rectangular Bivariate Density}\\
+Let $S=\{(x,y):x^2\leq y\leq1\}$ and $f_{X,Y}(x,y)=cx^2y\mathbf{1}_S(x,y)$.\\
+Since $S=\{(x,y):-1\leq x\leq1,\ x^2\leq y\leq1\}$, $1=c\int_{-1}^{1}\int_{x^2}^{1}x^2y\,dy\,dx=4c/21$, so $c=21/4$.\\
+For $E=\{X\geq Y\}$, $S\cap E=\{(x,y):0\leq x\leq1,\ x^2\leq y\leq x\}$, hence $\mathbb{P}(E)=(21/4)\int_0^1\int_{x^2}^{x}x^2y\,dy\,dx=3/20$.\\
+\hlt{Key Insight}: In bivariate integration, pick one variable first and let the other range over the corresponding slice.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/parabolic_bivariate_region.tikz}
+  \caption{\textcolor{gray!70!black}{Gray}: support $x^2\leq y\leq1$; \textcolor{blue!70!black}{blue}: event $X\geq Y$ ($x^2\leq y\leq x$).}
+  \label{fig:parabolic-bivariate-region}
+\end{figure}
+
+\begin{definition} \label{def:multinomial-and-multivariate-normal} \hlt{Two Multivariate Families}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Multinomial}: for $n\in\N$ and $p\in[0,1]^k$ with $\sum_{j=1}^{k}p_j=1$, $X\sim\operatorname{Multinomial}(n,p)$\\
+if $\mathbb{P}(X=x)=n!(x_1!\cdots x_k!)^{-1}\prod_{j=1}^{k}p_j^{x_j}$ for $x\in\N_0^k$ with $\sum_{j=1}^{k}x_j=n$; then $X_j\sim\operatorname{Binomial}(n,p_j)$.
+\item \hlt{Multivariate normal}: for $\mu\in\R^k$ and symmetric positive definite $\Sigma\in\R^{k\times k}$, $X\sim N(\mu,\Sigma)$\\
+if $f_X(x)=((2\pi)^k\det\Sigma)^{-1/2}\exp(-(x-\mu)^t\Sigma^{-1}(x-\mu)/2)$ for $x\in\R^k$.\\
+$N(0,I_k)$ has independent $N(0,1)$ coordinates.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:multivariate-normal-affine-standardization} \hlt{Multivariate Normal Affine Standardization}\\
+Let $\mu\in\R^k$ and $\Sigma\in\R^{k\times k}$ with $\Sigma\succ0$. For a random vector $X\in\R^k$, $X\sim N(\mu,\Sigma)$ iff $Z\defeq\Sigma^{-1/2}(X-\mu)\sim N(0,I_k)$; equivalently, if $Z\sim N(0,I_k)$, then $\mu+\Sigma^{1/2}Z\sim N(\mu,\Sigma)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Set $Z=\Sigma^{-1/2}(X-\mu)$, so $x=\mu+\Sigma^{1/2}z$ and $|\det\Sigma^{1/2}|=(\det\Sigma)^{1/2}$.\\
+By change of variables, $f_Z(z)=f_X(\mu+\Sigma^{1/2}z)(\det\Sigma)^{1/2}=(2\pi)^{-k/2}\exp(-z^tz/2)$, hence $Z\sim N(0,I_k)$.
+\item[$(\Leftarrow)$] Let $X=\mu+\Sigma^{1/2}Z$ with $Z\sim N(0,I_k)$. Since $z=\Sigma^{-1/2}(x-\mu)$ and $|\det\Sigma^{-1/2}|=(\det\Sigma)^{-1/2}$,\\
+$f_X(x)=f_Z(\Sigma^{-1/2}(x-\mu))(\det\Sigma)^{-1/2}=((2\pi)^k\det\Sigma)^{-1/2}\exp(-(x-\mu)^t\Sigma^{-1}(x-\mu)/2)$, so $X\sim N(\mu,\Sigma)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Positive definite covariance is an affine deformation of the standard normal.\\
+\hlt{Key Insight}: Standardize by $\Sigma^{-1/2}$; reconstruct by $\Sigma^{1/2}$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:multivariate-normal-basic-calculus} \hlt{Basic Multivariate Normal Calculus}\\
+Let $X=(X_a,X_b)\sim N(\mu,\Sigma)$ with $X_a\in\R^r$, $X_b\in\R^s$, $\mu=(\mu_a,\mu_b)$, and $\Sigma=\begin{pmatrix}\Sigma_{aa}&\Sigma_{ab}\\ \Sigma_{ba}&\Sigma_{bb}\end{pmatrix}\succ0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Marginal}: $X_a\sim N(\mu_a,\Sigma_{aa})$.
+\item \hlt{Conditional}: $X_b\mid X_a=x_a\sim N(\mu_b+\Sigma_{ba}\Sigma_{aa}^{-1}(x_a-\mu_a),\Sigma_{bb}-\Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab})$.
+\item \hlt{Linear form}: for any vector $a$, $a^tX\sim N(a^t\mu,a^t\Sigma a)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $P_aX=X_a$. By Proposition \ref{prop:multivariate-normal-affine-standardization}, $X=\mu+\Sigma^{1/2}Z$ with $Z\sim N(0,I)$.\\
+Hence $X_a=P_a\mu+P_a\Sigma^{1/2}Z\sim N(\mu_a,P_a\Sigma P_a^t)=N(\mu_a,\Sigma_{aa})$.
+\item Set $S\defeq\Sigma_{bb}-\Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab}$ and $m(x_a)\defeq\mu_b+\Sigma_{ba}\Sigma_{aa}^{-1}(x_a-\mu_a)$.\\
+The block determinant and inverse identities give $\det\Sigma=\det\Sigma_{aa}\det S$ and\\
+$(x-\mu)^t\Sigma^{-1}(x-\mu)=(x_a-\mu_a)^t\Sigma_{aa}^{-1}(x_a-\mu_a)+(x_b-m(x_a))^tS^{-1}(x_b-m(x_a))$.\\
+Thus $f_{b\mid a}(x_b\mid x_a)=f_{a,b}(x_a,x_b)/f_a(x_a)$ is the $N(m(x_a),S)$ density.
+\item With $X=\mu+\Sigma^{1/2}Z$, $a^tX=a^t\mu+(\Sigma^{1/2}a)^tZ$.\\
+Since $Z$ has independent $N(0,1)$ coordinates, $(\Sigma^{1/2}a)^tZ\sim N(0,a^t\Sigma a)$, hence $a^tX\sim N(a^t\mu,a^t\Sigma a)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Marginals, conditionals, and linear projections of Gaussian vectors remain Gaussian.\\
+\hlt{Key Insight}: Gaussian calculus is affine calculus plus Schur complements.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:one-variable-transformation-cdf-method} \hlt{One-Variable Transformations}\\
+Let $Y=r(X)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Discrete pushforward}: if $X$ is discrete, then $f_Y(y)=\mathbb{P}(Y=y)=\mathbb{P}(X\in r^{-1}(\{y\}))=\sum_{x:r(x)=y}f_X(x)$.
+\item \hlt{CDF method}: if $X$ has density $f_X$, set $A_y\defeq\{x:r(x)\leq y\}$, compute $F_Y(y)=\mathbb{P}(Y\leq y)=\int_{A_y}f_X(x)\,dx$, and use $f_Y(y)=F_Y'(y)$ where differentiable.
+\item \hlt{Monotone change of variables}: if $r$ is strictly monotone with inverse $s=r^{-1}$,\\
+then $f_Y(y)=f_X(s(y))|s'(y)|$ on $r(\operatorname{supp}X)$.
+\end{enumerate}
+\hlt{Key Insight}: The CDF method works because it translates the transformed event back into an event about $X$.
+\end{method}
+
+\begin{example} \label{ex:log-transform-exponential} \hlt{Log Transform of an Exponential Variable}\\
+Let $X\sim\operatorname{Exp}(1)$ and $Y=\log X$. Since $r(x)=\log x$ has inverse $s(y)=e^y$ with $s'(y)=e^y$, the change-of-variables formula gives $f_Y(y)=f_X(e^y)e^y=e^ye^{-e^y}$ for $y\in\R$.
+\end{example}
+
+\begin{example} \label{ex:square-transform-nonmonotone-uniform} \hlt{A Nonmonotone Square Transform}\\
+Let $X\sim\operatorname{Uniform}(-1,3)$ and $Y=X^2$. Since $f_X=1/4$ on $[-1,3]$, $r^{-1}(\{y\})\cap[-1,3]=\{-\sqrt y,\sqrt y\}$ for $0<y<1$ and $\{\sqrt y\}$ for $1<y<9$. Hence $f_Y(y)=1/(4\sqrt y)\mathbf{1}_{(0,1)}(y)+1/(8\sqrt y)\mathbf{1}_{(1,9)}(y)$.\\
+\hlt{Key Insight}: Non-one-to-one transformations require splitting the range into cases.
+\end{example}
+
+\begin{method} \label{meth:several-variable-transformation-cdf-method} \hlt{Several-Variable Transformations}\\
+For $Z=r(X,Y)$ with joint density $f_{X,Y}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sublevel set}: define $A_z\defeq\{(x,y):r(x,y)\leq z\}$.
+\item \hlt{CDF integral}: compute $F_Z(z)=\mathbb{P}(Z\leq z)=\iint_{A_z}f_{X,Y}(x,y)\,dx\,dy$.
+\item \hlt{Density}: differentiate where possible, $f_Z(z)=F_Z'(z)$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:sum-of-two-independent-uniforms} \hlt{Sum of Two Independent Uniforms}\\
+Let $X_1,X_2\sim\operatorname{Uniform}(0,1)$ be independent and $Y=X_1+X_2$.\\
+Since $f_{X_1,X_2}=\mathbf{1}_{[0,1]^2}$, $F_Y(y)$ is the area of $A_y=\{(x_1,x_2)\in[0,1]^2:x_1+x_2\leq y\}$,\\
+so $F_Y(y)=(y^2/2)\mathbf{1}_{[0,1]}(y)+(1-(2-y)^2/2)\mathbf{1}_{(1,2]}(y)+\mathbf{1}_{(2,\infty)}(y)$. Hence $f_Y(y)=y\mathbf{1}_{(0,1)}(y)+(2-y)\mathbf{1}_{(1,2)}(y)$.
+\end{example}
