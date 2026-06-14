@@ -93,6 +93,65 @@ placement, then inspect the live `parts/` files for local style and labels.
 - For substantive source pages, integrate only what the source supports and use
   existing notes for cross-references before adding duplicate theory.
 
+## Content Moving Loop Reference
+
+For content-moving prompts, the migration phases are complete. Use this workflow
+only for small, user-approved cleanup batches inside the active `parts/` tree:
+moving misplaced content, splitting overlarge subsection files, correcting local
+input order, or removing duplicate ownership that exists within `parts/`.
+
+The old repo-level LaTeX `sections/` tree has been removed. Prompt language
+about using legacy `sections/` files as source material is historical unless the
+user provides such material separately. Do not recreate `sections/`, do not move
+content into `sections/`, and do not search for migration-phase source files
+that no longer exist.
+
+Batch selection:
+
+- Propose exactly one coherent mathematical topic batch at a time.
+- Prefer one to three files and complete logical blocks.
+- Prefer moving or splitting a whole subsection file over extracting tiny spans.
+- Avoid batches larger than roughly 300--500 lines unless the user approves.
+- Do not apply a move until the user approves the exact proposed batch.
+- If no high-confidence move candidate exists, say so and ask for a new cursor
+  or scope.
+
+For each proposed batch, report:
+
+- Topic name.
+- Current `parts/...` source file or block.
+- Proposed `parts/...` destination file.
+- Whether the destination exists or needs a minimal new subsection/section
+  skeleton.
+- Why the destination is the first natural owner according to the ownership
+  table.
+- Whether the move improves logical order, reference-before-label order, or
+  duplicate ownership.
+- Any affected labels, references, figures, and local `\input{...}` edges.
+- Any ambiguous candidates under `Needs Human Review`.
+- Proposed lightweight validation commands.
+
+When applying an approved move:
+
+- Preserve mathematical content verbatim unless the user explicitly requests
+  rewriting.
+- Preserve labels, theorem environments, equations, examples, methods, proofs,
+  and source comments.
+- Create only the minimal target files needed for the approved batch.
+- Update only affected `overview.tex` files and local input order.
+- Remove or disconnect the old overlapping active source only after the target
+  is included and lightweight validation passes.
+- Re-check affected references, labels, and figure placement.
+- Stop after the batch and ask whether to continue, revise, or stop.
+
+Figure placement:
+
+- Keep figures close to the text that introduces or uses them.
+- Avoid creating consecutive figure blocks with no explanatory text unless they
+  form a single intentional comparison.
+- If a move would separate a figure from its explanation, include the connecting
+  text in the same batch or list the case under `Needs Human Review`.
+
 ## Formalization Loop Reference
 
 For formalization-loop prompts, use the active `parts/` tree as the only LaTeX
