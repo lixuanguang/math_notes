@@ -6,9 +6,13 @@ files are moved by this document.
 
 Important migration constraint: the migration is content-copying, not rewriting. Each target
 part/section/subsection file should receive copied mathematical content with wording, labels,
-proofs, and displays preserved. After copied content is verified in the new `parts/` location,
-remove the overlapping content from the old repo-level `sections/...` source files so there is
-only one active owner for each piece of mathematics.
+proofs, and displays preserved. Each migration phase follows one numbered target part from the
+Target Structure and Source Mapping below. After each copied content span is verified in its new
+`parts/` location, immediately remove the overlapping body from the old repo-level
+`sections/...` source file so there is only one active owner for that piece of mathematics.
+If the old `sections/...` file is still needed by the current active include graph, replace the
+removed body with a temporary forwarding `\input{parts/...}` or a short placeholder comment, not
+with duplicated mathematical content.
 
 ## Goals
 
@@ -18,7 +22,7 @@ only one active owner for each piece of mathematics.
 - Use `parts/` as the canonical new content tree.
 - Keep part, section, and subsection content controlled by separate files.
 - Preserve mathematical content while copying; do not rewrite mathematics during migration.
-- Remove overlapping old content after verifying the copied target content.
+- Remove overlapping old content immediately after verifying each copied target span.
 - Remove all book-body `\subsubsection` headings by making target subsection files the deepest visible level.
 - Avoid duplicate ownership: first occurrence develops the theory; later occurrences apply it and cross-reference it.
 
@@ -957,9 +961,10 @@ Notes:
 
 These files are too large or too internally heterogeneous for long-term maintenance. During the
 migration, copy their relevant source spans into the target numbered subsection files under
-`parts/`. Preserve mathematical wording, labels, proofs, and displays while extracting. After the
-target subsection files compile, delete the overlapping copied spans from the old `sections/...`
-source files so there is no duplicate active content.
+`parts/`. Preserve mathematical wording, labels, proofs, and displays while extracting. After each
+target span is copied, audit its inbound and outbound references, verify local compilation or
+lightweight structural checks, then delete the overlapping copied span from the old `sections/...`
+source file in the same migration step so there is no duplicate active content.
 
 | Source | Current Role | Migration Action |
 | --- | --- | --- |
@@ -1078,12 +1083,21 @@ Use these rules while extracting content into `parts/`:
 4. If a current file has no explicit internal headings but is large, split it into numbered subsection files using natural theorem/definition blocks as boundaries.
 5. Do not create a `\subsection` with only one siblingless child. Either keep the section body in `overview.tex` while short, or create two or more subsection files.
 6. Keep theorem/definition labels stable.
-7. After a target subsection file compiles, remove the overlapping copied span from the old `sections/...` source file.
-8. Never leave the same mathematical body active in both `parts/...` and `sections/...`.
+7. For every copied content span, collect the labels it defines and the labels/files it references.
+8. Before deleting the old span, check inbound references to the moved labels and outbound references from the moved span:
+   - inbound: `\ref`, `\eqref`, `\autoref`, `\cref`, `\Cref`, `\pageref`, and `\nameref` occurrences elsewhere still resolve to the preserved labels;
+   - outbound: referenced labels already exist in an active owner or are intentionally forward references;
+   - file references: figure, TikZ, and `\input` paths used by the moved span still resolve.
+9. After the copied target span passes reference and structural validation, immediately remove the overlapping body from the old `sections/...` source file. If the old file remains in the active include graph before global rewiring, replace the removed body with a temporary forwarding `\input{parts/...}` or a short placeholder comment.
+10. Never leave the same mathematical body active in both `parts/...` and `sections/...`.
 
-## Migration Phases
+## Migration Phases by Target Part
 
-### Phase 0: Baseline Audit
+Phase numbering follows the numbered Target Structure and Source Mapping exactly. Phase 1
+migrates Part 1, Phase 2 migrates Part 2, and so on. Structure setup is preflight work, not a
+numbered migration phase.
+
+### Phase 0: Baseline and Skeleton Preflight
 
 - Compile the current document once and save the log.
 - Record current heading depth:
@@ -1098,79 +1112,209 @@ rg -n '^\\(part|section|subsection|subsubsection|paragraph)\{' sections
 rg -n '\\input\{' math.tex sections
 ```
 
-### Phase 1: Create the `parts/` Skeleton
+- Record duplicate labels before migration:
 
-- Add the repo-level `parts/` directory.
-- Add numbered named part folders.
-- In each part folder, add `overview.tex` containing the `\part{...}` heading and inputs for section overviews.
-- In each part folder, add numbered named section folders.
-- In each section folder, add `overview.tex` containing the `\section{...}` heading and inputs for numbered subsection files.
-- Create numbered subsection files only when content is copied into them.
-
-Example:
-
-```text
-parts/02_structural_linear_algebra/
-  overview.tex
-  01_vector_spaces_and_linear_structure/
-    overview.tex
-    01_vector_spaces.tex
-    02_subspaces_and_spans.tex
+```sh
+rg -n '\\label\{' sections | sort
 ```
 
-### Phase 2: Extract Linear Algebra Into `parts/`
+- Ensure the repo-level `parts/` skeleton exists for all sixteen target parts and their section folders.
+- Create numbered subsection files only when content is actually copied into them.
 
-- Create:
-  - `parts/02_structural_linear_algebra/`
-  - `parts/03_geometric_spectral_linear_algebra/`
-  - `parts/04_matrix_analysis_numerical_linear_algebra/`
-- Copy content into numbered subsection files.
-- Delete overlapping copied spans from old `sections/linear_algebra/...` files after verification.
-- Retire old linear algebra inputs only when all active content has a `parts/` owner.
+### Per-Phase Migration Loop
 
-### Phase 3: Extract Algebra and Algebraic Geometry Into `parts/`
+For each target part phase, process the part in the section order listed in the Target Structure
+and Source Mapping above. Work in small content batches, usually one target subsection or one
+short target section at a time.
 
-- Create:
-  - `parts/05_groups_rings_fields/`
-  - `parts/06_modules_multilinear_homological/`
-  - `parts/07_commutative_algebra/`
-  - `parts/08_algebraic_geometry/`
-- Copy content into numbered subsection files.
-- Separate rings from modules at the destination file level.
-- Delete overlapping copied spans from old algebra source files after verification.
+For each content batch:
 
-### Phase 4: Extract Analysis Into `parts/`
+1. Identify the target part, section, subsection file, source file, and exact source span.
+2. Inspect the copied span's outbound references: labels, figures, TikZ files, and nested inputs.
+3. Search for inbound references to labels defined by the copied span.
+4. Copy the mathematical body into the target `parts/...` file, preserving wording, labels,
+   proofs, displays, and figure placement.
+5. Wire the target section `overview.tex` to the new subsection file.
+6. Validate the affected target files:
+   - every new `\input` target resolves;
+   - every moved figure/TikZ path resolves;
+   - every outbound label reference resolves or is intentionally forward;
+   - every inbound reference still points to the preserved label;
+   - no formal theorem/proposition/lemma/corollary/method depends on a remark or example.
+7. Remove the copied mathematical body from the old `sections/...` source file immediately after
+   validation. If the old file is still active before the global `math.tex` rewire, replace the
+   removed body with a temporary forwarding `\input{parts/...}` or with a short placeholder comment.
+8. Re-check the affected old and new files for duplicate active content, duplicate labels in the
+   active include path, and unresolved references.
+9. Record the next cursor within the same target part.
 
-- Create:
-  - `parts/09_real_topological_analysis/`
-  - `parts/10_calculus_series_approximation/`
-  - `parts/11_measure_integration_functional_analysis/`
-- Copy content into numbered subsection files.
-- Move overlapping cardinality material from analysis into the Mathematical Foundations ownership model by extracting unique content or replacing with cross-references.
-- Delete overlapping copied spans from old analysis source files after verification.
+Do not start the next numbered phase until the current target part's mapped current sources are
+migrated, removed from old owners, or explicitly marked as deferred/rebuild-only.
 
-### Phase 5: Extract Probability, Dynamics, and Numerics Into `parts/`
+### Phase 1: Migrate Part 1, Mathematical Foundations
 
-- Create:
-  - `parts/12_probability_stochastic_systems/`
-  - `parts/13_dynamical_pde_systems/`
-  - `parts/14_numerical_stochastic_computation/`
-- Copy content into numbered subsection files.
-- Delete overlapping copied spans from old probability, dynamics, PDE, and numerical source files after verification.
+- Target: `parts/01_mathematical_foundations/`.
+- Source mapping: `sections/foundational_prerequisites.tex` and
+  `sections/mathematical_language_sets_and_logic/...`.
+- Also inspect `sections/analysis/foundations_of_analysis/1_2_cardinality_and_infinite_sets.tex`;
+  move unique cardinality/choice content here or replace the old analysis body with cross-references.
+- Completion condition: foundational content has a single active owner under Part 1, and later
+  analysis/algebra files reference it instead of redeveloping it.
 
-### Phase 6: Rebuild Deferred Statistics and Learning
+### Phase 2: Migrate Part 2, Structural Linear Algebra
 
-- Create:
-  - `parts/15_statistics_time_series/`
-  - `parts/16_statistical_learning_deep_learning/`
-- Populate these parts only from new specialized sources, not from the retired old statistics/learning tree.
-- Keep their prerequisites as cross-references to probability, measure theory, stochastic processes, optimization, and numerical computation where possible.
-- Compile each rebuilt section before adding it to the active include graph.
+- Target: `parts/02_structural_linear_algebra/`.
+- Source mapping: `sections/linear_algebra/structural_linear_algebra/...`.
+- Split large source files according to the Structural Linear Algebra target subsections.
+- Completion condition: structural vector spaces, maps, direct sums, block operations, duality,
+  and finite-dimensional TVS material have Part 2 owners; old structural source bodies are removed
+  or temporarily forward to Part 2.
 
-### Phase 7: Clean Up and Validate
+### Phase 3: Migrate Part 3, Geometric and Spectral Linear Algebra
 
-- Remove stale old inputs only after new `parts/` owners compile.
-- Delete empty or legacy old files/directories only after reviewing unique content and confirming no active inputs reference them.
+- Target: `parts/03_geometric_spectral_linear_algebra/`.
+- Source mapping: geometric and spectral linear algebra sources listed in Part 3 above.
+- Keep geometry, inner products, forms, eigenstructure, polynomial operator structure, canonical
+  forms, and spectral theorems in this part.
+- Completion condition: later matrix-analysis, functional-analysis, and module sections reference
+  this part instead of duplicating spectral development.
+
+### Phase 4: Migrate Part 4, Matrix Analysis and Numerical Linear Algebra
+
+- Target: `parts/04_matrix_analysis_numerical_linear_algebra/`.
+- Source mapping: matrix-analysis and numerical-linear-algebra sources listed in Part 4 above.
+- Extract large matrix-class, invariant, decomposition, norm, conditioning, and stability files
+  into numbered subsection files.
+- Completion condition: matrix algorithms and matrix-analysis results have Part 4 owners, with
+  spectral theory referenced from Part 3 where appropriate.
+
+### Phase 5: Migrate Part 5, Groups, Rings, and Fields
+
+- Target: `parts/05_groups_rings_fields/`.
+- Source mapping:
+  - `sections/algebraic_structures/algebraic_language_and_categories/...`;
+  - `sections/algebraic_structures/group_theory/...`;
+  - `sections/algebraic_structures/rings_ideals_and_modules/3_1_rings_and_ideals.tex`;
+  - `sections/algebraic_structures/rings_ideals_and_modules/3_2_polynomial_rings_and_factorization.tex`;
+  - `sections/algebraic_structures/fields_and_galois_theory/...`.
+- Separate rings from modules at the destination file level: rings stay in Part 5; modules move in
+  Phase 6.
+- Completion condition: group/ring/field content has Part 5 owners, and old algebra source bodies
+  are removed or forward to Part 5.
+
+### Phase 6: Migrate Part 6, Modules, Multilinear Algebra, and Homological Methods
+
+- Target: `parts/06_modules_multilinear_homological/`.
+- Source mapping:
+  - `sections/algebraic_structures/rings_ideals_and_modules/3_3_modules.tex`;
+  - `sections/algebraic_structures/rings_ideals_and_modules/3_4_structure_theorems.tex`;
+  - `sections/algebraic_structures/rings_ideals_and_modules/3_5_linear_operators_as_modules.tex`;
+  - `sections/algebraic_structures/rings_ideals_and_modules/3_6_associative_algebras.tex`;
+  - `sections/algebraic_structures/tensor_exterior_and_homological_algebra/...`.
+- Split module theory, PID structure, operator modules, associative algebras, tensor products,
+  exterior/symmetric algebras, and homology according to the Part 6 target sections.
+- Completion condition: all module and multilinear material has Part 6 owners, and old mixed
+  rings/modules source bodies no longer duplicate Part 5 or Part 6 content.
+
+### Phase 7: Migrate Part 7, Commutative Algebra
+
+- Target: `parts/07_commutative_algebra/`.
+- Source mapping: `sections/algebraic_geometry_commutative_algebra/commutative_algebra/...`.
+- Keep commutative ring theory here; reference Part 6 for general module foundations when possible.
+- Completion condition: spectra, localization, Noetherian commutative algebra, dimension,
+  integral dependence, regularity, and singularity-preview material have Part 7 owners.
+
+### Phase 8: Migrate Part 8, Algebraic Geometry
+
+- Target: `parts/08_algebraic_geometry/`.
+- Source mapping: `sections/algebraic_geometry_commutative_algebra/algebraic_geometry/...`.
+- Keep affine/projective geometry, morphisms, schemes, sheaves, smoothness, divisors, line bundles,
+  and curves here; reference Part 7 for commutative algebra.
+- Completion condition: algebraic geometry content has Part 8 owners and old geometry source bodies
+  are removed or forward to Part 8.
+
+### Phase 9: Migrate Part 9, Real and Topological Analysis
+
+- Target: `parts/09_real_topological_analysis/`.
+- Source mapping: analysis foundations, number systems, order/completeness, metric, topological,
+  compactness, connectedness, and continuity sources listed in Part 9 above.
+- Move cardinality/choice overlap to Part 1 instead of duplicating it here.
+- Completion condition: real and topological foundations have Part 9 owners and reference Part 1
+  for set-theoretic foundations.
+
+### Phase 10: Migrate Part 10, Calculus, Series, and Approximation
+
+- Target: `parts/10_calculus_series_approximation/`.
+- Source mapping: one-variable calculus, Riemann/Stieltjes/improper integration, series, uniform
+  convergence, power series, Fourier, and approximation sources listed in Part 10 above.
+- Keep classical calculus and approximation here; abstract measure integration belongs to Part 11.
+- Completion condition: calculus and approximation source bodies have Part 10 owners.
+
+### Phase 11: Migrate Part 11, Measure, Integration, and Functional Analysis
+
+- Target: `parts/11_measure_integration_functional_analysis/`.
+- Source mapping: measure theory, Lebesgue integration, product measure, Radon-Nikodym,
+  differentiation, `Lp` spaces, Banach/Hilbert, and operator-theoretic functional analysis sources
+  listed in Part 11 above.
+- Keep probability-specific specialization in Part 12.
+- Completion condition: measure/integration/functional-analysis material has Part 11 owners and
+  probability notes cross-reference it rather than redeveloping it.
+
+### Phase 12: Migrate Part 12, Probability and Stochastic Systems
+
+- Target: `parts/12_probability_stochastic_systems/`.
+- Source mapping: probability, conditional expectation, convergence, limit theorem, process,
+  Markov, martingale, stochastic calculus, and SDE sources listed in Part 12 above.
+- Keep measure foundations in Part 11 and reference them here.
+- Completion condition: probability and stochastic-system material has Part 12 owners.
+
+### Phase 13: Migrate Part 13, Dynamical and PDE Systems
+
+- Target: `parts/13_dynamical_pde_systems/`.
+- Source mapping: ODE, dynamical systems, qualitative dynamics, PDE, weak solution, and evolution
+  equation sources listed in Part 13 above.
+- Keep numerical discretization and stochastic computation in Part 14.
+- Completion condition: dynamics and PDE theory have Part 13 owners.
+
+### Phase 14: Migrate Part 14, Numerical and Stochastic Computation
+
+- Target: `parts/14_numerical_stochastic_computation/`.
+- Source mapping: numerical ODE/PDE, discretization, Monte Carlo, stochastic simulation, MCMC,
+  sequential Monte Carlo, stochastic optimization, and computational stability sources listed in
+  Part 14 above.
+- Reference linear algebra, analysis, probability, and dynamics rather than redeveloping them.
+- Completion condition: numerical and stochastic computation material has Part 14 owners.
+
+### Phase 15: Rebuild Part 15, Statistics and Time Series
+
+- Target: `parts/15_statistics_time_series/`.
+- Source mapping: no active current source tree; the old statistics/time-series material has been
+  retired.
+- Populate this part only from new specialized statistics and time-series sources.
+- Keep prerequisites as cross-references to probability, measure theory, stochastic processes,
+  optimization, and numerical computation.
+- Completion condition: rebuilt statistics/time-series content compiles section by section before
+  becoming active.
+
+### Phase 16: Rebuild Part 16, Statistical Learning and Deep Learning
+
+- Target: `parts/16_statistical_learning_deep_learning/`.
+- Source mapping: no active current source tree; the old learning material has been retired.
+- Populate this part only from new specialized statistical-learning, machine-learning, and
+  deep-learning sources.
+- Avoid duplicating Part 15's inference foundations; introduce statistical tools only when they are
+  used for prediction, representation, or learning-system analysis.
+- Completion condition: rebuilt learning/deep-learning content compiles section by section before
+  becoming active.
+
+### Final Activation and Global Validation
+
+- Replace the body include sequence in `math.tex` with the Target Include Order once target parts
+  have active owners.
+- Remove temporary forwarding `sections/...` shims after their corresponding `parts/...` owners are
+  directly active.
+- Delete empty or legacy old files/directories only after reviewing unique content and confirming no
+  active inputs reference them.
 - Rebuild the PDF.
 - Search for remaining deep headings in the active tree:
 
@@ -1196,11 +1340,14 @@ Migration checklist:
 - Substantial sections are controlled through numbered subsection files.
 - Copied mathematical content preserves labels, proofs, prose, equations, and theorem/definition statements unless a later explicit editing pass is requested.
 - Old `sections/...` files no longer contain content that has already been copied into active `parts/...` files.
+- Any old `sections/...` file that remains active after content removal is only a temporary forwarding shim or placeholder.
+- Each migrated content span has inbound references, outbound references, and file/figure inputs checked before the old body is removed.
 - Cross-references compile without unresolved labels.
 - Figure paths still resolve.
 - Lean mirror files under `MathNotes/sections` are updated only after the LaTeX structure stabilizes.
 
 Later cleanup checklist:
 
+- No temporary forwarding shim remains once `math.tex` directly uses the target `parts/...` include order.
 - No active `\subsubsection` headings remain.
 - No section has exactly one forced subsection.
