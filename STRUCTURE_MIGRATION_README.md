@@ -39,9 +39,10 @@ The proposed replacement for the body include sequence in `math.tex` is:
 \input{parts/10_calculus_series_approximation/overview}
 \input{parts/11_measure_integration_functional_analysis/overview}
 \input{parts/12_probability_stochastic_systems/overview}
-\input{parts/13_dynamical_pde_numerical_systems/overview}
-\input{parts/14_statistics_time_series/overview}
-\input{parts/15_statistical_learning_deep_learning/overview}
+\input{parts/13_dynamical_pde_systems/overview}
+\input{parts/14_numerical_stochastic_computation/overview}
+\input{parts/15_statistics_time_series/overview}
+\input{parts/16_statistical_learning_deep_learning/overview}
 ```
 
 Each part folder owns one `overview.tex` containing the `\part{...}` heading and inputs for its
@@ -94,8 +95,9 @@ File responsibilities:
 | Real/metric/topological foundations | Real and Topological Analysis | Reference from measure/probability |
 | Riemann/Stieltjes and classical calculus | Calculus, Series, and Approximation | Reference from measure/dynamics |
 | Abstract measure and Lebesgue integration | Measure, Integration, and Functional Analysis | Probability specializes it |
-| Probability spaces and limit theorems | Probability and Stochastic Systems | Statistics/time series use it |
-| PDE and numerical methods | Dynamical, PDE, and Numerical Systems | Statistics/ML avoid redeveloping algorithms |
+| Probability spaces and limit theorems | Probability and Stochastic Systems | Future inference chapters can specialize it |
+| ODEs, dynamical systems, and PDE | Dynamical and PDE Systems | Reference analysis, functional analysis, and probability where needed |
+| Numerical algorithms and stochastic computation | Numerical and Stochastic Computation | Apply linear algebra, analysis, probability, and dynamics without redeveloping them |
 | Inference for data-generating processes | Statistics and Time Series | Learning uses risk/prediction language |
 | Prediction, representation, learned models | Statistical Learning and Deep Learning | Statistics remains inference-focused |
 
@@ -761,12 +763,12 @@ Notes:
 - Probability should specialize measure theory, not repeat it.
 - Stochastic processes and stochastic calculus can remain within one part for now because stochastic calculus files are currently short.
 
-### 13. Dynamical, PDE, and Numerical Systems
+### 13. Dynamical and PDE Systems
 
 Target:
 
 ```tex
-\part{Dynamical, PDE, and Numerical Systems}
+\part{Dynamical and PDE Systems}
 \section{Dynamical Systems and ODEs}
   \subsection{ODE Foundations and Flows}
   \subsection{Linear Systems and Stability}
@@ -783,6 +785,24 @@ Target:
   \subsection{Sobolev Spaces for PDE}
   \subsection{Weak Solutions and Variational Methods}
   \subsection{Evolution Equations}
+```
+
+Current sources:
+
+- `sections/dynamical_pde_systems/dynamical_systems_and_odes/*`
+- `sections/dynamical_pde_systems/pde_and_evolution_equations/*`
+
+Notes:
+
+- Keep analytic existence, uniqueness, stability, weak-solution, and evolution-equation theory in this part.
+- Numerical methods for ODEs, PDEs, and SDEs belong to Part 14, with cross-references back here for the equations being discretized.
+
+### 14. Numerical and Stochastic Computation
+
+Target:
+
+```tex
+\part{Numerical and Stochastic Computation}
 \section{Numerical Analysis}
   \subsection{Floating Point and Error Analysis}
   \subsection{Nonlinear Equations and Optimization Basics}
@@ -807,178 +827,131 @@ Target:
 
 Current sources:
 
-- `sections/dynamical_pde_systems/dynamical_systems_and_odes/*`
-- `sections/dynamical_pde_systems/pde_and_evolution_equations/*`
 - `sections/numerical_computational_mathematics/numerical_analysis/*`
 - `sections/numerical_computational_mathematics/numerical_differential_systems/*`
 - `sections/numerical_computational_mathematics/monte_carlo_and_stochastic_computation/*`
 
 Notes:
 
-- This is intentionally a broad systems/computation part.
-- If PDE or numerical material grows substantially, split later into `Dynamical and PDE Systems` and `Numerical and Stochastic Computation`.
+- Keep numerical approximation, discretization, simulation, Monte Carlo, and computational stability here.
+- Reference Part 13 for the continuous dynamical/PDE/SDE systems being approximated, and Part 12 for probabilistic foundations.
 
-### 14. Statistics and Time Series
+### 15. Statistics and Time Series (Deferred Rebuild)
 
 Target:
 
 ```tex
 \part{Statistics and Time Series}
-\section{Statistical Models and Estimation}
-  \subsection{Models, Estimators, and Confidence}
-  \subsection{Empirical Distributions and Functionals}
-  \subsection{Bootstrap and Resampling}
-\section{Inference, Testing, and Decision Theory}
-  \subsection{Parametric Inference}
-  \subsection{Hypothesis Testing and p-values}
-  \subsection{Statistical Decision Theory}
+\section{Statistical Models and Experiments}
+  \subsection{Statistical Models, Experiments, and Identifiability}
+  \subsection{Dominated Families, Likelihoods, and Scores}
+  \subsection{Sufficiency, Ancillarity, and Exponential Families}
+\section{Estimation Theory}
+  \subsection{Estimators, Risk, Bias, Variance, and Consistency}
+  \subsection{Minimum-Variance and Cramer-Rao Theory}
+  \subsection{Maximum Likelihood and M-Estimation}
+  \subsection{Asymptotic Normality and Delta Methods}
+  \subsection{Robust and Semiparametric Estimation}
+\section{Hypothesis Testing and Confidence}
+  \subsection{Neyman-Pearson Theory}
+  \subsection{Likelihood Ratio, Score, and Wald Tests}
+  \subsection{Confidence Sets, Duality, and Coverage}
+  \subsection{Multiple Testing and Error Rates}
+\section{Decision Theory}
+  \subsection{Loss, Risk, Bayes Risk, and Minimax Risk}
+  \subsection{Admissibility, Complete Classes, and Invariance}
+  \subsection{Shrinkage and Empirical Bayes Methods}
 \section{Bayesian Inference}
-\section{Nonparametric Statistics}
-  \subsection{Histograms}
-  \subsection{Kernel Density Estimation}
-  \subsection{Nonparametric Regression}
-  \subsection{Orthogonal Series Density Estimation}
-  \subsection{Orthogonal Series Regression}
-  \subsection{Wavelet Smoothing}
+  \subsection{Priors, Posteriors, and Predictive Distributions}
+  \subsection{Conjugate Families and Hierarchical Models}
+  \subsection{Bayesian Asymptotics and Bernstein-von Mises Theory}
+  \subsection{Posterior Computation and Diagnostics}
+\section{Nonparametric and High-Dimensional Statistics}
+  \subsection{Empirical Processes and Concentration}
+  \subsection{Density and Regression Function Estimation}
+  \subsection{Smoothing, Regularization, and Model Complexity}
+  \subsection{Sparse and High-Dimensional Estimation}
 \section{Time Series Models}
-  \subsection{Time Series Foundations}
-  \subsection{Stationary Time Series}
-  \subsection{ARMA and ARIMA Structure}
-  \subsection{Spectral Methods}
-  \subsection{Nonlinear and Volatility Models}
-  \subsection{Long Memory and Multiscale Structure}
-\section{Sequential Inference and Filtering}
-  \subsection{State-Space Models}
-  \subsection{Sequential Inference and Filtering}
+  \subsection{Stationarity, Dependence, and Ergodicity}
+  \subsection{ARMA, ARIMA, and Linear Prediction}
+  \subsection{Spectral Analysis}
+  \subsection{State-Space Models and Kalman Filtering}
+  \subsection{Nonlinear, Volatility, and Long-Memory Models}
+\section{Sequential Inference and Resampling}
+  \subsection{Bootstrap, Jackknife, and Permutation Methods}
+  \subsection{Sequential Testing and Online Estimation}
+  \subsection{Particle Filters and Sequential Monte Carlo}
 ```
 
 Current sources:
 
-- `sections/statistical_learning_systems/statistical_learning/1_1_statistical_inference_foundations.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_11_nonparametric_curve_estimation.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_12_orthogonal_series_and_wavelet_smoothing.tex`
-- `sections/statistical_learning_systems/time_series_and_sequential_systems/*`
-
-Suggested split for `1_1_statistical_inference_foundations.tex`:
-
-- `\section{Statistical Models and Estimation}`
-  - `\subsection{Models, Estimators, and Confidence}`
-  - `\subsection{Empirical Distributions and Functionals}`
-  - `\subsection{Bootstrap and Resampling}`
-- `\section{Inference, Testing, and Decision Theory}`
-  - `\subsection{Parametric Inference}`
-  - `\subsection{Hypothesis Testing and p-values}`
-  - `\subsection{Statistical Decision Theory}`
-- `\section{Bayesian Inference}`
-
-Suggested split for nonparametric files:
-
-- `\section{Nonparametric Statistics}`
-  - `\subsection{Histograms}`
-  - `\subsection{Kernel Density Estimation}`
-  - `\subsection{Nonparametric Regression}`
-  - `\subsection{Orthogonal Series Density Estimation}`
-  - `\subsection{Orthogonal Series Regression}`
-  - `\subsection{Wavelet Smoothing}`
-
-Time series mapping:
-
-- `3_1_time_series_foundations.tex` -> `\section{Time Series Models}`
-- `3_2_arma_and_arima_structure.tex` -> `\section{Time Series Models}`
-- `3_3_spectral_methods.tex` -> `\section{Time Series Models}` or a subsection inside it if expanded
-- `3_4_state_space_models.tex` -> `\section{Sequential Inference and Filtering}`
-- `3_5_nonlinear_and_volatility_models.tex` -> `\section{Time Series Models}`
-- `3_6_long_memory_and_multiscale_structure.tex` -> `\section{Time Series Models}`
-- `3_7_sequential_inference_and_filtering.tex` -> `\section{Sequential Inference and Filtering}`
+- No active current source tree. The previous statistics, time-series, and learning material has been retired.
 
 Notes:
 
-- The legacy `sections/time_series_analysis/*` tree duplicates active time-series material. Extract any unique content into this part, then retire the legacy tree after review.
+- Rebuild this part from specialized statistics and time-series sources before adding it back to the active document.
+- Use the existing probability, measure, functional-analysis, and stochastic-process material by reference instead of redeveloping prerequisites.
+- Keep inference, decision, and uncertainty quantification here; move prediction-system and representation-learning material to Part 16.
 
-### 15. Statistical Learning and Deep Learning
+### 16. Statistical Learning and Deep Learning (Deferred Rebuild)
 
 Target:
 
 ```tex
 \part{Statistical Learning and Deep Learning}
-\section{Statistical Learning Theory}
-  \subsection{Risk Minimization}
-  \subsection{Generalization Theory}
-\section{Classical Learning Models}
-  \subsection{Linear and Generalized Linear Models}
-  \subsection{Linear Regression}
+\section{Learning Problems and Risk}
+  \subsection{Prediction, Loss Functions, and Risk}
+  \subsection{Empirical Risk Minimization}
+  \subsection{Surrogate Losses and Calibration}
+  \subsection{Bias-Variance and Approximation-Estimation Tradeoffs}
+\section{Generalization Theory}
+  \subsection{Uniform Convergence and VC Theory}
+  \subsection{Rademacher Complexity and Covering Numbers}
+  \subsection{Concentration and Stability}
+  \subsection{PAC-Bayes and Information-Theoretic Bounds}
+\section{Classical Supervised Learning}
+  \subsection{Linear Prediction and Generalized Linear Models}
   \subsection{Regularization and Model Selection}
-  \subsection{Regression Model Selection}
-  \subsection{Kernels and Nonlinear Methods}
-  \subsection{Trees, Ensembles, and Boosting}
-\section{Graphical and Causal Models}
-  \subsection{Association and Independence Inference}
-  \subsection{Undirected Graphs and Log-Linear Models}
-  \subsection{Counterfactual Causal Inference}
-  \subsection{Directed Graphs and Interventions}
+  \subsection{Kernel Methods and RKHS Theory}
+  \subsection{Support Vector Machines and Margin Methods}
+  \subsection{Trees, Forests, and Boosting}
+\section{Unsupervised and Latent-Variable Learning}
+  \subsection{Clustering and Mixture Models}
+  \subsection{Dimension Reduction and Manifold Learning}
+  \subsection{Matrix Factorization and Topic Models}
+  \subsection{Representation Learning Objectives}
+\section{Probabilistic Graphical and Causal Learning}
+  \subsection{Directed and Undirected Graphical Models}
+  \subsection{Inference and Learning in Graphical Models}
+  \subsection{Causal Graphs, Interventions, and Identifiability}
+  \subsection{Counterfactuals and Policy Evaluation}
 \section{Neural Network Foundations}
-  \subsection{Deep Feedforward Networks}
-  \subsection{Cost Functions and Output Units}
-  \subsection{Hidden Units and Architecture Design}
-  \subsection{Universal Approximation and Backpropagation}
-\section{Training, Regularization, and Representation Learning}
+  \subsection{Network Architectures and Expressivity}
+  \subsection{Backpropagation and Automatic Differentiation}
   \subsection{Optimization for Deep Learning}
-  \subsection{Regularization and Generalization}
-  \subsection{Representation Learning}
+  \subsection{Regularization, Normalization, and Generalization}
 \section{Modern Deep Models}
-  \subsection{Sequence Models}
+  \subsection{Convolutional and Geometric Architectures}
+  \subsection{Sequence Models and Attention}
+  \subsection{Transformers and Large-Scale Training}
   \subsection{Generative Models}
-  \subsection{Convolutional Neural Networks}
-  \subsection{Modern Architecture and Systems View}
+  \subsection{Reinforcement Learning and Decision Systems}
+\section{Learning Systems and Evaluation}
+  \subsection{Data Splitting, Validation, and Benchmarking}
+  \subsection{Robustness, Shift, and Distributional Uncertainty}
+  \subsection{Interpretability, Fairness, and Safety}
+  \subsection{Deployment, Monitoring, and Feedback Loops}
 ```
 
 Current sources:
 
-- `sections/statistical_learning_systems/statistical_learning/1_2_risk_minimization.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_3_linear_and_generalized_linear_models.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_3a_linear_regression_source_integration.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_4_regularization_and_model_selection.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_4a_regression_model_selection_source_integration.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_5_kernels_and_nonlinear_methods.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_6_trees_ensembles_and_boosting.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_7_generalization_theory.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_8_association_and_independence_inference.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_8a_undirected_graphs_and_loglinear_models.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_9_counterfactual_causal_inference.tex`
-- `sections/statistical_learning_systems/statistical_learning/1_10_directed_graphs_and_interventions.tex`
-- `sections/statistical_learning_systems/deep_learning_and_representation_systems/*`
-
-Suggested mapping:
-
-- `\section{Statistical Learning Theory}`
-  - `1_2_risk_minimization.tex`
-  - `1_7_generalization_theory.tex`
-- `\section{Classical Learning Models}`
-  - `1_3_linear_and_generalized_linear_models.tex`
-  - `1_3a_linear_regression_source_integration.tex`
-  - `1_4_regularization_and_model_selection.tex`
-  - `1_4a_regression_model_selection_source_integration.tex`
-  - `1_5_kernels_and_nonlinear_methods.tex`
-  - `1_6_trees_ensembles_and_boosting.tex`
-- `\section{Graphical and Causal Models}`
-  - `1_8_association_and_independence_inference.tex`
-  - `1_8a_undirected_graphs_and_loglinear_models.tex`
-  - `1_9_counterfactual_causal_inference.tex`
-  - `1_10_directed_graphs_and_interventions.tex`
-- `\section{Neural Network Foundations}`
-  - `2_1_neural_network_foundations.tex`
-- `\section{Training, Regularization, and Representation Learning}`
-  - `2_2_optimization_for_deep_learning.tex`
-  - `2_3_regularization_and_generalization.tex`
-  - `2_4_representation_learning.tex`
-- `\section{Modern Deep Models}`
-  - `2_5_sequence_models.tex`
-  - `2_6_generative_models.tex`
-  - `2_7_modern_architecture_and_systems_view.tex`
+- No active current source tree. The previous statistics, time-series, and learning material has been retired.
 
 Notes:
 
-- The legacy `sections/machine_learning/*` tree is not included by `math.tex`. Compare it against the active statistical/deep-learning material and extract unique items into this part before retiring it.
+- Rebuild this part from specialized statistical-learning, machine-learning, and deep-learning sources before adding it back to the active document.
+- Avoid duplicating Part 15's inference foundations; introduce statistical tools here only when they are used for prediction, representation, or learning-system analysis.
+- Keep optimization details that are broadly numerical in Part 14, and reference them here when training algorithms use those tools.
 
 ## Files That Need Content Extraction
 
@@ -996,9 +969,6 @@ source files so there is no duplicate active content.
 | `sections/linear_algebra/geometric_linear_algebra/2_5_metric_vector_spaces_and_bilinear_forms.tex` | Forms, Witt theory, symplectic and classical groups | Extract into bilinear/quadratic forms, decompositions, symplectic, classical groups |
 | `sections/analysis/differential_and_geometric_analysis/4_1_one_variable_differentiation_and_integration.tex` | Differentiation, Riemann, Stieltjes, improper, curves | Extract into calculus and Stieltjes/integration subsection files |
 | `sections/linear_algebra/spectral_linear_algebra/3_2_polynomial_structure_of_operators.tex` | Characteristic/minimal polynomials plus primary decomposition | Extract by polynomial evaluation, characteristic/minimal polynomials, generalized eigenspaces |
-| `sections/statistical_learning_systems/statistical_learning/1_1_statistical_inference_foundations.tex` | Statistics survey file | Extract into estimation, inference/testing/decision, Bayesian inference |
-| `sections/statistical_learning_systems/statistical_learning/1_11_nonparametric_curve_estimation.tex` | Several nonparametric topics | Extract existing subsubsection content into subsection files |
-| `sections/statistical_learning_systems/statistical_learning/1_12_orthogonal_series_and_wavelet_smoothing.tex` | Orthogonal and wavelet methods | Extract existing subsubsection content into subsection files |
 
 ## Subsection Requirement Review
 
@@ -1034,7 +1004,9 @@ Current-style ordering should be preserved or restored in these areas:
 | Measure, Integration, and Functional Analysis | Product Measures, Radon-Nikodym, and Differentiation | Prefer separate subsections, and split into separate sections if this grows |
 | Probability and Stochastic Systems | Probability Spaces, Random Variables, and Expectation | Prefer probability spaces/random variables and expectation as separate subsections |
 | Probability and Stochastic Systems | Probabilistic Convergence and Limit Theorems | Prefer modes of convergence, laws of large numbers, central limit theory, and probability on metric spaces as separate subsections or sections |
-| Dynamical, PDE, and Numerical Systems | Partial Differential Equations | Prefer first-order, elliptic, parabolic, hyperbolic, Sobolev, weak solutions, and evolution equations as subsections while short, sections if expanded |
+| Dynamical and PDE Systems | Partial Differential Equations | Prefer first-order, elliptic, parabolic, hyperbolic, Sobolev, weak solutions, and evolution equations as subsections while short, sections if expanded |
+| Numerical and Stochastic Computation | Numerical Differential Systems | Combines numerical ODEs, geometric integration, PDE discretizations, numerical SDEs, and computational stability |
+| Numerical and Stochastic Computation | Monte Carlo and Stochastic Computation | Combines Monte Carlo, MCMC, sequential Monte Carlo, rare-event simulation, and stochastic optimization |
 
 Likely sections that should be represented by subsection files during migration:
 
@@ -1079,16 +1051,16 @@ Likely sections that should be represented by subsection files during migration:
 | Probability and Stochastic Systems | Probabilistic Convergence and Limit Theorems | Combines convergence modes, LLN, and CLT |
 | Probability and Stochastic Systems | Stochastic Processes | Combines several process classes |
 | Probability and Stochastic Systems | Stochastic Calculus and SDEs | Will need subsections once currently short placeholder files are expanded |
-| Statistics and Time Series | Statistical Models and Estimation | Existing statistics file has natural subsubsections |
-| Statistics and Time Series | Inference, Testing, and Decision Theory | Existing statistics file has natural subsubsections |
-| Statistics and Time Series | Nonparametric Statistics | Existing nonparametric files already have natural subsubsections |
-| Statistics and Time Series | Time Series Models | Existing time-series files already have natural subsubsections/placeholders |
-| Statistical Learning and Deep Learning | Statistical Learning Theory | Combines risk and generalization |
-| Statistical Learning and Deep Learning | Classical Learning Models | Combines several model families |
-| Statistical Learning and Deep Learning | Graphical and Causal Models | Combines graphical, causal, and intervention material |
-| Statistical Learning and Deep Learning | Neural Network Foundations | Existing deep-learning file has natural subsubsection material |
-| Statistical Learning and Deep Learning | Training, Regularization, and Representation Learning | Combines optimization, regularization, and representations |
-| Statistical Learning and Deep Learning | Modern Deep Models | Combines sequence, generative, CNN/modern architecture material |
+| Statistics and Time Series | Statistical Models and Experiments | Deferred rebuild; separates model language from estimation and testing |
+| Statistics and Time Series | Estimation Theory | Deferred rebuild; substantial enough for estimator, efficiency, asymptotic, and robust-estimation subsections |
+| Statistics and Time Series | Hypothesis Testing and Confidence | Deferred rebuild; tests, confidence, and multiplicity need separate navigation |
+| Statistics and Time Series | Decision Theory and Bayesian Inference | Deferred rebuild; decision-theoretic and Bayesian material should remain visible |
+| Statistics and Time Series | Nonparametric, High-Dimensional, and Time-Series Methods | Deferred rebuild; broad methods sections need internal topic files |
+| Statistical Learning and Deep Learning | Learning Problems and Risk | Deferred rebuild; core prediction language should be isolated from statistical inference |
+| Statistical Learning and Deep Learning | Generalization Theory | Deferred rebuild; complexity, concentration, and stability tools need separate subsections |
+| Statistical Learning and Deep Learning | Classical Supervised and Unsupervised Learning | Deferred rebuild; model families should not be collapsed into one large file |
+| Statistical Learning and Deep Learning | Probabilistic Graphical and Causal Learning | Deferred rebuild; graph, inference, and intervention topics need separate navigation |
+| Statistical Learning and Deep Learning | Neural Network Foundations and Modern Deep Models | Deferred rebuild; architectures, training, and evaluation should be separated |
 
 Sections that are currently short or placeholder-like can remain without subsection files until they grow.
 Examples include much of the current dynamical/PDE/numerical tree, the short algebraic-geometry files,
@@ -1138,26 +1110,15 @@ rg -n '\\input\{' math.tex sections
 Example:
 
 ```text
-parts/14_statistics_time_series/
+parts/02_structural_linear_algebra/
   overview.tex
-  01_statistical_models_and_estimation/
+  01_vector_spaces_and_linear_structure/
     overview.tex
-    01_models_estimators_and_confidence.tex
-    02_empirical_distributions_and_functionals.tex
-    03_bootstrap_and_resampling.tex
+    01_vector_spaces.tex
+    02_subspaces_and_spans.tex
 ```
 
-### Phase 2: Move Statistics and Learning First
-
-This is the highest-value migration because it currently has the deepest headings.
-
-- Copy each target subsection's content into the corresponding `parts/14_statistics_time_series/...` or `parts/15_statistical_learning_deep_learning/...` file.
-- Convert current `\subsubsection{...}` boundaries into target subsection files.
-- After each copied subsection compiles, delete the overlapping content span from the old `sections/statistical_learning_systems/...` file.
-- Once all content in an old source file has been extracted, remove that old file from active old inputs or replace it with a short migration note.
-- Review `sections/time_series_analysis/*` and `sections/machine_learning/*` for unique content before extracting or retiring them.
-
-### Phase 3: Extract Linear Algebra Into `parts/`
+### Phase 2: Extract Linear Algebra Into `parts/`
 
 - Create:
   - `parts/02_structural_linear_algebra/`
@@ -1167,7 +1128,7 @@ This is the highest-value migration because it currently has the deepest heading
 - Delete overlapping copied spans from old `sections/linear_algebra/...` files after verification.
 - Retire old linear algebra inputs only when all active content has a `parts/` owner.
 
-### Phase 4: Extract Algebra and Algebraic Geometry Into `parts/`
+### Phase 3: Extract Algebra and Algebraic Geometry Into `parts/`
 
 - Create:
   - `parts/05_groups_rings_fields/`
@@ -1178,7 +1139,7 @@ This is the highest-value migration because it currently has the deepest heading
 - Separate rings from modules at the destination file level.
 - Delete overlapping copied spans from old algebra source files after verification.
 
-### Phase 5: Extract Analysis Into `parts/`
+### Phase 4: Extract Analysis Into `parts/`
 
 - Create:
   - `parts/09_real_topological_analysis/`
@@ -1188,13 +1149,23 @@ This is the highest-value migration because it currently has the deepest heading
 - Move overlapping cardinality material from analysis into the Mathematical Foundations ownership model by extracting unique content or replacing with cross-references.
 - Delete overlapping copied spans from old analysis source files after verification.
 
-### Phase 6: Extract Probability, Dynamics, and Numerics Into `parts/`
+### Phase 5: Extract Probability, Dynamics, and Numerics Into `parts/`
 
 - Create:
   - `parts/12_probability_stochastic_systems/`
-  - `parts/13_dynamical_pde_numerical_systems/`
+  - `parts/13_dynamical_pde_systems/`
+  - `parts/14_numerical_stochastic_computation/`
 - Copy content into numbered subsection files.
 - Delete overlapping copied spans from old probability, dynamics, PDE, and numerical source files after verification.
+
+### Phase 6: Rebuild Deferred Statistics and Learning
+
+- Create:
+  - `parts/15_statistics_time_series/`
+  - `parts/16_statistical_learning_deep_learning/`
+- Populate these parts only from new specialized sources, not from the retired old statistics/learning tree.
+- Keep their prerequisites as cross-references to probability, measure theory, stochastic processes, optimization, and numerical computation where possible.
+- Compile each rebuilt section before adding it to the active include graph.
 
 ### Phase 7: Clean Up and Validate
 
@@ -1210,7 +1181,7 @@ rg -n '^\\subsubsection|^\\paragraph' math.tex parts sections
 - Search for stale active old paths:
 
 ```sh
-rg -n 'sections/(linear_algebra|analysis|algebraic_structures|algebraic_geometry_commutative_algebra|statistical_learning_systems|machine_learning|time_series_analysis)' math.tex parts sections
+rg -n 'sections/(linear_algebra|analysis|algebraic_structures|algebraic_geometry_commutative_algebra)' math.tex parts sections
 ```
 
 ## Validation Checklist
@@ -1233,18 +1204,3 @@ Later cleanup checklist:
 
 - No active `\subsubsection` headings remain.
 - No section has exactly one forced subsection.
-- Legacy `sections/machine_learning` and `sections/time_series_analysis` content is either extracted into `parts/` or deliberately retired.
-
-## Suggested First PR Scope
-
-For the first migration PR, do only:
-
-1. Add `parts/14_statistics_time_series/` and `parts/15_statistical_learning_deep_learning/`.
-2. Add part `overview.tex` files and numbered section folders with section `overview.tex` files.
-3. Extract `1_1_statistical_inference_foundations.tex` into numbered target subsection files, preserving content.
-4. Extract nonparametric and orthogonal-series content into numbered target subsection files, preserving content.
-5. Remove the extracted overlapping spans from the old `sections/statistical_learning_systems/...` source files.
-6. Rewire only the old `Statistical and Learning Systems` include to the new `parts/` includes.
-7. Compile and confirm the new structure builds.
-
-This gives the biggest readability improvement while keeping the blast radius modest.
