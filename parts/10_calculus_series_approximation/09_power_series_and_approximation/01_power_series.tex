@@ -1,0 +1,148 @@
+\subsection{Power Series}
+
+% **Role:** convergence of functions and analytic approximation.
+%
+% Power series, Taylor series, analytic functions, Weierstrass approximation, Stone--Weierstrass.
+
+
+Power series are controlled infinite polynomials, and approximation is uniform closure. This subsection covers radii, Taylor structure, Abel behavior, Weierstrass, Stone--Weierstrass, and elementary analytic functions.
+
+\begin{motivation} \label{mot:power-series-as-controlled-infinite-polynomials} \hlt{Power Series as Controlled Infinite Polynomials}\\
+Power-series manipulations rest on uniform convergence: Definition \ref{def:series-and-partial-sums}, Theorems \ref{thm:power-series-radius-convergence}, \ref{thm:weierstrass-m-test}, and \ref{thm:uniform-derivative-convergence}.
+\end{motivation}
+
+\begin{definition} \label{def:power-approx-fourier-core-source-todo}\label{def:power-approx-core-objects} \hlt{Core Objects: Power Series, Approximation, and Gamma}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A real \hlt{power series about $a$} is $\sum\limits_{n=0}^{\infty}c_n(x-a)^n$; a local representation of $f$ by one makes $f$ \hlt{analytic} at $a$.
+\item A \hlt{polynomial approximant} to $f$ on a compact set $K$ is a polynomial $P$ chosen so that $\norm{f-P}_{\infty,K}$ is small.
+\item A function algebra is a collection closed under addition, multiplication, and scalar multiplication; Stone--Weierstrass asks when such algebras are uniformly dense in $C(K)$.
+\item For $x>0$, the \hlt{gamma function} is $\Gamma(x)\defeq\int_0^\infty t^{x-1}e^{-t}\,dt$ when the improper integral converges.
+\end{enumerate}
+\hlt{Key Insight}: Power series are local analytic objects; approximation theorems turn algebraic families into dense function families; $\Gamma$ extends factorials by integration.
+\end{definition}
+
+\begin{definition} \label{def:power-series-radius-basic} \hlt{Power Series and Radius of Convergence}\\
+Given a complex sequence $(c_n)$, the series $\sum\limits_{n=0}^{\infty}c_nz^n$ is a \hlt{power series}. If $\alpha\defeq\limsup\limits_{n\to\infty}\sqrt[n]{\abs{c_n}}$, define $R\defeq1/\alpha$, with $R=+\infty$ when $\alpha=0$ and $R=0$ when $\alpha=+\infty$. The number $R$ is the \hlt{radius of convergence}.
+\end{definition}
+
+\begin{theorem} \label{thm:power-series-radius-convergence} \hlt{Convergence Inside the Circle}\\
+For $\sum c_nz^n$, radius $R$: converge if $\abs{z}<R$, diverge if $\abs{z}>R$; boundary $\abs{z}=R$ is undecided.
+\begin{proof}
+For $a_n=c_nz^n$, $\limsup\limits_{n\to\infty}\sqrt[n]{\abs{a_n}}=\abs{z}\limsup\limits_{n\to\infty}\sqrt[n]{\abs{c_n}}=\frac{\abs{z}}{R}$, with extended meaning if $R=0$ or $R=+\infty$.\\
+If $\abs{z}<R$, this value is $<1$; if $\abs{z}>R$, it is $>1$. Apply Theorem \ref{thm:root-test}.\\
+\hlt{Structural Commentary}: Radius controls the interior and exterior, not the boundary.\\
+\hlt{Key Insight}: The root test is the radius-of-convergence theorem in disguise.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:power-series-boundary-dirichlet} \hlt{A Boundary Test for Power Series}\\
+If $\sum c_nz^n$ has radius $1$, $c_n\downarrow0$, and $c_n\geq0$, then it converges for $\abs{z}=1$, except possibly at $z=1$.
+\begin{proof}
+For $\abs{z}=1$ and $z\neq1$, put $a_n=z^n$ and $b_n=c_n$.\\
+The partial sums of $\sum z^n$ are bounded because $\abs{\sum\limits_{m=0}^{n}z^m}=\abs{\frac{1-z^{n+1}}{1-z}}\leq\frac{2}{\abs{1-z}}$. Theorem \ref{thm:dirichlet-test-series} applies.\\
+\hlt{Structural Commentary}: Boundary convergence away from $z=1$ comes from bounded geometric partial sums.\\
+\hlt{Key Insight}: Monotone coefficients can make the unit-circle boundary converge without absolute convergence.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:centered-power-series-translation} \hlt{Centered Series Are Translated Series}\\
+$\sum c_n(x-a)^n$ is $\sum c_ny^n$ with $y=x-a$. Its radius is $R$ from Definition \ref{def:power-series-radius-basic}: absolute convergence for $\abs{x-a}<R$, divergence for $\abs{x-a}>R$, and separate endpoint tests for $\abs{x-a}=R$.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/power_series_radius_interval.tikz}
+\caption{Inside $\abs{x-a}<R$: absolute and locally uniform; outside divergence; endpoints undecided.}
+  \label{fig:power-series-radius-interval}
+\end{figure}
+
+\begin{definition} \label{def:real-analytic-at-point} \hlt{Real Analytic at a Point}\\
+Let $E\subseteq\R$, let $f:E\to\R$, and let $a$ be an interior point of $E$. The function $f$ is \hlt{real analytic at $a$} if there are $r>0$ and coefficients $(c_n)$ such that $(a-r,a+r)\subseteq E$, the power series $\sum c_n(x-a)^n$ has radius of convergence at least $r$, and $f(x)=\sum\limits_{n=0}^{\infty}c_n(x-a)^n$ for all $x\in(a-r,a+r)$.\\
+If $E$ is open and $f$ is real analytic at every point of $E$, then $f$ is \hlt{real analytic on $E$}.
+\end{definition}
+
+\begin{theorem} \label{thm:power-series-uniform-differentiation} \hlt{Power Series May Be Differentiated Term by Term}\\
+Let $f(x)=\sum_{n\ge0}c_nx^n$ have radius $R>0$, and $I_R=(-R,R)$. For $0<\rho<R$, let $K_\rho=[-\rho,\rho]$, a closed interval contained in $I_R$. Then $\sum c_nx^n$ converges uniformly on each $K_\rho$, and $f\in C^\infty(I_R)$.\\
+For $k\ge1$, $f^{(k)}(x)=\sum\limits_{n\ge k}\frac{n!}{(n-k)!}c_nx^{n-k}$, $(x\in I_R)$, and $f^{(k)}(0)=k!c_k$.
+\begin{proof}
+For $0<\rho<R$, Theorem \ref{thm:power-series-radius-convergence} and the root-test argument give $\sum\abs{c_n}\rho^n<\infty$; hence the Weierstrass $M$-test, Theorem \ref{thm:weierstrass-m-test}, gives uniform convergence on $K_\rho$.\\
+Since $\sqrt[n]{n}\to1$, polynomial factors in $n$ do not change the radius. Thus each differentiated series converges uniformly on $K_\rho$, and Theorem \ref{thm:uniform-derivative-convergence}, iterated, gives the formula and $f^{(k)}(0)=k!c_k$.\\
+\hlt{Structural Commentary}: On each $K_\rho$, termwise operations are justified.\\
+\hlt{Key Insight}: The derivative coefficients grow only by polynomial factors, which do not change the radius.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:centered-power-series-termwise-calculus} \hlt{Termwise Calculus for Centered Power Series}\\
+Let $f(x)=\sum\limits_{n=0}^{\infty}c_n(x-a)^n$ have radius $R>0$. On $(a-R,a+R)$ the series converges locally uniformly and defines a continuous function. For $\abs{x-a}<R$, $f'(x)=\sum\limits_{n=1}^{\infty}n c_n(x-a)^{n-1}$ with local uniform convergence of the derivative series. If $[y,z]\subset(a-R,a+R)$, then $\int_y^z f(x)\,dx = \sum\limits_{n=0}^{\infty}c_n\frac{(z-a)^{n+1}-(y-a)^{n+1}}{n+1}$.
+\begin{proof}
+Set $g(u)=\sum c_nu^n$ and $u=x-a$.\\
+Theorem \ref{thm:power-series-uniform-differentiation} applied to $g$ on $(-R,R)$ gives convergence, continuity, derivative formula after translating.\\
+For $[y,z]\subset(a-R,a+R)$, choose $\rho<R$ with $[y,z]\subset[a-\rho,a+\rho]$; then Corollary \ref{cor:termwise-riemann-stieltjes-integration} lets the integrals of partial sums pass to the uniform limit.\\
+\hlt{Structural Commentary}: All local termwise operations happen on closed intervals strictly inside the radius.\\
+\hlt{Key Insight}: Translation reduces centered power series to the radius-$R$ theorem about $\sum c_nu^n$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:analytic-functions-smooth-and-unique-taylor} \hlt{Analytic Functions Are Their Taylor Series}\\
+If $f(x)=\sum c_n(x-a)^n$ near $a$, then $f$ is $C^\infty$, expansion $f$ is unique, and $f(x)=f(a)+\sum\limits_{n=1}^{\infty}\frac{f^{(n)}(a)}{n!}(x-a)^n$.
+\begin{proof}
+Corollary \ref{cor:centered-power-series-termwise-calculus}, applied repeatedly, gives $c_0=f(a)$ and $c_k=f^{(k)}(a)/k!$.\\
+Hence two expansions about $a$ have the same coefficients.\\
+\hlt{Structural Commentary}: Derivatives determine the local series.\\
+\hlt{Key Insight}: Once a power-series representation exists, the coefficients cannot vary.
+\end{proof}
+\end{corollary}
+
+\begin{perspective} \label{per:taylor-coefficients-need-a-remainder} \hlt{Taylor Coefficients Are Only the First Half}\\
+Power-series coefficients are forced by derivatives (Corollary \ref{cor:analytic-functions-smooth-and-unique-taylor}); for a function not already known to be analytic, proving the Taylor series represents the function needs a remainder estimate (Theorem \ref{thm:taylor-theorem-lagrange-remainder}).
+\end{perspective}
+
+\begin{theorem} \label{thm:abel-endpoint-theorem} \hlt{Abel's Endpoint Theorem}\\
+Let $s_n\defeq\sum_{k=0}^{n}c_k$ with $s_n\to s$, and let $f(x)=\sum_{n\ge0}c_nx^n$ on $(-1,1)$. Then $f(x)\to s$, for $x\to1^-$.
+\begin{proof}
+With $s_{-1}=0$, summation by parts, Theorem \ref{thm:summation-by-parts}, gives for $\abs{x}<1$, $f(x)=(1-x)\sum\limits_{n=0}^{\infty}s_nx^n$.\\
+Since $(1-x)\sum\limits_{n\ge0}x^n=1$, then $f(x)-s=(1-x)\sum\limits_{n\ge0}(s_n-s)x^n$. Choose $N$ so that $\abs{s_n-s}<\varepsilon/2$ for $n>N$.\\
+The tail is at most $\varepsilon/2$, and the finite part tends to $0$ after multiplication by $1-x$.\\
+\hlt{Structural Commentary}: Endpoint convergence becomes one-sided continuity.\\
+\hlt{Key Insight}: The factor $(1-x)$ averages the partial sums $s_n$ with geometric weights.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:abel-product-theorem} \hlt{Abel Product Theorem for Cauchy Products}\\
+Suppose $\sum a_n=A$, $\sum b_n=B$, $\sum c_n=C$, and $c_n=\sum\limits_{k=0}^{n}a_kb_{n-k}$. Then $C=AB$.
+\begin{proof}
+For $0\leq x<1$, set $f(x)\defeq\sum\limits_{n\ge0}a_nx^n$; $g(x)\defeq\sum\limits_{n\ge0}b_nx^n$; and $h(x)\defeq\sum\limits_{n\ge0}c_nx^n$.\\
+Since convergent series have bounded terms, $f,g,h$ converge absolutely for $\abs{x}<1$. Thus the Cauchy product gives $fg=h$ on $[0,1)$. By Theorem \ref{thm:abel-endpoint-theorem}, $f\to A$, $g\to B$, and $h\to C$ as $x\to1^-$. Hence $AB=C$.\\
+\hlt{Structural Commentary}: Prove $fg=h$ inside, then pass to $x=1$.\\
+\hlt{Key Insight}: Inside $\abs{x}<1$, the Cauchy product is safe; Abel then moves the identity to $x=1$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:power-series-reexpansion-and-identity} \hlt{Re-Expansion and Identity for Power Series}\\
+Let $f(x)=\sum_{n\ge0}c_nx^n$ have radius $R>0$, and set $S=(-R,R)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $a\in S$, then $f(x)=\sum\limits_{m\ge0}\frac{f^{(m)}(a)}{m!}(x-a)^m$, $(\abs{x-a}<R-\abs{a})$
+\item Let $F=\sum\limits_{n\ge0}a_nx^n$ and $G=\sum\limits_{n\ge0}b_nx^n$ on $S$.\\
+If $\mathcal{Z}_{F,G}\defeq\{x\in S:F(x)=G(x)\}$ has a limit point in $S$, then $a_n=b_n$ for all $n\ge0$, hence $F=G$ on $S$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write $x^n=((x-a)+a)^n$. If $\abs{x-a}+\abs{a}<R$, then $\sum\limits_{n\ge0}\abs{c_n}\bigl(\abs{x-a}+\abs{a}\bigr)^n<\infty$, so the resulting double sum may be rearranged. Theorem \ref{thm:power-series-uniform-differentiation} gives the coefficients $f^{(m)}(a)/m!$.
+\item Subtract the series and call the difference $f$. Let $Z=\{x\in S:f(x)=0\}$, and let $A$ be the set of limit points of $Z$ in $S$. Then $A\neq\emptyset$. For $x_0\in A$, part (i) gives $f(x)=\sum d_n(x-x_0)^n$.\\
+If $d_k$ were the first nonzero coefficient, then $f(x)=(x-x_0)^kg(x)$ with $g(x_0)\neq0$, contradicting $x_0\in A$. Hence $f=0$ near $x_0$, so $A$ is open. Also $S\setminus A$ is open; by connectedness, Theorem \ref{thm:connected-subsets-of-real-line-interval-property}, $A=S$. Since $Z$ is closed, $f=0$ on $S$, and evaluating derivatives at $0$ gives equality of coefficients.
+\end{enumerate}
+\hlt{Structural Commentary}: Power-series equality is local-to-global on an interval.\\
+\hlt{Key Insight}: A limit point of zeros forces all Taylor coefficients to vanish.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/polynomial_bump_kernel.tikz}
+  \caption{The normalized kernels $Q_n(t)=c_n(1-t^2)^n$ concentrate near $0$ while retaining integral $1$.}
+  \label{fig:polynomial-bump-kernel}
+\end{figure}
+

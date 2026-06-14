@@ -1,0 +1,66 @@
+\subsection{Inverse Function Theorem}
+
+% **Role:** calculus as local linearization plus global geometric integration.
+%
+% Inverse function theorem, implicit function theorem, rank theorem, local normal forms.
+
+\begin{theorem} \label{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} \hlt{Finite-Dimensional Linear Maps Are Lipschitz}\\
+Let $A\in\LL(\R^n,\R^m)$. Then $A$ is $\normop{A}$-Lipschitz: $\norm{A\x}_2\leq\normop{A}\norm{\x}_2$ for $\x\in\R^n$.\\
+If $A\in\LL(\R^n)$ is invertible, then $\frac{1}{\normop{A^{-1}}}\norm{\x}_2\leq\norm{A\x}_2\leq\normop{A}\norm{\x}_2$, so $A$ is a homeomorphism of $\R^n$.
+\begin{proof}
+The upper estimate follows from Definition \ref{def:operator-norm-rn-rm}: apply it to $\x/\norm{\x}_2$ when $\x\neq\ze$, while $\x=\ze$ is trivial. If $A$ is invertible, apply the same estimate to $A^{-1}$ with $\y=A\x$: $\norm{\x}_2=\norm{A^{-1}\y}_2\leq\normop{A^{-1}}\norm{A\x}_2$.\\
+Thus $A$ and $A^{-1}$ are continuous.\\
+\hlt{Structural Commentary}: Linear maps have finite stretch; invertible ones have positive lower stretch.\\
+\hlt{Key Insight}: The operator norm turns linear algebra into uniform metric estimates.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:invertible-operators-open-and-inversion-continuous} \hlt{Invertible Operators Form an Open Set}\\
+Let $\Omega\subseteq\LL(\R^n)$ be the set of invertible linear operators. If $A\in\Omega$, $B\in\LL(\R^n)$, $\normop{B-A}\,\normop{A^{-1}}<1$, then $B\in\Omega$. Consequently, $\Omega$ is open in $\LL(\R^n)$ and the map $A\mapsto A^{-1}$ is continuous on $\Omega$.
+\begin{proof}
+Put $\alpha=1/\normop{A^{-1}}$ and $\beta=\normop{B-A}$.\\
+For every $\x\in\R^n$, $\alpha\norm{\x}_2\leq \norm{A\x}_2 \leq \norm{(A-B)\x}_2+\norm{B\x}_2 \leq \beta\norm{\x}_2+\norm{B\x}_2$.\\
+Since $\beta<\alpha$, this shows $B\x\neq0$ for $\x\neq0$; hence $B$ is injective and therefore invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+Replacing $\x$ by $B^{-1}\y$ gives $\normop{B^{-1}}\leq(\alpha-\beta)^{-1}$.\\
+Finally, $B^{-1}-A^{-1}=B^{-1}(A-B)A^{-1}$, Proposition \ref{prop:spectral-norm-basic-properties} gives the continuity of inversion.\\
+\hlt{Structural Commentary}: Small operator-norm perturbations of an invertible map remain invertible.\\
+\hlt{Key Insight}: The inverse changes continuously because the difference of inverses factors through $A-B$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:linear-inverse-lower-bound} \hlt{Linear Inverse Estimate}\\
+For invertible $A\in\LL(\R^n)$, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} gives $c\norm{\h}_2\leq\norm{A\h}_2\leq\normop{A}\norm{\h}_2$; and $\qquad c\defeq\frac{1}{\normop{A^{-1}}}$.\\
+The inverse function theorem preserves this lower stretch under small derivative changes.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/linear_isomorphism_conorm.tikz}
+  \caption{Invertibility keeps $A(S^{n-1})$ a positive distance from $0$.}
+  \label{fig:linear-isomorphism-conorm}
+\end{figure}
+
+\begin{theorem} \label{thm:inverse-function-theorem-rn} \hlt{Inverse Function Theorem}\\
+Let $\f:E\subseteq\R^n\to\R^n$ be $C^1$, let $\a\in E$, and suppose $D\f(\a)$ is invertible. With $\b=\f(\a)$, $\f$ restricts to a bijection $U\to V$ between open neighborhoods of $\a$ and $\b$; inverse $\g:V\to U$ is $C^1$, and $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$, $\y\in V$.
+\begin{proof}
+Put $A=D\f(\a)$ and choose $0<\theta<1$.\\
+By continuity of $D\f$, choose $r>0$ with $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on this closed ball.\\
+For fixed $\y$, solutions of $\f(\x)=\y$ are fixed points of $\varphi_{\y}(\x)=\x+A^{-1}(\y-\f(\x))$.\\
+Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$. If $\norm{A^{-1}(\y-\b)}_2\leq(1-\theta)r$, then $\varphi_{\y}$ maps $\overline{B}_r(\a)$ into itself. Since $\overline{B}_r(\a)$ is a closed subset of complete $\R^n$, Proposition \ref{prop:basic-completeness-consequences} makes it complete.\\
+The contraction principle, Theorem \ref{thm:contraction-principle}, gives a unique $\x\in\overline{B}_r(\a)$ with $\f(\x)=\y$. Thus, after shrinking to open neighborhoods $U$ of $\a$ and $V$ of $\b$, $\f:U\to V$ is bijective with inverse $\g$.\\
+For $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$ in $V$, the same derivative bound gives $\norm{\h}_2\leq C\norm{\mathbf{k}}_2$ for a local constant $C$. Moreover $\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k} =-\bigl(D\f(\x)\bigr)^{-1}\bigl[\f(\x+\h)-\f(\x)-D\f(\x)\h\bigr]$.\\
+Since $\f$ is differentiable at $\x$ and $\norm{\h}_2=O(\norm{\mathbf{k}}_2)$, division by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=(D\f(\x))^{-1}$.\\
+Continuity of $D\g$ follows from continuity of $D\f$, continuity of $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.\\
+\hlt{Structural Commentary}: Local inversion is a contraction built from $A^{-1}$.\\
+\hlt{Key Insight}: Small derivative variation preserves local invertibility.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:local-diffeomorphism-open-map} \hlt{Local Diffeomorphisms Are Open}\\
+If $\f:E\subseteq\R^n\to\R^n$ is $C^1$ and $D\f$ is everywhere invertible, then $\f$ is an open map (locally one-to-one).
+\begin{proof}
+Let $W\subseteq E$ be open and let $\y\in\f(W)$. Choose $\x\in W$ with $\f(\x)=\y$. Applying Theorem \ref{thm:inverse-function-theorem-rn} to $\f|_W$ at $\x$ gives open neighborhoods $U\subseteq W$ of $\x$ and $V$ of $\y$ with $\f(U)=V$. Hence $V\subseteq\f(W)$, so $\y$ is interior to $\f(W)$. Since $\y$ was arbitrary, $\f(W)$ is open. Local one-to-one-ness is the same theorem applied pointwise.\\
+\hlt{Structural Commentary}: Openness is checked one image point at a time.\\
+\hlt{Key Insight}: A local inverse turns nearby domain points into a full image neighborhood.
+\end{proof}
+\end{corollary}
