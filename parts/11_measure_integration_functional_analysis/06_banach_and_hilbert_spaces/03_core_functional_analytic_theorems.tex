@@ -1,0 +1,64 @@
+\subsection{Core Functional Analytic Theorems}
+
+% **Role:** infinite-dimensional linear algebra powered by analysis.
+%
+% Hahn--Banach, uniform boundedness, open mapping, closed graph theorem.
+
+The core theorems explain why complete normed spaces behave rigidly under linear maps. Baire category turns pointwise control, surjectivity, and closed graphs into operator statements.
+
+\begin{theorem} \label{thm:hahn-banach-extension} \hlt{Hahn--Banach Extension Theorem}\\
+Let $\mathcal{X}$ be a real normed space, let $M\subseteq\mathcal{X}$ be a linear subspace, and let $p:\mathcal{X}\to\R$ be sublinear. If $\varphi:M\to\R$ is linear and $\varphi(x)\leq p(x)$ for all $x\in M$, then $\varphi$ extends to a linear functional $\Phi:\mathcal{X}\to\R$ with $\Phi(x)\leq p(x)$ for all $x\in\mathcal{X}$. In the normed complex form, every bounded functional on a subspace extends with the same norm.
+\end{theorem}
+
+\begin{theorem} \label{thm:positive-riesz-representation-c-interval} \hlt{Positive Riesz Representation on $C([a,b])$}\\
+Let $J=[a,b]$ and let $G\in C(J)^*$ be positive, i.e. $f\geq0$ on $J$ implies $G(f)\geq0$.\\
+Then $\exists$ a finite positive Borel measure $\gamma$ on $\R$ with $\operatorname{supp}\gamma\subseteq J$ s.t. $G(f)=\int_J f\,d\gamma$ $\forall f\in C(J)$.\\
+Moreover, $\normop{G}=G(\mathbf{1}_J)=\gamma(J)$.
+\begin{proof}
+For $a\leq t<b$ and $n$ large, set
+\begin{align}
+\varphi_{t,n}(s)\defeq
+\begin{cases}
+1, & a\leq s\leq t,\\
+n(t+1/n-s), & t<s<t+1/n,\\
+0, & t+1/n\leq s\leq b.
+\end{cases} \nonumber
+\end{align}
+Then $\varphi_{t,n}\downarrow \mathbf{1}_{[a,t]}$ pointwise, hence $G(\varphi_{t,n})$ decreases.\\
+Define $g(t)\defeq\lim_{n\to\infty}G(\varphi_{t,n})$; $g(t)=0$ for $t<a$; and $g(t)=G(\mathbf{1}_J)$ for $t \geq b$.\\
+Ramp comparisons give $g$ increasing and right-continuous.\\
+By Theorem \ref{thm:borel-stieltjes-measure-generation}, $g$ induces a finite Borel--Stieltjes measure $\gamma$ with $\operatorname{supp}\gamma\subseteq J$ and $\gamma(J)=g(b)=G(\mathbf{1}_J)$.\\
+Fix $f\in C(J)$ and $\varepsilon>0$. Choose $P:a=t_0<\cdots<t_m=b$ with oscillation $\omega_f(P)\leq\varepsilon$.\\
+Put $\Delta g_k\defeq g(t_k)-g(t_{k-1})$. For $n$ large, ramp increments $\varphi_{t_k,n}-\varphi_{t_{k-1},n}$ give continuous approximant $f_{P,n}$ whose $G$-increments approximate $\sum_k f(t_k)\Delta g_k$ within $\varepsilon$, while step approximant $s_P$ satisfies $\norm{f-s_P}_{L^1(\gamma)}\leq\varepsilon\gamma(J)$.\\
+Hence $\left|G(f)-\int_Jf\,d\gamma\right|\leq \varepsilon(2\normop{G}+1)$ after absorbing constants into $\varepsilon$. Letting $\varepsilon\downarrow0$ gives $G(f)=\int_Jf\,d\gamma$.\\
+Finally, positivity gives $\abs{G(f)}\leq G(\mathbf{1}_J)\norm{f}_\infty=\gamma(J)\norm{f}_\infty$, and $f=\mathbf{1}_J$ gives $\normop{G}\geq\gamma(J)$.\\
+\hlt{Structural Commentary}: Positivity turns ramp limits into interval masses, hence a Stieltjes measure.\\
+\hlt{Key Insight}: Ramps turn order on $C(J)$ into interval masses.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:riesz-representation-by-charges-conditional} \hlt{Signed Riesz Representation by a Charge}\\
+Let $J=[a,b]$ and let $G\in C(J)^*$ admit $G=G^+-G^-$, $G^\pm\in C(J)^*$; for $G^\pm\geq0$.\\
+Then $\exists$ a charge $\lambda:\mathcal{B}(\R)\to\R$ with $\operatorname{supp}\lambda\subseteq J$ such that $G(f)=\int_J f\,d\lambda$ $\forall f\in C(J)$.
+\begin{proof} By Theorem \ref{thm:positive-riesz-representation-c-interval}, $\exists$ finite positive Borel measures $\gamma^\pm$ with $\operatorname{supp}\gamma^\pm\subseteq J$; $G^\pm(f)=\int_J f\,d\gamma^\pm$ $\forall f\in C(J)$.\\
+Set $\lambda\defeq\gamma^+-\gamma^-$, i.e. $\lambda(E)\defeq\gamma^+(E)-\gamma^-(E)$ for $E\in\mathcal{B}(\R)$. Then $\lambda$ is a charge by Proposition \ref{prop:charges-linear-combinations-and-variation}, $\operatorname{supp}\lambda\subseteq J$, and $G(f)=G^+(f)-G^-(f)=\int_J f\,d\gamma^+-\int_J f\,d\gamma^-=\int_J f\,d\lambda$.\\
+\hlt{Structural Commentary}: Positive representations subtract to a charge representation.\\
+\hlt{Key Insight}: Signed representation is positive representation plus subtraction.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:uniform-boundedness-principle} \hlt{Uniform Boundedness Principle}\\
+Let $\mathcal{X}$ be Banach and let $\mathcal{Y}$ be normed. If $\mathcal{F}\subseteq\LL(\mathcal{X},\mathcal{Y})$ is pointwise bounded, meaning $\sup_{T\in\mathcal{F}}\norm{Tx}<\infty$ for every $x\in\mathcal{X}$, then $\sup_{T\in\mathcal{F}}\normop{T}<\infty$.
+\end{theorem}
+
+\begin{theorem} \label{thm:open-mapping-theorem} \hlt{Open Mapping Theorem}\\
+A surjective bounded linear map $T:\mathcal{X}\to\mathcal{Y}$ between Banach spaces is open. Equivalently, $T$ maps neighborhoods of $0$ onto neighborhoods of $0$.
+\end{theorem}
+
+\begin{theorem} \label{thm:closed-graph-theorem} \hlt{Closed Graph Theorem}\\
+Let $\mathcal{X}$ and $\mathcal{Y}$ be Banach spaces. A linear map $T:\mathcal{X}\to\mathcal{Y}$ is bounded if and only if its graph
+\[
+\Gamma(T)\defeq\{(x,Tx):x\in\mathcal{X}\}
+\]
+is closed in $\mathcal{X}\times\mathcal{Y}$.
+\end{theorem}

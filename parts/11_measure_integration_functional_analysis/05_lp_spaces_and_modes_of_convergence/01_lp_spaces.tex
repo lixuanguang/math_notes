@@ -1,0 +1,417 @@
+\subsection{Lp Spaces}
+
+% **Role:** modern integration and almost-everywhere analysis.
+%
+% Lp spaces, H\"older, Minkowski, completeness, density, duality, Riesz representation.
+
+Lebesgue spaces turn integrability into normed linear geometry. The essential point is that an integral norm cannot distinguish functions that differ only on null sets, so the actual vectors are almost-everywhere equivalence classes. Their bounded linear functionals are themselves represented by integration against functions in the conjugate space.
+
+% Source guide: The Elements of Integration, Chapter 6, Sections 6.1--6.16.
+\begin{definition} \label{def:norms-and-seminorms-lp-source} \hlt{Norms and Seminorms}\\
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}\in\{\R,\C\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{seminorm} is $N:\mathcal{V}\to[0,\infty)$ with $N(\alpha v)=\abs{\alpha}N(v)$ and $N(u+v)\leq N(u)+N(v)$ $\forall u,v\in\mathcal{V}$, $\alpha\in\mathbb{F}$.
+\item A \hlt{norm} is a seminorm with $N(v)=0\Longleftrightarrow v=0$.
+\item A norm $N$ induces $d_N(u,v)\defeq N(u-v)$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:coordinate-sequence-function-norms-seminorms} \hlt{Norms and Seminorms Before Quotienting}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item On $\mathbb{F}^n$, $\norm{u}_p\defeq(\sum_{j=1}^n\abs{u_j}^p)^{1/p}$ for $1\leq p<\infty$ and $\norm{u}_\infty\defeq\max_{1\leq j\leq n}\abs{u_j}$ are norms.\\
+Minkowski gives $\norm{u+v}_p\leq\norm{u}_p+\norm{v}_p$.
+\item On sequences, $\ell^p\defeq\{a:\sum_n\abs{a_n}^p<+\infty\}$ with $\norm{a}_p\defeq(\sum_n\abs{a_n}^p)^{1/p}$, and $\ell^\infty\defeq\{a:\sup_n\abs{a_n}<+\infty\}$ with $\norm{a}_\infty\defeq\sup_n\abs{a_n}$.
+\item On $B(X)$, $\norm{f}_\infty\defeq\sup_{x\in X}\abs{f(x)}$ is a norm. On $C[0,1]$, $N_0(f)\defeq\abs{f(0)}$ and $N_1(f)\defeq\sup_{0\leq x\leq1/2}\abs{f(x)}$ are seminorms. On $C^1[a,b]$, $N_D(f)\defeq\sup_{a\leq x\leq b}\abs{f'(x)}$ is a seminorm with kernel the constant functions.
+\end{enumerate}
+\hlt{Key Insight}: Seminorms become norms after quotienting out their zero directions.
+\end{example}
+
+\begin{remark} \label{rem:continuous-functions-integral-metric-crossref} \hlt{Integral Norm on Continuous Functions}\\
+On $C[0,1]$, $N(f)\defeq\int_0^1\abs{f(x)}\,dx$ is a norm: if $f(x_0)\neq0$, continuity gives $N(f)>0$. It is not complete, since continuous ramps can be Cauchy in $N$ and converge in $L^1$ to a discontinuous step function.
+\end{remark}
+
+\begin{definition} \label{def:general-lp-space-and-mean-convergence}\label{def:lp-and-linfty-lebesgue-spaces} \hlt{$L^p$ Spaces and Mean Convergence}\\
+Let $(X,\mathcal{M},\mu)$ be a measure space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $1\leq p<\infty$, the \hlt{$p$-integrable class} is $\mathscr{L}^p(\mu)\defeq\{f:X\to\mathbb{F}:f\text{ measurable},\ \int_X\abs{f}^p\,d\mu<+\infty\}$.
+\item The \hlt{$L^p$ space} and \hlt{$L^p$ norm} are $L^p(\mu)\defeq\mathscr{L}^p(\mu)/{=_{\mathrm{a.e.}}}$ and $\norm{f}_p\defeq(\int_X\abs{f}^p\,d\mu)^{1/p}$.
+\item \hlt{$L^p$ convergence}, or \hlt{mean convergence of order $p$}, means $f_n\to f\Longleftrightarrow\norm{f_n-f}_p\to0$.\\
+\hlt{$L^p$-Cauchy} means $\norm{f_m-f_n}_p\to0$ as $m,n\to\infty$.
+\item \hlt{Essentially bounded} means $\abs{f}\leq M$ a.e. for some $M<+\infty$; \hlt{$L^\infty(\mu)$} is the a.e.-quotient of such functions, with \hlt{essential sup norm} $\norm{f}_\infty\defeq\inf\{M\geq0:\abs{f}\leq M\text{ a.e.}\}=\inf_{\mu(N)=0}\sup_{x\in X\setminus N}\abs{f(x)}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:l1-seminorm-and-ae-quotient} \hlt{$L^1$ as a Quotient of a Seminorm}\\
+On $\mathscr{L}^1(\mu)$ set $N_\mu(f)\defeq\int_X\abs{f}\,d\mu$. Then $N_\mu$ is a seminorm and $N_\mu(f)=0\Longleftrightarrow f=0$ a.e.\\
+Hence $L^1(\mu)\defeq\mathscr{L}^1(\mu)/{=_{\mathrm{a.e.}}}$ with $\norm{[f]}_1\defeq\int_X\abs{f}\,d\mu$ is normed; write $f$ for $[f]$.
+\begin{proof}
+$\mathscr{L}^1(\mu)$ is linear since $\abs{af+bg}\leq\abs{a}\abs{f}+\abs{b}\abs{g}$. Hence $N_\mu(\alpha f)=\abs{\alpha}N_\mu(f)$ and $N_\mu(f+g)\leq N_\mu(f)+N_\mu(g)$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $N_\mu(f)=0$, set $E_n\defeq\{\abs{f}\geq1/n\}$.\\
+Then $(1/n)\mu(E_n)\leq\int_{E_n}\abs{f}\,d\mu\leq0$, so $\mu(E_n)=0$ and $\{f\neq0\}=\bigcup_nE_n$ is null.
+\item[$(\Leftarrow)$] If $f=0$ a.e., then $N_\mu(f)=\int_X\abs{f}\,d\mu=0$.
+\end{enumerate}
+The quotient kills exactly $\ker N_\mu$, so $\norm{\cdot}_1$ is well defined and definite.
+\hlt{Structural Commentary}: The seminorm kernel is exactly the a.e.-zero functions.\\
+\hlt{Key Insight}: Quotient by null differences before calling the integral a norm.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:complex-integrable-and-l2} \hlt{Complex Integrals and $L^2$}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $f=u+iv$, \hlt{complex measurability} means measurability of $u,v$.
+\item On $E\in\mathcal{M}$, \hlt{complex integrability} means $u,v\in\mathscr{L}^1(\mu)$ on $E$; set $\int_Ef\,d\mu\defeq\int_Eu\,d\mu+i\int_Ev\,d\mu$.
+\item \hlt{$L^2(\mu)$} consists of complex measurable $f$ with $\int_X\abs{f}^2\,d\mu<+\infty$, modulo a.e. equality; $\norm{f}_2\defeq(\int_X\abs{f}^2\,d\mu)^{1/2}$.
+\item The \hlt{$L^2$ inner product} is $\innerprod[L^2]{f,g}\defeq\int_Xf\overline{g}\,d\mu$; it induces $\norm{f}_2$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:complex-l1-absolute-integrability-and-dct} \hlt{Complex $L^1$ and Dominated Convergence}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For complex measurable $f$ on $E$, $f$ is integrable $\Longleftrightarrow \abs{f}\in\mathscr{L}^1(\mu)$ on $E$; then $\abs{\int_Ef\,d\mu}\leq\int_E\abs{f}\,d\mu$.
+\item If $f_n\to f$ a.e. on $E$ and $\abs{f_n}\leq g\in\mathscr{L}^1(\mu)$, then $f$ is integrable and $\int_Ef\,d\mu=\lim_n\int_Ef_n\,d\mu$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) Write $f=u+iv$. If $u,v\in\mathscr{L}^1$, then $\abs f\leq\abs u+\abs v$, so $\abs f\in\mathscr{L}^1$.
+\item[$(i)$] ($\Leftarrow$) If $\abs f\in\mathscr{L}^1$, then $\abs u,\abs v\leq\abs f$, so $u,v\in\mathscr{L}^1$ and $f$ is integrable.\\
+If $\int_Ef\,d\mu=re^{i\theta}$ and $h=e^{-i\theta}f$, then $\abs{\int_Ef\,d\mu}=r=\operatorname{Re}\int_Eh\,d\mu=\int_E\operatorname{Re}h\,d\mu\leq\int_E\abs h\,d\mu=\int_E\abs f\,d\mu$.
+\item[$(ii)$] Write $f_n=u_n+iv_n$ and $f=u+iv$. Since $\abs{u_n},\abs{v_n}\leq g$ and $u_n\to u$, $v_n\to v$ a.e., real DCT gives $\int_Eu_n\,d\mu\to\int_Eu\,d\mu$ and $\int_Ev_n\,d\mu\to\int_Ev\,d\mu$; hence the complex identity.
+\end{enumerate}
+\hlt{Structural Commentary}: Complex integration is two real integrals.\\
+\hlt{Key Insight}: Rotate the integral to make its value real and nonnegative before applying the real inequality.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:l2-schwarz-minkowski-and-completeness} \hlt{$L^2$ Geometry}\\
+For $f,g\in L^2(\mu)$,
+$\int_X\abs{fg}\,d\mu\leq\norm{f}_2\norm{g}_2$, $f+g\in L^2(\mu)$, and $\norm{f+g}_2\leq\norm{f}_2+\norm{g}_2$.\\
+Modulo equality a.e., $(L^2(\mu),\norm{\cdot}_2)$ is complete.
+\begin{proof}
+For $\lambda\in\mathbb R$, $0\leq Q(\lambda)\defeq\int_X(\abs f+\lambda\abs g)^2\,d\mu=\norm f_2^2+2\lambda\int_X\abs{fg}\,d\mu+\lambda^2\norm g_2^2$; hence $\Delta(Q)\leq0$ and Schwarz follows. Thus $\norm{f+g}_2^2\leq\int_X(\abs f+\abs g)^2\,d\mu\leq(\norm f_2+\norm g_2)^2$.\\
+Let $(f_n)$ be Cauchy. Choose $n_k\uparrow\infty$ so $m,n\geq n_k$ imply $\norm{f_m-f_n}_2\leq2^{-k}$, and set $h_N\defeq\sum_{k<N}\abs{f_{n_{k+1}}-f_{n_k}}$. Then $\norm{h_N}_2\leq\sum_{k<N}2^{-k}$, so Fatou gives $h\defeq\lim_N h_N\in L^2$; hence $f_{n_k}\to f$ a.e. for some $f$.\\
+For fixed $n$, Fatou gives $\norm{f-f_n}_2\leq\liminf_k\norm{f_{n_k}-f_n}_2$.\\
+The Cauchy property sends the right side to $0$ as $n\to\infty$, so $f_n\to f$ in $L^2$.\\
+\hlt{Structural Commentary}: $L^2$ is Hilbert-space geometry in measure form.\\
+\hlt{Key Insight}: The same Schwarz mechanism survives because the integral is positive and additive.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:young-inequality-for-holder} \hlt{Young's Inequality}\\
+If $A,B\geq0$, $1<p<\infty$, and $p^{-1}+q^{-1}=1$, then $AB\leq A^p/p+B^q/q$, with equality iff $A^p=B^q$.
+\begin{proof}
+If $AB=0$, the claim is immediate. For $A,B>0$, let $\alpha=1/p$.\\
+Since $\varphi(t)=\alpha t+1-\alpha-t^\alpha\geq0$ for $t\geq0$, with equality iff $t=1$, apply this to $t=A^p/B^q$ and multiply by $B^q$.\\
+$AB\leq A^p/p+B^q/q$, with equality iff $A^p=B^q$.\\
+\hlt{Structural Commentary}: Young's inequality is weighted AM--GM in conjugate exponents.\\
+\hlt{Key Insight}: Rescale to $A^p$ and $B^q$, then use convexity.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:holder-inequality-lp} \hlt{H\"older's Inequality}\\
+Let $1<p<\infty$ and $p^{-1}+q^{-1}=1$. Then $f\in L^p(\mu)$ and $g\in L^q(\mu)$ imply $fg\in L^1(\mu)$ and $\norm{fg}_1\leq\norm f_p\norm g_q$.
+\begin{proof}
+If $\norm f_p\norm g_q=0$, then $\abs f^p=0$ or $\abs g^q=0$ a.e., so $fg=0$ a.e.\\
+Otherwise set $A=\abs f/\norm f_p$ and $B=\abs g/\norm g_q$. Young gives $\abs{fg}/(\norm f_p\norm g_q)\leq A^p/p+B^q/q$.\\
+The right side lies in $L^1$, so $fg\in L^1$, and integration yields $\norm{fg}_1/(\norm f_p\norm g_q)\leq p^{-1}+q^{-1}=1$.\\
+\hlt{Structural Commentary}: Normalize both factors to unit $L^p$ and $L^q$ size.\\
+\hlt{Key Insight}: Products are controlled by conjugate powers.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:conjugate-indices-lp} \hlt{Conjugate Indices}\\
+For $p,q\in(1,\infty)$, $p$ and $q$ are \hlt{conjugate indices} if $p^{-1}+q^{-1}=1$, equivalently $p+q=pq$.\\
+The unique self-conjugate index is $p=q=2$.
+\end{definition}
+
+\begin{corollary} \label{cor:cauchy-schwarz-l2-integral} \hlt{Cauchy--Bunyakovsky--Schwarz in $L^2$}\\
+If $f,g\in L^2(\mu)$, then $fg\in L^1(\mu)$ and $\abs{\int_Xfg\,d\mu}\leq\int_X\abs{fg}\,d\mu\leq\norm f_2\norm g_2$.
+\begin{proof}
+H\"older with $p=q=2$ gives $fg\in L^1$ and $\int_X\abs{fg}\,d\mu\leq\norm f_2\norm g_2$.\\
+The first inequality is the complex integral estimate applied to $fg$.\\
+\hlt{Structural Commentary}: The self-conjugate exponent turns H\"older into Cauchy--Schwarz.\\
+\hlt{Key Insight}: Pair two $L^2$ factors through the $2$--$2$ conjugacy.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:minkowski-inequality-lp} \hlt{Minkowski's Inequality}\\
+If $1\leq p<\infty$, then $f,h\in L^p(\mu)$ imply $f+h\in L^p(\mu)$ and $\norm{f+h}_p\leq\norm f_p+\norm h_p$.
+\begin{proof}
+For $p=1$, integrate $\abs{f+h}\leq\abs f+\abs h$. Let $p>1$ and $q=p/(p-1)$.\\
+Since $\abs{f+h}^p\leq2^{p-1}(\abs f^p+\abs h^p)$, $f+h\in L^p$ and $\abs{f+h}^{p-1}\in L^q$.\\
+From $\abs{f+h}^p\leq(\abs f+\abs h)\abs{f+h}^{p-1}$, H\"older gives $\norm{f+h}_p^p\leq(\norm f_p+\norm h_p)\norm{f+h}_p^{p-1}$.\\
+If $\norm{f+h}_p>0$, divide by $\norm{f+h}_p^{p-1}$; otherwise the inequality is trivial.\\
+\hlt{Structural Commentary}: H\"older turns the pointwise triangle inequality into a norm triangle inequality.\\
+\hlt{Key Insight}: Minkowski is exactly the closure and triangle estimate for $L^p$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:lp-normed-linear-space} \hlt{$L^p$ Is Normed}\\
+For $1\leq p<\infty$, $(L^p(\mu),\norm{\cdot}_p)$ is a normed linear space.
+\begin{proof}
+Pointwise operations descend to a.e.-classes, so $L^p(\mu)$ is linear. For $\alpha\in\mathbb F$, $\norm{\alpha f}_p=\abs{\alpha}\norm f_p$.\\
+If $\norm f_p=0$, then $\int_X\abs f^p\,d\mu=0$, hence $\abs f^p=0$ a.e. and $f=0$ in $L^p$. The triangle axiom is Minkowski.\\
+\hlt{Structural Commentary}: Quotienting by a.e. equality turns pointwise operations into vector-space operations.\\
+\hlt{Key Insight}: Minkowski supplies the nontrivial norm axiom.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:lp-cauchy-complete-language} \hlt{Completeness Language}\\
+A normed space $(V,\norm{\cdot})$ is \hlt{complete}, or a \hlt{Banach space}, if every Cauchy sequence $(x_n)\subset V$ has $x\in V$ with $\norm{x_n-x}\to0$. Thus $L^p(\mu)$ is complete iff every $L^p$-Cauchy sequence converges in $\norm{\cdot}_p$.
+\end{definition}
+
+\begin{lemma} \label{lem:lp-convergent-sequences-are-cauchy} \hlt{Convergent Implies Cauchy}\\
+If $f_n\to f$ in $L^p(\mu)$, then $(f_n)$ is Cauchy in $L^p(\mu)$.
+\begin{proof}
+Given $\varepsilon>0$, choose $N$ so $n\geq N$ implies $\norm{f_n-f}_p<\varepsilon/2$.\\
+Then $m,n\geq N$ gives $\norm{f_m-f_n}_p\leq\norm{f_m-f}_p+\norm{f-f_n}_p<\varepsilon$ by Minkowski.\\
+\hlt{Structural Commentary}: A convergent sequence has uniformly small tails around its limit.\\
+\hlt{Key Insight}: Use the common limit as the bridge between two tails.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:riesz-fischer-lp-banach} \hlt{Riesz--Fischer Completeness Theorem}\\
+For $1\leq p<\infty$, $(L^p(\mu),\norm{\cdot}_p)$ is complete.
+\begin{proof}
+Let $(f_n)$ be Cauchy. Choose $n_k\uparrow\infty$ so $m,n\geq n_k$ imply $\norm{f_m-f_n}_p\leq2^{-k}$, and set $g_k=f_{n_k}$.\\
+For $G_N\defeq\abs{g_1}+\sum_{k<N}\abs{g_{k+1}-g_k}$, Minkowski gives $\norm{G_N}_p\leq\norm{g_1}_p+\sum_{k<N}2^{-k}\leq\norm{g_1}_p+1$.\\
+Fatou gives $G\defeq\lim_NG_N\in L^p$. Hence $\sum_k\abs{g_{k+1}-g_k}<+\infty$ a.e., so $f\defeq g_1+\sum_k(g_{k+1}-g_k)$ exists a.e. and $g_k\to f$ a.e. Since $\abs{g_k-f}\leq G$ a.e., DCT gives $\norm{g_k-f}_p\to0$.\\
+Finally, for $\varepsilon>0$, choose $k$ with $\norm{g_k-f}_p<\varepsilon/2$ and then $n\geq n_k$ with $\norm{f_n-g_k}_p<\varepsilon/2$; hence $\norm{f_n-f}_p<\varepsilon$.\\
+\hlt{Structural Commentary}: A rapid subsequence converges a.e.; DCT gives norm convergence.\\
+\hlt{Key Insight}: Fatou finds the pointwise limit, dominated convergence brings it back to $L^p$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:linfty-essential-supremum-characterization} \hlt{Essential Supremum Test}\\
+If $f\in L^\infty(\mu)$, then $\abs f\leq\norm f_\infty$ a.e.; if $A<\norm f_\infty$, then $\mu(\{\abs f>A\})>0$.
+\begin{proof}
+For each $k$, $\abs f\leq\norm f_\infty+1/k$ a.e.; intersect the full-measure sets and let $k\to\infty$.\\
+If $A<\norm f_\infty$ and $\mu(\{\abs f>A\})=0$, then $A$ is an essential bound, contradiction.\\
+\hlt{Structural Commentary}: The essential supremum is the least a.e. upper bound.\\
+\hlt{Key Insight}: The sharp bound cannot be lowered on a full-measure set.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:linfty-banach-space} \hlt{$L^\infty$ Is Banach}\\
+$(L^\infty(\mu),\norm{\cdot}_\infty)$ is a Banach space.
+\begin{proof}
+Linearity is pointwise modulo a.e. equality; homogeneity is immediate. The essential bound test gives definiteness, and off the union of two null sets $\abs{f+g}\leq\norm f_\infty+\norm g_\infty$, giving the triangle axiom.\\
+Let $(f_n)$ be $L^\infty$-Cauchy. For each $m,n$, choose null $N_{mn}$ with $\abs{f_m-f_n}\leq\norm{f_m-f_n}_\infty$ on $X\setminus N_{mn}$, and put $N=\bigcup_{m,n}N_{mn}$. On $X\setminus N$, $(f_n)$ is uniformly Cauchy, hence uniformly converges to a measurable $f$.\\
+Thus $\norm{f_n-f}_\infty\to0$; for fixed $N_0$, $\abs f\leq\abs{f_{N_0}}+\sup_{n\geq N_0}\norm{f_n-f_{N_0}}_\infty$ a.e., so $f\in L^\infty$.\\
+\hlt{Structural Commentary}: $L^\infty$ completeness is uniform convergence after discarding one null set.\\
+\hlt{Key Insight}: Essential bounds become ordinary uniform bounds off a common null set.
+\end{proof}
+\end{theorem}
+
+% Source guide: The Elements of Integration, Chapter 6, Exercises 6.A--6.V, formalized selectively.
+\begin{proposition} \label{prop:simple-density-support-and-tails-lp} \hlt{Simple Approximation, Support, and Tails}\\
+Let $1\leq p<\infty$ and $f\in L^p(\mu)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Simple measurable functions are dense in $L^p(\mu)$; also in $L^\infty(\mu)$ for $\norm{\cdot}_\infty$.
+\item $\{\abs f>0\}$ is $\sigma$-finite.
+\item For $E_n\defeq\{\abs f\geq n\}$, $\mu(E_n)\to0$.
+\item For every $\varepsilon>0$, there is $E_\varepsilon\in\mathcal M$ with $\mu(E_\varepsilon)<+\infty$ such that $F\cap E_\varepsilon=\emptyset$ implies $\norm{f\mathbf 1_F}_p<\varepsilon$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose simple $s_n\to f$ a.e. with $\abs{s_n}\leq\abs f$ in the real case; treat real and imaginary parts separately in the complex case. Then $\abs{f-s_n}^p\leq2^p\abs f^p$, so DCT gives $\norm{f-s_n}_p\to0$. For $f\in L^\infty$, discard null $N$ with $\abs f\leq\norm f_\infty+\eta$ on $X\setminus N$, then quantize that bounded range.
+\item Put $A_k\defeq\{\abs f\geq1/k\}$. Then $\mu(A_k)\leq k^p\norm f_p^p<+\infty$ and $\{\abs f>0\}=\bigcup_kA_k$.
+\item $n^p\mu(E_n)\leq\int_{E_n}\abs f^p\,d\mu\leq\norm f_p^p$, hence $\mu(E_n)\leq n^{-p}\norm f_p^p\to0$.
+\item With $A_k$ as in (ii), $A_k\uparrow\{\abs f>0\}$ and $\abs f^p\mathbf 1_{X\setminus A_k}\to0$ a.e. DCT gives $\int_{X\setminus A_k}\abs f^p\,d\mu\to0$.\\
+Choose $E_\varepsilon=A_k$ with this integral $<\varepsilon^p$; if $F\cap E_\varepsilon=\emptyset$, then $\norm{f\mathbf 1_F}_p^p\leq\int_{X\setminus E_\varepsilon}\abs f^p\,d\mu<\varepsilon^p$.
+\end{enumerate}
+\hlt{Structural Commentary}: $L^p$ mass is simple-approximable and finite-piece capturable.\\
+\hlt{Key Insight}: Integrability turns level sets into finite-measure exhaustions.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:lp-layer-shell-criterion-finite-measure} \hlt{Shell Criterion on Finite Measure Spaces}\\
+Let $\mu(X)<+\infty$, $f$ be measurable, and $E_n\defeq\{n-1\leq\abs f<n\}$ for $n\geq1$.\\
+For $1\leq p<\infty$, $f\in L^p(\mu)\iff\sum_{n\geq1}n^p\mu(E_n)<+\infty$.
+\begin{proof}
+If $\sum_n n^p\mu(E_n)<+\infty$, then $\abs f^p\leq\sum_n n^p\mathbf 1_{E_n}$, so $f\in L^p$.\\
+Conversely, if $f\in L^p$, then $\mu(E_1)\leq\mu(X)<+\infty$ and, for $n\geq2$, $n^p\mathbf 1_{E_n}\leq2^p\abs f^p\mathbf 1_{E_n}$.\\
+Hence $\sum_n n^p\mu(E_n)\leq\mu(X)+2^p\int_X\abs f^p\,d\mu<+\infty$.\\
+\hlt{Structural Commentary}: The finite base shell handles small values; weighted shells control tails.\\
+\hlt{Key Insight}: Shell weights characterize $L^p$ mass.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:lp-inclusions-interpolation-and-multipliers} \hlt{Inclusions, Interpolation, and Multipliers}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mu(X)<+\infty$ and $1\leq r\leq p<\infty$, then $L^p(\mu)\subseteq L^r(\mu)$ and $\norm f_r\leq\norm f_p\mu(X)^{1/r-1/p}$.
+\item On $(\N,2^\N,\#)$, $1\leq p\leq s<\infty$ implies $\ell^p\subseteq\ell^s$ and $\norm a_s\leq\norm a_p$.
+\item If $1\leq p_1<p_2<\infty$ and $f\in L^{p_1}(\mu)\cap L^{p_2}(\mu)$, then $f\in L^p(\mu)$ for $p_1\leq p\leq p_2$.
+\item If $1\leq p\leq\infty$, then $L^p(\mu)\cdot L^\infty(\mu)\subseteq L^p(\mu)$ and $\norm{fg}_p\leq\norm f_p\norm g_\infty$.
+\item $L^\infty(\mu)\subseteq L^1(\mu)\Longleftrightarrow\mu(X)<+\infty$. If $\mu(X)=1$, then $\norm f_\infty=\lim_{p\to\infty}\norm f_p$ for $f\in L^\infty(\mu)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $r=p$, $L^p\subseteq L^p$ and the estimate reads $\norm f_p\leq\norm f_p$, i.e. equality.\\
+For $r<p$, H\"older applied to $\abs f^r\cdot1$ gives $\int_X\abs f^r\,d\mu\leq\norm f_p^r\mu(X)^{1-r/p}$; take $r$th roots.
+\item For $a\in\ell^p$, $\abs{a_n}\leq\norm a_p$ for all $n$, hence $\sum_n\abs{a_n}^s\leq\norm a_p^{s-p}\sum_n\abs{a_n}^p\leq\norm a_p^s$.
+\item For $p\in[p_1,p_2]$, $\abs f^p\leq\abs f^{p_1}\mathbf 1_{\{\abs f\leq1\}}+\abs f^{p_2}\mathbf 1_{\{\abs f>1\}}$.
+\item For $p<\infty$, $\abs{fg}^p\leq\norm g_\infty^p\abs f^p$ a.e.; for $p=\infty$, $\abs{fg}\leq\norm f_\infty\norm g_\infty$ a.e.
+\item[$(v)$]($\Rightarrow$) If $L^\infty(\mu)\subseteq L^1(\mu)$, then $\mathbf 1_X\in L^\infty(\mu)$ lies in $L^1(\mu)$, so $\mu(X)=\int_X\mathbf 1_X\,d\mu<+\infty$.
+\item[$(v)$]($\Leftarrow$) If $\mu(X)<+\infty$ and $f\in L^\infty(\mu)$, then $\int_X\abs f\,d\mu\leq\norm f_\infty\mu(X)<+\infty$. If $\mu(X)=1$, then $\norm f_p\leq\norm f_\infty$.\\
+For $A<\norm f_\infty$, $\mu(\{\abs f>A\})>0$ and $\norm f_p\geq A\mu(\{\abs f>A\})^{1/p}\to A$. Let $A\uparrow\norm f_\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: Inclusions depend on domain size and pointwise bounds.\\
+\hlt{Key Insight}: Check whether size comes from the function values or from the measure of the domain.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:lp-membership-models-from-exercises} \hlt{Membership Models}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item On $(\N,2^\N,\#)$, $a_n=1/n$ satisfies $\norm a_p^p=\sum_{n\geq1}n^{-p}$; hence $a\in\ell^p\Longleftrightarrow p>1$, while $a\in\ell^\infty\setminus\ell^1$.
+\item On $\N$ with $\lambda(\{n\})=n^{-2}$, $\lambda(\N)<+\infty$ and $f(n)=n^{1/p_0}$ satisfies $\int_\N\abs f^p\,d\lambda=\sum_{n\geq1}n^{p/p_0-2}$.\\
+Hence $f\in L^p(\lambda)\Longleftrightarrow1\leq p<p_0$. In particular, $f(n)=\sqrt n$ gives $p_0=2$.
+\item On $(0,\infty)$, $f(x)=x^{-1/2}(1+\abs{\log x})^{-1}$ gives $\int_0^\infty\abs f^p\,dx=\int_{-\infty}^{\infty}e^{(1-p/2)t}(1+\abs t)^{-p}\,dt$ under $x=e^t$.\\
+If $p<2$ it diverges at $+\infty$; if $p>2$ at $-\infty$; if $p=2$ it is $\int(1+\abs t)^{-2}\,dt<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: $L^p$ membership reduces to series and endpoint tests.\\
+\hlt{Key Insight}: Different ends impose different $p$-conditions.
+\end{example}
+
+\begin{proposition} \label{prop:holder-dual-norm-attainment} \hlt{H\"older Dual Norm Attainment}\\
+Let $1<p<\infty$, $p^{-1}+q^{-1}=1$, and $f\in L^p(\mu)$ be real-valued. Then $\sup_{\norm g_q\leq1}\abs{\int_Xfg\,d\mu}=\norm f_p$.\\
+If $f\neq0$, the supremum is attained by $g_0=\norm f_p^{-p/q}\sign(f)\abs f^{p-1}$.
+\begin{proof}
+H\"older gives $\abs{\int_Xfg\,d\mu}\leq\norm f_p\norm g_q$, hence the supremum is $\leq\norm f_p$.\\
+Since $(p-1)q=p$, $\norm{g_0}_q^q=\norm f_p^{-p}\int_X\abs f^p\,d\mu=1$, and $\int_Xfg_0\,d\mu=\norm f_p^{-p/q}\int_X\abs f^p\,d\mu=\norm f_p$.\\
+\hlt{Structural Commentary}: Equality in H\"older is obtained by matching the conjugate powers.\\
+\hlt{Key Insight}: The $L^q$ test function points in the power direction of $f$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:bounded-linear-functional-on-lp} \hlt{Bounded Linear Functionals on $L^p$}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{linear functional} on real $L^p(\mu)$ is a linear map $G:L^p(\mu)\to\mathbb R$.
+\item $G$ is \hlt{bounded} if $\exists M<+\infty$ such that $\abs{G(f)}\leq M\norm f_p$ for all $f\in L^p(\mu)$.
+\item The \hlt{operator norm} is $\norm G\defeq\sup\{\abs{G(f)}:f\in L^p(\mu),\ \norm f_p\leq1\}$.
+\item $G$ is \hlt{positive} if $f\geq0$ a.e. implies $G(f)\geq0$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma} \label{lem:bounded-lp-functional-positive-split} \hlt{Positive Split of a Bounded Functional}\\
+Let $1\leq p<+\infty$ and $G\in(L^p(\mu))^*_\mathbb R$. Then $G=G^+-G^-$ for positive bounded linear functionals $G^\pm$.
+\begin{proof}
+For $f\geq0$, set $G^+(f)\defeq\sup\{G(g):0\leq g\leq f\}$.\\
+This is finite since $\abs{G(g)}\leq\norm G\norm g_p\leq\norm G\norm f_p$, and positive homogeneity is immediate.\\
+For $f_1,f_2\geq0$, $G^+(f_1)+G^+(f_2)\leq G^+(f_1+f_2)$; conversely, if $0\leq h\leq f_1+f_2$, set $h_1=(h-f_2)^+$ and $h_2=h-h_1$, so $h=h_1+h_2$ with $0\leq h_j\leq f_j$, hence $G(h)\leq G^+(f_1)+G^+(f_2)$.\\
+Thus $G^+$ is additive on the positive cone. Extend by $G^+(f)=G^+(f^+)-G^+(f^-)$; then $G^+$ is positive, linear, and bounded. Let $G^-=G^+-G$. Since $G^+(f)\geq G(f)$ for $f\geq0$, $G^-$ is positive and bounded.\\
+\hlt{Structural Commentary}: Function-lattice functionals split into positive parts.\\
+\hlt{Key Insight}: Split any competitor $h\leq f_1+f_2$ into the portions assigned to $f_1$ and $f_2$.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:riesz-representation-l1} \hlt{Riesz Representation for $L^1$}\\
+Let $(X,\mathcal M,\mu)$ be $\sigma$-finite and $G\in(L^1(\mu))^*_\mathbb R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item There is $g\in L^\infty(\mu)$ such that $G(f)=\int_Xfg\,d\mu$ for all $f\in L^1(\mu)$.
+\item $\norm G=\norm g_\infty$.
+\item If $G$ is positive, then $g\geq0$ a.e.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item First let $\mu(X)<+\infty$ and $G\geq0$. Set $\lambda(E)\defeq G(\mathbf 1_E)$. Finite additivity is linearity; if $E_n\uparrow E$, then $\mathbf 1_{E_n}\to\mathbf 1_E$ in $L^1$, hence $\lambda(E_n)\to\lambda(E)$. Thus $\lambda$ is finite, and $\lambda\ll\mu$ since $\mu(E)=0$ gives $\mathbf 1_E=0$ in $L^1$. Radon--Nikodym gives $g\geq0$ with $\lambda(E)=\int_Eg\,d\mu$, so simple functions are represented.\\
+By (ii), $g\in L^\infty$, hence $L^1$-density of simple functions extends the identity to all $f\in L^1$. For $\sigma$-finite $\mu$, apply the finite case to $f\mapsto G(f\mathbf 1_{X_n})$ on $X_n\uparrow X$, $\mu(X_n)<+\infty$, and patch densities on overlaps. For general $G$, use the positive split $G=G^+-G^-$ and subtract the two densities.
+\item The pairing estimate gives $\norm G\leq\norm g_\infty$. Conversely, if $A>\norm G$ and $E\subseteq\{\abs g>A\}$ has $\mu(E)<+\infty$, then with $f=\sign(g)\mathbf 1_E$, $A\mu(E)<\int_E\abs g\,d\mu=G(f)\leq\norm G\mu(E)$, so $\mu(E)=0$.\\
+A $\sigma$-finite exhaustion gives $\mu(\{\abs g>A\})=0$ for every $A>\norm G$, hence $\norm g_\infty\leq\norm G$.
+\item If $G$ is positive and $B=\{g<0\}$, then for every finite-measure $E\subseteq B$, $0\leq G(\mathbf 1_E)=\int_Eg\,d\mu\leq0$ only if $\int_E(-g)\,d\mu=0$. Hence $\mu(E)=0$ on $\{g<-1/k\}$ for all $k$, and a $\sigma$-finite exhaustion gives $\mu(B)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: A bounded functional on $L^1$ is integration against an essentially bounded density.\\
+\hlt{Key Insight}: Indicators give a measure; Radon--Nikodym gives the density.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:riesz-representation-lp} \hlt{Riesz Representation for $L^p$, $1<p<+\infty$}\\
+Let $(X,\mathcal M,\mu)$ be any measure space, $1<p<+\infty$, and $q=p/(p-1)$. For every $G\in(L^p(\mu))^*_\mathbb R$, there is a unique $g\in L^q(\mu)$ modulo a.e. equality such that $G(f)=\int_Xfg\,d\mu$ for all $f\in L^p(\mu)$, and $\norm G=\norm g_q$.
+\begin{proof}
+On finite measure spaces, repeat the $L^1$ proof with $\mathbf 1_{E_n}\to\mathbf 1_E$ in $L^p$ and the positive split.\\
+Testing truncations of $\sign(g)\abs g^{q-1}$ gives $g\in L^q$ and the reverse H\"older inequality, hence $\norm G=\norm g_q$; uniqueness follows from testing finite-measure sets.\\
+On $\sigma$-finite spaces, patch the finite-measure representatives along $X_n\uparrow X$, $\mu(X_n)<+\infty$.\\
+For arbitrary $\mu$, choose $\norm{f_n}_p=1$ with $G(f_n)\to\norm G$; the supports of the $f_n$ lie in a $\sigma$-finite $X_0$.\\
+If $E\cap X_0=\emptyset$ and $\mu(E)<+\infty$, boundedness on $f_n\pm t\mathbf 1_E$, followed by $n\to\infty$ and $t\downarrow0$, gives $G(\mathbf 1_E)=0$.\\
+Thus $G$ vanishes off $X_0$; represent it on $X_0$ and extend the density by $0$.\\
+\hlt{Structural Commentary}: For $1<p<\infty$, every bounded functional comes from the conjugate space $L^q$.\\
+\hlt{Key Insight}: Localize to $\sigma$-finite support, then patch.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:riesz-l2-route-to-radon-nikodym} \hlt{$L^2$ Riesz Gives Another Radon--Nikodym Route}\\
+Let $\lambda,\mu$ be finite and $\lambda\ll\mu$. Put $\rho=\lambda+\mu$ and $G(h)\defeq\int h\,d\lambda$ on $L^2(\rho)$.\\
+If $G(h)=\int hg\,d\rho$, indicator tests give $0\leq g\leq1$ $\rho$-a.e. and $\mu(\{g=1\})=0$.\\
+Since $\int h(1-g)\,d\lambda=\int hg\,d\mu$, take $E_N=E\cap\{1-g\geq1/N\}$ and $h=\mathbf 1_{E_N}/(1-g)\in L^2(\rho)$ to get $\lambda(E_N)=\int_{E_N}g/(1-g)\,d\mu$. Let $N\to\infty$ by monotone convergence and $\lambda\ll\mu$: $\lambda(E)=\int_E g/(1-g)\,d\mu$.\\
+\hlt{Key Insight}: Riesz representation on $L^2(\lambda+\mu)$ encodes the density in the ratio $g/(1-g)$.
+\end{remark}
+
+\begin{lemma} \label{lem:lp-integral-absolute-continuity} \hlt{Absolute Continuity of $L^p$ Mass}\\
+For $1\leq p<\infty$ and $f\in L^p(\mu)$, $\forall\varepsilon>0\,\exists\delta>0$ such that $\mu(E)<\delta$ implies $\norm{f\mathbf 1_E}_p<\varepsilon$.
+\begin{proof}
+Let $h=\abs f^p\in L^1$. Choose $M>0$ with $\int_{\{h>M\}}h\,d\mu<\varepsilon^p/2$, and set $\delta=\varepsilon^p/(2M)$.\\
+If $\mu(E)<\delta$, then $\norm{f\mathbf 1_E}_p^p=\int_Eh\,d\mu\leq M\mu(E)+\int_{\{h>M\}}h\,d\mu<\varepsilon^p$.\\
+\hlt{Structural Commentary}: $L^p$ mass is absolutely continuous with respect to measure.\\
+\hlt{Key Insight}: Truncate the tail; small measure controls the bounded part.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:lp-cauchy-local-mass-limits} \hlt{Local Mass Limits for $L^p$ Cauchy Sequences}\\
+For $1\leq p<\infty$ and $f_n\in L^p(\mu)$, set $\beta_n(E)\defeq\norm{f_n\mathbf 1_E}_p$ for $E\in\mathcal M$. Then $\abs{\beta_n(E)-\beta_m(E)}\leq\norm{f_n-f_m}_p$.\\
+Hence, if $(f_n)$ is $L^p$-Cauchy, then $\beta(E)\defeq\lim_n\beta_n(E)$ exists for every $E\in\mathcal M$.
+\begin{proof}
+Minkowski on $E$ gives $\beta_n(E)\leq\beta_m(E)+\norm{(f_n-f_m)\mathbf 1_E}_p\leq\beta_m(E)+\norm{f_n-f_m}_p$; swap $m,n$.\\
+Thus $L^p$-Cauchy implies $(\beta_n(E))$ is Cauchy in $\mathbb R$.\\
+\hlt{Structural Commentary}: Restricting to $E$ is a $1$-Lipschitz operation on $L^p$ mass.\\
+\hlt{Key Insight}: Local mass inherits global Cauchy control.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:lp-cauchy-local-mass-control} \hlt{Uniform Local Mass Control for $L^p$ Cauchy Sequences}\\
+Let $1\leq p<\infty$, $f_n$ be $L^p$-Cauchy, and $\beta_n(E)\defeq\norm{f_n\mathbf 1_E}_p$. For every $\varepsilon>0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists E_\varepsilon\in\mathcal M$ with $\mu(E_\varepsilon)<+\infty$ such that $F\cap E_\varepsilon=\emptyset$ implies $\sup_n\beta_n(F)<\varepsilon$;
+\item $\exists\delta>0$ such that $\mu(E)<\delta$ implies $\sup_n\beta_n(E)<\varepsilon$.
+\end{enumerate}
+\begin{proof}
+Choose $N$ so $n\geq N$ implies $\norm{f_n-f_N}_p<\varepsilon/3$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose finite-measure $E_j$ for $1\leq j\leq N$ with $F\cap E_j=\emptyset\Rightarrow\beta_j(F)<\varepsilon/3$, and set $E_\varepsilon=\bigcup_{j\leq N}E_j$.\\
+For $n\leq N$ this works; for $n>N$, $\beta_n(F)\leq\norm{f_n-f_N}_p+\beta_N(F)<\varepsilon$.
+\item Choose $\delta_j>0$ for $1\leq j\leq N$ with $\mu(E)<\delta_j\Rightarrow\beta_j(E)<\varepsilon/3$, and set $\delta=\min_{j\leq N}\delta_j$.\\
+For $n\leq N$ this works; for $n>N$, $\beta_n(E)\leq\norm{f_n-f_N}_p+\beta_N(E)<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: Cauchy families are uniformly tight and absolutely continuous.\\
+\hlt{Key Insight}: Control finitely many early terms directly and the tail by Cauchy closeness.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:lebesgue-product-proof-patterns} \hlt{Lebesgue Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Approximate}: for $f\geq0$, use $s\in\mathcal{S}^+(f)$ and $\int_E f\,d\mu=\sup_{s\in\mathcal{S}^+(f)}\mathcal{I}_E(s)$.
+\item \hlt{Promote}: prove for $\mathbf{1}_A$, extend to $s=\sum_i c_i\mathbf{1}_{A_i}$, then pass through $s_n\uparrow f$.
+\item \hlt{Ignore null sets}: if $f\sim_{\mathrm{a.e.}}g$ on $E$, replace $f$ by $g$ inside integrals over measurable $A\subseteq E$.
+\item \hlt{Split signs}: use $f=f^+-f^-$ and $h=u+iv$.
+\item \hlt{Exchange limits}: reduce Fatou and dominated convergence to $0\leq f_n\uparrow f$.
+\item \hlt{Slice}: prove boxes first; use regularity and null slices to pass to products and Fubini.
+\end{enumerate}
+\hlt{Key Insight}: Reduce to simple functions, monotone convergence, null sets, and product boxes.
+\end{method}

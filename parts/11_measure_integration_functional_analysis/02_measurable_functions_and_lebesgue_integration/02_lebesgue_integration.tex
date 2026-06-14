@@ -1,0 +1,347 @@
+\subsection{Lebesgue Integration}
+
+% **Role:** modern integration and almost-everywhere analysis.
+%
+% Nonnegative integration, integrable functions, comparison with Riemann integration, absolute integrability.
+
+Lebesgue integration starts with simple functions, then extends by monotone approximation and positive--negative decomposition.
+
+\begin{definition} \label{def:lebesgue-product-core-source-todo}\label{def:simple-functions-and-lebesgue-integral} \hlt{Lebesgue Integral}\\
+Let $(X,\mathcal{M},\mu)$ be a measure space and $E\in\mathcal{M}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Simple}: if $0\leq s=\sum_{i=1}^{n}c_i\mathbf{1}_{E_i}$ with $c_i\geq0$, $E_i\in\mathcal{M}$ disjoint, set $\mathcal{I}_E(s)\defeq\sum\limits_{i=1}^{n}c_i\mu(E\cap E_i)$; $0\cdot(+\infty)\defeq0$.
+\item \hlt{Nonnegative}: measurable $f\geq0$, $\mathcal{S}^+(f)\defeq\{s:0\leq s\leq f,\ s\text{ simple measurable}\}$; $\int_E f\,d\mu\defeq\sup\limits_{s\in\mathcal{S}^+(f)}\mathcal{I}_E(s)$
+\item \hlt{Signed}: real measurable $f$, $f^+\defeq f\vee0$, $f^-\defeq(-f)\vee0$.\\
+If at least one of $\int_Ef^+\,d\mu,\int_Ef^-\,d\mu$ is finite, define $\int_E f\,d\mu\defeq\int_Ef^+\,d\mu-\int_Ef^-\,d\mu$.
+\item \hlt{Integrable}: $f$ is Lebesgue integrable on $E$, written $f\in\mathscr{L}^1(\mu)$ on $E$, iff $\int_Ef^+\,d\mu,\int_Ef^-\,d\mu<+\infty$.
+\item \hlt{Whole space}: if $E=X$, this gives the real-valued integrable, or summable, functions on $(X,\mathcal{M},\mu)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:signed-integral-independent-of-decomposition} \hlt{Signed Decompositions Give the Same Integral}\\
+Let $E\in\mathcal{M}$ and $f=f_1-f_2$ on $E$, with $f_i\geq0$ measurable and $\int_Ef_i\,d\mu<+\infty$ for $i=1,2$.\\
+Then $f\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E f\,d\mu=\int_E f_1\,d\mu-\int_E f_2\,d\mu$.
+\begin{proof}
+On $E$, $f^+\leq f_1$, $f^-\leq f_2$, hence $\int_Ef^\pm\,d\mu<+\infty$.\\
+Also $f^++f_2=f_1+f^-$, so nonnegative additivity gives $\int_E f^+\,d\mu+\int_E f_2\,d\mu=\int_E f_1\,d\mu+\int_E f^-\,d\mu$.\\
+Subtract the finite terms $\int_Ef^-\,d\mu$ and $\int_Ef_2\,d\mu$.\\
+\hlt{Structural Commentary}: Any finite nonnegative decomposition gives the same signed value.\\
+\hlt{Key Insight}: Move all positive pieces to one side, use nonnegative additivity, then subtract finite numbers.
+\end{proof}
+\end{proposition}
+
+Simple functions are finite linear combinations of indicators of measurable sets: coefficients carry size, while the level sets carry measurability.
+
+\begin{lemma} \label{lem:simple-integral-refinement} \hlt{Refining a Simple Integral}\\
+Let $s\geq0$ be simple measurable and suppose $s=\sum\limits_{k=1}^{m}b_k\mathbf{1}_{F_k}$ with $b_k\geq0$ and $F_k\in\mathcal{M}$.\\
+Then, for every $E\in\mathcal{M}$, $\mathcal{I}_E(s)=\sum\limits_{k=1}^{m}b_k\mu(E\cap F_k)$.
+\begin{proof}
+For $\eta\in\{0,1\}^m$, set $F_k^1\defeq F_k$, $F_k^0\defeq F_k^c$, discard empty atoms $G_\eta\defeq\bigcap\limits_{k=1}^{m}F_k^{\eta_k}$. On $G_\eta$, $s=c_\eta\defeq\sum\limits_{\eta_k=1}b_k$.\\
+Group equal $c_\eta$ values to recover the standard representation; finite additivity gives\\
+$\mathcal{I}_E(s)=\sum\limits_\eta c_\eta\mu(E\cap G_\eta) =\sum\limits_{k=1}^{m}b_k\sum\limits_{\eta:\eta_k=1}\mu(E\cap G_\eta) =\sum\limits_{k=1}^{m}b_k\mu(E\cap F_k)$.\\
+\hlt{Structural Commentary}: Refine nonstandard sums to one finite partition.\\
+\hlt{Key Insight}: Refine first, then regroup by equal function values.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:simple-integral-linearity-and-measure} \hlt{Simple Integral Algebra}\\
+If $s,t\geq0$ are simple measurable, $c\geq0$, and $E\in\mathcal{M}$, then $\mathcal{I}_E(cs)=c\mathcal{I}_E(s)$; $\mathcal{I}_E(s+t)=\mathcal{I}_E(s)+\mathcal{I}_E(t)$.\\
+For fixed $s\geq0$, $\nu_s(A)\defeq\mathcal{I}_A(s)$ is a measure on $\mathcal{M}$.
+\begin{proof} Let $s=\sum_ia_i\mathbf{1}_{A_i}$ and $t=\sum_jb_j\mathbf{1}_{B_j}$ be standard.\\
+Homogeneity follows from $\mathcal{I}_E(cs)=\sum_i(ca_i)\mu(E\cap A_i)$ and $0\cdot(+\infty)=0$.\\
+On the common refinement, $s+t=\sum\limits_{i,j}(a_i+b_j)\mathbf{1}_{A_i\cap B_j}$.\\
+By Lemma \ref{lem:simple-integral-refinement}, $\mathcal{I}_E(s+t) =\sum\limits_{i,j}(a_i+b_j)\mu(E\cap A_i\cap B_j) =\sum\limits_ia_i\mu(E\cap A_i)+\sum_jb_j\mu(E\cap B_j)$.\\
+Finally, $\nu_s=\sum_ia_i\,\mu(\,\cdot\,\cap A_i)$ is a finite nonnegative linear combination of measures.\\
+\hlt{Structural Commentary}: The integral is additive first on finite measurable partitions.\\
+\hlt{Key Insight}: Add simple functions on the common refinement of their level sets.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:positive-integral-monotonicity} \hlt{Monotonicity for Nonnegative Integrals}\\
+Let $f,g\geq0$ be measurable and let $E,F\in\mathcal{M}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\leq g$ on $E$, then $\int_E f\,d\mu\leq\int_E g\,d\mu$.
+\item If $E\subseteq F$, then $\int_E f\,d\mu\leq\int_F f\,d\mu$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $s\in\mathcal{S}^+(f)$, then $s\mathbf{1}_E\in\mathcal{S}^+(g)$, $\mathcal{I}_E(s)=\mathcal{I}_E(s\mathbf{1}_E)\leq\int_Eg\,d\mu$. Taking $\sup_{s\in\mathcal{S}^+(f)}$ gives $\int_Ef\,d\mu\leq\int_Eg\,d\mu$.
+\item If $E\subseteq F$ and $s\in\mathcal{S}^+(f)$, then $\mathcal{I}_E(s)\leq\mathcal{I}_F(s)$. Taking $\sup_{s\in\mathcal{S}^+(f)}$ gives $\int_Ef\,d\mu\leq\int_Ff\,d\mu$.
+\end{enumerate}
+\hlt{Structural Commentary}: The nonnegative integral is a supremum over simple functions below the integrand.\\
+\hlt{Key Insight}: More room below the integrand, or over a larger set, can only increase the supremum.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:splitting-simple-minorants-under-sum} \hlt{Splitting a Simple Minorant Under a Sum}\\
+Let $E\in\mathcal{M}$, $f,g\geq0$ measurable, and $\omega\in\mathcal{S}^+(f+g)$ simple.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Grid}: for $n\geq1$, use $D_n\defeq\{0,\frac1n,\ldots,1\}$.
+\item \hlt{Split}: define $\varphi_n(x)\defeq\max\{\theta\omega(x):\theta\in D_n,\ \theta\omega(x)\leq f(x)\}$; $\psi_n(x)\defeq\left(\left(1-\frac1n\right)\omega(x)-\varphi_n(x)\right)^+$.
+\item \hlt{Bounds}: $\varphi_n,\psi_n$ are simple, $\varphi_n\leq f$, $\psi_n\leq g$, and $(1-\frac1n)\omega\leq\varphi_n+\psi_n$.
+\item \hlt{Use}: simple additivity gives $(1-\frac1n)\mathcal{I}_E(\omega)\leq\int_Ef\,d\mu+\int_Eg\,d\mu$; then let $n\to\infty$ and take $\sup_{\omega\in\mathcal{S}^+(f+g)}$.
+\end{enumerate}
+\hlt{Key Insight}: Grid-split $\omega$ between $f$ and $g$, losing only $1/n$.
+\end{method}
+
+\begin{proposition} \label{prop:nonnegative-integral-homogeneity-additivity} \hlt{Homogeneity and Additivity for Nonnegative Integrals}\\
+Let $f,g\geq0$ be measurable, let $c\geq0$, and let $E\in\mathcal{M}$. Then $\int_E cf\,d\mu=c\int_E f\,d\mu$; and $\int_E(f+g)\,d\mu=\int_Ef\,d\mu+\int_Eg\,d\mu$, where the identities are interpreted in $[0,+\infty]$ with $0\cdot(+\infty)=0$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $c=0$, both sides are $0$. If $c>0$, $s\mapsto cs$ bijects $\mathcal{S}^+(f)$ with $\mathcal{S}^+(cf)$ and $\mathcal{I}_E(cs)=c\mathcal{I}_E(s)$; take suprema.
+\item If $s\in\mathcal{S}^+(f)$ and $t\in\mathcal{S}^+(g)$, then $s+t\in\mathcal{S}^+(f+g)$ and $\mathcal{I}_E(s)+\mathcal{I}_E(t)=\mathcal{I}_E(s+t)\leq\int_E(f+g)\,d\mu$.\\
+Taking $\sup_{s,t}$ gives $\int_Ef\,d\mu+\int_Eg\,d\mu\leq\int_E(f+g)\,d\mu$. Conversely, for $\omega\in\mathcal{S}^+(f+g)$, choose simple $\varphi_n\leq f$, $\psi_n\leq g$ with $(1-\frac1n)\omega\leq\varphi_n+\psi_n$. Then $\left(1-\frac1n\right)\mathcal{I}_E(\omega) \leq \mathcal{I}_E(\varphi_n)+\mathcal{I}_E(\psi_n) \leq \int_E f\,d\mu+\int_E g\,d\mu$.\\
+Let $n\to\infty$, then take $\sup_{\omega\in\mathcal{S}^+(f+g)}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The nonnegative integral is linear before signed integrability is introduced.\\
+\hlt{Key Insight}: Scale minorants; split sum-minorants on a finite grid.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:riemann-step-vs-lebesgue-simple} \hlt{Step Functions versus Simple Functions}\\
+Riemann: $\sup\sum_i m_i\ell(I_i)$ over interval partitions. Lebesgue: $\sup\{\mathcal{I}(s):0\leq s\leq f,\ s=\sum_ic_i\mathbf{1}_{E_i},\ E_i\in\mathcal{M}\}$.\\
+\hlt{Structural Commentary}: Riemann partitions intervals; Lebesgue partitions level sets.\\
+\hlt{Key Insight}: Same finite constants, measurable pieces.
+\end{perspective}
+
+\begin{perspective} \label{per:undergraph-geometric-integral} \hlt{Undergraph Picture for Nonnegative Functions}\\
+For measurable $f:\R\to[0,+\infty]$, set $\mathcal{U}_f\defeq\{(x,y)\in\R\times[0,+\infty):0\leq y<f(x)\}$.\\
+Geometrically, $\int f\,dm=m_2(\mathcal{U}_f)$; analytically, the integral is built as $\sup\mathcal{I}(s)$ over simple $0\leq s\leq f$.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/lebesgue_undergraph.tikz}
+  \caption{The integral of $f\geq0$ is modeled by the measure of its undergraph.}
+  \label{fig:lebesgue-undergraph}
+\end{figure}
+
+\begin{proposition} \label{prop:basic-lebesgue-integral-properties} \hlt{Basic Integral Properties}\\
+Let $E\in\mathcal{M}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f$ is measurable and bounded on $E$, and $\mu(E)<+\infty$, then $f\in\mathscr{L}^1(\mu)$ on $E$.
+\item If $a\leq f(x)\leq b$ on $E$ and $\mu(E)<+\infty$, then $a\mu(E)\leq\int_E f\,d\mu\leq b\mu(E)$.
+\item If $f,g\in\mathscr{L}^1(\mu)$ on $E$ and $f\leq g$ on $E$, then $\int_E f\,d\mu\leq\int_E g\,d\mu$.
+\item If $f\in\mathscr{L}^1(\mu)$ on $E$, then $cf\in\mathscr{L}^1(\mu)$ on $E$ for finite $c$, and $\int_E cf\,d\mu=c\int_E f\,d\mu$.
+\item If $\mu(E)=0$ and $f$ is measurable, then $\int_E f\,d\mu=0$.
+\item If $f\in\mathscr{L}^1(\mu)$ on $E$, $A\in\mathcal{M}$, and $A\subseteq E$, then $f\in\mathscr{L}^1(\mu)$ on $A$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\abs{f}\leq M$ on $E$, then $0\leq f^\pm\leq M\mathbf{1}_E$ on $E$, so $\int_Ef^\pm\,d\mu\leq M\mu(E)<+\infty$.
+\item Since $a\mathbf{1}_E\leq f\leq b\mathbf{1}_E$ on $E$, order for the positive integral gives $a\mu(E)\leq\int_Ef\,d\mu\leq b\mu(E)$.
+\item Since $g-f\geq0$ on $E$, $\int_E(g-f)\,d\mu\geq0$, hence $\int_Ef\,d\mu\leq\int_Eg\,d\mu$.
+\item For $c\geq0$, scale the simple approximants. For $c<0$, use $(cf)^+=(-c)f^-$ and $(cf)^-=(-c)f^+$.
+\item If $\mu(E)=0$, then $\mathcal{I}_E(s)=0$ for every $s\geq0$ simple, so $\int_Ef^\pm\,d\mu=0$.
+\item Since $A\subseteq E$, $\mathcal{I}_A(s)\leq \mathcal{I}_E(s)$ for $s\geq0$ simple; hence $\int_Af^\pm\,d\mu\leq\int_Ef^\pm\,d\mu<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: Estimate $f^\pm$ by simpler functions.\\
+\hlt{Key Insight}: Monotonicity makes bounds, null sets, and restrictions immediate.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:integral-countably-additive-set-function} \hlt{The Integral as a Measure or Charge}\\
+If $f\geq0$ is measurable, then $\phi_f:\mathcal{M}\to[0,+\infty]$, $\phi_f(A)\defeq\int_A f\,d\mu$, is a measure.\\
+If $f\in\mathscr{L}^1(\mu)$, then $\lambda_f:\mathcal{M}\to\R$, $\lambda_f(A)\defeq\int_A f\,d\mu$, is finite-valued and countably additive.
+\begin{proof} For simple $s\geq0$, $A\mapsto\mathcal{I}_A(s)$ is a measure.\\
+If $A=\dot\bigcup_nA_n$ and $s\in\mathcal{S}^+(f)$, then $\mathcal{I}_A(s)=\sum_n\mathcal{I}_{A_n}(s)\leq\sum_n\phi_f(A_n)$; taking $\sup_s$ gives $\phi_f(A)\leq\sum_n\phi_f(A_n)$.\\
+Conversely, for every $N$, finite additivity gives $\sum_{n=1}^{N}\phi_f(A_n)=\phi_f(\bigcup_{n=1}^{N}A_n)\leq\phi_f(A)$; let $N\to\infty$.\\
+Hence $\phi_f$ is countably additive. If $f\in\mathscr{L}^1(\mu)$, then $\phi_{f^+}(X),\phi_{f^-}(X)<+\infty$ and $\lambda_f=\phi_{f^+}-\phi_{f^-}$.\\
+Thus, for $A=\dot\bigcup_nA_n$, $\lambda_f(A)=\sum_n\phi_{f^+}(A_n)-\sum_n\phi_{f^-}(A_n)=\sum_n\lambda_f(A_n)$.
+\hlt{Structural Commentary}: Setwise integration turns densities into measures.\\
+\hlt{Key Insight}: Sup simple measures; subtract finite signs.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:integral-null-and-finite-ae-consequences} \hlt{Null and Finiteness Consequences for $f\geq0$}\\
+Let $f:X\to[0,+\infty]$ be measurable and $\phi_f(A)\defeq\int_A f\,d\mu$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mu(A)=0\Longrightarrow\phi_f(A)=0$ for $A\in\mathcal{M}$.
+\item $\int_X f\,d\mu=0\Longleftrightarrow f=0$ a.e.
+\item $\int_X f\,d\mu<+\infty\Longrightarrow\mu\{f=+\infty\}=0$ and $\{f>0\}$ is $\sigma$-finite.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] If $\mu(A)=0$ and $0\leq s\leq f$ is simple, then $\mathcal{I}_A(s)=0$; hence $\phi_f(A)=\sup_s\mathcal{I}_A(s)=0$.
+\item[$(ii)$] ($\Rightarrow$) Set $E_n\defeq\{f>1/n\}$. Since $(1/n)\mathbf{1}_{E_n}\leq f$, $0\leq n^{-1}\mu(E_n)\leq\int_X f\,d\mu=0$.\\
+Thus $\mu(E_n)=0$ for all $n$, and $\{f>0\}=\bigcup_nE_n$ is null.
+\item[$(ii)$] ($\Leftarrow$) If $N\defeq\{f>0\}$ null, every simple $0\leq s\leq f$ vanishes on $X\setminus N$, so $\mathcal{I}_X(s)=\mathcal{I}_N(s)=0$; take $\sup_s$.
+\item[$(iii)$] Let $F_n\defeq\{f\geq n\}$. Then $n\mu(F_n)\leq\int_X f\,d\mu$, so $\mu\{f=+\infty\}\leq\mu(F_n)\leq n^{-1}\int_X f\,d\mu\to0$.\\
+Also $\{f>0\}=\bigcup_n\{f>1/n\}$ and $\mu\{f>1/n\}\leq n\int_X f\,d\mu<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite nonnegative integrals control threshold sets.\\
+\hlt{Key Insight}: Threshold sets convert integral bounds into measure bounds.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:absolute-integrability-and-domination} \hlt{Absolute Integrability and Domination}\\
+If $f\in\mathscr{L}^1(\mu)$ on $E$, then $\abs{f}\in\mathscr{L}^1(\mu)$ and $\abs{\int_E f\,d\mu}\leq\int_E\abs{f}\,d\mu$.\\
+If $f$ is measurable and $\abs{f}\leq g\in\mathscr{L}^1(\mu)$ on $E$, then $f\in\mathscr{L}^1(\mu)$ on $E$.
+\begin{proof}
+Use $\abs{f}=f^++f^-$, $f\leq\abs{f}$, and $-f\leq\abs{f}$. If $\abs{f}\leq g$, then $0\leq f^\pm\leq g$, so $\int_Ef^\pm\,d\mu<+\infty$.\\
+\hlt{Structural Commentary}: Lebesgue integrability is absolute integrability.\\
+\hlt{Key Insight}: A single integrable majorant controls both signs.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:lebesgue-integral-linearity} \hlt{Linearity of the Lebesgue Integral}\\
+Let $E\in\mathcal{M}$, $f,g\in\mathscr{L}^1(\mu)$ on $E$, and $a,b\in\R$.\\
+Then $af+bg\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(af+bg)\,d\mu=a\int_Ef\,d\mu+b\int_Eg\,d\mu$.
+\begin{proof} For $f,g\geq0$, choose simple $s_n\uparrow f$ and $t_n\uparrow g$.\\
+Then $s_n+t_n\uparrow f+g$ and $\int_E(s_n+t_n)\,d\mu=\int_Es_n\,d\mu+\int_Et_n\,d\mu\to\int_Ef\,d\mu+\int_Eg\,d\mu$.\\
+Thus nonnegative additivity holds; homogeneity follows by scaling simple minorants.\\
+For signed $f,g$, put $a=a^+-a^-$, $b=b^+-b^-$ and $P\defeq a^+f^+ + a^-f^- + b^+g^+ + b^-g^-$;\\
+$Q\defeq a^+f^- + a^-f^+ + b^+g^- + b^-g^+$. Then $P,Q\geq0$, $\int_E P\,d\mu,\int_E Q\,d\mu<+\infty$, and $af+bg=P-Q$.\\
+By Proposition \ref{prop:signed-integral-independent-of-decomposition} and nonnegative linearity, the displayed identity follows.\\
+\hlt{Structural Commentary}: Simple additivity plus monotone convergence gives linearity.\\
+\hlt{Key Insight}: Reduce additivity to simple functions before splitting signs.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:l1-level-sets-null-and-indefinite-integrals} \hlt{$L^1$ Level Sets, Null Changes, and Indefinite Integrals}\\
+Let $f,g\in\mathscr{L}^1(\mu)$ on $X$, and write $\lambda_u(A)\defeq\int_Au\,d\mu$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $a>0$, $\mu\{\abs{f}\geq a\}\leq a^{-1}\int_X\abs{f}\,d\mu<+\infty$; hence $\{f\neq0\}$ is $\sigma$-finite.
+\item If measurable $h=0$ a.e., then $h\in\mathscr{L}^1(\mu)$ and $\lambda_h\equiv0$.
+\item $\lambda_f\geq0$ on $\mathcal{M}\Longrightarrow f\geq0$ a.e.; $\lambda_f\equiv0\Longrightarrow f=0$ a.e.
+\item $\lambda_f=\lambda_g$ on $\mathcal{M}\Longleftrightarrow f=g$ a.e.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $a\mathbf{1}_{\{\abs{f}\geq a\}}\leq\abs{f}$, integration gives $a\mu\{\abs{f}\geq a\}\leq\int_X\abs{f}\,d\mu$. Also $\{f\neq0\}=\bigcup_{k\geq1}\{\abs{f}\geq1/k\}$.
+\item Let $N\defeq\{h\neq0\}$. For $A\in\mathcal{M}$, $h^\pm\mathbf{1}_A$ vanish off $A\cap N$, a null set.\\
+Hence $\int_Ah^+\,d\mu=\int_Ah^-\,d\mu=0$, so $\lambda_h(A)=0$.
+\item For $k\geq1$, set $N_k\defeq\{f\leq-1/k\}$. By (i), $\mu(N_k)<+\infty$, and $\lambda_f(N_k)\leq-k^{-1}\mu(N_k)$.\\
+If $\lambda_f\geq0$, then $\mu(N_k)=0$, so $\{f<0\}=\bigcup_kN_k$ is null. If $\lambda_f\equiv0$, apply this to $f$ and $-f$.
+\item If $\lambda_f=\lambda_g$, then $\lambda_{f-g}\equiv0$, so $f-g=0$ a.e. by (iii). Conversely, if $f=g$ a.e., apply (ii) to $h=f-g$.
+\end{enumerate}
+\hlt{Structural Commentary}: An $L^1$ function is detected by its integrals over all measurable sets, up to null sets.\\
+\hlt{Key Insight}: Test sign on the level sets where the function is bounded away from $0$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:l1-simple-approximation-and-bounded-multipliers} \hlt{$L^1$ Approximation and Bounded Multipliers}\\
+Let $f\in\mathscr{L}^1(\mu)$ on $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\forall\varepsilon>0$, $\exists$ measurable simple $\varphi$ with $\int_X\abs{f-\varphi}\,d\mu<\varepsilon$.
+\item If $g$ is bounded measurable, then $fg\in\mathscr{L}^1(\mu)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose simple $0\leq s_n\uparrow f^+$ and $0\leq t_n\uparrow f^-$. Then $\int_X(f^+-s_n)\,d\mu\to0$ and $\int_X(f^--t_n)\,d\mu\to0$.\\
+For large $n$, $\varphi\defeq s_n-t_n$ satisfies $\int_X\abs{f-\varphi}\,d\mu\leq\int_X(f^+-s_n)\,d\mu+\int_X(f^--t_n)\,d\mu<\varepsilon$.
+\item If $\abs{g}\leq M$, then $fg$ is measurable and $\int_X\abs{fg}\,d\mu\leq M\int_X\abs{f}\,d\mu<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: $L^1$ is simple-closed and bounded-multiplier stable.\\
+\hlt{Key Insight}: Approximate signs separately; dominate products by $M\abs{f}$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:finite-measure-indicator-continuous-l1-approximation} \hlt{Finite-Measure Indicators by Intervals and Continuous Functions}\\
+Let $A\subseteq\R$ be Lebesgue measurable with $m(A)<+\infty$. For every $\varepsilon>0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists G=\bigcup_{j=1}^{N}I_j$, $I_j$ open intervals, such that $m(A\triangle G)<\varepsilon$.
+\item $\exists f\in C(\R)$ such that $0\leq f\leq1$ and $\int_{\R}\abs{\mathbf{1}_A-f}\,dm<\varepsilon$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose open $O\supseteq A$ with $m(O\setminus A)<\varepsilon/2$ and $m(O)<+\infty$. Write $O=\bigsqcup_{j\geq1}I_j$ with open intervals $I_j$, choose $N$ with $m(O\setminus G)<\varepsilon/2$ for $G\defeq\bigcup_{j=1}^{N}I_j$. Then $A\setminus G\subseteq O\setminus G$ and $G\setminus A\subseteq O\setminus A$, so $m(A\triangle G)<\varepsilon$.
+\item Apply (i) with $\varepsilon/2$ to get finite open $G$. Choose compact $K\subseteq G$ with $m(G\setminus K)<\varepsilon/2$, and choose piecewise-linear $f$ with $0\leq f\leq1$, $f=1$ on $K$, $f=0$ on $\R\setminus G$. Then $\int_{\R}\abs{\mathbf{1}_G-f}\,dm\leq m(G\setminus K)<\varepsilon/2$, hence $\int_{\R}\abs{\mathbf{1}_A-f}\,dm\leq m(A\triangle G)+\int_{\R}\abs{\mathbf{1}_G-f}\,dm<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite-measure sets can be made geometrically simple up to small $L^1$ error.\\
+\hlt{Key Insight}: Approximate by intervals, then smooth the indicator.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:counting-measure-l1-absolute-series} \hlt{Counting Measure Gives Absolute Series}\\
+Let $\mu$ be counting measure on $(\N,2^\N)$. For $f:\N\to\R$,\\
+$f\in\mathscr{L}^1(\mu)\Longleftrightarrow\sum_{n=1}^{\infty}\abs{f(n)}<+\infty$; $\int_{\N}f\,d\mu=\sum_{n=1}^{\infty}f(n)$ when these equivalent conditions hold.
+\end{example}
+
+\begin{example} \label{ex:l1-not-closed-under-squaring} \hlt{$L^1$ Is Not Closed Under Squaring}\\
+On $X=\N$ with $\mathcal{M}=2^\N$, define $\mu(E)\defeq\sum_{n\in E}4^{-n}$ and $f(n)\defeq 2^n/\sqrt{n}$.\\
+Then $\int_X\abs{f}\,d\mu=\sum\limits_{n=1}^{\infty}\frac{1}{2^n\sqrt{n}}<+\infty$; $\int_X f^2\,d\mu=\sum\limits_{n=1}^{\infty}\frac1n=+\infty$.\\
+The first series is dominated by the geometric series $\sum2^{-n}$, while the second diverges by Corollary \ref{cor:p-series-test}.\\
+Thus $f\in\mathscr{L}^1(\mu)$ need not imply $f^2\in\mathscr{L}^1(\mu)$.
+\end{example}
+
+\begin{theorem} \label{thm:riemann-lebesgue-comparison} \hlt{Comparison with the Riemann Integral}\\
+On $[a,b]$ with Lebesgue measure $\mu$, $f\in\mathcal{R}$ implies $f\in\mathscr{L}^1(\mu)$ and the integrals agree.\\
+If $f$ is bounded with discontinuity set $D$, then $f\in\mathcal{R}\iff\mu(D)=0$.
+\begin{proof}
+For refining partitions, let $L_n\uparrow L$ and $U_n\downarrow U$ be lower and upper step envelopes.\\
+Monotone convergence identifies $\int L$ and $\int U$ with the lower and upper Riemann integrals; if $f\in\mathcal{R}$, then $L=U$ a.e., so the common Lebesgue integral equals the Riemann integral.\\
+For bounded $f$, put $\omega_f(x)\defeq \lim_{r\downarrow0}\diam f\bigl([a,b]\cap(x-r,x+r)\bigr)$, where $D_k\defeq\{x:\omega_f(x)\geq1/k\}$.\\
+Then $f$ is continuous at $x$ iff $\omega_f(x)=0$, and its discontinuity set is $D=\bigcup_{k\geq1}D_k$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Fix $k$ and $\varepsilon>0$. Choose $P$ with $U(P,f)-L(P,f)<\varepsilon/k$.\\
+Intervals of $P$ whose interiors meet $D_k$ have total length $<\varepsilon$; adding the finitely many partition points, null by Proposition \ref{prop:finite-countable-cantor-null-sets}, covers $D_k$ by arbitrarily short intervals.\\
+Thus $\mu(D_k)=0$ by Definition \ref{def:null-sets-and-real-line-measure-zero}, and $\mu(D)=0$.
+\item[$(\Leftarrow)$] Suppose $\mu(D)=0$ and $\abs{f}\leq B$. If $B=0$, there is nothing to prove. Given $\varepsilon>0$, choose $k$ with $(b-a)/k<\varepsilon/2$ and cover $D_k$ by intervals of total length $<\varepsilon/(4B)$.\\
+On the compact complement, $\omega_f<1/k$, so a finite refinement makes the good intervals contribute $<\varepsilon/2$ to $U-L$; the covered intervals contribute $<2B\cdot\varepsilon/(4B)=\varepsilon/2$.\\
+Hence $U(P,f)-L(P,f)<\varepsilon$, and Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with $\alpha(x)=x$ gives $f\in\mathcal{R}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Darboux gap measures oscillation sets.\\
+\hlt{Key Insight}: Lebesgue measure turns ``bad discontinuities'' into a null-set condition.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:riemann-integrable-monotone-step-approximation} \hlt{Riemann Integrable Functions as Monotone Step Limits}\\
+Let $f:[a,b]\to\R$ be Riemann integrable. Then $\exists$ step functions $(\varphi_n),(\psi_n)$ such that
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\varphi_n\uparrow$, $\psi_n\downarrow$, and $\varphi_n\leq f\leq\psi_n$ on $[a,b]$;
+\item $\lim\limits_n\int_a^b\varphi_n\,dx=\lim\limits_n\int_a^b\psi_n\,dx=\int_a^bf\,dx$;
+\item $\varphi_n,\psi_n\to f$ a.e.; hence $f$ is Lebesgue measurable and $\int_{[a,b]}f\,dm=\int_a^bf\,dx$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose nested partitions $P_n$ with $\max_{I\in P_n}\ell(I)\to0$ and $U(P_n,f)-L(P_n,f)\to0$.\\
+Let $\varphi_n,\psi_n$ be the lower and upper step envelopes on $P_n$; refinement gives $\varphi_n\uparrow$, $\psi_n\downarrow$, and $\varphi_n\leq f\leq\psi_n$.
+\item Since $\int_a^b\varphi_n\,dx=L(P_n,f)$ and $\int_a^b\psi_n\,dx=U(P_n,f)$, by Darboux gap condition, both limits equal $\int_a^bf\,dx$.
+\item If $x\notin D_f$, then $\max_{I\in P_n}\ell(I)\to0$ forces $\varphi_n(x),\psi_n(x)\to f(x)$.\\
+Since $m(D_f)=0$, convergence holds a.e.; hence $f$ is measurable and $\int_{[a,b]}f\,dm=\int_a^bf\,dx$.
+\end{enumerate}
+\hlt{Structural Commentary}: Riemann integrability is monotone step squeezing.\\
+\hlt{Key Insight}: Refining partitions make Darboux sums into pointwise a.e. step approximations.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:nonnegative-continuous-lebesgue-riemann} \hlt{Nonnegative Continuous Functions and Riemann Integrals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\geq0$ is continuous on $[a,b]$, then $\int_{[a,b]}f\,dm=\int_a^bf(x)\,dx$.
+\item If $f\geq0$ is continuous on $[0,+\infty)$, then $\int_{[0,+\infty)}f\,dm=\lim\limits_{b\to+\infty}\int_0^bf(x)\,dx$ in $[0,+\infty]$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Continuous $f$ on $[a,b]$ is Riemann integrable; by Riemann--Lebesgue comparison, $\int_{[a,b]}f\,dm=\int_a^bf(x)\,dx$.
+\item Put $f_b\defeq f\mathbf{1}_{[0,b]}$. By (i), $\int_{[0,b]}f\,dm=\int_0^bf(x)\,dx$. As $b\uparrow+\infty$, $f_b\uparrow f$; monotone convergence gives the left limit, and the right limit is the nonnegative improper Riemann integral.
+\end{enumerate}
+\hlt{Structural Commentary}: Compact comparison plus monotone truncation.\\
+\hlt{Key Insight}: Truncate to compact intervals and pass upward.
+\end{proof}
+\end{corollary}
+
+\begin{perspective} \label{per:lebesgue-criterion-riemann-roadmap} \hlt{Lebesgue's Criterion as a Roadmap}\\
+For bounded $f:[a,b]\to\R$ with discontinuity set $D_f$, $f\in\mathcal{R}[a,b]\Longleftrightarrow m(D_f)=0$.\\
+Thus finite, countable, and null Cantor-type $D_f$ are allowed, while $D_f=[a,b]$ is not.
+\end{perspective}

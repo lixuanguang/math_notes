@@ -1,0 +1,190 @@
+\subsection{Signed and Absolutely Continuous Measures}
+
+% **Role:** modern integration and almost-everywhere analysis.
+%
+% Signed measures, Hahn/Jordan decomposition, absolute continuity, Radon--Nikodym theorem, Lebesgue decomposition, Lebesgue differentiation theorem.
+
+This subsection first decomposes finite signed set functions into honest measures, then compares measures by absolute continuity and singularity. The differentiation results later in the subsection are the local Euclidean counterpart of the Radon--Nikodym viewpoint.
+
+\begin{definition} \label{def:positive-negative-null-sets-charge} \hlt{Positive, Negative, and Null Sets for a Charge}\\
+Let $\lambda$ be a charge on $(X,\mathcal{M})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{P}_\lambda\defeq\{P\in\mathcal{M}:\forall E\in\mathcal{M},\lambda(E\cap P)\geq0\}$, the \hlt{positive} sets.
+\item $\mathcal{N}_\lambda\defeq\{N\in\mathcal{M}:\forall E\in\mathcal{M},\lambda(E\cap N)\leq0\}$, the \hlt{negative} sets.
+\item $\mathcal{Z}_\lambda\defeq\{M\in\mathcal{M}:\forall E\in\mathcal{M},\lambda(E\cap M)=0\}$, the \hlt{null} sets.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:positive-negative-set-closure-charge} \hlt{Positive and Negative Set Closure}\\
+For a charge $\lambda$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\in\mathcal{M}$ and $A\subseteq P\in\mathcal{P}_\lambda$ imply $A\in\mathcal{P}_\lambda$; $A\subseteq N\in\mathcal{N}_\lambda$ implies $A\in\mathcal{N}_\lambda$.
+\item $\mathcal{P}_\lambda$ and $\mathcal{N}_\lambda$ are closed under finite unions.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A\subseteq P\in\mathcal{P}_\lambda$, then $\lambda(E\cap A)=\lambda((E\cap A)\cap P)\geq0$ for all $E\in\mathcal{M}$, hence $A\in\mathcal{P}_\lambda$.\\
+The negative case reverses the inequality.
+\item If $P_1,P_2\in\mathcal{P}_\lambda$, then $\lambda(E\cap(P_1\cup P_2))=\lambda(E\cap P_1)+\lambda(E\cap P_1^c\cap P_2)\geq0$ $\forall E\in\mathcal{M}$, since $E\cap P_1^c\cap P_2\subseteq P_2$.\\
+Thus $P_1\cup P_2\in\mathcal{P}_\lambda$; induction gives finite unions, negative case is identical with reversed inequalities.
+\end{enumerate}
+\hlt{Structural Commentary}: Sign sets are hereditary and finite-union stable.\\
+\hlt{Key Insight}: Test sets can always be disjointized against the first positive set.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:hahn-decomposition-charge} \hlt{Hahn Decomposition Theorem}\\
+Let $\lambda$ be a charge on $(X,\mathcal{M})$. Then there exist $P,N\in\mathcal{M}$ such that
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $P\cap N=\emptyset$ and $X=P\sqcup N$.
+\item $P\in\mathcal{P}_\lambda$.
+\item $N\in\mathcal{N}_\lambda$.
+\end{enumerate}
+Such a pair $(P,N)$ is a \hlt{Hahn decomposition} of $X$ for $\lambda$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $\alpha=\sup\{\lambda(A):A\in\mathcal{P}_\lambda\}$. If $\alpha=+\infty$, choose $B_m\in\mathcal{P}_\lambda$, $\lambda(B_m)>m$, and set $C_m=\bigcup_{j=1}^{m}B_j$; then $C_m\in\mathcal{P}_\lambda$, $C_m\uparrow C$, and $\lambda(C_m)\geq\lambda(B_m)>m$, contradicting continuity from below and $\lambda(C)\in\R$.\\
+Choose $A_n\in\mathcal{P}_\lambda$, $\lambda(A_n)\to\alpha$, replace $A_n$ by $\bigcup_{j=1}^{n}A_j$, and set $P=\bigcup_{n\geq1}A_n$, $N=X\setminus P$.\\
+Hence $P,N\in\mathcal{M}$, $P\cap N=\emptyset$, and $X=P\sqcup N$.
+\item For $E\in\mathcal{M}$, $E\cap A_n\uparrow E\cap P$ and $\lambda(E\cap A_n)\geq0$, so continuity from below gives $\lambda(E\cap P)\geq0$.\\
+Thus $P\in\mathcal{P}_\lambda$, and $\lambda(P)=\alpha$.
+\item Suppose $E\in\mathcal{M}$, $E\subseteq N$, and $\lambda(E)>0$. Then $E\notin\mathcal{P}_\lambda$, else $P\cup E\in\mathcal{P}_\lambda$ and $\lambda(P\cup E)>\alpha$.\\
+Set $R_0=E$; while $R_{k-1}\notin\mathcal{P}_\lambda$, choose $n_k$ minimal with some $H\in\mathcal{M}$, $H\subseteq R_{k-1}$, $\lambda(H)\leq-1/n_k$, put $E_k=H$, and set $R_k=R_{k-1}\setminus E_k$. If $R_m\in\mathcal{P}_\lambda$, then $\lambda(R_m)=\lambda(E)-\sum_{k=1}^{m}\lambda(E_k)>0$, so $P\cup R_m\in\mathcal{P}_\lambda$ and $\lambda(P\cup R_m)>\alpha$; hence the construction is infinite.\\
+For $F_m=\bigcup_{k=1}^{m}E_k$ and $F=\bigcup_{k\geq1}E_k$, $\lambda(F_m)=\sum_{k=1}^{m}\lambda(E_k)\leq-\sum_{k=1}^{m}1/n_k$; since $F_m\uparrow F$ and $\lambda(F)\in\R$, $\sum_k1/n_k<+\infty$ and $n_k\to+\infty$. If $G\in\mathcal{M}$ and $G\subseteq E\setminus F$, then $G\subseteq R_{k-1}$ for every $k$, so minimality gives $\lambda(G)>-1/(n_k-1)$ for all large $k$, hence $\lambda(G)\geq0$ and $E\setminus F\in\mathcal{P}_\lambda$. But $\lambda(E\setminus F)=\lambda(E)-\lambda(F)>0$, so $P\cup(E\setminus F)\in\mathcal{P}_\lambda$ and $\lambda(P\cup(E\setminus F))>\alpha$, contradiction. Thus $N\in\mathcal{N}_\lambda$.
+\end{enumerate}
+\hlt{Structural Commentary}: A charge splits $X$ into nonnegative-piece and nonpositive-piece regions.\\
+\hlt{Key Insight}: Maximize positive mass; purify any leftover positive piece.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:hahn-positive-part-independent} \hlt{Hahn Parts Are Unique up to Null Sets}\\
+Let $(P_i,N_i)$, $i=1,2$, be Hahn decompositions for a charge $\lambda$.\\
+Then $\forall E\in\mathcal{M}$, $\lambda(E\cap P_1)=\lambda(E\cap P_2)$ and $\lambda(E\cap N_1)=\lambda(E\cap N_2)$.
+\begin{proof}
+Fix $E\in\mathcal{M}$. For $\{i,j\}=\{1,2\}$, $E\cap(P_i\setminus P_j)\subseteq P_i\cap N_j$, hence $\lambda(E\cap(P_i\setminus P_j))=0$.\\
+Thus $\lambda(E\cap P_i)=\lambda(E\cap P_1\cap P_2)$ for $i=1,2$.\\
+Similarly, $E\cap(N_i\setminus N_j)\subseteq N_i\cap P_j$, hence $\lambda(E\cap N_i)=\lambda(E\cap N_1\cap N_2)$ for $i=1,2$.\\
+\hlt{Structural Commentary}: Hahn decompositions are not unique as sets, but the measures they define are unique.\\
+\hlt{Key Insight}: Positive-and-negative overlap is necessarily null.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:jordan-positive-negative-total-variation} \hlt{Jordan Variations of a Charge}\\
+Let $\lambda$ be a charge, $(P,N)$ a Hahn decomposition, and $E\in\mathcal{M}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\lambda^+(E)\defeq\lambda(E\cap P)$, the \hlt{positive variation}.
+\item $\lambda^-(E)\defeq-\lambda(E\cap N)$, the \hlt{negative variation}.
+\item $\abs{\lambda}(E)\defeq\lambda^+(E)+\lambda^-(E)$, the \hlt{total variation}.
+\end{enumerate}
+Lemma \ref{lem:hahn-positive-part-independent} makes these independent of $(P,N)$.
+\end{definition}
+
+\begin{theorem} \label{thm:jordan-decomposition-charge} \hlt{Jordan Decomposition Theorem}\\
+For every charge $\lambda$, $\lambda=\lambda^+-\lambda^-$. If $\lambda=\mu-\nu$ for finite measures $\mu,\nu$, then $\lambda^+\leq\mu$ and $\lambda^-\leq\nu$.
+\begin{proof}
+Let $(P,N)$ be a Hahn decomposition and $E\in\mathcal{M}$. Then $\lambda(E)=\lambda(E\cap P)+\lambda(E\cap N)=\lambda^+(E)-\lambda^-(E)$. If $\lambda=\mu-\nu$, then $\lambda^+(E)=\mu(E\cap P)-\nu(E\cap P)\leq\mu(E)$ and $\lambda^-(E)=\nu(E\cap N)-\mu(E\cap N)\leq\nu(E)$.\\
+\hlt{Structural Commentary}: Jordan decomposition is the minimal finite-measure difference.\\
+\hlt{Key Insight}: Positive and negative Hahn pieces isolate the irreducible positive masses.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:variation-supremum-formulas-and-null-sets} \hlt{Variation by Subsets and Null Sets}\\
+For a charge $\lambda$ and $E,M\in\mathcal{M}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\lambda^+(E)=\sup\{\lambda(F):F\in\mathcal{M},F\subseteq E\}$ and $\lambda^-(E)=-\inf\{\lambda(F):F\in\mathcal{M},F\subseteq E\}$.
+\item $M\in\mathcal{Z}_\lambda\Leftrightarrow\abs{\lambda}(M)=0$.
+\item $\pi_\lambda=\lambda^+$ and $\nu_\lambda=\abs{\lambda}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Let $(P,N)$ be Hahn. If $F\in\mathcal{M}$ and $F\subseteq E$, then $\lambda(F)=\lambda^+(F)-\lambda^-(F)\leq\lambda^+(E)$, with equality at $F=E\cap P$; similarly $\lambda(F)\geq-\lambda^-(E)$, with equality at $F=E\cap N$.
+\item[$(ii)$]$(\Rightarrow)$ If $M\in\mathcal{Z}_\lambda$, then $\lambda^+(M)=\lambda(M\cap P)=0$ and $\lambda^-(M)=-\lambda(M\cap N)=0$, so $\abs{\lambda}(M)=0$.
+\item[$(ii)$]$(\Leftarrow)$ If $\abs{\lambda}(M)=0$, then $\lambda^\pm(G\cap M)=0$ for every $G\in\mathcal{M}$, hence $\lambda(G\cap M)=0$ and $M\in\mathcal{Z}_\lambda$.
+\item[$(iii)$] The identity $\pi_\lambda=\lambda^+$ is (i). For finite partitions $(A_j)$ of $E$, $\sum_j\abs{\lambda(A_j)}\leq\sum_j\abs{\lambda}(A_j)=\abs{\lambda}(E)$, and $E=(E\cap P)\sqcup(E\cap N)$ attains equality; hence $\nu_\lambda=\abs{\lambda}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Variation is intrinsic to $\lambda$.\\
+\hlt{Key Insight}: The positive part is the largest charge obtainable inside a set.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:integral-charge-variation-density} \hlt{Variations of Integral Charges}\\
+Let $f\in\mathscr{L}^1(\mu)$ and $\lambda(E)\defeq\int_E f\,d\mu$.\\
+Then $\forall E\in\mathcal{M}$, $\lambda^+(E)=\int_E f^+\,d\mu$, $\lambda^-(E)=\int_E f^-\,d\mu$, and $\abs{\lambda}(E)=\int_E\abs{f}\,d\mu$.
+\begin{proof} Set $P=\{f\geq0\}$ and $N=\{f<0\}$.\\
+For $A\in\mathcal{M}$, $\lambda(A\cap P)=\int_{A\cap P}f\,d\mu\geq0$ and $\lambda(A\cap N)=\int_{A\cap N}f\,d\mu\leq0$, so $(P,N)$ is Hahn.\\
+Thus $\lambda^+(E)=\lambda(E\cap P)=\int_E f^+\,d\mu$, $\lambda^-(E)=-\lambda(E\cap N)=\int_E f^-\,d\mu$, and $\abs{\lambda}(E)=\lambda^+(E)+\lambda^-(E)=\int_E\abs{f}\,d\mu$.\\
+\hlt{Structural Commentary}: Measure variations match function parts.\\
+\hlt{Key Insight}: Sign sets of the density are Hahn sets.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:absolute-continuity-and-singularity-measures} \hlt{Absolute Continuity and Singularity}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Absolute continuity for measures}: $\lambda\ll\mu\Leftrightarrow\forall E\in\mathcal{M},\mu(E)=0\Rightarrow\lambda(E)=0$.
+\item \hlt{Absolute continuity for charges}: $\lambda\ll\mu\Leftrightarrow\abs{\lambda}\ll\mu$.
+\item \hlt{Mutual singularity}: $\lambda\perp\mu\Leftrightarrow\exists A,B\in\mathcal{M}$ with $A\cap B=\emptyset$, $X=A\cup B$, $\lambda(A)=0$, and $\mu(B)=0$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:absolute-continuity-basic-calculus} \hlt{Absolute Continuity Calculus}\\
+Let $\lambda,\mu,\nu$ be measures and $\eta$ a charge.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\lambda\ll\lambda$ and $\lambda\ll\mu\ll\nu\Rightarrow\lambda\ll\nu$.
+\item $\ll$ is not symmetric.
+\item $(\forall E\in\mathcal{M},\mu(E)=0\Rightarrow\eta(E)=0)\Rightarrow\eta^+,\eta^-,\abs{\eta}\ll\mu$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Reflexivity is immediate. If $\lambda\ll\mu\ll\nu$ and $\nu(E)=0$, then $\mu(E)=0$, hence $\lambda(E)=0$.
+\item On $X=\{0,1\}$, $\mathcal{M}=2^X$, $\delta_0\ll\#$, but $\#\not\ll\delta_0$ since $\delta_0(\{1\})=0$ and $\#\{1\}=1$.
+\item If $\mu(E)=0$, then $\mu(F)=0$ for every $F\in\mathcal{M}$, $F\subseteq E$, so $\eta(F)=0$.\\
+Hence $E\in\mathcal{Z}_\eta$, and Corollary \ref{cor:variation-supremum-formulas-and-null-sets} gives $\abs{\eta}(E)=0$; therefore $\eta^\pm(E)\leq\abs{\eta}(E)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Absolute continuity is null-set order; charges reduce to variation.\\
+\hlt{Key Insight}: Null sets pass to measurable subsets, so all signed pieces vanish there.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:weighted-sum-dominates-countable-measures} \hlt{Dominating a Countable Family of Measures}\\
+Let $(\mu_n)$ be measures with $\mu_n(X)\leq1$, and set $\lambda(E)\defeq\sum_{n\geq1}2^{-n}\mu_n(E)$.\\
+Then $\lambda$ is finite, since $\lambda(X)\leq1$, and countably additive by Tonelli for nonnegative series.\\
+Also $2^{-n}\mu_n(E)\leq\lambda(E)$, hence $\lambda(E)=0\Rightarrow\mu_n(E)=0$ and $\mu_n\ll\lambda$ for all $n$.\\
+\hlt{Key Insight}: A summable positive mixture packages countably many null-set tests into one reference measure.
+\end{example}
+
+\begin{lemma} \label{lem:absolute-continuity-epsilon-delta-finite-source} \hlt{Epsilon--Delta Form of Absolute Continuity}\\
+Let $\lambda$ be finite and $\mu$ a measure on $(X,\mathcal{M})$. Then $\lambda\ll\mu\Leftrightarrow\forall\varepsilon>0,\exists\delta>0,\forall E\in\mathcal{M},\mu(E)<\delta\Rightarrow\lambda(E)<\varepsilon$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose the $\varepsilon$-$\delta$ condition fails. Then $\exists\varepsilon>0$ and $E_n\in\mathcal{M}$ with $\mu(E_n)<2^{-n}$ and $\lambda(E_n)\geq\varepsilon$.\\
+Let $F_n=\bigcup_{k\geq n}E_k$ and $F=\bigcap_nF_n$. Then $\mu(F_n)\leq2^{-n+1}$, so $\mu(F)=0$.\\
+Since $F_n\downarrow F$, $\lambda(F_n)\geq\varepsilon$, and $\lambda$ is finite, continuity from above gives $\lambda(F)\geq\varepsilon$, contradicting $\lambda\ll\mu$.
+\item[$(\Leftarrow)$] If $\mu(E)=0$, then $\mu(E)<\delta$ for every $\delta>0$; hence $\lambda(E)<\varepsilon$ for every $\varepsilon>0$, so $\lambda(E)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: For finite target measure, absolute continuity is uniform smallness on small $\mu$-sets.\\
+\hlt{Key Insight}: A failing sequence is converted into a decreasing null tail with positive $\lambda$-mass.
+\end{proof}
+\end{lemma}
+
+\begin{example} \label{ex:absolute-continuity-delta-fails-infinite-target} \hlt{Finite Target Is Needed}\\
+On $(\N,2^\N)$, let $\lambda=\#$ and $\mu(E)\defeq\sum_{n\in E}2^{-n}$. Since $\mu(E)=0\Leftrightarrow E=\emptyset$, $\lambda\ll\mu$.\\
+But for $E_n=\{n\}$, $\mu(E_n)=2^{-n}\to0$ while $\lambda(E_n)=1$, so the $\varepsilon$-$\delta$ condition fails for $\varepsilon=1$.
+\end{example}
+
+\begin{example} \label{ex:mutual-absolute-continuity-with-infinite-measure} \hlt{Mutual Absolute Continuity Need Not Preserve Finiteness}\\
+On $(\N,2^\N)$, set $\mu(E)\defeq\sum_{n\in E}2^{-n}$ and $\lambda(\emptyset)=0$, $\lambda(E)=+\infty$ for $E\neq\emptyset$.\\
+Then $\mu(\N)=1$, while $\lambda$ is not $\sigma$-finite. Since both measures have null ideal $\{\emptyset\}$, $\lambda\ll\mu$ and $\mu\ll\lambda$.\\
+\hlt{Key Insight}: Absolute continuity compares null sets; it does not compare finiteness, $\sigma$-finiteness, or size.
+\end{example}
