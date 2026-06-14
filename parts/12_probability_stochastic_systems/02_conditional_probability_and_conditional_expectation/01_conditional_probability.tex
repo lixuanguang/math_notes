@@ -1,0 +1,174 @@
+\subsection{Conditional Probability}
+% Conditional probability, conditioning on events, conditional expectation, regular conditional distributions, tower property.
+
+\begin{definition} \label{def:conditional-probability-on-event} \hlt{Conditional Probability}\\
+For $A,B\in\mathcal{F}$ with $\mathbb{P}(B)>0$, the \hlt{conditional probability} of $A$ given $B$ is $\mathbb{P}(A\mid B)\defeq\mathbb{P}(A\cap B)/\mathbb{P}(B)$, i.e. the probability of $A$ under the normalized restriction of $\mathbb{P}$ to $B$.
+\end{definition}
+
+\begin{proposition} \label{prop:conditional-probability-is-probability-measure} \hlt{Conditioning on a Fixed Event Gives a Probability Measure}\\
+Fix $B\in\mathcal{F}$ with $\mathbb{P}(B)>0$. The map $\mathbb{P}_B:\mathcal{F}\to[0,1]$ defined by $\mathbb{P}_B(A)\defeq\mathbb{P}(A\mid B)$ is a probability measure on $\mathcal{F}$.
+\begin{proof}
+For all $A\in\mathcal{F}$, $\mathbb{P}_B(A)=\mathbb{P}(A\cap B)/\mathbb{P}(B)\geq0$, and $\mathbb{P}_B(\Omega)=1$.\\
+If $(A_i)_{i\geq1}$ are disjoint, then $(A_i\cap B)_{i\geq1}$ are disjoint and $(\bigcup_iA_i)\cap B=\bigcup_i(A_i\cap B)$.\\
+Hence $\mathbb{P}_B(\bigcup_iA_i)=\sum_i\mathbb{P}(A_i\cap B)/\mathbb{P}(B)=\sum_i\mathbb{P}_B(A_i)$.\\
+\hlt{Structural Commentary}: Conditioning normalizes the restriction of $\mathbb{P}$ to $B$.\\
+\hlt{Key Insight}: Once $B$ is fixed, conditional probability is ordinary probability on the restricted world.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:conditional-probability-not-symmetric} \hlt{Conditional Probability Is Not Symmetric}\\
+In general, $\mathbb{P}(A\mid B)\neq\mathbb{P}(B\mid A)$; conditioning fixes the reference population. For disease event $D$ and positive-test event $T$, large $\mathbb{P}(T\mid D)$ need not imply large $\mathbb{P}(D\mid T)$ when $\mathbb{P}(D)$ is small.
+\end{remark}
+
+\begin{proposition} \label{prop:multiplication-and-chain-rules} \hlt{Multiplication and Chain Rules}\\
+Let $A,B,C\in\mathcal{F}$ with $\mathbb{P}(A)>0$, $\mathbb{P}(B)>0$, and $\mathbb{P}(B\cap C)>0$. Then $\mathbb{P}(A\cap B)=\mathbb{P}(A\mid B)\mathbb{P}(B)=\mathbb{P}(B\mid A)\mathbb{P}(A)$, and $\mathbb{P}(A\cap B\cap C)=\mathbb{P}(A\mid B\cap C)\mathbb{P}(B\mid C)\mathbb{P}(C)$.
+\begin{proof}
+Using $\mathbb{P}(E\mid F)\mathbb{P}(F)=\mathbb{P}(E\cap F)$ for $\mathbb{P}(F)>0$, $\mathbb{P}(A\mid B)\mathbb{P}(B)=\mathbb{P}(A\cap B)$ and $\mathbb{P}(B\mid A)\mathbb{P}(A)=\mathbb{P}(B\cap A)=\mathbb{P}(A\cap B)$.
+Also, $\mathbb{P}(A\mid B\cap C)\mathbb{P}(B\mid C)\mathbb{P}(C)=\frac{\mathbb{P}(A\cap B\cap C)}{\mathbb{P}(B\cap C)}\cdot\frac{\mathbb{P}(B\cap C)}{\mathbb{P}(C)}\cdot\mathbb{P}(C)=\mathbb{P}(A\cap B\cap C)$.
+\hlt{Structural Commentary}: The chain rule orders information as $C$, then $B$ within $C$, then $A$ within $B\cap C$.
+\hlt{Key Insight}: A joint probability factors into conditional increments along a chosen order.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:cards-without-replacement-multiplication-rule} \hlt{Cards Without Replacement}\\
+Draw two cards from a standard deck without replacement. Let $A$ be the event that the first card is the ace of clubs and $B$ the event that the second card is the queen of diamonds. Since $\mathbb{P}(A)=1/52$ and $\mathbb{P}(B\mid A)=1/51$, $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B\mid A)=1/(52\cdot51)$.
+The factor $\mathbb{P}(B\mid A)$ uses the $51$-card deck remaining after $A$ occurs.
+\end{example}
+
+\begin{proposition} \label{prop:independence-via-conditioning} \hlt{Independence Through Conditioning}\\
+Let $A,B\in\mathcal{F}$ with $\mathbb{P}(A)>0$ and $\mathbb{P}(B)>0$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ and $B$ are independent.
+\item $\mathbb{P}(A\mid B)=\mathbb{P}(A)$.
+\item $\mathbb{P}(B\mid A)=\mathbb{P}(B)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ If $A$ and $B$ are independent, then $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B)$, so $\mathbb{P}(A\mid B)=\mathbb{P}(A\cap B)/\mathbb{P}(B)=\mathbb{P}(A)$.
+\item[$(ii)$]$\Rightarrow (iii)$ If $\mathbb{P}(A\mid B)=\mathbb{P}(A)$, then $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B)$, so $\mathbb{P}(B\mid A)=\mathbb{P}(A\cap B)/\mathbb{P}(A)=\mathbb{P}(B)$.
+\item[$(iii)$]$\Rightarrow (i)$ If $\mathbb{P}(B\mid A)=\mathbb{P}(B)$, then $\mathbb{P}(A\cap B)=\mathbb{P}(B\mid A)\mathbb{P}(A)=\mathbb{P}(A)\mathbb{P}(B)$, hence $A$ and $B$ are independent.
+\end{enumerate}
+\hlt{Structural Commentary}: Each condition is $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B)$ normalized by a positive marginal.\\
+\hlt{Key Insight}: Independence means conditioning on either event preserves the probability of the other.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:law-of-total-probability} \hlt{Law of Total Probability}\\
+Let $A_1,\ldots,A_k\in\mathcal{F}$ satisfy $A_i\cap A_j=\varnothing$ for $i\neq j$, $\bigcup_{i=1}^kA_i=\Omega$, and $\mathbb{P}(A_i)>0$ for all $i$.\\
+For every $B\in\mathcal{F}$, $\mathbb{P}(B)=\sum_{i=1}^{k}\mathbb{P}(B\mid A_i)\mathbb{P}(A_i)$.
+\begin{proof}
+Since $B=\bigsqcup_{i=1}^k(B\cap A_i)$, finite additivity gives $\mathbb{P}(B)=\sum_{i=1}^k\mathbb{P}(B\cap A_i)$.\\
+For each $i$, $\mathbb{P}(B\cap A_i)=\mathbb{P}(B\mid A_i)\mathbb{P}(A_i)$; substitution gives the formula.\\
+\hlt{Structural Commentary}: The partition $\{A_i\}_{i=1}^k$ decomposes $B$ into disjoint cases $B\cap A_i$.\\
+\hlt{Key Insight}: Total probability is weighted averaging over cases.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:prior-and-posterior-probabilities} \hlt{Prior and Posterior Probabilities}\\
+Let $A_1,\ldots,A_k\in\mathcal{F}$ be a partition with $\mathbb{P}(A_i)>0$ for all $i$, and let $B\in\mathcal{F}$ with $\mathbb{P}(B)>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{P}(A_i)$ is the \hlt{prior probability} of $A_i$.
+\item $\mathbb{P}(A_i\mid B)$ is the \hlt{posterior probability} of $A_i$ after conditioning on $B$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:bayes-theorem-finite-partition} \hlt{Bayes' Theorem}\\
+Let $A_1,\ldots,A_k\in\mathcal{F}$ satisfy $A_i\cap A_j=\varnothing$ for $i\neq j$, $\bigcup_{i=1}^kA_i=\Omega$, and $\mathbb{P}(A_i)>0$ for all $i$.\\
+If $B\in\mathcal{F}$ with $\mathbb{P}(B)>0$, then for each $i$, $\mathbb{P}(A_i\mid B)=\frac{\mathbb{P}(B\mid A_i)\mathbb{P}(A_i)}{\sum_{j=1}^{k}\mathbb{P}(B\mid A_j)\mathbb{P}(A_j)}$.
+\begin{proof}
+For fixed $i$, $\mathbb{P}(A_i\mid B)=\mathbb{P}(A_i\cap B)/\mathbb{P}(B)=\mathbb{P}(B\mid A_i)\mathbb{P}(A_i)/\mathbb{P}(B)$.\\
+Since $B=\bigsqcup_{j=1}^k(B\cap A_j)$, $\mathbb{P}(B)=\sum_{j=1}^k\mathbb{P}(B\cap A_j)=\sum_{j=1}^k\mathbb{P}(B\mid A_j)\mathbb{P}(A_j)$. Substitution gives the formula.\\
+\hlt{Structural Commentary}: Bayes reweights priors by likelihoods, then normalizes.\\
+\hlt{Key Insight}: Posterior equals likelihood times prior divided by evidence.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:posterior-mass-compensation} \hlt{Posterior Mass Must Balance}\\
+Let $A_1,\ldots,A_k\in\mathcal{F}$ be a partition of $\Omega$ with $\mathbb{P}(A_i)>0$ for all $i$, and let $B\in\mathcal{F}$ with $\mathbb{P}(B)>0$.\\
+If $\mathbb{P}(A_1\mid B)<\mathbb{P}(A_1)$, then there exists $i\in\{2,\ldots,k\}$ such that $\mathbb{P}(A_i\mid B)>\mathbb{P}(A_i)$.
+\begin{proof}
+Suppose $\mathbb{P}(A_i\mid B)\leq\mathbb{P}(A_i)$ for all $i\geq2$\\
+As $\sum_{i=1}^k\mathbb{P}(A_i\mid B)=\sum_{i=1}^k\mathbb{P}(A_i)=1$, hence $1=\sum_{i=1}^k\mathbb{P}(A_i\mid B)<\mathbb{P}(A_1)+\sum_{i=2}^k\mathbb{P}(A_i)=1$, a contradiction.\\
+\hlt{Structural Commentary}: Posterior mass is conserved across the partition.\\
+\hlt{Key Insight}: A decrease in one cell must be offset by an increase in another.
+\end{proof}
+\end{corollary}
+
+\begin{example} \label{ex:medical-test-base-rate} \hlt{Base Rates in a Medical Test}\\
+Let $D$ denote disease and $T$ a positive test. The joint law is:
+\begin{equation*}
+\begin{array}{c|cc}
+&D&D^c\\ \hline
+T&0.0081&0.0900\\
+T^c&0.0009&0.9010
+\end{array}
+\end{equation*}
+The conditional accuracies are $\mathbb{P}(T\mid D)=\frac{0.0081}{0.0081+0.0009}=0.9$ and $\mathbb{P}(T^c\mid D^c)=\frac{0.9010}{0.9010+0.0900}\approx0.91$.\\
+The posterior under a positive test is $\mathbb{P}(D\mid T)=\frac{0.0081}{0.0081+0.0900}\approx0.083$.\\
+\hlt{Key Insight}: A rare condition can have small posterior probability after a positive test.
+\end{example}
+
+\begin{example} \label{ex:monty-hall-conditional-sample-space} \hlt{Monty Hall}\\
+The player chooses door $1$. Let $\omega=(\omega_1,\omega_2)$, where $\omega_1$ is the prize door and $\omega_2$ is Monty's opened door.\\
+Monty opens neither door $1$ nor the prize door, and chooses uniformly from $\{2,3\}$ when $\omega_1=1$.\\
+The induced probabilities are $\mathbb{P}(1,2)=\mathbb{P}(1,3)=\frac16$ and $\mathbb{P}(2,3)=\mathbb{P}(3,2)=\frac13$.\\
+Let $S=\{\omega_1=1\}$ be the event that staying wins.\\
+Given $\omega_2=2$, the staying-win probability is $\mathbb{P}(S\mid \omega_2=2)=\frac{1/6}{1/6+1/3}=\frac13$.\\
+Thus switching wins with probability $2/3$, and the case $\omega_2=3$ is symmetric.\\
+\hlt{Key Insight}: Once Monty's rule is part of the sample space, switching has conditional probability $2/3$.
+\end{example}
+
+\begin{example} \label{ex:three-card-green-side-problem} \hlt{Three Cards and Conditional Sampling}\\
+Cards are $GG$, $RR$, and $GR$. Choose a card uniformly and then a side uniformly.\\
+Let $V$ be the event that the visible side is green and $H$ the event that the hidden side is green.\\
+Among the three equally likely green visible sides, two have green hidden side, so $\mathbb{P}(H\mid V)=2/3$.
+\end{example}
+
+\begin{example} \label{ex:conditional-blue-eyes-family} \hlt{Conditioning Changes the Reference Class}\\
+Let $X\sim\operatorname{Binomial}(5,1/4)$ be number of blue-eyed children, $Y$ be event that youngest child has blue eyes.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Given $X\geq1$, $\mathbb{P}(X\geq3\mid X\geq1) =\frac{\binom53(1/4)^3(3/4)^2+\binom54(1/4)^4(3/4)+(1/4)^5}{1-(3/4)^5} =\frac{106}{781}$.
+\item Given $Y$, $\mathbb{P}(X\geq3\mid Y) =1-\left(\frac34\right)^4-4\left(\frac14\right)\left(\frac34\right)^3 =\frac{67}{256}$.
+\end{enumerate}
+\hlt{Key Insight}: Similar information can determine different conditioning events.
+\end{example}
+
+\begin{example} \label{ex:bayes-computer-virus-operating-system} \hlt{Bayes with Several Categories}\\
+Let $O\in\{M,W,L\}$ denote operating system with probabilities $(0.30,0.50,0.20)$.\\
+Let $I$ be infection, with $\mathbb{P}(I\mid O=M)=0.65$, $\mathbb{P}(I\mid O=W)=0.82$, and $\mathbb{P}(I\mid O=L)=0.50$.\\
+Bayes' theorem gives $\mathbb{P}(W\mid I) =\frac{0.82\cdot0.50}{0.65\cdot0.30+0.82\cdot0.50+0.50\cdot0.20} =\frac{82}{141}$.
+\end{example}
+
+\begin{example} \label{ex:bayesian-coin-box-posterior-predictive} \hlt{Posterior and Predictive Probabilities}\\
+Let $C$ be uniform on $\{C_1,\ldots,C_5\}$, and suppose coin $C_i$ has head probability $p_i$.\\
+The head-probability vector is $(p_1,p_2,p_3,p_4,p_5)=\left(0,\frac14,\frac12,\frac34,1\right)$. Let $H_n$ be the event that toss $n$ is heads.\\
+The posterior after one head is $\mathbb{P}(C_i\mid H_1) =\frac{p_i}{p_1+p_2+p_3+p_4+p_5} =\left(0,\frac{1}{10},\frac15,\frac{3}{10},\frac25\right)_i$.\\
+The predictive probability is $\mathbb{P}(H_2\mid H_1)=\sum\limits_{i=1}^5p_i\mathbb{P}(C_i\mid H_1)=\frac34$. If $B_4$ is the event that the first head occurs on toss $4$,\\
+the posterior is $\mathbb{P}(C_i\mid B_4)=\frac{(1-p_i)^3p_i}{\sum_{j=1}^5(1-p_j)^3p_j}$, and $\bigl(\mathbb{P}(C_i\mid B_4)\bigr)_{i=1}^5=\left(0,\frac{27}{46},\frac{16}{46},\frac{3}{46},0\right)$.\\
+\hlt{Key Insight}: Bayes' theorem updates hidden parameters; prediction averages over the posterior.
+\end{example}
+
+\begin{definition} \label{def:conditional-mass-and-density-functions} \hlt{Conditional Mass and Density Functions}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Discrete}: if $X,Y$ are discrete and $f_Y(y)>0$, the conditional mass function is\\
+$f_{X\mid Y}(x\mid y)\defeq\mathbb{P}(X=x\mid Y=y)=f_{X,Y}(x,y)/f_Y(y)$.
+\item \hlt{Continuous}: if $X,Y$ have a joint density and $f_Y(y)>0$, the conditional density is\\
+$f_{X\mid Y}(x\mid y)\defeq f_{X,Y}(x,y)/f_Y(y)$, so $\mathbb{P}(X\in A\mid Y=y)=\int_A f_{X\mid Y}(x\mid y)\,dx$ for measurable $A$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:conditional-density-uniform-square} \hlt{Uniform Square}\\
+If $(X,Y)\sim\operatorname{Uniform}([0,1]^2)$, then for $0\leq y\leq1$, $0\leq x\leq1$, $f_{X\mid Y}(x\mid y)=1$. Hence $X\mid Y=y\sim\operatorname{Uniform}(0,1)$.
+\end{example}
+
+\begin{example} \label{ex:conditional-density-parabolic-region} \hlt{Conditioning in the Parabolic Region}\\
+Let $(X,Y)$ have density $f(x,y)=\frac{21}{4}x^2y$, $x^2\leq y\leq1$. Then $f_X(x)=\frac{21}{8}x^2(1-x^4)$, $-1\leq x\leq1$.\\
+For $x^2\leq y\leq1$, $f_{Y\mid X}(y\mid x)=\frac{(21/4)x^2y}{(21/8)x^2(1-x^4)}=\frac{2y}{1-x^4}$.\\
+At $x=1/2$, $f_{Y\mid X}(y\mid1/2)=32y/15$, so $\mathbb{P}(Y\geq3/4\mid X=1/2)=\int_{3/4}^{1}\frac{32y}{15}\,dy=\frac{7}{15}$.
+\end{example}
+
