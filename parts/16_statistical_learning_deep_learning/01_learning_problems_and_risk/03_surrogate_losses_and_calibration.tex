@@ -1,0 +1,29 @@
+\subsection{Surrogate Losses and Calibration}
+
+Many prediction losses are discontinuous or combinatorial.  Learning algorithms often optimize a smoother surrogate and rely on calibration to connect that surrogate to the target loss.
+
+\begin{definition} \label{def:sl-surrogate-loss} \hlt{Surrogate Loss}\\
+For binary labels $Y\in\{-1,1\}$ and score functions $g:\mathcal{X}\to\R$, a \hlt{margin surrogate} has the form
+\[
+\ell_{\phi}(g(x),y)=\phi(yg(x)).
+\]
+It replaces the zero-one loss $\mathbf{1}_{\{yg(x)\leq0\}}$ by a function $\phi$ that is easier to optimize.
+\end{definition}
+
+\begin{example} \label{ex:sl-margin-surrogates} \hlt{Margin Surrogates}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Hinge loss: $\phi(t)=\max\{0,1-t\}$.
+\item Logistic loss: $\phi(t)=\log(1+\exp(-t))$.
+\item Exponential loss: $\phi(t)=\exp(-t)$.
+\item Squared margin loss: $\phi(t)=(1-t)^2$.
+\end{enumerate}
+\end{example}
+
+\begin{definition} \label{def:sl-classification-calibration} \hlt{Classification Calibration}\\
+A surrogate $\phi$ is \hlt{classification calibrated} if every sequence of scores whose surrogate risk approaches the optimal surrogate risk also has zero-one risk approaching the Bayes risk.  Calibration is the population-level bridge between optimizing the surrogate and solving the original classification problem.
+\end{definition}
+
+\begin{remark} \label{rem:sl-proper-scoring-rules} \hlt{Proper Scoring Rules}\\
+For probabilistic prediction, log loss and Brier loss are examples of proper scoring rules: at the population optimum, the predicted distribution equals the conditional law of $Y$ given $X$.  This turns a predictive criterion into a way of learning calibrated probabilities.
+\end{remark}

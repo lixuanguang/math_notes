@@ -1,0 +1,43 @@
+\subsection{Empirical Risk Minimization}
+
+The population risk is the target, but only a sample is observed.  Empirical risk minimization replaces the unknown expectation by an average over the training data.
+
+\begin{definition} \label{def:sl-empirical-risk-minimization} \hlt{Empirical Risk Minimization}\\
+Given training data $S=((x_1,y_1),\ldots,(x_n,y_n))$, the \hlt{empirical risk} of $f$ is
+\[
+\widehat{R}_S(f)=\frac1n\sum_{i=1}^n\ell(f(x_i),y_i).
+\]
+An \hlt{empirical risk minimizer} over a class $\mathcal{F}$ is any
+\[
+\widehat{f}\in\operatorname*{arg\,min}_{f\in\mathcal{F}}\widehat{R}_S(f).
+\]
+\end{definition}
+
+\begin{definition} \label{def:sl-regularized-erm} \hlt{Regularized Empirical Risk}\\
+For a complexity penalty $\Omega:\mathcal{F}\to[0,\infty]$ and tuning parameter $\lambda\geq0$, a regularized empirical risk minimizer solves
+\[
+\widehat{f}_{\lambda}\in
+\operatorname*{arg\,min}_{f\in\mathcal{F}}
+\left\{\widehat{R}_S(f)+\lambda\Omega(f)\right\}.
+\]
+The penalty may encode smoothness, sparsity, norm control, margin size, or architectural constraints.
+\end{definition}
+
+\begin{theorem} \label{thm:sl-finite-class-erm-bound} \hlt{Finite-Class ERM Bound}\\
+Assume $0\leq\ell(f(X),Y)\leq1$ for every $f\in\mathcal{F}$ and $\abs{\mathcal{F}}<\infty$.  With probability at least $1-\delta$,
+\[
+\sup_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_S(f)}
+\leq
+\sqrt{\frac{\log(2\abs{\mathcal{F}}/\delta)}{2n}}.
+\]
+Consequently, an exact empirical risk minimizer $\widehat{f}$ satisfies
+\[
+R(\widehat{f})\leq
+\inf_{f\in\mathcal{F}}R(f)
++2\sqrt{\frac{\log(2\abs{\mathcal{F}}/\delta)}{2n}}.
+\]
+\end{theorem}
+
+\begin{remark} \label{rem:sl-erm-computational-statistical-split} \hlt{Statistical and Computational Error}\\
+In practice the selected predictor may be only an approximate minimizer of the empirical criterion.  Its excess risk is then decomposed into approximation error, estimation error, and optimization error.
+\end{remark}

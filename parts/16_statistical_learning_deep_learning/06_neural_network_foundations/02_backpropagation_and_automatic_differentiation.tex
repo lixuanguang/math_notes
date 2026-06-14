@@ -1,0 +1,26 @@
+\subsection{Backpropagation and Automatic Differentiation}
+
+Backpropagation is reverse-mode differentiation applied to the computational graph of the network and loss.
+
+\begin{definition} \label{def:sl-computational-graph} \hlt{Computational Graph}\\
+A computational graph is a directed acyclic graph whose nodes are intermediate variables and whose edges record functional dependence.  Neural-network training differentiates a scalar loss through this graph with respect to many parameters.
+\end{definition}
+
+\begin{method} \label{method:sl-backpropagation} \hlt{Backpropagation}\\
+For a multilayer network, the forward pass computes activations layer by layer.  The backward pass propagates adjoints from the loss to the parameters using the chain rule.  For layer preactivation $z^{(k)}$ and activation $h^{(k)}$, the local Jacobians determine how the error signal at layer $k+1$ becomes the error signal at layer $k$.
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Minibatch Backpropagation Step}
+\begin{algorithmic}
+\Require Minibatch $B$, parameters $\theta$, learning rate $\eta$
+\State Compute predictions $f(x;\theta)$ for all $(x,y)\in B$
+\State Compute minibatch loss $\widehat{L}_B(\theta)$
+\State Run reverse-mode automatic differentiation to compute $g=\nabla_{\theta}\widehat{L}_B(\theta)$
+\State Update parameters $\theta \leftarrow \theta-\eta g$
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-autodiff-versus-symbolic} \hlt{Automatic Differentiation}\\
+Automatic differentiation is neither numerical finite differencing nor purely symbolic simplification.  It evaluates exact chain-rule derivatives of the implemented computation up to floating-point arithmetic.
+\end{remark}
