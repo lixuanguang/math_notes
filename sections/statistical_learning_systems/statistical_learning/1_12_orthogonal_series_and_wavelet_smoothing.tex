@@ -1,0 +1,226 @@
+\subsection{Orthogonal Series and Wavelet Smoothing}
+% Orthogonal basis expansions, series density/regression estimators, Haar wavelets.
+% Source integration: attached screenshots from Chapter 22, Smoothing Using Orthogonal Functions.
+
+Orthogonal series methods replace local averaging by coordinates in an orthonormal basis. The analytic backbone is already in the Fourier and Hilbert-space notes: Fourier coefficients give best mean-square approximation in Theorem \ref{thm:orthonormal-fourier-best-approximation-bessel}, and complete orthonormal systems in $L^2$ satisfy Parseval identities in Theorem \ref{thm:l2-orthonormal-systems-riesz-fischer-parseval}.
+
+\subsubsection{Orthogonal Coordinates in $L^2$}
+
+\begin{definition} \label{def:l2-orthogonal-series-coordinates} \hlt{Orthogonal Series Coordinates}\\
+Let $(\phi_j)_{j\geq1}$ be a complete orthonormal system for $L^2[a,b]$. For $f\in L^2[a,b]$, define $\beta_j\defeq\int_a^b f(x)\phi_j(x)\,dx$.\\
+In $L^2$, $f=\sum_{j\geq1}\beta_j\phi_j$ and $\int_a^b f(x)^2\,dx=\sum_{j\geq1}\beta_j^2$.\\
+The projection $f_J\defeq\sum_{j=1}^{J}\beta_j\phi_j$ minimizes $\|f-g\|_2$ over $g\in\operatorname{span}\{\phi_1,\ldots,\phi_J\}$.
+\end{definition}
+
+\begin{example} \label{ex:cosine-and-legendre-orthogonal-bases} \hlt{Cosine and Legendre Bases}\\
+On $[0,1]$, the cosine basis is $\phi_1(x)=1$ and $\phi_j(x)=\sqrt2\cos((j-1)\pi x)$ for $j\geq2$.\\
+On $[-1,1]$, Legendre polynomials satisfy $P_\ell(x)=(2^\ell\ell!)^{-1}d^\ell((x^2-1)^\ell)/dx^\ell$ and $\int_{-1}^{1}P_\ell^2=2/(2\ell+1)$.\\
+Hence $\phi_\ell(x)=\sqrt{(2\ell+1)/2}\,P_\ell(x)$ is orthonormal, with $P_0=1$, $P_1=x$, $P_2=(3x^2-1)/2$, $P_3=(5x^3-3x)/2$.\\
+The recurrence is $P_{\ell+1}(x)=((2\ell+1)xP_\ell(x)-\ell P_{\ell-1}(x))/(\ell+1)$.
+\end{example}
+
+\begin{principle} \label{princ:smoothness-means-small-high-frequency-coefficients} \hlt{Smoothness Means Small High-Frequency Coefficients}\\
+In an oscillatory basis, high-index coefficients encode high-frequency structure.\\
+For the cosine basis, $\int_0^1(f^{(k)}(x))^2\,dx\asymp\sum_{j\geq1}\beta_j^2(\pi(j-1))^{2k}$, so Sobolev smoothness forces weighted coefficient decay.
+\end{principle}
+
+\begin{example} \label{ex:source-orthonormal-vector-basis} \hlt{A Finite Orthonormal Basis Check}\\
+The source begins with finite-dimensional coordinates.\\
+The vectors $\psi_1=\left(\frac1{\sqrt3},\frac1{\sqrt3},\frac1{\sqrt3}\right)$, $\psi_2=\left(\frac1{\sqrt2},-\frac1{\sqrt2},0\right)$, $\psi_3=\left(\frac1{\sqrt6},\frac1{\sqrt6},-\frac2{\sqrt6}\right)$ have norm $1$ and pairwise dot products $0$. Hence every $v\in\R^3$ has the expansion $v=\sum_{j=1}^{3}\langle \psi_j,v\rangle\psi_j$.
+\end{example}
+
+\begin{example} \label{ex:cosine-basis-source-exercise-coefficients} \hlt{Two Cosine-Basis Exercise Answers}\\
+For cosine basis on $[0,1]$, $\sqrt2\cos(3\pi x)=\phi_4(x)$, so $\beta_4=1$, all other coefficients vanish.\\
+For $f(x)=\sin(\pi x)$, $\beta_1=2/\pi$ and, for $m=j-1\geq1$, $\beta_{m+1}=
+\begin{cases}
+0, & m\ \text{odd},\\[2mm]
+-\dfrac{2\sqrt2}{\pi(m^2-1)}, & m\ \text{even}.
+\end{cases}$.
+\end{example}
+
+\subsubsection{Orthogonal Series Density Estimation}
+
+\begin{definition} \label{def:orthogonal-series-density-estimator} \hlt{Orthogonal Series Density Estimator}\\
+Let $X_1,\ldots,X_n$ be IID from density $f$ on $[0,1]$, with expansion $f=\sum_{j\geq1}\beta_j\phi_j$ in an orthonormal basis.\\
+Since $\beta_j=\mathbb{E}\phi_j(X_1)$, estimate $\widehat\beta_j\defeq n^{-1}\sum_{i=1}^{n}\phi_j(X_i)$.\\
+The \hlt{$J$-term orthogonal series estimator} is $\widehat f_J(x)\defeq\sum_{j=1}^{J}\widehat\beta_j\phi_j(x)$.
+\end{definition}
+
+\begin{theorem} \label{thm:orthogonal-density-coefficient-moments-and-risk} \hlt{Density Coefficient Moments and Risk}\\
+Let $\sigma_j^2\defeq\operatorname{Var}(\phi_j(X_1))=\int(\phi_j(x)-\beta_j)^2f(x)\,dx$ and $R(J)\defeq\mathbb{E}\|\widehat f_J-f\|_2^2$.\\
+Then $\mathbb{E}\widehat\beta_j=\beta_j$, $\operatorname{Var}(\widehat\beta_j)=\sigma_j^2/n$, and $R(J)=\sum_{j=1}^{J}\sigma_j^2/n+\sum_{j>J}\beta_j^2$.
+\begin{proof} Since $\widehat\beta_j=n^{-1}\sum_{i=1}^{n}\phi_j(X_i)$, sample-mean identities give $\mathbb{E}\widehat\beta_j=\beta_j$ and $\operatorname{Var}(\widehat\beta_j)=\sigma_j^2/n$.\\
+By orthonormality, $\widehat f_J-f=\sum_{j\leq J}(\widehat\beta_j-\beta_j)\phi_j-\sum_{j>J}\beta_j\phi_j$.\\
+Hence $\|\widehat f_J-f\|_2^2=\sum_{j\leq J}(\widehat\beta_j-\beta_j)^2+\sum_{j>J}\beta_j^2$. Taking expectations gives the stated risk.\\
+\hlt{Structural Commentary}: Orthogonality diagonalizes the estimation error.\\
+\hlt{Key Insight}: Risk equals retained coefficient variance plus omitted coefficient energy.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:orthogonal-density-risk-estimation} \hlt{Orthogonal Density Risk Estimation}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Restrict $1\leq J\leq p$, for a chosen truncation cap $p$.
+\item Estimate coefficient variances by $\widehat\sigma_j^2\defeq(n-1)^{-1}\sum_{i=1}^{n}(\phi_j(X_i)-\widehat\beta_j)^2$.
+\item With $a_+\defeq\max\{a,0\}$, estimate risk by $\widehat R(J)\defeq\sum_{j=1}^{J}\widehat\sigma_j^2/n+\sum_{j=J+1}^{p}(\widehat\beta_j^2-\widehat\sigma_j^2/n)_+$.
+\item Choose $\widehat J\in\operatorname*{arg\,min}_{1\leq J\leq p}\widehat R(J)$ and set $\widehat f(x)\defeq\sum_{j=1}^{\widehat J}\widehat\beta_j\phi_j(x)$.
+\item If a density is required, use $\widehat f^{\,*}(x)\defeq\max\{\widehat f(x),0\}/\int_0^1\max\{\widehat f(u),0\}\,du$.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:orthogonal-density-confidence-band} \hlt{Orthogonal Density Confidence Band}\\
+Let $\widetilde f_J\defeq\sum_{j=1}^{J}\beta_j\phi_j$, $K_J\defeq\max_{1\leq j\leq J}\|\phi_j\|_\infty$, and $c_J\defeq JK_J^2n^{-1/2}(1+\sqrt{2z_\alpha/J})^{1/2}$.\\
+Define $\ell(x)\defeq\widehat f_J(x)-c_J$ and $u(x)\defeq\widehat f_J(x)+c_J$.\\
+Then $[\ell,u]$ is an approximate $1-\alpha$ band for $\widetilde f_J$; for the cosine basis, $K_J=\sqrt2$.
+\begin{proof} For each $x$, $\widehat f_J(x)-\widetilde f_J(x)=\sum_{j=1}^{J}(\widehat\beta_j-\beta_j)\phi_j(x)$. Since $|\phi_j(x)|\leq K_J$, $\|\widehat f_J-\widetilde f_J\|_\infty\leq K_J\sum_{j=1}^{J}|\widehat\beta_j-\beta_j|$.\\
+The coefficient errors are sample averages with variance $O(n^{-1})$.\\
+Gaussian and union-bound approximations give $\mathbb{P}(\|\widehat f_J-\widetilde f_J\|_\infty\leq c_J)\approx1-\alpha$.\\
+Thus $\ell(x)\leq\widetilde f_J(x)\leq u(x)$ simultaneously in $x$ with approximate probability $1-\alpha$.\\
+\hlt{Structural Commentary}: A uniform band is obtained by controlling finitely many coefficient errors.\\
+\hlt{Key Insight}: The band covers the truncated target $\widetilde f_J$, not the unsmoothed density $f$.
+\end{proof}
+\end{theorem}
+
+\subsubsection{Orthogonal Series Regression}
+
+\begin{definition} \label{def:orthogonal-series-regression-estimator} \hlt{Orthogonal Series Regression Estimator}\\
+Consider fixed-design regression $Y_i=r(x_i)+\varepsilon_i$, $i=1,\ldots,n$, with independent errors satisfying $\mathbb{E}\varepsilon_i=0$ and $\operatorname{Var}(\varepsilon_i)=\sigma^2$. On a regular grid $x_i=i/n$, write $r=\sum_{j\geq1}\beta_j\phi_j$ and estimate $\widehat\beta_j\defeq n^{-1}\sum_{i=1}^{n}Y_i\phi_j(x_i)$.\\
+The \hlt{$J$-term orthogonal regression estimator} is $\widehat r_J(x)\defeq\sum_{j=1}^{J}\widehat\beta_j\phi_j(x)$.
+\end{definition}
+
+\begin{theorem} \label{thm:orthogonal-regression-coefficients-risk} \hlt{Orthogonal Regression Coefficients and Risk}\\
+Assume $x_i=i/n$, $Y_i=r(x_i)+\varepsilon_i$, $\mathbb{E}\varepsilon_i=0$, and $\operatorname{Var}(\varepsilon_i)=\sigma^2$. For fixed $j$, $\widehat\beta_j\approx N(\beta_j,\sigma^2/n)$.\\
+With $R(J)\defeq\mathbb{E}\|\widehat r_J-r\|_2^2$, $R(J)\approx J\sigma^2/n+\sum_{j>J}\beta_j^2$.
+\begin{proof} Since $\widehat\beta_j=n^{-1}\sum_{i=1}^{n}Y_i\phi_j(x_i)$, $\mathbb{E}\widehat\beta_j=n^{-1}\sum_i r(x_i)\phi_j(x_i)\approx\int_0^1r(x)\phi_j(x)\,dx=\beta_j$.\\
+Also $\operatorname{Var}(\widehat\beta_j)=\sigma^2n^{-2}\sum_i\phi_j(x_i)^2\approx\sigma^2n^{-1}\int_0^1\phi_j(x)^2\,dx=\sigma^2/n$.\\
+A normal approximation for the coefficient average gives $\widehat\beta_j\approx N(\beta_j,\sigma^2/n)$.\\
+By orthonormality, $\widehat r_J-r=\sum_{j\leq J}(\widehat\beta_j-\beta_j)\phi_j-\sum_{j>J}\beta_j\phi_j$, hence $R(J)\approx\sum_{j\leq J}\sigma^2/n+\sum_{j>J}\beta_j^2$.\\
+\hlt{Structural Commentary}: Regression risk separates into estimated-coordinate noise and omitted-coordinate bias.\\
+\hlt{Key Insight}: Regular-grid orthogonality makes each coefficient behave like an independent noisy coordinate.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:orthogonal-series-regression-react} \hlt{REACT Risk Estimation}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $k\approx n/4$ and estimate $\sigma^2$ by $\widehat\sigma^2\defeq(n/k)\sum_{j=n-k+1}^{n}\widehat\beta_j^2$.
+\item With $a_+\defeq\max\{a,0\}$, estimate risk by $\widehat R(J)\defeq J\widehat\sigma^2/n+\sum_{j=J+1}^{n}(\widehat\beta_j^2-\widehat\sigma^2/n)_+$.
+\item Choose $\widehat J\in\operatorname*{arg\,min}_{1\leq J\leq n}\widehat R(J)$.
+\item Set $\widehat r(x)\defeq\sum_{j=1}^{\widehat J}\widehat\beta_j\phi_j(x)$.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:orthogonal-regression-confidence-band} \hlt{Orthogonal Regression Confidence Band}\\
+Let $\widehat r_J(x)\defeq\sum_{j=1}^{J}\widehat\beta_j\phi_j(x)$ and $\widetilde r_J(x)\defeq\sum_{j=1}^{J}\beta_j\phi_j(x)$.\\
+Assume $e_j\defeq\widehat\beta_j-\beta_j\approx N(0,\sigma^2/n)$ for $j\leq J$ and estimate $\sigma^2$ by $\widehat\sigma^2\defeq(n/k)\sum_{j=n-k+1}^{n}\widehat\beta_j^2$.\\
+Set $K_J\defeq\max_{1\leq j\leq J}\max_x\abs{\phi_j(x)}$ and $\widehat\tau^2\defeq 2J\widehat\sigma^4(1+J/k)/n$.\\
+For $J<n-k+1$, let $z_\alpha$ be the upper standard-normal $\alpha$-quantile.\\
+An approximate $1-\alpha$ band for $\widetilde r_J$ is $\ell_J(x)\defeq\widehat r_J(x)-K_J\sqrt J\sqrt{z_\alpha\widehat\tau/\sqrt n+J\widehat\sigma^2/n}$\\
+and $u_J(x)\defeq\widehat r_J(x)+K_J\sqrt J\sqrt{z_\alpha\widehat\tau/\sqrt n+J\widehat\sigma^2/n}$. For the cosine basis, $K_J=\sqrt2$.
+\begin{proof} Let $e_j\defeq\widehat\beta_j-\beta_j$ and $S_J\defeq\sum_{j=1}^{J}e_j^2$.\\
+By Cauchy--Schwarz, $\abs{\widehat r_J(x)-\widetilde r_J(x)}\leq S_J^{1/2}(\sum_{j=1}^{J}\phi_j(x)^2)^{1/2}\leq K_J\sqrt J S_J^{1/2}$.\\
+The coefficient approximation gives estimated center $J\widehat\sigma^2/n$ and estimated standard error $\widehat\tau/\sqrt n$ for $S_J$.\\
+Hence $S_J\lesssim J\widehat\sigma^2/n+z_\alpha\widehat\tau/\sqrt n$ with probability approximately $1-\alpha$.\\
+Substitution gives $\ell_J(x)\leq\widetilde r_J(x)\leq u_J(x)$ uniformly in $x$.\\
+\hlt{Structural Commentary}: The band converts coefficient uncertainty into a uniform function envelope.\\
+\hlt{Key Insight}: Bounded basis functions turn an $\ell^2$ coefficient radius into a sup-norm band.
+\end{proof}
+\end{theorem}
+
+\subsubsection{Haar Wavelets}
+
+\begin{perspective} \label{per:why-wavelets-after-orthogonal-series} \hlt{Why Wavelets}\\
+Global bases encode local irregularities inefficiently: high-frequency terms affect the whole domain.\\
+Wavelets are localised, so a few large coefficients can represent sharp local structure. They are therefore suited to spatially inhomogeneous signals.
+\end{perspective}
+
+\begin{definition} \label{def:haar-father-mother-wavelets} \hlt{Haar Father and Mother Wavelets}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{Haar father wavelet} is $\phi\defeq\mathbf{1}_{[0,1)}$.
+\item The \hlt{Haar mother wavelet} is $\psi\defeq-\mathbf{1}_{[0,1/2]}+\mathbf{1}_{(1/2,1]}$.
+\item For $j\geq0$ and $k\in\mathbb{Z}$, set $\phi_{j,k}(x)\defeq2^{j/2}\phi(2^jx-k)$ and $\psi_{j,k}(x)\defeq2^{j/2}\psi(2^jx-k)$.
+\item Larger $j$ gives support length $2^{-j}$ and finer localization.
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistical_learning_systems/haar_wavelet_examples.tikz}
+  \caption{Left to right: $\phi,\psi,\psi_{2,2},\psi_{4,10}$; $\psi_{j,k}(x)=2^{j/2}\psi(2^jx-k)$.}
+  \label{fig:haar-wavelet-examples}
+\end{figure}
+
+\begin{theorem} \label{thm:haar-wavelet-basis-expansion} \hlt{Haar Basis Expansion}\\
+For $j\geq0$, let $W_j\defeq\{\psi_{j,k}:0\leq k<2^j\}$ and $\mathcal{H}\defeq\{\phi\}\cup\bigcup_{j\geq0}W_j$. Then $\mathcal{H}$ is an orthonormal basis of $L^2(0,1)$.\\
+Thus every $f\in L^2(0,1)$ has $f=\alpha\phi+\sum_{j\geq0}\sum_{k=0}^{2^j-1}\beta_{j,k}\psi_{j,k}$ in $L^2$, where $\alpha\defeq\int_0^1f\phi$ and $\beta_{j,k}\defeq\int_0^1f\psi_{j,k}$.\\
+The resolution-$J$ projection is $\widetilde f_J\defeq\alpha\phi+\sum_{j=0}^{J-1}\sum_{k=0}^{2^j-1}\beta_{j,k}\psi_{j,k}$ and has $2^J$ coefficients.
+\begin{proof}
+Proposition \ref{prop:haar-wavelets-orthonormal-direct-check} gives orthonormality.
+Dyadic step functions lie in $\operatorname{span}\mathcal{H}$ and are dense in $L^2(0,1)$, so $\mathcal{H}$ is complete.
+The expansion and projection formula then follow from Hilbert-space Fourier expansion.
+\hlt{Structural Commentary}: Haar functions organize $L^2(0,1)$ by dyadic resolution levels.\\
+\hlt{Key Insight}: Completeness comes from dyadic step functions; orthogonality comes from zero-mean local oscillations.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:haar-wavelets-orthonormal-direct-check} \hlt{Haar Orthonormality}\\
+Let $\mathcal{H}\defeq\{\phi\}\cup\{\psi_{j,k}:j\geq0,\ 0\leq k<2^j\}$.\\
+Then $\|h\|_2=1$ for all $h\in\mathcal{H}$ and $\langle h,h'\rangle=0$ for all distinct $h,h'\in\mathcal{H}$.
+\begin{proof} Since $\|\phi\|_2=1$ and $\int_0^1\psi_{j,k}=0$, $\langle\phi,\psi_{j,k}\rangle=0$. Set $I_{j,k}\defeq[k2^{-j},(k+1)2^{-j}]$.\\
+Then $\operatorname{supp}\psi_{j,k}=I_{j,k}$ and $\abs{\psi_{j,k}}=2^{j/2}$ on $I_{j,k}$, hence $\|\psi_{j,k}\|_2^2=2^j\abs{I_{j,k}}=1$.\\
+For $(j,k)\neq(j',k')$, if $\abs{I_{j,k}\cap I_{j',k'}}=0$, then $\langle\psi_{j,k},\psi_{j',k'}\rangle=0$.\\
+Otherwise dyadic nesting holds; say $I_{j',k'}\subset I_{j,k}$ with $j'>j$.\\
+Since $\psi_{j,k}=c$ on $I_{j',k'}$ for some constant $c$, $\langle\psi_{j,k},\psi_{j',k'}\rangle=c\int_{I_{j',k'}}\psi_{j',k'}=0$.\\
+\hlt{Structural Commentary}: Haar orthogonality reduces to disjoint or nested dyadic supports.\\
+\hlt{Key Insight}: A finer Haar wavelet has zero mean inside any coarser dyadic cell containing it.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:haar-wavelet-regression-thresholding} \hlt{Haar Wavelet Regression by Universal Thresholding}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Assume $n=2^J$, $x_i=i/n$, and $Y_i=r(x_i)+\sigma\varepsilon_i$.
+\item Estimate coefficients by $\widehat\alpha\defeq n^{-1}\sum_i\phi(x_i)Y_i$ and $D_{j,k}\defeq n^{-1}\sum_i\psi_{j,k}(x_i)Y_i$ for $0\leq j<J$.
+\item Estimate noise by $\widehat\sigma\defeq\sqrt n\,\operatorname{median}\{\abs{D_{J-1,k}}:0\leq k<2^{J-1}\}/0.6745$.
+\item With $\lambda_n\defeq\widehat\sigma\sqrt{2\log n/n}$, set $\widehat\beta_{j,k}\defeq D_{j,k}\mathbf{1}_{\{\abs{D_{j,k}}>\lambda_n\}}$.
+\item Return $\widehat r(x)\defeq\widehat\alpha\phi(x)+\sum_{j=0}^{J-1}\sum_{k=0}^{2^j-1}\widehat\beta_{j,k}\psi_{j,k}(x)$.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:haar-discrete-wavelet-transform} \hlt{Discrete Haar Wavelet Transform}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $y=(y_1,\ldots,y_n)$ with $n=2^J$, and initialize $\operatorname{temp}\defeq y/\sqrt n$.
+\item For $j=J-1,J-2,\ldots,0$ and $I=1,\ldots,2^j$, set $D_j(I)\defeq(\operatorname{temp}(2I)-\operatorname{temp}(2I-1))/\sqrt2$.
+\item Replace $\operatorname{temp}(I)$ by $(\operatorname{temp}(2I)+\operatorname{temp}(2I-1))/\sqrt2$ for $I=1,\ldots,2^j$.
+\item The recursion stores details $D_j$ and propagates local averages to the next coarser scale.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:universal-threshold-removes-pure-noise} \hlt{Universal Threshold Removes Pure Noise}\\
+Let $D_1,\ldots,D_n$ be independent pure-noise detail coefficients with $D_m\approx N(0,\sigma^2/n)$, set $\lambda_n\defeq\sigma\sqrt{2\log n/n}$, and define $\widehat\beta_m\defeq D_m\mathbf{1}_{\{\abs{D_m}>\lambda_n\}}$. Then $\mathbb{P}(\widehat\beta_m=0\ \forall m)\to1$.
+\begin{proof} Let $Z_m\defeq\sqrt nD_m/\sigma$.\\
+By the union bound and Mills' inequality, $\mathbb{P}(\max_m\abs{D_m}>\lambda_n)\leq n\mathbb{P}(\abs{Z_1}>\sqrt{2\log n})\to0$.\\
+Thus $\max_m\abs{D_m}\leq\lambda_n$ with probability tending to $1$, and then $\widehat\beta_m=0$ for all $m$.\\
+\hlt{Structural Commentary}: Universal thresholding controls the maximum of many noise coordinates.\\
+\hlt{Key Insight}: The $\sqrt{2\log n}$ threshold matches the extreme-value scale of $n$ Gaussian noises.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:haar-density-exercise-unbiased-risk} \hlt{Haar Density Risk}\\
+Let $X_1,\ldots,X_n\sim f$ on $[0,1]$ and suppose $f=\phi+\sum_{j\geq0}\sum_{k=0}^{2^j-1}\beta_{j,k}\psi_{j,k}$ in $L^2(0,1)$.\\
+For $B\geq0$, set $\widehat\beta_{j,k}\defeq n^{-1}\sum_{i=1}^{n}\psi_{j,k}(X_i)$ and $\widehat f_B\defeq\phi+\sum_{j=0}^{B}\sum_{k=0}^{2^j-1}\widehat\beta_{j,k}\psi_{j,k}$.\\
+Then $\mathbb{E}\widehat\beta_{j,k}=\beta_{j,k}$ and $R_B\defeq\mathbb{E}\|\widehat f_B-f\|_2^2=\sum_{j=0}^{B}\sum_{k=0}^{2^j-1}\operatorname{Var}(\psi_{j,k}(X_1))/n+\sum_{j>B}\sum_{k=0}^{2^j-1}\beta_{j,k}^2$.
+\begin{proof} Unbiasedness follows from $\mathbb{E}\widehat\beta_{j,k}=\int_0^1\psi_{j,k}(x)f(x)\,dx=\beta_{j,k}$. Let $\eta_{j,k}\defeq\widehat\beta_{j,k}-\beta_{j,k}$.\\
+Orthonormality gives $\widehat f_B-f=\sum_{j=0}^{B}\sum_{k=0}^{2^j-1}\eta_{j,k}\psi_{j,k}-\sum_{j>B}\sum_{k=0}^{2^j-1}\beta_{j,k}\psi_{j,k}$ and therefore\\
+$\|\widehat f_B-f\|_2^2=\sum_{j=0}^{B}\sum_{k=0}^{2^j-1}\eta_{j,k}^2+\sum_{j>B}\sum_{k=0}^{2^j-1}\beta_{j,k}^2$.\\
+Taking expectations, using $\operatorname{Var}(\widehat\beta_{j,k})=\operatorname{Var}(\psi_{j,k}(X_1))/n$ gives the formula.\\
+\hlt{Structural Commentary}: Haar truncation separates estimation variance from omitted-resolution bias.\\
+\hlt{Key Insight}: Orthonormal coordinates turn integrated squared error into coordinatewise squared error.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:wavelet-mad-normalization} \hlt{Why the Constant $0.6745$ Appears}\\
+For $Z\sim N(0,1)$, $\operatorname{median}\abs{Z}\approx0.6745$, so $\operatorname{MAD}/0.6745$ estimates a normal standard deviation. Finest-scale Haar details are natural noise proxies because local oscillations suppress broad signal structure.
+\end{remark}
