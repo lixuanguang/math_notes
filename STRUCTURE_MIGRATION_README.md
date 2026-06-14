@@ -93,6 +93,56 @@ placement, then inspect the live `parts/` files for local style and labels.
 - For substantive source pages, integrate only what the source supports and use
   existing notes for cross-references before adding duplicate theory.
 
+## Formalization Loop Reference
+
+For formalization-loop prompts, use the active `parts/` tree as the only LaTeX
+source tree. The old repo-level `sections/` tree has been removed, so any prompt
+language about unmigrated legacy LaTeX sections should be treated as obsolete.
+
+The loop should process exactly one logical unit:
+
+- If a section `overview.tex` contains substantive prose or formal environments
+  directly under its `\section{...}`, that overview body is one logical unit.
+- If a section `overview.tex` only declares the `\section{...}` and inputs
+  subsection files, each input subsection file is one logical unit.
+- Do not process an entire part or multiple sibling subsection files in one
+  loop.
+- Do not edit notation, overview, or neighboring files unless the current unit
+  cannot remain coherent without a strictly local input/update.
+
+Cursor resolution:
+
+- Prefer exact `parts/...` file paths.
+- If given a section heading, search active `parts/` files and choose the unique
+  matching `\section` or `\subsection`; if there are multiple matches, ask for a
+  part or file path.
+- Bare section numbers are part-scoped because section counters restart in each
+  `\part`. A bare cursor such as `Section 1` is therefore ambiguous unless the
+  user has already supplied a part context.
+- At the beginning of the whole notes, `Continue from: Section 1` may be
+  resolved as Part 1, Section 1:
+  `parts/01_set_theory_logic_foundations/01_sets/overview.tex`. Since that file
+  is structural, the first editable logical unit is
+  `parts/01_set_theory_logic_foundations/01_sets/01_introduction_to_sets.tex`.
+- The next logical cursor after a subsection file is the next `\input{...}` in
+  the same section `overview.tex`; after the last subsection in a section, move
+  to the first logical unit in the next section folder listed by the part
+  `overview.tex`.
+
+Before editing a formalization-loop unit:
+
+- Inspect the current file, its local section `overview.tex`, the owning part
+  `overview.tex`, and nearby prerequisite files needed for notation and
+  cross-references.
+- Check whether any theorem, proposition, lemma, corollary, or method depends
+  on or references a remark or example.
+- If formal content is needed later, keep it in exposition or a formal
+  environment rather than relying on a remark or example.
+- Preserve labels and cross-references unless they are locally wrong.
+- Make text more formal, succinct, notation-driven, and precise without adding
+  unsupported mathematical content.
+- Stop after one logical unit and report the next logical cursor.
+
 ## Current Section Index
 
 Use this as the first-pass placement index. For subsection-level placement,
