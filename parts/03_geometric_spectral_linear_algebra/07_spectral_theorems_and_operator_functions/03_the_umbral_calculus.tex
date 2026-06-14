@@ -1,0 +1,520 @@
+\subsection{The Umbral Calculus}
+
+
+% Source note: first-pass integration from Roman, Advanced Linear Algebra,
+% Formal power series as algebraic dual vectors and as operators on polynomial space.
+
+The umbral calculus is the formal linear algebra of polynomial sequences. It identifies a formal power series with three related objects: an algebra element, a linear functional on $\C[x]$, and an operator on $\C[x]$. Refines duality of Definition \ref{def:dual-map} and polynomial operator calculus of Definition \ref{def:polynomial-applied-to-operator}, without invoking convergence.
+
+\begin{definition} \label{def:formal-power-series-umbral-calculus} \hlt{Formal Power Series and Order}\\
+Let $\mathscr{F}\defeq\C[[t]]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f \in \mathscr{F}$ are \hlt{formal power series} $f(t)=\sum\limits_{k\geq0}a_kt^k$, w. coefficientwise addition, Cauchy product multiplication.
+\item The \hlt{order} of $f$ is $o(f)\defeq \min\{k:a_k\neq0\}$, where $o(0)\defeq+\infty$.
+\item A series is \hlt{invertible} if it has a multiplicative inverse in $\mathscr{F}$, and is a \hlt{delta series} if $o(f)=1$.
+\item If $o(f)=1$, its \hlt{compositional inverse} is denoted $\overline f$ and satisfies $f(\overline f(t))=\overline f(f(t))=t$.
+\item The \hlt{lower factorial polynomials} are $x)_0\defeq1$ and $(x)_n\defeq x(x-1)\cdots(x-n+1)$, for $n\geq1$
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:formal-series-order-and-composition} \hlt{Formal Order Calculus}\\
+For $f,g\in\mathscr{F}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\in\mathscr{F}^{\times}\Longleftrightarrow o(f)=0$;
+\item $o(fg)=o(f)+o(g)$ and $o(f+g)\geq\min\{o(f),o(g)\}$;
+\item if $g(t)=\sum_{k\geq0}b_kt^k$ and $o(f)\geq1$, then
+$g\circ f\defeq g(f(t))\defeq\sum\limits_{k\geq0}b_kf(t)^k\in\mathscr{F}$;
+\item if $o(f)\geq1$ and $g\neq0$, then $o(g\circ f)=o(g)o(f)$;
+\item if $o(f)=1$, then for every $g\in\mathscr{F}$ there are unique $c_k\in\C$ such that $g(t)=\sum\limits_{k\geq0}c_k f(t)^k$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $[t^n]:\mathscr{F}\to\C$ denote coefficient extraction. Then $f\in\mathscr{F}^{\times}$ $\Longleftrightarrow$ $[t^0]f\in\C^{\times}$ $\Longleftrightarrow$ $o(f)=0$.
+\item Let $r=o(f)$ and $s=o(g)$. Then $[t^{r+s}]fg=[t^r]f\,[t^s]g\neq0$, and all lower coefficients vanish; hence $o(fg)=r+s$. Also $[t^m](f+g)=0$ for $m<\min\{r,s\}$, giving the stated lower bound.
+\item Since $o(f)\geq1$, $o(f^k)\to\infty$; hence $\forall n$, coefficient $[t^n]\sum\limits_{k\geq0}b_kf^k$ has only finitely many nonzero terms.
+\item Let $s=o(g)$. Then $g\circ f=f^s\left(b_s+\sum\limits_{k>s}b_kf^{k-s}\right)$, where second factor has order $0$; hence $o(g\circ f)=s\,o(f)$.
+\item If $o(f)=1$ and $f(t)=a_1t+\cdots$ with $a_1\neq0$, then $f^k=a_1^kt^k+\text{higher terms}$. Thus $\{t^k\}_{k\geq0}\mapsto\{f^k\}_{k\geq0}$ is triangular with nonzero diagonal, so recursive coefficient matching gives existence and uniqueness.
+\end{enumerate}
+\hlt{Structural Commentary}: Delta series behave like a formal change of coordinate at $t=0$.\\
+\hlt{Key Insight}: Order replaces convergence as the bookkeeping device.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:derivation-on-an-algebra} \hlt{Derivation}\\
+Let $\mathcal{A}$ be an algebra over a field. Linear operator $\partial:\mathcal{A}\to\mathcal{A}$ is a \hlt{derivation} if $\partial(ab)=(\partial a)b+a(\partial b)$ $\forall a,b\in\mathcal{A}$.
+\end{definition}
+
+\begin{proposition} \label{prop:formal-derivative-is-derivation} \hlt{Formal Differentiation}\\
+Define $\partial_t:\mathscr{F}\to\mathscr{F}$ by $\partial_t\left(\sum\limits_{k\geq0}a_kt^k\right) \defeq \sum\limits_{k\geq1}ka_kt^{k-1}$.\\
+Then $\partial_t\in\operatorname{Der}_{\C}(\mathscr{F})$; equivalently, for all $f,g\in\mathscr{F}$, $\partial_t(fg)=(\partial_t f)g+f(\partial_t g)$.
+\begin{proof} Linearity is immediate. Let $f(t)=\sum\limits_{k\geq0}a_kt^k$ and $g(t)=\sum\limits_{k\geq0}b_kt^k$.\\
+For $n\geq0$, $[t^n]\partial_t(fg) =(n+1)\sum\limits_{j=0}^{n+1}a_jb_{n+1-j}$, while $[t^n]\bigl((\partial_t f)g+f(\partial_t g)\bigr) =\sum\limits_{j=1}^{n+1}ja_jb_{n+1-j} +\sum\limits_{j=0}^{n}(n+1-j)a_jb_{n+1-j}$.\\
+The last two sums combine to the preceding coefficient, so the Leibniz identity holds.\\
+\hlt{Structural Commentary}: Formal differentiation is the canonical derivation of $\C[[t]]$.\\
+\hlt{Key Insight}: The Leibniz rule is a Cauchy-product coefficient identity.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:umbral-algebra-functional-identification} \hlt{The Umbral Algebra}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Polynomial algebra}: set $\mathscr{P}\defeq\C[x]$ and let $\mathscr{P}'\defeq\operatorname{Hom}_{\C}(\mathscr{P},\C)$.
+\item \hlt{Umbral pairing}: for $L\in\mathscr{P}'$ and $p(x)\in\mathscr{P}$, write $\langle L\mid p(x)\rangle\defeq L(p(x))$.
+\item \hlt{Exponential normalization}: write each $f\in\mathscr{F}$ as $f(t)=\sum\limits_{k\geq0}\frac{a_k}{k!}t^k$.
+\item \hlt{Associated functional}: set $\langle f(t)\mid x^n\rangle\defeq a_n$ for $n\geq0$, extending $\C$-linearly.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:umbral-functional-series-isomorphism} \hlt{Formal Series Represent All Algebraic Functionals}\\
+The $\C$-linear map $\Phi:\mathscr{P}'\xrightarrow{\sim}\mathscr{F}$; $L\longmapsto \sum\limits_{k\geq0}\frac{\langle L\mid x^k\rangle}{k!}t^k$ is an isomorphism with inverse\\
+$\Phi^{-1}\left(\sum\limits_{k\geq0}\frac{a_k}{k!}t^k\right) \left(\sum\limits_{k=0}^{d}c_kx^k\right)\defeq \sum\limits_{k=0}^{d}c_ka_k$. Thus, under $\Phi^{-1}$, $\langle t^k\mid x^n\rangle=n!\delta_{n,k}$ and $\langle t^k\mid p\rangle=p^{(k)}(0)$, $(p\in\mathscr{P})$.\\
+Thus $t^0=\operatorname{ev}_0$ and $t^k=D^k|_{0}$.
+\begin{proof}
+Since $\{x^k\}_{k\geq0}$ is a Hamel basis of $\mathscr{P}$, $\mathscr{P}'\cong\C^{\mathbb{N}}$ via $L\mapsto(\langle L\mid x^k\rangle)_{k\geq0}$.\\
+The inverse sends the coefficient sequence $(a_k)$ to the unique functional with $L(x^k)=a_k$, so $\Phi$ is bijective.\\
+Moreover, $t^k=k!\,t^k/k!$ gives $\langle t^k\mid x^n\rangle=n!\delta_{n,k}$, and linearity gives $\langle t^k\mid p\rangle=p^{(k)}(0)$.\\
+\hlt{Structural Commentary}: $\mathscr{P}'$ is the sequence space encoded by exponentially normalised formal series.\\
+\hlt{Key Insight}: A formal series is a compact record of the functional's values on all monomials.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:delta-and-invertible-functionals} \hlt{Delta and Invertible Functionals}\\
+Under the identification $\mathscr{F}\simeq\mathscr{P}'$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Delta functional}: a functional represented by $f\in\mathscr{F}$ with $o(f)=1$.
+\item \hlt{Invertible functional}: a functional represented by $f\in\mathscr{F}^{\times}$, equivalently $o(f)=0$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:umbral-algebra-basic-identities} \hlt{Basic Umbral Identities}\\
+For $f,g\in\mathscr{F}$, $p\in\mathscr{P}$, and $n\geq0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\displaystyle f(t)=\sum_{k\geq0}\frac{\langle f(t)\mid x^k\rangle}{k!}t^k$;
+\item $\displaystyle p(x)=\sum_{k=0}^{\deg p}\frac{\langle t^k\mid p\rangle}{k!}x^k$;
+\item $\displaystyle \langle fg\mid x^n\rangle =\sum\limits_{k=0}^{n}\binom{n}{k} \langle f\mid x^k\rangle \langle g\mid x^{n-k}\rangle$;
+\item if $o(f)>\deg p$, then $\langle f\mid p\rangle=0$;
+\item if $o(f_k)=k$ for all $k\geq0$, then $\left\langle\sum\limits_{k\geq0}a_kf_k\middle|p\right\rangle =\sum\limits_{k=0}^{\deg p}a_k\langle f_k\mid p\rangle$, with $\sum\limits_{k\geq0}a_kf_k$ well-defined in $\mathscr{F}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f(t)=\sum\limits_{k\geq0}a_kt^k/k!$, then $a_k=\langle f\mid x^k\rangle$ by definition.
+\item Since $\langle t^k\mid p\rangle=p^{(k)}(0)$, this is Taylor's formula
+for the polynomial $p$.
+\item Write $f=\sum a_kt^k/k!$ and $g=\sum b_kt^k/k!$.\\
+The Cauchy product is $fg=\sum\limits_{n\geq0} \left(\sum\limits_{k=0}^{n}\binom{n}{k}a_kb_{n-k}\right)\frac{t^n}{n!}$, and $a_k=\langle f\mid x^k\rangle$, $b_k=\langle g\mid x^k\rangle$.
+\item If $p=\sum\limits_{j=0}^{d}c_jx^j$ and $o(f)>d$, then $\langle f\mid x^j\rangle=0$ for $0\leq j\leq d$.
+\item Since $o(f_k)=k$, each coefficient of $\sum\limits_{k\geq0}a_kf_k$ has only finitely many contributions.\\
+With $d=\deg p$, (iv) gives $\langle f_k\mid p\rangle=0$ for $k>d$, proving the finite formula.
+\end{enumerate}
+\hlt{Structural Commentary}: The umbral pairing dualizes coefficient calculus.\\
+\hlt{Key Insight}: Order makes infinite formal sums act finitely on each polynomial.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:umbral-multiplication-by-x-is-formal-derivative} \hlt{Multiplication by $x$ Moves to Formal Differentiation}\\
+For all $f\in\mathscr{F}$ and $p\in\mathscr{P}$, $\langle f\mid xp\rangle=\langle \partial_t f\mid p\rangle$.\\
+Equivalently, multiplication by $x$ on $\mathscr{P}$ has adjoint $\partial_t$ on $\mathscr{F}$.
+\begin{proof}
+By linearity it suffices to take $p=x^n$.\\
+For $f=\sum\limits_{k\geq0}a_kt^k/k!$, $\partial_t f=\sum\limits_{k\geq0}a_{k+1}\frac{t^k}{k!}$, where $\langle \partial_t f\mid x^n\rangle=a_{n+1} =\langle f\mid x^{n+1}\rangle$.\\
+\hlt{Structural Commentary}: Under the umbral pairing, $x^{*}=\partial_t$.\\
+\hlt{Key Insight}: The factorial normalisation shifts coefficients by one without extra constants.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:umbral-functionals-basic-examples} \hlt{Basic Umbral Functionals}\\
+For $a\in\C$ and $p\in\mathscr{P}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Evaluation}: $\epsilon_a=e^{at}$ and $\langle e^{at}\mid p\rangle=p(a)$; hence $\epsilon_a\epsilon_b=\epsilon_{a+b}$.
+\item \hlt{Forward difference}: $\Delta_a=e^{at}-1$ and $\langle \Delta_a\mid p\rangle=p(a)-p(0)$.
+\item \hlt{Abel functional}: $te^{at}$ and $\langle te^{at}\mid p\rangle=p'(a)$.
+\item \hlt{Gamma functional}: $(1-t)^{-1}$ and $\left\langle(1-t)^{-1}\middle|p\right\rangle =\int_0^\infty p(u)e^{-u}\,du$.
+\item \hlt{Integral functional}: $\left\langle\frac{e^{at}-1}{t}\middle|p\right\rangle =\int_0^a p(u)\,du$
+\item \hlt{Bernoulli numbers}: for $a=1$, $B_n=\left\langle\frac{t}{e^t-1}\middle|x^n\right\rangle$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:formal-series-as-polynomial-operators} \hlt{Formal Series as Polynomial Operators}\\
+For $f(t)=\sum_{k\geq0}a_kt^k/k!\in\mathscr{F}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Operator action}: define $f(t)\in\operatorname{End}_{\C}(\mathscr{P})$ by $f(t)p(x)\defeq\sum\limits_{k\geq0}\frac{a_k}{k!}p^{(k)}(x)$, a finite sum for each $p\in\mathscr{P}$.
+\item \hlt{Monomial action}: for $n\geq0$, $f(t)x^n=\sum\limits_{k=0}^{n}\binom{n}{k}a_kx^{n-k}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:umbral-functional-operator-adjointness} \hlt{Functional-Operator Compatibility}\\
+For $f,g\in\mathscr{F}$ and $p\in\mathscr{P}$, $\langle fg\mid p\rangle=\langle f\mid gp\rangle$. In particular, $\langle f\mid p\rangle=\langle t^0\mid fp\rangle$.
+\begin{proof}
+By linearity take $p=x^n$. Write $f=\sum\limits_{i\geq0}a_it^i/i!$ and $g=\sum\limits_{j\geq0}b_jt^j/j!$.\\
+Then $\langle fg\mid x^n\rangle =\sum\limits_{j=0}^{n}\binom{n}{j}a_{n-j}b_j$. Also $gx^n=\sum\limits_{j=0}^{n}\binom{n}{j}b_jx^{n-j}$ and $\langle f\mid gx^n\rangle =\sum\limits_{j=0}^{n}\binom{n}{j}b_ja_{n-j}$.\\
+Thus $\langle fg\mid x^n\rangle=\langle f\mid gx^n\rangle$. Taking $(f,g)=(t^0,f)$ in the first identity gives $\langle f\mid p\rangle=\langle t^0\mid fp\rangle$.\\
+\hlt{Structural Commentary}: Product in $\mathscr{F}$ is adjoint to operator action.\\
+\hlt{Key Insight}: The same series acts on either side of the umbral pairing.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:umbral-operators-basic-examples} \hlt{Basic Umbral Operators}\\
+For $a\in\C$ and $p\in\mathscr{P}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Translation}: $e^{at}p(x)=p(x+a)$.
+\item \hlt{Forward difference}: $(e^{at}-1)p(x)=p(x+a)-p(x)$.
+\item \hlt{Abel operator}: $te^{at}p(x)=p'(x+a)$.
+\item \hlt{Gamma operator}: $(1-t)^{-1}p(x)=\int_0^\infty p(x+u)e^{-u}\,du$
+\item \hlt{Integral operator}: $\frac{e^{at}-1}{t}p(x)=\int_x^{x+a}p(u)\,du$
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:formal-series-operators-commutant-characterization} \hlt{Shift-Invariant Operators}\\
+For $T\in\operatorname{End}_{\C}(\mathscr{P})$, the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T=f(t)$ for some $f\in\mathscr{F}$;
+\item $[T,t]=0$;
+\item $[T,h(t)]=0$ for every delta series $h$;
+\item $[T,e^{at}]=0$ for all $a\in\C$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii),(iii),(iv)$ If $T=f(t)$, then $\forall u(t)\in\mathscr{F}$, $[T,u(t)]=[f(t),u(t)]=0$, since $\mathscr{F}$ is commutative.
+\item[$(iii)$]$\Rightarrow (ii)$ Since $o(t)=1$, $(\forall h\in\mathscr{F},\ o(h)=1\Rightarrow [T,h(t)]=0) \Rightarrow [T,t]=0$.
+\item[$(iv)$]$\Rightarrow (ii)$ For each $p\in\mathscr{P}$, $0=[a^1]\,[T,e^{at}]p=[T,t]p$, so $[T,t]=0$.
+\item[$(ii)$]$\Rightarrow (i)$ Set $g(t)\defeq\sum\limits_{k\geq0}\frac{\langle t^0\mid Tx^k\rangle}{k!}t^k$. Let $a_k\defeq\langle t^0\mid Tx^k\rangle$.\\
+Since $[T,t]=0$, for $m,k\geq0$, $\langle t^m\mid Tx^k\rangle =\langle t^0\mid t^mTx^k\rangle =\langle t^0\mid Tt^mx^k\rangle =(k)_m a_{k-m}$, with the convention $a_{k-m}=0$ if $m>k$. The same computation from Definition \ref{def:formal-series-as-polynomial-operators} gives $\langle t^m\mid g(t)x^k\rangle=(k)_m a_{k-m}$.\\
+Thus $\langle t^m\mid Tx^k-g(t)x^k\rangle=0$ for all $m,k$. Since $\{t^m:m\geq0\}$ separates $\mathscr{P}$, $T=g(t)$.
+\end{enumerate}
+\hlt{Structural Commentary}: The commutant of $t$ on $\mathscr{P}$ is $\mathscr{F}$.\\
+\hlt{Key Insight}: The derivative is enough to recover every coefficient of the operator.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:sheffer-associated-appell-sequences} \hlt{Sheffer, Associated, and Appell Sequences}\\
+Let $f$ be a delta series, $g$ an invertible series, and
+$\deg s_n=n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sheffer sequence}: $(s_n)_{n\geq0}$ is Sheffer for $(g,f)$ if $\langle g(t)f(t)^k\mid s_n(x)\rangle=n!\delta_{n,k}$ for $n,k\geq0$.
+\item \hlt{Associated sequence}: a Sheffer sequence for $(1,f)$.
+\item \hlt{Appell sequence}: a Sheffer sequence for $(g,t)$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:sheffer-sequence-existence-and-expansion} \hlt{Existence and Expansion Theorems}\\
+Let $f$ be a delta series, $g$ an invertible series, and $q_k\defeq g(t)f(t)^k$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item There is a unique sequence $(s_n)_{n\geq0}$ with $\deg s_n=n$ and $\langle q_k\mid s_n\rangle=n!\delta_{n,k}$.
+\item If $p_n\defeq g(t)s_n$, then $(s_n)$ is Sheffer for $(g,f)$ iff $(p_n)$ is associated with $f$.
+\item For all $h\in\mathscr{F}$, $h=\sum\limits_{k\geq0}\frac{\langle h\mid s_k\rangle}{k!}\,q_k$.
+\item For all $p\in\mathscr{P}$, $p=\sum\limits_{k=0}^{\deg p}\frac{\langle q_k\mid p\rangle}{k!}\,s_k$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $o(q_k)=k$, the matrix $A_n=(\langle q_i\mid x^j\rangle)_{0\leq i,j\leq n}$ is triangular with nonzero diagonal.\\
+Hence the equations $\langle q_k\mid s_n\rangle=n!\delta_{n,k}$ have a unique solution $s_n\in\mathscr{P}_{\leq n}$, necessarily with $\deg s_n=n$.
+\item By Theorem \ref{thm:umbral-functional-operator-adjointness}, $\langle f(t)^k\mid p_n\rangle =\langle f(t)^k\mid g(t)s_n\rangle =\langle q_k\mid s_n\rangle$.
+\item Since $o(q_k)=k$, every $h\in\mathscr{F}$ has a unique expansion $h=\sum c_kq_k$.\\
+Pairing with $s_n$ gives $\langle h\mid s_n\rangle=c_n n!$, so $c_n=\langle h\mid s_n\rangle/n!$.
+\item Let $d=\deg p$ and $r\defeq p-\sum\limits_{k=0}^{d}\langle q_k\mid p\rangle s_k/k!$.\\\
+Then $\langle q_j\mid r\rangle=0$ for all $j\leq d$, and also for $j>d$ by $o(q_j)>d$. Since the $q_j$ separate $\mathscr{P}$, $r=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $(s_n)$ is dual to $q_k=g f^k$.\\
+\hlt{Key Insight}: The order filtration makes the orthogonality equations triangular.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:sheffer-generating-and-operator-characterizations} \hlt{Generating and Operator Characterizations}\\
+Let $f$ be a delta series with compositional inverse $\overline f$, let $g\in\mathscr{F}^{\times}$, and let $(p_n),(s_n)$ be polynomial sequences with $\deg p_n=\deg s_n=n$. Set $P(y,u)\defeq\sum\limits_{n\geq0}\frac{p_n(y)}{n!}u^n$ and $S(y,u)\defeq\sum\limits_{n\geq0}\frac{s_n(y)}{n!}u^n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(p_n)$ is associated with $f$ iff $P(y,u)=e^{y\overline f(u)}$
+\item $(s_n)$ is Sheffer for $(g,f)$ iff $S(y,u)=g(\overline f(u))^{-1}e^{y\overline f(u)}$
+\item $(p_n)$ is associated with $f$ iff $p_n(0)=\delta_{n,0}$, $f(t)p_n=np_{n-1}$, where $p_{-1}\defeq0$.
+\item $(s_n)$ is Sheffer for $(\gamma,f)$ for some $\gamma\in\mathscr{F}^{\times}$ iff $f(t)s_n=ns_{n-1}$, where $s_{-1}\defeq0$.
+\item If $(p_n)$ is associated with $f$, then $p_n(x)=\sum\limits_{k=0}^{n} \frac{\langle \overline f(t)^k\mid x^n\rangle}{k!}\,x^k$
+\item If $(s_n)$ is Sheffer for $(g,f)$, then $s_n(x)=\sum\limits_{k=0}^{n} \frac{1}{k!} \left\langle g(\overline f(t))^{-1}\overline f(t)^k\middle|x^n\right\rangle x^k$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]($\Rightarrow$) By Theorem \ref{thm:sheffer-sequence-existence-and-expansion}, $e^{yt}=\sum\limits_{n\geq0}\frac{p_n(y)}{n!}f(t)^n$. Substitute $t=\overline f(u)$ to obtain $P(y,u)=e^{y\overline f(u)}$.
+\item[$(i)$]($\Leftarrow$) If $P(x,u)=e^{x\overline f(u)}$, then for all $k\geq0$, $\sum\limits_{n\geq0}\frac{\langle f(t)^k\mid p_n\rangle}{n!}u^n =\langle f(t)^k\mid P(x,u)\rangle =f(\overline f(u))^k=u^k$.\\
+Thus $\langle f(t)^k\mid p_n\rangle=n!\delta_{n,k}$.
+\item[$(ii)$]($\Rightarrow$) By Theorem \ref{thm:sheffer-sequence-existence-and-expansion}, $e^{yt}=\sum\limits_{n\geq0}\frac{s_n(y)}{n!}g(t)f(t)^n$. Substitute $t=\overline f(u)$ and divide by $g(\overline f(u))$.
+\item[$(ii)$]($\Leftarrow$) If $S(x,u)=g(\overline f(u))^{-1}e^{x\overline f(u)}$, then $\sum\limits_{n\geq0}\frac{\langle g(t)f(t)^k\mid s_n\rangle}{n!}u^n =\langle g(t)f(t)^k\mid S(x,u)\rangle=u^k$,\\
+so $\langle g(t)f(t)^k\mid s_n\rangle=n!\delta_{n,k}$.
+\item[$(iii)$]($\Rightarrow$) If $(p_n)$ is associated, then $p_n(0)=\langle 1\mid p_n\rangle=\delta_{n,0}$ and, for all $k$, $\langle f(t)^k\mid f(t)p_n-np_{n-1}\rangle=0$.\\
+Since $\{f(t)^k:k\geq0\}$ separates $\mathscr{P}$, $f(t)p_n=np_{n-1}$.
+\item[$(iii)$]($\Leftarrow$) The lowering relation gives $f(t)^kp_n=(n)_kp_{n-k}$.\\
+Hence $\langle f(t)^k\mid p_n\rangle =\langle 1\mid f(t)^kp_n\rangle =(n)_kp_{n-k}(0)=n!\delta_{n,k}$.
+\item[$(iv)$]($\Rightarrow$) If $(s_n)$ is Sheffer for $(\gamma,f)$, then for all $k$, $\langle \gamma(t)f(t)^k\mid f(t)s_n-ns_{n-1}\rangle=0$.\\
+Since $\{\gamma(t)f(t)^k:k\geq0\}$ separates $\mathscr{P}$, $f(t)s_n=ns_{n-1}$.
+\item[$(iv)$]($\Leftarrow$) Define $L\in\mathscr{P}'$ by $L(s_0)=1$ and $L(s_n)=0$ for $n>0$, and put $\gamma\defeq\Phi(L)$. Then $\langle\gamma\mid1\rangle=L(1)\neq0$, so $\gamma\in\mathscr{F}^{\times}$, and $\langle \gamma(t)f(t)^k\mid s_n\rangle=\langle \gamma(t)\mid f(t)^ks_n\rangle=(n)_kL(s_{n-k})=n!\delta_{n,k}$.
+\item[$(v)$] From (i), $e^{x\overline f(u)} =\sum\limits_{k\geq0}\frac{\overline f(u)^k}{k!}x^k$. Applying $n![u^n]$ gives the stated formula for $p_n$.
+\item[$(vi)$] From (ii), $g(\overline f(u))^{-1}e^{x\overline f(u)} =\sum\limits_{k\geq0} \frac{g(\overline f(u))^{-1}\overline f(u)^k}{k!}x^k$. Applying $n![u^n]$ gives the stated formula for $s_n$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\overline f$ converts $f$-lowering to exponential generating functions.\\
+\hlt{Key Insight}: Generating functions package the whole triangular duality into one formal identity.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:building-sheffer-sequences} \hlt{Building Sheffer Sequences}\\
+To construct the Sheffer sequence for $(g,f)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Verify $o(f)=1$ and $o(g)=0$.
+\item If $\overline f$ is explicit, compute $S(y,t)\defeq g(\overline f(t))^{-1}e^{y\overline f(t)}$, where $s_n(y)=n![t^n]S(y,t)$.
+\item If $\overline f$ is unavailable, solve recursively from $f(t)s_n=ns_{n-1}$, where $\langle g(t)f(t)^k\mid s_n\rangle=n!\delta_{n,k}$.
+\item For associated sequences, set $g=1$ and use Theorem
+\ref{thm:associated-sequence-recurrence-and-transfer}.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:binomial-type-and-sheffer-identity} \hlt{Binomial Type and Sheffer Identity}\\
+Let $(p_n)$ and $(s_n)$ be polynomial sequences.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Binomial type}: $(p_n)$ is of binomial type if $p_n(x+y)=\sum\limits_{k=0}^{n}\binom{n}{k}p_k(y)p_{n-k}(x)$.
+\item \hlt{Sheffer identity}: $(s_n)$ satisfies the Sheffer identity relative to $(p_n)$ if $s_n(x+y)=\sum\limits_{k=0}^{n}\binom{n}{k}p_k(y)s_{n-k}(x)$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:sheffer-action-and-binomial-identities} \hlt{Action and Binomial Identities}\\
+Let $(s_n)$ be Sheffer for $(g,f)$, let $(p_n)$ be associated with $f$, and
+        write $E_y\defeq e^{yt}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item for $h\in\mathscr{F}$ and $n\geq0$, $h(t)s_n=\sum\limits_{k=0}^{n}\binom{n}{k} \langle h\mid s_k\rangle p_{n-k}$;
+\item $(p_n)$ is associated with a delta series iff $(p_n)$ is of binomial type;
+\item $(s_n)$ is Sheffer for some $g\in\mathscr{F}^{\times}$ and same $f$ iff $(s_n)$ satisfies the Sheffer identity relative to $(p_n)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:sheffer-sequence-existence-and-expansion}, $h=\sum\limits_{k\geq0}\frac{\langle h\mid s_k\rangle}{k!}g(t)f(t)^k$.\\
+Since $g(t)s_n=p_n$ and $f(t)^kp_n=(n)_kp_{n-k}$, $h(t)s_n=\sum\limits_{k=0}^{n}\frac{\langle h\mid s_k\rangle}{k!}(n)_kp_{n-k}$.
+\item If $(p_n)$ is associated, apply (i) with $s_n=p_n$, $g=1$, and $h=E_y$ to get the binomial identity.\\
+Conversely, if the binomial identity holds, then $p_n(0)=\delta_{n,0}$ and the operator $Qp_n\defeq np_{n-1}$ commutes with every $E_y$; hence $Q=f(t)$ by Theorem \ref{thm:formal-series-operators-commutant-characterization}.\\
+Since $Q$ lowers degree by one, $o(f)=1$, and Theorem \ref{thm:sheffer-generating-and-operator-characterizations} gives that $(p_n)$ is associated with $f$.
+\item If $(s_n)$ is Sheffer, apply (i) with $h=E_y$ to obtain the Sheffer identity.\\
+Conversely, applying $f(t)$ in $y$-variable to Sheffer identity and then setting $y=0$ gives $f(t)s_n=ns_{n-1}$; Theorem \ref{thm:sheffer-generating-and-operator-characterizations} yields a $g\in\mathscr{F}^{\times}$ such that $(s_n)$ is Sheffer for $(g,f)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Translation turns the operator formula into addition laws for polynomial sequences.\\
+\hlt{Key Insight}: Binomial identities are the visible polynomial shadow of a delta operator.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:sheffer-sequence-standard-examples} \hlt{Standard Sheffer Examples}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Monomials}: $p_n(x)=x^n$ is associated with $f(t)=t$; the binomial identity is the usual binomial theorem.
+\item \hlt{Lower factorials}: $(x)_n$ is associated with $f(t)=e^t-1$, with $(1+t)^y=e^{y\log(1+t)} =\sum\limits_{k\geq0}\frac{(y)_k}{k!}t^k$,\\
+and Vandermonde identity $(x+y)_n=\sum\limits_{k=0}^{n}\binom{n}{k}(x)_k(y)_{n-k}$.
+\item \hlt{Abel polynomials}: associated with $f(t)=te^{at}$, $A_n(x;a)=x(x-an)^{n-1}$.
+\item \hlt{Hermite polynomials}: for $g(t)=e^{t^2/2}$, the polynomial is $H_n(x)=e^{-t^2/2}x^n$, where $e^{yt-t^2/2}=\sum\limits_{k\geq0}\frac{H_k(y)}{k!}t^k$.
+\item \hlt{Laguerre polynomials}: order $\alpha$, Sheffer for $g(t)=(1-t)^{-\alpha-1}$, $f(t)=\frac{t}{t-1}$, $\frac{1}{(1-t)^{\alpha+1}}e^{yt/(t-1)} =\sum\limits_{k\geq0}\frac{L_k^{(\alpha)}(y)}{k!}t^k$.
+\end{enumerate}
+\end{example}
+
+\begin{definition} \label{def:umbral-operator-and-shift}
+\label{def:continuous-operators-on-umbral-algebra}
+\label{def:operator-adjoint-on-umbral-algebra}
+\hlt{Umbral Operators, Continuity, and Adjoints}\\
+Let $(s_n)$ be Sheffer for $(g,f)$, and let $(p_n)$ be associated with $f$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sheffer operator}: $\lambda_{g,f}\in\LL(\mathscr{P})$ is defined by $\lambda_{g,f}(x^n)=s_n(x)$.
+\item \hlt{Umbral operator}: $\lambda_f\in\LL(\mathscr{P})$ is defined by $\lambda_f(x^n)=p_n(x)$.
+\item \hlt{Sheffer/umbral shift}: $\theta_{g,f}s_n=s_{n+1}$; in the associated case, $\theta_fp_n=p_{n+1}$.
+\item \hlt{Continuous operator}: $T\in\LL(\mathscr{F})$ is continuous iff $o(f_k)\to\infty$ $\Longrightarrow$ $o(Tf_k)\to\infty$.\\
+Equivalently, for every defined formal sum with $o(f_k)\to\infty$, $T\left(\sum\limits_{k\geq0}a_kf_k\right) =\sum\limits_{k\geq0}a_kT(f_k)$
+\item \hlt{Algebraic adjoint}: for $\tau\in\LL(\mathscr{P})$, $\tau^\times\in\LL(\mathscr{F})$ is defined by $\langle \tau^\times h\mid p\rangle =\langle h\mid \tau p\rangle$ for $h\in\mathscr{F},\ p\in\mathscr{P}$.\\
+This is the dual-map adjoint of Definition \ref{def:dual-map}, not an inner-product adjoint.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:operator-adjoints-and-continuity-umbral} \hlt{Continuous Operators Are Exactly Operator Adjoints}\\
+Let $\LL_{\mathrm{cont}}(\mathscr{F})$ denote the continuous linear operators on $\mathscr{F}$.\\
+Then $(-)^\times:\LL(\mathscr{P})\xrightarrow{\sim} \LL_{\mathrm{cont}}(\mathscr{F})$, $\tau\longmapsto\tau^\times$ is a vector-space isomorphism.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $\tau\in\LL(\mathscr{P})$ and $o(h_j)\to\infty$.
+For fixed $n$, $\tau x^n\in\mathscr{P}$, hence $\langle \tau^\times h_j\mid x^n\rangle =\langle h_j\mid \tau x^n\rangle=0$ for all sufficiently large $j$. Thus $o(\tau^\times h_j)\to\infty$, so $\tau^\times\in\LL_{\mathrm{cont}}(\mathscr{F})$.\\
+If $\tau^\times=0$, then $\langle h\mid \tau p\rangle=0$ for all $h,p$, hence $\tau=0$; the map is injective.
+\item[$(\Leftarrow)$] Let $T\in\LL_{\mathrm{cont}}(\mathscr{F})$. Define $\tau_Tx^n\defeq \sum\limits_{k\geq0}\frac{\langle Tt^k\mid x^n\rangle}{k!}x^k$. Since $o(Tt^k)\to\infty$, the sum is finite for each $n$.\\
+For all $m,n$, $\langle \tau_T^\times t^m\mid x^n\rangle =\langle t^m\mid \tau_Tx^n\rangle =\langle Tt^m\mid x^n\rangle$. Thus $\tau_T^\times t^m=Tt^m$ for every $m$.\\
+By continuity, $\tau_T^\times=T$, so the map is surjective.
+\end{enumerate}
+\hlt{Structural Commentary}: Continuity is the finiteness condition for dualising polynomial operators.\\
+\hlt{Key Insight}: Finiteness on each polynomial degree is the hidden topology.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/umbral_operator_adjoint_correspondence.tikz}
+  \caption{Adjoints identify $\LL(\mathscr{P})$ with $\LL_{\mathrm{cont}}(\mathscr{F})$ and map the umbral classes shown.}
+  \label{fig:umbral-operator-adjoint-correspondence}
+\end{figure}
+
+\begin{theorem} \label{thm:umbral-operators-automorphisms-composition} \hlt{Umbral Operators and Adjoint Automorphisms}\\
+Let $f$ be a delta series with associated sequence $(p_n)$ and umbral operator $\lambda_f(x^n)=p_n(x)$.\\
+Let $C_{\overline f}:\mathscr{F}\to\mathscr{F}$ be substitution by $\overline f$. Then $\lambda_f^\times=C_{\overline f}$, $C_{\overline f}(h)=h(\overline f)$, so $\lambda_f^\times\in\operatorname{Aut}_{\C\text{-alg}}(\mathscr{F})$ and $\lambda_f^\times f=t$.\\
+Moreover, $\lambda\in\LL(\mathscr{P})$ is umbral iff $\lambda^\times\in\operatorname{Aut}_{\C\text{-alg}}(\mathscr{F})$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\lambda=\lambda_f$, then for $k,n\geq0$, $\langle \lambda_f^\times f^k\mid x^n\rangle =\langle f^k\mid p_n\rangle =n!\delta_{n,k} =\langle t^k\mid x^n\rangle$.\\
+Thus $\lambda_f^\times f^k=t^k$. For $h=q(f)$, equivalently $q=h(\overline f)$, continuity gives $\lambda_f^\times h=q(t)=h(\overline f(t))$.\\
+Hence $\lambda_f^\times=C_{\overline f}\in \operatorname{Aut}_{\C\text{-alg}}(\mathscr{F})$.
+\item[$(\Leftarrow)$] Let $A\defeq\lambda^\times\in \operatorname{Aut}_{\C\text{-alg}}(\mathscr{F})$ and set $f\defeq A^{-1}t$. Since $A^{-1}$ preserves $(t)$ and $(t)^2$, $o(f)=1$.\\
+With $p_n\defeq\lambda x^n$, $\langle f^k\mid p_n\rangle =\langle A f^k\mid x^n\rangle =\langle t^k\mid x^n\rangle =n!\delta_{n,k}$.\\
+Thus $(p_n)$ is associated with the delta series $f$, so $\lambda=\lambda_f$.
+\end{enumerate}
+\hlt{Structural Commentary}: Umbral operators are formal coordinate changes on $\mathscr{F}$.\\
+\hlt{Key Insight}: The adjoint remembers the delta series as the coordinate sent to $t$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:umbral-composition-associated-sequences} \hlt{Umbral Composition}\\
+For polynomial sequences $(p_n)$ and $(q_n)$ with $p_n(x)=\sum_{k=0}^{n}p_{n,k}x^k$, define $(p\circ_U q)_n(x)\defeq\sum\limits_{k=0}^{n}p_{n,k}q_k(x)$.
+\end{definition}
+
+\begin{theorem} \label{thm:umbral-operators-group-law} \hlt{Group Law for Umbral Operators}\\
+If $f,g$ are delta series, then $\lambda_g\circ\lambda_f=\lambda_{f\circ g}$ and $\lambda_f^{-1}=\lambda_{\overline f}$.\\
+Equivalently, associated sequences form a group under umbral composition.
+\begin{proof} Using $(AB)^\times=B^\times A^\times$ and Theorem \ref{thm:umbral-operators-automorphisms-composition}, $(\lambda_g\lambda_f)^\times h =\lambda_f^\times\lambda_g^\times h =h(\overline g(\overline f)) =h(\overline{f\circ g})$,\\
+so $\lambda_g\lambda_f=\lambda_{f\circ g}$. Taking $g=\overline f$ gives $\lambda_f^{-1}=\lambda_{\overline f}$. If $(p_n)$ and $(q_n)$ are associated with $f$ and $g$,\\
+then $(\lambda_g\lambda_f)x^n=\lambda_g p_n =\sum\limits_{k=0}^{n}p_{n,k}q_k=(p\circ_U q)_n$, so umbral composition corresponds to $f\circ g$.\\
+\hlt{Structural Commentary}: The umbral group is the substitution group of delta series.\\
+\hlt{Key Insight}: Composition of associated sequences is composition of delta series in reverse adjoint form.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:sheffer-operators-group-law} \hlt{Sheffer Operators}\\
+Let $f,k$ be delta series and let $g,h\in\mathscr{F}^{\times}$.\\
+If $(s_n)$ is Sheffer for $(g,f)$ and $(p_n)$ is associated with $f$, then $s_n=g(t)^{-1}p_n$, and $\lambda_{g,f}=g(t)^{-1}\lambda_f$.\\
+Moreover, $\lambda_{g,f}\circ\lambda_{h,k} =\lambda_{g\cdot(h\circ f),\,k\circ f}$ and $\lambda_{g,f}^{-1}=\lambda_{g^{-1}(\overline f),\,\overline f}$.
+\begin{proof}
+Theorem \ref{thm:sheffer-sequence-existence-and-expansion} gives $g(t)s_n=p_n$, hence $s_n=g(t)^{-1}p_n$ and $\lambda_{g,f}=g(t)^{-1}\lambda_f$.\\
+For $a\in\mathscr{F}$, the adjoint substitution identity gives $\lambda_f a(t)=a(f(t))\lambda_f$.\\
+Therefore $\lambda_{g,f}\lambda_{h,k} =g(t)^{-1}\lambda_fh(t)^{-1}\lambda_k =g(t)^{-1}h(f(t))^{-1}\lambda_{k\circ f}$.\\
+This is $\lambda_{g\cdot(h\circ f),\,k\circ f}$. Taking $(h,k)=(g^{-1}(\overline f),\overline f)$ gives the inverse formula.\\
+\hlt{Structural Commentary}: Sheffer operators are invertible weights followed by umbral substitutions.\\
+\hlt{Key Insight}: Their group law is the semidirect product law
+$(g,f)(h,k)=(g(h\circ f),k\circ f)$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:umbral-shift-derivation-chain-rule} \hlt{Umbral Shift Derivations}\\
+Let $f$ be a delta series and let $\theta_f$ be its umbral shift.\\
+Define the continuous derivation $\partial_f:\mathscr{F}\to\mathscr{F}$ by $\partial_f(f^k)=kf^{k-1}$, $k\geq0$. Then $\theta_f^\times=\partial_f$, $\partial_f f=1$.\\
+If $f,g$ are delta series, then $\partial_g=(\partial_g f)\partial_f$.
+\begin{proof}
+Let $(p_n)$ be associated with $f$.\\
+For $k,n\geq0$, $\langle \theta_f^\times f^k\mid p_n\rangle =\langle f^k\mid p_{n+1}\rangle =(n+1)!\delta_{n+1,k} =\langle kf^{k-1}\mid p_n\rangle$.\\
+Hence $\theta_f^\times f^k=kf^{k-1}$ for all $k$, so $\theta_f^\times=\partial_f$ by continuity.\\
+For the chain rule, test on the coordinate powers $f^k$, which is $(\partial_g f)\partial_f(f^k) =k(\partial_g f)f^{k-1} =\partial_g(f^k)$.\\
+Continuity gives the identity on $\mathscr{F}$.\\
+\hlt{Structural Commentary}: An umbral shift is differentiation in its delta
+coordinate.\\
+\hlt{Key Insight}: The associated basis turns shifting into formal
+differentiation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:umbral-shifts-and-derivations} \hlt{Umbral Shifts and Surjective Derivations}\\
+For $\theta\in\LL(\mathscr{P})$, $\theta$ is an umbral shift $\Longleftrightarrow$ $\theta^\times$ is a surjective derivation of $\mathscr{F}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\theta=\theta_f$, then $\theta^\times=\partial_f$ by Theorem \ref{thm:umbral-shift-derivation-chain-rule}. Since $\partial_f\left(\frac{f^{k+1}}{k+1}\right)=f^k$, $k\geq0$, $\partial_f$ is a surjective derivation.
+\item[$(\Leftarrow)$] Let $D\defeq\theta^\times$ be a surjective derivation. Choose $u\in\mathscr{F}$ with $Du=1$ and set $f\defeq u-[t^0]u$.\\
+Then $Df=1$ and, since $D$ lowers order by one, $o(f)=1$. Let $(p_n)$ be associated with $f$.\\
+For $k,n\geq0$, $\langle f^k\mid \theta p_n\rangle =\langle Df^k\mid p_n\rangle =\langle kf^{k-1}\mid p_n\rangle =\langle f^k\mid p_{n+1}\rangle$.\\
+The functionals $f^k$ separate $\mathscr{P}$, so $\theta p_n=p_{n+1}$ and $\theta=\theta_f$.
+\end{enumerate}
+\hlt{Structural Commentary}: Surjective derivations are derivatives in delta coordinates.\\
+\hlt{Key Insight}: Surjectivity chooses the coordinate whose derivative is $1$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:associated-sequence-recurrence-and-transfer} \hlt{Recurrence and Transfer Formulas}\\
+Let $(p_n)$ be associated with the delta series $f$, and set $u(t)\defeq f(t)/t\in\mathscr{F}^{\times}$.\\
+Then $p_{n+1}=x[f'(t)]^{-1}p_n$, and, for $n\geq1$, $p_n=f'(t)u(t)^{-n-1}x^n=xu(t)^{-n}x^{n-1}$.
+\begin{proof} By the chain rule for umbral shifts with coordinate $t$, $\theta_t=(\partial_t f)\theta_f=f'(t)\theta_f$.\\
+Since $\theta_t=x$ and $\theta_f p_n=p_{n+1}$, $p_{n+1}=x[f'(t)]^{-1}p_n$. The transfer identity follows by applying this recurrence inductively after writing $f=tu$, hence $p_n=f'(t)u(t)^{-n-1}x^n=xu(t)^{-n}x^{n-1}$.\\
+\hlt{Structural Commentary}: The recurrence generates $(p_n)$ from $f'(t)^{-1}$.\\
+\hlt{Key Insight}: Transfer formulas convert the difficult inverse coordinate problem into formal operator algebra.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:sheffer-shift-formula} \hlt{Sheffer Shift Formula}\\
+If $(s_n)$ is Sheffer for $(g,f)$, then $\theta_{g,f}=g(t)^{-1}\theta_fg(t) =\left[x-\frac{g'(t)}{g(t)}\right]\frac{1}{f'(t)}$, and hence $s_{n+1}=\left(x-\frac{g'}{g}\right)(f')^{-1}s_n$.
+\begin{proof}
+Since $g(t)s_n$ is associated with $f$, $\theta_{g,f}=g^{-1}\theta_fg$. By Theorem \ref{thm:associated-sequence-recurrence-and-transfer}, $\theta_f=x(f')^{-1}$.\\
+Using the Pincherle commutator $g'(t)=g(t)x-xg(t)$, we get $g^{-1}x(f')^{-1}g =g^{-1}xg(f')^{-1} =\left(x-\frac{g'}{g}\right)(f')^{-1}$.\\
+Applying this operator to $s_n$ gives the recurrence.\\
+\hlt{Structural Commentary}: The Sheffer shift is a conjugated associated
+shift.\\
+\hlt{Key Insight}: The logarithmic derivative $g'/g$ is the correction term.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:stirling-and-exponential-polynomials} \hlt{Stirling and Exponential Polynomials}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Stirling numbers}: $S(n,k)$ are defined by $x^n=\sum\limits_{k=0}^{n}S(n,k)(x)_k$.
+\item \hlt{Exponential polynomials}: define $\phi_n(x)\defeq\sum\limits_{k=0}^{n}S(n,k)x^k$.
+\item \hlt{Boundary convention}: $S(n,-1)=0$ and $S(n,k)=0$ for $k>n$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:umbral-recurrences-stirling} \hlt{Lower Factorials and Stirling Numbers}\\
+For $f(t)=e^t-1$, $f'(t)=e^t$, hence $p_{n+1}(x)=xe^{-t}p_n(x)=xp_n(x-1)$. With $p_0=1$, this gives $p_n=(x)_n$.\\
+For $f(t)=\log(1+t)$, $\overline f(t)=e^t-1$, and the associated sequence is $(\phi_n)$.\\
+The inverse umbral relation is $x^n=\sum\limits_{k=0}^{n}S(n,k)(x)_k$, and $\phi_n(x)=\sum\limits_{k=0}^{n}S(n,k)x^k$.\\
+The recurrence formula gives $\phi_{n+1}(x)=x(1+t)\phi_n(x)=x\bigl(\phi_n(x)+\phi_n'(x)\bigr)$,\\
+so coefficient comparison yields $S(n+1,k)=S(n,k-1)+kS(n,k)$.
+\end{example}
+
+\begin{definition} \label{def:q-and-logarithmic-umbral-variants} \hlt{\texorpdfstring{$q$}{q}- and Logarithmic Umbral Variants}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Gaussian coefficient}: for $0\leq k\leq n$,
+$\binom{n}{k}_q\defeq
+\prod\limits_{j=1}^{n}(1-q^j)/
+\left(\prod\limits_{j=1}^{k}(1-q^j)
+\prod\limits_{j=1}^{n-k}(1-q^j)\right)$.
+\item \hlt{\texorpdfstring{$q$}{q}-umbral calculus}: the deformation $\binom{n}{k}\leadsto\binom{n}{k}_q$.
+\item \hlt{Logarithmic umbral calculus}: the logarithmic-type variant based on harmonic logarithms.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:umbral-calculus-further-directions} \hlt{Further Directions}\\
+Classical umbral methods extend to many polynomial families and operations:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Families}: lower factorial, Stirling, exponential, Gould, central
+factorial, Abel, Mittag--Leffler, Bessel, Bell, Hermite, Bernoulli, Euler,
+Laguerre, Poisson--Charlier, actuarial, Meixner, Pidduck, Narumi, Boole,
+Peters, Mahler, and Mott polynomials.
+\item \hlt{Operations}: connection constants, duplication formulas, Lagrange
+inversion, cross sequences, Steffensen sequences, operational formulas,
+inverse relations, recurrence solving, and binomial convolution.
+\item \hlt{Variants}: $q$-umbral and logarithmic umbral calculi replace or
+modify the binomial structure through the objects in Definition
+\ref{def:q-and-logarithmic-umbral-variants}.
+\end{enumerate}
+\end{remark}
