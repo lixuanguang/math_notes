@@ -1,0 +1,75 @@
+\subsection{Conditioning}
+
+\begin{definition} \label{def:spectral-condition-number} \hlt{Spectral Condition Number}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, its \hlt{spectral condition number} is $\kappa_2(A)\defeq\norm{A}_2\norm{A^{-1}}_2$.\\
+Equivalently, $\kappa_2(A)=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$. If $A$ is singular, $\kappa_2(A)$ is undefined.
+\end{definition}
+
+\begin{proposition} \label{prop:spectral-condition-number-properties} \hlt{Properties of the Spectral Condition Number}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\kappa_2(AB)\leq\kappa_2(A)\kappa_2(B)$;
+\item $\kappa_2(A)\geq1$, with equality if and only if $A$ is a nonzero scalar multiple of a unitary matrix;
+\item $\kappa_2(cA)=\kappa_2(A)$ for every nonzero scalar $c$;
+\item $\kappa_2(A)=\kappa_2(A^*)=\kappa_2(\overline{A})=\kappa_2(A^t)=\kappa_2(A^{-1})$ over $\mathbb{C}$, with the evident real special cases;
+\item $\kappa_2(A^*A)=\kappa_2(A)^2$;
+\item if $U,V$ are unitary, then $\kappa_2(UAV)=\kappa_2(A)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Use submultiplicativity: $\kappa_2(AB)=\norm{AB}_2\norm{B^{-1}A^{-1}}_2\leq\norm{A}_2\norm{B}_2\norm{B^{-1}}_2\norm{A^{-1}}_2$.
+\item Since $I_n=AA^{-1}$, $1=\norm{I_n}_2\leq\kappa_2(A)$. Equality means $\sigma_{\max}(A)=\sigma_{\min}(A)$, equivalently every singular value is the same positive number $s$. If $A=V\Sigma W^*$, then $\Sigma=sI_n$, so $A=sVW^*$ is a nonzero scalar multiple of a unitary matrix. The converse is immediate.
+\item This follows from $\norm{cA}_2=\abs{c}\norm{A}_2$ and $(cA)^{-1}=c^{-1}A^{-1}$.
+\item These matrices have the same singular values as $A$, except $A^{-1}$ has singular values $\sigma_n^{-1}\geq\cdots\geq\sigma_1^{-1}$.
+\item The singular values of $A^*A$ are $\sigma_1(A)^2,\ldots,\sigma_n(A)^2$.
+\item This follows from Proposition \ref{prop:unitary-invariance-of-singular-values}.
+\end{enumerate}
+\hlt{Structural Commentary}: Condition number compares largest and smallest singular stretches.\\
+\hlt{Key Insight}: A well-conditioned matrix stretches every direction by nearly the same factor.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:positive-definite-condition-number-eigenvalues} \hlt{Positive Definite Condition Number by Eigenvalues}\\
+Let $A\succ0$ have eigenvalues $0<\lambda_1\leq\cdots\leq\lambda_n$. Then $\norm{A}_2=\lambda_n$; $\norm{A^{-1}}_2=\frac{1}{\lambda_1}$; and $\kappa_2(A)=\frac{\lambda_n}{\lambda_1}$.
+\begin{proof}
+By Theorems \ref{thm:positive-definite-matrix-equivalences} and \ref{thm:eigenvalues-versus-singular-values}, the singular values of $A$ are $\lambda_1,\ldots,\lambda_n$.\\
+Hence Theorem \ref{thm:spectral-norm-largest-singular-value} gives $\norm{A}_2=\lambda_n$. Since $\operatorname{spec}(A^{-1})=\{\lambda_1^{-1},\ldots,\lambda_n^{-1}\}$, same argument gives $\norm{A^{-1}}_2=\lambda_1^{-1}$, and multiplying yields $\kappa_2(A)=\lambda_n/\lambda_1$.\\
+\hlt{Structural Commentary}: For $A\succ0$, singular and eigenvalue stretches coincide.\\
+\hlt{Key Insight}: Conditioning compares the largest and smallest positive eigendirections.
+\end{proof}
+\end{corollary}
+
+\begin{perspective} \label{per:determinant-is-not-conditioning} \hlt{Determinant is Not Conditioning}\\
+Determinants measure volume, not sensitivity.\\
+$\kappa_2(cA)=\kappa_2(A)$ for $c\neq0$ (Proposition \ref{prop:spectral-condition-number-properties}), but $\det(cA)=c^n\det(A)$.
+\end{perspective}
+
+\begin{theorem} \label{thm:linear-system-relative-error-condition-number} \hlt{Condition Number and Linear-System Error}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible, let $\mathbf{y}\neq\mathbf{0}$, and let $A\mathbf{x}=\mathbf{y}$.\\
+If $A(\Delta\mathbf{x})=\Delta\mathbf{y}$, then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}}_2} \leq \kappa_2(A)\frac{\norm{\Delta\mathbf{y}}_2}{\norm{\mathbf{y}}_2}$
+\begin{proof}
+From $\mathbf{y}=A\mathbf{x}$, we have $\norm{\mathbf{y}}_2\leq\norm{A}_2\norm{\mathbf{x}}_2$, hence $1/\norm{\mathbf{x}}_2\leq\norm{A}_2/\norm{\mathbf{y}}_2$. Also $\Delta\mathbf{x}=A^{-1}\Delta\mathbf{y}$, so $\norm{\Delta\mathbf{x}}_2\leq\norm{A^{-1}}_2\norm{\Delta\mathbf{y}}_2$. Multiplying the two estimates gives the displayed bound.\\
+\hlt{Structural Commentary}: Solution error is controlled by the ratio of extreme singular stretches.\\
+\hlt{Key Insight}: $\kappa_2(A)$ measures worst-case error magnification.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:matrix-perturbation-relative-error-condition-number} \hlt{Condition Number and Matrix Perturbation}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible. Suppose $A\mathbf{x}=\mathbf{y}$; $(A+\Delta A)(\mathbf{x}+\Delta\mathbf{x})=\mathbf{y}$, and $\mathbf{x}+\Delta\mathbf{x}\neq\mathbf{0}$.\\
+Then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}+\Delta\mathbf{x}}_2} \leq \kappa_2(A)\frac{\norm{\Delta A}_2}{\norm{A}_2}$.
+\begin{proof}
+Subtracting gives $A\Delta\mathbf{x}+\Delta A(\mathbf{x}+\Delta\mathbf{x})=\mathbf{0}$, so $\Delta\mathbf{x}=-A^{-1}\Delta A(\mathbf{x}+\Delta\mathbf{x})$.\\
+Thus $\norm{\Delta\mathbf{x}}_2 \leq \norm{A^{-1}}_2\norm{\Delta A}_2\norm{\mathbf{x}+\Delta\mathbf{x}}_2 =\kappa_2(A)\frac{\norm{\Delta A}_2}{\norm{A}_2}\norm{\mathbf{x}+\Delta\mathbf{x}}_2$. Divide by $\norm{\mathbf{x}+\Delta\mathbf{x}}_2\neq0$.\\
+\hlt{Structural Commentary}: Perturbing the matrix changes the operator applied to the perturbed solution.\\
+\hlt{Key Insight}: The same condition number controls matrix errors and right-hand-side errors.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/condition_number_error_bound.tikz}
+  \caption{$A$ maps a unit error ball to an ellipse; $\kappa_2(A)=\sigma_{\max}/\sigma_{\min}$ is the long/short semiaxis ratio.}
+  \label{fig:condition-number-error-bound}
+\end{figure}

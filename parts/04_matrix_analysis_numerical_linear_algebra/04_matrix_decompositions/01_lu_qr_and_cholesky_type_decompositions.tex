@@ -1,0 +1,142 @@
+\subsection{LU, QR, and Cholesky-Type Decompositions}
+
+% **Role:** quantitative matrix behavior and computation.
+%
+% LU, QR, Cholesky, SVD, compact SVD, polar decomposition.
+
+Decompositions expose usable structure in a matrix. LU, QR, Cholesky, SVD, compact SVD, and polar decomposition separate elimination, geometry, positivity, rank, and stretching.
+
+\begin{perspective} \label{per:matrix-factorization-roadmap} \hlt{Matrix Factorisation Roadmap}\\
+Factorisations expose structure by task: elimination gives $LU$ and $LDL^t$ (Theorem \ref{thm:lu-factorization-leading-principal-minors}, Corollary \ref{cor:symmetric-lu-gives-ldlt}); positivity gives Cholesky (Theorem \ref{thm:cholesky-factorization}); geometry gives $QR$ (Theorem \ref{thm:qr-factorization}); singular directions give SVD, compact SVD, and the pseudoinverse (Theorems \ref{thm:matrix-singular-value-decomposition}, \ref{thm:compact-singular-value-decomposition}, Definition \ref{def:moore-penrose-pseudoinverse}); polar decomposition separates motion from stretch (Theorem \ref{thm:rectangular-polar-decomposition}). Spectral factorisations appeared earlier: diagonalisation, spectral theorems, Jordan form, and Schur form (Theorems \ref{thm:conditions-equivalent-to-diagonalizability}, \ref{thm:complex-spectral-theorem}, \ref{thm:real-spectral-theorem}, \ref{thm:complex-jordan-form}, \ref{thm:matrix-schur-triangularization-ordered}).\\
+\hlt{Key Insight}: Choose the factorisation that exposes the needed structure.
+\end{perspective}
+
+\begin{definition} \label{def:full-rank-factorization} \hlt{Full-Rank Factorization}\\
+A factorization $A=XY$ with $X$ full column rank and $Y$ full row rank is called a \hlt{full-rank factorization} of $A$.
+\end{definition}
+
+\begin{theorem} \label{thm:full-rank-factorization} \hlt{Full-Rank Factorization}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq 1$, and let the columns of $X\in\operatorname{Mat}(m,r,\mathbb{F})$ be a basis of $\operatorname{col}(A)$. Then there is a unique $Y\in\operatorname{Mat}(r,n,\mathbb{F})$ such that $A=XY$, and $\operatorname{rank}(X)=\operatorname{rank}(Y)=r$.
+\begin{proof}
+Write $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$. Since the columns of $X$ form a basis of $\operatorname{col}(A)$, for each $j$ there is a unique $\mathbf{y}_j\in\mathbb{F}^r$ such that $\mathbf{a}_j=X\mathbf{y}_j$. Set $Y=[\mathbf{y}_1\ \cdots\ \mathbf{y}_n]$. Then $A=[X\mathbf{y}_1\ \cdots\ X\mathbf{y}_n]=XY$ and uniqueness of the coordinates $\mathbf{y}_j$ gives uniqueness of $Y$. The columns of $X$ are independent, so $\operatorname{rank}(X)=r$.\\
+By Theorem \ref{thm:rank-product-and-concatenation-bounds}, $r=\operatorname{rank}(A)=\operatorname{rank}(XY)\leq \operatorname{rank}(Y)\leq r$ because $Y$ has only $r$ rows. Hence $\operatorname{rank}(Y)=r$.\\
+\hlt{Structural Commentary}: A matrix factors through a basis of its column space.\\
+\hlt{Key Insight}: Full-rank factorization separates column directions from their coordinates.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:lu-factorization} \hlt{LU Factorisation}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, an \hlt{LU factorisation} is a product $A=LU$, where $L$ is lower triangular and $U$ is upper triangular. It is \hlt{unit lower triangular} if every diagonal entry of $L$ is $1$.
+\end{definition}
+
+\begin{theorem} \label{thm:lu-factorization-leading-principal-minors} \hlt{LU Factorisation from Nonzero Leading Principal Minors}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. If every leading principal minor of $A$ is nonzero, then $A=LU$ for a unique unit lower triangular $L$ and a unique upper triangular $U$.
+\begin{proof}
+Induct on $n$. The case $n=1$ is immediate. Write $A=
+\begin{bmatrix}
+a & \mathbf{r}\\
+\mathbf{c} & B
+\end{bmatrix}$, $a\neq0$.\\
+Set $\boldsymbol{\ell}=a^{-1}\mathbf{c}$ and $S=B-a^{-1}\mathbf{c}\mathbf{r}$. For each leading $k\times k$ principal block of $A$, the block determinant formula gives determinant $a$ times the corresponding leading $(k-1)\times(k-1)$ principal minor of $S$. Hence all leading principal minors of $S$ are nonzero. By induction, $S=L_1U_1$ with $L_1$ unit lower triangular and $U_1$ upper triangular.\\
+Then $A=
+\begin{bmatrix}
+1 & 0\\
+\boldsymbol{\ell} & L_1
+\end{bmatrix}
+\begin{bmatrix}
+a & \mathbf{r}\\
+0 & U_1
+\end{bmatrix}$. For uniqueness, comparing the first row and first column of $LU$ determines $a$, $\mathbf{r}$, and $\boldsymbol{\ell}$, then reduces uniqueness to the lower-right Schur complement.\\
+\hlt{Structural Commentary}: Gaussian elimination peels off one pivot and passes to a Schur complement.\\
+\hlt{Key Insight}: Nonzero leading principal minors are exactly the no-row-swap pivot condition.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:symmetric-lu-gives-ldlt} \hlt{Symmetric LU Gives an $LDL^t$ Factorisation}\\
+Let $A=A^t\in\operatorname{Mat}(n,n,\mathbb{R})$ have nonzero leading principal minors.\\
+Then $A=LDL^t$, with $L$ unit lower triangular and $D$ diagonal invertible.
+\begin{proof}
+By Theorem \ref{thm:lu-factorization-leading-principal-minors}, write $A=LU$ uniquely with $L$ unit lower triangular and $U$ upper triangular.\\
+Since the leading principal minors are nonzero, each $u_{ii}\neq0$. Put $D=\operatorname{diag}(u_{11},\ldots,u_{nn})$ and $U_0=D^{-1}U$; then $U_0$ is unit upper triangular and $A=LDU_0$. Since $A=A^t$, also $A=U_0^tDL^t$. This is another LU factorisation with unit lower factor $U_0^t$, so uniqueness gives $L=U_0^t$. Hence $A=LDL^t$.\\
+\hlt{Structural Commentary}: Symmetry makes the upper triangular unit factor the transpose of the lower one.\\
+\hlt{Key Insight}: Once the pivots are separated into $D$, the two triangular halves mirror each other.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:wide-and-narrow-qr-factorization} \hlt{Wide and Narrow QR Factorisation}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $m\geq n$, factorisation $A=V\begin{bmatrix}R\\0\end{bmatrix}$, $V\in\operatorname{Mat}(m,m,\mathbb{F})$ unitary, $R\in\operatorname{Mat}(n,n,\mathbb{F})$ upper triangular is called a \hlt{wide QR factorisation}. Writing $V=[Q\ Q']$ gives the \hlt{narrow QR factorisation} $A=QR$.
+\end{definition}
+
+\begin{theorem} \label{thm:qr-factorization} \hlt{QR Factorisation}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and suppose $m\geq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists$ a unitary $V$ and an upper triangular $R$ with real nonnegative diagonal entries such that $A=V\begin{bmatrix}R\\0\end{bmatrix}$.\\
+Writing $V=[Q\ Q']$ with $Q$ the first $n$ columns gives $A=QR$, with $Q$ orthonormal columns.
+\item If $\operatorname{rank}(A)=n$, then narrow $A=QR$ is unique when $R$ has positive diagonal entries.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+At step $k$, after the first $k-1$ columns have been triangularized, apply Corollary \ref{cor:householder-unitary-annihilator} to the tail of the $k$th column. This gives a unitary $I_{k-1}\oplus U_k$ that sends that tail to $r_{kk}\mathbf{e}_1$ with $r_{kk}\geq0$.\\
+Since the first $k-1$ entries of every earlier column already contain all possible nonzero entries, acting only on rows $k,\ldots,m$ preserves the earlier triangular columns.\\
+After $n$ steps, $U_n\cdots U_1A=\begin{bmatrix}R\\0\end{bmatrix}$, where $R$ is upper triangular with nonnegative diagonal entries.\\
+Let $V=(U_n\cdots U_1)^*$. Then $A=V\begin{bmatrix}R\\0\end{bmatrix}$, and $V=[Q\ Q']$ gives $A=QR$ with $Q$ orthonormal columns.\\
+If $\operatorname{rank}(A)=n$, then $n=\operatorname{rank}(A)=\operatorname{rank}(R)$, so the triangular matrix $R$ is invertible and its nonnegative diagonal entries are positive.
+\item
+Suppose $A=Q_1R_1=Q_2R_2$, where $Q_i^*Q_i=I_n$ and the $R_i$ are upper triangular with positive diagonal entries. Then $A^*A=R_1^*R_1=R_2^*R_2$. Let $D=R_1R_2^{-1}$. Substituting $R_1=DR_2$ gives $D^*D=I_n$.\\
+Thus the columns of $D$ are orthonormal. Since $D$ is upper triangular, the first column has only one possible nonzero entry; orthogonality with it forces the rest of the first row to vanish.\\
+Inducting on the lower-right principal submatrix shows $D$ is diagonal, and $D^*D=I_n$ gives diagonal entries of modulus $1$. These diagonal entries are ratios of positive diagonal entries of $R_1$ and $R_2$, so they are positive. Hence $D=I_n$. Therefore $R_1=R_2$, and then $Q_1=Q_2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Householder steps triangularise columns; full rank makes the diagonal positive.\\
+\hlt{Key Insight}: Positive diagonals remove the sign/phase ambiguity.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/qr_factorization_geometry.tikz}
+  \caption{QR writes $A=QR$ while preserving prefix column spaces: $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.}
+  \label{fig:qr-factorization-geometry}
+\end{figure}
+
+\begin{perspective} \label{per:gram-schmidt-householder-qr} \hlt{Gram--Schmidt and Householder QR}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]$ have full column rank.\\
+Gram--Schmidt gives orthonormal columns $\mathbf{q}_1,\ldots,\mathbf{q}_n$ s.t. $\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_k)=\operatorname{span}(\mathbf{q}_1,\ldots,\mathbf{q}_k)$, $k=1,\ldots,n$.\\
+Hence $A=QR$ with $Q^*Q=I$ and $R$ upper triangular. The Householder construction gives the same factorization via unitary transformations, which is the numerically stable form.
+\end{perspective}
+
+\begin{perspective} \label{per:rank-deficient-gram-schmidt-qr} \hlt{Rank-Deficient QR from Gram--Schmidt}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$, $m\geq n$, and let $\mathbf{u}_j$ be the arbitrary-list Gram--Schmidt remainders from Theorem \ref{thm:gram-schmidt-arbitrary-list}. Set $\mathcal{J}=\{j:\mathbf{u}_j\neq\mathbf{0}\}$. For $j\in\mathcal{J}$ put $\mathbf{q}_j=\mathbf{u}_j/\norm{\mathbf{u}_j}$; for $j\notin\mathcal{J}$ choose $\mathbf{q}_j\in\operatorname{col}(A)^\perp$ so that $Q=[\mathbf{q}_1\ \cdots\ \mathbf{q}_n]$ has orthonormal columns. With $R=Q^*A$, one has $A=QR$, $R$ upper triangular, and $r_{jj}=0$ exactly when $\mathbf{u}_j=\mathbf{0}$. Thus uniqueness fails unless $\mathcal{J}=\{1,\ldots,n\}$ and $r_{jj}>0$ for all $j$.\\
+\hlt{Structural Commentary}: Rank defect becomes zero QR pivots.\\
+\hlt{Key Insight}: The full-rank hypothesis in uniqueness is a statement about nonzero orthogonal remainders.
+\end{perspective}
+
+\begin{corollary} \label{cor:qr-prefix-column-spaces} \hlt{Prefix Column Spaces in QR Factorisation}\\
+Let $A=QR$ be the narrow QR factorisation of $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with $\operatorname{rank}(A)=n$ and positive diagonal entries in $R$. For $k=1,\ldots,n$, let $A_k$ and $Q_k$ be the first $k$ columns of $A$ and $Q$, respectively. Then $\operatorname{col}(A_k)=\operatorname{col}(Q_k)$.\\
+Thus the columns of $Q_k$ form an orthonormal basis of $\operatorname{col}(A_k)$.
+\begin{proof}
+Let $R_k$ be the leading $k\times k$ principal submatrix of $R$. Since $R$ is upper triangular with positive diagonal entries, $R_k$ is invertible. The first $k$ columns of $A=QR$ satisfy $A_k=Q_kR_k$, because upper triangularity prevents later columns of $Q$ from contributing. Hence $\operatorname{col}(A_k)\subseteq\operatorname{col}(Q_k)$ and $Q_k=A_kR_k^{-1}$ gives the reverse inclusion. The columns of $Q_k$ are orthonormal because $Q$ has orthonormal columns.\\
+\hlt{Structural Commentary}: QR preserves prefix column spaces while orthonormalising them.\\
+\hlt{Key Insight}: Invertible $R_k$ only changes coordinates within that space.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:cholesky-factorization} \hlt{Cholesky Factorisation}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. If $A\succeq0$, then $A=LL^*$ for some lower triangular $L$ with nonnegative diagonal entries. If $A\succ0$, then $L$ is unique and has positive diagonal entries.
+\begin{proof}
+Let $B=A^{1/2}$ and take a QR factorisation $B=QR$ with $R$ upper triangular and diagonal entries nonnegative. Then $A=B^*B=R^*R$, so $L=R^*$ works.\\
+If $A\succ0$, then $L$ is invertible, so its diagonal entries are positive. For uniqueness, suppose $A=L_1L_1^*=L_2L_2^*$ with $L_i$ lower triangular and positive diagonal. Set $R_i=L_i^*$. Then $R_i$ is upper triangular with positive diagonal and $B^2=A=R_i^*R_i$. Define $Q_i=BR_i^{-1}$. Then $Q_i^*Q_i=(R_i^{-1})^*B^2R_i^{-1}=(R_i^{-1})^*R_i^*R_iR_i^{-1}=I_n$, so $B=Q_iR_i$ are QR factorisations with positive diagonal. Uniqueness of QR gives $R_1=R_2$, hence $L_1=L_2$.\\
+\hlt{Structural Commentary}: Cholesky is QR applied to $A^{1/2}$.\\
+\hlt{Key Insight}: Triangularise the square root, then set $L=R^*$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/cholesky_from_qr.tikz}
+  \caption{Apply QR to $B=A^{1/2}$; then $A=R^*R=LL^*$, with uniqueness in the positive definite case.}
+  \label{fig:cholesky-from-qr}
+\end{figure}
+

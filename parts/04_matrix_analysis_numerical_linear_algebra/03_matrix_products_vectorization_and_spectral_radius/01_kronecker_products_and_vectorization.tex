@@ -1,0 +1,128 @@
+\subsection{Kronecker Products and Vectorization}
+
+\begin{definition} \label{def:kronecker-product} \hlt{Kronecker Product}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(p,q,\mathbb{F})$. The \hlt{Kronecker product} of $A$ and $B$ is the block matrix
+\begin{align}
+A\otimes B
+\defeq
+\begin{bmatrix}
+a_{11}B & a_{12}B & \cdots & a_{1n}B\\
+a_{21}B & a_{22}B & \cdots & a_{2n}B\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{m1}B & a_{m2}B & \cdots & a_{mn}B
+\end{bmatrix}
+\in\operatorname{Mat}(mp,nq,\mathbb{F}).
+\nonumber
+\end{align}
+The Kronecker product is also called the tensor product of matrices.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-kronecker-identities} \hlt{Basic Kronecker Identities}\\
+Whenever the expressions are defined,
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $c(A\otimes B)=(cA)\otimes B=A\otimes(cB)$;
+\item $(A+B)\otimes C=A\otimes C+B\otimes C$ and $A\otimes(B+C)=A\otimes B+A\otimes C$;
+\item $(A\otimes B)\otimes C=A\otimes(B\otimes C)$;
+\item $(A\otimes B)^t=A^t\otimes B^t$;
+\item $I_m\otimes I_n=I_{mn}$.
+\end{enumerate}
+If $\mathbb{F}=\mathbb{C}$, then also $\overline{A\otimes B}=\overline{A}\otimes\overline{B}$ and $(A\otimes B)^*=A^*\otimes B^*$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The $(i,j)$ block of $c(A\otimes B)$ is $c(a_{ij}B)=(ca_{ij})B=a_{ij}(cB)$, which is $(i,j)$ block of $(cA)\otimes B$ and $A\otimes(cB)$.
+\item The $(i,j)$ block of $(A+B)\otimes C$ is $(a_{ij}+b_{ij})C=a_{ij}C+b_{ij}C$, so $(A+B)\otimes C=A\otimes C+B\otimes C$.\\
+The proof of $A\otimes(B+C)=A\otimes B+A\otimes C$ is identical inside each block.
+\item If $B=[b_{rs}]$, then both $(A\otimes B)\otimes C$ and $A\otimes(B\otimes C)$ have blocks $a_{ij}b_{rs}C$ in the same relative positions.
+\item The $(j,i)$ block of $(A\otimes B)^t$ is $(a_{ij}B)^t=a_{ij}B^t$, which is the $(j,i)$ block of $A^t\otimes B^t$.
+\item The block matrix $I_m\otimes I_n$ has $I_n$ on its diagonal blocks and zero elsewhere, hence equals $I_{mn}$.
+\end{enumerate}
+If $\mathbb{F}=\mathbb{C}$, conjugation is checked blockwise, adjoint identity follows from conjugation together with part (iv).\\
+\hlt{Structural Commentary}: Kronecker products replace scalar entries by whole scaled blocks. Standard algebraic rules survive because each block is still controlled by scalar distributivity and transposition.\\
+\hlt{Key Insight}: Check identities block-by-block; each block reduces to an ordinary scalar-matrix identity.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:kronecker-mixed-product-property} \hlt{Mixed Product Property}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(p,q,\mathbb{F})$, $C\in\operatorname{Mat}(n,r,\mathbb{F})$, $D\in\operatorname{Mat}(q,s,\mathbb{F})$.  $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$.
+\begin{proof}
+Write $A=[a_{ik}]$ and $C=[c_{kj}]$. The $(i,j)$ block of $(A\otimes B)(C\otimes D)$ is\\
+$\sum\limits_{k=1}^{n}(a_{ik}B)(c_{kj}D) =\left(\sum\limits_{k=1}^{n}a_{ik}c_{kj}\right)BD =(AC)_{ij}BD$, which is exactly the $(i,j)$ block of $(AC)\otimes(BD)$.\\
+\hlt{Structural Commentary}: The outer indices multiply as $AC$, while the inner block action multiplies as $BD$.\\
+\hlt{Key Insight}: Kronecker multiplication separates into ordinary multiplication in each factor.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:inverse-of-kronecker-product} \hlt{Inverse of a Kronecker Product}\\
+If $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and $B\in\operatorname{Mat}(n,n,\mathbb{F})$ are invertible, then $A\otimes B$ is invertible and $(A\otimes B)^{-1}=A^{-1}\otimes B^{-1}$.
+\begin{proof}
+By Theorem \ref{thm:kronecker-mixed-product-property}, $(A\otimes B)(A^{-1}\otimes B^{-1})=I_m\otimes I_n=I_{mn}$ and the reverse product is identical.\\
+\hlt{Structural Commentary}: Inverting a Kronecker product inverts each independent factor.\\
+\hlt{Key Insight}: The mixed product property turns the inverse check into two ordinary inverse checks.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:kronecker-product-and-sum-diagonalizable-spectra} \hlt{Kronecker Product and Sum Spectra in the Diagonalizable Case}\\
+Let $A=P\Lambda P^{-1}$, $B=QMQ^{-1}$, where $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ and $M=\operatorname{diag}(\mu_1,\ldots,\mu_q)$.\\
+Then $A\otimes B\sim\Lambda\otimes M$; and $A\otimes I_q+I_n\otimes B\sim \Lambda\otimes I_q+I_n\otimes M$.\\
+Their diagonal entries are respectively $\lambda_i\mu_j$ and $\lambda_i+\mu_j$ for $1\leq i\leq n$, $1\leq j\leq q$.
+\begin{proof}
+By Theorem \ref{thm:kronecker-mixed-product-property} and $(P\otimes Q)^{-1}=P^{-1}\otimes Q^{-1}$, $A\otimes B =(P\otimes Q)(\Lambda\otimes M)(P^{-1}\otimes Q^{-1})$.\\
+Similarly, $A\otimes I_q+I_n\otimes B =(P\otimes Q)(\Lambda\otimes I_q+I_n\otimes M)(P^{-1}\otimes Q^{-1})$.\\
+The middle matrices are diagonal with the stated $(i,j)$-indexed entries.\\
+\hlt{Structural Commentary}: Eigenvectors tensor together, and Kronecker sums add the two scalar eigenvalues.\\
+\hlt{Key Insight}: Diagonalize each factor first; the Kronecker operation becomes entrywise on eigenvalue pairs.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/kronecker_sum_five_point_stencil.tikz}
+  \caption{Vertical plus horizontal second differences give the five-point stencil.}
+  \label{fig:kronecker-sum-five-point-stencil}
+\end{figure}
+
+\begin{definition} \label{def:vectorization-map} \hlt{Vectorisation}\\
+Let $X=[\mathbf{x}_1\ \mathbf{x}_2\ \cdots\ \mathbf{x}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$. The \hlt{vectorisation} of $X$ is
+\begin{align}
+\operatorname{vec}(X)\defeq
+\begin{bmatrix}
+\mathbf{x}_1\\
+\mathbf{x}_2\\
+\vdots\\
+\mathbf{x}_n
+\end{bmatrix}
+\in\mathbb{F}^{mn}.
+\nonumber
+\end{align}
+Thus $\operatorname{vec}$ stacks the columns of $X$ vertically.
+\end{definition}
+
+\begin{theorem} \label{thm:vectorization-of-triple-product} \hlt{Vectorisation of a Triple Product}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $X\in\operatorname{Mat}(n,p,\mathbb{F})$, and $B\in\operatorname{Mat}(p,q,\mathbb{F})$. Then $\operatorname{vec}(AXB)=(B^t\otimes A)\operatorname{vec}(X)$.
+\begin{proof}
+Write $B=[\mathbf{b}_1\ \cdots\ \mathbf{b}_q]$ and $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_p]$.\\
+The $k$th column of $AXB$ is $AX\mathbf{b}_k=A\sum\limits_{i=1}^{p}b_{ik}\mathbf{x}_i =\sum\limits_{i=1}^{p}b_{ik}A\mathbf{x}_i =(\mathbf{b}_k^t\otimes A)\operatorname{vec}(X)$.\\
+Stacking these $q$ columns gives $(B^t\otimes A)\operatorname{vec}(X)$.\\
+\hlt{Structural Commentary}: Vectorisation rewrites two-sided multiplication as one matrix action.\\
+\hlt{Key Insight}: Left multiplication contributes $A$; right multiplication contributes $B^t$.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:vectorized-minimal-polynomial-linear-system} \hlt{Vectorising a Minimal-Polynomial Test}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and a monic candidate $p_m(z)=a_0+a_1z+\cdots+a_{m-1}z^{m-1}+z^m$,\\
+the matrix equation $a_0I+a_1A+\cdots+a_{m-1}A^{m-1}=-A^m$ can be written as the ordinary linear system
+\begin{align}
+\begin{bmatrix}
+\operatorname{vec}(I)&\operatorname{vec}(A)&\cdots&\operatorname{vec}(A^{m-1})
+\end{bmatrix}
+\begin{bmatrix}
+a_0\\a_1\\ \vdots\\ a_{m-1}
+\end{bmatrix}
+=-\operatorname{vec}(A^m) \nonumber
+\end{align}
+\hlt{Structural Commentary}: Vectorisation turns matrix identities into linear systems.\\
+\hlt{Key Insight}: Polynomial membership becomes a coefficient system in vectorized powers.
+\end{perspective}
+

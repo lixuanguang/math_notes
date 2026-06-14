@@ -1,0 +1,282 @@
+\subsection{Trace and Determinant}
+
+% **Role:** quantitative matrix behavior and computation.
+%
+% Trace, determinant, rank, spectral radius, PSD/PD matrices, idempotents, nilpotents.
+
+Matrix classes package operator structure in coordinates. Trace, determinant, rank, positivity, idempotents, nilpotents, spectral radius, and structured products give computable invariants.
+
+\begin{definition} \label{def:matrix-trace-and-determinant} \hlt{Trace and Determinant of a Matrix}\\
+For $A=[A_{j,k}]\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{trace} of $A$ is $\operatorname{tr}(A)\defeq A_{1,1}+\cdots+A_{n,n}$.\\
+The \hlt{determinant} of $A$ is $\det A \defeq \sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.
+\end{definition}
+
+\begin{definition} \label{def:gram-determinant} \hlt{Gram Determinant}\\
+Vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in inner-product space has \hlt{Gram determinant} $\operatorname{GramDet}(\mathbf{u}_1,\ldots,\mathbf{u}_n) \defeq \det \operatorname{Gram}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.
+\end{definition}
+
+\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
+On $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product from Example \ref{ex:function-and-matrix-inner-products}, the Riesz vector of the trace functional $A\mapsto\operatorname{tr}(A)$ is $I_n$, since $\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
+\end{example}
+
+\begin{proposition} \label{prop:trace-cyclicity-two-factors} \hlt{Trace Is Cyclic for Two Factors}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,m,\mathbb{F})$, then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.
+\begin{proof}
+Expand both traces by entries: $\operatorname{tr}(AB) =\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{n}A_{j,k}B_{k,j} =\sum\limits_{k=1}^{n}\sum\limits_{j=1}^{m}B_{k,j}A_{j,k} =\operatorname{tr}(BA)$.\\
+\hlt{Structural Commentary}: Cyclicity is just reindexing the same double sum.\\
+\hlt{Key Insight}: The two double sums contain exactly the same scalar terms.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:trace-arithmetic} \hlt{Trace Arithmetic}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ and $r\in\mathbb{F}$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}(rA)=r\operatorname{tr}(A)$;
+\item $\operatorname{tr}(A+B)=\operatorname{tr}(A)+\operatorname{tr}(B)$.
+\end{enumerate}
+\begin{proof}
+We prove the two identities separately.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Summing the diagonal entries of $rA$ gives $\operatorname{tr}(rA)=\sum\limits_{j=1}^{n}ra_{jj}=r\sum\limits_{j=1}^{n}a_{jj}=r\operatorname{tr}(A)$.
+\item Summing the diagonal entries of $A+B$ gives $\operatorname{tr}(A+B)=\sum\limits_{j=1}^{n}(a_{jj}+b_{jj}) =\sum\limits_{j=1}^{n}a_{jj}+\sum_{j=1}^{n}b_{jj} =\operatorname{tr}(A)+\operatorname{tr}(B)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Trace is linear because it is the sum of diagonal entries.\\
+\hlt{Key Insight}: Scalar multiplication and addition pass through the diagonal sum.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:trace-cyclic-products} \hlt{Cyclic Products}\\
+Let $m\geq 2$, $A_j\in\operatorname{Mat}(n_j,n_{j+1},\mathbb{F})$ for $j=1,\ldots,m$, $n_{m+1}=n_1$, $P_{p,q}\defeq A_pA_{p+1}\cdots A_q$.\\
+Then $\operatorname{tr}(P_{1,m})=\operatorname{tr}(A_mP_{1,m-1})$. Consequently, for $A,B,C\in\operatorname{Mat}(n,n,\mathbb{F})$, $\operatorname{tr}(ABC)=\operatorname{tr}(BCA)=\operatorname{tr}(CAB)$
+\begin{proof}
+Since $P_{1,m-1}\in\operatorname{Mat}(n_1,n_m,\mathbb{F})$ and $A_m\in\operatorname{Mat}(n_m,n_1,\mathbb{F})$,\\
+Proposition \ref{prop:trace-cyclicity-two-factors} gives $\operatorname{tr}(P_{1,m}) =\operatorname{tr}(P_{1,m-1}A_m) =\operatorname{tr}(A_mP_{1,m-1})$.\\
+Applying this cyclic move twice to $ABC$ gives the three-factor identity.\\
+\hlt{Structural Commentary}: Trace preserves cyclic order, not arbitrary order.\\
+\hlt{Key Insight}: One cyclic move is $\operatorname{tr}(XY)=\operatorname{tr}(YX)$ with $X=P_{1,m-1}$ and $Y=A_m$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:trace-cyclicity-not-arbitrary-permutation} \hlt{Cyclicity Is Not Arbitrary Commutativity}\\
+Let $A=E_{1,2}$, $B=E_{2,1}$, and $C=E_{1,1}$ in $\operatorname{Mat}(2,2,\mathbb{F})$. Then $\operatorname{tr}(ABC)=1$, while $\operatorname{tr}(ACB)=0$.\\
+Thus trace permits cyclic rotations of factors, but not arbitrary rearrangements.
+\end{example}
+
+\begin{theorem} \label{thm:determinant-basic-laws} \hlt{Basic Determinant Laws}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=1$.
+\item $\det(A)$ is linear as a function of each column of $A$ when the other columns are fixed.
+\item Swapping two columns negates the determinant; equal columns force $\det A=0$.
+\item If $A$ is triangular, then $\det A=A_{1,1}\cdots A_{n,n}$.
+\item $\det(AB)=\det(A)\det(B)$.
+\item $A$ is invertible if and only if $\det A\neq0$. In that case $\det(A^{-1})=(\det A)^{-1}$.
+\item $\det(A^t)=\det(A)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)(I_n)_{\sigma(1),1}\cdots (I_n)_{\sigma(n),n}=1$ as product is nonzero only when $\sigma(k)=k \ \forall k$.
+\item For fixed $k$, $\det(A_{\cdot,1},\ldots,\mathbf{x},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)x_{\sigma(k)}\prod\limits_{\ell\neq k}A_{\sigma(\ell),\ell}$, which is linear in $\mathbf{x}$.
+\item If $B_{\cdot,k}=A_{\cdot,\tau(k)}$ for transposition $\tau$, then $\det B=\sum\limits_{\rho\in\mathfrak{S}_n}\sign(\rho\tau)\prod\limits_{k=1}^n A_{\rho(k),k} =-\det A$.\\
+If the swapped columns are equal, then $B=A$, so $\det A=-\det A$ and $\det A=0$.
+\item If $A$ is upper triangular and $\prod_{k=1}^n A_{\sigma(k),k}\neq0$, then $\sigma(k)\leq k$ for all $k$, hence $\sigma(k)=k$ for all $k$.\\
+Thus $\det A=A_{1,1}\cdots A_{n,n}$. If $A$ is lower triangular, nonzero products require $\sigma(k)\geq k$ for all $k$, again forcing $\sigma(k)=k$ for all $k$, so the same diagonal product formula holds.
+\item If $F$ is alternating and multilinear in columns, then expanding each column in the standard basis gives\\
+$F(A_{\cdot,1},\ldots,A_{\cdot,n}) =\sum\limits_{i_1,\ldots,i_n}A_{i_1,1}\cdots A_{i_n,n}F(\mathbf{e}_{i_1},\ldots,\mathbf{e}_{i_n}) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)F(I_n)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.\\
+The terms with repeated $i_j$ vanish by alternation, and the surviving ordered bases differ from $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ by sign of permutation. For $H(B)=\det(AB)$, map $H$ is alternating multilinear and $H(I_n)=\det A$.\\
+Hence $\det(AB)=H(B)=H(I_n)\det B=\det(A)\det(B)$.
+\item If $A$ is invertible, then $1=\det I_n=\det(AA^{-1})=\det(A)\det(A^{-1})$.\\
+If $A_{\cdot,k}=\sum\limits_{\ell\neq k}c_\ell A_{\cdot,\ell}$, then $\det A=\sum\limits_{\ell\neq k}c_\ell\det(A_{\cdot,1},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,n})=0$.\\
+Thus $\det A\neq0$ iff the columns of $A$ are independent, iff $A$ is invertible.
+\item Using the permutation definition and replacing $\sigma$ by $\sigma^{-1}$,\\
+$\det(A^t) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)A_{1,\sigma(1)}\cdots A_{n,\sigma(n)} =\sum\limits_{\tau\in\mathfrak{S}_n}\sign(\tau)A_{\tau(1),1}\cdots A_{\tau(n),n} =\det(A)$; $\sign(\tau^{-1})=\sign(\tau)$.
+\end{enumerate}
+\hlt{Structural Commentary}: The determinant is the normalized alternating multilinear measure of columns.\\
+\hlt{Key Insight}: Multilinearity expands columns; alternation kills repeated directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/determinant_column_geometry.tikz}
+  \caption{Determinant is signed column-volume; swaps reverse orientation and dependence gives zero volume.}
+  \label{fig:determinant-column-geometry}
+\end{figure}
+
+\begin{method} \label{meth:determinant-by-structure} \hlt{Determinant by Structure}\\
+To compute or simplify a determinant:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item first look for triangular or block triangular form;
+\item use column linearity to split complicated columns only when it reduces structure;
+\item use column swaps to move useful pivots into position, tracking a factor of $-1$ for each swap;
+\item detect zero determinants from dependent columns or repeated columns;
+\item for products or changes of basis, use multiplicativity instead of expanding permutations.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/determinant_volume_scaling.tikz}
+  \caption{A linear map scales oriented volume by its determinant; singular maps collapse volume to zero.}
+  \label{fig:matrix-determinant-volume-scaling}
+\end{figure}
+
+\begin{lemma} \label{lem:determinant-identity-direct-sum} \hlt{Identity Blocks Do Not Change Determinant}\\
+Let $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and let $n\geq0$. Then $\det(I_n\oplus A)=\det(A)=\det(A\oplus I_n)$.
+\begin{proof}
+In the permutation formula for $I_n\oplus A$, a nonzero term must satisfy $\sigma(k)=k$ for $1\leq k\leq n$. Remaining choices are exactly permutations of $\{n+1,\ldots,n+m\}$, after relabeling, gives $\det(A)$. Hence $\det(I_n\oplus A)=\det(A)$.\\
+The same argument applied to the last $n$ coordinates gives $\det(A\oplus I_n)=\det(A)$.\\
+The case $n=0$ is the empty identity block convention.\\
+\hlt{Structural Commentary}: Identity blocks add directions without changing volume.\\
+\hlt{Key Insight}: In the determinant expansion, the identity block forces the matching coordinates to be fixed.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:block-upper-triangular-determinant} \hlt{Determinant of an Upper Block-Triangular Matrix}\\
+Let $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$. Then $\det
+\begin{bmatrix}
+A & B\\
+0 & D
+\end{bmatrix}
+=\det(A)\det(D)$.
+\begin{proof}
+Factor $\begin{bmatrix}
+A & B\\
+0 & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_r & 0\\
+0 & D
+\end{bmatrix}
+\begin{bmatrix}
+I_r & B\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & 0\\
+0 & I_s
+\end{bmatrix}$.\\
+The first and last factors have determinants $\det(D)$ and $\det(A)$ by Lemma \ref{lem:determinant-identity-direct-sum}.\\
+The middle factor is upper triangular with every diagonal entry equal to $1$, so its determinant is $1$.\\
+Multiplicativity of determinant gives the formula.\\
+\hlt{Structural Commentary}: Block upper triangular matrices separate determinant contribution into diagonal blocks. The off-diagonal block does not affect the determinant.\\
+\hlt{Key Insight}: Factor the matrix into two block diagonal pieces and one unit upper triangular piece.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:schur-complement-determinant-formula} \hlt{Schur Complement Determinant Formula}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
+If $A$ is invertible, then the \hlt{Schur complement of $A$ in $M$} is $M/A\defeq D-CA^{-1}B$, and $\det(M)=\det(A)\det(M/A)$.
+\begin{proof}
+Block Gaussian elimination gives $\begin{bmatrix}
+I_r & 0\\
+-CA^{-1} & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A & B\\
+0 & D-CA^{-1}B
+\end{bmatrix}$.\\
+The elimination matrix is lower block-triangular with identity diagonal blocks, so its determinant is $1$. Take determinants, apply Theorem \ref{thm:block-upper-triangular-determinant} to right-hand block triangular matrix, $\det(M)=\det(A)\det(D-CA^{-1}B)$.\\
+\hlt{Structural Commentary}: Schur complementation is block Gaussian elimination.\\
+\hlt{Key Insight}: Eliminating $C$ splits the determinant into $\det(A)$ times the remaining block determinant.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
+Let $M=
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
+If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
+\begin{proof}
+Block Gaussian elimination gives $\begin{bmatrix}
+I_r & -BD^{-1}\\
+0 & I_s
+\end{bmatrix}
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}
+=
+\begin{bmatrix}
+A-BD^{-1}C & 0\\
+C & D
+\end{bmatrix}$.\\
+The elimination matrix has determinant $1$. The transpose of the matrix on the right is upper block-triangular, and $\det(X^t)=\det(X)$ by Theorem \ref{thm:determinant-basic-laws}. Therefore Theorem \ref{thm:block-upper-triangular-determinant} gives $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
+\hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
+\hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
+Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
+\begin{proof}
+Let $M=
+\begin{bmatrix}
+I_n & -A\\
+B & I_m
+\end{bmatrix}$.\\
+Using Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$ gives $\det(M)=\det(I_n+AB)$. Using Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$ gives $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
+\hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
+\hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:cauchy-binet-minors} \hlt{Cauchy--Binet Formula}\\
+Let $A\in\operatorname{Mat}(k,n,\mathbb{F})$, $B\in\operatorname{Mat}(n,k,\mathbb{F})$, and $k\leq n$. For $J=\{j_1<\cdots<j_k\}\subseteq\{1,\ldots,n\}$, let $A^J$ use the columns of $A$ in $J$ and $B_J$ use the rows of $B$ in $J$.\\
+Then $\det(AB)=\sum\limits_J \det(A^J)\det(B_J)$, where $J$ ranges over all $k$-subsets.
+\begin{proof}
+Put $S(A,B)\defeq \sum\limits_J \det(A^J)\det(B_J)$. For an elementary $n\times n$ matrix $E$, determinant multilinearity and row/column operation rules give $S(A,B)=S(AE,E^{-1}B)$, and $AB=(AE)(E^{-1}B)$.\\
+If $\operatorname{rank}A<k$, both sides vanish. Otherwise reduce $A$ by elementary column operations to $A'=[C\ 0]$ with $C$ invertible, and transform $B$ oppositely to $B'$.\\
+Then $AB=A'B'$ and $\det(A'B')=\det(C)\det(B'_{J_0})=S(A',B')$, $J_0=\{1,\ldots,k\}$, as every other $k$-minor of $A'$ is zero. Hence $\det(AB)=S(A,B)$.\\
+\hlt{Structural Commentary}: Cauchy--Binet is determinant multiplicativity for rectangular middle dimensions.\\
+\hlt{Key Insight}: The middle space contributes one $k$-coordinate shadow at a time.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:bordered-determinant-formulas} \hlt{Bordered Determinant Formulas}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and let $c\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $c\neq0$, then $\det
+\begin{bmatrix}
+c & \mathbf{x}^t\\
+\mathbf{y} & A
+\end{bmatrix}
+=
+c\det\left(A-\frac{1}{c}\mathbf{y}\mathbf{x}^t\right)$.
+\item If $A$ is invertible, then $\det
+\begin{bmatrix}
+A & \mathbf{x}\\
+\mathbf{y}^t & c
+\end{bmatrix}
+=
+\left(c-\mathbf{y}^tA^{-1}\mathbf{x}\right)\det(A)$
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is Proposition \ref{prop:schur-complement-determinant-formula} with the scalar block $c$ in the upper-left corner.
+\item This is Proposition \ref{prop:schur-complement-determinant-formula} with $A$ as the upper-left block and $D=c$.
+\end{enumerate}
+\hlt{Structural Commentary}: Bordered determinants are Schur complements with scalar borders.\\
+\hlt{Key Insight}: Treat the border as a $1\times1$ block and apply the Schur complement formula.
+\end{proof}
+\end{proposition}
+
