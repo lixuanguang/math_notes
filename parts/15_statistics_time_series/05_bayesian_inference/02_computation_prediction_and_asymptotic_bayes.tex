@@ -1,0 +1,45 @@
+\subsection{Computation, Prediction, and Asymptotic Bayes}
+
+Except in conjugate models, posterior summaries are integrals that usually require approximation.  Monte Carlo and optimization methods from numerical computation become statistical tools here.
+
+\begin{definition} \label{def:bayesian-credible-set} \hlt{Credible Set}\\
+A set $C(x)\subseteq\Theta$ is a \hlt{posterior credible set} with credibility $1-\alpha$ if
+\[
+\Pi(C(x)\mid x)\geq1-\alpha.
+\]
+Unlike a confidence set, this is a conditional posterior probability statement after observing $x$.
+\end{definition}
+
+\begin{method} \label{meth:laplace-approximation-posterior} \hlt{Laplace Approximation}\\
+Suppose the posterior density is proportional to $\exp(-nq_n(\theta))$ and $q_n$ has an interior minimizer $\widehat{\theta}$.  A second-order expansion gives
+\[
+q_n(\theta)\approx q_n(\widehat{\theta})
+\frac12(\theta-\widehat{\theta})^\top H_n(\widehat{\theta})(\theta-\widehat{\theta}),
+\]
+so the posterior is approximated by
+\[
+\mathcal{N}\!\left(\widehat{\theta},(nH_n(\widehat{\theta}))^{-1}\right).
+\]
+\end{method}
+
+\begin{definition} \label{def:mcmc-posterior-integration} \hlt{Posterior Monte Carlo}\\
+If $\theta^{(1)},\ldots,\theta^{(M)}$ are draws from, or approximately from, $\Pi(\cdot\mid x)$, then posterior expectations are approximated by
+\[
+\int g(\theta)\,d\Pi(\theta\mid x)
+\approx \frac1M\sum_{m=1}^Mg(\theta^{(m)}).
+\]
+Markov chain Monte Carlo and sequential Monte Carlo provide dependent-sample versions of this approximation.
+\end{definition}
+
+\begin{theorem} \label{thm:bernstein-von-mises-informal} \hlt{Bernstein--von Mises Principle}\\
+In regular finite-dimensional models with a prior positive and continuous near the true parameter $\theta_0$, the posterior distribution is asymptotically normal:
+\[
+\Pi\!\left(\sqrt{n}(\theta-\widehat{\theta}_n)\in\cdot\mid X_1,\ldots,X_n\right)
+\Rightarrow \mathcal{N}(0,I(\theta_0)^{-1})
+\]
+in $P_{\theta_0}$-probability, for efficient center $\widehat{\theta}_n$.
+\end{theorem}
+
+\begin{remark} \label{rem:bayes-frequentist-alignment-and-limits} \hlt{Alignment and Limits}\\
+Bernstein--von Mises explains why Bayesian credible intervals often resemble frequentist confidence intervals in regular parametric problems.  The principle may fail in high-dimensional, nonparametric, weakly identified, or boundary problems, where the prior can remain first-order relevant.
+\end{remark}

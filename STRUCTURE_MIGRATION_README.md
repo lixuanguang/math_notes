@@ -28,9 +28,10 @@ with duplicated mathematical content.
 
 ## Target Include Order
 
-The proposed replacement for the body include sequence in `math.tex` is:
+The proposed replacement for the notation and body include sequence in `math.tex` is:
 
 ```tex
+\input{parts/00_notations/overview}
 \input{parts/01_set_theory_logic_foundations/overview}
 \input{parts/02_structural_linear_algebra/overview}
 \input{parts/03_geometric_spectral_linear_algebra/overview}
@@ -49,8 +50,9 @@ The proposed replacement for the body include sequence in `math.tex` is:
 \input{parts/16_statistical_learning_deep_learning/overview}
 ```
 
-Each part folder owns one `overview.tex` containing the `\part{...}` heading and inputs for its
-numbered section folders.
+Each numbered part folder owns one `overview.tex` containing the `\part{...}` heading and inputs
+for its numbered section folders. The `parts/00_notations/` folder is front matter, not a numbered
+mathematical part.
 
 ## Canonical Directory Layout
 
@@ -58,6 +60,16 @@ Use this filesystem pattern:
 
 ```text
 parts/
+  00_notations/
+    overview.tex
+    00_collision_index_and_scope_rules.tex
+    01_global_conventions.tex
+    02_linear_operator_structures.tex
+    03_algebraic_structures.tex
+    04_algebraic_geometry_commutative_algebra.tex
+    05_analysis_continuous_structure.tex
+    06_probability_stochastic_structure.tex
+    07_numerical_computational_mathematics.tex
   01_set_theory_logic_foundations/
     overview.tex
     01_sets/
@@ -79,6 +91,8 @@ parts/
 
 File responsibilities:
 
+- `parts/00_notations/overview.tex` contains the unnumbered notation-list heading, notation-list helper macros if still local, and inputs for notation subfiles.
+- `parts/00_notations/<number>_<topic>.tex` contains one unnumbered notation subsection or notation block copied from `sections/notation_list.tex` or `sections/notation/...`.
 - `parts/<number>_<part_name>/overview.tex` contains exactly one `\part{...}` and inputs section `overview.tex` files.
 - `parts/<part>/<number>_<section_name>/overview.tex` contains exactly one `\section{...}` and inputs numbered subsection files.
 - `parts/<part>/<section>/<number>_<subsection_name>.tex` contains one `\subsection{...}` and its copied content.
@@ -89,6 +103,7 @@ File responsibilities:
 
 | Topic | Owner | Later Uses Should Do |
 | --- | --- | --- |
+| Global notation, collision index, and symbol scope rules | Notations | Update notation subfiles when a migrated part introduces persistent notation |
 | Set theory, cardinality, choice | Set Theory, Logic, and Foundations | Reference it from analysis/algebra |
 | Finite-dimensional linear maps | Structural Linear Algebra | Use from matrix/spectral parts |
 | Inner products, forms, finite-dimensional metric geometry | Geometric and Spectral Linear Algebra | Reference from functional analysis |
@@ -106,6 +121,54 @@ File responsibilities:
 | Prediction, representation, learned models | Statistical Learning and Deep Learning | Statistics remains inference-focused |
 
 ## Target Structure and Source Mapping
+
+### 0. Notations
+
+Target:
+
+```tex
+\section*{Notation List}
+\addcontentsline{toc}{section}{Notation List}
+  \subsection*{Collision Index and Scope Rules}
+  \subsection*{Global Conventions and Basic Notation}
+  \subsection*{Linear and Operator Structures Notation}
+  \subsection*{Algebraic Structures Notation}
+  \subsection*{Algebraic Geometry and Commutative Algebra Notation}
+  \subsection*{Analysis and Continuous Structure Notation}
+  \subsection*{Probability and Stochastic Structure Notation}
+  \subsection*{Numerical and Computational Mathematics Notation}
+```
+
+Target files:
+
+- `parts/00_notations/overview.tex`
+- `parts/00_notations/00_collision_index_and_scope_rules.tex`
+- `parts/00_notations/01_global_conventions.tex`
+- `parts/00_notations/02_linear_operator_structures.tex`
+- `parts/00_notations/03_algebraic_structures.tex`
+- `parts/00_notations/04_algebraic_geometry_commutative_algebra.tex`
+- `parts/00_notations/05_analysis_continuous_structure.tex`
+- `parts/00_notations/06_probability_stochastic_structure.tex`
+- `parts/00_notations/07_numerical_computational_mathematics.tex`
+
+Current sources:
+
+- `sections/notation_list.tex`
+- `sections/notation/global_conventions.tex`
+- `sections/notation/linear_operator_structures.tex`
+- `sections/notation/algebraic_structures.tex`
+- `sections/notation/algebraic_geometry_commutative_algebra.tex`
+- `sections/notation/analysis_continuous_structure.tex`
+- `sections/notation/probability_stochastic_structure.tex`
+- `sections/notation/numerical_computational_mathematics.tex`
+
+Notes:
+
+- `parts/00_notations` is front matter, not a numbered mathematical part.
+- Migrate notation helper macros from `sections/notation_list.tex` only if they are not better placed in `sections/base`.
+- Preserve unnumbered notation headings unless the final document style requires numbered notation subsections.
+- When a mathematical content phase introduces or removes persistent notation, update the relevant `00_notations` subfile in the same migration batch.
+- After migration, `math.tex` should input `parts/00_notations/overview` instead of `sections/notation_list`.
 
 ### 1. Set Theory, Logic, and Foundations
 
@@ -1107,8 +1170,8 @@ Use these rules while extracting content into `parts/`:
 
 ## Migration Phases by Target Part
 
-Phase numbering follows the numbered Target Structure and Source Mapping exactly. Phase 1
-migrates Part 1, Phase 2 migrates Part 2, and so on. Structure setup is preflight work, not a
+Phase numbering follows the numbered mathematical parts for Phases 1--16. Phase 17 migrates the
+front-matter notation list into `parts/00_notations`. Structure setup is preflight work, not a
 numbered migration phase.
 
 ### Phase 0: Baseline and Skeleton Preflight
@@ -1132,7 +1195,7 @@ rg -n '\\input\{' math.tex sections
 rg -n '\\label\{' sections | sort
 ```
 
-- Ensure the repo-level `parts/` skeleton exists for all sixteen target parts and their section folders.
+- Ensure the repo-level `parts/` skeleton exists for `00_notations` and all sixteen target parts.
 - Create numbered subsection files only when content is actually copied into them.
 
 ### Per-Phase Migration Loop
@@ -1335,10 +1398,44 @@ migrated, removed from old owners, or explicitly marked as deferred/rebuild-only
   section before becoming active, and the old root/mirror machine-learning owners no longer
   duplicate active Part 16 content.
 
+### Phase 17: Migrate Notations Into `parts/00_notations`
+
+- Target: `parts/00_notations/`.
+- Source mapping:
+  - `sections/notation_list.tex`;
+  - `sections/notation/global_conventions.tex`;
+  - `sections/notation/linear_operator_structures.tex`;
+  - `sections/notation/algebraic_structures.tex`;
+  - `sections/notation/algebraic_geometry_commutative_algebra.tex`;
+  - `sections/notation/analysis_continuous_structure.tex`;
+  - `sections/notation/probability_stochastic_structure.tex`;
+  - `sections/notation/numerical_computational_mathematics.tex`.
+- Create `parts/00_notations/overview.tex` with the unnumbered notation-list heading,
+  table-of-contents entry, helper macros if they remain local, and inputs for notation subfiles.
+- Create associated notation subfiles in `parts/00_notations/`:
+  - `00_collision_index_and_scope_rules.tex`;
+  - `01_global_conventions.tex`;
+  - `02_linear_operator_structures.tex`;
+  - `03_algebraic_structures.tex`;
+  - `04_algebraic_geometry_commutative_algebra.tex`;
+  - `05_analysis_continuous_structure.tex`;
+  - `06_probability_stochastic_structure.tex`;
+  - `07_numerical_computational_mathematics.tex`.
+- Preserve notation entries and collision/scope rules while copying; do not rewrite symbol meanings
+  unless a corresponding migrated mathematical part has changed the notation policy.
+- Check every `\notationentry`, `\notationgroup`, `tabularx`, and notation helper macro still
+  compiles after the move.
+- Update `math.tex` to input `parts/00_notations/overview` instead of `sections/notation_list`
+  once the new notation owner is validated.
+- Remove or convert `sections/notation_list.tex` and `sections/notation/...` to temporary
+  forwarding shims only if they are still needed by the active include graph.
+- Completion condition: the active notation list has a single owner under `parts/00_notations`,
+  all notation subfiles compile, and no active input still depends on old notation source bodies.
+
 ### Final Activation and Global Validation
 
-- Replace the body include sequence in `math.tex` with the Target Include Order once target parts
-  have active owners.
+- Replace the notation and body include sequence in `math.tex` with the Target Include Order once
+  target parts and `00_notations` have active owners.
 - Remove temporary forwarding `sections/...` shims after their corresponding `parts/...` owners are
   directly active.
 - Delete empty or legacy old files/directories only after reviewing unique content and confirming no
@@ -1353,7 +1450,7 @@ rg -n '^\\subsubsection|^\\paragraph' math.tex parts sections
 - Search for stale active old paths:
 
 ```sh
-rg -n 'sections/(linear_algebra|analysis|algebraic_structures|algebraic_geometry_commutative_algebra)' math.tex parts sections
+rg -n 'sections/(notation|linear_algebra|analysis|algebraic_structures|algebraic_geometry_commutative_algebra)|sections/notation_list' math.tex parts sections
 ```
 
 ## Validation Checklist
@@ -1363,6 +1460,7 @@ Migration checklist:
 - `math.tex` compiles.
 - Every active mathematical content span appears in exactly one active location.
 - New canonical content lives under `parts/`.
+- The notation list lives under `parts/00_notations`, not `sections/notation_list` or `sections/notation/...`.
 - Each part folder has an `overview.tex`.
 - Each section folder has an `overview.tex`.
 - Substantial sections are controlled through numbered subsection files.

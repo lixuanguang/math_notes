@@ -1,0 +1,53 @@
+\subsection{Loss, Risk, Bayes, and Minimax Rules}
+
+Decision theory compares statistical procedures by their consequences, not only by their formulas.  The same data model can lead to different optimal rules under different loss functions.
+
+\begin{definition} \label{def:statistical-decision-problem} \hlt{Statistical Decision Problem}\\
+A \hlt{statistical decision problem} consists of a model $\{P_\theta:\theta\in\Theta\}$, an action space $\mathcal{A}$, and a loss function $L:\Theta\times\mathcal{A}\to[0,\infty]$.  A decision rule is a measurable map $\delta:\mathcal{X}\to\mathcal{A}$, and its risk is
+\[
+R(\theta,\delta)=\mathbb{E}_\theta[L(\theta,\delta(X))].
+\]
+\end{definition}
+
+\begin{definition} \label{def:bayes-risk-minimax-admissible} \hlt{Bayes Risk, Minimaxity, and Admissibility}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Given a prior $\Pi$ on $\Theta$, the \hlt{Bayes risk} is $r(\Pi,\delta)=\int R(\theta,\delta)\,d\Pi(\theta)$.
+\item A \hlt{Bayes rule} minimizes $r(\Pi,\delta)$ over all rules.
+\item The \hlt{maximum risk} is $\sup_{\theta\in\Theta}R(\theta,\delta)$.
+\item A \hlt{minimax rule} minimizes the maximum risk.
+\item A rule $\delta$ is \hlt{inadmissible} if another rule $\delta'$ has $R(\theta,\delta')\leq R(\theta,\delta)$ for all $\theta$ and strict inequality for some $\theta$; otherwise $\delta$ is \hlt{admissible}.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:posterior-risk-bayes-rule} \hlt{Posterior Risk Characterization}\\
+Assume a prior $\Pi$ and a posterior $\Pi(\cdot\mid X)$ exist.  A Bayes rule may be chosen pointwise by minimizing posterior expected loss:
+\[
+\delta_\Pi(x)\in\operatorname*{arg\,min}_{a\in\mathcal{A}}
+\int L(\theta,a)\,d\Pi(\theta\mid x).
+\]
+\begin{proof}
+By iterated expectation,
+\[
+r(\Pi,\delta)=
+\mathbb{E}_{\Pi}\!\left[
+\int L(\theta,\delta(X))\,d\Pi(\theta\mid X)
+\right].
+\]
+Minimizing the inner posterior risk for each observed $x$ minimizes the outer expectation.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:posterior-mean-median-mode-loss} \hlt{Bayes Rules Under Common Losses}\\
+For a real parameter and posterior distribution $\Pi(\cdot\mid x)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Squared-error loss is minimized by the posterior mean.
+\item Absolute-error loss is minimized by a posterior median.
+\item Zero-one loss on a finite action set is minimized by a posterior mode.
+\end{enumerate}
+\end{example}
+
+\begin{remark} \label{rem:minimax-bayes-least-favorable} \hlt{Least Favorable Priors}\\
+If a prior $\Pi^\star$ has Bayes risk equal to the minimax value, then any Bayes rule for $\Pi^\star$ with constant risk on the support of $\Pi^\star$ is minimax.  Such priors are called least favorable.
+\end{remark}

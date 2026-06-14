@@ -1,0 +1,58 @@
+\subsection{Information Bounds and Asymptotic Efficiency}
+
+Information inequalities describe the best possible local accuracy under regular models.  Efficient procedures are those whose asymptotic error reaches these bounds.
+
+\begin{theorem} \label{thm:cramer-rao-bound} \hlt{Cramer--Rao Bound}\\
+Let $\{P_\theta:\theta\in\Theta\subseteq\R\}$ be a regular dominated model, and let $I(\theta)>0$ be the Fisher information for one observation.  If $\widehat{\psi}$ is unbiased for $\psi(\theta)$ based on $n$ independent observations, then
+\[
+\operatorname{Var}_\theta(\widehat{\psi})
+\geq \frac{\psi'(\theta)^2}{nI(\theta)}.
+\]
+\begin{proof}
+Let $S_n(\theta)=\partial_\theta\log L_X(\theta)$ be the sample score.  Regularity gives $\mathbb{E}_\theta S_n(\theta)=0$ and $\mathbb{E}_\theta S_n(\theta)^2=nI(\theta)$.  Differentiating $\mathbb{E}_\theta\widehat{\psi}=\psi(\theta)$ under the integral gives $\operatorname{Cov}_\theta(\widehat{\psi},S_n(\theta))=\psi'(\theta)$.  Cauchy--Schwarz yields $\psi'(\theta)^2\leq \operatorname{Var}_\theta(\widehat{\psi})nI(\theta)$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:maximum-likelihood-estimator} \hlt{Maximum Likelihood Estimator}\\
+A \hlt{maximum likelihood estimator} is any measurable choice
+\[
+\widehat{\theta}_n\in\operatorname*{arg\,max}_{\theta\in\Theta}L_X(\theta)
+=\operatorname*{arg\,max}_{\theta\in\Theta}\ell_X(\theta).
+\]
+Equivalently, it minimizes negative log-likelihood.
+\end{definition}
+
+\begin{theorem} \label{thm:mle-asymptotic-normality} \hlt{Regular MLE Asymptotic Normality}\\
+Under standard identifiability, smoothness, and nonsingularity assumptions, if $\theta_0$ is an interior point and $X_1,\ldots,X_n$ are independent from $P_{\theta_0}$, then
+\[
+\sqrt{n}(\widehat{\theta}_n-\theta_0)
+\Rightarrow \mathcal{N}(0,I(\theta_0)^{-1}).
+\]
+\begin{proof}
+The score equation is $0=S_n(\widehat{\theta}_n)$.  Taylor expanding around $\theta_0$ gives
+\[
+0=S_n(\theta_0)+\partial_\theta S_n(\widetilde{\theta}_n)(\widehat{\theta}_n-\theta_0).
+\]
+After dividing by $n$, the observed negative Hessian converges to $I(\theta_0)$, while $n^{-1/2}S_n(\theta_0)$ converges in distribution to $\mathcal{N}(0,I(\theta_0))$.  Solving the expansion gives the claim.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:delta-method} \hlt{Delta Method}\\
+If $\sqrt{n}(T_n-\theta)\Rightarrow\mathcal{N}(0,\Sigma)$ and $g:\R^d\to\R^k$ is differentiable at $\theta$, then
+\[
+\sqrt{n}(g(T_n)-g(\theta))
+\Rightarrow\mathcal{N}(0,Dg(\theta)\Sigma Dg(\theta)^\top).
+\]
+\begin{proof}
+Use the first-order expansion $g(T_n)=g(\theta)+Dg(\theta)(T_n-\theta)+r_n$, where $\norm{r_n}/\norm{T_n-\theta}\to0$ in probability.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:asymptotic-efficiency} \hlt{Asymptotic Efficiency}\\
+An estimator sequence of a scalar regular parameter is \hlt{asymptotically efficient} at $\theta_0$ if
+\[
+\sqrt{n}(\widehat{\theta}_n-\theta_0)\Rightarrow
+\mathcal{N}(0,I(\theta_0)^{-1}).
+\]
+It then attains the inverse Fisher-information variance predicted by local asymptotic normality.
+\end{definition}
