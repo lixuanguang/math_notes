@@ -3,9 +3,9 @@
 This folder contains the LeanBlueprint source for tracking the formalization of
 the LaTeX notes.
 
-The blueprint inputs prepared source files from `sections/` rather than keeping
+The blueprint inputs prepared source files from `parts/` rather than keeping
 a duplicate copy of the mathematics. The normal notes PDF ignores LeanBlueprint
-markers through no-op fallbacks in `sections/base.tex`; the blueprint web build
+markers through no-op fallbacks in `parts/base.tex`; the blueprint web build
 uses the same markers to produce dependency and formalization status data.
 
 ## Local Workflow

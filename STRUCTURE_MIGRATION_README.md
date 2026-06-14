@@ -165,7 +165,7 @@ Current sources:
 Notes:
 
 - `parts/00_notations` is front matter, not a numbered mathematical part.
-- Migrate notation helper macros from `sections/notation_list.tex` only if they are not better placed in `sections/base`.
+- Migrate notation helper macros from `sections/notation_list.tex` only if they are not better placed in `parts/base`.
 - Preserve unnumbered notation headings unless the final document style requires numbered notation subsections.
 - When a mathematical content phase introduces or removes persistent notation, update the relevant `00_notations` subfile in the same migration batch.
 - After migration, `math.tex` should input `parts/00_notations/overview` instead of `sections/notation_list`.
