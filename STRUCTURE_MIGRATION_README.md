@@ -889,7 +889,7 @@ Target:
 
 Current sources:
 
-- No active current source tree. The previous statistics, time-series, and learning material has been retired.
+- No active current source tree. The previous statistics and time-series material has been retired.
 
 Notes:
 
@@ -897,7 +897,7 @@ Notes:
 - Use the existing probability, measure, functional-analysis, and stochastic-process material by reference instead of redeveloping prerequisites.
 - Keep inference, decision, and uncertainty quantification here; move prediction-system and representation-learning material to Part 16.
 
-### 16. Statistical Learning and Deep Learning (Deferred Rebuild)
+### 16. Statistical Learning and Deep Learning (Source-Vetted Migration and Rebuild)
 
 Target:
 
@@ -949,11 +949,21 @@ Target:
 
 Current sources:
 
-- No active current source tree. The previous statistics, time-series, and learning material has been retired.
+- `machine_learning/overallstruct.tex`
+- `machine_learning/cml/overview.tex`
+- `machine_learning/cml/ensemble.tex`
+- `machine_learning/dl/overview.tex`
+- `machine_learning/dl/dfn.tex`
+- `machine_learning/dl/reg.tex`
+- `machine_learning/dl/opt.tex`
+- `machine_learning/dl/cnn.tex`
+- `sections/machine_learning/...` currently mirrors the root `machine_learning/...` material and should be checked before migration; prefer the root `machine_learning/...` tree as the source of record unless the mirror contains newer edits.
 
 Notes:
 
-- Rebuild this part from specialized statistical-learning, machine-learning, and deep-learning sources before adding it back to the active document.
+- Use the root `machine_learning/...` tree as migration input for existing classical-machine-learning and deep-learning material, but vet it against the new Part 16 target structure before copying.
+- Treat the current root machine-learning material as draft source content: split it into the target subsections, preserve usable mathematical content, and replace or defer material that is too informal, underspecified, or structurally misplaced.
+- Supplement or rebuild missing Part 16 topics from specialized statistical-learning, machine-learning, and deep-learning sources before adding them back to the active document.
 - Avoid duplicating Part 15's inference foundations; introduce statistical tools here only when they are used for prediction, representation, or learning-system analysis.
 - Keep optimization details that are broadly numerical in Part 14, and reference them here when training algorithms use those tools.
 
@@ -974,6 +984,10 @@ source file in the same migration step so there is no duplicate active content.
 | `sections/linear_algebra/geometric_linear_algebra/2_5_metric_vector_spaces_and_bilinear_forms.tex` | Forms, Witt theory, symplectic and classical groups | Extract into bilinear/quadratic forms, decompositions, symplectic, classical groups |
 | `sections/analysis/differential_and_geometric_analysis/4_1_one_variable_differentiation_and_integration.tex` | Differentiation, Riemann, Stieltjes, improper, curves | Extract into calculus and Stieltjes/integration subsection files |
 | `sections/linear_algebra/spectral_linear_algebra/3_2_polynomial_structure_of_operators.tex` | Characteristic/minimal polynomials plus primary decomposition | Extract by polynomial evaluation, characteristic/minimal polynomials, generalized eigenspaces |
+| `machine_learning/dl/dfn.tex` | Deep feedforward networks, cost functions, output/hidden units, universal approximation, backpropagation | Extract into neural-network architecture, expressivity, output/loss, and backpropagation subsection files |
+| `machine_learning/dl/reg.tex` | Deep-learning regularization, penalties, augmentation, early stopping, dropout, adversarial and tangent methods | Extract into regularization, normalization/generalization, robustness, and representation-learning subsections as appropriate |
+| `machine_learning/dl/opt.tex` | Deep-learning optimization, SGD variants, adaptive methods, second-order methods, batch normalization, curriculum learning | Extract optimization algorithms carefully; keep broadly numerical optimization in Part 14 and reference it from Part 16 |
+| `machine_learning/dl/cnn.tex` | Convolution, cross-correlation, pooling, padding, multi-channel and locally connected layers | Extract into convolutional/geometric architectures and representation-learning subsections |
 
 ## Subsection Requirement Review
 
@@ -1061,11 +1075,11 @@ Likely sections that should be represented by subsection files during migration:
 | Statistics and Time Series | Hypothesis Testing and Confidence | Deferred rebuild; tests, confidence, and multiplicity need separate navigation |
 | Statistics and Time Series | Decision Theory and Bayesian Inference | Deferred rebuild; decision-theoretic and Bayesian material should remain visible |
 | Statistics and Time Series | Nonparametric, High-Dimensional, and Time-Series Methods | Deferred rebuild; broad methods sections need internal topic files |
-| Statistical Learning and Deep Learning | Learning Problems and Risk | Deferred rebuild; core prediction language should be isolated from statistical inference |
-| Statistical Learning and Deep Learning | Generalization Theory | Deferred rebuild; complexity, concentration, and stability tools need separate subsections |
-| Statistical Learning and Deep Learning | Classical Supervised and Unsupervised Learning | Deferred rebuild; model families should not be collapsed into one large file |
-| Statistical Learning and Deep Learning | Probabilistic Graphical and Causal Learning | Deferred rebuild; graph, inference, and intervention topics need separate navigation |
-| Statistical Learning and Deep Learning | Neural Network Foundations and Modern Deep Models | Deferred rebuild; architectures, training, and evaluation should be separated |
+| Statistical Learning and Deep Learning | Learning Problems and Risk | Source-vetted migration plus rebuild; core prediction language should be isolated from statistical inference |
+| Statistical Learning and Deep Learning | Generalization Theory | Source-vetted migration plus rebuild; complexity, concentration, and stability tools need separate subsections |
+| Statistical Learning and Deep Learning | Classical Supervised and Unsupervised Learning | Use root `machine_learning/cml` where appropriate, but do not collapse model families into one large file |
+| Statistical Learning and Deep Learning | Probabilistic Graphical and Causal Learning | Mostly rebuild; graph, inference, and intervention topics need separate navigation |
+| Statistical Learning and Deep Learning | Neural Network Foundations and Modern Deep Models | Use root `machine_learning/dl` where appropriate; architectures, training, and evaluation should be separated |
 
 Sections that are currently short or placeholder-like can remain without subsection files until they grow.
 Examples include much of the current dynamical/PDE/numerical tree, the short algebraic-geometry files,
@@ -1296,16 +1310,30 @@ migrated, removed from old owners, or explicitly marked as deferred/rebuild-only
 - Completion condition: rebuilt statistics/time-series content compiles section by section before
   becoming active.
 
-### Phase 16: Rebuild Part 16, Statistical Learning and Deep Learning
+### Phase 16: Migrate and Rebuild Part 16, Statistical Learning and Deep Learning
 
 - Target: `parts/16_statistical_learning_deep_learning/`.
-- Source mapping: no active current source tree; the old learning material has been retired.
-- Populate this part only from new specialized statistical-learning, machine-learning, and
-  deep-learning sources.
+- Source mapping:
+  - `machine_learning/overallstruct.tex`;
+  - `machine_learning/cml/overview.tex`;
+  - `machine_learning/cml/ensemble.tex`;
+  - `machine_learning/dl/overview.tex`;
+  - `machine_learning/dl/dfn.tex`;
+  - `machine_learning/dl/reg.tex`;
+  - `machine_learning/dl/opt.tex`;
+  - `machine_learning/dl/cnn.tex`.
+- Prefer the root `machine_learning/...` tree as the source of record; inspect
+  `sections/machine_learning/...` only to confirm whether it is an identical mirror or contains
+  newer edits.
+- Migrate usable existing machine-learning and deep-learning material after vetting it against the
+  target Part 16 structure.
+- Rebuild missing, weak, or structurally misplaced topics from specialized statistical-learning,
+  machine-learning, and deep-learning sources.
 - Avoid duplicating Part 15's inference foundations; introduce statistical tools only when they are
   used for prediction, representation, or learning-system analysis.
-- Completion condition: rebuilt learning/deep-learning content compiles section by section before
-  becoming active.
+- Completion condition: migrated or rebuilt learning/deep-learning content compiles section by
+  section before becoming active, and the old root/mirror machine-learning owners no longer
+  duplicate active Part 16 content.
 
 ### Final Activation and Global Validation
 
