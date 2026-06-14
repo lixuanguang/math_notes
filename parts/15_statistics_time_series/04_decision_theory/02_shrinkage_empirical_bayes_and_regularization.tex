@@ -1,0 +1,50 @@
+\subsection{Shrinkage, Empirical Bayes, and Regularization}
+
+Risk can often be reduced by intentionally pulling noisy estimates toward a structured target.  The price is bias; the benefit is variance reduction.
+
+\begin{definition} \label{def:shrinkage-estimator} \hlt{Shrinkage Estimator}\\
+A \hlt{shrinkage estimator} replaces an unstable estimator $\widehat{\theta}$ by a contracted version
+\[
+\delta(X)=a(X)\widehat{\theta}+(1-a(X))\theta_{\mathrm{target}},
+\qquad 0\leq a(X)\leq1,
+\]
+where $\theta_{\mathrm{target}}$ encodes a reference value or lower-complexity model.
+\end{definition}
+
+\begin{example} \label{ex:ridge-as-shrinkage} \hlt{Ridge Regression as Shrinkage}\\
+In linear regression with design matrix $X$ and response $y$, ridge regression solves
+\[
+\widehat{\beta}_{\lambda}
+\in\operatorname*{arg\,min}_{\beta}
+\left\{\norm{y-X\beta}_2^2+\lambda\norm{\beta}_2^2\right\}.
+\]
+When $X^\top X$ is invertible,
+\[
+\widehat{\beta}_{\lambda}
+=(X^\top X+\lambda I)^{-1}X^\top y,
+\]
+which shrinks the least-squares solution toward zero along directions with small design information.
+\end{example}
+
+\begin{theorem} \label{thm:james-stein-phenomenon} \hlt{James--Stein Phenomenon}\\
+Let $X\sim\mathcal{N}_d(\theta,\sigma^2I_d)$ with $d\geq3$ and known $\sigma^2$.  The estimator
+\[
+\delta_{\mathrm{JS}}(X)=
+\left(1-\frac{(d-2)\sigma^2}{\norm{X}^2}\right)X
+\]
+has no larger squared-error risk than $X$ for every $\theta$, and has strictly smaller risk for some $\theta$.
+\end{theorem}
+
+\begin{definition} \label{def:empirical-bayes-rule} \hlt{Empirical Bayes}\\
+An \hlt{empirical Bayes} procedure uses data to estimate hyperparameters in a prior family and then applies the corresponding Bayes rule.  In hierarchical notation,
+\[
+\theta_i\mid\eta\sim\Pi_\eta,
+\qquad
+X_i\mid\theta_i\sim P_{\theta_i},
+\]
+the hyperparameter $\eta$ is estimated from the marginal distribution of $X_1,\ldots,X_m$.
+\end{definition}
+
+\begin{remark} \label{rem:regularization-decision-theory} \hlt{Regularization as Decision-Theoretic Structure}\\
+Penalized estimators, shrinkage rules, and empirical Bayes estimators all express a preference for simpler or pooled explanations.  Their statistical value is measured by risk, not by the absence of bias.
+\end{remark}

@@ -1,0 +1,77 @@
+\subsection{Direct Methods}
+
+% **Role:** quantitative matrix behavior and computation.
+%
+% Direct solves, QR algorithms, SVD numerics, least-squares stability, sparse/banded structure, Krylov methods, iterative methods, preconditioning preview.
+
+Numerical linear algebra turns matrix structure into algorithms for direct solves, least squares, eigenvalues, SVD, structured transforms, Krylov methods, iteration, and preconditioning.
+
+\begin{perspective} \label{per:solve-with-factors-not-inverses} \hlt{Solve with Factors Before Forming Inverses}\\
+For $A\mathbf{x}=\mathbf{b}$, use available factors such as LU, QR, or Cholesky to solve triangular or orthogonal subproblems.\\
+This avoids forming $A^{-1}$ and preserves sparse or triangular structure.
+\end{perspective}
+
+\begin{perspective} \label{per:iterative-refinement-residual-correction} \hlt{Iterative Refinement by Residual Correction}\\
+Given an approximate solution $\mathbf{x}_k$ of $A\mathbf{x}=\mathbf{b}$, set $\mathbf{r}_k=\mathbf{b}-A\mathbf{x}_k$.\\
+Solve $A\mathbf{d}_k=\mathbf{r}_k$ with the same factors or preconditioner, then update $\mathbf{x}_{k+1}=\mathbf{x}_k+\mathbf{d}_k$.\\
+Exact arithmetic corrects in one step; floating point helps when $\mathbf{r}_k$ is accurate and conditioning is moderate.
+\end{perspective}
+
+\begin{method} \label{meth:augmented-inverse-computation-preview} \hlt{Augmented Inverse Computation Preview}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Form $[\,A\ I_n\,]$.
+\item Apply Gauss--Jordan reduction to the left block.
+\item If $[\,A\ I_n\,]\sim[\,I_n\ B\,]$, then $B=A^{-1}$.
+\item Otherwise $A$ is not invertible, by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
+\end{enumerate}
+\end{method}
+
+\begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
+Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
+\begin{proof}
+The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
+Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
+\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
+\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:normal-equations-squaring-condition-number} \hlt{Why Normal Equations Can Be Numerically Fragile}\\
+For full-column-rank least squares, solving $A^*A\mathbf{x}=A^*\mathbf{y}$ squares the spectral condition number because $\kappa_2(A^*A)=\kappa_2(A)^2$. QR-based methods avoid this squaring and therefore preserve conditioning better.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/band_matrix_lu_structure.tikz}
+  \caption{A tridiagonal matrix can factor as bidiagonal $L$ times bidiagonal $U$, retaining local band structure.}
+  \label{fig:band-matrix-lu-structure}
+\end{figure}
+
+\begin{definition} \label{def:band-and-tridiagonal-matrix} \hlt{Band and Tridiagonal Matrices}\\
+For $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ and $1\leq w\leq n$, say that $A$ has \hlt{half-bandwidth} $w$ if $a_{ij}=0$ whenever $\abs{i-j}\geq w$. Thus $w=1$ gives a diagonal matrix, while $w=2$ gives a \hlt{tridiagonal} matrix.
+\end{definition}
+
+\begin{method} \label{meth:banded-elimination-preview} \hlt{Banded Elimination Preview}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ have half-bandwidth $w$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Eliminate without row exchanges that leave the band.
+\item At pivot $k$, update only entries with $\abs{i-k}<w$ and $\abs{j-k}<w$.
+\item Obtain $A=LU$ with $L$ and $U$ of comparable bandwidth.
+\end{enumerate}
+Cost: $O(nw^2)$ operations; for tridiagonal matrices $(w=2)$, $O(n)$.
+\end{method}
+
+\begin{perspective} \label{per:five-point-stencil-bandwidth} \hlt{Five-Point Stencils Are Banded but Less Local}\\
+The $1$D second-difference pattern $-1,2,-1$ is tridiagonal; the row-ordered $N\times N$ five-point stencil is still sparse, but vertical neighbors create diagonals offset by about $N$. Thus bandwidth grows with grid width, and incomplete LU keeps a prescribed sparse pattern for a cheap approximate solve or preconditioner.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/five_point_stencil_bandwidth.tikz}
+  \caption{Row ordering gives matrix bands at offsets $0,\pm1,\pm N$.}
+  \label{fig:five-point-stencil-bandwidth}
+\end{figure}
+

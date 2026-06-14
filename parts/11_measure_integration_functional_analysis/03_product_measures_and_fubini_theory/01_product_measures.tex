@@ -1,0 +1,82 @@
+\subsection{Product Measures}
+
+% **Role:** modern integration and almost-everywhere analysis.
+%
+% Product measures, Tonelli, Fubini, iterated integration, applications.
+
+Product measure builds measurable rectangles and reads higher-dimensional integrals through slices. The abstract construction comes first; the Euclidean statements below are its geometric specialization.
+
+\begin{definition} \label{def:abstract-product-sigma-algebra-and-sections} \hlt{Product Measurable Spaces and Sections}\\
+Let $(X,\mathcal{M})$, $(Y,\mathcal{N})$ be measurable spaces and $Z\defeq X\times Y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{measurable rectangle} is $A\times B$ with $A\in\mathcal{M}$ and $B\in\mathcal{N}$; set $\mathcal{Z}_0\defeq\{\bigcup_{j=1}^n(A_j\times B_j):A_j\in\mathcal{M},\ B_j\in\mathcal{N}\}$ and $\mathcal{M}\otimes\mathcal{N}\defeq\sigma\{A\times B:A\in\mathcal{M},\ B\in\mathcal{N}\}$.
+\item For $E\subseteq Z$, the \hlt{sections} are $E_x\defeq\{y\in Y:(x,y)\in E\}$ and $E^y\defeq\{x\in X:(x,y)\in E\}$.
+\item For $F:Z\to\overline{\R}$, the \hlt{function sections} are $F_x(y)\defeq F(x,y)$ and $F^y(x)\defeq F(x,y)$, where defined.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma} \label{lem:finite-rectangle-algebra-product-measure} \hlt{Finite Rectangle Algebra}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $R_j=A_j\times B_j$, then $R_1\cap R_2=(A_1\cap A_2)\times(B_1\cap B_2)$ and $R_1\setminus R_2=\bigl[(A_1\cap A_2)\times(B_1\setminus B_2)\bigr]\sqcup\bigl[(A_1\setminus A_2)\times B_1\bigr]$.
+\item $\mathcal{Z}_0$ is an algebra on $Z$.
+\item Every $E\in\mathcal{Z}_0$ admits $E=\bigsqcup_{j=1}^n(A_j\times B_j)$ with $A_j\in\mathcal{M}$ and $B_j\in\mathcal{N}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(x,y)\in Z$, $(x,y)\in R_1\cap R_2\Longleftrightarrow x\in A_1\cap A_2$ and $y\in B_1\cap B_2$. Also, $(x,y)\in R_1\setminus R_2$ iff $x\in A_1$, $y\in B_1$, and either $x\notin A_2$ or $y\notin B_2$; splitting by $x\in A_2$ gives the disjoint union in (i).
+\item If $E=\bigcup_jR_j$ and $F=\bigcup_kS_k$, then $E\cap F=\bigcup_{j,k}(R_j\cap S_k)\in\mathcal{Z}_0$ by (i).\\
+Repeatedly applying (i) gives $R_j\setminus F\in\mathcal{Z}_0$, hence $E\setminus F=\bigcup_j(R_j\setminus F)\in\mathcal{Z}_0$. Since $Z=X\times Y\in\mathcal{Z}_0$, complements are differences from $Z$.
+\item If $E=\bigcup_{j=1}^nR_j$, set $S_j\defeq R_j\setminus\bigcup_{i<j}R_i$. Then $S_j\in\mathcal{Z}_0$ by (ii), the $S_j$ are disjoint, and $E=\bigsqcup_jS_j$. Writing each $S_j$ as a finite union of rectangles and relabeling gives the required finite disjoint representation.
+\end{enumerate}
+\hlt{Structural Commentary}: Product rectangles behave like elementary sets for the product space.\\
+\hlt{Key Insight}: Before extending to a $\sigma$-algebra, make all finite overlaps into disjoint rectangle pieces.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:abstract-product-measure-existence-uniqueness} \hlt{Product Measure Theorem}\\
+For measure spaces $(X,\mathcal{M},\mu)$ and $(Y,\mathcal{N},\nu)$, there exists a measure $\pi$ on $\mathcal{M}\otimes\mathcal{N}$ with $\pi(A\times B)=\mu(A)\nu(B)$ for $A\in\mathcal{M}$ and $B\in\mathcal{N}$, where $0\cdot(+\infty)=0$. If $\mu,\nu$ are $\sigma$-finite, $\pi$ is unique; write $\pi=\mu\otimes\nu$.
+\begin{proof}
+For $E=\bigsqcup_{j=1}^n(A_j\times B_j)\in\mathcal{Z}_0$, set $\pi_0(E)\defeq\sum_{j=1}^n\mu(A_j)\nu(B_j)$.\\
+If $A\times B=\bigsqcup_{j\geq1}(A_j\times B_j)$, then $\mathbf{1}_{A\times B}=\sum_{j\geq1}\mathbf{1}_{A_j\times B_j}$, so monotone convergence in $y$, then $x$,\\
+gives $\mu(A)\nu(B)=\sum_{j\geq1}\mu(A_j)\nu(B_j)$. Refining two finite disjoint rectangle decompositions by intersections gives equal $\pi_0$-values; hence $\pi_0$ is well defined. If $E=\bigsqcup_kE_k\in\mathcal{Z}_0$ with $E_k\in\mathcal{Z}_0$, write $E=\bigsqcup_iR_i$ and $E_k=\bigsqcup_\ell R_{k\ell}$.\\
+Since $R_i=\bigsqcup_{k,\ell}(R_i\cap R_{k\ell})$, the rectangle comparison yields $\pi_0(E)=\sum_k\pi_0(E_k)$; hence $\pi_0$ is a premeasure.\\
+Extend $\pi_0$ to $\sigma(\mathcal{Z}_0)=\mathcal{M}\otimes\mathcal{N}$. If $\mu,\nu$ are $\sigma$-finite, then $\mathcal{Z}_0$ is $\pi_0$-$\sigma$-finite, so the extension is unique.\\
+\hlt{Structural Commentary}: Rectangles fix the product measure.\\
+\hlt{Key Insight}: Monotone convergence makes rectangle mass respect countable disjoint refinements.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:product-measurable-sections} \hlt{Measurable Sections}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E\in\mathcal{M}\otimes\mathcal{N}$ implies $E_x\in\mathcal{N}$ for all $x\in X$ and $E^y\in\mathcal{M}$ for all $y\in Y$.
+\item If $F:Z\to\overline{\R}$ is $\mathcal{M}\otimes\mathcal{N}$-measurable, then $F_x$ is $\mathcal{N}$-measurable for all $x$ and $F^y$ is $\mathcal{M}$-measurable for all $y$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $x\in X$ and set $\mathcal{C}_x\defeq\{E\subseteq Z:E_x\in\mathcal{N}\}$. Since $(E^c)_x=(E_x)^c$ and $(\bigcup_nE_n)_x=\bigcup_n(E_n)_x$, $\mathcal{C}_x$ is a $\sigma$-algebra. Also $(A\times B)_x=B$ if $x\in A$ and $\emptyset$ otherwise; hence $\mathcal{M}\otimes\mathcal{N}\subseteq\mathcal{C}_x$. The $E^y$ proof is identical.
+\item For $a\in\R$, set $H_a\defeq\{(u,v)\in Z:F(u,v)>a\}\in\mathcal{M}\otimes\mathcal{N}$. By (i), $(H_a)_x\in\mathcal{N}$ and $(H_a)^y\in\mathcal{M}$.\\
+Since $(H_a)_x=\{y:F_x(y)>a\}$ and $(H_a)^y=\{x:F^y(x)>a\}$, all threshold sets are measurable.
+\end{enumerate}
+\hlt{Structural Commentary}: Product measurability is stable under freezing one coordinate.\\
+\hlt{Key Insight}: Section operations preserve the set algebra used to generate the product $\sigma$-algebra.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:section-measures-integrate-to-product-measure} \hlt{Section Measures Integrate to Product Measure}\\
+Let $(X,\mathcal{M},\mu)$ and $(Y,\mathcal{N},\nu)$ be $\sigma$-finite, $\pi\defeq\mu\otimes\nu$, and $E\in\mathcal{M}\otimes\mathcal{N}$. Set $f_E(x)\defeq\nu(E_x)$ and $g_E(y)\defeq\mu(E^y)$.\\
+Then $f_E,g_E$ are measurable and $\int_Xf_E\,d\mu=\pi(E)=\int_Yg_E\,d\nu$.
+\begin{proof}
+Assume $\mu(X),\nu(Y)<+\infty$ and let $\mathcal{C}$ be the class of $E$ satisfying the claim.\\
+For $E=A\times B$, $f_E=\nu(B)\mathbf{1}_A$ and $g_E=\mu(A)\mathbf{1}_B$, so $A\times B\in\mathcal{C}$; finite additivity gives $\mathcal{Z}_0\subseteq\mathcal{C}$.\\
+If $E_n\uparrow E$ in $\mathcal{C}$, then $(E_n)_x\uparrow E_x$ and $(E_n)^y\uparrow E^y$; MCT gives $E\in\mathcal{C}$.\\
+If $E_n\downarrow E$, finite total mass gives downward continuity and DCT, hence $E\in\mathcal{C}$.\\
+Thus $\mathcal{C}$ is a monotone class containing $\mathcal{Z}_0$, so $\mathcal{C}=\mathcal{M}\otimes\mathcal{N}$. For $\sigma$-finite $\mu,\nu$, choose $X_n\uparrow X$, $Y_n\uparrow Y$ with $\mu(X_n),\nu(Y_n)<+\infty$, apply the finite case to $E_n\defeq E\cap(X_n\times Y_n)$, then let $n\to\infty$ by MCT.\\
+\hlt{Structural Commentary}: Cavalieri's principle is already true for abstract $\sigma$-finite products.\\
+\hlt{Key Insight}: Prove rectangles, close under monotone limits, then exhaust by finite-measure rectangles.
+\end{proof}
+\end{proposition}

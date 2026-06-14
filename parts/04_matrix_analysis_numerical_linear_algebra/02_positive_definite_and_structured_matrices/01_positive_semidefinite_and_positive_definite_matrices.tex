@@ -1,0 +1,195 @@
+\subsection{Positive Semidefinite and Positive Definite Matrices}
+
+\begin{definition} \label{def:positive-semidefinite-matrix} \hlt{Positive Semidefinite and Positive Definite Matrices}\\
+Let $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$ and let $A\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
+The matrix $A$ is \hlt{positive semidefinite}, written $A\succeq0$, if $A=A^*$ and $\mathbf{x}^*A\mathbf{x}\geq0$ for every $\mathbf{x}\in\mathbb{F}^n$.\\
+It is \hlt{positive definite}, written $A\succ0$, if $A=A^*$ and $\mathbf{x}^*A\mathbf{x}>0$ for every nonzero $\mathbf{x}\in\mathbb{F}^n$.\\
+Negative semidefinite and negative definite mean $-A\succeq0$ and $-A\succ0$, respectively.
+\end{definition}
+
+\begin{proposition} \label{prop:rectangular-gram-products-are-psd} \hlt{Rectangular Gram Products Are Positive Semidefinite}\\
+Let $R\in\operatorname{Mat}(m,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Then $R^*R\succeq0$, $RR^*\succeq0$, and $(R^*R)_{j,j}=\norm{R_{\cdot,j}}_2^2$; $(RR^*)_{i,i}=\norm{R_{i,\cdot}}_2^2$.\\
+Full column rank gives $R^*R\succ0$; full row rank gives $RR^*\succ0$.
+\begin{proof}
+The matrices are self-adjoint by Proposition \ref{prop:basic-adjoint-identities}.\\
+For $\mathbf{x}\in\mathbb{F}^n$ and $\mathbf{y}\in\mathbb{F}^m$, $\mathbf{x}^*R^*R\mathbf{x}=\norm{R\mathbf{x}}_2^2\geq0$ and $\mathbf{y}^*RR^*\mathbf{y}=\norm{R^*\mathbf{y}}_2^2\geq0$. Hence both products are positive semidefinite. Taking $\mathbf{x}=\mathbf{e}_j$ and $\mathbf{y}=\mathbf{e}_i$ gives the diagonal formulas. If $R$ has full column rank, then $R\mathbf{x}\neq0$ for $\mathbf{x}\neq0$, so $R^*R\succ0$. If $R$ has full row rank, apply the same argument to $R^*$.\\
+\hlt{Structural Commentary}: Multiplying a matrix by its adjoint produces a Gram matrix of columns or rows.\\
+\hlt{Key Insight}: The quadratic form is a squared norm, so no cancellation can make it negative.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:directed-incidence-matrix} \hlt{Directed Incidence Matrix}\\
+For edges $e=u\to v$ on vertices $1,\ldots,n$, $B\in\operatorname{Mat}(m,n,\mathbb{R})$ has row $e$ equal to $-\mathbf{e}_u^t+\mathbf{e}_v^t$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/directed_incidence_matrix.tikz}
+  \caption{A directed incidence matrix records oriented edge differences from vertices to edges.}
+  \label{fig:directed-incidence-matrix}
+\end{figure}
+
+\begin{example} \label{ex:directed-incidence-matrix-four-node} \hlt{A Directed Incidence Matrix}\\
+For Figure \ref{fig:directed-incidence-matrix}, $B=
+\begin{bmatrix}
+-1 & 1 & 0 & 0\\
+0 & -1 & 1 & 0\\
+0 & 0 & 1 & -1\\
+-1 & 0 & 0 & 1
+\end{bmatrix}$. For node potentials $\mathbf{x}=(x_1,x_2,x_3,x_4)^t$, $B\mathbf{x}=
+\begin{bmatrix}
+x_2-x_1\\
+x_3-x_2\\
+x_3-x_4\\
+x_4-x_1
+\end{bmatrix}$.\\
+Hence $\ker(B)=\operatorname{span}\{(1,1,1,1)^t\}$, and $\operatorname{rank}(B)=3$. The loop vector $\mathbf{y}=(1,1,-1,-1)^t$ spans $\ker(B^t)$.\\
+Thus $\mathbf{b}\in\operatorname{col}(B)$ if and only if $\mathbf{y}^t\mathbf{b}=b_1+b_2-b_3-b_4=0$. This is Kirchhoff loop compatibility.\\
+\hlt{Structural Commentary}: Incidence subspaces encode graph constraints.\\
+\hlt{Key Insight}: A sparse matrix can encode both the algebra of a linear map and the combinatorics of a graph.
+\end{example}
+
+\begin{perspective} \label{per:incidence-least-squares-ranking} \hlt{Incidence Data and Least Squares}\\
+For an incidence matrix $B$ as in Example \ref{ex:directed-incidence-matrix-four-node}, $B\mathbf{x}=\mathbf{b}$ seeks node potentials matching edge differences. If loop consistency fails, least squares projects $\mathbf{b}$ onto $\operatorname{col}(B)$, where $B^*(B\mathbf{x}_0-\mathbf{b})=\mathbf{0}$ (Theorem \ref{thm:matrix-least-squares-normal-equations} on $B$). The constant-vector kernel means potentials are unique only after fixing one node or choosing minimum norm.
+\end{perspective}
+
+\begin{proposition} \label{prop:incidence-laplacian-positive-semidefinite} \hlt{Incidence Laplacians Are Positive Semidefinite}\\
+Let $B$ be a directed incidence matrix and set $L=B^tB$. Then $L\succeq0$ and $\mathbf{x}^tL\mathbf{x}=\sum\limits_{e=(u\to v)}(x_v-x_u)^2$, with $\ker(L)$ equal to the vectors constant on each connected component.
+\begin{proof}
+Since $L=B^tB$, Proposition \ref{prop:rectangular-gram-products-are-psd} gives $L\succeq0$.\\
+For $e=(u\to v)$, $(B\mathbf{x})_e=x_v-x_u$, so $\mathbf{x}^tL\mathbf{x}=\norm{B\mathbf{x}}_2^2=\sum\limits_{e=(u\to v)}(x_v-x_u)^2$. Thus $\mathbf{x}\in\ker(L)$ if and only if $B\mathbf{x}=\mathbf{0}$, equivalently $x_u=x_v$ on every edge, which means $\mathbf{x}$ is constant on each connected component.\\
+\hlt{Structural Commentary}: Laplacians sum squared edge differences.\\
+\hlt{Key Insight}: A graph Laplacian is a Gram product, so positivity is automatic.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:positive-semidefinite-matrix-equivalences} \hlt{Equivalent Forms of Positive Semidefiniteness}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\succeq0$.
+\item $A$ is Hermitian and all eigenvalues of $A$ are nonnegative.
+\item $A=B^*B$ for some $B\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\item $A$ has a positive semidefinite square root.
+\end{enumerate}
+In this case the positive semidefinite square root is unique.\\
+If $A=U\Lambda U^*$ with $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ and $\lambda_i\geq0$, then $A^{1/2}=U\operatorname{diag}(\sqrt{\lambda_1},\ldots,\sqrt{\lambda_n})U^*$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ This is the matrix form of Theorem \ref{thm:positive-operator-characterization}.
+\item[$(ii)$]$\Rightarrow (iv)$ By the spectral theorem, write $A=U\Lambda U^*$, where $U$ is unitary and $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ with $\lambda_i\geq0$. Then $A^{1/2}=U\operatorname{diag}(\sqrt{\lambda_1},\ldots,\sqrt{\lambda_n})U^*$ is positive semidefinite and satisfies $(A^{1/2})^2=A$.
+\item[$(iv)$]$\Rightarrow (iii)$ If $C\succeq0$ and $C^2=A$, then $C=C^*$ and $A=C^*C$, so (iii) holds with $m=n$.
+\item[$(iii)$]$\Rightarrow (i)$ If $A=B^*B$, then $A^*=A$ and $\mathbf{x}^*A\mathbf{x}=\mathbf{x}^*B^*B\mathbf{x}=\norm{B\mathbf{x}}_2^2\geq0$, so $A\succeq0$.
+\end{enumerate}
+The positive semidefinite square root is unique by Proposition \ref{prop:positive-square-root-unique}.\\
+\hlt{Structural Commentary}: Positive semidefinite matrices are Gram-type matrices with nonnegative spectrum.\\
+\hlt{Key Insight}: Positivity is best checked either on eigenvalues or by finding a factor $B$ with $A=B^*B$.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:psd-spectral-factorization} \hlt{PSD Spectral Factorisation Method}\\
+To analyse a Hermitian matrix $A$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item diagonalise $A=U\Lambda U^*$;
+\item check the signs of the diagonal entries of $\Lambda$;
+\item if $\Lambda\geq0$, set $A^{1/2}=U\Lambda^{1/2}U^*$ and use $A=(A^{1/2})^*A^{1/2}$;
+\item translate kernel, rank, and zero-quadratic-form questions into the factor $A^{1/2}$.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/psd_factorization_kernel.tikz}
+  \caption{For $A=B^*B$, the squared-norm identity gives $\ker A=\ker B$.}
+  \label{fig:psd-factorization-kernel}
+\end{figure}
+
+\begin{theorem} \label{thm:positive-definite-matrix-equivalences} \hlt{Equivalent Forms of Positive Definiteness}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\succ0$.
+\item $A$ is Hermitian and all eigenvalues of $A$ are positive.
+\item $A\succeq0$ and $A$ is invertible.
+\item $A=B^*B$ for some invertible $B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\item $A$ is invertible and $A^{-1}\succ0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ By definition $A$ is Hermitian. If $(\lambda,\mathbf{v})$ is an eigenpair with $\mathbf{v}\neq\mathbf{0}$, then $\lambda\norm{\mathbf{v}}_2^2=\mathbf{v}^*A\mathbf{v}>0$, so every eigenvalue is positive.
+\item[$(ii)$]$\Rightarrow (iii)$ Positive eigenvalues imply $A\succeq0$ by Theorem \ref{thm:positive-semidefinite-matrix-equivalences}; they also exclude $0$, so $A$ is invertible.
+\item[$(iii)$]$\Rightarrow (iv)$ By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, $A$ has a positive semidefinite square root $A^{1/2}$.\\
+Since $A$ is invertible, $A^{1/2}$ is invertible, and $A=(A^{1/2})^*A^{1/2}$.
+\item[$(iv)$]$\Rightarrow (i)$ If $A=B^*B$ and $B$ is invertible, then for every nonzero $\mathbf{x}$, $\mathbf{x}^*A\mathbf{x}=\norm{B\mathbf{x}}_2^2>0$.
+\item[$(ii)$]$\Leftrightarrow (v)$ Hermitian-ness is preserved by inversion, and eigenvalues of $A^{-1}$ are reciprocal eigenvalues of $A$. Thus positive eigenvalues of $A$ are equivalent to positive eigenvalues of $A^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Positive definite matrices are the invertible part of the positive semidefinite cone.\\
+\hlt{Key Insight}: Positive definite means every eigenvalue is strictly on the positive side of zero.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:trace-determinant-positive-semidefinite} \hlt{Trace and Determinant of Positive Semidefinite Matrices}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Then $\operatorname{tr}A\geq0$, with equality if and only if $A=0$, and $\det A\geq0$, with strict inequality if and only if $A$ is positive definite.
+\begin{proof}
+List the eigenvalues of $A$ as $\lambda_1,\ldots,\lambda_n$. By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, each $\lambda_j\geq0$.\\
+Hence $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j\geq0$ and $\det A=\prod\limits_{j=1}^{n}\lambda_j\geq0$.\\
+The trace is zero exactly when every $\lambda_j=0$, which for a Hermitian matrix means $A=0$. The determinant is positive exactly when every $\lambda_j>0$, which is positive definiteness by Theorem \ref{thm:positive-definite-matrix-equivalences}.\\
+\hlt{Structural Commentary}: Trace and determinant aggregate the nonnegative eigenvalues by sum and product.\\
+\hlt{Key Insight}: Equality is controlled by which eigenvalues vanish.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:gram-factor-kernel-rank-column-data} \hlt{Kernel, Rank, and Columns of $B^*B$}\\
+Let $B\in\operatorname{Mat}(m,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and set $A=B^*B$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\succeq0$;
+\item $\ker(A)=\ker(B)$;
+\item $\operatorname{rank}(A)=\operatorname{rank}(B)$;
+\item $\operatorname{col}(A)=\operatorname{col}(B^*)$;
+\item $A=0$ if and only if $B=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Positive semidefiniteness follows from Theorem \ref{thm:positive-semidefinite-matrix-equivalences}.
+\item If $B\mathbf{x}=0$, then $A\mathbf{x}=0$. Conversely, if $A\mathbf{x}=0$, then $0=\mathbf{x}^*A\mathbf{x}=\norm{B\mathbf{x}}_2^2$ so $B\mathbf{x}=0$.
+\item Since $A$ and $B$ both have $n$ columns, rank-nullity and (ii) give $\operatorname{rank}(A)=\operatorname{rank}(B)$.
+\item Since $A=A^*$, Proposition \ref{prop:adjoint-kernel-range-orthogonality} and (ii) give $\operatorname{col}(A)=\ker(A)^{\perp}=\ker(B)^{\perp}=\operatorname{col}(B^*)$.
+\item By (iii), $\operatorname{rank}(A)=0$ if and only if $\operatorname{rank}(B)=0$.\\
+A matrix has rank zero exactly when it is the zero matrix, so $A=0$ if and only if $B=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: The Gram product $B^*B$ preserves the kernel of $B$.\\
+\hlt{Key Insight}: The identity $\mathbf{x}^*B^*B\mathbf{x}=\norm{B\mathbf{x}}_2^2$ is the whole mechanism.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:positive-semidefinite-principal-block-column-inclusion} \hlt{Principal Blocks and Column Inclusion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be PSD, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and partition $A=
+\begin{bmatrix}
+A_{11} & A_{12}\\
+A_{12}^* & A_{22}
+\end{bmatrix}$, $A_{11}\in\operatorname{Mat}(k,k,\mathbb{F})$.\\
+Then $A_{11}\succeq0$, $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$, and $\operatorname{rank}(A_{12})\leq\operatorname{rank}(A_{11})$. If $A\succ0$, then $A_{11}\succ0$.
+\begin{proof}
+Write $A=B^*B$ and partition $B=[B_1\ B_2]$ conformally. Then $A_{11}=B_1^*B_1$ and $A_{12}=B_1^*B_2$.\\
+Hence $A_{11}\succeq0$ and $\operatorname{col}(A_{12})=\operatorname{col}(B_1^*B_2)\subseteq\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)=\operatorname{col}(A_{11})$, equality $\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)$ follows from Theorem \ref{thm:gram-factor-kernel-rank-column-data}. The rank inequality follows by taking dimensions\\
+If $A\succ0$ and $\mathbf{x}\neq0$ in $\mathbb{F}^k$, then $\mathbf{x}^*A_{11}\mathbf{x}=
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}^*
+A
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}>0$, so $A_{11}\succ0$.\\
+\hlt{Structural Commentary}: In a positive block matrix, cross-block columns lie in principal block's column space.\\
+\hlt{Key Insight}: Factor first; then column inclusion is immediate from $A_{12}=B_1^*B_2$.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/principal_block_column_inclusion.tikz}
+  \caption{For $A\succeq0$, factorisation forces $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$.}
+  \label{fig:principal-block-column-inclusion}
+\end{figure}
+

@@ -1,0 +1,181 @@
+\subsection{Riemann-Stieltjes Integrability}
+
+\begin{definition} \label{def:riemann-stieltjes-integral} \hlt{Riemann--Stieltjes Integral}\\
+Let $\alpha$ be increasing on $[a,b]$. For $\Pi=\{x_0,\ldots,x_n\}$, put $\Delta\alpha_i\defeq\alpha(x_i)-\alpha(x_{i-1})\geq0$.\\
+For bounded real $f$, with $M_i,m_i$ as in Definition \ref{def:partition-and-riemann-upper-lower-sums}, set $U(\Pi,f,\alpha)\defeq\sum\limits_{i=1}^{n}M_i\Delta\alpha_i$; $L(\Pi,f,\alpha)\defeq\sum\limits_{i=1}^{n}m_i\Delta\alpha_i$.\\
+Define $\overline{\int_a^b f\,d\alpha}\defeq\inf\limits_\Pi U(\Pi,f,\alpha)$; $\underline{\int_a^b f\,d\alpha}\defeq\sup\limits_\Pi L(\Pi,f,\alpha)$. If value match, $f$ is \hlt{Riemann integrable with respect to $\alpha$}, written $f\in\mathcal{R}(\alpha)$, and the common value is $\int_a^b f\,d\alpha$, also written $\int_a^b f(x)\,d\alpha(x)$.\\
+Taking $\alpha(x)=x$ gives the ordinary Riemann integral; the variable of integration is dummy.
+\end{definition}
+
+\begin{remark} \label{rem:stieltjes-increments-as-alpha-lengths} \hlt{Stieltjes Increments as $\alpha$-Lengths}\\
+Stieltjes sums replace ordinary length $\Delta x_i$ by $\Delta\alpha_i$, the length measured by $\alpha$.\\
+Thus $\alpha(x)=x$ gives Riemann sums, while jumps of $\alpha$ place point mass as in Theorem \ref{thm:single-step-riemann-stieltjes-integral}.
+\end{remark}
+
+\begin{definition} \label{def:partition-refinement} \hlt{Refinements}\\
+A partition $\Pi^\ast$ is a \hlt{refinement} of $\Pi$ if $\Pi^\ast\supseteq \Pi$. Given two partitions $\Pi_1,\Pi_2$, their \hlt{common refinement} is $\Pi_1\cup \Pi_2$.
+\end{definition}
+
+\begin{theorem} \label{thm:refinement-monotonicity-riemann-stieltjes} \hlt{Refinement Monotonicity}\\
+If $\Pi^\ast$ is a refinement of $\Pi$, then $L(\Pi,f,\alpha)\leq L(\Pi^\ast,f,\alpha)$ and $U(\Pi^\ast,f,\alpha)\leq U(\Pi,f,\alpha)$.
+\begin{proof}
+It suffices to add one point $x^\ast\in(x_{i-1},x_i)$. If $w_1,w_2$ are infima on $[x_{i-1},x^\ast]$ and $[x^\ast,x_i]$, then $w_1,w_2\geq m_i$ and $L(\Pi^\ast,f,\alpha)-L(\Pi,f,\alpha) =(w_1-m_i)\bigl[\alpha(x^\ast)-\alpha(x_{i-1})\bigr] +(w_2-m_i)\bigl[\alpha(x_i)-\alpha(x^\ast)\bigr]\geq0$.\\
+Iterate for additional points. The upper-sum inequality is the same argument with suprema.\\
+\hlt{Structural Commentary}: Refinement raises lower sums and lowers upper sums.\\
+\hlt{Key Insight}: Splitting an interval tightens the local oscillation bounds.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:piecewise-constant-envelope-view} \hlt{Piecewise-Constant Envelopes}\\
+A partition $\Pi$ gives lower and upper step envelopes with values $m_i$ and $M_i$; their integrals are exactly $L(\Pi,f)$ and $U(\Pi,f)$. Common refinements make these envelope sums compatible across partitions.
+\end{perspective}
+
+\begin{theorem} \label{thm:lower-integral-below-upper-integral} \hlt{Lower Integral Below Upper Integral}\\
+For every bounded real $f$ and increasing $\alpha$ on $[a,b]$, $\underline{\int_a^b f\,d\alpha}\leq \overline{\int_a^b f\,d\alpha}$.
+\begin{proof}
+Given partitions $\Pi_1,\Pi_2$, let $\Pi^\ast=\Pi_1\cup \Pi_2$.\\
+By Theorem \ref{thm:refinement-monotonicity-riemann-stieltjes}, $L(\Pi_1,f,\alpha)\leq L(\Pi^\ast,f,\alpha)\leq U(\Pi^\ast,f,\alpha)\leq U(\Pi_2,f,\alpha)$.\\
+Take the supremum over $\Pi_1$ and then the infimum over $\Pi_2$.\\
+\hlt{Structural Commentary}: Common refinements compare sums from different partitions.\\
+\hlt{Key Insight}: The lower envelope never rises above the upper envelope.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:riemann-stieltjes-integrability-criterion}\label{thm:riemann-stieltjes-main-source-todo} \hlt{Upper--Lower Criterion}\\
+A bounded real $f$ is in $\mathcal{R}(\alpha)$ on $[a,b]$ if and only if $\forall\varepsilon>0$ $\exists$ a partition $\Pi$ with $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f\in\mathcal{R}(\alpha)$, choose $\Pi_1,\Pi_2$ whose lower and upper sums are within $\varepsilon/2$ of $\int_a^b f\,d\alpha$.\\
+Their common refinement $\Pi$ satisfies the displayed inequality by Theorem \ref{thm:refinement-monotonicity-riemann-stieltjes}.
+\item[$(\Leftarrow)$] If such $\Pi$ exist, then $L(\Pi,f,\alpha)\leq \underline{\int_a^b f\,d\alpha}\leq \overline{\int_a^b f\,d\alpha}\leq U(\Pi,f,\alpha)$ forces upper and lower integrals to agree.
+\end{enumerate}
+\hlt{Structural Commentary}: Integrability is exactly the ability to make one partition squeeze the oscillation.\\
+\hlt{Key Insight}: The gap $U-L$ is the quantitative defect of integrability.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:darboux-and-riemann-sum-definitions} \hlt{Darboux Gaps and Riemann Sums}\\
+For $\alpha(x)=x$, a small Darboux gap $U(\Pi,f)-L(\Pi,f)$ traps every tagged sum for $\Pi$ near the integral. This is the local reason the Darboux definition above and the tagged Riemann-sum definition give the same number. The same estimate works with Stieltjes weights $\Delta\alpha_i$ whenever the upper--lower gap is small.
+\end{perspective}
+
+\begin{theorem} \label{thm:tagged-riemann-stieltjes-sums} \hlt{Tagged Sums}\\
+Let $\Pi=\{x_0,\ldots,x_n\}$ satisfy $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$, and choose tags $t_i\in[x_{i-1},x_i]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $s_i,t_i\in[x_{i-1},x_i]$, then $\sum_{i=1}^{n}\abs{f(s_i)-f(t_i)}\Delta\alpha_i<\varepsilon$.
+\item If $f\in\mathcal{R}(\alpha)$, then $\abs{\sum\limits_{i=1}^{n} f(t_i)\Delta\alpha_i-\int_a^b f\,d\alpha}<\varepsilon$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\abs{f(s_i)-f(t_i)}\leq M_i-m_i$, summing gives $\sum\limits_{i=1}^{n}\abs{f(s_i)-f(t_i)}\Delta\alpha_i \leq U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$.
+\item The tagged sum and $\int_a^b f\,d\alpha$ both lie between $L(\Pi,f,\alpha)$ and $U(\Pi,f,\alpha)$, so their distance is $<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: A small Darboux gap makes tags and the integral close.\\
+\hlt{Key Insight}: Tags are harmless after oscillation has been controlled.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:continuous-functions-riemann-stieltjes-integrable} \hlt{Continuous Functions Are Riemann--Stieltjes Integrable}\\
+If $f$ is continuous on $[a,b]$ and $\alpha$ is increasing on $[a,b]$, then $f\in\mathcal{R}(\alpha)$.
+\begin{proof}
+If $\alpha(b)=\alpha(a)$, the Darboux gap is zero.\\
+Otherwise choose $\eta>0$ with $\eta[\alpha(b)-\alpha(a)]<\varepsilon$. Uniform continuity gives partition $\Pi$ with $M_i-m_i\leq\eta$ $\forall i$, so $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)=\sum\limits_{i=1}^{n}(M_i-m_i)\Delta\alpha_i \leq \eta[\alpha(b)-\alpha(a)]<\varepsilon$. Apply Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.\\
+\hlt{Structural Commentary}: Uniform continuity controls oscillation uniformly across the partition.\\
+\hlt{Key Insight}: Continuity turns local small intervals into a small total Darboux gap.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:monotone-functions-integrable-continuous-integrator} \hlt{Monotone Functions and Continuous Integrators}\\
+If $f$ is monotone on $[a,b]$ and $\alpha$ is continuous and increasing on $[a,b]$, then $f\in\mathcal{R}(\alpha)$.
+\begin{proof}
+Assume first that $f$ is increasing. If $\alpha(b)=\alpha(a)$, then every $\Delta\alpha_i=0$, so $U(\Pi,f,\alpha)=L(\Pi,f,\alpha)=0$ for every partition $\Pi$. Choose $n$ and a partition $\Pi$ such that $\Delta\alpha_i=[\alpha(b)-\alpha(a)]/n$ for all $i$.\\
+Existence follows from continuity of $\alpha$ and Theorem \ref{thm:intermediate-value-theorem}.\\
+Then $U(\Pi,f,\alpha)-L(\Pi,f,\alpha) =\frac{\alpha(b)-\alpha(a)}{n}\sum\limits_{i=1}^{n}\bigl(f(x_i)-f(x_{i-1})\bigr) =\frac{\alpha(b)-\alpha(a)}{n}\bigl(f(b)-f(a)\bigr) <\varepsilon$ for $n$ large.\\
+If $f$ is decreasing, use the same partition. Then the suprema and infima on $[x_{i-1},x_i]$ are $f(x_{i-1})$ and $f(x_i)$, so the same computation gives $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)=\frac{\alpha(b)-\alpha(a)}{n}\bigl(f(a)-f(b)\bigr)$, which is $<\varepsilon$ for large $n$.\\
+\hlt{Structural Commentary}: Equal $\alpha$-increments convert the monotone oscillations into a telescoping sum.\\
+\hlt{Key Insight}: A monotone function's total oscillation is finite and can be spread thinly.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/discontinuity_isolation_partition.tikz}
+  \caption{Isolate the discontinuity in a short interval; control the compact pieces outside it.}
+  \label{fig:discontinuity-isolation-partition}
+\end{figure}
+
+\begin{theorem} \label{thm:finitely-many-discontinuities-integrable} \hlt{Finitely Many Discontinuities}\\
+Suppose $f$ is bounded on $[a,b]$, the discontinuity set $E\defeq\{x\in[a,b]:f\text{ is discontinuous at }x\}$ is finite, and $\alpha$ is continuous at each point of $E$. Then $f\in\mathcal{R}(\alpha)$.
+\begin{proof}
+Let $M=\sup_{[a,b]}\abs{f}$ and let $\eta>0$. By continuity of $\alpha$ on the finite set $E$, choose disjoint intervals $I_j=[u_j,v_j]$ covering $E$, with each point of $E\cap(a,b)$ in some $(u_j,v_j)$, such that $\sum\limits_j\bigl(\alpha(v_j)-\alpha(u_j)\bigr)<\eta$.\\
+Set $K=[a,b]\setminus\bigcup_j(u_j,v_j)$. Then $f|_K$ is uniformly continuous by Theorem \ref{thm:compact-continuity-uniform-continuity}.\\
+Choose a partition $\Pi$ containing all $u_j,v_j$, with no points inside the intervals $(u_j,v_j)$, and fine enough on $K$ that $M_i-m_i\leq\eta$ whenever $[x_{i-1},x_i]\subset K$.\\
+Hence $U(\Pi,f,\alpha)-L(\Pi,f,\alpha) \leq \eta\bigl[\alpha(b)-\alpha(a)\bigr] +2M\sum\limits_j\bigl(\alpha(v_j)-\alpha(u_j)\bigr) <\eta\bigl[\alpha(b)-\alpha(a)+2M\bigr]$.\\
+Since $\eta$ is arbitrary, Theorem \ref{thm:riemann-stieltjes-integrability-criterion} applies.\\
+\hlt{Structural Commentary}: Isolate bad points in small $\alpha$-intervals; use uniform continuity elsewhere.\\
+\hlt{Key Insight}: Finitely many discontinuities do not matter unless $\alpha$ also jumps there.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:dirichlet-function-not-riemann-integrable} \hlt{Dirichlet's Function Is Not Riemann Integrable}\\
+Let $g=\mathbf{1}_{\Q}$ on $[0,1]$. Every nondegenerate subinterval contains rationals and irrationals by Corollary \ref{cor:rationals-and-irrationals-dense}, so for every partition $\Pi$, $M_i=1$ and $m_i=0$ on each nonzero-width subinterval.\\
+Thus $U(\Pi,g)=1$ and $L(\Pi,g)=0$, hence $g\notin\mathcal{R}$.
+\end{example}
+
+\begin{remark} \label{rem:small-discontinuity-sets-riemann-preview} \hlt{Small Discontinuity Sets}\\
+The same idea underlies Theorem \ref{thm:riemann-lebesgue-comparison}: small discontinuity sets, later called measure-zero sets in Definition \ref{def:null-sets-and-real-line-measure-zero}, do not obstruct integrability. Dirichlet's function fails because every point is discontinuous.
+\end{remark}
+
+\begin{theorem} \label{thm:continuous-composition-preserves-riemann-stieltjes-integrability} \hlt{Continuous Composition Preserves Integrability}\\
+Let $\alpha$ be increasing on $[a,b]$. Suppose $f\in\mathcal{R}(\alpha)$, $m\leq f(x)\leq M$ on $[a,b]$, and $\phi:[m,M]\to\R$ is continuous.\\
+Define $h:[a,b]\to\R$ by $h(x)\defeq \phi(f(x))$. Then $h\in\mathcal{R}(\alpha)$.
+\begin{proof}
+Let $C\defeq\sup_{y\in[m,M]}\abs{\phi(y)}$ and let $\varepsilon>0$. Choose $\eta>0$ such that $\eta[\alpha(b)-\alpha(a)+2C]<\varepsilon$. Since $\phi$ is uniformly continuous on $[m,M]$, choose $\gamma>0$ such that $\abs{s-t}<\gamma$ $\Longrightarrow$ $\abs{\phi(s)-\phi(t)}<\eta$ $(s,t\in[m,M])$.\\
+Choose a partition $\Pi=\{x_0,\ldots,x_n\}$ with $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\gamma\eta$.\\
+Let $M_i,m_i$ denote upper and lower values for $f$ on $[x_{i-1},x_i]$, $M_i^h,m_i^h$ denote corresponding values for $h$.\\
+Split $A\defeq\{i:M_i-m_i<\gamma\}$, $B\defeq\{i:M_i-m_i\geq\gamma\}$. For $i\in A$, $M_i^h-m_i^h\leq\eta$; for $i\in B$, $M_i^h-m_i^h\leq2C$.\\
+Also $\gamma\sum\limits_{i\in B}\Delta\alpha_i \leq \sum\limits_{i\in B}(M_i-m_i)\Delta\alpha_i \leq U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\gamma\eta$, so $\sum\limits_{i\in B}\Delta\alpha_i<\eta$.\\
+$U(\Pi,h,\alpha)-L(\Pi,h,\alpha) \leq \eta\sum\limits_{i\in A}\Delta\alpha_i+2C\sum\limits_{i\in B}\Delta\alpha_i <\eta[\alpha(b)-\alpha(a)+2C]<\varepsilon$. Theorem \ref{thm:riemann-stieltjes-integrability-criterion} gives $h\in\mathcal{R}(\alpha)$.\\
+\hlt{Structural Commentary}: Integrability survives continuous remeasurement of the values of $f$.\\
+\hlt{Key Insight}: Large oscillation intervals have small total $\alpha$-weight.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:riemann-stieltjes-integral-properties} \hlt{Basic Properties of the Integral}\\
+Let all functions be bounded and real on $[a,b]$, and let all integrators be increasing.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f_1,f_2\in\mathcal{R}(\alpha)$, $c\in\R$, then $f_1+f_2,cf_1\in\mathcal{R}(\alpha)$,\\
+and $\int_a^b(f_1+f_2)\,d\alpha=\int_a^b f_1\,d\alpha+\int_a^b f_2\,d\alpha$; $\int_a^b cf_1\,d\alpha=c\int_a^b f_1\,d\alpha$.\\
+\item If $f_1\leq f_2$ and both functions are in $\mathcal{R}(\alpha)$, then $\int_a^b f_1\,d\alpha\leq\int_a^b f_2\,d\alpha$.
+\item If $f\in\mathcal{R}(\alpha)$ and $a<c<b$, then $f$ is integrable on $[a,c]$ and $[c,b]$, and $\int_a^c f\,d\alpha+\int_c^b f\,d\alpha=\int_a^b f\,d\alpha$.
+\item If $f\in\mathcal{R}(\alpha)$ and $\abs{f}\leq M$, then $\abs{\int_a^b f\,d\alpha}\leq M\bigl[\alpha(b)-\alpha(a)\bigr]$
+\item If $f\in\mathcal{R}(\alpha_1)$ and $f\in\mathcal{R}(\alpha_2)$, then $f\in\mathcal{R}(\alpha_1+\alpha_2)$ and $\int_a^b f\,d(\alpha_1+\alpha_2)=\int_a^b f\,d\alpha_1+\int_a^b f\,d\alpha_2$.\\
+If $c>0$ and $f\in\mathcal{R}(\alpha)$, then $f\in\mathcal{R}(c\alpha)$ and $\int_a^b f\,d(c\alpha)=c\int_a^b f\,d\alpha$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $L(\Pi,f_1,\alpha)+L(\Pi,f_2,\alpha)\leq L(\Pi,f_1+f_2,\alpha)\leq U(\Pi,f_1+f_2,\alpha) \leq U(\Pi,f_1,\alpha)+U(\Pi,f_2,\alpha)$,\\
+where $\Pi$ is common refinement,  and Theorem \ref{thm:riemann-stieltjes-integrability-criterion}; scalar multiplication is the same estimate with signs handled by swapping upper and lower sums when $c<0$.
+\item If $f_1\leq f_2$, then $L(\Pi,f_2-f_1,\alpha)\geq0$ for every $\Pi$; apply (i) to $f_2-f_1$.
+\item Refine so that $c\in \Pi$. Then the lower and upper sums split into the sums over $[a,c]$ and $[c,b]$.
+\item Apply (ii) to $-M\leq f\leq M$ and use the integrals of the constant functions $\pm M$.
+\item Since $\Delta(\alpha_1+\alpha_2)_i=\Delta\alpha_{1,i}+\Delta\alpha_{2,i}$ and $\Delta(c\alpha)_i=c\,\Delta\alpha_i$, corresponding lower and upper sums split exactly.
+\end{enumerate}
+\hlt{Structural Commentary}: The algebra of integrals is inherited from the algebra of upper and lower sums.\\
+\hlt{Key Insight}: Common refinements let several integrable functions be approximated by the same partition.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:products-and-absolute-values-riemann-stieltjes} \hlt{Products and Absolute Values}\\
+If $f,g\in\mathcal{R}(\alpha)$ on $[a,b]$, then $fg\in\mathcal{R}(\alpha)$, $\abs{f}\in\mathcal{R}(\alpha)$, and $\abs{\int_a^b f\,d\alpha}\leq\int_a^b\abs{f}\,d\alpha$.
+\begin{proof}
+By Theorem \ref{thm:riemann-stieltjes-integral-properties}, $f\pm g\in\mathcal{R}(\alpha)$. Applying Theorem \ref{thm:continuous-composition-preserves-riemann-stieltjes-integrability} to $\phi(t)=t^2$ gives $(f\pm g)^2\in\mathcal{R}(\alpha)$, hence $fg\in\mathcal{R}(\alpha)$ from $4fg=(f+g)^2-(f-g)^2$.\\
+Applying the same theorem to $\phi(t)=\abs{t}$ gives $\abs{f}\in\mathcal{R}(\alpha)$, and $-\abs{f}\leq f\leq\abs{f}$ gives the inequality.\\
+\hlt{Structural Commentary}: Products reduce to squares; absolute values to composition.\\
+\hlt{Key Insight}: Once continuous composition is available, the usual algebra closes.
+\end{proof}
+\end{theorem}

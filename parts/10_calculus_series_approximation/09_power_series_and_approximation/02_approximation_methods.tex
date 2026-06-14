@@ -1,0 +1,201 @@
+\subsection{Approximation Methods}
+
+\begin{theorem} \label{thm:weierstrass-polynomial-approximation}\label{thm:power-approx-fourier-main-source-todo} \hlt{Weierstrass Polynomial Approximation}\\
+If $f:[a,b]\to\C$ is continuous, then polynomials $P_n$ satisfy $P_n\rightrightarrows f$ on $[a,b]$. If $f$ is real-valued, take $P_n$ real.
+\begin{proof}
+By an affine change of variables and subtraction of the endpoint interpolant, assume $[a,b]=[0,1]$ and $f(0)=f(1)=0$; extend $f$ by $0$ outside $[0,1]$. For $n\geq1$, let $Q_n(x)\defeq c_n(1-x^2)^n$ and $\int_{-1}^{1}Q_n(x)\,dx=1$.\\
+Source estimates give $c_n<\sqrt n$ and $Q_n(t)\leq\sqrt n(1-\delta^2)^n$ for $\delta\leq\abs{t}\leq1$.\\
+Define $P_n(x)\defeq\int_{-1}^{1}f(x+t)Q_n(t)\,dt$, $(0\leq x\leq1)$. By change of variables, $P_n(x)=\int_0^1 f(u)Q_n(u-x)\,du$, so $P_n$ is a polynomial in $x$ (real if $f$ is real). Given $\varepsilon>0$, choose $\delta>0$ so $\abs{u-v}<\delta$ implies $\abs{f(u)-f(v)}<\varepsilon/2$, and set $M=\sup\abs{f}$. Since $Q_n\geq0$ and $\int Q_n=1$, $\abs{P_n(x)-f(x)} \leq \int_{-1}^{1}\abs{f(x+t)-f(x)}Q_n(t)\,dt \leq \frac{\varepsilon}{2}+4M\sqrt n(1-\delta^2)^n$.\\
+The last term tends to $0$, so $P_n\rightrightarrows f$ on $[0,1]$. Undoing the reductions proves the theorem.\\
+\hlt{Structural Commentary}: The kernels $Q_n$ form polynomial approximate identities.\\
+\hlt{Key Insight}: Uniform continuity controls the near part, and concentration of $Q_n$ kills the far part.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/polygonal_approximation_sqrt_one_minus_x.tikz}
+  \caption{Finer piecewise-linear interpolants approach $f(x)=\sqrt{1-x}$ uniformly on $[0,1]$.}
+  \label{fig:polygonal-approximation-sqrt-one-minus-x}
+\end{figure}
+
+\begin{corollary} \label{cor:absolute-value-polynomial-approximation} \hlt{Polynomial Approximation of $\abs{x}$}\\
+For every interval $[-a,a]$, there are real polynomials $P_n$ such that $P_n(0)=0$ and $P_n\rightrightarrows \abs{x}$ on $[-a,a]$.
+\begin{proof}
+By Theorem \ref{thm:weierstrass-polynomial-approximation}, choose real polynomials $P_n^\ast$ converging uniformly to $\abs{x}$ on $[-a,a]$.\\
+Since $P_n^\ast(0)\to0$, the polynomials $P_n(x)\defeq P_n^\ast(x)-P_n^\ast(0)$ have $P_n(0)=0$ and still converge uniformly to $\abs{x}$.\\
+\hlt{Structural Commentary}: Normalize the approximants at the base point.\\
+\hlt{Key Insight}: Subtracting the value at $0$ fixes the normalization without changing the uniform limit.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:algebra-uniform-closure-functions} \hlt{Algebras and Uniform Closure}\\
+Let $\mathcal{A}$ be a family of complex-valued functions on a set $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{A}$ is an \hlt{algebra} if it is closed under $+$, products, and scalar multiplication (real scalars in the real case).
+\item $\mathcal{A}$ is \hlt{uniformly closed} if $f_n\in\mathcal{A}$ and $f_n\rightrightarrows f$ on $E$ imply $f\in\mathcal{A}$.
+\item The \hlt{uniform closure} of $\mathcal{A}$ is $\{f:f_n\in\mathcal{A},\ f_n\rightrightarrows f\text{ on }E\}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:uniform-closure-algebra} \hlt{Uniform Closures Are Closed Algebras}\\
+The uniform closure of an algebra of bounded functions is a uniformly closed algebra.
+\begin{proof}
+If $f,g\in\mathcal{B}$, choose $f_n,g_n\in\mathcal{A}$ with $f_n\rightrightarrows f$ and $g_n\rightrightarrows g$.\\
+Boundedness and uniform convergence give $f_n+g_n\rightrightarrows f+g$; $f_ng_n\rightrightarrows fg$; and $cf_n\rightrightarrows cf$.
+Thus $\mathcal{B}$ is an algebra. If $h_n\in\mathcal{B}$ and $h_n\rightrightarrows h$, approximate each $h_n$ uniformly by some $a_n\in\mathcal{A}$ within $1/n$; then $a_n\rightrightarrows h$, so $h\in\mathcal{B}$.\\
+\hlt{Structural Commentary}: Uniform limits preserve algebraic operations for bounded functions.\\
+\hlt{Key Insight}: The uniform closure of an algebra has already absorbed all further uniform limits.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:separates-points-vanishes-nowhere-self-adjoint} \hlt{Separation, Nonvanishing, and Self-Adjointness}\\
+Let $\mathcal{A}$ be a family of functions on $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{A}$ \hlt{separates points} on $E$ if for every distinct $x_1,x_2\in E$ there is $f\in\mathcal{A}$ with $f(x_1)\neq f(x_2)$.
+\item $\mathcal{A}$ \hlt{vanishes at no point} of $E$ if for every $x\in E$ there is $g\in\mathcal{A}$ with $g(x)\neq0$.
+\item A complex algebra $\mathcal{A}$ is \hlt{self-adjoint} if $f\in\mathcal{A}$ implies $\overline{f}\in\mathcal{A}$, where $\overline{f}(x)\defeq\overline{f(x)}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:two-point-interpolation-in-separating-algebra} \hlt{Two-Point Interpolation in a Separating Algebra}\\
+If an algebra $\mathcal{A}$ on $E$ separates points and vanishes nowhere, then for distinct $x_1,x_2\in E$ and scalars $c_1,c_2$, there is $f\in\mathcal{A}$ with $f(x_i)=c_i$, $(i=1,2)$.
+\begin{proof}
+Choose $g,h,k\in\mathcal{A}$ with $g(x_1)\neq g(x_2)$, $h(x_1)\neq0$, and $k(x_2)\neq0$.\\
+Let $u\defeq gk-g(x_1)k$ and $v\defeq gh-g(x_2)h$. Then $u(x_1)=v(x_2)=0$ and $u(x_2)v(x_1)\neq0$.\\
+Hence $f\defeq \frac{c_1v}{v(x_1)}+\frac{c_2u}{u(x_2)}$ lies in $\mathcal{A}$ and satisfies $f(x_i)=c_i$.\\
+\hlt{Structural Commentary}: Separation and nonvanishing build two functions that isolate the two points.\\
+\hlt{Key Insight}: Once two point-isolating functions are in the algebra, interpolation is linear algebra.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:stone-weierstrass-interpolation-linear-algebra} \hlt{Interpolation Is Linear Algebra}\\
+The two-point interpolation step can also be written as a $2\times2$ linear system. Its invertibility is exactly the finite-dimensional criterion from Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}, with the determinant test supplied by Theorem \ref{thm:determinant-basic-laws}. The proof above chooses explicit point-isolating functions instead of reopening the calculation.
+\end{perspective}
+
+\begin{theorem} \label{thm:real-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Real Form}\\
+$\mathcal{A}\subset C(K,\R)$ is algebra on compact $K$ that separates points, vanishes nowhere, then uniform closure is $C(K,\R)$.
+\begin{proof}
+Let $\mathcal{B}$ be the uniform closure of $\mathcal{A}$; by Theorem \ref{thm:uniform-closure-algebra}, $\mathcal{B}$ is a uniformly closed algebra.\\
+If $f\in\mathcal{B}$, then $\abs{f}\in\mathcal{B}$: for $a=\norm{f}_{\infty}$, approximate $\abs{y}$ on $[-a,a]$ by polynomials $p_n$ with $p_n(0)=0$ using Corollary \ref{cor:absolute-value-polynomial-approximation}; then $p_n(f)\in\mathcal{B}$ and $p_n(f)\rightrightarrows\abs{f}$.\\
+Hence $\max(f,g),\min(f,g)\in\mathcal{B}$ whenever $f,g\in\mathcal{B}$, as $\max(f,g)=\frac{f+g}{2}+\frac{\abs{f-g}}{2}$; $\min(f,g)=\frac{f+g}{2}-\frac{\abs{f-g}}{2}$.\\
+Fix $f\in C(K,\R)$, $x\in K$, $\varepsilon>0$. $\forall y\in K$, Theorem \ref{thm:two-point-interpolation-in-separating-algebra} gives $h_y\in\mathcal{B}$, $h_y(x)=f(x)$, $h_y(y)=f(y)$.\\
+Compactness gives $y_1,\ldots,y_r$ s.t. $g_x\defeq\max(h_{y_1},\ldots,h_{y_r})$ satisfies $g_x(x)=f(x)$ and $g_x>f-\varepsilon$ on $K$.\\
+Compactness gives $x_1,\ldots,x_m$ such that $h\defeq\min(g_{x_1},\ldots,g_{x_m})$ satisfies $\abs{h-f}<\varepsilon$ on $K$.\\
+Thus every $f\in C(K,\R)$ is a uniform limit of members of $\mathcal{B}$, so $f\in\mathcal{B}$.\\
+\hlt{Structural Commentary}: Local supports plus finite max/min give global approximation.\\
+\hlt{Key Insight}: Separation plus compactness gives uniform approximation.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:complex-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Complex Form}\\
+If $\mathcal{A}\subset C_b(K)$ is self-adjoint, separates points, and vanishes nowhere on compact $K$, then $\overline{\mathcal{A}}=C_b(K)$.
+\begin{proof}
+Let $\mathcal{A}_{\R}\defeq\{f\in\mathcal{A}:f\text{ real-valued}\}$.\\
+If $f=u+iv\in\mathcal{A}$, self-adjointness gives $u=\frac{f+\overline{f}}{2}\in\mathcal{A}_{\R}$ and $v=\frac{f-\overline{f}}{2i}\in\mathcal{A}_{\R}$.\\
+Thus $\mathcal{A}_{\R}$ separates points; rescaling a nonzero value and taking real parts shows it vanishes nowhere.\\
+By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R)$. Approximate the real and imaginary parts separately, then combine.\\
+\hlt{Structural Commentary}: Self-adjointness lets the complex algebra expose enough real functions.\\
+\hlt{Key Insight}: The complex theorem is the real theorem applied to real and imaginary parts.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:exponential-logarithm-from-power-series} \hlt{Exponential and Logarithm from the Power Series}\\
+Define $\mathsf{E}(z)\defeq\sum\limits_{n=0}^{\infty}\frac{z^n}{n!}$ for $z\in\C$.\\
+Then, for $z,w\in\C$, $x\in\R$, $\mathsf{E}(z+w)=\mathsf{E}(z)\mathsf{E}(w)$, $\mathsf{E}(x)>0$, $\mathsf{E}'(x)=\mathsf{E}(x)$, $\mathsf{E}(x)=e^x$, and $\mathsf{E}$ is strictly increasing on $\R$. Its inverse $\mathsf{L}:(0,\infty)\to\R$ satisfies $\mathsf{L}'(y)=\frac1y$, $\mathsf{L}(uv)=\mathsf{L}(u)+\mathsf{L}(v)$ for $u,v>0$.\\
+For $x>0$ and $\alpha\in\R$, set $x^\alpha\defeq \mathsf{E}(\alpha \mathsf{L}(x))$; then $(x^\alpha)'=\alpha x^{\alpha-1}$.
+\begin{proof}
+The ratio test (Theorem \ref{thm:ratio-test}), gives convergence for all $z\in\C$.\\
+Absolute convergence and Cauchy product give $\mathsf{E}(z)\mathsf{E}(w)=\sum\limits_{n\ge0}\frac{(z+w)^n}{n!}=\mathsf{E}(z+w)$, hence $\mathsf{E}(z)\mathsf{E}(-z)=1$.\\
+Theorem \ref{thm:power-series-uniform-differentiation} gives $\mathsf{E}'=\mathsf{E}$ on $\R$. Thus $\mathsf{E}(x)>0$ $\forall$ real $x$ and $\mathsf{E}'>0$, so $\mathsf{E}$ is strictly increasing.\\
+Since $\mathsf{E}(1)=e$, the addition formula gives $\mathsf{E}(p)=e^p$ for $p\in\Q$; continuity extends this to $x\in\R$.\\
+Let $\mathsf{L}=\mathsf{E}^{-1}$. Differentiating $\mathsf{L}(\mathsf{E}(x))=x$ gives $\mathsf{L}'(y)=1/y$.\\
+If $u=\mathsf{E}(x)$ and $v=\mathsf{E}(y)$, then $\mathsf{L}(uv)=\mathsf{L}(\mathsf{E}(x+y))=\mathsf{L}(u)+\mathsf{L}(v)$.\\
+Finally, the chain rule, Theorem \ref{thm:chain-rule-one-variable}, gives $(x^\alpha)'=\alpha x^{\alpha-1}$.\\
+\hlt{Structural Commentary}: Power series define $\mathsf{E}$; inversion gives $\mathsf{L}$ and real powers.\\
+\hlt{Key Insight}: The addition formula is the bridge from coefficients to the logarithm law.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:real-powers-rational-approximation-route} \hlt{Real Powers by Rational Approximation}\\
+One route defines $x^\alpha$ for $x>0$ by choosing $q_n\in\Q$ with $q_n\to\alpha$ and setting $x^\alpha=\lim_{n\to\infty}x^{q_n}$ after proving existence and independence of $(q_n)$. The power-series construction sets $x^\alpha=\mathsf{E}(\alpha\mathsf{L}(x))$; both routes must agree with rational powers and be choice-independent.
+\end{perspective}
+
+\begin{perspective} \label{per:ross-logarithmic-integral-route} \hlt{Logarithmic Integral Route}\\
+With the Riemann integral, set $L(y)\defeq\int_1^y \frac1t\,dt$ for $y>0$. Theorem \ref{thm:integral-function-continuity-and-derivative} gives $L'(y)=1/y$; endpoint limits make $L$ invertible, and Theorem \ref{thm:chain-rule-one-variable} then recovers $E'=E$ and the product laws.
+\end{perspective}
+
+\begin{perspective} \label{per:exponential-factorial-and-improper-integrals} \hlt{From Exponentials to Factorials}\\
+Theorems \ref{thm:exponential-logarithm-from-power-series}, \ref{thm:riemann-integration-by-parts} supply real-power laws and integration-by-parts pattern used for $\Gamma$ in Theorem \ref{thm:gamma-function-basic-theory}.
+\end{perspective}
+
+\begin{theorem} \label{thm:trigonometric-functions-from-exponential} \hlt{Trigonometric Functions from the Exponential}\\
+For real $x$, define $\mathsf{C}(x)\defeq\frac{\mathsf{E}(ix)+\mathsf{E}(-ix)}{2}$ and $\mathsf{S}(x)\defeq\frac{\mathsf{E}(ix)-\mathsf{E}(-ix)}{2i}$.\\
+Then $\mathsf{E}(ix)=\mathsf{C}(x)+i\mathsf{S}(x)$, $\mathsf{C}^2+\mathsf{S}^2=1$; $\mathsf{C}'=-\mathsf{S}$, and $\mathsf{S}'=\mathsf{C}$.\\
+If $x_0=\min\{x>0:\mathsf{C}(x)=0\}$ and $\pi\defeq2x_0$, then $\mathsf{E}(\pi i)=-1$, $\mathsf{E}(2\pi i)=1$, $\mathsf{E}(z+2\pi i)=\mathsf{E}(z)$ for $z\in\C$.\\
+Thus $\mathsf{C},\mathsf{S}$ are $2\pi$-periodic, and $\gamma(t)\defeq \mathsf{E}(it)$ traces the unit circle once on $[0,2\pi]$.
+\begin{proof}
+The definitions give $\mathsf{E}(ix)=\mathsf{C}+i\mathsf{S}$. Since $\mathsf{E}(ix)\mathsf{E}(-ix)=1$, $\abs{\mathsf{E}(ix)}=1$, hence $\mathsf{C}^2+\mathsf{S}^2=1$.\\
+Differentiating the definitions and using Theorem \ref{thm:power-series-uniform-differentiation} gives $\mathsf{C}'=-\mathsf{S}$ and $\mathsf{S}'=\mathsf{C}$.\\
+If $\mathsf{C}$ had no positive zero, then $\mathsf{C}>0$ and $\mathsf{S}'>0$ on $(0,\infty)$.\\
+Thus, for $0<x<y$, $\mathsf{S}(x)(y-x)<\int_x^y \mathsf{S}(t)\,dt=\mathsf{C}(x)-\mathsf{C}(y)\leq2$, impossible for large $y$. Hence $x_0$ exists.\\
+On $(0,\pi/2)$, $\mathsf{C}>0$, so $\mathsf{S}$ increases from $0$ to $\mathsf{S}(\pi/2)=1$; thus $\mathsf{E}(\pi i/2)=i$, and the addition formula gives $\mathsf{E}(\pi i)=-1$, $\mathsf{E}(2\pi i)=1$, and the period.\\
+Finally, $\abs{\mathsf{E}(it)}=1$ and the source quadrant argument give the one-time traversal of the unit circle.\\
+\hlt{Structural Commentary}: Trigonometry comes from the path $\mathsf{E}(it)$.\\
+\hlt{Key Insight}: The identity $\mathsf{E}(ix)\mathsf{E}(-ix)=1$ puts the exponential path on the unit circle.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/exponential_unit_circle.tikz}
+  \caption{$\mathsf{E}(it)=\mathsf{C}(t)+i\mathsf{S}(t)$ traces the unit circle, defining sine and cosine analytically.}
+  \label{fig:exponential-unit-circle}
+\end{figure}
+
+\begin{theorem} \label{thm:fundamental-theorem-algebra-exponential-proof} \hlt{Algebraic Completeness of $\C$}\\
+Every nonconstant complex polynomial has a complex root.
+\begin{proof}
+Let $P(z)=\sum_{j=0}^{n}a_jz^j$, $n\geq1$, and normalize $a_n=1$.\\
+Since $\abs{P(z)}\to\infty$, Theorem \ref{thm:extreme-value-theorem-compact} gives $z_0$ with $\mu\defeq\abs{P(z_0)}=\min_{\C}\abs{P}$. If $\mu=0$, done.\\
+Assume $\mu>0$ and set $Q(w)\defeq P(z_0+w)/P(z_0)$. Then $Q(0)=1$ and $\abs{Q(w)}\geq1$.\\
+Write $Q(w)=1+\sum\limits_{j=k}^{n}b_jw^j$, where $b_k\neq0$ and $k$ is minimal. By Theorem \ref{thm:trigonometric-functions-from-exponential}, choose $\theta$ with $b_ke^{ik\theta}=-\abs{b_k}$.\\
+Then $Q(re^{i\theta})=1-\abs{b_k}r^k+r^{k+1}H(r)$, with $H$ bounded near $0$, so $\abs{Q(re^{i\theta})}<1$ for small $r>0$, contradiction.\\
+\hlt{Structural Commentary}: Minimize, translate, then perturb.\\
+\hlt{Key Insight}: Choose the phase that lowers the first nonzero term.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:gamma-function-basic-theory} \hlt{Gamma Function, Beta Function, and Stirling Skeleton}\\
+For $x>0$, $\Gamma(x+1)=x\Gamma(x)$; $\Gamma(n+1)=n!$ for $n\in\N$; $\log\Gamma$ is convex on $(0,\infty)$.\\
+Moreover, $\Gamma$ is the unique $f:(0,\infty)\to(0,\infty)$ with $f(1)=1$, $f(x+1)=xf(x)$, and $\log f$ convex.\\
+For $x,y>0$, $\mathrm{B}(x,y)\defeq\int_0^1t^{x-1}(1-t)^{y-1}\,dt =\frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}$.\\
+Consequently, $\Gamma\!\left(\frac12\right)=\sqrt{\pi}$; $\int_{-\infty}^{\infty}e^{-s^2}\,ds=\sqrt{\pi}$; $\Gamma(x)=\frac{2^{x-1}}{\sqrt{\pi}}\Gamma\!\left(\frac{x}{2}\right)\Gamma\!\left(\frac{x+1}{2}\right)$; and $\lim_{x\to\infty}\frac{\Gamma(x+1)}{(x/e)^x\sqrt{2\pi x}}=1$.
+\begin{proof}
+Integration by parts gives $\Gamma(x+1)=x\Gamma(x)$; $\Gamma(1)=1$ gives $\Gamma(n+1)=n!$.\\
+Holder's inequality gives log-convexity. For uniqueness, let $\varphi=\log f$.\\
+If $0<x<1$, convexity and $\varphi(x+1)=\varphi(x)+\log x$ give $0\leq \varphi(x)-\log\!\frac{n!\,n^x}{x(x+1)\cdots(x+n)} \leq x\log\!\left(1+\frac1n\right)\to0$.\\
+Thus $f$ is uniquely determined on $(0,1)$, hence on $(0,\infty)$.\\
+For fixed $y>0$, $\mathrm{B}(1,y)=1/y$, $\mathrm{B}(x+1,y)=\frac{x}{x+y}\mathrm{B}(x,y)$, and Holder gives log-convexity in $x$.\\
+Hence $F_y(x)\defeq\frac{\Gamma(x+y)}{\Gamma(y)}\mathrm{B}(x,y)$ satisfies the three uniqueness conditions, so $F_y=\Gamma$.\\
+The consequences follow from $t=\sin^2\theta$, $t=s^2$, the duplication identity, and the substitution $t=x(1+u)$ in the asymptotic proof of Stirling's formula.\\
+\hlt{Structural Commentary}: Functional equation plus convexity gives uniqueness.\\
+\hlt{Key Insight}: Bohr--Mollerup uniqueness turns beta-function identities into gamma identities.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:power-approx-fourier-proof-patterns-source-todo}\label{meth:power-series-approximation-proof-patterns} \hlt{Power-Series and Approximation Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Power series}: work on $K_\rho\Subset I_R$; use uniform convergence before termwise limits or derivatives.
+\item \hlt{Endpoint theorems}: prove identities inside the radius and pass to endpoints with Abel-type control.
+\item \hlt{Approximate identities}: use kernels $Q_n\geq0$, $\int Q_n=1$, with tails $\to0$ off $0$.
+\item \hlt{Uniform closure}: show $a_n\in\mathcal{A}$ and $a_n\rightrightarrows f$.
+\item \hlt{Lattice closure}: derive $\abs{f}$, then $\max,\min$ from algebraic formulas.
+\item \hlt{Stone--Weierstrass}: interpolate locally; use compactness and finite max/min to globalize.
+\item \hlt{Gamma function}: use $\Gamma(x+1)=x\Gamma(x)$, $\Gamma(1)=1$, and log-convexity for uniqueness.
+\end{enumerate}
+\hlt{Key Insight}: Uniform convergence and compactness are what make infinite algebra behave like finite algebra.
+\end{method}

@@ -1,0 +1,77 @@
+\subsection{Hadamard Products}
+
+\begin{definition} \label{def:hadamard-product} \hlt{Hadamard Product}\\
+Let $A=[a_{ij}],B=[b_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
+The \hlt{Hadamard product}, or \hlt{entrywise product}, of $A$ and $B$ is $A\circ B\defeq [a_{ij}b_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-hadamard-identities} \hlt{Basic Hadamard Identities}\\
+For matrices of compatible sizes:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\circ B=B\circ A$;
+\item $A\circ(\gamma B+C)=\gamma(A\circ B)+A\circ C$;
+\item $(A\circ B)^*=A^*\circ B^*$;
+\item if $E$ is the all-ones matrix, then $A\circ E=A$;
+\item if $D=\operatorname{diag}(d_1,\ldots,d_n)$, then $A\circ D=\operatorname{diag}(a_{11}d_1,\ldots,a_{nn}d_n)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(A\circ B)_{ij}=a_{ij}b_{ij}=b_{ij}a_{ij}=(B\circ A)_{ij}$.
+\item $\bigl(A\circ(\gamma B+C)\bigr)_{ij}=a_{ij}(\gamma b_{ij}+c_{ij})=\gamma a_{ij}b_{ij}+a_{ij}c_{ij}$.
+\item $\bigl((A\circ B)^*\bigr)_{ij}=\overline{a_{ji}b_{ji}}=\overline{a_{ji}}\,\overline{b_{ji}}=(A^*\circ B^*)_{ij}$.
+\item $(A\circ E)_{ij}=a_{ij}$.
+\item Since $D$ has zero off-diagonal entries, $A\circ D$ is diagonal with entries $a_{ii}d_i$.
+\end{enumerate}
+\hlt{Structural Commentary}: Hadamard multiplication is entrywise, with no row-column summation.\\
+\hlt{Key Insight}: Prove Hadamard identities entry by entry.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:schur-product-theorem} \hlt{Schur Product Theorem}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $A\circ B$ is positive semidefinite.
+\begin{proof}
+By Theorem \ref{thm:positive-semidefinite-matrix-equivalences}, regard $A$ and $B$ as Gram matrices: $a_{ij}=\innerprod{\mathbf{u}_j,\mathbf{u}_i}$, $b_{ij}=\innerprod{\mathbf{v}_j,\mathbf{v}_i}$ for suitable vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ and $\mathbf{v}_1,\ldots,\mathbf{v}_n$. Then $(A\circ B)_{ij} =\innerprod{\mathbf{u}_j,\mathbf{u}_i}\innerprod{\mathbf{v}_j,\mathbf{v}_i} =\innerprod{\mathbf{u}_j\otimes\mathbf{v}_j,\mathbf{u}_i\otimes\mathbf{v}_i}$.\\
+Thus $A\circ B$ is the Gram matrix of the vectors $\mathbf{u}_j\otimes\mathbf{v}_j$, hence is positive semidefinite by Proposition \ref{prop:gram-matrix-positive-semidefinite}.\\
+\hlt{Structural Commentary}: The Schur product is the Gram matrix of paired tensor vectors.\\
+\hlt{Key Insight}: Pair the $j$th vector from each Gram representation and take tensor products.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/schur_product_gram.tikz}
+  \caption{For Gram matrices, entrywise products become tensor inner products, so $A\circ B$ is Gram.}
+  \label{fig:schur-product-gram}
+\end{figure}
+
+\begin{corollary} \label{cor:hadamard-positive-definite-criterion} \hlt{Positive Definite Hadamard Products}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ is positive definite and every diagonal entry of $B$ is positive, then $A\circ B$ is positive definite.
+\item If $A$ and $B$ are positive definite, then $A\circ B$ is positive definite.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\lambda_{\min}>0$ be the smallest eigenvalue of $A$. Then $A-\lambda_{\min}I_n\succeq0$, so $(A-\lambda_{\min}I_n)\circ B\succeq0$ by Theorem \ref{thm:schur-product-theorem}. Thus, for $\mathbf{x}\neq\mathbf{0}$, $\mathbf{x}^*(A\circ B)\mathbf{x} =\mathbf{x}^*((A-\lambda_{\min}I_n)\circ B)\mathbf{x} \lambda_{\min}\sum\limits_{j=1}^{n}b_{jj}\abs{x_j}^2>0$.
+\item If $B\succ0$, then $b_{jj}=\mathbf{e}_j^*B\mathbf{e}_j>0$ for every $j$, so (i) applies.
+\end{enumerate}
+\hlt{Structural Commentary}: Subtract the spectral floor of $A$; the diagonal of $B$ gives strictness.\\
+\hlt{Key Insight}: Use $I_n\circ B=\operatorname{diag}(b_{11},\ldots,b_{nn})$.
+\end{proof}
+\end{corollary}
+
+\begin{method} \label{meth:schur-product-positivity} \hlt{Schur Product Positivity Method}\\
+To prove an entrywise product is positive semidefinite:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item factor or interpret each matrix as a Gram matrix;
+\item pair the corresponding vectors;
+\item take tensor products of the paired vectors;
+\item identify the Hadamard product as the Gram matrix of those tensor products.
+\end{enumerate}
+\end{method}
+

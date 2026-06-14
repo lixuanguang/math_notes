@@ -1,0 +1,312 @@
+\subsection{Classical Groups and Isometries}
+
+\begin{theorem} \label{thm:orthogonal-bases-and-diagonal-congruence} \hlt{Orthogonal Bases and Diagonal Congruence}\\
+Let $(\mathcal{V},B)$ be an orthogonal geometry, $q(\mathbf{x})\defeq B(\mathbf{x},\mathbf{x})$, $n=\dim\mathcal{V}$, and $r=\operatorname{rank}B$.\\
+Then $\exists$ basis $\beta$ such that $M_{\beta}=\operatorname{diag}(a_1,\ldots,a_r,0_{n-r}),\quad a_i\in\mathbb{F}^{\times} \iff \neg\bigl(\operatorname{char}(\mathbb{F})=2\ \wedge\ q\equiv0\ \wedge\ B\neq0\bigr)$.\\
+Equivalently, a symmetric matrix is congruent to a diagonal matrix iff it is not a nonzero alternating matrix in characteristic $2$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $M_{\beta}$ is diagonal and $\operatorname{char}(\mathbb{F})=2$ with $q\equiv0$, then all diagonal entries of $M_{\beta}$ vanish. Hence $M_{\beta}=0$, so $B=0$.
+\item[$(\Leftarrow)$] If $B=0$, any basis works. Otherwise, the hypothesis and Proposition \ref{prop:form-type-relations-by-characteristic} give $q\not\equiv0$.\\
+Peel off nonisotropic lines, where $\mathcal{V} =\mathbb{F}\mathbf{u}_1\odot\cdots\odot\mathbb{F}\mathbf{u}_s\odot\mathcal{W}$, $q(\mathbf{u}_i)=a_i\in\mathbb{F}^{\times}$, $q|_{\mathcal{W}}\equiv0$.\\
+If $\operatorname{char}(\mathbb{F})\neq2$, Proposition \ref{prop:form-type-relations-by-characteristic} gives $B|_{\mathcal{W}}=0$, so append any basis of $\mathcal{W}$.\\
+If $\operatorname{char}(\mathbb{F})=2$, then $\mathcal{W}=R\odot\mathcal{H}_1\odot\cdots\odot\mathcal{H}_t$ by Theorem \ref{thm:symplectic-geometries-hyperbolic-classification}.\\
+For each hyperbolic plane $\mathcal{H}_j=\operatorname{span}(\mathbf{e},\mathbf{f})$, rescale so $B(\mathbf{e},\mathbf{f})=a=q(\mathbf{u})$ for some current nonisotropic $\mathbf{u}$.\\
+Then $\mathbb{F}\mathbf{u}\odot\mathcal{H}_j = \mathbb{F}(\mathbf{u}+\mathbf{e}) \odot \mathbb{F}(\mathbf{u}+\mathbf{f}) \odot \mathbb{F}(\mathbf{u}+\mathbf{e}+\mathbf{f})$ is orthogonal with all three norms $a$.\\
+Absorb all $\mathcal{H}_j$ and append any basis of $R$.
+\end{enumerate}
+\hlt{Structural Commentary}: Only nonzero alternating characteristic-$2$ blocks obstruct diagonals.\\
+\hlt{Key Insight}: Peel off nonisotropic lines until only the radical or characteristic-$2$ alternating residue remains.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:characteristic-two-orthogonal-symplectic-plane} \hlt{Characteristic Two Orthogonal-Symplectic Plane}\\
+Assume $\operatorname{char}(\mathbb{F})=2$. Let $\mathcal{H}=\mathbb{F}\mathbf{e}\oplus\mathbb{F}\mathbf{f}$ with Gram matrix $\begin{bmatrix}
+0&1\\
+1&0
+\end{bmatrix}$.\\
+Then $B$ is symmetric, alternating, and nonsingular. For every $a,b\in\mathbb{F}$, $B(a\mathbf{e}+b\mathbf{f},a\mathbf{e}+b\mathbf{f})=2ab=0$, so $\mathcal{H}$ is both orthogonal and symplectic. If $0\neq\mathbf{x}\in\mathcal{H}$, then $\{\mathbf{x}\}^{\perp}=\mathbb{F}\mathbf{x}$; hence no two independent nonzero vectors are orthogonal. Thus $\mathcal{H}$ has no orthogonal basis, the obstruction excluded in Theorem \ref{thm:orthogonal-bases-and-diagonal-congruence}.
+\end{example}
+
+\begin{method} \label{meth:lagrange-orthogonalization-arbitrary-field} \hlt{Lagrange Orthogonalization}\\
+Let $\mathcal{V}$ be an orthogonal geometry with $\operatorname{char}(\mathbb{F})\neq2$, and set $q(\mathbf{x})=\innerprod{\mathbf{x},\mathbf{x}}$.\\
+From a generating list $L=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$, construct an orthogonal basis as follows.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item In the current summand with generators $(\mathbf{x}_i)$, choose a pivot $\mathbf{u}$ with $q(\mathbf{u})\neq0$; if none exists, stop with a totally degenerate remainder. If all $\mathbf{x}_i$ are isotropic but the summand is not totally degenerate, take $\mathbf{u}=\mathbf{x}_i+\mathbf{x}_j$ with $\innerprod{\mathbf{x}_i,\mathbf{x}_j}\neq0$.
+\item Given mutually orthogonal pivots $\mathbf{u}_1,\ldots,\mathbf{u}_k$, let $S_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$.\\
+Replace each generator $\mathbf{x}_i$ by $\mathbf{w}_i = \mathbf{x}_i-\sum\limits_{j=1}^{k} \frac{\innerprod{\mathbf{x}_i,\mathbf{u}_j}}{q(\mathbf{u}_j)}\mathbf{u}_j$. Then the nonzero $\mathbf{w}_i$ generate $S_k^{\perp}$.
+\item Iterate inside $S_k^{\perp}$ until the remaining summand $R$ is totally degenerate.\\
+Output $\beta=(\mathbf{u}_1,\ldots,\mathbf{u}_r,\mathbf{z}_1,\ldots,\mathbf{z}_m)$, where $(\mathbf{z}_1,\ldots,\mathbf{z}_m)$ is any basis of $R$.
+\end{enumerate}
+Only nonisotropic pivots are allowed, since the projection step divides by $q(\mathbf{u}_j)\neq0$.
+\end{method}
+
+\begin{theorem} \label{thm:orthogonal-canonical-forms-common-fields} \hlt{Canonical Orthogonal Forms over Common Fields}\\
+Let $M=M^t\in M_n(\mathbb{F})$, let $r=\operatorname{rank}M$, and write $M\sim N$ for congruence. If $\operatorname{char}(\mathbb{F})=2$, assume $M$ is not nonzero alternating.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathbb{F}$ is algebraically closed, then $M\sim I_r\oplus0_{n-r}$; $r$ is complete.
+\item If $\mathbb{F}=\mathbb{R}$, then $M\sim I_p\oplus(-I_m)\oplus0_k$ with $p+m+k=n$; $(p,m)$ is complete.
+\item If $\mathbb{F}=\mathbb{F}_q$ and $\operatorname{char}(\mathbb{F})=2$, then $M\sim I_r\oplus0_{n-r}$.
+\item If $\mathbb{F}=\mathbb{F}_q$ has odd characteristic and $d\in\mathbb{F}_q^{\times}$ is a fixed nonsquare,\\
+then for $r>0$, $M\sim I_r\oplus0_{n-r}$ or $M\sim I_{r-1}\oplus[d]\oplus0_{n-r}$ with exactly one alternative; for $r=0$, $M\sim0_n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:orthogonal-bases-and-diagonal-congruence}, write $M\sim\operatorname{diag}(a_1,\ldots,a_r,0_{n-r})$ with $a_i\neq0$.\\
+If $\mathbb{F}$ is algebraically closed, $a_i=s_i^2$, so scaling by $s_i^{-1}$ gives $M\sim I_r\oplus0_{n-r}$.
+\item Write $M\sim\operatorname{diag}(a_1,\ldots,a_r,0_k)$ over $\mathbb{R}$. Rescaling gives $a_i=\pm1$, hence $M\sim I_p\oplus(-I_m)\oplus0_k$.\\
+Uniqueness of $(p,m)$ is Sylvester's inertia theorem, Theorem \ref{thm:sylvester-inertia-theorem-hermitian}.
+\item Write $M\sim\operatorname{diag}(a_1,\ldots,a_r,0_{n-r})$ over $\mathbb{F}_q$ with $\operatorname{char}(\mathbb{F}_q)=2$.\\
+Since $x\mapsto x^2$ is an automorphism, each $a_i$ is a square; hence $M\sim I_r\oplus0_{n-r}$.
+\item Write $M\sim\operatorname{diag}(a_1,\ldots,a_r,0_{n-r})$ over odd $\mathbb{F}_q$. Since $\mathbb{F}_q^{\times}/(\mathbb{F}_q^{\times})^2=\{1,d\}$, the nonsingular diagonal part is determined by its discriminant square class $\delta(M)\defeq a_1\cdots a_r\pmod{(\mathbb{F}_q^{\times})^2}$, giving $I_r$ when $\delta(M)=1$ and $I_{r-1}\oplus[d]$ when $\delta(M)=d$. Appending the zero block gives the stated forms, and $\delta$ separates them.
+\end{enumerate}
+\hlt{Structural Commentary}: Once diagonalized, congruence classification becomes square-class bookkeeping.\\
+\hlt{Key Insight}: The base field determines how many diagonal coefficients can be normalized to $1$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:universal-orthogonal-geometry} \hlt{Universal Orthogonal Geometry}\\
+An orthogonal geometry $\mathcal{V}$ over $\mathbb{F}$ is \hlt{universal} if its norm map $q(\mathbf{x})\defeq\innerprod{\mathbf{x},\mathbf{x}}$ represents every scalar $q(\mathcal{V})=\mathbb{F}$.
+\end{definition}
+
+\begin{proposition} \label{prop:finite-field-square-classes-and-universality} \hlt{Finite-Field Square Classes and Universality}\\
+Let $\mathbb{F}_q$ be a finite field and let $S=(\mathbb{F}_q^{\times})^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\operatorname{char}(\mathbb{F}_q)=2$, then every element of $\mathbb{F}_q$ is a square.
+\item If $\operatorname{char}(\mathbb{F}_q)\neq2$, then $|S|=(q-1)/2$ and $\mathbb{F}_q^{\times}\setminus S=dS$ for any nonsquare $d$.
+\item If $\mathcal{V}$ is orthogonal over odd $\mathbb{F}_q$ and contains a nonsingular subspace of dimension $\geq2$, then $\mathcal{V}$ is universal.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The map $\varphi:\mathbb{F}_q\to\mathbb{F}_q$, $\varphi(x)=x^2$, is the Frobenius automorphism in characteristic $2$.
+\item For $\operatorname{char}(\mathbb{F}_q)\neq2$, the homomorphism $\varphi:\mathbb{F}_q^{\times}\to\mathbb{F}_q^{\times}$, $\varphi(x)=x^2$, has kernel $\{\pm1\}$.\\
+Hence $|S|=(q-1)/2$, and the nonsquares are the other coset $dS$.
+\item Let $q(\mathbf{x})=\innerprod{\mathbf{x},\mathbf{x}}$. By Theorem \ref{thm:orthogonal-bases-and-diagonal-congruence}, the nonsingular subspace contains orthogonal nonisotropic $\mathbf{u},\mathbf{v}$; set $a=q(\mathbf{u})$, $b=q(\mathbf{v})$. For fixed $c\in\mathbb{F}_q$, the sets $A=a\{\alpha^2:\alpha\in\mathbb{F}_q\}$ and $B=c-b\{\beta^2:\beta\in\mathbb{F}_q\}$ both have $(q+1)/2$ elements, so $A\cap B\neq\varnothing$. Thus $c=a\alpha^2+b\beta^2=q(\alpha\mathbf{u}+\beta\mathbf{v})$ for some $\alpha,\beta\in\mathbb{F}_q$.
+\end{enumerate}
+\hlt{Structural Commentary}: Over finite fields, cardinality replaces order arguments.\\
+\hlt{Key Insight}: Two half-sized subsets of a finite field must overlap.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:finite-field-orthogonal-rank-two-classes} \hlt{Two Rank-Two Orthogonal Planes over $\mathbb{F}_5$}\\
+In $\mathbb{F}_5$, $(\mathbb{F}_5^{\times})^2=\{1,4\}$ and the nonsquare class is $\{2,3\}$. Let $q_1(x,y)=x^2+y^2$, $q_2(x,y)=x^2+2y^2$.\\
+Then $q_1$ has Gram matrix $I_2$ and is hyperbolic, since $q_1(1,2)=1+4=0$.\\
+The form $q_2$ has Gram matrix $\operatorname{diag}(1,2)$ and is anisotropic: if $q_2(x,y)=0$ with $y\neq0$, then $\left(\frac{x}{y}\right)^2=-2=3$, impossible since $3$ is nonsquare; if $y=0$, then $x=0$.\\
+Thus $I_2$ and $\operatorname{diag}(1,2)$ realize the two nonsingular rank-$2$ classes in Theorem \ref{thm:orthogonal-canonical-forms-common-fields}.\\
+\hlt{Structural Commentary}: Odd finite-field classes are square-class classes.\\
+\hlt{Key Insight}: In rank $2$, the square class of the determinant decides
+whether the plane is hyperbolic or anisotropic.
+\end{example}
+
+\begin{lemma} \label{lem:odd-finite-field-anisotropic-residue-bound} \hlt{Odd Finite-Field Isotropy Bound}\\
+Let $\mathbb{F}_q$ have odd characteristic, $\mathcal{V}$ be nonsingular orthogonal with $q(\mathbf{x})\defeq\innerprod{\mathbf{x},\mathbf{x}}$. Let $\mathcal{H}$ be hyperbolic plane.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\dim\mathcal{V}\geq3$, then $\mathcal{V}$ is isotropic.
+\item $\mathcal{V}\cong\mathcal{H}^{\odot s}\odot\mathcal{R}$, where $\mathcal{R}$ is nonsingular anisotropic and $\dim\mathcal{R}\leq2$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:orthogonal-bases-and-diagonal-congruence}, choose a nonsingular plane $\mathcal{P}\subset\mathcal{V}$ and $0\neq\mathbf{z}\in\mathcal{P}^{\perp}$. If $q(\mathbf{z})=0$, then $\mathbf{z}$ is isotropic. Otherwise Proposition \ref{prop:finite-field-square-classes-and-universality} gives $\mathbf{p}\in\mathcal{P}$ with $q(\mathbf{p})=-q(\mathbf{z})$, so $\mathbf{p}+\mathbf{z}$ is isotropic.
+\item Induct on $\dim\mathcal{V}$. If $\mathcal{V}$ is anisotropic, take $s=0$ and $\mathcal{R}=\mathcal{V}$; then (i) gives $\dim\mathcal{R}\leq2$. Otherwise Theorem \ref{thm:isotropic-vector-sits-in-hyperbolic-plane} gives $\mathcal{V}\cong\mathcal{H}\odot\mathcal{W}$ with $\mathcal{W}$ nonsingular and $\dim\mathcal{W}=\dim\mathcal{V}-2$, so induction gives the decomposition.
+\end{enumerate}
+\hlt{Structural Commentary}: Odd finite fields force isotropy in dimension $\geq3$.\\
+\hlt{Key Insight}: Hyperbolic splitting leaves only a residue of dimension at most $2$.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:odd-finite-field-witt-decomposition} \hlt{Odd Finite-Field Orthogonal Decomposition}\\
+Let $\mathbb{F}_q$ have odd characteristic, fix a nonsquare $d\in\mathbb{F}_q^{\times}$, and let $\mathcal{V}$ be nonsingular orthogonal.\\
+Write $\mathcal{H}$ for a hyperbolic plane, $\langle a\rangle$ for a line of value $a$, and $\mathcal{A}_d\defeq\langle1\rangle\odot\langle-d\rangle$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\dim\mathcal{V}=2m+1$, then $\exists\,a\in\mathbb{F}_q^{\times}$ such that $\mathcal{V}\cong\mathcal{H}^{\odot m}\odot\langle a\rangle$, and $a(\mathbb{F}_q^{\times})^2=(-1)^m\Delta(\mathcal{V})$.
+\item If $\dim\mathcal{V}=2m$, then exactly one holds: $\mathcal{V}\cong\mathcal{H}^{\odot m} \iff \Delta(\mathcal{V})=(-1)^m(\mathbb{F}_q^{\times})^2$\\
+or $\mathcal{V}\cong\mathcal{H}^{\odot(m-1)}\odot\mathcal{A}_d \iff \Delta(\mathcal{V})=(-1)^m d(\mathbb{F}_q^{\times})^2$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Lemma \ref{lem:odd-finite-field-anisotropic-residue-bound}, $\mathcal{V}\cong\mathcal{H}^{\odot m}\odot\mathcal{R}$ with $\dim\mathcal{R}=1$, so $\mathcal{R}\cong\langle a\rangle$.\\
+Since $\Delta(\mathcal{H})=-(\mathbb{F}_q^{\times})^2$, $\Delta(\mathcal{V})=(-1)^m a(\mathbb{F}_q^{\times})^2$, hence $a(\mathbb{F}_q^{\times})^2=(-1)^m\Delta(\mathcal{V})$.
+\item By Lemma \ref{lem:odd-finite-field-anisotropic-residue-bound}, $\mathcal{V}\cong\mathcal{H}^{\odot s}\odot\mathcal{R}$ with $\dim\mathcal{R}=0$ or $2$. If $\dim\mathcal{R}=0$, then $s=m$ and $\Delta(\mathcal{V})=(-1)^m(\mathbb{F}_q^{\times})^2$. If $\dim\mathcal{R}=2$, then $s=m-1$ and Proposition \ref{prop:hyperbolic-plane-orthogonal-criteria} shows that the anisotropic residue is the nonsquare class $\mathcal{A}_d$, with $\Delta(\mathcal{A}_d)=-d(\mathbb{F}_q^{\times})^2$; hence $\Delta(\mathcal{V})=(-1)^m d(\mathbb{F}_q^{\times})^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: The anisotropic residue has dimension $\leq2$.\\
+\hlt{Key Insight}: Parity and discriminant determine the residue.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:characteristic-two-quadratic-refinements-finite-field} \hlt{Quadratic Refinements over $\mathbb{F}_2$}\\
+On $V=\mathbb{F}_2^2$, set $B((x,y),(u,v))=xv+yu$, $Q_0(x,y)=xy$, $Q_1(x,y)=x^2+xy+y^2$. Then $B_{Q_0}=B_{Q_1}=B$, the unique nonsingular alternating plane over $\mathbb{F}_2$. However, $Q_0^{-1}(0)\setminus\{\mathbf{0}\}=\{(1,0),(0,1)\}$, $Q_1^{-1}(0)=\{\mathbf{0}\}$.\\
+Hence $Q_0\not\cong Q_1$ although they have the same polar form.\\
+\hlt{Structural Commentary}: One polar form, two refinements.\\
+\hlt{Key Insight}: Track $Q$, not only $B_Q$.
+\end{example}
+
+\begin{definition} \label{def:arf-invariant-over-f2} \hlt{Arf Invariant over $\mathbb{F}_2$}\\
+Let $Q:\mathcal{V}\to\mathbb{F}_2$ be quadratic.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Its \hlt{polar form} is $B_Q(\mathbf{x},\mathbf{y})=Q(\mathbf{x}+\mathbf{y})+Q(\mathbf{x})+Q(\mathbf{y})$ and is assumed nonsingular.
+\item For a \hlt{symplectic basis} $\beta=(\mathbf{u}_1,\mathbf{v}_1,\ldots,\mathbf{u}_m,\mathbf{v}_m)$ of $B_Q$,\\
+the \hlt{Arf invariant} is $\operatorname{Arf}(Q) \defeq \sum\limits_{i=1}^{m} Q(\mathbf{u}_i)Q(\mathbf{v}_i) \in\mathbb{F}_2$, independent of $\beta$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:f2-quadratic-refinements-arf-classification} \hlt{Quadratic Refinements over $\mathbb{F}_2$}\\
+Let $Q:\mathcal{V}\to\mathbb{F}_2$ be quadratic with nonsingular polar form $B_Q$. Then $\dim\mathcal{V}=2m$, and $Q\cong Q_{\operatorname{Arf}(Q)}$.\\
+Here $Q_0(x_1,y_1,\ldots,x_m,y_m) \defeq\sum\limits_{i=1}^{m}x_iy_i$ and, for $m\geq1$, $Q_1(x_1,y_1,\ldots,x_m,y_m) \defeq x_1^2+x_1y_1+y_1^2+\sum\limits_{i=2}^{m}x_iy_i$.\\
+$Q_0$ has Arf invariant $0$, and $Q_1$ has Arf invariant $1$.
+\begin{proof} As $B_Q$ nonsingular alternating, Theorem \ref{thm:symplectic-geometries-hyperbolic-classification} gives symplectic basis $(\mathbf{u}_1,\mathbf{v}_1,\ldots,\mathbf{u}_m,\mathbf{v}_m)$, $\dim\mathcal{V}=2m$.\\
+On each hyperbolic pair $(\mathbf{u},\mathbf{v})$, if $Q(\mathbf{u})Q(\mathbf{v})=0$, a change of pair gives the refined plane $xy$.\\
+If $Q(\mathbf{u})=Q(\mathbf{v})=1$, the plane is $x^2+xy+y^2$.\\
+Thus $Q$ is an orthogonal sum of refined planes of types $H_Q:=xy$ and $A_Q:=x^2+xy+y^2$.\\
+Since $A_Q\odot A_Q\cong H_Q\odot H_Q$, all pairs of anisotropic refinements cancel.\\
+Remaining parity is $\operatorname{Arf}(Q)=\sum\limits_{i=1}^{m}Q(\mathbf{u}_i)Q(\mathbf{v}_i)\in\mathbb{F}_2$, so $Q\cong Q_0$ when $\operatorname{Arf}(Q)=0$ and $Q\cong Q_1$ when $\operatorname{Arf}(Q)=1$.\\
+\hlt{Structural Commentary}: In characteristic $2$, the same symplectic polar form supports two quadratic geometries.\\
+\hlt{Key Insight}: The Arf invariant is the missing one-bit datum that the polar bilinear form cannot see.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:metric-isometry-and-classical-groups} \hlt{Isometries and Classical Groups}\\
+Let $\mathcal{V},\mathcal{W}$ be metric vector spaces.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A bijective linear map $\sigma:\mathcal{V}\to\mathcal{W}$ is an \hlt{isometry} if $\innerprod{\sigma\mathbf{x},\sigma\mathbf{y}} =\innerprod{\mathbf{x},\mathbf{y}} \ \forall \mathbf{x},\mathbf{y}\in\mathcal{V}$.
+\item The group of isometries $\mathcal{V}\to\mathcal{V}$ is denoted $\operatorname{Iso}(\mathcal{V})$. If $\mathcal{V}$ is nonsingular orthogonal, this is the \hlt{orthogonal group} $\mathcal{O}(\mathcal{V})$; if $\mathcal{V}$ is nonsingular symplectic, this is the \hlt{symplectic group} $\operatorname{Sp}(\mathcal{V})$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:matrix-criterion-for-metric-isometries} \hlt{Matrix Criterion for Isometries}\\
+Let $\beta$ be a basis of a metric vector space $\mathcal{V}$, let $M=M_{\beta}$, and let $A=[\sigma]_{\beta\leftarrow\beta}$.\\
+Then $\sigma\in\operatorname{Iso}(\mathcal{V})$ $\iff$ $\sigma$ is bijective and $A^tMA=M$. If $M$ is nonsingular, then $\det A=\pm1$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\sigma$ is an isometry, then it is bijective and, for all coordinate vectors $X,Y$,\\
+$X^tA^tMAY=(AX)^tM(AY)=X^tMY$. Hence $A^tMA=M$.
+\item[$(\Leftarrow)$] If $\sigma$ is bijective and $A^tMA=M$, then for all $\mathbf{x},\mathbf{y}\in\mathcal{V}$ with coordinate vectors $X,Y$,\\
+$\innerprod{\sigma\mathbf{x},\sigma\mathbf{y}} =(AX)^tM(AY) =X^tMY =\innerprod{\mathbf{x},\mathbf{y}}$, so $\sigma$ is an isometry.
+\end{enumerate}
+If $M$ is invertible, taking determinants in $A^tMA=M$ gives $(\det A)^2=1$, hence $\det A=\pm1$.\\
+\hlt{Structural Commentary}: Isometries are exactly the coordinate changes that stabilize the representing matrix.\\
+\hlt{Key Insight}: Orthogonal and symplectic groups are stabilizer groups under congruence.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:isometry-fixed-space} \hlt{Fixed Spaces of Isometries}\\
+Let $\mathcal{V}$ be nonsingular and let $\tau\in\operatorname{Iso}(\mathcal{V})$. Then $\ker(I-\tau)=\operatorname{im}(I-\tau)^{\perp}$, and $\dim\ker(I-\tau)=\dim\operatorname{im}(I-\tau)^{\perp}$.
+\begin{proof}
+If $\mathbf{x}$ is fixed by $\tau$, then for every $\mathbf{y}$, $\innerprod{\mathbf{x},(I-\tau)\mathbf{y}} =\innerprod{\mathbf{x},\mathbf{y}}-\innerprod{\tau\mathbf{x},\tau\mathbf{y}}=0$, so $\ker(I-\tau)\subseteq\operatorname{im}(I-\tau)^{\perp}$.\\
+The dimensions agree by rank-nullity and Theorem \ref{thm:metric-orthogonal-complement-dimension}, hence equality holds.\\
+\hlt{Structural Commentary}: The fixed space of an isometry is the orthogonal complement of its displacement space.\\
+\hlt{Key Insight}: Fixed vectors are exactly vectors orthogonal to all displacements.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:symmetries-fixed-hyperplanes} \hlt{Symmetries and Fixed Hyperplanes}\\
+Let $\mathcal{V}$ be nonsingular orthogonal with $\operatorname{char}(\mathbb{F})\neq2$, and let $\tau\in\mathcal{O}(\mathcal{V})$ with $\tau\neq I$. Then $\tau=\sigma_{\mathbf{u}}$ for some nonisotropic $\mathbf{u}$ $\iff$ $\ker(I-\tau)$ is a nonsingular hyperplane.
+In this case $\ker(I-\sigma_{\mathbf{u}})=\operatorname{span}(\mathbf{u})^{\perp}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] The formula for $\sigma_{\mathbf{u}}$ gives $\sigma_{\mathbf{u}}\mathbf{u}=-\mathbf{u}$ and fixes $\operatorname{span}(\mathbf{u})^{\perp}$ pointwise.\\
+Hence $\ker(I-\sigma_{\mathbf{u}})=\operatorname{span}(\mathbf{u})^{\perp}$, a nonsingular hyperplane.
+\item[$(\Leftarrow)$] Let $\mathcal{H}=\ker(I-\tau)$ be a nonsingular hyperplane and write $\mathcal{V}=\mathcal{H}\odot\mathcal{L}$ with $\dim\mathcal{L}=1$.\\
+Since $\tau$ fixes $\mathcal{H}$ and is an isometry, $\tau\mathcal{L}=\mathcal{L}$. Thus $\tau|_{\mathcal{L}}=\lambda I$ with $\lambda^2=1$; as $\tau\neq I$ and $\operatorname{char}(\mathbb{F})\neq2$, $\lambda=-1$. For $0\neq\mathbf{u}\in\mathcal{L}$, $\tau=\sigma_{\mathbf{u}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Symmetries are exactly fixed-hyperplane isometries.\\
+\hlt{Key Insight}: A symmetry fixes a nonsingular hyperplane and flips its orthogonal line.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:anisotropic-space-has-no-nontrivial-unipotent-isometries} \hlt{No Unipotent Isometries in Anisotropic Spaces}\\
+Let $\mathcal{V}$ be nonsingular anisotropic. If $\tau\in\operatorname{Iso}(\mathcal{V})$ is unipotent, then $\tau=I$.
+\begin{proof}
+Put $N=\tau-I$. Then $N$ is nilpotent and, by Proposition \ref{prop:metric-adjoints-and-isometries}, $N^*=\tau^*-I=\tau^{-1}-I\in N\mathbb{F}[N]$.\\
+If $N\neq0$, choose maximal $k\geq1$ with $N^k\neq0$ and choose $\mathbf{x}$ with $\mathbf{u}=N^k\mathbf{x}\neq0$.\\
+Since $N^{k+1}=0$ and $(N^*)^k\in N^k\mathbb{F}[N]$, $\innerprod{\mathbf{u},\mathbf{u}} =\innerprod{N^k\mathbf{x},N^k\mathbf{x}} =\innerprod{\mathbf{x},(N^*)^kN^k\mathbf{x}}=0$, contradicting anisotropy. Hence $N=0$ and $\tau=I$.\\
+\hlt{Structural Commentary}: Top nilpotent displacements are isotropic.\\
+\hlt{Key Insight}: An anisotropic form leaves no room for unipotent shear.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:orthogonal-symmetry-rotation-reflection} \hlt{Rotations, Reflections, and Symmetries}\\
+Let $\mathcal{V}$ be a nonsingular orthogonal geometry.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\sigma\in\mathcal{O}(\mathcal{V})$, $\det\sigma=1$ means $\sigma$ is a \hlt{rotation}, and $\det\sigma=-1$ means $\sigma$ is a \hlt{reflection}.
+\item If $\operatorname{char}(\mathbb{F})\neq2$ and $q(\mathbf{u})=\innerprod{\mathbf{u},\mathbf{u}}\neq0$, the \hlt{symmetry} in the line $\mathbb{F}\mathbf{u}$ is $\sigma_{\mathbf{u}}(\mathbf{x}) =\mathbf{x}-2\frac{\innerprod{\mathbf{x},\mathbf{u}}}{\innerprod{\mathbf{u},\mathbf{u}}}\mathbf{u}$.\\
+It satisfies $\sigma_{\mathbf{u}}\mathbf{u}=-\mathbf{u}$ and $\sigma_{\mathbf{u}}|_{\operatorname{span}(\mathbf{u})^{\perp}}=I$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:symmetry-matches-equal-length-nonisotropic-vectors} \hlt{Matching Equal-Length Vectors by a Symmetry}\\
+Let $\mathcal{V}$ be nonsingular orthogonal with $\operatorname{char}(\mathbb{F})\neq2$, and set $q(\mathbf{x})=\innerprod{\mathbf{x},\mathbf{x}}$.\\
+If $q(\mathbf{u})=q(\mathbf{v})\neq0$,  then $\exists$ a symmetry $\sigma$ with $\sigma\mathbf{u}=\mathbf{v}$ or $\sigma\mathbf{u}=-\mathbf{v}$.
+\begin{proof}
+Let $\mathbf{a}=\mathbf{u}-\mathbf{v}$ and $\mathbf{b}=\mathbf{u}+\mathbf{v}$. Then $\innerprod{\mathbf{a},\mathbf{b}}=q(\mathbf{u})-q(\mathbf{v})=0$.\\
+They cannot both be isotropic: if $q(\mathbf{a})=q(\mathbf{b})=0$, then $q(2\mathbf{u})=0$, contradicting $q(\mathbf{u})\neq0$.\\If $q(\mathbf{a})\neq0$, then $\sigma_{\mathbf{a}}\mathbf{u}=\mathbf{v}$; if $q(\mathbf{b})\neq0$, then $\sigma_{\mathbf{b}}\mathbf{u}=-\mathbf{v}$.\\
+\hlt{Structural Commentary}: One symmetry matches equal-length lines.\\
+\hlt{Key Insight}: Use $\mathbf{u}\pm\mathbf{v}$ as the reflecting direction.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:orthogonal-transformations-products-of-symmetries} \hlt{Orthogonal Transformations Are Products of Symmetries}\\
+Let $\mathcal{V}$ be nonsingular orthogonal with $\operatorname{char}(\mathbb{F})\neq2$, and set $q(\mathbf{x})\defeq\innerprod{\mathbf{x},\mathbf{x}}$. Then $\mathcal{O}(\mathcal{V}) = \left\langle \sigma_{\mathbf{u}}:q(\mathbf{u})\neq0\right\rangle$.
+\begin{proof}
+Induct on $n=\dim\mathcal{V}$.\\
+If $n=0$, this is trivial; if $n=1$, any $\tau\in\mathcal{O}(\mathcal{V})$ acts on a nonisotropic line by $\pm1$, hence is $I$ or the symmetry of that line. For $n>1$, choose $\mathbf{u}$ with $q(\mathbf{u})\neq0$. Since $q(\tau\mathbf{u})=q(\mathbf{u})$, Proposition \ref{prop:symmetry-matches-equal-length-nonisotropic-vectors} gives a symmetry $\sigma$ with $\sigma\tau\mathbf{u}=\mathbf{u}$ or $-\mathbf{u}$. Composing further with $\sigma_{\mathbf{u}}$ if necessary, obtain a product $\rho$ of symmetries such that $\rho\tau$ fixes $\mathbf{u}$. Hence $\rho\tau$ preserves $\operatorname{span}(\mathbf{u})^\perp$, and its restriction lies in $\mathcal{O}(\operatorname{span}(\mathbf{u})^\perp)$.\\
+By induction, this restriction is a product of symmetries in $\operatorname{span}(\mathbf{u})^\perp$, extended by $I$ on $\mathbb{F}\mathbf{u}$; these are symmetries of $\mathcal{V}$. Thus $\tau$ is a product of symmetries.\\
+\hlt{Structural Commentary}: Symmetries are the orthogonal analogue of elementary generators.\\
+\hlt{Key Insight}: Match one nonisotropic line, then reduce to its orthogonal complement.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:orthogonal-witt-cancellation-and-extension} \hlt{Witt Theorems for Orthogonal Geometries}\\
+Let $\mathcal{V}\cong\mathcal{V}'$ be nonsingular orthogonal geometries over $\mathbb{F}$ with $\operatorname{char}(\mathbb{F})\neq2$, and write $q(\mathbf{x})\defeq\innerprod{\mathbf{x},\mathbf{x}}$.\\
+If $\mathcal{S}\subseteq\mathcal{V}$ and $\mathcal{T}\subseteq\mathcal{V}'$ are nonsingular and $\tau:\mathcal{S}\to\mathcal{T}$ is an isometry, then for $\mathcal{S}^{\perp}\cong\mathcal{T}^{\perp}$ $\exists$ $\Phi$ such that $\mathcal{V}\to\mathcal{V}'$ isometric with $\Phi|_{\mathcal{S}}=\tau$.
+\begin{proof}
+By Proposition \ref{prop:witt-extension-cancellation-bridge}, it suffices to prove cancellation. Transport along a fixed isometry $\mathcal{V}\cong\mathcal{V}'$ and assume $\mathcal{V}'=\mathcal{V}$. Thus $\mathcal{V}=\mathcal{S}\odot\mathcal{S}^{\perp} =\mathcal{T}\odot\mathcal{T}^{\perp}$, with $\tau:\mathcal{S}\to\mathcal{T}$ an isometry.\\
+Induct on $r=\dim\mathcal{S}$. If $r=0$, the claim is trivial. If $r=1$, write $\mathcal{S}=\mathbb{F}\mathbf{s}$ with $q(\mathbf{s})\neq0$. Since $q(\tau\mathbf{s})=q(\mathbf{s})$, Proposition \ref{prop:symmetry-matches-equal-length-nonisotropic-vectors} gives $\sigma\in\mathcal{O}(\mathcal{V})$ with $\sigma\mathcal{S}=\mathcal{T}$; hence $\sigma(\mathcal{S}^{\perp})=\mathcal{T}^{\perp}$.\\
+For $r>1$, choose $\mathbf{s}\in\mathcal{S}$ with $q(\mathbf{s})\neq0$ and write $\mathcal{S}=\mathbb{F}\mathbf{s}\odot\mathcal{U}$. By case $r=1$, choose $\sigma\in\mathcal{O}(\mathcal{V})$ with $\sigma(\mathbb{F}\mathbf{s})=\mathbb{F}\tau\mathbf{s}$.\\
+Inside $\mathcal{W}\defeq(\mathbb{F}\tau\mathbf{s})^{\perp}$, $\mathcal{W} = \sigma\mathcal{U}\odot\sigma(\mathcal{S}^{\perp}) = \tau\mathcal{U}\odot\mathcal{T}^{\perp}$, $\sigma\mathcal{U}\cong\tau\mathcal{U}$. Since $\dim\mathcal{U}<r$, induction in $\mathcal{W}$ gives $\sigma(\mathcal{S}^{\perp})\cong\mathcal{T}^{\perp}$. Thus $\mathcal{S}^{\perp}\cong\mathcal{T}^{\perp}$. Cancellation follows, and extension follows from Proposition \ref{prop:witt-extension-cancellation-bridge}.\\
+\hlt{Structural Commentary}: Orthogonal Witt cancellation reduces one nonisotropic line at a time.\\
+\hlt{Key Insight}: Symmetries align the first line; induction handles the remaining orthogonal complement.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:orthogonal-witt-index} \hlt{Witt Index}\\
+Let $\mathcal{V}$ be nonsingular orthogonal with $\operatorname{char}(\mathbb{F})\neq2$.  The \hlt{Witt index} is $w(\mathcal{V})\defeq\max\{\dim\mathcal{L}:\mathcal{L}\leq\mathcal{V},\ \mathcal{L}\subseteq\mathcal{L}^{\perp}\}$.
+\end{definition}
+
+\begin{theorem} \label{thm:orthogonal-witt-index-and-anisotropic-decomposition} \hlt{Witt Index and Anisotropic Decomposition}\\
+Let $\mathcal{V}$ be orthogonal over $\mathbb{F}$ with $\operatorname{char}(\mathbb{F})\neq2$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item if $\mathcal{V}$ is nonsingular, every maximal totally isotropic subspace has dimension $w(\mathcal{V})$;
+\item if $\mathcal{V}$ is nonsingular, every maximal hyperbolic subspace has dimension $2w(\mathcal{V})$;
+\item for $R=\operatorname{rad}(\mathcal{V})$ and a nonsingular complement $\mathcal{U}$ of $R$, there exist $\mathcal{H}\leq\mathcal{U}$ hyperbolic and $\mathcal{S}\leq\mathcal{U}$ anisotropic such that $\mathcal{V}=\mathcal{S}\odot\mathcal{H}\odot R$, $\dim\mathcal{H}=2w(\mathcal{U})$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathcal{L}$ be maximal totally isotropic and choose $\mathcal{M}$ totally isotropic with $\dim\mathcal{M}=w(\mathcal{V})$.\\
+Since $\dim\mathcal{L}\leq w(\mathcal{V})$, choose $\mathcal{M}_0\leq\mathcal{M}$ with $\dim\mathcal{M}_0=\dim\mathcal{L}$.\\
+Any isomorphism $\mathcal{L}\to\mathcal{M}_0$ is an isometry, so Theorem \ref{thm:witt-extension-theorem-metric-spaces} extends it to $\Phi\in\mathcal{O}(\mathcal{V})$.\\
+Then $\mathcal{L}\subseteq\Phi^{-1}\mathcal{M}$; maximality gives $\mathcal{L}=\Phi^{-1}\mathcal{M}$, hence $\dim\mathcal{L}=w(\mathcal{V})$.
+\item If $\mathcal{H}$ has $k$ hyperbolic planes, then $\mathcal{H}$ contains a $k$-dimensional totally isotropic subspace, so $k\leq w(\mathcal{V})$.\\
+Conversely, Theorem \ref{thm:nonsingular-completions-hyperbolic-extensions} completes a $w(\mathcal{V})$-dimensional totally isotropic subspace to a hyperbolic subspace $\mathcal{H}_0$ of dimension $2w(\mathcal{V})$.  If a maximal hyperbolic $\mathcal{H}$ had dimension $2k<2w(\mathcal{V})$, choose hyperbolic $\mathcal{H}_1\leq\mathcal{H}_0$ with $\dim\mathcal{H}_1=2k$ and extend an isometry $\mathcal{H}\to\mathcal{H}_1$ to $\Phi\in\mathcal{O}(\mathcal{V})$; then $\Phi^{-1}\mathcal{H}_0$ is a larger hyperbolic subspace containing $\mathcal{H}$, contradiction.
+\item By Theorem \ref{thm:radical-splitting-metric-space}, $\mathcal{V}=R\odot\mathcal{U}$ with $\mathcal{U}$ nonsingular. Choose maximal hyperbolic $\mathcal{H}\leq\mathcal{U}$ and set $\mathcal{S}=\mathcal{H}^{\perp}\cap\mathcal{U}$. Then $\dim\mathcal{H}=2w(\mathcal{U})$ by (ii), and $\mathcal{U}=\mathcal{H}\odot\mathcal{S}$. If $\mathcal{S}$ had a nonzero isotropic vector, Theorem \ref{thm:isotropic-vector-sits-in-hyperbolic-plane} would give a hyperbolic plane in $\mathcal{S}$, enlarging $\mathcal{H}$; hence $\mathcal{S}$ is anisotropic.
+\end{enumerate}
+\hlt{Structural Commentary}: Orthogonal spaces split into radical, hyperbolic part, and anisotropic residue.\\
+\hlt{Key Insight}: The Witt index counts how many hyperbolic planes can be split off.
+\end{proof}
+\end{theorem}

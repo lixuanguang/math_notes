@@ -1,0 +1,94 @@
+\subsection{Point Processes and Renewal Structure}
+% Poisson processes, renewal processes, counting processes, compensators preview.
+
+Counting processes model random event arrivals over time. The Poisson process is the basic model in which disjoint time intervals contribute independent counts and short intervals usually contain either zero or one event.
+
+\begin{definition} \label{def:counting-process} \hlt{Counting Process}\\
+A \hlt{counting process} is a stochastic process $\{X(t):t\geq0\}$ with state space $\{0,1,2,\ldots\}$ such that $X(t)$ records the number of events observed up to and including time $t$.
+\end{definition}
+
+\begin{definition} \label{def:poisson-process-intensity} \hlt{Poisson Process with Intensity Function}\\
+Let $\lambda:[0,\infty)\to[0,\infty)$ be locally integrable.\\
+A counting process $X=\{X(t):t\geq0\}$ is a \hlt{Poisson process} with \hlt{intensity function} $\lambda$ if:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X(0)=0$.
+\item For $0=t_0<t_1<\cdots<t_n$, the increments $\Delta_kX\defeq X(t_k)-X(t_{k-1})$, $1\leq k\leq n$, are independent.
+\item For each $t\geq0$, as $h\downarrow0$, $\mathbb{P}(X(t+h)-X(t)=1)=\lambda(t)h+o(h)$ and $\mathbb{P}(X(t+h)-X(t)\geq2)=o(h)$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:poisson-process-increments-distribution} \hlt{Increment Distribution}\\
+Let $X$ be a Poisson process with intensity $\lambda$, and set $\Lambda(s,t)\defeq\int_s^t\lambda(u)\,du$ for $0\leq s\leq t$.\\
+Then $X(t)-X(s)\sim\operatorname{Poisson}(\Lambda(s,t))$. In particular, $X(t)\sim\operatorname{Poisson}(\Lambda(0,t))$, so $\mathbb{E}X(t)=\mathbb{V}X(t)=\Lambda(0,t)$.
+\begin{proof} Fix $s\geq0$ and let $p_k(u)\defeq\mathbb{P}(X(s+u)-X(s)=k)$ with $p_{-1}\defeq0$. By small-time conditions and independent increments, $p_k(u+h)=p_k(u)(1-\lambda(s+u)h+o(h))+p_{k-1}(u)\lambda(s+u)h+o(h)$.\\
+Hence $p_k'(u)=-\lambda(s+u)p_k(u)+\lambda(s+u)p_{k-1}(u)$, with $p_0(0)=1$ and $p_k(0)=0$ for $k\geq1$.\\
+Writing $M(u)\defeq\Lambda(s,s+u)$, the unique solution is $p_k(u)=e^{-M(u)}M(u)^k/k!$ by induction on $k$.\\
+Taking $u=t-s$ yields $X(t)-X(s)\sim\operatorname{Poisson}(\Lambda(s,t))$. Mean-variance identities follow from Poisson law.\\
+\hlt{Structural Commentary}: The infinitesimal jump rules form a triangular system for the increment probabilities.\\
+\hlt{Key Insight}: Integrating the local rate $\lambda$ gives the Poisson mean over the interval.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:homogeneous-poisson-process} \hlt{Homogeneous Poisson Process}\\
+If $\lambda(t)\equiv\lambda>0$, then $X(t)$ is a \hlt{homogeneous Poisson process} with \hlt{rate} $\lambda$. In this case, $X(t)\sim\operatorname{Poisson}(\lambda t)$.
+\end{definition}
+
+\begin{definition} \label{def:poisson-waiting-sojourn-times} \hlt{Waiting and Interarrival Times}\\
+For a homogeneous Poisson process:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $W_0=0$ and $W_n\defeq\inf\{t\geq0:X(t)\geq n\}$ for $n\geq1$; $W_1,W_2,\ldots$ are \hlt{waiting times}.
+\item Set $S_n\defeq W_{n+1}-W_n$ for $n\geq0$; $S_0,S_1,\ldots$ are \hlt{sojourn} or \hlt{interarrival times}.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:poisson-interarrival-exponential} \hlt{Poisson Interarrival Times}\\
+Let $X$ be a homogeneous Poisson process with rate $\lambda>0$.\\
+Then $S_0,S_1,\ldots\stackrel{\mathrm{iid}}{\sim}\operatorname{Exp}(\lambda)$, with density $f(s)=\lambda e^{-\lambda s}$ for $s\geq0$.\\
+For $n\geq1$, $W_n=\sum_{r=0}^{n-1}S_r\sim\operatorname{Gamma}(n,1/\lambda)$, so $\mathbb{E}W_n=n/\lambda$ and $\mathbb{V}W_n=n/\lambda^2$.
+\begin{proof} For $t\geq0$, $\mathbb{P}(S_0>t)=\mathbb{P}(X(t)=0)=e^{-\lambda t}$, so $S_0\sim\operatorname{Exp}(\lambda)$.\\
+By independent stationary increments, $\mathbb{P}(S_n>t\mid\mathcal{F}_{W_n})=\mathbb{P}(X(W_n+t)-X(W_n)=0\mid\mathcal{F}_{W_n})=e^{-\lambda t}$.\\
+Thus each $S_n\sim\operatorname{Exp}(\lambda)$ and is independent of the past, so the $S_n$ are IID.\\
+Since $W_n=\sum_{r=0}^{n-1}S_r$, the Gamma law and its mean and variance follow.\\
+\hlt{Structural Commentary}: Arrival times are cumulative sums of IID interarrival gaps.\\
+\hlt{Key Insight}: No events in a length-$t$ interval has probability $e^{-\lambda t}$.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:poisson-event-times-uniform-diagnostic} \hlt{Uniform Event-Time Diagnostic}\\
+For a homogeneous Poisson process on $[0,T]$, conditional on $X(T)=n$, the event times $(W_1,\ldots,W_n)$ have the law of the order statistics of $n$ IID $\operatorname{Uniform}(0,T)$ variables.\\
+Marked nonuniformity in the observed event times is evidence against homogeneity.
+\end{remark}
+
+\begin{proposition} \label{prop:poisson-conditional-binomial-count} \hlt{Conditional Binomial Count}\\
+Let $X$ be a homogeneous Poisson process with rate $\lambda>0$.\\
+For $s,t>0$ and $n\in\mathbb{N}_0$, $X(t)\mid X(t+s)=n\sim\operatorname{Binomial}(n,t/(t+s))$.
+\begin{proof} Let $Y=X(t)$ and $Z=X(t+s)-X(t)$. Then $Y\sim\operatorname{Poisson}(\lambda t)$, $Z\sim\operatorname{Poisson}(\lambda s)$, and $Y\perp Z$.\\
+For $0\leq k\leq n$, $\mathbb{P}(Y=k\mid Y+Z=n)=\frac{(\lambda t)^k(\lambda s)^{n-k}/(k!(n-k)!)}{(\lambda(t+s))^n/n!}=\binom{n}{k}(t/(t+s))^k(s/(t+s))^{n-k}$.\\
+Thus $Y\mid Y+Z=n\sim\operatorname{Binomial}(n,t/(t+s))$.\\
+\hlt{Structural Commentary}: Conditioning on the total allocates independent Poisson counts.\\
+\hlt{Key Insight}: Independent Poisson counts become multinomial after conditioning on their sum.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:poisson-odd-count-probability} \hlt{Odd Poisson Count}\\
+Let $X$ be a homogeneous Poisson process with rate $\lambda>0$. For $t\geq0$, $\mathbb{P}(X(t)\in2\mathbb{N}_0+1)=(1-e^{-2\lambda t})/2$.
+\begin{proof}
+Let $\mu=\lambda t$. Since $X(t)\sim\operatorname{Poisson}(\mu)$,\\
+$\mathbb{P}(X(t)\in2\mathbb{N}_0+1)=e^{-\mu}\sum_{k=0}^{\infty}\mu^{2k+1}/(2k+1)!=e^{-\mu}\sinh\mu=(1-e^{-2\mu})/2$.\\
+\hlt{Structural Commentary}: Split the Poisson mass by parity.\\
+\hlt{Key Insight}: The odd terms of $e^{\mu}$ sum to $\sinh\mu$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:planar-poisson-nearest-neighbor} \hlt{Nearest Neighbor in a Planar Poisson Process}\\
+Let $\Phi$ be a planar Poisson point process with intensity $\lambda>0$, fix $x_0\in\mathbb{R}^2$, and set $R\defeq\inf_{Y\in\Phi}\norm{Y-x_0}$.\\
+Then for $t\geq0$, $\mathbb{P}(R>t)=e^{-\lambda\pi t^2}$, and $\mathbb{E}R=1/(2\sqrt{\lambda})$.
+\begin{proof} Let $B_t\defeq B(x_0,t)$ and $N_t\defeq\#(\Phi\cap B_t)$.\\
+Then $N_t\sim\operatorname{Poisson}(\lambda\pi t^2)$ and $\{R>t\}=\{N_t=0\}$, so $\mathbb{P}(R>t)=e^{-\lambda\pi t^2}$.\\
+Since $R\geq0$, $\mathbb{E}R=\int_0^\infty\mathbb{P}(R>t)\,dt=\int_0^\infty e^{-\lambda\pi t^2}\,dt=1/(2\sqrt{\lambda})$.\\
+\hlt{Structural Commentary}: Nearest-neighbor distance is encoded by empty disks around $x_0$.\\
+\hlt{Key Insight}: The tail of $R$ is the zero-count probability of a Poisson disk count.
+\end{proof}
+\end{proposition}

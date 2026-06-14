@@ -1,0 +1,212 @@
+\subsection{Principal Minors and Inertia}
+
+\begin{definition} \label{def:principal-and-leading-principal-minors} \hlt{Principal and Leading Principal Minors}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the determinant of a principal submatrix of $A$.\\
+A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
+\end{definition}
+
+\begin{theorem} \label{thm:sylvester-positive-definite-criterion-leading-minors} \hlt{Sylvester's Criterion}\\
+A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite if and only if all leading principal minors are positive.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A\succ0$, then each leading principal submatrix is positive definite by Corollary \ref{cor:positive-semidefinite-principal-block-column-inclusion}. Its eigenvalues are positive, so its determinant is positive.
+\item[$(\Leftarrow)$] Induct on $n$. If $n=1$, the single leading principal minor is the only diagonal entry, so positivity of that minor is exactly positive definiteness. Assume $n\geq2$ and write $A=
+\begin{bmatrix}
+B & \mathbf{y}\\
+\mathbf{y}^* & a
+\end{bmatrix}$, $B\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$\\
+The leading principal minors of $B$ are positive, so $B\succ0$.\\
+Since $\det(B)>0$ and $\det(A)>0$, Proposition \ref{prop:schur-complement-determinant-formula} gives $a-\mathbf{y}^*B^{-1}\mathbf{y}=\frac{\det(A)}{\det(B)}>0$.\\
+For $\mathbf{u}\in\mathbb{C}^{n-1}$ and $t\in\mathbb{C}$, $\begin{bmatrix}\mathbf{u}\\ t\end{bmatrix}^*
+A
+\begin{bmatrix}\mathbf{u}\\ t\end{bmatrix} =(\mathbf{u}+B^{-1}\mathbf{y}t)^*B(\mathbf{u}+B^{-1}\mathbf{y}t) +\left(a-\mathbf{y}^*B^{-1}\mathbf{y}\right)\abs{t}^2$.\\
+First term is nonnegative as $B\succ0$, and second coefficient is positive. If displayed vector is nonzero, then either $t\neq0$ and second term is positive, or $t=0$ and then $\mathbf{u}\neq0$, making first term positive. Thus $A\succ0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Leading minors make each leading block positive and final Schur complement positive.\\
+\hlt{Key Insight}: Complete the square with the leading block.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:two-by-two-quadratic-form-test} \hlt{$2\times2$ Quadratic Form Test}\\
+Let $A=\begin{bmatrix}a&b\\ b&c\end{bmatrix}$ be real symmetric, $\Delta=ac-b^2$, and $q(x,y)=\begin{bmatrix}x&y\end{bmatrix}A\begin{bmatrix}x\\y\end{bmatrix}=ax^2+2bxy+cy^2$.\\
+For $a\neq0$, $q(x,y)=a\left(x+\frac{b}{a}y\right)^2+\frac{\Delta}{a}y^2$.\\
+If $a=0$, swap variables when $c\neq0$; if $a=c=0$, use $q=2bxy$. Thus:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $q\succ0$ if and only if $a>0$ and $\Delta>0$;
+\item $q\prec0$ if and only if $a<0$ and $\Delta>0$;
+\item $q$ is indefinite if and only if $\Delta<0$;
+\item if $\Delta=0$, then $q\succeq0$ iff $a,c\geq0$, and $q\preceq0$ iff $a,c\leq0$.
+\end{enumerate}
+This is the $2\times2$ form of Sylvester's criterion and inertia.\\
+\hlt{Structural Commentary}: Completing the square is the $2\times2$ shadow of the $LDL^*$ and Schur-complement tests.\\
+\hlt{Key Insight}: $\Delta$ and the leading sign classify the form.
+\end{method}
+
+\begin{corollary} \label{cor:positive-semidefinite-zero-quadratic-form} \hlt{Zero Quadratic Form Detects the Kernel}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\mathbf{x}^*A\mathbf{x}=0$ if and only if $A\mathbf{x}=0$.
+\begin{proof}
+Write $A=B^*B$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{x}^*A\mathbf{x}=0$, then $\norm{B\mathbf{x}}_2^2=0$, so $B\mathbf{x}=0$ and hence $A\mathbf{x}=B^*B\mathbf{x}=0$.
+\item[$(\Leftarrow)$] If $A\mathbf{x}=0$, then $\mathbf{x}^*A\mathbf{x}=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: A zero PSD quadratic value has no hidden cancellation.\\
+\hlt{Key Insight}: Zero length-square means the factored vector itself is zero.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:positive-semidefinite-stability-rules} \hlt{Stability Rules for Positive Semidefinite Matrices}\\
+Let $A,B\succeq0$ over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Whenever the expressions are defined:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $aA+bB\succeq0$ for $a,b\geq0$; if $a,b>0$ and one of $A,B$ is positive definite, then $aA+bB\succ0$.
+\item $S^*AS\succeq0$; moreover, $S^*AS\succ0$ if and only if $S\mathbf{x}\notin\ker(A)$ for all $\mathbf{x}\neq\mathbf{0}$.
+\item $A\oplus B\succeq0$, with $A\oplus B\succ0$ if and only if $A\succ0$ and $B\succ0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbf{x}^*(aA+bB)\mathbf{x}=a\mathbf{x}^*A\mathbf{x}+b\mathbf{x}^*B\mathbf{x}\geq0$. If, for example, $A\succ0$ and $a>0$, then for every nonzero $\mathbf{x}$ the first summand is positive and the second is nonnegative, so $aA+bB\succ0$; the case $B\succ0$ is identical.
+\item $\mathbf{x}^*S^*AS\mathbf{x}=(S\mathbf{x})^*A(S\mathbf{x})\geq0$. By Corollary \ref{cor:positive-semidefinite-zero-quadratic-form}, equality occurs exactly when $S\mathbf{x}\in\ker(A)$.
+\item $(\mathbf{x}\oplus\mathbf{y})^*(A\oplus B)(\mathbf{x}\oplus\mathbf{y})=\mathbf{x}^*A\mathbf{x}+\mathbf{y}^*B\mathbf{y}\geq0$. This expression is positive for every nonzero $\mathbf{x}\oplus\mathbf{y}$ exactly when each summand is positive on its own nonzero vectors, namely when $A\succ0$ and $B\succ0$.
+\end{enumerate}
+\hlt{Structural Commentary}: The PSD cone is stable under sums, pullbacks, and direct sums.\\
+\hlt{Key Insight}: Test the quadratic form after each construction.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:two-by-two-positive-semidefinite-square-root} \hlt{Explicit Square Root for a $2\times2$ Positive Semidefinite Matrix}\\
+Let $A\in\operatorname{Mat}(2,2,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, be positive semidefinite and nonzero. Set $\tau=\bigl(\operatorname{tr}A+2\sqrt{\det A}\bigr)^{1/2}$.\\
+Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$.
+\begin{proof}
+Let $C=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$. By Proposition \ref{prop:trace-determinant-positive-semidefinite}, $\det A\geq0$ and $\operatorname{tr}A>0$, hence $\tau>0$; by Theorem \ref{thm:positive-semidefinite-stability-rules}, $C\succeq0$. Cayley--Hamilton gives $A^2-(\operatorname{tr}A)A+(\det A)I_2=0$, so
+\begin{align}
+C^2 =\frac{1}{\tau^2}\bigl(A^2+2\sqrt{\det A}\,A+(\det A)I_2\bigr) =\frac{1}{\tau^2}\bigl((\operatorname{tr}A)A+2\sqrt{\det A}\,A\bigr)=A.
+\nonumber
+\end{align}
+Thus $C=A^{1/2}$ by uniqueness of the positive semidefinite square root.\\
+\hlt{Structural Commentary}: In dimension $2$, Cayley--Hamilton makes $A^{1/2}$ linear in $A$.\\
+\hlt{Key Insight}: Square the linear candidate and use Cayley--Hamilton.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:simultaneous-congruence-one-positive-definite-form} \hlt{Simultaneous Congruence with One Positive Definite Form}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be Hermitian, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and let $A\succ0$.\\
+Then, for some invertible $S$ and real diagonal $\Lambda$, $A=SS^*$ and $B=S\Lambda S^*$.\\
+The diagonal entries of $\Lambda$ are the eigenvalues of $A^{-1}B$.
+\begin{proof}
+Let $C=A^{-1/2}BA^{-1/2}=U\Lambda U^*$ be spectral decomposition, $S=A^{1/2}U$. Then $SS^*=A$ and $S\Lambda S^*=B$.\\
+Also $A^{-1}B=A^{-1/2}CA^{1/2}$, so $A^{-1}B$ is similar to $C$ and has eigenvalues given by the diagonal entries of $\Lambda$.\\
+\hlt{Structural Commentary}: The positive definite form $A$ normalizes $B$ to a Hermitian matrix.\\
+\hlt{Key Insight}: Normalize, diagonalise, then transform back.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:positive-definite-hermitian-product-spectrum} \hlt{Products with One Positive Definite Factor}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and let $A\succ0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $B$ is Hermitian, then $AB$ is diagonalizable with real spectrum.
+\item If $B\succeq0$, then $AB$ is diagonalizable with nonnegative real spectrum; if $B\neq0$, one eigenvalue is positive.
+\item If $B\succ0$, then $AB$ is diagonalizable with positive real spectrum.
+\end{enumerate}
+\begin{proof}
+Let $C=A^{1/2}BA^{1/2}$. Since $A^{-1/2}(AB)A^{1/2}=C$, the matrices $AB$ and $C$ are similar.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $B$ is Hermitian, then $C$ is Hermitian, hence diagonalizable with real spectrum.
+\item If $B\succeq0$, then $C\succeq0$ by Theorem \ref{thm:positive-semidefinite-stability-rules}, so its spectrum is nonnegative.\\
+If $B\neq0$, then $C\neq0$, hence some eigenvalue is positive.
+\item If $B\succ0$, then $C\succ0$ by Theorem \ref{thm:positive-semidefinite-stability-rules}, so all eigenvalues are positive.
+\end{enumerate}
+\hlt{Structural Commentary}: A positive definite factor makes $AB$ similar to a Hermitian congruence.\\
+\hlt{Key Insight}: Use $AB\sim A^{1/2}BA^{1/2}$.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:real-quadratic-form-principal-axes} \hlt{Principal Axes for Real Quadratic Forms}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{R})$ be symmetric. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item there are a real orthogonal $Q$ and real $\lambda_1,\ldots,\lambda_n$ such that, with $\mathbf{y}=Q^t\mathbf{x}$, $\mathbf{x}^tA\mathbf{x}=\sum\limits_{j=1}^{n}\lambda_jy_j^2$.
+\item $A\succeq0$ if and only if every $\lambda_j\geq0$;
+\item $A\succ0$ if and only if every $\lambda_j>0$;
+\item $A$ is indefinite if and only if some $\lambda_j>0$ and some $\lambda_k<0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By the real spectral theorem, write $A=Q\operatorname{diag}(\lambda_1,\ldots,\lambda_n)Q^t$.\\
+Then $\mathbf{x}^tA\mathbf{x} =\mathbf{x}^tQ\operatorname{diag}(\lambda_j)Q^t\mathbf{x} =\mathbf{y}^t\operatorname{diag}(\lambda_j)\mathbf{y} =\sum\limits_{j=1}^{n}\lambda_jy_j^2$.
+\item The displayed sum is nonnegative for all $\mathbf{y}$ exactly when each coefficient $\lambda_j$ is nonnegative.
+\item The displayed sum is positive for all nonzero $\mathbf{y}$ exactly when each coefficient $\lambda_j$ is positive.
+\item The diagonal form takes both signs exactly when its coefficients include both signs.
+\end{enumerate}
+\hlt{Structural Commentary}: Principal axes turn the form into signed squares.\\
+\hlt{Key Insight}: Eigenvalue signs classify the quadratic form.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:quadratic-form-principal-axes} \hlt{Quadratic Form Principal-Axes Method}\\
+To analyse a real quadratic form:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item write it as $\mathbf{x}^tA\mathbf{x}$ with $A=A^t$; split each cross coefficient equally between $a_{ij}$ and $a_{ji}$;
+\item diagonalise $A=Q\Lambda Q^t$;
+\item change variables by $\mathbf{y}=Q^t\mathbf{x}$;
+\item classify the form from the signs of the eigenvalues in $\Lambda$.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/quadratic_form_principal_axes.tikz}
+  \caption{Orthogonal coordinates reveal the principal axes of a quadratic form.}
+  \label{fig:quadratic-form-principal-axes}
+\end{figure}
+
+\begin{definition} \label{def:star-congruence-and-hermitian-inertia} \hlt{$*$-Congruence and Hermitian Inertia}\\
+Two matrices $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are \hlt{$*$-congruent} if $A=SBS^*$ for some invertible $S\in\operatorname{Mat}(n,n,\mathbb{C})$.\\
+For Hermitian $A$, its \hlt{inertia} is $\operatorname{in}(A)=(n_+(A),n_-(A),n_0(A))$, where these are the numbers of positive, negative, and zero eigenvalues of $A$, counted with multiplicity.
+\end{definition}
+
+\begin{perspective} \label{per:ordinary-congruence-bilinear-form-bridge} \hlt{Congruence versus Similarity}\\
+Similarity $B=P^{-1}AP$ is change of basis for an operator. Congruence $N=P^tMP$ is change of basis for a bilinear form, with the same basis change in both slots. Over $\mathbb{R}$ this is the real case of $*$-congruence. Hence inertia classifies forms, not similarity classes of operators.
+\end{perspective}
+
+\begin{lemma} \label{lem:positive-subspace-dimension-inertia} \hlt{Positive Subspaces and Inertia}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian. The maximal dimensions of subspaces on which $\mathbf{x}^*A\mathbf{x}$ is positive or negative for every nonzero $\mathbf{x}$ are $n_+(A)$ and $n_-(A)$, respectively.
+\begin{proof}
+Let $P_+$, $P_{\leq0}$ be positive, nonpositive spectral subspaces. Then $\dim P_+=n_+(A)$, $P_+$ is positive for $A$.\\
+If $\dim\mathcal{U}>n_+(A)$, then $\dim\mathcal{U}+\dim P_{\leq0}>n_+(A)+n_-(A)+n_0(A)=n$, so $\mathcal{U}\cap P_{\leq0}$ contains a nonzero vector.\\
+On this vector quadratic form is nonpositive, so $\mathcal{U}$ cannot be positive. Apply this to $-A$ for negative case.\\
+\hlt{Structural Commentary}: The positive spectral subspace is maximal; the nonpositive part blocks enlargement.\\
+\hlt{Key Insight}: Inertia counts maximal sign-definite dimensions.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:sylvester-inertia-theorem-hermitian} \hlt{Sylvester's Inertia Theorem}\\
+Hermitian matrices $A,B$ of the same size are $*$-congruent if and only if $n_+(A)=n_+(B)$ and $n_-(A)=n_-(B)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $A=SBS^*$ with $S$ invertible. Then $\mathbf{x}^*A\mathbf{x}=(S^*\mathbf{x})^*B(S^*\mathbf{x})$.\\
+Thus $S^*$ transports positive and negative subspaces, so Lemma \ref{lem:positive-subspace-dimension-inertia} gives $n_\pm(A)=n_\pm(B)$.
+\item[$(\Leftarrow)$] Let the common inertia be $(p,q,r)$ and set $D=I_p\oplus(-I_q)\oplus0_r$.\\
+By the spectral theorem, each of $A$ and $B$ is $*$-congruent to $D$, hence they are $*$-congruent to each other.
+\end{enumerate}
+\hlt{Structural Commentary}: $*$-congruence is a coordinate change for Hermitian quadratic forms.\\
+\hlt{Key Insight}: Spectral decomposition reduces the form to signed squares and zero directions.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/sylvester_inertia_congruence.tikz}
+  \caption{$*$-congruence reduces a Hermitian form to signed coordinate axes.}
+  \label{fig:sylvester-inertia-congruence}
+\end{figure}
+

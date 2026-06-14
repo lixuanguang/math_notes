@@ -1,0 +1,33 @@
+\subsection{Optimization for Deep Learning}
+
+The old optimization notes are migrated here only where the algorithms are used as training methods for neural networks.  General numerical optimization belongs to Part 14.
+
+\begin{definition} \label{def:sl-neural-empirical-objective} \hlt{Neural Empirical Objective}\\
+For network $f(x;\theta)$ and per-example loss $L$, training commonly minimizes
+\[
+J(\theta)=\frac1n\sum_{i=1}^nL(f(x_i;\theta),y_i).
+\]
+The population target replaces the empirical average by expectation under the data-generating distribution.
+\end{definition}
+
+\begin{method} \label{method:sl-sgd-minibatch} \hlt{Minibatch Stochastic Gradient Descent}\\
+At iteration $k$, sample a minibatch $B_k$ and use
+\[
+g_k=\frac{1}{\abs{B_k}}\sum_{i\in B_k}\nabla_{\theta}L(f(x_i;\theta_k),y_i),
+\qquad
+\theta_{k+1}=\theta_k-\eta_kg_k.
+\]
+The minibatch gradient is noisy but cheaper than a full-batch gradient.
+\end{method}
+
+\begin{definition} \label{def:sl-momentum-adaptive-methods} \hlt{Momentum and Adaptive Methods}\\
+Momentum keeps an exponentially decaying velocity of past gradients.  AdaGrad, RMSProp, and Adam rescale updates coordinatewise using accumulated first or second moment estimates of gradients.
+\end{definition}
+
+\begin{remark} \label{rem:sl-deep-optimization-challenges} \hlt{Deep Optimization Challenges}\\
+Ill-conditioning, saddle regions, plateaus, exploding gradients, vanishing gradients, and noisy objectives make neural-network optimization different from convex empirical risk minimization.  Initialization, normalization, clipping, skip connections, and learning-rate schedules are therefore part of the training method.
+\end{remark}
+
+\begin{remark} \label{rem:sl-second-order-methods} \hlt{Second-Order Methods}\\
+Newton, conjugate-gradient, BFGS, and L-BFGS ideas can be adapted to learning problems, but full Hessian methods are usually too costly for large networks.  Their practical role is often indirect: preconditioning, curvature approximations, or analysis.
+\end{remark}

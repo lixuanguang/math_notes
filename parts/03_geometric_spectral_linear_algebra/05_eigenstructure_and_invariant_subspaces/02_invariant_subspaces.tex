@@ -1,0 +1,172 @@
+\subsection{Invariant Subspaces}
+
+\begin{definition} \label{def:invariant-subspace} \hlt{Invariant Subspace}\\
+Let $T\in\LL(\mathcal{V})$. A subspace $\mathcal{U}$ of $\mathcal{V}$ is \hlt{invariant under $T$} if $T\mathbf{u}\in\mathcal{U}$ for every $\mathbf{u}\in\mathcal{U}$.\\
+The set of all $T$-invariant subspaces is $\operatorname{Inv}(T)\defeq\{\mathcal{U}\leq\mathcal{V}:T\mathcal{U}\subseteq\mathcal{U}\}$.\\
+\hlt{Key Insight}: $\mathcal{U}$ is invariant under $T$ iff $T|_{\mathcal{U}}\in\LL(\mathcal{U})$.
+\end{definition}
+
+\begin{proposition} \label{prop:one-dimensional-invariant-subspaces-and-eigenvectors} \hlt{One-Dimensional Invariant Subspaces and Eigenvectors}\\
+Let $T\in\LL(\mathcal{V})$, $\mathbf{v}\neq\mathbf{0}$. Then $\operatorname{span}(\mathbf{v})$ is invariant under $T$ if and only if there exists $\lambda\in\mathbb{F}$ such that $T\mathbf{v}=\lambda\mathbf{v}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\operatorname{span}(\mathbf{v})$ is invariant under $T$, then $T\mathbf{v}\in\operatorname{span}(\mathbf{v})$, so $T\mathbf{v}=\lambda\mathbf{v}$ for some $\lambda\in\mathbb{F}$.
+\item[$(\Leftarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ and $\mathbf{u}=a\mathbf{v}\in\operatorname{span}(\mathbf{v})$, then $T\mathbf{u}=aT\mathbf{v}=a\lambda\mathbf{v}\in\operatorname{span}(\mathbf{v})$.
+\end{enumerate}
+\hlt{Structural Commentary}: One-dimensional invariance means rescaling one direction.\\
+\hlt{Key Insight}: In dimension one, staying inside the subspace means being a scalar multiple of the same vector.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/eigenline_scaling.tikz}
+  \caption{An eigendirection is a one-dimensional invariant subspace.}
+  \label{fig:eigenline-scaling}
+\end{figure}
+
+\begin{proposition} \label{prop:invariant-subspaces-and-block-form} \hlt{Invariant Subspaces and Block Form}\\
+Let $T \in \LL(\mathcal{V})$ and suppose $\mathcal{V} = \mathcal{U} \oplus \mathcal{W}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{U}$ is invariant under $T$, then in a basis adapted to $\mathcal{U} \oplus \mathcal{W}$, matrix of $T$ has upper block-triangular form
+\begin{align}
+\begin{bmatrix}
+A & B \\
+0 & D
+\end{bmatrix}. \nonumber
+\end{align}
+\item If both $\mathcal{U}$ and $\mathcal{W}$ are invariant under $T$, then the matrix of $T$ has the block-diagonal form
+\begin{align}
+\begin{bmatrix}
+A & 0 \\
+0 & D
+\end{bmatrix}. \nonumber
+\end{align}
+\end{enumerate}
+\begin{proof}
+Choose basis $(\mathbf{u}_1,\ldots,\mathbf{u}_p)$ of $\mathcal{U}$ and basis $(\mathbf{w}_1,\ldots,\mathbf{w}_q)$ of $\mathcal{W}$, and use concatenation as basis of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{U}$ is invariant, then each $T\mathbf{u}_j$ lies in $\mathcal{U}$, so its coordinates along $\mathbf{w}_1,\ldots,\mathbf{w}_q$ are zero. These entries form the lower-left block.
+\item If $\mathcal{W}$ is also invariant, then each $T\mathbf{w}_j$ lies in $\mathcal{W}$, so its coordinates along $\mathbf{u}_1,\ldots,\mathbf{u}_p$ are zero. These entries form the upper-right block.
+\end{enumerate}
+\hlt{Structural Commentary}: Block form records how an operator moves vectors between chosen summands. Invariant summands force the corresponding off-diagonal movement to vanish.\\
+\hlt{Key Insight}: Zero blocks are coordinate evidence of invariant subspaces.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:reducing-pair-and-direct-sum-operator} \hlt{Reducing Pair}\\
+Let $T\in\LL(\mathcal{V})$. A pair of subspaces $(\mathcal{U},\mathcal{W})$ \hlt{reduces} $T$ if $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$; $T(\mathcal{U})\subseteq\mathcal{U}$; and $T(\mathcal{W})\subseteq\mathcal{W}$.\\
+Then $T=T|_{\mathcal{U}}\oplus T|_{\mathcal{W}}$ with respect to $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$.
+\end{definition}
+
+\begin{proposition} \label{prop:reducing-pairs-and-algebraic-projections} \hlt{Reducing Pairs and Projections}\\
+Let $T\in\LL(\mathcal{V})$, let $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$, and let $\rho=\rho_{\mathcal{U},\mathcal{W}}$. Then $(\mathcal{U},\mathcal{W})$ reduces $T$ $\Longleftrightarrow$ $T\rho=\rho T$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $\mathbf{v}=\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$.\\
+Since both summands are invariant, $T\rho\mathbf{v}=T\mathbf{u}$ and $\rho T\mathbf{v}=\rho(T\mathbf{u}+T\mathbf{w})=T\mathbf{u}$. Thus $T\rho=\rho T$.
+\item[$(\Leftarrow)$] Suppose $T\rho=\rho T$. If $\mathbf{u}\in\mathcal{U}$, then $\rho(T\mathbf{u})=T(\rho\mathbf{u})=T\mathbf{u}$, so $T\mathbf{u}\in\operatorname{range}(\rho)=\mathcal{U}$.\\
+If $\mathbf{w}\in\mathcal{W}$, then $\rho(T\mathbf{w})=T(\rho\mathbf{w})=\mathbf{0}$, so $T\mathbf{w}\in\ker(\rho)=\mathcal{W}$. Hence $(\mathcal{U},\mathcal{W})$ reduces $T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Commutation with $\rho$ means $T$ preserves the two projection components.\\
+\hlt{Key Insight}: Reducing pairs are exactly decompositions whose projection commutes with $T$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:invariant-subspace-projection-criterion} \hlt{Invariant Subspaces and Algebraic Projections}\\
+Let $T\in\LL(\mathcal{V})$, let $\mathcal{V}=\mathcal{U}\oplus\mathcal{W}$, and let $\rho=\rho_{\mathcal{U},\mathcal{W}}$. Then $\mathcal{U}\in\operatorname{Inv}(T)$ $\Longleftrightarrow$ $\rho T\rho=T\rho$.\\
+Consequently, if $\mathcal{U}\in\operatorname{Inv}(T)$, then $\rho_{\mathcal{U},\mathcal{Z}}T\rho_{\mathcal{U},\mathcal{Z}}=T\rho_{\mathcal{U},\mathcal{Z}}$ for every complement $\mathcal{Z}$ of $\mathcal{U}$.
+\begin{proof}
+For $\mathbf{v}=\mathbf{u}+\mathbf{w}$ with $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$, $\mathcal{U}\in\operatorname{Inv}(T)$ gives $(\rho T\rho-T\rho)\mathbf{v}=\rho T\mathbf{u}-T\mathbf{u}=\mathbf{0}$.\\
+Thus $\rho T\rho=T\rho$. Conversely, if $\rho T\rho=T\rho$ and $\mathbf{u}\in\mathcal{U}$, then $\rho T\mathbf{u}=\rho T\rho\mathbf{u}=T\rho\mathbf{u}=T\mathbf{u}$.\\
+Hence $T\mathbf{u}\in\operatorname{range}(\rho)=\mathcal{U}$, so $\mathcal{U}\in\operatorname{Inv}(T)$.\\
+\hlt{Structural Commentary}: A projection onto $\mathcal{U}$ tests whether the $\mathcal{W}$-component of $T\mathbf{u}$ vanishes.\\
+\hlt{Key Insight}: Invariance says applying $T$ after projecting into $\mathcal{U}$ needs no further correction by $\rho$.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \hlt{Matrix Viewpoint on Structure}\\
+Basic block matrices already capture important geometry. Upper block-triangular form records the presence of an invariant subspace; block diagonal form records a genuine decomposition into independent invariant pieces.
+\end{perspective}
+
+\begin{definition} \label{def:diagonal-and-upper-triangular-matrices} \hlt{Diagonal and Upper-Triangular Matrices}\\
+The \hlt{diagonal} of a square matrix is its upper-left to lower-right entries. A square matrix is \hlt{diagonal} if all off-diagonal entries are zero, and \hlt{upper triangular} if all entries below the diagonal are zero.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-invariant-subspace-projection-block-criteria} \hlt{Invariant Subspaces, Blocks, and Projections}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathcal{U}$ be an $r$-dimensional subspace of $\mathbb{F}^n$ with $1\leq r\leq n-1$, and let $Q=[Q_1\ Q_2]$ be unitary, where the columns of $Q_1$ and $Q_2$ are orthonormal bases of $\mathcal{U}$ and $\mathcal{U}^{\perp}$, respectively. Let $P=Q_1Q_1^*$ be the orthogonal projection onto $\mathcal{U}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}$ is invariant under $A$;
+\item $Q^*AQ=\begin{bmatrix}B & X\\ 0 & C\end{bmatrix}$ for some compatible matrices $B,X,C$;
+\item $PAP=AP$.
+\end{enumerate}
+\begin{proof} Let $M=Q^*AQ=\begin{bmatrix}B&X\\Y&C\end{bmatrix}$ and $E=Q^*PQ=I_r\oplus0_{n-r}$. Since $Q$ is unitary and $P=Q_1Q_1^*$, the matrix of $P$ in the $Q$-coordinates is $E$. Also $Y=Q_2^*AQ_1$, and $\ker(Q_2^*)=\operatorname{col}(Q_1)=\mathcal{U}$.
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ If $A\mathcal{U}\subseteq\mathcal{U}$, then each column of $AQ_1$ lies in $\mathcal{U}=\ker(Q_2^*)$, so $Y=Q_2^*AQ_1=0$.
+\item[$(ii)$] $\Rightarrow (iii)$ If $Y=0$, then $EME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$.\\
+Thus $Q^*(PAP)Q=EME=ME=Q^*(AP)Q$, so $PAP=AP$.
+\item[$(iii)$] $\Rightarrow (i)$ If $PAP=AP$, then $EME=ME$. Since $EME=\begin{bmatrix}B&0\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\Y&0\end{bmatrix}$, we get $Y=0$.\\
+Hence the columns of $AQ_1$ lie in $\ker(Q_2^*)=\mathcal{U}$. Since the columns of $Q_1$ span $\mathcal{U}$, linearity gives $A\mathcal{U}\subseteq\mathcal{U}$.
+\end{enumerate}
+\hlt{Structural Commentary}: In adapted coordinates, the lower-left block is the component of $A\mathcal{U}$ in $\mathcal{U}^{\perp}$.\\
+\hlt{Key Insight}: $PAP=AP$ exactly kills this component.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:reducing-subspace-projection-commutation} \hlt{Reducing Subspaces and Commuting Projections}\\
+Maintain the notation of Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}$ is invariant under both $A$ and $A^*$;
+\item $Q^*AQ=B\oplus C$ for some $B\in\operatorname{Mat}(r,r,\mathbb{F})$ and $C\in\operatorname{Mat}(n-r,n-r,\mathbb{F})$;
+\item $PA=AP$.
+\end{enumerate}
+\begin{proof} Let $M=Q^*AQ=\begin{bmatrix}B&X\\Y&C\end{bmatrix}$ and $E=Q^*PQ=I_r\oplus0_{n-r}$.\\
+Then $Q^*A^*Q=M^*$, $Q^*(PA)Q=EM$, and $Q^*(AP)Q=ME$.
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ By Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}, $A$-invariance gives $Y=0$. Applying the same theorem to $A^*$ gives that the lower-left block of $M^*$ is zero, namely $X^*=0$, so $X=0$. Thus $M=B\oplus C$.
+\item[$(ii)$] $\Rightarrow (iii)$ If $M=B\oplus C$, then $EM=ME$, hence $PA=AP$.
+\item[$(iii)$] $\Rightarrow (i)$ If $PA=AP$, then $EM=ME$. Since $EM=\begin{bmatrix}B&X\\0&0\end{bmatrix}$ and $ME=\begin{bmatrix}B&0\\Y&0\end{bmatrix}$, we get $X=Y=0$.\\
+The equation $Y=0$ gives $A$-invariance by Theorem \ref{thm:matrix-invariant-subspace-projection-block-criteria}. Since the lower-left block of $M^*$ is $X^*=0$, applying the same theorem to $A^*$ gives $A^*$-invariance.
+\end{enumerate}
+\hlt{Structural Commentary}: Reducing subspaces are exactly block diagonal decompositions in adapted coordinates.\\
+\hlt{Key Insight}: Commutation with $P$ kills both off-diagonal blocks.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/invariant_projection_block_form.tikz}
+  \caption{Adapted coordinates: invariance gives upper block form; $PA=AP$ gives block diagonal form.}
+  \label{fig:invariant-projection-block-form}
+\end{figure}
+
+\begin{definition} \label{def:restriction-and-quotient-operators} \hlt{Restriction and Quotient Operators}\\
+Let $T\in\LL(\mathcal{V})$ and let $\mathcal{U}$ be invariant under $T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{restriction operator} $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ is defined by $T|_{\mathcal{U}}(\mathbf{u})=T\mathbf{u}$ for $\mathbf{u}\in\mathcal{U}$.
+\item The \hlt{quotient operator} $T/\mathcal{U}\in\LL(\mathcal{V}/\mathcal{U})$ is defined by $(T/\mathcal{U})(\mathbf{v}+\mathcal{U})=T\mathbf{v}+\mathcal{U}$, $\mathbf{v}\in\mathcal{V}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:restriction-and-quotient-operators-well-defined} \hlt{Restriction and Quotient Operators Are Well-Defined}\\
+Let $T\in\LL(\mathcal{V})$ and let $\mathcal{U}$ be invariant under $T$. Then $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ and $T/\mathcal{U}\in\LL(\mathcal{V}/\mathcal{U})$.
+\begin{proof} Since $\mathcal{U}$ is invariant under $T$, $T\mathbf{u}\in\mathcal{U}$ whenever $\mathbf{u}\in\mathcal{U}$, so $T|_{\mathcal{U}}$ maps $\mathcal{U}$ into itself. Its linearity is inherited from $T$. For the quotient operator, suppose $\mathbf{v}+\mathcal{U}=\mathbf{w}+\mathcal{U}$. Then $\mathbf{v}-\mathbf{w}\in\mathcal{U}$.\\
+Invariance gives $T(\mathbf{v}-\mathbf{w})\in\mathcal{U}$, so $T\mathbf{v}-T\mathbf{w}\in\mathcal{U}$ and hence $T\mathbf{v}+\mathcal{U}=T\mathbf{w}+\mathcal{U}$. Thus $T/\mathcal{U}$ is well-defined.\\
+For $a\in\mathbb{F}$, $(T/\mathcal{U})(a(\mathbf{v}+\mathcal{U})+(\mathbf{w}+\mathcal{U})) =T(a\mathbf{v}+\mathbf{w})+\mathcal{U} =a(T\mathbf{v}+\mathcal{U})+(T\mathbf{w}+\mathcal{U})$, so $T/\mathcal{U}$ is linear.\\
+\hlt{Structural Commentary}: Restriction stays inside $\mathcal{U}$; quotient collapses $\mathcal{U}$.\\
+\hlt{Key Insight}: Invariance makes both operators well-defined.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:restriction-quotient-perspective} \hlt{Two Smaller Views of an Operator}\\
+When $\mathcal{U}$ is invariant under $T$, the operators $T|_{\mathcal{U}}$ and $T/\mathcal{U}$ split attention between what happens inside $\mathcal{U}$ and what remains after $\mathcal{U}$ is collapsed. These two views often simplify an operator, even though they need not determine the whole operator by themselves.
+\end{perspective}
