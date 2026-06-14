@@ -31,7 +31,7 @@ with duplicated mathematical content.
 The proposed replacement for the body include sequence in `math.tex` is:
 
 ```tex
-\input{parts/01_mathematical_foundations/overview}
+\input{parts/01_set_theory_logic_foundations/overview}
 \input{parts/02_structural_linear_algebra/overview}
 \input{parts/03_geometric_spectral_linear_algebra/overview}
 \input{parts/04_matrix_analysis_numerical_linear_algebra/overview}
@@ -58,7 +58,7 @@ Use this filesystem pattern:
 
 ```text
 parts/
-  01_mathematical_foundations/
+  01_set_theory_logic_foundations/
     overview.tex
     01_sets/
       overview.tex
@@ -89,7 +89,7 @@ File responsibilities:
 
 | Topic | Owner | Later Uses Should Do |
 | --- | --- | --- |
-| Set theory, cardinality, choice | Mathematical Foundations | Reference it from analysis/algebra |
+| Set theory, cardinality, choice | Set Theory, Logic, and Foundations | Reference it from analysis/algebra |
 | Finite-dimensional linear maps | Structural Linear Algebra | Use from matrix/spectral parts |
 | Inner products, forms, finite-dimensional metric geometry | Geometric and Spectral Linear Algebra | Reference from functional analysis |
 | Matrix algorithms | Matrix Analysis and Numerical Linear Algebra | Reference from numerical PDE/computation |
@@ -107,12 +107,12 @@ File responsibilities:
 
 ## Target Structure and Source Mapping
 
-### 1. Mathematical Foundations
+### 1. Set Theory, Logic, and Foundations
 
 Target:
 
 ```tex
-\part{Mathematical Foundations}
+\part{Set Theory, Logic, and Foundations}
 \section{Sets}
   \subsection{Introduction to Sets}
   \subsection{Cartesian Products}
@@ -574,7 +574,7 @@ Current sources:
 
 Notes:
 
-- `sections/analysis/foundations_of_analysis/1_2_cardinality_and_infinite_sets.tex` should not remain here as full theory. Merge or cross-reference from Mathematical Foundations.
+- `sections/analysis/foundations_of_analysis/1_2_cardinality_and_infinite_sets.tex` should not remain here as full theory. Merge or cross-reference from Set Theory, Logic, and Foundations.
 - Empty directories `sections/analysis/topological_analysis`, `sections/analysis/geometric_and_measure_analysis`, and `sections/analysis/differential_and_integral_calculus` can be removed after confirming no tooling depends on them.
 
 ### 10. Calculus, Series, and Approximation
@@ -1011,9 +1011,9 @@ Current-style ordering should be preserved or restored in these areas:
 
 | Target part | Broad target section to avoid | Prefer this section ordering |
 | --- | --- | --- |
-| Mathematical Foundations | Sets, Logic, and Proofs | Keep `Sets`; `Logic and Proofs` as separate sections |
-| Mathematical Foundations | Functions, Relations, Orders, and Counting | Keep `Counting and Finite Sums`; `Relations, Orders, and Lattices`; `Functions` as separate sections |
-| Mathematical Foundations | Cardinality, Choice, and Axiomatic Set Theory | Keep `Cardinality, Choice, and Infinite Sets`; `Axiomatic and Advanced Set Theory` as separate sections |
+| Set Theory, Logic, and Foundations | Sets, Logic, and Proofs | Keep `Sets`; `Logic and Proofs` as separate sections |
+| Set Theory, Logic, and Foundations | Functions, Relations, Orders, and Counting | Keep `Counting and Finite Sums`; `Relations, Orders, and Lattices`; `Functions` as separate sections |
+| Set Theory, Logic, and Foundations | Cardinality, Choice, and Axiomatic Set Theory | Keep `Cardinality, Choice, and Infinite Sets`; `Axiomatic and Advanced Set Theory` as separate sections |
 | Groups, Rings, and Fields | Algebraic Language and Categories | Keep universal properties, categories/functors, algebraic structures as objects, and exactness as subsections |
 | Groups, Rings, and Fields | Group Theory | Keep groups/subgroups, actions, normality, Sylow theory, and representation preview as subsections |
 | Groups, Rings, and Fields | Fields and Galois Theory | Keep field extensions, splitting fields, Galois groups, applications, and scalar extension as subsections |
@@ -1165,9 +1165,9 @@ For each content batch:
 Do not start the next numbered phase until the current target part's mapped current sources are
 migrated, removed from old owners, or explicitly marked as deferred/rebuild-only.
 
-### Phase 1: Migrate Part 1, Mathematical Foundations
+### Phase 1: Migrate Part 1, Set Theory, Logic, and Foundations
 
-- Target: `parts/01_mathematical_foundations/`.
+- Target: `parts/01_set_theory_logic_foundations/`.
 - Source mapping: `sections/foundational_prerequisites.tex` and
   `sections/mathematical_language_sets_and_logic/...`.
 - Also inspect `sections/analysis/foundations_of_analysis/1_2_cardinality_and_infinite_sets.tex`;
