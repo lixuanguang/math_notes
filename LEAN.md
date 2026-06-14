@@ -1,34 +1,38 @@
 # Lean Setup
 
-Lean files mirror the LaTeX source tree.
+Lean files mirror the canonical LaTeX source tree under `parts/`.
 
 For every file
 
 ```text
-sections/<path>/<name>.tex
+parts/<path>/<name>.tex
 ```
 
-the corresponding Lean file should be
+the corresponding newly scaffolded Lean file should be
 
 ```text
-MathNotes/sections/<path>/<name>.lean
+MathNotes/parts/<path>/<name>.lean
 ```
 
 Examples:
 
 ```text
-sections/linear_algebra/structural_linear_algebra/1_1_vector_spaces_and_linear_structure.tex
-MathNotes/sections/linear_algebra/structural_linear_algebra/1_1_vector_spaces_and_linear_structure.lean
+parts/02_structural_linear_algebra/01_vector_spaces_and_linear_structure/01_vector_spaces.tex
+MathNotes/parts/02_structural_linear_algebra/01_vector_spaces_and_linear_structure/01_vector_spaces.lean
 
-sections/analysis/topological_analysis/2_1_metric_spaces_and_euclidean_topology.tex
-MathNotes/sections/analysis/topological_analysis/2_1_metric_spaces_and_euclidean_topology.lean
+parts/09_real_topological_analysis/03_metric_spaces_and_euclidean_topology/01_metrics_open_sets_and_euclidean_topology.tex
+MathNotes/parts/09_real_topological_analysis/03_metric_spaces_and_euclidean_topology/01_metrics_open_sets_and_euclidean_topology.lean
 ```
 
 Some mirrored filenames begin with numbers. They stay unchanged on disk, but imports use Lean escaped identifiers:
 
 ```lean
-import MathNotes.sections.linear_algebra.structural_linear_algebra.«1_1_vector_spaces_and_linear_structure»
+import MathNotes.parts.«02_structural_linear_algebra».«01_vector_spaces_and_linear_structure».«01_vector_spaces»
 ```
+
+Existing formalization modules under `MathNotes/sections/` are legacy modules
+from before the LaTeX migration. They remain importable so existing Lean work is
+not lost, but new generated stubs should target `MathNotes/parts/`.
 
 ## Setup
 
@@ -44,13 +48,16 @@ The project pins Lean and mathlib to `v4.29.1`.
 
 ## Adding New Sections
 
-After adding a new `.tex` file under `sections/`, run:
+After adding a new `.tex` file under `parts/`, run:
 
 ```sh
 python3 scripts/scaffold_lean_sections.py
 ```
 
-The script creates only missing mirrored Lean files and updates `MathNotes.lean`. It does not overwrite existing section Lean files.
+The script creates only missing mirrored Lean files under `MathNotes/parts/` and
+updates `MathNotes.lean`. It does not overwrite existing Lean files, and it
+keeps legacy `MathNotes/sections/` modules imported while they remain in the
+repository.
 
 ## LaTeX Linking Convention
 
@@ -67,7 +74,7 @@ Use `\uses{label-a,label-b}` when the blueprint dependency graph should record
 statement or proof dependencies.
 
 The blueprint source lives in `blueprint/src` and currently inputs prepared files
-from `sections/`, so the notes remain the source of truth.
+from `parts/`, so the notes remain the source of truth.
 
 Use the `py311` conda environment for LeanBlueprint commands:
 

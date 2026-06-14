@@ -44,3 +44,17 @@ Results:
 Phase 17 is complete. The active notation list has a single owner under
 `parts/00_notations`, the shared base preamble has a canonical owner under
 `parts/base.tex`, and the old `sections/...` files are compatibility forwarders.
+
+## Post-Phase Cleanup
+
+- Updated `scripts/scaffold_lean_sections.py` so future Lean stubs are generated
+  from `parts/` into `MathNotes/parts/`.
+- Updated `README.md`, `LEAN.md`, and `blueprint/src/content.tex` so operational
+  documentation and blueprint content no longer depend on the repo-level
+  `sections/` source tree.
+- Removed the repo-level `sections/` folder after confirming it was absent from
+  the active LaTeX recorder path.
+- Rebuilt the PDF after removal: `pdflatex -recorder -interaction=nonstopmode
+  -halt-on-error math.tex` succeeded with 503 unique TeX inputs and zero
+  `sections/` recorder inputs.
+- Checked Lean after removal: `lake build` succeeded.
