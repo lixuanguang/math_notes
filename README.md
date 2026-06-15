@@ -77,17 +77,30 @@ rg -n "\\\\subsubsection|\\\\paragraph" parts
 
 ## Reference Coverage
 
-| Section | Reference Book | Author | Progress |
-| ----- | ----- | ----- | ----- |
-| Linear and Operator Structures | A Second Course in Linear Algebra | Stephan Ramon Garcia | Completed |
-| Linear and Operator Structures | Linear Algebra Done Right | Sheldon Axler | Completed |
-| Linear and Operator Structures | Linear Algebra and Its Applications | Gilbert Strang | Completed |
-| Linear and Operator Structures | Advanced Linear Algebra, Third Edition | Steven Roman | Completed |
-| Analysis and Continuous Structure | Principles of Mathematical Analysis (Baby Rudin) | Walter Rudin | Completed |
-| Analysis and Continuous Structure | The Real Analysis Lifesaver | Raffi Grinberg | Completed |
-| Analysis and Continuous Structure | Understanding Analysis | Stephen Abbott | Completed |
-| Analysis and Continuous Structure | Elementary Analysis | Kenneth A. Ross | Completed |
-| Analysis and Continuous Structure | Real Mathematical Analysis | Charles Chapman Pugh | Completed |
-| Analysis and Continuous Structure | Analysis I | Terence Tao | Completed |
-| Analysis and Continuous Structure | Analysis II | Terence Tao | Completed |
-| Analysis and Continuous Structure | The Elements of Integration and Lebesgue Measure | Robert G. Bartle | Completed |
+Coverage is organized by the active `parts/` tree. The table below records the
+current reference spine and nearby source library; it is not meant to certify
+that every local reference file has already been integrated into the notes.
+
+`references.bib` contains the bibliography currently surfaced by the document.
+The `reference/` directory also contains working source material for future
+expansion.
+
+| Parts | Area | Current reference spine |
+| ----- | ---- | ----------------------- |
+| `01` | Set theory, logic, and foundations | Source library includes set theory, logic, proof, computability, and philosophy of mathematics texts. Bibliography expansion pending. |
+| `02`-`04` | Linear algebra, spectral theory, and matrix analysis | Garcia-Horn, Axler, Strang, and Roman are in the active bibliography. |
+| `05`-`08` | Abstract algebra, commutative algebra, and algebraic geometry | Structured notes tree is in place. Bibliography expansion pending as these parts are developed. |
+| `09`-`10` | Real analysis, topology, calculus, series, and approximation | Rudin, Grinberg, Abbott, Ross, Pugh, and Tao I-II are in the active bibliography. |
+| `11` | Measure, integration, and functional analysis | Bartle is in the active bibliography. The source library also includes Royden, Rudin real/complex analysis, Oxtoby, Dunford-Schwartz, and functional analysis references. |
+| `12` | Probability and stochastic systems | Source library includes Ross, Lamperti, Billingsley, and stochastic calculus references. Bibliography expansion pending. |
+| `13`-`14` | Dynamical systems, PDEs, numerical analysis, and stochastic computation | Structured notes tree is in place. Bibliography expansion pending as these parts are developed. |
+| `15` | Statistics and time series | Hamilton is in the active bibliography. The source library also includes Rice, Casella-Berger, Lehmann-Casella, Lehmann-Romano, van der Vaart, Schervish, Berger, nonparametric statistics texts, and resampling references. |
+| `16` | Statistical learning and deep learning | Mazur and Granziol-Wan-Albanie-Roberts are in the active bibliography. Broader learning references remain expansion material. |
+
+When adding a source to the notes, prefer this order:
+
+1. Add or confirm the BibTeX entry in `references.bib`.
+2. Add the appropriate `\nocite{...}` or local citation in `references.tex` or
+   the relevant `parts/...` file.
+3. Place the mathematical content according to the ownership rules in
+   `STRUCTURE_MIGRATION_README.md`.
