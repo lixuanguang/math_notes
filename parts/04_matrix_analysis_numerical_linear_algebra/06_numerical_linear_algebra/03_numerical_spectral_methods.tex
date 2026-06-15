@@ -93,6 +93,37 @@ For $n\geq1$, set $\omega_n=e^{2\pi i/n}$ and $F_n\defeq[\omega_n^{jk}]_{j,k=0}^
 Then $F_n\mathbf{c}$ is the unnormalised DFT of $\mathbf{c}\in\C^n$; $Q_n\defeq n^{-1/2}F_n$ is the normalized Fourier matrix.
 \end{definition}
 
+\begin{definition} \label{def:circulant-matrix-cyclic-shift} \hlt{Circulant Matrix}\\
+On the $0$-indexed basis of $\C^n$, define the \hlt{cyclic shift}
+$P_n\mathbf{e}_j=\mathbf{e}_{(j-1)\operatorname{mod} n}$.\\
+A matrix $C\in\operatorname{Mat}(n,n,\C)$ is \hlt{circulant} if, for some $a_0,\ldots,a_{n-1}\in\C$,
+\begin{align}
+C&=a_0I_n+a_1P_n+\cdots+a_{n-1}P_n^{n-1}=p(P_n), \nonumber\\
+p(z)&=a_0+a_1z+\cdots+a_{n-1}z^{n-1} \nonumber
+\end{align}
+\end{definition}
+
+\begin{theorem} \label{thm:fourier-basis-diagonalizes-cyclic-circulants} \hlt{Fourier Basis for Cyclic Shifts and Circulants}\\
+Let $n\geq1$, let $\omega_n\defeq e^{2\pi i/n}$, and let $P_n$ be the cyclic shift.\\
+For $0\leq k<n$, set $\mathbf{f}_k\defeq(\omega_n^{jk})_{j=0}^{n-1}$; $F_n\defeq[\mathbf{f}_0\ \cdots\ \mathbf{f}_{n-1}]$; and $\Omega_n\defeq\operatorname{diag}(1,\omega_n,\ldots,\omega_n^{n-1})$.\\
+Then $F_n^*F_n=nI_n$, so $Q_n\defeq n^{-1/2}F_n$ is unitary, and $P_nF_n=F_n\Omega_n$.\\
+If $C=p(P_n)$ is circulant, then $Q_n^*CQ_n=p(\Omega_n) =\operatorname{diag}\bigl(p(1),p(\omega_n),\ldots,p(\omega_n^{n-1})\bigr)$.
+\begin{proof}
+For $0\leq k,\ell\leq n-1$, $\innerprod{\mathbf{f}_k,\mathbf{f}_\ell} =\sum\limits_{r=0}^{n-1}(\omega_n^{k-\ell})^r =n\delta_{k\ell}$.
+For $k=\ell$ the sum is $n$; for $k\neq\ell$, $W=\omega_n^{k-\ell}$ has $W\neq1$ and $W^n=1$, so $(1-W)\sum\limits_{r=0}^{n-1}W^r=0$. Hence $F_n^*F_n=nI_n$, and Theorem \ref{thm:unitary-matrix-equivalent-conditions} makes $Q_n$ unitary.\\
+Also $P_n\mathbf{f}_k=\omega_n^k\mathbf{f}_k$, so $Q_n^*P_nQ_n=\Omega_n$; applying $p$ gives the formula.\\
+\hlt{Structural Commentary}: Fourier coordinates diagonalize every circulant.\\
+\hlt{Key Insight}: Orthogonality of roots of unity turns a cyclic matrix problem into scalar evaluation.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/circulant_fourier_diagonalization.tikz}
+  \caption{Fourier diagonalizes $P_n$; polynomial evaluation diagonalizes $C=p(P_n)$.}
+  \label{fig:circulant-fourier-diagonalization}
+\end{figure}
+
 \begin{proposition} \label{prop:fourier-matrix-inverse} \hlt{Inverse of the Fourier Matrix}\\
 The Fourier matrix satisfies $F_n^*F_n=nI_n$, and therefore $F_n^{-1}=\frac1nF_n^*$.
 \begin{proof}
@@ -120,4 +151,3 @@ $n^2$ dense products become about $\frac12 n\log_2 n$ twiddle multiplications pl
   \caption{For $n=4$: split, apply two $F_2$ transforms, then $B_4\binom{\mathbf{y}'}{\mathbf{y}''}=\binom{\mathbf{y}'+D\mathbf{y}''}{\mathbf{y}'-D\mathbf{y}''}$ with $D=\operatorname{diag}(1,i)$.}
   \label{fig:fft-butterfly-n4}
 \end{figure}
-

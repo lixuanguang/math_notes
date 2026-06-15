@@ -1,0 +1,162 @@
+\subsection{Divergence, Upper and Lower Limits, and Sequence Estimates}
+
+\begin{definition} \label{def:sequence-diverges-to-infinity} \hlt{Divergence to $\pm\infty$}\\
+For a real sequence $(s_n)$,
+\begin{align}
+s_n\to+\infty &\iff \forall M\in\R,\ \exists N\in\N:\ n\geq N\Rightarrow s_n\geq M, \nonumber\\
+s_n\to-\infty &\iff \forall M\in\R,\ \exists N\in\N:\ n\geq N\Rightarrow s_n\leq M. \nonumber
+\end{align}
+This extends $\to$ notation for divergent real sequences; Definition \ref{def:real-complex-sequence-convergence} is unchanged.
+\end{definition}
+
+\begin{proposition} \label{prop:unbounded-real-sequence-has-infinite-subsequence} \hlt{Unbounded Real Sequences Have Infinite Subsequences}\\
+A real sequence is unbounded iff some subsequence tends to $+\infty$ or $-\infty$.
+\begin{proof}
+Set $n_0=0$. If $(s_n)$ is unbounded above, every tail is unbounded above, so choose $n_k>n_{k-1}$ with $s_{n_k}\geq k$; then $s_{n_k}\to+\infty$. The unbounded-below case similarly gives $s_{n_k}\leq-k$, hence $s_{n_k}\to-\infty$.\\
+Conversely, a subsequence tending to $\pm\infty$ is unbounded, so $(s_n)$ is unbounded.\\
+\hlt{Structural Commentary}: Unbounded tails supply the thresholds $\pm k$.\\
+\hlt{Key Insight}: Large late terms form a divergent subsequence.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/limsup_extended_subsequences.tikz}
+  \caption{For $s_n=[(-1)^n+1]n$, odd terms (orange) stay at $0$, while even terms (blue) diverge to $+\infty$.}
+  \label{fig:limsup-extended-subsequences}
+\end{figure}
+
+\begin{definition} \label{def:upper-and-lower-limits} \hlt{Upper and Lower Limits}\\
+For real sequence $(s_n)$, let $E\defeq\{x\in\overline{\R}:\exists\, n_1<n_2<\cdots,\ s_{n_k}\to x\}$, allowing $x=\pm\infty$.\\
+Set $s^*\defeq\sup E$ and $s_*\defeq\inf E$; equivalently, $\limsup_{n\to\infty}s_n=s^*$ and $\liminf_{n\to\infty}s_n=s_*$.
+\end{definition}
+
+\begin{theorem} \label{thm:limsup-characterization} \hlt{Characterization of the Upper Limit}\\
+Let $(s_n)$ be a real sequence, and let $E,s^*,s_*$ be as in Definition \ref{def:upper-and-lower-limits}. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $s^*\in E$.
+\item If $x>s^*$, then $s_n<x$ eventually.
+\item These two properties characterize $s^*$ uniquely.
+\end{enumerate}
+Dually, $s_*$ is uniquely characterized by $s_*\in E$ and $x<s_*$ implies $s_n>x$ eventually.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $s^*=\sup E$: if $s^*=+\infty$, use Proposition \ref{prop:unbounded-real-sequence-has-infinite-subsequence}; if $s^*\in\R$, use Theorem \ref{thm:subsequential-limits-closed}. If $s^*=-\infty$ and $s_n\nrightarrow-\infty$, infinitely many terms are bounded below; they are either unbounded above or have a bounded subsequence, giving an element of $E$ above $-\infty$, a contradiction.
+\item If $s_n\geq x>s^*$ infinitely often, that subsequence is unbounded above or has a finite subsequential limit $y\geq x$; both contradict $s^*=\sup E<x$. Hence $s_n<x$ eventually.
+\item If $p<q$ both satisfy (i)--(ii), choose $p<x<q$. Then $s_n<x$ eventually, contradicting $q\in E$.
+\end{enumerate}
+Apply the same argument to $(-s_n)$ for $s_*$.\\
+\hlt{Structural Commentary}: Limsup is the maximal subsequential limit and eventual ceiling.\\
+\hlt{Key Insight}: Limsup combines subsequences with eventual upper bounds.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/limsup_liminf_tail_bounds.tikz}
+  \caption{Blue tail suprema $u_N$ decrease to $s^*=\limsup s_n$; orange tail infima $\ell_N$ increase to $s_*=\liminf s_n$.}
+  \label{fig:limsup-liminf-tail-bounds}
+\end{figure}
+
+\begin{proposition} \label{prop:limsup-liminf-tail-suprema} \hlt{Tail Suprema Formula}\\
+For a real sequence $(s_n)$, put $T_N\defeq\{s_n:n\geq N\}$ and, in $\overline{\R}$, $u_N\defeq\sup T_N$, $\ell_N\defeq\inf T_N$.\\
+Then $u_N\downarrow$, $\ell_N\uparrow$, and $\limsup\limits_{n\to\infty}s_n=\inf_Nu_N$ and $\liminf\limits_{n\to\infty}s_n=\sup_N\ell_N$.
+\begin{proof}
+Since $T_{N+1}\subseteq T_N$, $u_N\downarrow$ and $\ell_N\uparrow$. Let $s^*=\limsup s_n$ and $u=\inf_Nu_N$.\\
+If $x>s^*$, then $s_n<x$ eventually, so $u\leq u_N\leq x$ for some $N$. If $y<s^*$, then $s^*\in E$ gives a subsequence tending to $s^*$; hence every tail meets $(y,\infty)$, so $u_N\geq y$ for all $N$ and $u\geq y$. Thus $u=s^*$.\\
+Apply the same formula to $(-s_n)$ and use Corollary \ref{cor:infimum-as-negative-supremum}.\\
+\hlt{Structural Commentary}: Tail envelopes converge to $\limsup$ and $\liminf$.\\
+\hlt{Key Insight}: Shrinking tails compute the extremal subsequential limits.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:convergence-iff-limsup-liminf-equal} \hlt{Convergence and Equal Upper/Lower Limits}\\
+A real sequence $(s_n)$ converges to a finite number $s\in\R$ if and only if $\limsup_{n\to\infty}s_n=\liminf_{n\to\infty}s_n=s$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $s_n\to s$, every subsequence converges to $s$, and the tail is bounded, so no subsequence tends to $\pm\infty$. Thus $E=\{s\}$, hence $\limsup s_n=\liminf s_n=s$.
+\item[$(\Leftarrow)$] Suppose $\limsup s_n=\liminf s_n=s$. Given $\varepsilon>0$, Theorem \ref{thm:limsup-characterization} gives $s_n<s+\varepsilon$ and $s_n>s-\varepsilon$ eventually. Hence $\abs{s_n-s}<\varepsilon$ eventually, so $s_n\to s$.
+\end{enumerate}
+\hlt{Structural Commentary}: Equality of the two extremal subsequential limits traps the whole tail.\\
+\hlt{Key Insight}: Limsup supplies an eventual ceiling; liminf supplies an eventual floor.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:limsup-liminf-order-comparison} \hlt{Order Comparison for Upper and Lower Limits}\\
+If $s_n\leq t_n$ for all $n\geq N$, where $N$ is fixed, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\limsup\limits_{n\to\infty}s_n\leq \limsup\limits_{n\to\infty}t_n$.
+\item $\liminf\limits_{n\to\infty}s_n\leq \liminf\limits_{n\to\infty}t_n$.
+\end{enumerate}
+\begin{proof}
+Discard finitely many terms, so $s_n\leq t_n$ for all $n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $a=\limsup s_n$ and $b=\limsup t_n$. If $x<a$, then $s_n>x$ infinitely often, hence $t_n>x$ infinitely often; Theorem \ref{thm:limsup-characterization} gives $x\leq b$. Thus $a\leq b$.
+\item Apply (i) to $-t_n\leq -s_n$ to get $\limsup(-t_n)\leq\limsup(-s_n)$, equivalently $\liminf s_n\leq\liminf t_n$.
+\end{enumerate}
+\hlt{Structural Commentary}: Eventual order is inherited by the extremal subsequential limits.\\
+\hlt{Key Insight}: Limsup and liminf ignore finitely many initial terms.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:pinching-theorem-sequences} \hlt{Pinching Theorem for Real Sequences}\\
+Let $(a_n)$, $(s_n)$, and $(b_n)$ be real sequences with $a_n\leq s_n\leq b_n$ for all sufficiently large $n$.\\
+If $a_n\to s$ and $b_n\to s$, then $s_n\to s$.
+\begin{proof}
+Let $\varepsilon>0$. Choose $N_0$ s.t. $a_n\leq s_n\leq b_n$ for $n\geq N_0$; $N_1$ s.t. $s-\varepsilon<a_n$ for $n\geq N_1$; and $N_2$ s.t. $b_n<s+\varepsilon$ for $n\geq N_2$. If $N=\max\{N_0,N_1,N_2\}$, then $s-\varepsilon<s_n<s+\varepsilon$ for all $n\geq N$. Hence $s_n\to s$.\\
+\hlt{Structural Commentary}: Two convergent bounds squeeze the middle sequence to the same limit.\\
+\hlt{Key Insight}: Once both walls are inside the $\varepsilon$-neighborhood, the middle term has no room to escape.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/pinching_theorem_sequences.tikz}
+  \caption{With $a_n\leq s_n\leq b_n$ and $a_n,b_n\to s$, the middle sequence also tends to $s$.}
+  \label{fig:pinching-theorem-sequences}
+\end{figure}
+
+\begin{theorem} \label{thm:special-sequence-limits} \hlt{Special Sequence Limits}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $p>0$, then $\lim\limits_{n\to\infty}n^{-p}=0$.
+\item If $p>0$, then $\lim\limits_{n\to\infty}\sqrt[n]{p}=1$.
+\item $\lim\limits_{n\to\infty}\sqrt[n]{n}=1$.
+\item If $p>0$ and $\alpha\in\R$, then $\lim\limits_{n\to\infty}\frac{n^\alpha}{(1+p)^n}=0$.
+\item If $\abs{x}<1$, then $\lim\limits_{n\to\infty}x^n=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Given $\varepsilon>0$, choose $N>(1/\varepsilon)^{1/p}$ by Theorem \ref{thm:archimedean-and-rational-density}. Then $n\geq N$ gives $n^{-p}<\varepsilon$.
+\item If $p>1$, set $x_n\defeq\sqrt[n]{p}-1$. Then $x_n>0$ and $1+nx_n\leq(1+x_n)^n=p$, so $0<x_n\leq(p-1)/n\to0$.\\
+By Theorem \ref{thm:pinching-theorem-sequences}, $x_n\to0$. If $p=1$, then $\sqrt[n]{p}=1$ for every $n$.\\
+If $0<p<1$, then $1/p>1$, so $\sqrt[n]{1/p}\to1$ by the previous case.\\
+Since $\sqrt[n]{p}=1/\sqrt[n]{1/p}$ and limits preserve reciprocals away from $0$, $\sqrt[n]{p}\to1$.
+\item Put $x_n\defeq\sqrt[n]{n}-1$. Then $x_n\geq0$, and for $n\geq2$ the binomial theorem gives $n=(1+x_n)^n\geq \frac{n(n-1)}{2}x_n^2$.\\
+Thus $0\leq x_n\leq\sqrt{2/(n-1)}$, so Theorem \ref{thm:pinching-theorem-sequences} gives $x_n\to0$.
+\item Choose an integer $k>\alpha$ with $k>0$. For $n>2k$, $(1+p)^n\geq \binom{n}{k}p^k=\frac{n(n-1)\cdots(n-k+1)}{k!}p^k>\frac{n^k p^k}{2^k k!}$.\\
+Hence $0<\frac{n^\alpha}{(1+p)^n}<\frac{2^kk!}{p^k}n^{\alpha-k}$, and $n^{\alpha-k}\to0$ by (i). Apply Theorem \ref{thm:pinching-theorem-sequences}.
+\item If $x\neq0$, write $\abs{x}=(1+p)^{-1}$ with $p>0$ and apply (iv) with $\alpha=0$ to get $\abs{x}^n\to0$. Since $-\abs{x}^n\leq x^n\leq\abs{x}^n$, Theorem \ref{thm:pinching-theorem-sequences} gives $x^n\to0$; $x=0$ is immediate.
+\end{enumerate}
+\hlt{Structural Commentary}: Each limit is reduced to an elementary comparison sequence.\\
+\hlt{Key Insight}: The binomial theorem supplies the right upper bounds for roots and exponential domination.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:sequence-proof-patterns}\label{meth:sequence-proof-patterns-source-todo} \hlt{Sequence Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Convergence}: fix $\varepsilon>0$, then find $N$ so that all later terms lie in the relevant $\varepsilon$-ball.
+\item \hlt{Uniqueness}: compare two proposed limits with $\varepsilon/2$ and use the triangle inequality.
+\item \hlt{Subsequences}: choose $n_k\uparrow$ recursively with distances $<1/k$.
+\item \hlt{Cauchy arguments}: estimate the diameter of tails rather than guessing the limit first.
+\item \hlt{Monotone sequences}: use $\sup$ or $\inf$ and then prove eventual trapping.
+\end{enumerate}
+\hlt{Key Insight}: Most sequence proofs are bookkeeping for quantifiers, indices, and one controlling inequality.
+\end{method}
