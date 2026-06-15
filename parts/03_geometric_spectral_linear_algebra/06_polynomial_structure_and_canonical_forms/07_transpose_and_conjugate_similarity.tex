@@ -1,0 +1,111 @@
+\subsection{Transpose and Conjugate Similarity}
+
+\begin{theorem} \label{thm:conjugate-similarity-jordan-block-criterion} \hlt{Conjugate Similarity Criterion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is similar to $\overline{A}$ if and only if each $J_k(\lambda)$ occurs in the Jordan form of $A$ with the same multiplicity as $J_k(\overline{\lambda})$.
+\begin{proof}
+Let $J$ be a Jordan form of $A$. Then $\overline{J}$ is a Jordan form of $\overline{A}$, obtained by replacing each $J_k(\lambda)$ by $J_k(\overline{\lambda})$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is similar to $\overline{A}$, then $J$ and $\overline{J}$ are similar.\\
+By Corollary \ref{cor:jordan-form-unique-up-to-block-permutation}, their Jordan blocks have same multiplicities.
+\item[$(\Leftarrow)$] If the multiplicities agree, then $J$ and $\overline{J}$ differ only by a permutation of blocks. Hence $A$ is similar to $\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation changes eigenvalue labels but not block sizes.\\
+\hlt{Key Insight}: Non-real Jordan blocks must occur in conjugate pairs.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:hermitian-products-and-conjugate-products} \hlt{Hermitian Products and Conjugate Products}\\
+Let $A,H,K\in\operatorname{Mat}(n,n,\mathbb{C})$, and suppose $H$ and $K$ are Hermitian.\\
+Then $HK$ is similar to $KH$, and $A\overline{A}$ is similar to $\overline{A}A$.
+\begin{proof}
+For each $p=1,\ldots,n$, adjoints preserves rank, $((HK)^p)^*=(KH)^p$. Hence $\operatorname{rank}\bigl((HK)^p\bigr)=\operatorname{rank}\bigl((KH)^p\bigr)$.\\
+Similarly, entrywise conjugation preserves rank and gives $\overline{(A\overline{A})^p}=(\overline{A}A)^p$, so $\operatorname{rank}\bigl((A\overline{A})^p\bigr)=\operatorname{rank}\bigl((\overline{A}A)^p\bigr)$.\\
+Apply Corollary \ref{cor:ab-ba-similar-rank-power-criterion} in both cases.\\
+\hlt{Structural Commentary}: Adjoint and conjugation preserve rank and reverse product order.\\
+\hlt{Key Insight}: The rank-power test turns order reversal into similarity.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:reversal-matrix} \hlt{Reversal Matrix}\\
+For $k\geq1$, \hlt{reversal matrix} $R_k\in\operatorname{Mat}(k,k,\mathbb{C})$ defined $(R_k)_{ij}=
+\begin{cases}
+1,& i+j=k+1,\\
+0,& i+j\neq k+1
+\end{cases}$, thus $R_k^t=R_k$, $R_k^2=I_k$.
+\end{definition}
+
+\begin{lemma} \label{lem:jordan-block-transpose-reversal-similarity} \hlt{Reversal Conjugates a Jordan Block to Its Transpose}\\
+For every $k\geq1$ and $\lambda\in\mathbb{C}$, $J_k(\lambda)^t=R_kJ_k(\lambda)R_k$. Moreover, $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.
+\begin{proof}
+Let $N=J_k(0)$. Since $R_k$ reverses standard basis order, $R_kNR_k=N^t$.\\
+Adding scalar gives $R_kJ_k(\lambda)R_k=J_k(\lambda)^t$. As $R_k=R_k^t=R_k^{-1}$, this identity gives $J_k(\lambda)^tR_k=R_kJ_k(\lambda)$ and $R_kJ_k(\lambda)^t=J_k(\lambda)R_k$, so $R_kJ_k(\lambda)$ and $J_k(\lambda)R_k$ are symmetric.\\
+\hlt{Structural Commentary}: Reversal changes the superdiagonal shift into the subdiagonal shift.\\
+\hlt{Key Insight}: Transposition reads the same Jordan chain backwards.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:matrix-similar-to-transpose-and-symmetric-factorizations} \hlt{Transpose Similarity and Symmetric Factorisations}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $A^t$ via a symmetric similarity matrix.
+\item $A=BC=DE$, where $B,C,D,E$ are symmetric and $B,E$ are invertible.
+\end{enumerate}
+\begin{proof}
+Choose a Jordan form $A=SJS^{-1}$, and let $R$ be the direct sum of the reversal matrices matching the Jordan blocks of $J$. By Lemma \ref{lem:jordan-block-transpose-reversal-similarity}, $J^t=RJR$, $R^t=R$, $R^2=I_n$, and both $RJ$ and $JR$ are symmetric.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Set $P=(S^{-1})^tRS^{-1}$. Then $P^t=P$, $P^{-1}=SRS^t$, and $PAP^{-1}=(S^{-1})^tRJR S^t=(S^{-1})^tJ^tS^t=A^t$.
+\item
+Using $R^2=I_n$, $A=(SRS^t)\bigl((S^{-1})^tRJ S^{-1}\bigr)$ and $A=(SJR S^t)\bigl((S^{-1})^tR S^{-1}\bigr)$.\\
+The products equal $SJS^{-1}$ because $S^t(S^{-1})^t=I_n$ and $R^2=I_n$. All four factors are symmetric because $R,RJ,JR$ are symmetric; $SRS^t$ and $(S^{-1})^tRS^{-1}$ are invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: Reduce to Jordan blocks, reverse chains, then conjugate back.\\
+\hlt{Key Insight}: Symmetric involutions produce both transpose similarity and symmetric factors.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_transpose_reversal.tikz}
+  \caption{Reversal gives $R_kJ_k(0)R_k=J_k(0)^t$: the same chain read backwards.}
+  \label{fig:jordan-transpose-reversal}
+\end{figure}
+
+\begin{theorem} \label{thm:conjugate-similarity-hermitian-product-equivalences} \hlt{Conjugate Similarity and Hermitian Products}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ is similar to $\overline{A}$.
+\item $A$ is similar to $A^*$.
+\item $A$ is similar to $A^*$ via a Hermitian similarity matrix.
+\item $A=HK=LM$, where $H,K,L,M$ are Hermitian, and $H,M$ are invertible.
+\item $A=HK$ for some Hermitian matrices $H,K$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$ Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations} applied to $\overline{A}$ gives $\overline{A}\sim(\overline{A})^t=A^*$. Thus $A\sim A^*$.
+\item[$(ii)$]$\Rightarrow(iii)$ Choose invertible $S$ such that $A=SA^*S^{-1}$, so $AS=SA^*$. For $\theta\in\mathbb{R}$, put $S_{\theta}=e^{i\theta}S$.\\
+Then $AS_{\theta}=S_{\theta}A^*$ and, by taking adjoints, $AS_{\theta}^*=S_{\theta}^*A^*$. Hence $A(S_{\theta}+S_{\theta}^*)=(S_{\theta}+S_{\theta}^*)A^*$.\\
+The matrix $H_{\theta}=S_{\theta}+S_{\theta}^*$ is Hermitian. Also $S_{\theta}^{-1}H_{\theta}=I_n+e^{-2i\theta}S^{-1}S^*$. Thus $H_{\theta}$ is singular exactly when $-e^{2i\theta}$ is an eigenvalue of $S^{-1}S^*$. There are only finitely many such values, so choose $\theta$ for which $H_{\theta}$ is invertible. Then $A=H_{\theta}A^*H_{\theta}^{-1}$.
+\item[$(iii)$]$\Rightarrow(iv)$ Let $R$ be invertible Hermitian and satisfy $A=RA^*R^{-1}$. Then $AR=RA^*$ and $R^{-1}A=A^*R^{-1}$.\\
+Thus $A^*R^{-1}$ and $RA^*$ are Hermitian, and $A=R(A^*R^{-1})=(RA^*)R^{-1}$.\\
+This gives the two asserted Hermitian factorizations, with the first factor in the first product and the second factor in the second product invertible.
+\item[$(iv)$]$\Rightarrow(v)$ The first factorization in (iv) already has the form $A=HK$ with $H$ and $K$ Hermitian.
+\item[$(v)$]$\Rightarrow(i)$ If $A=HK$ with $H,K$ Hermitian, then Corollary \ref{cor:hermitian-products-and-conjugate-products} gives $HK\sim KH$.\\
+By Theorem \ref{thm:matrix-similar-to-transpose-and-symmetric-factorizations}, $KH\sim (KH)^t=H^tK^t=\overline{H}\,\overline{K}=\overline{A}$. Hence $A\sim\overline{A}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The equivalences move between conjugation, adjoints, and Hermitian products by combining transpose similarity with a Hermitianized similarity matrix.\\
+\hlt{Key Insight}: A phase-rotated average $e^{i\theta}S+e^{-i\theta}S^*$ turns an arbitrary similarity to $A^*$ into a Hermitian one.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/conjugate_similarity_hermitian_products.tikz}
+  \caption{Conjugate similarity, adjoint similarity, and Hermitian product factorisations are equivalent.}
+  \label{fig:conjugate-similarity-hermitian-products}
+\end{figure}
