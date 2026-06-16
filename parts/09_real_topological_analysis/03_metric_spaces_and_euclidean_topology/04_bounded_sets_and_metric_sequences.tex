@@ -1,0 +1,117 @@
+\subsection{Bounded Sets and Metric Sequences}
+
+\begin{definition} \label{def:bounded-and-perfect-metric-sets}\label{rem:boundedness-and-intrinsic-metric-properties}\label{per:metric-sequences-as-topological-tests}\label{def:sequence-convergence-metric}\label{def:sequences-core-definitions-source-todo}\label{def:sequence-range-and-boundedness}\label{def:eventually-and-frequently-in-a-set} \hlt{Bounded Sets and Metric Sequences}\\
+Let $(X,d)$ be a metric space, $E\subseteq X$, and $(p_n)$ a sequence in $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E$ is \hlt{bounded} iff $\exists q\in X,\exists M>0$ such that $E\subseteq B_M(q)$
+\item $E$ is \hlt{perfect} iff $E$ is closed and every $p\in E$ is a limit point of $E$.
+\item $(p_n)$ \hlt{converges} to $p\in X$ iff $\forall\varepsilon>0,\exists N\in\N$ such that $n\geq N\Longrightarrow d(p_n,p)<\varepsilon$; write $p_n\to p$ or $\lim\limits_{n\to\infty}p_n=p$.\\
+If no such $p$ exists, $(p_n)$ \hlt{diverges}.
+\item The \hlt{range} of $(p_n)$ is $\operatorname{ran}(p_n)\defeq\{p_n:n\in\N\}$; $(p_n)$ is \hlt{bounded} iff $\operatorname{ran}(p_n)$ is bounded.
+\item $(p_n)$ is \hlt{eventually in $E$} iff $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n\in E$
+\item $(p_n)$ is \hlt{frequently in $E$} iff $\forall N\in\N,\exists n\geq N$ such that $p_n\in E$.
+\end{enumerate}
+\hlt{Structural Commentary}: Boundedness, compactness, and completeness are intrinsic to restricted metrics; openness and closedness are ambient.\\
+\hlt{Key Insight}: Convergence is tail control; frequent membership is arbitrarily late recurrence.
+\end{definition}
+
+\begin{proposition} \label{prop:sequence-limit-points-subsequential-limits} \hlt{Limit Points Are Subsequence Limits}\\
+For $(p_n)\subseteq X$ and $p\in X$, the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\forall r>0,\forall N\in\N,\exists n\geq N$ such that $p_n\in B_r(p)$.
+\item $\exists n_1<n_2<\cdots$ such that $p_{n_k}\to p$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$ Set $n_0=0$. By (i), recurse $n_k>n_{k-1}$ with $p_{n_k}\in B_{1/k}(p)$; then $d(p_{n_k},p)<1/k$, so $p_{n_k}\to p$.
+\item[$(ii)$]$\Rightarrow(i)$ If $p_{n_k}\to p$, then for any $r>0$ and $N\in\N$, choose $k$ with $n_k\geq N$ and $d(p_{n_k},p)<r$.\\
+Thus $p_{n_k}\in B_r(p)$, so (i) holds.
+\end{enumerate}
+\hlt{Structural Commentary}: Frequent visits are exactly enough to extract a convergent subsequence.\\
+\hlt{Key Insight}: Limits require all sufficiently late terms; limit points require arbitrarily late witnesses.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:metric-sequence-basic-properties} \hlt{Basic Properties of Metric Convergence}\\
+Let $X$ be a metric space and $(p_n)\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_n\to p\Longleftrightarrow\forall r>0,\exists N\in\N$ such that $n\geq N\Longrightarrow p_n\in B_r(p)$.
+\item If $p_n\to p$ and $p_n\to p'$, then $p=p'$.
+\item If $E\subseteq X$ and $p\in E^{\operatorname{acc}}$, then $\exists(q_n)\subseteq E\setminus\{p\}$ such that $q_n\to p$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]($\Rightarrow$) If $p_n\to p$ and $r>0$, take $\varepsilon=r$ in the definition.
+\item[$(i)$]($\Leftarrow$) If the ball condition holds, then for every $\varepsilon>0$ take $r=\varepsilon$, giving $d(p_n,p)<\varepsilon$ eventually.
+\item[$(ii)$] Given $\varepsilon>0$, choose $N,N'$ with $n\geq N\Longrightarrow d(p_n,p)<\varepsilon/2$ and $n\geq N'\Longrightarrow d(p_n,p')<\varepsilon/2$.\\
+If $n\geq\max\{N,N'\}$, then $d(p,p')\leq d(p,p_n)+d(p_n,p')<\varepsilon$, so $d(p,p')=0$.
+\item[$(iii)$] Since $p\in E^{\operatorname{acc}}$, for each $n\in\N$ choose $q_n\in E\setminus\{p\}$ with $d(q_n,p)<1/n$. Then $q_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: Eventual containment gives convergence; triangle inequality gives uniqueness.\\
+\hlt{Key Insight}: A limit point can always be approached by a sequence of points from the set.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:metric-convergent-subsequences} \hlt{Subsequences Preserve Metric Limits}\\
+If $p_n\to p$ in a metric space, then every subsequence $(p_{n_k})$ also converges to $p$.
+\begin{proof}
+Given $\varepsilon>0$, choose $N$ such that $n\geq N$ implies $d(p_n,p)<\varepsilon$.\\
+Since $n_k\to\infty$, all sufficiently large $k$ satisfy $n_k\geq N$, hence $d(p_{n_k},p)<\varepsilon$.\\
+\hlt{Structural Commentary}: A subsequence is only a delayed tail of the same sequence.\\
+\hlt{Key Insight}: Eventual estimates survive deleting terms.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:discrete-metric-convergence-eventually-constant} \hlt{Discrete-Metric Convergence}\\
+Let $X$ carry the discrete metric $d(x,y)=0$ if $x=y$ and $d(x,y)=1$ if $x\neq y$.\\
+For $(p_n)\subset X$ and $p\in X$, $p_n\to p$ if and only if $\exists N\in\N$ such that $n\geq N\Longrightarrow p_n=p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Suppose $p_n\to p$. For $\varepsilon=1/2$, choose $N\in\N$ such that $n\geq N\Longrightarrow d(p_n,p)<1/2$.\\
+Since $d$ takes only the values $0,1$, $d(p_n,p)=0$, hence $p_n=p$ for all $n\geq N$.
+\item[$(\Leftarrow)$] Suppose $\exists N\in\N$ s.t. $n\geq N\Longrightarrow p_n=p$. Then $\forall \varepsilon>0$, $n\geq N$ gives $d(p_n,p)=0<\varepsilon$, so $p_n\to p$.
+\end{enumerate}
+\hlt{Structural Commentary}: The discrete metric has no room for distinct points to approach one another.\\
+\hlt{Key Insight}: In the discrete metric, $d(x,y)<1\Longleftrightarrow x=y$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:sequential-closure-criterion} \hlt{Sequential Closure Criterion}\\
+Let $E\subseteq X$, where $X$ is a metric space, and let $p\in X$. Then $p\in\overline{E}$ $\Longleftrightarrow$ $\exists (p_n)_{n\geq1}$ with $p_n\in E\ \forall n$, $p_n\to p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $p\in\overline{E}$, choose $p_n\in E\cap B_{1/n}(p)$ for $n\geq1$ by Principle \ref{princ:axiom-of-choice-analysis}. Then $d(p_n,p)<1/n$, so $p_n\to p$.
+\item[$(\Leftarrow)$] If $p_n\in E$ and $p_n\to p$, then every ball $B_r(p)$ contains some $p_n$.\\
+Thus $p$ is adherent to $E$ by Definition \ref{def:adherent-points-and-closure}, so $p\in\overline{E}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Closure can be read either by neighborhoods or by sequences.\\
+\hlt{Key Insight}: Adherence supplies one witness at every scale.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:closed-sets-and-limit-points-via-sequences} \hlt{Closed Sets and Limit Points via Sequences}\\
+Let $X$ be a metric space and $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p\in E^{\operatorname{acc}}\Longleftrightarrow\exists(p_n)\subseteq E\setminus\{p\}$ such that $p_n\to p$.
+\item $E$ is closed $\Longleftrightarrow$ every $(p_n)\subseteq E$ with $p_n\to p\in X$ satisfies $p\in E$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]($\Rightarrow$) If $p\in E^{\operatorname{acc}}$, choose $p_n\in(E\setminus\{p\})\cap B_{1/n}(p)$ for each $n$. Then $d(p_n,p)<1/n$, so $p_n\to p$.
+\item[$(i)$]($\Leftarrow$) If $(p_n)\subseteq E\setminus\{p\}$ and $p_n\to p$, then every $B_r(p)$ contains some $p_n\ne p$. Hence $p\in E^{\operatorname{acc}}$.
+\item[$(ii)$]($\Rightarrow$) If $E$ is closed, $(p_n)\subseteq E$, and $p_n\to p$, then Proposition \ref{prop:sequential-closure-criterion} gives $p\in\overline{E}=E$.
+\item[$(ii)$]($\Leftarrow$) If every convergent sequence in $E$ has limit in $E$, then Proposition \ref{prop:sequential-closure-criterion} gives $\overline{E}\subseteq E$. QED.
+\end{enumerate}
+\hlt{Structural Commentary}: In metric spaces, closedness can be tested by sequences.\\
+\hlt{Key Insight}: Balls at radii $1/n$ convert local information into a sequence.
+\end{proof}
+\end{theorem}
