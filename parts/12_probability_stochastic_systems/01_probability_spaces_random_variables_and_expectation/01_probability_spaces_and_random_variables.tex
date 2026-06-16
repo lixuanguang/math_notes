@@ -1,8 +1,7 @@
 \subsection{Probability Spaces and Random Variables}
 % Probability spaces, events, random variables, distributions, pushforward measures, independence.
-% Source integration: attached screenshots from introductory chapters on probability and random variables.
 
-Probability turns a data-generating experiment into numerical statements about its outcomes. The elementary language is set-theoretic; the measure-theoretic form is obtained by choosing which subsets are measurable events.
+Probability assigns numbers to experimental outcomes; measure theory specifies which subsets are events.
 
 \begin{definition} \label{def:probability-space-random-variable-law}\label{def:sample-space-events-and-probability-space} \hlt{Sample Spaces, Events, and Probability Spaces}
 \begin{enumerate}[label=(\roman*)]
@@ -28,6 +27,16 @@ $10<\omega\leq23$ gives $A=(10,23]$.
 \end{enumerate}
 \end{method}
 
+\begin{example} \label{ex:introductory-sample-spaces-and-events} \hlt{Introductory Sample Spaces and Events}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If a commute passes three traffic lights, each with outcome stop $s$ or continue $c$, then $\Omega=\{c,s\}^3$. The event that the first light is a stop is $\{sss,ssc,scc,scs\}$.
+\item If a print queue length is modeled as random, one possible sample space is $\Omega=\{0,1,2,\ldots\}$; with a known capacity $N$, one may instead use $\Omega=\{0,1,\ldots,N\}$.
+\item If the measured waiting time between events is nonnegative, a natural sample space is $\Omega=[0,\infty)$.
+\end{enumerate}
+\hlt{Key Insight}: Choose $\Omega$ at the event resolution needed.
+\end{example}
+
 \begin{definition} \label{def:event-algebra-indicators-and-monotone-events} \hlt{Event Algebra, Indicators, and Monotone Events}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -45,6 +54,22 @@ $10<\omega\leq23$ gives $A=(10,23]$.
 \item A sequence $(A_n)$ is \hlt{decreasing} to $A$, written $A_n\downarrow A$, if $A_1\supseteq A_2\supseteq\cdots$ and $A=\bigcap_{n\geq1}A_n$.
 \end{enumerate}
 \end{definition}
+
+\begin{proposition} \label{prop:indicator-event-algebra} \hlt{Indicator Algebra for Unions and Intersections}\\
+For events $A,B\in\mathcal{F}$: $\mathbf{1}_{A\cap B}=\mathbf{1}_A\mathbf{1}_B=\min\{\mathbf{1}_A,\mathbf{1}_B\}$, and $\mathbf{1}_{A\cup B}=\max\{\mathbf{1}_A,\mathbf{1}_B\}$.
+\begin{proof}
+Fix $\omega\in\Omega$ and set $a\defeq\mathbf{1}_A(\omega)$, $b\defeq\mathbf{1}_B(\omega)$. Then $a,b\in\{0,1\}$, $\mathbf{1}_{A\cap B}(\omega)=ab=\min\{a,b\}$, and $\mathbf{1}_{A\cup B}(\omega)=\max\{a,b\}$. Since $\omega$ was arbitrary, the identities hold pointwise.\\
+\hlt{Structural Commentary}: Boolean operations on events become arithmetic operations on $0$-$1$ variables.\\
+\hlt{Key Insight}: Indicators let event algebra be manipulated inside sums and expectations.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/venn_union_intersection.tikz}
+  \caption{Set operations become event operations in a probability space.}
+  \label{fig:venn-union-intersection-probability}
+\end{figure}
 
 \begin{example} \label{ex:monotone-event-limits-on-real-line} \hlt{Endpoint Sensitivity in Monotone Limits}\\
 Let $\Omega=\R$.
@@ -87,6 +112,26 @@ Hence $\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)$.
 Let $\Omega=\{HH,HT,TH,TT\}$ with $\mathbb{P}(\{\omega\})=1/4$ for all $\omega\in\Omega$. Set $H_1=\{HH,HT\}$ and $H_2=\{HH,TH\}$.\\
 Since $H_1\cap H_2=\{HH\}$, $\mathbb{P}(H_1\cup H_2) =\mathbb{P}(H_1)+\mathbb{P}(H_2)-\mathbb{P}(H_1\cap H_2) =\frac12+\frac12-\frac14 =\frac34$.
 \end{example}
+
+\begin{proposition} \label{prop:three-set-inclusion-exclusion-and-bonferroni} \hlt{Three-Set Inclusion-Exclusion and Bonferroni}\\
+For events $A,B,C\in\mathcal{F}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{P}(A\cup B\cup C)=\mathbb{P}(A)+\mathbb{P}(B)+\mathbb{P}(C)-\mathbb{P}(A\cap B)-\mathbb{P}(A\cap C)-\mathbb{P}(B\cap C)+\mathbb{P}(A\cap B\cap C)$.
+\item $\mathbb{P}(A\cap B)\geq \mathbb{P}(A)+\mathbb{P}(B)-1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $U=A\cup B$. Then $A\cup B\cup C=U\cup C$ and $U\cap C=(A\cap C)\cup(B\cap C)$.\\
+By two-set inclusion-exclusion, $\mathbb{P}(U\cup C)=\mathbb{P}(U)+\mathbb{P}(C)-\mathbb{P}(U\cap C)$, $\mathbb{P}(U)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)$,\\
+and $\mathbb{P}(U\cap C)=\mathbb{P}(A\cap C)+\mathbb{P}(B\cap C)-\mathbb{P}(A\cap B\cap C)$. Substitution gives (i).
+\item Since $\mathbb{P}(A\cup B)\leq1$ and $\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)$, rearrange.
+\end{enumerate}
+\hlt{Structural Commentary}: Inclusion-exclusion alternates between overcounting and correcting overlaps.\\
+\hlt{Key Insight}: Bonferroni inequalities are one-sided forms of inclusion-exclusion.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:probability-continuity-monotone-events} \hlt{Continuity of Probabilities}
 \begin{enumerate}[label=(\roman*)]
@@ -185,10 +230,19 @@ For $A\subseteq\Omega$, $\mathbb{P}(A)=\sum_{\omega\in A}\mathbb{P}(\{\omega\})=
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Events $A,B\in\mathcal{F}$ are \hlt{independent}, written $A\perp\!\!\!\perp B$, if $\mathbb{P}(A\cap B)=\mathbb{P}(A)\mathbb{P}(B)$.
-\item A family $(A_i)_{i\in I}\subseteq\mathcal{F}$ is \hlt{independent} if $\mathbb{P}(\bigcap_{i\in J}A_i)=\prod_{i\in J}\mathbb{P}(A_i)$ for every finite $J\subseteq I$.
+\item A family $(A_i)_{i\in I}\subseteq\mathcal{F}$ is \hlt{pairwise independent} if $A_i$ and $A_j$ are independent whenever $i\neq j$.
+\item A family $(A_i)_{i\in I}\subseteq\mathcal{F}$ is \hlt{mutually independent} if $\mathbb{P}(\bigcap_{i\in J}A_i)=\prod_{i\in J}\mathbb{P}(A_i)$ for every finite $J\subseteq I$.
 \end{enumerate}
-\hlt{Key Insight}: Independence is multiplicative probability for simultaneous occurrence.
+\hlt{Key Insight}: Mutual independence means multiplicativity for every finite subfamily, not just pairs.
 \end{definition}
+
+\begin{example} \label{ex:pairwise-not-mutual-independence-two-tosses} \hlt{Pairwise Independence Need Not Be Mutual}\\
+Let $\Omega=\{HH,HT,TH,TT\}$ with $\mathbb{P}(\{\omega\})=1/4$ $\forall \omega\in\Omega$.\\
+Set $A=\{HH,HT\}$, $B=\{HH,TH\}$, $C=\{HT,TH\}$.\\
+Then $\mathbb{P}(A)=\mathbb{P}(B)=\mathbb{P}(C)=1/2$, $\mathbb{P}(A\cap B)=\mathbb{P}(A\cap C)=\mathbb{P}(B\cap C)=1/4$, so $A,B,C$ pairwise independent.\\
+But $A\cap B\cap C=\emptyset$, so $\mathbb{P}(A\cap B\cap C)=0\neq 1/8=\mathbb{P}(A)\mathbb{P}(B)\mathbb{P}(C)$.\\
+\hlt{Key Insight}: Pairwise checks do not control higher-order intersections.
+\end{example}
 
 \begin{proposition} \label{prop:basic-independence-tests} \hlt{Basic Independence Tests}\\
 Let $A,B\in\mathcal{F}$.
@@ -226,7 +280,6 @@ and $T_j=\{X_j=T\}$. Then $A^c=\bigcap_{j=1}^{10}T_j$ and $\mathbb{P}(A)=1-\math
 Let $A_j$ be player $1$'s first success on turn $j$ before player $2$ succeeds.\\
 Then $E=\bigsqcup_{j\geq1}A_j$, $\mathbb{P}(A_j)=((1-p_1)(1-p_2))^{j-1}p_1=(1/2)^{j-1}/3$, and $\mathbb{P}(E)=\sum_{j\geq1}\mathbb{P}(A_j)=2/3$.
 \end{enumerate}
-\hlt{Key Insight}: Verify independence by products, use complements for at-least-one events, and decompose first successes into disjoint geometric pieces.
 \end{example}
 
 \begin{method} \label{meth:independence-complement-disjoint-decomposition} \hlt{Independence, Complement, and Decomposition Methods}
@@ -240,6 +293,18 @@ Then $\mathbb{P}(A)=1-\prod_{j=1}^{n}\mathbb{P}(C_j)$.
 \end{enumerate}
 \end{method}
 
+\begin{example} \label{ex:reliability-and-match-probabilities} \hlt{Reliability and Match Probabilities}\\
+Let $A_i$ be the event that component $i$ works, and assume all relevant events are mutually independent.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Series: if $\mathbb{P}(A_i^c)=p$ for $1\leq i\leq n$ and $W_s=\bigcap_{i=1}^{n}A_i$, then $\mathbb{P}(W_s)=(1-p)^n$ and $\mathbb{P}(W_s^c)=1-(1-p)^n$.
+\item Parallel: if $W_p=\bigcup_{i=1}^{n}A_i$, then $\mathbb{P}(W_p^c)=\mathbb{P}(\bigcap_{i=1}^{n}A_i^c)=p^n$.
+\item DNA match: let $N_j\in\{A,C,G,T\}$ with $\mathbb{P}(N_j=x)=p_{xj}$ for $j=1,2$.\\
+If $N_1\perp\!\!\!\perp N_2$, then $\mathbb{P}(N_1=N_2)=\sum_{x\in\{A,C,G,T\}}p_{x1}p_{x2}$.
+\end{enumerate}
+\hlt{Key Insight}: Independence multiplies intersections; complements handle failures; matches sum disjoint cases.
+\end{example}
+
 \begin{definition} \label{def:random-variable-law-and-cdf} \hlt{Random Variables, Laws, and Distribution Functions}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -252,7 +317,7 @@ Then $\mathbb{P}(A)=1-\prod_{j=1}^{n}\mathbb{P}(C_j)$.
 \begin{definition} \label{def:distribution-function-and-density} \hlt{Distribution Functions and Densities}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Distribution function} is nondecreasing right-continuous $F:\R\to[0,1]$, $\lim_{x\to-\infty}F(x)=0$, $\lim_{x\to\infty}F(x)=1$.
+\item A \hlt{distribution function} is $F:\R\to[0,1]$ such that $x\leq y\Rightarrow F(x)\leq F(y)$, $F(x)=\lim_{t\downarrow x}F(t)$ for all $x\in\R$, $\lim_{x\to-\infty}F(x)=0$, and $\lim_{x\to\infty}F(x)=1$.
 \item A \hlt{density} for $F$ is an integrable $g:\R\to[0,\infty)$ with $\int_{-\infty}^{\infty}g(x)\,dx=1$ and $F(t)=\int_{-\infty}^{t}g(x)\,dx$ $\forall t\in\R$.\\
 If $g$ is continuous, then $F'(t)=g(t)$.
 \end{enumerate}
@@ -275,7 +340,13 @@ If $g$ is continuous, then $F'(t)=g(t)$.
 \item The \hlt{continuous probabilities} satisfy $\mathbb{P}(a<X<b)=\int_a^b f_X(t)\,dt$ and $F_X(x)=\int_{-\infty}^{x}f_X(t)\,dt$.
 \item The \hlt{point-mass distinction}: for continuous $X$, $\mathbb{P}(X=x)=0$ for every fixed $x$, so $f_X(x)\neq\mathbb{P}(X=x)$.
 \end{enumerate}
+A law may be mixed. It can have atoms and a continuous density on the remaining part.
 \end{definition}
+
+\begin{remark} \label{rem:mixed-random-variables-source-example} \hlt{Mixed Laws Are Natural}\\
+For a component lifetime $X$, one may have $\mathbb{P}(X=0)=p>0$ and, conditional on $X>0$, a density $g$ on $(0,\infty)$.\\
+Then $\mathcal{L}(X)$ has an atom plus a continuous part, so it is mixed.
+\end{remark}
 
 \begin{figure}[H]
   \centering
@@ -318,11 +389,21 @@ Hence $\mathbb{P}(X=x)=\lim_n\mathbb{P}(E_n)=F(x)-F(x^-)$.
 \begin{definition} \label{def:quantile-and-equality-in-distribution} \hlt{Quantiles and Equality in Distribution}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The \hlt{quantile function} of a CDF $F$ is $F^{-1}(q)\defeq\inf\{x\in\R:F(x)\geq q\}$ for $q\in[0,1]$.
-\item If $F$ is strictly increasing and continuous, then \hlt{inverse CDF} satisfies $F(F^{-1}(q))=q$ and $F^{-1}(F(x))=x$.
-\item Random variables $X,Y$ are \hlt{equal in distribution}, written $X\disteq Y$, if $F_X(x)=F_Y(x)$ for all $x\in\R$.
+\item For a CDF $F$, the \hlt{quantile function} is $F^{-1}(q)\defeq\inf\{x\in\R:F(x)\geq q\}$, $q\in(0,1)$.
+\item If $F$ is continuous and strictly increasing, then $F^{-1}$ is the ordinary inverse:\\
+$F(F^{-1}(q))=q$ for $q\in(0,1)$ and $F^{-1}(F(x))=x$ for $x\in\R$.
+\item The \hlt{$p$th quantile} is $x_p=F^{-1}(p)$; under (ii), $F(x_p)=p$ uniquely.\\
+Here $x_{1/2}$ is the median and $x_{1/4},x_{3/4}$ are the lower and upper quartiles.
+\item Random variables $X,Y$ are \hlt{equal in distribution}, written $X\disteq Y$, iff $F_X=F_Y$ on $\R$.
 \end{enumerate}
 \end{definition}
+
+\begin{example} \label{ex:value-at-risk-as-quantile} \hlt{Value at Risk as a Quantile}\\
+Let $V_0>0$, $R=(V_1-V_0)/V_0$, and $F_R(x)=\mathbb{P}(R\leq x)$.\\
+The loss is $L=V_0-V_1=-V_0R$, so $\{L\geq v\}=\{R\leq -v/V_0\}$ and $\mathbb{P}(L\geq v)=F_R(-v/V_0)$.\\
+If $F_R$ is invertible and $\mathbb{P}(L\geq v_\alpha)=\alpha$, then $v_\alpha=-V_0F_R^{-1}(\alpha)$.\\
+\hlt{Key Insight}: VaR is a lower-tail return quantile converted back into a dollar loss.
+\end{example}
 
 \begin{definition} \label{def:core-discrete-distributions} \hlt{Core Discrete Distributions}\\
 Common discrete laws include:
@@ -330,9 +411,14 @@ Common discrete laws include:
 \setlength{\itemsep}{0pt}
 \item \hlt{Point mass}: $X\sim\delta_a$ for $a\in\R$ if $\mathbb{P}(X=a)=1$.
 \item \hlt{Discrete uniform}: $X\sim\operatorname{Unif}\{1,\ldots,k\}$ for $k\in\N$ if $\mathbb{P}(X=x)=1/k$ for $x=1,\ldots,k$.
-\item \hlt{Bernoulli}: $X\sim\operatorname{Bernoulli}(p)$ for $p\in[0,1]$ if $\mathbb{P}(X=1)=p$ and $\mathbb{P}(X=0)=1-p$.
+\item \hlt{Bernoulli}: $X\sim\operatorname{Bernoulli}(p)$ for $p\in[0,1]$ if $\mathbb{P}(X=1)=p$ and $\mathbb{P}(X=0)=1-p$.\\
+Equivalently $\mathbb{P}(X=x)=p^x(1-p)^{1-x}$ for $x\in\{0,1\}$.
 \item \hlt{Binomial}: $X\sim\operatorname{Binomial}(n,p)$ for $n\in\N$ and $p\in[0,1]$ if $\mathbb{P}(X=x)=\binom{n}{x}p^x(1-p)^{n-x}$ for $x=0,\ldots,n$.
-\item \hlt{Geometric}: $X\sim\operatorname{Geom}(p)$ for $p\in(0,1]$ if $\mathbb{P}(X=k)=p(1-p)^{k-1}$ for $k\geq1$.
+\item \hlt{Geometric}: $X\sim\operatorname{Geom}(p)$, $p\in(0,1]$, if $\mathbb{P}(X=k)=p(1-p)^{k-1}$ for $k\geq1$; $X$ counts trials to first success.
+\item \hlt{Negative binomial}: $X\sim\operatorname{NegBin}(r,p)$, $r\in\N$, $p\in(0,1]$, if $\mathbb{P}(X=k)=\binom{k-1}{r-1}p^r(1-p)^{k-r}$ for $k\geq r$;\\
+$X$ counts trials to the $r$th success.
+\item \hlt{Hypergeometric}: $X\sim\operatorname{Hypergeom}(n,r,m)$ if $\mathbb{P}(X=k)=\binom{r}{k}\binom{n-r}{m-k}/\binom{n}{m}$\\
+for $\max\{0,m-n+r\}\leq k\leq\min\{r,m\}$.
 \item \hlt{Poisson}: $X\sim\operatorname{Poisson}(\lambda)$ for $\lambda\geq0$ if $\mathbb{P}(X=x)=e^{-\lambda}\lambda^x/x!$ for $x=0,1,2,\ldots$.
 \end{enumerate}
 \end{definition}
@@ -344,13 +430,75 @@ Common continuous laws include:
 \item \hlt{Uniform}: $X\sim\operatorname{Uniform}(a,b)$ for $a<b$ if $f_X(x)=(b-a)^{-1}\mathbf{1}_{[a,b]}(x)$.
 \item \hlt{Normal}: $X\sim N(\mu,\sigma^2)$ for $\mu\in\R$, $\sigma>0$, if $f_X(x)=(\sigma\sqrt{2\pi})^{-1}\exp(-(x-\mu)^2/(2\sigma^2))$ for $x\in\R$.\\
 $N(0,1)$ has density $\phi$ and CDF $\Phi$.
-\item \hlt{Exponential}: $X\sim\operatorname{Exp}(\beta)$ for $\beta>0$ if $f_X(x)=\beta^{-1}e^{-x/\beta}\mathbf{1}_{(0,\infty)}(x)$.
-\item \hlt{Gamma}: $X\sim\operatorname{Gamma}(\alpha,\beta)$ for $\alpha,\beta>0$ if $f_X(x)=\beta^{-\alpha}\Gamma(\alpha)^{-1}x^{\alpha-1}e^{-x/\beta}\mathbf{1}_{(0,\infty)}(x)$; $\operatorname{Exp}(\beta)=\operatorname{Gamma}(1,\beta)$.
+\item \hlt{Exponential}: $X\sim\operatorname{Exp}(\lambda)$ for $\lambda>0$ if $f_X(x)=\lambda e^{-\lambda x}\mathbf{1}_{[0,\infty)}(x)$.
+\item \hlt{Gamma}: $X\sim\operatorname{Gamma}(\alpha,\lambda)$ for $\alpha,\lambda>0$ if $f_X(x)=\lambda^\alpha\Gamma(\alpha)^{-1}x^{\alpha-1}e^{-\lambda x}\mathbf{1}_{[0,\infty)}(x)$; $\operatorname{Exp}(\lambda)=\operatorname{Gamma}(1,\lambda)$.
 \item \hlt{Beta}: $X\sim\operatorname{Beta}(\alpha,\beta)$ for $\alpha,\beta>0$ if $f_X(x)=\Gamma(\alpha+\beta)(\Gamma(\alpha)\Gamma(\beta))^{-1}x^{\alpha-1}(1-x)^{\beta-1}\mathbf{1}_{(0,1)}(x)$.
 \item \hlt{Cauchy}: $X\sim\operatorname{Cauchy}(0,1)$ if $f_X(x)=(\pi(1+x^2))^{-1}$ for $x\in\R$.
 \item \hlt{$\chi^2$}: $X\sim\chi_p^2$ for $p>0$ if $f_X(x)=(\Gamma(p/2)2^{p/2})^{-1}x^{p/2-1}e^{-x/2}\mathbf{1}_{(0,\infty)}(x)$.
 \end{enumerate}
+The gamma and beta normalizing constants are developed analytically in Theorem \ref{thm:gamma-function-basic-theory}.
 \end{definition}
+
+\begin{method} \label{meth:discrete-distribution-model-recipes} \hlt{Discrete Distribution Model Recipes}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Indicators}: for $A\in\mathcal{F}$, $\mathbf{1}_A\sim\operatorname{Bernoulli}(\mathbb{P}(A))$.
+\item \hlt{Binomial counts}: if $B_1,\ldots,B_n$ are independent $\operatorname{Bernoulli}(p)$ variables, then $\sum_{i=1}^{n}B_i\sim\operatorname{Binomial}(n,p)$.
+\item \hlt{Geometric waiting}: the probability of first success on trial $k$ is $(1-p)^{k-1}p$.
+\item \hlt{Negative-binomial waiting}: for iid $B_i\sim\operatorname{Bernoulli}(p)$ and $T_r=\min\{k:\sum_{i=1}^{k}B_i=r\}$,\\
+$\{T_r=k\}=\{B_k=1,\sum_{i=1}^{k-1}B_i=r-1\}$, so $\mathbb{P}(T_r=k)=\binom{k-1}{r-1}p^r(1-p)^{k-r}$.
+\item \hlt{Hypergeometric sampling}: if $M\subseteq[n]$, $\abs{M}=r$, and $S$ is a uniform $m$-subset,\\
+then $X=\abs{S\cap M}$ and $\mathbb{P}(X=k)=\binom{r}{k}\binom{n-r}{m-k}/\binom{n}{m}$ for $\max\{0,m-n+r\}\leq k\leq\min\{r,m\}$.
+\end{enumerate}
+\hlt{Key Insight}: Name the event; PMFs come from independence or subset counts.
+\end{method}
+
+\begin{proposition} \label{prop:poisson-limit-of-binomial} \hlt{Poisson Limit of Rare Binomial Counts}\\
+Let $\lambda>0$, $k\in\N_0$, and $X_n\sim\operatorname{Binomial}(n,\lambda/n)$ for all sufficiently large $n$. Then $\lim_{n\to\infty}\mathbb{P}(X_n=k)=e^{-\lambda}\lambda^k/k!$.
+\begin{proof}
+For large $n$, $\mathbb{P}(X_n=k)=\binom{n}{k}(\lambda/n)^k(1-\lambda/n)^{n-k}=\frac{\lambda^k}{k!}\prod_{j=0}^{k-1}(1-j/n)(1-\lambda/n)^n(1-\lambda/n)^{-k}$.\\
+Since $\prod_{j=0}^{k-1}(1-j/n)\to1$, $(1-\lambda/n)^n\to e^{-\lambda}$, and $(1-\lambda/n)^{-k}\to1$, the limit is $e^{-\lambda}\lambda^k/k!$.\\
+\hlt{Structural Commentary}: Rare binomial masses split into fixed-$k$ choices and an exponential no-event factor.\\
+\hlt{Key Insight}: Large $n$, small $p$, fixed $np$ turns binomial masses into Poisson masses.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:recursive-binomial-poisson-masses} \hlt{Recursive Binomial and Poisson Mass Computation}\\
+Let $q\defeq1-p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Binomial}(n,p)$, $p_k\defeq\mathbb{P}(X=k)$, and $q>0$,\\
+then $p_0=q^n$ and $p_k/p_{k-1}=(n-k+1)p/(kq)$ for $1\leq k\leq n$.
+\item If $X\sim\operatorname{Poisson}(\lambda)$ and $p_k\defeq\mathbb{P}(X=k)$, then $p_0=e^{-\lambda}$ and $p_k/p_{k-1}=\lambda/k$ for $k\geq1$.
+\end{enumerate}
+\hlt{Key Insight}: Successive mass ratios avoid repeatedly evaluating large factorials.
+\end{method}
+
+\begin{example} \label{ex:majority-decoder-binomial-tail} \hlt{Majority Decoding as a Binomial Tail}\\
+Let $n=2m+1$ and let $C_i\sim\operatorname{Bernoulli}(p)$ be independent corruption indicators.\\
+Then $X=\sum_{i=1}^{n}C_i\sim\operatorname{Binomial}(n,p)$ and the majority decoder is correct iff $X\leq m$.\\
+For $n=5$, $p=0.1$, $\mathbb{P}(X\leq2)=0.9^5+5(0.1)(0.9)^4+10(0.1)^2(0.9)^3\approx0.9914$.\\
+\hlt{Key Insight}: Repetition coding converts reliability into a lower binomial tail.
+\end{example}
+
+\begin{example} \label{ex:poisson-approximation-double-sixes} \hlt{Poisson Approximation for Rare Repeated Events}\\
+Let $I_j=\mathbf{1}_{\{\text{double six on roll }j\}}$ for $1\leq j\leq100$. Then $I_j\sim\operatorname{Bernoulli}(1/36)$ iid, $X=\sum_{j=1}^{100}I_j\sim\operatorname{Binomial}(100,1/36)$, and with $\lambda=100/36=25/9$, $\mathbb{P}(X=k)\approx e^{-25/9}(25/9)^k/k!$.\\
+\hlt{Key Insight}: Rare repeated event counts are often well approximated by a Poisson law with $\lambda=np$.
+\end{example}
+
+\begin{proposition} \label{prop:exponential-memoryless-property} \hlt{Exponential Memorylessness}\\
+If $T\sim\operatorname{Exp}(\lambda)$ with $\lambda>0$, then $\mathbb{P}(T>s+t\mid T>s)=\mathbb{P}(T>t)$ for all $s,t\geq0$.
+\begin{proof}
+For $u\geq0$, $\mathbb{P}(T>u)=e^{-\lambda u}$.\\
+Hence $\mathbb{P}(T>s+t\mid T>s)=\mathbb{P}(T>s+t)/\mathbb{P}(T>s)=e^{-\lambda(s+t)}/e^{-\lambda s}=e^{-\lambda t}=\mathbb{P}(T>t)$.\\
+\hlt{Structural Commentary}: Conditioning on survival to time $s$ leaves the residual tail unchanged.\\
+\hlt{Key Insight}: Exponential tails convert elapsed time into a cancellable factor.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:poisson-process-distribution-link} \hlt{Poisson Counts and Exponential Gaps}\\
+In homogeneous Poisson process, counts satisfy $N(t)\sim\operatorname{Poisson}(\lambda t)$; interarrival gaps satisfy $S_i\sim\operatorname{Exp}(\lambda)$ iid.
+\end{remark}
 
 \begin{proposition} \label{prop:normal-standardization-and-sums} \hlt{Standardizing Normal Variables}\\
 For $\sigma,\sigma_i>0$:
@@ -366,9 +514,11 @@ For $\sigma,\sigma_i>0$:
 \setlength{\itemsep}{0pt}
 \item Let $Y=(X-\mu)/\sigma$. By change of variables, $f_Y(z)=\sigma f_X(\mu+\sigma z)=(2\pi)^{-1/2}e^{-z^2/2}$, so $Y\sim N(0,1)$.
 \item Let $Y=\mu+\sigma Z$. Then $f_Y(y)=\sigma^{-1}\phi((y-\mu)/\sigma)=(\sigma\sqrt{2\pi})^{-1}\exp(-(y-\mu)^2/(2\sigma^2))$, hence $Y\sim N(\mu,\sigma^2)$.
-\item Let $S=X+Y$, $m_s=(v_2\mu_1+v_1(s-\mu_2))/(v_1+v_2)$, and $w=v_1v_2/(v_1+v_2)$.\\
-Since $(u-\mu_1)^2/v_1+(s-u-\mu_2)^2/v_2=(s-\mu_1-\mu_2)^2/(v_1+v_2)+(u-m_s)^2/w$,\\
-convolution gives $f_S(s)=(2\pi(v_1+v_2))^{-1/2}\exp(-(s-\mu_1-\mu_2)^2/(2(v_1+v_2)))$; induction gives (iii).
+\item It suffices by induction to treat $n=2$.\\
+Let $X_i\sim N(\mu_i,v_i)$ be independent, $S=X_1+X_2$, $v=v_1+v_2$, $w=v_1v_2/v$, and $a_s=(v_2\mu_1+v_1(s-\mu_2))/v$.\\
+Then $f_S(s)=\int_\R f_1(u)f_2(s-u)\,du$, and completing the square gives\\
+$f_1(u)f_2(s-u)=(2\pi v)^{-1/2}e^{-(s-\mu_1-\mu_2)^2/(2v)}(2\pi w)^{-1/2}e^{-(u-a_s)^2/(2w)}$.\\
+The second factor integrates to $1$, so $S\sim N(\mu_1+\mu_2,v_1+v_2)$; induction gives (iii).
 \item Let $Z=(X-\mu)/\sigma$. Since $\sigma>0$, $\{a<X<b\}=\{(a-\mu)/\sigma<Z<(b-\mu)/\sigma\}$.\\
 Hence $\mathbb{P}(a<X<b)=\Phi((b-\mu)/\sigma)-\Phi((a-\mu)/\sigma)$.
 \end{enumerate}
