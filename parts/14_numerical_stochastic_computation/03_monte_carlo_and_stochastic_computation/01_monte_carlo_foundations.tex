@@ -19,6 +19,34 @@ For $\theta=(\theta_1,\ldots,\theta_k)$, marginalisation requires integrating ov
 \end{enumerate}
 \end{method}
 
+\begin{method} \label{method:rejection-sampling} \hlt{Rejection Sampling}\\
+Let $f$ be a target density on an interval $[a,b]$, possibly with infinite endpoints.\\
+Choose an envelope $M$ such that $M(x)\geq f(x)$ on $[a,b]$ and $A\defeq\int_a^b M(t)\,dt<\infty$. Let $m(x)\defeq M(x)/A$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Generate $T$ with density $m$.
+\item Generate $U\sim\operatorname{Uniform}(0,1)$ independently of $T$.
+\item Accept $X=T$ if $U\leq f(T)/M(T)$; otherwise reject $T$ and repeat.
+\end{enumerate}
+\hlt{Key Insight}: Sample under an easy envelope and keep only points that fall below the target curve.
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/rejection_sampling_envelope.tikz}
+  \caption{Rejection sample accepts when the vertical draw lies below $f(T)$.}
+  \label{fig:rejection-sampling-envelope}
+\end{figure}
+
+\begin{proposition} \label{prop:rejection-sampling-correctness} \hlt{Rejection Sampling Correctness}\\
+Let $f$ be a density, let $M\geq f$ with $A\defeq\int M(x)\,dx<\infty$, and set $m\defeq M/A$. If $T\sim m$, $U\sim\operatorname{Uniform}(0,1)$ independently, and $\mathcal{A}\defeq\{U\leq f(T)/M(T)\}$, then $\mathbb{P}(\mathcal{A})=1/A$ and $T\mid\mathcal{A}$ has density $f$.
+\begin{proof} For measurable $B$, $\mathbb{P}(T\in B,\mathcal{A})=\int_B m(x)f(x)/M(x)\,dx=A^{-1}\int_B f(x)\,dx$.\\
+Taking $B=\mathbb{R}$ gives $\mathbb{P}(\mathcal{A})=A^{-1}$, and hence $\mathbb{P}(T\in B\mid\mathcal{A})=\int_B f(x)\,dx$.\\
+\hlt{Structural Commentary}: Acceptance reweights the envelope $m$ back to $f$.\\
+\hlt{Key Insight}: Conditional on acceptance, the normalized accepted density is exactly the target.
+\end{proof}
+\end{proposition}
+
 \begin{example} \label{ex:uniform-monte-carlo-integral} \hlt{Integrating on an Interval}\\
 For $X\sim\operatorname{Uniform}(a,b)$, $I=\int_a^b h(x)\,dx=(b-a)\mathbb{E}[h(X)]$.\\
 Given IID draws $X_1,\ldots,X_N\sim\operatorname{Uniform}(a,b)$, estimate $I$ by $\widehat{I}_N=(b-a)N^{-1}\sum_{i=1}^{N}h(X_i)$.

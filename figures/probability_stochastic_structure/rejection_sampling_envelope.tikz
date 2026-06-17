@@ -1,0 +1,47 @@
+% Source integration: schematic redraw of the rejection-method envelope from the
+% attached joint-distribution chapter.
+\begin{tikzpicture}[
+  x=1.0cm,
+  y=1.35cm,
+  >=Stealth,
+  line cap=round,
+  line join=round,
+  every node/.style={font=\scriptsize},
+  axis/.style={->, gray!70, line width=0.45pt},
+  tick/.style={gray!70, line width=0.4pt},
+  envelope/.style={black!70, line width=0.75pt},
+  target/.style={blue!70!black, line width=0.95pt},
+  accept/.style={fill=blue!12, draw=none},
+  accept line/.style={blue!70!black, line width=0.85pt},
+  reject line/.style={gray!65, dashed, line width=0.55pt},
+  point/.style={circle, fill=blue!70!black, inner sep=0pt, minimum size=2.8pt},
+  label/.style={text=black!78}
+]
+  \def\a{-2}
+  \def\b{2}
+  \def\M{1.18}
+  \def\T{0.65}
+  \def\U{\fT}
+  \pgfmathsetmacro{\fT}{0.82*exp(-\T*\T/1.35)+0.08}
+
+  \draw[axis] (-2.45,0) -- (2.55,0) node[black!78,right] {$x$};
+  \draw[axis] (-2.2,-0.04) -- (-2.2,1.38) node[black!78,above] {$y$};
+
+  \path[accept, domain=-2:2, samples=80, variable=\x]
+    (-2,0) -- plot ({\x},{0.82*exp(-\x*\x/1.35)+0.08}) -- (2,0) -- cycle;
+  \draw[envelope] (\a,0) rectangle (\b,\M);
+  \node[label, above=2pt] at (0,\M) {$M$};
+  \draw[target, domain=-2:2, samples=100, variable=\x]
+    plot ({\x},{0.82*exp(-\x*\x/1.35)+0.08}) node[right] {$f$};
+
+  \draw[accept line] (\T,0) -- (\T,\fT);
+  \draw[reject line] (\T,\fT) -- (\T,\M);
+  \node[point] at (\T,\U) {};
+
+  \node[blue!70!black] at (0.2,0.25) {accept};
+  \node[black!55] at (1.2,0.94) {reject};
+
+  \draw[tick] (\a,0.025) -- (\a,-0.025) node[black!78,below=2pt] {$a$};
+  \draw[tick] (\b,0.025) -- (\b,-0.025) node[black!78,below=2pt] {$b$};
+  \draw[tick] (\T,0.025) -- (\T,-0.025) node[black!78,below=2pt] {$T$};
+\end{tikzpicture}
