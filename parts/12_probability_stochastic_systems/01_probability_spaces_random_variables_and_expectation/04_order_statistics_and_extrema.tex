@@ -1,0 +1,200 @@
+\subsection{Order Statistics, Extrema, and Moment Methods}
+% Source integration: attached screenshots from Chapter 4, "Expected Values",
+
+Order statistics describe the sorted values of an independent sample. They turn joint density calculations into formulas for minima, maxima, medians, ranges, and distribution-free tolerance intervals.
+
+\begin{definition} \label{def:order-statistics} \hlt{Order Statistics}\\
+For real-valued $X_1,\ldots,X_n$,
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{order statistics} are the pointwise rearrangement $X_{(1)}\leq X_{(2)}\leq\cdots\leq X_{(n)}$ of $X_1,\ldots,X_n$.
+\item $X_{(1)}=\min_{1\leq i\leq n}X_i$, $X_{(n)}=\max_{1\leq i\leq n}X_i$, and if $n=2m+1$, then $X_{(m+1)}$ is the sample median.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:min-max-cdfs-and-densities} \hlt{Minimum and Maximum of an IID Continuous Sample}\\
+Let $n\geq1$ and $X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}F$, where $F$ is differentiable with density $f=F'$.\\
+Set $V=X_{(1)}=\min_iX_i$ and $U=X_{(n)}=\max_iX_i$; then for $u,v\in\mathbb{R}$, $F_U(u)=F(u)^n$, $f_U(u)=n f(u)F(u)^{n-1}$, $F_V(v)=1-(1-F(v))^n$, and $f_V(v)=n f(v)(1-F(v))^{n-1}$.
+\begin{proof}
+Since $\{U\leq u\}=\bigcap_{i=1}^n\{X_i\leq u\}$, independence gives $F_U(u)=\prod_{i=1}^nF(u)=F(u)^n$.\\
+Differentiation gives $f_U(u)=n f(u)F(u)^{n-1}$.\\
+Since $\{V>v\}=\bigcap_{i=1}^n\{X_i>v\}$, independence gives $1-F_V(v)=\prod_{i=1}^n(1-F(v))=(1-F(v))^n$.\\
+Differentiation of $F_V(v)=1-(1-F(v))^n$ gives $f_V(v)=n f(v)(1-F(v))^{n-1}$.\\
+\hlt{Structural Commentary}: Extremes convert order events into products over independent coordinates.\\
+\hlt{Key Insight}: Maxima use all observations to the left; minima use all observations to the right.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:series-parallel-exponential-lifetimes} \hlt{Series and Parallel Exponential Lifetimes}\\
+Let $T_1,\ldots,T_n\overset{\mathrm{ind}}{\sim}\operatorname{Exp}(\lambda)$ be component lifetimes.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+For a series system, all components must survive, so system failure occurs at the first component failure: $V=\min_i T_i=T_{(1)}$. Thus $F_V(v)=1-e^{-n\lambda v}$ and $f_V(v)=n\lambda e^{-n\lambda v}$ for $v\geq0$; hence $V\sim\operatorname{Exp}(n\lambda)$.
+\item
+For a parallel system, one surviving component suffices, so system failure occurs only after all components fail: $U=\max_i T_i=T_{(n)}$. Thus $F_U(u)=(1-e^{-\lambda u})^n$ and $f_U(u)=n\lambda e^{-\lambda u}(1-e^{-\lambda u})^{n-1}$ for $u\geq0$.
+\end{enumerate}
+\end{example}
+
+\begin{theorem} \label{thm:kth-order-statistic-density} \hlt{Density of the kth Order Statistic}\\
+Let $X_1,\ldots,X_n$ be iid real-valued random variables with differentiable CDF $F$ and density $f=F'$.\\
+For $1\leq k\leq n$ and $x\in\mathbb{R}$, $f_{X_{(k)}}(x)=\frac{n!}{(k-1)!(n-k)!}f(x)F(x)^{k-1}(1-F(x))^{n-k}$.
+\begin{proof} Set $N_x=\sum_{i=1}^n\mathbf{1}_{\{X_i\leq x\}}$.\\
+Then $N_x\sim\operatorname{Bin}(n,F(x))$ and $\{X_{(k)}\leq x\}=\{N_x\geq k\}$, so $F_{X_{(k)}}(x)=\sum_{j=k}^n\binom{n}{j}F(x)^j(1-F(x))^{n-j}$.\\
+With $p=F(x)$, $\frac{d}{dp}\sum_{j=k}^n\binom{n}{j}p^j(1-p)^{n-j}=\frac{n!}{(k-1)!(n-k)!}p^{k-1}(1-p)^{n-k}$, and the chain rule gives stated density.\\
+\hlt{Structural Commentary}: The multinomial count of left, middle, and right observations supplies the coefficient.\\
+\hlt{Key Insight}: An order statistic is located by counting how many sample points fall on each side.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:uniform-order-statistics-are-beta} \hlt{Uniform Order Statistics Are Beta}\\
+If $X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}\operatorname{Uniform}(0,1)$, then for $1\leq k\leq n$, $X_{(k)}\sim\operatorname{Beta}(k,n-k+1)$\\
+with density $f_{X_{(k)}}(x)=\frac{n!}{(k-1)!(n-k)!}x^{k-1}(1-x)^{n-k}\mathbf{1}_{(0,1)}(x)$.
+\begin{proof}
+On $(0,1)$, $F(x)=x$ and $f(x)=1$, so Theorem~\ref{thm:kth-order-statistic-density} gives $f_{X_{(k)}}(x)=\frac{n!}{(k-1)!(n-k)!}x^{k-1}(1-x)^{n-k}$.\\
+Also $B(k,n-k+1)=\frac{(k-1)!(n-k)!}{n!}$, hence this density is the $\operatorname{Beta}(k,n-k+1)$ density.\\
+\hlt{Structural Commentary}: Uniform order statistics reduce the general density to the beta normalizing constant.\\
+\hlt{Key Insight}: Counting positions in a uniform sample produces beta powers of left and right mass.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:min-max-joint-density-and-uniform-range} \hlt{Joint Density of Minimum and Maximum}\\
+Let $n\geq2$, let $X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}F$ with differentiable CDF $F$, density $f=F'$; $V=X_{(1)}$, $U=X_{(n)}$, $R=U-V$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $v<u$, $f_{V,U}(v,u)=n(n-1)f(v)f(u)(F(u)-F(v))^{n-2}$, and $f_{V,U}(v,u)=0$ for $v\geq u$.
+\item If $F(t)=t$ on $[0,1]$, then $f_{V,U}(v,u)=n(n-1)(u-v)^{n-2}\mathbf{1}_{\{0<v<u<1\}}$.
+\item In the uniform case, $f_R(r)=n(n-1)r^{n-2}(1-r)\mathbf{1}_{(0,1)}(r)$, with $F_R(r)=0$ for $r<0$,\\
+$F_R(r)=nr^{n-1}-(n-1)r^n$ for $0\leq r\leq1$, and $F_R(r)=1$ for $r\geq1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $v<u$, $G(v,u)=\mathbb{P}(V\geq v,U\leq u)=\mathbb{P}(v\leq X_i\leq u,\ 1\leq i\leq n)=(F(u)-F(v))^n$,\\
+so $f_{V,U}(v,u)=-\partial_v\partial_uG(v,u)=n(n-1)f(v)f(u)(F(u)-F(v))^{n-2}$.
+\item If $F(t)=t$ and $f(t)=1$ on $(0,1)$, by (i), $f_{V,U}(v,u)=n(n-1)(u-v)^{n-2}$ on $0<v<u<1$, else $0$.
+\item For $0<r<1$, $f_R(r)=\int_0^{1-r}f_{V,U}(v,v+r)\,dv=n(n-1)r^{n-2}(1-r)$.\\
+Integration gives $F_R(r)=\int_0^r f_R(s)\,ds=nr^{n-1}-(n-1)r^n$; outside $[0,1]$, the support gives $F_R(r)\in\{0,1\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Mixed derivatives select the two boundary observations.\\
+\hlt{Key Insight}: Fixed extremes leave only interior mass.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:distribution-free-tolerance-interval-from-range} \hlt{Distribution-Free Tolerance Interval}\\
+Let $X_1,\ldots,X_n$ be iid with continuous CDF $F$, and set $Q=F(X_{(n)})-F(X_{(1)})$.\\
+By the probability integral transform, $U_i=F(X_i)\overset{\mathrm{iid}}{\sim}\operatorname{Uniform}(0,1)$, so $Q\stackrel{d}{=}U_{(n)}-U_{(1)}$.\\
+Therefore, for $0\leq\alpha\leq1$, $\mathbb{P}(Q>\alpha)=1-F_R(\alpha)=1-n\alpha^{n-1}+(n-1)\alpha^n$. For $n=100$ and $\alpha=.95$, $\mathbb{P}(Q>.95)\approx.96$: $[X_{(1)},X_{(n)}]$ covers at least $.95$ of the $F$-mass with probability about $.96$.
+\end{example}
+
+The expectation calculus developed above also supports a useful collection of moment methods: identifying whether the mean exists, replacing difficult distributions of functions by direct expectation, controlling spread by covariance, and using generating functions or Taylor expansion when direct integration is cumbersome.
+
+\begin{example} \label{ex:expectation-existence-and-classical-means} \hlt{Existence and First Distributional Means}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Geom}(p)$ on $\{1,2,\ldots\}$ and $q=1-p$, then $\mathbb{E}X=p\sum_{k\geq1}kq^{k-1}=p\frac{d}{dq}\frac{q}{1-q}=1/p$.
+\item If $X\sim\operatorname{Poisson}(\lambda)$, then $\mathbb{E}X=e^{-\lambda}\sum_{k\geq1}k\lambda^k/k!=\lambda e^{-\lambda}\sum_{j\geq0}\lambda^j/j!=\lambda$.
+\item If $X\sim\operatorname{Cauchy}(0,1)$, then $\mathbb{E}|X|=\frac{2}{\pi}\int_0^\infty x(1+x^2)^{-1}\,dx=\infty$, so $X$ is not integrable and $\mathbb{E}X$ is undefined.
+\item If $\mathbb{P}(Y=2^k)=2^{-(k+1)}$ for $k\geq0$, then $\mathbb{E}Y=\sum_{k\geq0}2^{-1}=\infty$; truncation is essential.
+\end{enumerate}
+\hlt{Key Insight}: Expectation is a finite absolute average, not merely a formal symmetry or a plausible center.
+\end{example}
+
+\begin{method} \label{meth:indicator-sum-expectation-without-independence} \hlt{Indicator Sums Without Independence}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For a finite index set $I$ and events $(A_i)_{i\in I}$, if $W=\sum_{i\in I}\mathbf{1}_{A_i}$, then $\mathbb{E}W=\sum_{i\in I}\mathbb{P}(A_i)$.
+\item The identity uses only linearity of expectation; the events $A_i$ need not be independent.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:dna-word-count-by-linearity} \hlt{Counting Word Occurrences}\\
+Let $S_1,\ldots,S_N\overset{\mathrm{iid}}{\sim}\operatorname{Uniform}\{A,C,G,T\}$ and fix a word $w\in\{A,C,G,T\}^q$.\\
+For $1\leq m\leq N-q+1$, set $I_m=\mathbf{1}_{\{(S_m,\ldots,S_{m+q-1})=w\}}$ and $W=\sum_{m=1}^{N-q+1}I_m$.\\
+Then $\mathbb{P}(I_m=1)=4^{-q}$ and $\mathbb{E}W=(N-q+1)4^{-q}$.\\
+Overlaps may create dependence; linearity does not require independence.
+\end{example}
+
+\begin{example} \label{ex:coupon-collector-expectation-harmonic} \hlt{Coupon Collection by Waiting Times}\\
+Draw uniformly from $n$ coupon types, and let $X_r$ be the waiting time for the $r$th new type. Then $X_r\sim\operatorname{Geom}((n-r+1)/n)$ on $\{1,2,\ldots\}$, so $\mathbb{E}X_r=n/(n-r+1)$.\\
+For $T=\sum_{r=1}^nX_r$, linearity gives $\mathbb{E}T=\sum_{r=1}^n n/(n-r+1)=nH_n$, where $H_n=\sum_{j=1}^n1/j\sim\log n+\gamma$.
+\end{example}
+
+\begin{theorem} \label{thm:correlation-bound-and-equality} \hlt{Correlation Bound and Equality Case}\\
+Let $X,Y\in L^2$ have means $\mu_X,\mu_Y$ and standard deviations $0<\sigma_X,\sigma_Y<\infty$, set $\rho=\operatorname{Cov}(X,Y)/(\sigma_X\sigma_Y)$, and define $Z_X=(X-\mu_X)/\sigma_X$, $Z_Y=(Y-\mu_Y)/\sigma_Y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{E}Z_X=\mathbb{E}Z_Y=0$, $\operatorname{Var}(Z_X)=\operatorname{Var}(Z_Y)=1$, and $\operatorname{Cov}(Z_X,Z_Y)=\rho$.
+\item $-1\leq\rho\leq1$, equivalently $|\rho|\leq1$.
+\item $\rho=\pm1$ iff $Z_Y=\pm Z_X$ a.s., equivalently $Y=\mu_Y\pm(\sigma_Y/\sigma_X)(X-\mu_X)$ a.s., with the same sign.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{E}Z_X=0$, $\operatorname{Var}(Z_X)=\sigma_X^{-2}\operatorname{Var}(X)=1$, and similarly for $Z_Y$.\\
+Moreover, $\operatorname{Cov}(Z_X,Z_Y)=\sigma_X^{-1}\sigma_Y^{-1}\operatorname{Cov}(X,Y)=\rho$.
+\item Since $0\leq\operatorname{Var}(Z_X\pm Z_Y)=2\pm2\rho$, both $1+\rho\geq0$ and $1-\rho\geq0$, hence $|\rho|\leq1$.
+\item[$(iii)$]($\Rightarrow$) If $\rho=1$, then $\mathbb{E}(Z_X-Z_Y)^2=0$, so $Z_X=Z_Y$ a.s..\\
+If $\rho=-1$, then $\mathbb{E}(Z_X+Z_Y)^2=0$, so $Z_X=-Z_Y$ a.s.
+\item[$(iii)$]($\Leftarrow$) If $Z_Y=\pm Z_X$, then $\rho=\operatorname{Cov}(Z_X,\pm Z_X)=\pm1$, and $(Y-\mu_Y)/\sigma_Y=\pm(X-\mu_X)/\sigma_X$\\
+iff $Y=\mu_Y\pm(\sigma_Y/\sigma_X)(X-\mu_X)$ a.s.
+\end{enumerate}
+\hlt{Structural Commentary}: Correlation is centred covariance after unit-variance normalization.\\
+\hlt{Key Insight}: Perfect correlation means no residual scatter around an affine line.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:covariance-correlation-bivariate-uniform-family} \hlt{Bivariate Uniform Association}\\
+For $(X,Y)$ with uniform marginals on $[0,1]$, $\mathbb{E}X=\mathbb{E}Y=1/2$ and $\operatorname{Var}(X)=\operatorname{Var}(Y)=1/12$.\\
+Hence $\operatorname{Cov}(X,Y)=\mathbb{E}(XY)-1/4$ and $\rho=12\operatorname{Cov}(X,Y)$.\\
+If $\mathbb{E}(XY)=2/9$, then $\operatorname{Cov}(X,Y)=-1/36$, $\rho=-1/3$; if $\mathbb{E}(XY)=5/18$, then $\operatorname{Cov}(X,Y)=1/36$, $\rho=1/3$.\\
+The sign of $\rho$ records negative or positive association.
+\end{example}
+
+\begin{method} \label{meth:mgf-calculus-for-classical-laws} \hlt{MGF Calculus for Classical Laws}\\
+If $\psi_X(t)=\mathbb{E}e^{tX}$ exists near $0$, then $\mathbb{E}X=\psi_X'(0)$ and $\operatorname{Var}(X)=\psi_X''(0)-\psi_X'(0)^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Poisson}(\lambda)$, then $\psi_X(t)=\exp(\lambda(e^t-1))$, $\mathbb{E}X=\lambda$, and $\operatorname{Var}(X)=\lambda$.
+\item If $X\sim\operatorname{Gamma}(\alpha,\lambda)$ with rate $\lambda$, then $\psi_X(t)=(\lambda/(\lambda-t))^\alpha$ for $t<\lambda$, $\mathbb{E}X=\alpha/\lambda$, and $\operatorname{Var}(X)=\alpha/\lambda^2$.
+\item If $Z\sim N(0,1)$, then $\psi_Z(t)=e^{t^2/2}$; for $Y=\mu+\sigma Z$, $\psi_Y(t)=\exp(\mu t+\sigma^2t^2/2)$.
+\end{enumerate}
+\end{method}
+
+\begin{corollary} \label{cor:mgf-independent-sum-families} \hlt{Independent Sums from MGFs}\\
+Let $X\perp\!\!\!\perp Y$, and interpret all MGFs on a common neighborhood of $0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\lambda,\mu>0$, $X\sim\operatorname{Poisson}(\lambda)$, and $Y\sim\operatorname{Poisson}(\mu)$, then $X+Y\sim\operatorname{Poisson}(\lambda+\mu)$.
+\item If $X\sim\operatorname{Gamma}(\alpha_1,\lambda)$ and $Y\sim\operatorname{Gamma}(\alpha_2,\lambda)$ with $\alpha_1,\alpha_2,\lambda>0$, then $X+Y\sim\operatorname{Gamma}(\alpha_1+\alpha_2,\lambda)$.
+\item If $\mu,\nu\in\mathbb{R}$, $\sigma,\tau>0$, $X\sim N(\mu,\sigma^2)$, and $Y\sim N(\nu,\tau^2)$, then $X+Y\sim N(\mu+\nu,\sigma^2+\tau^2)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\psi_{X+Y}(t)=\psi_X(t)\psi_Y(t)=\exp(\lambda(e^t-1))\exp(\mu(e^t-1))=\exp((\lambda+\mu)(e^t-1))$, QED.
+\item For $t<\lambda$, $\psi_{X+Y}(t)=\psi_X(t)\psi_Y(t)=(\lambda/(\lambda-t))^{\alpha_1+\alpha_2}$, QED.
+\item $\psi_{X+Y}(t)=\psi_X(t)\psi_Y(t)=\exp(\mu t+\sigma^2t^2/2)\exp(\nu t+\tau^2t^2/2)=\exp((\mu+\nu)t+(\sigma^2+\tau^2)t^2/2)$, QED.
+\end{enumerate}
+\hlt{Structural Commentary}: Independence turns convolution into multiplication of MGFs.\\
+\hlt{Key Insight}: Closed distribution families are stable when their MGF parameters add.
+\end{proof}
+\end{corollary}
+
+\begin{method} \label{meth:moment-propagation-error-propagation} \hlt{Moment Propagation by Taylor Expansion}\\
+Let the relevant variables have finite second moments, and let $g$ be $C^2$ near the relevant mean point.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $Y=g(X)$, $\mu=\mathbb{E}X$, and $\sigma^2=\operatorname{Var}(X)$, then $\mathbb{E}Y\approx g(\mu)$ and $\operatorname{Var}(Y)\approx[g'(\mu)]^2\sigma^2$.
+\item The second-order mean correction is $\mathbb{E}g(X)\approx g(\mu)+\frac12g''(\mu)\sigma^2$.
+\item For $Z=g(\mathbf{X})$, $\mu=\mathbb{E}\mathbf{X}$, and $\Sigma=\operatorname{Cov}(\mathbf{X})$, $\operatorname{Var}(Z)\approx\nabla g(\mu)^\top\Sigma\nabla g(\mu)$ and $\mathbb{E}Z\approx g(\mu)+\frac12\operatorname{tr}(\Sigma H_g(\mu))$.
+\end{enumerate}
+\hlt{Structural Commentary}: Taylor expansion propagates moments through local derivatives.\\
+\hlt{Key Insight}: Smooth nonlinear functions are locally linear for variance and locally quadratic for mean correction.
+\end{method}
+
+\begin{example} \label{ex:ratio-moment-propagation} \hlt{Approximate Moments of a Ratio}\\
+Let $Z=Y/X$, $\mu_X\neq0$, $\mu=(\mu_X,\mu_Y)$, and write $\sigma_X^2=\operatorname{Var}(X)$, $\sigma_Y^2=\operatorname{Var}(Y)$, $\sigma_{XY}=\operatorname{Cov}(X,Y)$.\\
+For $g(x,y)=y/x$, Taylor propagation gives $\mathbb{E}Z\approx\mu_Y/\mu_X+\sigma_X^2\mu_Y/\mu_X^3-\sigma_{XY}/\mu_X^2$\\
+and $\operatorname{Var}(Z)\approx\sigma_X^2\mu_Y^2/\mu_X^4+\sigma_Y^2/\mu_X^2-2\sigma_{XY}\mu_Y/\mu_X^3$. The approximation is ill-conditioned as $|\mu_X|\downarrow0$.
+\end{example}
