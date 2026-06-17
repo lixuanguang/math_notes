@@ -19,23 +19,69 @@ Since $e^{-t^2/2}$ is the characteristic function of $N(0,1)$, Levy's continuity
 \end{theorem}
 
 \begin{method} \label{meth:clt-normal-approximation-forms} \hlt{Equivalent CLT Approximation Forms}\\
-The CLT approximation $Z_n\rightsquigarrow N(0,1)$ is used as $\overline{X}_n\approx N(\mu,\sigma^2/n)$, equivalently $\sqrt{n}(\overline{X}_n-\mu)\approx N(0,\sigma^2)$, for approximating probabilities involving $\overline{X}_n$.
+Let $\overline{X}_n\defeq n^{-1}\sum_{i=1}^{n}X_i$ with mean $\mu$ and variance $\sigma^2\in(0,+\infty)$, and set $Z_n\defeq\sigma^{-1}\sqrt{n}(\overline{X}_n-\mu)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Standardized form: $Z_n\approx N(0,1)$.
+\item Centered form: $\sqrt{n}(\overline{X}_n-\mu)\approx N(0,\sigma^2)$.
+\item Sample-mean form: $\overline{X}_n\approx N(\mu,\sigma^2/n)$.
+\end{enumerate}
+Use any equivalent form to approximate probabilities involving $\overline{X}_n$.
 \end{method}
 
-\begin{lemma} \label{lem:mgf-convergence-criterion} \hlt{MGF Convergence Criterion}\\
-Let $(Z_n)_{n\geq1}$ and $Z$ be real-valued random variables with MGFs $\psi_n(t)\defeq\mathbb{E}e^{tZ_n}$ and $\psi(t)\defeq\mathbb{E}e^{tZ}$ finite on $(-a,a)$ for some $a>0$. If $\psi_n(t)\to\psi(t)$ for every $t\in(-a,a)$, then $Z_n\rightsquigarrow Z$.
-\begin{proof} Assume that $Y_i\defeq(X_i-\mu)/\sigma$ has MGF $\psi$ finite near $0$.\\
-Then $\mathbb{E}Y_i=0$, $\operatorname{Var}(Y_i)=1$, and $\psi(t)=1+t^2/2+o(t^2)$ as $t\to0$. Since $Z_n=n^{-1/2}\sum_{i=1}^{n}Y_i$,\\
-independence gives $\psi_{Z_n}(t)=[\psi(t/\sqrt{n})]^n=[1+t^2/(2n)+o(1/n)]^n\to e^{t^2/2}$ for every $t$ near $0$.\\
-As $e^{t^2/2}$ is the MGF of $N(0,1)$, Lemma \ref{lem:mgf-convergence-criterion} gives $Z_n\rightsquigarrow N(0,1)$.\\
-\hlt{Structural Commentary}: Standardization reduces the MGF to $1+t^2/2+o(t^2)$.\\
-\hlt{Key Insight}: Independence turns normalized sums into MGF powers converging to the Gaussian MGF.
+\begin{lemma} \label{lem:mgf-convergence-criterion} \hlt{MGF Continuity Theorem}\\
+Let $Z_n,Z$ be real-valued with MGFs $\psi_n(t)\defeq\mathbb{E}e^{tZ_n}$ and $\psi(t)\defeq\mathbb{E}e^{tZ}$ finite on $(-a,a)$ for some $a>0$.\\
+If $\psi_n(t)\to\psi(t)$ for all $t\in(-a,a)$, then $Z_n\rightsquigarrow Z$.
+\begin{proof}
+For each $s\in\mathbb{R}$, the characteristic functions satisfy $\varphi_n(s)=\mathbb{E}e^{\mathrm{i}sZ_n}=\psi_n(\mathrm{i}s)$ by analytic continuation on the strip $\{z:\abs{\operatorname{Re}z}<a\}$. Pointwise MGF convergence near $0$ gives $\varphi_n(s)\to\varphi(s)$, the characteristic function of $Z$; Levy's continuity theorem yields $Z_n\rightsquigarrow Z$.\\
+\hlt{Structural Commentary}: Local MGF convergence determines local characteristic-function convergence.\\
+\hlt{Key Insight}: MGFs near $0$ identify the weak limit.
 \end{proof}
 \end{lemma}
+
+\begin{proposition} \label{prop:mgf-proof-clt-near-zero} \hlt{MGF Proof of the IID CLT}\\
+Let $(X_i)_{i\geq1}$ be iid with $\mathbb{E}X_1=0$, $\operatorname{Var}(X_1)=\sigma^2\in(0,+\infty)$, and MGF $M(t)\defeq\mathbb{E}e^{tX_1}$ finite near $0$.\\
+Set $S_n\defeq\sum_{i=1}^{n}X_i$ and $Z_n\defeq S_n/(\sigma\sqrt{n})$. Then $Z_n\rightsquigarrow N(0,1)$, equivalently $\mathbb{P}(Z_n\leq x)\to\Phi(x)$ for all $x\in\mathbb{R}$.
+\begin{proof}
+For fixed $t$ near $0$, independence gives $M_{Z_n}(t)=\mathbb{E}e^{tS_n/(\sigma\sqrt{n})}=\prod_{i=1}^{n}\mathbb{E}e^{tX_i/(\sigma\sqrt{n})}=[M(t/(\sigma\sqrt{n}))]^n$.\\
+Since $M(0)=1$, $M'(0)=0$, and $M''(0)=\sigma^2$, Taylor expansion gives $M(s)=1+\sigma^2s^2/2+o(s^2)$ as $s\to0$.\\
+Hence $M_{Z_n}(t)=(1+t^2/(2n)+o(1/n))^n\to e^{t^2/2}$, the MGF of $N(0,1)$.\\
+Lemma \ref{lem:mgf-convergence-criterion} gives $Z_n\rightsquigarrow N(0,1)$, and continuity of $\Phi$ gives the c.d.f. convergence.\\
+\hlt{Structural Commentary}: The MGF proof needs the stronger near-zero MGF assumption.\\
+\hlt{Key Insight}: Standardization gives $t^2/(2n)$; independence exponentiates.
+\end{proof}
+\end{proposition}
 
 \begin{example} \label{ex:clt-poisson-program-errors} \hlt{A Poisson Error-Count Approximation}\\
 Let $X_1,\ldots,X_{125}\sim\operatorname{Poisson}(5)$ be IID and set $\overline{X}_{125}=125^{-1}\sum_{i=1}^{125}X_i$.\\
 Since $\mu=5$ and $\sigma^2=5$, the CLT gives $\mathbb{P}(\overline{X}_{125}<5.5)\approx\Phi(\sqrt{125}(5.5-5)/\sqrt5)=\Phi(2.5)\approx0.9938$.
+\end{example}
+
+\begin{example} \label{ex:standardized-poisson-normal-limit} \hlt{Normal Approximation to a Poisson Count}\\
+Let $X_\lambda\sim\operatorname{Poisson}(\lambda)$ and $Z_\lambda\defeq(X_\lambda-\lambda)/\sqrt{\lambda}$.\\
+Then $M_{Z_\lambda}(t)=\exp(-t\sqrt{\lambda}+\lambda(e^{t/\sqrt{\lambda}}-1))$ and $\log M_{Z_\lambda}(t)=t^2/2+o(1)$, so $Z_\lambda\rightsquigarrow N(0,1)$.\\
+If $X\sim\operatorname{Poisson}(900)$, then $\mathbb{P}(X>950)=\mathbb{P}((X-900)/30>5/3)\approx1-\Phi(5/3)\approx0.04779$, close to $0.04712$.
+\end{example}
+
+\begin{example} \label{ex:clt-measurement-error-interval} \hlt{Measurement Error and Sample Size}\\
+Let $X_1,\ldots,X_n$ be independent measurements with $\mathbb{E}X_i=\mu$ and $\operatorname{Var}(X_i)=\sigma^2$.\\
+For $c>0$, the CLT gives $\mathbb{P}(\abs{\overline{X}_n-\mu}<c)\approx\Phi(c\sqrt{n}/\sigma)-\Phi(-c\sqrt{n}/\sigma)$.\\
+For $(n,\sigma,c)=(16,1,0.5)$, this is $\Phi(2)-\Phi(-2)\approx0.954$.
+\end{example}
+
+\begin{example} \label{ex:normal-approximation-binomial-fair-coin} \hlt{Normal Approximation to the Binomial}\\
+If $X\sim\operatorname{Binomial}(n,p)$, $np>5$, $n(1-p)>5$, then $X\approx N(np,np(1-p))$; $(X-np)/\sqrt{np(1-p)}\approx N(0,1)$.\\
+For $X\sim\operatorname{Binomial}(100,1/2)$, $\mathbb{P}(X\geq60)\approx1-\Phi((60-50)/5)=1-\Phi(2)\approx0.0228$.
+\end{example}
+
+\begin{example} \label{ex:gamma-skewness-clt-approximation} \hlt{Skewed Summands Need More Averaging}\\
+Let $E_1,\ldots,E_n$ be iid $\operatorname{Exp}(1)$ and $G_n\defeq\sum_{i=1}^{n}E_i\sim\operatorname{Gamma}(n,1)$. Then $(G_n-n)/\sqrt{n}\rightsquigarrow N(0,1)$.\\
+Skewness makes the normal approximation slower for small $n$.
+\end{example}
+
+\begin{example} \label{ex:products-and-lognormal-clt} \hlt{Products and Lognormal Shape}\\
+Let $Y_n=y_0\prod_{i=1}^{n}X_i$ with iid $X_i>0$, and suppose $\mu_\ell\defeq\mathbb{E}\log X_1$ and $\sigma_\ell^2\defeq\operatorname{Var}(\log X_1)\in(0,+\infty)$.\\
+Since $\log Y_n=\log y_0+\sum_{i=1}^{n}\log X_i$, the CLT gives $\log Y_n\approx N(\log y_0+n\mu_\ell,n\sigma_\ell^2)$, so $Y_n$ is approximately lognormal. Likewise $V_n=v_0\prod_{i=1}^{n}R_i$ when iid log-returns $\log R_i$ have finite positive variance.
 \end{example}
 
 \begin{theorem} \label{thm:studentized-central-limit-theorem} \hlt{Studentized Central Limit Theorem}\\
