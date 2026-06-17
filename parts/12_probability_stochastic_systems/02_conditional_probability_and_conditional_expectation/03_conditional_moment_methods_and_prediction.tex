@@ -1,0 +1,98 @@
+\subsection{Conditional Moment Methods and Prediction}
+% Source integration: attached screenshots from Chapter 4, "Expected Values",
+% especially Sections 4.4.1--4.4.2.
+
+Conditional expectation is not only a way to compute means.  It is also the geometric projection rule behind random-sum formulas and least-squares prediction.
+
+\begin{proposition} \label{prop:random-sum-mean-and-variance} \hlt{Random Sums}\\
+Let $N\in\mathbb{N}_0$ a.s. with $\mathbb{E}N^2<\infty$, and let $(X_i)_{i\geq1}$ be iid, independent of $N$, with $\mathbb{E}X_1=m$ and $\operatorname{Var}(X_1)=v<\infty$.\\ Set $T=\sum_{i=1}^{N}X_i$, with $T=0$ on $\{N=0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{E}T=m\mathbb{E}N$.
+\item $\operatorname{Var}(T)=v\mathbb{E}N+m^2\operatorname{Var}(N)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item On $\{N=n\}$, $T=\sum_{i=1}^{n}X_i$, so $\mathbb{E}(T\mid N=n)=nm$ and $\mathbb{E}(T\mid N)=mN$; hence $\mathbb{E}T=\mathbb{E}\mathbb{E}(T\mid N)=m\mathbb{E}N$.
+\item On $\{N=n\}$, independence gives $\operatorname{Var}(T\mid N=n)=nv$, so $\operatorname{Var}(T\mid N)=vN$.\\
+Total variance gives $\operatorname{Var}(T)=\mathbb{E}(vN)+\operatorname{Var}(mN)=v\mathbb{E}N+m^2\operatorname{Var}(N)$.
+\end{enumerate}
+\hlt{Structural Commentary}: The randomness of the number of summands contributes the second variance term.\\
+\hlt{Key Insight}: First condition on how many summands exist; then average over that count.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:random-sum-mgf-composition} \hlt{MGF of a Random Sum}\\
+Let $T=\sum_{i=1}^{N}X_i$, where $N\in\mathbb{N}_0$ is independent of iid $(X_i)_{i\geq1}$.\\
+If $\psi_N$ and $\psi_X$ are finite at the relevant arguments, then $\psi_T(t)=\psi_N(\log\psi_X(t))$.
+\begin{proof}
+On $\{N=n\}$, independence gives $\mathbb{E}(e^{tT}\mid N=n)=\mathbb{E}e^{t\sum_{i=1}^{n}X_i}=\prod_{i=1}^{n}\psi_X(t)=[\psi_X(t)]^n$.\\
+Hence $\psi_T(t)=\mathbb{E}[\psi_X(t)^N]=\mathbb{E}e^{N\log\psi_X(t)}=\psi_N(\log\psi_X(t))$.\\
+\hlt{Structural Commentary}: Conditioning on $N$ turns the random sum into a fixed product of MGFs.\\
+\hlt{Key Insight}: Random counts compose MGFs by substituting $\log\psi_X(t)$ into $\psi_N$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:compound-poisson-mgf} \hlt{Compound Poisson Count}\\
+Let $N\sim\operatorname{Poisson}(\mu)$ and, given $N$, let $T=\sum_{i=1}^{N}X_i$ with iid $X_i\sim\operatorname{Poisson}(\lambda)$ independent of $N$.\\
+Since $\psi_N(s)=\exp(\mu(e^s-1))$ and $\psi_X(t)=\exp(\lambda(e^t-1))$, one has $\psi_T(t)=\psi_N(\log\psi_X(t))=\exp(\mu(e^{\lambda(e^t-1)}-1))$.
+\end{example}
+
+\begin{proposition} \label{prop:best-constant-l2-predictor} \hlt{Best Constant Predictor}\\
+For $Y\in L^2$, $\arg\min_{c\in\mathbb{R}}\mathbb{E}(Y-c)^2=\mathbb{E}Y$, and $\min_{c\in\mathbb{R}}\mathbb{E}(Y-c)^2=\operatorname{Var}(Y)$.
+\begin{proof}
+Let $\mu=\mathbb{E}Y$. Since $\mathbb{E}(Y-\mu)=0$, $\mathbb{E}(Y-c)^2=\mathbb{E}[(Y-\mu)+(\mu-c)]^2=\operatorname{Var}(Y)+(\mu-c)^2$. Since $(\mu-c)^2\geq0$ with equality iff $c=\mu$, the unique minimizer is $c=\mu$.\\
+\hlt{Structural Commentary}: The mean is the orthogonal projection of $Y$ onto the constants.\\
+\hlt{Key Insight}: Best constant prediction equals the average.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:conditional-expectation-best-l2-predictor} \hlt{Conditional Expectation as Best Predictor}\\
+Let $X,Y\in L^2$ and $\mathcal{G}\defeq\{h(X):h(X)\in L^2\}$. Let $M\defeq\mathbb{E}(Y\mid X)$, then $M\in\mathcal{G}$, $\mathbb{E}(Y-M)^2\leq\mathbb{E}(Y-Z)^2$$\forall Z\in\mathcal{G}$.
+\begin{proof}
+For $Z\in\mathcal{G}$, both $M$ and $Z$ are $\sigma(X)$-measurable.\\
+Since $\mathbb{E}(Y-M\mid X)=0$, $\mathbb{E}[(Y-M)(M-Z)]=\mathbb{E}[(M-Z)\mathbb{E}(Y-M\mid X)]=0$.\\
+Hence $\mathbb{E}(Y-Z)^2=\mathbb{E}(Y-M)^2+\mathbb{E}(M-Z)^2\geq\mathbb{E}(Y-M)^2$.\\
+\hlt{Structural Commentary}: Prediction from $X$ is performed fiber by fiber over the conditional laws of $Y$.\\
+\hlt{Key Insight}: The optimal nonlinear least-squares predictor is the conditional mean.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:best-linear-predictor} \hlt{Best Linear Predictor}\\
+For $X,Y\in L^2$, set $\mathcal{A}_X\defeq\{\alpha+\beta X:\alpha,\beta\in\mathbb{R}\}$.\\
+A \hlt{best linear predictor} of $Y$ from $X$ is any $\widehat{Y}^*\in\arg\min_{Z\in\mathcal{A}_X}\mathbb{E}(Y-Z)^2$.
+\end{definition}
+
+\begin{theorem} \label{thm:best-linear-predictor} \hlt{Best Linear Predictor}\\
+Let $X,Y\in L^2$, $\sigma_X^2\defeq\operatorname{Var}(X)>0$, $\mu_X\defeq\mathbb{E}X$, and $\mu_Y\defeq\mathbb{E}Y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\arg\min_{Z\in\mathcal{A}_X}\mathbb{E}(Y-Z)^2=\{\alpha^*+\beta^*X\}$, where $\beta^*=\operatorname{Cov}(X,Y)/\sigma_X^2$ and $\alpha^*=\mu_Y-\beta^*\mu_X$.
+\item $\min_{Z\in\mathcal{A}_X}\mathbb{E}(Y-Z)^2=\operatorname{Var}(Y)-\operatorname{Cov}(X,Y)^2/\sigma_X^2$.
+\item If $\operatorname{Var}(Y)>0$ and $\rho=\operatorname{Corr}(X,Y)$, then the minimum error is $\operatorname{Var}(Y)(1-\rho^2)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $q(\alpha,\beta)\defeq\mathbb{E}(Y-\alpha-\beta X)^2$. For fixed $\beta$, $q(\alpha,\beta)=\operatorname{Var}(Y-\beta X)+(\mu_Y-\alpha-\beta\mu_X)^2$,\\
+so $\alpha(\beta)=\mu_Y-\beta\mu_X$ uniquely minimizes over $\alpha$.
+\item Then $q(\alpha(\beta),\beta)=\operatorname{Var}(Y-\beta X)=\operatorname{Var}(Y)+\beta^2\sigma_X^2-2\beta\operatorname{Cov}(X,Y)$.\\
+Since $\sigma_X^2>0$, this quadratic has unique minimizer $\beta^*=\operatorname{Cov}(X,Y)/\sigma_X^2$.
+\item Substituting $\beta^*$ gives $\operatorname{Var}(Y)-\operatorname{Cov}(X,Y)^2/\sigma_X^2$. If $\rho=\operatorname{Cov}(X,Y)/(\sigma_X\sigma_Y)$, then this equals $\operatorname{Var}(Y)(1-\rho^2)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Linear prediction projects $Y$ onto $\mathcal{A}_X$.\\
+\hlt{Key Insight}: The optimal slope is normalized covariance.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:bivariate-normal-prediction} \hlt{Bivariate Normal Prediction}\\
+If $(X,Y)$ is bivariate normal with means $\mu_X,\mu_Y$, standard deviations $\sigma_X,\sigma_Y>0$, and correlation $\rho\in(-1,1)$, then $Y\mid X\sim N(\mu_Y+\rho\sigma_Y\sigma_X^{-1}(X-\mu_X),\sigma_Y^2(1-\rho^2))$.\\
+Thus $\mathbb{E}(Y\mid X)=\mu_Y+\rho\sigma_Y\sigma_X^{-1}(X-\mu_X)$ is linear, with conditional variance $\sigma_Y^2(1-\rho^2)$.
+\end{example}
+
+\begin{example} \label{ex:regression-to-the-mean-linear-prediction} \hlt{Regression to the Mean}\\
+Let $\mathbb{E}X=\mathbb{E}Y=\mu$, $\operatorname{Var}(X)=\operatorname{Var}(Y)=\sigma^2>0$, and $\operatorname{Corr}(X,Y)=\rho$.\\
+The best linear predictor is $\widehat{Y}=\mu+\rho(X-\mu)$.\\
+For $0<\rho<1$, $|\widehat{Y}-\mu|=\rho|X-\mu|<|X-\mu|$, so predicted scores regress toward $\mu$.
+\end{example}
