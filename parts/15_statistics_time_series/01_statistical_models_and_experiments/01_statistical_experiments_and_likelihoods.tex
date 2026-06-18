@@ -2,44 +2,50 @@
 
 A statistical problem starts with observable data and a family of probability laws that could have generated it.  The model is not the data itself; it is the mathematical language in which uncertainty about the data-generating mechanism is expressed.
 
-\begin{definition} \label{def:statistical-experiment-and-model} \hlt{Statistical Experiment and Model}\\
-A \hlt{statistical experiment} is a measurable space $(\mathcal{X},\mathcal{A})$ together with a family of probability measures
-\[
-\mathcal{P}=\{P_\theta:\theta\in\Theta\}
-\]
-on $(\mathcal{X},\mathcal{A})$.  The set $\Theta$ is the \hlt{parameter space}; a realization $X\in\mathcal{X}$ is the \hlt{sample}; and $\mathcal{P}$ is the \hlt{statistical model}.  If the true law belongs to $\mathcal{P}$, the model is \hlt{well specified}; otherwise it is \hlt{misspecified}.
-\end{definition}
-
-\begin{definition} \label{def:dominated-model-likelihood-score-information} \hlt{Dominated Models, Likelihood, Score, and Information}\\
-The model is \hlt{dominated} by a measure $\mu$ if $P_\theta\ll\mu$ for every $\theta\in\Theta$.  Writing $p_\theta=dP_\theta/d\mu$, the \hlt{likelihood} at observation $x$ is
-\[
-L_x(\theta)=p_\theta(x),
-\qquad
-\ell_x(\theta)=\log p_\theta(x)
-\]
-when $p_\theta(x)>0$.  If $\Theta\subseteq\R^d$ and differentiation is justified, the \hlt{score} and \hlt{Fisher information} are
-\[
-S_\theta(X)=\nabla_\theta\ell_X(\theta),
-\qquad
-I(\theta)=\mathbb{E}_\theta\!\left[S_\theta(X)S_\theta(X)^\top\right].
-\]
-\end{definition}
-
-\begin{example} \label{ex:bernoulli-and-normal-likelihoods} \hlt{Bernoulli and Normal Likelihoods}
+\begin{definition} \label{def:statistical-experiment-and-model} \hlt{Statistical Experiment and Model}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $X_1,\ldots,X_n$ are independent Bernoulli$(p)$ observations, then
-\[
-L_x(p)=\prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}
-=p^{\sum_i x_i}(1-p)^{n-\sum_i x_i}.
-\]
-The data enter the likelihood only through the count $\sum_iX_i$.
-\item If $X_1,\ldots,X_n$ are independent $\mathcal{N}(\mu,\sigma^2)$ observations with known $\sigma^2$, then
-\[
-\ell_x(\mu)=-\frac{n}{2}\log(2\pi\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2.
-\]
-The maximizer is the sample mean $\overline{X}$.
+\item A \hlt{statistical experiment} is $(\mathcal{X},\mathcal{A},\mathcal{P})$, where $(\mathcal{X},\mathcal{A})$ is measurable and\\
+$\mathcal{P}=\{P_\theta:\theta\in\Theta\}$ is a family of probability measures on $(\mathcal{X},\mathcal{A})$.
+\item $\Theta$ is the \hlt{parameter space}, $X\in\mathcal{X}$ is the \hlt{sample}, and $\mathcal{P}$ is the \hlt{statistical model}.
+\item The model is \hlt{well specified} if the true law $P_0\in\mathcal{P}$.
+\item The model is \hlt{misspecified} if $P_0\notin\mathcal{P}$.
 \end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:dominated-model-likelihood-score-information} \hlt{Dominated Models, Likelihood, Score, and Information}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A model $\mathcal{P}=\{P_\theta:\theta\in\Theta\}$ is \hlt{dominated} by $\mu$ if $P_\theta\ll\mu$ for all $\theta\in\Theta$; write $p_\theta\defeq dP_\theta/d\mu$.
+\item Given $x$, the \hlt{likelihood} and \hlt{log-likelihood} are $L_x(\theta)\defeq p_\theta(x)$ and $\ell_x(\theta)\defeq\log p_\theta(x)$ when $p_\theta(x)>0$.
+\item If $\Theta\subseteq\mathbb{R}^d$ and differentiation is valid, the \hlt{score} is $S_\theta(X)\defeq\nabla_\theta\ell_X(\theta)$.
+\item The \hlt{Fisher information} is $I(\theta)\defeq\mathbb{E}_\theta[S_\theta(X)S_\theta(X)^\top]$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:bernoulli-and-normal-likelihoods} \hlt{Bernoulli and Normal Likelihoods}\\
+Let $X_1,\ldots,X_n$ be independent observations.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X_i\sim\operatorname{Bernoulli}(p)$, then $L_x(p)=p^{s}(1-p)^{n-s}$, where $s\defeq\sum_{i=1}^{n}x_i$.
+\item If $X_i\sim N(\mu,\sigma^2)$ and $\sigma^2$ is known, then $\ell_x(\mu)=-\frac{n}{2}\log(2\pi\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i-\mu)^2$, maximized at $\widehat{\mu}=\overline{x}$.
+\end{enumerate}
+\end{example}
+
+\begin{example} \label{ex:multinomial-cell-probability-likelihood} \hlt{Multinomial Cell Probabilities}\\
+Let $X=(X_1,\ldots,X_m)$ have total count $n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Multinomial}(n;p_1,\ldots,p_m)$ and $\sum_{j=1}^{m}p_j=1$, then $L_x(p)\propto\prod_{j=1}^{m}p_j^{x_j}$ and $\widehat{p}_j=x_j/n$.
+\item If $p_j=p_j(\theta)$, then $L_x(\theta)\propto\prod_{j=1}^{m}p_j(\theta)^{x_j}$ and $\widehat{\theta}\in\arg\max_\theta\sum_{j=1}^{m}x_j\log p_j(\theta)$.
+\end{enumerate}
+\end{example}
+
+\begin{example} \label{ex:capture-recapture-hypergeometric-likelihood} \hlt{Capture--Recapture Likelihood}\\
+Suppose $t$ population units are tagged and a later sample of size $m$ contains $r>0$ tagged units.\\
+For population size $n$, the likelihood is $L_n=\binom{t}{r}\binom{n-t}{m-r}/\binom{n}{m}$.\\
+Since $L_n/L_{n-1}=(n-t)(n-m)/\{n(n-t-m+r)\}$, $L_n$ increases for $n<mt/r$ and decreases for $n>mt/r$.\\
+Hence $\widehat n=\lfloor mt/r\rfloor$; for $(t,m,r)=(10,20,4)$, $\widehat n=50$.
 \end{example}
 
 \begin{definition} \label{def:identifiability-and-parametric-functionals} \hlt{Identifiability and Functionals}
@@ -53,5 +59,6 @@ The maximizer is the sample mean $\overline{X}$.
 \end{definition}
 
 \begin{remark} \label{rem:likelihood-is-relative-evidence} \hlt{Likelihood as Relative Evidence}\\
-For fixed data $x$, the likelihood is a function of $\theta$, not a probability distribution on $\Theta$.  Ratios $L_x(\theta_1)/L_x(\theta_0)$ compare how well two model laws explain the same observation.
+For fixed data $x$, the likelihood is a function of $\theta$, not a probability distribution on $\Theta$.\\
+Ratios $L_x(\theta_1)/L_x(\theta_0)$ compare how well two model laws explain the same observation.
 \end{remark}
