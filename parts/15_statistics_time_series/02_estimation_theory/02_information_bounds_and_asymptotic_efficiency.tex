@@ -2,57 +2,68 @@
 
 Information inequalities describe the best possible local accuracy under regular models.  Efficient procedures are those whose asymptotic error reaches these bounds.
 
-\begin{theorem} \label{thm:cramer-rao-bound} \hlt{Cramer--Rao Bound}\\
-Let $\{P_\theta:\theta\in\Theta\subseteq\R\}$ be a regular dominated model, and let $I(\theta)>0$ be the Fisher information for one observation.  If $\widehat{\psi}$ is unbiased for $\psi(\theta)$ based on $n$ independent observations, then
-\[
-\operatorname{Var}_\theta(\widehat{\psi})
-\geq \frac{\psi'(\theta)^2}{nI(\theta)}.
-\]
+\begin{lemma} \label{lem:fisher-information-second-derivative} \hlt{Two Forms of Fisher Information}\\
+For a regular one-parameter dominated model, let $\ell_\theta(x)\defeq\log p_\theta(x)$ and $S_\theta(X)\defeq\partial_\theta\ell_\theta(X)$.\\
+Then $I(\theta)\defeq\mathbb{E}_\theta S_\theta(X)^2=-\mathbb{E}_\theta\partial_\theta^2\ell_\theta(X)$.
 \begin{proof}
-Let $S_n(\theta)=\partial_\theta\log L_X(\theta)$ be the sample score.  Regularity gives $\mathbb{E}_\theta S_n(\theta)=0$ and $\mathbb{E}_\theta S_n(\theta)^2=nI(\theta)$.  Differentiating $\mathbb{E}_\theta\widehat{\psi}=\psi(\theta)$ under the integral gives $\operatorname{Cov}_\theta(\widehat{\psi},S_n(\theta))=\psi'(\theta)$.  Cauchy--Schwarz yields $\psi'(\theta)^2\leq \operatorname{Var}_\theta(\widehat{\psi})nI(\theta)$.
+Differentiating $\int p_\theta\,d\mu=1$ gives $\mathbb{E}_\theta S_\theta=0$.\\
+Differentiating, $0=\partial_\theta\mathbb{E}_\theta S_\theta=\mathbb{E}_\theta[\partial_\theta S_\theta+S_\theta^2]=\mathbb{E}_\theta[\partial_\theta^2\ell_\theta+S_\theta^2]$, since $\partial_\theta p_\theta=S_\theta p_\theta$. Thus $I(\theta)=\mathbb{E}_\theta S_\theta^2=-\mathbb{E}_\theta\partial_\theta^2\ell_\theta$.\\
+\hlt{Structural Commentary}: Fisher information is both score variance and expected log-likelihood curvature.\\
+\hlt{Key Insight}: Normalisation forces the mean score to vanish, linking slope variance to curvature.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:cramer-rao-bound} \hlt{Cramer--Rao Bound}\\
+Let $X_1,\ldots,X_n\sim P_\theta$ be iid from a regular one-parameter dominated model with one-observation information $I(\theta)>0$. If $\widehat{\psi}\in L^2(P_\theta)$ is unbiased for differentiable $\psi(\theta)$, then $\operatorname{Var}_\theta(\widehat{\psi})\geq \psi'(\theta)^2/(nI(\theta))$.
+\begin{proof}
+Let $S_n(\theta)\defeq\partial_\theta\log L_n(\theta)=\sum_{i=1}^{n}S_\theta(X_i)$. Regularity gives $\mathbb{E}_\theta S_n=0$ and $\operatorname{Var}_\theta(S_n)=\mathbb{E}_\theta S_n^2=nI(\theta)$.\\
+Differentiating $\mathbb{E}_\theta\widehat{\psi}=\psi(\theta)$ gives $\psi'(\theta)=\mathbb{E}_\theta[\widehat{\psi}S_n]=\operatorname{Cov}_\theta(\widehat{\psi},S_n)$.\\
+Thus $\psi'(\theta)^2\leq\operatorname{Var}_\theta(\widehat{\psi})\operatorname{Var}_\theta(S_n)=\operatorname{Var}_\theta(\widehat{\psi})nI(\theta)$ by Cauchy--Schwarz.\\
+\hlt{Structural Commentary}: The score is the direction in which unbiased estimators must covary to track $\psi(\theta)$.\\
+\hlt{Key Insight}: Information lower-bounds variance through Cauchy--Schwarz.
 \end{proof}
 \end{theorem}
 
+\begin{example} \label{ex:poisson-cramer-rao-attainment} \hlt{Poisson Mean Attains the Bound}\\
+For $X\sim\operatorname{Poisson}(\lambda)$, $\ell_\lambda(X)=X\log\lambda-\lambda-\log(X!)$ and $\partial_\lambda^2\ell_\lambda(X)=-X/\lambda^2$, so $I(\lambda)=-\mathbb{E}_\lambda\partial_\lambda^2\ell_\lambda(X)=1/\lambda$.\\
+For iid $X_1,\ldots,X_n$, any unbiased estimator $T$ of $\lambda$ satisfies $\operatorname{Var}_\lambda(T)\geq\lambda/n$.\\
+$\overline{X}$ attains equality since $\mathbb{E}\overline{X}=\lambda$ and $\operatorname{Var}(\overline{X})=\lambda/n$.
+\end{example}
+
 \begin{definition} \label{def:maximum-likelihood-estimator} \hlt{Maximum Likelihood Estimator}\\
-A \hlt{maximum likelihood estimator} is any measurable choice
-\[
-\widehat{\theta}_n\in\operatorname*{arg\,max}_{\theta\in\Theta}L_X(\theta)
-=\operatorname*{arg\,max}_{\theta\in\Theta}\ell_X(\theta).
-\]
-Equivalently, it minimizes negative log-likelihood.
+For likelihood $L_X(\theta)$ and log-likelihood $\ell_X(\theta)$, a \hlt{maximum likelihood estimator} is any measurable\\
+$\widehat{\theta}_n(X)\in\arg\max_{\theta\in\Theta}L_X(\theta)=\arg\max_{\theta\in\Theta}\ell_X(\theta)$; equivalently, $\widehat{\theta}_n\in\arg\min_{\theta\in\Theta}[-\ell_X(\theta)]$.
 \end{definition}
 
 \begin{theorem} \label{thm:mle-asymptotic-normality} \hlt{Regular MLE Asymptotic Normality}\\
-Under standard identifiability, smoothness, and nonsingularity assumptions, if $\theta_0$ is an interior point and $X_1,\ldots,X_n$ are independent from $P_{\theta_0}$, then
-\[
-\sqrt{n}(\widehat{\theta}_n-\theta_0)
-\Rightarrow \mathcal{N}(0,I(\theta_0)^{-1}).
-\]
+Let $X_1,\ldots,X_n\sim P_{\theta_0}$ iid in a regular one-parameter model, with $\theta_0$ interior, $I(\theta_0)>0$, and a consistent interior MLE $\widehat{\theta}_n$. Then $\sqrt{n}(\widehat{\theta}_n-\theta_0)\Rightarrow N(0,I(\theta_0)^{-1})$.
 \begin{proof}
-The score equation is $0=S_n(\widehat{\theta}_n)$.  Taylor expanding around $\theta_0$ gives
-\[
-0=S_n(\theta_0)+\partial_\theta S_n(\widetilde{\theta}_n)(\widehat{\theta}_n-\theta_0).
-\]
-After dividing by $n$, the observed negative Hessian converges to $I(\theta_0)$, while $n^{-1/2}S_n(\theta_0)$ converges in distribution to $\mathcal{N}(0,I(\theta_0))$.  Solving the expansion gives the claim.
+Let $S_n(\theta)\defeq\partial_\theta\ell_n(\theta)$ and $J_n(\theta)\defeq-n^{-1}\partial_\theta S_n(\theta)$.\\
+Since $S_n(\widehat{\theta}_n)=0$, Taylor expansion gives $0=S_n(\theta_0)-nJ_n(\widetilde{\theta}_n)(\widehat{\theta}_n-\theta_0)$ for some $\widetilde{\theta}_n$ between $\widehat{\theta}_n$ and $\theta_0$.\\
+Hence $\sqrt{n}(\widehat{\theta}_n-\theta_0)=J_n(\widetilde{\theta}_n)^{-1}n^{-1/2}S_n(\theta_0)$.\\
+Regularity gives $J_n(\widetilde{\theta}_n)\xrightarrow{P}I(\theta_0)$ and $n^{-1/2}S_n(\theta_0)\Rightarrow N(0,I(\theta_0))$, so Slutsky gives the result.\\
+\hlt{Structural Commentary}: Local likelihood curvature converts score noise into estimator error.\\
+\hlt{Key Insight}: The MLE is asymptotically score divided by information.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:delta-method} \hlt{Delta Method}\\
-If $\sqrt{n}(T_n-\theta)\Rightarrow\mathcal{N}(0,\Sigma)$ and $g:\R^d\to\R^k$ is differentiable at $\theta$, then
-\[
-\sqrt{n}(g(T_n)-g(\theta))
-\Rightarrow\mathcal{N}(0,Dg(\theta)\Sigma Dg(\theta)^\top).
-\]
+If $\sqrt{n}(T_n-\theta)\Rightarrow N(0,\Sigma)$ and $g:\R^d\to\R^k$ is differentiable at $\theta$ with derivative $Dg(\theta)$,\\
+then $\sqrt{n}(g(T_n)-g(\theta))\Rightarrow N(0,Dg(\theta)\Sigma Dg(\theta)^\top)$.
 \begin{proof}
-Use the first-order expansion $g(T_n)=g(\theta)+Dg(\theta)(T_n-\theta)+r_n$, where $\norm{r_n}/\norm{T_n-\theta}\to0$ in probability.
+Differentiability gives $g(T_n)-g(\theta)=Dg(\theta)(T_n-\theta)+r_n$ with $\norm{r_n}/\norm{T_n-\theta}\to0$ in probability.\\
+Since $\sqrt{n}(T_n-\theta)=O_P(1)$, $\sqrt{n}r_n=o_P(1)$.\\
+Hence $\sqrt{n}(g(T_n)-g(\theta))=Dg(\theta)\sqrt{n}(T_n-\theta)+o_P(1)$, and Slutsky gives the stated limit.\\
+\hlt{Structural Commentary}: The derivative transports the limiting normal fluctuation through $g$.\\
+\hlt{Key Insight}: First-order linearisation determines asymptotic variance.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:asymptotic-efficiency} \hlt{Asymptotic Efficiency}\\
-An estimator sequence of a scalar regular parameter is \hlt{asymptotically efficient} at $\theta_0$ if
-\[
-\sqrt{n}(\widehat{\theta}_n-\theta_0)\Rightarrow
-\mathcal{N}(0,I(\theta_0)^{-1}).
-\]
-It then attains the inverse Fisher-information variance predicted by local asymptotic normality.
+For a scalar regular parameter with information $I(\theta_0)>0$, an estimator sequence $\widehat{\theta}_n$ is \hlt{asymptotically efficient} at $\theta_0$ if $\sqrt{n}(\widehat{\theta}_n-\theta_0)\Rightarrow N(0,I(\theta_0)^{-1})$, i.e. it attains the inverse Fisher-information variance.
 \end{definition}
+
+\begin{remark} \label{rem:asymptotic-efficiency-versus-finite-sample-efficiency} \hlt{Efficiency and Approximation}\\
+Finite-sample efficiency means equality in the Cramer--Rao bound.\\
+Asymptotic efficiency means $\sqrt{n}(\widehat{\theta}_n-\theta_0)\Rightarrow N(0,I(\theta_0)^{-1})$; finite-sample bias or boundary effects still matter.
+\end{remark}
