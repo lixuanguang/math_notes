@@ -1,0 +1,62 @@
+\subsection{Multiple Comparisons After ANOVA}
+\label{subsec:multiple-comparisons-after-anova}
+% Source integration: attached Chapter 12 screenshots, Section 12.2.2 and selected problems.
+
+The one-way $F$ test asks whether all treatment means are equal.  Once it rejects, the scientific question often becomes local: which means differ, and by how much?  The difficulty is simultaneous error control, already visible in Method \ref{prin:fishing-expeditions-and-bonferroni}.
+
+\begin{definition} \label{def:studentized-range-quantile} \hlt{Studentized Range Quantile}\\
+For $I$ treatment means and $\nu$ error degrees of freedom, let $q_{I,\nu}(\alpha)$ denote the upper $\alpha$ point of the studentized range distribution used in Tukey's simultaneous comparisons.  In a balanced one-way layout, the relevant error scale is the pooled standard deviation $S_p$ from Theorem \ref{thm:one-way-anova-expected-mean-squares}.
+\end{definition}
+
+\begin{method} \label{meth:tukey-pairwise-mean-comparisons} \hlt{Tukey Pairwise Comparisons}\\
+In a balanced normal one-way layout, simultaneous $100(1-\alpha)\%$ confidence intervals for all pairwise differences $\mu_{i_1}-\mu_{i_2}$ are
+\[
+(\overline{Y}_{i_1\cdot}-\overline{Y}_{i_2\cdot})
+\pm
+q_{I,I(J-1)}(\alpha)\frac{S_p}{\sqrt J}.
+\]
+Equivalently, reject the pairwise null $\mu_{i_1}=\mu_{i_2}$ when
+\[
+\abs{\overline{Y}_{i_1\cdot}-\overline{Y}_{i_2\cdot}}
+>
+q_{I,I(J-1)}(\alpha)\frac{S_p}{\sqrt J}.
+\]
+The protection is simultaneous over all pairs, so the threshold is larger than the threshold from a single pooled two-sample $t$ comparison.
+\end{method}
+
+\begin{example} \label{ex:tablet-laboratories-tukey-comparisons} \hlt{Tablet Laboratories: Tukey Comparisons}\\
+For the tablet laboratory data in Example \ref{ex:tablet-laboratories-one-way-anova}, the reported ordered sample means were
+\[
+\begin{array}{c|rrrrrrr}
+\text{Lab} & 1 & 3 & 7 & 2 & 5 & 6 & 4\\ \hline
+\text{Mean} & 4.062 & 4.003 & 3.998 & 3.997 & 3.957 & 3.955 & 3.920
+\end{array}
+\]
+Using $S_p=.06$ and the source's approximation $q_{7,60}(.05)=4.31$, the Tukey half-width is about
+\[
+4.31\frac{.06}{\sqrt{10}}=.082.
+\]
+Thus lab $1$ is significantly higher than labs $4,5,6$, and lab $3$ is significantly higher than lab $4$; the remaining pairwise differences are not significant at the simultaneous $5\%$ level.
+\end{example}
+
+\begin{method} \label{meth:bonferroni-multiple-mean-comparisons} \hlt{Bonferroni Pairwise Comparisons}\\
+Suppose $k$ pairwise hypotheses or confidence intervals are planned.  Testing each individual hypothesis at level $\alpha/k$, or forming each individual confidence interval at level $1-\alpha/k$, controls the family-wise error rate at most $\alpha$.  For pairwise mean comparisons using the one-way pooled error variance, a two-sided Bonferroni interval has the form
+\[
+(\overline{Y}_{i_1\cdot}-\overline{Y}_{i_2\cdot})
+\pm
+t_{\nu,1-\alpha/(2k)}S_p\sqrt{\frac1{J_{i_1}}+\frac1{J_{i_2}}},
+\]
+with $\nu=N-I$ in the unequal-size case.  Unlike Tukey's balanced formula, this method adapts directly to unequal treatment sizes and to selected planned comparisons.
+\end{method}
+
+\begin{example} \label{ex:tablet-laboratories-bonferroni-comparisons} \hlt{Tablet Laboratories: Bonferroni Comparisons}\\
+For all $\binom{7}{2}=21$ pairwise laboratory comparisons, the source uses a Bonferroni calculation with a critical value near $3.16$.  The resulting simultaneous $95\%$ half-width is about
+\[
+.085,
+\]
+very close to the Tukey half-width $.082$ in Example \ref{ex:tablet-laboratories-tukey-comparisons}.  It again identifies lab $1$ as significantly higher than labs $4,5,6$.
+\end{example}
+
+\begin{remark} \label{rem:multiple-comparisons-after-global-test} \hlt{The Global Test Does Not Name the Difference}\\
+Rejecting the one-way ANOVA null says that not all treatment means are equal.  It does not identify the responsible pairs or estimate their signs with simultaneous reliability.  Planned comparisons, Tukey intervals, and Bonferroni intervals answer different questions and should be chosen according to the comparison family that was scientifically meaningful before looking at the data.
+\end{remark}

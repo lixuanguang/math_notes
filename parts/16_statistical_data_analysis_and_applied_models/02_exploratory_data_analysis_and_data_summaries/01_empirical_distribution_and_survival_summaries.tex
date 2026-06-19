@@ -1,0 +1,119 @@
+\subsection{Empirical Distribution and Survival Summaries}
+\label{subsec:empirical-distribution-and-survival-summaries}
+% Source integration: attached screenshots from Chapter 10, "Summarizing Data."
+
+Exploratory summaries first treat the observed values as a batch of numbers.  A stochastic model may later explain their variability, but the displays themselves are useful before a model has been chosen.
+
+\begin{definition} \label{def:empirical-cdf-and-survival-summary} \hlt{Empirical CDF and Empirical Survival Function}\\
+For data $x_1,\ldots,x_n\in\R$, the \hlt{empirical cumulative distribution function} is
+\[
+F_n(x)\defeq \frac1n\#\{i:x_i\leq x\}.
+\]
+If the data are nonnegative times, the \hlt{empirical survival function} is
+\[
+S_n(t)\defeq 1-F_n(t)=\frac1n\#\{i:x_i>t\}.
+\]
+Thus $F_n(x)$ records the observed fraction at or below $x$, while $S_n(t)$ records the observed fraction beyond $t$.
+\end{definition}
+
+\begin{remark} \label{rem:ecdf-step-convention} \hlt{Step-Function Convention}\\
+If $x_{(1)}\leq\cdots\leq x_{(n)}$ are the ordered observations, then $F_n$ is a right-continuous step function.  It jumps by $r/n$ at a value that appears $r$ times, and is constant between successive observed values.  This is the data analogue of the CDF calculus in Proposition \ref{prop:cdf-probability-calculus}.
+\end{remark}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_ecdf_survival_steps.tikz}
+  \caption{Empirical distribution and survival functions summarize a batch by cumulative proportions.}
+  \label{fig:eda-ecdf-survival-steps}
+\end{figure}
+
+\begin{proposition} \label{prop:ecdf-fixed-point-mean-variance} \hlt{Fixed-Point Behavior of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent observations with common CDF $F$, and set
+\[
+F_n(x)=\frac1n\sum_{i=1}^n\mathbf{1}_{(-\infty,x]}(X_i).
+\]
+For fixed $x$,
+\[
+nF_n(x)\sim\operatorname{Binomial}(n,F(x)),
+\qquad
+\mathbb{E}F_n(x)=F(x),
+\qquad
+\operatorname{Var}(F_n(x))=\frac1nF(x)(1-F(x)).
+\]
+\begin{proof}
+For fixed $x$, the indicators $\mathbf{1}_{(-\infty,x]}(X_i)$ are independent Bernoulli random variables with success probability $F(x)$.  Summing them gives the binomial law, and dividing by $n$ gives the displayed expectation and variance.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:ecdf-two-point-covariance} \hlt{Two-Point Covariance of the Empirical CDF}\\
+Under the assumptions of Proposition \ref{prop:ecdf-fixed-point-mean-variance}, for $u,v\in\R$ and $m=\min\{u,v\}$,
+\[
+\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)
+=\frac1n\bigl(F(m)-F(u)F(v)\bigr).
+\]
+In particular the covariance is nonnegative.
+\begin{proof}
+Write $I_i(u)=\mathbf{1}_{\{X_i\leq u\}}$.  Cross terms with $i\neq j$ have zero covariance by independence.  For a common index,
+\[
+\mathbb{E}[I_i(u)I_i(v)]=\mathbb{P}(X_i\leq m)=F(m),
+\]
+while $\mathbb{E}I_i(u)\mathbb{E}I_i(v)=F(u)F(v)$.  Averaging over $n$ terms gives the formula.  If $u\leq v$, then the bracket equals $F(u)(1-F(v))\geq0$, and the case $v\leq u$ is symmetric.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:survival-and-hazard-functions} \hlt{Survival and Hazard Functions}\\
+For a nonnegative lifetime $T$ with CDF $F$ and density $f$, the \hlt{survival function} and \hlt{hazard function} are
+\[
+S(t)\defeq\mathbb{P}(T>t)=1-F(t),
+\qquad
+h(t)\defeq\frac{f(t)}{1-F(t)}
+\]
+where $S(t)>0$.  Equivalently, where differentiable,
+\[
+h(t)=-\frac{d}{dt}\log S(t).
+\]
+\end{definition}
+
+\begin{proposition} \label{prop:hazard-determines-density} \hlt{Hazard Determines the Density}\\
+If $h$ is a hazard function and $S(0)=1$, then
+\[
+S(t)=\exp\!\left(-\int_0^t h(s)\,ds\right),
+\qquad
+f(t)=h(t)\exp\!\left(-\int_0^t h(s)\,ds\right).
+\]
+\begin{proof}
+From Definition \ref{def:survival-and-hazard-functions}, $h(t)=-(d/dt)\log S(t)$.  Integrating from $0$ to $t$ gives the survival formula, and $f(t)=h(t)S(t)$ gives the density.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:exponential-and-weibull-hazards} \hlt{Constant and Power Hazards}\\
+For $F(t)=1-e^{-\lambda t}$ on $t\geq0$, one has $S(t)=e^{-\lambda t}$, $f(t)=\lambda e^{-\lambda t}$, and $h(t)=\lambda$.  Thus the exponential law has constant instantaneous failure rate.\\
+More generally, if
+\[
+F(t)=1-e^{-\alpha t^\beta},\qquad t\geq0,\quad \alpha,\beta>0,
+\]
+then $S(t)=e^{-\alpha t^\beta}$ and
+\[
+h(t)=\alpha\beta t^{\beta-1}.
+\]
+The hazard is increasing for $\beta>1$, decreasing for $0<\beta<1$, and constant for $\beta=1$.
+\end{example}
+
+\begin{method} \label{meth:empirical-log-survival-plot} \hlt{Empirical Log-Survival Plot}\\
+Suppose the ordered failure times satisfy $T_{(1)}<\cdots<T_{(n)}$ and there are no ties.  To avoid the undefined value $\log 0$ at the last observation, plot
+\[
+\log\left(1-\frac{i}{n+1}\right)
+\quad\text{against}\quad T_{(i)}.
+\]
+Large negative slopes indicate large hazards.  Since the delta-method approximation gives
+\[
+\operatorname{Var}\!\left(\log[1-F_n(t)]\right)
+\approx
+\frac1n\frac{F(t)}{1-F(t)},
+\]
+the far right tail of an empirical log-survival plot can be visually unstable.
+\end{method}
+
+\begin{remark} \label{rem:ecdf-simultaneous-versus-pointwise} \hlt{Pointwise and Simultaneous CDF Uncertainty}\\
+Proposition \ref{prop:ecdf-fixed-point-mean-variance} describes $F_n(x)$ at one fixed $x$.  Uniform statements about $\sup_x\abs{F_n(x)-F(x)}$ are different: they control the whole random function at once and are the route to simultaneous confidence bands and goodness-of-fit diagnostics.
+\end{remark}

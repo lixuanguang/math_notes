@@ -1,0 +1,89 @@
+\subsection{Randomized Blocks and Friedman's Test}
+\label{subsec:randomized-blocks-and-friedman-test}
+% Source integration: attached Chapter 12 screenshots, Sections 12.3.3--12.3.4.
+
+Randomized block designs compare treatments within relatively homogeneous blocks.  Blocking removes a major source of background variation from the treatment comparison, much as pairing removes shared variation in Proposition \ref{prop:pairing-variance-reduction}.
+
+\begin{definition} \label{def:randomized-block-design} \hlt{Randomized Block Design}\\
+A randomized block design has $I$ treatments and $J$ blocks.  Each block is divided into $I$ experimental units, and treatments are randomized within the block.  The additive block model is
+\[
+Y_{ij}=\mu+\alpha_i+\beta_j+\varepsilon_{ij},
+\qquad
+\sum_{i=1}^{I}\alpha_i=0,\quad
+\sum_{j=1}^{J}\beta_j=0,
+\]
+where $\alpha_i$ is the treatment effect and $\beta_j$ is the block effect.  Interest is usually focused on the treatment effects.
+\end{definition}
+
+\begin{method} \label{meth:randomized-block-f-test} \hlt{Randomized Block $F$ Test}\\
+Treat the randomized block model as a two-way layout with one observation per cell and no interaction.  Let $MS_A$, $MS_B$, and $MS_{AB}$ be the treatment, block, and residual mean squares.  When the no-interaction model is adequate,
+\[
+\mathbb{E}(MS_A)=\sigma^2+\frac{J}{I-1}\sum_{i=1}^{I}\alpha_i^2,
+\qquad
+\mathbb{E}(MS_B)=\sigma^2+\frac{I}{J-1}\sum_{j=1}^{J}\beta_j^2,
+\]
+\[
+\mathbb{E}(MS_{AB})=\sigma^2.
+\]
+Thus the treatment null is tested by
+\[
+F=\frac{MS_A}{MS_{AB}},
+\]
+with $I-1$ and $(I-1)(J-1)$ degrees of freedom under the normal additive model.
+\end{method}
+
+\begin{remark} \label{rem:block-interaction-conservatism} \hlt{Interaction in a Block Design}\\
+If treatment effects vary substantially across blocks, then $MS_{AB}$ estimates $\sigma^2$ plus interaction variation.  Using it as the denominator for the treatment test can make the test conservative, because the denominator is inflated by structure not included in the additive block model.
+\end{remark}
+
+\begin{example} \label{ex:itching-randomized-block-anova} \hlt{Itching Treatments with Subjects as Blocks}\\
+In the source experiment, seven treatments for itching were compared on ten subjects, each subject receiving one treatment per day in randomized order.  Subjects are blocks.  The reported ANOVA table was
+\[
+\begin{array}{c|rrrr}
+\text{Source} & df & SS & MS & F\\ \hline
+\text{Drugs} & 6 & 53013 & 8835 & 2.85\\
+\text{Subjects} & 9 & 103280 & 11476 & 3.71\\
+\text{Interaction} & 54 & 167130 & 3095 & \\
+\text{Total} & 69 & 323422 & &
+\end{array}
+\]
+The drug statistic $F=2.85$ on $6$ and $54$ degrees of freedom has reported $p<.025$, giving evidence of treatment differences.  The subject effect is large but is not the experimental target; blocking prevents that subject-to-subject variation from being mistaken for treatment variation.
+\end{example}
+
+\begin{method} \label{meth:friedman-test} \hlt{Friedman's Rank Test for Blocks}\\
+For a nonparametric block analysis, rank the $I$ treatment responses within each of the $J$ blocks.  Let $\overline{R}_{i\cdot}$ be the average rank of treatment $i$ across blocks and let
+\[
+\overline{R}_{\cdot\cdot}=\frac{I+1}{2}.
+\]
+The Friedman statistic is
+\[
+Q=
+\frac{12J}{I(I+1)}
+\sum_{i=1}^{I}(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2.
+\]
+For sample sizes like the source itching experiment, the null distribution is well approximated by $\chi^2_{I-1}$.  Average ranks are assigned to ties.
+\end{method}
+
+\begin{example} \label{ex:itching-friedman-test} \hlt{Itching Treatments by Within-Subject Ranks}\\
+For the itching data, the source reports average treatment ranks for no drug, placebo, papaverine, morphine, aminophylline, pentobarbital, and tripelennamine:
+\[
+\begin{array}{c|rrrrrrr}
+\text{Treatment} & \text{No} & \text{Plac.} & \text{Pap.} & \text{Morph.} & \text{Amino.} & \text{Pento.} & \text{Trip.}\\ \hline
+\text{Average rank} & 5.10 & 4.90 & 2.30 & 3.50 & 3.05 & 4.90 & 4.25
+\end{array}
+\]
+With $\overline{R}_{\cdot\cdot}=4$, the source gives
+\[
+\sum_i(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2=6.935,
+\qquad
+Q=14.86.
+\]
+Using the $\chi^2_6$ approximation, the reported tail probability is below $.025$.  The rank analysis reaches the same qualitative conclusion as the parametric block ANOVA.
+\end{example}
+
+\begin{corollary} \label{cor:friedman-two-treatments-sign-test} \hlt{Two Treatments Recover the Sign Test}\\
+With two treatments in each block, Friedman's test uses only whether treatment $1$ or treatment $2$ receives the larger within-block rank.  Thus it carries the same information as the paired sign test from Example \ref{ex:sign-test-binomial-glrt}.
+\begin{proof}
+Within each block, the ranks are $1$ and $2$.  The average rank of one treatment is therefore determined by the number of blocks in which that treatment has the larger response, which is exactly the sign-test count after ties are set aside or averaged according to the chosen convention.
+\end{proof}
+\end{corollary}

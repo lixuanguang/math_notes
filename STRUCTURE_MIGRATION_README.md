@@ -11,7 +11,7 @@ This file is now a maintenance reference, not a migration plan.
 - Shared preamble and macros live in `parts/base.tex`.
 - Front-matter notation lives in `parts/00_notations/`.
 - Mathematical body content lives in numbered part folders
-  `parts/01_...` through `parts/16_...`.
+  `parts/01_...` through `parts/17_...`.
 - Each numbered part owns one `overview.tex` file containing exactly one
   `\part{...}` and inputs for its section folders.
 - Each section folder owns one `overview.tex` file containing exactly one
@@ -42,8 +42,9 @@ order is:
 \input{parts/12_probability_stochastic_systems/overview}
 \input{parts/13_dynamical_pde_systems/overview}
 \input{parts/14_numerical_stochastic_computation/overview}
-\input{parts/15_statistics_time_series/overview}
-\input{parts/16_statistical_learning_deep_learning/overview}
+\input{parts/15_statistical_inference_and_time_series/overview}
+\input{parts/16_statistical_data_analysis_and_applied_models/overview}
+\input{parts/17_statistical_learning_deep_learning/overview}
 ```
 
 ## Top-Level Parts
@@ -66,23 +67,20 @@ parts/
   12_probability_stochastic_systems/
   13_dynamical_pde_systems/
   14_numerical_stochastic_computation/
-  15_statistics_time_series/
-  16_statistical_learning_deep_learning/
+  15_statistical_inference_and_time_series/
+  16_statistical_data_analysis_and_applied_models/
+  17_statistical_learning_deep_learning/
 ```
 
 `parts/00_notations/` is front matter, not a numbered mathematical part.
 
-## Proposed Statistical Split
+## Statistical Split
 
-The live worktree currently extends `parts/15_statistics_time_series/` beyond
-the original section index by adding sections `09`--`13`.  This makes one part
-own both inference theory and applied data-analysis workflows.  The preferred
-next structural cleanup is to split this region into three consecutive parts.
+The former `parts/15_statistics_time_series/` region has been split into three
+consecutive parts so that inference theory, classical applied statistical
+analysis, and statistical learning each have separate ownership.
 
-Do not treat the target paths below as active until a rename/move batch updates
-`math.tex`, the affected `overview.tex` files, and any local references.
-
-Target top-level order:
+Active top-level order:
 
 ```text
 parts/15_statistical_inference_and_time_series/
@@ -90,7 +88,7 @@ parts/16_statistical_data_analysis_and_applied_models/
 parts/17_statistical_learning_deep_learning/
 ```
 
-Target section ownership:
+Active section ownership:
 
 ```text
 parts/15_statistical_inference_and_time_series/
@@ -121,9 +119,11 @@ parts/17_statistical_learning_deep_learning/
   08_learning_systems_and_evaluation/
 ```
 
-Until the split is applied, the current temporary home for the applied
-data-analysis material is `parts/15_statistics_time_series/09_...` through
-`parts/15_statistics_time_series/13_...`.
+The applied data-analysis material that temporarily lived under
+`parts/15_statistics_time_series/09_...` through
+`parts/15_statistics_time_series/13_...` now lives under
+`parts/16_statistical_data_analysis_and_applied_models/01_...` through
+`parts/16_statistical_data_analysis_and_applied_models/05_...`.
 
 ## Content Adding Reference
 
@@ -373,7 +373,7 @@ parts/14_numerical_stochastic_computation/
   02_numerical_differential_systems/
   03_monte_carlo_and_stochastic_computation/
 
-parts/15_statistics_time_series/
+parts/15_statistical_inference_and_time_series/
   01_statistical_models_and_experiments/
   02_estimation_theory/
   03_hypothesis_testing_and_confidence/
@@ -382,13 +382,15 @@ parts/15_statistics_time_series/
   06_nonparametric_and_high_dimensional_statistics/
   07_time_series_models/
   08_sequential_inference_and_resampling/
-  09_survey_sampling/
-  10_exploratory_data_analysis_and_data_summaries/
-  11_categorical_data_analysis/
-  12_analysis_of_variance_and_designed_experiments/
-  13_linear_models_and_regression/
 
-parts/16_statistical_learning_deep_learning/
+parts/16_statistical_data_analysis_and_applied_models/
+  01_survey_sampling/
+  02_exploratory_data_analysis_and_data_summaries/
+  03_categorical_data_analysis/
+  04_analysis_of_variance_and_designed_experiments/
+  05_linear_models_and_regression/
+
+parts/17_statistical_learning_deep_learning/
   01_learning_problems_and_risk/
   02_generalization_theory/
   03_classical_supervised_learning/
@@ -438,9 +440,9 @@ notation file in the same change.
 | Probability spaces and limit theorems | Probability and Stochastic Systems |
 | ODEs, dynamical systems, and PDE | Dynamical and PDE Systems |
 | Numerical algorithms and stochastic computation | Numerical and Stochastic Computation |
-| Statistical models, estimation, tests, Bayes, nonparametrics, time series, and sequential inference | Statistics and Time Series; target owner: Statistical Inference and Time Series |
-| Survey sampling, exploratory data analysis, categorical data, ANOVA/design, regression, and classical applied models | Temporary home: Statistics and Time Series sections `09`--`13`; target owner: Statistical Data Analysis and Applied Models |
-| Prediction, representation, learned models | Statistical Learning and Deep Learning; target owner after split: Statistical Learning and Deep Learning |
+| Statistical models, estimation, tests, Bayes, nonparametrics, time series, and sequential inference | Statistical Inference and Time Series |
+| Survey sampling, exploratory data analysis, categorical data, ANOVA/design, regression, and classical applied models | Statistical Data Analysis and Applied Models |
+| Prediction, representation, learned models | Statistical Learning and Deep Learning |
 
 When a later part uses material owned earlier, it should cross-reference the
 owner rather than redeveloping the theory.

@@ -1,0 +1,104 @@
+\subsection{Inference, Prediction, and Multiple Regression}
+% Source integration: attached Chapter 14 screenshots, Sections 14.4.2--14.5.
+
+Once the linear model is written in matrix form, standard errors for coefficients and predictions are consequences of linear transformations of random vectors.
+
+\begin{theorem} \label{thm:linear-model-beta-hat-mean-covariance} \hlt{Mean and Covariance of Least-Squares Estimates}\\
+Assume $Y=X\beta+e$, $\operatorname{rank}(X)=p$, $\mathbb{E}e=0$, and $\operatorname{Var}(e)=\sigma^2I_n$.  Then
+\[
+\mathbb{E}\widehat{\beta}=\beta,
+\qquad
+\operatorname{Var}(\widehat{\beta})=\sigma^2(X^tX)^{-1}.
+\]
+\begin{proof}
+From Theorem \ref{thm:linear-model-normal-equations},
+\[
+\widehat{\beta}=(X^tX)^{-1}X^t(X\beta+e)
+=\beta+(X^tX)^{-1}X^te.
+\]
+The expectation follows from $\mathbb{E}e=0$.  The covariance formula follows from Proposition \ref{prop:linear-transform-random-vector-moments}:
+\[
+\operatorname{Var}(\widehat{\beta})
+=(X^tX)^{-1}X^t(\sigma^2I_n)X(X^tX)^{-1}
+=\sigma^2(X^tX)^{-1}.
+\]
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:linear-model-coefficient-inference} \hlt{Coefficient Inference in a Normal Linear Model}\\
+Let $C=(X^tX)^{-1}$ and estimate the standard error of $\widehat{\beta}_j$ by
+\[
+s_{\widehat{\beta}_j}=s\sqrt{c_{jj}}.
+\]
+If the errors are independent normal variables, then
+\[
+\frac{\widehat{\beta}_j-\beta_j}{s_{\widehat{\beta}_j}}\sim t_{n-p}.
+\]
+Thus a $100(1-\alpha)\%$ confidence interval is
+\[
+\widehat{\beta}_j\pm t_{n-p,1-\alpha/2}s_{\widehat{\beta}_j},
+\]
+and the test of $H_0:\beta_j=\beta_{j0}$ uses the statistic
+\[
+t=\frac{\widehat{\beta}_j-\beta_{j0}}{s_{\widehat{\beta}_j}}.
+\]
+Asymptotically, similar intervals are often used under weaker conditions by central-limit reasoning.
+\end{method}
+
+\begin{proposition} \label{prop:linear-model-mean-response-interval} \hlt{Mean Response at a New Design Point}\\
+For a fixed predictor vector $x_0\in\R^p$, the estimated mean response is
+\[
+\widehat{\mu}_0=x_0^t\widehat{\beta}.
+\]
+Under the assumptions of Theorem \ref{thm:linear-model-beta-hat-mean-covariance},
+\[
+\operatorname{Var}(\widehat{\mu}_0)=\sigma^2x_0^t(X^tX)^{-1}x_0.
+\]
+Replacing $\sigma$ by $s$ gives the usual standard error $s_{\widehat{\mu}_0}$ and normal-model confidence interval
+\[
+\widehat{\mu}_0\pm t_{n-p,1-\alpha/2}s_{\widehat{\mu}_0}.
+\]
+\end{proposition}
+
+\begin{corollary} \label{cor:linear-model-prediction-interval} \hlt{Prediction Interval for a New Observation}\\
+If a new observation at $x_0$ is
+\[
+Y_0=x_0^t\beta+e_0,
+\]
+with $e_0$ independent of the original errors and variance $\sigma^2$, then
+\[
+\operatorname{Var}(Y_0-\widehat{\mu}_0)
+=\sigma^2\left(1+x_0^t(X^tX)^{-1}x_0\right).
+\]
+Under normality, a $100(1-\alpha)\%$ prediction interval is
+\[
+\widehat{\mu}_0\pm t_{n-p,1-\alpha/2}s
+\sqrt{1+x_0^t(X^tX)^{-1}x_0}.
+\]
+\end{corollary}
+
+\begin{definition} \label{def:multiple-linear-regression-coefficients} \hlt{Multiple Regression Coefficients}\\
+In the model
+\[
+Y_i=\beta_0+\beta_1x_{i1}+\cdots+\beta_{p-1}x_{i,p-1}+e_i,
+\]
+the coefficient $\beta_k$ is the change in the expected response associated with increasing $x_k$ by one unit while holding the other predictors fixed.  Polynomial regression is included by treating powers such as $x_i^2$ as additional columns of the design matrix.
+\end{definition}
+
+\begin{definition} \label{def:coefficient-of-determination-r-squared} \hlt{Coefficient of Determination}\\
+For a model with an intercept, define
+\[
+\operatorname{TSS}=\sum_{i=1}^{n}(Y_i-\overline{Y})^2,
+\qquad
+R^2=1-\frac{\operatorname{RSS}}{\operatorname{TSS}}.
+\]
+Equivalently, $R^2$ is the squared sample correlation between $Y$ and $\widehat{Y}$.  It measures the fraction of response variability removed by the fitted model on the observed sample.
+\end{definition}
+
+\begin{remark} \label{rem:collinearity-and-coefficient-interpretation} \hlt{Collinearity and Interpretation}\\
+When two predictors are strongly linearly related, the fitted mean may be stable while individual coefficient estimates have large standard errors.  In the catheter-length example from the source, height and weight predicted length similarly one at a time; fitting both together added little reduction in residual scale and made coefficient interpretation unstable.  Exact linear dependence would make $X$ rank deficient, so the normal equations would not have a unique coefficient vector.
+\end{remark}
+
+\begin{example} \label{ex:quadratic-term-as-regression-check} \hlt{Quadratic Terms as a Lack-of-Fit Check}\\
+The source revisits a peak-area calibration fit by adding $x^2$ to the straight-line model.  The quadratic coefficient had a small $t$ statistic, so there was no evidence that the extra term was needed.  In contrast, for the stream-flow example, a quadratic term in depth was strongly significant and the residual plot no longer showed systematic curvature.  The lesson is diagnostic rather than automatic: an added term should be motivated by residual structure or subject-matter scale.
+\end{example}

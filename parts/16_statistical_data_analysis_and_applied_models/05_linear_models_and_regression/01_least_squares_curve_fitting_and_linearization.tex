@@ -1,0 +1,84 @@
+\subsection{Least Squares Curve Fitting and Linearization}
+% Source integration: attached Chapter 14 screenshots, Section 14.1.
+
+Least squares begins as a geometric fitting rule and becomes a statistical model only after assumptions are made about the errors.  The optimization step is asymmetric in the two plotted variables: ordinary regression measures vertical prediction errors.
+
+\begin{definition} \label{def:least-squares-parametric-fit} \hlt{Least-Squares Fit to a Parametric Family}\\
+For observed pairs $(x_i,y_i)$, $i=1,\ldots,n$, and a parametric prediction rule $m(x;\theta)$, the least-squares estimate minimizes
+\[
+S(\theta)=\sum_{i=1}^{n}\bigl(y_i-m(x_i;\theta)\bigr)^2.
+\]
+The residual at the $i$th observation is the observed value minus the fitted value,
+\[
+\widehat{e}_i=y_i-m(x_i;\widehat{\theta}).
+\]
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/regression_vertical_residuals.tikz}
+  \caption{Ordinary least squares minimizes squared vertical residuals from the observed responses to the fitted line.}
+  \label{fig:regression-vertical-residuals}
+\end{figure}
+
+\begin{proposition} \label{prop:simple-line-least-squares-formulas} \hlt{Least-Squares Line}\\
+Let $x_1,\ldots,x_n$ not all be equal.  The line $\widehat{y}=\widehat{\beta}_0+\widehat{\beta}_1x$ minimizing
+\[
+S(\beta_0,\beta_1)=\sum_{i=1}^{n}(y_i-\beta_0-\beta_1x_i)^2
+\]
+has coefficients
+\[
+\widehat{\beta}_1=
+\frac{\sum_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y})}
+{\sum_{i=1}^{n}(x_i-\overline{x})^2},
+\qquad
+\widehat{\beta}_0=\overline{y}-\widehat{\beta}_1\overline{x}.
+\]
+\begin{proof}
+Differentiating $S$ and setting the derivatives equal to zero gives
+\[
+\sum_{i=1}^{n}y_i=n\widehat{\beta}_0+\widehat{\beta}_1\sum_{i=1}^{n}x_i,
+\qquad
+\sum_{i=1}^{n}x_iy_i=\widehat{\beta}_0\sum_{i=1}^{n}x_i+\widehat{\beta}_1\sum_{i=1}^{n}x_i^2.
+\]
+Solving the first equation gives $\widehat{\beta}_0=\overline{y}-\widehat{\beta}_1\overline{x}$; substituting into the second gives the displayed slope formula.\\
+\hlt{Structural Commentary}: The fitted line passes through $(\overline{x},\overline{y})$.\\
+\hlt{Key Insight}: Centering turns the slope into covariance divided by variance.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:linear-in-the-parameters-model} \hlt{Linear in the Parameters}\\
+A fitting problem is \hlt{linear in the parameters} if the prediction has the form
+\[
+m(x;\beta)=\beta_0\phi_0(x)+\beta_1\phi_1(x)+\cdots+\beta_{p-1}\phi_{p-1}(x),
+\]
+where the basis functions $\phi_j$ are fixed and the unknowns are the coefficients $\beta_j$.  Polynomial regression is obtained by taking $\phi_j(x)=x^j$.
+\end{definition}
+
+\begin{example} \label{ex:least-squares-linear-and-nonlinear-parameters} \hlt{Linear and Nonlinear Parameters}\\
+The model
+\[
+f(t)=A\cos(\omega_1t)+B\sin(\omega_1t)+C\cos(\omega_2t)+D\sin(\omega_2t)
+\]
+is linear in $A,B,C,D$ when the frequencies $\omega_1,\omega_2$ are known, and nonlinear when the frequencies must also be estimated.  Similarly,
+\[
+f(t)=Ae^{-\alpha t}+Be^{-\beta t}
+\]
+is linear in $A,B$ when $\alpha,\beta$ are fixed but nonlinear when the decay rates are unknown.
+\end{example}
+
+\begin{method} \label{meth:linearizing-transformations-for-regression} \hlt{Linearizing Transformations}\\
+Some nonlinear-looking relationships become linear after a change of variables.  The Arrhenius form
+\[
+\alpha=Ce^{-e_A/(KT)}
+\]
+becomes
+\[
+\log\alpha=\log C-e_A\frac{1}{KT}.
+\]
+Thus plotting $\log \alpha$ against $1/T$ supports estimating $\log C$ and $e_A$ by a straight-line fit.  A transformation should be checked by residual plots because it changes both the scale of the mean relation and the implicit error model.
+\end{method}
+
+\begin{remark} \label{rem:least-squares-before-statistical-model} \hlt{Optimization Before Inference}\\
+The formulas above require only calculus and algebra.  Confidence intervals, standard errors, and tests require additional assumptions about the residual variation, introduced in the next subsection.
+\end{remark}

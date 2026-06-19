@@ -1,0 +1,90 @@
+\subsection{Quantile and Shape Displays}
+\label{subsec:quantile-and-shape-displays}
+% Source integration: attached screenshots from Chapter 10, "Summarizing Data."
+
+Distributional shape can be read from cumulative displays, density displays, or quantile comparisons.  These views emphasize different questions: cumulative proportion, local concentration, and relative change between two distributions.
+
+\begin{definition} \label{def:qq-plot} \hlt{Quantile--Quantile Plot}\\
+Let $F$ and $G$ be continuous strictly increasing CDFs with quantile functions as in Definition \ref{def:quantile-and-equality-in-distribution}.  A \hlt{Q--Q plot} compares the two distributions by plotting
+\[
+\bigl(F^{-1}(p),G^{-1}(p)\bigr),\qquad 0<p<1.
+\]
+For two equal-sized batches with order statistics $X_{(1)}\leq\cdots\leq X_{(n)}$ and $Y_{(1)}\leq\cdots\leq Y_{(n)}$, the empirical Q--Q plot uses the points $(X_{(i)},Y_{(i)})$.
+\end{definition}
+
+\begin{proposition} \label{prop:qq-location-scale-effects} \hlt{Location and Scale Effects in Q--Q Plots}\\
+Let $x_p=F^{-1}(p)$ and $y_p=G^{-1}(p)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $y_p=x_p+h$ for all $p$, then $G(y)=F(y-h)$ and the Q--Q plot is a line of slope $1$ and intercept $h$.
+\item If $y_p=cx_p$ for all $p$ with $c>0$, then $G(y)=F(y/c)$ and the Q--Q plot is a line through the origin with slope $c$.
+\end{enumerate}
+\begin{proof}
+For (i), $p=G(y_p)=F(x_p)=F(y_p-h)$ for every $p$, so the CDFs agree by reparameterizing $y=y_p$.  The proof of (ii) is the same with $x_p=y_p/c$.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_qq_effects.tikz}
+  \caption{Straight Q--Q plots diagnose simple additive and multiplicative effects.}
+  \label{fig:eda-qq-effects}
+\end{figure}
+
+\begin{example} \label{ex:normal-and-exponential-qq-lines} \hlt{Normal and Exponential Q--Q Lines}\\
+If $F$ is $N(0,1)$ and $G$ is $N(1,1)$, then $y_p=x_p+1$.  If $G$ is instead $N(1,4)$, then $y_p=1+2x_p$.  Thus the first Q--Q plot has slope $1$ and intercept $1$, while the second has slope $2$ and intercept $1$.\\
+If $F$ is exponential with rate $\lambda_1$ and $G$ is exponential with rate $\lambda_2$, then
+\[
+F^{-1}(p)=-\frac{\log(1-p)}{\lambda_1},
+\qquad
+G^{-1}(p)=-\frac{\log(1-p)}{\lambda_2},
+\]
+so the Q--Q plot is the line $y=(\lambda_1/\lambda_2)x$.
+\end{example}
+
+\begin{method} \label{meth:interpolated-empirical-quantile} \hlt{Interpolated Empirical Quantiles}\\
+For order statistics $X_{(1)},\ldots,X_{(n)}$, assign $X_{(k)}$ to probability $k/(n+1)$.  If
+\[
+\frac{k}{n+1}\leq p\leq\frac{k+1}{n+1},
+\]
+one linear interpolation convention is
+\[
+\widehat{x}_p
+=(1-\lambda)X_{(k)}+\lambda X_{(k+1)},
+\qquad
+\lambda=(n+1)p-k.
+\]
+This lets Q--Q plots compare unequal batch sizes by fixing a common grid of probabilities and interpolating the larger or smaller sample as needed.
+\end{method}
+
+\begin{proposition} \label{prop:sample-quantile-variance-delta-method} \hlt{Approximate Variance of a Sample Quantile}\\
+Let $Y_1,\ldots,Y_n$ be iid from a continuous CDF $F$ with density $f$, and let $x_p=F^{-1}(p)$ with $f(x_p)>0$.  For an order statistic whose rank is near $p(n+1)$,
+\[
+\operatorname{Var}(\widehat{x}_p)
+\approx
+\frac{p(1-p)}{n f(x_p)^2}.
+\]
+\begin{proof}
+By Theorem \ref{thm:kth-order-statistic-density}, the transformed order statistic $F(Y_{(k)})$ behaves like a uniform order statistic with mean approximately $p$ and variance approximately $p(1-p)/n$.  Applying the derivative of $F^{-1}$, namely $1/f(F^{-1}(p))$, gives the displayed delta-method approximation.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:histogram-density-and-stem-leaf-display} \hlt{Histogram, Density Display, and Stem-and-Leaf Plot}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{histogram} divides the range into bins and plots counts or proportions in each bin.  With unequal bin widths, density height should be proportional to ``proportion divided by bin width'' so that area represents probability.
+\item A \hlt{density display} estimates local concentration by a smooth curve, often using the kernel estimator from Definition \ref{def:kernel-density-estimator}.
+\item A \hlt{stem-and-leaf plot} writes each observation as a common leading part, the stem, and a final digit or block, the leaf.  It displays shape while retaining much of the original numerical information.
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_histogram_kde_bandwidth.tikz}
+  \caption{Bin width and bandwidth control the roughness of shape displays.}
+  \label{fig:eda-histogram-kde-bandwidth}
+\end{figure}
+
+\begin{remark} \label{rem:shape-displays-lose-different-information} \hlt{What Shape Displays Preserve}\\
+An empirical CDF preserves all order information and supports direct quantile reading.  A histogram sacrifices exact data values for a compact view of shape.  A kernel estimate smooths the histogram idea, but the bandwidth controls how much local structure is retained.  A stem-and-leaf plot is useful when one wants both a rough distributional shape and recoverable numerical values.
+\end{remark}

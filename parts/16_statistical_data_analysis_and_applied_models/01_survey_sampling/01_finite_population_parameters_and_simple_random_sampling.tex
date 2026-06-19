@@ -1,0 +1,160 @@
+\subsection{Finite Population Parameters and Simple Random Sampling}
+% Source integration: supplied Chapter 7 screenshots, Sections 7.1--7.3.2
+% and selected end-of-chapter problems on sequential simple random sampling.
+
+Survey sampling treats a finite population as fixed and the sample-selection
+mechanism as random.  The inferential target is often a population mean, total,
+or proportion, while the random variables come from the sampling design.
+
+\begin{definition} \label{def:finite-population-parameters} \hlt{Finite Population Parameters}\\
+Let a population have size $N$ and fixed values $x_1,\ldots,x_N$.  Its
+\hlt{population mean}, \hlt{population total}, and \hlt{population variance} are
+\[
+\mu\defeq \frac1N\sum_{i=1}^{N}x_i,
+\qquad
+\tau\defeq\sum_{i=1}^{N}x_i=N\mu,
+\qquad
+\sigma^2\defeq \frac1N\sum_{i=1}^{N}(x_i-\mu)^2.
+\]
+Equivalently,
+\[
+\sigma^2=\frac1N\sum_{i=1}^{N}x_i^2-\mu^2.
+\]
+In the dichotomous case $x_i\in\{0,1\}$, $\mu=p$ is the population proportion
+with the characteristic and $\sigma^2=p(1-p)$.
+\end{definition}
+
+\begin{definition} \label{def:simple-random-sampling-without-replacement} \hlt{Simple Random Sampling}\\
+A \hlt{simple random sample} of size $n$ without replacement is a random
+$n$-element subset of the population, with every one of the $\binom{N}{n}$
+possible subsets equally likely.  If $X_1,\ldots,X_n$ denote the sampled
+values in random order, the usual estimators are
+\[
+\overline{X}\defeq \frac1n\sum_{i=1}^{n}X_i,
+\qquad
+T\defeq N\overline{X}.
+\]
+In the dichotomous case, $\widehat p\defeq\overline{X}$ is the sample
+proportion.
+\end{definition}
+
+\begin{lemma} \label{lem:srs-one-draw-law} \hlt{Law of One Sample Position}\\
+Let the distinct population values be $\zeta_1,\ldots,\zeta_m$, and let
+$n_j$ be the number of population members with value $\zeta_j$.  For each
+sample position $i$,
+\[
+\mathbb{P}(X_i=\zeta_j)=\frac{n_j}{N},
+\qquad
+\mathbb{E}X_i=\mu,
+\qquad
+\operatorname{Var}(X_i)=\sigma^2.
+\]
+\begin{proof}
+The $i$th selected member is equally likely to be any of the $N$ population
+members, so the probability of value $\zeta_j$ is $n_j/N$.  The expectation and
+variance then reduce to the finite-population formulas in Definition
+\ref{def:finite-population-parameters}.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:srs-unbiased-mean-and-total} \hlt{Unbiased SRS Estimators}\\
+Under simple random sampling,
+\[
+\mathbb{E}\overline{X}=\mu,
+\qquad
+\mathbb{E}T=\tau.
+\]
+\begin{proof}
+By Lemma \ref{lem:srs-one-draw-law} and linearity,
+$\mathbb{E}\overline{X}=n^{-1}\sum_i\mathbb{E}X_i=\mu$.  Since $T=N\overline{X}$,
+$\mathbb{E}T=N\mu=\tau$.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:srs-without-replacement-covariance} \hlt{Negative Dependence Without Replacement}\\
+For $i\neq j$ in a simple random sample without replacement,
+\[
+\operatorname{Cov}(X_i,X_j)=-\frac{\sigma^2}{N-1}.
+\]
+\begin{proof}
+Let $Y_1,\ldots,Y_N$ be a uniformly random ordering of the whole population.
+Each $Y_i$ has variance $\sigma^2$, and all off-diagonal covariances have the
+same value, say $\gamma$.  Since $\sum_iY_i=\tau$ is fixed,
+\[
+0=\operatorname{Var}\left(\sum_{i=1}^{N}Y_i\right)
+=N\sigma^2+N(N-1)\gamma.
+\]
+Thus $\gamma=-\sigma^2/(N-1)$, and any two distinct sample positions have this
+same covariance.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:srs-sample-mean-variance} \hlt{Variance and Finite Population Correction}\\
+Under simple random sampling without replacement,
+\[
+\operatorname{Var}(\overline{X})
+=\frac{\sigma^2}{n}\left(\frac{N-n}{N-1}\right)
+=\frac{\sigma^2}{n}\left(1-\frac{n-1}{N-1}\right).
+\]
+The factor $(N-n)/(N-1)$ is the \hlt{finite population correction}.  Consequently
+\[
+\operatorname{Var}(T)=N^2\operatorname{Var}(\overline{X}).
+\]
+\begin{proof}
+Use the covariance expansion from Theorem
+\ref{thm:expectation-variance-covariance-rules} and Lemma
+\ref{lem:srs-without-replacement-covariance}:
+\[
+\operatorname{Var}(\overline{X})
+=\frac1{n^2}\left(n\sigma^2+n(n-1)\left[-\frac{\sigma^2}{N-1}\right]\right)
+=\frac{\sigma^2}{n}\left(1-\frac{n-1}{N-1}\right).
+\]
+The total estimator satisfies $T=N\overline{X}$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:srs-estimated-standard-errors} \hlt{Estimated Standard Errors}\\
+Let
+\[
+s^2\defeq \frac{1}{n-1}\sum_{i=1}^{n}(X_i-\overline{X})^2.
+\]
+Then practical estimated variances are
+\[
+s_{\overline{X}}^2=\frac{s^2}{n}\left(1-\frac{n}{N}\right),
+\qquad
+s_T^2=N^2s_{\overline{X}}^2.
+\]
+In the dichotomous case,
+\[
+s_{\widehat p}^2=\frac{\widehat p(1-\widehat p)}{n-1}
+\left(1-\frac{n}{N}\right).
+\]
+\end{corollary}
+
+\begin{example} \label{ex:srs-finite-population-correction-hospitals} \hlt{Finite Population Correction in a Hospital Survey}\\
+For the hospital population in the source chapter, $N=393$ and the population
+standard deviation of discharges is about $589.7$.  If $n=32$ hospitals are
+sampled without replacement, then
+\[
+\sigma_{\overline{X}}
+=\frac{589.7}{\sqrt{32}}\sqrt{1-\frac{31}{392}}
+\approx 100.0.
+\]
+The correction is small here because $32/393$ is small; the main scale is still
+the familiar $1/\sqrt n$ averaging factor.
+\end{example}
+
+\begin{method} \label{meth:reservoir-sampling-simple-random-sample} \hlt{Sequential Simple Random Sampling}\\
+When the population size is not known in advance but $n\leq N$, a simple random
+sample can be generated while reading the population once:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put the first $n$ population members into the sample.
+\item When the $(n+k)$th member is read, place it in the sample with probability
+$n/(n+k)$.
+\item If it is placed in the sample, remove one of the existing sample members
+uniformly at random.
+\end{enumerate}
+After each step the current sample is uniformly distributed over all subsets of
+the current population list with size $n$.
+\end{method}

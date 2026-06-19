@@ -1,0 +1,143 @@
+\subsection{Ratio Estimation}
+% Source integration: supplied Chapter 7 screenshots, Section 7.4 and selected
+% ratio-estimation problems.
+
+Ratio estimation uses an auxiliary variable whose population mean or total is
+known.  It is especially useful when the auxiliary variable is strongly
+correlated with the target variable.
+
+\begin{definition} \label{def:finite-population-ratio} \hlt{Population and Sample Ratios}\\
+Suppose each population member has two fixed values $(x_i,y_i)$, with
+$\mu_x\neq0$.  The population ratio is
+\[
+r\defeq \frac{\sum_{i=1}^{N}y_i}{\sum_{i=1}^{N}x_i}
+=\frac{\mu_y}{\mu_x}.
+\]
+For a simple random sample of pairs $(X_i,Y_i)$, the natural sample ratio is
+\[
+R\defeq \frac{\overline{Y}}{\overline{X}}.
+\]
+If $\mu_x$ is known, a ratio estimate of $\mu_y$ is
+\[
+\overline{Y}_R\defeq \mu_xR.
+\]
+If the total $\tau_x$ is known, a ratio estimate of $\tau_y$ is
+\[
+T_R\defeq \tau_x R.
+\]
+In general, $r$ is not the average of the individual ratios $y_i/x_i$.
+\end{definition}
+
+\begin{definition} \label{def:finite-population-covariance-correlation} \hlt{Population Covariance and Correlation}\\
+For finite population pairs $(x_i,y_i)$, define
+\[
+\sigma_{xy}\defeq \frac1N\sum_{i=1}^{N}(x_i-\mu_x)(y_i-\mu_y),
+\qquad
+\rho\defeq \frac{\sigma_{xy}}{\sigma_x\sigma_y},
+\]
+when $\sigma_x,\sigma_y>0$.  The sample covariance is
+\[
+s_{xy}\defeq \frac{1}{n-1}\sum_{i=1}^{n}
+(X_i-\overline{X})(Y_i-\overline{Y}).
+\]
+\end{definition}
+
+\begin{theorem} \label{thm:srs-ratio-approximate-variance-bias} \hlt{Approximate Moments of the Ratio Estimator}\\
+Under simple random sampling,
+\[
+\operatorname{Var}(R)
+\approx
+\frac1n\left(1-\frac{n-1}{N-1}\right)
+\frac{1}{\mu_x^2}
+\left(r^2\sigma_x^2+\sigma_y^2-2r\sigma_{xy}\right),
+\]
+and
+\[
+\mathbb{E}R
+\approx
+r+
+\frac1n\left(1-\frac{n-1}{N-1}\right)
+\frac{1}{\mu_x^2}
+\left(r\sigma_x^2-\sigma_{xy}\right).
+\]
+\begin{proof}
+For the sample means,
+\[
+\operatorname{Var}(\overline{X})
+=\frac{\sigma_x^2}{n}\left(1-\frac{n-1}{N-1}\right),
+\quad
+\operatorname{Var}(\overline{Y})
+=\frac{\sigma_y^2}{n}\left(1-\frac{n-1}{N-1}\right),
+\]
+and the same without-replacement covariance calculation gives
+\[
+\operatorname{Cov}(\overline{X},\overline{Y})
+=\frac{\sigma_{xy}}{n}\left(1-\frac{n-1}{N-1}\right).
+\]
+Apply the ratio expansion in Example \ref{ex:ratio-moment-propagation} to
+$g(x,y)=y/x$ at $(\mu_x,\mu_y)$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:ratio-estimated-standard-error} \hlt{Estimated Standard Error of a Ratio}\\
+An estimated variance for $R$ is
+\[
+s_R^2=
+\frac1n\left(1-\frac{n-1}{N-1}\right)
+\frac{1}{\overline{X}^2}
+\left(R^2s_x^2+s_y^2-2Rs_{xy}\right).
+\]
+An approximate $100(1-\alpha)\%$ confidence interval for $r$ is
+\[
+R\pm z(\alpha/2)s_R.
+\]
+For estimating $\mu_y$ by $\overline{Y}_R=\mu_xR$, use
+$s_{\overline{Y}_R}=\mu_xs_R$; for estimating $\tau_y$ by $T_R=\tau_xR$, use
+$s_{T_R}=\tau_xs_R$.
+\end{corollary}
+
+\begin{method} \label{meth:when-ratio-estimation-helps} \hlt{When the Ratio Estimate Helps}\\
+Ignoring finite population corrections, the ordinary estimator $\overline{Y}$
+has variance $\sigma_y^2/n$, while the ratio estimate of $\mu_y$ has approximate
+variance
+\[
+\frac1n(r^2\sigma_x^2+\sigma_y^2-2r\sigma_{xy}).
+\]
+Thus, for $r>0$, the ratio estimate has smaller variance when
+\[
+2\rho\sigma_y>r\sigma_x.
+\]
+Writing $C_x\defeq\sigma_x/\mu_x$ and $C_y\defeq\sigma_y/\mu_y$, this condition
+is
+\[
+\rho>\frac12\frac{C_x}{C_y}.
+\]
+Strong positive correlation, with stable $x$-scale, is the favorable case.
+\end{method}
+
+\begin{example} \label{ex:mortgage-income-ratio-estimate} \hlt{Mortgage-Payment Ratio}\\
+In a sample of $100$ recent house buyers, let $Y$ be monthly mortgage payment
+and $X$ gross income.  Suppose
+\[
+\overline{X}=3100,\quad \overline{Y}=868,\quad
+s_x=1200,\quad s_y=250,\quad \widehat\rho=0.85,\quad R=0.28.
+\]
+Neglecting the finite population correction,
+\[
+s_R
+\approx
+\frac{1}{10}\frac1{3100}
+\sqrt{0.28^2(1200)^2+(250)^2-2(0.28)(0.85)(250)(1200)}
+\approx 0.006.
+\]
+An approximate $95\%$ confidence interval for the population ratio is therefore
+$0.28\pm1.96(0.006)$.
+\end{example}
+
+\begin{remark} \label{rem:ratio-bias-and-resampling-todo} \hlt{Bias and Resampling Corrections}\\
+The ratio estimator is nonlinear, so it is generally biased, with first-order
+bias described by Theorem \ref{thm:srs-ratio-approximate-variance-bias}.  The
+source problems also point toward exact bias bounds and jackknife bias reduction
+for ratio estimators.  Those require a separate development of resampling
+corrections and are left as a later integration target.
+\end{remark}

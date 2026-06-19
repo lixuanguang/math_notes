@@ -1,0 +1,67 @@
+\subsection{Boxplots, Scatterplots, and Relationship Summaries}
+\label{subsec:boxplots-scatterplots-and-relationship-summaries}
+% Source integration: attached screenshots from Chapter 10, "Summarizing Data."
+
+Boxplots and scatterplots are compact exploratory displays.  A boxplot summarizes one batch or compares several batches; a scatterplot displays relationships between paired variables.
+
+\begin{method} \label{meth:boxplot-construction} \hlt{Boxplot Construction}\\
+A standard boxplot is built from the median, lower quartile $Q_1$, upper quartile $Q_3$, and $\operatorname{IQR}=Q_3-Q_1$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Draw a box from $Q_1$ to $Q_3$ and mark the median inside the box.
+\item Draw whiskers to the most extreme observations lying within $1.5\operatorname{IQR}$ of the nearer quartile.
+\item Mark observations beyond the whiskers individually as possible outliers.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_boxplot_schematic.tikz}
+  \caption{A boxplot displays center, central spread, skewness, and possible outliers.}
+  \label{fig:eda-boxplot-schematic}
+\end{figure}
+
+\begin{remark} \label{rem:boxplots-compare-batches} \hlt{Comparing Batches with Boxplots}\\
+Parallel boxplots are useful when many batches must be compared at once.  Differences in medians suggest shifts in location; differences in box lengths suggest changes in central spread; asymmetric whiskers and one-sided outliers suggest skewness or tail imbalance.
+\end{remark}
+
+\begin{definition} \label{def:scatterplot-and-correlation-summaries} \hlt{Scatterplot, Pearson Correlation, and Rank Correlation}\\
+For paired data $(x_1,y_1),\ldots,(x_n,y_n)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{scatterplot} places the points in the $xy$-plane to display association, curvature, clusters, and outliers.
+\item The \hlt{Pearson correlation coefficient} is
+\[
+r=\frac{\sum_{i=1}^n(x_i-\overline{x})(y_i-\overline{y})}
+{\sqrt{\sum_{i=1}^n(x_i-\overline{x})^2}\sqrt{\sum_{i=1}^n(y_i-\overline{y})^2}}.
+\]
+\item The \hlt{rank correlation coefficient} is the Pearson correlation of the ranks of the $x_i$ and the ranks of the $y_i$.
+\end{enumerate}
+Pearson correlation measures linear association on the displayed scales.  Rank correlation is invariant under monotone transformations and is less sensitive to extreme numerical values.
+\end{definition}
+
+\begin{method} \label{meth:scatterplot-diagnostic-workflow} \hlt{Scatterplot Diagnostics}\\
+When using scatterplots:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Plot the raw variables first and look for outliers, curvature, clusters, and changing spread.
+\item Try scientifically meaningful transformations, such as logarithms for variables spanning several orders of magnitude.
+\item Use correlation only after checking whether a linear summary is visually appropriate.
+\item For more than two variables, inspect a scatterplot matrix before relying on pairwise numerical summaries alone.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:scale-can-hide-relationship-in-scatterplot} \hlt{Changing Scale Can Reveal Structure}\\
+If one coordinate varies over several orders of magnitude, a raw scatterplot can compress most points near an axis and hide a relationship.  Plotting against the logarithm of that coordinate can reveal an approximately monotone or linear pattern on the transformed scale.  The correlation before and after such a transformation need not agree, because Pearson correlation measures linear association on the chosen coordinates.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_scatterplot_scale_change.tikz}
+  \caption{A change of scale can turn a compressed scatterplot into a readable relationship display.}
+  \label{fig:eda-scatterplot-scale-change}
+\end{figure}
+
+\begin{remark} \label{rem:exploratory-displays-before-inference} \hlt{Exploration Before Formal Inference}\\
+Exploratory displays do not replace confidence intervals, tests, or models.  They often determine which formal question is sensible: whether a model should include a transformation, whether an apparent relationship is driven by a few points, whether batches have comparable spread, and whether a data-recording problem is plausible.
+\end{remark}

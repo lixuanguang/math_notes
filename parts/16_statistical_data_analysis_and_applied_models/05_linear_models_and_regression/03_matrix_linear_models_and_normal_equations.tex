@@ -1,0 +1,115 @@
+\subsection{Matrix Linear Models and Normal Equations}
+% Source integration: attached Chapter 14 screenshots, Sections 14.3--14.4.4.
+
+Matrix notation separates the geometry of least squares from the statistical assumptions on the errors.  It also makes multiple regression a direct extension of simple regression.
+
+\begin{definition} \label{def:fixed-design-linear-model} \hlt{Fixed-Design Linear Model}\\
+Let $Y\in\R^n$, $X\in\R^{n\times p}$, $\beta\in\R^p$, and $e\in\R^n$.  The fixed-design linear model is
+\[
+Y=X\beta+e.
+\]
+Usually the first column of $X$ is $\mathbf{1}$ when the model contains an intercept.  The least-squares estimator minimizes
+\[
+S(\beta)=\norm{Y-X\beta}_2^2.
+\]
+\end{definition}
+
+\begin{theorem} \label{thm:linear-model-normal-equations} \hlt{Normal Equations for the Linear Model}\\
+The least-squares estimates are exactly the solutions of
+\[
+X^tX\widehat{\beta}=X^tY.
+\]
+If $\operatorname{rank}(X)=p$, then $X^tX$ is invertible and
+\[
+\widehat{\beta}=(X^tX)^{-1}X^tY.
+\]
+\begin{proof}
+This is Theorem \ref{thm:matrix-least-squares-normal-equations} with $A=X$ and $\mathbf{y}=Y$, written over $\R$ with transpose in place of conjugate transpose.  The full-column-rank formula follows by uniqueness.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:linear-model-gram-rank-criterion} \hlt{Rank Criterion for the Normal Matrix}\\
+The matrix $X^tX$ is nonsingular if and only if $\operatorname{rank}(X)=p$.
+\begin{proof}
+If $X^tX$ is singular, choose $u\neq0$ with $X^tXu=0$.  Then
+\[
+0=u^tX^tXu=\norm{Xu}_2^2,
+\]
+so $Xu=0$ and the columns of $X$ are dependent.  Conversely, if $Xu=0$ for some nonzero $u$, then $X^tXu=0$, so $X^tX$ is singular.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:hat-matrix-fitted-values-and-residuals} \hlt{Hat Matrix, Fitted Values, and Residuals}\\
+Assume $\operatorname{rank}(X)=p$ and set
+\[
+P\defeq X(X^tX)^{-1}X^t.
+\]
+Then
+\[
+\widehat{Y}=X\widehat{\beta}=PY,
+\qquad
+\widehat{e}=Y-\widehat{Y}=(I-P)Y.
+\]
+The matrix $P$ is often called the \hlt{hat matrix} because it maps observations to fitted values.
+\end{definition}
+
+\begin{proposition} \label{prop:hat-matrix-projection-properties} \hlt{Projection Properties of the Hat Matrix}\\
+The matrix $P=X(X^tX)^{-1}X^t$ satisfies
+\[
+P=P^t=P^2,
+\qquad
+I-P=(I-P)^t=(I-P)^2.
+\]
+Moreover, $\widehat{Y}$ is the orthogonal projection of $Y$ onto $\operatorname{col}(X)$, and the residual vector is orthogonal to every column of $X$.
+\begin{proof}
+The identities follow by direct multiplication and symmetry of $(X^tX)^{-1}$.  Since $P$ is self-adjoint and idempotent with range $\operatorname{col}(X)$, it is the orthogonal projection onto $\operatorname{col}(X)$ by the projection criteria in Theorem \ref{thm:matrix-least-squares-normal-equations}.  Thus $X^t\widehat{e}=X^t(Y-X\widehat{\beta})=0$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:linear-model-unbiased-error-variance} \hlt{Unbiased Estimate of the Error Variance}\\
+Assume the fixed-design model has $\mathbb{E}e=0$ and $\operatorname{Var}(e)=\sigma^2I_n$, with $\operatorname{rank}(X)=p$.  Then
+\[
+\mathbb{E}\norm{Y-\widehat{Y}}_2^2=(n-p)\sigma^2.
+\]
+Consequently,
+\[
+s^2\defeq\frac{\norm{Y-\widehat{Y}}_2^2}{n-p}
+\]
+is an unbiased estimator of $\sigma^2$.
+\begin{proof}
+Because $(I-P)X\beta=0$,
+\[
+\norm{Y-\widehat{Y}}_2^2=e^t(I-P)e.
+\]
+For a centered vector with covariance matrix $\sigma^2I_n$ and a fixed matrix $A$, $\mathbb{E}(e^tAe)=\sigma^2\operatorname{tr}(A)$.  With $A=I-P$,
+\[
+\mathbb{E}\norm{Y-\widehat{Y}}_2^2=\sigma^2\operatorname{tr}(I-P).
+\]
+Since $P$ is a projection onto a $p$-dimensional space, $\operatorname{tr}(P)=p$, so $\operatorname{tr}(I-P)=n-p$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:standardized-residual-linear-model} \hlt{Standardized Residual}\\
+Let $p_{ii}$ be the $i$th diagonal entry of the hat matrix $P$.  The standardized residual is
+\[
+r_i=\frac{Y_i-\widehat{Y}_i}{s\sqrt{1-p_{ii}}}.
+\]
+The factor $1-p_{ii}$ accounts for the fact that different residuals can have different variances.
+\end{definition}
+
+\begin{proposition} \label{prop:residuals-uncorrelated-with-fitted-values} \hlt{Residuals Are Uncorrelated with Fitted Values}\\
+Under $\operatorname{Var}(e)=\sigma^2I_n$, the residual vector $\widehat{e}=(I-P)Y$ is uncorrelated with the fitted vector $\widehat{Y}=PY$.
+\begin{proof}
+The cross-covariance matrix is
+\[
+\operatorname{Cov}(\widehat{e},\widehat{Y})
+=(I-P)\sigma^2I_nP^t
+=\sigma^2(P^t-PP^t)=0,
+\]
+using Proposition \ref{prop:hat-matrix-projection-properties}.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:linear-model-numerical-solution-route} \hlt{Solve Least Squares with Factors}\\
+The normal equations are compact, but forming $X^tX$ can square the condition number.  QR-based least squares, Proposition \ref{prop:qr-least-squares-and-projection}, solves with orthogonal and triangular factors, and Perspective \ref{per:normal-equations-squaring-condition-number} explains the conditioning issue.  Cholesky can be used on $X^tX$ when it is well conditioned, but it inherits the normal-equation sensitivity.
+\end{perspective}

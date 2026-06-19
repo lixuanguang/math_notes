@@ -1,0 +1,166 @@
+\subsection{Stratified Random Sampling}
+% Source integration: supplied Chapter 7 screenshots, Sections 7.5--7.6 and
+% selected stratified-sampling problems.
+
+Stratified sampling partitions the population into subpopulations and samples
+within each one.  It can guarantee representation of important groups and can
+reduce variance when strata are internally homogeneous or have different means.
+
+\begin{definition} \label{def:stratified-sampling-notation} \hlt{Strata and the Stratified Mean}\\
+Suppose the population is partitioned into $L$ strata.  Let stratum $l$ have
+size $N_l$, weight $W_l\defeq N_l/N$, population mean $\mu_l$, and population
+variance $\sigma_l^2$.  Then
+\[
+\mu=\sum_{l=1}^{L}W_l\mu_l.
+\]
+If a simple random sample of size $n_l$ is taken within stratum $l$, let
+\[
+\overline{X}_l\defeq \frac1{n_l}\sum_{i=1}^{n_l}X_{il}.
+\]
+The stratified estimate of the population mean is
+\[
+\overline{X}_s\defeq \sum_{l=1}^{L}W_l\overline{X}_l.
+\]
+\end{definition}
+
+\begin{theorem} \label{thm:stratified-mean-unbiased-variance} \hlt{Mean and Variance of the Stratified Estimate}\\
+Assume the samples from different strata are independent.  Then
+\[
+\mathbb{E}\overline{X}_s=\mu
+\]
+and
+\[
+\operatorname{Var}(\overline{X}_s)
+=\sum_{l=1}^{L}
+W_l^2\frac{\sigma_l^2}{n_l}
+\left(1-\frac{n_l-1}{N_l-1}\right).
+\]
+If all stratum sampling fractions are small, then
+\[
+\operatorname{Var}(\overline{X}_s)
+\approx \sum_{l=1}^{L}W_l^2\frac{\sigma_l^2}{n_l}.
+\]
+\begin{proof}
+Theorem \ref{thm:srs-unbiased-mean-and-total} gives
+$\mathbb{E}\overline{X}_l=\mu_l$, so
+$\mathbb{E}\overline{X}_s=\sum_lW_l\mu_l=\mu$.  Independence across strata gives
+\[
+\operatorname{Var}(\overline{X}_s)
+=\sum_{l=1}^{L}W_l^2\operatorname{Var}(\overline{X}_l),
+\]
+and Theorem \ref{thm:srs-sample-mean-variance} supplies each stratum variance.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:stratified-total-and-estimated-variance} \hlt{Totals and Estimated Variances}\\
+The stratified total estimator $T_s\defeq N\overline{X}_s$ satisfies
+\[
+\mathbb{E}T_s=\tau,
+\qquad
+\operatorname{Var}(T_s)=N^2\operatorname{Var}(\overline{X}_s).
+\]
+With
+\[
+s_l^2\defeq \frac{1}{n_l-1}\sum_{i=1}^{n_l}(X_{il}-\overline{X}_l)^2,
+\]
+an estimated variance of $\overline{X}_s$ is
+\[
+s_{\overline{X}_s}^2
+=\sum_{l=1}^{L}W_l^2\frac{s_l^2}{n_l}
+\left(1-\frac{n_l}{N_l}\right).
+\]
+Approximate confidence intervals use
+$\overline{X}_s\pm z(\alpha/2)s_{\overline{X}_s}$ and
+$T_s\pm z(\alpha/2)Ns_{\overline{X}_s}$.
+\end{corollary}
+
+\begin{theorem} \label{thm:neyman-allocation} \hlt{Neyman Allocation}\\
+Ignoring finite population corrections, the allocation that minimizes
+\[
+\operatorname{Var}(\overline{X}_s)
+\approx \sum_{l=1}^{L}W_l^2\frac{\sigma_l^2}{n_l}
+\]
+subject to $\sum_l n_l=n$ is
+\[
+n_l
+=n\frac{W_l\sigma_l}{\sum_{k=1}^{L}W_k\sigma_k},
+\qquad l=1,\ldots,L.
+\]
+\begin{proof}
+Minimize
+\[
+\mathcal{L}(n_1,\ldots,n_L,\lambda)
+=\sum_{l=1}^{L}\frac{W_l^2\sigma_l^2}{n_l}
++\lambda\left(\sum_{l=1}^{L}n_l-n\right).
+\]
+The first-order equations give
+$-W_l^2\sigma_l^2/n_l^2+\lambda=0$, hence
+$n_l=W_l\sigma_l/\sqrt{\lambda}$.  Summing over $l$ and using
+$\sum_ln_l=n$ determines $1/\sqrt{\lambda}=n/\sum_kW_k\sigma_k$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:stratified-allocation-comparisons} \hlt{Allocation Comparisons}\\
+Let $\overline{X}_{so}$ denote the optimal-allocation stratified mean and
+$\overline{X}_{sp}$ the proportional-allocation stratified mean, where
+$n_l=nW_l$.  Ignoring finite population corrections,
+\[
+\operatorname{Var}(\overline{X}_{so})
+=\frac{\left(\sum_{l=1}^{L}W_l\sigma_l\right)^2}{n},
+\qquad
+\operatorname{Var}(\overline{X}_{sp})
+=\frac1n\sum_{l=1}^{L}W_l\sigma_l^2.
+\]
+If $\overline{\sigma}\defeq\sum_lW_l\sigma_l$, then
+\[
+\operatorname{Var}(\overline{X}_{sp})
+-\operatorname{Var}(\overline{X}_{so})
+=\frac1n\sum_{l=1}^{L}W_l(\sigma_l-\overline{\sigma})^2.
+\]
+Also, compared to simple random sampling,
+\[
+\operatorname{Var}(\overline{X})
+-\operatorname{Var}(\overline{X}_{sp})
+=\frac1n\sum_{l=1}^{L}W_l(\mu_l-\mu)^2.
+\]
+Thus proportional allocation gains when stratum means differ, while optimal
+allocation gains further when stratum standard deviations differ.
+\end{corollary}
+
+\begin{example} \label{ex:hospital-stratification-summary} \hlt{Hospital Stratification by Beds}\\
+In the hospital example, strata formed by number of beds have the following
+population summaries:
+\[
+\begin{array}{c|c|c|c|c}
+\text{Stratum} & N_l & W_l & \mu_l & \sigma_l\\ \hline
+A & 98 & .249 & 182.9 & 103.4\\
+B & 98 & .249 & 526.5 & 204.8\\
+C & 98 & .249 & 956.3 & 243.5\\
+D & 99 & .251 & 1591.2 & 419.2
+\end{array}
+\]
+Equal stratum sample sizes give, ignoring finite population corrections,
+\[
+\operatorname{Var}(\overline{X}_s)=\frac{72042.6}{n},
+\qquad
+\sigma_{\overline{X}_s}=\frac{268.4}{\sqrt n}.
+\]
+The comparable simple-random-sampling standard deviation is about
+$587.7/\sqrt n$, so stratifying by bed count substantially reduces variance.
+For Neyman allocation, the allocation weights
+$W_l\sigma_l/\sum_kW_k\sigma_k$ are approximately
+\[
+.106,\quad .210,\quad .250,\quad .434,
+\]
+so the largest, most variable stratum receives the heaviest sampling effort.
+\end{example}
+
+\begin{remark} \label{rem:survey-sampling-model-limitations} \hlt{Model Limits and Other Designs}\\
+Systematic sampling and cluster sampling are common designs beyond this first
+development.  Systematic sampling can resemble simple random sampling when the
+list order is effectively random, but periodic structure may create bias.
+Cluster sampling is often cheaper, but it is less precise than simple random
+sampling when units inside a cluster are similar.  More broadly, the standard
+errors above measure random sampling variation, not nonresponse, selection
+bias, interviewer effects, or question wording effects.
+\end{remark}

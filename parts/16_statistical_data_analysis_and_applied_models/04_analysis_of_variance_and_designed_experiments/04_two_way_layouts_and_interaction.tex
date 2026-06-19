@@ -1,0 +1,143 @@
+\subsection{Two-Way Layouts and Interaction}
+\label{subsec:two-way-layouts-and-interaction}
+% Source integration: attached Chapter 12 screenshots, Sections 12.3--12.3.2.
+
+A two-way layout studies two factors at once.  It estimates main effects for each factor and checks whether the effect of one factor changes across levels of the other.
+
+\begin{definition} \label{def:two-way-additive-parametrization} \hlt{Two-Way Additive Parametrization}\\
+With one observation $Y_{ij}$ at level $i$ of factor $A$ and level $j$ of factor $B$, define
+\[
+\widehat{\mu}=\overline{Y}_{\cdot\cdot},
+\qquad
+\widehat{\alpha}_i=\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot},
+\qquad
+\widehat{\beta}_j=\overline{Y}_{\cdot j}-\overline{Y}_{\cdot\cdot}.
+\]
+The additive fitted value is
+\[
+\widehat{Y}_{ij}=\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j.
+\]
+The residual interaction contrast is
+\[
+\widehat{\delta}_{ij}
+=Y_{ij}-\overline{Y}_{i\cdot}-\overline{Y}_{\cdot j}+\overline{Y}_{\cdot\cdot},
+\]
+so
+\[
+Y_{ij}=\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j+\widehat{\delta}_{ij}.
+\]
+The row and column sums of the $\widehat{\delta}_{ij}$ are zero, up to rounding in displayed data.
+\end{definition}
+
+\begin{remark} \label{rem:two-way-interaction-profile-plots} \hlt{Interaction and Parallel Profiles}\\
+In an additive model, the fitted difference between two levels of one factor is the same at every level of the other factor.  Thus profile lines are parallel.  Visible nonparallelism is evidence of interaction: the comparison between levels depends on the background level of the other factor.
+\end{remark}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/anova_interaction_parallelism.tikz}
+  \caption{Parallel profiles represent an additive two-way model; changing separation between profiles indicates interaction.}
+  \label{fig:anova-interaction-parallelism}
+\end{figure}
+
+\begin{definition} \label{def:balanced-two-way-normal-model} \hlt{Balanced Two-Way Normal Model}\\
+Suppose there are $I$ levels of factor $A$, $J$ levels of factor $B$, and $K>1$ independent observations per cell.  The fixed-effects model is
+\[
+Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk},
+\]
+where the errors are independent $N(0,\sigma^2)$ variables and the parameters satisfy
+\[
+\sum_{i=1}^{I}\alpha_i=0,
+\qquad
+\sum_{j=1}^{J}\beta_j=0,
+\qquad
+\sum_{i=1}^{I}\delta_{ij}=0,\quad
+\sum_{j=1}^{J}\delta_{ij}=0.
+\]
+\end{definition}
+
+\begin{definition} \label{def:two-way-anova-sums-of-squares} \hlt{Two-Way Sums of Squares}\\
+For the model in Definition \ref{def:balanced-two-way-normal-model}, set
+\[
+SS_A=JK\sum_{i=1}^{I}(\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2,
+\]
+\[
+SS_B=IK\sum_{j=1}^{J}(\overline{Y}_{\cdot j\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2,
+\]
+\[
+SS_{AB}=K\sum_{i=1}^{I}\sum_{j=1}^{J}
+(\overline{Y}_{ij\cdot}-\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot j\cdot}
++\overline{Y}_{\cdot\cdot\cdot})^2,
+\]
+\[
+SS_E=\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K}
+(Y_{ijk}-\overline{Y}_{ij\cdot})^2.
+\]
+Then
+\[
+SS_{\mathrm{tot}}=SS_A+SS_B+SS_{AB}+SS_E.
+\]
+\end{definition}
+
+\begin{theorem} \label{thm:two-way-anova-expected-sums-of-squares} \hlt{Expected Two-Way Sums of Squares}\\
+Under Definition \ref{def:balanced-two-way-normal-model},
+\[
+\mathbb{E}(SS_A)=(I-1)\sigma^2+JK\sum_{i=1}^{I}\alpha_i^2,
+\]
+\[
+\mathbb{E}(SS_B)=(J-1)\sigma^2+IK\sum_{j=1}^{J}\beta_j^2,
+\]
+\[
+\mathbb{E}(SS_{AB})=(I-1)(J-1)\sigma^2
++K\sum_{i=1}^{I}\sum_{j=1}^{J}\delta_{ij}^2,
+\]
+\[
+\mathbb{E}(SS_E)=IJ(K-1)\sigma^2.
+\]
+\begin{proof}
+Apply Lemma \ref{lem:mean-centering-expected-square} to the relevant marginal means and cell means.  The parameter constraints remove mixed cross terms when the squared effects are summed.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:two-way-anova-f-tests} \hlt{Two-Way Normal-Theory $F$ Tests}\\
+Under normality, the sums of squares in Definition \ref{def:two-way-anova-sums-of-squares} are independent.  Also
+\[
+\frac{SS_E}{\sigma^2}\sim \chi^2_{IJ(K-1)}.
+\]
+Under the corresponding null hypotheses,
+\[
+\frac{SS_A}{\sigma^2}\sim \chi^2_{I-1},
+\qquad
+\frac{SS_B}{\sigma^2}\sim \chi^2_{J-1},
+\qquad
+\frac{SS_{AB}}{\sigma^2}\sim \chi^2_{(I-1)(J-1)}.
+\]
+Consequently, main effects and interaction are tested by
+\[
+F_A=\frac{SS_A/(I-1)}{SS_E/[IJ(K-1)]},
+\quad
+F_B=\frac{SS_B/(J-1)}{SS_E/[IJ(K-1)]},
+\]
+\[
+F_{AB}=\frac{SS_{AB}/[(I-1)(J-1)]}{SS_E/[IJ(K-1)]}.
+\]
+\end{theorem}
+
+\begin{example} \label{ex:iron-retention-two-way-anova} \hlt{Iron Retention: Transformation, Main Effects, and Interaction}\\
+The source analyzes iron-retention data for two forms of iron and three dosage levels, with $K=18$ observations per cell.  Boxplots and cell standard deviations indicated that a logarithmic transformation stabilized spread.  On the log scale, the reported ANOVA table was
+\[
+\begin{array}{c|rrrr}
+\text{Source} & df & SS & MS & F\\ \hline
+\text{Iron form} & 1 & 2.074 & 2.074 & 5.99\\
+\text{Dosage} & 2 & 15.588 & 7.794 & 22.53\\
+\text{Interaction} & 2 & .810 & .405 & 1.17\\
+\text{Error} & 102 & 35.296 & .346 & \\
+\text{Total} & 107 & 53.768 & &
+\end{array}
+\]
+The iron-form effect has reported $p<.025$.  The estimated log difference was $.28$, corresponding to a multiplicative factor $e^{.28}=1.32$ on the original scale, with reported approximate confidence interval $(1.06,1.65)$.  The interaction test had reported $p=.31$, so the visible departure from parallelism in the source plot was not strong evidence that the iron-form comparison depended on dosage.
+\end{example}
+
+\begin{remark} \label{rem:two-way-transformations-diagnostics} \hlt{Transformations and Diagnostics}\\
+Two-way ANOVA inherits the normal-theory assumptions of the one-way model.  Residual plots, normal probability plots, profile plots, and plots of cell spread against cell mean help decide whether a transformation is needed.  A transformation can stabilize variance and improve symmetry, but it also changes additive effects on the transformed scale into multiplicative or otherwise nonlinear effects on the original scale.
+\end{remark}

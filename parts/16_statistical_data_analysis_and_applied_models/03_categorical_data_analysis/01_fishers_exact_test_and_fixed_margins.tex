@@ -1,0 +1,66 @@
+\subsection{Fisher's Exact Test and Fixed Margins}
+\label{subsec:fishers-exact-test-and-fixed-margins}
+% Source integration: attached Chapter 13 screenshots, Sections 13.1--13.2.
+
+Categorical data record counts in classes rather than measurements on a continuous scale.  In a two-way table, the rows and columns encode two classifications, and the cells record how many units fall in each cross-classification.  The probability model is therefore built from multinomial and hypergeometric count laws rather than from normal sampling pivots.
+
+\begin{definition} \label{def:two-way-contingency-table-counts} \hlt{Two-Way Contingency Table}\\
+For an $I\times J$ table, write $n_{ij}$ for the observed count in row $i$ and column $j$,
+\[
+n_{i\cdot}\defeq\sum_{j=1}^{J}n_{ij},
+\qquad
+n_{\cdot j}\defeq\sum_{i=1}^{I}n_{ij},
+\qquad
+n_{\cdot\cdot}\defeq\sum_{i=1}^{I}\sum_{j=1}^{J}n_{ij}.
+\]
+The row totals, column totals, and grand total are the \hlt{margins}.  When the table entries are random, capital letters such as $N_{ij}$ denote the corresponding random counts.
+\end{definition}
+
+\begin{method} \label{meth:fishers-exact-test-fixed-margins} \hlt{Fisher's Exact Test for a $2\times2$ Table}\\
+Suppose a $2\times2$ table has fixed margins
+\[
+\begin{array}{c|cc|c}
+&1&2&\text{Total}\\ \hline
+1&N_{11}&N_{12}&n_{1\cdot}\\
+2&N_{21}&N_{22}&n_{2\cdot}\\ \hline
+\text{Total}&n_{\cdot1}&n_{\cdot2}&n_{\cdot\cdot}
+\end{array}
+\]
+and the null hypothesis says that, conditional on the margins, the column labels are randomly assigned to the fixed row counts.  Then $N_{11}$ determines the whole table, and its null distribution is hypergeometric:
+\[
+\mathbb{P}_{0}(N_{11}=x)
+=
+\frac{\binom{n_{1\cdot}}{x}\binom{n_{2\cdot}}{n_{\cdot1}-x}}
+{\binom{n_{\cdot\cdot}}{n_{\cdot1}}},
+\]
+for feasible $x$.  A one-sided test rejects in the appropriate tail of this distribution; a two-sided test rejects for tables with sufficiently small null probability, or equivalently for both tails when the support is ordered by $N_{11}$.
+\end{method}
+
+This is the same hypergeometric sampling mechanism recorded in Definition \ref{def:core-discrete-distributions}; here it appears after conditioning on the margins of a contingency table.
+
+\begin{example} \label{ex:promotion-fishers-exact-test} \hlt{Promotion Decisions and Fixed Margins}\\
+In the source experiment, $48$ supervisors were randomly assigned otherwise identical personnel files labeled male or female.  Their decisions were
+\[
+\begin{array}{c|cc|c}
+&\text{Male}&\text{Female}&\text{Total}\\ \hline
+\text{Promote}&21&14&35\\
+\text{Hold file}&3&10&13\\ \hline
+\text{Total}&24&24&48
+\end{array}
+\]
+Under the null hypothesis that the label has no effect on the decision, the margins are fixed: $24$ male-labeled files, $24$ female-labeled files, $35$ promotions, and $13$ holds.  Thus $N_{11}$, the number of male-labeled promotions, has
+\[
+\mathbb{P}_{0}(N_{11}=x)
+=
+\frac{\binom{35}{x}\binom{13}{24-x}}{\binom{48}{24}}.
+\]
+The source tabulates this distribution for $x=11,\ldots,24$.  At level $0.05$, the two-sided rejection region is
+\[
+x\in\{11,12,13,14,21,22,23,24\}.
+\]
+The observed value is $x=21$, so the exact fixed-margin test rejects at the $5\%$ level.  Interpreted in the experimental design, the table gives evidence that the file label affected promotion decisions.
+\end{example}
+
+\begin{remark} \label{rem:fisher-exact-conditional-design-interpretation} \hlt{What Is Exact Here}\\
+Fisher's test is exact for the conditional distribution given the margins.  This is most directly justified when the design or the conditioning argument makes the margins ancillary to the question being tested.  In observational tables, the same calculation can still be useful, but the design facts decide whether the conclusion is causal, descriptive, or only a calibrated association; see Principle \ref{prin:randomization-confounding-and-blocking}.
+\end{remark}

@@ -1,0 +1,150 @@
+\subsection{Chi-Square Tests for Contingency Tables}
+\label{subsec:chi-square-tests-for-contingency-tables}
+% Source integration: attached Chapter 13 screenshots, Sections 13.3--13.4 and selected problems.
+
+Pearson chi-square tests compare observed table counts with fitted counts under a constrained multinomial model.  They reuse the goodness-of-fit statistic from Definition \ref{def:pearson-and-likelihood-ratio-gof-statistics}, but the fitted counts now come from row and column structure.
+
+\begin{definition} \label{def:chi-square-test-of-homogeneity} \hlt{Homogeneity of Multinomial Distributions}\\
+Let $n_{ij}$ be the count in category $i=1,\ldots,I$ from sample $j=1,\ldots,J$, where the $J$ samples are independent multinomials with fixed sample sizes $n_{\cdot j}$.  The homogeneity null hypothesis is
+\[
+H_0:\pi_{i1}=\pi_{i2}=\cdots=\pi_{iJ},
+\qquad i=1,\ldots,I.
+\]
+Under $H_0$, write the common category probability as $\pi_i$.
+\end{definition}
+
+\begin{proposition} \label{prop:homogeneity-common-multinomial-mle} \hlt{Common Probability MLE Under Homogeneity}\\
+In the homogeneity model of Definition \ref{def:chi-square-test-of-homogeneity}, the maximum likelihood estimate of the common category probability is
+\[
+\widehat{\pi}_i=\frac{n_{i\cdot}}{n_{\cdot\cdot}},
+\qquad i=1,\ldots,I.
+\]
+Consequently the fitted count in cell $(i,j)$ is
+\[
+E_{ij}=n_{\cdot j}\widehat{\pi}_i
+=\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}}.
+\]
+\begin{proof}
+Ignoring multinomial coefficients that do not involve $\pi$, independence of the $J$ samples gives likelihood proportional to
+\[
+\prod_{j=1}^{J}\prod_{i=1}^{I}\pi_i^{n_{ij}}
+=
+\prod_{i=1}^{I}\pi_i^{n_{i\cdot}}.
+\]
+Maximize $\sum_i n_{i\cdot}\log\pi_i$ subject to $\sum_i\pi_i=1$.  The Lagrange equations are $n_{i\cdot}/\pi_i+\lambda=0$, so $\pi_i=-n_{i\cdot}/\lambda$.  Summing over $i$ gives $\lambda=-n_{\cdot\cdot}$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:homogeneity-fitted-counts} \hlt{Homogeneity Fitted Counts}\\
+The fitted count in cell $(i,j)$ under homogeneity is
+\[
+E_{ij}=n_{\cdot j}\widehat{\pi}_i
+=\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}}.
+\]
+\end{definition}
+
+\begin{method} \label{meth:pearson-homogeneity-test} \hlt{Pearson Test of Homogeneity}\\
+For the homogeneity setting of Definition \ref{def:chi-square-test-of-homogeneity}, use
+\[
+X^2
+=\sum_{i=1}^{I}\sum_{j=1}^{J}\frac{(n_{ij}-E_{ij})^2}{E_{ij}}.
+\]
+For large samples with no very small expected counts, the null calibration is
+\[
+X^2\approx\chi^2_{(I-1)(J-1)}.
+\]
+The degrees of freedom are $J(I-1)$ independent counts minus the $(I-1)$ free common probabilities estimated under the null.
+\end{method}
+
+\begin{example} \label{ex:austen-word-count-homogeneity} \hlt{Austen Word Counts}\\
+The source compares the relative frequencies of six words in chapters from \textit{Sense and Sensibility}, \textit{Emma}, two Austen-written chapters of \textit{Sanditon}, and two continuation chapters written by an imitator.  Abbreviating \textit{Sense and Sensibility} by S\&S, the counts are
+\[
+\begin{array}{c|rrrr}
+\text{Word}&\text{S\&S}&\text{\textit{Emma}}&\text{\textit{Sanditon I}}&\text{\textit{Sanditon II}}\\ \hline
+a&147&186&101&83\\
+an&25&26&11&29\\
+this&32&39&15&15\\
+that&94&105&37&22\\
+with&59&74&28&43\\
+without&18&10&10&4\\ \hline
+\text{Total}&375&440&202&196
+\end{array}
+\]
+First comparing only Austen's three columns gives $X^2=12.27$ on $10$ degrees of freedom, which is not large against the source's quoted chi-square quantiles.  Pooling those three Austen columns and comparing them with the imitator gives $X^2=32.81$ on $5$ degrees of freedom, with $p<0.001$.  The largest cell contributions come from the words \textit{an} and \textit{that}, so the rejection is not merely a global black box: it points to where the stylistic pattern differs.
+\end{example}
+
+\begin{definition} \label{def:chi-square-test-of-independence} \hlt{Independence in a Contingency Table}\\
+For one multinomial sample of size $n$ cross-classified by rows $i=1,\ldots,I$ and columns $j=1,\ldots,J$, let $\pi_{ij}$ be the joint cell probabilities and define marginal probabilities
+\[
+\pi_{i\cdot}=\sum_{j=1}^{J}\pi_{ij},
+\qquad
+\pi_{\cdot j}=\sum_{i=1}^{I}\pi_{ij}.
+\]
+The row and column classifications are independent when
+\[
+H_0:\pi_{ij}=\pi_{i\cdot}\pi_{\cdot j},
+\qquad i=1,\ldots,I,\quad j=1,\ldots,J.
+\]
+Under $H_0$, the fitted probabilities and fitted counts are
+\[
+\widehat{\pi}_{ij}
+=
+\frac{n_{i\cdot}}{n}\frac{n_{\cdot j}}{n},
+\qquad
+E_{ij}=n\widehat{\pi}_{ij}
+=\frac{n_{i\cdot}n_{\cdot j}}{n}.
+\]
+\end{definition}
+
+\begin{method} \label{meth:pearson-independence-test} \hlt{Pearson Test of Independence}\\
+For a single $I\times J$ contingency table, use
+\[
+X^2
+=
+\sum_{i=1}^{I}\sum_{j=1}^{J}
+\frac{(n_{ij}-E_{ij})^2}{E_{ij}},
+\qquad
+E_{ij}=\frac{n_{i\cdot}n_{\cdot j}}{n}.
+\]
+The large-sample null calibration is
+\[
+X^2\approx\chi^2_{(I-1)(J-1)}.
+\]
+Equivalently, the saturated model has $IJ-1$ free cell probabilities, while the independence model has $(I-1)+(J-1)$ free marginal parameters.
+\end{method}
+
+\begin{example} \label{ex:education-marital-status-independence} \hlt{Education and Marital Status}\\
+The source table cross-classifies $1436$ women by education and marital-status category:
+\[
+\begin{array}{c|rr|r}
+&\text{Married once}&\text{Married more than once}&\text{Total}\\ \hline
+\text{College}&550&61&611\\
+\text{No college}&681&144&825\\ \hline
+\text{Total}&1231&205&1436
+\end{array}
+\]
+The fitted counts under independence are
+\[
+\begin{array}{c|rr}
+&\text{Married once}&\text{Married more than once}\\ \hline
+\text{College}&523.8&87.2\\
+\text{No college}&707.2&117.8
+\end{array}
+\]
+and the Pearson statistic is $X^2=16.01$ on $1$ degree of freedom, giving $p<0.001$.  The table is evidence of association, not by itself evidence that education causes marital stability; the study design does not randomize education level.
+\end{example}
+
+\begin{remark} \label{rem:homogeneity-versus-independence} \hlt{Homogeneity Versus Independence}\\
+The formulas for the homogeneity and independence tests are identical, and so are their degrees of freedom, but the sampling stories differ.  Homogeneity compares several independent multinomial samples with fixed sample sizes.  Independence treats one sample as cross-classified by two random categorical variables.  In a $2\times2$ table, independence can be viewed as homogeneity of one conditional distribution across levels of the other variable, but the design still determines which interpretation is appropriate.
+\end{remark}
+
+\begin{method} \label{meth:categorical-likelihood-ratio-statistic} \hlt{Likelihood-Ratio Version}\\
+The likelihood-ratio statistic for either homogeneity or independence has the same observed/fitted-count form as the multinomial goodness-of-fit statistic:
+\[
+G^2
+=
+2\sum_{i=1}^{I}\sum_{j=1}^{J}
+n_{ij}\log\left(\frac{n_{ij}}{E_{ij}}\right),
+\]
+with zero-count terms interpreted as $0$.  Under the same large-sample conditions, $G^2$ has the same approximate $\chi^2_{(I-1)(J-1)}$ null calibration.  This is the contingency-table instance of the likelihood-ratio calibration in Theorem \ref{thm:wilks-likelihood-ratio-chi-square}.
+\end{method}

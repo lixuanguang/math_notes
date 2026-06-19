@@ -1,0 +1,125 @@
+\subsection{Simple Linear Regression Inference and Diagnostics}
+% Source integration: attached Chapter 14 screenshots, Sections 14.2--14.2.3.
+
+Simple linear regression adds a noise model to the least-squares line.  The $x_i$ values are treated as fixed design points, and randomness enters through the observed responses.
+
+\begin{definition} \label{def:simple-linear-regression-standard-model} \hlt{Standard Simple Linear Regression Model}\\
+The standard simple linear regression model is
+\[
+Y_i=\beta_0+\beta_1x_i+e_i,\qquad i=1,\ldots,n,
+\]
+where $x_i$ are fixed, $\mathbb{E}e_i=0$, $\operatorname{Var}(e_i)=\sigma^2$, and the errors are uncorrelated.  The normal linear model adds that the errors are independent normal random variables.
+\end{definition}
+
+\begin{theorem} \label{thm:simple-regression-unbiased-variance} \hlt{Mean and Variance of the Simple Regression Coefficients}\\
+Let $D\defeq\sum_{i=1}^{n}(x_i-\overline{x})^2>0$.  Under Definition \ref{def:simple-linear-regression-standard-model},
+\[
+\mathbb{E}\widehat{\beta}_0=\beta_0,\qquad
+\mathbb{E}\widehat{\beta}_1=\beta_1,
+\]
+and
+\[
+\operatorname{Var}(\widehat{\beta}_1)=\frac{\sigma^2}{D},
+\qquad
+\operatorname{Var}(\widehat{\beta}_0)=\sigma^2\left(\frac1n+\frac{\overline{x}^{\,2}}{D}\right),
+\qquad
+\operatorname{Cov}(\widehat{\beta}_0,\widehat{\beta}_1)=-\frac{\sigma^2\overline{x}}{D}.
+\]
+\begin{proof}
+By Proposition \ref{prop:simple-line-least-squares-formulas},
+\[
+\widehat{\beta}_1
+=\beta_1+\frac{\sum_{i=1}^{n}(x_i-\overline{x})e_i}{D},
+\qquad
+\widehat{\beta}_0=\beta_0+\overline{e}-\overline{x}(\widehat{\beta}_1-\beta_1).
+\]
+Expectations give unbiasedness.  The variance and covariance formulas follow from the assumed common variance and zero cross-covariances of the $e_i$.\\
+\hlt{Structural Commentary}: The slope is a fixed linear combination of the responses.\\
+\hlt{Key Insight}: Centering the design isolates the uncertainty in the slope.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:simple-regression-rss-and-error-variance-estimator} \hlt{Residual Sum of Squares and Error Scale}\\
+For the fitted line $\widehat{y}_i=\widehat{\beta}_0+\widehat{\beta}_1x_i$, define
+\[
+\operatorname{RSS}=\sum_{i=1}^{n}(Y_i-\widehat{y}_i)^2.
+\]
+The usual estimate of $\sigma^2$ is
+\[
+s^2=\frac{\operatorname{RSS}}{n-2}.
+\]
+The divisor $n-2$ reflects that two coefficients have been estimated from the data.
+\end{definition}
+
+\begin{corollary} \label{cor:simple-regression-t-intervals} \hlt{Simple Regression $t$ Intervals and Tests}\\
+In the normal simple linear model,
+\[
+\frac{\widehat{\beta}_j-\beta_j}{s_{\widehat{\beta}_j}}\sim t_{n-2},
+\qquad j=0,1,
+\]
+where $s_{\widehat{\beta}_j}$ is obtained from the standard error formula in Theorem \ref{thm:simple-regression-unbiased-variance} by replacing $\sigma$ by $s$.  Thus a $100(1-\alpha)\%$ confidence interval for $\beta_j$ is
+\[
+\widehat{\beta}_j\pm t_{n-2,1-\alpha/2}s_{\widehat{\beta}_j}.
+\]
+The same pivot gives the usual test of $H_0:\beta_j=\beta_{j0}$.
+\end{corollary}
+
+\begin{example} \label{ex:peak-area-simple-regression-summary} \hlt{Calibration by Peak Area}\\
+In the chromatographic calibration example from the source, the least-squares line relating peak area to percentage of FD\&C Yellow No. 5 had approximately
+\[
+\widehat{\beta}_0=.0729,\qquad \widehat{\beta}_1=10.77,
+\qquad s=.068.
+\]
+The reported standard errors were $.0297$ and $.27$, giving $t$ statistics $2.45$ and $40.20$.  The corresponding $95\%$ intervals were about $(.011,.135)$ for the intercept and $(10.21,11.33)$ for the slope.  The example illustrates instrument calibration: fit on known concentrations, then use the fitted relation to estimate unknown concentrations.
+\end{example}
+
+\begin{method} \label{meth:regression-residual-diagnostics} \hlt{Residual Diagnostics}\\
+After fitting a regression, examine residuals against the fitted values and against important predictors.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A random horizontal band supports the chosen mean form.
+\item Curvature suggests a transformation or added nonlinear term.
+\item Changing spread suggests heteroscedasticity.
+\item A normal probability plot checks large departures from normality and possible outliers.
+\item Points with extreme $x$ values may have high leverage and can strongly affect the fitted line.
+\end{enumerate}
+These checks refine the modeling assumptions; they do not replace them.
+\end{method}
+
+\begin{definition} \label{def:homoscedastic-and-heteroscedastic-errors} \hlt{Homoscedastic and Heteroscedastic Errors}\\
+Errors are \hlt{homoscedastic} when their variance is constant across the design points.  They are \hlt{heteroscedastic} when the variance changes with the predictor or with the mean level.  Standard errors and confidence intervals based on a constant-variance model can be misleading under strong heteroscedasticity.
+\end{definition}
+
+\begin{example} \label{ex:regression-diagnostic-patterns-from-source} \hlt{Diagnostic Patterns}\\
+The source examples show three recurring diagnostic patterns:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Stream flow against depth had residual curvature under a straight-line fit; a log-log plot gave a more linear pattern.
+\item Mortality counts against county population had growing residual spread; a square-root transformation stabilized the spread more nearly.
+\item Transition pressure measurements grouped by temperature had residual offsets by setting, suggesting correlated calibration errors rather than independent pointwise noise.
+\end{enumerate}
+\end{example}
+
+\begin{proposition} \label{prop:correlation-and-simple-regression} \hlt{Correlation and the Regression Line}\\
+For paired data define
+\[
+s_{xx}=\frac1n\sum_{i=1}^{n}(x_i-\overline{x})^2,\quad
+s_{yy}=\frac1n\sum_{i=1}^{n}(y_i-\overline{y})^2,\quad
+s_{xy}=\frac1n\sum_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y}).
+\]
+If $s_{xx},s_{yy}>0$, the sample correlation is $r=s_{xy}/\sqrt{s_{xx}s_{yy}}$, and the least-squares slope satisfies
+\[
+\widehat{\beta}_1=\frac{s_{xy}}{s_{xx}},
+\qquad
+r=\widehat{\beta}_1\sqrt{\frac{s_{xx}}{s_{yy}}}.
+\]
+Equivalently, the fitted line in standardized units is
+\[
+\frac{\widehat{y}-\overline{y}}{\sqrt{s_{yy}}}
+=r\,\frac{x-\overline{x}}{\sqrt{s_{xx}}}.
+\]
+\end{proposition}
+
+\begin{remark} \label{rem:regression-to-the-mean-simple-line} \hlt{Regression to the Mean}\\
+When $0<r<1$, a predictor that is one standard deviation above its mean gives a fitted response only $r$ standard deviations above its mean.  This is the finite-sample regression-line version of Example \ref{ex:regression-to-the-mean-linear-prediction}.
+\end{remark}

@@ -1,0 +1,113 @@
+\subsection{Odds Ratios and Case-Control Sampling}
+\label{subsec:odds-ratios-and-case-control-sampling}
+% Source integration: attached Chapter 13 screenshots, Section 13.6 and selected problems.
+
+Odds ratios summarize association in a binary exposure--binary outcome table.  They are especially useful because the same cross-product ratio can be estimated under several sampling designs, including retrospective case-control designs where risks themselves cannot be estimated.
+
+\begin{definition} \label{def:odds-and-odds-ratio} \hlt{Odds and Odds Ratio}\\
+For an event $A$ with $0<\mathbb{P}(A)<1$, the \hlt{odds} of $A$ are
+\[
+\operatorname{odds}(A)
+=
+\frac{\mathbb{P}(A)}{1-\mathbb{P}(A)}.
+\]
+Equivalently,
+\[
+\mathbb{P}(A)=\frac{\operatorname{odds}(A)}{1+\operatorname{odds}(A)}.
+\]
+If $X$ denotes exposure and $D$ denotes disease, the \hlt{odds ratio} is
+\[
+\Delta
+=
+\frac{\operatorname{odds}(D\mid X)}
+{\operatorname{odds}(D\mid \overline{X})}.
+\]
+\end{definition}
+
+\begin{proposition} \label{prop:odds-ratio-cross-product} \hlt{Cross-Product Formula}\\
+For the joint probability table
+\[
+\begin{array}{c|cc|c}
+&\overline{D}&D&\\ \hline
+\overline{X}&\pi_{00}&\pi_{01}&\pi_{0\cdot}\\
+X&\pi_{10}&\pi_{11}&\pi_{1\cdot}\\ \hline
+&\pi_{\cdot0}&\pi_{\cdot1}&1
+\end{array}
+\]
+the odds ratio is
+\[
+\Delta
+=
+\frac{\pi_{11}\pi_{00}}{\pi_{01}\pi_{10}}.
+\]
+\begin{proof}
+Since
+\[
+\mathbb{P}(D\mid X)=\frac{\pi_{11}}{\pi_{10}+\pi_{11}},
+\qquad
+\mathbb{P}(D\mid\overline{X})=\frac{\pi_{01}}{\pi_{00}+\pi_{01}},
+\]
+the corresponding conditional odds are $\pi_{11}/\pi_{10}$ and $\pi_{01}/\pi_{00}$.  Taking their ratio gives the displayed formula.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:odds-ratio-by-sampling-design} \hlt{Estimating an Odds Ratio by Design}\\
+For a $2\times2$ count table with the same layout as Proposition \ref{prop:odds-ratio-cross-product},
+\[
+\widehat{\Delta}
+=
+\frac{n_{00}n_{11}}{n_{01}n_{10}}.
+\]
+The interpretation depends on the sampling design:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item In a simple random sample from the population, all joint probabilities can be estimated directly.
+\item In a prospective study, the exposed and unexposed sample sizes are fixed; disease risks conditional on exposure can be estimated, and so can $\Delta$, but the population exposure margins are not learned from the design.
+\item In a retrospective case-control study, diseased and nondiseased sample sizes are fixed; disease risks such as $\mathbb{P}(D\mid X)$ cannot be estimated from the data alone, but the same cross-product ratio estimates $\Delta$ through the exposure odds among cases and controls.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:tonsillectomy-odds-ratio} \hlt{Tonsillectomy Odds Ratio}\\
+For the unmatched Hodgkin's disease table in the source,
+\[
+\begin{array}{c|cc}
+&\text{Tonsillectomy}&\text{No tonsillectomy}\\ \hline
+\text{Hodgkin's}&67&34\\
+\text{Control}&43&64
+\end{array}
+\]
+the estimated odds ratio is
+\[
+\widehat{\Delta}
+=
+\frac{67\cdot64}{43\cdot34}
+=2.93.
+\]
+In this table, the estimated odds of Hodgkin's disease are about three times as large among those with a tonsillectomy history as among those without one, subject to the design cautions discussed in the matched-pairs analysis.
+\end{example}
+
+\begin{method} \label{meth:parametric-bootstrap-odds-ratio-standard-error} \hlt{Parametric Bootstrap for an Odds-Ratio Standard Error}\\
+When an odds-ratio estimate is a nonlinear function of binomial counts, a parametric bootstrap can approximate its standard error, following Definition \ref{def:parametric-bootstrap} and Method \ref{meth:bootstrap-standard-error}.  In the source tonsillectomy example, model the two row counts as independent:
+\[
+N_{11}\sim\operatorname{Binomial}(101,\pi_{11}),
+\qquad
+N_{22}\sim\operatorname{Binomial}(107,\pi_{22}),
+\]
+where the fitted probabilities are
+\[
+\widehat{\pi}_{11}=\frac{67}{101}=0.663,
+\qquad
+\widehat{\pi}_{22}=\frac{64}{107}=0.598.
+\]
+For simulated counts, recompute
+\[
+\widehat{\Delta}^{\ast}
+=
+\frac{N_{11}N_{22}}{(101-N_{11})(107-N_{22})}.
+\]
+The source reports that $1000$ such simulations gave a standard deviation about $0.89$, used as an estimated standard error for the observed $\widehat{\Delta}=2.93$.
+\end{method}
+
+\begin{remark} \label{rem:odds-ratio-risk-and-retrospective-caution} \hlt{Odds Ratios Are Not Automatically Risks}\\
+An odds ratio measures multiplicative change in odds, not additive change in probabilities.  In retrospective sampling, the case and control totals are chosen by design, so absolute disease risks cannot be recovered without additional population information.  The odds ratio remains estimable because the nuisance sampling margins cancel in the cross-product ratio.
+\end{remark}

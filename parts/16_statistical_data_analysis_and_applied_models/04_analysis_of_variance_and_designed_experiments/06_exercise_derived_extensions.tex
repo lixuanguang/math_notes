@@ -1,0 +1,100 @@
+\subsection{Exercise-Derived Extensions}
+\label{subsec:anova-exercise-derived-extensions}
+% Source integration: attached Chapter 12 screenshots, concluding remarks and selected Problems 2--20.
+
+The source exercises emphasize that ANOVA is a language for decomposing variation, not just a single table.  The following extensions record reusable consequences supported by the problem statements.
+
+\begin{corollary} \label{cor:two-treatment-one-way-anova-equals-pooled-t} \hlt{Two Treatments Give $F=t^2$}\\
+For a one-way normal layout with two treatment groups, the ordinary one-way $F$ statistic equals the square of the pooled two-sample $t$ statistic from Theorem \ref{thm:two-sample-pooled-t-pivot}.
+\begin{proof}
+Let the group sizes be $n$ and $m$, with means $\overline{X}$ and $\overline{Y}$.  The between-group sum of squares is
+\[
+SS_B=\frac{nm}{n+m}(\overline{X}-\overline{Y})^2,
+\]
+while $SS_W/(n+m-2)$ is the pooled variance $S_p^2$.  Therefore
+\[
+F=\frac{SS_B}{SS_W/(n+m-2)}
+=
+\frac{(\overline{X}-\overline{Y})^2}
+{S_p^2(n^{-1}+m^{-1})}
+=t^2.
+\]
+This also matches Corollary \ref{cor:f-reciprocal-and-squared-t}, since $t_\nu^2\sim F_{1,\nu}$ under the null.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:one-way-random-effects-model} \hlt{Balanced One-Way Random Effects Model}\\
+In a balanced random-effects one-way layout,
+\[
+Y_{ij}=\mu+A_i+\varepsilon_{ij},
+\]
+where the group effects $A_i$ are independent with
+\[
+\mathbb{E}A_i=0,\qquad \operatorname{Var}(A_i)=\sigma_A^2,
+\]
+and the measurement errors are independent of the $A_i$ with
+\[
+\mathbb{E}\varepsilon_{ij}=0,\qquad \operatorname{Var}(\varepsilon_{ij})=\sigma_\varepsilon^2.
+\]
+Here
+\[
+\operatorname{Var}(Y_{ij})=\sigma_A^2+\sigma_\varepsilon^2.
+\]
+\end{definition}
+
+\begin{proposition} \label{prop:random-effects-one-way-expected-mean-squares} \hlt{Random-Effects Expected Mean Squares}\\
+For Definition \ref{def:one-way-random-effects-model} with $I$ groups and $J$ observations per group,
+\[
+\mathbb{E}(MS_W)=\sigma_\varepsilon^2,
+\qquad
+\mathbb{E}(MS_B)=\sigma_\varepsilon^2+J\sigma_A^2.
+\]
+Thus the method-of-moments estimates are
+\[
+\widehat{\sigma}_\varepsilon^2=MS_W,
+\qquad
+\widehat{\sigma}_A^2=\frac{MS_B-MS_W}{J},
+\]
+when the second quantity is nonnegative.
+\begin{proof}
+Conditional on the random effects, the within-group deviations remove $A_i$, so the within mean square targets measurement error.  Group means have variance $\sigma_A^2+\sigma_\varepsilon^2/J$, and the between mean square multiplies the excess group-mean variation by $J$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:dye-batch-random-effects-estimates} \hlt{Dye Strength Batch Variation}\\
+One source problem gives six subsamples from each of six dye batches.  From the displayed table,
+\[
+\overline{y}_{\cdot\cdot}=93.61,
+\]
+and the batch means are approximately
+\[
+92.00,\ 90.50,\ 91.25,\ 98.25,\ 91.17,\ 98.50.
+\]
+The sums of squares are
+\[
+SS_B=415.47,
+\qquad
+SS_W=134.08.
+\]
+Thus
+\[
+MS_B=83.09,
+\qquad
+MS_W=4.47,
+\]
+and Proposition \ref{prop:random-effects-one-way-expected-mean-squares} gives
+\[
+\widehat{\sigma}_\varepsilon^2=4.47,
+\qquad
+\widehat{\sigma}_A^2=\frac{83.09-4.47}{6}=13.10.
+\]
+In this example, batch-to-batch variation is larger than the within-batch measurement-error component on the variance scale.
+\end{example}
+
+\begin{remark} \label{rem:factorial-fractional-and-incomplete-designs} \hlt{Factorial Economy and Incomplete Designs}\\
+The source's concluding remarks stress why factorial designs are efficient: the same observations can compare levels of more than one factor and can estimate interactions.  As the number of factors grows, full factorial layouts become expensive; fractional factorial designs leave selected cells unobserved while preserving estimability of chosen main effects or interactions.  In block experiments, blocks may be too small to contain every treatment, leading to incomplete block designs that retain some blocking advantage without requiring every block-treatment combination.
+\end{remark}
+
+\begin{remark} \label{rem:anova-supported-problems-left-as-analysis} \hlt{Data-Analysis Problems Need Data Files}\\
+Several source problems refer to external data files such as \texttt{tablet}, \texttt{LHfemale}, \texttt{linseed}, and \texttt{fruitfly}.  Without those files in the supplied screenshots, the notes can record the intended ANOVA, multiple-comparison, or rank-test workflow, but not the numerical conclusions.
+\end{remark}

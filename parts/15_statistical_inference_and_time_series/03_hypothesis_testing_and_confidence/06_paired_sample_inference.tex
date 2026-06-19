@@ -1,0 +1,60 @@
+\subsection{Paired-Sample Inference}
+\label{subsec:paired-sample-inference}
+
+Paired comparisons arise when observations are naturally matched: before and after measurements on the same unit, littermates, matched subjects, or two measurement methods applied to the same specimen.  Pairing changes the stochastic structure because the two samples are no longer independent.
+
+\begin{definition} \label{def:paired-sample-differences} \hlt{Paired Differences}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Pairs}: $(X_i,Y_i)$, $i=1,\ldots,n$, are independent across $i$; dependence within each pair is allowed.
+\item \hlt{Differences}: $D_i\defeq X_i-Y_i$ and $\overline{D}\defeq n^{-1}\sum_{i=1}^nD_i$.
+\item \hlt{Mean}: if $\mathbb{E}X_i=\mu_X$ and $\mathbb{E}Y_i=\mu_Y$, then $\mathbb{E}D_i=\mu_X-\mu_Y$.
+\item \hlt{Variance}: if $\operatorname{Var}(X_i)=\sigma_X^2$, $\operatorname{Var}(Y_i)=\sigma_Y^2$, and $\operatorname{Cov}(X_i,Y_i)=\sigma_{XY}$, then $\operatorname{Var}(D_i)=\sigma_X^2+\sigma_Y^2-2\sigma_{XY}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:pairing-variance-reduction} \hlt{Variance Effect of Pairing}\\
+Let $(X_i,Y_i)$, $i=1,\ldots,n$, be independent pairs with $\operatorname{Var}(X_i)=\sigma_X^2$, $\operatorname{Var}(Y_i)=\sigma_Y^2$, and $\operatorname{Corr}(X_i,Y_i)=\rho$.\\
+Set $D_i\defeq X_i-Y_i$ and $\overline{D}\defeq n^{-1}\sum_iD_i$. Then $\operatorname{Var}(\overline{D})=n^{-1}(\sigma_X^2+\sigma_Y^2-2\rho\sigma_X\sigma_Y)$.
+\begin{proof} Since $\operatorname{Cov}(X_i,Y_i)=\rho\sigma_X\sigma_Y$, $\operatorname{Var}(D_i)=\operatorname{Var}(X_i-Y_i)=\sigma_X^2+\sigma_Y^2-2\rho\sigma_X\sigma_Y$.\\
+Independence across pairs gives $\operatorname{Var}(\overline{D})=n^{-2}\sum_i\operatorname{Var}(D_i)=\operatorname{Var}(D_i)/n$.\\
+If $\sigma_X=\sigma_Y=\sigma$, substitution gives $\operatorname{Var}(\overline{D})=2\sigma^2(1-\rho)/n$; independent unpaired samples of size $n$ per group have $\operatorname{Var}(\overline{X}-\overline{Y})=2\sigma^2/n$, so the paired-to-unpaired variance ratio is $1-\rho$.\\
+\hlt{Structural Commentary}: Pairing replaces two marginal measurements by one within-pair contrast.\\
+\hlt{Key Insight}: Positive within-pair correlation cancels shared variation and lowers variance.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/paired_vs_unpaired_variance.tikz}
+  \caption{Pairing cancels shared variation; positive within-pair correlation lowers variance.}
+  \label{fig:paired-vs-unpaired-variance}
+\end{figure}
+
+\begin{method} \label{meth:paired-normal-t-procedure} \hlt{Paired $t$ Procedure}\\
+Let $D_1,\ldots,D_n\sim N(\mu_D,\sigma_D^2)$, where $\mu_D\defeq\mu_X-\mu_Y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Variance}: $S_D^2\defeq(n-1)^{-1}\sum_{i=1}^n(D_i-\overline{D})^2$.
+\item \hlt{Pivot}: $T\defeq(\overline{D}-\mu_D)/(S_D/\sqrt{n})\sim t_{n-1}$.
+\item \hlt{Interval}: $C_\alpha\defeq[\overline{D}-t_{n-1,1-\alpha/2}S_D/\sqrt{n},\overline{D}+t_{n-1,1-\alpha/2}S_D/\sqrt{n}]$ is exact $1-\alpha$ for $\mu_D$.
+\item \hlt{Test}: for $H_0:\mu_D=0$, reject two-sided at level $\alpha$ iff $\abs{\overline{D}}>(t_{n-1,1-\alpha/2}S_D)/\sqrt{n}$.
+\end{enumerate}
+For large $n$, use same rule by CLT; for small nonnormal differences, prefer rank or sign methods.
+\end{method}
+
+\begin{example} \label{ex:platelet-aggregation-paired-t} \hlt{Platelet Aggregation Before and After Smoking}\\
+For $n=11$ before-after platelet measurements, let $D_i=\mathrm{after}_i-\mathrm{before}_i$ with $\overline{D}=10.27$ and $S_D/\sqrt{11}=2.40$.\\
+Then $t_0=\overline{D}/(S_D/\sqrt{11})=4.28$ with $\nu=10$, so $p<0.01$ two-sided; a $90\%$ confidence interval is approximately $(5.9,14.6)$, indicating a positive mean increase after smoking.
+\end{example}
+
+\begin{example} \label{ex:mercury-methods-paired-analysis} \hlt{Mercury Measurement Methods}\\
+For $n=25$ paired mercury measurements, let $D_i=M_{1i}-M_{2i}$ with $\overline{D}=0.04$ and $S_D=0.116$.\\
+Then $t_0=\overline{D}/(S_D/\sqrt{25})=1.724$ with $\nu=24$, giving $p\approx0.094$ two-sided.\\
+Plot of $D_i$ against measurement level should be checked: level-dependent discrepancies not captured by $\overline{D}$ alone.
+\end{example}
+
+\begin{remark} \label{rem:paired-versus-repeated-measures} \hlt{Pairing Is Not Extra Independent Sampling}\\
+If unit $i$ contributes repeated measurements $Z_{i1},\ldots,Z_{ik}$, independence is across units, not within unit.\\
+Treating all $nk$ observations as iid ignores within-unit dependence and overstates the effective sample size.
+\end{remark}
