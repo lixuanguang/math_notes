@@ -72,6 +72,59 @@ parts/
 
 `parts/00_notations/` is front matter, not a numbered mathematical part.
 
+## Proposed Statistical Split
+
+The live worktree currently extends `parts/15_statistics_time_series/` beyond
+the original section index by adding sections `09`--`13`.  This makes one part
+own both inference theory and applied data-analysis workflows.  The preferred
+next structural cleanup is to split this region into three consecutive parts.
+
+Do not treat the target paths below as active until a rename/move batch updates
+`math.tex`, the affected `overview.tex` files, and any local references.
+
+Target top-level order:
+
+```text
+parts/15_statistical_inference_and_time_series/
+parts/16_statistical_data_analysis_and_applied_models/
+parts/17_statistical_learning_deep_learning/
+```
+
+Target section ownership:
+
+```text
+parts/15_statistical_inference_and_time_series/
+  01_statistical_models_and_experiments/
+  02_estimation_theory/
+  03_hypothesis_testing_and_confidence/
+  04_decision_theory/
+  05_bayesian_inference/
+  06_nonparametric_and_high_dimensional_statistics/
+  07_time_series_models/
+  08_sequential_inference_and_resampling/
+
+parts/16_statistical_data_analysis_and_applied_models/
+  01_survey_sampling/
+  02_exploratory_data_analysis_and_data_summaries/
+  03_categorical_data_analysis/
+  04_analysis_of_variance_and_designed_experiments/
+  05_linear_models_and_regression/
+
+parts/17_statistical_learning_deep_learning/
+  01_learning_problems_and_risk/
+  02_generalization_theory/
+  03_classical_supervised_learning/
+  04_unsupervised_and_latent_variable_learning/
+  05_probabilistic_graphical_and_causal_learning/
+  06_neural_network_foundations/
+  07_modern_deep_models/
+  08_learning_systems_and_evaluation/
+```
+
+Until the split is applied, the current temporary home for the applied
+data-analysis material is `parts/15_statistics_time_series/09_...` through
+`parts/15_statistics_time_series/13_...`.
+
 ## Content Adding Reference
 
 For content-adding prompts, use this README as the authority for ownership and
@@ -329,6 +382,11 @@ parts/15_statistics_time_series/
   06_nonparametric_and_high_dimensional_statistics/
   07_time_series_models/
   08_sequential_inference_and_resampling/
+  09_survey_sampling/
+  10_exploratory_data_analysis_and_data_summaries/
+  11_categorical_data_analysis/
+  12_analysis_of_variance_and_designed_experiments/
+  13_linear_models_and_regression/
 
 parts/16_statistical_learning_deep_learning/
   01_learning_problems_and_risk/
@@ -380,8 +438,9 @@ notation file in the same change.
 | Probability spaces and limit theorems | Probability and Stochastic Systems |
 | ODEs, dynamical systems, and PDE | Dynamical and PDE Systems |
 | Numerical algorithms and stochastic computation | Numerical and Stochastic Computation |
-| Inference for data-generating processes | Statistics and Time Series |
-| Prediction, representation, learned models | Statistical Learning and Deep Learning |
+| Statistical models, estimation, tests, Bayes, nonparametrics, time series, and sequential inference | Statistics and Time Series; target owner: Statistical Inference and Time Series |
+| Survey sampling, exploratory data analysis, categorical data, ANOVA/design, regression, and classical applied models | Temporary home: Statistics and Time Series sections `09`--`13`; target owner: Statistical Data Analysis and Applied Models |
+| Prediction, representation, learned models | Statistical Learning and Deep Learning; target owner after split: Statistical Learning and Deep Learning |
 
 When a later part uses material owned earlier, it should cross-reference the
 owner rather than redeveloping the theory.
