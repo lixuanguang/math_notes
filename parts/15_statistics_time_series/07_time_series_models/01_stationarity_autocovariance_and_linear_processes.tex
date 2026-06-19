@@ -3,49 +3,45 @@
 Time-series statistics studies data ordered by time, where dependence is part of the signal rather than a nuisance to be removed.
 
 \begin{definition} \label{def:strict-and-weak-stationarity} \hlt{Strict and Weak Stationarity}\\
-A stochastic process $(X_t)_{t\in\Z}$ is \hlt{strictly stationary} if
-\[
-(X_{t_1},\ldots,X_{t_k})\disteq (X_{t_1+h},\ldots,X_{t_k+h})
-\]
-for all $k$, all $t_1,\ldots,t_k$, and all shifts $h$.  It is \hlt{weakly stationary} if $\mathbb{E}X_t=\mu$ is constant and
-\[
-\gamma(h)=\operatorname{Cov}(X_t,X_{t-h})
-\]
-depends only on the lag $h$.
+Let $(X_t)_{t\in\Z}$ be a real-valued stochastic process.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Strict stationarity}: $\forall k\in\N,\ t_1,\ldots,t_k,h\in\Z$, $(X_{t_1},\ldots,X_{t_k})\disteq(X_{t_1+h},\ldots,X_{t_k+h})$.
+\item \hlt{Weak stationarity}: $\exists\mu\in\R$ and $\gamma:\Z\to\R$ with $\forall t,h\in\Z$, $X_t\in L^2$, $\mathbb{E}X_t=\mu$, and $\operatorname{Cov}(X_t,X_{t-h})=\gamma(h)$.
+\end{enumerate}
+\hlt{Key Insight}: (i) plus $L^2$ implies (ii); (ii) fixes only $\mu$ and $\gamma$, not finite-dimensional laws.
 \end{definition}
 
-\begin{definition} \label{def:acf-pacf-and-spectral-density} \hlt{Autocorrelation and Spectral Density}\\
-For a weakly stationary process with $\gamma(0)>0$, the \hlt{autocorrelation function} is
-\[
-\rho(h)=\frac{\gamma(h)}{\gamma(0)}.
-\]
-If $\sum_{h\in\Z}\abs{\gamma(h)}<\infty$, the \hlt{spectral density} is
-\[
-f(\lambda)=\frac{1}{2\pi}\sum_{h\in\Z}\gamma(h)e^{-ih\lambda},
-\qquad -\pi\leq\lambda\leq\pi.
-\]
+\begin{definition} \label{def:acf-pacf-and-spectral-density} \hlt{Autocorrelation, Partial Autocorrelation, and Spectral Density}\\
+Let $(X_t)_{t\in\Z}$ be weakly stationary with autocovariance $\gamma(h)\defeq\operatorname{Cov}(X_t,X_{t-h})$ and $\gamma(0)>0$.\\
+For $h\geq2$ and $t\in\Z$, set $\mathcal{H}_{t,h}\defeq\operatorname{span}\{1,X_{t-1},\ldots,X_{t-h+1}\}$ let $P_{t,h}$ be $L^2$-orthogonal projection onto $\mathcal{H}_{t,h}$.\\
+Assume $\operatorname{Var}(X_t-P_{t,h}X_t)>0$ and $\operatorname{Var}(X_{t-h}-P_{t,h}X_{t-h})>0$ $\forall h\geq2,\ t\in\Z$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Autocorrelation function}: $\rho:\Z\to[-1,1]$, $\rho(h)\defeq\gamma(h)/\gamma(0)$.
+\item \hlt{Partial autocorrelation function}: $\alpha:\N_0\to[-1,1]$, $\alpha(0)\defeq1$, $\alpha(1)\defeq\gamma(1)/\gamma(0)$,\\
+and $\alpha(h)\defeq\operatorname{Corr}(X_t-P_{t,h}X_t,X_{t-h}-P_{t,h}X_{t-h})$ $\forall h\geq2,\ t\in\Z$.
+\item \hlt{Spectral density}: If $\sum_{h\in\Z}\abs{\gamma(h)}<\infty$, $f_X:[-\pi,\pi]\to\C$, $f_X(\lambda)\defeq(2\pi)^{-1}\sum_{h\in\Z}\gamma(h)e^{-ih\lambda}$ $\forall\lambda\in[-\pi,\pi]$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:white-noise-linear-process} \hlt{White Noise and Linear Process}\\
-A process $(\varepsilon_t)$ is \hlt{white noise} with variance $\sigma^2$ if $\mathbb{E}\varepsilon_t=0$, $\operatorname{Var}(\varepsilon_t)=\sigma^2$, and $\operatorname{Cov}(\varepsilon_t,\varepsilon_s)=0$ for $t\neq s$.  A \hlt{linear process} has representation
-\[
-X_t=\mu+\sum_{j=0}^{\infty}\psi_j\varepsilon_{t-j},
-\]
-usually with $\sum_j\abs{\psi_j}<\infty$.
+Let $\sigma^2\geq0$, $\mu\in\R$, and $(\psi_j)_{j\geq0}\subset\R$ satisfy $\sum_{j=0}^{\infty}\abs{\psi_j}<\infty$; all processes below are real-valued, indexed by $\Z$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{White noise}: $(\varepsilon_t)_{t\in\Z}\subset L^2$, $\mathbb{E}\varepsilon_t=0$ and $\operatorname{Var}(\varepsilon_t)=\sigma^2$ $\forall t\in\Z$, and $\operatorname{Cov}(\varepsilon_t,\varepsilon_s)=0$ $\forall s,t\in\Z$ with $s\neq t$.
+\item \hlt{Linear process}: $(X_t)_{t\in\Z}$ satisfies $X_t=\mu+\sum_{j=0}^{\infty}\psi_j\varepsilon_{t-j}$ $\forall t\in\Z$ for some $(\varepsilon_t)_{t\in\Z}$ satisfying (i).
+\end{enumerate}
+\hlt{Structural Commentary}: $\sum_j\abs{\psi_j}<\infty$ gives an $L^2$-stable one-sided innovation filter.
 \end{definition}
 
 \begin{example} \label{ex:ar-one-stationarity} \hlt{Autoregression of Order One}\\
-For
-\[
-X_t=\phi X_{t-1}+\varepsilon_t,
-\]
-with white-noise innovations and $|\phi|<1$, the stationary solution is
-\[
-X_t=\sum_{j=0}^{\infty}\phi^j\varepsilon_{t-j}.
-\]
-Its autocovariance is $\gamma(h)=\sigma^2\phi^{|h|}/(1-\phi^2)$ and its autocorrelation is $\rho(h)=\phi^{|h|}$.
+Let $(\varepsilon_t)_{t\in\Z}$ be white noise with variance $\sigma^2$, and let $|\phi|<1$.\\
+For $X_t=\phi X_{t-1}+\varepsilon_t$, the stationary solution is $X_t=\sum_{j=0}^{\infty}\phi^j\varepsilon_{t-j}$.\\
+Thus $\gamma(h)=\operatorname{Cov}(X_t,X_{t-h})=\sigma^2\phi^{|h|}/(1-\phi^2)$ and $\rho(h)=\gamma(h)/\gamma(0)=\phi^{|h|}$.\\
+Autocorrelation decays geometrically at rate $|\phi|$.
 \end{example}
 
 \begin{remark} \label{rem:time-series-prerequisite-stochastic-processes} \hlt{Process-Level Prerequisites}\\
-The stochastic-process concepts of filtration, conditional expectation, martingales, stationarity, and ergodicity from Part 12 provide the probability backbone for time-series inference.
+Time-series inference uses filtrations $(\mathcal{F}_t)$, adapted $X_t$, predictors $\mathbb{E}(X_{t+h}\mid\mathcal{F}_t)$, martingale differences $\varepsilon_t$, and stationarity or ergodicity assumptions.
 \end{remark}

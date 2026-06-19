@@ -3,45 +3,41 @@
 Classical time-series models combine deterministic filters, stochastic innovations, and likelihood-based estimation.
 
 \begin{definition} \label{def:arma-model} \hlt{ARMA Model}\\
-An \hlt{ARMA$(p,q)$} model satisfies
-\[
-X_t-\phi_1X_{t-1}-\cdots-\phi_pX_{t-p}
-=\varepsilon_t+\theta_1\varepsilon_{t-1}+\cdots+\theta_q\varepsilon_{t-q}.
-\]
-Using the backshift operator $B X_t=X_{t-1}$, this is
-\[
-\phi(B)X_t=\theta(B)\varepsilon_t.
-\]
-Causality and invertibility are encoded by roots of $\phi$ and $\theta$ lying outside the unit disk.
+Let $p,q\in\N_0$, $\phi_i\in\R$ $(1\leq i\leq p)$, $\theta_j\in\R$ $(1\leq j\leq q)$, and let $B$ denote the backshift, $(BX)_t=X_{t-1}$.\\
+Set $\phi(z)\defeq1-\sum_{i=1}^{p}\phi_i z^i$ and $\theta(z)\defeq1+\sum_{j=1}^{q}\theta_j z^j$; empty sums are zero.\\
+$(X_t)_{t\in\Z}$ is ARMA$(p,q)$ with innovations $(\varepsilon_t)_{t\in\Z}$ iff $(\varepsilon_t)$ is white noise and $\phi(B)X_t=\theta(B)\varepsilon_t$ $\forall t\in\Z$.\\
+\hlt{Structural Commentary}: Causal iff $\phi(z)\neq0$ for $\abs{z}\leq1$; invertible iff $\theta(z)\neq0$ for $\abs{z}\leq1$.\\
+\hlt{Key Insight}: AR roots control recursion; MA roots control innovation recovery.
 \end{definition}
 
 \begin{definition} \label{def:arima-model} \hlt{ARIMA Model}\\
-A process is \hlt{ARIMA$(p,d,q)$} if $(1-B)^dX_t$ is ARMA$(p,q)$.  Differencing removes polynomial stochastic trends before stationary ARMA modeling.
+Let $p,q,d\in\N_0$, $\phi_i\in\R$ $(1\leq i\leq p)$, $\theta_j\in\R$ $(1\leq j\leq q)$, and let $B$ denote the backshift.\\
+Set $\Delta^d\defeq(1-B)^d$, $\phi(z)\defeq1-\sum_{i=1}^{p}\phi_i z^i$, and $\theta(z)\defeq1+\sum_{j=1}^{q}\theta_j z^j$.\\
+$(X_t)_{t\in\Z}$ is ARIMA$(p,d,q)$ with innovations $(\varepsilon_t)_{t\in\Z}$ iff $(\varepsilon_t)$ is white noise and $\phi(B)\Delta^dX_t=\theta(B)\varepsilon_t$ $\forall t\in\Z$.\\
+\hlt{Structural Commentary}: $Y_t\defeq\Delta^dX_t$ satisfies ARMA$(p,q)$ with the same innovations.\\
+\hlt{Key Insight}: $d>0$ shifts stationarity from $X_t$ to $\Delta^dX_t$.
 \end{definition}
 
 \begin{definition} \label{def:state-space-model-kalman} \hlt{Linear Gaussian State-Space Model}\\
-A linear Gaussian state-space model has latent state $\alpha_t$ and observation $Y_t$ satisfying
-\[
-\alpha_{t+1}=F\alpha_t+G\eta_t,
-\qquad
-Y_t=H\alpha_t+\varepsilon_t,
-\]
-where $(\eta_t)$ and $(\varepsilon_t)$ are Gaussian white-noise sequences.  The Kalman filter recursively computes the conditional mean and covariance of $\alpha_t$ given past observations.
+Let $m,r,n\in\N$, $F\in\R^{m\times m}$, $G\in\R^{m\times r}$, $H\in\R^{n\times m}$, and $Q\in\R^{r\times r}$, $R\in\R^{n\times n}$ with $Q,R\succeq0$.\\
+Let $(\eta_t)$ and $(\varepsilon_t)$ be mutually independent Gaussian noises with $\eta_t\sim N(0,Q)$ and $\varepsilon_t\sim N(0,R)$.\\
+Let $\alpha_0$ be independent Gaussian. $(\alpha_t,Y_t)_{t\in\N_0}$ is \hlt{linear Gaussian state-space} iff\\
+$\alpha_t\in\R^m$, $Y_t\in\R^n$, $\alpha_{t+1}=F\alpha_t+G\eta_t$, $Y_t=H\alpha_t+\varepsilon_t$ $\forall t\in\N_0$.\\
+\hlt{Key Insight}: With $\mathcal{F}_t^Y\defeq\sigma(Y_0,\ldots,Y_t)$, Kalman filtering recurses $(a_t,P_t)\defeq(\mathbb{E}(\alpha_t\mid\mathcal{F}_t^Y),\operatorname{Var}(\alpha_t\mid\mathcal{F}_t^Y))$.
 \end{definition}
 
 \begin{definition} \label{def:arch-garch-models} \hlt{ARCH and GARCH Volatility}\\
-An \hlt{ARCH$(q)$} model writes
-\[
-X_t=\sigma_t z_t,
-\qquad
-\sigma_t^2=\omega+\alpha_1X_{t-1}^2+\cdots+\alpha_qX_{t-q}^2,
-\]
-where $(z_t)$ is standardized white noise.  A \hlt{GARCH$(p,q)$} model adds lagged conditional variances:
-\[
-\sigma_t^2=\omega+\sum_{i=1}^q\alpha_iX_{t-i}^2+\sum_{j=1}^p\beta_j\sigma_{t-j}^2.
-\]
+Let $p,q\in\N_0$, $\omega>0$, $\alpha_1,\ldots,\alpha_q,\beta_1,\ldots,\beta_p\geq0$, and let $(z_t)_{t\in\Z}$ be standardized white noise.\\
+All processes below are real-valued and indexed by $\Z$; set $A\defeq\sum_{i=1}^{q}\alpha_i+\sum_{j=1}^{p}\beta_j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{ARCH$(q)$}: $(X_t,\sigma_t)_{t\in\Z}$, $\sigma_t\geq0$, satisfies $X_t=\sigma_t z_t$ and $\sigma_t^2=\omega+\sum_{i=1}^{q}\alpha_iX_{t-i}^2$ $\forall t\in\Z$.
+\item \hlt{GARCH$(p,q)$}: $(X_t,\sigma_t)_{t\in\Z}$, $\sigma_t\geq0$, satisfies $X_t=\sigma_t z_t$ and $\sigma_t^2=\omega+\sum_{i=1}^{q}\alpha_iX_{t-i}^2+\sum_{j=1}^{p}\beta_j\sigma_{t-j}^2$ $\forall t\in\Z$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\omega>0$, $\alpha_i,\beta_j\geq0$ force $\sigma_t^2\geq0$; by stationary GARCH, $A<1$ has $\mathbb{E}X_t^2=\omega/(1-A)$.
 \end{definition}
 
 \begin{remark} \label{rem:time-series-likelihood-filtering} \hlt{Likelihood by Filtering}\\
-For ARMA, state-space, and volatility models, likelihood evaluation is often a recursive filtering problem.  This links statistical inference to the numerical recursion and stability ideas of Parts 13 and 14.
+If one-step densities exist, likelihood filtering has $S_t=\mathcal{T}_\vartheta(S_{t-1},W_t)$ and $\ell_T(\vartheta)=\sum_{t=1}^{T}\log p_\vartheta(W_t\mid S_{t-1})$.\\
+Inference depends on stability of $S_t$.
 \end{remark}
