@@ -9,7 +9,7 @@ Let $\Pi(\cdot\mid x)$ be the posterior on $\Theta$.
 \item \hlt{Credible set}: $C(x)\subseteq\Theta$ has credibility $1-\alpha$ if $\Pi(C(x)\mid x)\geq1-\alpha$.
 \item \hlt{Conditioning}: credibility is a posterior probability conditional on the observed data $x$.
 \item \hlt{Monte Carlo sample}: let $\theta^{(1)},\ldots,\theta^{(M)}$ be draws, or approximate draws, from $\Pi(\cdot\mid x)$.
-\item \hlt{Posterior mean}: for integrable $g$, $\int g(\theta)\,d\Pi(\theta\mid x)\approx M^{-1}\sum_{m=1}^Mg(\theta^{(m)})$.
+\item \hlt{Posterior mean}: for integrable $g$, $\int g(\theta)\,d\Pi(\theta\mid x)\approx M^{-1}\sum\limits_{m=1}^Mg(\theta^{(m)})$.
 \item \hlt{Dependent draws}: MCMC uses dependent samples but targets the same posterior integrals.
 \end{enumerate}
 \end{definition}
@@ -27,11 +27,10 @@ Let $\Pi(\cdot\mid x)$ be the posterior on $\Theta$.
 \begin{method} \label{meth:gibbs-sampling-normal-mean-precision} \hlt{Gibbs Sampling from Full Conditionals}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Kernel}: with unknown mean $\theta$ and precision $\xi$, the flat-prior posterior satisfies\\
-$\pi(\theta,\xi\mid x)\propto\xi^{n/2-1}\exp\{-(\xi/2)\sum_i(x_i-\theta)^2\}$.
-\item \hlt{Decomposition}: $\sum_i(x_i-\theta)^2=\sum_i(x_i-\overline{x})^2+n(\theta-\overline{x})^2$.
+\item \hlt{Kernel}: unknown mean $\theta$, precision $\xi$, flat-prior posterior satisfies $\pi(\theta,\xi\mid x)\propto\xi^{\frac{n}{2}-1}\exp\{-\frac{\xi}{2}\sum\limits_i(x_i-\theta)^2\}$.
+\item \hlt{Decomposition}: $\sum\limits_i(x_i-\theta)^2=\sum\limits_i(x_i-\overline{x})^2+n(\theta-\overline{x})^2$.
 \item \hlt{Mean conditional}: $\theta\mid\xi,x\sim N(\overline{x},(n\xi)^{-1})$.
-\item \hlt{Precision conditional}: $\xi\mid\theta,x\sim\operatorname{Gamma}(n/2,\frac12\sum_i(x_i-\theta)^2)$ in rate form.
+\item \hlt{Precision conditional}: $\xi\mid\theta,x\sim\operatorname{Gamma}(\frac{n}{2},\frac12\sum\limits_i(x_i-\theta)^2)$ in rate form.
 \item \hlt{Gibbs sampler}: alternate conditionals; post-burn-in averages estimate posterior summaries.
 \end{enumerate}
 \end{method}
@@ -40,7 +39,7 @@ $\pi(\theta,\xi\mid x)\propto\xi^{n/2-1}\exp\{-(\xi/2)\sum_i(x_i-\theta)^2\}$.
 Let $X_1,\ldots,X_n\sim P_{\theta_0}$ in a regular $d$-dimensional model with nonsingular information $I(\theta_0)$.\\
 Assume the prior density $\pi$ is positive and continuous near $\theta_0$, and let $\widehat{\theta}_n$ be an efficient center.\\
 Then $\Pi(\sqrt{n}(\theta-\widehat{\theta}_n)\in\cdot\mid X_1,\ldots,X_n)\Rightarrow N_d(0,I(\theta_0)^{-1})$ in $P_{\theta_0}$-probability.
-\begin{proof} Set $h\defeq\sqrt{n}(\theta-\widehat{\theta}_n)$. Local asymptotic normality gives $\ell_n(\widehat{\theta}_n+h/\sqrt{n})-\ell_n(\widehat{\theta}_n)=-\frac12h^\top I(\theta_0)h+o_{P_{\theta_0}}(1)$ uniformly on bounded $h$. Prior continuity gives $\pi(\widehat{\theta}_n+h/\sqrt{n})/\pi(\theta_0)\to1$ in $P_{\theta_0}$-probability on bounded $h$.\\
+\begin{proof} Set $h\defeq\sqrt{n}(\theta-\widehat{\theta}_n)$. Local asymptotic normality gives $\ell_n(\widehat{\theta}_n+\frac{h}{\sqrt{n}})-\ell_n(\widehat{\theta}_n)=-\frac12h^\top I(\theta_0)h+o_{P_{\theta_0}}(1)$ uniformly on bounded $h$. Prior continuity gives $\frac{\pi(\widehat{\theta}_n+\frac{h}{\sqrt{n}})}{\pi(\theta_0)}\to1$ in $P_{\theta_0}$-probability on bounded $h$.\\
 After normalization, the posterior density of $h$ converges to the $N_d(0,I(\theta_0)^{-1})$ density, with tail mass outside bounded sets negligible. Thus the displayed posterior weak convergence holds.\\
 \hlt{Structural Commentary}: Locally, the likelihood is quadratic and the prior is flat to first order.\\
 \hlt{Key Insight}: In regular finite-dimensional models, posterior uncertainty is asymptotically frequentist normal.

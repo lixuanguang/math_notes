@@ -8,7 +8,7 @@ Let $\Pi$ be a prior on $\Theta$ and $p_\theta(x)$ a dominated likelihood.
 \setlength{\itemsep}{0pt}
 \item \hlt{Prior}: $\Pi$ encodes uncertainty about $\theta\in\Theta$ before observing $x$.
 \item \hlt{Evidence}: $m(x)\defeq\int_\Theta p_\vartheta(x)\,d\Pi(\vartheta)$, assumed finite and positive.
-\item \hlt{Posterior}: $d\Pi(\theta\mid x)\defeq p_\theta(x)d\Pi(\theta)/m(x)$.
+\item \hlt{Posterior}: $d\Pi(\theta\mid x)\defeq \frac{p_\theta(x)d\Pi(\theta)}{m(x)}$.
 \item \hlt{Predictive}: for future $X_{\mathrm{new}}$, $\mathbb{P}(X_{\mathrm{new}}\in A\mid x)=\int_\Theta P_\theta(A)\,d\Pi(\theta\mid x)$.
 \item \hlt{Conjugacy}: $\{\Pi_\eta:\eta\in H\}$ is conjugate if $\Pi_\eta(\cdot\mid x)=\Pi_{\eta(x)}$ for some $\eta(x)\in H$.
 \end{enumerate}
@@ -16,13 +16,13 @@ Let $\Pi$ be a prior on $\Theta$ and $p_\theta(x)$ a dominated likelihood.
 
 \begin{example} \label{ex:beta-binomial-conjugacy} \hlt{Beta--Binomial Updating}\\
 If $X\mid p\sim\operatorname{Binomial}(n,p)$ and $p\sim\operatorname{Beta}(a,b)$, then $p\mid X=x\sim\operatorname{Beta}(a+x,b+n-x)$.\\
-Thus $\mathbb{E}[p\mid x]=(a+x)/(a+b+n)$, a weighted average of $a/(a+b)$ and $x/n$.
+Thus $\mathbb{E}[p\mid x]=\frac{a+x}{a+b+n}$, a weighted average of $\frac{a}{a+b}$ and $\frac{x}{n}$.
 \end{example}
 
 \begin{example} \label{ex:gamma-poisson-conjugacy-rate} \hlt{Gamma--Poisson Updating}\\
 Let $X_1,\ldots,X_n\mid\lambda$ be iid $\operatorname{Poisson}(\lambda)$ and $\lambda\sim\operatorname{Gamma}(\alpha,\nu)$ in rate form.\\
-Writing $s\defeq\sum_{i=1}^nx_i$, the posterior kernel is $\pi(\lambda\mid x)\propto\lambda^{\alpha+s-1}e^{-(\nu+n)\lambda}$, hence $\lambda\mid x\sim\operatorname{Gamma}(\alpha+s,\nu+n)$.\\
-Thus $\mathbb{E}[\lambda\mid x]=(\alpha+s)/(\nu+n)$, $\operatorname{Var}(\lambda\mid x)=(\alpha+s)/(\nu+n)^2$, $\operatorname{mode}(\lambda\mid x)=(\alpha+s-1)/(\nu+n)$ if $\alpha+s>1$.
+Writing $s\defeq\sum\limits_{i=1}^nx_i$, the posterior kernel is $\pi(\lambda\mid x)\propto\lambda^{\alpha+s-1}e^{-(\nu+n)\lambda}$, hence $\lambda\mid x\sim\operatorname{Gamma}(\alpha+s,\nu+n)$.\\
+Thus $\mathbb{E}[\lambda\mid x]=\frac{\alpha+s}{\nu+n}$, $\operatorname{Var}(\lambda\mid x)=\frac{\alpha+s}{(\nu+n)^2}$, $\operatorname{mode}(\lambda\mid x)=\frac{\alpha+s-1}{\nu+n}$ if $\alpha+s>1$.
 \end{example}
 
 \begin{example} \label{ex:normal-normal-conjugacy} \hlt{Normal Mean with Normal Prior}\\
@@ -32,13 +32,13 @@ Then $\mu\mid X\sim N(m_n,\tau_n^2)$, where $\tau_n^{-2}=\tau_0^{-2}+n\sigma^{-2
 
 \begin{example} \label{ex:normal-precision-gamma-conjugacy} \hlt{Known Mean and Unknown Precision}\\
 Let $X_1,\ldots,X_n\mid\xi$ be iid $N(\theta_0,\xi^{-1})$ with known $\theta_0$, and let $\xi\sim\operatorname{Gamma}(\alpha,\lambda)$ in rate form.\\
-Writing $q\defeq\sum_{i=1}^n(x_i-\theta_0)^2$, the posterior is $\xi\mid x\sim\operatorname{Gamma}(\alpha+n/2,\lambda+q/2)$.\\
-With a flat gamma prior, $\sigma^2=\xi^{-1}$ centers near the MLE $q/n$.
+Writing $q\defeq\sum\limits_{i=1}^n(x_i-\theta_0)^2$, the posterior is $\xi\mid x\sim\operatorname{Gamma}(\alpha+\frac{n}{2},\lambda+\frac{q}{2})$.\\
+With a flat gamma prior, $\sigma^2=\xi^{-1}$ centers near the MLE $\frac{q}{n}$.
 \end{example}
 
 \begin{definition} \label{rem:improper-priors-need-proper-posteriors} \hlt{Improper Prior}\\
 An \hlt{improper prior} is a $\sigma$-finite prior measure $\Pi$ on $\Theta$ with $\Pi(\Theta)=\infty$.
-For likelihood $p_\theta(x)$, it is usable only when $0<m_\Pi(x)\defeq\int_\Theta p_\theta(x)\,d\Pi(\theta)<\infty$, in which case $d\Pi(\theta\mid x)\defeq p_\theta(x)d\Pi(\theta)/m_\Pi(x)$ is a proper posterior.
+For likelihood $p_\theta(x)$, it is usable only when $0<m_\Pi(x)\defeq\int_\Theta p_\theta(x)\,d\Pi(\theta)<\infty$, in which case $d\Pi(\theta\mid x)\defeq\frac{p_\theta(x)d\Pi(\theta)}{m_\Pi(x)}$ is a proper posterior.
 \end{definition}
 
 \begin{remark} \label{rem:bayesian-conditioning-measure-theory} \hlt{Conditioning Viewpoint}\\

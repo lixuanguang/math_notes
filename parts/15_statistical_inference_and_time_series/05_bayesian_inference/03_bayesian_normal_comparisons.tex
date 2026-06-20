@@ -11,35 +11,34 @@ The normal two-sample model also has a Bayesian interpretation.  With diffuse pr
 \item \hlt{Conditional model}: Given $(\mu_X,\mu_Y,\xi)$, the variables $X_1,\ldots,X_n,Y_1,\ldots,Y_m$ are independent, with $X_i\mid(\mu_X,\xi)\sim N(\mu_X,\xi^{-1})$ and $Y_j\mid(\mu_Y,\xi)\sim N(\mu_Y,\xi^{-1})$.
 \item \hlt{Improper prior}: $\pi(\mu_X,\mu_Y,\xi)\propto \xi^{-1}$ on $\mu_X,\mu_Y\in\R$ and $\xi>0$.
 \item \hlt{Observed data}: Write $x=(x_1,\ldots,x_n)$ and $y=(y_1,\ldots,y_m)$.
-\item \hlt{Sample means}: $\overline{x}\defeq n^{-1}\sum_{i=1}^{n}x_i$ and $\overline{y}\defeq m^{-1}\sum_{j=1}^{m}y_j$.
-\item \hlt{Sample variances}: $s_X^2\defeq(n-1)^{-1}\sum_{i=1}^{n}(x_i-\overline{x})^2$ and $s_Y^2\defeq(m-1)^{-1}\sum_{j=1}^{m}(y_j-\overline{y})^2$.
-\item \hlt{Pooled variance}: $s_p^2\defeq\{(n-1)s_X^2+(m-1)s_Y^2\}/(m+n-2)$.
-\item \hlt{Posterior kernel}: $\pi(\mu_X,\mu_Y,\xi\mid x,y)\propto \xi^{(m+n)/2-1}\exp\{-(\xi/2)[\sum_{i=1}^{n}(x_i-\mu_X)^2+\sum_{j=1}^{m}(y_j-\mu_Y)^2]\}$.
+\item \hlt{Sample means}: $\overline{x}\defeq n^{-1}\sum\limits_{i=1}^{n}x_i$ and $\overline{y}\defeq m^{-1}\sum\limits_{j=1}^{m}y_j$.
+\item \hlt{Sample variances}: $s_X^2\defeq(n-1)^{-1}\sum\limits_{i=1}^{n}(x_i-\overline{x})^2$ and $s_Y^2\defeq(m-1)^{-1}\sum\limits_{j=1}^{m}(y_j-\overline{y})^2$.
+\item \hlt{Pooled variance}: $s_p^2\defeq\frac{(n-1)s_X^2+(m-1)s_Y^2}{m+n-2}$.
+\item \hlt{Posterior kernel}: $\pi(\mu_X,\mu_Y,\xi\mid x,y)\propto \xi^{\frac{m+n}{2}-1}\exp\left\{-\frac{\xi}{2}\left[\sum\limits_{i=1}^{n}(x_i-\mu_X)^2+\sum\limits_{j=1}^{m}(y_j-\mu_Y)^2\right]\right\}$.
 \end{enumerate}
 \end{definition}
 
 \begin{proposition} \label{prop:bayesian-two-sample-conditional-posterior} \hlt{Conditional Posterior Factors}\\
 For $n,m\geq2$, put $\nu\defeq m+n-2$ and take $\operatorname{Gamma}$ shape-rate.\\
 In the common-precision model, $\pi(\mu_X,\mu_Y,\xi\mid x,y)=\pi(\mu_X\mid\xi,x,y)\pi(\mu_Y\mid\xi,x,y)\pi(\xi\mid x,y)$,\\
-where $(\mu_X,\mu_Y)\mid\xi,x,y\sim N(\overline{x},(n\xi)^{-1})\otimes N(\overline{y},(m\xi)^{-1})$ and $\xi\mid x,y\sim\operatorname{Gamma}(\nu/2,\nu s_p^2/2)$.\\
-Hence $\mu_X\perp\!\!\!\perp\mu_Y\mid(\xi,x,y)$.
-\begin{proof} Let $S_X(\mu_X)\defeq\sum_{i=1}^{n}(x_i-\mu_X)^2$, $S_Y(\mu_Y)\defeq\sum_{j=1}^{m}(y_j-\mu_Y)^2$, and $A\defeq(n-1)s_X^2+(m-1)s_Y^2=\nu s_p^2$.\\
+where $(\mu_X,\mu_Y)\mid\xi,x,y\sim N(\overline{x},(n\xi)^{-1})\otimes N(\overline{y},(m\xi)^{-1})$ and $\xi\mid x,y\sim\operatorname{Gamma}(\frac{\nu}{2},\frac{\nu s_p^2}{2})$. $\mu_X\perp\!\!\!\perp\mu_Y\mid(\xi,x,y)$.
+\begin{proof} Let $S_X(\mu_X)\defeq\sum\limits_{i=1}^{n}(x_i-\mu_X)^2$, $S_Y(\mu_Y)\defeq\sum\limits_{j=1}^{m}(y_j-\mu_Y)^2$, and $A\defeq(n-1)s_X^2+(m-1)s_Y^2=\nu s_p^2$.\\
 Completing squares gives $S_X(\mu_X)=(n-1)s_X^2+n(\mu_X-\overline{x})^2$ and $S_Y(\mu_Y)=(m-1)s_Y^2+m(\mu_Y-\overline{y})^2$.\\
-Thus $\pi(\mu_X,\mu_Y,\xi\mid x,y)\propto\xi^{(m+n)/2-1}\exp\{-\xi A/2\}\exp\{-n\xi(\mu_X-\overline{x})^2/2\}\exp\{-m\xi(\mu_Y-\overline{y})^2/2\}$.\\
+Thus $\pi(\mu_X,\mu_Y,\xi\mid x,y)\propto\xi^{\frac{m+n}{2}-1}\exp\{-\frac{\xi A}{2}\}\exp\{-\frac{n\xi(\mu_X-\overline{x})^2}{2}\}\exp\{-\frac{m\xi(\mu_Y-\overline{y})^2}{2}\}$.\\
 For fixed $\xi$, last two factors are independent normal kernels for $\mu_X$, $\mu_Y$ with variances $(n\xi)^{-1}$, $(m\xi)^{-1}$.\\
-Also $\int\exp\{-n\xi(\mu_X-\overline{x})^2/2\}\,d\mu_X\propto(n\xi)^{-1/2}$ and $\int\exp\{-m\xi(\mu_Y-\overline{y})^2/2\}\,d\mu_Y\propto(m\xi)^{-1/2}$, so marginalising $\mu_X,\mu_Y$ leaves $\pi(\xi\mid x,y)\propto\xi^{\nu/2-1}\exp\{-\xi\nu s_p^2/2\}$.\\
+Also $\int\exp\{-\frac{n\xi(\mu_X-\overline{x})^2}{2}\}\,d\mu_X\propto(n\xi)^{-\frac{1}{2}}$ and $\int\exp\{-\frac{m\xi(\mu_Y-\overline{y})^2}{2}\}\,d\mu_Y\propto(m\xi)^{-\frac{1}{2}}$.\\
+Hence marginalising $\mu_X,\mu_Y$ leaves $\pi(\xi\mid x,y)\propto\xi^{\frac{\nu}{2}-1}\exp\{-\frac{\xi\nu s_p^2}{2}\}$.\\
 \hlt{Structural Commentary}: Completing squares isolates location kernels and pooled residual $A=\nu s_p^2$.\\
 \hlt{Key Insight}: Marginalising $\mu_X,\mu_Y$ leaves the pooled gamma law for $\xi$.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:bayesian-two-sample-t-posterior} \hlt{Posterior $t$ Law for a Mean Difference}\\
-In the common-precision model with $n,m\geq2$, set $\Delta\defeq\mu_X-\mu_Y$, $d\defeq\overline{x}-\overline{y}$, $c\defeq n^{-1}+m^{-1}$, $\nu\defeq m+n-2$, and $T\defeq(\Delta-d)/(s_p\sqrt{c})$. Then $T\mid x,y\sim t_\nu$.
-\begin{proof} By Proposition \ref{prop:bayesian-two-sample-conditional-posterior}, $\Delta\mid\xi,x,y\sim N(d,c/\xi)$ and $\xi\mid x,y\sim\operatorname{Gamma}(\nu/2,\nu s_p^2/2)$.\\
-Equivalently, take independent $E\sim N(0,1)$, $V\sim\chi^2_\nu$, $\xi=V/(\nu s_p^2)$, and $\Delta=d+\sqrt{c/\xi}\,E$.\\
-Thus $T=(\Delta-d)/(s_p\sqrt{c})=E/\sqrt{V/\nu}$, so $T\mid x,y\sim t_\nu$.\\
+In the common-precision model with $n,m\geq2$, set $\Delta\defeq\mu_X-\mu_Y$, $d\defeq\overline{x}-\overline{y}$, $c\defeq n^{-1}+m^{-1}$, $\nu\defeq m+n-2$, and $T\defeq\frac{\Delta-d}{s_p\sqrt{c}}$. Then $T\mid x,y\sim t_\nu$.
+\begin{proof} By Proposition \ref{prop:bayesian-two-sample-conditional-posterior}, $\Delta\mid\xi,x,y\sim N(d,\frac{c}{\xi})$ and $\xi\mid x,y\sim\operatorname{Gamma}(\frac{\nu}{2},\frac{\nu s_p^2}{2})$.\\
+Equivalently, take independent $E\sim N(0,1)$, $V\sim\chi^2_\nu$, $\xi=\frac{V}{\nu s_p^2}$, $\Delta=d+\sqrt{\frac{c}{\xi}}\,E$. Thus $T=\frac{\Delta-d}{s_p\sqrt{c}}=\frac{E}{\sqrt{\frac{V}{\nu}}}$, QED.\\
 \hlt{Structural Commentary}: Normal given $\xi$; Student after mixing over $\xi$.\\
-\hlt{Key Insight}: The $t$ law is exactly a standard normal divided by an independent estimated-scale factor $\sqrt{V/\nu}$.
+\hlt{Key Insight}: The $t$ law is exactly a standard normal divided by an independent estimated-scale factor $\sqrt{\frac{V}{\nu}}$.
 \end{proof}
 \end{proposition}
 
