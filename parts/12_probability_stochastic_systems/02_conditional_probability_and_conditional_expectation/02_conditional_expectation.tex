@@ -3,14 +3,14 @@
 Let $X,Y$ be random variables, and assume the relevant sums or integrals exist.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Discrete case}: If $X,Y$ are discrete, then $\mathbb{E}(X\mid Y=y)\defeq\sum_x x\,p_{X\mid Y}(x\mid y)$.
+\item \hlt{Discrete case}: If $X,Y$ are discrete, then $\mathbb{E}(X\mid Y=y)\defeq\sum\limits_x x\,p_{X\mid Y}(x\mid y)$.
 \item \hlt{Density case}: If $X,Y$ have conditional density $f_{X\mid Y}$, then $\mathbb{E}(X\mid Y=y)\defeq\int_{\R}x f_{X\mid Y}(x\mid y)\,dx$
 \item \hlt{Measurable transforms}: For measurable $r$,
 \begin{equation*}
 \mathbb{E}(r(X,Y)\mid Y=y)
 =
 \begin{cases}
-\sum_x r(x,y)p_{X\mid Y}(x\mid y),&\text{discrete case},\\[2mm]
+\sum\limits_x r(x,y)p_{X\mid Y}(x\mid y),&\text{discrete case},\\[2mm]
 \int_{\R}r(x,y)f_{X\mid Y}(x\mid y)\,dx,&\text{density case}.
 \end{cases}
 \end{equation*}
@@ -20,8 +20,7 @@ Let $X,Y$ be random variables, and assume the relevant sums or integrals exist.
 
 \begin{example} \label{ex:conditional-uniform-triangle} \hlt{A Conditional Uniform Model}\\
 Let $X\sim\operatorname{Uniform}(0,1)$ and, conditionally on $X=x$, let $Y\sim\operatorname{Uniform}(x,1)$.\\
-For $0\leq x<1$ and $x<y<1$, $f_{Y\mid X}(y\mid x)=1/(1-x)$, so $\mathbb{E}(Y\mid X=x)=\frac{1}{1-x}\int_x^1 y\,dy=\frac{1+x}{2}$.\\
-Hence $\mathbb{E}(Y\mid X)=(1+X)/2$.
+For $0\leq x<1$ and $x<y<1$, $f_{Y\mid X}(y\mid x)=\frac{1}{1-x}$, so $\mathbb{E}(Y\mid X=x)=\frac{1}{1-x}\int_x^1 y\,dy=\frac{1+x}{2}$; $\mathbb{E}(Y\mid X)=\frac{1+X}{2}$.
 \end{example}
 
 \begin{theorem} \label{thm:tower-property-iterated-expectation-elementary} \hlt{Tower Property}\\
@@ -31,7 +30,7 @@ If $\mathbb{E}|Y|<\infty$ and $\mathbb{E}|r(X,Y)|<\infty$, then $\mathbb{E}[\mat
 Let $h(x,y)$ denote either $y$ or $r(x,y)$, and set $g_h(x)\defeq\mathbb{E}(h(X,Y)\mid X=x)$.\\
 In the density case, $g_h(x)=\int h(x,y)f_{Y\mid X}(y\mid x)\,dy$ and $f(x,y)=f_X(x)f_{Y\mid X}(y\mid x)$,\\
 so Fubini gives $\mathbb{E}[g_h(X)]=\int\int h(x,y)f(x,y)\,dy\,dx=\mathbb{E}h(X,Y)$.\\
-In the discrete case, $\mathbb{E}[g_h(X)]=\sum_x\sum_y h(x,y)p_{Y\mid X}(y\mid x)p_X(x)=\sum_x\sum_y h(x,y)p_{X,Y}(x,y)=\mathbb{E}h(X,Y)$.\\
+In the discrete case, $\mathbb{E}[g_h(X)]=\sum\limits_x\sum\limits_y h(x,y)p_{Y\mid X}(y\mid x)p_X(x)=\sum\limits_x\sum\limits_y h(x,y)p_{X,Y}(x,y)=\mathbb{E}h(X,Y)$.\\
 Taking $h(x,y)=y$ and $h(x,y)=r(x,y)$ gives the two identities.\\
 \hlt{Structural Commentary}: Conditional expectation first averages over fibers $\{X=x\}$, and the outer expectation averages those fiber means over the law of $X$.\\
 \hlt{Key Insight}: Iterated expectation removes the conditioning variable without changing the total mean.
@@ -39,8 +38,8 @@ Taking $h(x,y)=y$ and $h(x,y)=r(x,y)$ gives the two identities.\\
 \end{theorem}
 
 \begin{example} \label{ex:tower-property-conditional-uniform} \hlt{Using the Tower Property}\\
-Let $X\sim\operatorname{Uniform}(0,1)$ and, conditionally on $X=x$, let $Y\sim\operatorname{Uniform}(x,1)$.
-Since $\mathbb{E}(Y\mid X)=(1+X)/2$ and $\mathbb{E}X=1/2$, the tower property gives $\mathbb{E}Y=\mathbb{E}[\mathbb{E}(Y\mid X)]=\mathbb{E}[(1+X)/2]=3/4$.
+Let $X\sim\operatorname{Uniform}(0,1)$ and, conditionally on $X=x$, let $Y\sim\operatorname{Uniform}(x,1)$.\\
+Since $\mathbb{E}(Y\mid X)=\frac{1+X}{2}$ and $\mathbb{E}X=\frac{1}{2}$, the tower property gives $\mathbb{E}Y=\mathbb{E}[\mathbb{E}(Y\mid X)]=\mathbb{E}\left[\frac{1+X}{2}\right]=\frac{3}{4}$.
 \end{example}
 
 \begin{proposition} \label{prop:conditional-expectation-pull-out-known-factor} \hlt{Pulling Out What Is Known}\\
@@ -76,8 +75,7 @@ Let $m\defeq\mathbb{E}Y$ and $e\defeq Y-b(X)$.\\
 The tower property gives $\mathbb{E}b(X)=m$, and $\mathbb{E}(e\mid X)=\mathbb{E}(Y\mid X)-b(X)=0$.\\
 Since $Y-m=e+(b(X)-m)$, expansion gives $\operatorname{Var}(Y)=\mathbb{E}e^2+2\mathbb{E}[e(b(X)-m)]+\mathbb{E}(b(X)-m)^2$.\\
 The cross term is zero because $\mathbb{E}[e(b(X)-m)]=\mathbb{E}[(b(X)-m)\mathbb{E}(e\mid X)]=0$.\\
-Also $\mathbb{E}e^2=\mathbb{E}[\mathbb{E}(e^2\mid X)]=\mathbb{E}[v(X)]$, $\mathbb{E}(b(X)-m)^2=\operatorname{Var}(b(X))$.\\
-By substitution, $\operatorname{Var}(Y)=\mathbb{E}[v(X)]+\operatorname{Var}(b(X))$.\\
+Also $\mathbb{E}e^2=\mathbb{E}[\mathbb{E}(e^2\mid X)]=\mathbb{E}[v(X)]$, $\mathbb{E}(b(X)-m)^2=\operatorname{Var}(b(X))$. Thus $\operatorname{Var}(Y)=\mathbb{E}[v(X)]+\operatorname{Var}(b(X))$.\\
 \hlt{Structural Commentary}: Variance splits into within-fiber variance and between-fiber mean variation.\\
 \hlt{Key Insight}: Total variance equals average conditional variance plus variance of conditional expectation.
 \end{proof}
@@ -85,9 +83,8 @@ By substitution, $\operatorname{Var}(Y)=\mathbb{E}[v(X)]+\operatorname{Var}(b(X)
 
 \begin{example} \label{ex:total-variance-random-binomial-proportion} \hlt{Random Binomial Proportion}\\
 Let $Q\sim\operatorname{Uniform}(0,1)$ and, conditionally on $Q=q$, let $X\sim\operatorname{Binomial}(n,q)$.\\
-Then $\mathbb{E}(X\mid Q)=nQ$, so $\mathbb{E}X=\mathbb{E}(nQ)=n/2$. Also $\operatorname{Var}(X\mid Q)=nQ(1-Q)$.\\
-Hence $\mathbb{E}[\operatorname{Var}(X\mid Q)]=n\int_0^1q(1-q)\,dq=n/6$, $\operatorname{Var}(\mathbb{E}(X\mid Q))=\operatorname{Var}(nQ)=n^2/12$.\\
-Therefore $\operatorname{Var}(X)=n/6+n^2/12$.
+Then $\mathbb{E}(X\mid Q)=nQ$, so $\mathbb{E}X=\mathbb{E}(nQ)=\frac{n}{2}$. Also $\operatorname{Var}(X\mid Q)=nQ(1-Q)$.\\
+Hence $\mathbb{E}[\operatorname{Var}(X\mid Q)]=n\int_0^1q(1-q)\,dq=\frac{n}{6}$, $\operatorname{Var}(\mathbb{E}(X\mid Q))=\operatorname{Var}(nQ)=\frac{n^2}{12}$. Thus $\operatorname{Var}(X)=\frac{n}{6}+\frac{n^2}{12}$.
 \end{example}
 
 \begin{corollary} \label{cor:constant-conditional-mean-implies-uncorrelated} \hlt{Constant Conditional Mean Implies Uncorrelated}\\
