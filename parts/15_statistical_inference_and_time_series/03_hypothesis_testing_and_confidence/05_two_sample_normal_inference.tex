@@ -9,7 +9,7 @@ $X_1,\ldots,X_n\sim F$ are independent, $Y_1,\ldots,Y_m\sim G$ are independent, 
 \setlength{\itemsep}{0pt}
 \item \hlt{Means}: $\mu_X\defeq\mathbb{E}X_i$ and $\mu_Y\defeq\mathbb{E}Y_j$ summarize the two average levels, assuming both exist.
 \item \hlt{Location contrast}: $\Delta\defeq\mu_X-\mu_Y$ measures the shift from group $Y$ to group $X$.
-\item \hlt{Estimator}: $\widehat{\Delta}\defeq\overline{X}-\overline{Y}$ estimates $\Delta$, where $\overline{X}\defeq n^{-1}\sum_iX_i$ and $\overline{Y}\defeq m^{-1}\sum_jY_j$.
+\item \hlt{Estimator}: $\widehat{\Delta}\defeq\overline{X}-\overline{Y}$ estimates $\Delta$, where $\overline{X}\defeq n^{-1}\sum\limits_iX_i$ and $\overline{Y}\defeq m^{-1}\sum\limits_jY_j$.
 \end{enumerate}
 \end{definition}
 
@@ -18,16 +18,16 @@ Let $X_1,\ldots,X_n$ and $Y_1,\ldots,Y_m$ be independent samples, $X_i\sim N(\mu
 Set $\Delta\defeq\mu_X-\mu_Y$, $\widehat{\Delta}\defeq\overline{X}-\overline{Y}$, and $\operatorname{se}_0\defeq\sigma\sqrt{n^{-1}+m^{-1}}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\widehat{\Delta}\sim N(\Delta,\operatorname{se}_0^2)$ and $Z\defeq(\widehat{\Delta}-\Delta)/\operatorname{se}_0\sim N(0,1)$.
-\item $C_\alpha(X,Y)\defeq[\widehat{\Delta}-z_{1-\alpha/2}\operatorname{se}_0,\widehat{\Delta}+z_{1-\alpha/2}\operatorname{se}_0]$ satisfies $\mathbb{P}_\Delta\{\Delta\in C_\alpha(X,Y)\}=1-\alpha$.
+\item $\widehat{\Delta}\sim N(\Delta,\operatorname{se}_0^2)$ and $Z\defeq\frac{\widehat{\Delta}-\Delta}{\operatorname{se}_0}\sim N(0,1)$.
+\item $C_\alpha(X,Y)\defeq[\widehat{\Delta}-z_{1-\frac{\alpha}{2}}\operatorname{se}_0,\widehat{\Delta}+z_{1-\frac{\alpha}{2}}\operatorname{se}_0]$ satisfies $\mathbb{P}_\Delta\{\Delta\in C_\alpha(X,Y)\}=1-\alpha$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Since $\overline{X}\sim N(\mu_X,\sigma^2/n)$, $\overline{Y}\sim N(\mu_Y,\sigma^2/m)$, and $\overline{X}\perp\!\!\!\perp\overline{Y}$, $\widehat{\Delta}=\overline{X}-\overline{Y}\sim N(\Delta,\sigma^2/n+\sigma^2/m)=N(\Delta,\operatorname{se}_0^2)$.\
+\item Since $\overline{X}\sim N(\mu_X,\frac{\sigma^2}{n})$, $\overline{Y}\sim N(\mu_Y,\frac{\sigma^2}{m})$, and $\overline{X}\perp\!\!\!\perp\overline{Y}$, $\widehat{\Delta}=\overline{X}-\overline{Y}\sim N(\Delta,\frac{\sigma^2}{n}+\frac{\sigma^2}{m})=N(\Delta,\operatorname{se}_0^2)$.\
 Standardization gives $Z\sim N(0,1)$.
 \item
-By (i), $\mathbb{P}_\Delta\{\abs{Z}\leq z_{1-\alpha/2}\}=1-\alpha$, equivalently $\mathbb{P}_\Delta\{\Delta\in C_\alpha(X,Y)\}=1-\alpha$.
+By (i), $\mathbb{P}_\Delta\{\abs{Z}\leq z_{1-\frac{\alpha}{2}}\}=1-\alpha$, equivalently $\mathbb{P}_\Delta\{\Delta\in C_\alpha(X,Y)\}=1-\alpha$.
 \end{enumerate}
 \hlt{Structural Commentary}: The contrast is a linear combination of independent sample means.\\
 \hlt{Key Insight}: Known common variance gives an exact normal pivot for $\Delta$.
@@ -38,17 +38,19 @@ By (i), $\mathbb{P}_\Delta\{\abs{Z}\leq z_{1-\alpha/2}\}=1-\alpha$, equivalently
 Let $X_1,\ldots,X_n\sim N(\mu_X,\sigma^2)$ and $Y_1,\ldots,Y_m\sim N(\mu_Y,\sigma^2)$ be independent samples with common unknown $\sigma^2$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Sample variances}: $S_X^2\defeq(n-1)^{-1}\sum_{i=1}^n(X_i-\overline{X})^2$ and $S_Y^2\defeq(m-1)^{-1}\sum_{j=1}^m(Y_j-\overline{Y})^2$.
-\item \hlt{Pooled variance}: $S_p^2\defeq\{(n-1)S_X^2+(m-1)S_Y^2\}/(n+m-2)$.
+\item \hlt{Sample variances}: $S_X^2\defeq(n-1)^{-1}\sum\limits_{i=1}^n(X_i-\overline{X})^2$ and $S_Y^2\defeq(m-1)^{-1}\sum\limits_{j=1}^m(Y_j-\overline{Y})^2$.
+\item \hlt{Pooled variance}: $S_p^2\defeq\frac{(n-1)S_X^2+(m-1)S_Y^2}{n+m-2}$.
 \item \hlt{Degrees-of-freedom weighting}: $S_p^2$ weights $S_X^2$ and $S_Y^2$ by $n-1$ and $m-1$, respectively.
 \end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:two-sample-pooled-t-pivot} \hlt{Pooled Two-Sample Student Pivot}\\
-Let $X_i\sim N(\mu_X,\sigma^2)$, $i=1,\ldots,n$, and $Y_j\sim N(\mu_Y,\sigma^2)$, $j=1,\ldots,m$, be mutually independent, with unknown common $\sigma^2>0$. Set $\Delta\defeq\mu_X-\mu_Y$ and $\nu\defeq n+m-2$. Then $T\defeq\{(\overline{X}-\overline{Y})-\Delta\}/\{S_p\sqrt{n^{-1}+m^{-1}}\}\sim t_\nu$.
+Let $X_i\sim N(\mu_X,\sigma^2)$, $i=1,\ldots,n$, and $Y_j\sim N(\mu_Y,\sigma^2)$, $j=1,\ldots,m$, be mutually independent, with unknown common $\sigma^2>0$. Set $\Delta\defeq\mu_X-\mu_Y$ and $\nu\defeq n+m-2$. Then $T\defeq\frac{(\overline{X}-\overline{Y})-\Delta}{S_p\sqrt{n^{-1}+m^{-1}}}\sim t_\nu$.
 \begin{proof}
-Let $Z\defeq\{(\overline{X}-\overline{Y})-\Delta\}/\{\sigma\sqrt{n^{-1}+m^{-1}}\}$ and $W\defeq\nu S_p^2/\sigma^2=\{(n-1)S_X^2+(m-1)S_Y^2\}/\sigma^2$.\\
-Since $\overline{X}-\overline{Y}\sim N(\Delta,\sigma^2(n^{-1}+m^{-1}))$, $Z\sim N(0,1)$; since $(n-1)S_X^2/\sigma^2\sim\chi^2_{n-1}$ and $(m-1)S_Y^2/\sigma^2\sim\chi^2_{m-1}$ are independent of $Z$ and of each other, $W\sim\chi^2_\nu$ and $W\perp\!\!\!\perp Z$. Since $S_p^2=\sigma^2W/\nu$, $T=Z/\sqrt{W/\nu}\sim t_\nu$.\\
+Let $Z\defeq\frac{(\overline{X}-\overline{Y})-\Delta}{\sigma\sqrt{n^{-1}+m^{-1}}}$ and $W\defeq\frac{\nu S_p^2}{\sigma^2}=\frac{(n-1)S_X^2+(m-1)S_Y^2}{\sigma^2}$.\\
+Since $\overline{X}-\overline{Y}\sim N(\Delta,\sigma^2(n^{-1}+m^{-1}))$, $Z\sim N(0,1)$. Let $U_X\defeq\frac{(n-1)S_X^2}{\sigma^2}$ and $U_Y\defeq\frac{(m-1)S_Y^2}{\sigma^2}$.\\
+By normal mean-residual independence and sample independence, $Z,U_X,U_Y$ mutually independent,\\
+with $U_X\sim\chi^2_{n-1}$, $U_Y\sim\chi^2_{m-1}$. Hence $W=U_X+U_Y\sim\chi^2_\nu$ and $W\perp\!\!\!\perp Z$. Since $S_p^2=\frac{\sigma^2W}{\nu}$, $T=\frac{Z}{\sqrt{\frac{W}{\nu}}}\sim t_\nu$.\\
 \hlt{Structural Commentary}: The pooled variance combines the two residual sums of squares.\\
 \hlt{Key Insight}: A common variance permits replacing $\sigma$ by an independent pooled estimate.
 \end{proof}
@@ -58,9 +60,9 @@ Since $\overline{X}-\overline{Y}\sim N(\Delta,\sigma^2(n^{-1}+m^{-1}))$, $Z\sim 
 Under the equal-variance normal model, set $\Delta\defeq\mu_X-\mu_Y$, $\nu\defeq n+m-2$, and $\operatorname{se}_p\defeq S_p\sqrt{n^{-1}+m^{-1}}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Interval}: $C_\alpha\defeq[(\overline{X}-\overline{Y})-t_{\nu,1-\alpha/2}\operatorname{se}_p,(\overline{X}-\overline{Y})+t_{\nu,1-\alpha/2}\operatorname{se}_p]$ is exact $1-\alpha$ for $\Delta$.
-\item \hlt{Statistic}: for $H_0:\Delta=0$, use $t_0\defeq(\overline{X}-\overline{Y})/\operatorname{se}_p$, with $t_0\sim t_\nu$ under $H_0$.
-\item \hlt{Rejection}: reject $H_0$ for $\abs{t_0}>t_{\nu,1-\alpha/2}$ under $H_1:\Delta\neq0$\\
+\item \hlt{Interval}: $C_\alpha\defeq[(\overline{X}-\overline{Y})-t_{\nu,1-\frac{\alpha}{2}}\operatorname{se}_p,(\overline{X}-\overline{Y})+t_{\nu,1-\frac{\alpha}{2}}\operatorname{se}_p]$ is exact $1-\alpha$ for $\Delta$.
+\item \hlt{Statistic}: for $H_0:\Delta=0$, use $t_0\defeq\frac{\overline{X}-\overline{Y}}{\operatorname{se}_p}$, with $t_0\sim t_\nu$ under $H_0$.
+\item \hlt{Rejection}: reject $H_0$ for $\abs{t_0}>t_{\nu,1-\frac{\alpha}{2}}$ under $H_1:\Delta\neq0$\\
 reject $H_0$ for $t_0>t_{\nu,1-\alpha}$ under $H_1:\Delta>0$\\
 reject $H_0$ for $t_0<-t_{\nu,1-\alpha}$ under $H_1:\Delta<0$.
 \item \hlt{Duality}: the two-sided test rejects iff $0\notin C_\alpha$.
@@ -70,37 +72,40 @@ reject $H_0$ for $t_0<-t_{\nu,1-\alpha}$ under $H_1:\Delta<0$.
 \begin{example} \label{ex:latent-heat-two-methods} \hlt{Latent Heat of Fusion: Two Methods}\\
 For methods $A$ and $B$, let $n_A=13$, $n_B=8$, $\overline{x}_A=80.02$, $\overline{x}_B=79.98$, $s_A=0.024$, $s_B=0.031$, and $S_p=0.027$.\\
 Then $\widehat{\Delta}=\overline{x}_A-\overline{x}_B=0.04$, $\widehat{\operatorname{se}}=S_p\sqrt{13^{-1}+8^{-1}}\approx0.012$, pooled $95\%$ interval for $\Delta=\mu_A-\mu_B$ is\\
-$\approx (0.015,0.065)$. For $H_0:\Delta=0$, $t_0=\widehat{\Delta}/\widehat{\operatorname{se}}\approx3.33$ with $\nu=19$, strong evidence that method means differ.
+$\approx (0.015,0.065)$. For $H_0:\Delta=0$, $t_0=\frac{\widehat{\Delta}}{\widehat{\operatorname{se}}}\approx3.33$ with $\nu=19$, strong evidence that method means differ.
 \end{example}
 
 \begin{proposition} \label{prop:two-sample-normal-glrt-equivalent-to-t} \hlt{Likelihood-Ratio View of the Pooled Test}\\
-Let $X_i\sim N(\mu_X,\sigma^2)$, $i=1,\ldots,n$, and $Y_j\sim N(\mu_Y,\sigma^2)$, $j=1,\ldots,m$, be mutually independent, with unknown common $\sigma^2>0$. For $H_0:\mu_X=\mu_Y$ against $H_1:\mu_X\neq\mu_Y$, the GLR test is equivalent to rejecting for large $\abs{T}$, where $T\defeq(\overline{X}-\overline{Y})/\{S_p\sqrt{n^{-1}+m^{-1}}\}$.
-\begin{proof} Set $N\defeq n+m$, $\nu\defeq N-2$, $d\defeq\overline{X}-\overline{Y}$, $R_1\defeq\sum_i(X_i-\overline{X})^2+\sum_j(Y_j-\overline{Y})^2$, $\widehat{\mu}_0\defeq(n\overline{X}+m\overline{Y})/N$, and $R_0\defeq\sum_i(X_i-\widehat{\mu}_0)^2+\sum_j(Y_j-\widehat{\mu}_0)^2$. Under $H_1$, $(\widehat{\mu}_X,\widehat{\mu}_Y,\widehat{\sigma}_1^2)=(\overline{X},\overline{Y},R_1/N)$; under $H_0$, $(\widehat{\mu},\widehat{\sigma}_0^2)=(\widehat{\mu}_0,R_0/N)$.\\
-The maximised Gaussian likelihood is proportional to $\widehat{\sigma}^{-N}$, hence $\lambda=(R_1/R_0)^{N/2}$.\\
-ANOVA decomposition gives $R_0=R_1+\{nm/N\}d^2$, while $T^2=d^2/\{(R_1/\nu)(n^{-1}+m^{-1})\}=\nu\{nm/N\}d^2/R_1$.\\
-Therefore $R_0/R_1=1+T^2/\nu$ and $\lambda=\{1+T^2/\nu\}^{-N/2}$, decreasing in $T^2$; small $\lambda$ iff large $\abs{T}$.\\
+Let $X_i\sim N(\mu_X,\sigma^2)$, $i=1,\ldots,n$, and $Y_j\sim N(\mu_Y,\sigma^2)$, $j=1,\ldots,m$, be mutually independent, with unknown common $\sigma^2>0$.
+Set $\Delta\defeq\mu_X-\mu_Y$, $\nu\defeq n+m-2$, and $T\defeq\frac{\overline{X}-\overline{Y}}{S_p\sqrt{n^{-1}+m^{-1}}}$.\\
+For $H_0:\Delta=0$ against $H_1:\Delta\neq0$, $\lambda(X,Y)=(1+\frac{T^2}{\nu})^{-\frac{n+m}{2}}$.\\
+Hence the GLR rejects for large $\abs{T}$; at level $\alpha$, reject iff $\abs{T}>t_{\nu,1-\frac{\alpha}{2}}$.
+\begin{proof} Set $N\defeq n+m$, $\nu\defeq N-2$, $d\defeq\overline{X}-\overline{Y}$, $R_1\defeq\sum\limits_i(X_i-\overline{X})^2+\sum\limits_j(Y_j-\overline{Y})^2$, $\widehat{\mu}_0\defeq\frac{n\overline{X}+m\overline{Y}}{N}$, and $R_0\defeq\sum\limits_i(X_i-\widehat{\mu}_0)^2+\sum\limits_j(Y_j-\widehat{\mu}_0)^2$. Under $H_1$, $(\widehat{\mu}_X,\widehat{\mu}_Y,\widehat{\sigma}_1^2)=(\overline{X},\overline{Y},\frac{R_1}{N})$; under $H_0$, $(\widehat{\mu},\widehat{\sigma}_0^2)=(\widehat{\mu}_0,\frac{R_0}{N})$.\\
+The maximised Gaussian likelihood is proportional to $\widehat{\sigma}^{-N}$, hence $\lambda=(\frac{R_1}{R_0})^{\frac{N}{2}}$.\\
+ANOVA decomposition gives $R_0=R_1+\{\frac{nm}{N}\}d^2$, while $T^2=\frac{d^2}{(\frac{R_1}{\nu})(n^{-1}+m^{-1})}=\frac{\nu\{\frac{nm}{N}\}d^2}{R_1}$.\\
+Therefore $\frac{R_0}{R_1}=1+\frac{T^2}{\nu}$ and $\lambda=(1+\frac{T^2}{\nu})^{-\frac{N}{2}}$, decreasing in $T^2$; small $\lambda$ iff large $\abs{T}$.\\
 \hlt{Structural Commentary}: The null fit adds only the between-sample mean discrepancy to the unrestricted fit.\\
 \hlt{Key Insight}: The GLR depends on the data through the pooled $t$ statistic.
 \end{proof}
 \end{proposition}
 
 \begin{method} \label{meth:welch-two-sample-test} \hlt{Unequal-Variance Two-Sample Procedure}\\
-For independent samples without the equal-variance assumption, set $\widehat{v}\defeq S_X^2/n+S_Y^2/m$.
+For independent samples without the equal-variance assumption, set $\widehat{v}\defeq \frac{S_X^2}{n}+\frac{S_Y^2}{m}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Standard error}: estimate $\operatorname{Var}(\overline{X}-\overline{Y})$ by $\widehat{v}$.
-\item \hlt{Welch statistic}: for $H_0:\Delta=\Delta_0$, use $T_W\defeq\{(\overline{X}-\overline{Y})-\Delta_0\}/\sqrt{\widehat{v}}$.
-\item \hlt{Degrees of freedom}: calibrate $T_W$ by $t_\nu$, where $\nu\defeq\widehat{v}^2/\{(S_X^2/n)^2/(n-1)+(S_Y^2/m)^2/(m-1)\}$.
+\item \hlt{Welch statistic}: for $H_0:\Delta=\Delta_0$, use $T_W\defeq\frac{(\overline{X}-\overline{Y})-\Delta_0}{\sqrt{\widehat{v}}}$.
+\item \hlt{Degrees of freedom}: calibrate $T_W$ by $t_\nu$, where $\nu\defeq\frac{\widehat{v}^2}{\frac{(S_X^2/n)^2}{n-1}+\frac{(S_Y^2/m)^2}{m-1}}$.
 \item \hlt{Use}: the procedure avoids pooling variances, at the cost of approximate calibration.
 \end{enumerate}
 \end{method}
 
 \begin{corollary} \label{cor:two-normal-sample-variance-ratio-f} \hlt{Variance Ratio Test Under Normality}\\
 Let $X_1,\ldots,X_n\sim N(\mu_X,\sigma_X^2)$ and $Y_1,\ldots,Y_m\sim N(\mu_Y,\sigma_Y^2)$ be independent samples, with $n,m\geq2$.\\
-Set $\rho\defeq\sigma_X^2/\sigma_Y^2$ and $R\defeq S_X^2/S_Y^2$. Then $R/\rho\sim F_{n-1,m-1}$.
-\begin{proof} Let $U\defeq(n-1)S_X^2/\sigma_X^2$ and $V\defeq(m-1)S_Y^2/\sigma_Y^2$.\\
+Set $\rho\defeq\frac{\sigma_X^2}{\sigma_Y^2}$ and $R\defeq \frac{S_X^2}{S_Y^2}$. Then $\frac{R}{\rho}\sim F_{n-1,m-1}$.
+\begin{proof} Let $U\defeq\frac{(n-1)S_X^2}{\sigma_X^2}$ and $V\defeq\frac{(m-1)S_Y^2}{\sigma_Y^2}$.\\
 Normal residual chi-square laws give $U\sim\chi^2_{n-1}$ and $V\sim\chi^2_{m-1}$, and sample independence gives $U\perp\!\!\!\perp V$.\\
-Thus $(U/(n-1))/(V/(m-1))=R/\rho\sim F_{n-1,m-1}$. If $H_0:\rho=1$, then $R\sim F_{n-1,m-1}$, yielding exact normal-theory tests and confidence intervals for $\rho$; the calibration is normality-sensitive.\\
+Thus $\frac{\frac{U}{n-1}}{\frac{V}{m-1}}=\frac{R}{\rho}\sim F_{n-1,m-1}$. If $H_0:\rho=1$, then $R\sim F_{n-1,m-1}$, yielding exact normal-theory tests and confidence intervals for $\rho$; the calibration is normality-sensitive.\\
 \hlt{Structural Commentary}: The comparison standardises two independent residual variance estimates.\\
 \hlt{Key Insight}: Normality turns each sample variance into an independent chi-square pivot.
 \end{proof}
@@ -110,10 +115,10 @@ Thus $(U/(n-1))/(V/(m-1))=R/\rho\sim F_{n-1,m-1}$. If $H_0:\rho=1$, then $R\sim 
 For planning, assume balanced samples of size $n$, known common $\sigma$, and target effect $\Delta\defeq\mu_X-\mu_Y>0$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Statistic}: use $Z\defeq(\overline{X}-\overline{Y})/\{\sigma\sqrt{2/n}\}$ and reject two-sided at level $\alpha$ when $\abs{Z}>z_{1-\alpha/2}$.
-\item \hlt{Shift}: under $\Delta>0$, $Z\sim N(\delta,1)$ with $\delta\defeq(\Delta/\sigma)\sqrt{n/2}$.
-\item \hlt{Power}: $\pi(\Delta)\defeq1-\Phi(z_{1-\alpha/2}-\delta)+\Phi(-z_{1-\alpha/2}-\delta)$.
-\item \hlt{Sample size}: if the lower-tail term is negligible, target power $1-\beta$ gives $n\approx2\sigma^2(z_{1-\alpha/2}+z_{1-\beta})^2/\Delta^2$.
+\item \hlt{Statistic}: use $Z\defeq\frac{\overline{X}-\overline{Y}}{\sigma\sqrt{\frac{2}{n}}}$ and reject two-sided at level $\alpha$ when $\abs{Z}>z_{1-\frac{\alpha}{2}}$.
+\item \hlt{Shift}: under $\Delta>0$, $Z\sim N(\delta,1)$ with $\delta\defeq(\frac{\Delta}{\sigma})\sqrt{\frac{n}{2}}$.
+\item \hlt{Power}: $\pi(\Delta)\defeq1-\Phi(z_{1-\frac{\alpha}{2}}-\delta)+\Phi(-z_{1-\frac{\alpha}{2}}-\delta)$.
+\item \hlt{Sample size}: if the lower-tail term is negligible, target power $1-\beta$ gives $n\approx\frac{2\sigma^2(z_{1-\frac{\alpha}{2}}+z_{1-\beta})^2}{\Delta^2}$.
 \end{enumerate}
 \end{method}
 
