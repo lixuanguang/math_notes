@@ -33,15 +33,18 @@ For sample pairs $(X_i,Y_i)_{i=1}^{n}$, set $\overline{X}\defeq n^{-1}\sum_{i=1}
 \end{definition}
 
 \begin{theorem} \label{thm:srs-ratio-approximate-variance-bias} \hlt{Approximate Moments of the Ratio Estimator}\\
-Under simple random sampling,
+Let $U\defeq\{1,\ldots,N\}$, $N>1$, $1\leq n\leq N$, fix pairs $(x_a,y_a)\in\R^2$ for $a\in U$, and set $\mu_x\defeq N^{-1}\sum_{a=1}^{N}x_a$, $\mu_y\defeq N^{-1}\sum_{a=1}^{N}y_a$, $r\defeq\mu_y/\mu_x$ with $\mu_x\neq0$, $\sigma_x^2\defeq N^{-1}\sum_{a=1}^{N}(x_a-\mu_x)^2$, $\sigma_y^2\defeq N^{-1}\sum_{a=1}^{N}(y_a-\mu_y)^2$, and $\sigma_{xy}\defeq N^{-1}\sum_{a=1}^{N}(x_a-\mu_x)(y_a-\mu_y)$.  Let $S\sim\operatorname{Unif}\{s\subseteq U:|s|=n\}$.  For a random ordering $(J_1,\ldots,J_n)$ of $S$, set $(X_k,Y_k)\defeq(x_{J_k},y_{J_k})$, $\overline{X}\defeq n^{-1}\sum_{k=1}^{n}X_k$, and $\overline{Y}\defeq n^{-1}\sum_{k=1}^{n}Y_k$.  Assume $\overline{X}\neq0$ and set $R\defeq\overline{Y}/\overline{X}$.  Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Variance}: the first-order Taylor approximation to the design variance of $R$ is
 \[
 \operatorname{Var}(R)
 \approx
 \frac1n\left(1-\frac{n-1}{N-1}\right)
 \frac{1}{\mu_x^2}
-\left(r^2\sigma_x^2+\sigma_y^2-2r\sigma_{xy}\right),
+\left(r^2\sigma_x^2+\sigma_y^2-2r\sigma_{xy}\right).
 \]
-and
+\item \hlt{Mean}: the second-order Taylor approximation to the design mean of $R$ is
 \[
 \mathbb{E}R
 \approx
@@ -50,40 +53,51 @@ r+
 \frac{1}{\mu_x^2}
 \left(r\sigma_x^2-\sigma_{xy}\right).
 \]
+\end{enumerate}
 \begin{proof}
-For the sample means,
+Let $(A_1,B_1),\ldots,(A_N,B_N)$ be a uniformly random ordering of the population pairs.  For each position $q$, $\operatorname{Var}(A_q)=\sigma_x^2$, $\operatorname{Var}(B_q)=\sigma_y^2$, and $\operatorname{Cov}(A_q,B_q)=\sigma_{xy}$.  If $\gamma_x$, $\gamma_y$, and $\gamma_{xy}$ denote the common off-diagonal values of $\operatorname{Cov}(A_q,A_r)$, $\operatorname{Cov}(B_q,B_r)$, and $\operatorname{Cov}(A_q,B_r)$ for $q\neq r$, then the fixed sums $\sum_qA_q$, $\sum_qB_q$ give $\gamma_x=-\sigma_x^2/(N-1)$, $\gamma_y=-\sigma_y^2/(N-1)$, and $\gamma_{xy}=-\sigma_{xy}/(N-1)$.  Hence
 \[
-\operatorname{Var}(\overline{X})
+V_x\defeq\operatorname{Var}(\overline{X})
 =\frac{\sigma_x^2}{n}\left(1-\frac{n-1}{N-1}\right),
-\quad
-\operatorname{Var}(\overline{Y})
+\;
+V_y\defeq\operatorname{Var}(\overline{Y})
 =\frac{\sigma_y^2}{n}\left(1-\frac{n-1}{N-1}\right),
 \]
-and the same without-replacement covariance calculation gives
+and
 \[
-\operatorname{Cov}(\overline{X},\overline{Y})
+C_{xy}\defeq\operatorname{Cov}(\overline{X},\overline{Y})
 =\frac{\sigma_{xy}}{n}\left(1-\frac{n-1}{N-1}\right).
 \]
-Apply the ratio expansion in Example \ref{ex:ratio-moment-propagation} to
-$g(x,y)=y/x$ at $(\mu_x,\mu_y)$.
+Let $g(x,y)=y/x$.  At $(\mu_x,\mu_y)$, $g(\mu_x,\mu_y)=r$, $\nabla g(\mu_x,\mu_y)=(-r/\mu_x,1/\mu_x)$, $g_{xx}(\mu_x,\mu_y)=2r/\mu_x^2$, $g_{xy}(\mu_x,\mu_y)=-1/\mu_x^2$, and $g_{yy}(\mu_x,\mu_y)=0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Variance}: The first-order Taylor variance is $g_x(\mu_x,\mu_y)^2V_x+g_y(\mu_x,\mu_y)^2V_y+2g_x(\mu_x,\mu_y)g_y(\mu_x,\mu_y)C_{xy}$, which gives (i) after substituting the derivatives, variances, and covariance above.
+\item \hlt{Mean}: The second-order Taylor mean correction is $\frac12g_{xx}(\mu_x,\mu_y)V_x+g_{xy}(\mu_x,\mu_y)C_{xy}+\frac12g_{yy}(\mu_x,\mu_y)V_y$, which gives (ii) after substituting the derivatives, variances, and covariance above.
+\end{enumerate}
+\hlt{Structural Commentary}: The ratio estimator is locally linear for variance and locally quadratic for bias.\\
+\hlt{Key Insight}: Positive covariance between $X$ and $Y$ reduces ratio variance because numerator and denominator move together.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:ratio-estimated-standard-error} \hlt{Estimated Standard Error of a Ratio}\\
-An estimated variance for $R$ is
+Let $U\defeq\{1,\ldots,N\}$, $N>1$, $1<n\leq N$, fix pairs $(x_a,y_a)\in\R^2$ for $a\in U$, set $\mu_x\defeq N^{-1}\sum_{a=1}^{N}x_a$, $\tau_x\defeq\sum_{a=1}^{N}x_a$, $\tau_y\defeq\sum_{a=1}^{N}y_a$, and $r\defeq\tau_y/\tau_x$ with $\tau_x\neq0$.  Let $S\sim\operatorname{Unif}\{s\subseteq U:|s|=n\}$.  For a random ordering $(J_1,\ldots,J_n)$ of $S$, set $(X_i,Y_i)\defeq(x_{J_i},y_{J_i})$, $\overline{X}\defeq n^{-1}\sum_{i=1}^{n}X_i$, and $\overline{Y}\defeq n^{-1}\sum_{i=1}^{n}Y_i$.  Assume $\overline{X}\neq0$ and set $R\defeq\overline{Y}/\overline{X}$, $s_x^2\defeq (n-1)^{-1}\sum_{i=1}^{n}(X_i-\overline{X})^2$, $s_y^2\defeq (n-1)^{-1}\sum_{i=1}^{n}(Y_i-\overline{Y})^2$, and $s_{xy}\defeq (n-1)^{-1}\sum_{i=1}^{n}(X_i-\overline{X})(Y_i-\overline{Y})$.  If $0<\alpha<1$ and $z(\alpha/2)\defeq\Phi^{-1}(1-\alpha/2)$ for the standard normal cdf $\Phi$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Ratio variance}: the plug-in estimated variance for the sample ratio $R$ is
 \[
 s_R^2=
 \frac1n\left(1-\frac{n-1}{N-1}\right)
 \frac{1}{\overline{X}^2}
 \left(R^2s_x^2+s_y^2-2Rs_{xy}\right).
 \]
-An approximate $100(1-\alpha)\%$ confidence interval for $r$ is
+\item \hlt{Ratio interval}: an approximate $100(1-\alpha)\%$ confidence interval for the population ratio $r$ is
 \[
 R\pm z(\alpha/2)s_R.
 \]
-For estimating $\mu_y$ by $\overline{Y}_R=\mu_xR$, use
-$s_{\overline{Y}_R}=\mu_xs_R$; for estimating $\tau_y$ by $T_R=\tau_xR$, use
-$s_{T_R}=\tau_xs_R$.
+\item \hlt{Mean and total}: if the auxiliary mean $\mu_x$ or total $\tau_x$ is known, then the estimated standard errors for $\overline{Y}_R=\mu_xR$ and $T_R=\tau_xR$ are $s_{\overline{Y}_R}=\abs{\mu_x}s_R$ and $s_{T_R}=\abs{\tau_x}s_R$.
+\end{enumerate}
+\hlt{Structural Commentary}: The estimated standard error uses the same quadratic form as the approximate variance, with population moments replaced by sample moments.\\
+\hlt{Key Insight}: Ratio uncertainty is driven by residual variation in $Y-RX$, not by the marginal variation of $Y$ alone.
 \end{corollary}
 
 \begin{method} \label{meth:when-ratio-estimation-helps} \hlt{When the Ratio Estimate Helps}\\
@@ -109,8 +123,8 @@ Strong positive correlation, with stable $x$-scale, is the favorable case.
 In a sample of $100$ recent house buyers, let $Y$ be monthly mortgage payment
 and $X$ gross income.  Suppose
 \[
-\overline{X}=3100,\quad \overline{Y}=868,\quad
-s_x=1200,\quad s_y=250,\quad \widehat\rho=0.85,\quad R=0.28.
+\overline{X}=3100,\; \overline{Y}=868,\;
+s_x=1200,\; s_y=250,\; \widehat\rho=0.85,\; R=0.28.
 \]
 Neglecting the finite population correction,
 \[

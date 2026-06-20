@@ -22,107 +22,108 @@ For stratum samples of sizes $n_l$, write sampled values as $X_{il}$, $i=1,\ldot
 \end{definition}
 
 \begin{theorem} \label{thm:stratified-mean-unbiased-variance} \hlt{Mean and Variance of the Stratified Estimate}\\
-Assume the samples from different strata are independent.  Then
-\[
-\mathbb{E}\overline{X}_s=\mu
-\]
-and
+Let $L\geq1$, $N_l>1$, $1\leq n_l\leq N_l$, $N\defeq\sum_{l=1}^{L}N_l$, and $W_l\defeq N_l/N$.  Fix $x_{il}\in\R$ for $i=1,\ldots,N_l$, $l=1,\ldots,L$, and set $\mu_l\defeq N_l^{-1}\sum_{i=1}^{N_l}x_{il}$, $\sigma_l^2\defeq N_l^{-1}\sum_{i=1}^{N_l}(x_{il}-\mu_l)^2$, and $\mu\defeq\sum_{l=1}^{L}W_l\mu_l$.  Assume independently $S_l\sim\operatorname{Unif}\{s\subseteq\{1,\ldots,N_l\}:|s|=n_l\}$ for $l=1,\ldots,L$.  For random orderings $(J_{il})_{i=1}^{n_l}$ of $S_l$, set $X_{il}\defeq x_{J_{il},l}$, $\overline{X}_l\defeq n_l^{-1}\sum_{i=1}^{n_l}X_{il}$, and $\overline{X}_s\defeq\sum_{l=1}^{L}W_l\overline{X}_l$.  Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: the stratified mean is design-unbiased for the population mean, $\mathbb{E}\overline{X}_s=\mu$.
+\item \hlt{Variance}: the exact design variance under independent within-stratum sampling is
 \[
 \operatorname{Var}(\overline{X}_s)
 =\sum_{l=1}^{L}
 W_l^2\frac{\sigma_l^2}{n_l}
 \left(1-\frac{n_l-1}{N_l-1}\right).
 \]
-If all stratum sampling fractions are small, then
+\item \hlt{Small fractions}: when all stratum sampling fractions are small, the variance is approximated by
 \[
 \operatorname{Var}(\overline{X}_s)
 \approx \sum_{l=1}^{L}W_l^2\frac{\sigma_l^2}{n_l}.
 \]
+\end{enumerate}
 \begin{proof}
-Theorem \ref{thm:srs-unbiased-mean-and-total} gives
-$\mathbb{E}\overline{X}_l=\mu_l$, so
-$\mathbb{E}\overline{X}_s=\sum_lW_l\mu_l=\mu$.  Independence across strata gives
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: Within stratum $l$, $\mathbb{P}(J_{il}=a)=1/N_l$ for every $a\in\{1,\ldots,N_l\}$, so $\mathbb{E}X_{il}=\mu_l$ and $\mathbb{E}\overline{X}_l=\mu_l$.  Therefore $\mathbb{E}\overline{X}_s=\sum_{l=1}^{L}W_l\mathbb{E}\overline{X}_l=\sum_{l=1}^{L}W_l\mu_l=\mu$.
+\item \hlt{Variance}: Independence across strata gives
 \[
 \operatorname{Var}(\overline{X}_s)
 =\sum_{l=1}^{L}W_l^2\operatorname{Var}(\overline{X}_l),
 \]
-and Theorem \ref{thm:srs-sample-mean-variance} supplies each stratum variance.
+and within stratum $l$ each sampled position has variance $\sigma_l^2$.  If $(Y_{1,l},\ldots,Y_{N_l,l})$ is a uniformly random ordering of $\{x_{il}:1\leq i\leq N_l\}$ and $\gamma_l$ is the common covariance of $Y_{a,l},Y_{b,l}$ for $a\neq b$, then $0=\operatorname{Var}(\sum_{i=1}^{N_l}Y_{i,l})=N_l\sigma_l^2+N_l(N_l-1)\gamma_l$, so $\gamma_l=-\sigma_l^2/(N_l-1)$ and $\operatorname{Var}(\overline{X}_l)=\sigma_l^2n_l^{-1}(1-(n_l-1)/(N_l-1))$.
+\item \hlt{Small fractions}: If all stratum sampling fractions are small, each finite population correction is close to $1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Stratified estimation is a weighted sum of independent within-stratum estimators.\\
+\hlt{Key Insight}: Stratification controls variance by isolating within-stratum variation before averaging across the population weights.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:stratified-total-and-estimated-variance} \hlt{Totals and Estimated Variances}\\
-The stratified total estimator $T_s\defeq N\overline{X}_s$ satisfies
-\[
-\mathbb{E}T_s=\tau,
-\qquad
-\operatorname{Var}(T_s)=N^2\operatorname{Var}(\overline{X}_s).
-\]
-With
-\[
-s_l^2\defeq \frac{1}{n_l-1}\sum_{i=1}^{n_l}(X_{il}-\overline{X}_l)^2,
-\]
-an estimated variance of $\overline{X}_s$ is
+Let $L\geq1$, $N_l>1$, $1<n_l\leq N_l$, $N\defeq\sum_{l=1}^{L}N_l$, and $W_l\defeq N_l/N$.  Fix $x_{il}\in\R$ for $i=1,\ldots,N_l$, $l=1,\ldots,L$, and set $\mu_l\defeq N_l^{-1}\sum_{i=1}^{N_l}x_{il}$, $\mu\defeq\sum_{l=1}^{L}W_l\mu_l$, and $\tau\defeq N\mu$.  Assume independently $S_l\sim\operatorname{Unif}\{s\subseteq\{1,\ldots,N_l\}:|s|=n_l\}$ for $l=1,\ldots,L$.  For random orderings $(J_{il})_{i=1}^{n_l}$ of $S_l$, set $X_{il}\defeq x_{J_{il},l}$, $\overline{X}_l\defeq n_l^{-1}\sum_{i=1}^{n_l}X_{il}$, $\overline{X}_s\defeq\sum_{l=1}^{L}W_l\overline{X}_l$, $T_s\defeq N\overline{X}_s$, and $s_l^2\defeq (n_l-1)^{-1}\sum_{i=1}^{n_l}(X_{il}-\overline{X}_l)^2$.  If $0<\alpha<1$ and $z(\alpha/2)\defeq\Phi^{-1}(1-\alpha/2)$ for the standard normal cdf $\Phi$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Total moments}: the stratified total estimator is design-unbiased and scales the stratified mean variance, $\mathbb{E}T_s=\tau$ and $\operatorname{Var}(T_s)=N^2\operatorname{Var}(\overline{X}_s)$.
+\item \hlt{Estimated mean variance}: the plug-in estimated variance of the stratified mean is
 \[
 s_{\overline{X}_s}^2
 =\sum_{l=1}^{L}W_l^2\frac{s_l^2}{n_l}
 \left(1-\frac{n_l}{N_l}\right).
 \]
-Approximate confidence intervals use
-$\overline{X}_s\pm z(\alpha/2)s_{\overline{X}_s}$ and
-$T_s\pm z(\alpha/2)Ns_{\overline{X}_s}$.
+\item \hlt{Intervals}: with standard normal right-tail quantile $z(\alpha/2)$, approximate confidence intervals for $\mu$ and $\tau$ are $\overline{X}_s\pm z(\alpha/2)s_{\overline{X}_s}$ and $T_s\pm z(\alpha/2)Ns_{\overline{X}_s}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Total estimation and interval construction are obtained by scaling the stratified mean estimate.\\
+\hlt{Key Insight}: The variance estimate is additive across independent strata after each stratum is weighted by $W_l^2$.
 \end{corollary}
 
 \begin{theorem} \label{thm:neyman-allocation} \hlt{Neyman Allocation}\\
-Ignoring finite population corrections, the allocation that minimizes
+Let $L\geq1$, $W_l>0$ with $\sum_{l=1}^{L}W_l=1$, $\sigma_l>0$ for $l=1,\ldots,L$, and $n>0$.  For continuous allocations $n_l>0$ with $\sum_{l=1}^{L}n_l=n$, set
 \[
-\operatorname{Var}(\overline{X}_s)
-\approx \sum_{l=1}^{L}W_l^2\frac{\sigma_l^2}{n_l}
+V(n_1,\ldots,n_L)\defeq \sum_{l=1}^{L}W_l^2\frac{\sigma_l^2}{n_l}.
 \]
-subject to $\sum_l n_l=n$ is
+The unique minimizer of $V$ is
 \[
 n_l
 =n\frac{W_l\sigma_l}{\sum_{k=1}^{L}W_k\sigma_k},
-\qquad l=1,\ldots,L.
 \]
+for $l=1,\ldots,L$.
 \begin{proof}
-Minimize
+The objective is convex in the variables $n_l>0$, and its Lagrangian is
 \[
 \mathcal{L}(n_1,\ldots,n_L,\lambda)
 =\sum_{l=1}^{L}\frac{W_l^2\sigma_l^2}{n_l}
 +\lambda\left(\sum_{l=1}^{L}n_l-n\right).
 \]
-The first-order equations give
-$-W_l^2\sigma_l^2/n_l^2+\lambda=0$, hence
-$n_l=W_l\sigma_l/\sqrt{\lambda}$.  Summing over $l$ and using
-$\sum_ln_l=n$ determines $1/\sqrt{\lambda}=n/\sum_kW_k\sigma_k$.
+The first-order equations give $-W_l^2\sigma_l^2/n_l^2+\lambda=0$, hence $n_l=W_l\sigma_l/\sqrt{\lambda}$.  Summing over $l$ and using $\sum_{l=1}^{L}n_l=n$ determines $1/\sqrt{\lambda}=n/\sum_{k=1}^{L}W_k\sigma_k$.
+\hlt{Structural Commentary}: The constrained optimum balances marginal variance reduction across strata.\\
+\hlt{Key Insight}: A stratum receives more sample not only when it is large, but also when it is internally variable.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:stratified-allocation-comparisons} \hlt{Allocation Comparisons}\\
-Let $\overline{X}_{so}$ denote the optimal-allocation stratified mean and
-$\overline{X}_{sp}$ the proportional-allocation stratified mean, where
-$n_l=nW_l$.  Ignoring finite population corrections,
+Let $L\geq1$, $W_l>0$ with $\sum_{l=1}^{L}W_l=1$, $\mu_l\in\R$, $\sigma_l>0$, $\mu\defeq\sum_{l=1}^{L}W_l\mu_l$, $\overline{\sigma}\defeq\sum_{l=1}^{L}W_l\sigma_l$, and $n>0$.  Ignoring finite population corrections, let $\overline{X}_{so}$ denote the optimal-allocation stratified mean, let $\overline{X}_{sp}$ denote the proportional-allocation stratified mean with $n_l=nW_l$, and let $\overline{X}$ denote the ordinary simple-random-sampling mean with sample size $n$.  Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Allocation variances}: the approximate variances under optimal and proportional allocation are
 \[
 \operatorname{Var}(\overline{X}_{so})
 =\frac{\left(\sum_{l=1}^{L}W_l\sigma_l\right)^2}{n},
-\qquad
+\;
 \operatorname{Var}(\overline{X}_{sp})
 =\frac1n\sum_{l=1}^{L}W_l\sigma_l^2.
 \]
-If $\overline{\sigma}\defeq\sum_lW_l\sigma_l$, then
+\item \hlt{Optimal-allocation gain}: the approximate variance reduction from optimal allocation relative to proportional allocation is
 \[
 \operatorname{Var}(\overline{X}_{sp})
 -\operatorname{Var}(\overline{X}_{so})
 =\frac1n\sum_{l=1}^{L}W_l(\sigma_l-\overline{\sigma})^2.
 \]
-Also, compared to simple random sampling,
+\item \hlt{Proportional-allocation gain}: the approximate variance reduction from proportional stratification relative to ordinary SRS is
 \[
 \operatorname{Var}(\overline{X})
 -\operatorname{Var}(\overline{X}_{sp})
 =\frac1n\sum_{l=1}^{L}W_l(\mu_l-\mu)^2.
 \]
-Thus proportional allocation gains when stratum means differ, while optimal
-allocation gains further when stratum standard deviations differ.
+\end{enumerate}
+\hlt{Structural Commentary}: Proportional allocation removes between-stratum mean variation, and optimal allocation additionally responds to unequal within-stratum standard deviations.\\
+\hlt{Key Insight}: Stratification helps when means differ across strata; Neyman allocation helps further when precisions differ across strata.
 \end{corollary}
 
 \begin{example} \label{ex:hospital-stratification-summary} \hlt{Hospital Stratification by Beds}\\
@@ -140,7 +141,7 @@ D & 99 & .251 & 1591.2 & 419.2
 Equal stratum sample sizes give, ignoring finite population corrections,
 \[
 \operatorname{Var}(\overline{X}_s)=\frac{72042.6}{n},
-\qquad
+\;
 \sigma_{\overline{X}_s}=\frac{268.4}{\sqrt n}.
 \]
 The comparable simple-random-sampling standard deviation is about
@@ -148,7 +149,7 @@ $587.7/\sqrt n$, so stratifying by bed count substantially reduces variance.
 For Neyman allocation, the allocation weights
 $W_l\sigma_l/\sum_kW_k\sigma_k$ are approximately
 \[
-.106,\quad .210,\quad .250,\quad .434,
+.106,\; .210,\; .250,\; .434,
 \]
 so the largest, most variable stratum receives the heaviest sampling effort.
 \end{example}
