@@ -5,28 +5,16 @@
 A two-way layout studies two factors at once.  It estimates main effects for each factor and checks whether the effect of one factor changes across levels of the other.
 
 \begin{definition} \label{def:two-way-additive-parametrization} \hlt{Two-Way Additive Parametrization}\\
-With one observation $Y_{ij}$ at level $i$ of factor $A$ and level $j$ of factor $B$, define
-\[
-\widehat{\mu}=\overline{Y}_{\cdot\cdot},
-\qquad
-\widehat{\alpha}_i=\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot},
-\qquad
-\widehat{\beta}_j=\overline{Y}_{\cdot j}-\overline{Y}_{\cdot\cdot}.
-\]
-The additive fitted value is
-\[
-\widehat{Y}_{ij}=\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j.
-\]
-The residual interaction contrast is
-\[
-\widehat{\delta}_{ij}
-=Y_{ij}-\overline{Y}_{i\cdot}-\overline{Y}_{\cdot j}+\overline{Y}_{\cdot\cdot},
-\]
-so
-\[
-Y_{ij}=\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j+\widehat{\delta}_{ij}.
-\]
-The row and column sums of the $\widehat{\delta}_{ij}$ are zero, up to rounding in displayed data.
+For one observation $Y_{ij}$ at factor levels $i=1,\ldots,I$ and $j=1,\ldots,J$, set $\overline{Y}_{i\cdot}\defeq J^{-1}\sum_{j=1}^{J}Y_{ij}$, $\overline{Y}_{\cdot j}\defeq I^{-1}\sum_{i=1}^{I}Y_{ij}$, and $\overline{Y}_{\cdot\cdot}\defeq (IJ)^{-1}\sum_{i=1}^{I}\sum_{j=1}^{J}Y_{ij}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Intercept}: $\widehat{\mu}\defeq\overline{Y}_{\cdot\cdot}$.
+\item \hlt{Factor $A$ coefficient}: $\widehat{\alpha}_i\defeq\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot}$, $1\leq i\leq I$.
+\item \hlt{Factor $B$ coefficient}: $\widehat{\beta}_j\defeq\overline{Y}_{\cdot j}-\overline{Y}_{\cdot\cdot}$, $1\leq j\leq J$.
+\item \hlt{Additive fitted value}: $\widehat{Y}_{ij}\defeq\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j$.
+\item \hlt{Interaction residual}: $\widehat{\delta}_{ij}\defeq Y_{ij}-\overline{Y}_{i\cdot}-\overline{Y}_{\cdot j}+\overline{Y}_{\cdot\cdot}$, so $Y_{ij}=\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j+\widehat{\delta}_{ij}$.
+\end{enumerate}
+\hlt{Structural Commentary}: In exact arithmetic, $\sum_{i=1}^{I}\widehat{\alpha}_i=\sum_{j=1}^{J}\widehat{\beta}_j=0$, $\sum_{i=1}^{I}\widehat{\delta}_{ij}=0\ \forall j$, and $\sum_{j=1}^{J}\widehat{\delta}_{ij}=0\ \forall i$; displayed rounded data may violate these identities numerically.
 \end{definition}
 
 \begin{remark} \label{rem:two-way-interaction-profile-plots} \hlt{Interaction and Parallel Profiles}\\
@@ -41,42 +29,30 @@ In an additive model, the fitted difference between two levels of one factor is 
 \end{figure}
 
 \begin{definition} \label{def:balanced-two-way-normal-model} \hlt{Balanced Two-Way Normal Model}\\
-Suppose there are $I$ levels of factor $A$, $J$ levels of factor $B$, and $K>1$ independent observations per cell.  The fixed-effects model is
-\[
-Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk},
-\]
-where the errors are independent $N(0,\sigma^2)$ variables and the parameters satisfy
-\[
-\sum_{i=1}^{I}\alpha_i=0,
-\qquad
-\sum_{j=1}^{J}\beta_j=0,
-\qquad
-\sum_{i=1}^{I}\delta_{ij}=0,\quad
-\sum_{j=1}^{J}\delta_{ij}=0.
-\]
+For factor levels $i=1,\ldots,I$ and $j=1,\ldots,J$ with $K>1$ independent observations per cell, the fixed-effects model satisfies $Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk}$, independent errors $\varepsilon_{ijk}\sim N(0,\sigma^2)$, $\sum_{i=1}^{I}\alpha_i=0$, $\sum_{j=1}^{J}\beta_j=0$, $\sum_{i=1}^{I}\delta_{ij}=0\ \forall j$, and $\sum_{j=1}^{J}\delta_{ij}=0\ \forall i$.
+\hlt{Key Insight}: $\delta_{ij}=0\ \forall(i,j)$ iff the cell means are additive in the two factors.
 \end{definition}
 
 \begin{definition} \label{def:two-way-anova-sums-of-squares} \hlt{Two-Way Sums of Squares}\\
-For the model in Definition \ref{def:balanced-two-way-normal-model}, set
-\[
-SS_A=JK\sum_{i=1}^{I}(\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2,
-\]
-\[
-SS_B=IK\sum_{j=1}^{J}(\overline{Y}_{\cdot j\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2,
-\]
-\[
-SS_{AB}=K\sum_{i=1}^{I}\sum_{j=1}^{J}
-(\overline{Y}_{ij\cdot}-\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot j\cdot}
-+\overline{Y}_{\cdot\cdot\cdot})^2,
-\]
-\[
-SS_E=\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K}
-(Y_{ijk}-\overline{Y}_{ij\cdot})^2.
-\]
-Then
-\[
-SS_{\mathrm{tot}}=SS_A+SS_B+SS_{AB}+SS_E.
-\]
+For the model in Definition \ref{def:balanced-two-way-normal-model}, write $\sum_i$, $\sum_j$, and $\sum_k$ for sums over $1,\ldots,I$, $1,\ldots,J$, and $1,\ldots,K$.
+
+$\overline{Y}_{ij\cdot}\defeq K^{-1}\sum_kY_{ijk}$.
+
+$\overline{Y}_{i\cdot\cdot}\defeq (JK)^{-1}\sum_j\sum_kY_{ijk}$.
+
+$\overline{Y}_{\cdot j\cdot}\defeq (IK)^{-1}\sum_i\sum_kY_{ijk}$.
+
+$\overline{Y}_{\cdot\cdot\cdot}\defeq (IJK)^{-1}\sum_i\sum_j\sum_kY_{ijk}$.
+
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Factor $A$}: $SS_A\defeq JK\sum_i(\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2$.
+\item \hlt{Factor $B$}: $SS_B\defeq IK\sum_j(\overline{Y}_{\cdot j\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2$.
+\item \hlt{Interaction}: $SS_{AB}\defeq K\sum_i\sum_j(\overline{Y}_{ij\cdot}-\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot j\cdot}+\overline{Y}_{\cdot\cdot\cdot})^2$.
+\item \hlt{Error}: $SS_E\defeq \sum_i\sum_j\sum_k(Y_{ijk}-\overline{Y}_{ij\cdot})^2$.
+\item \hlt{Total}: $SS_{\mathrm{tot}}\defeq \sum_i\sum_j\sum_k(Y_{ijk}-\overline{Y}_{\cdot\cdot\cdot})^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: $SS_{\mathrm{tot}}=SS_A+SS_B+SS_{AB}+SS_E$.
 \end{definition}
 
 \begin{theorem} \label{thm:two-way-anova-expected-sums-of-squares} \hlt{Expected Two-Way Sums of Squares}\\
@@ -115,7 +91,6 @@ Under the corresponding null hypotheses,
 Consequently, main effects and interaction are tested by
 \[
 F_A=\frac{SS_A/(I-1)}{SS_E/[IJ(K-1)]},
-\quad
 F_B=\frac{SS_B/(J-1)}{SS_E/[IJ(K-1)]},
 \]
 \[
