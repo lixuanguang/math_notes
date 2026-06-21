@@ -5,79 +5,76 @@
 Numerical summaries compress a batch more aggressively than a plot.  They should therefore be chosen with attention to the feature being summarized and to the influence of extreme observations.
 
 \begin{definition} \label{def:location-summaries-for-data} \hlt{Location Summaries for a Batch}\\
-For ordered data $x_{(1)}\leq\cdots\leq x_{(n)}$:
+Let $x_1,\ldots,x_n\in\R$ have order statistics $x_{(1)}\leq\cdots\leq x_{(n)}$.\\
+When a trim fraction is used, let $0\leq\alpha<\frac{1}{2}$ and $m_\alpha\defeq\floor{n\alpha}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The \hlt{arithmetic mean} is $\overline{x}=n^{-1}\sum_{i=1}^n x_i$.
-\item The \hlt{median} is the middle ordered value when $n$ is odd, and the average of the two middle ordered values when $n$ is even.
-\item For $0\leq\alpha<1/2$, the \hlt{$100\alpha\%$ trimmed mean} is
-\[
-\overline{x}_\alpha
-=\frac{x_{(\floor{n\alpha}+1)}+\cdots+x_{(n-\floor{n\alpha})}}
-{n-2\floor{n\alpha}}.
-\]
+\item \hlt{Arithmetic Mean}: $\overline{x}\defeq n^{-1}\sum\limits_{i=1}^n x_i$.
+\item \hlt{Median}: $\widetilde{x}\defeq x_{\left(\frac{n+1}{2}\right)}$ if $n$ is odd, and $\widetilde{x}\defeq\frac{x_{\left(\frac{n}{2}\right)}+x_{\left(\frac{n}{2}+1\right)}}{2}$ if $n$ is even.
+\item \hlt{$100\alpha\%$ Trimmed Mean}: $\overline{x}_\alpha\defeq(n-2m_\alpha)^{-1}\sum\limits_{i=m_\alpha+1}^{n-m_\alpha}x_{(i)}$.
 \end{enumerate}
-The mean targets arithmetic center and is sensitive to extremes.  The median and trimmed means reduce the effect of extremes by using order information.
+\hlt{Structural Commentary}: Under $x_i\mapsto x_i+\Delta$, $\overline{x}\mapsto\overline{x}+\frac{\Delta}{n}$; $\widetilde{x}$ and $\overline{x}_\alpha$ depend only on central order statistics.\\
+\hlt{Key Insight}: Extreme magnitudes affect $\overline{x}$ directly, but affect $\widetilde{x}$ and $\overline{x}_\alpha$ mainly through rank changes.
 \end{definition}
 
 \begin{remark} \label{rem:outliers-and-location-summaries} \hlt{Outliers and Center}\\
-Changing a single observation can make the mean arbitrarily large or small.  The sample median is unchanged by moving one extreme observation farther outward, and a fixed positive trimmed mean also ignores a controlled number of extremes on each side.  This is descriptive robustness, not a guarantee that the observations are independent or that a model is appropriate.
+Replacing one $x_i$ by $M$ sends $\overline{x}$ to $\overline{x}+\frac{M-x_i}{n}$, hence unbounded as $M\to\pm\infty$.\\
+Once an observation is extreme, moving it farther outward leaves $\widetilde{x}$ unchanged and leaves $\overline{x}_\alpha$ unchanged if it remains trimmed. This is descriptive robustness, not an independence or model.
 \end{remark}
 
 \begin{proposition} \label{prop:distribution-free-median-confidence-interval} \hlt{Distribution-Free Median Interval}\\
-Let $X_1,\ldots,X_n$ be independent observations from a continuous distribution with population median $\eta$, and let $X_{(1)}\leq\cdots\leq X_{(n)}$.  For $1\leq k\leq n/2$,
-\[
-\bigl(X_{(k)},X_{(n-k+1)}\bigr)
-\]
-has coverage
-\[
-\mathbb{P}\!\left(X_{(k)}\leq\eta\leq X_{(n-k+1)}\right)
-=1-\frac{1}{2^{n-1}}\sum_{j=0}^{k-1}\binom{n}{j}.
-\]
+Let $X_1,\ldots,X_n$ be independent with continuous CDF $F$ and median $\eta$, so $F(\eta)=\frac{1}{2}$.\\
+Let $X_{(1)}\leq\cdots\leq X_{(n)}$ and $1\leq k\leq\floor{\frac{n}{2}}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Interval}: $C_k\defeq[X_{(k)},X_{(n-k+1)}]$.
+\item \hlt{Coverage}: $\mathbb{P}(\eta\in C_k)=1-\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$.
+\end{enumerate}
 \begin{proof}
-Because the distribution is continuous and $\eta$ is a median, each observation lies above $\eta$ with probability $1/2$ and below $\eta$ with probability $1/2$.  The median is outside the interval exactly when fewer than $k$ observations fall below it or fewer than $k$ observations fall above it.  The two events are disjoint and symmetric, so their total probability is $2\sum_{j=0}^{k-1}\binom{n}{j}2^{-n}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $B_-\defeq\sum\limits_{i=1}^n\mathbf{1}_{\{X_i<\eta\}}$, $B_+\defeq\sum\limits_{i=1}^n\mathbf{1}_{\{X_i>\eta\}}$. By continuity, $B_-+B_+=n$ a.s. and $B_-\sim\operatorname{Binomial}(n,\frac{1}{2})$.
+\item $\eta\notin C_k$ iff $B_-<k$ or $B_+<k$. Since $k\leq\floor{\frac{n}{2}}$, these two events are disjoint.
+\item By symmetry, $\mathbb{P}(\eta\notin C_k)=2\mathbb{P}(B_-<k)=2\sum\limits_{j=0}^{k-1}\binom{n}{j}2^{-n}=\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$, so $\mathbb{P}(\eta\in C_k)=1-\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The coverage depends only on the binomial count of observations below $\eta$, not on $F$.\\
+\hlt{Key Insight}: Continuity turns median coverage into a symmetric binomial tail.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:m-estimates-location} \hlt{Location M-Estimates}\\
-A location \hlt{$M$-estimate} chooses $\widehat{\mu}$ to minimize an empirical criterion
-\[
-\sum_{i=1}^n \Psi\!\left(\frac{x_i-\mu}{\sigma}\right),
-\]
-where $\sigma$ is a scale value and $\Psi$ determines how deviations are weighted.  Quadratic $\Psi$ gives the mean; absolute-value $\Psi$ gives the median; choices that are quadratic near zero and linear in the tails reduce the influence of large deviations.
+For data $x_1,\ldots,x_n\in\R$, scale $\sigma>0$, and loss $\Psi:\R\to\R$, $\widehat{\mu}\in\arg\min\limits_{\mu\in\R}\sum\limits_{i=1}^n\Psi(\frac{x_i-\mu}{\sigma})$.\\
+\hlt{Key Insight}: Quadratic loss gives $\overline{x}$; absolute or subquadratic loss improves outlier resistance.
 \end{definition}
 
 \begin{definition} \label{def:dispersion-summaries-for-data} \hlt{Dispersion Summaries}\\
-For data $x_1,\ldots,x_n$ with mean $\overline{x}$ and median $\widetilde{x}$:
+Let $x_1,\ldots,x_n\in\R$ have mean $\overline{x}$, median $\widetilde{x}$, and selected sample quartiles $Q_1,Q_3$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The \hlt{sample variance} and \hlt{sample standard deviation} are
-\[
-s^2=\frac{1}{n-1}\sum_{i=1}^n(x_i-\overline{x})^2,
-\qquad
-s=\sqrt{s^2}.
-\]
-\item The \hlt{interquartile range} is
-\[
-\operatorname{IQR}=Q_3-Q_1,
-\]
-the difference between the upper and lower sample quartiles.
-\item The \hlt{median absolute deviation from the median} is
-\[
-\operatorname{MAD}=\operatorname{median}\{|x_i-\widetilde{x}|:1\leq i\leq n\}.
-\]
+\item \hlt{Sample Variance}: $s^2\defeq(n-1)^{-1}\sum\limits_{i=1}^n(x_i-\overline{x})^2$.
+\item \hlt{Sample Standard Deviation}: $s\defeq\sqrt{s^2}$.
+\item \hlt{Interquartile Range}: $\operatorname{IQR}\defeq Q_3-Q_1$.
+\item \hlt{Median Absolute Deviation}: $\operatorname{MAD}\defeq\operatorname{median}\{\abs{x_i-\widetilde{x}}:1\leq i\leq n\}$.
 \end{enumerate}
-The standard deviation reacts strongly to extremes because deviations are squared.  The IQR and MAD focus on the central part of the batch.
+\hlt{Structural Commentary}: $s^2$ is residual-based; $\operatorname{IQR}$ and $\operatorname{MAD}$ are order-based.\\
+\hlt{Key Insight}: A single extreme value can dominate $s$, but not $\operatorname{IQR}$ or $\operatorname{MAD}$ unless it changes central ranks.
 \end{definition}
 
 \begin{remark} \label{rem:normal-scale-calibrations} \hlt{Normal Scale Calibrations}\\
-For approximately normal data, $\operatorname{IQR}/1.35$ and $\operatorname{MAD}/0.675$ are common robust scale estimates for the normal standard deviation.  The constants calibrate the population normal IQR and median absolute deviation to $\sigma$.
+For approximately normal data, $\frac{\operatorname{IQR}}{1.35}$ and $\frac{\operatorname{MAD}}{0.675}$ are common robust scale estimates for the normal standard deviation. The constants calibrate the population normal IQR and median absolute deviation to $\sigma$.
 \end{remark}
 
 \begin{method} \label{meth:bootstrap-location-standard-errors} \hlt{Bootstrap Variability for Location Summaries}\\
-To approximate the sampling variability of a location summary $T$, draw bootstrap samples from the empirical distribution, compute $T^\ast$ on each resample, and use the empirical spread of the bootstrap values as in Method \ref{meth:bootstrap-standard-error}.  This is especially useful for summaries such as trimmed means and medians, where analytic standard errors may be awkward or sensitive to tail behavior.
+Let $T=T(x_1,\ldots,x_n)$ be a location summary and let $B\geq1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Resample}: For $1\leq b\leq B$, draw $x_1^{*(b)},\ldots,x_n^{*(b)}$ iid from $\widehat F_n\defeq n^{-1}\sum\limits_{i=1}^n\delta_{x_i}$.
+\item \hlt{Recompute}: Set $T_b^\ast\defeq T(x_1^{*(b)},\ldots,x_n^{*(b)})$ and $\overline{T}^{\ast}\defeq B^{-1}\sum\limits_{b=1}^BT_b^\ast$.
+\item \hlt{Spread}: Estimate variability by $\widehat{\operatorname{se}}_{\ast}(T)\defeq\left((B-1)^{-1}\sum\limits_{b=1}^B(T_b^\ast-\overline{T}^{\ast})^2\right)^{1/2}$.
+\end{enumerate}
+\hlt{Key Insight}: This is useful for medians and trimmed means, where analytic standard errors can be tail-sensitive.
 \end{method}
 
 \begin{remark} \label{rem:compare-multiple-location-summaries} \hlt{Compare More Than One Center}\\
-For symmetric light-tailed data, the mean, median, trimmed means, and many $M$-estimates often tell similar stories.  Large disagreement among them is itself information: it points to skewness, heavy tails, outliers, or a mixture of regimes.
+Let $\mathcal{C}\defeq\{\overline{x},\widetilde{x},\overline{x}_\alpha,\widehat{\mu}_\Psi\}$. For symmetric light-tailed data, $\operatorname{range}(\mathcal{C})$ is typically small; a large range signals skewness, heavy tails, outliers, or mixture structure.
 \end{remark}

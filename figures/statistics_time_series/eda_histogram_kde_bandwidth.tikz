@@ -1,0 +1,41 @@
+% Source: supplied Chapter 10 screenshots on histograms and kernel density estimates.
+% Schematic redraw, not a reproduction of the scanned figures.
+\begin{tikzpicture}[
+  x=0.62cm,
+  y=0.42cm,
+  >=Stealth,
+  line cap=round,
+  line join=round,
+  every node/.style={font=\scriptsize},
+  axis/.style={->, gray!70, line width=0.45pt},
+  bar/.style={draw=blue!70!black, fill=blue!10, line width=0.45pt},
+  rough/.style={blue!70!black, line width=0.95pt},
+  wideband/.style={green!45!black, line width=0.95pt}
+]
+  \begin{scope}
+    \draw[axis] (0,0) -- (8.2,0) node[black!78,right] {$x$};
+    \draw[axis] (0,0) -- (0,5.5) node[black!78,above] {count};
+    \foreach \lo/\hi/\h in {
+      .45/1.05/1, 1.05/1.65/2.4, 1.65/2.25/2,
+      2.25/2.85/4.7, 2.85/3.45/3.8, 3.45/4.05/4.7,
+      4.05/4.65/2.4, 4.65/5.25/3, 5.25/5.85/1.1,
+      5.85/6.45/2
+    }{
+      \draw[bar] (\lo,0) rectangle (\hi,\h);
+    }
+  \end{scope}
+
+  \begin{scope}[xshift=6.35cm]
+    \draw[axis] (0,0) -- (8.2,0) node[black!78,right] {$x$};
+    \draw[axis] (0,0) -- (0,5.5) node[black!78,above] {$\widehat f_h$};
+    \draw[rough]
+      plot[smooth] coordinates {
+        (.45,.25) (.85,.75) (1.2,.45) (1.55,1.85) (1.9,1.1)
+        (2.25,3.1) (2.6,2.0) (2.95,4.45) (3.3,3.05)
+        (3.65,4.55) (4.0,3.25) (4.45,3.85) (4.9,2.35)
+        (5.35,2.8) (5.85,1.45) (6.35,.7) (6.95,.3)
+      };
+    \draw[wideband, domain=.35:7.3, samples=120]
+      plot (\x,{4.05*exp(-0.18*(\x-3.45)*(\x-3.45))});
+  \end{scope}
+\end{tikzpicture}
