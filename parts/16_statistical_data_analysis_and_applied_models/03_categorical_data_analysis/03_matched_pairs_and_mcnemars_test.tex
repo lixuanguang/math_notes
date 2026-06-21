@@ -2,87 +2,66 @@
 \label{subsec:matched-pairs-and-mcnemars-test}
 % Source integration: attached Chapter 13 screenshots, Section 13.5 and selected problems.
 
-Matched categorical data require a different table from unmatched samples.  The pair, not the individual measurement, is the independent sampling unit, just as in the continuous paired-sample setting of Subsection \ref{subsec:paired-sample-inference}.
+Matched categorical data require a different table from unmatched samples. The pair, not the individual measurement, is the independent sampling unit.
 
 \begin{definition} \label{def:matched-pair-binary-table} \hlt{Matched Binary Pair Table}\\
-For paired binary responses, write the table as
-\[
-\begin{array}{c|cc}
-&\text{Second: }0&\text{Second: }1\\ \hline
-\text{First: }0&n_{11}&n_{12}\\
-\text{First: }1&n_{21}&n_{22}
-\end{array}
-\]
-after choosing which level is coded as $0$ or $1$.  The diagonal cells count concordant pairs.  The off-diagonal cells count discordant pairs and contain the information about marginal change between the first and second members of each pair.
+Let $(Y_k^{(1)},Y_k^{(2)})\in\{0,1\}^2$ for $k\in[n]$, and set $R_k\defeq Y_k^{(1)}+1$, $S_k\defeq Y_k^{(2)}+1$.\\
+For $(r,s)\in\{1,2\}^2$, set $n_{rs}\defeq\#\{k\in[n]:(R_k,S_k)=(r,s)\}$, so $n=\sum\limits_{r=1}^{2}\sum\limits_{s=1}^{2}n_{rs}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Matched Binary Pair Table}: $N\defeq(n_{rs})_{(r,s)\in\{1,2\}^2}$.
+\item \hlt{Concordant Cells}: $C\defeq\{(r,s)\in\{1,2\}^2:r=s\}=\{(1,1),(2,2)\}$; counts $(n_{rs})_{(r,s)\in C}=(n_{11},n_{22})$.
+\item \hlt{Discordant Cells}: $D\defeq\{(r,s)\in\{1,2\}^2:r\ne s\}=\{(1,2),(2,1)\}$; counts $(n_{rs})_{(r,s)\in D}=(n_{12},n_{21})$.
+\end{enumerate}
+\hlt{Key Insight}: $(n_{12},n_{21})$ determines marginal change; $(n_{11},n_{22})$ records agreement.
 \end{definition}
 
 \begin{definition} \label{def:mcnemars-null} \hlt{Marginal Homogeneity for Matched Pairs}\\
-Let $\pi_{ij}$ be the cell probabilities in Definition \ref{def:matched-pair-binary-table}.  Equality of the two marginal response probabilities is
-\[
-\pi_{1\cdot}=\pi_{\cdot1}
-\quad\text{and}\quad
-\pi_{2\cdot}=\pi_{\cdot2},
-\]
-which is equivalent in a $2\times2$ matched table to
-\[
-H_0:\pi_{12}=\pi_{21}.
-\]
-Thus only the two off-diagonal probabilities are constrained by the null hypothesis.
+Let $\pi=(\pi_{rs})_{(r,s)\in\{1,2\}^2}\in[0,1]^4$ satisfy $\sum\limits_{r=1}^{2}\sum\limits_{s=1}^{2}\pi_{rs}=1$. Set $\pi_{r\cdot}\defeq\sum\limits_{s=1}^{2}\pi_{rs}$ and $\pi_{\cdot s}\defeq\sum\limits_{r=1}^{2}\pi_{rs}$.\\
+The matched-pair law is \hlt{marginally homogeneous} iff $H_0:(\pi_{1\cdot},\pi_{2\cdot})=(\pi_{\cdot1},\pi_{\cdot2})$, equivalently $\pi_{12}=\pi_{21}$.\\
+\hlt{Key Insight}: $H_0$ constrains only the discordant probabilities $\pi_{12},\pi_{21}$.
 \end{definition}
 
 \begin{method} \label{meth:mcnemars-test} \hlt{McNemar's Test}\\
-For the matched binary table of Definition \ref{def:matched-pair-binary-table}, the maximum likelihood estimates under $H_0:\pi_{12}=\pi_{21}$ are
-\[
-\widehat{\pi}_{11}=\frac{n_{11}}{n},
-\qquad
-\widehat{\pi}_{22}=\frac{n_{22}}{n},
-\qquad
-\widehat{\pi}_{12}=\widehat{\pi}_{21}=\frac{n_{12}+n_{21}}{2n}.
-\]
-The Pearson statistic reduces to the off-diagonal contrast
-\[
-X^2
-=
-\frac{(n_{12}-n_{21})^2}{n_{12}+n_{21}}.
-\]
-For large discordant-pair count $n_{12}+n_{21}$, this is calibrated by $\chi_1^2$.
+Let $n_{rs}\in\N_0$ and cell probabilities $\pi_{rs}$ for $(r,s)\in\{1,2\}^2$, with $n\defeq\sum\limits_{r=1}^{2}\sum\limits_{s=1}^{2}n_{rs}>0$. Set $d\defeq n_{12}+n_{21}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Null}: $H_0:\pi_{12}=\pi_{21}$.
+\item \hlt{MLE Under $H_0$}: $\widehat{\pi}_{11}=\frac{n_{11}}{n}$, $\widehat{\pi}_{22}=\frac{n_{22}}{n}$, and $\widehat{\pi}_{12}=\widehat{\pi}_{21}=\frac{d}{2n}$.
+\item \hlt{Statistic}: If $d>0$, $X^2\defeq\frac{(n_{12}-n_{21})^2}{d}$.
+\item \hlt{Calibration}: If $d$ is large, then $X^2\overset{H_0}{\approx}\chi_1^2$.
+\item \hlt{Decision}: Reject $H_0$ at level $\alpha$ when $\mathbb{P}\{\chi_1^2\geq X^2_{\mathrm{obs}}\}\leq\alpha$.
+\end{enumerate}
 \end{method}
 
-\begin{example} \label{ex:hodgkins-tonsillectomy-matched-pairs} \hlt{Hodgkin's Disease and Sibling Controls}\\
-The source contrasts an unmatched analysis with a matched sibling design.  When $85$ Hodgkin's patients were paired with disease-free siblings, the pair table was
+\begin{example} \label{ex:matched-case-control-binary-exposure} \hlt{Matched Case-Control Pairs}\\
+In a matched case-control study, $85$ cases were each paired with one control, and a binary exposure was recorded for both members of each pair.
 \[
 \begin{array}{c|cc}
-&\multicolumn{2}{c}{\text{Sibling}}\\
-\text{Patient}&\text{No tonsillectomy}&\text{Tonsillectomy}\\ \hline
-\text{No tonsillectomy}&37&7\\
-\text{Tonsillectomy}&15&26
+&\multicolumn{2}{c}{\text{Control}}\\
+\text{Case}&\text{Unexposed}&\text{Exposed}\\ \hline
+\text{Unexposed}&37&7\\
+\text{Exposed}&15&26
 \end{array}
 \]
-The ordinary unmatched chi-square comparison ignores the pairing.  McNemar's statistic uses only the discordant cells:
-\[
-X^2=\frac{(7-15)^2}{7+15}=2.91.
-\]
-The source reports the corresponding $p$-value as about $0.09$, which weakens the apparent evidence from the unpaired analysis.
+An unmatched chi-square test treats cases and controls as independent samples.\\
+McNemar's test uses only discordant pairs; here $X^2=(7-15)^2/(7+15)=2.91$ and $p\approx0.09$, so accounting for the matching weakens the evidence of an exposure difference.
 \end{example}
 
-\begin{example} \label{ex:cell-phone-driving-mcnemar} \hlt{Cell Phones and Driving}\\
-In a matched case-crossover study, each driver involved in a collision was compared with the same driver's phone status at the same time during the previous week:
+\begin{example} \label{ex:matched-case-crossover-binary-exposure} \hlt{Matched Case-Crossover Exposure}\\
+In a matched case-crossover study, each subject is observed during an event window and a comparable control window, with a binary exposure recorded in both windows.
 \[
 \begin{array}{c|cc|c}
-\text{Day of collision}&\multicolumn{2}{c|}{\text{Before collision}}&\\
-&\text{On phone}&\text{Not on phone}&\text{Total}\\ \hline
-\text{On phone}&13&157&170\\
-\text{Not on phone}&24&505&529\\ \hline
+\text{Event window}&\multicolumn{2}{c|}{\text{Control window}}&\\
+&\text{Exposed}&\text{Unexposed}&\text{Total}\\ \hline
+\text{Exposed}&13&157&170\\
+\text{Unexposed}&24&505&529\\ \hline
 \text{Total}&37&662&699
 \end{array}
 \]
-McNemar's statistic is
-\[
-X^2=\frac{(157-24)^2}{157+24}=97.7,
-\]
-so the association is statistically strong.  The source also emphasizes the design limitation: the association need not mean that phone use directly causes collisions, because time-varying factors such as emotional stress could affect both phone use and driving risk.
+The discordant counts are $157$ and $24$, so $X^2=(157-24)^2/(157+24)=97.7$, giving strong evidence that exposure prevalence differs between the two windows. This does not by itself establish causation, since time-varying covariates may affect both exposure and event risk.
 \end{example}
 
 \begin{remark} \label{rem:mcnemar-versus-independence} \hlt{Matched Does Not Mean Independent}\\
-The null in McNemar's test is not independence of the two paired responses.  It is equality of marginal response probabilities within the pair.  Source problems ask for comparisons with paired $t$ procedures and with square matched tables; the common lesson is that the analysis must preserve the matching structure rather than treating the two margins as independent samples.
+McNemar's null hypothesis is marginal homogeneity, not independence of paired responses. Thus the analysis must preserve the matching structure rather than treat the two margins as independent samples.
 \end{remark}
