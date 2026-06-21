@@ -1,32 +1,25 @@
-# Structure Migration README
+# Structure Reference
 
-The structure migration is complete. The canonical LaTeX source tree is now
-`parts/`, and `math.tex` inputs that tree directly. The old repo-level
-`sections/` source tree has been removed.
+The canonical LaTeX source tree is `parts/`, and `math.tex` inputs that tree
+directly. This file is a maintenance reference for placement, ownership, and
+structural checks.
 
-This file is now a maintenance reference, not a migration plan.
+## Source Layout
 
-## Current State
-
-- Shared preamble and macros live in `parts/base.tex`.
-- Front-matter notation lives in `parts/00_notations/`.
-- Mathematical body content lives in numbered part folders
-  `parts/01_...` through `parts/17_...`.
-- Each numbered part owns one `overview.tex` file containing exactly one
-  `\part{...}` and inputs for its section folders.
-- Each section folder owns one `overview.tex` file containing exactly one
-  `\section{...}` and inputs for subsection files.
+- `parts/base.tex`: shared preamble, macros, and theorem environments.
+- `parts/00_notations/`: front-matter notation and symbol scope rules.
+- `parts/01_...` through `parts/17_...`: mathematical body content.
+- Each numbered part has one `overview.tex` with one `\part{...}` and inputs for
+  its section folders.
+- Each section folder has one `overview.tex` with one `\section{...}` and inputs
+  for numbered subsection files.
 - Numbered subsection files are the deepest visible book-body level and contain
   `\subsection{...}` plus content.
 
-## Active Include Order
-
-The active document entry point is `math.tex`. Its front matter and body include
-order is:
+The active include order in `math.tex` is:
 
 ```tex
 \input{parts/base}
-
 \input{parts/00_notations/overview}
 \input{parts/01_set_theory_logic_foundations/overview}
 \input{parts/02_structural_linear_algebra/overview}
@@ -47,215 +40,35 @@ order is:
 \input{parts/17_statistical_learning_deep_learning/overview}
 ```
 
-## Top-Level Parts
+## Editing Rules
 
-```text
-parts/
-  base.tex
-  00_notations/
-  01_set_theory_logic_foundations/
-  02_structural_linear_algebra/
-  03_geometric_spectral_linear_algebra/
-  04_matrix_analysis_numerical_linear_algebra/
-  05_groups_rings_fields/
-  06_modules_multilinear_homological/
-  07_commutative_algebra/
-  08_algebraic_geometry/
-  09_real_topological_analysis/
-  10_calculus_series_approximation/
-  11_measure_integration_functional_analysis/
-  12_probability_stochastic_systems/
-  13_dynamical_pde_systems/
-  14_numerical_stochastic_computation/
-  15_statistical_inference_and_time_series/
-  16_statistical_data_analysis_and_applied_models/
-  17_statistical_learning_deep_learning/
-```
-
-`parts/00_notations/` is front matter, not a numbered mathematical part.
-
-## Statistical Split
-
-The former `parts/15_statistics_time_series/` region has been split into three
-consecutive parts so that inference theory, classical applied statistical
-analysis, and statistical learning each have separate ownership.
-
-Active top-level order:
-
-```text
-parts/15_statistical_inference_and_time_series/
-parts/16_statistical_data_analysis_and_applied_models/
-parts/17_statistical_learning_deep_learning/
-```
-
-Active section ownership:
-
-```text
-parts/15_statistical_inference_and_time_series/
-  01_statistical_models_and_experiments/
-  02_estimation_theory/
-  03_hypothesis_testing_and_confidence/
-  04_decision_theory/
-  05_bayesian_inference/
-  06_nonparametric_and_high_dimensional_statistics/
-  07_time_series_models/
-  08_sequential_inference_and_resampling/
-
-parts/16_statistical_data_analysis_and_applied_models/
-  01_survey_sampling/
-  02_exploratory_data_analysis_and_data_summaries/
-  03_categorical_data_analysis/
-  04_analysis_of_variance_and_designed_experiments/
-  05_linear_models_and_regression/
-
-parts/17_statistical_learning_deep_learning/
-  01_learning_problems_and_risk/
-  02_generalization_theory/
-  03_classical_supervised_learning/
-  04_unsupervised_and_latent_variable_learning/
-  05_probabilistic_graphical_and_causal_learning/
-  06_neural_network_foundations/
-  07_modern_deep_models/
-  08_learning_systems_and_evaluation/
-```
-
-The applied data-analysis material that temporarily lived under
-`parts/15_statistics_time_series/09_...` through
-`parts/15_statistics_time_series/13_...` now lives under
-`parts/16_statistical_data_analysis_and_applied_models/01_...` through
-`parts/16_statistical_data_analysis_and_applied_models/05_...`.
-
-## Content Adding Reference
-
-For content-adding prompts, use this README as the authority for ownership and
-placement, then inspect the live `parts/` files for local style and labels.
-
-- Choose the destination under `parts/`; there is no legacy LaTeX `sections/`
-  destination.
-- Use the section index below to choose the part and section folder.
-- Use each section folder's `overview.tex` as the local subsection outline.
-- If an existing subsection file fits, extend it conservatively.
-- If the topic fits an existing section but not an existing subsection, add the
-  next numbered subsection file and input it from that section's `overview.tex`.
-- If the topic does not fit any existing section, add the minimal new section
-  folder under the best owning part and input it from the part `overview.tex`.
+- Add LaTeX content under `parts/`.
+- Use the section index below for first-pass placement, then inspect local
+  `overview.tex` files and nearby subsection files before editing.
+- Extend an existing subsection when it is the natural owner.
+- Add the next numbered subsection file only when no existing subsection fits.
+- Add a new section folder only when the topic does not fit an existing section.
 - Add a new part only when the material spans multiple sections and does not fit
   the ownership table.
-- For contents-page-only sources, do not edit; produce a coverage and placement
-  audit against this index and the live files.
-- For substantive source pages, integrate only what the source supports and use
-  existing notes for cross-references before adding duplicate theory.
-
-## Content Moving Loop Reference
-
-For content-moving prompts, the migration phases are complete. Use this workflow
-only for small, user-approved cleanup batches inside the active `parts/` tree:
-moving misplaced content, splitting overlarge subsection files, correcting local
-input order, or removing duplicate ownership that exists within `parts/`.
-
-The old repo-level LaTeX `sections/` tree has been removed. Prompt language
-about using legacy `sections/` files as source material is historical unless the
-user provides such material separately. Do not recreate `sections/`, do not move
-content into `sections/`, and do not search for migration-phase source files
-that no longer exist.
-
-Batch selection:
-
-- Propose exactly one coherent mathematical topic batch at a time.
-- Prefer one to three files and complete logical blocks.
-- Prefer moving or splitting a whole subsection file over extracting tiny spans.
-- Avoid batches larger than roughly 300--500 lines unless the user approves.
-- Do not apply a move until the user approves the exact proposed batch.
-- If no high-confidence move candidate exists, say so and ask for a new cursor
-  or scope.
-
-For each proposed batch, report:
-
-- Topic name.
-- Current `parts/...` source file or block.
-- Proposed `parts/...` destination file.
-- Whether the destination exists or needs a minimal new subsection/section
-  skeleton.
-- Why the destination is the first natural owner according to the ownership
-  table.
-- Whether the move improves logical order, reference-before-label order, or
-  duplicate ownership.
-- Any affected labels, references, figures, and local `\input{...}` edges.
-- Any ambiguous candidates under `Needs Human Review`.
-- Proposed lightweight validation commands.
-
-When applying an approved move:
-
-- Preserve mathematical content verbatim unless the user explicitly requests
-  rewriting.
-- Preserve labels, theorem environments, equations, examples, methods, proofs,
-  and source comments.
-- Create only the minimal target files needed for the approved batch.
-- Update only affected `overview.tex` files and local input order.
-- Remove or disconnect the old overlapping active source only after the target
-  is included and lightweight validation passes.
-- Re-check affected references, labels, and figure placement.
-- Stop after the batch and ask whether to continue, revise, or stop.
-
-Figure placement:
-
+- Keep `overview.tex` files structural: headings and inputs only.
+- Preserve the visible depth convention: `\part`, `\section`, and
+  `\subsection`; do not add book-body `\subsubsection` or `\paragraph`.
+- Prefer cross-references over duplicate definitions or duplicate theory.
 - Keep figures close to the text that introduces or uses them.
-- Avoid creating consecutive figure blocks with no explanatory text unless they
-  form a single intentional comparison.
-- If a move would separate a figure from its explanation, include the connecting
-  text in the same batch or list the case under `Needs Human Review`.
+- When introducing durable notation, update the relevant notation file in the
+  same change.
+- Keep LeanBlueprint markers in the LaTeX environment they document.
 
-## Formalization Loop Reference
+For content-moving work, make one coherent mathematical move at a time, preserve
+labels and mathematical content unless rewriting is explicitly requested, update
+only affected inputs, and validate before removing the old included source.
 
-For formalization-loop prompts, use the active `parts/` tree as the only LaTeX
-source tree. The old repo-level `sections/` tree has been removed, so any prompt
-language about unmigrated legacy LaTeX sections should be treated as obsolete.
+For formalization-loop work, process one logical unit at a time: either the
+substantive body of a section `overview.tex`, or one numbered subsection file.
+Prefer exact `parts/...` cursors. Bare section numbers are ambiguous because
+section counters restart in each part.
 
-The loop should process exactly one logical unit:
-
-- If a section `overview.tex` contains substantive prose or formal environments
-  directly under its `\section{...}`, that overview body is one logical unit.
-- If a section `overview.tex` only declares the `\section{...}` and inputs
-  subsection files, each input subsection file is one logical unit.
-- Do not process an entire part or multiple sibling subsection files in one
-  loop.
-- Do not edit notation, overview, or neighboring files unless the current unit
-  cannot remain coherent without a strictly local input/update.
-
-Cursor resolution:
-
-- Prefer exact `parts/...` file paths.
-- If given a section heading, search active `parts/` files and choose the unique
-  matching `\section` or `\subsection`; if there are multiple matches, ask for a
-  part or file path.
-- Bare section numbers are part-scoped because section counters restart in each
-  `\part`. A bare cursor such as `Section 1` is therefore ambiguous unless the
-  user has already supplied a part context.
-- At the beginning of the whole notes, `Continue from: Section 1` may be
-  resolved as Part 1, Section 1:
-  `parts/01_set_theory_logic_foundations/01_sets/overview.tex`. Since that file
-  is structural, the first editable logical unit is
-  `parts/01_set_theory_logic_foundations/01_sets/01_introduction_to_sets.tex`.
-- The next logical cursor after a subsection file is the next `\input{...}` in
-  the same section `overview.tex`; after the last subsection in a section, move
-  to the first logical unit in the next section folder listed by the part
-  `overview.tex`.
-
-Before editing a formalization-loop unit:
-
-- Inspect the current file, its local section `overview.tex`, the owning part
-  `overview.tex`, and nearby prerequisite files needed for notation and
-  cross-references.
-- Check whether any theorem, proposition, lemma, corollary, or method depends
-  on or references a remark or example.
-- If formal content is needed later, keep it in exposition or a formal
-  environment rather than relying on a remark or example.
-- Preserve labels and cross-references unless they are locally wrong.
-- Make text more formal, succinct, notation-driven, and precise without adding
-  unsupported mathematical content.
-- Stop after one logical unit and report the next logical cursor.
-
-## Current Section Index
+## Section Index
 
 Use this as the first-pass placement index. For subsection-level placement,
 inspect the relevant `overview.tex` and numbered subsection files.
@@ -403,8 +216,6 @@ parts/17_statistical_learning_deep_learning/
 
 ## Notation Files
 
-The notation list owns persistent notation, collision rules, and scope rules.
-
 ```text
 parts/00_notations/
   overview.tex
@@ -418,10 +229,7 @@ parts/00_notations/
   07_numerical_computational_mathematics.tex
 ```
 
-When a mathematical part introduces durable notation, update the relevant
-notation file in the same change.
-
-## Ownership Rules
+## Ownership
 
 | Topic | Owner |
 | --- | --- |
@@ -444,45 +252,27 @@ notation file in the same change.
 | Survey sampling, exploratory data analysis, categorical data, ANOVA/design, regression, and classical applied models | Statistical Data Analysis and Applied Models |
 | Prediction, representation, learned models | Statistical Learning and Deep Learning |
 
-When a later part uses material owned earlier, it should cross-reference the
-owner rather than redeveloping the theory.
+## Lean
 
-## Maintenance Rules
-
-- Add new LaTeX source under `parts/`, not under a repo-level `sections/` tree.
-- Preserve the visible depth convention: `\part`, `\section`, and
-  `\subsection` only.
-- Do not introduce book-body `\subsubsection` or `\paragraph` headings.
-- Keep each substantial subsection in its own numbered `.tex` file.
-- Keep `overview.tex` files structural: part and section headings plus inputs.
-- Prefer cross-references over duplicate definitions or duplicate theory.
-- Keep LeanBlueprint markers in the LaTeX source they document.
-- After adding or renaming part files, update `math.tex`, local `overview.tex`
-  files, and any relevant notation file together.
-
-## Lean Scaffolding
-
-Lean files live under `MathNotes/`. New generated stubs should mirror `parts/`
-under `MathNotes/parts/`:
+Lean files live under `MathNotes/`. New generated stubs mirror
+`parts/<path>/<name>.tex` as `MathNotes/parts/<path>/<name>.lean`.
 
 ```sh
 python3 scripts/scaffold_lean_sections.py
 ```
 
-Legacy Lean modules under `MathNotes/sections/` may still exist because they
-contain earlier formalization work. They are Lean modules, not dependencies on
-the removed LaTeX source tree.
+The scaffolding script creates only missing mirrored stubs and regenerates
+`MathNotes.lean`. Existing modules under `MathNotes/sections/` are legacy Lean
+formalization modules, not LaTeX source.
+
+Use `LEAN.md` for Lean setup, escaped import names, and LeanBlueprint commands.
 
 ## Validation
 
-Run these checks after structural edits:
+Run the relevant checks after structural edits:
 
 ```sh
 pdflatex -recorder -interaction=nonstopmode -halt-on-error math.tex
 lake build
 rg -n '^\\subsubsection|^\\paragraph' math.tex parts
-rg -n '\\input\{sections|\\.\\./\\.\\./sections|TEX_ROOT = ROOT / "sections"' .
 ```
-
-The recorder file `math.fls` should not report any active inputs from a
-repo-level `sections/` directory.
