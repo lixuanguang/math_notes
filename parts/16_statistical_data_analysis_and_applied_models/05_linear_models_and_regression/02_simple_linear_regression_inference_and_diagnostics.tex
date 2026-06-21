@@ -4,73 +4,60 @@
 Simple linear regression adds a noise model to the least-squares line.  The $x_i$ values are treated as fixed design points, and randomness enters through the observed responses.
 
 \begin{definition} \label{def:simple-linear-regression-standard-model} \hlt{Standard Simple Linear Regression Model}\\
-The standard simple linear regression model is
-\[
-Y_i=\beta_0+\beta_1x_i+e_i,\qquad i=1,\ldots,n,
-\]
-where $x_i$ are fixed, $\mathbb{E}e_i=0$, $\operatorname{Var}(e_i)=\sigma^2$, and the errors are uncorrelated.  The normal linear model adds that the errors are independent normal random variables.
+Let $[n]\defeq\{1,\ldots,n\}$, let $x_i\in\R$ be fixed for $i\in[n]$, let $\beta_0,\beta_1\in\R$, and let $\sigma^2>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Standard model}: $Y_i=\beta_0+\beta_1x_i+e_i$, $\mathbb{E}e_i=0$, $\operatorname{Var}(e_i)=\sigma^2$, and $\operatorname{Cov}(e_i,e_j)=0$ for $i\neq j$, $i,j\in[n]$.
+\item \hlt{Normal model}: $Y_i=\beta_0+\beta_1x_i+e_i$ with $e_1,\ldots,e_n$ independent and $e_i\sim N(0,\sigma^2)$, $i\in[n]$.
+\end{enumerate}
+\hlt{Structural Commentary}: $(x_i)_{i\in[n]}$ is fixed; randomness enters through $(e_i)_{i\in[n]}$.
 \end{definition}
 
 \begin{theorem} \label{thm:simple-regression-unbiased-variance} \hlt{Mean and Variance of the Simple Regression Coefficients}\\
-Let $D\defeq\sum_{i=1}^{n}(x_i-\overline{x})^2>0$.  Under Definition \ref{def:simple-linear-regression-standard-model},
-\[
-\mathbb{E}\widehat{\beta}_0=\beta_0,\qquad
-\mathbb{E}\widehat{\beta}_1=\beta_1,
-\]
-and
-\[
-\operatorname{Var}(\widehat{\beta}_1)=\frac{\sigma^2}{D},
-\qquad
-\operatorname{Var}(\widehat{\beta}_0)=\sigma^2\left(\frac1n+\frac{\overline{x}^{\,2}}{D}\right),
-\qquad
-\operatorname{Cov}(\widehat{\beta}_0,\widehat{\beta}_1)=-\frac{\sigma^2\overline{x}}{D}.
-\]
+Let $[n]\defeq\{1,\ldots,n\}$, let $x_i\in\R$, and set $\overline{x}\defeq\frac{1}{n}\sum\limits_{i=1}^{n}x_i$ and $D\defeq\sum\limits_{i=1}^{n}(x_i-\overline{x})^2>0$.\\
+Let $\beta\defeq(\beta_0,\beta_1)$ and assume $Y_i=\beta_0+\beta_1x_i+e_i$, $\mathbb{E}e_i=0$, $\operatorname{Var}(e_i)=\sigma^2$, and $\operatorname{Cov}(e_i,e_j)=0$ for $i\neq j$.\\
+If $\widehat{\beta}=(\widehat{\beta}_0,\widehat{\beta}_1)$ minimizes $\sum\limits_{i=1}^{n}(Y_i-b_0-b_1x_i)^2$ over $b=(b_0,b_1)\in\R^2$, then $\mathbb{E}\widehat{\beta}=\beta$; $\operatorname{Var}(\widehat{\beta})=\sigma^2\begin{pmatrix}\frac{1}{n}+\frac{\overline{x}^2}{D} & -\frac{\overline{x}}{D}\\ -\frac{\overline{x}}{D} & \frac{1}{D}\end{pmatrix}$.
 \begin{proof}
-By Proposition \ref{prop:simple-line-least-squares-formulas},
-\[
-\widehat{\beta}_1
-=\beta_1+\frac{\sum_{i=1}^{n}(x_i-\overline{x})e_i}{D},
-\qquad
-\widehat{\beta}_0=\beta_0+\overline{e}-\overline{x}(\widehat{\beta}_1-\beta_1).
-\]
-Expectations give unbiasedness.  The variance and covariance formulas follow from the assumed common variance and zero cross-covariances of the $e_i$.\\
+Set $u_i\defeq x_i-\overline{x}$ and $\overline{e}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}e_i$. \\
+Proposition \ref{prop:simple-line-least-squares-formulas} gives $\widehat{\beta}_1-\beta_1=D^{-1}\sum\limits_{i=1}^{n}u_ie_i$ and $\widehat{\beta}_0-\beta_0=\overline{e}-\overline{x}(\widehat{\beta}_1-\beta_1)$.\\
+Because $\sum\limits_{i=1}^{n}u_i=0$, $\mathbb{E}(\widehat{\beta}-\beta)=0$, $\operatorname{Var}(\widehat{\beta}_1)=D^{-2}\sum\limits_{i=1}^{n}u_i^2\sigma^2=\frac{\sigma^2}{D}$, $\operatorname{Cov}(\overline{e},\widehat{\beta}_1)=\frac{1}{n}D^{-1}\sum\limits_{i=1}^{n}u_i\sigma^2=0$, and $\operatorname{Var}(\overline{e})=\frac{\sigma^2}{n}$. Therefore $\operatorname{Var}(\widehat{\beta}_0)=\frac{\sigma^2}{n}+\frac{\overline{x}^2\sigma^2}{D}$ and $\operatorname{Cov}(\widehat{\beta}_0,\widehat{\beta}_1)=-\frac{\overline{x}\sigma^2}{D}$.\\
 \hlt{Structural Commentary}: The slope is a fixed linear combination of the responses.\\
 \hlt{Key Insight}: Centering the design isolates the uncertainty in the slope.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:simple-regression-rss-and-error-variance-estimator} \hlt{Residual Sum of Squares and Error Scale}\\
-For the fitted line $\widehat{y}_i=\widehat{\beta}_0+\widehat{\beta}_1x_i$, define
-\[
-\operatorname{RSS}=\sum_{i=1}^{n}(Y_i-\widehat{y}_i)^2.
-\]
-The usual estimate of $\sigma^2$ is
-\[
-s^2=\frac{\operatorname{RSS}}{n-2}.
-\]
-The divisor $n-2$ reflects that two coefficients have been estimated from the data.
+Let $[n]\defeq\{1,\ldots,n\}$ with $n>2$, and let $\widehat{y}_i=\widehat{\beta}_0+\widehat{\beta}_1x_i$ for $i\in[n]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Residual Sum of Squares}: $\operatorname{RSS}\defeq\sum\limits_{i=1}^{n}(Y_i-\widehat{y}_i)^2$.
+\item \hlt{Error Scale}: $s^2\defeq\frac{\operatorname{RSS}}{n-2}$ and $s\defeq\sqrt{s^2}$.
+\end{enumerate}
+\hlt{Key Insight}: $n-2$ subtracts the fitted coefficients $\widehat{\beta}_0,\widehat{\beta}_1$.
 \end{definition}
 
 \begin{corollary} \label{cor:simple-regression-t-intervals} \hlt{Simple Regression $t$ Intervals and Tests}\\
-In the normal simple linear model,
-\[
-\frac{\widehat{\beta}_j-\beta_j}{s_{\widehat{\beta}_j}}\sim t_{n-2},
-\qquad j=0,1,
-\]
-where $s_{\widehat{\beta}_j}$ is obtained from the standard error formula in Theorem \ref{thm:simple-regression-unbiased-variance} by replacing $\sigma$ by $s$.  Thus a $100(1-\alpha)\%$ confidence interval for $\beta_j$ is
-\[
-\widehat{\beta}_j\pm t_{n-2,1-\alpha/2}s_{\widehat{\beta}_j}.
-\]
-The same pivot gives the usual test of $H_0:\beta_j=\beta_{j0}$.
+Let $n>2$, $[n]\defeq\{1,\ldots,n\}$, $\alpha\in(0,1)$, $\beta\in\R^2$, $\sigma^2>0$, $x=(x_1,\ldots,x_n)^t\in\R^n$, $X\defeq(\mathbf{1},x)\in\R^{n\times2}$\\
+with $\operatorname{rank}(X)=2$, $Y=X\beta+e$, and $e\sim N(0,\sigma^2I_n)$.\\
+Set $\widehat{\beta}\defeq(X^tX)^{-1}X^tY$, $s^2\defeq\frac{\norm{Y-X\widehat{\beta}}_2^2}{n-2}$, $\overline{x}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}x_i$, $D\defeq\sum\limits_{i=1}^{n}(x_i-\overline{x})^2$, $c_0\defeq \frac{1}{n}+\frac{\overline{x}^2}{D}$, and $c_1\defeq D^{-1}$.\\
+For $j\in\{0,1\}$ and $\beta_{j0}\in\R$, set $s_{\widehat{\beta}_j}\defeq s\sqrt{c_j}$.\\
+Then $T_j\defeq\frac{\widehat{\beta}_j-\beta_j}{s_{\widehat{\beta}_j}}\sim t_{n-2}$, $C_j(Y)\defeq[\widehat{\beta}_j-t_{n-2,1-\frac{\alpha}{2}}s_{\widehat{\beta}_j},\widehat{\beta}_j+t_{n-2,1-\frac{\alpha}{2}}s_{\widehat{\beta}_j}]$ satisfies $\mathbb{P}_\beta(\beta_j\in C_j(Y))=1-\alpha$,\\
+and the two-sided level-$\alpha$ test of $H_0:\beta_j=\beta_{j0}$ rejects iff $\abs{\frac{\widehat{\beta}_j-\beta_{j0}}{s_{\widehat{\beta}_j}}}>t_{n-2,1-\frac{\alpha}{2}}$.
+\begin{proof} Let $P\defeq X(X^tX)^{-1}X^t$, $M\defeq I-P$, and $G\defeq(X^tX)^{-1}=(g_{jk})_{j,k=0}^{1}$.\\
+Then $\widehat{\beta}-\beta=GX^te$, $g_{00}=c_0$, $g_{11}=c_1$, $\operatorname{Var}(\widehat{\beta}_j)=\sigma^2c_j$, and $Z_j\defeq\frac{\widehat{\beta}_j-\beta_j}{\sigma\sqrt{c_j}}\sim N(0,1)$.\\
+Also $\frac{(n-2)s^2}{\sigma^2}=\frac{e^tMe}{\sigma^2}$, $M=M^t=M^2$, $\operatorname{rank}(M)=n-2$, and $MX=0$, hence $U\defeq\frac{(n-2)s^2}{\sigma^2}\sim\chi^2_{n-2}$ and $\operatorname{Cov}(GX^te,Me)=GX^t\sigma^2M=0$. Joint normality gives $Z_j\perp U$, so $T_j=\frac{Z_j}{\sqrt{\frac{U}{n-2}}}\sim t_{n-2}$.\\
+The interval and rejection rule follow from $\mathbb{P}(\abs{T_j}\leq t_{n-2,1-\frac{\alpha}{2}})=1-\alpha$.\\
+\hlt{Structural Commentary}: $T_j=\frac{Z_j}{\sqrt{\frac{U}{n-2}}}$ with $Z_j\sim N(0,1)$, $U\sim\chi^2_{n-2}$, and $Z_j\perp U$.\\
+\hlt{Key Insight}: Normality and orthogonal residual projection make replacing $\sigma$ by $s$ exact.
+\end{proof}
 \end{corollary}
 
 \begin{example} \label{ex:peak-area-simple-regression-summary} \hlt{Calibration by Peak Area}\\
-In the chromatographic calibration example from the source, the least-squares line relating peak area to percentage of FD\&C Yellow No. 5 had approximately
-\[
-\widehat{\beta}_0=.0729,\qquad \widehat{\beta}_1=10.77,
-\qquad s=.068.
-\]
-The reported standard errors were $.0297$ and $.27$, giving $t$ statistics $2.45$ and $40.20$.  The corresponding $95\%$ intervals were about $(.011,.135)$ for the intercept and $(10.21,11.33)$ for the slope.  The example illustrates instrument calibration: fit on known concentrations, then use the fitted relation to estimate unknown concentrations.
+Let $[n]\defeq\{1,\ldots,n\}$, with known standard concentrations $x_i$ and measured peak areas $A_i$, $i\in[n]$.\\
+Fit $A_i=\beta_0+\beta_1x_i+e_i$ by least squares, giving $\widehat{A}(x)=\widehat{\beta}_0+\widehat{\beta}_1x$.\\
+For a new area $A_\ast$, the inverse calibration estimate is $\widehat{x}_\ast\defeq\frac{A_\ast-\widehat{\beta}_0}{\widehat{\beta}_1}$ when $\widehat{\beta}_1\neq0$.\\
+In the reported fit, $\widehat{\beta}_0=.0729$, $\widehat{\beta}_1=10.77$, $s=.068$, $\operatorname{se}(\widehat{\beta}_0)=.0297$, and $\operatorname{se}(\widehat{\beta}_1)=.27$, hence $t_0=2.45$, $t_1=40.20$, and the reported $95\%$ intervals are $C_0=(.011,.135)$ and $C_1=(10.21,11.33)$.\\
+Thus $\widehat{\beta}_1>0$ makes peak area a monotone calibration signal.
 \end{example}
 
 \begin{method} \label{meth:regression-residual-diagnostics} \hlt{Residual Diagnostics}\\
@@ -87,39 +74,40 @@ These checks refine the modeling assumptions; they do not replace them.
 \end{method}
 
 \begin{definition} \label{def:homoscedastic-and-heteroscedastic-errors} \hlt{Homoscedastic and Heteroscedastic Errors}\\
-Errors are \hlt{homoscedastic} when their variance is constant across the design points.  They are \hlt{heteroscedastic} when the variance changes with the predictor or with the mean level.  Standard errors and confidence intervals based on a constant-variance model can be misleading under strong heteroscedasticity.
+Let $[n]\defeq\{1,\ldots,n\}$, let $e=(e_1,\ldots,e_n)^t$ be errors at design points $x_i$, and set $v_i\defeq\operatorname{Var}(e_i)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Homoscedastic}: $\exists\sigma^2\geq0$ with $v_i=\sigma^2$, $i\in[n]$.
+\item \hlt{Heteroscedastic}: $\exists i,j\in[n]$ with $v_i\neq v_j$.
+\end{enumerate}
+\hlt{Key Insight}: $\operatorname{Var}(e)\neq\sigma^2I_n$ invalidates formulas requiring $\operatorname{Var}(e)=\sigma^2I_n$.
 \end{definition}
 
 \begin{example} \label{ex:regression-diagnostic-patterns-from-source} \hlt{Diagnostic Patterns}\\
-The source examples show three recurring diagnostic patterns:
+Let $[n]\defeq\{1,\ldots,n\}$, $r_i\defeq Y_i-\widehat{Y}_i$, $f_i\defeq\widehat{Y}_i$, $\ell_i\in\mathcal{G}$,\\
+$m_r(x)\defeq\mathbb{E}(r_i\mid x_i=x)$, $v_r(f)\defeq\operatorname{Var}(r_i\mid f_i=f)$, and $m_a\defeq\mathbb{E}(r_i\mid\ell_i=a)$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Stream flow against depth had residual curvature under a straight-line fit; a log-log plot gave a more linear pattern.
-\item Mortality counts against county population had growing residual spread; a square-root transformation stabilized the spread more nearly.
-\item Transition pressure measurements grouped by temperature had residual offsets by setting, suggesting correlated calibration errors rather than independent pointwise noise.
+\item $m_r\not\equiv0$ or $m_r$ non-affine; transform variables or add nonlinear terms.
+\item $v_r$ nonconstant; transform $Y_i$ or use heteroscedastic errors.
+\item $\exists a,b\in\mathcal{G}$ with $m_a\neq m_b$ or $\exists i\neq j$ with $\operatorname{Cov}(r_i,r_j\mid\ell_i=\ell_j)\neq0$; add group effects or correlated errors.
 \end{enumerate}
 \end{example}
 
 \begin{proposition} \label{prop:correlation-and-simple-regression} \hlt{Correlation and the Regression Line}\\
-For paired data define
-\[
-s_{xx}=\frac1n\sum_{i=1}^{n}(x_i-\overline{x})^2,\quad
-s_{yy}=\frac1n\sum_{i=1}^{n}(y_i-\overline{y})^2,\quad
-s_{xy}=\frac1n\sum_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y}).
-\]
-If $s_{xx},s_{yy}>0$, the sample correlation is $r=s_{xy}/\sqrt{s_{xx}s_{yy}}$, and the least-squares slope satisfies
-\[
-\widehat{\beta}_1=\frac{s_{xy}}{s_{xx}},
-\qquad
-r=\widehat{\beta}_1\sqrt{\frac{s_{xx}}{s_{yy}}}.
-\]
-Equivalently, the fitted line in standardized units is
-\[
-\frac{\widehat{y}-\overline{y}}{\sqrt{s_{yy}}}
-=r\,\frac{x-\overline{x}}{\sqrt{s_{xx}}}.
-\]
+Let $[n]\defeq\{1,\ldots,n\}$, let $(x_i,y_i)\in\R^2$ for $i\in[n]$.\\
+Set $\overline{x}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}x_i$, $\overline{y}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}y_i$, $s_{xx}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}(x_i-\overline{x})^2$, $s_{yy}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}(y_i-\overline{y})^2$, $s_{xy}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y})$.\\
+If $s_{xx},s_{yy}>0$, $r\defeq\frac{s_{xy}}{\sqrt{s_{xx}s_{yy}}}$, $(\widehat{\beta}_0,\widehat{\beta}_1)$ minimizes $\sum\limits_{i=1}^{n}(y_i-b_0-b_1x_i)^2$ over $(b_0,b_1)\in\R^2$,\\
+and $\widehat{y}(x)\defeq\widehat{\beta}_0+\widehat{\beta}_1x$, then $\widehat{\beta}_1=\frac{s_{xy}}{s_{xx}}$, $r=\widehat{\beta}_1\sqrt{\frac{s_{xx}}{s_{yy}}}$, and $\frac{\widehat{y}(x)-\overline{y}}{\sqrt{s_{yy}}}=r\frac{x-\overline{x}}{\sqrt{s_{xx}}}$.
+\begin{proof} Set $D\defeq\sum\limits_{i=1}^{n}(x_i-\overline{x})^2=ns_{xx}$ and $N\defeq\sum\limits_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y})=ns_{xy}$.\\
+Proposition \ref{prop:simple-line-least-squares-formulas} gives $\widehat{\beta}_1=\frac{N}{D}=\frac{s_{xy}}{s_{xx}}$ and $\widehat{\beta}_0=\overline{y}-\widehat{\beta}_1\overline{x}$.\\
+Hence $r=\frac{s_{xy}}{\sqrt{s_{xx}s_{yy}}}=\widehat{\beta}_1\sqrt{\frac{s_{xx}}{s_{yy}}}$ and $\widehat{y}(x)-\overline{y}=\widehat{\beta}_1(x-\overline{x})$, so $\frac{\widehat{y}(x)-\overline{y}}{\sqrt{s_{yy}}}=r\frac{x-\overline{x}}{\sqrt{s_{xx}}}$.\\
+\hlt{Structural Commentary}: $z_x\defeq\frac{x-\overline{x}}{\sqrt{s_{xx}}}$ and $z_{\widehat{y}}\defeq\frac{\widehat{y}(x)-\overline{y}}{\sqrt{s_{yy}}}$ give $z_{\widehat{y}}=rz_x$.\\
+\hlt{Key Insight}: $\widehat{\beta}_1=\frac{s_{xy}}{s_{xx}}$ becomes $r=\frac{s_{xy}}{\sqrt{s_{xx}s_{yy}}}$ after standardising both coordinates.
+\end{proof}
 \end{proposition}
 
 \begin{remark} \label{rem:regression-to-the-mean-simple-line} \hlt{Regression to the Mean}\\
-When $0<r<1$, a predictor that is one standard deviation above its mean gives a fitted response only $r$ standard deviations above its mean.  This is the finite-sample regression-line version of Example \ref{ex:regression-to-the-mean-linear-prediction}.
+With $s_{xx},s_{yy}>0$ and $0<r<1$, set $z_x\defeq\frac{x-\overline{x}}{\sqrt{s_{xx}}}$ and $z_{\widehat{y}}\defeq\frac{\widehat{y}(x)-\overline{y}}{\sqrt{s_{yy}}}$.\\
+Proposition \ref{prop:correlation-and-simple-regression} gives $z_{\widehat{y}}=rz_x$, hence $\abs{z_{\widehat{y}}}<\abs{z_x}$ for $z_x\neq0$.
 \end{remark}
