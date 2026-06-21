@@ -67,7 +67,8 @@ $\mathbb{E}\sum\limits_i(\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot})^2=\sum
 \begin{theorem} \label{thm:one-way-anova-f-test} \hlt{Normal-Theory One-Way $F$ Test}\\
 For $I,J\in\N$, let $Y_{ij}=\mu+\alpha_i+\varepsilon_{ij}$, $1\leq i\leq I$, $1\leq j\leq J$, with $\sum\limits_i\alpha_i=0$ and independent errors $\varepsilon_{ij}\sim N(0,\sigma^2)$.\\
 Set $\overline{Y}_{i\cdot}\defeq \frac{1}{J}\sum\limits_jY_{ij}$, $\overline{Y}_{\cdot\cdot}\defeq \frac{1}{IJ}\sum\limits_i\sum\limits_jY_{ij}$, $SS_W\defeq\sum\limits_i\sum\limits_j(Y_{ij}-\overline{Y}_{i\cdot})^2$, $SS_B\defeq J\sum\limits_i(\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot})^2$.\\
-$MS_W\defeq \frac{SS_W}{I(J-1)}$, $MS_B\defeq \frac{SS_B}{I-1}$; $\frac{SS_W}{\sigma^2}\sim \chi^2_{I(J-1)}$; if $H_0:\alpha_i=0\ \forall i$, then $\frac{SS_B}{\sigma^2}\sim \chi^2_{I-1}$, $SS_B\perp\!\!\!\perp SS_W$, $F\defeq \frac{MS_B}{MS_W}\sim F_{I-1,I(J-1)}$.
+$MS_W\defeq \frac{SS_W}{I(J-1)}$, $MS_B\defeq \frac{SS_B}{I-1}$; $\frac{SS_W}{\sigma^2}\sim \chi^2_{I(J-1)}$.\\
+If $H_0:\alpha_i=0\ \forall i$, then $\frac{SS_B}{\sigma^2}\sim \chi^2_{I-1}$, $SS_B\perp\!\!\!\perp SS_W$, $F\defeq \frac{MS_B}{MS_W}\sim F_{I-1,I(J-1)}$.
 \begin{proof} Let $C_m\defeq \mathrm{Id}_m-m^{-1}\mathbf{1}_m\mathbf{1}_m^\top$, so $C_m^2=C_m=C_m^\top$ and $\operatorname{rank}C_m=m-1$.\\
 For each $i$, $Z_i\defeq\frac{1}{\sigma}(Y_{i1}-\mu-\alpha_i,\ldots,Y_{iJ}-\mu-\alpha_i)^\top\sim N_J(0,\mathrm{Id}_J)$ independently,\\
 $\frac{1}{\sigma^2}\sum\limits_j(Y_{ij}-\overline{Y}_{i\cdot})^2=Z_i^\top C_JZ_i\sim\chi^2_{J-1}$. Summing over independent treatments gives $\frac{SS_W}{\sigma^2}\sim\chi^2_{I(J-1)}$.\\
@@ -91,6 +92,15 @@ satisfy $SS_{\mathrm{tot}}=SS_W+SS_B$.
 \end{enumerate}
 \end{method}
 
+\begin{corollary} \label{cor:two-treatment-one-way-anova-equals-pooled-t} \hlt{Two Treatments Give $F=t^2$}\\
+Let $X_1,\ldots,X_n$ and $Y_1,\ldots,Y_m$ be independent normal samples with common variance, means $\overline{X},\overline{Y}$, pooled variance $S_p^2\defeq \frac{SS_W}{n+m-2}$, and $t\defeq\frac{\overline{X}-\overline{Y}}{S_p\sqrt{n^{-1}+m^{-1}}}$. The one-way ANOVA statistic for the two groups satisfies $F=t^2$.
+\begin{proof} Let $N\defeq n+m$ and $\overline{Z}\defeq\frac{n\overline{X}+m\overline{Y}}{N}$. Then $SS_B=n(\overline{X}-\overline{Z})^2+m(\overline{Y}-\overline{Z})^2=\frac{nm}{N}(\overline{X}-\overline{Y})^2$.\\
+Since $df_B=1$ and $MS_W=\frac{SS_W}{N-2}=S_p^2$, $F=\frac{SS_B}{MS_W}=\frac{(\overline{X}-\overline{Y})^2}{S_p^2(n^{-1}+m^{-1})}=t^2$.\\
+\hlt{Structural Commentary}: Two groups leave one between-group contrast.\\
+\hlt{Key Insight}: ANOVA squares the pooled $t$ contrast.
+\end{proof}
+\end{corollary}
+
 \begin{example} \label{ex:tablet-laboratories-one-way-anova} \hlt{Generic Balanced One-Way ANOVA}\\
 Let $I=7$, $J=10$, and $Y_{ij}=\mu_i+\varepsilon_{ij}$ with independent errors $\varepsilon_{ij}\sim N(0,\sigma^2)$. Suppose the ANOVA table is
 \[
@@ -103,6 +113,33 @@ Let $I=7$, $J=10$, and $Y_{ij}=\mu_i+\varepsilon_{ij}$ with independent errors $
 \]
 Then $F=5.66$ has null law $F_{6,63}$, $p=\mathbb{P}(F_{6,63}\geq5.66)<.01$, and $H_0:\mu_1=\cdots=\mu_7$ is rejected at level $.01$.\\
 If diagnostics are adequate, between-treatment variation exceeds within-treatment noise.
+\end{example}
+
+The same one-way decomposition also supports a random-effects interpretation, where groups are sampled from a population of possible group levels rather than fixed in advance.
+
+\begin{definition} \label{def:one-way-random-effects-model} \hlt{Balanced One-Way Random Effects Model}\\
+A \hlt{balanced one-way random-effects model} has $I$ groups and common replication $J$, with $Y_{ij}=\mu+A_i+\varepsilon_{ij}$ for $1\leq i\leq I$, $1\leq j\leq J$, independent $A_i$ satisfying $\mathbb{E}A_i=0$ and $\operatorname{Var}(A_i)=\sigma_A^2$, and independent errors $\varepsilon_{ij}$ independent of $(A_i)$ with $\mathbb{E}\varepsilon_{ij}=0$ and $\operatorname{Var}(\varepsilon_{ij})=\sigma_\varepsilon^2$.\\
+\hlt{Structural Commentary}: $\operatorname{Var}(Y_{ij})=\sigma_A^2+\sigma_\varepsilon^2$, and $\operatorname{Cov}(Y_{ij},Y_{ij'})=\sigma_A^2$ for $j\ne j'$ within the same group.
+\end{definition}
+
+\begin{proposition} \label{prop:random-effects-one-way-expected-mean-squares} \hlt{Random-Effects Expected Mean Squares}\\
+Assume $Y_{ij}=\mu+A_i+\varepsilon_{ij}$ for $1\leq i\leq I$, $1\leq j\leq J$, with independent $A_i$ and $\varepsilon_{ij}$, $\mathbb{E}A_i=\mathbb{E}\varepsilon_{ij}=0$, $\operatorname{Var}(A_i)=\sigma_A^2$, and $\operatorname{Var}(\varepsilon_{ij})=\sigma_\varepsilon^2$. Then $\mathbb{E}(MS_W)=\sigma_\varepsilon^2$ and $\mathbb{E}(MS_B)=\sigma_\varepsilon^2+J\sigma_A^2$.\\
+The method-of-moments estimators are $\widehat{\sigma}_\varepsilon^2=MS_W$ and $\widehat{\sigma}_A^2=\frac{MS_B-MS_W}{J}$, truncated at $0$ if required.
+\begin{proof} Condition on $(A_i)$. Since $Y_{ij}-\overline{Y}_{i\cdot}=\varepsilon_{ij}-\overline{\varepsilon}_{i\cdot}$, $\mathbb{E}(SS_W\mid A)=I(J-1)\sigma_\varepsilon^2$, hence $\mathbb{E}(MS_W)=\sigma_\varepsilon^2$.\\
+Also $\overline{Y}_{i\cdot}=\mu+A_i+\overline{\varepsilon}_{i\cdot}$ has variance $\sigma_A^2+\frac{\sigma_\varepsilon^2}{J}$.\\
+Hence the one-way between mean square satisfies $\mathbb{E}(MS_B)=J\operatorname{Var}(\overline{Y}_{i\cdot})=\sigma_\varepsilon^2+J\sigma_A^2$.\\
+Solving these two moment equations gives the estimators.\\
+\hlt{Structural Commentary}: Within estimates error; between adds group heterogeneity.\\
+\hlt{Key Insight}: The excess $MS_B-MS_W$ estimates $J\sigma_A^2$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:dye-batch-random-effects-estimates} \hlt{Dye Strength Batch Variation}\\
+Suppose $I=6$ batches each have $J=6$ subsamples, with $\overline{y}_{\cdot\cdot}=93.61$\\
+and batch means $(92.00,90.50,91.25,98.25,91.17,98.50)$.\\
+Given $SS_B=415.47$ and $SS_W=134.08$, the mean squares are $MS_B=83.09$ and $MS_W=4.47$.\\
+The moment estimates are $\widehat{\sigma}_\varepsilon^2=MS_W=4.47$ and $\widehat{\sigma}_A^2=\frac{MS_B-MS_W}{6}=13.10$.\\
+Batch variation dominates measurement-error variation.
 \end{example}
 
 \begin{remark} \label{rem:one-way-anova-assumptions} \hlt{Assumptions and Robustness}\\
