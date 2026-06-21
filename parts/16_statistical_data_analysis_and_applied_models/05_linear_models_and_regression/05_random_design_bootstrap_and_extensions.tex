@@ -1,56 +1,52 @@
 \subsection{Random Design, Bootstrap, and Extensions}
-% Source integration: attached Chapter 14 screenshots, Sections 14.6--14.8 and selected problems.
 
-The fixed-design model conditions on the observed predictor values.  Many observational studies are more naturally viewed as sampling random predictor-response pairs, with the fixed-design analysis recovered after conditioning on the realized design.
+The fixed-design model conditions on the observed predictor values.  Many observational studies are more naturally viewed as sampling random predictor-response pairs, with the fixed-design analysis recovered after conditioning on the realised design.
 
 \begin{definition} \label{def:random-design-linear-regression-model} \hlt{Random-Design Linear Regression}\\
-Let $(Y_i,\xi_i)$, $i=1,\ldots,n$, be independent copies of a pair $(Y,\xi)$, with $\xi\in\R^p$.  A random-design linear regression model specifies
-\[
-\mathbb{E}(Y\mid \xi=x)=x^t\beta,
-\qquad
-\operatorname{Var}(Y\mid \xi=x)=\sigma^2.
-\]
-After observing the design rows $x_i=\xi_i^t$, the conditional model is the fixed-design model $Y=X\beta+e$.
+Let $[n]\defeq\{1,\ldots,n\}$, $(Y_i,\xi_i)_{i\in[n]}$ be independent copies of $(Y,\xi)$, $\xi\in\R^p$, $\beta\in\R^p$, and $\sigma^2>0$.\\
+A \hlt{Random-Design Linear Regression} is an iid sample $(Y_i,\xi_i)_{i\in[n]}$ satisfying $\mathbb{E}(Y\mid \xi=x)=x^t\beta$\\
+and $\operatorname{Var}(Y\mid \xi=x)=\sigma^2$ for $x\in\operatorname{supp}(\xi)$.\\
+\hlt{Structural Commentary}: Conditioning on $X_{i\cdot}=\xi_i^t$ gives $Y_{1:n}=X\beta+e$ with $e_i=Y_i-\xi_i^t\beta$.
 \end{definition}
 
 \begin{proposition} \label{prop:fixed-design-intervals-unconditional-coverage} \hlt{Conditional Coverage Implies Unconditional Coverage}\\
-Suppose a fixed-design confidence procedure $C(X,Y)$ satisfies
-\[
-\mathbb{P}\bigl(\beta_j\in C(X,Y)\mid X\bigr)=1-\alpha
-\]
-for every realized full-rank design matrix $X$.  Then
-\[
-\mathbb{P}\bigl(\beta_j\in C(X,Y)\bigr)=1-\alpha.
-\]
+Let $C(X,Y)$ be a confidence set for $\beta_j$, $\alpha\in(0,1)$, and $F\defeq\{\operatorname{rank}(X)=p\}$.\\
+If $\mathbb{P}(F)=1$ and $\mathbb{P}(\beta_j\in C(X,Y)\mid X)=1-\alpha$ on $F$, then $\mathbb{P}(\beta_j\in C(X,Y))=1-\alpha$.
 \begin{proof}
-Use the tower property:
-\[
-\mathbb{P}\bigl(\beta_j\in C(X,Y)\bigr)
-=\mathbb{E}\left[\mathbb{P}\bigl(\beta_j\in C(X,Y)\mid X\bigr)\right]
-=\mathbb{E}(1-\alpha)=1-\alpha.
-\]
+Set $A\defeq\{\beta_j\in C(X,Y)\}$. Since $\mathbb{P}(F)=1$, $\mathbb{P}(A)=\mathbb{E}[\mathbb{P}(A\mid X)]=\mathbb{E}[(1-\alpha)\mathbf{1}_F+\mathbb{P}(A\mid X)\mathbf{1}_{F^c}]=1-\alpha$.
+\hlt{Structural Commentary}: $\mathbb{P}(F)=1$ and $\mathbb{P}(A\mid X)=1-\alpha$ on $F$.\\
+\hlt{Key Insight}: $\mathbb{P}(A\mid X)=1-\alpha$ a.s. implies $\mathbb{P}(A)=1-\alpha$.
 \end{proof}
 \end{proposition}
 
 \begin{remark} \label{rem:random-design-variance-differs} \hlt{Unconditional Variability Can Differ}\\
-The fixed-design estimator remains unbiased under the random-design model by conditioning on $X$ and then averaging.  Its unconditional variance, however, also reflects the randomness of $X$ and generally is not the same matrix obtained by simply freezing $X$.
+Under random design, if $\mathbb{E}(\widehat{\beta}\mid X)=\beta$, then $\mathbb{E}\widehat{\beta}=\beta$.\\
+Moreover, $\operatorname{Var}(\widehat{\beta})=\mathbb{E}[\operatorname{Var}(\widehat{\beta}\mid X)]+\operatorname{Var}(\mathbb{E}[\widehat{\beta}\mid X])=\sigma^2\mathbb{E}[(X^tX)^{-1}]$, not generally $\sigma^2(X^tX)^{-1}$ for frozen design.
 \end{remark}
 
 \begin{method} \label{meth:regression-pairs-bootstrap-cross-reference} \hlt{Pairs Bootstrap for Random-Design Regression}\\
-For random-design regression, resample observed pairs $(Y_i,x_i)$ with replacement, refit the regression in each bootstrap sample, and use the empirical spread of the resulting coefficients or predictions as a standard-error estimate.  This is the regression version of Method \ref{meth:pairs-bootstrap-for-regression-statistics}.
-\end{method}
-
-\begin{perspective} \label{per:least-squares-extensions-source-chapter} \hlt{Extensions Beyond Ordinary Least Squares}\\
-The source chapter flags several common extensions.
+Let $D\defeq\{(Y_i,x_i):i\in[n]\}$, $x_i\in\R^p$, and let $T(D)$ be a fitted coefficient, prediction, or smooth statistic.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Robust regression}: least squares can be highly sensitive to outliers; replacing $\sum_i\widehat{e}_i^2$ by $\sum_i\Psi(\widehat{e}_i)$ gives an $M$-estimation analogue, with $\Psi(u)=u^2$ returning least squares.
-\item \hlt{Variable selection}: many applications have more candidate predictors than should be included simultaneously; coefficient estimates and their standard errors depend on the selected model.
-\item \hlt{Influence}: high-leverage observations can dominate a fit, especially in multiple regression where influence is harder to see in two-dimensional plots.
-\item \hlt{Inverse calibration}: after fitting an instrument response curve, predicting an unknown input from a measured response is an inverse problem and has uncertainty not captured by coefficient standard errors alone.
+\item Draw $D_b^*\defeq\{(Y_{i_m},x_{i_m}):m\in[n]\}$ with $i_1,\ldots,i_n$ sampled iid from $[n]$.
+\item Fit least squares on $D_b^*$ and compute $T_b^*\defeq T(D_b^*)$.
+\item Repeat for $b\in[B]$ and estimate $\operatorname{se}(T(D))$ by $\widehat{\operatorname{se}}_*(T)\defeq\left(\frac{1}{B-1}\sum\limits_{b=1}^{B}(T_b^*-\overline{T}^*)^2\right)^{1/2}$, where $\overline{T}^*\defeq B^{-1}\sum\limits_{b=1}^{B}T_b^*$.
+\end{enumerate}
+\end{method}
+
+\begin{perspective} \label{per:least-squares-extensions-source-chapter} \hlt{Extensions Beyond Ordinary Least Squares}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Robust regression}: Replace $\sum\limits_i\widehat{e}_i^2$ by $\sum\limits_i\Psi(\widehat{e}_i)$; $\Psi(u)=u^2$ gives least squares.
+\item \hlt{Variable selection}: For selected predictors $S\subseteq\{1,\ldots,p\}$, $\widehat{\beta}_S$ and $\operatorname{se}(\widehat{\beta}_S)$ are conditional on $S$.
+\item \hlt{Influence}: Large leverage $h_{ii}=x_i^t(X^tX)^{-1}x_i$ can make observation $i$ dominate $\widehat{\beta}$.
+\item \hlt{Inverse calibration}: Given a fitted response curve $\widehat{m}$ and measured response $y_0$,\\
+estimating $x_0$ from $\widehat{m}(x_0)=y_0$ is an inverse problem with uncertainty beyond $\operatorname{se}(\widehat{\beta})$.
 \end{enumerate}
 \end{perspective}
 
 \begin{remark} \label{rem:local-linear-smoothing-regression-bridge} \hlt{Local Linear Smoothing}\\
-When a global straight line is too rigid but the relationship is locally linear, local linear smoothing fits small weighted lines around each target point.  Method \ref{meth:local-linear-regression-smoothing} records this nonparametric regression version in its natural owner, extending the broader smoothing setup in Definition \ref{def:nonparametric-regression-smoothing}.
+For scalar predictors $x_i$, target $x_0$, bandwidth $h>0$, and kernel $K$.\\
+Set $w_i(x_0)\defeq K(\frac{x_i-x_0}{h})$ and $(\widehat{a}(x_0),\widehat{b}(x_0))\in\operatorname*{arg\,min}\limits_{a,b\in\R}\sum\limits_{i=1}^{n}w_i(x_0)(Y_i-a-b(x_i-x_0))^2$.\\
+The local linear estimate is $\widehat{m}(x_0)\defeq\widehat{a}(x_0)$.
 \end{remark}
