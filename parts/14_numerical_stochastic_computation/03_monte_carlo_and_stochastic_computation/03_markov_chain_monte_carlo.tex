@@ -9,7 +9,7 @@ Choose $X_0$ arbitrarily; given $X_i=x$, define $X_{i+1}$ as follows.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Draw $Y\sim q(\cdot\mid x)$.
-\item Set $r(x,Y)=\min\{f(Y)q(x\mid Y)/(f(x)q(Y\mid x)),1\}$.
+\item Set $r(x,Y)=\min\left\{\frac{f(Y)q(x\mid Y)}{f(x)q(Y\mid x)},1\right\}$.
 \item Set $X_{i+1}=Y$ with probability $r(x,Y)$, and set $X_{i+1}=x$ otherwise.
 \end{enumerate}
 \hlt{Key Insight}: Only ratios of $f$ enter $r$, so unknown normalising constants cancel.
@@ -17,11 +17,11 @@ Choose $X_0$ arbitrarily; given $X_i=x$, define $X_{i+1}$ as follows.
 
 \begin{proposition} \label{prop:mh-detailed-balance} \hlt{Detailed Balance for Metropolis-Hastings}\\
 Let $\Phi(x,y)=f(x)q(y\mid x)$ and assume $\Phi(x,y)>0$ iff $\Phi(y,x)>0$.\\
-For $x\neq y$, define $\alpha(x,y)=\min\{\Phi(y,x)/\Phi(x,y),1\}$ when $\Phi(x,y)>0$ and $\alpha(x,y)=0$ otherwise.\\
+For $x\neq y$, define $\alpha(x,y)=\min\left\{\frac{\Phi(y,x)}{\Phi(x,y)},1\right\}$ when $\Phi(x,y)>0$ and $\alpha(x,y)=0$ otherwise.\\
 Set $p(x,y)=q(y\mid x)\alpha(x,y)$. Then $f(x)p(x,y)=f(y)p(y,x)$ for $x\neq y$.
 \begin{proof}
 If $\Phi(x,y)=0$, the support condition gives $\Phi(y,x)=0$, hence $p(x,y)=p(y,x)=0$.\\
-If $\Phi(x,y)>0$, then $f(x)p(x,y)=\Phi(x,y)\min\{\Phi(y,x)/\Phi(x,y),1\}=\min\{\Phi(x,y),\Phi(y,x)\}$.\\
+If $\Phi(x,y)>0$, then $f(x)p(x,y)=\Phi(x,y)\min\left\{\frac{\Phi(y,x)}{\Phi(x,y)},1\right\}=\min\{\Phi(x,y),\Phi(y,x)\}$.\\
 Interchanging $x,y$ gives the same expression for $f(y)p(y,x)$, QED.\\
 \hlt{Structural Commentary}: The acceptance rule symmetrizes the weighted proposal flow.\\
 \hlt{Key Insight}: Both directions reduce to the same minimum of the two proposal fluxes.
@@ -43,14 +43,14 @@ By detailed balance, this equals $\int \mathbf{1}_A(y)\,\pi(dy)P(y,dx)=\int_A P(
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Use the proposal $Y=X_i+\varepsilon_i$, where $\varepsilon_i$ has a symmetric density.
-\item Then $q(y\mid x)=q(x\mid y)$, so the acceptance probability is $r(x,y)=\min\{f(y)/f(x),1\}$.
+\item Then $q(y\mid x)=q(x\mid y)$, so the acceptance probability is $r(x,y)=\min\left\{\frac{f(y)}{f(x)},1\right\}$.
 \item For $\varepsilon_i\sim N(0,b^2)$, small $b$ gives slow local moves, large $b$ gives frequent rejection.\\
 Tune $b$ for adequate mixing.
 \end{enumerate}
 \end{method}
 
 \begin{example} \label{ex:cauchy-random-walk-mh} \hlt{Cauchy Target}\\
-For Cauchy target $f(x)=1/[\pi(1+x^2)]$ and symmetric random-walk proposal, $r(x,y)=\min\{\frac{1+x^2}{1+y^2},1\}$.\\
+For Cauchy target $f(x)=\frac{1}{\pi(1+x^2)}$ and symmetric random-walk proposal, $r(x,y)=\min\left\{\frac{1+x^2}{1+y^2},1\right\}$.\\
 The proposal scale changes mixing efficiency, not the stationary target.
 \end{example}
 

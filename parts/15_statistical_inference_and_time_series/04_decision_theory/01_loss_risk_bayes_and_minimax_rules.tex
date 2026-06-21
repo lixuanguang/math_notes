@@ -1,0 +1,41 @@
+\subsection{Loss, Risk, Bayes, and Minimax Rules}
+
+Decision theory compares statistical procedures by their consequences, not only by their formulas.  The same data model can lead to different optimal rules under different loss functions.
+
+\begin{definition} \label{def:statistical-decision-problem} \label{def:bayes-risk-minimax-admissible} \hlt{Decision Problem and Optimality Criteria}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Problem}: a statistical decision problem is $(\{P_\theta:\theta\in\Theta\},\mathcal{A},L)$ with $L:\Theta\times\mathcal{A}\to[0,\infty]$.
+\item \hlt{Rule}: a decision rule is a measurable $\delta:\mathcal{X}\to\mathcal{A}$.
+\item \hlt{Risk}: $R(\theta,\delta)\defeq\mathbb{E}_\theta[L(\theta,\delta(X))]$.
+\item \hlt{Bayes risk}: for prior $\Pi$ on $\Theta$, $r(\Pi,\delta)\defeq\int R(\theta,\delta)\,d\Pi(\theta)$.
+\item \hlt{Bayes rule}: $\delta_\Pi$ is Bayes if $r(\Pi,\delta_\Pi)=\inf\limits_\delta r(\Pi,\delta)$.
+\item \hlt{Maximum risk}: $M(\delta)\defeq\sup\limits_{\theta\in\Theta}R(\theta,\delta)$; $\delta^\star$ is minimax if $M(\delta^\star)=\inf\limits_\delta M(\delta)$.
+\item \hlt{Admissibility}: $\delta$ inadmissible if $\exists\delta'$ with $R(\theta,\delta')\leq R(\theta,\delta)$ $\forall \theta$ and $<$ for some $\theta$; otherwise $\delta$ admissible.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:posterior-risk-bayes-rule} \hlt{Posterior Risk Characterization}\\
+Let $\Pi$ be a prior, let $\Pi(\cdot\mid x)$ be a posterior, and set $\rho_x(a)\defeq\int L(\theta,a)\,d\Pi(\theta\mid x)$.\\
+If a measurable selector $\delta_\Pi(x)\in\operatorname*{arg\,min}\limits_{a\in\mathcal{A}}\rho_x(a)$ exists, then $\delta_\Pi$ is Bayes: $r(\Pi,\delta_\Pi)=\inf\limits_\delta r(\Pi,\delta)$.
+\begin{proof} By iterated expectation, $r(\Pi,\delta)=\mathbb{E}_{\Pi}[\rho_X(\delta(X))]$, where $X$ has the prior predictive law.\\
+Since $\rho_x(\delta_\Pi(x))\leq\rho_x(\delta(x))$ $\forall$ rule $\delta$ and almost every $x$, $r(\Pi,\delta_\Pi)\leq r(\Pi,\delta)$ $\forall \delta$.
+Thus $r(\Pi,\delta_\Pi)=\inf\limits_\delta r(\Pi,\delta)$.\\
+\hlt{Structural Commentary}: Bayes risk is the prior-predictive average of posterior risks.\\
+\hlt{Key Insight}: Global Bayes optimization reduces to pointwise posterior-risk minimization.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:posterior-mean-median-mode-loss} \hlt{Bayes Rules Under Common Losses}\\
+For a real parameter and posterior distribution $\Pi(\cdot\mid x)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Squared-error loss is minimized by the posterior mean.
+\item Absolute-error loss is minimized by a posterior median.
+\item Zero-one loss on a finite action set is minimized by a posterior mode.
+\end{enumerate}
+\end{example}
+
+\begin{remark} \label{rem:minimax-bayes-least-favorable} \hlt{Least Favorable Priors}\\
+If a prior $\Pi^\star$ has Bayes risk equal to the minimax value, then any Bayes rule for $\Pi^\star$ with constant risk on the support of $\Pi^\star$ is minimax.  Such priors are called least favorable.
+\end{remark}

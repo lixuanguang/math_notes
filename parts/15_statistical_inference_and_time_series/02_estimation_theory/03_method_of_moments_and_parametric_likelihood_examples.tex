@@ -1,0 +1,68 @@
+\subsection{Method of Moments and Parametric Likelihood Examples}
+
+\begin{definition} \label{def:sampling-distribution-and-standard-error} \hlt{Sampling Distribution and Standard Error}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For a statistic $T_n=T_n(X_1,\ldots,X_n)$ under $P_\theta$, its \hlt{sampling distribution} is $\mathcal{L}_\theta(T_n)$.
+\item If $T_n\in L^2(P_\theta)$, its \hlt{standard error} is $\operatorname{SE}_\theta(T_n)\defeq\sqrt{\operatorname{Var}_\theta(T_n)}$.
+\item An \hlt{estimated standard error} estimates $\operatorname{SE}_\theta(T_n)$, typically by plug-in, asymptotics, or resampling.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:method-of-moments} \hlt{Method of Moments}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $X_1,\ldots,X_n$ be independent from $P_\theta$, and set $\mu_k(\theta)\defeq\mathbb{E}_\theta X^k$ for $k=1,\ldots,r$.
+\item If $\mu(\theta)=(\mu_1(\theta),\ldots,\mu_r(\theta))$ identifies $\theta\in\Theta\subseteq\R^r$, define $\widehat{\mu}_k\defeq n^{-1}\sum\limits_{i=1}^{n}X_i^k$.
+\item The \hlt{method of moments} estimator solves $\mu_k(\widehat{\theta})=\widehat{\mu}_k$ for $k=1,\ldots,r$.
+\end{enumerate}
+\hlt{Key Insight}: Match population moments to sample moments.
+\end{method}
+
+\begin{proposition} \label{prop:method-of-moments-consistency} \hlt{Consistency of Continuous Moment Estimates}\\
+Let $\widehat{\mu}_n\xrightarrow{P_{\theta_0}}\mu_0$ and let $g$ be continuous at $\mu_0$ with $g(\mu_0)=\theta_0$. Then $\widehat{\theta}_n\defeq g(\widehat{\mu}_n)\xrightarrow{P_{\theta_0}}\theta_0$. Thus method-of-moments estimators are consistent whenever $\widehat{\mu}_n\xrightarrow{P}\mu(\theta_0)$, inversion map $g=\mu^{-1}$ is continuous at $\mu(\theta_0)$.
+\begin{proof} Since $\widehat{\mu}_n\xrightarrow{P_{\theta_0}}\mu_0$ and $g$ is continuous at $\mu_0$, by continuous mapping theorem, $g(\widehat{\mu}_n)\xrightarrow{P_{\theta_0}}g(\mu_0)=\theta_0$.\\
+For MoM, if the required moments are finite, the weak law gives $\widehat{\mu}_n\xrightarrow{P_{\theta_0}}\mu(\theta_0)$.\\
+\hlt{Structural Commentary}: Moment consistency is convergence plus continuous inversion.\\
+\hlt{Key Insight}: Estimate moments first, then pass through $g$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:poisson-moments-likelihood-standard-error} \hlt{Poisson Mean}\\
+Let $X_1,\ldots,X_n\sim\operatorname{Poisson}(\lambda)$ be independent. Since $\mathbb{E}_\lambda X=\lambda$, $\widehat{\lambda}_{\mathrm{mom}}=\overline{X}$.\\
+Also $\ell(\lambda)=\sum\limits_{i=1}^{n}\{X_i\log\lambda-\lambda-\log(X_i!)\}$ and $\ell'(\lambda)=\frac{S}{\lambda}-n$, where $S=\sum\limits_iX_i$, so $\widehat{\lambda}_{\mathrm{mle}}=\frac{S}{n}=\overline{X}$.\\
+If true value is $\lambda_0$, then $S\sim\operatorname{Poisson}(n\lambda_0)$. Hence $\mathbb{E}_{\lambda_0}\widehat{\lambda}=\lambda_0$, $\operatorname{Var}_{\lambda_0}(\widehat{\lambda})=\frac{\lambda_0}{n}$, $\operatorname{SE}_{\lambda_0}(\widehat{\lambda})=\sqrt{\frac{\lambda_0}{n}}$, $\widehat{\operatorname{SE}}(\widehat{\lambda})=\sqrt{\frac{\widehat{\lambda}}{n}}$.
+\end{example}
+
+\begin{remark} \label{rem:grouped-poisson-fit-expected-cell-counts} \hlt{Grouped Counts and Expected Frequencies}\\
+Let $Y_1,\ldots,Y_N$ be observations, let $A_1,\ldots,A_m$ partition sample space, with observed counts $O_j\defeq\sum\limits_{i=1}^{N}\mathbf{1}_{\{Y_i\in A_j\}}$.\\
+Given a fitted parametric law $P_{\widehat{\theta}}$, set $p_j(\widehat{\theta})\defeq P_{\widehat{\theta}}(Y\in A_j)$; the fitted expected count is $E_j\defeq Np_j(\widehat{\theta})$.\\
+For grouped Poisson tails, $p_j(\widehat{\theta})$ is a sum of Poisson masses, $(O_1,\ldots,O_m)$ is modelled as multinomial under $P_{\widehat{\theta}}$.
+\end{remark}
+
+\begin{example} \label{ex:normal-moments-and-mle} \hlt{Normal Mean and Variance}\\
+For iid $X_i\sim N(\mu,\sigma^2)$, $\mu_1=\mu$, $\mu_2=\mu^2+\sigma^2$. Thus by MoM $\widehat{\mu}=\overline{X}$; $\widehat{\sigma}^2=n^{-1}\sum\limits_{i=1}^{n}X_i^2-\overline{X}^{\,2}=n^{-1}\sum\limits_{i=1}^{n}(X_i-\overline{X})^2$.\\
+The normal MLEs are the same; $\widehat{\sigma}^2$ uses denominator $n$, not the unbiased denominator $n-1$.
+\end{example}
+
+\begin{example} \label{ex:gamma-moments-and-likelihood-equations} \hlt{Gamma Shape and Rate}\\
+Let $X_i$ be iid gamma with shape $\alpha$ and rate $\lambda$, so $\mathbb{E}X=\frac{\alpha}{\lambda}$ and $\operatorname{Var}(X)=\frac{\alpha}{\lambda^2}$.\\
+With $\widehat{\sigma}^2\defeq n^{-1}\sum\limits_{i=1}^{n}(X_i-\overline{X})^2$, MoM gives $\widehat{\alpha}_{\mathrm{mom}}=\frac{\overline{X}^{\,2}}{\widehat{\sigma}^2}$ and $\widehat{\lambda}_{\mathrm{mom}}=\frac{\overline{X}}{\widehat{\sigma}^2}$.\\
+The log-likelihood is $\ell(\alpha,\lambda)=n\alpha\log\lambda+(\alpha-1)\sum\limits_i\log X_i-\lambda\sum\limits_iX_i-n\log\Gamma(\alpha)$.\\
+The MLE satisfies $\widehat{\lambda}=\frac{\widehat{\alpha}}{\overline{X}}$ and $\log\widehat{\alpha}-\log\overline{X}+n^{-1}\sum\limits_i\log X_i-\psi(\widehat{\alpha})=0$, where $\psi=\frac{\Gamma'}{\Gamma}$.\\
+The MoM estimate is a natural starting value.
+\end{example}
+
+\begin{example} \label{ex:angular-distribution-method-of-moments} \hlt{Angular Density}\\
+Let $f(x\mid\alpha)=\frac{1+\alpha x}{2}$ on $[-1,1]$, with $\alpha\in[-1,1]$. Since $\mathbb{E}_\alpha X=\int_{-1}^{1}\frac{x(1+\alpha x)}{2}\,dx=\frac{\alpha}{3}$, MoM gives $\widehat{\alpha}=3\overline{X}$.\\
+Also $\operatorname{Var}_\alpha(X)=\frac{1}{3}-\frac{\alpha^2}{9}$, so $\operatorname{Var}_\alpha(\widehat{\alpha})=9\operatorname{Var}_\alpha(\overline{X})=\frac{3-\alpha^2}{n}$.
+\end{example}
+
+\begin{definition} \label{def:overdispersed-counts} \hlt{Overdispersed Counts}\\
+Count data are \hlt{overdispersed} relative to a Poisson model if $\operatorname{Var}(X)>\mathbb{E}X$; empirically, this is $\widehat{\sigma}^2>\overline{X}$.
+\end{definition}
+
+\begin{example} \label{ex:negative-binomial-overdispersion-estimation} \hlt{Negative Binomial Overdispersion}\\
+For overdispersed counts, negative-binomial mass $f(x\mid m,k)=(1+\frac{m}{k})^{-k}\Gamma(k+x)\{x!\Gamma(k)\}^{-1}(\frac{m}{m+k})^x$, $x\in\mathbb{N}_0$,\\
+has $\mathbb{E}X=m$ and $\operatorname{Var}(X)=m+\frac{m^2}{k}$. By MoM $\widehat{m}=\overline{X}$, $\widehat{k}=\frac{\overline{X}^{\,2}}{\widehat{\sigma}^2-\overline{X}}$ when $\widehat{\sigma}^2>\overline{X}$.
+\end{example}

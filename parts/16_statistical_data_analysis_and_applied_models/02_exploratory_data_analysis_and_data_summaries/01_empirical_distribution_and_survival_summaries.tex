@@ -1,0 +1,124 @@
+\subsection{Empirical Distribution and Survival Summaries}
+
+Exploratory summaries first treat the observed values as a batch of numbers.  A stochastic model may later explain their variability, but the displays themselves are useful before a model has been chosen.
+
+\begin{definition} \label{def:empirical-cdf-and-survival-summary} \hlt{Empirical CDF and Empirical Survival Function}\\
+Let $x_1,\ldots,x_n\in\R$ be data; for survival summaries assume $x_i\geq0$ for $1\leq i\leq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Empirical CDF}: $F_n:\R\to[0,1]$, $F_n(x)\defeq n^{-1}\#\{i\in\{1,\ldots,n\}:x_i\leq x\}$.
+\item \hlt{Empirical Survival Function}: $S_n:[0,\infty)\to[0,1]$, $S_n(t)\defeq1-F_n(t)=n^{-1}\#\{i\in\{1,\ldots,n\}:x_i>t\}$.
+\end{enumerate}
+\hlt{Key Insight}: $F_n$ and $S_n$ encode complementary empirical tails, with $S_n(t)=1-F_n(t)$ for $t\geq0$.
+\end{definition}
+
+\begin{remark} \label{rem:ecdf-step-convention} \hlt{Step-Function Convention}\\
+Let $v_1<\cdots<v_m$ be the distinct observed values, with multiplicities $r_1,\ldots,r_m$. Then $F_n$ is right-continuous, constant on each component of $\R\setminus\{v_1,\ldots,v_m\}$, and has jump $\Delta F_n(v_j)=\frac{r_j}{n}$.
+\end{remark}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_ecdf_survival_steps.tikz}
+  \caption{Empirical CDF (blue) rises as empirical survival (green) falls.}
+  \label{fig:eda-ecdf-survival-steps}
+\end{figure}
+
+\begin{proposition} \label{prop:ecdf-fixed-point-mean-variance} \hlt{Fixed-Point Behavior of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent with common CDF $F$.\\
+For $x\in\R$, set $I_i(x)\defeq\mathbf{1}_{(-\infty,x]}(X_i)$ and $F_n(x)\defeq n^{-1}\sum\limits_{i=1}^n I_i(x)$. Then, for each fixed $x\in\R$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Law}: $nF_n(x)\sim\operatorname{Binomial}(n,F(x))$.
+\item \hlt{Mean}: $\mathbb{E}F_n(x)=F(x)$.
+\item \hlt{Variance}: $\operatorname{Var}(F_n(x))=n^{-1}F(x)(1-F(x))$.
+\end{enumerate}
+\begin{proof}
+Fix $x\in\R$ and put $p\defeq F(x)$ and $I_i\defeq I_i(x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $I_i\sim\operatorname{Bernoulli}(p)$ independently, $nF_n(x)=\sum\limits_{i=1}^n I_i\sim\operatorname{Binomial}(n,p)$.
+\item Linearity gives $\mathbb{E}F_n(x)=n^{-1}\sum\limits_{i=1}^n\mathbb{E}I_i=n^{-1}np=p=F(x)$.
+\item Independence gives $\operatorname{Var}(F_n(x))=n^{-2}\sum\limits_{i=1}^n\operatorname{Var}(I_i)=n^{-2}np(1-p)=n^{-1}F(x)(1-F(x))$.
+\end{enumerate}
+\hlt{Structural Commentary}: Pointwise, $F_n(x)=n^{-1}\sum\limits_{i=1}^n I_i(x)$ with $I_i(x)\sim\operatorname{Bernoulli}(F(x))$ independently.\\
+\hlt{Key Insight}: The empirical CDF at one point is a normalised binomial count.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:ecdf-two-point-covariance} \hlt{Two-Point Covariance of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent with common CDF $F$.\\
+For $w\in\R$, set $I_i(w)\defeq\mathbf{1}_{(-\infty,w]}(X_i)$, $F_n(w)\defeq n^{-1}\sum\limits_{i=1}^n I_i(w)$. For $u,v\in\R$, put $m\defeq\min\{u,v\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Covariance}: $\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)=n^{-1}\bigl(F(m)-F(u)F(v)\bigr)$.
+\item \hlt{Sign}: $\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)\geq0$.
+\end{enumerate}
+\begin{proof}
+Fix $u,v\in\R$ and set $m\defeq\min\{u,v\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Covariance}: $\operatorname{Cov}(F_n(u),F_n(v))=n^{-2}\sum\limits_{i,j}\operatorname{Cov}(I_i(u),I_j(v))$.\\
+For $i\neq j$ the term is $0$ by independence, while for $i=j$,\\
+$\operatorname{Cov}(I_i(u),I_i(v))=\mathbb{E}[I_i(u)I_i(v)]-\mathbb{E}I_i(u)\mathbb{E}I_i(v)=F(m)-F(u)F(v)$.\\
+Hence $\operatorname{Cov}(F_n(u),F_n(v))=n^{-1}(F(m)-F(u)F(v))$.
+\item \hlt{Sign}: If $u\leq v$, then $F(m)-F(u)F(v)=F(u)(1-F(v))\geq0$.\\
+If $v\leq u$, then $F(m)-F(u)F(v)=F(v)(1-F(u))\geq0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $F_n(u)$ and $F_n(v)$ average iid Bernoulli pairs, so covariance scales by $1/n$.\\
+\hlt{Key Insight}: Cross-index independence leaves only the same-observation overlap $\{X_i\leq m\}$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:survival-and-hazard-functions} \hlt{Survival and Hazard Functions}\\
+Let $T\geq0$ have CDF $F$ and density $f$, and set $D\defeq\{t\geq0:1-F(t)>0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Survival Function}: $S:[0,\infty)\to[0,1]$, $S(t)\defeq\mathbb{P}(T>t)=1-F(t)$.
+\item \hlt{Hazard Function}: $h:D\to[0,\infty)$, $h(t)\defeq \frac{f(t)}{1-F(t)}=\frac{f(t)}{S(t)}$.
+\end{enumerate}
+\hlt{Structural Commentary}: On intervals where $S$ is differentiable and positive, $h(t)=-\frac{d}{dt}\log S(t)$.
+\end{definition}
+
+\begin{proposition} \label{prop:hazard-determines-density} \hlt{Hazard Determines the Density}\\
+Let $T\geq0$ have survival $S(t)\defeq\mathbb{P}(T>t)$ with $S\in C^1([0,\infty))$, $S(t)>0$, $S(0)=1$, density $f(t)\defeq -S'(t)$, and hazard $h(t)\defeq\frac{f(t)}{S(t)}$. Put $H(t)\defeq\int_0^t h(s)\,ds$. Then, for $t\geq0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Survival}: $S(t)=e^{-H(t)}$.
+\item \hlt{Density}: $f(t)=h(t)e^{-H(t)}$.
+\end{enumerate}
+\begin{proof}
+Fix $t\geq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Survival}: Since $(\log S)'=S'/S=-h$, $\log S(t)-\log S(0)=-H(t)$. Since $S(0)=1$, $S(t)=e^{-H(t)}$.
+\item \hlt{Density}: Since $h=f/S$, $f(t)=h(t)S(t)=h(t)e^{-H(t)}$.
+\end{enumerate}
+\hlt{Structural Commentary}: $h=-S'/S=-(\log S)'$, so $H$ is the cumulative log-decay of survival.\\
+\hlt{Key Insight}: The hazard determines the law through $S=e^{-H}$ and $f=hS$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:exponential-and-weibull-hazards} \hlt{Constant and Power Hazards}\\
+For $t\geq0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Exponential}: If $F(t)=1-e^{-\lambda t}$ with $\lambda>0$, then $S(t)=e^{-\lambda t}$, $f(t)=\lambda e^{-\lambda t}$, and $h(t)=\lambda$.
+\item \hlt{Weibull-Type}: If $F(t)=1-e^{-\alpha t^\beta}$ with $\alpha,\beta>0$, then $S(t)=e^{-\alpha t^\beta}$, $f(t)=\alpha\beta t^{\beta-1}e^{-\alpha t^\beta}$, $h(t)=\alpha\beta t^{\beta-1}$.
+\end{enumerate}
+\hlt{Key Insight}: Power hazards increase for $\beta>1$, decrease for $0<\beta<1$, and are constant for $\beta=1$.
+\end{example}
+
+\begin{method} \label{meth:empirical-log-survival-plot} \hlt{Empirical Log-Survival Plot}\\
+Suppose $0\leq T_{(1)}<\cdots<T_{(n)}$ and there are no ties. Set $p_i\defeq\frac{i}{n+1}$ and $y_i\defeq\log(1-p_i)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Plot}: Draw $P_{\log S}^{(n)}\defeq\{(T_{(i)},y_i):1\leq i\leq n\}$; using $n+1$ keeps $y_n$ finite.
+\item \hlt{Hazard Reading}: Since $(\log S)'=-h$, more negative local slopes indicate larger hazards.
+\item \hlt{Tail Variability}: $\operatorname{Var}(\log[1-F_n(t)])\approx n^{-1}\frac{F(t)}{1-F(t)}$, which grows as $F(t)\uparrow1$.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:ecdf-simultaneous-versus-pointwise} \hlt{Pointwise and Simultaneous CDF Uncertainty}\\
+Proposition \ref{prop:ecdf-fixed-point-mean-variance} is pointwise: $x$ is fixed and $F_n(x)$ is a normalised binomial count.\\
+Simultaneous uncertainty controls $\|F_n-F\|_\infty\defeq\sup\limits_x\abs{F_n(x)-F(x)}$, yielding bands and diagnostics.
+\end{remark}

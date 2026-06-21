@@ -1,0 +1,128 @@
+\subsection{Chi-Square Tests for Contingency Tables}
+
+For an $I\times J$ table with observed counts $n_{ij}$ and fitted null counts $E_{ij}$, use $X^2\defeq\sum_{i=1}^{I}\sum_{j=1}^{J}(n_{ij}-E_{ij})^2/E_{ij}$; in contingency tables, $E_{ij}$ is determined by the row-column null model.
+
+\begin{definition} \label{def:chi-square-test-of-homogeneity} \hlt{Homogeneity of Multinomial Distributions}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, and $\Delta_{I-1}\defeq\{\pi\in[0,1]^I:\sum\limits_{i=1}^{I}\pi_i=1\}$.\\
+For independent columns $j\in[J]$, let $(N_{1j},\ldots,N_{Ij})\sim\operatorname{Multinomial}(n_{\cdot j};\pi_{1j},\ldots,\pi_{Ij})$ with observed counts $n_{ij}$.\\
+The column multinomial laws are \hlt{homogeneous} iff $H_0:\exists\pi\in\Delta_{I-1}$ with $\pi_{ij}=\pi_i$ $\forall(i,j)\in[I]\times[J]$; under $H_0$, $\pi_i$ is the common category probability.
+\end{definition}
+
+\begin{proposition} \label{prop:homogeneity-common-multinomial-mle} \hlt{Common Probability MLE Under Homogeneity}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, $\Delta_{I-1}\defeq\{\pi\in[0,1]^I:\sum\limits_{i=1}^{I}\pi_i=1\}$, and $N_{\cdot j}\defeq(N_{1j},\ldots,N_{Ij})$, independently for $j\in[J]$. Under $H_0$, $N_{\cdot j}\sim\operatorname{Multinomial}(n_{\cdot j};\pi)$ for a common $\pi\in\Delta_{I-1}$.\\
+With observed counts $n_{ij}$, set $n_{i\cdot}\defeq\sum\limits_{j=1}^{J}n_{ij}$ and $n_{\cdot\cdot}\defeq\sum\limits_{i=1}^{I}n_{i\cdot}>0$.\\
+Then $\widehat{\pi}_i=\frac{n_{i\cdot}}{n_{\cdot\cdot}}$ and $E_{ij}=n_{\cdot j}\widehat{\pi}_i=\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}}$ for $(i,j)\in[I]\times[J]$.
+\begin{proof}
+Up to factors independent of $\pi$, $L(\pi)\propto\prod\limits_{j=1}^{J}\prod\limits_{i=1}^{I}\pi_i^{n_{ij}}=\prod\limits_{i=1}^{I}\pi_i^{n_{i\cdot}}$, hence $\ell(\pi)=\sum\limits_{i=1}^{I}n_{i\cdot}\log\pi_i$ on $\Delta_{I-1}$.\\
+Stationarity of $\ell(\pi)+\lambda(1-\sum\limits_{i=1}^{I}\pi_i)$ gives $\frac{n_{i\cdot}}{\pi_i}-\lambda=0$ when $n_{i\cdot}>0$ and $\widehat{\pi}_i=0$ when $n_{i\cdot}=0$,\\
+Normalisation gives $\lambda=n_{\cdot\cdot}$ and $\widehat{\pi}_i=\frac{n_{i\cdot}}{n_{\cdot\cdot}}$. Therefore $E_{ij}=\mathbb{E}_{\widehat{\pi}}N_{ij}=n_{\cdot j}\widehat{\pi}_i$.\\
+\hlt{Structural Commentary}: $H_0$ reduces $IJ$ cell probabilities to one shared $\pi\in\Delta_{I-1}$.\\
+\hlt{Key Insight}: $\widehat{\pi}$ is the pooled row proportion, and $E_{ij}$ redistributes each column total by $\widehat{\pi}_i$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:homogeneity-fitted-counts} \hlt{Homogeneity Fitted Counts}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, and let $n_{ij}\in\N_0$ for $(i,j)\in[I]\times[J]$.\\
+Set $n_{i\cdot}\defeq\sum\limits_{j=1}^{J}n_{ij}$, $n_{\cdot j}\defeq\sum\limits_{i=1}^{I}n_{ij}$, $n_{\cdot\cdot}\defeq\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}n_{ij}>0$, and $\widehat{\pi}_i\defeq\frac{n_{i\cdot}}{n_{\cdot\cdot}}$.\\
+The homogeneity \hlt{fitted counts} are $E_{ij}\defeq n_{\cdot j}\widehat{\pi}_i=\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}}$ for $(i,j)\in[I]\times[J]$.
+\end{definition}
+
+\begin{method} \label{meth:pearson-homogeneity-test} \hlt{Pearson Test of Homogeneity}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, and let $n_{ij}\in\N_0$ for $(i,j)\in[I]\times[J]$.\\
+Set $n_{i\cdot}\defeq\sum\limits_{j=1}^{J}n_{ij}$, $n_{\cdot j}\defeq\sum\limits_{i=1}^{I}n_{ij}$, $n_{\cdot\cdot}\defeq\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}n_{ij}>0$, and $E_{ij}\defeq\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}}$. Assume $E_{ij}>0$ for cells used.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Statistic}: $X^2\defeq\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}\frac{(n_{ij}-E_{ij})^2}{E_{ij}}$.
+\item \hlt{Calibration}: If $n_{\cdot\cdot}$ large, $\min_{i,j}E_{ij}$ not small, then $X^2\overset{H_0}{\approx}\chi^2_{\nu}$; $\nu\defeq J(I-1)-(I-1)=(I-1)(J-1)$.
+\item \hlt{Decision}: Reject $H_0$ at level $\alpha$ when $\mathbb{P}\{\chi^2_{(I-1)(J-1)}\geq X^2_{\mathrm{obs}}\}\leq\alpha$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:austen-word-count-homogeneity} \hlt{Word Counts by Text Group}\\
+Let $W=\{\textit{a},\textit{an},\textit{this},\textit{that},\textit{with},\textit{without}\}$, let $G_1,\ldots,G_4$ be text groups. Observed word-count table $n_{wj}$ is
+\[
+\begin{array}{c|rrrr}
+\text{Word}&G_1&G_2&G_3&G_4\\ \hline
+a&147&186&101&83\\
+an&25&26&11&29\\
+this&32&39&15&15\\
+that&94&105&37&22\\
+with&59&74&28&43\\
+without&18&10&10&4\\ \hline
+\text{Total}&375&440&202&196
+\end{array}
+\]
+For $C_A\defeq\{1,2,3\}$, by homogeneity test: $X_A^2=12.27$, $\nu_A=(6-1)(3-1)=10$, $p_A=\mathbb{P}\{\chi^2_{10}\geq12.27\}\approx0.27$.\\
+Pooling $C_A$ and comparing it with $C_B\defeq\{4\}$ gives $X_{A,B}^2=32.81$, $\nu_{A,B}=6-1=5$, and $p_{A,B}<0.001$.\\
+$w\in\{\textit{an},\textit{that}\}$ gives the largest Pearson contributions, localising nonhomogeneity by row.
+\end{example}
+
+\begin{definition} \label{def:chi-square-test-of-independence} \hlt{Independence in a Contingency Table}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, and $N=(N_{ij})\sim\operatorname{Multinomial}(n;(\pi_{ij})_{[I]\times[J]})$ with $n>0$, observed counts $n_{ij}$.\\
+Set $\pi_{i\cdot}\defeq\sum\limits_{j=1}^{J}\pi_{ij}$, $\pi_{\cdot j}\defeq\sum\limits_{i=1}^{I}\pi_{ij}$, $n_{i\cdot}\defeq\sum\limits_{j=1}^{J}n_{ij}$, and $n_{\cdot j}\defeq\sum\limits_{i=1}^{I}n_{ij}$.\\
+Rows and columns are \hlt{independent} iff $H_0:\pi_{ij}=\pi_{i\cdot}\pi_{\cdot j}$ $\forall(i,j)\in[I]\times[J]$; then $\widehat{\pi}_{ij}\defeq\frac{n_{i\cdot}n_{\cdot j}}{n^2}$ and $E_{ij}\defeq\frac{n_{i\cdot}n_{\cdot j}}{n}$.
+\end{definition}
+
+\begin{method} \label{meth:pearson-independence-test} \hlt{Pearson Test of Independence}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, and let $n_{ij}\in\N_0$ for $(i,j)\in[I]\times[J]$.\\
+Set $n\defeq\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}n_{ij}>0$, $n_{i\cdot}\defeq\sum\limits_{j=1}^{J}n_{ij}$, $n_{\cdot j}\defeq\sum\limits_{i=1}^{I}n_{ij}$, and $E_{ij}\defeq\frac{n_{i\cdot}n_{\cdot j}}{n}$. Assume $E_{ij}>0$ for cells used.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Statistic}: $X^2\defeq\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}\frac{(n_{ij}-E_{ij})^2}{E_{ij}}$.
+\item \hlt{Calibration}: If $n$ is large and $\min_{i,j}E_{ij}$ is not small, then $X^2\overset{H_0}{\approx}\chi^2_{\nu}$ with $\nu\defeq(I-1)(J-1)$.
+\item \hlt{Decision}: Reject $H_0$ at level $\alpha$ when $\mathbb{P}\{\chi^2_{\nu}\geq X^2_{\mathrm{obs}}\}\leq\alpha$.
+\item \hlt{Degrees of Freedom}: $\nu=(IJ-1)-((I-1)+(J-1))=(I-1)(J-1)$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:education-marital-status-independence} \hlt{Binary Classifications}\\
+Let $n=1436$, $[n]\defeq\{1,\ldots,n\}$, and $(A_k,B_k)\in\{a_1,a_2\}\times\{b_1,b_2\}$ for $k\in[n]$.\\
+Set $n_{ij}\defeq\#\{k\in[n]:A_k=a_i,\ B_k=b_j\}$ and $E_{ij}\defeq\frac{n_{i\cdot}n_{\cdot j}}{n}$. The observed and independence-fitted tables are
+\[
+\begin{array}{c@{\hspace{3em}}c}
+\begin{array}{c}
+n_{ij}\\[2pt]
+\begin{array}{c|rr|r}
+a_i\backslash b_j&b_1&b_2&\text{Total}\\ \hline
+a_1&550&61&611\\
+a_2&681&144&825\\ \hline
+\text{Total}&1231&205&1436
+\end{array}
+\end{array}
+&
+\begin{array}{c}
+E_{ij}\\[2pt]
+\begin{array}{c|rr}
+a_i\backslash b_j&b_1&b_2\\ \hline
+a_1&523.8&87.2\\
+a_2&707.2&117.8
+\end{array}
+\end{array}
+\end{array}
+\]
+Under $H_0:A\perp B$, $X^2=\sum\limits_{i=1}^{2}\sum\limits_{j=1}^{2}\frac{(n_{ij}-E_{ij})^2}{E_{ij}}=16.01$, $\nu=1$, and $p<0.001$; reject $H_0$.\\
+Thus $A\not\perp B$; absent randomised $A$, inference is associative, not causal.
+\end{example}
+
+\begin{remark} \label{rem:homogeneity-versus-independence} \hlt{Homogeneity Versus Independence}\\
+Both tests use $E_{ij}=\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}}$, $X^2=\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}\frac{(n_{ij}-E_{ij})^2}{E_{ij}}$, and $\nu=(I-1)(J-1)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Homogeneity}: $N_{\cdot j}\sim\operatorname{Multinomial}(n_{\cdot j};\pi_{\cdot j})$ independently for $j\in[J]$, with fixed $n_{\cdot j}$, $H_0:\pi_{\cdot 1}=\cdots=\pi_{\cdot J}$.
+\item \hlt{Independence}: $N\sim\operatorname{Multinomial}(n_{\cdot\cdot};(\pi_{ij})_{[I]\times[J]})$ with $H_0:\pi_{ij}=\pi_{i\cdot}\pi_{\cdot j}$ $\forall(i,j)\in[I]\times[J]$.
+\end{enumerate}
+If $\pi_{\cdot j}>0$, then independence iff $\pi_{i\mid j}\defeq\frac{\pi_{ij}}{\pi_{\cdot j}}=\pi_{i\cdot}$ $\forall(i,j)\in[I]\times[J]$.
+\end{remark}
+
+\begin{method} \label{meth:categorical-likelihood-ratio-statistic} \hlt{Likelihood-Ratio Version}\\
+Let $I,J\in\N$, $[K]\defeq\{1,\ldots,K\}$, and let $n_{ij}\in\N_0$ with null fitted counts $E_{ij}$ for $(i,j)\in[I]\times[J]$.\\
+Set $n_{\cdot\cdot}\defeq\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}n_{ij}>0$ and $\nu\defeq(I-1)(J-1)$.\\
+Let $H_0$ be the homogeneity or independence null producing $E_{ij}$, and assume $E_{ij}>0$ whenever $n_{ij}>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Statistic}: $G^2\defeq2\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}n_{ij}\log\left(\frac{n_{ij}}{E_{ij}}\right)$.
+\item \hlt{Zero Counts}: $n_{ij}=0$ contributes $0$ to $G^2$.
+\item \hlt{Calibration}: Under the large-sample likelihood-ratio conditions of Theorem \ref{thm:wilks-likelihood-ratio-chi-square}, $G^2\overset{H_0}{\approx}\chi^2_{\nu}$.
+\item \hlt{Decision}: Reject $H_0$ at level $\alpha$ when $\mathbb{P}\{\chi^2_{\nu}\geq G^2_{\mathrm{obs}}\}\leq\alpha$.
+\end{enumerate}
+\end{method}

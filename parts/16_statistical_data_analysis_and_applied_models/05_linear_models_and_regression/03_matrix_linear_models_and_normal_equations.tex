@@ -1,0 +1,105 @@
+\subsection{Matrix Linear Models and Normal Equations}
+
+Matrix notation separates the geometry of least squares from the statistical assumptions on the errors.  It also makes multiple regression a direct extension of simple regression.
+
+\begin{definition} \label{def:fixed-design-linear-model} \hlt{Fixed-Design Linear Model}\\
+Let $Y\in\R^n$, $X\in\R^{n\times p}$, $\beta,b\in\R^p$, and $e\in\R^n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Model}: $Y=X\beta+e$.
+\item \hlt{Least-Squares Estimator}: $\widehat{\beta}\in\operatorname*{arg\,min}\limits_{b\in\R^p}\norm{Y-Xb}_2^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: An intercept is encoded by $X_{\cdot 1}=\mathbf{1}$.
+\end{definition}
+
+\begin{theorem} \label{thm:linear-model-normal-equations} \hlt{Normal Equations for the Linear Model}\\
+Let $Y\in\R^n$, $X\in\R^{n\times p}$, and $Q(b)\defeq\norm{Y-Xb}_2^2$ for $b\in\R^p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\widehat{\beta}\in\operatorname*{arg\,min}\limits_{b\in\R^p}Q(b)$ iff $X^tX\widehat{\beta}=X^tY$.
+\item If $\operatorname{rank}(X)=p$, then $X^tX$ is invertible and $\operatorname*{arg\,min}\limits_{b\in\R^p}Q(b)=\{(X^tX)^{-1}X^tY\}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) If $\widehat{\beta}$ minimizes $Q$, then $\forall(t,h)\in\R\times\R^p$, $0\le Q(\widehat{\beta}+th)-Q(\widehat{\beta})=2t h^tX^t(X\widehat{\beta}-Y)+t^2\norm{Xh}_2^2$.\\
+Hence $\forall h\in\R^p$, $h^tX^t(X\widehat{\beta}-Y)=0$, so $X^tX\widehat{\beta}=X^tY$.
+\item[$(i)$] ($\Leftarrow$) If $X^tX\widehat{\beta}=X^tY$, then $\forall h\in\R^p$, $Q(\widehat{\beta}+h)-Q(\widehat{\beta})=\norm{Xh}_2^2\ge0$, so $\widehat{\beta}$ minimizes $Q$.
+\item[$(ii)$] If $\operatorname{rank}(X)=p$, then $\forall u\in\R^p\setminus\{0\}$, $u^tX^tXu=\norm{Xu}_2^2>0$, so $X^tX$ is invertible.\\
+Applying (i) gives $\operatorname*{arg\,min}\limits_{b\in\R^p}Q(b)=\{(X^tX)^{-1}X^tY\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\widehat{Y}=X\widehat{\beta}$ and $\widehat{e}=Y-\widehat{Y}$ satisfy $X^t\widehat{e}=0$, hence $\widehat{e}\perp\operatorname{col}(X)$.\\
+\hlt{Key Insight}: The projection $\widehat{Y}\in\operatorname{col}(X)$ is unique; $\operatorname{rank}(X)=p$ makes $b\mapsto Xb$ injective, so $\widehat{\beta}$ is unique.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:linear-model-gram-rank-criterion} \hlt{Rank Criterion for the Normal Matrix}\\
+Let $X\in\R^{n\times p}$. Then $X^tX$ is nonsingular iff $\operatorname{rank}(X)=p$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $X^tX$ is nonsingular and $\operatorname{rank}(X)<p$, then $\exists u\in\R^p\setminus\{0\}$ with $Xu=0$, hence $X^tXu=0$, contradiction.
+\item[$(\Leftarrow)$] If $\operatorname{rank}(X)=p$ and $X^tXu=0$, then $0=u^tX^tXu=\norm{Xu}_2^2$, so $Xu=0$ and hence $u=0$.\\
+Therefore $\ker(X^tX)=\{0\}$ and $X^tX$ is nonsingular.
+\end{enumerate}
+\hlt{Structural Commentary}: $\ker(X^tX)=\ker(X)$.\\
+\hlt{Key Insight}: $X^tX$ is invertible exactly when $Xu=Xv\Rightarrow u=v$.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:hat-matrix-fitted-values-and-residuals} \hlt{Hat Matrix, Fitted Values, and Residuals}\\
+Assume $Y\in\R^n$, $X\in\R^{n\times p}$, $\operatorname{rank}(X)=p$, $\widehat{\beta}=(X^tX)^{-1}X^tY$, and $I=I_n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Hat Matrix}: $P\defeq X(X^tX)^{-1}X^t$.
+\item \hlt{Fitted Values}: $\widehat{Y}\defeq X\widehat{\beta}=PY$.
+\item \hlt{Residuals}: $\widehat{e}\defeq Y-\widehat{Y}=(I-P)Y$.
+\end{enumerate}
+\hlt{Key Insight}: $\operatorname{range}(P)=\operatorname{col}(X)$ and $PY=\widehat{Y}$.
+\end{definition}
+
+\begin{proposition} \label{prop:hat-matrix-projection-properties} \hlt{Projection Properties of the Hat Matrix}\\
+Let $Y\in\R^n$, $X\in\R^{n\times p}$ with $\operatorname{rank}(X)=p$, $I=I_n$, $P\defeq X(X^tX)^{-1}X^t$, $\widehat{Y}\defeq PY$, and $\widehat{e}\defeq(I-P)Y$.\\
+Then $P=P^t=P^2$, $I-P=(I-P)^t=(I-P)^2$, $\operatorname{range}(P)=\operatorname{col}(X)$, $\widehat{Y}=P_{\operatorname{col}(X)}Y$, and $X^t\widehat{e}=0$.
+\begin{proof} Since $(X^tX)^t=X^tX$, $P^t=X((X^tX)^{-1})^tX^t=P$, and $P^2=X(X^tX)^{-1}X^tX(X^tX)^{-1}X^t=P$.\\
+Hence $(I-P)^t=I-P$ and $(I-P)^2=I-2P+P^2=I-P$.\\
+If $z=Xb\in\operatorname{col}(X)$, then $Pz=X(X^tX)^{-1}X^tXb=z$; also $\operatorname{range}(P)\subseteq\operatorname{col}(X)$, so $\operatorname{range}(P)=\operatorname{col}(X)$.\\
+Finally, $X^t\widehat{e}=X^t(I-P)Y=X^tY-X^tX(X^tX)^{-1}X^tY=0$, so $\widehat{e}\perp\operatorname{col}(X)$ and $\widehat{Y}=P_{\operatorname{col}(X)}Y$.\\
+\hlt{Structural Commentary}: $P=P_{\operatorname{col}(X)}$ and $I-P=P_{\operatorname{col}(X)^\perp}$.\\
+\hlt{Key Insight}: Fitting decomposes $Y=PY+(I-P)Y=\widehat{Y}+\widehat{e}$ with $\widehat{Y}\perp\widehat{e}$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:linear-model-unbiased-error-variance} \hlt{Unbiased Estimate of the Error Variance}\\
+Let $Y=X\beta+e$ with $Y,e\in\R^n$, $X\in\R^{n\times p}$, $\beta\in\R^p$, $\operatorname{rank}(X)=p$, $\mathbb{E}e=0$, and $\operatorname{Var}(e)=\sigma^2I_n$.\\
+Set $P\defeq X(X^tX)^{-1}X^t$, $\widehat{Y}\defeq PY$, $\widehat{e}\defeq Y-\widehat{Y}$, and $s^2\defeq\frac{\norm{\widehat{e}}_2^2}{n-p}$. Then $\mathbb{E}\norm{\widehat{e}}_2^2=(n-p)\sigma^2$ and $\mathbb{E}s^2=\sigma^2$.
+\begin{proof} Let $M\defeq I_n-P$. Since $PX=X$, $\widehat{e}=MY=M(X\beta+e)=Me$.\\
+Since $M=M^t=M^2$, $\norm{\widehat{e}}_2^2=e^tM^tMe=e^tMe$. For fixed $A\in\R^{n\times n}$ and centered $e$ with $\operatorname{Var}(e)=\sigma^2I_n$,\\
+$\mathbb{E}(e^tAe)=\operatorname{tr}(A\sigma^2I_n)=\sigma^2\operatorname{tr}(A)$. Thus $\mathbb{E}\norm{\widehat{e}}_2^2=\sigma^2\operatorname{tr}(M)$,\\
+and $\operatorname{tr}(M)=n-\operatorname{tr}(P)=n-\operatorname{tr}((X^tX)^{-1}X^tX)=n-p$.
+Therefore $\mathbb{E}s^2=\frac{1}{n-p}\mathbb{E}\norm{\widehat{e}}_2^2=\sigma^2$.\\
+\hlt{Structural Commentary}: $M=I_n-P=P_{\operatorname{col}(X)^\perp}$ and $\operatorname{tr}(M)=n-p$.\\
+\hlt{Key Insight}: $\widehat{e}=Me$, so residual variation is noise projected onto the $n-p$ directions orthogonal to $\operatorname{col}(X)$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:standardized-residual-linear-model} \hlt{Standardized Residual}\\
+Let $[n]\defeq\{1,\ldots,n\}$, $Y\in\R^n$, $X\in\R^{n\times p}$ with $\operatorname{rank}(X)=p$, $P=(p_{ij})\defeq X(X^tX)^{-1}X^t$, $\widehat{Y}\defeq PY$, $\widehat{e}\defeq Y-\widehat{Y}$, $s^2\defeq\frac{\norm{\widehat{e}}_2^2}{n-p}$, and $s>0$. The \hlt{standardized residual} is $r_i\defeq\frac{\widehat{e}_i}{s\sqrt{1-p_{ii}}}$ for $i\in[n]$.\\
+\hlt{Key Insight}: Under $\operatorname{Var}(e)=\sigma^2I_n$, $\operatorname{Var}(\widehat{e}_i)=\sigma^2(1-p_{ii})$.
+\end{definition}
+
+\begin{proposition} \label{prop:residuals-uncorrelated-with-fitted-values} \hlt{Residuals Are Uncorrelated with Fitted Values}\\
+Let $Y=X\beta+e$ with $Y,e\in\R^n$, $X\in\R^{n\times p}$, $\beta\in\R^p$, $\operatorname{rank}(X)=p$, and $\operatorname{Var}(e)=\sigma^2I_n$.\\
+Set $P\defeq X(X^tX)^{-1}X^t$, $\widehat{Y}\defeq PY$, and $\widehat{e}\defeq(I_n-P)Y$. Then $\operatorname{Cov}(\widehat{e},\widehat{Y})=0$.
+\begin{proof} Since $\operatorname{Cov}(Y)=\operatorname{Cov}(e)=\sigma^2I_n$ and $P=P^t=P^2$,\\
+$\operatorname{Cov}(\widehat{e},\widehat{Y})=(I_n-P)\operatorname{Cov}(Y)P^t=\sigma^2(I_n-P)P=\sigma^2(P-P^2)=0$.\\
+\hlt{Structural Commentary}: $\widehat{Y}=PY$ and $\widehat{e}=(I_n-P)Y$ are images of $Y$ under complementary projections.\\
+\hlt{Key Insight}: Spherical error covariance makes orthogonal projection components uncorrelated.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:linear-model-numerical-solution-route} \hlt{Solve Least Squares with Factors}\\
+For $X\in\R^{n\times p}$ with $\operatorname{rank}(X)=p$, normal equations use $X^tX\widehat{\beta}=X^tY$ but $\kappa_2(X^tX)=\kappa_2(X)^2$.\\
+Prefer $X=QR$ with $Q^tQ=I_p$ and $R$ nonsingular, giving $\widehat{\beta}=R^{-1}Q^tY$.\\
+Use Cholesky on $X^tX$ only when $X^tX$ is well conditioned.
+\end{perspective}

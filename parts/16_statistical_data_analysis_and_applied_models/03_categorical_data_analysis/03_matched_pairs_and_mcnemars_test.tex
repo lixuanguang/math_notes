@@ -1,0 +1,65 @@
+\subsection{Matched Pairs and McNemar's Test}
+
+Matched categorical data require a different table from unmatched samples. The pair, not the individual measurement, is the independent sampling unit.
+
+\begin{definition} \label{def:matched-pair-binary-table} \hlt{Matched Binary Pair Table}\\
+Let $(Y_k^{(1)},Y_k^{(2)})\in\{0,1\}^2$ for $k\in[n]$, and set $R_k\defeq Y_k^{(1)}+1$, $S_k\defeq Y_k^{(2)}+1$.\\
+For $(r,s)\in\{1,2\}^2$, set $n_{rs}\defeq\#\{k\in[n]:(R_k,S_k)=(r,s)\}$, so $n=\sum\limits_{r=1}^{2}\sum\limits_{s=1}^{2}n_{rs}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Matched Binary Pair Table}: $N\defeq(n_{rs})_{(r,s)\in\{1,2\}^2}$.
+\item \hlt{Concordant Cells}: $C\defeq\{(r,s)\in\{1,2\}^2:r=s\}=\{(1,1),(2,2)\}$; counts $(n_{rs})_{(r,s)\in C}=(n_{11},n_{22})$.
+\item \hlt{Discordant Cells}: $D\defeq\{(r,s)\in\{1,2\}^2:r\ne s\}=\{(1,2),(2,1)\}$; counts $(n_{rs})_{(r,s)\in D}=(n_{12},n_{21})$.
+\end{enumerate}
+\hlt{Key Insight}: $(n_{12},n_{21})$ determines marginal change; $(n_{11},n_{22})$ records agreement.
+\end{definition}
+
+\begin{definition} \label{def:mcnemars-null} \hlt{Marginal Homogeneity for Matched Pairs}\\
+Let $\pi=(\pi_{rs})_{(r,s)\in\{1,2\}^2}\in[0,1]^4$ satisfy $\sum\limits_{r=1}^{2}\sum\limits_{s=1}^{2}\pi_{rs}=1$. Set $\pi_{r\cdot}\defeq\sum\limits_{s=1}^{2}\pi_{rs}$ and $\pi_{\cdot s}\defeq\sum\limits_{r=1}^{2}\pi_{rs}$.\\
+The matched-pair law is \hlt{marginally homogeneous} iff $H_0:(\pi_{1\cdot},\pi_{2\cdot})=(\pi_{\cdot1},\pi_{\cdot2})$, equivalently $\pi_{12}=\pi_{21}$.\\
+\hlt{Key Insight}: $H_0$ constrains only the discordant probabilities $\pi_{12},\pi_{21}$.
+\end{definition}
+
+\begin{method} \label{meth:mcnemars-test} \hlt{McNemar's Test}\\
+Let $n_{rs}\in\N_0$ and cell probabilities $\pi_{rs}$ for $(r,s)\in\{1,2\}^2$, with $n\defeq\sum\limits_{r=1}^{2}\sum\limits_{s=1}^{2}n_{rs}>0$. Set $d\defeq n_{12}+n_{21}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Null}: $H_0:\pi_{12}=\pi_{21}$.
+\item \hlt{MLE Under $H_0$}: $\widehat{\pi}_{11}=\frac{n_{11}}{n}$, $\widehat{\pi}_{22}=\frac{n_{22}}{n}$, and $\widehat{\pi}_{12}=\widehat{\pi}_{21}=\frac{d}{2n}$.
+\item \hlt{Statistic}: If $d>0$, $X^2\defeq\frac{(n_{12}-n_{21})^2}{d}$.
+\item \hlt{Calibration}: If $d$ is large, then $X^2\overset{H_0}{\approx}\chi_1^2$.
+\item \hlt{Decision}: Reject $H_0$ at level $\alpha$ when $\mathbb{P}\{\chi_1^2\geq X^2_{\mathrm{obs}}\}\leq\alpha$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:matched-case-control-binary-exposure} \hlt{Matched Case-Control Pairs}\\
+In a matched case-control study, $85$ cases were each paired with one control, and a binary exposure was recorded for both members of each pair.
+\[
+\begin{array}{c|cc}
+&\multicolumn{2}{c}{\text{Control}}\\
+\text{Case}&\text{Unexposed}&\text{Exposed}\\ \hline
+\text{Unexposed}&37&7\\
+\text{Exposed}&15&26
+\end{array}
+\]
+An unmatched chi-square test treats cases and controls as independent samples.\\
+McNemar's test uses only discordant pairs; here $X^2=(7-15)^2/(7+15)=2.91$ and $p\approx0.09$, so accounting for the matching weakens the evidence of an exposure difference.
+\end{example}
+
+\begin{example} \label{ex:matched-case-crossover-binary-exposure} \hlt{Matched Case-Crossover Exposure}\\
+In a matched case-crossover study, each subject is observed during an event window and a comparable control window, with a binary exposure recorded in both windows.
+\[
+\begin{array}{c|cc|c}
+\text{Event window}&\multicolumn{2}{c|}{\text{Control window}}&\\
+&\text{Exposed}&\text{Unexposed}&\text{Total}\\ \hline
+\text{Exposed}&13&157&170\\
+\text{Unexposed}&24&505&529\\ \hline
+\text{Total}&37&662&699
+\end{array}
+\]
+The discordant counts are $157$ and $24$, so $X^2=(157-24)^2/(157+24)=97.7$, giving strong evidence that exposure prevalence differs between the two windows. This does not by itself establish causation, since time-varying covariates may affect both exposure and event risk.
+\end{example}
+
+\begin{remark} \label{rem:mcnemar-versus-independence} \hlt{Matched Does Not Mean Independent}\\
+McNemar's null hypothesis is marginal homogeneity, not independence of paired responses. Thus the analysis must preserve the matching structure rather than treat the two margins as independent samples.
+\end{remark}

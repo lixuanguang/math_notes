@@ -1,0 +1,44 @@
+\subsection{Shrinkage, Empirical Bayes, and Regularization}
+
+Risk can often be reduced by intentionally pulling noisy estimates toward a structured target.  The price is bias; the benefit is variance reduction.
+
+\begin{definition} \label{def:shrinkage-estimator} \hlt{Shrinkage Estimator}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Input}: let $\widehat{\theta}=\widehat{\theta}(X)$ be a data-based estimator.
+\item \hlt{Target}: choose $\theta_{\mathrm{tar}}$ as a reference value or lower-complexity model.
+\item \hlt{Weight}: let $a(X)\in[0,1]$ control the amount of shrinkage.
+\item \hlt{Estimator}: $\delta(X)\defeq a(X)\widehat{\theta}+\{1-a(X)\}\theta_{\mathrm{tar}}$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:ridge-as-shrinkage} \hlt{Ridge Regression as Shrinkage}\\
+For design matrix $X$, response $y$, and $\lambda\geq0$, ridge regression sets $\widehat{\beta}_\lambda\in\operatorname*{arg\,min}\limits_\beta\{\norm{y-X\beta}_2^2+\lambda\norm{\beta}_2^2\}$.\\
+If $X^\top X$ is invertible, $\widehat{\beta}_\lambda=(X^\top X+\lambda I)^{-1}X^\top y$, shrinking $\widehat{\beta}_{\mathrm{LS}}$ toward $0$ most in weak eigendirections.
+\end{example}
+
+\begin{theorem} \label{thm:james-stein-phenomenon} \hlt{James--Stein Phenomenon}\\
+Let $X\sim\mathcal{N}_d(\theta,\sigma^2I_d)$ with $d\geq3$, known $\sigma^2$, and squared-error risk $R(\theta,\delta)\defeq\mathbb{E}_\theta\norm{\delta(X)-\theta}^2$.\\
+Define $\delta_{\mathrm{JS}}(X)\defeq(1-\frac{(d-2)\sigma^2}{\norm{X}^2})X$ for $X\neq0$, with arbitrary value at $X=0$.\\
+Then $R(\theta,\delta_{\mathrm{JS}})<R(\theta,X)=d\sigma^2$ for every $\theta\in\mathbb{R}^d$.
+\begin{proof} Let $a\defeq(d-2)\sigma^2$ and $g(x)\defeq-\frac{ax}{\norm{x}^2}$, so $\delta_{\mathrm{JS}}(X)=X+g(X)$.\\
+Stein's identity gives $R(\theta,X+g)=d\sigma^2+\mathbb{E}_\theta[\norm{g(X)}^2+2\sigma^2\nabla\cdot g(X)]$.\\
+For $x\neq0$, $\norm{g(x)}^2=\frac{a^2}{\norm{x}^2}$ and $\nabla\cdot g(x)=-\frac{a(d-2)}{\norm{x}^2}$.\\
+Thus $R(\theta,\delta_{\mathrm{JS}})=d\sigma^2-(d-2)^2\sigma^4\mathbb{E}_\theta[\norm{X}^{-2}]<d\sigma^2$, with $\mathbb{E}_\theta[\norm{X}^{-2}]<\infty$ since $d\geq3$.\\
+\hlt{Structural Commentary}: Shrinkage trades bias toward $0$ for enough variance reduction to lower total risk.\\
+\hlt{Key Insight}: In dimension $d\geq3$, the usual estimator $X$ is inadmissible under squared-error loss.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:empirical-bayes-rule} \hlt{Empirical Bayes}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Hierarchy}: $\theta_i\mid\eta\sim\Pi_\eta$ and $X_i\mid\theta_i\sim P_{\theta_i}$ for $i=1,\ldots,m$.
+\item \hlt{Hyperparameter}: estimate $\eta$ by $\widehat{\eta}=\widehat{\eta}(X_1,\ldots,X_m)$ from the marginal law of the data.
+\item \hlt{Plug-in Bayes rule}: use the Bayes rule computed under $\Pi_{\widehat{\eta}}$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:regularization-decision-theory} \hlt{Regularization as Decision-Theoretic Structure}\\
+Penalization, shrinkage, and empirical Bayes impose structure to reduce risk, typically by trading increased bias for reduced variance. The criterion is $R(\theta,\delta)$, not unbiasedness.
+\end{remark}

@@ -1,0 +1,112 @@
+\subsection{Quantile and Shape Displays}
+
+Distributional shape can be read from cumulative displays, density displays, or quantile comparisons.  These views emphasize different questions: cumulative proportion, local concentration, and relative change between two distributions.
+
+\begin{definition} \label{def:qq-plot} \hlt{Quantile--Quantile Plot}\\
+Let $F$ and $G$ be continuous strictly increasing CDFs with quantile inverses $F^{-1},G^{-1}:(0,1)\to\R$. For equal-sized batches $x_1,\ldots,x_n$ and $y_1,\ldots,y_n$, let $x_{(1)}\leq\cdots\leq x_{(n)}$ and $y_{(1)}\leq\cdots\leq y_{(n)}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Q--Q Plot}: $Q_{F,G}\defeq\{(F^{-1}(p),G^{-1}(p)):0<p<1\}\subseteq\R^2$.
+\item \hlt{Empirical Q--Q Plot}: $Q_{x,y}^{(n)}\defeq\{(x_{(i)},y_{(i)}):1\leq i\leq n\}\subseteq\R^2$.
+\end{enumerate}
+\hlt{Key Insight}: $(u,v)\in Q_{F,G}$ implies $F(u)=G(v)$, so plotted pairs match common cumulative probability levels.
+\end{definition}
+
+\begin{proposition} \label{prop:qq-location-scale-effects} \hlt{Location and Scale Effects in Q--Q Plots}\\
+Let $F,G$ be continuous strictly increasing CDFs.\\
+Set $x_p\defeq F^{-1}(p)$, $y_p\defeq G^{-1}(p)$ for $p\in(0,1)$, and $Q_{F,G}\defeq\{(x_p,y_p):0<p<1\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Location}: If $y_p=x_p+h$ $\forall p\in(0,1)$ with $h\in\R$, then $G(y)=F(y-h)$ $\forall y\in\R$, $Q_{F,G}\subseteq\{(x,y):y=x+h\}$.
+\item \hlt{Scale}: If $y_p=cx_p$ $\forall p\in(0,1)$ with $c>0$, then $G(y)=F(\frac{y}{c})$ $\forall y\in\R$, $Q_{F,G}\subseteq\{(x,y):y=cx\}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Location}: Fix $y\in\R$ and set $p\defeq G(y)$. Then $p\in(0,1)$, $y=y_p=x_p+h$, and $x_p=y-h$,\\
+so $G(y)=p=F(x_p)=F(y-h)$. Also $(x_p,y_p)\in Q_{F,G}$ implies $y_p=x_p+h$.
+\item \hlt{Scale}: Fix $y\in\R$ and set $p\defeq G(y)$. Then $p\in(0,1)$, $y=y_p=cx_p$, and $x_p=\frac{y}{c}$,\\
+so $G(y)=p=F(x_p)=F(\frac{y}{c})$. Also $(x_p,y_p)\in Q_{F,G}$ implies $y_p=cx_p$.
+\end{enumerate}
+\hlt{Structural Commentary}: A Q--Q plot is the graph of the quantile transport $F^{-1}(p)\mapsto G^{-1}(p)$.\\
+\hlt{Key Insight}: Straight Q--Q lines encode location shifts and scale changes.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_qq_effects.tikz}
+  \caption{Q--Q lines: blue $y=x+h$ for location shift, green $y=cx$ for scale change.}
+  \label{fig:eda-qq-effects}
+\end{figure}
+
+\begin{example} \label{ex:normal-and-exponential-qq-lines} \hlt{Normal and Exponential Q--Q Lines}\\
+For $p\in(0,1)$, set $x_p\defeq F^{-1}(p)$ and $y_p\defeq G^{-1}(p)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Normal Location}: If $F=N(0,1)$ and $G=N(1,1)$, then $y_p=x_p+1$, so the Q--Q line is $y=x+1$.
+\item \hlt{Normal Location--Scale}: If $F=N(0,1)$ and $G=N(1,4)$, then $y_p=1+2x_p$, so the Q--Q line is $y=1+2x$.
+\item \hlt{Exponential Rates}: If $F=\operatorname{Exp}(\lambda_1)$ and $G=\operatorname{Exp}(\lambda_2)$, then $x_p=-\frac{\log(1-p)}{\lambda_1}$ and $y_p=-\frac{\log(1-p)}{\lambda_2}=\frac{\lambda_1}{\lambda_2}x_p$, so the Q--Q line is $y=\frac{\lambda_1}{\lambda_2}x$.
+\end{enumerate}
+\end{example}
+
+\begin{method} \label{meth:interpolated-empirical-quantile} \hlt{Interpolated Empirical Quantiles}\\
+Let $X_{(1)}\leq\cdots\leq X_{(n)}$ and set $p_k\defeq\frac{k}{n+1}$ for $1\leq k\leq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Grid}: Assign $X_{(k)}$ to probability $p_k$.
+\item \hlt{Interpolation}: If $p_k\leq p\leq p_{k+1}$ for $1\leq k<n$, set $\lambda\defeq\frac{p-p_k}{p_{k+1}-p_k}=(n+1)p-k$, $\widehat{x}_p\defeq(1-\lambda)X_{(k)}+\lambda X_{(k+1)}$.
+\item \hlt{Q--Q Use}: For unequal samples, evaluate both interpolated quantile functions on a common grid $p\in(0,1)$.
+\end{enumerate}
+\end{method}
+
+\begin{proposition} \label{prop:sample-quantile-variance-delta-method} \hlt{Approximate Variance of a Sample Quantile}\\
+Let $Y_1,\ldots,Y_n$ be iid with continuous CDF $F$ and density $f$. Fix $p\in(0,1)$, set $x_p\defeq F^{-1}(p)$ with $f(x_p)>0$, choose $k$ with $\frac{k}{n+1}\approx p$, and put $\widehat{x}_p\defeq Y_{(k)}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Probability Scale}: $U_{(k)}\defeq F(Y_{(k)})$ has kth uniform order-statistic law. $\operatorname{Var}(U_{(k)})=\frac{k(n+1-k)}{(n+1)^2(n+2)}\approx\frac{p(1-p)}{n}$.
+\item \hlt{Quantile Scale}: $\operatorname{Var}(\widehat{x}_p)\approx\frac{p(1-p)}{n f(x_p)^2}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By probability integral transform, $U_i\defeq F(Y_i)$ are iid $\operatorname{Uniform}(0,1)$, $U_{(k)}=F(Y_{(k)})$.\\
+Theorem \ref{thm:kth-order-statistic-density} gives the stated exact variance, hence $\operatorname{Var}(U_{(k)})\approx\frac{p(1-p)}{n}$ when $\frac{k}{n+1}\approx p$.
+\item Let $g\defeq F^{-1}$. Since $g'(p)=\frac{1}{f(x_p)}$ and $\widehat{x}_p=g(U_{(k)})$, delta approximation $g(U_{(k)})\approx g(p)+g'(p)(U_{(k)}-p)$\\
+gives $\operatorname{Var}(\widehat{x}_p)\approx g'(p)^2\operatorname{Var}(U_{(k)})\approx\frac{p(1-p)}{n f(x_p)^2}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Quantile variance is probability-scale variance multiplied by $(F^{-1})'(p)^2$.\\
+\hlt{Key Insight}: Low density near $x_p$ inflates sample-quantile variability by $1/f(x_p)^2$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:histogram-density-and-stem-leaf-display} \hlt{Histogram, Density Display, and Stem-and-Leaf Plot}\\
+Let $x_1,\ldots,x_n\in\R$ be data.  For disjoint intervals $B_1,\ldots,B_m$ with widths $w_j>0$.\\
+Set $N_j\defeq\#\{i\in\{1,\ldots,n\}:x_i\in B_j\}$. Let $K$ be a kernel, $h>0$, and $b>0$ be a chosen scale.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Histogram}: $H_j^c\defeq N_j$, $H_j^p\defeq \frac{N_j}{n}$, or $H_j^d\defeq \frac{N_j}{nw_j}$ on $B_j$.
+\item \hlt{Density Display}: $\widehat f_h:\R\to[0,\infty)$, $\widehat f_h(x)\defeq(nh)^{-1}\sum\limits_{i=1}^n K(\frac{x-x_i}{h})$.
+\item \hlt{Stem-and-Leaf Plot}: $(s_i,\ell_i)$ satisfies $x_i=bs_i+\ell_i$, $s_i\in\Z$, $\ell_i\in[0,b)$.\\
+Entries with common $s_i$ are printed together in increasing $s_i$.
+\end{enumerate}
+\hlt{Structural Commentary}: For density-scaled heights $H_j^d=\frac{N_j}{nw_j}$, $\sum\limits_j H_j^dw_j=1$ when the bins cover the sample.
+\hlt{Key Insight}: Smaller $w_j$ or $h$ retains more local variation; larger $w_j$ or $h$ increases smoothing.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_histogram_kde_bandwidth.tikz}
+  \caption{Shape displays: narrow bins at left; small $h$ (blue) is rougher than large $h$ (green).}
+  \label{fig:eda-histogram-kde-bandwidth}
+\end{figure}
+
+\begin{remark} \label{rem:shape-displays-lose-different-information} \hlt{What Shape Displays Preserve}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{ECDF}: Preserves ranks and supports direct quantile reading.
+\item \hlt{Histogram}: Preserves bin counts $(N_j)$, not exact values.
+\item \hlt{Kernel Estimate}: Preserves smoothed local mass; bandwidth $h$ controls resolution.
+\item \hlt{Stem--Leaf}: Preserves coarse shape and recoverable numerical values.
+\end{enumerate}
+\end{remark}

@@ -1,0 +1,40 @@
+\subsection{Sparse High-Dimensional Inference}
+
+High-dimensional statistics studies regimes where the number of candidate parameters is comparable to, or much larger than, the sample size.  Estimation is possible only after adding structure.
+
+\begin{definition} \label{def:sparse-vector-and-high-dimensional-regime} \label{def:lasso-estimator} \label{def:restricted-eigenvalue-condition} \hlt{Sparsity, Lasso, and Restricted Eigenvalues}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{High dimension}: A sequence has dimension $p=p_n$, often with $p_n\gg n$.
+\item \hlt{Sparsity}: For $\theta\in\R^p$, $\norm{\theta}_0\defeq|\{j:\theta_j\neq0\}|$; $\theta$ is $s$-sparse if $\norm{\theta}_0\leq s$.
+\item \hlt{Lasso}: For $y=X\beta_0+\varepsilon$ and $\lambda\geq0$, $\widehat{\beta}_\lambda\in\operatorname*{arg\,min}\limits_{\beta\in\R^p}\{(2n)^{-1}\norm{y-X\beta}_2^2+\lambda\norm{\beta}_1\}$.\\
+The convex $\ell^1$ penalty promotes sparsity.
+\item \hlt{Restricted eigenvalue}: For $S\subseteq[p]\defeq\{1,\ldots,p\}$, $C(S)\defeq\{v:\norm{v_{S^c}}_1\leq3\norm{v_S}_1\}$,\\
+and $\kappa>0$, $X$ satisfies $\operatorname{RE}(S,\kappa)$ if $n^{-\frac{1}{2}}\norm{Xv}_2\geq\kappa\norm{v_S}_2$ for all $v\in C(S)$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:lasso-basic-rate-form} \hlt{Basic Lasso Rate Form}\\
+Let $y=X\beta_0+\varepsilon$, $S\defeq\operatorname{supp}(\beta_0)$, $|S|\leq s$, and let $\widehat{\beta}_\lambda$ be any lasso solution. If $X$ satisfies $\operatorname{RE}(S,\kappa)$ and $\lambda>0$ with $\lambda\geq2\norm{\frac{X^\top\varepsilon}{n}}_\infty$, then $n^{-1}\norm{X(\widehat{\beta}_\lambda-\beta_0)}_2^2\leq\frac{9s\lambda^2}{\kappa^2}$ and $\norm{\widehat{\beta}_\lambda-\beta_0}_1\leq\frac{12s\lambda}{\kappa^2}$.
+\begin{proof} Set $\delta\defeq\widehat{\beta}_\lambda-\beta_0$. The lasso optimality inequality gives $(2n)^{-1}\norm{X\delta}_2^2+\lambda\norm{\beta_0+\delta}_1\leq n^{-1}\varepsilon^\top X\delta+\lambda\norm{\beta_0}_1$.\\
+Since $\lambda\geq2\norm{\frac{X^\top\varepsilon}{n}}_\infty$, $n^{-1}\varepsilon^\top X\delta\leq\frac{\lambda}{2}\norm{\delta}_1$, and since $\beta_{0,S^c}=0$, $\norm{\beta_0}_1-\norm{\beta_0+\delta}_1\leq\norm{\delta_S}_1-\norm{\delta_{S^c}}_1$.\\
+Thus $(2n)^{-1}\norm{X\delta}_2^2+\frac{\lambda}{2}\norm{\delta_{S^c}}_1\leq\frac{3\lambda}{2}\norm{\delta_S}_1$, so $\delta\in C(S)$. By $\operatorname{RE}(S,\kappa)$, $\norm{\delta_S}_1\leq\sqrt{s}\norm{\delta_S}_2\leq\frac{\sqrt{s}\norm{X\delta}_2}{\kappa\sqrt{n}}$.\\
+Hence $n^{-1}\norm{X\delta}_2^2\leq\frac{3\lambda\sqrt{s}\norm{X\delta}_2}{\kappa\sqrt{n}}$, giving $n^{-1}\norm{X\delta}_2^2\leq\frac{9s\lambda^2}{\kappa^2}$; also $\norm{\delta}_1\leq4\norm{\delta_S}_1\leq\frac{12s\lambda}{\kappa^2}$.\\
+\hlt{Structural Commentary}: Basic inequality plus RE converts score control into prediction and $\ell^1$ error bounds.\\
+\hlt{Key Insight}: The $\ell^1$ penalty forces the error into the RE cone.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:false-discovery-rate} \hlt{False Discovery Rate}\\
+For a multiple-testing rule, let $R$ be total rejections and $V$ false rejections.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{False discovery proportion}: $\operatorname{FDP}\defeq\frac{V}{\max(R,1)}$.
+\item \hlt{False discovery rate}: $\operatorname{FDR}\defeq\mathbb{E}[\operatorname{FDP}]=\mathbb{E}[\frac{V}{\max(R,1)}]$.
+\item \hlt{Control}: FDR bounds the expected false-rejection proportion among discoveries.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:high-dimensional-cross-reference-optimization} \hlt{Statistical and Computational Structure}\\
+High-dimensional inference couples concentration bounds, convex optimization, and selection error control; computation and statistics are part of the same guarantee.
+\end{remark}

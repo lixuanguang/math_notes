@@ -1,0 +1,74 @@
+\subsection{Odds Ratios and Case-Control Sampling}
+
+Odds ratios summarize association in a binary exposure--binary outcome table.  They are especially useful because the same cross-product ratio can be estimated under several sampling designs, including retrospective case-control designs where risks themselves cannot be estimated.
+
+\begin{definition} \label{def:odds-and-odds-ratio} \hlt{Odds and Odds Ratio}\\
+Let $A$ satisfy $0<\mathbb{P}(A)<1$.\\
+Let $X$ and $D$ be binary exposure and disease events with $0<\mathbb{P}(X)<1$ and $0<\mathbb{P}(D\mid X),\mathbb{P}(D\mid\overline{X})<1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Odds}: $\operatorname{odds}(A)\defeq\frac{\mathbb{P}(A)}{1-\mathbb{P}(A)}$.
+\item \hlt{Odds ratio}: $\Delta\defeq\frac{\operatorname{odds}(D\mid X)}{\operatorname{odds}(D\mid\overline{X})}$.
+\end{enumerate}
+\hlt{Structural Commentary}: If $o=\operatorname{odds}(A)$, then $\mathbb{P}(A)=\frac{o}{1+o}$; $p\mapsto p/(1-p)$ is a bijection $(0,1)\to(0,\infty)$.
+\end{definition}
+
+\begin{proposition} \label{prop:odds-ratio-cross-product} \hlt{Cross-Product Formula}\\
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space, let $X,D\in\mathcal{F}$, and set $X_0\defeq\overline{X}$, $X_1\defeq X$, $D_0\defeq\overline{D}$, $D_1\defeq D$.\\
+Let $\pi_{ij}\defeq\mathbb{P}(X_i\cap D_j)>0$ for $i,j\in\{0,1\}$, with margins $\pi_{i\cdot}\defeq\pi_{i0}+\pi_{i1}$ and $\pi_{\cdot j}\defeq\pi_{0j}+\pi_{1j}$.
+\[
+\begin{array}{c|cc|c}
+&\overline{D}&D&\\ \hline
+\overline{X}&\pi_{00}&\pi_{01}&\pi_{0\cdot}\\
+X&\pi_{10}&\pi_{11}&\pi_{1\cdot}\\ \hline
+&\pi_{\cdot0}&\pi_{\cdot1}&1
+\end{array}
+\]
+With $\Delta\defeq\frac{\operatorname{odds}(D\mid X)}{\operatorname{odds}(D\mid\overline{X})}$, the cross-product identity is $\Delta = \frac{\pi_{11}\pi_{00}}{\pi_{01}\pi_{10}}$.
+\begin{proof} Since $\pi_{1\cdot}=\pi_{10}+\pi_{11}$ and $\pi_{0\cdot}=\pi_{00}+\pi_{01}$, $\mathbb{P}(D\mid X)=\frac{\pi_{11}}{\pi_{1\cdot}}$ and $1-\mathbb{P}(D\mid X)=\frac{\pi_{10}}{\pi_{1\cdot}}$, so $\operatorname{odds}(D\mid X)=\frac{\pi_{11}}{\pi_{10}}$.\\
+Similarly, $\operatorname{odds}(D\mid\overline{X})=\frac{\pi_{01}}{\pi_{00}}$. Hence $\Delta=\frac{\frac{\pi_{11}}{\pi_{10}}}{\frac{\pi_{01}}{\pi_{00}}}=\frac{\pi_{11}\pi_{00}}{\pi_{01}\pi_{10}}$.\\
+\hlt{Structural Commentary}: $\pi_{1\cdot},\pi_{0\cdot}$ enter conditional probabilities but cancel after passage to odds.\\
+\hlt{Key Insight}: $\Delta$ equals diagonal product $\pi_{11}\pi_{00}$ divided by off-diagonal product $\pi_{01}\pi_{10}$.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:odds-ratio-by-sampling-design} \hlt{Estimating an Odds Ratio by Design}\\
+Let $N=(n_{ij})_{i,j\in\{0,1\}}$ be a $2\times2$ table for $(X_i,D_j)$, where $X_1\defeq X$, $X_0\defeq\overline{X}$, $D_1\defeq D$, and $D_0\defeq\overline{D}$.\\
+Assume $n_{ij}>0$, set $n_{i\cdot}\defeq n_{i0}+n_{i1}$, $n_{\cdot j}\defeq n_{0j}+n_{1j}$, $n\defeq\sum\limits_{i=0}^{1}\sum\limits_{j=0}^{1}n_{ij}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Simple Random Sampling}: $\widehat{\pi}_{ij}\defeq\frac{n_{ij}}{n}$ estimates $\pi_{ij}$; hence $\widehat{\Delta}\defeq\frac{n_{00}n_{11}}{n_{01}n_{10}}$ estimates $\Delta$.
+\item \hlt{Prospective Sampling}: $n_{0\cdot},n_{1\cdot}$ fixed; $\frac{n_{01}}{n_{0\cdot}}$, $\frac{n_{11}}{n_{1\cdot}}$ estimate $\mathbb{P}(D\mid\overline{X})$, $\mathbb{P}(D\mid X)$; $\mathbb{P}(X)$ not identified.
+\item \hlt{Retrospective Case-Control Sampling}: $n_{\cdot0},n_{\cdot1}$ are fixed; disease risks are not identified,\\
+but $\widehat{\Delta}=\frac{n_{11}}{n_{01}}/\frac{n_{10}}{n_{00}}$ is estimable from exposure odds.
+\end{enumerate}
+\hlt{Key Insight}: Design-fixed margins cancel in $\widehat{\Delta}$, so odds ratio is estimable even when risks or margins are not.
+\end{method}
+
+\begin{example} \label{ex:unmatched-case-control-odds-ratio} \hlt{Unmatched Case-Control Odds Ratio}\\
+Consider an unmatched case-control table with binary exposure:
+\[
+\begin{array}{c|cc}
+&\text{Exposed}&\text{Unexposed}\\ \hline
+\text{Case}&67&34\\
+\text{Control}&43&64
+\end{array}
+\]
+The estimated odds ratio is $\widehat{\Delta}=\frac{67\cdot64}{43\cdot34)}=2.93$, indicating a positive exposure--disease association.
+\end{example}
+
+\begin{method} \label{meth:parametric-bootstrap-odds-ratio-standard-error} \hlt{Parametric Bootstrap for an Odds-Ratio Standard Error}\\
+Let $a,b,c,d\in\N$ denote the observed counts in rows $D,\overline{D}$ and columns $X,\overline{X}$: $a\defeq n_{DX}$, $b\defeq n_{D\overline{X}}$, $c\defeq n_{\overline{D}X}$, and $d\defeq n_{\overline{D}\overline{X}}$. Set $m_D\defeq a+b$, $m_{\overline{D}}\defeq c+d$, $\widehat{p}_D\defeq\frac{a}{m_D}$, $\widehat{p}_{\overline{D}}\defeq\frac{c}{m_{\overline{D}}}$, and $\widehat{\Delta}\defeq\frac{ad}{bc}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Bootstrap Law}: For $r\in[R]$, draw independently $A_r^{\ast}\sim\operatorname{Binomial}(m_D,\widehat{p}_D)$ and $C_r^{\ast}\sim\operatorname{Binomial}(m_{\overline{D}},\widehat{p}_{\overline{D}})$.
+\item \hlt{Replicate}: If $0<A_r^{\ast}<m_D$ and $0<C_r^{\ast}<m_{\overline{D}}$, set $\widehat{\Delta}_r^{\ast}\defeq\frac{A_r^{\ast}(m_{\overline{D}}-C_r^{\ast})}{(m_D-A_r^{\ast})C_r^{\ast}}$.
+\item \hlt{Standard Error}: With $\overline{\Delta}^{\ast}\defeq\frac{1}{R}\sum\limits_{r=1}^{R}\widehat{\Delta}_r^{\ast}$, set $\widehat{\operatorname{se}}_{\ast}(\widehat{\Delta})\defeq\left(\frac{1}{R-1}\sum\limits_{r=1}^{R}(\widehat{\Delta}_r^{\ast}-\overline{\Delta}^{\ast})^2\right)^{1/2}$.
+\end{enumerate}
+\item \hlt{Key Insight}: Resample exposure counts conditional on fixed row totals; $\operatorname{sd}\{(\widehat{\Delta}_r^{\ast})_{r\in[R]}\}$ estimates $\operatorname{se}(\widehat{\Delta})$.
+\end{method}
+
+\begin{remark} \label{rem:odds-ratio-risk-and-retrospective-caution} \hlt{Odds Ratios Are Not Automatically Risks}\\
+The odds ratio $\Delta=\operatorname{odds}(D\mid X)/\operatorname{odds}(D\mid\overline{X})$ differs from risk contrasts such as $\mathbb{P}(D\mid X)-\mathbb{P}(D\mid\overline{X})$.\\
+In retrospective sampling, $n_{\cdot0},n_{\cdot1}$ are design-fixed, absolute risks are not identified without population margins; $\Delta$ remains estimable because those margins cancel in the cross-product ratio.
+\end{remark}

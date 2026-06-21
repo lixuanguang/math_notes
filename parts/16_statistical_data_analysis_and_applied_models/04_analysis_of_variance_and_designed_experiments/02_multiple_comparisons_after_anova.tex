@@ -1,0 +1,49 @@
+\subsection{Multiple Comparisons After ANOVA}
+
+The one-way $F$ test assesses $H_0:\mu_1=\cdots=\mu_I$; after rejection, inference targets contrasts $\mu_a-\mu_b$ with error control over the chosen comparison family.
+
+\begin{definition} \label{def:studentized-range-quantile} \hlt{Studentized Range Quantile}\\
+Let $Q_{I,\nu}$ denote a random variable with the studentized range distribution for $I$ treatment means and $\nu$ error degrees of freedom.
+The \hlt{studentized range quantile} is $q_{I,\nu}(\alpha)\defeq \inf\{q\in\R:\mathbb{P}(Q_{I,\nu}>q)\leq \alpha\}$.\\
+\hlt{Structural Commentary}: Balanced Tukey comparisons use pooled scale $S_p$.
+\end{definition}
+
+\begin{method} \label{meth:tukey-pairwise-mean-comparisons} \hlt{Tukey Pairwise Comparisons}\\
+In a balanced normal one-way layout, let $\mathcal{P}\defeq\{(a,b):1\leq a<b\leq I\}$, $\nu\defeq I(J-1)$, and $h_\alpha\defeq q_{I,\nu}(\alpha)S_p/\sqrt J$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(a,b)\in\mathcal{P}$, the simultaneous $100(1-\alpha)\%$ confidence interval for $\mu_a-\mu_b$ is $(\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot})\pm h_\alpha$.
+\item Reject $H_{0,ab}:\mu_a=\mu_b$ iff $\abs{\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot}}>h_\alpha$.
+\end{enumerate}
+Simultaneity over $\mathcal{P}$ uses the studentized range cutoff.
+\end{method}
+
+\begin{example} \label{ex:tukey-pairwise-calculation} \hlt{Generic Tukey Pairwise Calculation}\\
+Consider a balanced one-way layout with $I=7$, $J=10$, $S_p=.06$, and ordered sample means\\
+$(\overline{Y}_{1\cdot},\overline{Y}_{3\cdot},\overline{Y}_{7\cdot},\overline{Y}_{2\cdot},\overline{Y}_{5\cdot},\overline{Y}_{6\cdot},\overline{Y}_{4\cdot})=(4.062,4.003,3.998,3.997,3.957,3.955,3.920)$.\\
+With $q_{7,60}(.05)=4.31$, the Tukey half-width is $h_{.05}=4.31(.06)/\sqrt{10}\approx.082$.\\
+Rejected pairs at simultaneous level $.05$ are $(1,4),(1,5),(1,6),(3,4)$; remaining pairwise nulls not rejected.
+\end{example}
+
+\begin{method} \label{meth:bonferroni-multiple-mean-comparisons} \hlt{Bonferroni Pairwise Comparisons}\\
+Let $\mathcal{C}\subseteq\{(a,b):1\leq a<b\leq I\}$ be the planned pairwise family with $|\mathcal{C}|=k$.\\
+Set $\nu\defeq N-I$ and $h_{ab}\defeq t_{\nu,1-\alpha/(2k)}S_p\sqrt{1/J_a+1/J_b}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(a,b)\in\mathcal{C}$, the Bonferroni confidence interval for $\mu_a-\mu_b$ is $(\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot})\pm h_{ab}$.
+\item Reject $H_{0,ab}:\mu_a=\mu_b$ iff $\abs{\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot}}>h_{ab}$.
+\end{enumerate}
+The family satisfies $\mathrm{FWER}\leq\alpha$ and allows unequal treatment sizes through $J_a,J_b$.
+\end{method}
+
+\begin{example} \label{ex:bonferroni-pairwise-calculation} \hlt{Generic Bonferroni Pairwise Calculation}\\
+For $I=7$ treatments and $k=\binom{7}{2}=21$ planned pairwise comparisons at $\alpha=.05$, take $t_{60,1-.05/(2\cdot21)}\approx3.16$.\\
+The resulting simultaneous $95\%$ Bonferroni half-width is $h\approx.085$.\\
+Rejected pairwise nulls are $(1,4),(1,5),(1,6)$; all other planned pairwise nulls are not rejected.
+\end{example}
+
+\begin{remark} \label{rem:multiple-comparisons-after-global-test} \hlt{The Global Test Does Not Name the Difference}\\
+Rejecting $H_0:\mu_1=\cdots=\mu_I$ establishes only $\exists\,a<b$ with $\mu_a\neq\mu_b$.\\
+It does not identify such pairs or provide simultaneous sign guarantees.\\
+Select Tukey, Bonferroni, or planned-contrast procedures according to the preassigned comparison family.
+\end{remark}

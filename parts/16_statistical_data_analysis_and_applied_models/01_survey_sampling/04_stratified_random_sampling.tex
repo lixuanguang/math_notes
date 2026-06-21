@@ -1,0 +1,124 @@
+\subsection{Stratified Random Sampling}
+
+Stratified sampling partitions the population into subpopulations and samples
+within each one.  It can guarantee representation of important groups and can
+reduce variance when strata are internally homogeneous or have different means.
+
+\begin{definition} \label{def:stratified-sampling-notation} \hlt{Strata and the Stratified Mean}\\
+Let $U$ be a finite population, $L\geq1$, nonempty subsets $U_1,\ldots,U_L\subseteq U$, $N_l\defeq|U_l|$, $N\defeq\sum\limits_{l=1}^{L}N_l$,\\
+and fixed values $x_{il}\in\R$ for $i=1,\ldots,N_l$, $l=1,\ldots,L$.\\
+For stratum samples of sizes $n_l$, write sampled values as $X_{il}$, $i=1,\ldots,n_l$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Strata}: $U=\bigsqcup\limits_{l=1}^{L}U_l$.
+\item \hlt{Stratum weight}: $W_l\defeq \frac{N_l}{N}$.
+\item \hlt{Stratum mean}: $\mu_l\defeq \frac{1}{N_l}\sum\limits_{i=1}^{N_l}x_{il}$.
+\item \hlt{Stratum variance}: $\sigma_l^2\defeq \frac{1}{N_l}\sum\limits_{i=1}^{N_l}(x_{il}-\mu_l)^2$.
+\item \hlt{Stratum sample mean}: $\overline{X}_l\defeq \frac{1}{n_l}\sum\limits_{i=1}^{n_l}X_{il}$.
+\item \hlt{Stratified mean}: $\overline{X}_s\defeq\sum\limits_{l=1}^{L}W_l\overline{X}_l$.
+\end{enumerate}
+\hlt{Structural Commentary}: With $\mu\defeq \frac{1}{N}\sum\limits_{l=1}^{L}\sum\limits_{i=1}^{N_l}x_{il}$, $\mu=\sum\limits_{l=1}^{L}W_l\mu_l$.
+\end{definition}
+
+\begin{theorem} \label{thm:stratified-mean-unbiased-variance} \hlt{Mean and Variance of the Stratified Estimate}\\
+Let $L\geq1$, $N_l>1$, $1\leq n_l\leq N_l$, $N\defeq\sum\limits_{l=1}^{L}N_l$, $W_l\defeq\frac{N_l}{N}$, and $\lambda_l\defeq\frac1{n_l}(1-\frac{n_l-1}{N_l-1})$.\\
+For fixed $x_{il}\in\R$, $i=1,\ldots,N_l$, $l=1,\ldots,L$, set $\mu_l\defeq\frac1{N_l}\sum\limits_{i=1}^{N_l}x_{il}$, $\sigma_l^2\defeq\frac1{N_l}\sum\limits_{i=1}^{N_l}(x_{il}-\mu_l)^2$, and $\mu\defeq\sum\limits_{l=1}^{L}W_l\mu_l$.\\
+Independently sample $S_l\sim\operatorname{Unif}\{s\subseteq\{1,\ldots,N_l\}:|s|=n_l\}$; for random orderings $(J_{il})_{i=1}^{n_l}$ of $S_l$, set $X_{il}\defeq x_{J_{il},l}$, $\overline{X}_l\defeq\frac1{n_l}\sum\limits_{i=1}^{n_l}X_{il}$, and $\overline{X}_s\defeq\sum\limits_{l=1}^{L}W_l\overline{X}_l$. Let $\mathbb{E}_d,\operatorname{Var}_d$ denote design moments.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: $\mathbb{E}_d\overline{X}_s=\mu$.
+\item \hlt{Variance}: $\operatorname{Var}_d(\overline{X}_s)=\sum\limits_{l=1}^{L}W_l^2\lambda_l\sigma_l^2$.
+\item \hlt{Small fractions}: if $n_l/N_l\ll1$ for all $l$, then $\operatorname{Var}_d(\overline{X}_s)\approx\sum\limits_{l=1}^{L}W_l^2\frac{\sigma_l^2}{n_l}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $a\in\{1,\ldots,N_l\}$, $\mathbb{P}_d(J_{il}=a)=1/N_l$, hence $\mathbb{E}_dX_{il}=\mu_l$, $\mathbb{E}_d\overline{X}_l=\mu_l$, and $\mathbb{E}_d\overline{X}_s=\sum\limits_{l=1}^{L}W_l\mu_l=\mu$.
+\item Independence across strata gives $\operatorname{Var}_d(\overline{X}_s)=\sum\limits_{l=1}^{L}W_l^2\operatorname{Var}_d(\overline{X}_l)$.\\
+For stratum $l$, let $(Y_{1,l},\ldots,Y_{N_l,l})$ uniformly order $\{x_{il}:1\leq i\leq N_l\}$, put $\gamma_l\defeq\operatorname{Cov}_d(Y_{a,l},Y_{b,l})$ for $a\neq b$.\\
+As $\sum\limits_{a=1}^{N_l}Y_{a,l}$ is fixed, $0=N_l\sigma_l^2+N_l(N_l-1)\gamma_l$, so $\gamma_l=-\frac{\sigma_l^2}{N_l-1}$, $\operatorname{Var}_d(\overline{X}_l)=\frac1{n_l^2}(n_l\sigma_l^2+n_l(n_l-1)\gamma_l)=\lambda_l\sigma_l^2$.
+\item If $n_l/N_l\ll1$, then $1-\frac{n_l-1}{N_l-1}\approx1$, so $\lambda_l\sigma_l^2\approx\sigma_l^2/n_l$.
+\end{enumerate}
+\hlt{Structural Commentary}: Stratified estimation is a weighted sum of independent within-stratum estimators.\\
+\hlt{Key Insight}: Independent strata make variance add as $\sum_l W_l^2\operatorname{Var}_d(\overline{X}_l)$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:stratified-total-and-estimated-variance} \hlt{Totals and Estimated Variances}\\
+Let $L\geq1$, $N_l>1$, $1<n_l\leq N_l$, $N\defeq\sum\limits_{l=1}^{L}N_l$, $W_l\defeq\frac{N_l}{N}$, and $f_l\defeq n_l/N_l$.\\
+Fix $x_{il}\in\R$ for $i=1,\ldots,N_l$, $l=1,\ldots,L$, set $\mu_l\defeq\frac1{N_l}\sum\limits_{i=1}^{N_l}x_{il}$, $\mu\defeq\sum\limits_{l=1}^{L}W_l\mu_l$, and $\tau\defeq N\mu$.\\
+Assume independently $S_l\sim\operatorname{Unif}\{s\subseteq\{1,\ldots,N_l\}:|s|=n_l\}$; for random orderings $(J_{il})_{i=1}^{n_l}$ of $S_l$.\\
+Set $X_{il}\defeq x_{J_{il},l}$, $\overline{X}_l\defeq\frac1{n_l}\sum\limits_{i=1}^{n_l}X_{il}$, $\overline{X}_s\defeq\sum\limits_{l=1}^{L}W_l\overline{X}_l$, $T_s\defeq N\overline{X}_s$, and $s_l^2\defeq\frac1{n_l-1}\sum\limits_{i=1}^{n_l}(X_{il}-\overline{X}_l)^2$.\\
+For $0<\alpha<1$, let $z(\frac{\alpha}{2})\defeq\Phi^{-1}(1-\frac{\alpha}{2})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Total moments}: $\mathbb{E}_dT_s=\tau$ and $\operatorname{Var}_d(T_s)=N^2\operatorname{Var}_d(\overline{X}_s)$.
+\item \hlt{Estimated mean variance}: $s_{\overline{X}_s}^2\defeq\sum\limits_{l=1}^{L}W_l^2(1-f_l)\frac{s_l^2}{n_l}$.
+\item \hlt{Intervals}: $\operatorname{CI}_{1-\alpha}(\mu)=\overline{X}_s\pm z(\frac{\alpha}{2})s_{\overline{X}_s}$ and $\operatorname{CI}_{1-\alpha}(\tau)=T_s\pm z(\frac{\alpha}{2})Ns_{\overline{X}_s}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $T_s=N\overline{X}_s$ and $\tau=N\mu$, Theorem \ref{thm:stratified-mean-unbiased-variance} gives $\mathbb{E}_dT_s=N\mu=\tau$ and $\operatorname{Var}_d(T_s)=N^2\operatorname{Var}_d(\overline{X}_s)$.
+\item Let $S_l^2\defeq\frac{1}{N_l-1}\sum\limits_{i=1}^{N_l}(x_{il}-\mu_l)^2$. Then $\operatorname{Var}_d(\overline{X}_l)=\frac{(1-f_l)S_l^2}{n_l}$, $\mathbb{E}_d s_l^2=S_l^2$, so $S_l^2\mapsto s_l^2$; $s_{\overline{X}_s}^2=\sum\limits_{l=1}^{L}W_l^2(1-f_l)\frac{s_l^2}{n_l}$.
+\item With $\frac{\overline{X}_s-\mu}{s_{\overline{X}_s}}\approx\mathcal{N}(0,1)$, inversion gives $\operatorname{CI}_{1-\alpha}(\mu)$; multiplying by $N$ gives $\operatorname{CI}_{1-\alpha}(\tau)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Totals and intervals scale the stratified mean.\\
+\hlt{Key Insight}: Estimated variance adds weighted stratum variances.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:neyman-allocation} \hlt{Neyman Allocation}\\
+Let $L\geq1$, $W_l>0$, $\sum\limits_{l=1}^{L}W_l=1$, $\sigma_l>0$, $S_\sigma\defeq\sum\limits_{k=1}^{L}W_k\sigma_k$, and $n>0$.\\
+On $\mathcal{A}\defeq\{(n_1,\ldots,n_L)\in(0,\infty)^L:\sum\limits_{l=1}^{L}n_l=n\}$, set $V(n_1,\ldots,n_L)\defeq\sum\limits_{l=1}^{L}\frac{W_l^2\sigma_l^2}{n_l}$.\\
+Then $V$ has the unique minimiser $n_l^\ast\defeq n\frac{W_l\sigma_l}{S_\sigma}$, $l=1,\ldots,L$.
+\begin{proof}
+$V$ is strictly convex on $(0,\infty)^L$ since $\partial_{ll}V=\frac{2W_l^2\sigma_l^2}{n_l^3}>0$ and $\partial_{lm}V=0$ for $l\neq m$.\\
+For $\mathcal{L}(n,\lambda)\defeq V(n)+\lambda(\sum\limits_{l=1}^{L}n_l-n)$, the first-order equations are $-\frac{W_l^2\sigma_l^2}{n_l^2}+\lambda=0$, hence $n_l=\frac{W_l\sigma_l}{\sqrt{\lambda}}$.\\
+The constraint gives $\frac{1}{\sqrt{\lambda}}=\frac{n}{S_\sigma}$, so $n_l=n_l^\ast$; strict convexity gives uniqueness.\\
+\hlt{Structural Commentary}: The constrained optimum balances marginal variance reduction across strata.\\
+\hlt{Key Insight}: A stratum receives more sample not only when it is large, but also when it is internally variable.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:stratified-allocation-comparisons} \hlt{Allocation Comparisons}\\
+Let $L\geq1$, $W_l>0$, $\sum\limits_{l=1}^{L}W_l=1$, $\mu_l\in\R$, $\sigma_l>0$, $\mu\defeq\sum\limits_{l=1}^{L}W_l\mu_l$, $\overline{\sigma}\defeq\sum\limits_{l=1}^{L}W_l\sigma_l$, and $n>0$.\\
+Ignoring finite-population corrections, let $\overline{X}_{so}$ be the optimal-allocation stratified mean, $\overline{X}_{sp}$ the proportional-allocation stratified mean with $n_l=nW_l$, and $\overline{X}$ the ordinary SRS mean.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Allocation variances}: $\operatorname{Var}(\overline{X}_{so})\approx\frac{\overline{\sigma}^2}{n}$ and $\operatorname{Var}(\overline{X}_{sp})\approx\frac{1}{n}\sum\limits_{l=1}^{L}W_l\sigma_l^2$.
+\item \hlt{Optimal-allocation gain}: $\operatorname{Var}(\overline{X}_{sp})-\operatorname{Var}(\overline{X}_{so})\approx\frac{1}{n}\sum\limits_{l=1}^{L}W_l(\sigma_l-\overline{\sigma})^2$.
+\item \hlt{Proportional-allocation gain}: $\operatorname{Var}(\overline{X})-\operatorname{Var}(\overline{X}_{sp})\approx\frac{1}{n}\sum\limits_{l=1}^{L}W_l(\mu_l-\mu)^2$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item With finite-population corrections suppressed, $\operatorname{Var}(\overline{X}_s)\approx\sum\limits_{l=1}^{L}\frac{W_l^2\sigma_l^2}{n_l}$. Neyman allocation gives $n_l=\frac{nW_l\sigma_l}{\overline{\sigma}}$, hence $\operatorname{Var}(\overline{X}_{so})\approx\frac{\overline{\sigma}^2}{n}$; proportional allocation $n_l=nW_l$ gives $\operatorname{Var}(\overline{X}_{sp})\approx\frac{1}{n}\sum\limits_{l=1}^{L}W_l\sigma_l^2$.
+\item Since $\sum\limits_{l=1}^{L}W_l=1$, $\sum\limits_{l=1}^{L}W_l\sigma_l^2-\overline{\sigma}^2=\sum\limits_{l=1}^{L}W_l(\sigma_l-\overline{\sigma})^2$.
+\item For ordinary SRS, $\operatorname{Var}(\overline{X})\approx\frac{1}{n}\{\sum\limits_{l=1}^{L}W_l\sigma_l^2+\sum\limits_{l=1}^{L}W_l(\mu_l-\mu)^2\}$; subtract the proportional-allocation variance.
+\end{enumerate}
+\hlt{Structural Commentary}: Proportional handles means; optimal also handles spreads.\\
+\hlt{Key Insight}: Mean gaps help stratification; spread gaps help Neyman allocation.
+\end{proof}
+\end{corollary}
+
+\begin{example} \label{ex:four-stratum-stratification-summary} \hlt{Four-Stratum Stratification Summary}\\
+Let $N=393$ and strata $l\in\{A,B,C,D\}$ have rounded summaries $(N_l)=(98,98,98,99)$, $(W_l)=(.249,.249,.249,.251)$, $(\mu_l)=(182.9,526.5,956.3,1591.2)$, and $(\sigma_l)=(103.4,204.8,243.5,419.2)$. Let $n$ be the total sample size, ignore finite-population corrections, and write $\overline{X}_s$ for the stratified mean.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Equal allocation}: if $n_l=n/4$, then $\operatorname{Var}(\overline{X}_s)\approx\sum\limits_{l=1}^{4}W_l^2\sigma_l^2/(n/4)\approx72042.6/n$, so $\operatorname{SE}(\overline{X}_s)\approx268.4/\sqrt n$.
+\item \hlt{SRS benchmark}: with overall standard deviation $\sigma\approx589.7$, $\operatorname{SE}(\overline{X})\approx589.7/\sqrt n$.
+\item \hlt{Neyman allocation}: $a_l\defeq\frac{W_l\sigma_l}{\sum\limits_{k=1}^{4}W_k\sigma_k}\approx(.106,.210,.250,.434)$ for $(A,B,C,D)$.
+\end{enumerate}
+Stratification reduces variance, and Neyman allocation assigns the largest share to the stratum with largest $\sigma_l$.
+\end{example}
+
+\begin{remark} \label{rem:survey-sampling-model-limitations} \hlt{Model Limits and Other Designs}\\
+For a finite-population survey:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Systematic}: fixed-interval sampling after a random start is SRS-like only when list order is noninformative; periodic order can bias selection.
+\item \hlt{Cluster}: sampling groups lowers cost but can inflate variance when within-cluster correlation is positive.
+\item \hlt{Scope}: design-based SEs measure random selection variation, not nonresponse, coverage error, selection bias, interviewer effects, or wording effects.
+\end{enumerate}
+\end{remark}

@@ -1,0 +1,87 @@
+\subsection{Inference, Prediction, and Multiple Regression}
+
+Once the linear model is written in matrix form, standard errors for coefficients and predictions are consequences of linear transformations of random vectors.
+
+\begin{theorem} \label{thm:linear-model-beta-hat-mean-covariance} \hlt{Mean and Covariance of Least-Squares Estimates}\\
+Let $Y=X\beta+e$ with $Y,e\in\R^n$, $X\in\R^{n\times p}$, $\beta\in\R^p$, $\operatorname{rank}(X)=p$, $\mathbb{E}e=0$, and $\operatorname{Var}(e)=\sigma^2I_n$.\\
+Set $\widehat{\beta}\defeq(X^tX)^{-1}X^tY$. Then $\mathbb{E}\widehat{\beta}=\beta$ and $\operatorname{Var}(\widehat{\beta})=\sigma^2(X^tX)^{-1}$.
+\begin{proof} Let $A\defeq(X^tX)^{-1}X^t$. Since $AX=I_p$, $\widehat{\beta}=A(X\beta+e)=\beta+Ae$.\\
+Hence $\mathbb{E}\widehat{\beta}=\beta+A\mathbb{E}e=\beta$, and $\operatorname{Var}(\widehat{\beta})=A\operatorname{Var}(e)A^t=\sigma^2(X^tX)^{-1}X^tX(X^tX)^{-1}=\sigma^2(X^tX)^{-1}$.\\
+\hlt{Structural Commentary}: $\widehat{\beta}-\beta=(X^tX)^{-1}X^te$ is a fixed linear transformation of $e$.\\
+\hlt{Key Insight}: $X^tX$ controls precision: $\operatorname{Var}(\widehat{\beta})=\sigma^2(X^tX)^{-1}$.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:linear-model-coefficient-inference} \hlt{Coefficient Inference in a Normal Linear Model}\\
+Let $Y=X\beta+e$, $e\sim N_n(0,\sigma^2I_n)$, $X\in\R^{n\times p}$ with $\operatorname{rank}(X)=p$, $\widehat{\beta}\defeq(X^tX)^{-1}X^tY$,\\
+$s^2\defeq\frac{1}{n-p}\norm{Y-X\widehat{\beta}}_2^2$, $C=(c_{jk})\defeq(X^tX)^{-1}$, $j\in\{1,\ldots,p\}$, and $\alpha\in(0,1)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Standard Error}: $s_{\widehat{\beta}_j}\defeq s\sqrt{c_{jj}}$.
+\item \hlt{Pivot}: $T_j\defeq\frac{\widehat{\beta}_j-\beta_j}{s_{\widehat{\beta}_j}}\sim t_{n-p}$.
+\item \hlt{Confidence Interval}: $C_{j,1-\alpha}\defeq\left[\widehat{\beta}_j-t_{n-p,1-\frac{\alpha}{2}}s_{\widehat{\beta}_j},\widehat{\beta}_j+t_{n-p,1-\frac{\alpha}{2}}s_{\widehat{\beta}_j}\right]$.
+\item \hlt{Test Statistic}: For $H_0:\beta_j=\beta_{j0}$, $t_j\defeq\frac{\widehat{\beta}_j-\beta_{j0}}{s_{\widehat{\beta}_j}}$.
+\end{enumerate}
+If a coefficient CLT holds, $T_j\approx N(0,1)$.
+\end{method}
+
+\begin{proposition} \label{prop:linear-model-mean-response-interval} \hlt{Mean Response at a New Design Point}\\
+Let $Y=X\beta+e$ with $Y,e\in\R^n$, $X\in\R^{n\times p}$, $\beta\in\R^p$, $\operatorname{rank}(X)=p$, and $e\sim N_n(0,\sigma^2I_n)$.\\
+Set $\widehat{\beta}\defeq(X^tX)^{-1}X^tY$, $s^2\defeq\frac{1}{n-p}\norm{Y-X\widehat{\beta}}_2^2$, $x_0\in\R^p$, $c_0\defeq x_0^t(X^tX)^{-1}x_0>0$,\\
+$\mu_0\defeq x_0^t\beta$, $\widehat{\mu}_0\defeq x_0^t\widehat{\beta}$, $s_{\widehat{\mu}_0}\defeq s\sqrt{c_0}$, and $\alpha\in(0,1)$. Then $\mathbb{E}\widehat{\mu}_0=\mu_0$, $\operatorname{Var}(\widehat{\mu}_0)=\sigma^2c_0$, $T_0\defeq\frac{\widehat{\mu}_0-\mu_0}{s_{\widehat{\mu}_0}}\sim t_{n-p}$,\\
+and $C_{0,1-\alpha}\defeq\left[\widehat{\mu}_0-t_{n-p,1-\frac{\alpha}{2}}s_{\widehat{\mu}_0},\widehat{\mu}_0+t_{n-p,1-\frac{\alpha}{2}}s_{\widehat{\mu}_0}\right]$ has coverage $1-\alpha$ for $\mu_0$.
+\begin{proof}
+Let $A\defeq(X^tX)^{-1}X^t$, $P\defeq XA$, and $M\defeq I_n-P$.\\
+Since $AX=I_p$, $\widehat{\mu}_0-\mu_0=x_0^tA(X\beta+e)-x_0^t\beta=x_0^tAe$, so $\mathbb{E}\widehat{\mu}_0=\mu_0$ and $\operatorname{Var}(\widehat{\mu}_0)=x_0^tA(\sigma^2I_n)A^tx_0=\sigma^2c_0$.\\
+Normality gives $Z\defeq\frac{\widehat{\mu}_0-\mu_0}{\sigma\sqrt{c_0}}\sim N(0,1)$.\\
+Since $M=M^t=M^2$, $\operatorname{rank}(M)=n-p$, and $MA^tx_0=0$, $Z\perp U\defeq\frac{e^tMe}{\sigma^2}=\frac{(n-p)s^2}{\sigma^2}\sim\chi^2_{n-p}$.\\
+Thus $T_0=\frac{Z}{\sqrt{U/(n-p)}}\sim t_{n-p}$, and $\mathbb{P}(\mu_0\in C_{0,1-\alpha})=\mathbb{P}(\abs{T_0}\le t_{n-p,1-\frac{\alpha}{2}})=1-\alpha$.\\
+\hlt{Structural Commentary}: $\widehat{\mu}_0-\mu_0=x_0^t(X^tX)^{-1}X^te$ and $s^2=\frac{e^t(I_n-P)e}{n-p}$ use orthogonal components of $e$.\\
+\hlt{Key Insight}: Estimating a mean response adds uncertainty only through $c_0=x_0^t(X^tX)^{-1}x_0$.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:linear-model-prediction-interval} \hlt{Prediction Interval for a New Observation}\\
+Let $Y=X\beta+e$ with $Y,e\in\R^n$, $X\in\R^{n\times p}$, $\beta\in\R^p$, $\operatorname{rank}(X)=p$, and $e\sim N_n(0,\sigma^2I_n)$.\\
+Let $x_0\in\R^p$, $e_0\sim N(0,\sigma^2)$ with $e_0\perp e$, and $Y_0\defeq x_0^t\beta+e_0$.\\
+Set $\widehat{\beta}\defeq(X^tX)^{-1}X^tY$, $\widehat{\mu}_0\defeq x_0^t\widehat{\beta}$, $s^2\defeq\frac{\norm{Y-X\widehat{\beta}}_2^2}{n-p}$, $c_0\defeq x_0^t(X^tX)^{-1}x_0$, $s_{\operatorname{pred}}\defeq s\sqrt{1+c_0}$, and $\alpha\in(0,1)$.\\
+Then $\operatorname{Var}(Y_0-\widehat{\mu}_0)=\sigma^2(1+c_0)$, $T_{\operatorname{pred}}\defeq\frac{Y_0-\widehat{\mu}_0}{s_{\operatorname{pred}}}\sim t_{n-p}$,\\
+and $I_{0,1-\alpha}\defeq\left[\widehat{\mu}_0-t_{n-p,1-\frac{\alpha}{2}}s_{\operatorname{pred}},\widehat{\mu}_0+t_{n-p,1-\frac{\alpha}{2}}s_{\operatorname{pred}}\right]$ has coverage $1-\alpha$ for $Y_0$.
+\begin{proof} Let $A\defeq(X^tX)^{-1}X^t$, $P\defeq XA$, and $M\defeq I_n-P$.\\
+Since $AX=I_p$, $Y_0-\widehat{\mu}_0=e_0-x_0^tAe$, so $\operatorname{Var}(Y_0-\widehat{\mu}_0)=\sigma^2+\sigma^2x_0^tAA^tx_0=\sigma^2(1+c_0)$.\\
+Normality gives $Z\defeq\frac{Y_0-\widehat{\mu}_0}{\sigma\sqrt{1+c_0}}\sim N(0,1)$. Since $AM=0$, $Z\perp U\defeq\frac{e^tMe}{\sigma^2}=\frac{(n-p)s^2}{\sigma^2}\sim\chi^2_{n-p}$.\\
+Thus $T_{\operatorname{pred}}=\frac{Z}{\sqrt{U/(n-p)}}\sim t_{n-p}$, and $\mathbb{P}(Y_0\in I_{0,1-\alpha})=\mathbb{P}(\abs{T_{\operatorname{pred}}}\le t_{n-p,1-\frac{\alpha}{2}})=1-\alpha$.\\
+\hlt{Structural Commentary}: $Y_0-\widehat{\mu}_0=e_0-x_0^t(X^tX)^{-1}X^te$ combines future noise and estimation error.\\
+\hlt{Key Insight}: Prediction variance is mean-response variance plus irreducible noise, $\sigma^2c_0+\sigma^2$.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:multiple-linear-regression-coefficients} \hlt{Multiple Regression Coefficients}\\
+Let $[n]\defeq\{1,\ldots,n\}$, $z_i=(x_{i1},\ldots,x_{i,p-1})\in\R^{p-1}$ for $i\in[n]$, $u_1,\ldots,u_{p-1}$ be the standard basis of $\R^{p-1}$, and $m(z)\defeq\beta_0+\sum\limits_{k=1}^{p-1}\beta_kz_k$ In $Y_i=m(z_i)+e_i$, the \hlt{multiple regression coefficient} $\beta_k$ satisfies $\forall z\in\R^{p-1}$ and $\forall\delta\in\R$, $m(z+\delta u_k)-m(z)=\delta\beta_k$ for $k\in\{1,\ldots,p-1\}$.\\
+\hlt{Structural Commentary}: Polynomial regression replaces $z_i$ by transformed design columns such as $z_{ik}^2$.
+\end{definition}
+
+\begin{definition} \label{def:coefficient-of-determination-r-squared} \hlt{Coefficient of Determination}\\
+Let $[n]\defeq\{1,\ldots,n\}$, $Y,\widehat{Y}\in\R^n$, $\overline{Y}\defeq n^{-1}\sum\limits_{i=1}^{n}Y_i$, $\mathbf{1}\in\operatorname{col}(X)$, and $\sum\limits_{i=1}^{n}(Y_i-\overline{Y})^2>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Residual Sum of Squares}: $\operatorname{RSS}\defeq\sum\limits_{i=1}^{n}(Y_i-\widehat{Y}_i)^2$.
+\item \hlt{Total Sum of Squares}: $\operatorname{TSS}\defeq\sum\limits_{i=1}^{n}(Y_i-\overline{Y})^2$.
+\item \hlt{Coefficient of Determination}: $R^2\defeq1-\frac{\operatorname{RSS}}{\operatorname{TSS}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: $R^2=\operatorname{corr}(Y,\widehat{Y})^2$ for an intercept model.\\
+\hlt{Key Insight}: $R^2=\frac{\operatorname{TSS}-\operatorname{RSS}}{\operatorname{TSS}}$ is the observed response variation removed by the fitted model.
+\end{definition}
+
+\begin{remark} \label{rem:collinearity-and-coefficient-interpretation} \hlt{Collinearity and Interpretation}\\
+Let $X_{-j}$ be $X$ without column $X_{\cdot j}$, set $d_j\defeq\operatorname{dist}(X_{\cdot j},\operatorname{col}(X_{-j}))$, and let $C=(c_{kl})\defeq(X^tX)^{-1}$.\\
+If $0<d_j\ll\norm{X_{\cdot j}}_2$, then $X^tX$ is nearly singular and $s_{\widehat{\beta}_j}=s\sqrt{c_{jj}}$ can be large even when $\widehat{Y}=X\widehat{\beta}$ is stable.\\
+If $d_j=0$, then $\operatorname{rank}(X)<p$ and $\widehat{\beta}$ is not unique.
+\end{remark}
+
+\begin{example} \label{ex:quadratic-term-as-regression-check} \hlt{Quadratic Terms as a Lack-of-Fit Check}\\
+Compare $M_1:Y_i=\beta_0+\beta_1x_i+e_i$ with $M_2:Y_i=\beta_0+\beta_1x_i+\beta_2x_i^2+e_i$.\\
+If $t_2=\widehat{\beta}_2/s_{\widehat{\beta}_2}$ is small and residual curvature is absent, retain $M_1$.\\
+If $|t_2|$ is large and residual curvature decreases under $M_2$, use the quadratic term.\\
+Add $x^2$ only when residual structure or scale supports $\beta_2\neq0$.
+\end{example}

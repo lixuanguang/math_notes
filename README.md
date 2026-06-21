@@ -12,7 +12,7 @@ content should not recreate it.
 - `math.tex`: main document entry point.
 - `parts/base.tex`: shared preamble, packages, theorem environments, and macros.
 - `parts/00_notations/`: front-matter notation.
-- `parts/01_...` through `parts/16_...`: mathematical body content.
+- `parts/01_...` through `parts/17_...`: mathematical body content.
 - `references.tex` and `references.bib`: bibliography entry point and BibTeX
   database.
 - `figures/`: figure assets used by the notes.
@@ -94,8 +94,8 @@ expansion.
 | `11` | Measure, integration, and functional analysis | Bartle is in the active bibliography. The source library also includes Royden, Rudin real/complex analysis, Oxtoby, Dunford-Schwartz, and functional analysis references. |
 | `12` | Probability and stochastic systems | Source library includes Ross, Lamperti, Billingsley, and stochastic calculus references. Bibliography expansion pending. |
 | `13`-`14` | Dynamical systems, PDEs, numerical analysis, and stochastic computation | Structured notes tree is in place. Bibliography expansion pending as these parts are developed. |
-| `15` | Statistics and time series | Hamilton is in the active bibliography. The source library also includes Rice, Casella-Berger, Lehmann-Casella, Lehmann-Romano, van der Vaart, Schervish, Berger, nonparametric statistics texts, and resampling references. |
-| `16` | Statistical learning and deep learning | Mazur and Granziol-Wan-Albanie-Roberts are in the active bibliography. Broader learning references remain expansion material. |
+| `15`-`16` | Statistics, time series, statistical data analysis, and applied models | Hamilton and Rice are in the active bibliography. The source library also includes Casella-Berger, Lehmann-Casella, Lehmann-Romano, van der Vaart, Schervish, Berger, nonparametric statistics texts, and resampling references. |
+| `17` | Statistical learning and deep learning | Mazur and Granziol-Wan-Albanie-Roberts are in the active bibliography. Broader learning references remain expansion material. |
 
 When adding a source to the notes, prefer this order:
 

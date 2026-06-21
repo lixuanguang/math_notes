@@ -1,0 +1,138 @@
+\subsection{Rank-Based Comparative Tests}
+
+Rank methods replace numerical values by their relative order.  They are invariant under strictly increasing transformations and reduce the influence of extreme observations, which makes them natural companions to the two-sample and paired $t$ procedures.
+
+\begin{definition} \label{def:mann-whitney-rank-sum-statistics} \hlt{Mann--Whitney and Rank-Sum Statistics}\\
+Let $X_1,\ldots,X_n\sim F$ and $Y_1,\ldots,Y_m\sim G$ be independent continuous samples.\\
+Rank the pooled observations increasingly.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Pooled size}: $N\defeq m+n$.
+\item \hlt{$Y$-ranks}: $R_j^Y\defeq\operatorname{rank}(Y_j)$ in the pooled sample.
+\item \hlt{Rank sum}: $T_Y\defeq\sum\limits_{j=1}^mR_j^Y$.
+\item \hlt{Mann--Whitney statistic}: $U_Y\defeq T_Y-\frac{m(m+1)}{2}$.
+\end{enumerate}
+Under continuity, $U_Y=\sum\limits_{i=1}^n\sum\limits_{j=1}^m\mathbf{1}_{\{X_i<Y_j\}}$ a.s., so $U_Y$ counts cross-sample pairs with $Y_j>X_i$.
+\end{definition}
+
+\begin{theorem} \label{thm:mann-whitney-rank-sum-mean-variance} \hlt{Null Mean and Variance of the Rank Sum}\\
+Let $X_1,\ldots,X_n\sim F$ and $Y_1,\ldots,Y_m\sim G$ be independent continuous samples.\\
+Let rank-sum $T_Y$ and Mann--Whitney statistic $U_Y$. Assume $F=G$ and set $N\defeq m+n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Rank law}: $T_Y=\sum\limits_{r\in A}r$, where $A$ is uniform over all $m$-subsets of $\{1,\ldots,N\}$.
+\item \hlt{Rank-sum moments}: $\mathbb{E}T_Y=\frac{m(N+1)}{2}$ and $\operatorname{Var}(T_Y)=\frac{mn(N+1)}{12}$.
+\item \hlt{Mann--Whitney moments}: $\mathbb{E}U_Y=\frac{mn}{2}$ and $\operatorname{Var}(U_Y)=\frac{mn(N+1)}{12}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Continuity gives no ties and $F=G$ makes labels exchangeable,\\
+so the $Y$-rank set $A\subseteq\{1,\ldots,N\}$ is uniform over all $m$-subsets and $T_Y=\sum\limits_{r\in A}r$.
+\item For ranks $1,\ldots,N$, $\overline{r}=\frac{N+1}{2}$ and $S_r^2=\frac{N^2-1}{12}$; sampling $m$ ranks without replacement gives\\
+$\mathbb{E}T_Y=m\overline{r}=\frac{m(N+1)}{2}$ and $\operatorname{Var}(T_Y)=\frac{mS_r^2(N-m)}{N-1}=\frac{mn(N+1)}{12}$.
+\item Since $U_Y=T_Y-\frac{m(m+1)}{2}$, shifting by a constant gives $\mathbb{E}U_Y=\frac{m(N+1)}{2}-\frac{m(m+1)}{2}=\frac{mn}{2}$\\
+and $\operatorname{Var}(U_Y)=\operatorname{Var}(T_Y)=\frac{mn(N+1)}{12}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Under $F=G$, ranks reduce to simple random sampling without replacement.\\
+\hlt{Key Insight}: $U_Y$ is just a centered rank sum, so only the mean shifts.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:mann-whitney-test} \hlt{Mann--Whitney Test}\\
+Given independent samples $X_1,\ldots,X_n\sim F$ and $Y_1,\ldots,Y_m\sim G$, test $H_0:F=G$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Compute}: Pool and rank $m+n$ observations, use midranks for ties. Compute $T_Y$, $U_Y=T_Y-\frac{m(m+1)}{2}$.
+\item \hlt{Calibrate}: For small $m,n$, enumerate $m$-subsets of $\{1,\ldots,m+n\}$ to get the exact null law.\\
+For large $m,n$, use $Z\defeq\frac{U_Y-\frac{mn}{2}}{\sqrt{\frac{mn(m+n+1)}{12}}}\approx N(0,1)$, with tie correction when needed.
+\item \hlt{Decide}: Compute the relevant one- or two-sided tail probability under the chosen null law.\\
+Reject $H_0$ at level $\alpha$ when $p\leq\alpha$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:heat-fusion-mann-whitney} \hlt{Latent Heat Data by Ranks}\\
+For the latent-heat data, take $m=8$, $n=13$, $N=21$, and midranks for ties.\\
+The smaller-sample rank sum is $R=51$, its complement is $R'=m(N+1)-R=125$, and $R^\ast=\min(R,R')=51$.\\
+Under equality of the two method distributions, $\mu_T=\frac{m(N+1)}{2}=88$ and $\sigma_T=\sqrt{\frac{mn(N+1)}{12}}\approx13.8$,\\
+hence $z=\frac{R-\mu_T}{\sigma_T}\approx-2.68$ and the two-sided normal $p$-value is $\approx0.007$.\\
+The exact rank-sum test therefore rejects equality at level $0.01$.
+\end{example}
+
+\begin{definition} \label{def:mann-whitney-effect-probability} \hlt{Mann--Whitney Effect Probability}\\
+Let $X\sim F$ and $Y\sim G$ be independent, with samples $X_1,\ldots,X_n$ and $Y_1,\ldots,Y_m$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Effect probability}: $\pi\defeq\mathbb{P}(X<Y)$.
+\item \hlt{Estimator}: $\widehat{\pi}\defeq (mn)^{-1}\sum\limits_{i=1}^n\sum\limits_{j=1}^m\mathbf{1}_{\{X_i<Y_j\}}=\frac{U_Y}{mn}$.
+\end{enumerate}
+Thus $\pi$ is the probability that a random $Y$ exceeds a random $X$.
+\end{definition}
+
+\begin{method} \label{meth:mann-whitney-shift-interval} \hlt{Shift Intervals from Pairwise Differences}\\
+Assume the shift model $G(x)=F(x-\Delta)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Compute}: Set $D_{ij}\defeq Y_j-X_i$ and order $D_{(1)}\leq\cdots\leq D_{(mn)}$.
+\item \hlt{Calibrate}: Choose $k$ so the two-sided rank test accepts a candidate shift when $k\leq U_Y(\Delta)\leq mn-k$.
+\item \hlt{Invert}: Report $[D_{(k)},D_{(mn-k+1)}]$ as the inverted shift interval.
+\end{enumerate}
+The Hodges--Lehmann point estimate is $\widehat{\Delta}_{HL}\defeq\operatorname{median}\{D_{ij}:1\leq i\leq n,1\leq j\leq m\}$.
+\end{method}
+
+\begin{definition} \label{def:signed-rank-test-statistic} \hlt{Signed-Rank Statistic}\\
+Let $D_1,\ldots,D_n$ be paired differences.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Nonzero index set}: $I\defeq\{i:D_i\neq0\}$.
+\item \hlt{Absolute ranks}: $R_i\defeq\operatorname{rank}(\abs{D_i})$ among $\{\abs{D_\ell}:\ell\in I\}$, using midranks for ties.
+\item \hlt{Signed-rank statistic}: $W_+\defeq\sum\limits_{i\in I}R_i\mathbf{1}_{\{D_i>0\}}$.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:signed-rank-test} \hlt{Signed-Rank Test}\\
+For paired differences $D_i$, test $H_0:D_i\stackrel{d}{=}-D_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Compute}: Discard zero differences, rank nonzero $\abs{D_i}$ using midranks for ties, and compute $W_+$.
+\item \hlt{Calibrate}: Conditional on the nonzero absolute ranks, enumerate the $2^r$ sign assignments,\\
+where $r\defeq|I|$, to get the null law of $W_+$.
+\item \hlt{Decide}: Compute the relevant tail probability and reject $H_0$ at level $\alpha$ when $p\leq\alpha$.
+\end{enumerate}
+The sign test is the coarser paired alternative using only signs, not ranks.
+\end{method}
+
+\begin{theorem} \label{thm:signed-rank-mean-variance} \hlt{Signed-Rank Mean and Variance}\\
+Under the signed-rank null, assume no zero differences and no ties in $\abs{D_i}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: $\mathbb{E}W_+=\frac{n(n+1)}{4}$.
+\item \hlt{Variance}: $\operatorname{Var}(W_+)=\frac{n(n+1)(2n+1)}{24}$.
+\end{enumerate}
+\begin{proof}
+Let $\mathcal{R}$ be the absolute-rank information and let $I_k$ indicate positivity at absolute-rank $k$.\\
+Then $W_+=\sum\limits_{k=1}^nkI_k$ and, under symmetry, $I_k\mid\mathcal{R}$ are independent $\operatorname{Bernoulli}(\frac{1}{2})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: $\mathbb{E}(W_+\mid\mathcal{R})=\frac{1}{2}\sum\limits_{k=1}^nk=\frac{n(n+1)}{4}$; the right side is deterministic, hence $\mathbb{E}W_+=\frac{n(n+1)}{4}$.
+\item \hlt{Variance}: $\operatorname{Var}(W_+\mid\mathcal{R})=\frac{1}{4}\sum\limits_{k=1}^nk^2=\frac{n(n+1)(2n+1)}{24}$, while $\mathbb{E}(W_+\mid\mathcal{R})$ is deterministic.\\
+Total variance gives $\operatorname{Var}(W_+)=\frac{n(n+1)(2n+1)}{24}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Condition on absolute ranks; only independent fair signs remain.\\
+\hlt{Key Insight}: $W_+$ is a weighted sum of Bernoulli signs with weights $1,\ldots,n$.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:signed-rank-paired-examples} \hlt{Paired Rank Analyses}\\
+Two paired-rank calculations are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Platelet data}: With one negative signed rank, use $W_-$; exact signed-rank test rejects symmetry at $0.01$.
+\item \hlt{Mercury data}: Dropping one zero difference and using midranks gives $n=24$ and $W_+=194.5$.\\
+Under $H_0$, $\mathbb{E}_0W_+=\frac{24\cdot25}{4}=150$ and $\operatorname{Var}_0(W_+)=\frac{24\cdot25\cdot49}{24}=1225$, so $Z=\frac{194.5-150}{35}\approx1.27$ and two-sided $p\approx0.20$; there is no strong evidence of a systematic shift.
+\end{enumerate}
+\end{example}
+
+\begin{remark} \label{rem:rank-tests-versus-normal-theory} \hlt{Rank Tests and Normal Theory}\\
+Rank tests use order information, require no normal model, and are robust to outliers; under normal models their efficiency relative to $t$ tests is often close to $1$.
+\end{remark}

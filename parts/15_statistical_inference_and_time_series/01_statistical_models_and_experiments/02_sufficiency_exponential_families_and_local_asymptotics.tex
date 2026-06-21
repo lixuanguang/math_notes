@@ -1,0 +1,94 @@
+\subsection{Sufficiency, Exponential Families, and Local Asymptotics}
+
+The shape of a model determines which summaries of the data preserve information and which approximations become valid in large samples.
+
+\begin{definition} \label{def:statistics-sufficiency-ancillarity} \hlt{Statistics, Sufficiency, and Ancillarity}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{statistic} is a measurable map $T:\mathcal{X}\to\mathcal{T}$.
+\item $T$ is \hlt{sufficient} if $\mathcal{L}_\theta(X\mid T)$ is independent of $\theta$.
+\item $T$ is \hlt{ancillary} if $\mathcal{L}_\theta(T)$ is independent of $\theta$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:factorization-criterion-sufficiency} \hlt{Factorization Criterion}\\
+Let $\mathcal{P}=\{P_\theta:\theta\in\Theta\}$ be dominated by $\mu$, with $p_\theta\defeq \frac{dP_\theta}{d\mu}$. A statistic $T:\mathcal{X}\to\mathcal{T}$ is sufficient iff there exist measurable $g_\theta:\mathcal{T}\to[0,\infty)$ and $h:\mathcal{X}\to[0,\infty)$ such that $p_\theta(x)=g_\theta(T(x))h(x)$ $\mu$-a.e. for all $\theta$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T$ is sufficient, write $\nu_\theta\defeq\mathcal{L}_\theta(T)$ and choose a $\theta$-free kernel $K_t=\mathcal{L}_\theta(X\mid T=t)$,\\
+so $P_\theta(A)=\int K_t(A)\nu_\theta(dt)$. Choosing densities for $\nu_\theta$ and for $K_t$ on each fiber gives $p_\theta(x)=g_\theta(T(x))h(x)$.
+\item[$(\Leftarrow)$] If $p_\theta=g_\theta\circ T\,h$, then on the fiber $T=t$ the factor $g_\theta(t)$ cancels:\\
+for $c(t)\defeq\int_{T^{-1}\{t\}}h\,d\mu_t>0$, $\mathbb{P}_\theta(X\in A\mid T=t)=c(t)^{-1}\int_{A\cap T^{-1}\{t\}}h\,d\mu_t$, independent of $\theta$.
+\end{enumerate}
+\hlt{Structural Commentary}: Factorisation separates parameter information $g_\theta(T)$ from residual shape $h$.\\
+\hlt{Key Insight}: Sufficiency keeps exactly the likelihood's $\theta$-dependent part.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:bernoulli-normal-sufficient-statistics} \hlt{Bernoulli and Normal Sufficient Statistics}\\
+Let $X_1,\ldots,X_n$ be independent and let $x=(x_1,\ldots,x_n)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X_i\sim\operatorname{Bernoulli}(\theta)$, then $p_\theta(x)=\theta^s(1-\theta)^{n-s}$ with $s\defeq\sum\limits_i x_i$.\\
+Hence $T=\sum\limits_iX_i$ is sufficient for $\theta$, and $\mathcal{L}_\theta(X\mid T=t)$ is uniform on $\{x:\sum\limits_i x_i=t\}$.
+\item If $X_i\sim N(\mu,\sigma^2)$ with $(\mu,\sigma^2)$ unknown, then $p_{\mu,\sigma^2}(x)\propto(\sigma^2)^{-\frac{n}{2}}\exp\{-\frac{\sum\limits_i x_i^2-2\mu\sum\limits_i x_i+n\mu^2}{2\sigma^2}\}$.\\
+Hence $T=(\sum\limits_iX_i,\sum\limits_iX_i^2)$ is sufficient for $(\mu,\sigma^2)$.
+\end{enumerate}
+\end{example}
+
+\begin{corollary} \label{cor:mle-function-of-sufficient-statistic} \hlt{Likelihood Estimators Use Sufficient Statistics}\\
+Let $\mathcal{P}=\{P_\theta:\theta\in\Theta\}$ be dominated with densities $p_\theta$, and let $T$ be sufficient with $p_\theta(x)=g_\theta(T(x))h(x)$.\\
+If $a(t)\in\arg\max\limits_{\theta\in\Theta}g_\theta(t)$ exists, then $\widehat{\theta}(X)\defeq a(T(X))$ is an MLE.
+\begin{proof}
+For fixed $x$, $L_x(\theta)=p_\theta(x)=h(x)g_\theta(T(x))$. If $h(x)>0$, then $\arg\max\limits_\theta L_x(\theta)=\arg\max\limits_\theta g_\theta(T(x))$.\\
+If $h(x)=0$, then $L_x(\theta)=0$ for all $\theta$. Thus an MLE may be chosen as $a(T(x))$.\\
+\hlt{Structural Commentary}: The $\theta$-free factor $h(x)$ is irrelevant to maximization.\\
+\hlt{Key Insight}: MLEs can depend on data only through a sufficient statistic.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:rao-blackwell-improvement} \hlt{Rao--Blackwell Improvement}\\
+Let $T$ be sufficient and let $\widehat{\psi}\in L^2(P_\theta)$ estimate a real target $\psi(\theta)$. Choose the $\theta$-free version $\widetilde{\psi}(T)\defeq\mathbb{E}_\theta(\widehat{\psi}\mid T)$.\\
+Then $\mathbb{E}_\theta\widetilde{\psi}=\mathbb{E}_\theta\widehat{\psi}$ and $\mathbb{E}_\theta(\widetilde{\psi}-\psi(\theta))^2\leq\mathbb{E}_\theta(\widehat{\psi}-\psi(\theta))^2$ for all $\theta$, with equality iff $\widehat{\psi}=\widetilde{\psi}$ $P_\theta$-a.s.
+\begin{proof}
+Sufficiency makes $\mathcal{L}_\theta(X\mid T)$ independent of $\theta$, so $\widetilde{\psi}$ is a $T$-statistic. Also $\mathbb{E}_\theta\widetilde{\psi}=\mathbb{E}_\theta\widehat{\psi}$.\\
+Since $\mathbb{E}_\theta(\widehat{\psi}-\widetilde{\psi}\mid T)=0$ and $\widetilde{\psi}-\psi(\theta)$ is $T$-measurable, $\mathbb{E}_\theta[(\widehat{\psi}-\widetilde{\psi})(\widetilde{\psi}-\psi(\theta))]=0$.\\
+Hence $\mathbb{E}_\theta(\widehat{\psi}-\psi(\theta))^2=\mathbb{E}_\theta(\widehat{\psi}-\widetilde{\psi})^2+\mathbb{E}_\theta(\widetilde{\psi}-\psi(\theta))^2\geq\mathbb{E}_\theta(\widetilde{\psi}-\psi(\theta))^2$, with equality iff $\mathbb{E}_\theta(\widehat{\psi}-\widetilde{\psi})^2=0$.\\
+\hlt{Structural Commentary}: Rao--Blackwellization projects an estimator onto the $\sigma(T)$-measurable statistics.\\
+\hlt{Key Insight}: Conditioning on a sufficient statistic preserves bias and removes residual noise.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:exponential-family-natural-statistic} \hlt{Exponential Family}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A dominated model $\{P_\eta:\eta\in\mathcal{N}\}$ is a \hlt{$k$-parameter exponential family}\\
+if $\mathcal{N}\subseteq\R^k$ and $p_\eta(x)=\exp\{\eta^\top T(x)-A(\eta)\}h(x)$.
+\item $\eta$ is the \hlt{natural parameter}, $T(X)$ is the \hlt{natural statistic}, and $h$ is the carrier density.
+\item $A(\eta)$ is the \hlt{log-partition function}: $A(\eta)=\log\int\exp\{\eta^\top T(x)\}h(x)\,d\mu(x)$ when finite.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:exponential-family-moments} \hlt{Moment Identities in Full Exponential Families}\\
+Let $p_\eta(x)=\exp\{\eta^\top T(x)-A(\eta)\}h(x)$ be a full exponential family with open natural parameter space, and assume differentiation under the integral is valid. Then $\nabla A(\eta)=\mathbb{E}_\eta T(X)$ and $\nabla^2A(\eta)=\operatorname{Cov}_\eta(T(X))$.
+\begin{proof} From $1=\int p_\eta\,d\mu$, differentiation gives $0=\int(T-\nabla A(\eta))p_\eta\,d\mu$, hence $\nabla A(\eta)=\mathbb{E}_\eta T(X)$.\\
+For coordinates $i,j$, differentiating $\mathbb{E}_\eta T_i=\int T_ip_\eta\,d\mu$ gives $\partial_j\mathbb{E}_\eta T_i=\mathbb{E}_\eta[T_i(T_j-\partial_jA(\eta))]=\operatorname{Cov}_\eta(T_i,T_j)$, QED.\\
+\hlt{Structural Commentary}: The log-partition function cumulatively encodes the natural statistic.\\
+\hlt{Key Insight}: First and second derivatives of $A$ give mean and covariance.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:local-asymptotic-normality} \hlt{Local Asymptotic Normality}\\
+For experiments $\{P_\theta^{(n)}:\theta\in\Theta\subseteq\R^d\}$, set $\theta_{n,h}\defeq\theta_0+\frac{h}{\sqrt{n}}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The sequence is \hlt{locally asymptotically normal} at $\theta_0$ with information $I(\theta_0)$ if,\\
+for each fixed $h\in\R^d$, $\log(\frac{dP_{\theta_{n,h}}^{(n)}}{dP_{\theta_0}^{(n)}})=h^\top\Delta_n-\frac{1}{2}h^\top I(\theta_0)h+o_{P_{\theta_0}^{(n)}}(1)$.
+\item The \hlt{central sequence} satisfies $\Delta_n\Rightarrow N(0,I(\theta_0))$ under $P_{\theta_0}^{(n)}$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:lan-bridge-to-estimation-tests} \hlt{Why Local Asymptotics Matter}\\
+LAN replaces local likelihood ratios by the Gaussian quadratic experiment $h^\top\Delta-\frac{1}{2}h^\top I(\theta_0)h$, giving normal approximations for estimators, tests, and confidence regions.
+\end{remark}

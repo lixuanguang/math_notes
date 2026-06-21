@@ -1,0 +1,51 @@
+\subsection{Normal Approximation and Confidence Intervals}
+
+The exact design formulas in Theorem \ref{thm:srs-sample-mean-variance} give the center and scale of the sampling distribution.  For large samples, a normal approximation turns those formulas into error probabilities and confidence intervals.
+
+\begin{method} \label{meth:srs-normal-approximation} \hlt{Normal Approximation for SRS}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $U\defeq\{1,\ldots,N\}$, $N>1$, $1\leq n\leq N$, $x_i\in\R$ for $i\in U$, and $S\sim\operatorname{Unif}\{s\subseteq U:|s|=n\}$.
+\item For a random ordering $(J_1,\ldots,J_n)$ of $S$, set $X_k\defeq x_{J_k}$, $\overline{X}\defeq n^{-1}\sum\limits_{k=1}^{n}X_k$, $T\defeq N\overline{X}$, $\mu\defeq N^{-1}\sum\limits_{i=1}^{N}x_i$, $\sigma^2\defeq N^{-1}\sum\limits_{i=1}^{N}(x_i-\mu)^2$, $\tau\defeq N\mu$, and $\sigma_{\overline{X}}^2\defeq\frac{\sigma^2}{n}\left(\frac{N-n}{N-1}\right)$.
+\item Let $\Phi$ be the standard normal cdf. For large $n$, use $\overline{X}\approx N(\mu,\sigma_{\overline{X}}^2)$.
+\item If $\sigma_{\overline{X}}>0$, then $\mathbb{P}(\abs{\overline{X}-\mu}\leq\delta)\approx2\Phi(\frac{\delta}{\sigma_{\overline{X}}})-1$ for $\delta>0$, and $T-\tau=N(\overline{X}-\mu)\approx N(0,N^2\sigma_{\overline{X}}^2)$.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:normal-right-tail-quantile} \hlt{Normal Right-Tail Quantile}\\
+For $0<\alpha<1$ and $Z\sim N(0,1)$, $z(\alpha)\defeq\Phi^{-1}(1-\alpha)$, so $\mathbb{P}(Z>z(\alpha))=\alpha$.
+\end{definition}
+
+\begin{method} \label{meth:srs-normal-confidence-intervals} \hlt{Approximate SRS Confidence Intervals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $S$ be an SRS without replacement, with targets $\mu,\tau$ and estimators $\overline{X},T$.
+\item Fix $0<\alpha<1$, let $\Phi$ be the standard normal cdf, set $z(\frac{\alpha}{2})\defeq\Phi^{-1}(1-\frac{\alpha}{2})$, and use plug-in SEs $s_{\overline{X}},s_T$, and, when binary, $s_{\widehat p}$.
+\item $\operatorname{CI}_{1-\alpha}(\mu)=\overline{X}\pm z(\frac{\alpha}{2})s_{\overline{X}}$ and $\operatorname{CI}_{1-\alpha}(\tau)=T\pm z(\frac{\alpha}{2})s_T$.
+\item In the dichotomous case, with population proportion $p$ and sample proportion $\widehat p$, use $\operatorname{CI}_{1-\alpha}(p)=\widehat p\pm z(\frac{\alpha}{2})s_{\widehat p}$.
+\item Intervals are random before sampling; after observation, parameters are fixed and coverage is procedural.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:srs-generic-confidence-intervals} \hlt{Generic SRS Intervals}\\
+Suppose finite population has $N=8000$ units. Simple random sample of $n=100$ gives $\overline{X}=1.6$ for variable with sample standard deviation $s=0.8$. Use $z(0.025)\approx1.96$, suppose sample gives $\widehat p=0.12$ for binary attribute.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: $s_{\overline{X}}=\frac{s}{\sqrt n}\sqrt{1-\frac{n}{N}}=\frac{0.8}{10}\sqrt{1-\frac{100}{8000}}\approx0.0795$, then $95\%$ CI for $\mu$ is $1.6\pm1.96(0.0795)=(1.44,1.76)$.
+\item \hlt{Total}: $T=N\overline{X}=8000(1.6)=12800$ and $s_T=Ns_{\overline{X}}\approx636$, then $95\%$ CI for $\tau$ is $(11553,14047)$.
+\item \hlt{Proportion}: $s_{\widehat p}=\sqrt{\frac{\widehat p(1-\widehat p)}{n-1}\left(1-\frac{n}{N}\right)}=\sqrt{\frac{0.12(0.88)}{99}\left(1-\frac{100}{8000}\right)}\approx0.0325$, then $95\%$ CI for $p$ is $(0.056,0.184)$.\\
+The estimated attribute total is $N\widehat p=960$ with $Ns_{\widehat p}\approx260$ and interval $(451,1469)$.
+\end{enumerate}
+These intervals quantify SRS uncertainty for fixed finite-population quantities.
+\end{example}
+
+\begin{method} \label{meth:srs-sample-size-from-half-width} \hlt{Sample Size from Desired Half-Width}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $0<\alpha<1$, half-width $h>0$, planning SD $\sigma>0$, and planned size $n$.\\
+Let $\Phi$ be the standard normal cdf and set $z(\frac{\alpha}{2})\defeq\Phi^{-1}(1-\frac{\alpha}{2})$.
+\item Ignoring the finite population correction, $h\approx z(\frac{\alpha}{2})\frac{\sigma}{\sqrt n}$ gives $n\approx\left(\frac{z(\frac{\alpha}{2})\sigma}{h}\right)^2$.
+\item For total based on population proportion over $N$ units, use planning value $p_0\in[0,1]$, SE $N\sqrt{\frac{p_0(1-p_0)}{n}}$.
+\item With negligible finite population correction, halving interval width requires roughly $4n$ observations.
+\end{enumerate}
+\end{method}

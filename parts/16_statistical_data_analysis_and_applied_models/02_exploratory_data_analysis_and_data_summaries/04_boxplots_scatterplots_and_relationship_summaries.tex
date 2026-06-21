@@ -1,0 +1,70 @@
+\subsection{Boxplots, Scatterplots, and Relationship Summaries}
+
+Boxplots and scatterplots are compact exploratory displays.  A boxplot summarizes one batch or compares several batches; a scatterplot displays relationships between paired variables.
+
+\begin{method} \label{meth:boxplot-construction} \hlt{Boxplot Construction}\\
+A standard boxplot is built from the median, lower quartile $Q_1$, upper quartile $Q_3$, and $\operatorname{IQR}=Q_3-Q_1$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Draw a box from $Q_1$ to $Q_3$ and mark the median inside the box.
+\item Draw whiskers to the most extreme observations lying within $1.5\operatorname{IQR}$ of the nearer quartile.
+\item Mark observations beyond the whiskers individually as possible outliers.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_boxplot_schematic.tikz}
+  \caption{Boxplot: box $Q_1$ to $Q_3$, line median, dots possible outliers.}
+  \label{fig:eda-boxplot-schematic}
+\end{figure}
+
+\begin{remark} \label{rem:boxplots-compare-batches} \hlt{Comparing Batches with Boxplots}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Location}: Differences in medians $M_g$ indicate group shifts.
+\item \hlt{Spread}: Differences in $\operatorname{IQR}_g=Q_{3,g}-Q_{1,g}$ indicate central-spread changes.
+\item \hlt{Tails}: Unequal whiskers or one-sided outliers indicate skewness or tail imbalance.
+\end{enumerate}
+\end{remark}
+
+\begin{definition} \label{def:scatterplot-and-correlation-summaries} \hlt{Scatterplot, Pearson Correlation, and Rank Correlation}\\
+Let $(x_i,y_i)\in\R^2$ for $1\leq i\leq n$, set $\overline{x}\defeq n^{-1}\sum\limits_{i=1}^n x_i$ and $\overline{y}\defeq n^{-1}\sum\limits_{i=1}^n y_i$.\\
+Let $R_i,S_i$ be chosen ranks of $x_i,y_i$, using average ranks for ties.\\
+Set $\overline{R}\defeq n^{-1}\sum\limits_{i=1}^nR_i$ and $\overline{S}\defeq n^{-1}\sum\limits_{i=1}^nS_i$. Set $a_i\defeq x_i-\overline{x}$, $b_i\defeq y_i-\overline{y}$, $u_i\defeq R_i-\overline{R}$, and $v_i\defeq S_i-\overline{S}$.\\
+Let $S_{xx}\defeq\sum\limits_i a_i^2$, $S_{yy}\defeq\sum\limits_i b_i^2$, $S_{xy}\defeq\sum\limits_i a_ib_i$, $S_{RR}\defeq\sum\limits_i u_i^2$, $S_{SS}\defeq\sum\limits_i v_i^2$, and $S_{RS}\defeq\sum\limits_i u_iv_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Scatterplot}: $P\defeq\{(x_i,y_i):1\leq i\leq n\}\subset\R^2$, displayed in the $xy$-plane.
+\item \hlt{Pearson Correlation Coefficient}: if $S_{xx}S_{yy}>0$, $r\defeq \frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}$.
+\item \hlt{Rank Correlation Coefficient}: if $S_{RR}S_{SS}>0$, $r_{\mathrm{rank}}\defeq \frac{S_{RS}}{\sqrt{S_{RR}S_{SS}}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: $r$ is affine-scale invariant; $r_{\mathrm{rank}}$ is monotone-transform invariant.\\
+\hlt{Key Insight}: $r$ measures linear association; $r_{\mathrm{rank}}$ measures rank association.
+\end{definition}
+
+\begin{method} \label{meth:scatterplot-diagnostic-workflow} \hlt{Scatterplot Diagnostics}\\
+For paired data $P=\{(x_i,y_i):1\leq i\leq n\}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Raw Plot}: Inspect $P$ for outliers, curvature, clusters, and nonconstant spread.
+\item \hlt{Transform}: If scale obscures structure, compare $(g(x_i),h(y_i))$ for domain-meaningful $g,h$ such as $\log$.
+\item \hlt{Correlation}: Use $r$ only when the displayed relation is approximately linear.
+\item \hlt{Multiple Variables}: For $z_i\in\R^d$ with $d>2$, inspect all pairwise plots before relying on pairwise summaries.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:scale-can-hide-relationship-in-scatterplot} \hlt{Changing Scale Can Reveal Structure}\\
+If $x_i>0$ and $\max_i x_i/\min_i x_i\gg1$, the raw plot $P=\{(x_i,y_i)\}$ may compress variation. The transformed plot $P_{\log}\defeq\{(\log x_i,y_i)\}$ can reveal monotone or linear structure, and generally $r(P_{\log})\neq r(P)$ because Pearson correlation depends on the chosen coordinates.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_scatterplot_scale_change.tikz}
+  \caption{Scatterplots: raw $x$ compresses points; $\log x$ reveals a linear trend.}
+  \label{fig:eda-scatterplot-scale-change}
+\end{figure}
+
+\begin{remark} \label{rem:exploratory-displays-before-inference} \hlt{Exploration Before Formal Inference}\\
+Exploratory displays choose the inferential target: transformations $g(X)$, influential subsets, comparable spreads $\operatorname{IQR}_g$, and data-quality checks should be settled before intervals, tests, or models are trusted.
+\end{remark}
