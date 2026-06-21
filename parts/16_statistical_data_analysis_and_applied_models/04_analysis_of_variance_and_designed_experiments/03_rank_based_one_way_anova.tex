@@ -1,55 +1,54 @@
 \subsection{Rank-Based One-Way ANOVA}
-\label{subsec:rank-based-one-way-anova}
-% Source integration: attached Chapter 12 screenshots, Section 12.2.3 and selected problems.
 
-When normality or outlier sensitivity is a concern, a one-way comparison can be made after replacing observations by pooled ranks.  This continues the rank-test philosophy from Subsection \ref{subsec:rank-based-comparative-tests}.
+When normality or outlier sensitivity is a concern, a one-way comparison can be made after replacing observations by pooled ranks.
 
 \begin{definition} \label{def:kruskal-wallis-ranks} \hlt{Kruskal--Wallis Ranks}\\
-In an unequal-size one-way layout, treatment $i$ has observations $Y_{ij}$ for $j=1,\ldots,J_i$, and $N\defeq\sum_{i=1}^{I}J_i$.
-Rank the pooled sample $\{Y_{ij}:1\leq i\leq I,\ 1\leq j\leq J_i\}$ increasingly, with tied observations assigned the average of occupied ranks.
+Let $\mathcal{Y}\defeq\{Y_{ij}:1\leq i\leq I, 1\leq j\leq J_i\}$ be an unequal-size one-way sample with $N\defeq\sum\limits_{i=1}^{I}J_i$.\\
+Assign increasing pooled ranks to $\mathcal{Y}$, averaging ranks over ties.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Pooled rank}: $R_{ij}\defeq \operatorname{rank}_{\mathrm{pool}}(Y_{ij})$.
-\item \hlt{Treatment mean rank}: $\overline{R}_{i\cdot}\defeq \frac1{J_i}\sum_{j=1}^{J_i}R_{ij}$.
+\item \hlt{Treatment mean rank}: $\overline{R}_{i\cdot}\defeq \frac1{J_i}\sum\limits_{j=1}^{J_i}R_{ij}$.
 \item \hlt{Grand mean rank}: $\overline{R}_{\cdot\cdot}\defeq \frac{N+1}{2}$.
 \end{enumerate}
 \end{definition}
 
 \begin{method} \label{meth:kruskal-wallis-test} \hlt{Kruskal--Wallis Test}\\
-Define the rank between-group sum of squares
-\[
-SS_B^{(R)}\defeq \sum_{i=1}^{I}J_i(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2.
-\]
-The Kruskal--Wallis statistic is
-\[
-K=
-\frac{12}{N(N+1)}SS_B^{(R)}
-=
-\frac{12}{N(N+1)}
-\left(\sum_{i=1}^{I}J_i\overline{R}_{i\cdot}^{\,2}\right)-3(N+1).
-\]
-The exact null law is obtained by enumerating rank assignments.  For ordinary moderate sample sizes, the null law is well approximated by $\chi^2_{I-1}$.
+Let $SS_B^{(R)}\defeq \sum\limits_{i=1}^{I}J_i(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2$ and $K\defeq \frac{12}{N(N+1)}SS_B^{(R)}=\frac{12}{N(N+1)}\sum\limits_{i=1}^{I}J_i\overline{R}_{i\cdot}^{\,2}-3(N+1)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The exact null law enumerates all allocations of pooled ranks to group sizes $J_1,\ldots,J_I$.
+\item For moderate samples, $K\overset{H_0}{\approx}\chi^2_{I-1}$.
+\item Reject $H_0:F_1=\cdots=F_I$ at level $\alpha$ when $\mathbb{P}\{\chi^2_{I-1}\geq K_{\mathrm{obs}}\}\leq\alpha$.
+\end{enumerate}
 \end{method}
 
-\begin{example} \label{ex:tablet-laboratories-kruskal-wallis} \hlt{Tablet Laboratories by Ranks}\\
-For the tablet laboratory data of Example \ref{ex:tablet-laboratories-one-way-anova}, the source reports
-\[
-K=29.51.
-\]
-Using the $\chi^2_6$ approximation, the tail probability is below $.005$.  Thus the rank analysis, like the normal-theory $F$ test, gives strong evidence that the laboratories do not all have the same response distribution.
+\begin{example} \label{ex:kruskal-wallis-rank-calculation} \hlt{Generic Kruskal--Wallis Rank Calculation}\\
+For $I=7$ groups, suppose the pooled ranks give $K_{\mathrm{obs}}=29.51$.\\
+Using $K\overset{H_0}{\approx}\chi^2_6$, the tail probability satisfies $\mathbb{P}\{\chi^2_6\geq29.51\}<.005$.\\
+Reject $H_0:F_1=\cdots=F_7$; the group response distributions are not all equal.
 \end{example}
 
 \begin{corollary} \label{cor:kruskal-wallis-two-groups-mann-whitney} \hlt{Two Groups Recover Mann--Whitney}\\
-When $I=2$, the Kruskal--Wallis statistic is a monotone function of the rank sum for either group.  Therefore the two-group Kruskal--Wallis test is equivalent to the Mann--Whitney rank-sum test of Method \ref{meth:mann-whitney-test}.
-\begin{proof}
-With two groups, the two rank sums determine each other because their total is $N(N+1)/2$.  The statistic $SS_B^{(R)}$ therefore depends on only one rank sum, and it is largest exactly when that rank sum is farthest from its null center.
+For $I=2$, let $T_i\defeq\sum\limits_{j=1}^{J_i}R_{ij}$ and $N=J_1+J_2$. Then $K=\frac{12}{J_1J_2(N+1)}\left(T_1-\frac{J_1(N+1)}{2}\right)^2$, so the Kruskal--Wallis rejection order is the two-sided Mann--Whitney rank-sum order.
+\begin{proof} Let $G\defeq\frac{N+1}{2}$. Since $T_1+T_2=NG$, $\overline{R}_{1\cdot}-G=\frac{T_1-J_1G}{J_1}$ and $\overline{R}_{2\cdot}-G=-\frac{T_1-J_1G}{J_2}$.\\
+Hence $SS_B^{(R)}=(T_1-J_1G)^2(\frac{1}{J_1}+\frac{1}{J_2})=\frac{N(T_1-J_1G)^2}{J_1J_2}$, and the formula for $K$ follows.\\
+Since $U_1=T_1-\frac{J_1(J_1+1)}{2}$ is affine in $T_1$, both tests order evidence by $|T_1-J_1G|$.\\
+\hlt{Structural Commentary}: Two groups leave one rank contrast.\\
+\hlt{Key Insight}: $K$ is a squared centered rank sum.
 \end{proof}
 \end{corollary}
 
 \begin{method} \label{meth:rank-based-multiple-comparisons} \hlt{Rank-Based Follow-Up Comparisons}\\
-After a Kruskal--Wallis rejection, pairwise Mann--Whitney tests may be used as follow-up comparisons.  To protect the family of decisions, apply the Bonferroni control from Method \ref{meth:bonferroni-multiple-mean-comparisons} to the chosen pairwise rank tests.  This is especially natural when only a small set of scientifically planned comparisons is of interest.
+After rejecting global rank null, let $\mathcal{C}\subseteq\{(a,b):1\leq a<b\leq I\}$ be planned follow-up family with $|\mathcal{C}|=k$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(a,b)\in\mathcal{C}$, test $H_{0,ab}:F_a=F_b$ by a two-sample rank-sum statistic and let $p_{ab}$ be its two-sided $p$-value.
+\item Reject $H_{0,ab}$ iff $p_{ab}\leq\frac{\alpha}{k}$, equivalently $kp_{ab}\leq\alpha$.
+\item The selected family satisfies $\mathrm{FWER}\leq\alpha$ and is most efficient when $\mathcal{C}$ is fixed before inspection.
+\end{enumerate}
 \end{method}
 
 \begin{remark} \label{rem:kruskal-wallis-scope} \hlt{What Rank ANOVA Tests}\\
-The Kruskal--Wallis null is equality of the treatment response distributions, not merely equality of means.  It is often interpreted as a location comparison when the group distributions have similar shapes.  Because it uses ranks, it makes no normality assumption and is less driven by extreme numerical values than the one-way $F$ test.
+The null is $H_0:F_1=\cdots=F_I$, not merely $\mu_1=\cdots=\mu_I$. Under comparable distributional shapes, rejection is read as a location difference; the rank form avoids normality and reduces sensitivity to extremes.
 \end{remark}

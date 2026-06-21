@@ -1,64 +1,49 @@
 \subsection{Multiple Comparisons After ANOVA}
-\label{subsec:multiple-comparisons-after-anova}
-% Source integration: attached Chapter 12 screenshots, Section 12.2.2 and selected problems.
 
-The one-way $F$ test asks whether all treatment means are equal.  Once it rejects, the scientific question often becomes local: which means differ, and by how much?  The difficulty is simultaneous error control, already visible in Method \ref{prin:fishing-expeditions-and-bonferroni}.
+The one-way $F$ test assesses $H_0:\mu_1=\cdots=\mu_I$; after rejection, inference targets contrasts $\mu_a-\mu_b$ with error control over the chosen comparison family.
 
 \begin{definition} \label{def:studentized-range-quantile} \hlt{Studentized Range Quantile}\\
 Let $Q_{I,\nu}$ denote a random variable with the studentized range distribution for $I$ treatment means and $\nu$ error degrees of freedom.
-$q_{I,\nu}(\alpha)\defeq \inf\{q\in\R:\mathbb{P}(Q_{I,\nu}>q)\leq \alpha\}$.
-\hlt{Structural Commentary}: In a balanced one-way layout, Tukey comparisons use the pooled error scale $S_p$ from Theorem \ref{thm:one-way-anova-expected-mean-squares}.
+The \hlt{studentized range quantile} is $q_{I,\nu}(\alpha)\defeq \inf\{q\in\R:\mathbb{P}(Q_{I,\nu}>q)\leq \alpha\}$.\\
+\hlt{Structural Commentary}: Balanced Tukey comparisons use pooled scale $S_p$.
 \end{definition}
 
 \begin{method} \label{meth:tukey-pairwise-mean-comparisons} \hlt{Tukey Pairwise Comparisons}\\
-In a balanced normal one-way layout, simultaneous $100(1-\alpha)\%$ confidence intervals for all pairwise differences $\mu_{i_1}-\mu_{i_2}$ are
-\[
-(\overline{Y}_{i_1\cdot}-\overline{Y}_{i_2\cdot})
-\pm
-q_{I,I(J-1)}(\alpha)\frac{S_p}{\sqrt J}.
-\]
-Equivalently, reject the pairwise null $\mu_{i_1}=\mu_{i_2}$ when
-\[
-\abs{\overline{Y}_{i_1\cdot}-\overline{Y}_{i_2\cdot}}
->
-q_{I,I(J-1)}(\alpha)\frac{S_p}{\sqrt J}.
-\]
-The protection is simultaneous over all pairs, so the threshold is larger than the threshold from a single pooled two-sample $t$ comparison.
+In a balanced normal one-way layout, let $\mathcal{P}\defeq\{(a,b):1\leq a<b\leq I\}$, $\nu\defeq I(J-1)$, and $h_\alpha\defeq q_{I,\nu}(\alpha)S_p/\sqrt J$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(a,b)\in\mathcal{P}$, the simultaneous $100(1-\alpha)\%$ confidence interval for $\mu_a-\mu_b$ is $(\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot})\pm h_\alpha$.
+\item Reject $H_{0,ab}:\mu_a=\mu_b$ iff $\abs{\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot}}>h_\alpha$.
+\end{enumerate}
+Simultaneity over $\mathcal{P}$ uses the studentized range cutoff.
 \end{method}
 
-\begin{example} \label{ex:tablet-laboratories-tukey-comparisons} \hlt{Tablet Laboratories: Tukey Comparisons}\\
-For the tablet laboratory data in Example \ref{ex:tablet-laboratories-one-way-anova}, the reported ordered sample means were
-\[
-\begin{array}{c|rrrrrrr}
-\text{Lab} & 1 & 3 & 7 & 2 & 5 & 6 & 4\\ \hline
-\text{Mean} & 4.062 & 4.003 & 3.998 & 3.997 & 3.957 & 3.955 & 3.920
-\end{array}
-\]
-Using $S_p=.06$ and the source's approximation $q_{7,60}(.05)=4.31$, the Tukey half-width is about
-\[
-4.31\frac{.06}{\sqrt{10}}=.082.
-\]
-Thus lab $1$ is significantly higher than labs $4,5,6$, and lab $3$ is significantly higher than lab $4$; the remaining pairwise differences are not significant at the simultaneous $5\%$ level.
+\begin{example} \label{ex:tukey-pairwise-calculation} \hlt{Generic Tukey Pairwise Calculation}\\
+Consider a balanced one-way layout with $I=7$, $J=10$, $S_p=.06$, and ordered sample means\\
+$(\overline{Y}_{1\cdot},\overline{Y}_{3\cdot},\overline{Y}_{7\cdot},\overline{Y}_{2\cdot},\overline{Y}_{5\cdot},\overline{Y}_{6\cdot},\overline{Y}_{4\cdot})=(4.062,4.003,3.998,3.997,3.957,3.955,3.920)$.\\
+With $q_{7,60}(.05)=4.31$, the Tukey half-width is $h_{.05}=4.31(.06)/\sqrt{10}\approx.082$.\\
+Rejected pairs at simultaneous level $.05$ are $(1,4),(1,5),(1,6),(3,4)$; remaining pairwise nulls not rejected.
 \end{example}
 
 \begin{method} \label{meth:bonferroni-multiple-mean-comparisons} \hlt{Bonferroni Pairwise Comparisons}\\
-Suppose $k$ pairwise hypotheses or confidence intervals are planned.  Testing each individual hypothesis at level $\alpha/k$, or forming each individual confidence interval at level $1-\alpha/k$, controls the family-wise error rate at most $\alpha$.  For pairwise mean comparisons using the one-way pooled error variance, a two-sided Bonferroni interval has the form
-\[
-(\overline{Y}_{i_1\cdot}-\overline{Y}_{i_2\cdot})
-\pm
-t_{\nu,1-\alpha/(2k)}S_p\sqrt{\frac1{J_{i_1}}+\frac1{J_{i_2}}},
-\]
-with $\nu=N-I$ in the unequal-size case.  Unlike Tukey's balanced formula, this method adapts directly to unequal treatment sizes and to selected planned comparisons.
+Let $\mathcal{C}\subseteq\{(a,b):1\leq a<b\leq I\}$ be the planned pairwise family with $|\mathcal{C}|=k$.\\
+Set $\nu\defeq N-I$ and $h_{ab}\defeq t_{\nu,1-\alpha/(2k)}S_p\sqrt{1/J_a+1/J_b}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(a,b)\in\mathcal{C}$, the Bonferroni confidence interval for $\mu_a-\mu_b$ is $(\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot})\pm h_{ab}$.
+\item Reject $H_{0,ab}:\mu_a=\mu_b$ iff $\abs{\overline{Y}_{a\cdot}-\overline{Y}_{b\cdot}}>h_{ab}$.
+\end{enumerate}
+The family satisfies $\mathrm{FWER}\leq\alpha$ and allows unequal treatment sizes through $J_a,J_b$.
 \end{method}
 
-\begin{example} \label{ex:tablet-laboratories-bonferroni-comparisons} \hlt{Tablet Laboratories: Bonferroni Comparisons}\\
-For all $\binom{7}{2}=21$ pairwise laboratory comparisons, the source uses a Bonferroni calculation with a critical value near $3.16$.  The resulting simultaneous $95\%$ half-width is about
-\[
-.085,
-\]
-very close to the Tukey half-width $.082$ in Example \ref{ex:tablet-laboratories-tukey-comparisons}.  It again identifies lab $1$ as significantly higher than labs $4,5,6$.
+\begin{example} \label{ex:bonferroni-pairwise-calculation} \hlt{Generic Bonferroni Pairwise Calculation}\\
+For $I=7$ treatments and $k=\binom{7}{2}=21$ planned pairwise comparisons at $\alpha=.05$, take $t_{60,1-.05/(2\cdot21)}\approx3.16$.\\
+The resulting simultaneous $95\%$ Bonferroni half-width is $h\approx.085$.\\
+Rejected pairwise nulls are $(1,4),(1,5),(1,6)$; all other planned pairwise nulls are not rejected.
 \end{example}
 
 \begin{remark} \label{rem:multiple-comparisons-after-global-test} \hlt{The Global Test Does Not Name the Difference}\\
-Rejecting the one-way ANOVA null says that not all treatment means are equal.  It does not identify the responsible pairs or estimate their signs with simultaneous reliability.  Planned comparisons, Tukey intervals, and Bonferroni intervals answer different questions and should be chosen according to the comparison family that was scientifically meaningful before looking at the data.
+Rejecting $H_0:\mu_1=\cdots=\mu_I$ establishes only $\exists\,a<b$ with $\mu_a\neq\mu_b$.\\
+It does not identify such pairs or provide simultaneous sign guarantees.\\
+Select Tukey, Bonferroni, or planned-contrast procedures according to the preassigned comparison family.
 \end{remark}

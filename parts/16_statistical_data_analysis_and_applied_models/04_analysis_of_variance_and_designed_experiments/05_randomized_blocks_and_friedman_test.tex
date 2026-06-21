@@ -1,84 +1,77 @@
-\subsection{Randomized Blocks and Friedman's Test}
-\label{subsec:randomized-blocks-and-friedman-test}
-% Source integration: attached Chapter 12 screenshots, Sections 12.3.3--12.3.4.
+\subsection{Randomised Blocks and Friedman's Test}
 
-Randomized block designs compare treatments within relatively homogeneous blocks.  Blocking removes a major source of background variation from the treatment comparison, much as pairing removes shared variation in Proposition \ref{prop:pairing-variance-reduction}.
+Randomised block designs compare treatments within relatively homogeneous blocks.  Blocking removes major background variation from the treatment comparison, much as pairing removes shared variation.
 
-\begin{definition} \label{def:randomized-block-design} \hlt{Randomized Block Design}\\
-For $I$ treatments and $J$ blocks, each block contains $I$ experimental units and receives a within-block random permutation of the treatments.
-The additive block model satisfies $Y_{ij}=\mu+\alpha_i+\beta_j+\varepsilon_{ij}$, $1\leq i\leq I$, $1\leq j\leq J$, $\sum_{i=1}^{I}\alpha_i=0$, and $\sum_{j=1}^{J}\beta_j=0$.
-\hlt{Key Insight}: $\alpha_i-\alpha_{i'}$ compares treatments after conditioning on block level $j$, while $\beta_j$ absorbs block heterogeneity.
+\begin{definition} \label{def:randomized-block-design} \hlt{Randomised Block Design}\\
+A randomised block design has $J$ blocks, each containing one experimental unit for each of the $I$ treatments; within every block, treatments are assigned by an independent random permutation.\\
+The additive block model is $Y_{ij}=\mu+\alpha_i+\beta_j+\varepsilon_{ij}$ for $1\leq i\leq I$, $1\leq j\leq J$, with $\sum\limits_i\alpha_i=\sum\limits_j\beta_j=0$.\\
+\hlt{Key Insight}: Blocks absorb heterogeneity; $\alpha_i-\alpha_{i'}$ is a within-block treatment contrast.
 \end{definition}
 
 \begin{method} \label{meth:randomized-block-f-test} \hlt{Randomized Block $F$ Test}\\
-Treat the randomized block model as a two-way layout with one observation per cell and no interaction.  Let $MS_A$, $MS_B$, and $MS_{AB}$ be the treatment, block, and residual mean squares.  When the no-interaction model is adequate,
-\[
-\mathbb{E}(MS_A)=\sigma^2+\frac{J}{I-1}\sum_{i=1}^{I}\alpha_i^2,
-\qquad
-\mathbb{E}(MS_B)=\sigma^2+\frac{I}{J-1}\sum_{j=1}^{J}\beta_j^2,
-\]
-\[
-\mathbb{E}(MS_{AB})=\sigma^2.
-\]
-Thus the treatment null is tested by
-\[
-F=\frac{MS_A}{MS_{AB}},
-\]
-with $I-1$ and $(I-1)(J-1)$ degrees of freedom under the normal additive model.
+Treat $Y_{ij}=\mu+\alpha_i+\beta_j+\varepsilon_{ij}$ as a two-way layout with one observation per treatment-block cell and no interaction.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Define $MS_A\defeq \frac{SS_A}{I-1}$, $MS_B\defeq \frac{SS_B}{J-1}$, and $MS_{AB}\defeq \frac{SS_{AB}}{(I-1)(J-1)}$.
+\item
+Under additivity, $\mathbb{E}(MS_A)=\sigma^2+\frac{J}{I-1}\sum\limits_i\alpha_i^2$, $\mathbb{E}(MS_B)=\sigma^2+\frac{I}{J-1}\sum\limits_j\beta_j^2$, and $\mathbb{E}(MS_{AB})=\sigma^2$.
+\item
+Test $H_0:\alpha_1=\cdots=\alpha_I=0$ by $F\defeq \frac{MS_A}{MS_{AB}}$.
+\item
+Under the normal additive null, $F\sim F_{I-1,(I-1)(J-1)}$.
+\end{enumerate}
 \end{method}
 
 \begin{remark} \label{rem:block-interaction-conservatism} \hlt{Interaction in a Block Design}\\
-If treatment effects vary substantially across blocks, then $MS_{AB}$ estimates $\sigma^2$ plus interaction variation.  Using it as the denominator for the treatment test can make the test conservative, because the denominator is inflated by structure not included in the additive block model.
+If $\delta_{ij}\neq0$, then $MS_{AB}$ estimates $\sigma^2$ plus treatment-block interaction energy.\\
+The denominator of $F=\frac{MS_A}{MS_{AB}}$ is inflated, so the additive-model treatment test is conservative.
 \end{remark}
 
-\begin{example} \label{ex:itching-randomized-block-anova} \hlt{Itching Treatments with Subjects as Blocks}\\
-In the source experiment, seven treatments for itching were compared on ten subjects, each subject receiving one treatment per day in randomized order.  Subjects are blocks.  The reported ANOVA table was
+\begin{example} \label{ex:generic-randomized-block-anova} \hlt{Generic Randomized Block ANOVA}\\
+Suppose $I=7$ treatments are compared across $J=10$ blocks, with each block receiving all treatments in randomized order. The randomized-block ANOVA table is
 \[
 \begin{array}{c|rrrr}
 \text{Source} & df & SS & MS & F\\ \hline
-\text{Drugs} & 6 & 53013 & 8835 & 2.85\\
-\text{Subjects} & 9 & 103280 & 11476 & 3.71\\
+\text{Treatments} & 6 & 53013 & 8835 & 2.85\\
+\text{Blocks} & 9 & 103280 & 11476 & 3.71\\
 \text{Interaction} & 54 & 167130 & 3095 & \\
 \text{Total} & 69 & 323422 & &
 \end{array}
 \]
-The drug statistic $F=2.85$ on $6$ and $54$ degrees of freedom has reported $p<.025$, giving evidence of treatment differences.  The subject effect is large but is not the experimental target; blocking prevents that subject-to-subject variation from being mistaken for treatment variation.
+$F=2.85$ on $(6,54)$ degrees of freedom gives $p<.025$, rejecting equal treatment effects.\\
+Blocking isolates nuisance block heterogeneity.
 \end{example}
 
 \begin{method} \label{meth:friedman-test} \hlt{Friedman's Rank Test for Blocks}\\
-For a nonparametric block analysis, rank the $I$ treatment responses within each of the $J$ blocks.  Let $\overline{R}_{i\cdot}$ be the average rank of treatment $i$ across blocks and let
-\[
-\overline{R}_{\cdot\cdot}=\frac{I+1}{2}.
-\]
-The Friedman statistic is
-\[
-Q=
-\frac{12J}{I(I+1)}
-\sum_{i=1}^{I}(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2.
-\]
-For sample sizes like the source itching experiment, the null distribution is well approximated by $\chi^2_{I-1}$.  Average ranks are assigned to ties.
+For observations $Y_{ij}$ from treatment $i$ in block $j$, rank $Y_{1j},\ldots,Y_{Ij}$ within each block.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $R_{ij}$ be within-block rank, use average ranks for ties, set $\overline{R}_{i\cdot}\defeq \frac{1}{J}\sum\limits_jR_{ij}$, $\overline{R}_{\cdot\cdot}\defeq\frac{I+1}{2}$.
+\item Define $Q\defeq \frac{12J}{I(I+1)}\sum\limits_i(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2$.
+\item Under $H_0:F_1=\cdots=F_I$, use $Q\overset{H_0}{\approx}\chi^2_{I-1}$ for moderate $J$.
+\item Reject at level $\alpha$ when $\mathbb{P}\{\chi^2_{I-1}\geq Q_{\mathrm{obs}}\}\leq\alpha$.
+\end{enumerate}
 \end{method}
 
-\begin{example} \label{ex:itching-friedman-test} \hlt{Itching Treatments by Within-Subject Ranks}\\
-For the itching data, the source reports average treatment ranks for no drug, placebo, papaverine, morphine, aminophylline, pentobarbital, and tripelennamine:
+\begin{example} \label{ex:generic-friedman-rank-calculation} \hlt{Generic Friedman Rank Calculation}\\
+For $I=7$ treatments, suppose the average within-block ranks are
 \[
 \begin{array}{c|rrrrrrr}
-\text{Treatment} & \text{No} & \text{Plac.} & \text{Pap.} & \text{Morph.} & \text{Amino.} & \text{Pento.} & \text{Trip.}\\ \hline
+\text{Treatment} & T_1 & T_2 & T_3 & T_4 & T_5 & T_6 & T_7\\ \hline
 \text{Average rank} & 5.10 & 4.90 & 2.30 & 3.50 & 3.05 & 4.90 & 4.25
 \end{array}
 \]
-With $\overline{R}_{\cdot\cdot}=4$, the source gives
-\[
-\sum_i(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2=6.935,
-\qquad
-Q=14.86.
-\]
-Using the $\chi^2_6$ approximation, the reported tail probability is below $.025$.  The rank analysis reaches the same qualitative conclusion as the parametric block ANOVA.
+With $\overline{R}_{\cdot\cdot}=4$, $\sum_i(\overline{R}_{i\cdot}-\overline{R}_{\cdot\cdot})^2=6.935$ and $Q=14.86$.\\
+Using $Q\overset{H_0}{\approx}\chi^2_6$, the tail probability is below $.025$, so the treatment response distributions are not all equal.
 \end{example}
 
 \begin{corollary} \label{cor:friedman-two-treatments-sign-test} \hlt{Two Treatments Recover the Sign Test}\\
-With two treatments in each block, Friedman's test uses only whether treatment $1$ or treatment $2$ receives the larger within-block rank.  Thus it carries the same information as the paired sign test from Example \ref{ex:sign-test-binomial-glrt}.
-\begin{proof}
-Within each block, the ranks are $1$ and $2$.  The average rank of one treatment is therefore determined by the number of blocks in which that treatment has the larger response, which is exactly the sign-test count after ties are set aside or averaged according to the chosen convention.
+For $I=2$, set $D_j\defeq Y_{1j}-Y_{2j}$ and $B\defeq\#\{j:D_j>0\}$. Friedman's statistic is a function of $B$ alone, so the two-treatment Friedman test is equivalent to the paired sign test.
+\begin{proof} Ignoring ties, $R_{1j}=2\mathbf{1}_{\{D_j>0\}}+\mathbf{1}_{\{D_j<0\}}=1+\mathbf{1}_{\{D_j>0\}}$.\\
+Hence $\sum_jR_{1j}=J+B$, so $\overline{R}_{1\cdot}$, $\overline{R}_{2\cdot}$, and $Q$ are determined by $B$.\\
+Under $H_0$, signs are exchangeable and $B\sim\operatorname{Bin}(J,1/2)$, which is the paired sign-test calibration.\\
+\hlt{Structural Commentary}: Two within-block ranks encode only the sign of $D_j$.\\
+\hlt{Key Insight}: The rank-sum statistic collapses to a binomial sign count.
 \end{proof}
 \end{corollary}

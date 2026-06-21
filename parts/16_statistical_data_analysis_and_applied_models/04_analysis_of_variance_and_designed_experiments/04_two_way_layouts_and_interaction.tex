@@ -1,116 +1,114 @@
 \subsection{Two-Way Layouts and Interaction}
-\label{subsec:two-way-layouts-and-interaction}
-% Source integration: attached Chapter 12 screenshots, Sections 12.3--12.3.2.
 
 A two-way layout studies two factors at once.  It estimates main effects for each factor and checks whether the effect of one factor changes across levels of the other.
 
 \begin{definition} \label{def:two-way-additive-parametrization} \hlt{Two-Way Additive Parametrization}\\
-For one observation $Y_{ij}$ at factor levels $i=1,\ldots,I$ and $j=1,\ldots,J$, set $\overline{Y}_{i\cdot}\defeq J^{-1}\sum_{j=1}^{J}Y_{ij}$, $\overline{Y}_{\cdot j}\defeq I^{-1}\sum_{i=1}^{I}Y_{ij}$, and $\overline{Y}_{\cdot\cdot}\defeq (IJ)^{-1}\sum_{i=1}^{I}\sum_{j=1}^{J}Y_{ij}$.
+For one observation $Y_{ij}$ at factor levels $i=1,\ldots,I$ and $j=1,\ldots,J$,\\
+set $\overline{Y}_{i\cdot}\defeq J^{-1}\sum\limits_{j=1}^{J}Y_{ij}$, $\overline{Y}_{\cdot j}\defeq I^{-1}\sum\limits_{i=1}^{I}Y_{ij}$, and $\overline{Y}_{\cdot\cdot}\defeq (IJ)^{-1}\sum\limits_{i=1}^{I}\sum\limits_{j=1}^{J}Y_{ij}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Intercept}: $\widehat{\mu}\defeq\overline{Y}_{\cdot\cdot}$.
-\item \hlt{Factor $A$ coefficient}: $\widehat{\alpha}_i\defeq\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot}$, $1\leq i\leq I$.
-\item \hlt{Factor $B$ coefficient}: $\widehat{\beta}_j\defeq\overline{Y}_{\cdot j}-\overline{Y}_{\cdot\cdot}$, $1\leq j\leq J$.
+\item \hlt{Factor $A$, $B$ coefficient}: $\widehat{\alpha}_i\defeq\overline{Y}_{i\cdot}-\overline{Y}_{\cdot\cdot}$, $1\leq i\leq I$ and $\widehat{\beta}_j\defeq\overline{Y}_{\cdot j}-\overline{Y}_{\cdot\cdot}$, $1\leq j\leq J$.
 \item \hlt{Additive fitted value}: $\widehat{Y}_{ij}\defeq\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j$.
 \item \hlt{Interaction residual}: $\widehat{\delta}_{ij}\defeq Y_{ij}-\overline{Y}_{i\cdot}-\overline{Y}_{\cdot j}+\overline{Y}_{\cdot\cdot}$, so $Y_{ij}=\widehat{\mu}+\widehat{\alpha}_i+\widehat{\beta}_j+\widehat{\delta}_{ij}$.
 \end{enumerate}
-\hlt{Structural Commentary}: In exact arithmetic, $\sum_{i=1}^{I}\widehat{\alpha}_i=\sum_{j=1}^{J}\widehat{\beta}_j=0$, $\sum_{i=1}^{I}\widehat{\delta}_{ij}=0\ \forall j$, and $\sum_{j=1}^{J}\widehat{\delta}_{ij}=0\ \forall i$; displayed rounded data may violate these identities numerically.
+\hlt{Structural Commentary}: Exact fits satisfy zero-sum effects and margins: $\sum\limits_i\widehat{\alpha}_i=\sum\limits_j\widehat{\beta}_j=\sum\limits_i\widehat{\delta}_{ij}=\sum\limits_j\widehat{\delta}_{ij}=0$.
 \end{definition}
 
 \begin{remark} \label{rem:two-way-interaction-profile-plots} \hlt{Interaction and Parallel Profiles}\\
-In an additive model, the fitted difference between two levels of one factor is the same at every level of the other factor.  Thus profile lines are parallel.  Visible nonparallelism is evidence of interaction: the comparison between levels depends on the background level of the other factor.
+Under additivity, $\widehat{Y}_{ij}-\widehat{Y}_{i'j}=\widehat{\alpha}_i-\widehat{\alpha}_{i'}$ is independent of $j$, so factor-$A$ profiles are parallel across $B$. Nonparallel profiles indicate $\delta_{ij}\neq0$ structure: the contrast between factor levels depends on the conditioning level.
 \end{remark}
 
 \begin{figure}[H]
   \centering
   \input{figures/statistics_time_series/anova_interaction_parallelism.tikz}
-  \caption{Parallel profiles represent an additive two-way model; changing separation between profiles indicates interaction.}
+  \caption{Parallel profiles indicate additivity; changing gaps indicate interaction.}
   \label{fig:anova-interaction-parallelism}
 \end{figure}
 
 \begin{definition} \label{def:balanced-two-way-normal-model} \hlt{Balanced Two-Way Normal Model}\\
-For factor levels $i=1,\ldots,I$ and $j=1,\ldots,J$ with $K>1$ independent observations per cell, the fixed-effects model satisfies $Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk}$, independent errors $\varepsilon_{ijk}\sim N(0,\sigma^2)$, $\sum_{i=1}^{I}\alpha_i=0$, $\sum_{j=1}^{J}\beta_j=0$, $\sum_{i=1}^{I}\delta_{ij}=0\ \forall j$, and $\sum_{j=1}^{J}\delta_{ij}=0\ \forall i$.
+A \hlt{balanced two-way normal fixed-effects model} observes $Y_{ijk}$ for $1\leq i\leq I$, $1\leq j\leq J$, $1\leq k\leq K$, with common cell size $K>1$, and assumes $Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk}$ for mutually independent $\varepsilon_{ijk}\sim N(0,\sigma^2)$,\\
+under $\sum\limits_i\alpha_i=\sum\limits_j\beta_j=0$, $\sum\limits_i\delta_{ij}=0\ \forall j$, and $\sum\limits_j\delta_{ij}=0\ \forall i$.\\
 \hlt{Key Insight}: $\delta_{ij}=0\ \forall(i,j)$ iff the cell means are additive in the two factors.
 \end{definition}
 
 \begin{definition} \label{def:two-way-anova-sums-of-squares} \hlt{Two-Way Sums of Squares}\\
-For the model in Definition \ref{def:balanced-two-way-normal-model}, write $\sum_i$, $\sum_j$, and $\sum_k$ for sums over $1,\ldots,I$, $1,\ldots,J$, and $1,\ldots,K$.
-
-$\overline{Y}_{ij\cdot}\defeq K^{-1}\sum_kY_{ijk}$.
-
-$\overline{Y}_{i\cdot\cdot}\defeq (JK)^{-1}\sum_j\sum_kY_{ijk}$.
-
-$\overline{Y}_{\cdot j\cdot}\defeq (IK)^{-1}\sum_i\sum_kY_{ijk}$.
-
-$\overline{Y}_{\cdot\cdot\cdot}\defeq (IJK)^{-1}\sum_i\sum_j\sum_kY_{ijk}$.
-
+Let $Y_{ijk}$ be balanced observations for $1\leq i\leq I$, $1\leq j\leq J$, $1\leq k\leq K$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Factor $A$}: $SS_A\defeq JK\sum_i(\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2$.
-\item \hlt{Factor $B$}: $SS_B\defeq IK\sum_j(\overline{Y}_{\cdot j\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2$.
-\item \hlt{Interaction}: $SS_{AB}\defeq K\sum_i\sum_j(\overline{Y}_{ij\cdot}-\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot j\cdot}+\overline{Y}_{\cdot\cdot\cdot})^2$.
-\item \hlt{Error}: $SS_E\defeq \sum_i\sum_j\sum_k(Y_{ijk}-\overline{Y}_{ij\cdot})^2$.
-\item \hlt{Total}: $SS_{\mathrm{tot}}\defeq \sum_i\sum_j\sum_k(Y_{ijk}-\overline{Y}_{\cdot\cdot\cdot})^2$.
+\item \hlt{Means}: $\overline{Y}_{ij\cdot}\defeq \frac{1}{K}\sum\limits_kY_{ijk}$, $\overline{Y}_{i\cdot\cdot}\defeq \frac{1}{JK}\sum\limits_j\sum\limits_kY_{ijk}$, $\overline{Y}_{\cdot j\cdot}\defeq \frac{1}{IK}\sum\limits_i\sum\limits_kY_{ijk}$, $\overline{Y}_{\cdot\cdot\cdot}\defeq \frac{1}{IJK}\sum\limits_i\sum\limits_j\sum\limits_kY_{ijk}$.
+\item \hlt{Between-cell components}: $SS_A\defeq JK\sum\limits_i(\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2$, $SS_B\defeq IK\sum\limits_j(\overline{Y}_{\cdot j\cdot}-\overline{Y}_{\cdot\cdot\cdot})^2$,\\
+and $SS_{AB}\defeq K\sum\limits_i\sum\limits_j(\overline{Y}_{ij\cdot}-\overline{Y}_{i\cdot\cdot}-\overline{Y}_{\cdot j\cdot}+\overline{Y}_{\cdot\cdot\cdot})^2$.
+\item \hlt{Within-cell and total}: $SS_E\defeq \sum\limits_i\sum\limits_j\sum\limits_k(Y_{ijk}-\overline{Y}_{ij\cdot})^2$, $SS_{\mathrm{tot}}\defeq \sum\limits_i\sum\limits_j\sum\limits_k(Y_{ijk}-\overline{Y}_{\cdot\cdot\cdot})^2$,\\
+and $SS_{\mathrm{tot}}=SS_A+SS_B+SS_{AB}+SS_E$.
 \end{enumerate}
-\hlt{Structural Commentary}: $SS_{\mathrm{tot}}=SS_A+SS_B+SS_{AB}+SS_E$.
+\hlt{Structural Commentary}: Orthogonal projections split total variation.
 \end{definition}
 
 \begin{theorem} \label{thm:two-way-anova-expected-sums-of-squares} \hlt{Expected Two-Way Sums of Squares}\\
-Under Definition \ref{def:balanced-two-way-normal-model},
-\[
-\mathbb{E}(SS_A)=(I-1)\sigma^2+JK\sum_{i=1}^{I}\alpha_i^2,
-\]
-\[
-\mathbb{E}(SS_B)=(J-1)\sigma^2+IK\sum_{j=1}^{J}\beta_j^2,
-\]
-\[
-\mathbb{E}(SS_{AB})=(I-1)(J-1)\sigma^2
-+K\sum_{i=1}^{I}\sum_{j=1}^{J}\delta_{ij}^2,
-\]
-\[
-\mathbb{E}(SS_E)=IJ(K-1)\sigma^2.
-\]
-\begin{proof}
-Apply Lemma \ref{lem:mean-centering-expected-square} to the relevant marginal means and cell means.  The parameter constraints remove mixed cross terms when the squared effects are summed.
+Assume $Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk}$ with independent $\varepsilon_{ijk}\sim N(0,\sigma^2)$,\\
+and $\sum\limits_i\alpha_i=\sum\limits_j\beta_j=0$, $\sum\limits_i\delta_{ij}=0\ \forall j$; $\sum\limits_j\delta_{ij}=0\ \forall i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{E}(SS_A)=(I-1)\sigma^2+JK\sum\limits_i\alpha_i^2$.
+\item $\mathbb{E}(SS_B)=(J-1)\sigma^2+IK\sum\limits_j\beta_j^2$.
+\item $\mathbb{E}(SS_{AB})=(I-1)(J-1)\sigma^2+K\sum\limits_i\sum\limits_j\delta_{ij}^2$.
+\item $\mathbb{E}(SS_E)=IJ(K-1)\sigma^2$.
+\end{enumerate}
+\begin{proof} Let $Y=m+\varepsilon\in\mathbb{R}^{IJK}$ with $m_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}$ and $\varepsilon\sim N(0,\sigma^2 I_{IJK})$.\\
+For an orthogonal projection $P$, $\mathbb{E}\norm{PY}^2=\norm{Pm}^2+\sigma^2\operatorname{rank}P$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $P_A m$ has value $\alpha_i$ repeated over $j,k$, so $\norm{P_A m}^2=JK\sum\limits_i\alpha_i^2$ and $\operatorname{rank}P_A=I-1$.
+\item $P_B m$ has value $\beta_j$ repeated over $i,k$, so $\norm{P_B m}^2=IK\sum\limits_j\beta_j^2$ and $\operatorname{rank}P_B=J-1$.
+\item $P_{AB}m$ has value $\delta_{ij}$ repeated over $k$, so $\norm{P_{AB}m}^2=K\sum\limits_i\sum\limits_j\delta_{ij}^2$ and $\operatorname{rank}P_{AB}=(I-1)(J-1)$.
+\item $P_E$ centers within cells; since $m_{ijk}$ is constant in $k$ for fixed $(i,j)$, $P_E m=0$ and $\operatorname{rank}P_E=IJ(K-1)$.
+\end{enumerate}
+Applying the projection identity to $P_A,P_B,P_{AB},P_E$ gives the four expectations.\\
+\hlt{Structural Commentary}: Balanced orthogonality separates noise degrees of freedom from effect energy.\\
+\hlt{Key Insight}: Each expectation is $\sigma^2$ times rank plus squared signal norm.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:two-way-anova-f-tests} \hlt{Two-Way Normal-Theory $F$ Tests}\\
-Under normality, the sums of squares in Definition \ref{def:two-way-anova-sums-of-squares} are independent.  Also
-\[
-\frac{SS_E}{\sigma^2}\sim \chi^2_{IJ(K-1)}.
-\]
-Under the corresponding null hypotheses,
-\[
-\frac{SS_A}{\sigma^2}\sim \chi^2_{I-1},
-\qquad
-\frac{SS_B}{\sigma^2}\sim \chi^2_{J-1},
-\qquad
-\frac{SS_{AB}}{\sigma^2}\sim \chi^2_{(I-1)(J-1)}.
-\]
-Consequently, main effects and interaction are tested by
-\[
-F_A=\frac{SS_A/(I-1)}{SS_E/[IJ(K-1)]},
-F_B=\frac{SS_B/(J-1)}{SS_E/[IJ(K-1)]},
-\]
-\[
-F_{AB}=\frac{SS_{AB}/[(I-1)(J-1)]}{SS_E/[IJ(K-1)]}.
-\]
+Assume observations $Y_{ijk}$ for $1\leq i\leq I$, $1\leq j\leq J$, $1\leq k\leq K$ satisfy $Y_{ijk}=\mu+\alpha_i+\beta_j+\delta_{ij}+\varepsilon_{ijk}$\\
+with independent $\varepsilon_{ijk}\sim N(0,\sigma^2)$, $\sum\limits_i\alpha_i=\sum\limits_j\beta_j=0$, $\sum\limits_i\delta_{ij}=0\ \forall j$, and $\sum\limits_j\delta_{ij}=0\ \forall i$.\\
+Let $d_E\defeq IJ(K-1)$ and $MS_E\defeq \frac{SS_E}{d_E}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $SS_A,SS_B,SS_{AB},SS_E$ are independent, and $\frac{SS_E}{\sigma^2}\sim\chi^2_{d_E}$.
+\item Under $H_A:\alpha_i=0\ \forall i$, $\frac{SS_A}{\sigma^2}\sim\chi^2_{I-1}$; under $H_B:\beta_j=0\ \forall j$, $\frac{SS_B}{\sigma^2}\sim\chi^2_{J-1}$;\\
+under $H_{AB}:\delta_{ij}=0\ \forall(i,j)$, $\frac{SS_{AB}}{\sigma^2}\sim\chi^2_{(I-1)(J-1)}$.
+\item $F_A\defeq \frac{\frac{SS_A}{I-1}}{MS_E}\sim F_{I-1,d_E}$ under $H_A$, $F_B\defeq \frac{\frac{SS_B}{J-1}}{MS_E}\sim F_{J-1,d_E}$ under $H_B$,\\
+and $F_{AB}\defeq \frac{\frac{SS_{AB}}{(I-1)(J-1)}}{MS_E}\sim F_{(I-1)(J-1),d_E}$ under $H_{AB}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Vectorise $Y=m+\varepsilon\in\mathbb{R}^{IJK}$ with $\varepsilon\sim N(0,\sigma^2 I_{IJK})$.\\
+Let $P_A,P_B,P_{AB},P_E$ be the mutually orthogonal projections onto the factor-$A$, factor-$B$, interaction, and within-cell subspaces, so $SS_R=\norm{P_RY}^2$ for $R\in\{A,B,AB,E\}$.\\
+Orthogonal projections of a spherical normal vector are independent, and $\frac{\norm{P_RY}^2}{\sigma^2}\sim\chi^2_{d_R}(\lambda_R)$ with $d_R=\operatorname{rank}P_R$ and $\lambda_R=\frac{\norm{P_Rm}^2}{\sigma^2}$. Since $d_E=IJ(K-1)$ and $\lambda_E=0$, claim (i) follows.
+\item Here $d_A=I-1$, $d_B=J-1$, and $d_{AB}=(I-1)(J-1)$. Under $H_A,H_B,H_{AB}$ respectively, $\lambda_A,\lambda_B,\lambda_{AB}$ vanish, so the central chi-square laws in claim (ii) follow.
+\item In each null case the numerator chi-square in claim (ii) is independent of $SS_E$ by claim (i); dividing by its degrees of freedom and by $\frac{SS_E}{d_E}=MS_E$ gives the stated $F$ ratios in claim (iii).
+\end{enumerate}
+\hlt{Structural Commentary}: Balanced normal ANOVA is an orthogonal Gaussian projection decomposition.\\
+\hlt{Key Insight}: Null effects remove noncentrality, leaving independent chi-square ratios.
+\end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:iron-retention-two-way-anova} \hlt{Iron Retention: Transformation, Main Effects, and Interaction}\\
-The source analyzes iron-retention data for two forms of iron and three dosage levels, with $K=18$ observations per cell.  Boxplots and cell standard deviations indicated that a logarithmic transformation stabilized spread.  On the log scale, the reported ANOVA table was
+\begin{example} \label{ex:generic-two-way-transformed-anova} \hlt{Generic Transformed Two-Way ANOVA}\\
+Consider balanced two-way study with factor $A$ having $2$ levels, factor $B$ having $3$ levels, $K=18$ observations per cell. After log transformation stabilises cell spread, ANOVA table on transformed scale is
 \[
 \begin{array}{c|rrrr}
 \text{Source} & df & SS & MS & F\\ \hline
-\text{Iron form} & 1 & 2.074 & 2.074 & 5.99\\
-\text{Dosage} & 2 & 15.588 & 7.794 & 22.53\\
+\text{Factor }A & 1 & 2.074 & 2.074 & 5.99\\
+\text{Factor }B & 2 & 15.588 & 7.794 & 22.53\\
 \text{Interaction} & 2 & .810 & .405 & 1.17\\
 \text{Error} & 102 & 35.296 & .346 & \\
 \text{Total} & 107 & 53.768 & &
 \end{array}
 \]
-The iron-form effect has reported $p<.025$.  The estimated log difference was $.28$, corresponding to a multiplicative factor $e^{.28}=1.32$ on the original scale, with reported approximate confidence interval $(1.06,1.65)$.  The interaction test had reported $p=.31$, so the visible departure from parallelism in the source plot was not strong evidence that the iron-form comparison depended on dosage.
+For factor $A$, $F_A=5.99$ gives $p<.025$, and an estimated log contrast $.28$ corresponds to the original-scale multiplier $e^{.28}\approx1.32$ with approximate interval $(1.06,1.65)$. For interaction, $F_{AB}=1.17$ gives $p=.31$, so there is no strong evidence that the $A$ contrast depends on the level of $B$.
 \end{example}
 
 \begin{remark} \label{rem:two-way-transformations-diagnostics} \hlt{Transformations and Diagnostics}\\
