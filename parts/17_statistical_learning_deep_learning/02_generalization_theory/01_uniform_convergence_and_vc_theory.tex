@@ -1,29 +1,55 @@
 \subsection{Uniform Convergence and VC Theory}
 
-Generalization asks when small training loss implies small population loss.  Uniform convergence controls the gap for all predictors in a class at once.
+Generalisation asks when small training loss implies small population loss.  Uniform convergence controls the gap for all predictors in a class at once.
 
-\begin{definition} \label{def:sl-uniform-convergence} \hlt{Uniform Convergence}\\
-A class $\mathcal{F}$ has \hlt{uniform convergence} for a bounded loss if
-\[
-\sup_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_S(f)}\to0
-\]
-in probability, or almost surely, as the sample size tends to infinity.
+\begin{definition} \label{def:sl-uniform-convergence}\label{def:sl-vc-dimension} \hlt{Uniform Convergence and VC Dimension}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Uniform convergence}: For samples $S_n$ of size $n$ and bounded loss, $\mathcal{F}$ has uniform convergence\\
+if $\sup_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_{S_n}(f)}\to0$ in probability, or almost surely, as $n\to\infty$.
+\item \hlt{Shattering and VC dimension}: For $\mathcal{C}\subseteq2^{\mathcal{X}}$, a finite $A\subseteq\mathcal{X}$ is shattered if $\{A\cap C:C\in\mathcal{C}\}=2^A$,\\
+and $\operatorname{VCdim}(\mathcal{C})$ is the supremum of $|A|$ over finite shattered $A\subseteq\mathcal{X}$.
+\end{enumerate}
 \end{definition}
 
-\begin{definition} \label{def:sl-vc-dimension} \hlt{VC Dimension}\\
-For a class $\mathcal{C}$ of subsets of $\mathcal{X}$, a finite set $\{x_1,\ldots,x_m\}$ is \hlt{shattered} if every subset of it can be realized as $\{x_i:x_i\in C\}$ for some $C\in\mathcal{C}$.  The \hlt{VC dimension} of $\mathcal{C}$ is the largest size of a shattered set, or infinity if no largest finite size exists.
-\end{definition}
+\begin{example} \label{ex:sl-vc-shattering-examples} \hlt{Shattering Examples}\\
+For $\mathcal{H}_p\defeq\{\{x\in\R^p:a^\top x+b\geq0\}:a\in\R^p,b\in\R\}$, $\operatorname{VCdim}(\mathcal{H}_p)=p+1$; in particular, $\mathcal{H}_2$ shatters any three noncollinear points and shatters no four-point set.\\
+Parameter count not decisive: one-parameter class $\mathcal{C}\defeq\{\{x\in\R:\sin(\alpha x)>0\}:\alpha\in\R\}$ has infinite $\operatorname{VCdim}$.
+\end{example}
 
 \begin{theorem} \label{thm:sl-vc-generalization-form} \hlt{VC Generalization Bound Form}\\
-For a binary classification class with VC dimension $d$ and zero-one loss, bounds of the form
-\[
-\sup_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_S(f)}
-\lesssim
-\sqrt{\frac{d\log(n/d)+\log(1/\delta)}{n}}
-\]
-hold with probability at least $1-\delta$ when $n$ is larger than $d$.
+Let $\mathcal{F}\subseteq\{0,1\}^{\mathcal{X}}$ have $1\leq d\defeq\operatorname{VCdim}(\mathcal{F})<\infty$, let $S_n=((X_i,Y_i))_{i=1}^n$ be i.i.d., and use $\ell_f(x,y)\defeq\mathbf{1}_{\{f(x)\neq y\}}$, $R(f)\defeq\mathbb{E}\ell_f(X,Y)$, and $\widehat{R}_{S_n}(f)\defeq \frac{1}{n}\sum\limits_{i=1}^n\ell_f(X_i,Y_i)$.\\
+Define $\Pi_{\mathcal{F}}(m)\defeq\max\abs{\{(f(x_1),\ldots,f(x_m)):f\in\mathcal{F}\}}$, where the maximum is over $x_1,\ldots,x_m\in\mathcal{X}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Growth bound}: If $m\geq d\geq1$, then $\Pi_{\mathcal{F}}(m)\leq\sum\limits_{j=0}^{d}\binom{m}{j}\leq\left(\frac{em}{d}\right)^d$.
+\item \hlt{Uniform deviation}: For every $\delta\in(0,1)$ and $n\geq d$, with probability at least $1-\delta$,\\
+$\sup\limits_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_{S_n}(f)}\leq C\sqrt{\frac{d\log\left(\frac{2en}{d}\right)+\log\left(\frac{1}{\delta}\right)}{n}}$ for a universal constant $C$.
+\end{enumerate}
 \end{theorem}
 
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Growth bound}: Since no set of size $d+1$ is shattered, Sauer's lemma gives $\Pi_{\mathcal{F}}(m)\leq\sum\limits_{j=0}^{d}\binom{m}{j}$,\\
+and the binomial-sum bound gives $\sum\limits_{j=0}^{d}\binom{m}{j}\leq\left(\frac{em}{d}\right)^d$ for $m\geq d$.
+\item \hlt{Uniform deviation}: Symmetrization with an independent ghost sample and Hoeffding's inequality on the at most $\Pi_{\mathcal{F}}(2n)$ realized labelings give $\mathbb{P}(\sup\limits_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_{S_n}(f)}>\varepsilon)\leq8\Pi_{\mathcal{F}}(2n)\exp(-c n\varepsilon^2)$ for a universal $c>0$; applying (i) with $m=2n$ and solving the right side at level $\delta$ yields (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: VC dimension polynomially bounds sample labelings.\\
+\hlt{Key Insight}: In finite-class concentration, use $|\mathcal{F}|\rightsquigarrow\Pi_{\mathcal{F}}(2n)\leq\left(\frac{2en}{d}\right)^d$.
+\end{proof}
+
 \begin{remark} \label{rem:sl-growth-functions} \hlt{Growth Functions}\\
-The VC dimension controls how many labelings the class can induce on finite samples.  Sauer's lemma converts that combinatorial count into a probability bound.
+For $d=\operatorname{VCdim}(\mathcal{F})$, $\Pi_{\mathcal{F}}(m)$ is the effective number of labelings on $m$ sample points. Sauer's lemma gives $\log\Pi_{\mathcal{F}}(m)\leq d\log\left(\frac{em}{d}\right)$, so VC bounds replace $\log|\mathcal{F}|$ by the sample-level complexity $\log\Pi_{\mathcal{F}}(m)$.
 \end{remark}
+
+\begin{method} \label{meth:sl-structural-risk-minimization} \hlt{Structural Risk Minimization}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Model ladder}: Choose $\mathcal{F}_1\subseteq\mathcal{F}_2\subseteq\cdots$ with complexities $c_m$, such as $c_m=\operatorname{VCdim}(\mathcal{F}_m)$.
+\item \hlt{Uniform penalties}: Choose $\delta_m>0$ with $\sum\limits_m\delta_m\leq\delta$ and penalties $\psi_m(n,\delta_m)$\\
+such that $\mathbb{P}(\sup\limits_{f\in\mathcal{F}_m}\abs{R(f)-\widehat{R}_{S_n}(f)}\leq\psi_m(n,\delta_m))\geq1-\delta_m$.
+\item \hlt{SRM rule}: Choose $(\widehat{m},\widehat{f})\in\operatorname*{argmin}\limits_{m\in\mathbb{N},f\in\mathcal{F}_m}\{\widehat{R}_{S_n}(f)+\psi_m(n,\delta_m)\}$.
+\end{enumerate}
+Larger $m$ improves fit but raises $\psi_m$; SRM balances flexibility against search cost.
+\end{method}
