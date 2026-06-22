@@ -1,43 +1,45 @@
 \subsection{Empirical Risk Minimization}
 
-The population risk is the target, but only a sample is observed.  Empirical risk minimization replaces the unknown expectation by an average over the training data.
+The population risk is the target, but only a sample is observed.  Empirical risk minimisation replaces the unknown expectation by an average over the training data.
 
 \begin{definition} \label{def:sl-empirical-risk-minimization} \hlt{Empirical Risk Minimization}\\
-Given training data $S=((x_1,y_1),\ldots,(x_n,y_n))$, the \hlt{empirical risk} of $f$ is
-\[
-\widehat{R}_S(f)=\frac1n\sum_{i=1}^n\ell(f(x_i),y_i).
-\]
-An \hlt{empirical risk minimizer} over a class $\mathcal{F}$ is any
-\[
-\widehat{f}\in\operatorname*{arg\,min}_{f\in\mathcal{F}}\widehat{R}_S(f).
-\]
+Let $S\defeq((x_1,y_1),\ldots,(x_n,y_n))$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Empirical risk}: For loss $\ell$, define $\widehat{R}_S(f)\defeq n^{-1}\sum\limits_{i=1}^n\ell(f(x_i),y_i)$.
+\item \hlt{Hypothesis class}: Let $\mathcal{F}$ be the admissible predictor class.
+\item \hlt{ERM}: Any $\widehat{f}\in\operatorname*{argmin}_{f\in\mathcal{F}}\widehat{R}_S(f)$ is an empirical risk minimiser.
+\end{enumerate}
 \end{definition}
 
-\begin{definition} \label{def:sl-regularized-erm} \hlt{Regularized Empirical Risk}\\
-For a complexity penalty $\Omega:\mathcal{F}\to[0,\infty]$ and tuning parameter $\lambda\geq0$, a regularized empirical risk minimizer solves
-\[
-\widehat{f}_{\lambda}\in
-\operatorname*{arg\,min}_{f\in\mathcal{F}}
-\left\{\widehat{R}_S(f)+\lambda\Omega(f)\right\}.
-\]
-The penalty may encode smoothness, sparsity, norm control, margin size, or architectural constraints.
+\begin{definition} \label{def:sl-regularized-erm} \hlt{Regularised Empirical Risk}\\
+Let $\Omega:\mathcal{F}\to[0,\infty]$ be a complexity penalty and $\lambda\geq0$.\\
+Define $Q_\lambda(f)\defeq\widehat{R}_S(f)+\lambda\Omega(f)$ and choose $\widehat{f}_\lambda\in\operatorname*{argmin}_{f\in\mathcal{F}}Q_\lambda(f)$.\\
+The penalty $\Omega$ may encode smoothness, sparsity, norm control, margin size, or architecture.
 \end{definition}
 
 \begin{theorem} \label{thm:sl-finite-class-erm-bound} \hlt{Finite-Class ERM Bound}\\
-Assume $0\leq\ell(f(X),Y)\leq1$ for every $f\in\mathcal{F}$ and $\abs{\mathcal{F}}<\infty$.  With probability at least $1-\delta$,
-\[
-\sup_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_S(f)}
-\leq
-\sqrt{\frac{\log(2\abs{\mathcal{F}}/\delta)}{2n}}.
-\]
-Consequently, an exact empirical risk minimizer $\widehat{f}$ satisfies
-\[
-R(\widehat{f})\leq
-\inf_{f\in\mathcal{F}}R(f)
-+2\sqrt{\frac{\log(2\abs{\mathcal{F}}/\delta)}{2n}}.
-\]
+Let $S=((X_1,Y_1),\ldots,(X_n,Y_n))$ be i.i.d. from $P$, let $\emptyset\neq\mathcal{F}$ be finite.\\
+Assume $0\leq\ell(f(X),Y)\leq1$ for all $f\in\mathcal{F}$, and fix $\delta\in(0,1)$. Set $\varepsilon_{n,\delta}\defeq\sqrt{\log(2\abs{\mathcal{F}}/\delta)/(2n)}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Uniform deviation}: With probability at least $1-\delta$, $\sup\limits_{f\in\mathcal{F}}\abs{R(f)-\widehat{R}_S(f)}\leq\varepsilon_{n,\delta}$.
+\item \hlt{ERM excess risk}: If $\widehat{f}\in\operatorname*{argmin}\limits_{f\in\mathcal{F}}\widehat{R}_S(f)$, then $R(\widehat{f})\leq\inf\limits_{f\in\mathcal{F}}R(f)+2\varepsilon_{n,\delta}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For fixed $f$, set $Z_i(f)\defeq\ell(f(X_i),Y_i)\in[0,1]$, so $R(f)=\mathbb{E}Z_i(f)$ and $\widehat{R}_S(f)=n^{-1}\sum\limits_{i=1}^nZ_i(f)$.\\
+Hoeffding and a union bound give $\mathbb{P}(\sup\limits_{f\in\mathcal{F}}\abs{\widehat{R}_S(f)-R(f)}>\varepsilon)\leq2\abs{\mathcal{F}}e^{-2n\varepsilon^2}$; set $\varepsilon=\varepsilon_{n,\delta}$.
+\item On the uniform-deviation event, choose $f^*\in\operatorname*{argmin}\limits_{f\in\mathcal{F}}R(f)$.\\
+Since $\widehat{R}_S(\widehat{f})\leq\widehat{R}_S(f^*)$, $R(\widehat{f})\leq\widehat{R}_S(\widehat{f})+\varepsilon_{n,\delta}\leq\widehat{R}_S(f^*)+\varepsilon_{n,\delta}\leq R(f^*)+2\varepsilon_{n,\delta}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Union-bounded concentration gives uniform control; ERM turns it into risk control.\\
+\hlt{Key Insight}: Control every gap $\abs{R-\widehat{R}_S}$ by $\varepsilon_{n,\delta}$; the ERM comparison pays this gap twice.
+\end{proof}
 \end{theorem}
 
 \begin{remark} \label{rem:sl-erm-computational-statistical-split} \hlt{Statistical and Computational Error}\\
-In practice the selected predictor may be only an approximate minimizer of the empirical criterion.  Its excess risk is then decomposed into approximation error, estimation error, and optimization error.
+In practice the selected predictor may be only an approximate minimizer of the empirical criterion. \\
+Its excess risk is then decomposed into approximation error, estimation error, and optimisation error.
 \end{remark}
