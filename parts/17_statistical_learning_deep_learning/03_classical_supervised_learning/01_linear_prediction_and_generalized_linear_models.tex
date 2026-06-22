@@ -3,29 +3,181 @@
 Linear prediction is the local model against which many nonlinear learning methods are compared.
 
 \begin{definition} \label{def:sl-linear-predictor} \hlt{Linear Predictor}\\
-For features $x\in\R^p$, a linear score has the form
-\[
-f_{w,b}(x)=w^\top x+b.
-\]
-Regression interprets this score directly, while classification often passes it through a sign, sigmoid, or softmax map.
+For $x\in\R^p$, $w\in\R^p$, and $b\in\R$, the \hlt{linear predictor} is $f_{w,b}(x)\defeq w^\top x+b$.\\
+Regression uses $f_{w,b}$ directly; classification uses $g\circ f_{w,b}$, e.g. $g=\operatorname{sign}$, sigmoid, or softmax.
 \end{definition}
 
-\begin{example} \label{ex:sl-linear-regression-risk} \hlt{Least-Squares Linear Regression}\\
-Given design matrix $X$ and response vector $y$, ordinary least squares solves
-\[
-\widehat{\beta}\in\operatorname*{arg\,min}_{\beta}\norm{y-X\beta}_2^2.
-\]
-When $X^\top X$ is invertible, $\widehat{\beta}=(X^\top X)^{-1}X^\top y$.
-\end{example}
+\begin{definition} \label{def:sl-least-squares-linear-regression} \hlt{Least-Squares Linear Regression}\\
+For $X\in\R^{n\times d}$ and $y\in\R^n$, \hlt{least-squares linear regression} chooses $\widehat{\beta}\in\operatorname*{argmin}\limits_{\beta\in\R^d}\norm{y-X\beta}_2^2$ and $\widehat{y}\defeq X\widehat{\beta}$.\\
+If $X^\top X$ is nonsingular, then $\widehat{\beta}=(X^\top X)^{-1}X^\top y$. Columns of $X$ may be raw variables, transformations, indicators, interactions, or basis functions; linearity is in $\beta$.
+\end{definition}
+
+\begin{method} \label{meth:sl-linear-regression-projection-and-rank} \hlt{Projection View of Least Squares}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Full rank}: If $\operatorname{rank}(X)=d$, define $H\defeq X(X^\top X)^{-1}X^\top$ and $\widehat{y}\defeq Hy$.
+\item \hlt{Projection}: $H$ is the orthogonal projection onto $\operatorname{col}(X)$; hence $y-\widehat{y}\perp\operatorname{col}(X)$.
+\item \hlt{Rank deficiency}: If $\operatorname{rank}(X)<d$, $\widehat{\beta}$ may be nonunique, but $\widehat{y}=\operatorname{proj}_{\operatorname{col}(X)}y$ is unique.
+\end{enumerate}
+Rank deficiency affects coefficient representation, not least-squares fitted values.
+\end{method}
+
+\begin{remark} \label{rem:sl-adjusted-coefficient-interpretation} \hlt{Adjusted Coefficients}\\
+Let $X_{-j}$ be $X$ without column $x_j$, and set $z_j\defeq(I-\operatorname{proj}_{\operatorname{col}(X_{-j})})x_j$.\\
+Then $\widehat{\beta}_j=\frac{z_j^\top y}{z_j^\top z_j}$, the simple-regression coefficient of $y$ on the adjusted predictor $z_j$.\\
+If $x_j\approx\operatorname{col}(X_{-j})$, then $\norm{z_j}_2$ is small and $\widehat{\beta}_j$ is unstable; this is collinearity.
+\end{remark}
+
+\begin{breakablealgorithm}
+\caption{Least Squares by Successive Orthogonalization}
+\label{alg:sl-successive-orthogonalization-least-squares}
+\begin{algorithmic}
+\Require Full-column-rank design columns $x_0,\ldots,x_p$ and response vector $y$
+\Ensure Least-squares coefficients $\widehat{\beta}$
+\For{$j=0,\ldots,p$}
+\State $z_j\gets x_j$
+\For{$\ell=0,\ldots,j-1$}
+\State $r_{\ell j}\gets q_\ell^Tx_j$
+\State $z_j\gets z_j-r_{\ell j}q_\ell$
+\EndFor
+\State $r_{jj}\gets \norm{z_j}_2$
+\State $q_j\gets z_j/r_{jj}$
+\EndFor
+\State Form $Q=[q_0,\ldots,q_p]$ and the upper-triangular matrix $R=(r_{\ell j})$
+\State Solve $R\widehat{\beta}=Q^Ty$ by back-substitution
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-linear-inference-after-model-choice} \hlt{Linear-Model Inference After Selection}\\
+Under fixed-design $y=X\beta+\varepsilon$, $\varepsilon\sim N(0,\sigma^2I_n)$, and $\operatorname{rank}(X)=d$, $\widehat{\beta}\sim N(\beta,\sigma^2(X^\top X)^{-1})$ and $\widehat{\sigma}^2\defeq\frac{\norm{y-X\widehat{\beta}}_2^2}{n-d}$.\\
+These give standard errors, $t$ or asymptotic $z$ statistics, and nested-model $F$ tests when $X$ is fixed in advance.\\
+After data-driven selection of $X$ or the model, these standard errors ignore selection.
+\end{remark}
+
+\begin{method} \label{meth:sl-multiple-output-least-squares} \hlt{Multiple-Output Least Squares}\\
+For $Y\in\R^{n\times K}$ and $B\in\R^{d\times K}$, set $Y=XB+E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Least squares}: If $\operatorname{rank}(X)=d$, then $\widehat{B}=(X^\top X)^{-1}X^\top Y$.
+\item \hlt{Decoupling}: Writing $Y=(y_1,\ldots,y_K)$ gives $\widehat{B}=(\widehat{\beta}_1,\ldots,\widehat{\beta}_K)$, where each $\widehat{\beta}_k$ is the OLS fit of $y_k$ on $X$.
+\end{enumerate}
+Shared responses can be pooled by low-rank $B$ or common-direction shrinkage.
+\end{method}
+
+\begin{method} \label{meth:sl-canonical-correlation-and-reduced-rank-regression} \hlt{Canonical Correlation and Reduced-Rank Regression}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{CCA}: Choose $(v_j,u_j)$ with large $\operatorname{corr}(Xv_j,Yu_j)$, orthogonal across $j$; at most $\min(d,K)$ pairs.
+\item \hlt{Rank constraint}: Fit $Y\approx XB$ with $\operatorname{rank}(B)\leq m$, restricting fitted responses to $m$ dimensions.
+\item \hlt{Objective}: $\widehat{B}^{\mathrm{rr}}_m\in\operatorname*{argmin}\limits_{\operatorname{rank}(B)\leq m}\sum\limits_i(y_i-B^\top x_i)^\top\widehat{\Sigma}^{-1}(y_i-B^\top x_i)$.
+\item \hlt{Role of $m$}: $m=K$ gives separate OLS; smaller $m$ pools shared response structure.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:sl-discriminant-functions-linear-boundaries} \hlt{Discriminant Functions and Linear Boundaries}\\
+For $\mathcal{G}=\{1,\ldots,K\}$ and scores $\delta_k:\mathcal{X}\to\R$, set $\widehat{G}(x)\in\operatorname*{argmax}_{k\in\mathcal{G}}\delta_k(x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Pairwise boundary}: The $k$ versus $\ell$ boundary lies in $\{x:\delta_k(x)=\delta_\ell(x)\}$.
+\item \hlt{Linear boundary}: If $\delta_k-\delta_\ell$ is affine in $x$ for all $k,\ell$, then all pairwise decision boundaries are hyperplanes.
+\item \hlt{Binary log-odds}: If $\log\frac{\mathbb{P}(G=1\mid X=x)}{\mathbb{P}(G=2\mid X=x)}=\beta_0+\beta^\top x$, then the boundary is $\{x:\beta_0+\beta^\top x=0\}$.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:sl-indicator-matrix-regression-classifier} \hlt{Indicator-Matrix Regression Classifier}\\
+For classes $g_i\in\{1,\ldots,K\}$, set $t_k=e_k\in\R^K$, $Y_i=t_{g_i}$, and $\widetilde{x}_i^\top=(1,x_i^\top)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Least-squares fit}: Choose $\widehat{B}\in\operatorname*{argmin}_B\sum\limits_{i=1}^{n}\norm{Y_i-B^\top\widetilde{x}_i}_2^2$; if $\widetilde{X}^\top\widetilde{X}$ is nonsingular, $\widehat{B}=(\widetilde{X}^\top\widetilde{X})^{-1}\widetilde{X}^\top Y$.
+\item \hlt{Scores}: For a new $x$, set $\widetilde{x}=(1,x^\top)^\top$ and $\widehat{f}(x)\defeq\widehat{B}^\top\widetilde{x}$.
+\item \hlt{Classification}: Predict $\widehat{G}(x)\in\operatorname*{argmax}_k\widehat{f}_k(x)$, equivalently nearest $t_k$.
+\end{enumerate}
+With an intercept, $\sum_k\widehat{f}_k(x)=1$, but $\widehat{f}_k(x)$ may leave $[0,1]$ and, for $K\geq3$, \hlt{mask} middle classes.
+\end{method}
 
 \begin{definition} \label{def:sl-generalized-linear-model} \hlt{Generalized Linear Model}\\
-A generalized linear model specifies a conditional distribution from an exponential family and links its mean to a linear score:
-\[
-g(\mathbb{E}[Y\mid X=x])=w^\top x+b.
-\]
-Logistic regression is the Bernoulli case with logit link.
+A \hlt{generalized linear model} specifies $Y\mid X=x$ in an exponential family with mean $\mu(x)\defeq\mathbb{E}[Y\mid X=x]$ and link $g$ satisfying $g(\mu(x))=w^\top x+b$.
+Logistic regression is the Bernoulli GLM with $g(\mu)=\log\frac{\mu}{1-\mu}$.
 \end{definition}
 
+\begin{definition} \label{def:sl-multiclass-logistic-regression} \hlt{Multiclass Logistic Regression}\\
+With class $K$ as baseline, set $\eta_k(x)\defeq\beta_{k0}+\beta_k^\top x=\log\frac{\mathbb{P}(G=k\mid X=x)}{\mathbb{P}(G=K\mid X=x)}$ for $k<K$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Softmax probabilities}: For $k<K$, $p_k(x;\theta)\defeq\frac{\exp(\eta_k(x))}{1+\sum\limits_{\ell=1}^{K-1}\exp(\eta_\ell(x))}$, and $p_K(x;\theta)\defeq\frac{1}{1+\sum\limits_{\ell=1}^{K-1}\exp(\eta_\ell(x))}$.
+\item \hlt{Likelihood}: Fit $\theta$ by maximising $\ell(\theta)\defeq\sum\limits_{i=1}^{n}\log p_{g_i}(x_i;\theta)$.
+\end{enumerate}
+The softmax gives $p(x;\theta)\in\Delta^{K-1}$; the reference class changes only the parametrisation.
+\end{definition}
+
+\begin{method} \label{meth:sl-logistic-irls} \hlt{Binary Logistic Regression by IRLS}\\
+For $y_i\in\{0,1\}$ and intercept-augmented rows $x_i^\top$, set $p_i(\beta)\defeq(1+\exp(-x_i^\top\beta))^{-1}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Derivatives}: With $p=(p_i)$ and $W\defeq\operatorname{diag}(p_i(1-p_i))$, $\nabla\ell(\beta)=X^\top(y-p)$ and $\nabla^2\ell(\beta)=-X^\top W X$.
+\item \hlt{Adjusted response}: At $\beta^{\mathrm{old}}$, set $z\defeq X\beta^{\mathrm{old}}+W^{-1}(y-p)$.
+\item \hlt{IRLS update}: Set $\beta^{\mathrm{new}}\defeq(X^\top W X)^{-1}X^\top Wz$.
+\end{enumerate}
+The log-likelihood is concave when the MLE is finite; step-halving controls Newton overshoot.
+\end{method}
+
+\begin{method} \label{meth:sl-l1-logistic-regression} \hlt{$L_1$-Regularized Logistic Regression}\\
+With unpenalized intercept, maximize $\ell_\lambda(\beta_0,\beta)\defeq\sum\limits_{i=1}^{n}\{y_i\eta_i-\log(1+\exp(\eta_i))\}-\lambda\sum\limits_{j=1}^{p}\abs{\beta_j}$, where $\eta_i\defeq\beta_0+x_i^\top\beta$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Probabilities}: Set $p_i\defeq(1+\exp(-\eta_i))^{-1}$ and residual $r\defeq y-p$.
+\item \hlt{KKT conditions}: If $\widehat{\beta}_j\neq0$, then $x_j^\top r=\lambda\sign(\widehat{\beta}_j)$; if $\widehat{\beta}_j=0$, then $\abs{x_j^\top r}\leq\lambda$.
+\end{enumerate}
+Coordinate descent and quadratic approximations exploit these thresholded score equations.
+\end{method}
+
+\begin{method} \label{meth:sl-gaussian-discriminant-analysis} \hlt{Gaussian Discriminant Analysis}\\
+If $X\mid G=k$ has density $f_k$ and prior $\pi_k$, then $\mathbb{P}(G=k\mid X=x)=\frac{f_k(x)\pi_k}{\sum\limits_{\ell=1}^{K}f_\ell(x)\pi_\ell}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Score}: If $X\mid G=k\sim N(\mu_k,\Sigma_k)$, compare $\delta_k(x)\defeq-\frac{1}{2}\log|\Sigma_k|-\frac{1}{2}(x-\mu_k)^\top\Sigma_k^{-1}(x-\mu_k)+\log\pi_k$.
+\item \hlt{LDA}: If $\Sigma_k=\Sigma$ for all $k$, equivalent linear scores are $\delta_k^{\mathrm{LDA}}(x)\defeq x^\top\Sigma^{-1}\mu_k-\frac{1}{2}\mu_k^\top\Sigma^{-1}\mu_k+\log\pi_k$.
+\item \hlt{QDA}: If $\Sigma_k$ varies with $k$, the quadratic term remains and the rule is quadratic discriminant analysis.
+\end{enumerate}
+Estimate $\pi_k,\mu_k,\Sigma_k$ from training data; pooled covariance gives LDA and classwise covariances give QDA.
+\end{method}
+
+\begin{method} \label{meth:sl-regularized-discriminant-analysis} \hlt{Regularized Discriminant Analysis}\\
+For $0\leq\alpha\leq1$, set $\widehat{\Sigma}_k(\alpha)\defeq\alpha\widehat{\Sigma}_k+(1-\alpha)\widehat{\Sigma}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Endpoints}: $\alpha=0$ gives LDA and $\alpha=1$ gives QDA.
+\item \hlt{Scalar shrinkage}: For $0\leq\gamma\leq1$, replace $\widehat{\Sigma}$ by $\widehat{\Sigma}(\gamma)\defeq\gamma\widehat{\Sigma}+(1-\gamma)\widehat{\sigma}^{2}I$.
+\end{enumerate}
+Shrinkage reduces variance when covariance estimation is unstable.
+\end{method}
+
+\begin{definition} \label{def:sl-naive-bayes-classifier} \hlt{Naive Bayes Classifier}\\
+For $x=(x_1,\ldots,x_p)$, assume $f_j(x)=\prod\limits_{k=1}^{p}f_{jk}(x_k)$ for each class $j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Posterior}: With priors $\pi_j$, $p_j(x)\defeq\mathbb{P}(G=j\mid X=x)\propto\pi_j\prod\limits_{k=1}^{p}f_{jk}(x_k)$.
+\item \hlt{Additive log odds}: Relative to class $J$, $\log\frac{p_\ell(x)}{p_J(x)}=\log\frac{\pi_\ell}{\pi_J}+\sum\limits_{k=1}^{p}\log\frac{f_{\ell k}(x_k)}{f_{Jk}(x_k)}$.
+\end{enumerate}
+Even misspecified independence can reduce variance enough to classify well near boundaries.
+\end{definition}
+
+\begin{remark} \label{rem:sl-least-squares-versus-lda} \hlt{Least Squares Versus LDA}\\
+For $K=2$, least-squares regression on any distinct label coding gives $\widehat{\beta}\propto\widehat{\Sigma}^{-1}(\widehat{\mu}_2-\widehat{\mu}_1)$, the LDA direction.\\
+The cutpoint may differ unless classes are balanced or tuned separately.\\
+For $K>2$, LDA uses pooled-Mahalanobis centroid distances and avoids masking.
+\end{remark}
+
+\begin{remark} \label{rem:sl-logistic-versus-lda} \hlt{Logistic Regression Versus LDA}\\
+Both can yield logit-linear $\mathbb{P}(G=k\mid X=x)$. Logistic regression fits $\prod_i\mathbb{P}(G_i\mid X_i)$ and leaves $P_X$ free; LDA fits a joint Gaussian mixture for $(X,G)$, reducing variance if correct but increasing sensitivity to misspecification.
+\end{remark}
+
+\begin{remark} \label{rem:sl-lda-whitening-and-reduced-rank-view} \hlt{Whitening and Reduced-Rank LDA}\\
+With common covariance $W$, LDA compares $W^{-1/2}x$ to whitened centroids, adjusted by $\log\pi_k$.\\
+The whitened centroids span dimension at most $K-1$, so LDA reduces to this centroid subspace.\\
+Fisher directions maximize $\frac{a^\top Ba}{a^\top Wa}$, equivalently solve $Ba=\lambda Wa$, where $B$ is between-class scatter.
+\end{remark}
+
 \begin{remark} \label{rem:sl-feature-maps-linear-models} \hlt{Feature Maps}\\
-Applying a linear model to transformed features $\phi(x)$ gives nonlinear prediction in the original input space.  Kernel methods and neural networks can both be viewed as systematic ways to choose or learn such feature maps.
+A feature map $\phi:\mathcal{X}\to\mathcal{H}$ gives linear prediction in feature space, $f(x)=w^\top\phi(x)+b$, which is generally nonlinear in $x$. Kernel methods choose $\phi$ implicitly; neural networks learn $\phi$ from data.
 \end{remark}
