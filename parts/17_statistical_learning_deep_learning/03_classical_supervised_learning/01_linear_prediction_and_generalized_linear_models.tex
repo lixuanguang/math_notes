@@ -1,16 +1,18 @@
 \subsection{Linear Prediction and Generalized Linear Models}
 
-Linear prediction is the local model against which many nonlinear learning methods are compared.
+Linear prediction reduces inputs to scores of the form ``intercept plus weighted features.'' Regression reads scores as predictions; classification compares or transforms them.  Its appeal is geometric: projections, hyperplanes, and feature maps.
 
 \begin{definition} \label{def:sl-linear-predictor} \hlt{Linear Predictor}\\
 For $x\in\R^p$, $w\in\R^p$, and $b\in\R$, the \hlt{linear predictor} is $f_{w,b}(x)\defeq w^\top x+b$.\\
-Regression uses $f_{w,b}$ directly; classification uses $g\circ f_{w,b}$, e.g. $g=\operatorname{sign}$, sigmoid, or softmax.
+Regression uses $f_{w,b}$ directly; classification transforms it by $g$. Score level sets are parallel hyperplanes.
 \end{definition}
 
 \begin{definition} \label{def:sl-least-squares-linear-regression} \hlt{Least-Squares Linear Regression}\\
 For $X\in\R^{n\times d}$ and $y\in\R^n$, \hlt{least-squares linear regression} chooses $\widehat{\beta}\in\operatorname*{argmin}\limits_{\beta\in\R^d}\norm{y-X\beta}_2^2$ and $\widehat{y}\defeq X\widehat{\beta}$.\\
 If $X^\top X$ is nonsingular, then $\widehat{\beta}=(X^\top X)^{-1}X^\top y$. Columns of $X$ may be raw variables, transformations, indicators, interactions, or basis functions; linearity is in $\beta$.
 \end{definition}
+
+Geometrically, least squares moves $y$ to the closest point in $\operatorname{col}(X)$.
 
 \begin{method} \label{meth:sl-linear-regression-projection-and-rank} \hlt{Projection View of Least Squares}
 \begin{enumerate}[label=(\roman*)]
@@ -25,8 +27,11 @@ Rank deficiency affects coefficient representation, not least-squares fitted val
 \begin{remark} \label{rem:sl-adjusted-coefficient-interpretation} \hlt{Adjusted Coefficients}\\
 Let $X_{-j}$ be $X$ without column $x_j$, and set $z_j\defeq(I-\operatorname{proj}_{\operatorname{col}(X_{-j})})x_j$.\\
 Then $\widehat{\beta}_j=\frac{z_j^\top y}{z_j^\top z_j}$, the simple-regression coefficient of $y$ on the adjusted predictor $z_j$.\\
+Thus $\widehat{\beta}_j$ uses only the part of $x_j$ left after adjusting for other predictors.\\
 If $x_j\approx\operatorname{col}(X_{-j})$, then $\norm{z_j}_2$ is small and $\widehat{\beta}_j$ is unstable; this is collinearity.
 \end{remark}
+
+Successive orthogonalization fits in an orthogonal basis for the same column space.
 
 \begin{breakablealgorithm}
 \caption{Least Squares by Successive Orthogonalization}
@@ -72,10 +77,11 @@ Shared responses can be pooled by low-rank $B$ or common-direction shrinkage.
 \item \hlt{Objective}: $\widehat{B}^{\mathrm{rr}}_m\in\operatorname*{argmin}\limits_{\operatorname{rank}(B)\leq m}\sum\limits_i(y_i-B^\top x_i)^\top\widehat{\Sigma}^{-1}(y_i-B^\top x_i)$.
 \item \hlt{Role of $m$}: $m=K$ gives separate OLS; smaller $m$ pools shared response structure.
 \end{enumerate}
+Reduced rank assumes the predictable response variation lies in a low-dimensional subspace.
 \end{method}
 
 \begin{definition} \label{def:sl-discriminant-functions-linear-boundaries} \hlt{Discriminant Functions and Linear Boundaries}\\
-For $\mathcal{G}=\{1,\ldots,K\}$ and scores $\delta_k:\mathcal{X}\to\R$, set $\widehat{G}(x)\in\operatorname*{argmax}_{k\in\mathcal{G}}\delta_k(x)$.
+For $\mathcal{G}=\{1,\ldots,K\}$ and scores $\delta_k:\mathcal{X}\to\R$, set $\widehat{G}(x)\in\operatorname*{argmax}_{k\in\mathcal{G}}\delta_k(x)$.  Only score differences matter.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Pairwise boundary}: The $k$ versus $\ell$ boundary lies in $\{x:\delta_k(x)=\delta_\ell(x)\}$.
@@ -85,7 +91,7 @@ For $\mathcal{G}=\{1,\ldots,K\}$ and scores $\delta_k:\mathcal{X}\to\R$, set $\w
 \end{definition}
 
 \begin{method} \label{meth:sl-indicator-matrix-regression-classifier} \hlt{Indicator-Matrix Regression Classifier}\\
-For classes $g_i\in\{1,\ldots,K\}$, set $t_k=e_k\in\R^K$, $Y_i=t_{g_i}$, and $\widetilde{x}_i^\top=(1,x_i^\top)$.
+For classes $g_i\in\{1,\ldots,K\}$, set $t_k=e_k\in\R^K$, $Y_i=t_{g_i}$, and $\widetilde{x}_i^\top=(1,x_i^\top)$, coding labels as Euclidean targets.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Least-squares fit}: Choose $\widehat{B}\in\operatorname*{argmin}_B\sum\limits_{i=1}^{n}\norm{Y_i-B^\top\widetilde{x}_i}_2^2$; if $\widetilde{X}^\top\widetilde{X}$ is nonsingular, $\widehat{B}=(\widetilde{X}^\top\widetilde{X})^{-1}\widetilde{X}^\top Y$.
@@ -96,9 +102,11 @@ With an intercept, $\sum_k\widehat{f}_k(x)=1$, but $\widehat{f}_k(x)$ may leave 
 \end{method}
 
 \begin{definition} \label{def:sl-generalized-linear-model} \hlt{Generalized Linear Model}\\
-A \hlt{generalized linear model} specifies $Y\mid X=x$ in an exponential family with mean $\mu(x)\defeq\mathbb{E}[Y\mid X=x]$ and link $g$ satisfying $g(\mu(x))=w^\top x+b$.
-Logistic regression is the Bernoulli GLM with $g(\mu)=\log\frac{\mu}{1-\mu}$.
+A \hlt{generalized linear model} gives $Y\mid X=x$ an exponential-family law and makes a linked mean linear:\\
+$g(\mu(x))=w^\top x+b$. Logistic regression uses the Bernoulli law and logit link $g(\mu)=\log\frac{\mu}{1-\mu}$.
 \end{definition}
+
+Thus a GLM separates score, mean scale, and likelihood.
 
 \begin{definition} \label{def:sl-multiclass-logistic-regression} \hlt{Multiclass Logistic Regression}\\
 With class $K$ as baseline, set $\eta_k(x)\defeq\beta_{k0}+\beta_k^\top x=\log\frac{\mathbb{P}(G=k\mid X=x)}{\mathbb{P}(G=K\mid X=x)}$ for $k<K$.
@@ -118,6 +126,7 @@ For $y_i\in\{0,1\}$ and intercept-augmented rows $x_i^\top$, set $p_i(\beta)\def
 \item \hlt{Adjusted response}: At $\beta^{\mathrm{old}}$, set $z\defeq X\beta^{\mathrm{old}}+W^{-1}(y-p)$.
 \item \hlt{IRLS update}: Set $\beta^{\mathrm{new}}\defeq(X^\top W X)^{-1}X^\top Wz$.
 \end{enumerate}
+IRLS is Newton's method as weighted least squares.\\
 The log-likelihood is concave when the MLE is finite; step-halving controls Newton overshoot.
 \end{method}
 
@@ -128,7 +137,7 @@ With unpenalized intercept, maximize $\ell_\lambda(\beta_0,\beta)\defeq\sum\limi
 \item \hlt{Probabilities}: Set $p_i\defeq(1+\exp(-\eta_i))^{-1}$ and residual $r\defeq y-p$.
 \item \hlt{KKT conditions}: If $\widehat{\beta}_j\neq0$, then $x_j^\top r=\lambda\sign(\widehat{\beta}_j)$; if $\widehat{\beta}_j=0$, then $\abs{x_j^\top r}\leq\lambda$.
 \end{enumerate}
-Coordinate descent and quadratic approximations exploit these thresholded score equations.
+The KKT conditions are thresholded feature--residual correlations.
 \end{method}
 
 \begin{method} \label{meth:sl-gaussian-discriminant-analysis} \hlt{Gaussian Discriminant Analysis}\\
@@ -139,7 +148,8 @@ If $X\mid G=k$ has density $f_k$ and prior $\pi_k$, then $\mathbb{P}(G=k\mid X=x
 \item \hlt{LDA}: If $\Sigma_k=\Sigma$ for all $k$, equivalent linear scores are $\delta_k^{\mathrm{LDA}}(x)\defeq x^\top\Sigma^{-1}\mu_k-\frac{1}{2}\mu_k^\top\Sigma^{-1}\mu_k+\log\pi_k$.
 \item \hlt{QDA}: If $\Sigma_k$ varies with $k$, the quadratic term remains and the rule is quadratic discriminant analysis.
 \end{enumerate}
-Estimate $\pi_k,\mu_k,\Sigma_k$ from training data; pooled covariance gives LDA and classwise covariances give QDA.
+Estimate $\pi_k,\mu_k,\Sigma_k$ from training data; pooled covariance gives LDA and classwise covariances give QDA.\\
+Shared covariance makes the boundaries linear.
 \end{method}
 
 \begin{method} \label{meth:sl-regularized-discriminant-analysis} \hlt{Regularized Discriminant Analysis}\\
@@ -159,6 +169,7 @@ For $x=(x_1,\ldots,x_p)$, assume $f_j(x)=\prod\limits_{k=1}^{p}f_{jk}(x_k)$ for 
 \item \hlt{Posterior}: With priors $\pi_j$, $p_j(x)\defeq\mathbb{P}(G=j\mid X=x)\propto\pi_j\prod\limits_{k=1}^{p}f_{jk}(x_k)$.
 \item \hlt{Additive log odds}: Relative to class $J$, $\log\frac{p_\ell(x)}{p_J(x)}=\log\frac{\pi_\ell}{\pi_J}+\sum\limits_{k=1}^{p}\log\frac{f_{\ell k}(x_k)}{f_{Jk}(x_k)}$.
 \end{enumerate}
+On the log scale, features contribute additively.\\
 Even misspecified independence can reduce variance enough to classify well near boundaries.
 \end{definition}
 
@@ -169,7 +180,7 @@ For $K>2$, LDA uses pooled-Mahalanobis centroid distances and avoids masking.
 \end{remark}
 
 \begin{remark} \label{rem:sl-logistic-versus-lda} \hlt{Logistic Regression Versus LDA}\\
-Both can yield logit-linear $\mathbb{P}(G=k\mid X=x)$. Logistic regression fits $\prod_i\mathbb{P}(G_i\mid X_i)$ and leaves $P_X$ free; LDA fits a joint Gaussian mixture for $(X,G)$, reducing variance if correct but increasing sensitivity to misspecification.
+Both can yield linear log-odds. Logistic regression models class probabilities directly and leaves $P_X$ free; LDA fits a joint Gaussian mixture for $(X,G)$ and uses Bayes' rule.
 \end{remark}
 
 \begin{remark} \label{rem:sl-lda-whitening-and-reduced-rank-view} \hlt{Whitening and Reduced-Rank LDA}\\
