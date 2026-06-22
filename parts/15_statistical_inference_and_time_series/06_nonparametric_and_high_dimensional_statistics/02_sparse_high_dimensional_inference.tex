@@ -9,13 +9,14 @@ High-dimensional statistics studies regimes where the number of candidate parame
 \item \hlt{Sparsity}: For $\theta\in\R^p$, $\norm{\theta}_0\defeq|\{j:\theta_j\neq0\}|$; $\theta$ is $s$-sparse if $\norm{\theta}_0\leq s$.
 \item \hlt{Lasso}: For $y=X\beta_0+\varepsilon$ and $\lambda\geq0$, $\widehat{\beta}_\lambda\in\operatorname*{arg\,min}\limits_{\beta\in\R^p}\{(2n)^{-1}\norm{y-X\beta}_2^2+\lambda\norm{\beta}_1\}$.\\
 The convex $\ell^1$ penalty promotes sparsity.
-\item \hlt{Restricted eigenvalue}: For $S\subseteq[p]\defeq\{1,\ldots,p\}$, $C(S)\defeq\{v:\norm{v_{S^c}}_1\leq3\norm{v_S}_1\}$,\\
-and $\kappa>0$, $X$ satisfies $\operatorname{RE}(S,\kappa)$ if $n^{-\frac{1}{2}}\norm{Xv}_2\geq\kappa\norm{v_S}_2$ for all $v\in C(S)$.
+\item \hlt{Restricted eigenvalue}: For $S\subseteq[p]\defeq\{1,\ldots,p\}$, $C(S)\defeq\{v:\norm{v_{S^c}}_1\leq3\norm{v_S}_1\}$, and $\kappa>0$,\\
+$X$ satisfies $\operatorname{RE}(S,\kappa)$ if $n^{-\frac{1}{2}}\norm{Xv}_2\geq\kappa\norm{v_S}_2$ for all $v\in C(S)$.
 \end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:lasso-basic-rate-form} \hlt{Basic Lasso Rate Form}\\
-Let $y=X\beta_0+\varepsilon$, $S\defeq\operatorname{supp}(\beta_0)$, $|S|\leq s$, and let $\widehat{\beta}_\lambda$ be any lasso solution. If $X$ satisfies $\operatorname{RE}(S,\kappa)$ and $\lambda>0$ with $\lambda\geq2\norm{\frac{X^\top\varepsilon}{n}}_\infty$, then $n^{-1}\norm{X(\widehat{\beta}_\lambda-\beta_0)}_2^2\leq\frac{9s\lambda^2}{\kappa^2}$ and $\norm{\widehat{\beta}_\lambda-\beta_0}_1\leq\frac{12s\lambda}{\kappa^2}$.
+Let $y=X\beta_0+\varepsilon$, $S\defeq\operatorname{supp}(\beta_0)$, $|S|\leq s$, and let $\widehat{\beta}_\lambda$ be any lasso solution.\\
+If $X$ satisfies $\operatorname{RE}(S,\kappa)$ and $\lambda>0$ with $\lambda\geq2\norm{\frac{X^\top\varepsilon}{n}}_\infty$, then $n^{-1}\norm{X(\widehat{\beta}_\lambda-\beta_0)}_2^2\leq\frac{9s\lambda^2}{\kappa^2}$ and $\norm{\widehat{\beta}_\lambda-\beta_0}_1\leq\frac{12s\lambda}{\kappa^2}$.
 \begin{proof} Set $\delta\defeq\widehat{\beta}_\lambda-\beta_0$. The lasso optimality inequality gives $(2n)^{-1}\norm{X\delta}_2^2+\lambda\norm{\beta_0+\delta}_1\leq n^{-1}\varepsilon^\top X\delta+\lambda\norm{\beta_0}_1$.\\
 Since $\lambda\geq2\norm{\frac{X^\top\varepsilon}{n}}_\infty$, $n^{-1}\varepsilon^\top X\delta\leq\frac{\lambda}{2}\norm{\delta}_1$, and since $\beta_{0,S^c}=0$, $\norm{\beta_0}_1-\norm{\beta_0+\delta}_1\leq\norm{\delta_S}_1-\norm{\delta_{S^c}}_1$.\\
 Thus $(2n)^{-1}\norm{X\delta}_2^2+\frac{\lambda}{2}\norm{\delta_{S^c}}_1\leq\frac{3\lambda}{2}\norm{\delta_S}_1$, so $\delta\in C(S)$. By $\operatorname{RE}(S,\kappa)$, $\norm{\delta_S}_1\leq\sqrt{s}\norm{\delta_S}_2\leq\frac{\sqrt{s}\norm{X\delta}_2}{\kappa\sqrt{n}}$.\\
@@ -25,15 +26,86 @@ Hence $n^{-1}\norm{X\delta}_2^2\leq\frac{3\lambda\sqrt{s}\norm{X\delta}_2}{\kapp
 \end{proof}
 \end{theorem}
 
-\begin{definition} \label{def:false-discovery-rate} \hlt{False Discovery Rate}\\
-For a multiple-testing rule, let $R$ be total rejections and $V$ false rejections.
+\begin{definition} \label{def:false-discovery-rate} \hlt{Multiple-Testing Error Counts and FDR}\\
+For a multiple-testing rule over $M$ hypotheses.\\
+Let $M_0$ be the number of true nulls and $M_1=M-M_0$ the number of false nulls.\\
+Let $V$ be false rejections, $S$ true rejections, $U$ true nonrejections, and $T$ false nonrejections.\\
+The total number of discoveries is $R=V+S$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
+\item \hlt{Family-wise error rate}: $\operatorname{FWER}\defeq\mathbb{P}(V\geq1)$.
 \item \hlt{False discovery proportion}: $\operatorname{FDP}\defeq\frac{V}{\max(R,1)}$.
-\item \hlt{False discovery rate}: $\operatorname{FDR}\defeq\mathbb{E}[\operatorname{FDP}]=\mathbb{E}[\frac{V}{\max(R,1)}]$.
-\item \hlt{Control}: FDR bounds the expected false-rejection proportion among discoveries.
+\item \hlt{False discovery rate}: $\operatorname{FDR}\defeq\mathbb{E}[\operatorname{FDP}]$.
+\item \hlt{Power}: One aggregate power measure is $\mathbb{E}[S]/M_1$ when $M_1>0$.
+\end{enumerate}
+Thus FWER controls the chance of any false discovery.\\
+FDR controls the expected false fraction among the reported discoveries.
+\end{definition}
+
+\begin{method} \label{meth:featurewise-two-sample-high-dimensional-screening} \hlt{Featurewise Two-Sample Screening}\\
+Let $x_{ij}$ be feature $j\in[M]$ for observation $i$, with groups $C_1,C_2$ and $n_\ell\defeq|C_\ell|$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Group means}: For $\ell\in\{1,2\}$, set $\bar{x}_{\ell j}\defeq n_\ell^{-1}\sum\limits_{i\in C_\ell}x_{ij}$.
+\item \hlt{Pooled scale}: Set $\widehat{\sigma}_j^2\defeq(n_1+n_2-2)^{-1}\{\sum\limits_{i\in C_1}(x_{ij}-\bar{x}_{1j})^2+\sum\limits_{i\in C_2}(x_{ij}-\bar{x}_{2j})^2\}$ and $\operatorname{se}_j\defeq\widehat{\sigma}_j\sqrt{n_1^{-1}+n_2^{-1}}$.
+\item \hlt{Statistic}: Define $t_j\defeq(\bar{x}_{2j}-\bar{x}_{1j})/\operatorname{se}_j$; large $|t_j|$ flags a featurewise mean shift.
+\item \hlt{Family}: Screening acts on $\{t_j:1\leq j\leq M\}$, so error control targets the family, not a single statistic.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:benjamini-hochberg-fdr-step-up} \hlt{Benjamini--Hochberg Step-Up Rule}\\
+For $M$ hypotheses with $p$-values $p_1,\ldots,p_M$ and target level $\alpha\in(0,1)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Order}: Let $p_{(1)}\leq\cdots\leq p_{(M)}$ be the order statistics.
+\item \hlt{Step-up index}: Set $L\defeq\max\{j:p_{(j)}\leq\alpha j/M\}$, with $L\defeq0$ if the set is empty.
+\item \hlt{Rejections}: Reject $\mathcal{R}\defeq\{m:p_m\leq p_{(L)}\}$ if $L>0$, and reject none if $L=0$.
+\item \hlt{Guarantee}: If true-null $p$-values are independent and uniform,\\
+then $\operatorname{FDR}\leq(M_0/M)\alpha\leq\alpha$, where $M_0$ is the number of true nulls.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/statistics_time_series/benjamini_hochberg_step_up.tikz}
+\caption{Benjamini--Hochberg threshold: \textcolor{red!70!black}{red} points reject, \textcolor{blue!70!black}{blue} points do not; line is $\alpha j/M$.}
+\label{fig:benjamini-hochberg-step-up}
+\end{figure}
+
+\begin{method} \label{meth:permutation-plug-in-fdr} \hlt{Permutation Plug-In FDR Estimate}\\
+Let $t_j$ be observed statistics for $j\in[M]$, and let $t_j^{(k)}$ be the statistic after label permutation $k\in[K]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Observed discoveries}: For cutpoint $C>0$, set $R_{\mathrm{obs}}(C)\defeq\sum\limits_{j=1}^M\mathbf{1}_{\{|t_j|>C\}}$.
+\item \hlt{Null discoveries}: Estimate the expected false discoveries by $\widehat{\mathbb{E}}(V;C)\defeq K^{-1}\sum\limits_{k=1}^K\sum\limits_{j=1}^M\mathbf{1}_{\{|t_j^{(k)}|>C\}}$.
+\item \hlt{Plug-in FDR}: If $R_{\mathrm{obs}}(C)>0$, set $\widehat{\operatorname{FDR}}(C)\defeq\widehat{\mathbb{E}}(V;C)/R_{\mathrm{obs}}(C)$.
+\item \hlt{Permutation $p$-values}: Use $\{t_j^{(k)}\}$ to compare $|t_j|$ with featurewise or pooled permutation null statistics.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:sam-asymmetric-cutpoints} \hlt{Asymmetric Cutpoints and SAM}\\
+Let $t_{(1)}\leq\cdots\leq t_{(M)}$ and $\bar{t}^{0}_{(j)}\defeq K^{-1}\sum\limits_{k=1}^Kt^{(k)}_{(j)}$, where $t^{(k)}_{(j)}$ is the $j$th ordered permutation statistic.\\
+For $d_j\defeq t_{(j)}-\bar{t}^{0}_{(j)}$, $a>0$, set $c_+(a)\defeq\min\{t_{(j)}:d_j>a\}$, $c_-(a)\defeq\max\{t_{(j)}:d_j<-a\}$ when nonempty.\\
+Reject $t_j\in A(c_-,c_+)\defeq(-\infty,c_-]\cup[c_+,\infty)$, estimate FDR by Method~\ref{meth:permutation-plug-in-fdr}, $A(c_-,c_+)$ replace $\{|t|>C\}$.
+\end{remark}
+
+\begin{definition} \label{def:pfd-local-fdr-and-q-value} \hlt{Positive FDR, Local FDR, and $q$-Values}\\
+Let $Z_j=0$ indicate a true null, $Z_j=1$ a false null, $t_j$ a test statistic, and $\Gamma$ a rejection region.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{pFDR}: For false discoveries $V$ and discoveries $R$, $\operatorname{pFDR}\defeq\mathbb{E}[V/R\mid R>0]$.
+\item \hlt{Mixture model}: If $\mathbb{P}(Z_j=0)=\pi_0$, $\mathcal{L}(t_j\mid Z_j=0)=F_0$, and $\mathcal{L}(t_j\mid Z_j=1)=F_1$,\\
+then $\mathcal{L}(t_j)=\pi_0F_0+(1-\pi_0)F_1$.
+\item \hlt{Bayes form}: For a rejection region $\Gamma$, $\operatorname{pFDR}(\Gamma)=\mathbb{P}(Z_j=0\mid t_j\in\Gamma)$.
+\item \hlt{Local FDR}: At value $t_0$, $\operatorname{lfdr}(t_0)\defeq\mathbb{P}(Z_j=0\mid t_j=t_0)$.
+\item \hlt{$q$-value}: For feature $j$, $q_j\defeq\inf\{\alpha:j\in\mathcal{R}_\alpha\}$, where $\mathcal{R}_\alpha$ is the discovery set at FDR level $\alpha$.
 \end{enumerate}
 \end{definition}
+
+\begin{remark} \label{rem:fdr-versus-family-wise-error} \hlt{FDR Versus Family-Wise Error}\\
+With false discoveries $V$ and total discoveries $R$, $\operatorname{FWER}\defeq\mathbb{P}(V\geq1)$ controls any false rejection, while $\operatorname{FDR}\defeq\mathbb{E}[V/\max(R,1)]$ controls the expected false fraction among discoveries.
+Thus FDR is less conservative for large screening lists and measures list reliability directly.
+\end{remark}
 
 \begin{remark} \label{rem:high-dimensional-cross-reference-optimization} \hlt{Statistical and Computational Structure}\\
 High-dimensional inference couples concentration bounds, convex optimization, and selection error control; computation and statistics are part of the same guarantee.
