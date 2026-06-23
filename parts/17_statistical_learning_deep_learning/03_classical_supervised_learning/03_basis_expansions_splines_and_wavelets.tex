@@ -1,0 +1,76 @@
+\subsection{Basis Expansions, Splines, and Wavelets}
+
+Basis expansions keep the fitting step linear while moving nonlinearity into the representation of the inputs.
+
+\begin{definition} \label{def:sl-linear-basis-expansion} \hlt{Linear Basis Expansion}\\
+A \hlt{linear basis expansion} chooses $h=(h_1,\ldots,h_M):\mathcal{X}\to\R^M$ and fits $f_\beta(x)\defeq\beta^Th(x)=\sum\limits_{m=1}^M\beta_mh_m(x)$.\\
+Typical $h_m$ include coordinates, powers, interactions, one-dimensional transforms, and region indicators.\\
+The model is linear in $h(x)$, but generally nonlinear in $x$.
+\end{definition}
+
+\begin{figure}[ht]
+\centering
+\input{figures/machine_learning/basis_expansion_curved_boundary.tikz}
+\caption{Basis expansion: boundary curved in $x$, linear in $h(x)$.}
+\label{fig:sl-basis-expansion-curved-boundary}
+\end{figure}
+
+\begin{remark} \label{rem:sl-basis-dictionary-complexity} \hlt{Dictionaries Need Complexity Control}\\
+For a dictionary $\mathcal{H}=\{h_m\}_{m=1}^M$, fitting $f_\beta(x)=\sum\limits_{m=1}^M\beta_mh_m(x)$ is flexible but unstable when $M$ is large or the $h_m$ are nearly collinear. Complexity control restricts admissible fits: additive models impose $f(x)=\sum_j f_j(x_j)$, subset selection imposes $\norm{\beta}_0\le s$, and regularization minimizes empirical loss plus $\lambda\Omega(\beta)$.
+\end{remark}
+
+\begin{definition} \label{def:sl-regression-splines} \hlt{Regression Splines}\\
+Let $\xi_1<\cdots<\xi_K$ be knots.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Order-$M$ regression spline} is piecewise polynomial $s:\R\to\R$ of degree $\le M-1$, $s\in C^{M-2}$ at knots.
+\item \hlt{Cubic truncated-power basis} is basis $1,x,x^2,x^3,(x-\xi_1)_+^3,\ldots,(x-\xi_K)_+^3$ for cubic spline space.
+\item \hlt{Natural cubic spline} is a cubic regression spline satisfying $s''(x)=0$ for $x\notin[\xi_1,\xi_K]$.
+\item \hlt{B-spline basis} is a locally supported basis for the same spline space.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:sl-smoothing-spline-penalty} \hlt{Smoothing Splines as Penalized Fits}\\
+Let $(x_i,y_i)_{i=1}^n\subset\R^2$, $y=(y_1,\ldots,y_n)^T$, $\lambda\ge0$, and $\mathcal{F}\defeq\{f:f''\in L^2(\R)\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The smoothing spline is $\widehat{f}_\lambda\in\operatorname*{arg\,min}_{f\in\mathcal{F}}\left\{\sum\limits_{i=1}^n(y_i-f(x_i))^2+\lambda\int_{\R}(f''(t))^2\,dt\right\}$.
+\item $\widehat{f}_\lambda$ is a natural cubic spline with knots at the distinct observed inputs.
+\item With $\widehat{y}_\lambda=(\widehat{f}_\lambda(x_1),\ldots,\widehat{f}_\lambda(x_n))^T$, there is a smoother matrix $S_\lambda$ such that $\widehat{y}_\lambda=S_\lambda y$ and $d_\lambda\defeq\operatorname{trace}(S_\lambda)$.
+\item For $e_{\lambda i}\defeq y_i-\widehat{f}_\lambda(x_i)$ and $h_{\lambda i}\defeq S_{\lambda,ii}$, leave-one-out CV is $\operatorname{CV}(\lambda)\defeq\frac{1}{n}\sum\limits_{i=1}^n\left(\frac{e_{\lambda i}}{1-h_{\lambda i}}\right)^2$.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:sl-spline-filtered-logistic-features} \hlt{Spline-Filtered Logistic Features}\\
+Let $(x_i,y_i)_{i=1}^n$ with $x_i\in\R^p$, $y_i\in\{0,1\}$, and let $H\in\R^{p\times M}$ be a smooth basis matrix with $M\ll p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Restrict $\beta\in\R^p$ to $\operatorname{col}(H)$ by writing $\beta=H\theta$, $\theta\in\R^M$.
+\item Define filtered features $z_i\defeq H^Tx_i$; then $x_i^T\beta=z_i^T\theta$.
+\item Fit $\widehat{\theta},\widehat{b}\in\operatorname*{arg\,min}\limits_{\theta,b}\sum\limits_{i=1}^n\{\log(1+\exp(b+z_i^T\theta))-y_i(b+z_i^T\theta)\}$.
+\item Set $\widehat{\beta}=H\widehat{\theta}$; smoothness is imposed by $\widehat{\beta}\in\operatorname{col}(H)$ and dimension drops from $p$ to $M$.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:sl-tensor-product-and-thin-plate-splines} \hlt{Tensor-Product and Thin-Plate Splines}\\
+Let $\{h_{rj}\}_{j=1}^{J_r}$ be a univariate basis for coordinate $x_r$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{two-way tensor-product basis} is $\{g_{jk}\}$ with $g_{jk}(x_1,x_2)\defeq h_{1j}(x_1)h_{2k}(x_2)$ and dimension $J_1J_2$.
+\item A \hlt{$d$-way tensor-product basis} is $\{g_{j_1,\ldots,j_d}\}$ with $g_{j_1,\ldots,j_d}(x)\defeq\prod\limits_{r=1}^d h_{rj_r}(x_r)$ and dimension $\prod\limits_{r=1}^d J_r$.
+\item A \hlt{thin-plate spline fit} is any $\widehat{f}_\lambda\in\operatorname*{arg\,min}_f Q_\lambda(f)$, where $Q_\lambda(f)\defeq\sum\limits_{i=1}^n(y_i-f(x_i))^2+\lambda J(f)$,\\
+$D_{ab}f\defeq\partial_a\partial_b f$, and $J(f)\defeq\int_{\R^2}\{(D_{11}f)^2+2(D_{12}f)^2+(D_{22}f)^2\}\,dx$.
+\item A \hlt{thin-plate representer} is $\widehat{f}(x)=a_0+a^\top x+\sum\limits_{\ell=1}^L c_\ell\phi(\norm{x-\kappa_\ell})$; $\phi(r)\defeq r^2\log r$, $\phi(0)\defeq0$, $\sum\limits_{\ell=1}^L c_\ell(1,\kappa_\ell^\top)=0$.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:sl-wavelet-shrinkage} \hlt{Wavelet Shrinkage}\\
+Let $y\in\R^n$ be observed on a regular lattice and let $W\in\R^{n\times n}$ be an orthonormal wavelet matrix.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Transform $y$ to wavelet coefficients $y^\ast\defeq W^\top y$.
+\item Estimate sparse coefficients by $\widehat{\theta}_\lambda\in\operatorname*{arg\,min}_{\theta\in\R^n}Q_\lambda(\theta)$, where $Q_\lambda(\theta)\defeq\norm{y-W\theta}_2^2+2\lambda\norm{\theta}_1$.
+\item Since $W^\top W=I$, $\widehat{\theta}_{\lambda,j}=\sign(y^\ast_j)(|y^\ast_j|-\lambda)_+$ for $j=1,\ldots,n$.
+\item Reconstruct $\widehat{f}_\lambda\defeq W\widehat{\theta}_\lambda=\sum_{j:|y^\ast_j|>\lambda}\sign(y^\ast_j)(|y^\ast_j|-\lambda)w_j$, where $w_j$ is the $j$th wavelet atom.
+\end{enumerate}
+\end{method}
