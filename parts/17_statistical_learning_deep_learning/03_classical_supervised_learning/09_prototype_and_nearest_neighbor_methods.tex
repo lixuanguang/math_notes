@@ -1,0 +1,185 @@
+\subsection{Prototype and Nearest-Neighbor Methods}
+
+Prototype and nearest-neighbor classifiers are model-free rules built from distances in feature space.  They can fit irregular decision boundaries and are often strong predictors, but their behavior is controlled by geometry: scaling, metric choice, neighborhood size, and storage of representative points.  The local-averaging view appears in Method~\ref{meth:sl-nearest-neighbor-local-averaging}; this subsection records the classification and metric-design side.
+
+\begin{definition} \label{def:sl-prototype-classifier} \hlt{Labeled Prototype Rule}\\
+Let $\mathcal{D}_n=\{(x_i,g_i)\}_{i=1}^n$ with $x_i\in\R^p$ and $g_i\in\{1,\ldots,K\}$.  Fix prototype counts $R_1,\ldots,R_K$, distance $d$ on $\R^p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A labeled prototype set is $\mathcal{M}=\{(m_j(k),k):m_j(k)\in\R^p,\ 1\leq j\leq R_k,\ 1\leq k\leq K\}$.
+\item For $x\in\R^p$, choose $(\widehat{\jmath},\widehat{k})\in\operatorname*{arg\,min}\limits_{1\leq k\leq K,\ 1\leq j\leq R_k}d(x,m_j(k))$ and define $\widehat{G}(x)=\widehat{k}$.
+\item If $\mathcal{M}=\{(x_i,g_i):1\leq i\leq n\}$, then $\widehat{G}$ is the one-nearest-neighbor classifier.
+\end{enumerate}
+For quantitative features, Euclidean distance requires comparable coordinate scales.
+\end{definition}
+
+\begin{method} \label{meth:sl-kmeans-prototype-classifier} \hlt{$k$-Means Prototypes}\\
+Let $I_k=\{i:g_i=k\}$, fix $R$ prototypes per class, and use $d(x,z)=\norm{x-z}_2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each $k=1,\ldots,K$, choose $m_1(k),\ldots,m_R(k)\in\R^p$ to minimize $\sum\limits_{i\in I_k}\min\limits_{1\leq j\leq R}\norm{x_i-m_j(k)}_2^2$.
+\item For $x\in\R^p$, choose $(\widehat{\jmath},\widehat{k})\in\operatorname*{arg\,min}\limits_{1\leq k\leq K,\ 1\leq j\leq R}\norm{x-m_j(k)}_2$ and set $\widehat{G}(x)=\widehat{k}$.
+\end{enumerate}
+The stored labeled prototype set is $\mathcal{M}=\{(m_j(k),k):1\leq j\leq R,\ 1\leq k\leq K\}$.\\
+The rule has piecewise-linear Euclidean decision boundaries; since classes are compressed independently, prototypes need not move away from competing classes near a boundary.
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Learning Vector Quantization}
+\label{alg:sl-learning-vector-quantization}
+\begin{algorithmic}
+\Require Labeled data $(x_i,g_i)_{i=1}^n$, prototypes per class $R$, learning rates $\epsilon_t\downarrow0$
+\Ensure Labeled prototypes $m_j(k)$
+\State Initialize $m_1(k),\ldots,m_R(k)$ from training observations in class $k$, for each $k$
+\For{$t=1,2,\ldots$}
+\State Sample a training index $i$
+\State Choose the closest prototype $(j,k)$ to $x_i$ over all classes and prototype indices
+\If{$g_i=k$}
+\State $m_j(k)\gets m_j(k)+\epsilon_t\bigl(x_i-m_j(k)\bigr)$
+\Else
+\State $m_j(k)\gets m_j(k)-\epsilon_t\bigl(x_i-m_j(k)\bigr)$
+\EndIf
+\EndFor
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-lvq-geometry} \hlt{Boundary-Aware Prototype Motion}\\
+For a sampled pair $(x_i,g_i)$, let $(j^\star,k^\star)\in\operatorname*{arg\,min}\limits_{1\leq k\leq K,\ 1\leq j\leq R_k}d(x_i,m_j(k))$ and let $\epsilon_t>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $g_i=k^\star$, set $m_{j^\star}(k^\star)\gets m_{j^\star}(k^\star)+\epsilon_t(x_i-m_{j^\star}(k^\star))$.
+\item If $g_i\neq k^\star$, set $m_{j^\star}(k^\star)\gets m_{j^\star}(k^\star)-\epsilon_t(x_i-m_{j^\star}(k^\star))$.
+\end{enumerate}
+Thus every sampled class can move the nearest prototype of any class.\\
+Unlike classwise $k$-means, LVQ is an online algorithmic rule rather than exact minimization of a fixed criterion.
+\end{remark}
+
+\begin{method} \label{meth:sl-gaussian-mixture-prototype-classifier} \hlt{Gaussian Mixtures as Soft Prototypes}\\
+Let $\varphi_p(\cdot;\mu,\Sigma)$ be the $p$-variate Gaussian density.  For class $k$, fix a prior $\rho_k$, component weights $\alpha_{kj}$, centers $\mu_{kj}\in\R^p$, covariances $\Sigma_{kj}\succ0$, and $j=1,\ldots,R_k$, with $\rho_k,\alpha_{kj}\geq0$, $\sum\limits_{k=1}^K\rho_k=1$, and $\sum\limits_{j=1}^{R_k}\alpha_{kj}=1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Define the class density $f_k(x)=\sum\limits_{j=1}^{R_k}\alpha_{kj}\varphi_p(x;\mu_{kj},\Sigma_{kj})$.
+\item For $x\in\R^p$, set $Z(x)=\sum\limits_{\ell=1}^K\rho_\ell f_\ell(x)=\sum\limits_{\ell=1}^K\sum\limits_{r=1}^{R_\ell}\rho_\ell\alpha_{\ell r}\varphi_p(x;\mu_{\ell r},\Sigma_{\ell r})$.
+\item Compute $\tau_k(x)=\frac{\rho_kf_k(x)}{Z(x)}$ and $\omega_{kj}(x)=\frac{\rho_k\alpha_{kj}\varphi_p(x;\mu_{kj},\Sigma_{kj})}{Z(x)}$. Set $\widehat{G}(x)\in\operatorname*{arg\,max}\limits_{1\leq k\leq K}\tau_k(x)$.
+\end{enumerate}
+The pairs $(\mu_{kj},\Sigma_{kj})$ are soft prototypes and $\omega_{kj}(x)$ gives fractional membership.\\
+If $\Sigma_{kj}=\sigma^2I$ and all $\rho_k\alpha_{kj}>0$, then as $\sigma^2\downarrow0$ the dominant component is nearest center $\mu_{kj}$ away from ties.
+\end{method}
+
+\begin{method} \label{meth:sl-knn-classifier-metric-form} \hlt{$k$-Nearest-Neighbor Classification}\\
+Fix a distance $d$ on the feature space and an integer $k\in\{1,\ldots,n\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For a query $x_0$, compute $d_i=d(x_i,x_0)$ for $i=1,\ldots,n$.
+\item Let $N_k(x_0)\subset\{1,\ldots,n\}$ be indices of $k$ smallest values among $d_1,\ldots,d_n$. Set $\widehat{G}(x_0)\in\operatorname*{arg\,max}\limits_{g\in\{1,\ldots,K\}}\sum\limits_{i\in N_k(x_0)}\mathbf{1}_{\{g_i=g\}}$.
+\end{enumerate}
+Small $k$ gives lower bias and higher variance; larger $k$ smooths the decision boundary by averaging over more labels. The tuning parameter $k$ is usually chosen by validation or cross-validation.
+\end{method}
+
+\begin{proposition} \label{prop:sl-cover-hart-nearest-neighbor-bound} \hlt{Asymptotic One-Nearest-Neighbor Error}\\
+Assume $K\geq2$ and fix $x$. Let $p_k=\mathbb{P}(G=k\mid X=x)$, choose $k^\star\in\operatorname*{arg\,max}\limits_{1\leq k\leq K}p_k$, and set $L^\star(x)=1-p_{k^\star}$.\\
+In the asymptotic one-nearest-neighbor idealisation, the query label $G$ and nearest-neighbor label $G'$ are independent draws from $(p_1,\ldots,p_K)$, and the classifier predicts $G'$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $L_{1\mathrm{NN}}(x)=\mathbb{P}(G'\neq G)=\sum\limits_{k=1}^K p_k(1-p_k)=1-\sum\limits_{k=1}^K p_k^2$.
+\item $L^\star(x)\leq L_{1\mathrm{NN}}(x)\leq 2L^\star(x)-\frac{K}{K-1}\bigl(L^\star(x)\bigr)^2\leq 2L^\star(x)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Independence gives $\mathbb{P}(G'=G)=\sum\limits_{k=1}^Kp_k^2$, hence $L_{1\mathrm{NN}}(x)=1-\sum\limits_{k=1}^Kp_k^2$.
+\item Let $p_\star=p_{k^\star}$ and $q=1-p_\star=L^\star(x)$.\\
+Since $p_k\leq p_\star$ for every $k$, $\sum\limits_{k=1}^Kp_k^2\leq p_\star\sum\limits_{k=1}^Kp_k=p_\star$, so $L_{1\mathrm{NN}}(x)\geq1-p_\star=L^\star(x)$.\\
+Also $\sum\limits_{k\neq k^\star}p_k=q$, so Cauchy-Schwarz gives $\sum\limits_{k\neq k^\star}p_k^2\geq\frac{q^2}{K-1}$.\\
+Therefore $\sum\limits_{k=1}^Kp_k^2\geq(1-q)^2+\frac{q^2}{K-1}$ and $L_{1\mathrm{NN}}(x)\leq2q-\frac{Kq^2}{K-1}\leq2q=2L^\star(x)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Dominant mass gives the lower bound; uniform residual mass gives the upper bound.
+\hlt{Key Insight}: One-nearest-neighbor error is label-disagreement probability at fixed $x$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:sl-knn-prototype-comparative-study} \hlt{Tuning Depends on the Problem}\\
+Let $X=(X_1,\ldots,X_{10})$ have independent $\operatorname{Unif}(0,1)$ coordinates and let $Y\in\{0,1\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Halfspace}: $Y=\mathbf{1}_{\{X_1>1/2\}}$; the decision boundary is the single hyperplane $X_1=1/2$.
+\item \hlt{Checkerboard}: $Y=\mathbf{1}_{\{\sign(\prod_{j=1}^3(X_j-1/2))>0\}}$.\\
+The planes $X_j=1/2$ for $j=1,2,3$ form eight cells with alternating labels.
+\end{enumerate}
+Across repeated simulations, the preferred neighborhood size $k$ or prototype count $R$ depended on the case.  For memory-based and prototype rules, tuning is geometry-dependent, not a universal complexity constant.
+\end{example}
+
+\begin{example} \label{ex:sl-image-scene-nearest-neighbor-classification} \hlt{Image Scene Classification by Local Pixel Features}\\
+For each pixel $s$, let $b_s\in\R^4$ be its four spectral-band vector and let $g_s\in\{1,\ldots,7\}$ be its land-use label.\\
+Replace $b_s$ by the local feature vector $z_s=(b_t:t\in\mathcal{N}_3(s))\in\R^{36}$, where $\mathcal{N}_3(s)$ is the $3\times3$ pixel patch centered at $s$. A five-nearest-neighbor rule on the features $z_s$ had reported test error about $9.5\%$, showing that local spatial features can make nearest-neighbor classification competitive for irregular class boundaries.
+\end{example}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/pixel_eight_neighbor_feature_map.tikz}
+\caption{A $3\times3$ patch over four bands gives $36$ features per pixel.}
+\label{fig:sl-pixel-eight-neighbor-feature-map}
+\end{figure}
+
+\begin{method} \label{meth:sl-invariant-and-tangent-distance} \hlt{Invariant Metrics and Tangent Distance}\\
+Let $x,x'\in\R^p$, let $\mathcal{A}$ be a transformation family, and write $T_\alpha x$ for the transformed input.\\
+For local transformations, let $V_x\in\R^{p\times r_x}$ span the tangent directions at $x$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Orbit metric}: $d_{\mathrm{inv}}(x,x')=\inf\limits_{\alpha,\beta\in\mathcal{A}}\norm{T_\alpha x-T_\beta x'}_2$ compares the transformation orbits of $x$ and $x'$.
+\item \hlt{Tangent metric}: $d_{\mathrm{tan}}(x,x')=\inf\limits_{a,b}\norm{x+V_xa-x'-V_{x'}b}_2$ compares tangent affine spaces.
+\end{enumerate}
+The tangent metric discounts small local transformations without making large transformations cost-free.\\
+Data augmentation encodes similar invariance by storing transformed copies, which becomes costly when many transformation directions are needed.
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/tangent_distance_schematic.tikz}
+\caption{Tangent distance uses \textcolor{red!75!black}{local tangents} instead of \textcolor{green!65!black}{orbits}; \textcolor{blue!70!black}{$d_E$} is ordinary distance.}
+\label{fig:sl-tangent-distance-schematic}
+\end{figure}
+
+\begin{method} \label{meth:sl-discriminant-adaptive-nearest-neighbor} \hlt{Discriminant Adaptive Nearest Neighbors}\\
+DANN replaces the fixed Euclidean metric by a query-dependent quadratic metric.\\
+For a query $x_0$, choose a pilot index set $P(x_0)$, final neighbor count $h$, and $\epsilon>0$. From $\{(x_i,g_i):i\in P(x_0)\}$ estimate local class proportions $\pi_k$, class means $\bar{x}_k$, local mean $\bar{x}$, and pooled within-class covariance $\mathbf{W}\succ0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute the local between-class covariance $\mathbf{B}=\sum\limits_{k=1}^K\pi_k(\bar{x}_k-\bar{x})(\bar{x}_k-\bar{x})^T$.
+\item Form $\mathbf{B}^\star=\mathbf{W}^{-1/2}\mathbf{B}\mathbf{W}^{-1/2}$ and $\bm{\Sigma}_{x_0}=\mathbf{W}^{-1/2}(\mathbf{B}^\star+\epsilon I)\mathbf{W}^{-1/2}$.
+\item With $D_{x_0}(x_i,x_0)=(x_i-x_0)^T\bm{\Sigma}_{x_0}(x_i-x_0)$, let $N_h(x_0)$ index $h$ smallest distances.\\
+\item Set $\widehat{G}(x_0)\in\operatorname*{arg\,max}\limits_{g\in\{1,\ldots,K\}}\sum\limits_{i\in N_h(x_0)}\mathbf{1}_{\{g_i=g\}}$.
+\end{enumerate}
+Whitening by $\mathbf{W}$ removes local within-class scale.\\
+$\mathbf{B}^\star+\epsilon I$ stretches neighborhoods along directions with weak local class separation, and $\epsilon$ prevents degeneracy.
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/dann_adaptive_neighborhood.tikz}
+\caption{DANN replaces the \textcolor{gray!65!black}{Euclidean ball} by a \textcolor{green!55!black}{local ellipsoid}, narrow along the \textcolor{red!75!black}{class-change direction} and elongated where class probabilities vary slowly.}
+\label{fig:sl-dann-adaptive-neighborhood}
+\end{figure}
+
+\begin{method} \label{meth:sl-global-dimension-reduction-nearest-neighbor} \hlt{Global Dimension Reduction for Nearest Neighbors}\\
+Fix a target dimension $L\leq p$.  Let $\mathbf{B}_i$ be the local between-class matrix estimated at training point $x_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute the global class-separation matrix $\overline{\mathbf{B}}=N^{-1}\sum_{i=1}^N\mathbf{B}_i$.
+\item Let $(\theta_\ell,e_\ell)_{\ell=1}^p$ be eigenpairs of $\overline{\mathbf{B}}$ with $\theta_1\geq\cdots\geq\theta_p$.
+\item Project by $P_Lx=(e_1^Tx,\ldots,e_L^Tx)\in\R^L$ and run nearest-neighbor classification on $P_Lx_i$.
+\end{enumerate}
+The rank-$L$ summary $\overline{\mathbf{B}}_{[L]}=\sum_{\ell=1}^L\theta_\ell e_\ell e_\ell^T$ solves $\min_{\operatorname{rank}(M)=L}\sum_{i=1}^N\operatorname{trace}[(\mathbf{B}_i-M)^2]$.\\
+The reduced space is selected from local class-separation information, not unsupervised variance alone.
+\end{method}
+
+\begin{remark} \label{rem:sl-nearest-neighbor-computation-and-storage} \hlt{Computation and Storage}\\
+With $N$ stored observations in $\R^p$, direct nearest-neighbor search costs $O(Np)$ per query and stores $O(Np)$ coordinates.  Storage can be reduced by replacing the retained set $S\subset\{1,\ldots,N\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Prototype compression}: store learned representatives rather than all training observations.
+\item \hlt{Editing}: delete observations whose local neighborhoods have inconsistent labels.
+\item \hlt{Condensing}: grow a small retained set by adding $i$ only if it misclassifies $(x_i,g_i)$.
+\end{enumerate}
+Fast search reduces query cost in favorable geometries; compression, editing, and condensing reduce storage by keeping representatives or boundary-relevant observations.
+\end{remark}
