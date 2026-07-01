@@ -1,0 +1,104 @@
+\subsection{Association Rules and Density-Ratio Views}
+
+Association-rule analysis searches for simple descriptions of regions where the input distribution has relatively large probability.  The classical market-basket setting is the binary special case, but the same idea extends to conjunctions of coordinate conditions.
+
+\begin{definition} \label{def:sl-conjunctive-region} \hlt{Conjunctive Region}\\
+Let $X=(X_1,\ldots,X_p)$ take values in $\mathcal{S}=\prod_{j=1}^p\mathcal{S}_j$. For $\mathcal{J}\subseteq\{1,\ldots,p\}$ and $s=(s_j)_{j\in\mathcal{J}}$ with $s_j\subseteq\mathcal{S}_j$, the \hlt{conjunctive region} is $R(\mathcal{J},s)=\{x\in\mathcal{S}:x_j\in s_j\ \forall j\in\mathcal{J}\}$, with event $\{X\in R(\mathcal{J},s)\}=\bigcap\limits_{j\in\mathcal{J}}\{X_j\in s_j\}$.\\
+Coordinates in $\{1,\ldots,p\}\setminus\mathcal{J}$ are unrestricted; under the extension $s_j=\mathcal{S}_j$, they add no constraint.\\
+For $\mathcal{S}_j\subseteq\mathbb{R}$, $s_j$ is typically an interval; for categorical $\mathcal{S}_j$, $s_j$ is typically a subset of levels.
+\end{definition}
+
+\begin{definition} \label{def:sl-market-basket-itemset-support} \hlt{Market-Basket Item Sets}\\
+Let $\mathcal{I}=\{1,\ldots,K\}$ and $z_i=(z_{ik})_{k\in\mathcal{I}}\in\{0,1\}^{\mathcal{I}}$ for $i=1,\ldots,n$, where $z_{ik}=1$ iff observation $i$ contains item $k$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item An \hlt{item set} is any $\mathcal{K}\subseteq\mathcal{I}$.
+\item The containment indicator is $Y_i(\mathcal{K})=\prod\limits_{k\in\mathcal{K}}z_{ik}$; observation $i$ contains $\mathcal{K}$ iff $Y_i(\mathcal{K})=1$.
+\item The empirical support is $T(\mathcal{K})=n^{-1}\sum\limits_{i=1}^nY_i(\mathcal{K})$.
+\item For finite categorical supports, take $\mathcal{I}=\{(j,a):1\leq j\leq p,\ a\in\mathcal{S}_j\}$, hence $K=\sum\limits_{j=1}^p\abs{\mathcal{S}_j}$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:sl-association-rule-confidence-lift} \hlt{Association Rule, Confidence, and Lift}\\
+Let $A,B\subseteq\mathcal{I}$ satisfy $A\cap B=\emptyset$, $A\neq\emptyset$, $B\neq\emptyset$, $T(A)>0$, and $T(B)>0$.\\
+The \hlt{association rule} with antecedent $A$ and consequent $B$ is $A\Rightarrow B$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The rule support is $S(A\Rightarrow B)=T(A\cup B)$.
+\item The confidence is $C(A\Rightarrow B)=\frac{T(A\cup B)}{T(A)}$.
+\item The lift is $L(A\Rightarrow B)=\frac{C(A\Rightarrow B)}{T(B)}=\frac{T(A\cup B)}{T(A)T(B)}$.
+\end{enumerate}
+Interpretation: $C(A\Rightarrow B)$ estimates prevalence of $B$ given $A$; $L(A\Rightarrow B)$ compares it with $T(B)$.
+\end{definition}
+
+\begin{example} \label{ex:sl-market-basket-support-confidence-lift} \hlt{A Market-Basket Rule}\\
+Let $A=\{\mathrm{peanut\ butter},\mathrm{jelly}\}$ and $B=\{\mathrm{bread}\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Support $T(A\cup B)=0.03$ means all three items appear in about $3\%$ of baskets.
+\item Confidence $C(A\Rightarrow B)=0.82$ means about $82\%$ of baskets containing $A$ also contain bread.
+\item If $T(B)=0.43$, then $L(A\Rightarrow B)=0.82/0.43\approx1.91$.
+\end{enumerate}
+The rule predicts bread more often than its marginal prevalence.
+\end{example}
+
+\begin{breakablealgorithm}
+\caption{Apriori Association-Rule Search}
+\label{alg:sl-apriori-association-rules}
+\begin{algorithmic}
+\Require Binary item data $z_1,\ldots,z_n$, support threshold $t$, confidence threshold $c$
+\Ensure Rules with support above $t$ and confidence above $c$
+\State Compute supports for all one-item sets and retain $\mathcal{F}_1=\{\mathcal{K}:|\mathcal{K}|=1,\ T(\mathcal{K})>t\}$
+\State Set $m\gets2$
+\While{$\mathcal{F}_{m-1}\neq\emptyset$}
+\State Form candidate item sets of size $m$ whose every size-$(m-1)$ subset lies in $\mathcal{F}_{m-1}$
+\State Scan the data to compute $T(\mathcal{K})$ for each candidate
+\State Retain $\mathcal{F}_m=\{\mathcal{K}:|\mathcal{K}|=m,\ T(\mathcal{K})>t\}$
+\State Set $m\gets m+1$
+\EndWhile
+\State For each retained item set $\mathcal{K}$, test nonempty proper antecedents $A\subset\mathcal{K}$
+\State Report $A\Rightarrow \mathcal{K}\setminus A$ when $C(A\Rightarrow \mathcal{K}\setminus A)>c$
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-apriori-monotonicity-and-limits} \hlt{Apriori Monotonicity and Limits}\\
+Support is antitone: $\mathcal{L}\subseteq\mathcal{K}\Longrightarrow T(\mathcal{L})\geq T(\mathcal{K})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T(\mathcal{L})<t$, then every $\mathcal{K}\supseteq\mathcal{L}$ also has $T(\mathcal{K})<t$ and may be pruned.
+\item A support threshold $t$ can discard rules $A\Rightarrow B$ with large $C(A\Rightarrow B)$ or $L(A\Rightarrow B)$ but small $T(A\cup B)$.
+\end{enumerate}
+\end{remark}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/apriori_itemset_monotonicity.tikz}
+\caption{Apriori keeps \textcolor{green!55!black}{frequent item sets}; if \textcolor{red!70!black}{$T(AB)\le t$}, all supersets of $AB$ are pruned.}
+\label{fig:sl-apriori-itemset-monotonicity}
+\end{figure}
+
+\begin{method} \label{meth:sl-generalized-association-rules} \hlt{Generalized Association Rules}\\
+For $\mathcal{J}\subseteq\{1,\ldots,p\}$ and $s_j\subseteq\mathcal{S}_j$, set $R(\mathcal{J},s)=\bigcap\limits_{j\in\mathcal{J}}\{X_j\in s_j\}$ and $\widehat{P}\{R(\mathcal{J},s)\}=n^{-1}\sum\limits_{i=1}^n\mathbf{1}\{x_{ij}\in s_j\ \forall j\in\mathcal{J}\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Allow $s_j$ to be intervals for quantitative variables and subsets of levels for categorical variables.
+\item Search over candidate regions with a heuristic rule learner.
+\item Retain rules whose fitted score and observed support meet the chosen thresholds.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:sl-unsupervised-as-supervised-density-ratio} \hlt{Unsupervised Learning as Supervised Density-Ratio Estimation}\\
+Let $g$ be the data density, $g_0$ a reference density, and $Y=1$ label data while $Y=0$ labels reference observations.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Draw a reference sample from $g_0$ and pool it with the data, weighting the two classes equally.
+\item Fit a probabilistic classifier $\widehat{\mu}(x)\approx\Pr(Y=1\mid X=x)$.
+\item Use $\mu(x)=g(x)/(g(x)+g_0(x))$ to estimate the density ratio by $\widehat{g}(x)/g_0(x)=\widehat{\mu}(x)/(1-\widehat{\mu}(x))$.
+\end{enumerate}
+Uniform, Gaussian, and product-marginal $g_0$ target high density, nonnormality, and dependence, respectively.
+\end{method}
+
+\begin{remark} \label{rem:sl-rule-learners-for-density-ratios} \hlt{Rule Learners for Density Ratios}\\
+After estimating $\widehat{g}/g_0$, any learner that returns regions $R=\bigcap\limits_{j\in\mathcal{J}}\{X_j\in s_j\}$ can search for generalized item sets. Tree leaves and box-peeling regions have this conjunctive form.\\
+The unsupervised target is large $\widehat{g}(x)/g_0(x)$ on $R$ together with adequate empirical support, not predictive risk.
+\end{remark}
