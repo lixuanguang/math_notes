@@ -3,17 +3,37 @@
 Policy learning and evaluation combine prediction with causal questions about actions not actually taken.
 
 \begin{definition} \label{def:sl-potential-outcomes} \hlt{Potential Outcomes}\\
-For treatment $A\in\{0,1\}$, the potential outcomes $Y(1)$ and $Y(0)$ denote the outcomes that would occur under each treatment level.  The individual causal effect is $Y(1)-Y(0)$, while average effects take expectations over a population.
+Let $A\in\mathcal A$ be a treatment.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Potential outcome}: $Y(a)$ is the outcome under $\operatorname{do}(A=a)$.
+\item \hlt{Consistency}: $Y=Y(A)$.
+\item \hlt{Individual effect}: for binary $A\in\{0,1\}$, $\tau=Y(1)-Y(0)$.
+\item \hlt{Average treatment effect}: $\operatorname{ATE}=\mathbb E[\tau]$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:sl-ignorability-propensity} \hlt{Ignorability and Propensity}\\
-Treatment assignment is ignorable given covariates $X$ if $(Y(0),Y(1))$ is conditionally independent of $A$ given $X$.  The propensity score is $e(X)=P(A=1\mid X)$.
+For binary treatment $A$ and covariates $X$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Ignorability}: $(Y(0),Y(1))\perp\!\!\!\perp A\mid X$.
+\item \hlt{Propensity score}: $e(x)=P(A=1\mid X=x)$.
+\item \hlt{Overlap}: $0<e(X)<1$ almost surely.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:sl-off-policy-evaluation} \hlt{Off-Policy Evaluation}\\
-Off-policy evaluation estimates the value of a target policy using data collected under another policy.  Importance weighting corrects the action distribution when the logging probabilities are known and overlap holds.
+Let $(X_i,A_i,Y_i)_{i=1}^n$ be logged under behavior policy $\mu(a\mid x)$, and let $\pi(a\mid x)$ be a target policy.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Target value}: $V(\pi)=\mathbb E_\pi[Y]$.
+\item \hlt{Off-policy evaluation}: estimate $V(\pi)$ from data sampled under $\mu$.
+\item \hlt{Inverse-propensity weighting}: $\hat V_{\operatorname{IPW}}(\pi)=n^{-1}\sum_{i=1}^n \{\pi(A_i\mid X_i)/\mu(A_i\mid X_i)\}Y_i$.
+\item \hlt{Overlap}: $\mu(a\mid x)>0$ whenever $\pi(a\mid x)>0$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-feedback-policy-learning} \hlt{Feedback}\\
-When predictions influence actions, the data-generating process changes.  This connects causal learning, reinforcement learning, and deployment monitoring.
+If a predictor $g$ induces actions through a policy $\pi_g(a\mid x)$, then future data are drawn from the post-deployment law $P^{\pi_g}$ rather than the pre-deployment law $P^0$. Feedback is the dependence $g\mapsto\pi_g\mapsto P^{\pi_g}$; causal learning, reinforcement learning, and deployment monitoring all study or control this induced law.
 \end{remark}

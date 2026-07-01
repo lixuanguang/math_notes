@@ -3,21 +3,27 @@
 Causal learning asks which predictions remain valid under interventions, not merely under passive observation.
 
 \begin{definition} \label{def:sl-structural-causal-model} \hlt{Structural Causal Model}\\
-A structural causal model specifies variables by assignments
-\[
-X_j=f_j(X_{\operatorname{pa}(j)},U_j),
-\]
-where the exogenous variables $U_j$ represent disturbances.  The associated directed graph records direct causal inputs.
+Let $J$ index endogenous variables $X=(X_j)_{j\in J}$ and exogenous disturbances $U=(U_j)_{j\in J}$.\\
+A structural causal model is $M=(G,\{f_j\}_{j\in J},P_U)$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $G=(J,E)$ is a directed graph with $\operatorname{pa}(j)=\{k\in J:k\to j\in E\}$.
+\item $P_U$ is the joint law of $U$.
+\item $X_j=f_j(X_{\operatorname{pa}(j)},U_j)$ for every $j\in J$.
+\end{enumerate}
+The edges $k\to j$ are the direct causal inputs to $X_j$.
 \end{definition}
 
 \begin{definition} \label{def:sl-intervention-do-operator} \hlt{Intervention}\\
-An intervention $\operatorname{do}(X_j=x)$ replaces the structural assignment for $X_j$ by the constant $x$ and leaves the remaining assignments unchanged.  The resulting law is an interventional distribution.
+For $M=(G,\{f_k\}_{k\in J},P_U)$ and $x\in\mathcal X_j$, set $\tilde f_j\equiv x$ and $\tilde f_k=f_k$ for $k\ne j$.\\
+The \hlt{intervention} $\operatorname{do}(X_j=x)$ is the modified model $M_{j:=x}=(G_{j:=x},\{\tilde f_k\}_{k\in J},P_U)$, where $G_{j:=x}$ deletes all incoming edges to $j$; the induced law $P_{M_{j:=x}}$ is the interventional distribution.
 \end{definition}
 
 \begin{definition} \label{def:sl-causal-identifiability} \hlt{Identifiability}\\
-A causal quantity is \hlt{identifiable} if it is uniquely determined by the observational distribution together with the assumed causal graph or model class.
+Let $\mathcal M$ be the assumed model class and let $P_M$ be the observational law induced by $M\in\mathcal M$.\\
+A causal functional $\psi:\mathcal M\to\Theta$ is \hlt{identifiable} on $\mathcal M$ if $P_M=P_{M'}$ implies $\psi(M)=\psi(M')$ for all $M,M'\in\mathcal M$.
 \end{definition}
 
 \begin{remark} \label{rem:sl-causal-versus-predictive} \hlt{Causal and Predictive Targets}\\
-A predictor can be accurate under the training distribution while failing after an intervention.  Causal assumptions specify which conditional relationships are stable enough to transport across regimes.
+Let $\hat y=g(z)$ be trained under the observational law $P_M$. Small risk $R_{P_M}(g)=\mathbb E_{P_M}[\ell(Y,g(Z))]$ need not imply small interventional risk $R_{P_{M_{j:=x}}}(g)$ after $\operatorname{do}(X_j=x)$. Transport across regimes requires causal stability of the conditional mechanism used by $g$, not only predictive fit under $P_M$.
 \end{remark}
