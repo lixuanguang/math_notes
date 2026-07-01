@@ -3,17 +3,44 @@
 Transformers combine attention, feedforward blocks, normalization, and residual connections into architectures that scale well on sequence and multimodal data.
 
 \begin{definition} \label{def:sl-transformer-block} \hlt{Transformer Block}\\
-A transformer block applies multi-head self-attention, residual connections, normalization layers, and a positionwise feedforward network.  Stacking these blocks yields deep contextual representations.
+For $X\in\R^{T\times d}$, let $\operatorname{MHA}$ be multi-head attention, $\operatorname{FFN}$ positionwise feedforward, and $\operatorname{LN}_1,\operatorname{LN}_2$ layer normalizations. A pre-norm block $B:\R^{T\times d}\to\R^{T\times d}$ is:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Attention sublayer}: $Z\defeq X+\operatorname{MHA}(\operatorname{LN}_1X)$.
+\item \hlt{Feedforward sublayer}: $B(X)\defeq Z+\operatorname{FFN}(\operatorname{LN}_2Z)$.
+\end{enumerate}
+Stacking blocks gives $B_L\circ\cdots\circ B_1(X)$.
 \end{definition}
 
 \begin{definition} \label{def:sl-self-attention} \hlt{Self-Attention}\\
-Self-attention uses the same sequence to form queries, keys, and values.  Multi-head attention runs several attention maps in parallel and recombines their outputs.
+For $X\in\R^{T\times d}$, head dimension $d_h$, and projection matrices $W_Q,W_K,W_V,W_O$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Self-attention}: $Q=XW_Q$, $K=XW_K$, $V=XW_V$, and $\operatorname{SA}(X)\defeq\operatorname{Attn}(Q,K,V)$.
+\item \hlt{Multi-head attention}: with heads $H_r\defeq\operatorname{Attn}(XW_Q^{(r)},XW_K^{(r)},XW_V^{(r)})$, set $\operatorname{MHA}(X)\defeq[H_1|\cdots|H_R]W_O$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-large-scale-training} \hlt{Large-Scale Training}\\
-Large-scale deep learning is constrained by optimization, data quality, memory, communication, and evaluation.  Batch size, learning-rate schedules, mixed precision, parallelism, and checkpointing are part of the mathematical and systems design of training.
+For data $\mathcal D=\{z_i\}_{i=1}^N$, loss $\ell_i(\theta)$, mini-batch $B_t$, and gradient estimate $\hat g_t\defeq\abs{B_t}^{-1}\sum_{i\in B_t}\nabla_\theta\ell_i(\theta_t)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Optimization}: choose update $\theta_{t+1}=U_t(\theta_t,\hat g_t)$, batch size $\abs{B_t}$, and schedule $\eta_t$.
+\item \hlt{Data}: sampling, filtering, weighting, and augmentation define the empirical training law $\widehat P_{\mathcal D}$.
+\item \hlt{Numerics}: mixed precision uses low-precision arithmetic with scaling or high-precision accumulators.
+\item \hlt{Parallelism}: workers compute local gradients $g_t^{(p)}$ and synchronize $\bar g_t=P^{-1}\sum_{p=1}^Pg_t^{(p)}$.
+\item \hlt{Memory}: checkpointing stores selected activations and recomputes the rest during backpropagation.
+\item \hlt{Evaluation}: validation loss and task metrics estimate out-of-sample performance.
+\end{enumerate}
 \end{remark}
 
 \begin{remark} \label{rem:sl-transformer-generalization} \hlt{Inductive Bias}\\
-Transformers have weaker built-in locality bias than convolutional networks but stronger capacity for long-range interaction.  Domain-specific variants add locality, recurrence, sparsity, or equivariance when the task demands it.
+Let $I=\{1,\ldots,T\}$ index tokens, $W_i\subset I$ be a local window, and $A_{ij}(x)$ be attention weights.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Locality}: convolution uses $y_i=F((x_j)_{j\in W_i})$.
+\item \hlt{Global interaction}: attention uses $y_i=\sum_{j\in I}A_{ij}(x)Vx_j$.
+\item \hlt{Domain-specific bias}: impose masks, recurrence, sparsity, or $\Phi(\rho_{\rm in}(g)x)=\rho_{\rm out}(g)\Phi(x)$.
+\end{enumerate}
+Useful bias matches the task's locality, symmetry, and dependency scale.
 \end{remark}
