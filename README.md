@@ -95,7 +95,7 @@ expansion.
 | `12` | Probability and stochastic systems | Source library includes Ross, Lamperti, Billingsley, and stochastic calculus references. Bibliography expansion pending. |
 | `13`-`14` | Dynamical systems, PDEs, numerical analysis, and stochastic computation | Structured notes tree is in place. Bibliography expansion pending as these parts are developed. |
 | `15`-`16` | Statistics, time series, statistical data analysis, and applied models | Hamilton and Rice are in the active bibliography. The source library also includes Casella-Berger, Lehmann-Casella, Lehmann-Romano, van der Vaart, Schervish, Berger, nonparametric statistics texts, and resampling references. |
-| `17` | Statistical learning and deep learning | Mazur and Granziol-Wan-Albanie-Roberts are in the active bibliography. Broader learning references remain expansion material. |
+| `17` | Statistical learning and deep learning | Hastie-Tibshirani-Friedman, Mazur, and Granziol-Wan-Albanie-Roberts are in the active bibliography. Broader learning references remain expansion material. |
 
 When adding a source to the notes, prefer this order:
 

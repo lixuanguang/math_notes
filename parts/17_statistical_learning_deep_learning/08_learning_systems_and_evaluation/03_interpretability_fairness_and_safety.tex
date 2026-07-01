@@ -3,17 +3,39 @@
 Evaluation also asks whether a model can be understood, audited, and constrained in the setting where it is used.
 
 \begin{definition} \label{def:sl-interpretability} \hlt{Interpretability}\\
-Interpretability methods assign human-usable explanations to model behavior.  Examples include feature attribution, counterfactual explanations, surrogate models, and mechanistic analysis of internal representations.
+Let $\mathcal{F},\mathcal{C},\mathcal{E},\mathcal{A},\mathcal{B}$ denote predictor, query-context, explanation, audience, and audit-task spaces.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Interpretability specification}: $\mathcal{I}=(\mathcal{E},a,b,\Phi)$ with $(a,b)\in\mathcal{A}\times\mathcal{B}$ and $\Phi:\mathcal{F}\times\mathcal{C}\to\mathcal{E}$.
+\item \hlt{Explanation}: for $(f,c)\in\mathcal{F}\times\mathcal{C}$, $e=\Phi(f,c)$.
+\end{enumerate}
+Typical codomains $\mathcal{E}$ encode attributions, counterfactuals, surrogate rules, or representation summaries.
 \end{definition}
 
 \begin{definition} \label{def:sl-fairness-criteria} \hlt{Fairness Criteria}\\
-Group fairness criteria compare error rates, acceptance rates, calibration, or other performance quantities across protected groups.  Different fairness criteria can conflict, so the mathematical condition must be tied to a policy goal.
+Let $A$ be a protected attribute, $\widehat Y$ a decision, $S$ a score, and $Y$ the outcome.\\
+A group fairness criterion imposes equalities or tolerances across values of $A$; common examples are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Demographic parity}: $\mathbb{P}(\widehat Y=1\mid A=a)$ is constant in $a$.
+\item \hlt{Equalized odds}: $\mathbb{P}(\widehat Y=1\mid Y=y,A=a)$ is constant in $a$ for each $y$.
+\item \hlt{Group calibration}: $\mathbb{P}(Y=1\mid S=s,A=a)=s$ for each relevant $s$ and $a$.
+\end{enumerate}
+These criteria need not be mutually compatible; the chosen condition should match the policy goal.
 \end{definition}
 
 \begin{definition} \label{def:sl-safety-constraint} \hlt{Safety Constraint}\\
-A safety constraint restricts model behavior outside ordinary average-case loss, for example by enforcing abstention, monotonicity, bounded action sets, human review, or worst-case risk limits.
+An additional requirement $f\in\mathcal{C}$ or $R_{\mathrm{safe}}(f)\le\tau$ beyond average-case loss is a \hlt{safety constraint}.\\
+$\mathcal{C}$ encodes abstention, monotonicity, action bounds, review triggers, or worst-case risk limits.
 \end{definition}
 
 \begin{remark} \label{rem:sl-evaluation-beyond-accuracy} \hlt{Beyond Accuracy}\\
-Interpretability, fairness, and safety are not single metrics.  They are collections of mathematical requirements, measurement protocols, and governance choices around a deployed learning system.
+For a deployed predictor $f$, evaluation beyond accuracy is a specification $\mathcal{E}=(\mathcal{I},\mathcal{F},\mathcal{C})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Interpretability}: $\mathcal{I}$ specifies the explanation object, audience, and audit protocol.
+\item \hlt{Fairness}: $\mathcal{F}$ specifies protected attributes, group metrics, and required parity or error constraints.
+\item \hlt{Safety}: $\mathcal{C}$ specifies forbidden actions, abstention rules, human review triggers, or worst-case risk bounds.
+\end{enumerate}
+A scalar score is incomplete unless the relevant components of $\mathcal{E}$ are stated.
 \end{remark}
