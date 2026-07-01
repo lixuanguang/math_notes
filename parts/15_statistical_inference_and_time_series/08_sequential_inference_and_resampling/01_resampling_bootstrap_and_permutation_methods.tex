@@ -18,6 +18,17 @@ Let $\widehat{\psi}=s(X_{1:n})$ be observed statistic, $\mathcal{R}_\ast(X_{1:n}
 \end{enumerate}
 \end{method}
 
+\begin{method} \label{meth:bootstrap-location-standard-errors} \hlt{Bootstrap Variability for Location Summaries}\\
+Let $T=T(x_1,\ldots,x_n)$ be a location summary and let $B\geq1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Resample}: For $1\leq b\leq B$, draw $x_1^{*(b)},\ldots,x_n^{*(b)}$ iid from $\widehat F_n\defeq n^{-1}\sum\limits_{i=1}^n\delta_{x_i}$.
+\item \hlt{Recompute}: Set $T_b^\ast\defeq T(x_1^{*(b)},\ldots,x_n^{*(b)})$ and $\overline{T}^{\ast}\defeq B^{-1}\sum\limits_{b=1}^BT_b^\ast$.
+\item \hlt{Spread}: Estimate variability by $\widehat{\operatorname{se}}_{\ast}(T)\defeq\left((B-1)^{-1}\sum\limits_{b=1}^B(T_b^\ast-\overline{T}^{\ast})^2\right)^{1/2}$.
+\end{enumerate}
+\hlt{Key Insight}: This is useful for medians and trimmed means, where analytic standard errors can be tail-sensitive.
+\end{method}
+
 \begin{definition} \label{def:parametric-bootstrap} \hlt{Parametric Bootstrap}\\
 Let $\{P_\theta:\theta\in\Theta\}$ be parametric model for $X_{1:n}\defeq(X_1,\ldots,X_n)$, let $\widehat{\theta}\defeq\widehat{\theta}(X_{1:n})$, and let $S$ be a statistic.\\
 $X_1^\ast,\ldots,X_n^\ast\mid X_{1:n}\sim P_{\widehat{\theta}}^{\otimes n}$, and $\mathcal{L}(S(X_{1:n}^\ast)\mid X_{1:n})$ is the fitted-model resampling law for $S(X_{1:n})$.\\
@@ -35,6 +46,17 @@ Let $\{P_\theta:\theta\in\Theta\}$ be parametric model, $\widehat{\psi}\defeq s(
 \end{enumerate}
 The percentile interval uses empirical quantiles of $\{\widehat{\psi}^{\ast b}\}_{b=1}^{B}$ directly.\\
 The pivotal and percentile intervals coincide when the bootstrap error law is symmetric about $0$.
+\end{method}
+
+\begin{method} \label{meth:parametric-bootstrap-odds-ratio-standard-error} \hlt{Parametric Bootstrap for an Odds-Ratio Standard Error}\\
+Let $a,b,c,d\in\N$ denote the observed counts in rows $D,\overline{D}$ and columns $X,\overline{X}$: $a\defeq n_{DX}$, $b\defeq n_{D\overline{X}}$, $c\defeq n_{\overline{D}X}$, and $d\defeq n_{\overline{D}\overline{X}}$. Set $m_D\defeq a+b$, $m_{\overline{D}}\defeq c+d$, $\widehat{p}_D\defeq\frac{a}{m_D}$, $\widehat{p}_{\overline{D}}\defeq\frac{c}{m_{\overline{D}}}$, and $\widehat{\Delta}\defeq\frac{ad}{bc}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Bootstrap Law}: For $r\in[R]$, draw independently $A_r^{\ast}\sim\operatorname{Binomial}(m_D,\widehat{p}_D)$ and $C_r^{\ast}\sim\operatorname{Binomial}(m_{\overline{D}},\widehat{p}_{\overline{D}})$.
+\item \hlt{Replicate}: If $0<A_r^{\ast}<m_D$ and $0<C_r^{\ast}<m_{\overline{D}}$, set $\widehat{\Delta}_r^{\ast}\defeq\frac{A_r^{\ast}(m_{\overline{D}}-C_r^{\ast})}{(m_D-A_r^{\ast})C_r^{\ast}}$.
+\item \hlt{Standard Error}: With $\overline{\Delta}^{\ast}\defeq\frac{1}{R}\sum\limits_{r=1}^{R}\widehat{\Delta}_r^{\ast}$, set $\widehat{\operatorname{se}}_{\ast}(\widehat{\Delta})\defeq\left(\frac{1}{R-1}\sum\limits_{r=1}^{R}(\widehat{\Delta}_r^{\ast}-\overline{\Delta}^{\ast})^2\right)^{1/2}$.
+\end{enumerate}
+\item \hlt{Key Insight}: Resample exposure counts conditional on fixed row totals; $\operatorname{sd}\{(\widehat{\Delta}_r^{\ast})_{r\in[R]}\}$ estimates $\operatorname{se}(\widehat{\Delta})$.
 \end{method}
 
 \begin{remark} \label{rem:parametric-bootstrap-plug-in-principle} \hlt{Plug-In Monte Carlo}\\
