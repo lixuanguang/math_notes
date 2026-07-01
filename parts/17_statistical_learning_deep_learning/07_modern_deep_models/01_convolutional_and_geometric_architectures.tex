@@ -3,28 +3,54 @@
 The convolutional-network source is migrated here because convolution is an architectural prior for data with grid, group, or geometric structure.
 
 \begin{definition} \label{def:sl-convolution} \hlt{Convolution}\\
-For functions on the real line, convolution is
-\[
-(f*g)(t)=\int_{-\infty}^{\infty}f(\tau)g(t-\tau)\,d\tau.
-\]
-For sequences on $\Z$, the discrete convolution is
-\[
-(f*g)[n]=\sum_{m=-\infty}^{\infty}f[m]g[n-m].
-\]
+For $f,g:\R\to\R$ and $a,b:\Z\to\R$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Continuous}: $f*g:D_c\ni t\mapsto\int_{-\infty}^{\infty}f(\tau)g(t-\tau)\,d\tau\in\R$; $D_c\defeq\{t\in\R:\int_\R\abs{f(\tau)g(t-\tau)}\,d\tau<\infty\}$.
+\item \hlt{Discrete}: $a*b:D_d\ni n\mapsto\sum\limits_{m\in\Z}a[m]b[n-m]\in\R$; $D_d\defeq\{n\in\Z:\sum\limits_{m\in\Z}\abs{a[m]b[n-m]}<\infty\}$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:sl-convolutional-neural-network} \hlt{Convolutional Neural Network}\\
-A convolutional neural network uses convolution or cross-correlation in at least one layer.  Neural-network libraries often implement cross-correlation while referring to it as convolution.
+Let $\Phi=L_k\circ\cdots\circ L_1$ be a neural network on array-valued activations.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Convolutional layer}: on $z:\Z^d\to\R^{C_{\rm in}}$, $L_jz=\sigma(K*z+b)$ or $\sigma(K\star z+b)$, with finite-support $K$, $b\in\R^{C_{\rm out}}$, pointwise $\sigma$, and cross-correlation $\star$.
+\item \hlt{Convolutional neural network}: $\Phi$ is a CNN if at least one layer $L_j$ is convolutional.
+\item \hlt{Library convention}: many neural-network libraries implement $\star$ while naming the operation convolution.
+\end{enumerate}
 \end{definition}
 
-\begin{remark} \label{rem:sl-cnn-motivations} \hlt{Sparse Interactions, Sharing, and Equivariance}\\
-Convolutional layers use small kernels, share parameters across spatial locations, and produce representations that are equivariant to translations.  Pooling then creates approximate invariance over local neighborhoods.
-\end{remark}
+\begin{definition} \label{def:sl-sparse-sharing-equivariance} \hlt{Sparse Interactions, Sharing, and Equivariance}\\
+For $x:\Z^d\to\R^{C_{\rm in}}$, finite $W\subset\Z^d$, kernels $K_w\in\R^{C_{\rm out}\times C_{\rm in}}$, $b\in\R^{C_{\rm out}}$, and pointwise $\sigma$,\\
+set $Lx(u)\defeq\sigma(\sum\limits_{w\in W}K_wx(u-w)+b)$ and $(\tau_a x)(u)\defeq x(u-a)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sparse interaction}: $Lx(u)$ depends only on $\{x(u-w):w\in W\}$.
+\item \hlt{Parameter sharing}: the same $(K_w)_{w\in W}$ and $b$ define $Lx(u)$ for every $u$.
+\item \hlt{Translation equivariance}: $L(\tau_a x)=\tau_a(Lx)$ for every $a\in\Z^d$ where defined.
+\end{enumerate}
+Pooling with finite $U$ applies $\rho$ to $\{Lx(u+w):w\in U\}$; shift-stable $\rho$ gives local approximate invariance.
+\end{definition}
 
 \begin{definition} \label{def:sl-pooling-padding-stride} \hlt{Pooling, Padding, and Stride}\\
-Pooling replaces nearby activations by summary statistics such as maxima or averages.  Padding controls boundary behavior, and stride controls the spacing between evaluated output locations.
+Let $x:\Omega\to\R^C$ on finite $\Omega\subset\Z^d$, with $W\subset\Z^d$, $p\in\N_0^d$, $s\in\N^d$, offset $r$, statistic $\rho:(\R^C)^W\to\R^{C'}$,\\
+and $\Omega^{(p)}\defeq\Omega+\prod\limits_i\{-p_i,\ldots,p_i\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Padding}: an extension $\tilde x:\Omega^{(p)}\to\R^C$ with $\tilde x|_{\Omega}=x$ and a boundary rule on $\Omega^{(p)}\setminus\Omega$.
+\item \hlt{Stride}: evaluation sites $\Omega_{s,r}\defeq\{u\in\Omega^{(p)}:\forall i,\ u_i\equiv r_i\pmod{s_i},\ u+W\subset\Omega^{(p)}\}$.
+\item \hlt{Pooling}: $P_{\rho,W,s,r}x:\Omega_{s,r}\ni u\mapsto\rho((\tilde x(u+w))_{w\in W})\in\R^{C'}$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-geometric-deep-learning} \hlt{Geometric Extensions}\\
-Graph neural networks, equivariant networks, and manifold-based architectures generalize the convolutional idea: encode the symmetries and locality of the domain directly into the model class.
+Let $X$ be a domain with local neighborhoods $\mathcal N(x)\subset X$ and symmetry group $G$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Graph neural networks}: on $\mathcal G=(V,E)$, $h_v^{(\ell+1)}=\phi(h_v^{(\ell)},\operatorname{Agg}\limits_{u\in\mathcal N(v)}m_{uv}^{(\ell)})$ with invariant $\operatorname{Agg}$.
+\item \hlt{Equivariant networks}: $\Phi$ is $G$-equivariant if $\Phi(\rho_{\rm in}(g)x)=\rho_{\rm out}(g)\Phi(x)$ for every $g\in G$.
+\item \hlt{Manifold architectures}: for a manifold $M$, layers use chart, tangent, or geodesic neighborhoods $\mathcal N(p)\subset M$.
+\end{enumerate}
+Each variant builds locality or symmetry into the model class.
 \end{remark}

@@ -1,19 +1,205 @@
 \subsection{Dimension Reduction and Manifold Learning}
 
-Dimension reduction replaces high-dimensional observations by lower-dimensional coordinates that preserve selected structure.
+Dimension reduction replaces high-dimensional observations, similarities, or dissimilarities by lower-dimensional coordinates that preserve selected structure.  Linear methods preserve variance or inner products; manifold methods preserve neighborhoods, graph distances, or local affine geometry.
 
 \begin{definition} \label{def:sl-principal-component-analysis} \hlt{Principal Component Analysis}\\
-For centered data with empirical covariance $\widehat{\Sigma}$, principal component analysis chooses orthonormal directions $v_1,\ldots,v_r$ maximizing projected variance.  Equivalently, it gives the best rank-$r$ linear reconstruction in squared error.
+Let centered observations $x_1,\ldots,x_n\in\R^p$ be the rows of $X\in\R^{n\times p}$, and let $1\leq r\leq p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Rank-$r$ principal component analysis chooses $V=[v_1\ \cdots\ v_r]\in\R^{p\times r}$,\\
+with $V^TV=I_r$ solving $\min\limits_{V^TV=I_r}\norm{X-XVV^T}_F^2$.
+\item The columns $v_1,\ldots,v_r$ are the principal directions, $\operatorname{im}(V)$ is the rank-$r$ principal subspace,\\
+and $x_i\mapsto VV^Tx_i$ is the fitted projection.
+\item Equivalently, $V$ solves $\max\limits_{V^TV=I_r}\operatorname{tr}(V^TX^TXV)$,\\
+with sequential directions $v_k\in\operatorname*{argmax}\limits\{\sum\limits_{i=1}^n(v^Tx_i)^2:\norm{v}_2=1,\ v\perp v_1,\ldots,v_{k-1}\}$.
+\end{enumerate}
 \end{definition}
+
+\begin{method} \label{meth:sl-pca-by-svd} \hlt{PCA by SVD}\\
+Let the centered observations be the rows of $X\in\R^{n\times p}$, and fix $1\leq r\leq \min\{n,p\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute an SVD $X=UDV^T$ with singular values $d_1\geq\cdots\geq 0$.
+\item Set $V_r=[v_1\ \cdots\ v_r]$, the first $r$ right singular vectors.
+\item Set the score matrix $Z_r=XV_r=U_rD_r$.
+\item Set the fitted matrix $\widehat{X}_r=Z_rV_r^T=XV_rV_r^T=U_rD_rV_r^T$.
+\end{enumerate}
+The columns of $V_r$ are the rank-$r$ PCA directions, $Z_r$ contains the principal-component scores,\\
+and $\widehat{X}_r$ is the orthogonal rank-$r$ reconstruction minimizing $\norm{X-\widehat{X}}_F^2$.
+\end{method}
+
+\begin{definition} \label{def:sl-multidimensional-scaling} \hlt{Multidimensional Scaling}\\
+Let $D=(d_{ii'})$ be a symmetric dissimilarity matrix with $d_{ii}=0$, fix $r<n$, and write $Z=(z_1^T,\ldots,z_n^T)^T\in\R^{n\times r}$ with fitted distances $\delta_{ii'}(Z)=\norm{z_i-z_{i'}}_2$.
+Multidimensional scaling chooses $Z$ so that $\delta_{ii'}(Z)$ approximates $d_{ii'}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Least-squares MDS}, or Kruskal--Shepard scaling, minimizes $S_{\mathrm{MDS}}(Z)=\sum\limits_{i\neq i'}(d_{ii'}-\delta_{ii'}(Z))^2$ over $Z\in\R^{n\times r}$.
+\item \hlt{Sammon MDS}, defined when $d_{ii'}>0$ for $i\neq i'$, minimizes $S_{\mathrm{Sammon}}(Z)=\sum\limits_{i\neq i'}\frac{(d_{ii'}-\delta_{ii'}(Z))^2}{d_{ii'}}$ over $Z\in\R^{n\times r}$.
+\end{enumerate}
+Sammon weighting penalizes relative errors more strongly for small dissimilarities.
+\end{definition}
+
+\begin{method} \label{meth:sl-classical-multidimensional-scaling} \hlt{Classical Scaling}\\
+Let $H=I_n-n^{-1}\mathbf{1}\mathbf{1}^T$ and fix $r<n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If centered similarities $S=(s_{ii'})$ are supplied, set $B=S$.
+\item If Euclidean distances $\Delta=(\Delta_{ii'})$ are supplied, set $\Delta^{(2)}=(\Delta_{ii'}^2)$ and $B=-\frac12H\Delta^{(2)}H$.
+\item Compute $Be_j=\lambda_je_j$ with $\lambda_1\geq\cdots\geq\lambda_r>0$, and set $E_r=[e_1\ \cdots\ e_r]$, $\Lambda_r=\operatorname{diag}(\lambda_1,\ldots,\lambda_r)$.
+\item Return $Z_r=E_r\Lambda_r^{1/2}\in\R^{n\times r}$, with row $z_i^T$ as the coordinate of observation $i$.
+\end{enumerate}
+The construction gives centered coordinates and fitted Gram matrix $Z_rZ_r^T=E_r\Lambda_rE_r^T$, the rank-$r$ positive-semidefinite approximation to $B$ from its leading positive spectrum.
+\end{method}
+
+\begin{method} \label{meth:sl-nonmetric-multidimensional-scaling} \hlt{Nonmetric Scaling}\\
+Given dissimilarities $D=(d_{ii'})$, coordinates $Z=(z_1^T,\ldots,z_n^T)^T\in\R^{n\times r}$, and an increasing map $\theta$, nonmetric scaling minimizes $S_{\mathrm{NM}}(Z,\theta)=\sum_{i\neq i'}(\norm{z_i-z_{i'}}_2-\theta(d_{ii'}))^2/\sum_{i\neq i'}\norm{z_i-z_{i'}}_2^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item With $\theta$ fixed, update $Z$ by minimizing $S_{\mathrm{NM}}(Z,\theta)$ over $Z\in\R^{n\times r}$.
+\item With $Z$ fixed, update $\theta$ by isotonic regression of the fitted distances $\norm{z_i-z_{i'}}_2$ on the dissimilarities $d_{ii'}$.
+\end{enumerate}
+Only the ordering of $d_{ii'}$ constrains $\theta(d_{ii'})$; their original scale is discarded.
+\end{method}
 
 \begin{definition} \label{def:sl-encoder-decoder} \hlt{Encoder and Decoder}\\
-An \hlt{encoder} maps data $x$ to a representation $h=e(x)$, and a \hlt{decoder} maps $h$ back to a reconstruction $d(h)$.  Linear PCA is the special case where both maps are linear and the representation subspace is orthogonal.
+Let $\mathcal{X}$ be a data space and $\mathcal{H}$ a representation space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item An \hlt{encoder} is a map $e:\mathcal{X}\to\mathcal{H}$, with representation $h=e(x)$.
+\item A \hlt{decoder} is a map $d:\mathcal{H}\to\mathcal{X}$, with reconstruction $\widehat{x}=d(h)=d(e(x))$.
+\end{enumerate}
+Linear PCA is the case $e,d$ linear with $\operatorname{im}(d)$ an orthogonal representation subspace.
 \end{definition}
 
+\begin{method} \label{meth:sl-procrustes-shape-alignment} \hlt{Procrustes Shape Alignment}\\
+Let $X_1,X_2\in\R^{n\times p}$ have corresponding landmark rows.\\
+Orthogonal Procrustes alignment solves $\min_{R^TR=I,\mu\in\R^p}\norm{X_2-(X_1R+\mathbf{1}\mu^T)}_F$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute column means $\bar{x}_1,\bar{x}_2$ and centered matrices $\widetilde{X}_a=X_a-\mathbf{1}\bar{x}_a^T$, $a=1,2$.
+\item Compute an SVD $\widetilde{X}_1^T\widetilde{X}_2=UDV^T$.
+\item Set $\widehat{R}=UV^T$ and $\widehat{\mu}=\bar{x}_2-\widehat{R}^T\bar{x}_1$.
+\item For scaled Procrustes, set $\widehat{\beta}=\operatorname{tr}(D)/\norm{\widetilde{X}_1}_F^2$, $\widehat{\mu}_{\beta}=\bar{x}_2-\widehat{\beta}\widehat{R}^T\bar{x}_1$, and use fitted configuration $\widehat{\beta}X_1\widehat{R}+\mathbf{1}\widehat{\mu}_{\beta}^T$.
+\end{enumerate}
+The unscaled solution uses $\widehat{\beta}=1$ and preserves size; the scaled solution also matches overall scale.
+\end{method}
+
+\begin{method} \label{meth:sl-procrustes-shape-average} \hlt{Procrustes Shape Average}\\
+For centered matched shapes $X_\ell\in\R^{n\times p}$, set $\Phi(M,\{R_\ell\})=\sum\limits_{\ell=1}^L\norm{X_\ell R_\ell-M}_F^2$, $R_\ell^TR_\ell=I_p$.\\
+A Procrustes shape average solves $\min\limits_{M,\{R_\ell\}}\Phi(M,\{R_\ell\})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Initialize $M^{(0)}$ as a centered observed shape or an initially aligned average.
+\item Given $M^{(t)}$, compute $R_\ell^{(t)}\in\operatorname*{argmin}\limits_{R^TR=I_p}\norm{X_\ell R-M^{(t)}}_F^2$ for each $\ell$.
+\item Update $M^{(t+1)}=L^{-1}\sum\limits_{\ell=1}^LX_\ell R_\ell^{(t)}$.
+\item Recenter $M^{(t+1)}$ and, when size is fixed, rescale it to the chosen norm.
+\item Repeat (ii)--(iv) until $\Phi$ changes by less than the chosen tolerance.
+\end{enumerate}
+The template is determined only up to a common right rotation unless a final orientation convention is imposed.
+\end{method}
+
 \begin{remark} \label{rem:sl-manifold-hypothesis} \hlt{Manifold Hypothesis}\\
-Many representation methods assume that high-dimensional observations concentrate near lower-dimensional sets.  Manifold learning tries to preserve local neighborhoods, geodesic structure, or tangent information rather than only global Euclidean variance.
+The manifold hypothesis asserts that observations $x_1,\ldots,x_n\in\R^p$ satisfy $\operatorname{dist}(x_i,\mathcal{M})\leq\varepsilon$ for some $r$-dimensional set $\mathcal{M}\subset\R^p$, with $r\ll p$ and small $\varepsilon\geq0$.
+For curved $\mathcal{M}$, ambient distances $\norm{x_i-x_j}_2$ need not approximate intrinsic distances $d_{\mathcal{M}}(x_i,x_j)$.
+Manifold learning therefore estimates low-dimensional coordinates from neighborhoods, graph geodesics, or tangent spaces, rather than from global Euclidean variance alone.
 \end{remark}
 
-\begin{example} \label{ex:sl-manifold-methods} \hlt{Manifold Methods}
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/mds_local_vs_global_distance.tikz}
+\caption{\textcolor{blue!70!black}{$d_G$} follows nearby samples along the curve; \textcolor{red!75!black}{$d_E$} is the ambient shortcut.}
+\label{fig:sl-mds-local-vs-global-distance}
+\end{figure}
+
+\begin{example} \label{ex:sl-manifold-methods} \hlt{Manifold Methods}\\
 Isomap, locally linear embedding, Laplacian eigenmaps, and diffusion maps construct low-dimensional coordinates from a neighborhood graph or kernel on the sample.
 \end{example}
+
+\begin{method} \label{meth:sl-isomap} \hlt{Isomap}\\
+Let $x_i\in\R^p$, fix $r$, set $H=I_n-n^{-1}\mathbf{1}\mathbf{1}^T$, and choose a connected neighborhood graph $G$ on $[n]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Assign edge weights $w_{ij}=\norm{x_i-x_j}_2$ to neighboring pairs.
+\item Compute shortest-path distances $d_G(i,j)$ and set $D_G^{(2)}=(d_G(i,j)^2)$.
+\item Form the centered Gram estimate $B=-\frac12HD_G^{(2)}H$.
+\item Compute $Be_k=\lambda_ke_k$ with $\lambda_1\geq\cdots\geq\lambda_r>0$, set $E_r=[e_1\ \cdots\ e_r]$, $\Lambda_r=\operatorname{diag}(\lambda_1,\ldots,\lambda_r)$.
+\item Return $Z=E_r\Lambda_r^{1/2}$.
+\end{enumerate}
+Isomap replaces ambient distances by graph geodesic distances; the coordinate extraction is spectral.
+\end{method}
+
+\begin{method} \label{meth:sl-locally-linear-embedding} \hlt{Locally Linear Embedding}\\
+Let $x_i\in\R^p$, fix $K,r$, and let $\mathcal{N}(i)$ be the $K$ nearest neighbors of $x_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\mathcal{W}_i=\{w:\sum\limits_k w_k=1,\ w_k=0\ (k\notin\mathcal{N}(i))\}$ and $w_i\in\operatorname*{argmin}\limits_{w\in\mathcal{W}_i}\norm{x_i-\sum\limits_k w_kx_k}_2^2$.
+\item Form $W=(w_{ik})$ and $M=(I_n-W)^T(I_n-W)$.
+\item Compute eigenvectors $u_1,\ldots,u_{r+1}$ of $M$ for the smallest eigenvalues, with $u_1\propto\mathbf{1}$.
+\item Return $Y=[u_2\ \cdots\ u_{r+1}]\in\R^{n\times r}$, with row $y_i^T$ as the coordinate of $x_i$.
+\end{enumerate}
+The affine constraint makes local weights translation-invariant; discarding $u_1$ gives mean-centered coordinates.
+\end{method}
+
+\begin{method} \label{meth:sl-local-multidimensional-scaling} \hlt{Local MDS}\\
+Let $\mathcal{N}\subset\{(i,i'):i<i'\}$ be symmetric nearby pairs, let $z_i\in\R^r$, and fix $\tau>0$.\\
+Local MDS minimizes $S_{\mathrm{local}}(Z)=\sum\limits_{(i,i')\in\mathcal{N}}(d_{ii'}-\norm{z_i-z_{i'}}_2)^2-\tau\sum\limits_{(i,i')\notin\mathcal{N}}\norm{z_i-z_{i'}}_2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The local stress term preserves distances on nearby pairs $(i,i')\in\mathcal{N}$.
+\item The separation term penalizes collapse of non-neighboring pairs $(i,i')\notin\mathcal{N}$.
+\end{enumerate}
+Thus the objective preserves local metric structure while repelling unrelated manifold regions.
+\end{method}
+
+\begin{definition} \label{def:sl-principal-curves-and-surfaces} \hlt{Principal Curves and Surfaces}\\
+Let $X\in\R^p$ be a random vector and let $f:\Lambda\to\R^p$ be a smooth parametrized set.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{projection index} is $\lambda_f(x)\in\operatorname*{argmin}\limits_{\lambda\in\Lambda}\norm{x-f(\lambda)}_2$.
+\item A \hlt{principal curve} has $\Lambda\subset\R$ and satisfies $f(\lambda)=\mathbb{E}\{X\mid \lambda_f(X)=\lambda\}$.
+\item A \hlt{principal surface} is the same definition with $\Lambda\subset\R^q$, $q\geq2$, and $f=(f_1,\ldots,f_p)$.
+\end{enumerate}
+For finite data, alternate coordinate-wise smoothing against $\lambda_f(x_i)$ and reprojection onto $f(\Lambda)$.
+\end{definition}
+
+\begin{remark} \label{rem:sl-som-versus-principal-surfaces} \hlt{SOMs Versus Principal Surfaces}\\
+Both self-organizing maps and principal surfaces approximate data by low-dimensional representatives.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A principal surface is a smooth map $f:\Lambda\subset\R^q\to\R^p$ with fitted coordinates $\lambda_f(x_i)$.
+\item A self-organizing map is a finite prototype family $\{m_a\}_{a\in A}\subset\R^p$ indexed by a lattice or graph $A$.
+\end{enumerate}
+With many prototypes and kernel neighborhood weights, batch SOM updates resemble coordinate-wise surface smoothing, but one fit is smooth-parametric and the other is finite-prototype.
+\end{remark}
+
+\begin{method} \label{meth:sl-kernel-pca} \hlt{Kernel PCA}\\
+Let $k$ be a positive definite kernel on observations $x_1,\ldots,x_n$, fix $r$, and set $M=n^{-1}\mathbf{1}\mathbf{1}^T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Form the Gram matrix $K=(k(x_i,x_{i'}))_{i,i'}$.
+\item Center it by $\widetilde{K}=(I_n-M)K(I_n-M)$.
+\item Compute $\widetilde{K}u_j=\lambda_ju_j$ with $\lambda_1\geq\cdots\geq\lambda_r>0$, and set $U_r=[u_1\ \cdots\ u_r]$, $\Lambda_r=\operatorname{diag}(\lambda_1,\ldots,\lambda_r)$.
+\item Return coordinates $Z=U_r\Lambda_r^{1/2}$.
+\end{enumerate}
+Kernel PCA is spectral PCA on $\widetilde{K}$; radial kernels encode local similarity.
+\end{method}
+
+\begin{method} \label{meth:sl-sparse-pca-objectives} \hlt{Sparse Principal Components}\\
+Let centered data have rows $x_i^T$ in $X\in\R^{n\times p}$, and let $v\in\R^p$ be a loading vector.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Variance form}: set $\mathcal{V}_t=\{a\in\R^p:a^Ta=1,\ \sum\limits_{j=1}^p\abs{a_j}\leq t\}$ and choose $v\in\operatorname*{argmax}\limits_{a\in\mathcal{V}_t}a^TX^TXa$.
+\item \hlt{Reconstruction form}: for one component, choose $(\theta,v)\in\operatorname*{argmin}\limits_{\norm{\theta}_2=1}\sum\limits_{i=1}^n\norm{x_i-\theta v^Tx_i}_2^2+\lambda\norm{v}_2^2+\lambda_1\norm{v}_1$.
+\end{enumerate}
+$L_1$ regularization sparsifies loadings; multiple components alternate sparse-loading and orthogonal-score updates.
+\end{method}
+
+\begin{remark} \label{rem:sl-local-versus-global-scaling} \hlt{Local versus Global Scaling}\\
+Let $d_E(i,j)=\norm{x_i-x_j}_2$ and let $\mathcal{N}$ be a neighborhood relation.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Global scaling} uses all pairs through $d_E(i,j)$ or centered inner products, and is appropriate when ambient distances encode the target geometry.
+\item \hlt{Local scaling} uses $\mathcal{N}$, graph distances, or local reconstruction weights to preserve neighborhood order or local shape on a curved set.
+\end{enumerate}
+Neighborhood scale is critical: too small disconnects, too large shortcuts.
+\end{remark}

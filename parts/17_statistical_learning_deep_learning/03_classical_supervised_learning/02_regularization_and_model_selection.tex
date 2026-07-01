@@ -1,25 +1,235 @@
-\subsection{Regularization and Model Selection}
+\subsection{Regularisation and Model Selection}
 
-Regularization controls model complexity by penalizing unstable parameter directions or by constraining the feasible set.
+Regularisation controls model complexity by penalising unstable parameter directions or by constraining the feasible set.
 
-\begin{definition} \label{def:sl-penalized-linear-estimator} \hlt{Penalized Linear Estimation}\\
-For empirical loss $L_n(\beta)$, a penalized estimator solves
-\[
-\widehat{\beta}_{\lambda}\in
-\operatorname*{arg\,min}_{\beta}
-\{L_n(\beta)+\lambda\Omega(\beta)\}.
-\]
+\begin{definition} \label{def:sl-penalized-linear-estimator} \hlt{Penalised Linear Estimation}\\
+For empirical loss $L_n(\beta)$, a penalised estimator solves $\widehat{\beta}_{\lambda}\in \operatorname*{arg\,min}_{\beta} \{L_n(\beta)+\lambda\Omega(\beta)\}$.\\
 The choices $\Omega(\beta)=\norm{\beta}_2^2$ and $\Omega(\beta)=\norm{\beta}_1$ give ridge and lasso penalties.
 \end{definition}
 
-\begin{remark} \label{rem:sl-ridge-lasso-geometry} \hlt{Penalty Geometry}\\
-The $\ell^2$ penalty shrinks coefficients smoothly along directions of weak design information.  The $\ell^1$ penalty has corners and can set coefficients exactly to zero, linking prediction to variable selection.
-\end{remark}
-
-\begin{definition} \label{def:sl-model-selection-validation} \hlt{Model Selection by Validation}\\
-A validation criterion estimates predictive risk for candidate models or hyperparameters.  In $K$-fold cross-validation, the data are split into $K$ folds; each fold is held out once while the model is trained on the remaining folds, and the held-out losses are averaged.
+\begin{definition} \label{def:sl-subset-ridge-lasso-linear-models} \hlt{Subset Selection, Ridge, and Lasso}\\
+Let $y\in\R^n$ be centered and let $X\in\R^{n\times p}$ have centered, standardised columns.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Best subset}: for a size $m$, solve $\widehat{\beta}^{\mathrm{sub}}_m\in \operatorname*{arg\,min}\limits_{|\operatorname{supp}(\beta)|\leq m}\norm{y-X\beta}_2^2$
+\item \hlt{Ridge}: for $\lambda\geq0$, solve $\widehat{\beta}^{\mathrm{ridge}}_\lambda\in \operatorname*{arg\,min}\limits_{\beta} \{\norm{y-X\beta}_2^2+\lambda\norm{\beta}_2^2\}$
+\item \hlt{Lasso}: for $\lambda\geq0$, solve $\widehat{\beta}^{\mathrm{lasso}}_\lambda\in \operatorname*{arg\,min}\limits_{\beta} \left\{\frac12\norm{y-X\beta}_2^2+\lambda\norm{\beta}_1\right\}$
+\end{enumerate}
+Centering separates the unpenalised intercept, estimated by the mean on the raw scale.
 \end{definition}
 
-\begin{remark} \label{rem:sl-selection-bias} \hlt{Selection Bias}\\
-The same validation data should not be used repeatedly as if it were untouched test data.  Nested validation or a final test set is needed when model selection itself is part of the learning procedure.
+\begin{remark} \label{rem:sl-ridge-lasso-geometry} \hlt{Penalty Geometry}\\
+Assume $X^TX=I$ and set $z_j=x_j^Ty$. For subset size $m$, best subset selection keeps the $m$ largest $|z_j|$.\\
+Ridge and lasso have coordinates $\widehat{\beta}^{\mathrm{ridge}}_{\lambda,j}=\frac{z_j}{1+\lambda}$ and $\widehat{\beta}^{\mathrm{lasso}}_{\lambda,j}=\sign(z_j)(|z_j|-\lambda)_+$.\\
+Thus $\ell^2$ shrinkage is smooth, while $\ell^1$ shrinkage can set coefficients exactly to zero.
 \end{remark}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/ridge_lasso_constraint_geometry.tikz}
+\caption{Left: lasso $\ell^1$ diamond; right: ridge $\ell^2$ disk.}
+\label{fig:sl-ridge-lasso-constraint-geometry}
+\end{figure}
+
+\begin{proposition} \label{prop:sl-ridge-effective-degrees} \hlt{Ridge Shrinkage and Effective Degrees}\\
+Let $X\in\R^{n\times p}$ be centered with rank $r$ and thin SVD $X=UDV^T$, where $D=\operatorname{diag}(d_1,\ldots,d_r)$ and $d_j>0$.\\
+For $\lambda>0$, set $S_\lambda\defeq X(X^TX+\lambda I_p)^{-1}X^T$ and $s_j(\lambda)\defeq \frac{d_j^2}{d_j^2+\lambda}$. Then $S_\lambda=U\operatorname{diag}(s_1(\lambda),\ldots,s_r(\lambda))U^T$.\\
+So $\widehat{y}^{\mathrm{ridge}}_\lambda\defeq X\widehat{\beta}^{\mathrm{ridge}}_\lambda=S_\lambda y=\sum\limits_{j=1}^r s_j(\lambda)u_ju_j^Ty$ and $\operatorname{df}(\lambda)\defeq\operatorname{tr}(S_\lambda)=\sum\limits_{j=1}^r s_j(\lambda)$.
+\begin{proof} Since $X^TX=VD^2V^T$ and $X^T=VDU^T$, we have $V^T(X^TX+\lambda I_p)^{-1}V=(D^2+\lambda I_r)^{-1}$.\\
+Hence $S_\lambda=UDV^T(X^TX+\lambda I_p)^{-1}VDU^T=UD(D^2+\lambda I_r)^{-1}DU^T=U\operatorname{diag}(s_1(\lambda),\ldots,s_r(\lambda))U^T$.\\
+Apply to $y$ and take traces, using $U^TU=I_r$.\\
+\hlt{Structural Commentary}: Ridge is diagonal in the left singular-vector basis of $X$.\\
+\hlt{Key Insight}: Ridge keeps direction $u_j$ by $s_j(\lambda)$; weak directions count less in the fit and $\operatorname{df}(\lambda)$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:sl-model-selection-validation} \hlt{Model Selection by Validation}\\
+Let $\mathcal{M}$ be a candidate set of models or hyperparameters.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{validation criterion} is $m\mapsto\widehat{R}_{\mathrm{val}}(m)$; choose $\widehat{m}\in\operatorname*{arg\,min}\limits_{m\in\mathcal{M}}\widehat{R}_{\mathrm{val}}(m)$.
+\item In \hlt{$K$-fold cross-validation}, take folds $I_1,\ldots,I_K$ and fits $\widehat{f}^{(-k)}_m$.\\
+Define $\ell_{ik}(m)\defeq\ell(y_i,\widehat{f}^{(-k)}_m(x_i))$, $\widehat{R}_{\mathrm{cv}}(m)\defeq \frac{1}{n}\sum\limits_{k=1}^K\sum\limits_{i\in I_k}\ell_{ik}(m)$, and choose $\widehat{m}_{\mathrm{cv}}\in\operatorname*{arg\,min}\limits_{m\in\mathcal{M}}\widehat{R}_{\mathrm{cv}}(m)$.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:sl-one-standard-error-rule} \hlt{One-Standard-Error Rule}\\
+Let $(\mathcal{M},\preceq)$ order candidates by complexity, with $\widehat{R}_{\mathrm{cv}},\widehat{\operatorname{se}}:\mathcal{M}\to\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $\widehat{m}_{\min}\in\operatorname*{arg\,min}_{m\in\mathcal{M}}\widehat{R}_{\mathrm{cv}}(m)$ and set $\widehat{R}_{\min}\defeq\widehat{R}_{\mathrm{cv}}(\widehat{m}_{\min})$.
+\item Define $\mathcal{M}_{1\mathrm{se}}\defeq\{m\in\mathcal{M}:\widehat{R}_{\mathrm{cv}}(m)\leq\widehat{R}_{\min}+\widehat{\operatorname{se}}(\widehat{m}_{\min})\}$.
+\item Select $\widehat{m}_{1\mathrm{se}}$ as the $\preceq$-minimal element of $\mathcal{M}_{1\mathrm{se}}$; use any final test set only after this choice.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:sl-prostate-selection-shrinkage-workflow} \hlt{A Selection and Shrinkage Workflow}\\
+Let $D=\{(x_i,y_i)\}_{i=1}^n$, where $y_i=\log(\mathrm{PSA}_i)$ and $x_i=(\mathrm{lcavol}_i,\mathrm{lweight}_i,\mathrm{age}_i,\mathrm{lbph}_i,\mathrm{svi}_i,\mathrm{lcp}_i,\mathrm{gleason}_i,\mathrm{pgg45}_i)$.\\
+Split indices into training and test sets $T,E$, standardize $X_T$, and choose each complexity parameter by cross-validation on $T$: subset size $m$, ridge/lasso penalty $\lambda$, or PCR/PLS dimension $M$.\\
+The selected fit $\widehat{f}$ is then evaluated once on $E$ by $\widehat{R}_{\mathrm{test}}\defeq |E|^{-1}\sum\limits_{i\in E}\ell(y_i,\widehat{f}(x_i))$.
+\end{example}
+
+\begin{remark} \label{rem:sl-selection-bias} \hlt{Selection Bias}\\
+If $\widehat{m}\in\operatorname*{arg\,min}\limits_{m\in\mathcal{M}}\widehat{R}_V(m)$ is chosen on validation set $V$, then $\widehat{R}_V(\widehat{m})$ is optimistically biased for $R(\widehat{m})$.\\
+Estimate the selected model with an independent set $E$, using $\widehat{R}_E(\widehat{m})$, or use nested validation.
+\end{remark}
+
+\begin{method} \label{meth:sl-derived-input-directions} \hlt{Derived Input Directions}\\
+Let $X,y$ be centered. A derived-direction method chooses $Z_M=(z_1,\ldots,z_M)$ with $z_m=Xv_m$ or data-adaptive analogues, then fits $\widehat{y}_M=P_{Z_M}y$, where $P_{Z_M}\defeq Z_M(Z_M^TZ_M)^{-1}Z_M^T$; $M$ is selected by validation.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Principal components regression}: for $X=UDV^T$, take $v_1,\ldots,v_M$ as the leading right singular vectors,\\
+set $z_m=Xv_m=d_mu_m$, and fit $\widehat{y}^{\mathrm{pcr}}_M=\sum\limits_{m=1}^M z_m\frac{z_m^Ty}{z_m^Tz_m}=\sum\limits_{m=1}^M u_mu_m^Ty$.
+\item \hlt{Partial least squares}: set $X^{(0)}=X$ and, for $m=1,\ldots,M$, define $z_m=X^{(m-1)}X^{(m-1)T}y$ and\\
+$X^{(m)}=(I-P_{z_m})X^{(m-1)}$, where $P_{z_m}\defeq \frac{z_mz_m^T}{z_m^Tz_m}$. With $Z_M=(z_1,\ldots,z_M)$, fit $\widehat{y}^{\mathrm{pls}}_M=P_{Z_M}y$.
+\end{enumerate}
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Partial Least Squares Directions}
+\label{alg:sl-partial-least-squares-directions}
+\begin{algorithmic}
+\Require Centered response $y$, standardized columns $x_1,\ldots,x_p$, number of directions $M\leq p$
+\Ensure Fitted vectors $\widehat{y}^{(1)},\ldots,\widehat{y}^{(M)}$
+\State Set $\widehat{y}^{(0)}\gets0$ and $x_j^{(0)}\gets x_j$ for $j=1,\ldots,p$
+\For{$m=1,\ldots,M$}
+\State $z_m\gets\sum\limits_{j=1}^p (x_j^{(m-1)})^Ty\,x_j^{(m-1)}$
+\State $\widehat{\theta}_m\gets \frac{z_m^Ty}{z_m^Tz_m}$
+\State $\widehat{y}^{(m)}\gets\widehat{y}^{(m-1)}+\widehat{\theta}_m z_m$
+\For{$j=1,\ldots,p$}
+\State $x_j^{(m)}\gets x_j^{(m-1)}-\frac{z_m^Tx_j^{(m-1)}}{z_m^Tz_m}z_m$
+\EndFor
+\EndFor
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-pls-pcr-contrast} \hlt{PLS Versus PCR}\\
+PCR chooses $v_m$ from $X^TXv_m=d_m^2v_m$, so directions are ordered only by predictor variance $d_m^2$.\\
+PLS chooses $z_m=X^{(m-1)}X^{(m-1)T}y$ and deflates $X^{(m)}=(I-P_{z_m})X^{(m-1)}$, so each direction depends on both variance in $X^{(m-1)}$ and covariance with $y$.
+\end{remark}
+
+\begin{method} \label{meth:sl-piecewise-linear-paths} \hlt{Piecewise-Linear Path Algorithms}\\
+Let $\widehat{\beta}(\lambda)\in\operatorname*{arg\,min}_{\beta}\{R(\beta)+\lambda J(\beta)\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $R$ is quadratic or piecewise quadratic and $J$ is piecewise linear, fixed active-set and sign regions give affine KKT equations in $\lambda$, so $\widehat{\beta}(\lambda)$ is piecewise linear.
+\item \hlt{Least angle regression}: with residual $r=y-X\beta$ and active set $\mathcal{A}$, move $\beta_{\mathcal{A}}$ in a direction keeping $|x_j^Tr|$ tied for $j\in\mathcal{A}$ until a new variable ties or the least-squares fit is reached.
+\item \hlt{Lasso path}: follow the same tied-correlation path and remove $j\in\mathcal{A}$ when $\beta_j$ reaches $0$.
+\item \hlt{Coordinate descent}: for fixed $\lambda$, update $\beta_j\gets\operatorname*{arg\,min}_{t}\{\frac12\norm{y-X_{-j}\beta_{-j}-x_jt}_2^2+\lambda(|t|+\norm{\beta_{-j}}_1)\}$\\
+and warm-start along $\lambda_1>\cdots>\lambda_L$.
+\end{enumerate}
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Least Angle Regression Path}
+\label{alg:sl-least-angle-regression-path}
+\begin{algorithmic}
+\Require Centered response $y$ and standardized columns $x_1,\ldots,x_p$ with $\norm{x_j}_2=1$
+\Ensure Piecewise-linear coefficient path $\{\beta(t)\}$
+\State Initialize $\beta\gets0$, $r\gets y$, $c\gets X^Tr$, $C\gets\norm{c}_\infty$, and $\mathcal{A}\gets\{j:|c_j|=C\}$
+\Repeat
+\State $s_{\mathcal{A}}\gets\sign(c_{\mathcal{A}})$, $\widetilde{X}_{\mathcal{A}}\gets X_{\mathcal{A}}\operatorname{diag}(s_{\mathcal{A}})$, and $G_{\mathcal{A}}\gets\widetilde{X}_{\mathcal{A}}^T\widetilde{X}_{\mathcal{A}}$
+\State $\alpha_{\mathcal{A}}\gets(\mathbf{1}^TG_{\mathcal{A}}^{-1}\mathbf{1})^{-1/2}$, $w_{\mathcal{A}}\gets\alpha_{\mathcal{A}}G_{\mathcal{A}}^{-1}\mathbf{1}$, $u_{\mathcal{A}}\gets\widetilde{X}_{\mathcal{A}}w_{\mathcal{A}}$, and $a\gets X^Tu_{\mathcal{A}}$
+\State $\gamma\gets\min\{C/\alpha_{\mathcal{A}},\min_{j\notin\mathcal{A}}^+\{(C-c_j)/(\alpha_{\mathcal{A}}-a_j),(C+c_j)/(\alpha_{\mathcal{A}}+a_j)\}\}$
+\State Record $\beta_{\mathcal{A}}(t)=\beta_{\mathcal{A}}+t\operatorname{diag}(s_{\mathcal{A}})w_{\mathcal{A}}$ for $0\leq t\leq\gamma$
+\State $\beta_{\mathcal{A}}\gets\beta_{\mathcal{A}}+\gamma\operatorname{diag}(s_{\mathcal{A}})w_{\mathcal{A}}$ and $r\gets r-\gamma u_{\mathcal{A}}$
+\State $c\gets X^Tr$, $C\gets\norm{c}_\infty$, and $\mathcal{A}\gets\mathcal{A}\cup\{j\notin\mathcal{A}:|c_j|=C\}$
+\Until{$C=0$ or $\mathcal{A}=\{1,\ldots,p\}$}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{method} \label{meth:sl-lar-lasso-modification} \hlt{LAR, Lasso, and Correlation Ties}\\
+Let $\widehat{\beta}_\lambda\in\operatorname*{arg\,min}_{\beta}\{\frac12\norm{y-X\beta}_2^2+\lambda\norm{\beta}_1\}$, $r_\lambda\defeq y-X\widehat{\beta}_\lambda$, and $\mathcal{A}_\lambda\defeq\{j:\widehat{\beta}_{\lambda,j}\neq0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{KKT}: $x_j^Tr_\lambda=\lambda\sign(\widehat{\beta}_{\lambda,j})$ for $j\in\mathcal{A}_\lambda$, and $|x_j^Tr_\lambda|\leq\lambda$ for $j\notin\mathcal{A}_\lambda$.
+\item \hlt{Correlation ties}: active predictors satisfy $|x_j^Tr_\lambda|=\lambda$; inactive predictors satisfy $|x_j^Tr_\lambda|\leq\lambda$.
+\item \hlt{LAR}: with $C=\norm{X^Tr}_\infty$, move in the equiangular active direction preserving $|x_j^Tr|=C$ for $j\in\mathcal{A}$\\
+until some $k\notin\mathcal{A}$ reaches $|x_k^Tr|=C$.
+\item \hlt{Lasso path}: on a fixed active set and sign pattern, the KKT equations are affine in $\lambda$.\\
+When some $\widehat{\beta}_{\lambda,j}$ reaches $0$, remove $j$ and recompute the active direction.
+\end{enumerate}
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Incremental Forward Stagewise Regression}
+\label{alg:sl-incremental-forward-stagewise-regression}
+\begin{algorithmic}
+\Require Centered response $y$, standardized columns $x_1,\ldots,x_p$, small step size $\varepsilon>0$
+\Ensure A stagewise coefficient path
+\State Initialize $\beta\gets0$ and $r\gets y$
+\Repeat
+\State Choose $j$ maximizing $|x_j^Tr|$
+\State $\delta\gets\varepsilon\,\sign(x_j^Tr)$
+\State $\beta_j\gets\beta_j+\delta$
+\State $r\gets r-\delta x_j$
+\Until{the residual has negligible correlation with every predictor}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-lar-stagewise-comparison} \hlt{Stagewise and Lasso Paths}\\
+Let $c=X^Tr$ and $j\in\operatorname*{arg\,max}_k |c_k|$. Forward stagewise uses $\beta_j\gets\beta_j+\varepsilon\sign(c_j)$ and $r\gets r-\varepsilon\sign(c_j)x_j$; as $\varepsilon\downarrow0$, it follows maximal-correlation directions, tracking LAR/lasso until a sign reversal is required.\\
+Boosting applies the same greedy infinitesimal update to additive fits.
+\end{remark}
+
+\begin{breakablealgorithm}
+\caption{Pathwise Coordinate Descent for the Lasso}
+\label{alg:lasso-pathwise-coordinate-descent}
+\begin{algorithmic}
+\Require Centered response $y$, standardized columns $x_j$ with $\norm{x_j}_2=1$, decreasing penalties $\lambda_1>\cdots>\lambda_L\geq0$
+\Ensure Lasso coefficient vectors $\widehat{\beta}(\lambda_\ell)$ on the penalty grid
+\State Define $S(z,\lambda)=\sign(z)(|z|-\lambda)_+$
+\State Initialize $\beta\gets0$ and $r\gets y-X\beta$
+\For{$\ell=1,\ldots,L$}
+\Repeat
+\For{$j=1,\ldots,p$}
+\State $r\gets r+x_j\beta_j$
+\State $z_j\gets x_j^Tr$
+\State $\beta_j\gets S(z_j,\lambda_\ell)$
+\State $r\gets r-x_j\beta_j$
+\EndFor
+\Until{the coefficient vector has converged}
+\State $\widehat{\beta}(\lambda_\ell)\gets\beta$
+\EndFor
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{definition} \label{def:sl-effective-degrees-of-freedom} \hlt{Effective Degrees of Freedom}\\
+Let $\widehat{y}=S_\lambda y$ be a linear smoother with $S_\lambda=S_\lambda(X)$ independent of $y$.\\
+Its \hlt{effective degrees of freedom} are $\operatorname{df}(\lambda)\defeq\operatorname{trace}(S_\lambda)$. If $S_\lambda=P_V$ with $\dim V=m$, then $\operatorname{df}(\lambda)=m$.\\
+For shrinkage smoothers, $\operatorname{df}(\lambda)$ need not be integral.
+\end{definition}
+
+\begin{remark} \label{rem:sl-training-error-optimism} \hlt{Optimism of Training Error}\\
+Assume $y=\mu+\varepsilon$, $\mathbb{E}\varepsilon=0$, $\operatorname{Var}(\varepsilon)=\sigma^2I$, and $\widehat{y}=S_\lambda y$ with $S_\lambda=S_\lambda(X)$.\\
+Let $y^0=\mu+\varepsilon^0$ be independent, $\operatorname{err}_{\mathrm{tr}}(\lambda)\defeq n^{-1}\norm{y-\widehat{y}}_2^2$, and $\operatorname{Err}_{\mathrm{in}}(\lambda)\defeq n^{-1}\mathbb{E}_{y^0}\norm{y^0-\widehat{y}}_2^2$.\\
+Then $\operatorname{Opt}(\lambda)\defeq\mathbb{E}\{\operatorname{Err}_{\mathrm{in}}(\lambda)-\operatorname{err}_{\mathrm{tr}}(\lambda)\}=\frac{2}{n}\sum_{i=1}^n\operatorname{Cov}(\widehat{y}_i,y_i)=\frac{2\sigma^2}{n}\operatorname{trace}(S_\lambda)$.\\
+Thus $\operatorname{df}(\lambda)=\operatorname{trace}(S_\lambda)$ is the covariance penalty.
+\end{remark}
+
+\begin{method} \label{meth:sl-aic-bic-effective-df-selection} \hlt{AIC, $C_p$, and BIC Selection}\\
+Let $\Lambda$ be candidate tuning values. For a criterion $C:\Lambda\to\R$, select $\widehat{\lambda}\in\operatorname*{arg\,min}_{\lambda\in\Lambda}C(\lambda)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For squared error, set $\overline{\operatorname{err}}(\lambda)\defeq \frac{1}{n}\sum_{i=1}^n(y_i-\widehat{y}_{\lambda,i})^2$ and $d_\lambda\defeq\operatorname{df}(S_\lambda)$; use $C_p(\lambda)\defeq\overline{\operatorname{err}}(\lambda)+\frac{2\widehat{\sigma}^2}{n}d_\lambda$.
+\item For likelihood fits with maximized log-likelihood $\ell_\lambda$, use $\operatorname{AIC}(\lambda)\defeq-\frac{2}{n}\ell_\lambda+\frac{2}{n}d_\lambda$.
+\item Use $\operatorname{BIC}(\lambda)\defeq-\frac{2}{n}\ell_\lambda+\frac{\log n}{n}d_\lambda$; the larger penalty favors smaller $d_\lambda$ as $n$ grows.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:sl-bic-bayesian-mdl-view} \hlt{Bayesian and MDL Readings of BIC}\\
+For models $\mathcal{M}_m$ with dimension $d_m$, maximised likelihood $L_m$, and nearly uniform prior $\pi_m$,\\
+set $\operatorname{BIC}_m\defeq-2\log L_m+d_m\log n$. By laplace approximation, posterior weight is $\widehat{\mathbb{P}}(\mathcal{M}_m\mid Z)=\frac{\pi_m\exp\{-\operatorname{BIC}_m/2\}}{\sum_{\ell=1}^M\pi_\ell\exp\{-\operatorname{BIC}_\ell/2\}}$, so $\arg\min_m\operatorname{BIC}_m$ is an approximate MAP model.\\
+In MDL form, $\frac12\operatorname{BIC}_m$ is model code length plus fitted-discrepancy code length up to constants.
+\end{remark}
+
+\begin{method} \label{meth:sl-generalized-cross-validation} \hlt{Generalized Cross-Validation}\\
+Let $\Lambda$ be candidate tuning values and $\widehat{y}_\lambda=S_\lambda y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Define $e_{\lambda i}\defeq y_i-\widehat{y}_{\lambda i}$, $h_{\lambda i}\defeq S_{\lambda,ii}$, and $d_\lambda\defeq\operatorname{trace}(S_\lambda)$.
+\item The leave-one-out residual is $e^{(-i)}_{\lambda i}=y_i-\widehat{f}^{(-i)}_\lambda(x_i)=\frac{e_{\lambda i}}{1-h_{\lambda i}}$.
+\item \hlt{Generalized cross-validation} replaces $h_{\lambda i}$ by $\bar h_\lambda\defeq d_\lambda/n$ and sets $\operatorname{GCV}(\lambda)\defeq\frac{1}{n}\sum_{i=1}^n\left(\frac{e_{\lambda i}}{1-d_\lambda/n}\right)^2$.
+\item Select $\widehat{\lambda}_{\mathrm{gcv}}\in\operatorname*{arg\,min}_{\lambda\in\Lambda}\operatorname{GCV}(\lambda)$; this uses $d_\lambda$ instead of the full leverage diagonal.
+\end{enumerate}
+\end{method}

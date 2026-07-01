@@ -2,27 +2,39 @@
 
 PAC-Bayes bounds analyze randomized predictors by comparing a data-dependent posterior distribution on hypotheses to a fixed prior.
 
-\begin{definition} \label{def:sl-randomized-predictor} \hlt{Randomized Predictor}\\
-Let $\mathcal{H}$ be a hypothesis space.  A distribution $Q$ on $\mathcal{H}$ defines a randomized predictor by sampling $h\sim Q$ and predicting with $h$.  Its risk is
-\[
-R(Q)=\mathbb{E}_{h\sim Q}R(h).
-\]
+\begin{definition} \label{def:sl-randomized-predictor} \hlt{Randomised Predictor}\\
+Let $\mathcal{H}$ be a hypothesis space and $Q\in\mathcal{P}(\mathcal{H})$. The \hlt{randomised predictor} $Q$ samples $h\sim Q$ before prediction, with risk $R(Q)\defeq\mathbb{E}_{h\sim Q}R(h)$ and empirical risk $\widehat{R}_S(Q)\defeq\mathbb{E}_{h\sim Q}\widehat{R}_S(h)$.
 \end{definition}
 
 \begin{theorem} \label{thm:sl-pac-bayes-kl-form} \hlt{PAC-Bayes Bound Form}\\
-Let $\Pi$ be a prior on $\mathcal{H}$ independent of the sample.  For bounded losses, with probability at least $1-\delta$, every posterior $Q$ satisfies a bound of the form
-\[
-R(Q)\leq \widehat{R}_S(Q)
-+O\!\left(
-\sqrt{\frac{\operatorname{KL}(Q\Vert \Pi)+\log(1/\delta)}{n}}
-\right).
-\]
+Let $S_n=(Z_1,\ldots,Z_n)$ be i.i.d., let $\ell(h,Z)\in[0,1]$, and let $\Pi\in\mathcal{P}(\mathcal{H})$ be independent of $S_n$.\\
+For $Q\ll\Pi$, set $\operatorname{KL}(Q\Vert\Pi)\defeq\mathbb{E}_Q\log\frac{dQ}{d\Pi}$ and $\operatorname{kl}(a,b)\defeq a\log\frac{a}{b}+(1-a)\log\frac{1-a}{1-b}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item With probability at least $1-\delta$, every posterior $Q\ll\Pi$ satisfies $\operatorname{kl}(\widehat{R}_{S_n}(Q),R(Q))\leq\frac{\operatorname{KL}(Q\Vert\Pi)+\log\left(\frac{n+1}{\delta}\right)}{n}$.
+\item On the same event, $R(Q)\leq\widehat{R}_{S_n}(Q)+\sqrt{\frac{\operatorname{KL}(Q\Vert\Pi)+\log\left(\frac{n+1}{\delta}\right)}{2n}}$ for every $Q\ll\Pi$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For fixed $h$, the bounded-loss kl moment bound gives $\mathbb{E}_{S_n}\exp(n\operatorname{kl}(\widehat{R}_{S_n}(h),R(h)))\leq n+1$.\\
+Thus $\mathbb{E}_{S_n}\mathbb{E}_{h\sim\Pi}\exp(n\operatorname{kl}(\widehat{R}_{S_n}(h),R(h)))\leq n+1$, so Markov gives,\\
+with probability at least $1-\delta$, $\mathbb{E}_{\Pi}\exp(n\operatorname{kl}(\widehat{R}_{S_n}(h),R(h)))\leq\frac{n+1}{\delta}$.\\
+On this event, the Donsker-Varadhan inequality with $\varphi(h)\defeq n\operatorname{kl}(\widehat{R}_{S_n}(h),R(h))$ gives\\
+$\mathbb{E}_Q\varphi\leq\operatorname{KL}(Q\Vert\Pi)+\log\mathbb{E}_{\Pi}\exp\varphi$  $\forall Q\ll\Pi$. By convexity of $\operatorname{kl}$, $n\operatorname{kl}(\widehat{R}_{S_n}(Q),R(Q))\leq\mathbb{E}_Q\varphi$, proving (i).
+\item If $R(Q)\geq\widehat{R}_{S_n}(Q)$, Pinsker gives $\operatorname{kl}(\widehat{R}_{S_n}(Q),R(Q))\geq2(R(Q)-\widehat{R}_{S_n}(Q))^2$.\\
+if $R(Q)<\widehat{R}_{S_n}(Q)$, the claim is immediate. Combining with (i) gives (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: PAC-Bayes replaces class size by posterior-prior divergence.\\
+\hlt{Key Insight}: A prior-average exponential tail plus $Q\ll\Pi$ yields all posteriors at cost $\operatorname{KL}(Q\Vert\Pi)$.
+\end{proof}
 \end{theorem}
 
 \begin{remark} \label{rem:sl-pac-bayes-prior-posterior} \hlt{Prior and Posterior}\\
-The prior in PAC-Bayes is not required to be a subjective Bayesian prior.  Its role is to anchor a complexity penalty: posteriors close to the prior are simpler in the sense of relative entropy.
+In PAC-Bayes, $\Pi$ need not be subjective; it anchors the complexity term $\operatorname{KL}(Q\Vert\Pi)$.\\
+Smaller $\operatorname{KL}(Q\Vert\Pi)$ means the data-dependent posterior $Q$ stays closer to the fixed prior.
 \end{remark}
 
 \begin{definition} \label{def:sl-information-generalization-gap} \hlt{Information-Theoretic Generalization}\\
-If $W=A(S)$ is the learned output of an algorithm, information-theoretic bounds control the generalization gap by quantities such as the mutual information $I(W;S)$.  Such bounds measure how much the trained model reveals about the particular sample.
+Let $S_n=(Z_1,\ldots,Z_n)$, $W=A(S_n)$ be learned output. \hlt{Information-theoretic generalization} bounds control $\operatorname{gen}(A)\defeq\mathbb{E}[R(W)-\widehat{R}_{S_n}(W)]$ by dependence measures such as $I(W;S_n)$.
 \end{definition}

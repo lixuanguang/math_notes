@@ -3,24 +3,52 @@
 Learning quality depends both on the richness of the model class and on the variability introduced by fitting that class from a finite sample.
 
 \begin{proposition} \label{prop:sl-bias-variance-regression} \hlt{Bias-Variance Decomposition}\\
-Let $Y=f_0(X)+\varepsilon$ with $\mathbb{E}[\varepsilon\mid X]=0$ and $\operatorname{Var}(\varepsilon\mid X)=\sigma^2(X)$.  If a learning algorithm trained on a random sample $S$ returns $\widehat{f}_S$, then at a fixed input $x$,
-\[
-\mathbb{E}_{S,Y\mid x}\!\left[(Y-\widehat{f}_S(x))^2\right]
-=
-\sigma^2(x)
-+\left(f_0(x)-\mathbb{E}_S\widehat{f}_S(x)\right)^2
-+\operatorname{Var}_S(\widehat{f}_S(x)).
-\]
+Let $Y=f_0(X)+\varepsilon$ with $\mathbb{E}[\varepsilon\mid X=x]=0$ and $\operatorname{Var}(\varepsilon\mid X=x)=\sigma^2(x)$.\\
+Let random $S$ produce $\widehat{f}_S$, set $\bar{f}(x)\defeq\mathbb{E}_S\widehat{f}_S(x)$, and let $Y_x\perp S$ be a fresh response at $x$.\\
+Then $\mathbb{E}_{S,Y_x}[(Y_x-\widehat{f}_S(x))^2]=\sigma^2(x)+(f_0(x)-\bar{f}(x))^2+\operatorname{Var}_S(\widehat{f}_S(x))$.
+\begin{proof} Write $Y_x-\widehat{f}_S(x)=\varepsilon_x+f_0(x)-\widehat{f}_S(x)$, where $\varepsilon_x\defeq Y_x-f_0(x)$.\\
+Since $\mathbb{E}[\varepsilon_x]=0$ and $Y_x$ is conditionally independent of $S$, $\mathbb{E}_{S,Y_x}[\varepsilon_x\{f_0(x)-\widehat{f}_S(x)\}]=0$.\\
+Thus $\mathbb{E}_{S,Y_x}[(Y_x-\widehat{f}_S(x))^2]=\sigma^2(x)+\mathbb{E}_S[(f_0(x)-\widehat{f}_S(x))^2]$.\\
+Finally, $\mathbb{E}_S[(f_0(x)-\widehat{f}_S(x))^2]=(f_0(x)-\bar{f}(x))^2+\mathbb{E}_S[(\widehat{f}_S(x)-\bar{f}(x))^2]$.\\
+\hlt{Structural Commentary}: Squared prediction error equals noise plus fitted-function error.\\
+\hlt{Key Insight}: Center $\widehat{f}_S(x)$ at $\bar{f}(x)$; the remaining cross term has mean zero.
+\end{proof}
 \end{proposition}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/machine_learning/bias_variance_model_complexity.tikz}
+  \caption{Bias--variance tradeoff: \textcolor{blue!70!black}{blue}: training error, \textcolor{red!75!black}{red}: test error; dashed line marks test minimum.}
+  \label{fig:sl-bias-variance-model-complexity}
+\end{figure}
+
+\begin{method} \label{meth:sl-nearest-neighbor-local-averaging} \hlt{Nearest-Neighbor Local Averaging}\\
+Let $\mathcal{T}\defeq\{(x_i,y_i):1\leq i\leq n\}$ be training data in a metric space $(\mathcal{X},d)$.\\
+Let $N_k(x)\subseteq\{1,\ldots,n\}$ be the indices of the $k$ smallest distances $d(x_i,x)$.\\
+For numerical responses, define the local average $\widehat{f}_k(x)\defeq \frac{1}{k}\sum\limits_{i\in N_k(x)}y_i$.\\
+For class labels $g_i\in\mathcal{G}$, define $\widehat{p}_g(x)\defeq \frac{1}{k}\sum\limits_{i\in N_k(x)}\mathbf{1}_{\{g_i=g\}}$ and classify by $\widehat{g}_k(x)\in\operatorname*{argmax}\limits_{g\in\mathcal{G}}\widehat{p}_g(x)$.\\
+Thus $k$-nearest neighbours replace conditioning at $X=x$ by averaging over $N_k(x)$.
+\end{method}
+
+\begin{remark} \label{rem:sl-nearest-neighbors-dimensionality} \hlt{Locality in High Dimension}\\
+The parameter $k$ trades local bias against variance: small $k$ reacts strongly to $S$, while large $k$ averages more but may wash out local structure.
+In $[0,1]^p$, a subcube with volume fraction $r$ has side length $e_p(r)=r^{1/p}$, so $e_{10}(0.01)\approx0.63$ and $e_{10}(0.10)\approx0.80$.
+For $N$ uniform points in the unit ball, the median nearest-neighbour radius is $d(p,N)=(1-2^{-1/N})^{1/p}$, about $0.52$ for $(p,N)=(10,500)$.
+Thus high-dimensional neighbourhoods large enough to contain data may not be local; useful local methods need structure or an adapted metric.
+\end{remark}
+
 \begin{definition} \label{def:sl-approximation-estimation-tradeoff} \hlt{Approximation and Estimation Errors}\\
-For a class $\mathcal{F}$ and target risk $R$, the \hlt{approximation error} is
-\[
-\inf_{f\in\mathcal{F}}R(f)-R^*,
-\]
-while the \hlt{estimation error} is the excess cost of choosing a data-dependent member of $\mathcal{F}$.  Enlarging $\mathcal{F}$ often lowers approximation error while increasing estimation difficulty.
+Let $R^*\defeq\inf_fR(f)$ and $R_{\mathcal{F}}^*\defeq\inf_{f\in\mathcal{F}}R(f)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Approximation error}: $\mathcal{A}(\mathcal{F})\defeq R_{\mathcal{F}}^*-R^*$.
+\item \hlt{Estimation error}: For a data-dependent $\widehat{f}\in\mathcal{F}$, $\mathcal{E}(\widehat{f};\mathcal{F})\defeq R(\widehat{f})-R_{\mathcal{F}}^*$.
+\item \hlt{Excess risk}: $R(\widehat{f})-R^*=\mathcal{A}(\mathcal{F})+\mathcal{E}(\widehat{f};\mathcal{F})$.
+\end{enumerate}
+Larger $\mathcal{F}$ usually lowers $\mathcal{A}(\mathcal{F})$ and raises estimation difficulty.
 \end{definition}
 
 \begin{remark} \label{rem:sl-model-complexity-tradeoff} \hlt{Model Complexity}\\
-Classical learning theory often predicts a U-shaped validation curve as complexity grows.  Modern overparameterized models may enter interpolation regimes where optimization, implicit regularization, and data geometry change this simple picture, so complexity must be measured by more than parameter count.
+As $c(\mathcal{F})$ grows, $\widehat{R}_S(\widehat{f}_{\mathcal{F}})$ usually decreases, while $R(\widehat{f}_{\mathcal{F}})-R^*=\mathcal{A}(\mathcal{F})+\mathcal{E}(\widehat{f}_{\mathcal{F}};\mathcal{F})$ trades smaller approximation error for larger estimation error.
+For zero-one loss, the relevant failure is crossing the wrong side of the decision boundary, not an additive squared-error bias--variance split.
 \end{remark}

@@ -3,27 +3,43 @@
 Sequence models process ordered data where context and position matter.
 
 \begin{definition} \label{def:sl-recurrent-network} \hlt{Recurrent Neural Network}\\
-A recurrent neural network updates a hidden state by
-\[
-h_t=\phi(W_xx_t+W_hh_{t-1}+b),
-\]
-then predicts from $h_t$.  Sharing $W_h$ across time lets the model process variable-length sequences.
+For dim $d_x,d_h,d_y$, parameters $\Theta=(W_x,W_h,b,\phi,\psi,h_0)$, $T\geq1$, an RNN is a map $\Phi_T:(\R^{d_x})^T\to(\R^{d_y})^T$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{State update}: $h_t=\phi(W_xx_t+W_hh_{t-1}+b)$ for $t=1,\ldots,T$, with shared $(W_x,W_h,b)$.
+\item \hlt{Readout}: $y_t=\psi(h_t)$ and $\Phi_T(x_{1:T})=(y_1,\ldots,y_T)$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-long-term-dependencies} \hlt{Long-Term Dependencies}\\
-Repeated multiplication by transition Jacobians can cause gradients to vanish or explode.  Gated recurrent units, long short-term memory units, clipping, and skip-like paths mitigate this problem.
+For $h_t=F_t(h_{t-1},x_t)$, set $J_t\defeq\partial h_t/\partial h_{t-1}$ and $P_{s:T}\defeq\prod\limits_{t=s+1}^T J_t$.\\
+Then $\nabla_{h_s}\mathcal L=P_{s:T}^\top\nabla_{h_T}\mathcal L$; $\norm{P_{s:T}}\ll1$ vanishes gradients and $\norm{P_{s:T}}\gg1$ explodes them.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Gating}: gates $g_t\in[0,1]^{d_h}$ interpolate between copy and update.
+\item \hlt{Gradient clipping}: replace a gradient $g$ by $\min\{1,c/\norm g\}g$, so the clipped norm is at most $c$.
+\item \hlt{Skip paths}: use additive routes such as $h_t=h_{t-1}+F_t(h_{t-1},x_t)$, giving transition Jacobian $I+\partial F_t/\partial h_{t-1}$.
+\end{enumerate}
+These mechanisms keep the long-horizon Jacobian product numerically controlled.
 \end{remark}
 
 \begin{definition} \label{def:sl-attention} \hlt{Attention}\\
-Given queries $Q$, keys $K$, and values $V$, scaled dot-product attention has the form
-\[
-\operatorname{Attn}(Q,K,V)
-=
-\operatorname{softmax}\!\left(\frac{QK^\top}{\sqrt{d}}\right)V.
-\]
-It lets each position form a data-dependent weighted average of value vectors.
+For $Q\in\R^{n_q\times d}$, $K\in\R^{n_k\times d}$, $V\in\R^{n_k\times d_v}$, define $\operatorname{Attn}(Q,K,V)\in\R^{n_q\times d_v}$ row-wise:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Scores}: $S\defeq d^{-1/2}QK^\top\in\R^{n_q\times n_k}$.
+\item \hlt{Weights}: $A\defeq\operatorname{softmax}_{\rm row}(S)$, $A_{ij}\defeq\exp(S_{ij})/\sum_{\ell=1}^{n_k}\exp(S_{i\ell})$.
+\item \hlt{Output}: $\operatorname{Attn}(Q,K,V)\defeq AV$, equivalently $(\operatorname{Attn}(Q,K,V))_{i\cdot}=\sum_{j=1}^{n_k}A_{ij}V_{j\cdot}$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-attention-as-routing} \hlt{Attention as Routing}\\
-Attention replaces a fixed local recurrence by content-dependent communication among tokens or locations.  Masks and positional encodings specify which interactions are allowed and how order is represented.
+For token matrix $X$, set $Q=XW_q$, $K=XW_k$, $V=XW_v$, $S=d^{-1/2}QK^\top$, and $A=\operatorname{softmax}_{\rm row}(S)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Content routing}: $y_i=\sum_j A_{ij}v_j$ routes value vectors by query-key compatibility.
+\item \hlt{Masking}: a mask $M_{ij}\in\{0,-\infty\}$ replaces $S$ by $S+M$, forcing $A_{ij}=0$ for forbidden interactions.
+\item \hlt{Positional encoding}: absolute codes use $x_i+e_i$; relative codes add a position term to $S_{ij}$.
+\end{enumerate}
+Thus attention replaces a fixed recurrence neighborhood by data-dependent communication.
 \end{remark}

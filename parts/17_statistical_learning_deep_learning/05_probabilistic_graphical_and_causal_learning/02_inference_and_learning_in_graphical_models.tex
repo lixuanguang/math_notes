@@ -3,17 +3,94 @@
 Inference in a graphical model computes marginal, conditional, or most likely latent quantities from the joint law encoded by the graph.
 
 \begin{definition} \label{def:sl-graphical-model-inference-tasks} \hlt{Inference Tasks}\\
-Common tasks include computing marginals $p(x_A)$, conditionals $p(x_A\mid x_B)$, maximum a posteriori assignments, and posterior distributions over latent variables.
+Let $X=(X_j)_{j\in V}$ have joint law $p$, and let $A,B\subseteq V$ be disjoint. Standard \hlt{inference tasks} are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Marginal inference}: compute $p(x_A)$.
+\item \hlt{Conditional inference}: compute $p(x_A\mid x_B)$.
+\item \hlt{MAP inference}: compute $x_A^\star\in\arg\max_{x_A}p(x_A\mid x_B)$, with $B=\varnothing$ for unconditional MAP.
+\item \hlt{Latent posterior inference}: for latent $Z$ and observed $X=x$, compute $p(z\mid x)$.
+\end{enumerate}
 \end{definition}
 
 \begin{method} \label{method:sl-message-passing} \hlt{Message Passing}\\
-On trees, belief propagation sends local messages along edges and computes exact marginals.  On loopy graphs, analogous iterations often serve as approximations.
+Let $G=(V,E)$ be a graphical model with local potentials.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Tree belief propagation}: on trees, two-way edge messages yield exact node and edge marginals.
+\item \hlt{Loopy belief propagation}: on cyclic graphs, iterated message updates yield approximate marginals.
+\end{enumerate}
 \end{method}
 
 \begin{definition} \label{def:sl-variational-inference} \hlt{Variational Inference}\\
-Variational inference approximates an intractable posterior $p(z\mid x)$ by a tractable distribution $q(z)$, commonly by minimizing $\operatorname{KL}(q(z)\Vert p(z\mid x))$ or maximizing an evidence lower bound.
+For latent-variable model $p(x,z)$, intractable $p(z\mid x)$, tractable family $\mathcal{Q}$, \hlt{variational inference} choose $q^\star\in\mathcal{Q}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{KL projection}: $q^\star\in\arg\min_{q\in\mathcal{Q}}\operatorname{KL}(q(z)\Vert p(z\mid x))$.
+\item \hlt{ELBO maximization}: equivalently, maximize $\mathcal{L}(q)\defeq\mathbb{E}_q[\log p(x,z)]-\mathbb{E}_q[\log q(z)]$,\\
+since $\log p(x)=\mathcal{L}(q)+\operatorname{KL}(q(z)\Vert p(z\mid x))$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-graphical-learning} \hlt{Learning Parameters and Structure}\\
-Parameter learning uses likelihood or regularized likelihood when the graph is fixed.  Structure learning searches over graphs and therefore combines statistical scoring with combinatorial optimization.
+Let $G$ denote the graph and $\theta$ its model parameters.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Parameter learning}: for fixed $G$, estimate $\theta$ by likelihood or regularized likelihood.
+\item \hlt{Structure learning}: estimate unknown $G$ by optimizing a statistical score over graph candidates, often with structural penalties or combinatorial search.
+\end{enumerate}
 \end{remark}
+
+\begin{method} \label{meth:sl-gaussian-graphical-model-learning} \hlt{Gaussian Graphical Model Learning}\\
+For centered Gaussian data with empirical covariance $S$, let $\Theta=\Sigma^{-1}\succ0$ and $\ell(\Theta)\defeq\log\det\Theta-\operatorname{trace}(S\Theta)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Known graph}: for edge set $E$, estimate $\widehat{\Theta}\in\operatorname*{arg\,max}\limits_{\Theta\succ0}\ell(\Theta)$ subject to $\theta_{jk}=0$ whenever $\left\{j,k\right\}\notin E$.
+\item \hlt{Unknown graph}: graphical lasso solves $\widehat{\Theta}\in\operatorname*{arg\,max}\limits_{\Theta\succ0}\left\{\ell(\Theta)-\lambda\sum\limits_{j\neq k}|\theta_{jk}|\right\}$, penalise off-diagonal entries.
+\end{enumerate}
+Graph selection is therefore shrinkage of inverse-covariance entries; zeros of $\widehat{\Theta}$ remove edges.
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/markov_graph_separation_and_learning.tikz}
+\caption{$\mathcal D$ is the data and $S$ its empirical covariance. \textcolor{orange!70!black}{$Y$} gives $X\perp\{Z,W\}\mid Y$; graphical lasso solves $\widehat{\Theta}_\lambda\in\operatorname*{arg\,max}\limits_{\Theta\succ0}\left\{\log\det\Theta-\operatorname{tr}(S\Theta)-\lambda\sum_{j\ne k}|\theta_{jk}|\right\}$, and zeros of $\widehat{\Theta}_\lambda$ define missing edges in $\widehat G$.}
+\label{fig:sl-markov-graph-separation-learning}
+\end{figure}
+
+\begin{breakablealgorithm}
+\caption{Graphical Lasso by Block Coordinate Descent}
+\label{alg:sl-graphical-lasso}
+\begin{algorithmic}
+\Require Empirical covariance $S\in\R^{p\times p}$, penalty $\lambda\geq0$
+\Ensure Covariance estimate $W$ and sparse precision estimate $\widehat{\Theta}=W^{-1}$
+\State Initialize $W\gets S+\lambda I$ and keep the diagonal fixed
+\Repeat
+\For{$j=1,\ldots,p$}
+\State Partition $W$ into $W_{11}$, $w_{12}$, and $w_{22}$ by isolating  row and column $j$; partition $S$ similarly to get $s_{12}$
+\State Define $\mathcal{S}_\lambda(z)=\sign(z)(|z|-\lambda)_+$
+\Repeat
+\For{$k=1,\ldots,p-1$}
+\State $\displaystyle \beta_k\gets
+\frac{\mathcal{S}_\lambda\!\left(s_{12,k}-\sum_{\ell\neq k}(W_{11})_{k\ell}\beta_\ell\right)}
+{(W_{11})_{kk}}$
+\EndFor
+\Until{$\beta$ has converged for this block}
+\State Update $w_{12}\gets W_{11}\beta$ and symmetrically update row and column $j$ of $W$
+\EndFor
+\Until{$W$ has converged}
+\State In the final cycle recover $\widehat{\theta}_{12}=-\widehat{\beta}\widehat{\theta}_{22}$ with $1/\widehat{\theta}_{22}=w_{22}-w_{12}^T\widehat{\beta}$
+\end{algorithmic} 
+\end{breakablealgorithm}
+
+\begin{method} \label{meth:sl-discrete-markov-network-learning} \hlt{Discrete Markov Network Learning}\\
+For a binary Markov network with edge statistic $T_{jk}(X)=X_jX_k$, likelihood equations are $\widehat{\mathbb{E}}T_{jk}=\mathbb{E}_\Theta T_{jk}$ for $\{j,k\}\in E$; exact $\mathbb{E}_\Theta$ sums over $x\in\{0,1\}^p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Small graphs}: solve $\widehat{\mathbb{E}}T_{jk}=\mathbb{E}_\Theta T_{jk}$ by log-linear Poisson MLE, gradient/Newton updates,\\
+or iterative proportional fitting.
+\item \hlt{Large graphs}: approximate $\mathbb{E}_\Theta T_{jk}$ by mean-field or Gibbs-sampling estimates.
+\item \hlt{Hidden-node models}: use observed-data conditionals for $\widehat{\mathbb{E}}T_{jk}$; for RBMs, CD-$r$ starts at data and\\
+runs $r$ alternating Gibbs steps $h\sim p(h\mid v)$, $v\sim p(v\mid h)$.
+\end{enumerate}
+\end{method}

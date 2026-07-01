@@ -3,17 +3,110 @@
 Evaluation estimates how the trained system behaves on data not used to fit it.
 
 \begin{definition} \label{def:sl-train-validation-test} \hlt{Training, Validation, and Test Splits}\\
-The training set fits parameters, the validation set selects models and hyperparameters, and the test set estimates final performance after selection.  Mixing these roles produces optimistic error estimates.
+Let $\mathcal{D}=\mathcal{D}_{\mathrm{tr}}\dot\cup\mathcal{D}_{\mathrm{val}}\dot\cup\mathcal{D}_{\mathrm{te}}$ be a disjoint partition of $\{(x_i,y_i)\}_{i=1}^n$, and fix a loss $\ell$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Training: for each $\lambda\in\Lambda$, fit $\widehat f_\lambda$ using only $\mathcal{D}_{\mathrm{tr}}$.
+\item Validation: set $\widehat\lambda\in\arg\min_{\lambda\in\Lambda}\widehat R_{\mathrm{val}}(\lambda)$, where $\widehat R_{\mathrm{val}}(\lambda)=|\mathcal{D}_{\mathrm{val}}|^{-1}\sum_{(x,y)\in\mathcal{D}_{\mathrm{val}}}\ell(\widehat f_\lambda(x),y)$.
+\item Test: after $\widehat\lambda$ is fixed, report $\widehat R_{\mathrm{te}}=|\mathcal{D}_{\mathrm{te}}|^{-1}\sum_{(x,y)\in\mathcal{D}_{\mathrm{te}}}\ell(\widehat f_{\widehat\lambda}(x),y)$ as the final performance estimate.
+\end{enumerate}
+If $\mathcal{D}_{\mathrm{val}}$ is unavailable, cross-validation or bootstrap resampling approximates validation.\\
+Any pre-reporting use of $\mathcal{D}_{\mathrm{te}}$ makes $\widehat R_{\mathrm{te}}$ adaptive and typically optimistic.
 \end{definition}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/machine_learning/train_validation_test_split.tikz}
+  \caption[Train/validation/test split]{Train/validation/test split: $\mathcal D=\mathcal D_{\mathrm{tr}}\sqcup\mathcal D_{\mathrm{val}}\sqcup\mathcal D_{\mathrm{te}}$, with $\mathcal D_{\mathrm{tr}}$ fitting $\widehat{f}_\lambda$, $\mathcal D_{\mathrm{val}}$ selecting $\widehat{\lambda}$, and $\mathcal D_{\mathrm{te}}$ estimating final risk $\widehat{R}_{\mathrm{te}}$.}
+  \label{fig:sl-train-validation-test-split}
+\end{figure}
+
+\begin{definition} \label{def:sl-model-selection-versus-assessment} \hlt{Model Selection and Model Assessment}\\
+Let $\{\widehat f_\lambda:\lambda\in\Lambda\}$ be candidates, let $\widehat R_{\mathrm{val}}(\lambda)$ be validation error, and let $R(f)=\mathbb{E}\ell(f(X),Y)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Model selection}: choose $\widehat\lambda\in\Lambda$, typically $\widehat\lambda\in\arg\min_{\lambda\in\Lambda}\widehat R_{\mathrm{val}}(\lambda)$, and output $\widehat f_{\widehat\lambda}$.
+\item \hlt{Model assessment}: after $\widehat\lambda$ is fixed, estimate $R(\widehat f_{\widehat\lambda})$ using data independent of training and selection.
+\end{enumerate}
+Reusing selection data for assessment yields adaptive, typically optimistic error.
+\end{definition}
+
+\begin{definition} \label{def:sl-conditional-expected-test-error} \hlt{Conditional and Expected Test Error}\\
+Let $\widehat f_{\mathcal{T}}$ be trained on random $\mathcal{T}$, and let $(X^0,Y^0)$ be an independent test point.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Conditional test error}: $\operatorname{Err}_{\mathcal{T}}=\mathbb{E}_{X^0,Y^0}[\ell(\widehat f_{\mathcal{T}}(X^0),Y^0)\mid\mathcal{T}]$.
+\item \hlt{Expected test error}: $\operatorname{Err}=\mathbb{E}_{\mathcal{T}}\operatorname{Err}_{\mathcal{T}}$.
+\end{enumerate}
+Reusable error estimators usually target $\operatorname{Err}$, while $\operatorname{Err}_{\mathcal{T}}$ is the error conditional on the realized training set.
+\end{definition}
+
+\begin{method} \label{meth:sl-k-fold-cross-validation} \hlt{$K$-Fold Cross-Validation}\\
+Let $\mathcal{D}=\{(x_i,y_i)\}_{i=1}^n$, loss $\ell$, candidates $\Lambda$, and fold map $\kappa:\{1,\ldots,n\}\to\{1,\ldots,K\}$ be fixed.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each $\lambda\in\Lambda$ and $k=1,\ldots,K$, fit $\widehat f_\lambda^{-k}$ using only observations with $\kappa(i)\ne k$.
+\item For each $\lambda\in\Lambda$, compute $\operatorname{CV}(\lambda)=n^{-1}\sum_{i=1}^n\ell(\widehat f_\lambda^{-\kappa(i)}(x_i),y_i)$.
+\item Choose $\widehat\lambda\in\arg\min_{\lambda\in\Lambda}\operatorname{CV}(\lambda)$, or the one-standard-error candidate when that rule is specified.
+\item Refit $\widehat f_{\widehat\lambda}$ on all of $\mathcal{D}$.
+\end{enumerate}
+Leave-one-out has $K=n$; $K=5$ or $10$ often lowers variance and computation but fits on smaller training folds.
+\end{method}
+
+\begin{remark} \label{rem:sl-cv-expected-not-conditional-error} \hlt{What Cross-Validation Estimates}\\
+For learning rule $\mathcal{A}$, let $\operatorname{Err}_{\mathcal{A}}(m)=\mathbb{E}_{\mathcal{T}_m,X^0,Y^0}\ell(\mathcal{A}(\mathcal{T}_m)(X^0),Y^0)$. $K$-fold cross-validation targets roughly $\operatorname{Err}_{\mathcal{A}}(n(1-1/K))$, not the conditional error of $\mathcal{A}(\mathcal{D})$. Leave-one-out has $m=n-1$ but dependent losses; fixed $K=5$ or $10$ lowers computation and often variance, with possible upward bias.
+\end{remark}
+
 \begin{definition} \label{def:sl-benchmark} \hlt{Benchmark}\\
-A benchmark specifies data, preprocessing rules, train-test splits, metrics, and allowed external resources.  Without these conventions, reported performance numbers need not be comparable.
+A benchmark is a fixed evaluation protocol $\mathcal{B}=(\mathcal{D},\Pi,\mathcal{S},m,\mathcal{R})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Data}: $\mathcal{D}$ specifies the population, sample, or data source.
+\item \hlt{Preprocessing}: $\Pi$ specifies transformations, filtering, feature construction, and allowed fitting scope.
+\item \hlt{Splitting}: $\mathcal{S}$ specifies train-validation-test splits or resampling schemes.
+\item \hlt{Metric}: $m$ specifies the reported score.
+\item \hlt{Resources}: $\mathcal{R}$ specifies allowed external data, models, compute, and manual intervention.
+\end{enumerate}
+Two reported scores are directly comparable only when computed under the same $\mathcal{B}$.
 \end{definition}
 
 \begin{remark} \label{rem:sl-data-leakage} \hlt{Data Leakage}\\
-Leakage occurs when information from validation or test data enters training, feature construction, preprocessing, hyperparameter selection, or manual iteration.  Leakage is a systems failure as much as a statistical one.
+For protected evaluation data $E$, leakage is dependence of any pre-evaluation choice $Z_{\mathrm{pre}}$ on labels or covariates in $E$. Then error measured on $E$ is adaptive, not honest out-of-sample error.
 \end{remark}
 
+\begin{method} \label{meth:sl-cross-validation-with-screening} \hlt{Cross-Validation with Screening or Preprocessing}\\
+For a fold map $\kappa:\{1,\ldots,n\}\to\{1,\ldots,K\}$, set $\mathcal{D}_k=\{(x_i,y_i):\kappa(i)=k\}$ and $\mathcal{D}_{-k}=\mathcal{D}\setminus\mathcal{D}_k$.\\
+Data-dependent pipeline choices must be fold-local:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each $k$, learn preprocessing, screening, feature selection, and tuning from $\mathcal{D}_{-k}$ only.
+\item Fit $\widehat f^{-k}$ on $\mathcal{D}_{-k}$ after applying exactly those fold-local choices.
+\item Predict and score $\mathcal{D}_k$ using $\widehat f^{-k}$ and the same fold-local choices.
+\item Average the held-out losses over $k=1,\ldots,K$.
+\end{enumerate}
+Full-data supervised choices leak held-out labels into $\widehat f^{-k}$ and bias cross-validation downward.\\
+The protocol should state whether unsupervised preprocessing is fold-local or full-covariate.
+\end{method}
+
 \begin{remark} \label{rem:sl-metric-choice} \hlt{Metric Choice}\\
-Accuracy, log loss, calibration error, ranking metrics, cost-sensitive utility, and latency measure different aspects of a system.  A benchmark metric should match the decision problem it stands in for.
+Choose $m(f;\mathcal{D}_{\mathrm{te}})$ so its ordering of candidate rules matches the deployment objective $U(f)$.\\
+Accuracy, log loss, calibration, ranking quality, cost, and latency need not agree.
+\end{remark}
+
+\begin{method} \label{meth:sl-bootstrap-prediction-error} \hlt{Bootstrap Estimates of Prediction Error}\\
+Let $\mathcal{D}=\{(x_i,y_i)\}_{i=1}^n$; draw bootstrap samples $S^{\ast b}$ and fit $\widehat f^{\ast b}$; set $C^{-i}=\{b:(x_i,y_i)\notin S^{\ast b}\}$,\\
+$I_{\mathrm{oob}}=\{i:C^{-i}\ne\varnothing\}$, and $\overline{\operatorname{err}}=n^{-1}\sum_i\ell(\widehat f(x_i),y_i)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Naive bootstrap}: $\widehat{\operatorname{Err}}_{\mathrm{boot}}=B^{-1}\sum_{b=1}^B n^{-1}\sum_{i=1}^n\ell(\widehat f^{\ast b}(x_i),y_i)$.
+\item \hlt{Out-of-bag bootstrap}: $\widehat{\operatorname{Err}}^{(1)}=|I_{\mathrm{oob}}|^{-1}\sum_{i\in I_{\mathrm{oob}}}|C^{-i}|^{-1}\sum_{b\in C^{-i}}\ell(\widehat f^{\ast b}(x_i),y_i)$.
+\item \hlt{$.632$ bootstrap}: $\widehat{\operatorname{Err}}^{(.632)}=.368\,\overline{\operatorname{err}}+.632\,\widehat{\operatorname{Err}}^{(1)}$.
+\item \hlt{$.632+$ bootstrap}: $\widehat{\operatorname{Err}}^{(.632+)}=(1-w_+)\overline{\operatorname{err}}+w_+\widehat{\operatorname{Err}}^{(1)}$, with $w_+\in[.632,1]$ increase with overfitting.
+\end{enumerate}
+Naive reuse is most optimistic; out-of-bag and $.632$ variants reduce reuse bias.
+\end{method}
+
+\begin{remark} \label{rem:sl-resampling-limits} \hlt{Limits of Reuse-Based Assessment}\\
+Write $\widehat R_{\mathrm{reuse}}(\lambda)=R(\widehat f_\lambda)+b_\lambda+\varepsilon_\lambda$. Nearly constant $b_\lambda$ can preserve candidate comparisons despite biased levels.\\
+After choosing $\widehat\lambda$, estimating $R(\widehat f_{\widehat\lambda})$ requires data independent of all fitting, preprocessing, tuning, and iteration.
 \end{remark}

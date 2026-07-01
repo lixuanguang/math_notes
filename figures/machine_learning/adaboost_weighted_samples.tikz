@@ -1,0 +1,42 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    font=\scriptsize,
+    line cap=round,
+    line join=round,
+    box/.style={draw=gray!65, rounded corners=2pt, align=center, minimum height=0.52cm, inner xsep=6pt, inner ysep=2pt},
+    sample/.style={box, draw=cyan!65!black, fill=cyan!8, minimum width=2.3cm},
+    learner/.style={box, draw=green!45!black, fill=green!8, minimum width=1.65cm},
+    vote/.style={box, draw=orange!70!black, fill=orange!10, minimum width=2.85cm, inner ysep=4pt},
+    flow/.style={->, draw=orange!80!black, line width=0.7pt},
+    fit/.style={->, dashed, draw=blue!70!black, line width=0.6pt},
+    update/.style={->, draw=red!65!black, line width=0.6pt}
+]
+\node[sample] (w1) at (0,1.80) {data weights\\$w^{(1)}$};
+\node[sample] (w2) at (0,0.60) {data weights\\$w^{(2)}$};
+\node[sample] (w3) at (0,-0.60) {data weights\\$w^{(3)}$};
+\node (dots) at (0,-1.55) {$\vdots$};
+\node[sample] (wM) at (0,-2.50) {data weights\\$w^{(M)}$};
+
+\node[learner] (g1) at (3.05,1.80) {$G_1(x)$\\coefficient $\alpha_1$};
+\node[learner] (g2) at (3.05,0.60) {$G_2(x)$\\coefficient $\alpha_2$};
+\node[learner] (g3) at (3.05,-0.60) {$G_3(x)$\\coefficient $\alpha_3$};
+\node (gdots) at (3.05,-1.55) {$\vdots$};
+\node[learner] (gM) at (3.05,-2.50) {$G_M(x)$\\coefficient $\alpha_M$};
+
+\node[vote] (vote) at (7.85,0)
+{$\displaystyle \widehat G(x)=\sign\!\left(\sum_{m=1}^M \alpha_mG_m(x)\right)$\\weighted vote};
+\coordinate (combine) at (4.85,0);
+
+\draw[fit] (w1) -- (g1);
+\draw[fit] (w2) -- (g2);
+\draw[fit] (w3) -- (g3);
+\draw[fit] (wM) -- (gM);
+
+\draw[update] (w1.south) -- (w2.north);
+\draw[update] (w2.south) -- (w3.north);
+\draw[update] (w3.south) -- (dots.north);
+\draw[update] (dots.south) -- (wM.north);
+
+\draw[black!55, line width=0.5pt] (4.55,2.05) -- (4.85,2.05) -- (4.85,-2.75) -- (4.55,-2.75);
+\draw[flow] (combine) -- (vote.west);
+\end{tikzpicture}

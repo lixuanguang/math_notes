@@ -1,14 +1,42 @@
 \subsection{Prediction, Loss Functions, and Risk}
 
-A learning problem turns observations into an action rule.  Unlike the inferential problems of Part 15, the primary object is often the future loss of a predictor rather than a confidence statement about a parameter.
+A learning problem turns observations into an action rule.  Unlike inferential problems, the primary object is often the future loss of a predictor rather than a confidence statement about a parameter.
 
 \begin{definition} \label{def:sl-prediction-problem-risk} \hlt{Prediction Problem and Risk}\\
-Let $(\mathcal{X},\mathcal{A})$ be an input space, $(\mathcal{Y},\mathcal{B})$ an output space, and $P$ a probability law on $\mathcal{X}\times\mathcal{Y}$.  A \hlt{predictor} is a measurable map $f:\mathcal{X}\to\mathcal{A}_0$ into an action space.  For a loss function $\ell:\mathcal{A}_0\times\mathcal{Y}\to[0,\infty]$, the \hlt{risk} of $f$ is
-\[
-R(f)=\mathbb{E}_{(X,Y)\sim P}\ell(f(X),Y).
-\]
-The \hlt{Bayes risk} is $R^*=\inf_fR(f)$, where the infimum ranges over all measurable predictors.
+ Inputs lie in $(\mathcal{X},\mathcal{A})$, outputs in $(\mathcal{Y},\mathcal{B})$, and $(X,Y)\sim P$ on $\mathcal{X}\times\mathcal{Y}$. Let $(\mathcal{A}_0,\mathcal{C})$ be an action space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Predictor}: A predictor is a measurable map $f:\mathcal{X}\to\mathcal{A}_0$.
+\item \hlt{Loss and risk}: For loss $\ell:\mathcal{A}_0\times\mathcal{Y}\to[0,\infty]$, define $R(f)\defeq\mathbb{E}_{P}\ell(f(X),Y)$.
+\item \hlt{Bayes risk}: $R^*\defeq\inf_fR(f)$, over measurable $f:\mathcal{X}\to\mathcal{A}_0$.
+\end{enumerate}
 \end{definition}
+
+\begin{definition} \label{def:sl-supervised-learning-terminology} \hlt{Supervised Learning Terminology}\\
+Let $S\defeq\{(x_i,y_i):1\leq i\leq n\}$ with $x_i=(x_{i1},\ldots,x_{ip})^\top\in\mathcal{X}$ and $y_i\in\mathcal{Y}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Features}: Coordinates $x_{ij}$ are variables, inputs, predictors, independent variables, or features.
+\item \hlt{Response}: Values $y_i$ are outputs, responses, targets, or dependent variables.
+\item \hlt{Regression}: If $\mathcal{Y}\subseteq\R^q$, the task is quantitative prediction.
+\item \hlt{Classification}: If $\mathcal{Y}=\mathcal{G}$ is a finite unordered label set, the task is classification.
+\item \hlt{Ordered labels}: If $\mathcal{Y}$ is ordered categorical, order matters but arithmetic on labels usually does not.
+\item \hlt{One-hot coding}: For $|\mathcal{G}|=K$, encode class $g$ by $t_g\in\{0,1\}^K$ with $(t_g)_g=1$.\\
+Classify vector scores $s(x)\in\R^K$ by $\operatorname*{argmax}_k s_k(x)$.
+\end{enumerate}
+If $y_i$ are unobserved, the problem is unsupervised and targets structure in $\{x_i\}_{i=1}^n$.
+\end{definition}
+
+\begin{example} \label{ex:sl-source-learning-problems} \hlt{Representative Learning Problems}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Email filtering}: $x$ contains word and punctuation frequencies, $y\in\{\operatorname{spam},\operatorname{ham}\}$, and asymmetric loss can penalize false deletion more than missed spam.
+\item \hlt{Clinical regression}: $y=\log(\mathrm{PSA})$ and $x$ contains log cancer volume, prostate weight, age, and related measurements; correlated predictors are common.
+\item \hlt{Digit recognition}: $x\in[0,1]^{16\times16}$ or $[0,1]^{256}$ and $y\in\{0,\ldots,9\}$; action set may add rejection option $\bot$.
+\item \hlt{Microarrays}: An expression matrix $X\in\R^{G\times n}$ has genes as rows and samples as columns.\\
+Typical first tasks are unsupervised clustering of genes or samples.
+\end{enumerate}
+\end{example}
 
 \begin{example} \label{ex:sl-standard-losses} \hlt{Common Prediction Losses}
 \begin{enumerate}[label=(\roman*)]
@@ -19,10 +47,18 @@ The \hlt{Bayes risk} is $R^*=\inf_fR(f)$, where the infimum ranges over all meas
 \end{enumerate}
 \end{example}
 
-\begin{definition} \label{def:sl-bayes-predictor} \hlt{Bayes Predictors}\\
-For squared loss, a Bayes predictor is $f^*(x)=\mathbb{E}[Y\mid X=x]$ whenever the conditional expectation exists.  For absolute loss, any conditional median is Bayes optimal.  For zero-one classification, the Bayes classifier chooses a label with largest conditional probability $P(Y=y\mid X=x)$.
+\begin{definition} \label{def:sl-bayes-predictor} \hlt{Bayes Predictors}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Conditional risk}: For action $a$, set $r_x(a)\defeq\mathbb{E}[\ell(a,Y)\mid X=x]$; any $f^*(x)\in\operatorname*{argmin}\limits_a r_x(a)$ is Bayes.
+\item \hlt{Squared loss}: If $\ell(a,y)=(a-y)^2$ and $\mathbb{E}[|Y|\mid X=x]<\infty$, then $f^*(x)=\mathbb{E}[Y\mid X=x]$.
+\item \hlt{Absolute loss}: If $\ell(a,y)=|a-y|$, any conditional median $m(x)$\\
+with $\mathbb{P}(Y\leq m(x)\mid X=x)\geq\frac12$ and $\mathbb{P}(Y\geq m(x)\mid X=x)\geq\frac12$ is Bayes.
+\item \hlt{Zero-one loss}: For labels $\mathcal{G}$ and $\ell(g,y)=\mathbf{1}_{\{g\neq y\}}$, a Bayes classifier is $g^*(x)\in\operatorname*{argmax}\limits_{g\in\mathcal{G}}\mathbb{P}(Y=g\mid X=x)$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-risk-versus-estimation-risk} \hlt{Risk as a Prediction Target}\\
-The word ``risk'' also appears in decision theory.  In this part it usually refers to out-of-sample predictive loss under a data-generating law, while Part 15 studies risk as the performance of statistical decisions over a model family.
+Here risk means predictive loss $R(f)=\mathbb{E}_{P}\ell(f(X),Y)$ under a data law $P$.\\
+Decision-theoretic risk instead studies $R(\theta,\delta)=\mathbb{E}_{\theta}L(\theta,\delta(X))$ over a model family.
 \end{remark}

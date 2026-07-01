@@ -3,11 +3,39 @@
 Backpropagation is reverse-mode differentiation applied to the computational graph of the network and loss.
 
 \begin{definition} \label{def:sl-computational-graph} \hlt{Computational Graph}\\
-A computational graph is a directed acyclic graph whose nodes are intermediate variables and whose edges record functional dependence.  Neural-network training differentiates a scalar loss through this graph with respect to many parameters.
+A computational graph is a finite directed acyclic graph $G=(V,E)$ together with variables $(x_v)_{v\in V}$ and local maps $(f_v)_{v\in V\setminus S}$, where $\operatorname{pa}(v)=\{u\in V:(u,v)\in E\}$ and $S=\{v\in V:\operatorname{pa}(v)=\varnothing\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $v\in S$, $x_v$ is an input, parameter, or constant.
+\item For $v\in V\setminus S$, $x_v=f_v((x_u)_{u\in\operatorname{pa}(v)})$.
+\item An edge $u\to v$ records the direct dependence of $x_v$ on $x_u$ in $f_v$.
+\end{enumerate}
+For scalar output $L=x_\ell$ and parameter sources $P\subseteq S$, reverse mode computes $(\partial L/\partial x_v)_{v\in V}$, hence $\nabla_{(x_p)_{p\in P}}L$.
 \end{definition}
 
 \begin{method} \label{method:sl-backpropagation} \hlt{Backpropagation}\\
-For a multilayer network, the forward pass computes activations layer by layer.  The backward pass propagates adjoints from the loss to the parameters using the chain rule.  For layer preactivation $z^{(k)}$ and activation $h^{(k)}$, the local Jacobians determine how the error signal at layer $k+1$ becomes the error signal at layer $k$.
+Let $h^{(0)}=x$, $z^{(k)}=W^{(k)}h^{(k-1)}+b^{(k)}$, $h^{(k)}=\phi_k(z^{(k)})$ for $1\leq k\leq K$, and $L=\ell(h^{(K)},y)$.\\
+Write $\bar u=\nabla_u L$ for the adjoint of $u$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $z^{(k)}$ and $h^{(k)}$ for $k=1,\ldots,K$, then compute $L$.
+\item Initialize $\bar h^{(K)}=\nabla_{h^{(K)}}\ell(h^{(K)},y)$.
+\item For $k=K,\ldots,1$, set $\bar z^{(k)}=J_{\phi_k}(z^{(k)})^T\bar h^{(k)}$ and $(\nabla_{W^{(k)}}L,\nabla_{b^{(k)}}L,\bar h^{(k-1)})=(\bar z^{(k)}(h^{(k-1)})^T,\bar z^{(k)},(W^{(k)})^T\bar z^{(k)})$.
+\end{enumerate}
+Thus backpropagation is reverse-mode differentiation of $L$ through the layerwise computational graph.
+\end{method}
+
+\begin{method} \label{meth:sl-single-hidden-layer-backprop-equations} \hlt{Single-Hidden-Layer Backpropagation Equations}\\
+For one training case $(x_i,y_i)$ in a single-hidden-layer network, let $m=1,\ldots,M$ index hidden units, $k=1,\ldots,K$ index output components, and $z_i=(z_{1i},\ldots,z_{Mi})^T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $a_{mi}=\alpha_{0m}+\alpha_m^Tx_i$, $z_{mi}=\sigma(a_{mi})$, $t_{ki}=\beta_{0k}+\beta_k^Tz_i$, and $f_k(x_i)=g_k(t_{ki})$.
+\item Compute $R_i=\sum\limits_{k=1}^K\{y_{ik}-f_k(x_i)\}^2$ and $\delta_{ki}=\frac{\partial R_i}{\partial t_{ki}}=-2\{y_{ik}-f_k(x_i)\}g_k'(t_{ki})$.
+\item Compute $\nabla_{\beta_k}R_i=\delta_{ki}z_i$ and $\frac{\partial R_i}{\partial\beta_{0k}}=\delta_{ki}$.
+\item Compute $s_{mi}=\frac{\partial R_i}{\partial a_{mi}}=\sigma'(a_{mi})\sum\limits_{k=1}^K\beta_{km}\delta_{ki}$.
+\item Compute $\nabla_{\alpha_m}R_i=s_{mi}x_i$ and $\frac{\partial R_i}{\partial\alpha_{0m}}=s_{mi}$.
+\end{enumerate}
+Batch gradients are obtained by summing these per-case derivatives over $i$.
 \end{method}
 
 \begin{breakablealgorithm}
@@ -22,5 +50,5 @@ For a multilayer network, the forward pass computes activations layer by layer. 
 \end{breakablealgorithm}
 
 \begin{remark} \label{rem:sl-autodiff-versus-symbolic} \hlt{Automatic Differentiation}\\
-Automatic differentiation is neither numerical finite differencing nor purely symbolic simplification.  It evaluates exact chain-rule derivatives of the implemented computation up to floating-point arithmetic.
+For an implemented graph map $F:\mathbb{R}^p\to\mathbb{R}^q$, automatic differentiation returns $DF(x)$ by chain-rule evaluation on the executed graph.  It differentiates the floating-point computation up to roundoff, without finite differences or symbolic simplification.
 \end{remark}

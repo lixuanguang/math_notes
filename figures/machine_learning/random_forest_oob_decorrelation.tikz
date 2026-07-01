@@ -1,0 +1,42 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    font=\scriptsize,
+    line cap=round,
+    line join=round,
+    box/.style={draw=gray!65, rounded corners=2pt, align=center, minimum height=0.5cm, inner xsep=6pt, inner ysep=2pt},
+    data/.style={box, fill=gray!8, minimum width=1.85cm},
+    sample/.style={box, draw=cyan!65!black, fill=cyan!8, minimum width=2.05cm},
+    tree/.style={box, draw=green!45!black, fill=green!8, minimum width=1.45cm},
+    agg/.style={box, draw=orange!70!black, fill=orange!10, minimum width=1.65cm},
+    oobbox/.style={box, draw=red!60!black, fill=red!6, minimum width=1.75cm},
+    flow/.style={->, draw=black!75, line width=0.6pt},
+    oob/.style={->, dashed, draw=red!70!black, line width=0.6pt}
+]
+\node[data] (data) at (0,0) {training set};
+\node[sample] (s1) at (2.55,0.85) {bootstrap $S^{\ast 1}$};
+\node[sample] (s2) at (2.55,0) {bootstrap $S^{\ast 2}$};
+\node[sample] (s3) at (2.55,-0.85) {bootstrap $S^{\ast 3}$};
+
+\node[tree] (t1) at (5.05,0.85) {tree $T_1$};
+\node[tree] (t2) at (5.05,0) {tree $T_2$};
+\node[tree] (t3) at (5.05,-0.85) {tree $T_3$};
+\node[agg] (agg) at (7.35,0) {aggregate};
+
+\node[oobbox] (held) at (3.15,-1.6) {OOB obs. $i$};
+\node[oobbox] (oobavg) at (7.35,-1.6) {OOB prediction};
+
+\draw[flow] (data.north east) -- (s1.west);
+\draw[flow] (data.east) -- (s2.west);
+\draw[flow] (data.south east) -- (s3.west);
+\draw[flow] (s1.east) -- (t1.west);
+\draw[flow] (s2.east) -- (t2.west);
+\draw[flow] (s3.east) -- (t3.west);
+\draw[flow] (t1.east) -- (agg.north west);
+\draw[flow] (t2.east) -- (agg.west);
+\draw[flow] (t3.east) -- (agg.south west);
+
+\draw[oob] (held.north east) -- (t2.south west);
+\draw[oob] (held.east) -- (t3.south west);
+\draw[oob] (t2.south east) -- (oobavg.north west);
+\draw[oob] (t3.east) -- (oobavg.west);
+\end{tikzpicture}

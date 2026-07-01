@@ -3,29 +3,83 @@
 The migrated deep-feedforward-network notes describe neural networks as learned feature maps followed by prediction heads.
 
 \begin{definition} \label{def:sl-feedforward-network} \hlt{Deep Feedforward Network}\\
-A deep feedforward network represents a map
-\[
-f(x;\theta)=f_L\circ f_{L-1}\circ\cdots\circ f_1(x),
-\]
-where typical layers have the form
-\[
-h^{(k)}=g^{(k)}(W^{(k)}h^{(k-1)}+b^{(k)}).
-\]
-Training chooses parameters $\theta$ to make this map small-risk for a task.
+Let $x\in\mathcal X$, set $h^{(0)}=x$, and fix depth $L$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Layer recursion}: $h^{(k)}=g^{(k)}(W^{(k)}h^{(k-1)}+b^{(k)})$ for $k=1,\ldots,L$.
+\item \hlt{Network map}: $f_\theta:\mathcal X\to\mathcal Y$ is $f_\theta(x)=h^{(L)}=(f_L\circ\cdots\circ f_1)(x)$.
+\item \hlt{Parameters}: $\theta=\{(W^{(k)},b^{(k)})\}_{k=1}^L$.
+\item \hlt{Training objective}: choose $\theta$ to minimize empirical risk $\hat R_n(f_\theta)$ or population risk $R(f_\theta)$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-learned-feature-map} \hlt{Learned Feature Maps}\\
-Classical nonlinear prediction fixes a feature map $\phi(x)$ and learns a linear head.  Deep learning learns both the representation $\phi(x;\theta)$ and the head, usually losing convexity but gaining adaptable features.
+Let $\ell$ be the task loss and let $R(f)=\mathbb E[\ell(Y,f(X))]$. Two representation parametrizations are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{fixed features}: $f_w(x)=a_w(\phi(x))$, with $\phi$ fixed and only the head parameter $w$ optimized.
+\item \hlt{learned features}: $f_{\theta,w}(x)=a_w(\phi_\theta(x))$, with $\theta$ and $w$ optimized jointly.
+\end{enumerate}
+Learning $\phi_\theta$ adds adaptivity but usually destroys convexity.
 \end{remark}
 
-\begin{definition} \label{def:sl-output-and-hidden-units} \hlt{Output and Hidden Units}\\
-Linear output units model conditional means, sigmoid units parameterize Bernoulli probabilities, and softmax units parameterize distributions over finitely many classes.  Hidden units commonly use rectified linear, leaky rectified, maxout, hyperbolic tangent, or other nonlinear activations.
+\begin{definition} \label{def:sl-projection-pursuit-ridge-functions} \hlt{Projection Pursuit and Ridge Functions}\\
+Let $x\in\R^p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Projection-pursuit form}: $f(x)=\sum\limits_{m=1}^M g_m(\omega_m^Tx)$ with $\norm{\omega_m}_2=1$.
+\item \hlt{Ridge coordinate}: $u_m=\omega_m^Tx$.
+\item \hlt{Ridge function}: $g_m(u_m)$ depends on $x$ only through the scalar coordinate $u_m$.
+\item \hlt{Learned components}: the directions $\omega_m$ and univariate profiles $g_m$ are estimated from data.
+\end{enumerate}
 \end{definition}
 
+\begin{definition} \label{def:sl-output-and-hidden-units} \hlt{Output and Hidden Units}\\
+Let $T\in\R^K$ denote output scores. Common output parametrizations are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{linear}: $f_k(x)=T_k$, for conditional means or real-valued responses.
+\item \hlt{sigmoid}: $p(x)=\sigma(T)=\frac{1}{1+\exp(-T)}$, for Bernoulli probabilities.
+\item \hlt{softmax}: $p_k(x)=\exp(T_k)/\sum\limits_{\ell=1}^K\exp(T_\ell)$, for $K$-class probabilities.
+\end{enumerate}
+Hidden units define activations $Z_m=\phi_m(a_m)$ from preactivations $a_m$, commonly using ReLU, leaky ReLU, maxout, $\tanh$, or another nonlinear map.
+\end{definition}
+
+\begin{definition} \label{def:sl-single-hidden-layer-network} \hlt{Single Hidden Layer Network}\\
+Let $x\in\R^p$, $Z=(Z_1,\ldots,Z_M)^T$, $T=(T_1,\ldots,T_K)^T$. A single-hidden-layer feedforward network is defined by:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $Z_m=\sigma(\alpha_{0m}+\alpha_m^Tx)$ for $m=1,\ldots,M$.
+\item $T_k=\beta_{0k}+\beta_k^TZ$ for $k=1,\ldots,K$.
+\item $f_k(x)=g_k(T)$, with $g_k(T)=T_k$ for regression and $g_k(T)=\exp(T_k)/\sum\limits_{\ell=1}^K\exp(T_\ell)$ for $K$-class classification.
+\end{enumerate}
+In the classification case, $f(x)\in\Delta^{K-1}$.
+\end{definition}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/single_hidden_layer_network.tikz}
+\caption{Single-hidden-layer feedforward network.}
+\label{fig:sl-single-hidden-layer-network}
+\end{figure}
+
+\begin{remark} \label{rem:sl-neural-networks-as-ridge-expansions} \hlt{Neural Networks as Ridge Expansions}\\
+For scalar output, a one-hidden-layer network has $f(x)=\beta_0+\sum\limits_{m=1}^M\beta_m\sigma(\alpha_{0m}+\alpha_m^Tx)$.\\
+If $\alpha_m\ne0$ and $\omega_m=\frac{\alpha_m}{\norm{\alpha_m}_2}$, the $m$th term is $\beta_m\sigma(\alpha_{0m}+\norm{\alpha_m}_2\omega_m^Tx)$, a ridge term in coordinate $\omega_m^Tx$ with learned \hlt{direction} $\omega_m$, \hlt{scale} $\norm{\alpha_m}_2$, \hlt{threshold} $\alpha_{0m}$, and \hlt{output coefficient} $\beta_m$.\\
+Thus a shallow scalar network is a projection-pursuit expansion with parametrized ridge profiles.
+\end{remark}
+
 \begin{theorem} \label{thm:sl-universal-approximation-form} \hlt{Universal Approximation Theorem Form}\\
-A feedforward network with a linear output layer and at least one sufficiently wide hidden layer with a suitable non-polynomial activation can approximate every continuous function on a compact subset of $\R^d$ arbitrarily well in the uniform norm.
+For compact $K\subset\R^d$, $h\in C(K)$, non-polynomial activation $\sigma:\R\to\R$, $\forall \varepsilon>0$, $\exists$ $M\in\mathbb{N}$, $a_m,b_m\in\R$, $w_m\in\R^d$ s.t. one-hidden-layer network $f_M(x)=\sum\limits_{m=1}^M a_m\sigma(w_m^\top x+b_m)$ satisfies $\norm{f_M-h}_\infty<\varepsilon$ on $K$.
+\begin{proof} Let $\mathcal{A}_\sigma\defeq\operatorname{span}\{\sigma(w^\top x+b):w\in\R^d,\ b\in\R\}\subset C(K)$.\\
+The classical universal approximation theorem states that $\overline{\mathcal{A}_\sigma}^{\norm{\cdot}_\infty}=C(K)$ for suitable non-polynomial $\sigma$.\\
+Since $h\in C(K)$ and $\varepsilon>0$, there is $f_M\in\mathcal{A}_\sigma$ with $\norm{f_M-h}_\infty<\varepsilon$.\\
+Thus $f_M(x)=\sum\limits_{m=1}^M a_m\sigma(w_m^\top x+b_m)$ has one hidden layer and linear output.\\
+\hlt{Structural Commentary}: Non-polynomial activations make ridge spans dense in $C(K)$.\\
+\hlt{Key Insight}: Width supplies finite linear combinations of nonlinear ridge functions.
+\end{proof}
 \end{theorem}
 
 \begin{remark} \label{rem:sl-depth-expressivity} \hlt{Depth and Expressivity}\\
-Universal approximation is an existence result, not a training guarantee.  Depth can represent some compositional and piecewise-linear functions with far fewer units than a shallow network.
+Let $N_L(\varepsilon,h)$ be the minimum width of a depth-$L$ network with $\norm{f-h}_\infty\le\varepsilon$ on a compact domain. Universal approximation gives $N_L(\varepsilon,h)<\infty$, not trainability; depth expressivity is $N_L(\varepsilon,h)\ll N_{L'}(\varepsilon,h)$ for some $L>L'$.
 \end{remark}

@@ -3,17 +3,42 @@
 Deployment turns a fitted model into part of a larger stochastic system.
 
 \begin{definition} \label{def:sl-monitoring} \hlt{Monitoring}\\
-Monitoring tracks input distributions, prediction distributions, losses when labels arrive, calibration, latency, missingness, and operational failures.  It detects when the assumptions behind validation no longer hold.
+Given deployed $f$ and stream $Z_t=(X_t,\widehat Y_t,Y_t^\ast)$, monitoring outputs $(M_t,a_t)$ with $a_t\in\{0,1\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Distribution}: compare $P_t(X)$ and $P_t(\widehat Y)$ with validation baselines.
+\item \hlt{Performance}: estimate loss, calibration, and subgroup error when labels $Y_t^\ast$ arrive.
+\item \hlt{Operations}: track latency, missingness, failures, and data-pipeline changes.
+\end{enumerate}
+An alarm $a_t=1$ indicates that validation assumptions or service constraints may no longer hold.
 \end{definition}
 
 \begin{definition} \label{def:sl-feedback-loop} \hlt{Feedback Loop}\\
-A feedback loop occurs when model predictions influence the future data observed by the model.  Recommendation, credit, policing, and medical triage systems can all change their own training distribution.
+A deployed policy $A_t=\pi(f(X_t),H_t)$ is a \hlt{feedback loop} if $P(X_{t+1},Y_{t+1}\mid A_t)\ne P(X_{t+1},Y_{t+1})$.\\
+Future data are then endogenous to $f$.
 \end{definition}
 
 \begin{method} \label{method:sl-model-update-policy} \hlt{Model Update Policy}\\
-An update policy specifies when to retrain, what data are eligible, how to validate a replacement, and how to roll back.  It is part of the statistical procedure because it determines the data seen by future models.
+Given deployed $f_t$, data $\mathcal{D}_{\le t}$, and diagnostics $M_t$, a model update policy maps $f_t$ to $f_{t+1}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Trigger}: retrain only when a scheduled time, alarm $M_t$, or performance threshold calls for it.
+\item \hlt{Eligibility}: choose the data subset $\mathcal{D}_{\mathrm{upd}}\subseteq\mathcal{D}_{\le t}$ allowed for training.
+\item \hlt{Validation}: accept candidate $\widetilde f$ only if it passes the benchmark and safety criteria against $f_t$.
+\item \hlt{Deployment}: replace $f_t$ by $\widetilde f$ under a rollout plan and rollback rule.
+\end{enumerate}
+The policy determines future training data and evaluation conditions.
 \end{method}
 
 \begin{remark} \label{rem:sl-human-system-boundary} \hlt{Human-System Boundary}\\
-When a learning model supports human decisions, the deployed predictor is only one component.  The effective policy includes interfaces, incentives, overrides, monitoring, and accountability.
+For human-supported decisions, the deployed policy is $\pi=(f,I,A,O,M,G)$, not just predictor $f$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Interface}: $I$ determines what predictions, explanations, and uncertainty are shown.
+\item \hlt{Action rule}: $A$ maps model output and human input to decisions.
+\item \hlt{Override}: $O$ specifies when humans may ignore or modify $f$.
+\item \hlt{Monitoring}: $M$ tracks errors, drift, latency, and misuse.
+\item \hlt{Governance}: $G$ assigns review, audit, and accountability.
+\end{enumerate}
+System evaluation should target $\pi$ rather than $f$ alone.
 \end{remark}
