@@ -1,0 +1,56 @@
+\subsection{Graph Ranking and PageRank}
+
+Graph ranking turns link structure into a numerical importance score.  PageRank is a spectral example: a page receives weight from incoming links, and a link from an already important page contributes more than a link from an unimportant one.
+
+\begin{definition} \label{def:sl-pagerank-link-matrix} \hlt{PageRank Equations}\\
+For pages indexed by $\{1,\ldots,N\}$, define $L\in\{0,1\}^{N\times N}$ by $L_{ij}=1$ iff page $j$ links to page $i$, and set $c_j=\sum\limits_{i=1}^N L_{ij}$.\\
+Assume $c_j>0$ for all $j$ and fix $d\in(0,1)$.\\
+A \hlt{PageRank score vector} is $p=(p_1,\ldots,p_N)\in\mathbb{R}^N$ satisfying $p_i=(1-d)+d\sum\limits_{j=1}^N\frac{L_{ij}}{c_j}p_j$ for $i=1,\ldots,N$.
+\end{definition}
+
+\begin{proposition} \label{prop:sl-pagerank-normalization} \hlt{PageRank Normalization}\\
+Let $L\in\{0,1\}^{N\times N}$, $c_j=\sum\limits_{i=1}^N L_{ij}>0$, and $d\in(0,1)$.\\
+If $p\in\mathbb{R}^N$ satisfies $p_i=(1-d)+d\sum\limits_{j=1}^N\frac{L_{ij}}{c_j}p_j$ for $i=1,\ldots,N$, then $\sum\limits_{i=1}^Np_i=N$.
+\begin{proof} Let $P=\sum\limits_{i=1}^Np_i$. Summing over $i$ gives $P=N(1-d)+dP$, since $\sum\limits_{i=1}^NL_{ij}=c_j$.\\
+Hence $(1-d)P=N(1-d)$, so $P=N$.\\
+\hlt{Structural Commentary}: Column normalisation preserves total score up to the teleportation offset.\\
+\hlt{Key Insight}: Summing cancels the link structure because each column has mass $c_j$.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:sl-pagerank-eigenvector-form} \hlt{Eigenvector Form}\\
+Let $\mathbf{e}=(1,\ldots,1)^T$, $D_c=\operatorname{diag}(c_1,\ldots,c_N)$, and $A=(1-d)\frac{\mathbf{e}\mathbf{e}^T}{N}+dLD_c^{-1}$.
+The PageRank equations are $\mathbf{p}=A\mathbf{p}$ with $\mathbf{e}^T\mathbf{p}=N$. Since $\mathbf{e}^TA=\mathbf{e}^T$ and $A_{ij}\geq(1-d)/N>0$, $A$ is positive column-stochastic. Thus $\mathbf{p}$ is the positive eigenvector for eigenvalue $1$ normalized by $\mathbf{e}^T\mathbf{p}=N$, and $\mathbf{p}/N$ is the stationary distribution in column-vector convention.
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{PageRank by Power Iteration}
+\label{alg:sl-pagerank-power-iteration}
+\begin{algorithmic}
+\Require Link matrix $L$, positive outlink counts $c_j$, damping parameter $0<d<1$, initial vector $\mathbf{p}_0>0$
+\Ensure PageRank vector normalized by $\mathbf{e}^T\mathbf{p}=N$
+\State Form $A=(1-d)\mathbf{e}\mathbf{e}^T/N+dLD_c^{-1}$
+\Repeat
+\State $\mathbf{p}_k\gets A\mathbf{p}_{k-1}$
+\State $\mathbf{p}_k\gets N\mathbf{p}_k/(\mathbf{e}^T\mathbf{p}_k)$
+\Until{the iterates stabilize}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-pagerank-random-surfer-normalization} \hlt{Random-Surfer Normalization}\\
+The probability-scale normalization uses $\pi_i=(1-d)/N+d\sum\limits_{j=1}^N(L_{ij}/c_j)\pi_j$ and $\mathbf{e}^T\pi=1$.\\
+Equivalently, $p=N\pi$ satisfies the average-score form $\mathbf{e}^T\mathbf{p}=N$.\\
+Random-surfer form: follow an outgoing link with probability $d$; jump uniformly with probability $1-d$.
+\end{remark}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/pagerank_four_page_network.tikz}
+\caption{Four-page PageRank graph: $\widehat{\mathbf p}\approx(1.49,0.78,1.58,0.15)^T$.}
+\label{fig:sl-pagerank-four-page-network}
+\end{figure}
+
+\begin{example} \label{ex:sl-pagerank-four-page-network} \hlt{Four-Page Network}\\
+Let $d=0.85$, $L=\left(\begin{smallmatrix}0&0&1&0\\1&0&0&0\\1&1&0&1\\0&0&0&0\end{smallmatrix}\right)$, $\mathbf{c}=L^T\mathbf{e}=(2,1,1,1)^T$, and $D_c=\operatorname{diag}(\mathbf{c})$.\\
+Solving $\mathbf{p}=(1-d)\mathbf{e}+dLD_c^{-1}\mathbf{p}$ gives $\widehat{\mathbf{p}}=(1.49,0.78,1.58,0.15)^T$. Since $L_{4j}=0$ for all $j$, $\widehat p_4=1-d=0.15$.
+\end{example}
