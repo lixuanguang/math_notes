@@ -1,0 +1,75 @@
+\subsection{Latent Factor and Component Analysis}
+
+Latent factor methods model observed coordinates as mixtures of unobserved sources.  The main question is which structure makes the sources interpretable: covariance structure, statistical independence, or non-Gaussian projections.
+
+\begin{definition} \label{def:sl-factor-analysis-latent-model} \hlt{Factor Analysis}\\
+Let $X\in\mathbb{R}^p$ and $q<p$. A \hlt{factor-analysis model} is a representation $X=AS+\varepsilon$ with $A\in\mathbb{R}^{p\times q}$, $S\in\mathbb{R}^q$, $\varepsilon\in\mathbb{R}^p$, where: $\operatorname{Cov}(S)=I_q$, $\operatorname{Cov}(\varepsilon)=D_\varepsilon$ for diagonal $D_\varepsilon\in\mathbb{R}^{p\times p}$, and $\operatorname{Cov}(S,\varepsilon)=0$.\\
+The columns $a_1,\ldots,a_q$ of $A$ are the \hlt{factor loadings}, and $\Sigma\defeq\operatorname{Cov}(X)=AA^T+D_\varepsilon$.\\
+For any orthogonal $R\in\mathbb{R}^{q\times q}$, $(A,S)$ and $(AR^T,RS)$ yield the same $\Sigma$.\\
+Hence $(A,S)$ is identifiable only up to orthogonal rotation.
+\end{definition}
+
+\begin{definition} \label{def:sl-independent-component-analysis} \hlt{Independent Component Analysis}\\
+Let $X\in\mathbb{R}^p$. An \hlt{independent component model} is a representation $X=AS$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\in\mathbb{R}^{p\times p}$ is nonsingular.
+\item $S=(S_1,\ldots,S_p)^T\in\mathbb{R}^p$ has mutually independent components.
+\end{enumerate}
+If $X$ is whitened, then $\operatorname{Cov}(X)=I_p$ and $A$ may be taken orthogonal.\\
+ICA estimates orthogonal $A$ with $Y=A^TX$ approximately componentwise independent, typically via non-Gaussianity contrasts. Gaussian components are identifiable only up to orthogonal rotations.
+\end{definition}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/ica_rotation_non_gaussianity.tikz}
+\caption{\textcolor{red!75!black}{$v_1,v_2$}: PCA variance axes; \textcolor{blue!70!black}{$a_1,a_2$}: ICA rotation exposing independent non-Gaussian coordinates.}
+\label{fig:sl-ica-rotation-nongaussianity}
+\end{figure}
+
+\begin{method} \label{meth:sl-ica-entropy-view} \hlt{Entropy View of ICA}\\
+For a density $g$, define $H(g)=-\int g(y)\log g(y)\,dy$.\\
+Let $Y=(Y_1,\ldots,Y_p)$ have joint density $g_Y$ and marginal densities $g_j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $H(Y)\defeq H(g_Y)$, $H(Y_j)\defeq H(g_j)$, and $I(Y)\defeq\sum_{j=1}^pH(Y_j)-H(Y)$.\\
+Then $I(Y)\ge0$, with $I(Y)=0$ iff $Y_1,\ldots,Y_p$ are independent.
+\item If $X$ is whitened, $A$ is orthogonal, and $Y=A^TX$, then $H(Y)=H(X)$.\\
+Hence minimising $I(Y)$ over orthogonal $A$ is equivalent to minimising $\sum_{j=1}^pH(Y_j)$.
+\item Replace marginal-entropy minimisation by marginal non-Gaussianity maximisation,\\
+e.g. through negentropy contrasts, since Gaussian marginals maximise entropy at fixed variance.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:sl-projection-pursuit-and-ica} \hlt{Projection Pursuit and ICA}\\
+Projection pursuit optimizes a non-Gaussianity index over $Y=a^TX$ or $Y=(a_1^TX,a_2^TX)$.\\
+ICA uses the same type of index on $Y_j=a_j^TX$, but imposes an orthogonal system $(a_1,\ldots,a_p)$ after whitening.
+\end{remark}
+
+\begin{method} \label{meth:sl-product-density-ica} \hlt{Product-Density ICA}\\
+For whitened $X\in\mathbb{R}^p$ and orthogonal $A\in\mathbb{R}^{p\times p}$, set $Y=A^TX$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Assume the product density $f_Y(y)=\prod_{j=1}^pf_j(y_j)$.
+\item Parameterize each marginal density by $f_j(s)=\phi(s)\exp(g_j(s))$ with $\int\phi(s)\exp(g_j(s))\,ds=1$.
+\item Estimate $A,g_1,\ldots,g_p$ by penalized likelihood subject to $A^TA=I$.\\
+For fixed $A$, the objective decomposes into $p$ one-dimensional smooth density fits.
+\end{enumerate}
+The roughness penalty shrinks $g_j$ toward $0$, the Gaussian baseline $\phi$.
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Product-Density ICA Alternation}
+\label{alg:sl-product-density-ica}
+\begin{algorithmic}
+\Require Whitened observations $x_1,\ldots,x_n$, initial orthogonal matrix $A$
+\Ensure Orthogonal unmixing matrix $A$ and components $s_{ij}=a_j^Tx_i$
+\Repeat
+\For{each component $j$}
+\State Fit a smooth tilted-Gaussian density $f_j(s)=\phi(s)\exp(g_j(s))$ to the current scores $a_j^Tx_i$
+\State Update $a_j\gets \mathbb{E}\{Xg_j'(a_j^TX)\}-\mathbb{E}\{g_j''(a_j^TX)\}a_j$
+\EndFor
+\State Orthogonalize $A$: if $A=UDV^T$ is its SVD, set $A\gets UV^T$
+\Until{the directions stabilize}
+\end{algorithmic}
+\end{breakablealgorithm}
