@@ -3,17 +3,43 @@
 Generative modeling learns distributions, simulators, or conditional samplers rather than only point predictions.
 
 \begin{definition} \label{def:sl-latent-variable-generative-model} \hlt{Latent-Variable Generative Model}\\
-A latent-variable model samples $Z\sim p(z)$ and then $X\sim p_{\theta}(x\mid z)$.  Learning fits $\theta$ so the marginal $p_{\theta}(x)=\int p_{\theta}(x\mid z)p(z)\,dz$ matches the data distribution.
+Let $Z\in\mathcal Z$, $X\in\mathcal X$, prior $p(z)$, decoder $p_\theta(x\mid z)$, and data law $P_{\rm data}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Joint law}: $p_\theta(x,z)\defeq p_\theta(x\mid z)p(z)$.
+\item \hlt{Marginal law}: $p_\theta(x)\defeq\int_{\mathcal Z}p_\theta(x\mid z)p(z)\,dz$.
+\item \hlt{Learning}: choose $\theta$ so $p_\theta$ approximates $P_{\rm data}$, e.g. by maximizing $\sum_{i=1}^n\log p_\theta(x_i)$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:sl-variational-autoencoder} \hlt{Variational Autoencoder}\\
-A variational autoencoder combines a decoder $p_{\theta}(x\mid z)$ with an encoder $q_{\phi}(z\mid x)$ and maximizes an evidence lower bound consisting of reconstruction and latent regularization terms.
+For prior $p(z)$, decoder $p_\theta(x\mid z)$, encoder $q_\phi(z\mid x)$, and data $\{x_i\}_{i=1}^n$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Generative model}: $p_\theta(x,z)\defeq p_\theta(x\mid z)p(z)$.
+\item \hlt{Variational posterior}: $q_\phi(z\mid x)$ approximates $p_\theta(z\mid x)$.
+\item \hlt{ELBO}: $\mathcal L(\theta,\phi;x)\defeq\mathbb{E}_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]-\operatorname{KL}(q_\phi(z\mid x)\|p(z))$.
+\item \hlt{Training}: maximize $\sum_{i=1}^n\mathcal L(\theta,\phi;x_i)$ over $(\theta,\phi)$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:sl-generative-adversarial-network} \hlt{Generative Adversarial Network}\\
-A generative adversarial network trains a generator against a discriminator that tries to distinguish generated samples from data.  The game defines a learned discrepancy between distributions.
+Let $Z\sim p_Z$, data law $P_{\rm data}$, generator $G_\theta:\mathcal Z\to\mathcal X$, and discriminator $D_\psi:\mathcal X\to(0,1)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Generator}: $G_\theta$ induces $P_\theta\defeq(G_\theta)_\#p_Z$ on $\mathcal X$.
+\item \hlt{Discriminator}: $D_\psi(x)$ estimates the probability that $x\sim P_{\rm data}$ rather than $x\sim P_\theta$.
+\item \hlt{Adversarial game}: $\min_\theta\max_\psi\mathbb{E}_{x\sim P_{\rm data}}\log D_\psi(x)+\mathbb{E}_{z\sim p_Z}\log(1-D_\psi(G_\theta(z)))$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:sl-diffusion-model} \hlt{Diffusion Model}\\
-A diffusion model corrupts data through a noising process and learns a reverse denoising process.  Sampling starts from noise and iteratively applies learned denoising transitions.
+Let $X_0\sim P_{\rm data}$ and $X_0,\ldots,X_T$ be a Markov chain on $\mathcal X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Forward noising}: fixed kernels $q_t(x_t\mid x_{t-1})$ define $q(x_{1:T}\mid x_0)=\prod_{t=1}^Tq_t(x_t\mid x_{t-1})$.
+\item \hlt{Reverse model}: learned kernels $p_\theta(x_{t-1}\mid x_t)$ define $p_\theta(x_{0:T})=p_T(x_T)\prod_{t=1}^Tp_\theta(x_{t-1}\mid x_t)$.
+\item \hlt{Training}: fit $\theta$ so $p_\theta(x_{t-1}\mid x_t)$ approximates the reverse conditionals of $q$.
+\item \hlt{Sampling}: draw $X_T\sim p_T$ and iterate $X_{t-1}\sim p_\theta(\cdot\mid X_t)$ for $t=T,\ldots,1$.
+\end{enumerate}
 \end{definition}
