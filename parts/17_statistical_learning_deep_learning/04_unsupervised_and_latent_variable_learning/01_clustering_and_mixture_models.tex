@@ -1,28 +1,220 @@
 \subsection{Clustering and Mixture Models}
 
-Unsupervised learning searches for structure in inputs without direct labels.  Clustering is the simplest form of latent assignment.
+Unsupervised learning searches for structure in inputs without direct labels or a direct prediction loss.  Clustering summarizes the input distribution by grouping observations, while mixture models replace hard groups by latent component probabilities.
 
 \begin{definition} \label{def:sl-kmeans-objective} \hlt{$k$-Means Clustering}\\
-Given data $x_1,\ldots,x_n\in\R^d$, $k$-means chooses centers $\mu_1,\ldots,\mu_k$ and assignments $c_i\in\{1,\ldots,k\}$ to minimize
-\[
-\sum_{i=1}^n\norm{x_i-\mu_{c_i}}_2^2.
-\]
+Let $x_1,\ldots,x_n\in\R^d$ and $k\in\{1,\ldots,n\}$. Put $\mathcal C=\{C:\{1,\ldots,n\}\to\{1,\ldots,k\}\}$, $\mathcal M=(\R^d)^k$,\\
+$I_r(C)=\{i:C(i)=r\}$, and, for $m=(m_1,\ldots,m_k)$, $\Phi(C,m)=\sum\limits_{r=1}^k\sum\limits_{i\in I_r(C)}\norm{x_i-m_r}_2^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{$k$-means solution} is any $(C^\star,m^\star)\in\operatorname*{arg\,min}\limits_{C\in\mathcal C,\,m\in\mathcal M}\Phi(C,m)$.
+\item Its \hlt{clusters} are $I_r^\star=I_r(C^\star)$, $r=1,\ldots,k$.
+\item For fixed $C$, a \hlt{minimizing center} is $m_r=|I_r(C)|^{-1}\sum\limits_{i\in I_r(C)}x_i$ if $I_r(C)\neq\varnothing$, and arbitrary if $I_r(C)=\varnothing$.
+\item For fixed $m$, a \hlt{minimizing assignment} satisfies $C(i)\in\operatorname*{arg\,min}\limits_{1\leq r\leq k}\norm{x_i-m_r}_2^2$ for each $i$.
+\end{enumerate}
 \end{definition}
+
+\begin{definition} \label{def:sl-clustering-dissimilarity} \hlt{Object Dissimilarities}\\
+Let $x_1,\ldots,x_n$ be objects and let $d_{ii'}=d(x_i,x_{i'})$; when attributes are used, write $x_i=(x_{i1},\ldots,x_{ip})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{dissimilarity matrix} is $D=(d_{ii'})\in[0,\infty)^{n\times n}$ with $d_{ii}=0$ and $d_{ii'}=d_{i'i}$; directional inputs $a_{ii'}$ are symmetrized by $d_{ii'}=s(a_{ii'},a_{i'i})$, where $s:[0,\infty)^2\to[0,\infty)$ and $s(u,v)=s(v,u)$.
+\item Given $d_j$ and $w_j\geq0$ with $\sum\limits_{j=1}^p w_j=1$, the \hlt{additive dissimilarity} is $d(x_i,x_{i'})=\sum\limits_{j=1}^p w_jd_j(x_{ij},x_{i'j})$.
+\item \hlt{Coordinate rules}: quantitative $d_j(a,b)=|a-b|$ or $(a-b)^2$; ordinal $r\mapsto(r-1/2)/M$ for $r=1,\ldots,M$; categorical $d_j(a,b)=L_j(a,b)$ with $L_j(a,a)=0$ and $L_j(a,b)\geq0$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:sl-clustering-weights-and-missingness} \hlt{Weights and Missing Values}\\
+For $d(x_i,x_{i'})=\sum\limits_{j=1}^p w_jd_j(x_{ij},x_{i'j})$, the empirical scale of coordinate $j$ is $\bar d_j=\binom{n}{2}^{-1}\sum\limits_{i<i'}d_j(x_{ij},x_{i'j})$, so its effective contribution is $w_j\bar d_j$. If $O_{ii'}\subseteq\{1,\ldots,p\}$ is the nonempty set of coordinates observed for both $x_i$ and $x_{i'}$, pairwise deletion uses $d(x_i,x_{i'})=\sum\limits_{j\in O_{ii'}}\tilde w_{j,ii'}d_j(x_{ij},x_{i'j})$ with $\tilde w_{j,ii'}=w_j/\sum\limits_{\ell\in O_{ii'}}w_\ell$.\\
+Alternatives are imputed values $\tilde x_{ij}$ before computing $d$ or an added categorical level $\mathtt{missing}$.
+\end{remark}
+
+\begin{definition} \label{def:sl-clustering-within-between-scatter} \hlt{Within- and Between-Cluster Scatter}\\
+Fix $k\in\{1,\ldots,n\}$ and a symmetric dissimilarity matrix $D=(d_{ii'})$.\\
+Let $\mathcal C_k=\{C:\{1,\ldots,n\}\to\{1,\ldots,k\}\}$ and $I_r(C)=\{i:C(i)=r\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{within-cluster scatter} is $W(C)=\frac{1}{2}\sum\limits_{r=1}^k\sum\limits_{i\in I_r(C)}\sum\limits_{i'\in I_r(C)}d_{ii'}$ for $C\in\mathcal C_k$.
+\item The \hlt{total scatter} is $T=\frac{1}{2}\sum\limits_{i=1}^n\sum\limits_{i'=1}^n d_{ii'}$.
+\item The \hlt{between-cluster scatter} is $B(C)=T-W(C)$ for $C\in\mathcal C_k$.
+\end{enumerate}
+As $T$ is fixed, $\operatorname*{arg\,min}\limits_{C\in\mathcal C_k}W(C)=\operatorname*{arg\,max}\limits_{C\in\mathcal C_k}B(C)$.
+\end{definition}
+
+\begin{breakablealgorithm}
+\caption{$k$-Means Alternating Minimization}
+\label{alg:sl-kmeans-alternating-minimization}
+\begin{algorithmic}
+\Require Data $x_1,\ldots,x_n\in\R^d$, number of clusters $k$, initial centers or assignments
+\Ensure Cluster assignments $C(i)$ and centers $m_1,\ldots,m_k$
+\Repeat
+\State Given assignments, set each $m_r$ to the mean of the observations with $C(i)=r$
+\State Given centers, assign each observation by $C(i)\gets \operatorname*{arg\,min}_{1\leq r\leq k}\norm{x_i-m_r}_2^2$
+\Until{the assignments no longer change}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{proposition} \label{prop:sl-kmeans-descent-local-minima} \hlt{$k$-Means Descent and Local Minima}\\
+Let $\mathcal C=\{C:\{1,\ldots,n\}\to\{1,\ldots,k\}\}$, $\mathcal M=(\R^d)^k$, and $\Phi(C,m)=\sum\limits_{r=1}^k\sum\limits_{i:C(i)=r}\norm{x_i-m_r}_2^2$.\\
+Suppose $(C^t,m^t)\in\mathcal C\times\mathcal M$ satisfies $m^{t+1}\in\operatorname*{arg\,min}\limits_{m\in\mathcal M}\Phi(C^t,m)$ and $C^{t+1}\in\operatorname*{arg\,min}\limits_{C\in\mathcal C}\Phi(C,m^{t+1})$ for each $t$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The objective is nonincreasing: $\Phi(C^{t+1},m^{t+1})\leq\Phi(C^t,m^t)$.
+\item If $C^{t+1}=C^t=C^\star$ and $m^{t+1}=m^t=m^\star$, then $(C^\star,m^\star)$ is coordinatewise minimal:\\
+$m^\star\in\operatorname*{arg\,min}\limits_{m\in\mathcal M}\Phi(C^\star,m)$ and $C^\star\in\operatorname*{arg\,min}\limits_{C\in\mathcal C}\Phi(C,m^\star)$.
+\end{enumerate}
+Coordinatewise minimal need not be global; compare initialisations by terminal $\Phi$.
+\end{proposition}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By the center update, $\Phi(C^t,m^{t+1})\leq\Phi(C^t,m^t)$. By the assignment update, $\Phi(C^{t+1},m^{t+1})\leq\Phi(C^t,m^{t+1})$. Combining gives the claim.
+\item At a fixed point, $C^{t+1}=C^t=C^\star$ and $m^{t+1}=m^t=m^\star$ in the two update inclusions, giving the two coordinatewise optimality conditions.
+\end{enumerate}
+\hlt{Structural Commentary}: Exact block minimization forces descent.\\
+\hlt{Key Insight}: A stopped run certifies blockwise, not global, optimality.
+\end{proof}
+
+\begin{breakablealgorithm}
+\caption{$k$-Medoids Alternating Representatives}
+\label{alg:sl-kmedoids-alternating-representatives}
+\begin{algorithmic}
+\Require Pairwise dissimilarities $D(x_i,x_{i'})$, number of clusters $k$, initial assignments
+\Ensure Cluster assignments $C(i)$ and representative indices $i_1^\star,\ldots,i_k^\star$
+\Repeat
+\For{$r=1,\ldots,k$}
+\State Set $i_r^\star\gets \operatorname*{arg\,min}_{i:\,C(i)=r}\sum_{C(i')=r}D(x_i,x_{i'})$
+\EndFor
+\State Assign each observation by $C(i)\gets \operatorname*{arg\,min}_{1\leq r\leq k}D(x_i,x_{i_r^\star})$
+\Until{the assignments no longer change}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-kmedoids-versus-kmeans} \hlt{$k$-Medoids Versus $k$-Means}\\
+Fix an assignment $C$ and write $I_r=\{i:C(i)=r\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{$k$-means}: $m_r\in\operatorname*{arg\,min}\limits_{m\in\R^d}\sum\limits_{i\in I_r}\norm{x_i-m}_2^2$, hence $m_r=|I_r|^{-1}\sum\limits_{i\in I_r}x_i$ when $I_r\neq\varnothing$.
+\item \hlt{$k$-medoids}: $i_r^\star\in\operatorname*{arg\,min}\limits_{i\in I_r}\sum\limits_{i'\in I_r}D(x_i,x_{i'})$, with representative $x_{i_r^\star}$.
+\end{enumerate}
+$k$-medoids only requires pairwise dissimilarities and keeps representatives inside the data set.\\
+Its representative update is usually costlier than the $k$-means empirical mean.
+\end{remark}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/clustering_centroids_medoids_voronoi.tikz}
+\caption{Open squares are centroids, circled points are medoids, the dashed line is nearest-center boundary.}
+\label{fig:sl-clustering-centroids-medoids}
+\end{figure}
+
+\begin{method} \label{meth:sl-hierarchical-clustering} \hlt{Hierarchical Clustering and Linkage}\\
+Given dissimilarities $d_{ii'}$ and a linkage $L(G,H)$ between nonempty groups, agglomerative hierarchical clustering constructs nested partitions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Initialize $\mathcal P_0=\{\{1\},\ldots,\{n\}\}$.
+\item At step $t$, choose distinct $G,H\in\mathcal P_t$ minimizing $L(G,H)$.
+\item Set $\mathcal P_{t+1}=(\mathcal P_t\setminus\{G,H\})\cup\{G\cup H\}$ and record merge height $L(G,H)$.
+\item Stop at $\mathcal P_{n-1}=\{\{1,\ldots,n\}\}$.
+\end{enumerate}
+For groups $G,H$ with sizes $N_G,N_H$, common linkages are
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Single}: $L_{\mathrm{SL}}(G,H)=\min\limits_{i\in G,\,i'\in H}d_{ii'}$.
+\item \hlt{Complete}: $L_{\mathrm{CL}}(G,H)=\max\limits_{i\in G,\,i'\in H}d_{ii'}$.
+\item \hlt{Group average}: $L_{\mathrm{GA}}(G,H)=(N_GN_H)^{-1}\sum\limits_{i\in G}\sum\limits_{i'\in H}d_{ii'}$.
+\end{enumerate}
+Recorded merges form a dendrogram; divisive clustering reverses the process by recursive splits.
+\end{method}
+
+\begin{remark} \label{rem:sl-clustering-practical-choices} \hlt{Choosing the Number of Clusters}\\
+For $k$-means or $k$-medoids, choose $k$ and an initialisation. Let $W_k$ be terminal within-cluster scatter.\\
+The elbow diagnostic inspects $k\mapsto W_k$; the gap statistic uses $G(k)=\mathbb{E}_0[\log W_k]-\log W_k$, where $\mathbb{E}_0$ is under a reference distribution on the data range.\\
+With simulation standard error $s'_{k+1}$, one rule is $\widehat{k}=\min\{k:G(k)\geq G(k+1)-s'_{k+1}\}$.\\
+This formalises the bend comparison but remains heuristic.
+\end{remark}
+
+\begin{remark} \label{rem:sl-dendrogram-cophenetic-distances} \hlt{Dendrograms and Cophenetic Distances}\\
+For dendrogram merge height $h_T(i,i')$, the cut at height $a$ partitions observations by $i\sim_a i'$ iff $h_T(i,i')\leq a$.\\
+The cophenetic dissimilarity is $C_{ii'}=h_T(i,i')$, the first height at which $i$ and $i'$ share a cluster.\\
+It is ultrametric: $C_{ii'}\leq\max\{C_{ih},C_{i'h}\}$. Thus a dendrogram is an algorithmic hierarchical summary, not an exact representation of arbitrary input dissimilarities.
+\end{remark}
+
+\begin{method} \label{meth:sl-self-organizing-map} \hlt{Self-Organizing Map}\\
+A self-organizing map uses prototypes $m_1^t,\ldots,m_q^t\in\R^p$ indexed by grid locations $\ell_1,\ldots,\ell_q\in\mathcal Q_1\times\mathcal Q_2$.\\
+Let $\alpha_t>0$ and $h_t:[0,\infty)\to[0,1]$ be the learning rate and neighborhood kernel.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Select an observation $x_i$.
+\item Find a winner $j_t\in\operatorname*{arg\,min}\limits_{1\leq j\leq q}\norm{x_i-m_j^t}_2^2$.
+\item Update every prototype by $m_k^{t+1}=m_k^t+\alpha_t h_t(\norm{\ell_{j_t}-\ell_k}_2)(x_i-m_k^t)$, $k=1,\ldots,q$.
+\item Increment $t$ and repeat until the stopping rule or schedule terminates.
+\end{enumerate}
+A common kernel is $h_t(s)=\mathbf{1}_{s\leq r_t}$ with decreasing radius $r_t$.\\
+Early large neighborhoods enforce grid smoothness; if $h_t(s)=\mathbf{1}_{s=0}$, the method reduces to online $k$-means.
+\end{method}
+
+\begin{remark} \label{rem:sl-som-reconstruction-check} \hlt{Checking the Topological Constraint}\\
+For $q$ prototypes, compare $E_{\mathrm{SOM}}=\sum\limits_i\norm{x_i-m_{C(i)}}_2^2$ with the $q$-means optimum $E_q^\star=\min\limits_{C,m}\sum\limits_i\norm{x_i-m_{C(i)}}_2^2$.\\
+Since $E_q^\star\leq E_{\mathrm{SOM}}$, a large gap $E_{\mathrm{SOM}}-E_q^\star$ indicates an overly restrictive lattice constraint.
+\end{remark}
+
+\begin{method} \label{meth:sl-spectral-clustering} \hlt{Spectral Clustering}\\
+Given weights $w_{ii'}\geq0$, set $W=(w_{ii'})$, $g_i=\sum\limits_{i'=1}^n w_{ii'}$, $G=\operatorname{diag}(g_i)$, and $L=G-W$.\\
+Often $w_{ii'}=s_{ii'}=\exp(-\frac{\norm{x_i-x_{i'}}_2^2}{c})$ (restricted to mutual nearest-neighbor edges). For target $k$ clusters:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Construct $W$, $G$, and the Laplacian $L$.
+\item Compute eigenvectors $u_1,\ldots,u_k$ for the $k$ smallest nontrivial eigenvalues of $L$.
+\item Form $U=(u_1,\ldots,u_k)\in\R^{n\times k}$ and represent observation $i$ by row $U_{i\cdot}$.
+\item Cluster the rows $U_{i\cdot}$ into $k$ groups, typically by $k$-means.
+\end{enumerate}
+$f^TLf=\frac{1}{2}\sum\limits_{i=1}^n\sum\limits_{i'=1}^n w_{ii'}(f_i-f_{i'})^2$, so small-eigenvalue directions are smooth across high-weight edges.
+\end{method}
+
+\begin{remark} \label{rem:sl-spectral-clustering-random-walk-view} \hlt{Connected Components and Random Walks}\\
+Let $L=G-W$ and, when $g_i>0$, $P=G^{-1}W$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If the graph has components $A_1,\ldots,A_m$, then $\ker L=\operatorname{span}\{\mathbf{1}_{A_1},\ldots,\mathbf{1}_{A_m}\}$.
+\item The matrix $P$ is a random-walk transition matrix.\\
+A good spectral cluster $A$ has large within-set transition mass $\sum\limits_{i\in A}\sum\limits_{i'\in A}P_{ii'}$ and small cross-set mass.
+\end{enumerate}
+Nearly separated clusters replace exact zero eigenvalues by small eigenvalues.
+\end{remark}
 
 \begin{definition} \label{def:sl-finite-mixture-model} \hlt{Finite Mixture Model}\\
-A finite mixture has density
-\[
-p(x)=\sum_{z=1}^k\pi_z p_z(x;\theta_z),
-\qquad
-\pi_z\geq0,\quad \sum_{z=1}^k\pi_z=1,
-\]
-where the component label $Z$ is latent.
+Let $Z\in\{1,\ldots,k\}$ be latent with $\mathbb P(Z=z)=\pi_z$, $\pi_z\geq0$, and $\sum\limits_{z=1}^k\pi_z=1$.\\
+Given component densities $p_z(\cdot;\theta_z)$, the marginal density is $p(x)=\sum\limits_{z=1}^k\pi_zp_z(x;\theta_z)$.
 \end{definition}
 
+\begin{definition} \label{def:sl-mixture-responsibilities} \hlt{Mixture Responsibilities}\\
+For fitted $(\widehat{\pi}_m,\widehat{\theta}_m)_{m=1}^k$, define $\widehat r_{im}=\widehat{\mathbb P}(Z_i=m\mid x_i)=\widehat{\pi}_m p_m(x_i;\widehat{\theta}_m)\left(\sum\limits_{\ell=1}^k\widehat{\pi}_\ell p_\ell(x_i;\widehat{\theta}_\ell)\right)^{-1}$.\\
+Then $\widehat r_i$ is soft membership and $\widehat C(i)\in\operatorname*{arg\,max}\limits_{1\leq m\leq k}\widehat r_{im}$ is a hard assignment.
+\end{definition}
+
+\begin{remark} \label{rem:sl-mixtures-density-classification} \hlt{Mixtures as Density Estimates}\\
+Gaussian mixtures give flexible density estimates $p(x)=\sum\limits_{m=1}^k\pi_m\phi(x;\mu_m,\Sigma_m)$. If class-conditional mixtures $\widehat p_g(x)$ and class priors $\widehat\pi_g$ are fit separately, the Bayes classifier is $\widehat g(x)\in\operatorname*{arg\,max}\limits_g\widehat\pi_g\widehat p_g(x)$.\\
+Without labels, component-label agreement is discovered structure, not supervised training.
+\end{remark}
+
+\begin{remark} \label{rem:sl-gaussian-mixtures-soft-kmeans} \hlt{Gaussian Mixtures as Soft $k$-Means}\\
+For $p_m(x)=\phi(x;\mu_m,\sigma^2I)$, the responsibility is $r_{im}=\pi_m\exp(-\frac{\norm{x_i-\mu_m}_2^2}{2\sigma^2})\left(\sum\limits_{\ell=1}^k\pi_\ell\exp(-\frac{\norm{x_i-\mu_\ell}_2^2}{2\sigma^2})\right)^{-1}$.\\
+Thus $r_{im}$ is distance-weighted; as $\sigma^2\downarrow0$, it concentrates on nearest centers, yielding hard $k$-means assignments.
+\end{remark}
+
 \begin{method} \label{method:sl-em-algorithm} \hlt{Expectation-Maximization}\\
-The EM algorithm alternates between computing posterior responsibilities for latent variables under current parameters and maximizing the expected complete-data log-likelihood.  It is a coordinate ascent method for likelihood lower bounds.
+Given $x_{1:n}$ and $p(x)=\sum\limits_{m=1}^k\pi_mp_m(x;\theta_m)$, set $\ell(\pi,\theta)=\sum\limits_{i=1}^n\log(\sum\limits_{m=1}^k\pi_mp_m(x_i;\theta_m))$. EM alternates:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{E-step}: compute $r_{im}=\frac{\pi_mp_m(x_i;\theta_m)}{\sum\limits_{\ell=1}^k\pi_\ell p_\ell(x_i;\theta_\ell)}$.
+\item \hlt{M-step}: update $\pi_m^{\mathrm{new}}=n^{-1}\sum\limits_{i=1}^n r_{im}$ and $\theta_m^{\mathrm{new}}\in\operatorname*{arg\,max}\limits_{\theta_m}\sum\limits_{i=1}^n r_{im}\log p_m(x_i;\theta_m)$.
+\end{enumerate}
+For Gaussian components, the M-step gives weighted means and variances or covariances.\\
+With an exact M-step, $\ell$ is nondecreasing, but convergence may be to a local maximum.
 \end{method}
 
 \begin{remark} \label{rem:sl-clustering-identifiability} \hlt{Identifiability}\\
-Mixture components are identifiable only up to label permutations.  This is a benign symmetry for density estimation but important when interpreting clusters.
+For any permutation $\tau$ of $\{1,\ldots,k\}$, $\sum\limits_{m=1}^k\pi_mp_m(x;\theta_m)=\sum\limits_{m=1}^k\pi_{\tau(m)}p_{\tau(m)}(x;\theta_{\tau(m)})$.\\
+Thus labels are identifiable only up to permutation: density is invariant, component interpretation is not.
 \end{remark}
