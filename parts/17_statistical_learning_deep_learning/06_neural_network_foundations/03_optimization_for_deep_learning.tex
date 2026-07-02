@@ -7,39 +7,16 @@ For data $(x_i,y_i)_{i=1}^n$, network $f_\theta:x\mapsto f(x;\theta)$, loss $L$,
 The population objective is $J(\theta)=\mathbb E[L(f_\theta(X),Y)]$ under the data-generating law.
 \end{definition}
 
-\begin{method} \label{method:sl-sgd-minibatch} \hlt{Minibatch Stochastic Gradient Descent}\\
-Let $J_n(\theta)=n^{-1}\sum\limits_{i=1}^nL(f_\theta(x_i),y_i)$, $|B_k|=b$, and $\eta_k>0$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Sample $B_k$ uniformly.
-\item Compute $g_k=b^{-1}\sum_{i\in B_k}\nabla_{\theta}L(f_{\theta_k}(x_i),y_i)$.
-\item Update $\theta_{k+1}=\theta_k-\eta_kg_k$.
-\end{enumerate}
-Uniform sampling gives $\mathbb E[g_k\mid\theta_k]=\nabla J_n(\theta_k)$; larger $b$ trades lower noise for higher cost.
-\end{method}
-
-\begin{definition} \label{def:sl-momentum-adaptive-methods} \hlt{Momentum and Adaptive Methods}\\
-Let $g_k$ denote the stochastic gradient at $\theta_k$; $\odot$, division, and square roots are coordinatewise.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Momentum}: $v_k=\mu v_{k-1}+g_k$ and $\theta_{k+1}=\theta_k-\eta_kv_k$, with $0\leq\mu<1$.
-\item \hlt{AdaGrad}: $r_k=r_{k-1}+g_k\odot g_k$ and $\theta_{k+1}=\theta_k-\frac{\eta_kg_k}{\sqrt{r_k}+\varepsilon}$.
-\item \hlt{RMSProp}: $r_k=\rho r_{k-1}+(1-\rho)g_k\odot g_k$ and $\theta_{k+1}=\theta_k-\frac{\eta_kg_k}{\sqrt{r_k}+\varepsilon}$, with $0<\rho<1$.
-\item \hlt{Adam}: update $(m_k,r_k)$ as exponential averages of $(g_k,g_k\odot g_k)$,\\
-set $(\widehat m_k,\widehat r_k)=(\frac{m_k}{1-\beta_1^k},\frac{r_k}{1-\beta_2^k})$, and $\theta_{k+1}=\theta_k-\frac{\eta_k\widehat m_k}{\sqrt{\widehat r_k}+\varepsilon}$.
-\end{enumerate}
-\end{definition}
-
-\begin{remark} \label{rem:sl-second-order-methods} \hlt{Second-Order Methods}\\
-Let $J:\R^d\to\R$, $g_k=\nabla J(\theta_k)$, and $H_k=\nabla^2J(\theta_k)$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Newton}: choose $p_k$ from $H_kp_k=-g_k$ and set $\theta_{k+1}=\theta_k+\eta_kp_k$.
-\item \hlt{Conjugate gradient}: solve $H_kp=-g_k$ approximately using only products $H_kv$.
-\item \hlt{BFGS/L-BFGS}: use $p_k=-B_kg_k$, where $B_k\approx H_k^{-1}$; L-BFGS stores few curvature pairs.
-\end{enumerate}
-Large networks make explicit $H_k$ storage or factorization prohibitive, so these methods usually act as preconditioners, curvature approximations, or analysis tools.
-\end{remark}
+\begin{breakablealgorithm}
+\caption{Minibatch Backpropagation Step}
+\begin{algorithmic}
+\Require Minibatch $B$, parameters $\theta$, learning rate $\eta$
+\State Compute predictions $f(x;\theta)$ for all $(x,y)\in B$
+\State Compute minibatch loss $\widehat{L}_B(\theta)$
+\State Run reverse-mode automatic differentiation to compute $g=\nabla_{\theta}\widehat{L}_B(\theta)$
+\State Update parameters $\theta \leftarrow \theta-\eta g$
+\end{algorithmic}
+\end{breakablealgorithm}
 
 \begin{remark} \label{rem:sl-deep-optimization-challenges} \hlt{Deep Optimization Challenges}\\
 For empirical loss $J_n(\theta)$, deep optimization is shaped by:
