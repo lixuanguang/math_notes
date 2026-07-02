@@ -2,6 +2,12 @@
 
 Except in conjugate models, posterior summaries are integrals that usually require approximation.  Monte Carlo and optimization methods from numerical computation become statistical tools here.
 
+\begin{remark} \label{rem:bayesian-integrals-motivate-simulation} \hlt{Bayesian Integrals as a Motivation}\\
+For prior density $\pi(\theta)$ and likelihood $\mathcal{L}(\theta)$, write $Z=\int \mathcal{L}(u)\pi(u)\,du$.\\
+Then $\pi(\theta\mid X^n)=Z^{-1}\mathcal{L}(\theta)\pi(\theta)$ and $\mathbb{E}[\theta\mid X^n]=Z^{-1}\int \theta\,\mathcal{L}(\theta)\pi(\theta)\,d\theta$.\\
+For $\theta=(\theta_1,\ldots,\theta_k)$, high-dimensional marginalisation is often analytically impractical.
+\end{remark}
+
 \begin{definition} \label{def:bayesian-credible-set} \label{def:mcmc-posterior-integration} \hlt{Credible Sets and Posterior Monte Carlo}\\
 Let $\Pi(\cdot\mid x)$ be the posterior on $\Theta$.
 \begin{enumerate}[label=(\roman*)]
@@ -13,6 +19,17 @@ Let $\Pi(\cdot\mid x)$ be the posterior on $\Theta$.
 \item \hlt{Dependent draws}: MCMC uses dependent samples but targets the same posterior integrals.
 \end{enumerate}
 \end{definition}
+
+\begin{method} \label{meth:gibbs-sampling-normal-mean-precision} \hlt{Gibbs Sampling from Full Conditionals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Kernel}: unknown mean $\theta$, precision $\xi$, flat-prior posterior satisfies $\pi(\theta,\xi\mid x)\propto\xi^{\frac{n}{2}-1}\exp\{-\frac{\xi}{2}\sum\limits_i(x_i-\theta)^2\}$.
+\item \hlt{Decomposition}: $\sum\limits_i(x_i-\theta)^2=\sum\limits_i(x_i-\overline{x})^2+n(\theta-\overline{x})^2$.
+\item \hlt{Mean conditional}: $\theta\mid\xi,x\sim N(\overline{x},(n\xi)^{-1})$.
+\item \hlt{Precision conditional}: $\xi\mid\theta,x\sim\operatorname{Gamma}(\frac{n}{2},\frac12\sum\limits_i(x_i-\theta)^2)$ in rate form.
+\item \hlt{Gibbs sampler}: alternate conditionals; post-burn-in averages estimate posterior summaries.
+\end{enumerate}
+\end{method}
 
 \begin{example} \label{ex:two-binomial-posterior-simulation} \hlt{Two Binomial Proportions}\\
 Suppose $X\sim\operatorname{Binomial}(n,p_1)$ and $Y\sim\operatorname{Binomial}(m,p_2)$ are independent, with independent flat priors on $p_1,p_2$.\\
