@@ -25,6 +25,25 @@ Let $S$ be a random $n$-element subset of $U$; for a random ordering $J_1,\ldots
 \end{enumerate}
 \end{definition}
 
+\begin{method} \label{meth:reservoir-sampling-simple-random-sample} \hlt{Sequential Simple Random Sampling}\\
+Fix target size $n\geq1$, assume terminal stream length is $N\geq n$, $N$ unknown while streaming.\\
+Population units arrive sequentially as $1,\ldots,N$. Let $S_t\subseteq\{1,\ldots,t\}$ denote current reservoir after $t$ arrivals.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Initialize}: for $1\leq t\leq n$, set $S_t=\{1,\ldots,t\}$.
+\item \hlt{Admit}: for $t>n$, draw $B_t\sim\operatorname{Bernoulli}(\frac{n}{t})$.
+\item \hlt{Update}: if $B_t=0$, set $S_t=S_{t-1}$; if $B_t=1$, draw $J_t\mid S_{t-1}\sim\operatorname{Unif}(S_{t-1})$ and set $S_t=(S_{t-1}\setminus\{J_t\})\cup\{t\}$.
+\item \hlt{Output}: after the stream ends, return $S_N$.
+\end{enumerate}
+Then for every $t\geq n$, $S_t\sim\operatorname{Unif}\{s\subseteq\{1,\ldots,t\}:|s|=n\}$.\\
+Hence $S_N$ is a simple random sample without replacement.
+\end{method}
+
+\begin{example} \label{ex:capture-recapture-hypergeometric-likelihood} \hlt{Capture--Recapture Likelihood}\\
+Suppose $t$ population units are tagged and a later sample of size $m$ contains $r>0$ tagged units.\\
+For population size $n$, likelihood is $L_n=\frac{\binom{t}{r}\binom{n-t}{m-r}}{\binom{n}{m}}$. Since $\frac{L_n}{L_{n-1}}=\frac{(n-t)(n-m)}{n(n-t-m+r)}$, $L_n$ increases for $n<\frac{mt}{r}$ and decreases for $n>\frac{mt}{r}$. Hence $\widehat n=\lfloor \frac{mt}{r}\rfloor$; for $(t,m,r)=(10,20,4)$, $\widehat n=50$.
+\end{example}
+
 \begin{lemma} \label{lem:srs-one-draw-law} \hlt{Law of One Sample Position}\\
 Let $U\defeq\{1,\ldots,N\}$, $1\leq n\leq N$, fix $x_a\in\R$ for $a\in U$.\\
 Let $\mu\defeq \frac{1}{N}\sum\limits_{a=1}^{N}x_a$, $\sigma^2\defeq \frac{1}{N}\sum\limits_{a=1}^{N}(x_a-\mu)^2$, $S\sim\operatorname{Unif}\{s\subseteq U:|s|=n\}$.\\
@@ -130,17 +149,3 @@ For a finite population of $N=393$ hospitals, let $x_i$ denote discharges and su
 Under simple random sampling without replacement with $n=32$, the sample-mean standard deviation is $\sigma_{\overline{X}}=\frac{\sigma}{\sqrt{n}}\sqrt{1-\frac{n-1}{N-1}}\approx\frac{589.7}{\sqrt{32}}\sqrt{1-\frac{31}{392}}\approx100.0$.
 Since $\frac{n}{N}=\frac{32}{393}$ is small, the finite-population correction is near $1$, and the standard error is mainly governed by the $\frac{1}{\sqrt n}$ averaging scale.
 \end{example}
-
-\begin{method} \label{meth:reservoir-sampling-simple-random-sample} \hlt{Sequential Simple Random Sampling}\\
-Fix target size $n\geq1$, assume terminal stream length is $N\geq n$, $N$ unknown while streaming.\\
-Population units arrive sequentially as $1,\ldots,N$. Let $S_t\subseteq\{1,\ldots,t\}$ denote current reservoir after $t$ arrivals.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Initialize}: for $1\leq t\leq n$, set $S_t=\{1,\ldots,t\}$.
-\item \hlt{Admit}: for $t>n$, draw $B_t\sim\operatorname{Bernoulli}(\frac{n}{t})$.
-\item \hlt{Update}: if $B_t=0$, set $S_t=S_{t-1}$; if $B_t=1$, draw $J_t\mid S_{t-1}\sim\operatorname{Unif}(S_{t-1})$ and set $S_t=(S_{t-1}\setminus\{J_t\})\cup\{t\}$.
-\item \hlt{Output}: after the stream ends, return $S_N$.
-\end{enumerate}
-Then for every $t\geq n$, $S_t\sim\operatorname{Unif}\{s\subseteq\{1,\ldots,t\}:|s|=n\}$.\\
-Hence $S_N$ is a simple random sample without replacement.
-\end{method}

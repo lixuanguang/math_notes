@@ -23,16 +23,6 @@ Testing formalises decisions between hypotheses.  The central quantities are the
 \end{enumerate}
 \end{definition}
 
-\begin{proposition} \label{prop:posterior-odds-likelihood-ratio} \hlt{Posterior Odds and Likelihood Ratios}\\
-Let $H_0,H_1$ be simple hypotheses with $\mathbb{P}(H_i)=\pi_i>0$ and likelihood $p_i(x)=p(x\mid H_i)$ for $i=0,1$.\\
-For $m(x)\defeq\pi_0p_0(x)+\pi_1p_1(x)>0$, $\mathbb{P}(H_i\mid x)=\frac{\pi_ip_i(x)}{m(x)}$ and $\frac{\mathbb{P}(H_0\mid x)}{\mathbb{P}(H_1\mid x)}=(\frac{\pi_0}{\pi_1})(\frac{p_0(x)}{p_1(x)})$.
-\begin{proof}
-Bayes' rule gives $\mathbb{P}(H_i\mid x)=\frac{\pi_ip_i(x)}{m(x)}$ for $i=0,1$. Therefore $\frac{\mathbb{P}(H_0\mid x)}{\mathbb{P}(H_1\mid x)}=\frac{\frac{\pi_0p_0(x)}{m(x)}}{\frac{\pi_1p_1(x)}{m(x)}}=(\frac{\pi_0}{\pi_1})(\frac{p_0(x)}{p_1(x)})$.\\
-\hlt{Structural Commentary}: Posterior odds factor as prior odds times the data likelihood ratio.\\
-\hlt{Key Insight}: Bayes updating multiplies odds by $\frac{p_0(x)}{p_1(x)}$.
-\end{proof}
-\end{proposition}
-
 \begin{theorem} \label{thm:neyman-pearson-lemma} \hlt{Neyman--Pearson Lemma}\\
 Let $P_1\ll P_0$, $\Lambda\defeq \frac{dP_1}{dP_0}$, $\alpha\in[0,1]$. If $c\geq0$ and $\gamma\in[0,1]$ make $\varphi^\ast\defeq\mathbf{1}_{\{\Lambda>c\}}+\gamma\mathbf{1}_{\{\Lambda=c\}}$ satisfy $\mathbb{E}_0\varphi^\ast=\alpha$,\\
 then $\varphi^\ast$ is most powerful among level-$\alpha$ tests: for every $\psi:\mathcal{X}\to[0,1]$ with $\mathbb{E}_0\psi\leq\alpha$, $\mathbb{E}_1\psi\leq\mathbb{E}_1\varphi^\ast$.
@@ -129,6 +119,76 @@ It is not $\mathbb{P}(H_0\mid x)$; posterior probabilities require priors and an
 For one test $\varphi$, size is $\alpha(\varphi)=\sup\limits_{\theta\in\Theta_0}\mathbb{E}_\theta\varphi$.
 For a family of tests, let $R$ be the number of rejections and $V$ the number of false rejections; common targets are $\operatorname{FWER}=\mathbb{P}\{V\geq1\}$ and $\operatorname{FDR}=\mathbb{E}[\frac{V}{R\vee1}]$, while directional or selective rates replace $V$ by the corresponding error count.
 \end{remark}
+
+\begin{definition} \label{def:false-discovery-rate} \hlt{Multiple-Testing Error Counts and FDR}\\
+For a multiple-testing rule over $M$ hypotheses.\\
+Let $M_0$ be the number of true nulls and $M_1=M-M_0$ the number of false nulls.\\
+Let $V$ be false rejections, $S$ true rejections, $U$ true nonrejections, and $T$ false nonrejections.\\
+The total number of discoveries is $R=V+S$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Family-wise error rate}: $\operatorname{FWER}\defeq\mathbb{P}(V\geq1)$.
+\item \hlt{False discovery proportion}: $\operatorname{FDP}\defeq\frac{V}{\max(R,1)}$.
+\item \hlt{False discovery rate}: $\operatorname{FDR}\defeq\mathbb{E}[\operatorname{FDP}]$.
+\item \hlt{Power}: One aggregate power measure is $\mathbb{E}[S]/M_1$ when $M_1>0$.
+\end{enumerate}
+Thus FWER controls the chance of any false discovery.\\
+FDR controls the expected false fraction among the reported discoveries.
+\end{definition}
+
+\begin{definition} \label{def:pfd-local-fdr-and-q-value} \hlt{Positive FDR, Local FDR, and $q$-Values}\\
+Let $Z_j=0$ indicate a true null, $Z_j=1$ a false null, $t_j$ a test statistic, and $\Gamma$ a rejection region.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{pFDR}: For false discoveries $V$ and discoveries $R$, $\operatorname{pFDR}\defeq\mathbb{E}[V/R\mid R>0]$.
+\item \hlt{Mixture model}: If $\mathbb{P}(Z_j=0)=\pi_0$, $\mathcal{L}(t_j\mid Z_j=0)=F_0$, and $\mathcal{L}(t_j\mid Z_j=1)=F_1$,\\
+then $\mathcal{L}(t_j)=\pi_0F_0+(1-\pi_0)F_1$.
+\item \hlt{Bayes form}: For a rejection region $\Gamma$, $\operatorname{pFDR}(\Gamma)=\mathbb{P}(Z_j=0\mid t_j\in\Gamma)$.
+\item \hlt{Local FDR}: At value $t_0$, $\operatorname{lfdr}(t_0)\defeq\mathbb{P}(Z_j=0\mid t_j=t_0)$.
+\item \hlt{$q$-value}: For feature $j$, $q_j\defeq\inf\{\alpha:j\in\mathcal{R}_\alpha\}$, where $\mathcal{R}_\alpha$ is the discovery set at FDR level $\alpha$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:fdr-versus-family-wise-error} \hlt{FDR Versus Family-Wise Error}\\
+With false discoveries $V$ and total discoveries $R$, $\operatorname{FWER}\defeq\mathbb{P}(V\geq1)$ controls any false rejection, while $\operatorname{FDR}\defeq\mathbb{E}[V/\max(R,1)]$ controls the expected false fraction among discoveries.
+Thus FDR is less conservative for large screening lists and measures list reliability directly.
+\end{remark}
+
+\begin{method} \label{meth:permutation-plug-in-fdr} \hlt{Permutation Plug-In FDR Estimate}\\
+Let $t_j$ be observed statistics for $j\in[M]$, and let $t_j^{(k)}$ be the statistic after label permutation $k\in[K]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Observed discoveries}: For cutpoint $C>0$, set $R_{\mathrm{obs}}(C)\defeq\sum\limits_{j=1}^M\mathbf{1}_{\{|t_j|>C\}}$.
+\item \hlt{Null discoveries}: Estimate the expected false discoveries by $\widehat{\mathbb{E}}(V;C)\defeq K^{-1}\sum\limits_{k=1}^K\sum\limits_{j=1}^M\mathbf{1}_{\{|t_j^{(k)}|>C\}}$.
+\item \hlt{Plug-in FDR}: If $R_{\mathrm{obs}}(C)>0$, set $\widehat{\operatorname{FDR}}(C)\defeq\widehat{\mathbb{E}}(V;C)/R_{\mathrm{obs}}(C)$.
+\item \hlt{Permutation $p$-values}: Use $\{t_j^{(k)}\}$ to compare $|t_j|$ with featurewise or pooled permutation null statistics.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:sam-asymmetric-cutpoints} \hlt{Asymmetric Cutpoints and SAM}\\
+Let $t_{(1)}\leq\cdots\leq t_{(M)}$ and $\bar{t}^{0}_{(j)}\defeq K^{-1}\sum\limits_{k=1}^Kt^{(k)}_{(j)}$, where $t^{(k)}_{(j)}$ is the $j$th ordered permutation statistic.\\
+For $d_j\defeq t_{(j)}-\bar{t}^{0}_{(j)}$, $a>0$, set $c_+(a)\defeq\min\{t_{(j)}:d_j>a\}$, $c_-(a)\defeq\max\{t_{(j)}:d_j<-a\}$ when nonempty.\\
+Reject $t_j\in A(c_-,c_+)\defeq(-\infty,c_-]\cup[c_+,\infty)$, estimate FDR by Method~\ref{meth:permutation-plug-in-fdr}, $A(c_-,c_+)$ replace $\{|t|>C\}$.
+\end{remark}
+
+\begin{method} \label{meth:benjamini-hochberg-fdr-step-up} \hlt{Benjamini--Hochberg Step-Up Rule}\\
+For $M$ hypotheses with $p$-values $p_1,\ldots,p_M$ and target level $\alpha\in(0,1)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Order}: Let $p_{(1)}\leq\cdots\leq p_{(M)}$ be the order statistics.
+\item \hlt{Step-up index}: Set $L\defeq\max\{j:p_{(j)}\leq\alpha j/M\}$, with $L\defeq0$ if the set is empty.
+\item \hlt{Rejections}: Reject $\mathcal{R}\defeq\{m:p_m\leq p_{(L)}\}$ if $L>0$, and reject none if $L=0$.
+\item \hlt{Guarantee}: If true-null $p$-values are independent and uniform,\\
+then $\operatorname{FDR}\leq(M_0/M)\alpha\leq\alpha$, where $M_0$ is the number of true nulls.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/statistics_time_series/benjamini_hochberg_step_up.tikz}
+\caption{Benjamini--Hochberg threshold: \textcolor{red!70!black}{red} points reject, \textcolor{blue!70!black}{blue} points do not; line is $\alpha j/M$.}
+\label{fig:benjamini-hochberg-step-up}
+\end{figure}
 
 \begin{method} \label{prin:fishing-expeditions-and-bonferroni} \hlt{Fishing Expeditions and Bonferroni Control}
 \begin{enumerate}[label=(\roman*)]

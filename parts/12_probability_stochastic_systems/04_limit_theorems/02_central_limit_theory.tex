@@ -29,6 +29,12 @@ Let $\overline{X}_n\defeq n^{-1}\sum\limits_{i=1}^{n}X_i$ with mean $\mu$ and va
 Use any equivalent form to approximate probabilities involving $\overline{X}_n$.
 \end{method}
 
+\begin{example} \label{ex:clt-measurement-error-interval} \hlt{Measurement Error and Sample Size}\\
+Let $X_1,\ldots,X_n$ be independent measurements with $\mathbb{E}X_i=\mu$ and $\operatorname{Var}(X_i)=\sigma^2$.\\
+For $c>0$, the CLT gives $\mathbb{P}(\abs{\overline{X}_n-\mu}<c)\approx\Phi(\frac{c\sqrt{n}}{\sigma})-\Phi(\frac{-c\sqrt{n}}{\sigma})$.\\
+For $(n,\sigma,c)=(16,1,0.5)$, this is $\Phi(2)-\Phi(-2)\approx0.954$.
+\end{example}
+
 \begin{lemma} \label{lem:mgf-convergence-criterion} \hlt{MGF Continuity Theorem}\\
 Let $Z_n,Z$ be real-valued with MGFs $\psi_n(t)\defeq\mathbb{E}e^{tZ_n}$ and $\psi(t)\defeq\mathbb{E}e^{tZ}$ finite on $(-a,a)$ for some $a>0$.\\
 If $\psi_n(t)\to\psi(t)$ for all $t\in(-a,a)$, then $Z_n\rightsquigarrow Z$.
@@ -125,11 +131,6 @@ $T_n=\operatorname{sgn}(g'(\mu))A_n(1+\frac{\rho(Y_n)}{g'(\mu)})\rightsquigarrow
 \end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:delta-method-exponential-sample-mean} \hlt{Exponentiating a Sample Mean}\\
-Let $(X_i)_{i=1}^{n}$ be IID with mean $\mu$ and variance $\sigma^2<+\infty$, and set $W_n\defeq e^{\overline{X}_n}$.\\
-For $g(s)=e^s$, $g'(\mu)=e^\mu$, so the delta method gives $W_n\approx N(e^\mu,\frac{e^{2\mu}\sigma^2}{n})$.
-\end{example}
-
 \begin{theorem} \label{thm:delta-method-multivariate} \hlt{Multivariate Delta Method}\\
 Let $(Y_n)_{n\geq1}$ be random vectors in $\mathbb{R}^k$ with $\sqrt{n}(Y_n-\mu)\rightsquigarrow N_k(0,\Sigma)$, and let $g:\mathbb{R}^k\to\mathbb{R}$ be differentiable at $\mu$ with gradient $\nabla g(\mu)$. Then $\sqrt{n}(g(Y_n)-g(\mu))\rightsquigarrow N(0,\nabla g(\mu)^t\Sigma\nabla g(\mu))$.
 \begin{proof} Set $A_n\defeq\sqrt{n}(Y_n-\mu)$, so $A_n\rightsquigarrow N_k(0,\Sigma)$ and $Y_n\xrightarrow{\mathbb{P}}\mu$.\\
@@ -140,6 +141,22 @@ Thus $\sqrt{n}(g(Y_n)-g(\mu))=\nabla g(\mu)^tA_n+o_{\mathbb{P}}(1)\rightsquigarr
 \hlt{Key Insight}: The gradient projection carries the Gaussian limit; the differentiability remainder vanishes.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:delta-method} \hlt{Delta Method}\\
+If $\sqrt{n}(T_n-\theta)\Rightarrow N(0,\Sigma)$ and $g:\R^d\to\R^k$ is differentiable at $\theta$ with derivative $Dg(\theta)$,\\
+then $\sqrt{n}(g(T_n)-g(\theta))\Rightarrow N(0,Dg(\theta)\Sigma Dg(\theta)^\top)$.
+\begin{proof}
+Differentiability gives $g(T_n)-g(\theta)=Dg(\theta)(T_n-\theta)+r_n$ with $\frac{\norm{r_n}}{\norm{T_n-\theta}}\to0$ in probability.\\
+Since $\sqrt{n}(T_n-\theta)=O_P(1)$, $\sqrt{n}r_n=o_P(1)$; $\sqrt{n}(g(T_n)-g(\theta))=Dg(\theta)\sqrt{n}(T_n-\theta)+o_P(1)$, by Slutsky QED.\\
+\hlt{Structural Commentary}: The derivative transports the limiting normal fluctuation through $g$.\\
+\hlt{Key Insight}: First-order linearisation determines asymptotic variance.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:delta-method-exponential-sample-mean} \hlt{Exponentiating a Sample Mean}\\
+Let $(X_i)_{i=1}^{n}$ be IID with mean $\mu$ and variance $\sigma^2<+\infty$, and set $W_n\defeq e^{\overline{X}_n}$.\\
+For $g(s)=e^s$, $g'(\mu)=e^\mu$, so the delta method gives $W_n\approx N(e^\mu,\frac{e^{2\mu}\sigma^2}{n})$.
+\end{example}
 
 \begin{example} \label{ex:multivariate-delta-method-product-and-ratio} \hlt{Product and Ratio of Sample Means}\\
 Let $X_i=(X_{1i},X_{2i})^t$ be IID with mean $\mu=(\mu_1,\mu_2)^t$ and covariance $\Sigma=(\sigma_{ij})$, and set $\overline{X}_{jn}\defeq n^{-1}\sum\limits_{i=1}^{n}X_{ji}$.\\

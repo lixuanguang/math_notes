@@ -11,6 +11,57 @@ Let $X_1,\ldots,X_n$ be observations in $(\mathcal{X},\mathcal{A})$ with referen
 \end{enumerate}
 \end{definition}
 
+\begin{proposition} \label{prop:ecdf-fixed-point-mean-variance} \hlt{Fixed-Point Behavior of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent with common CDF $F$.\\
+For $x\in\R$, set $I_i(x)\defeq\mathbf{1}_{(-\infty,x]}(X_i)$ and $F_n(x)\defeq n^{-1}\sum\limits_{i=1}^n I_i(x)$. Then, for each fixed $x\in\R$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Law}: $nF_n(x)\sim\operatorname{Binomial}(n,F(x))$.
+\item \hlt{Mean}: $\mathbb{E}F_n(x)=F(x)$.
+\item \hlt{Variance}: $\operatorname{Var}(F_n(x))=n^{-1}F(x)(1-F(x))$.
+\end{enumerate}
+\begin{proof}
+Fix $x\in\R$ and put $p\defeq F(x)$ and $I_i\defeq I_i(x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $I_i\sim\operatorname{Bernoulli}(p)$ independently, $nF_n(x)=\sum\limits_{i=1}^n I_i\sim\operatorname{Binomial}(n,p)$.
+\item Linearity gives $\mathbb{E}F_n(x)=n^{-1}\sum\limits_{i=1}^n\mathbb{E}I_i=n^{-1}np=p=F(x)$.
+\item Independence gives $\operatorname{Var}(F_n(x))=n^{-2}\sum\limits_{i=1}^n\operatorname{Var}(I_i)=n^{-2}np(1-p)=n^{-1}F(x)(1-F(x))$.
+\end{enumerate}
+\hlt{Structural Commentary}: Pointwise, $F_n(x)=n^{-1}\sum\limits_{i=1}^n I_i(x)$ with $I_i(x)\sim\operatorname{Bernoulli}(F(x))$ independently.\\
+\hlt{Key Insight}: The empirical CDF at one point is a normalised binomial count.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:ecdf-simultaneous-versus-pointwise} \hlt{Pointwise and Simultaneous CDF Uncertainty}\\
+Proposition \ref{prop:ecdf-fixed-point-mean-variance} is pointwise: $x$ is fixed and $F_n(x)$ is a normalised binomial count.\\
+Simultaneous uncertainty controls $\|F_n-F\|_\infty\defeq\sup\limits_x\abs{F_n(x)-F(x)}$, yielding bands and diagnostics.
+\end{remark}
+
+\begin{proposition} \label{prop:ecdf-two-point-covariance} \hlt{Two-Point Covariance of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent with common CDF $F$.\\
+For $w\in\R$, set $I_i(w)\defeq\mathbf{1}_{(-\infty,w]}(X_i)$, $F_n(w)\defeq n^{-1}\sum\limits_{i=1}^n I_i(w)$. For $u,v\in\R$, put $m\defeq\min\{u,v\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Covariance}: $\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)=n^{-1}\bigl(F(m)-F(u)F(v)\bigr)$.
+\item \hlt{Sign}: $\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)\geq0$.
+\end{enumerate}
+\begin{proof}
+Fix $u,v\in\R$ and set $m\defeq\min\{u,v\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Covariance}: $\operatorname{Cov}(F_n(u),F_n(v))=n^{-2}\sum\limits_{i,j}\operatorname{Cov}(I_i(u),I_j(v))$.\\
+For $i\neq j$ the term is $0$ by independence, while for $i=j$,\\
+$\operatorname{Cov}(I_i(u),I_i(v))=\mathbb{E}[I_i(u)I_i(v)]-\mathbb{E}I_i(u)\mathbb{E}I_i(v)=F(m)-F(u)F(v)$.\\
+Hence $\operatorname{Cov}(F_n(u),F_n(v))=n^{-1}(F(m)-F(u)F(v))$.
+\item \hlt{Sign}: If $u\leq v$, then $F(m)-F(u)F(v)=F(u)(1-F(v))\geq0$.\\
+If $v\leq u$, then $F(m)-F(u)F(v)=F(v)(1-F(u))\geq0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $F_n(u)$ and $F_n(v)$ average iid Bernoulli pairs, so covariance scales by $1/n$.\\
+\hlt{Key Insight}: Cross-index independence leaves only the same-observation overlap $\{X_i\leq m\}$.
+\end{proof}
+\end{proposition}
+
 \begin{theorem} \label{thm:glivenko-cantelli} \hlt{Glivenko--Cantelli Theorem}\\
 Let $X_1,X_2,\ldots$ be i.i.d. real variables with CDF $F$, and set $\widehat{F}_n(t)\defeq n^{-1}\sum\limits_{i=1}^n\mathbf{1}_{\{X_i\leq t\}}$.\\
 Then $\sup\limits_{t\in\R}\abs{\widehat{F}_n(t)-F(t)}\to0$ almost surely.
@@ -24,6 +75,46 @@ Hence $\sup\limits_{0\leq u\leq1}\abs{H_n(u)-u}\leq M_{n,k}+k^{-1}$, and $\limsu
 \hlt{Key Insight}: Monotonicity bounds between-grid drift by the mesh.
 \end{proof}
 \end{theorem}
+
+\begin{proposition} \label{prop:sample-quantile-variance-delta-method} \hlt{Approximate Variance of a Sample Quantile}\\
+Let $Y_1,\ldots,Y_n$ be iid with continuous CDF $F$ and density $f$. Fix $p\in(0,1)$, set $x_p\defeq F^{-1}(p)$ with $f(x_p)>0$, choose $k$ with $\frac{k}{n+1}\approx p$, and put $\widehat{x}_p\defeq Y_{(k)}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Probability Scale}: $U_{(k)}\defeq F(Y_{(k)})$ has kth uniform order-statistic law. $\operatorname{Var}(U_{(k)})=\frac{k(n+1-k)}{(n+1)^2(n+2)}\approx\frac{p(1-p)}{n}$.
+\item \hlt{Quantile Scale}: $\operatorname{Var}(\widehat{x}_p)\approx\frac{p(1-p)}{n f(x_p)^2}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By probability integral transform, $U_i\defeq F(Y_i)$ are iid $\operatorname{Uniform}(0,1)$, $U_{(k)}=F(Y_{(k)})$.\\
+Theorem \ref{thm:kth-order-statistic-density} gives the stated exact variance, hence $\operatorname{Var}(U_{(k)})\approx\frac{p(1-p)}{n}$ when $\frac{k}{n+1}\approx p$.
+\item Let $g\defeq F^{-1}$. Since $g'(p)=\frac{1}{f(x_p)}$ and $\widehat{x}_p=g(U_{(k)})$, delta approximation $g(U_{(k)})\approx g(p)+g'(p)(U_{(k)}-p)$\\
+gives $\operatorname{Var}(\widehat{x}_p)\approx g'(p)^2\operatorname{Var}(U_{(k)})\approx\frac{p(1-p)}{n f(x_p)^2}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Quantile variance is probability-scale variance multiplied by $(F^{-1})'(p)^2$.\\
+\hlt{Key Insight}: Low density near $x_p$ inflates sample-quantile variability by $1/f(x_p)^2$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:distribution-free-median-confidence-interval} \hlt{Distribution-Free Median Interval}\\
+Let $X_1,\ldots,X_n$ be independent with continuous CDF $F$ and median $\eta$, so $F(\eta)=\frac{1}{2}$.\\
+Let $X_{(1)}\leq\cdots\leq X_{(n)}$ and $1\leq k\leq\floor{\frac{n}{2}}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Interval}: $C_k\defeq[X_{(k)},X_{(n-k+1)}]$.
+\item \hlt{Coverage}: $\mathbb{P}(\eta\in C_k)=1-\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $B_-\defeq\sum\limits_{i=1}^n\mathbf{1}_{\{X_i<\eta\}}$, $B_+\defeq\sum\limits_{i=1}^n\mathbf{1}_{\{X_i>\eta\}}$. By continuity, $B_-+B_+=n$ a.s. and $B_-\sim\operatorname{Binomial}(n,\frac{1}{2})$.
+\item $\eta\notin C_k$ iff $B_-<k$ or $B_+<k$. Since $k\leq\floor{\frac{n}{2}}$, these two events are disjoint.
+\item By symmetry, $\mathbb{P}(\eta\notin C_k)=2\mathbb{P}(B_-<k)=2\sum\limits_{j=0}^{k-1}\binom{n}{j}2^{-n}=\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$, so $\mathbb{P}(\eta\in C_k)=1-\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The coverage depends only on the binomial count of observations below $\eta$, not on $F$.\\
+\hlt{Key Insight}: Continuity turns median coverage into a symmetric binomial tail.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \label{def:kernel-density-estimator} \hlt{Kernel Density Estimator}
 \begin{enumerate}[label=(\roman*)]
@@ -153,17 +244,6 @@ Let $N_\lambda(x_0)\defeq\{i:K_\lambda(x_0,X_i)>0\}$ and $n_\lambda(x_0)\defeq|N
 \item \hlt{Selection}: Choose $\widehat{h}\in\operatorname*{argmin}\limits_{1\leq k\leq M}\operatorname{CV}(h_k)$, with a visual smoothness check.
 \end{enumerate}
 \end{method}
-
-\begin{definition} \label{def:kernel-density-classification} \hlt{Kernel Density Classification}\\
-Let $G\in\{1,\ldots,J\}$ be the class label.\\
-Estimate $\pi_j\defeq\mathbb{P}(G=j)$ by $\widehat{\pi}_j$ and $f_j(x)\defeq f_{X\mid G=j}(x)$ by a kernel density estimate $\widehat{f}_j(x)$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Posterior}: Define $\widehat{p}_j(x)\defeq\widehat{\mathbb{P}}(G=j\mid X=x)\defeq\frac{\widehat{\pi}_j\widehat{f}_j(x)}{\sum\limits_{k=1}^J\widehat{\pi}_k\widehat{f}_k(x)}$ whenever the denominator is positive.
-\item \hlt{Classifier}: The plug-in Bayes rule is $\widehat{g}(x)\in\operatorname*{argmax}\limits_{1\leq j\leq J}\widehat{p}_j(x)$.
-\end{enumerate}
-Full density estimation is unnecessary if only the boundary is needed.
-\end{definition}
 
 \begin{remark} \label{rem:complexity-controls-nonparametric-estimation} \hlt{Complexity Control}\\
 For a function class $\mathcal{F}$, estimation is stable when $\sup\limits_{f\in\mathcal{F}}\abs{\widehat{P}_nf-Pf}$ is small with high probability or a.s.\\
