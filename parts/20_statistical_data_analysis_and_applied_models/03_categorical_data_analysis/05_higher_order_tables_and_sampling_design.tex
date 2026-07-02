@@ -1,0 +1,45 @@
+\subsection{Higher-Order Tables and Sampling Design}
+
+Two-way tables are the simplest categorical-data structure.  Higher-order tables introduce several possible notions of dependence: full independence, conditional independence given a third factor, marginal homogeneity, and interactions among factors.
+
+\begin{definition} \label{def:two-way-log-linear-independence} \hlt{Two-Way Log-Linear Form}\\
+Let $I,J\in\N$ and let $\pi_{ij}>0$ be two-way cell probabilities for $1\leq i\leq I$, $1\leq j\leq J$,\\
+with $\pi_{i\cdot}\defeq\sum\limits_{j=1}^{J}\pi_{ij}$, $\pi_{\cdot j}\defeq\sum\limits_{i=1}^{I}\pi_{ij}$, $\alpha_i\defeq\log\pi_{i\cdot}$, and $\beta_j\defeq\log\pi_{\cdot j}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Independence form}: $\pi_{ij}=\pi_{i\cdot}\pi_{\cdot j}$ $\forall 1\leq i\leq I$, $1\leq j\leq J$ $\Longleftrightarrow$ $\log\pi_{ij}=\alpha_i+\beta_j$ $\forall 1\leq i\leq I$, $1\leq j\leq J$.
+\item \hlt{Interaction terms}: $\gamma_{ij}\defeq\log\pi_{ij}-\alpha_i-\beta_j$, giving $\log\pi_{ij}=\alpha_i+\beta_j+\gamma_{ij}$.
+\end{enumerate}
+\hlt{Key Insight}: $\gamma_{ij}=0$ $\forall 1\leq i\leq I$, $1\leq j\leq J$ $\Longleftrightarrow$ $\pi_{ij}=\pi_{i\cdot}\pi_{\cdot j}$ $\forall 1\leq i\leq I$, $1\leq j\leq J$.
+\end{definition}
+
+\begin{remark} \label{rem:three-way-log-linear-models} \hlt{Three-Way Interactions}\\
+Let $\pi_{ijk}>0$ for $(i,j,k)\in[I]\times[J]\times[K]$. A log-linear model with all two-factor interactions and no three-factor interaction is $\log\pi_{ijk}=\mu+\alpha_i+\beta_j+\eta_k+\delta_{ij}+\varepsilon_{ik}+\gamma_{jk}$.\\
+The absent term $\lambda_{ijk}$ encodes the constraint of no third-order interaction; nested models are compared by deleting interaction terms and using the corresponding loss of degrees of freedom.
+\end{remark}
+
+\begin{example} \label{ex:berkeley-admissions-confounding} \hlt{Graduate Admissions and Aggregation}\\
+In the Berkeley admissions example, the aggregate admission rate for men was higher than for women. \\
+Within the six listed majors, however, women were not consistently admitted at lower rates. \\
+The apparent aggregate disadvantage was driven by application patterns: women applied more often to majors with lower admission rates. Major was therefore confounded with sex in the observational comparison.
+\end{example}
+
+\begin{principle} \label{prin:categorical-data-design-before-test} \hlt{Choose the Test from the Sampling Mechanism}\\
+For a contingency table $N=(n_{ij})$, let $n_{i\cdot}$ and $n_{\cdot j}$ denote row and column margins.\\
+Select the test from the design-fixed quantities:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Fixed Margins}: If $(n_{i\cdot})$ and $(n_{\cdot j})$ are fixed in a $2\times2$ table, use Fisher's exact test.
+\item \hlt{Independent Samples}: If rows are independent multinomial samples with fixed $(n_{i\cdot})$,\\
+test homogeneity of column probabilities.
+\item \hlt{Single Multinomial Sample}: If $N\sim\operatorname{Multinomial}(n,(\pi_{ij}))$, test independence, i.e. $\pi_{ij}=\pi_{i\cdot}\pi_{\cdot j}$.
+\item \hlt{Matched Pairs}: If observations are paired counts $n_{rs}$, test marginal homogeneity using discordant cells.
+\item \hlt{Case-Control Sampling}: If $(n_{\cdot0},n_{\cdot1})$ are fixed by disease status, estimate odds ratios.\\
+Absolute risks require population margins.
+\end{enumerate}
+\hlt{Key Insight}: The same numeric table can encode different null hypotheses under different sampling laws.
+\end{principle}
+
+\begin{remark} \label{rem:counts-not-percentages-in-chi-square-tests} \hlt{Use Counts, Not Percentages}\\
+Let $Q(O,E)\defeq\sum_i\frac{(O_i-E_i)^2}{E_i}$. Pearson's chi-square calibration applies to counts: $Q(O/n,E/n)=\frac{1}{n}Q(O,E)$ and $Q(100O/n,100E/n)=\frac{100}{n}Q(O,E)$. Thus relative frequencies or percentages give a rescaled statistic unless the original count scale is restored.
+\end{remark}

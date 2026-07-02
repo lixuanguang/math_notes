@@ -1,0 +1,60 @@
+\subsection{Least Squares Curve Fitting and Linearization}
+
+Least squares begins as a geometric fitting rule and becomes a statistical model only after assumptions are made about the errors.  The optimization step is asymmetric in the two plotted variables: ordinary regression measures vertical prediction errors.
+
+\begin{definition} \label{def:least-squares-parametric-fit} \hlt{Least-Squares Fit to a Parametric Family}\\
+Let $[n]\defeq\{1,\ldots,n\}$, let $(x_i,y_i)_{i\in[n]}\subseteq\mathcal{X}\times\R$, let $\Theta\subseteq\R^p$, and let $m:\mathcal{X}\times\Theta\to\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Criterion}: $S:\Theta\to[0,\infty)$, $S(\theta)\defeq\sum\limits_{i=1}^{n}\bigl(y_i-m(x_i;\theta)\bigr)^2$.
+\item \hlt{Estimate}: $\widehat{\theta}\in\operatorname*{arg\,min}\limits_{\theta\in\Theta}S(\theta)$.
+\item \hlt{Residual}: $\widehat{e}_i\defeq y_i-m(x_i;\widehat{\theta})$, $i\in[n]$.
+\end{enumerate}
+\hlt{Key Insight}: $y_i=m(x_i;\widehat{\theta})+\widehat{e}_i$, so $\widehat{e}_i>0$ iff $y_i>m(x_i;\widehat{\theta})$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/regression_vertical_residuals.tikz}
+  \caption{Least squares minimizes squared \textcolor{red!70!black}{vertical residuals}.}
+  \label{fig:regression-vertical-residuals}
+\end{figure}
+
+\begin{definition} \label{def:linear-in-the-parameters-model} \hlt{Linear in the Parameters}\\
+Let $\mathcal{X}$ be an input set, let $\Theta\subseteq\R^p$, and let $m:\mathcal{X}\times\Theta\to\R$.  $m$ is linear in $\beta$ if and only if\\
+$\exists$ fixed maps $\phi_0,\ldots,\phi_{p-1}:\mathcal{X}\to\R$ with $m(x;\beta)=\sum\limits_{j=0}^{p-1}\beta_j\phi_j(x)$ $\forall x\in\mathcal{X}$ and $\beta\in\Theta$.\\
+\hlt{Structural Commentary}: Polynomial regression uses $\phi_j(x)=x^j$ and estimates only the coefficients $\beta_j$.
+\end{definition}
+
+\begin{proposition} \label{prop:simple-line-least-squares-formulas} \hlt{Least-Squares Line}\\
+Let $[n]\defeq\{1,\ldots,n\}$, $(x_i,y_i)_{i\in[n]}\subseteq\R^2$, $\overline{x}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}x_i$, $\overline{y}\defeq \frac{1}{n}\sum\limits_{i=1}^{n}y_i$, assume $D\defeq\sum\limits_{i=1}^{n}(x_i-\overline{x})^2>0$.\\
+For $b=(b_0,b_1)\in\R^2$, set $S(b)\defeq\sum\limits_{i=1}^{n}(y_i-b_0-b_1x_i)^2$.\\
+Then $\exists!\widehat{\beta}=(\widehat{\beta}_0,\widehat{\beta}_1)\in\operatorname*{arg\,min}\limits_{b\in\R^2}S(b)$; $\widehat{y}(x)\defeq\widehat{\beta}_0+\widehat{\beta}_1x$ satisfies $\widehat{\beta}_1=\frac{1}{D}\sum\limits_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y})$, $\widehat{\beta}_0=\overline{y}-\widehat{\beta}_1\overline{x}$.
+\begin{proof} Set $u_i\defeq x_i-\overline{x}$, $v_i\defeq y_i-\overline{y}$, and $c(b)\defeq b_0+b_1\overline{x}-\overline{y}$.\\
+Since $\sum\limits_{i=1}^{n}u_i=\sum\limits_{i=1}^{n}v_i=0$, $S(b)=\sum\limits_{i=1}^{n}(v_i-b_1u_i)^2+nc(b)^2$.\\
+Thus $c(\widehat{\beta})=0$, so $\widehat{\beta}_0=\overline{y}-\widehat{\beta}_1\overline{x}$, and $\widehat{\beta}_1$ uniquely minimizes $Q(t)\defeq\sum\limits_{i=1}^{n}(v_i-tu_i)^2$.\\
+Since $Q'(t)=-2\sum\limits_{i=1}^{n}u_i(v_i-tu_i)$ and $\sum\limits_{i=1}^{n}u_i^2=D>0$, the unique critical point is $t=\frac{1}{D}\sum\limits_{i=1}^{n}u_iv_i$.\\
+\hlt{Structural Commentary}: The fitted line passes through $(\overline{x},\overline{y})$.\\
+\hlt{Key Insight}: Centering turns the slope into covariance divided by variance.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:least-squares-linear-and-nonlinear-parameters} \hlt{Linear and Nonlinear Parameters}\\
+For fixed $\omega=(\omega_1,\omega_2)$, $f_{\theta,\omega}(t)\defeq A\cos(\omega_1t)+B\sin(\omega_1t)+C\cos(\omega_2t)+D\sin(\omega_2t)=\theta^t\phi_\omega(t)$\\
+with $\theta=(A,B,C,D)^t$ and $\phi_\omega(t)=(\cos(\omega_1t),\sin(\omega_1t),\cos(\omega_2t),\sin(\omega_2t))^t$.\\
+Estimating $\omega$ makes $f_{\theta,\omega}$ nonlinear in $(\theta,\omega)$.\\
+For fixed $\lambda=(\alpha,\beta)$, $g_{\eta,\lambda}(t)\defeq Ae^{-\alpha t}+Be^{-\beta t}=\eta^t\psi_\lambda(t)$ with $\eta=(A,B)^t$ and $\psi_\lambda(t)=(e^{-\alpha t},e^{-\beta t})^t$.\\
+Estimating $\lambda$ makes $g_{\eta,\lambda}$ nonlinear in $(\eta,\lambda)$.
+\end{example}
+
+\begin{method} \label{meth:linearizing-transformations-for-regression} \hlt{Linearizing Transformations}\\
+Let $[n]\defeq\{1,\ldots,n\}$, $K>0$, $C>0$, $e_A\in\R$, $T>0$, and $\alpha(T)\defeq C\exp\left(-\frac{e_A}{KT}\right)$.\\
+For observations $(T_i,\alpha_i)_{i\in[n]}\subset(0,\infty)^2$, set $x\defeq\frac{1}{T}$, $z\defeq\log\alpha(T)$, $x_i\defeq\frac{1}{T_i}$, and $z_i\defeq\log\alpha_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $z=a+bx$ with $a\defeq\log C$ and $b\defeq-\frac{e_A}{K}$.
+\item $(\widehat{a},\widehat{b})\in\operatorname*{arg\,min}\limits_{(a,b)\in\R^2}\sum\limits_{i=1}^{n}(z_i-a-bx_i)^2$, $\widehat{C}\defeq e^{\widehat{a}}$, and $\widehat{e}_A\defeq-K\widehat{b}$.
+\item $\widehat{\varepsilon}_i\defeq z_i-\widehat{a}-\widehat{b}x_i$ is diagnosed against $x_i$ and $\widehat{z}_i\defeq\widehat{a}+\widehat{b}x_i$.\\
+Systematic structure indicates misspecification on the transformed scale.
+\end{enumerate}
+\end{method}

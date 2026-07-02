@@ -1,0 +1,63 @@
+\subsection{Invariant Distances and Adaptive Neighborhoods}
+\begin{method} \label{meth:sl-invariant-and-tangent-distance} \hlt{Invariant Metrics and Tangent Distance}\\
+Let $x,x'\in\R^p$, let $\mathcal{A}$ be a transformation family, and write $T_\alpha x$ for the transformed input.\\
+For local transformations, let $V_x\in\R^{p\times r_x}$ span the tangent directions at $x$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Orbit metric}: $d_{\mathrm{inv}}(x,x')=\inf\limits_{\alpha,\beta\in\mathcal{A}}\norm{T_\alpha x-T_\beta x'}_2$ compares the transformation orbits of $x$ and $x'$.
+\item \hlt{Tangent metric}: $d_{\mathrm{tan}}(x,x')=\inf\limits_{a,b}\norm{x+V_xa-x'-V_{x'}b}_2$ compares tangent affine spaces.
+\end{enumerate}
+The tangent metric discounts small local transformations without making large transformations cost-free.\\
+Data augmentation encodes similar invariance by storing transformed copies, which becomes costly when many transformation directions are needed.
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/tangent_distance_schematic.tikz}
+\caption{Tangent distance uses \textcolor{red!75!black}{local tangents} instead of \textcolor{green!65!black}{orbits}; \textcolor{blue!70!black}{$d_E$} is ordinary distance.}
+\label{fig:sl-tangent-distance-schematic}
+\end{figure}
+
+\begin{method} \label{meth:sl-discriminant-adaptive-nearest-neighbor} \hlt{Discriminant Adaptive Nearest Neighbors}\\
+DANN replaces the fixed Euclidean metric by a query-dependent quadratic metric.\\
+For a query $x_0$, choose a pilot index set $P(x_0)$, final neighbor count $h$, and $\epsilon>0$. From $\{(x_i,g_i):i\in P(x_0)\}$ estimate local class proportions $\pi_k$, class means $\bar{x}_k$, local mean $\bar{x}$, and pooled within-class covariance $\mathbf{W}\succ0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute the local between-class covariance $\mathbf{B}=\sum\limits_{k=1}^K\pi_k(\bar{x}_k-\bar{x})(\bar{x}_k-\bar{x})^T$.
+\item Form $\mathbf{B}^\star=\mathbf{W}^{-1/2}\mathbf{B}\mathbf{W}^{-1/2}$ and $\bm{\Sigma}_{x_0}=\mathbf{W}^{-1/2}(\mathbf{B}^\star+\epsilon I)\mathbf{W}^{-1/2}$.
+\item With $D_{x_0}(x_i,x_0)=(x_i-x_0)^T\bm{\Sigma}_{x_0}(x_i-x_0)$, let $N_h(x_0)$ index $h$ smallest distances.\\
+\item Set $\widehat{G}(x_0)\in\operatorname*{arg\,max}\limits_{g\in\{1,\ldots,K\}}\sum\limits_{i\in N_h(x_0)}\mathbf{1}_{\{g_i=g\}}$.
+\end{enumerate}
+Whitening by $\mathbf{W}$ removes local within-class scale.\\
+$\mathbf{B}^\star+\epsilon I$ stretches neighborhoods along directions with weak local class separation, and $\epsilon$ prevents degeneracy.
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/dann_adaptive_neighborhood.tikz}
+\caption{DANN replaces the \textcolor{gray!65!black}{Euclidean ball} by a \textcolor{green!55!black}{local ellipsoid}, narrow along the \textcolor{red!75!black}{class-change direction} and elongated where class probabilities vary slowly.}
+\label{fig:sl-dann-adaptive-neighborhood}
+\end{figure}
+
+\begin{method} \label{meth:sl-global-dimension-reduction-nearest-neighbor} \hlt{Global Dimension Reduction for Nearest Neighbors}\\
+Fix a target dimension $L\leq p$.  Let $\mathbf{B}_i$ be the local between-class matrix estimated at training point $x_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute the global class-separation matrix $\overline{\mathbf{B}}=N^{-1}\sum_{i=1}^N\mathbf{B}_i$.
+\item Let $(\theta_\ell,e_\ell)_{\ell=1}^p$ be eigenpairs of $\overline{\mathbf{B}}$ with $\theta_1\geq\cdots\geq\theta_p$.
+\item Project by $P_Lx=(e_1^Tx,\ldots,e_L^Tx)\in\R^L$ and run nearest-neighbor classification on $P_Lx_i$.
+\end{enumerate}
+The rank-$L$ summary $\overline{\mathbf{B}}_{[L]}=\sum_{\ell=1}^L\theta_\ell e_\ell e_\ell^T$ solves $\min_{\operatorname{rank}(M)=L}\sum_{i=1}^N\operatorname{trace}[(\mathbf{B}_i-M)^2]$.\\
+The reduced space is selected from local class-separation information, not unsupervised variance alone.
+\end{method}
+
+\begin{remark} \label{rem:sl-nearest-neighbor-computation-and-storage} \hlt{Computation and Storage}\\
+With $N$ stored observations in $\R^p$, direct nearest-neighbor search costs $O(Np)$ per query and stores $O(Np)$ coordinates.  Storage can be reduced by replacing the retained set $S\subset\{1,\ldots,N\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Prototype compression}: store learned representatives rather than all training observations.
+\item \hlt{Editing}: delete observations whose local neighborhoods have inconsistent labels.
+\item \hlt{Condensing}: grow a small retained set by adding $i$ only if it misclassifies $(x_i,g_i)$.
+\end{enumerate}
+Fast search reduces query cost in favorable geometries; compression, editing, and condensing reduce storage by keeping representatives or boundary-relevant observations.
+\end{remark}

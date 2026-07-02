@@ -1,0 +1,31 @@
+\subsection{Optimization for Deep Learning}
+
+The old optimization notes are migrated here only where the algorithms are used as training methods for neural networks.  General numerical optimization belongs to Part 14.
+
+\begin{definition} \label{def:sl-neural-empirical-objective} \hlt{Neural Empirical Objective}\\
+For data $(x_i,y_i)_{i=1}^n$, network $f_\theta:x\mapsto f(x;\theta)$, loss $L$, neural empirical objective is $J_n(\theta)=n^{-1}\sum\limits_{i=1}^nL(f_\theta(x_i),y_i)$.\\
+The population objective is $J(\theta)=\mathbb E[L(f_\theta(X),Y)]$ under the data-generating law.
+\end{definition}
+
+\begin{breakablealgorithm}
+\caption{Minibatch Backpropagation Step}
+\begin{algorithmic}
+\Require Minibatch $B$, parameters $\theta$, learning rate $\eta$
+\State Compute predictions $f(x;\theta)$ for all $(x,y)\in B$
+\State Compute minibatch loss $\widehat{L}_B(\theta)$
+\State Run reverse-mode automatic differentiation to compute $g=\nabla_{\theta}\widehat{L}_B(\theta)$
+\State Update parameters $\theta \leftarrow \theta-\eta g$
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-deep-optimization-challenges} \hlt{Deep Optimization Challenges}\\
+For empirical loss $J_n(\theta)$, deep optimization is shaped by:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{geometry}: large $\kappa(\nabla^2J_n)$, saddles with $\nabla J_n\approx0$ and indefinite $\nabla^2J_n$, and plateaus with $\norm{\nabla J_n}\approx0$.
+\item \hlt{gradient propagation}: large or small $\norm{\frac{\partial h^{(L)}}{\partial h^{(k)}}}$ causes exploding or vanishing gradients.
+\item \hlt{stochasticity}: $g_k=\nabla J_n(\theta_k)+\xi_k$, with $\mathbb E[\xi_k\mid\theta_k]=0$ and $\operatorname{Var}(\xi_k\mid\theta_k)\ne0$.
+\item \hlt{stabilization}: initialization, normalization, gradient clipping, skip connections, and learning-rate schedules control scale, conditioning, and update variance.
+\end{enumerate}
+These choices are part of the training specification, not post hoc implementation details.
+\end{remark}

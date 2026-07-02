@@ -1,0 +1,80 @@
+\subsection{Cayley-Hamilton and Minimal Polynomials}
+\begin{theorem} \label{thm:cayley-hamilton-operator} \hlt{Cayley--Hamilton Theorem for Operators}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, $q_T$ be characteristic polynomial of $T\in\LL(\mathcal{V})$. Then $q_T(T)=0$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues and set $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.\\
+It suffices, by primary decomposition, to show $q_T(T)$ kills each $\mathcal{G}_{\lambda_j}(T)$.\\
+On $\mathcal{G}_{\lambda_j}(T)$, the operator $T-\lambda_jI_{\mathcal{V}}$ is nilpotent, so Corollary \ref{cor:nilpotent-power-dimension-zero} gives $(T-\lambda_jI_{\mathcal{V}})^{d_j}=0$ on $\mathcal{G}_{\lambda_j}(T)$.\\
+Since the factors of $q_T(T)$ commute, this factor kills the whole product on $\mathcal{G}_{\lambda_j}(T)$. Hence $q_T(T)=0$.\\
+\hlt{Structural Commentary}: Check the polynomial on each primary summand.\\
+\hlt{Key Insight}: One factor of $q_T(T)$ kills each summand.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:cayley-hamilton-matrix} \hlt{Cayley--Hamilton Theorem}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have characteristic polynomial $p_A(z)=\det(zI_n-A)$. Then $p_A(A)=0$.
+\begin{proof}
+Choose a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+Since $p_A(A)=Up_A(T)U^*$ and $p_A(z)=\prod_{i=1}^{n}(z-\lambda_i)$, it suffices to prove $(T-\lambda_1I_n)(T-\lambda_2I_n)\cdots(T-\lambda_nI_n)=0$.\\
+Let $Q_j\defeq\prod\limits_{i=1}^{j}(T-\lambda_iI_n)$. We show that the first $j$ columns of $Q_j$ are zero. For $j=1$, the first column of $T-\lambda_1I_n$ is zero as $T$ is upper triangular with first diagonal entry $\lambda_1$. Assume the first $j$ columns of $Q_j$ are zero.\\
+Since $T-\lambda_{j+1}I_n$ is upper triangular and its $(j+1,j+1)$ entry is zero, its first $j+1$ columns lie in $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$. By the induction hypothesis, $Q_j$ kills this span, so $Q_{j+1}=Q_j(T-\lambda_{j+1}I_n)$ has first $j+1$ zero columns.\\
+At $j=n$, all columns of $Q_n$ are zero, so $Q_n=0$.\\
+\hlt{Structural Commentary}: Schur form reduces the theorem to a triangular column-killing induction.\\
+\hlt{Key Insight}: Each factor $T-\lambda_iI_n$ kills the next leading column.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/cayley_hamilton_triangular_killing.tikz}
+\caption{In Schur form, the factors $T-\lambda_iI$ kill the leading columns one layer at a time.}
+  \label{fig:cayley-hamilton-triangular-killing}
+\end{figure}
+
+\begin{theorem} \label{thm:minimal-polynomial-basic-properties} \hlt{Basic Properties of the Minimal Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_d$ be the distinct eigenvalues of $A$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mu_A$ exists, is unique, and $\deg\mu_A\leq n$.
+\item If a nonzero polynomial $f$ annihilates $A$, then $\mu_A$ divides $f$. In particular, $\mu_A$ divides $p_A$.
+\item There are integers $q_i$ satisfying $1\leq q_i\leq m_A(\lambda_i)$ such that $\mu_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Cayley--Hamilton supplies the monic annihilator $p_A$, so a least-degree monic annihilator $\mu_A$ exists and has degree at most $n$. If $g$ is another least-degree monic annihilator, write $g=h\mu_A+r$, where $r=0$ or $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$. If $r\neq0$, scaling $r$ to be monic would give a smaller-degree monic annihilator, a contradiction. Hence $r=0$, so $g=h\mu_A$.\\
+Since $g$ and $\mu_A$ are monic of the same degree, $h=1$ and $g=\mu_A$.
+\item If $f(A)=0$, divide $f=q\mu_A+r$ with $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$, hence $r=0$ and $\mu_A\mid f$. Taking $f=p_A$ gives $\mu_A\mid p_A$.
+\item Since $\mu_A\mid p_A=\prod_{i=1}^{d}(z-\lambda_i)^{m_A(\lambda_i)}$, its roots are eigenvalues with exponents at most the algebraic multiplicities. If $A\mathbf{v}=\lambda_i\mathbf{v}$ and $\mathbf{v}\neq\mathbf{0}$, then $\mu_A(\lambda_i)\mathbf{v}=\mu_A(A)\mathbf{v}=0$, so every $\lambda_i$ occurs.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial division makes $\mu_A$ the least monic generator of annihilators.\\
+\hlt{Key Insight}: Cayley--Hamilton gives existence; eigenvectors force the roots.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/minimal_polynomial_divisibility.tikz}
+  \caption{$\mu_A$ is the least monic annihilator; arrows indicate that $\mu_A$ divides $p_A$ and every annihilator $f$.}
+  \label{fig:minimal-polynomial-divisibility}
+\end{figure}
+
+\begin{theorem} \label{thm:minimal-polynomial-direct-sum-disjoint-spectra} \hlt{Minimal Polynomial of a Spectrally Disjoint Direct Sum}\\
+Let $A=A_1\oplus\cdots\oplus A_d$, where the spectra of $A_1,\ldots,A_d$ are pairwise disjoint. Then $\mu_A=\mu_{A_1}\mu_{A_2}\cdots\mu_{A_d}$.
+\begin{proof}
+Let $f=\prod\limits_i\mu_{A_i}$. Since $f(A_i)=0$ for all $i$, blockwise evaluation gives $f(A)=0$, and therefore $\mu_A\mid f$.\\
+Conversely, $\mu_A(A_i)=0$ for each $i$, so $\mu_{A_i}\mid\mu_A$ for each $i$. The roots of $\mu_{A_i}$ are exactly $\operatorname{spec}(A_i)$ by Theorem \ref{thm:operator-minimal-polynomial-roots-eigenvalues}, so the disjointness of the spectra makes the polynomials $\mu_{A_i}$ pairwise relatively prime.\\
+Hence their product $f$ divides $\mu_A$. Since $\mu_A\mid f$ and $f\mid\mu_A$, and both are monic, $\mu_A=f$.\\
+\hlt{Structural Commentary}: Direct sums are annihilated blockwise; disjoint spectra make the block factors coprime.\\
+\hlt{Key Insight}: Each spectral component contributes its own minimal-polynomial factor.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:similarity-preserves-minimal-polynomial} \hlt{Similarity Preserves the Minimal Polynomial}\\
+If $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are similar, then $p_A=p_B$ and $\mu_A=\mu_B$.
+\begin{proof}
+The identity $p_A=p_B$ is Theorem \ref{thm:similarity-preserves-characteristic-polynomial}. Let $A=SBS^{-1}$, then $f(A)=Sf(B)S^{-1}$ for every polynomial $f$, so $A$ and $B$ have the same annihilating polynomials. Hence $\mu_A=\mu_B$.\\
+\hlt{Structural Commentary}: Similarity preserves polynomial equations.\\
+\hlt{Key Insight}: Conjugation commutes with polynomial evaluation.
+\end{proof}
+\end{theorem}

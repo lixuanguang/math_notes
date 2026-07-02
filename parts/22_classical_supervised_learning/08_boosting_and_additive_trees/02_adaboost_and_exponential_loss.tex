@@ -1,0 +1,15 @@
+\subsection{AdaBoost and Exponential Loss}
+\begin{proposition} \label{prop:sl-adaboost-exponential-stagewise} \hlt{AdaBoost as Exponential-Loss Stagewise Fitting}\\
+For $y_i\in\{-1,1\}$, use $L(y,f)=\exp(-yf)$.  Fix stage $m$, current score $f_{m-1}$, weights $w_i^{(m)}\defeq\exp\{-y_if_{m-1}(x_i)\}$, and classifier $G:\mathcal X\to\{-1,1\}$.  Set $Q_m(\beta,G)\defeq\sum\limits_{i=1}^n L\{y_i,f_{m-1}(x_i)+\beta G(x_i)\}$ and $E_m(G)\defeq\sum\limits_{i=1}^n w_i^{(m)}\mathbf{1}_{\{y_i\neq G(x_i)\}}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For fixed $\beta>0$, $\operatorname*{argmin}\limits_G Q_m(\beta,G)=\operatorname*{argmin}\limits_G E_m(G)$.
+\item If $G_m\in\operatorname*{argmin}\limits_G E_m(G)$ and $\operatorname{err}_m\defeq E_m(G_m)/\sum\limits_{i=1}^n w_i^{(m)}$, then $\beta_m=\frac12\log\!\left(\frac{1-\operatorname{err}_m}{\operatorname{err}_m}\right)$ minimizes $Q_m(\beta,G_m)$.
+\item The induced weights satisfy $w_i^{(m+1)}=w_i^{(m)}\exp\{-\beta_my_iG_m(x_i)\}$.\\
+With $\alpha_m=2\beta_m$, a misclassified point has relative factor $\exp(\alpha_m)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{remark} \label{rem:sl-exponential-loss-population-target} \hlt{Exponential Loss and Class Probabilities}\\
+For $Y\in\{-1,1\}$ and $\eta(x)=\mathbb{P}(Y=1\mid X=x)$, the population minimizer of $\mathbb{E}\{\exp(-Yf(X))\mid X=x\}$ is $f^*(x)=\frac12\log\frac{\eta(x)}{1-\eta(x)}$.  Hence $\operatorname{sign}f^*(x)$ is the Bayes rule.  The binomial deviance $\log\{1+\exp(-2Yf(X))\}$ has the same minimizer but penalizes large negative margins less aggressively on finite samples.
+\end{remark}

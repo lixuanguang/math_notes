@@ -1,0 +1,98 @@
+\subsection{Transformations of Random Variables}
+\begin{method} \label{meth:one-variable-transformation-cdf-method} \hlt{One-Variable Transformations}\\
+Let $Y=r(X)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Discrete pushforward}: if $X$ is discrete, then $f_Y(y)=\mathbb{P}(Y=y)=\mathbb{P}(X\in r^{-1}(\{y\}))=\sum\limits_{x:r(x)=y}f_X(x)$.
+\item \hlt{CDF method}: for $Y=r(X)$, compute $F_Y(y)=\int_{\{x:r(x)\leq y\}}f_X(x)\,dx$; then $f_Y(y)=F_Y'(y)$ where differentiable.
+\item \hlt{Monotone change}: if $r$ is strictly monotone on $\operatorname{supp}X$ with inverse $s$, then $f_Y(y)=f_X(s(y))\abs{s'(y)}\mathbf{1}_{r(\operatorname{supp}X)}(y)$.
+\end{enumerate}
+\hlt{Key Insight}: The CDF method works because it translates the transformed event back into an event about $X$.
+\end{method}
+
+\begin{example} \label{ex:log-transform-exponential} \hlt{Log Transform of an Exponential Variable}\\
+Let $X\sim\operatorname{Exp}(1)$ and $Y=\log X$. Since $r(x)=\log x$ has inverse $s(y)=e^y$ with $s'(y)=e^y$, the change-of-variables formula gives $f_Y(y)=f_X(e^y)e^y=e^ye^{-e^y}$ for $y\in\R$.
+\end{example}
+
+\begin{example} \label{ex:square-transform-nonmonotone-uniform} \hlt{A Nonmonotone Square Transform}\\
+Let $X\sim\operatorname{Uniform}(-1,3)$ and $Y=X^2$. Since $f_X=\frac{1}{4}$ on $[-1,3]$, $r^{-1}(\{y\})\cap[-1,3]=\{-\sqrt y,\sqrt y\}$ for $0<y<1$ and $\{\sqrt y\}$ for $1<y<9$. Hence $f_Y(y)=\frac{1}{4\sqrt y}\mathbf{1}_{(0,1)}(y)+\frac{1}{8\sqrt y}\mathbf{1}_{(1,9)}(y)$.\\
+\hlt{Key Insight}: Non-one-to-one transformations require splitting the range into cases.
+\end{example}
+
+\begin{example} \label{ex:standard-normal-square-chi-square} \hlt{Squaring a Standard Normal}\\
+Let $Z\sim N(0,1)$ and $X=Z^2$. For $x>0$, $F_X(x)=\mathbb{P}(|Z|\leq\sqrt{x})=\Phi(\sqrt{x})-\Phi(-\sqrt{x})$,\\
+so $f_X(x)=x^{-\frac{1}{2}}\phi(\sqrt{x})=(2\pi)^{-\frac{1}{2}}x^{-\frac{1}{2}}e^{-\frac{x}{2}}$. Hence $X\sim\chi_1^2=\operatorname{Gamma}(\frac{1}{2},\frac{1}{2})$ in the rate convention.
+\end{example}
+
+\begin{example} \label{ex:reciprocal-uniform-density} \hlt{Reciprocal of a Uniform Variable}\\
+Let $U\sim\operatorname{Uniform}(0,1)$ and $V=\frac{1}{U}$. Then $F_V(v)=0$ for $v<1$, while for $v\geq1$, $F_V(v)=\mathbb{P}(U\geq\frac{1}{v})=1-\frac{1}{v}$.\\
+Hence $f_V(v)=v^{-2}\mathbf{1}_{[1,\infty)}(v)$.
+\end{example}
+
+\begin{proposition} \label{prop:probability-integral-and-inverse-transform} \hlt{Probability Integral Transform and Inverse Transform}\\
+Let $F:I\to(0,1)$ be a continuous strictly increasing CDF with inverse $F^{-1}:(0,1)\to I$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim F$, then $F(X)\sim\operatorname{Uniform}(0,1)$.
+\item If $U\sim\operatorname{Uniform}(0,1)$ and $Y=F^{-1}(U)$, then $F_Y=F$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $0<u<1$, $\mathbb{P}(F(X)\leq u)=\mathbb{P}(X\leq F^{-1}(u))=F(F^{-1}(u))=u$, with endpoint values $0,1$.
+\item For $x\in I$, $\mathbb{P}(Y\leq x)=\mathbb{P}(F^{-1}(U)\leq x)=\mathbb{P}(U\leq F(x))=F(x)$.
+\end{enumerate}
+\hlt{Structural Commentary}: $F$ maps its law to uniform scale; $F^{-1}$ maps uniform scale back.\\
+\hlt{Key Insight}: Uniform random numbers become target laws by applying inverse CDFs.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:several-variable-transformation-cdf-method} \hlt{Several-Variable Transformations}\\
+For $Z=r(X,Y)$ with joint density $f_{X,Y}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sublevel set}: define $A_z\defeq\{(x,y):r(x,y)\leq z\}$.
+\item \hlt{CDF integral}: compute $F_Z(z)=\mathbb{P}(Z\leq z)=\iint_{A_z}f_{X,Y}(x,y)\,dx\,dy$.
+\item \hlt{Density}: differentiate where possible, $f_Z(z)=F_Z'(z)$.
+\end{enumerate}
+\end{method}
+
+\begin{proposition} \label{prop:two-dimensional-density-change-of-variables} \hlt{Two-Dimensional Density Change of Variables}\\
+Let $(X,Y)$ have density $f_{X,Y}$ on $D\subseteq\R^2$, and let $T:D\to E$ be one-to-one $C^1$ with inverse $h:E\to D$ and $\det DT\neq0$ on $D$. If $(U,V)=T(X,Y)$, then $f_{U,V}(u,v)=f_{X,Y}(h(u,v))\abs{\det Dh(u,v)}\mathbf{1}_E(u,v)$.
+\begin{proof}
+For Borel $B\subseteq E$, $\mathbb{P}((U,V)\in B)=\mathbb{P}((X,Y)\in h(B))$\\
+$=\int_{h(B)}f_{X,Y}(x,y)\,dx\,dy=\int_B f_{X,Y}(h(u,v))\abs{\det Dh(u,v)}\,du\,dv$ (by Theorem \ref{thm:change-of-variables-rk})\\
+\hlt{Structural Commentary}: Transforming a density means preserving probability mass while rescaling area.\\
+\hlt{Key Insight}: The absolute Jacobian accounts for local volume distortion.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:sum-and-quotient-density-formulas} \hlt{Sums and Quotients}\\
+Let $(X,Y)$ have joint density $f_{X,Y}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Sum: for $S=X+Y$, $f_S(s)=\int_\R f_{X,Y}(x,s-x)\,dx$; if $X\perp\!\!\!\perp Y$, then $f_S(s)=\int_\R f_X(x)f_Y(s-x)\,dx$.
+\item Quotient: for $Z=\frac{Y}{X}$, $f_Z(z)=\int_\R\abs{x}f_{X,Y}(x,xz)\,dx$; if $X\perp\!\!\!\perp Y$, then $f_Z(z)=\int_\R\abs{x}f_X(x)f_Y(xz)\,dx$.
+\end{enumerate}
+\hlt{Key Insight}: Add one auxiliary coordinate, change variables, integrate it out.
+\end{example}
+
+\begin{example} \label{ex:sum-of-two-independent-uniforms} \hlt{Sum of Two Independent Uniforms}\\
+Let $X_1,X_2\sim\operatorname{Uniform}(0,1)$ be independent and $Y=X_1+X_2$.\\
+Since $f_{X_1,X_2}=\mathbf{1}_{[0,1]^2}$, $F_Y(y)$ is the area of $A_y=\{(x_1,x_2)\in[0,1]^2:x_1+x_2\leq y\}$,\\
+so $F_Y(y)=\frac{y^2}{2}\mathbf{1}_{[0,1]}(y)+(1-\frac{(2-y)^2}{2})\mathbf{1}_{(1,2]}(y)+\mathbf{1}_{(2,\infty)}(y)$. Hence $f_Y(y)=y\mathbf{1}_{(0,1)}(y)+(2-y)\mathbf{1}_{(1,2)}(y)$.
+\end{example}
+
+\begin{example} \label{ex:polar-transform-standard-normal} \hlt{Polar Transform of Two Standard Normals}\\
+Let $X,Y\overset{\mathrm{iid}}{\sim}N(0,1)$, $R=(X^2+Y^2)^{\frac{1}{2}}$, and $\Theta=\operatorname{atan2}(Y,X)$.\\
+Polar change of variables gives $f_{R,\Theta}(r,\theta)=(2\pi)^{-1}re^{-\frac{r^2}{2}}\mathbf{1}_{[0,\infty)}(r)\mathbf{1}_{[0,2\pi)}(\theta)$,\\
+so $R\perp\!\!\!\perp\Theta$, $\Theta\sim\operatorname{Uniform}(0,2\pi)$, and $R^2\sim\operatorname{Exp}(\frac{1}{2})$.\\
+Hence for iid $U_1,U_2\sim\operatorname{Uniform}(0,1)$, $(\sqrt{-2\log U_1}\cos(2\pi U_2),\sqrt{-2\log U_1}\sin(2\pi U_2))\sim N(0,I_2)$.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/polar_area_patch.tikz}
+  \caption{In polar coordinates, a small patch has area approximately $r\,dr\,d\theta$.}
+  \label{fig:polar-area-patch-rdrdtheta}
+\end{figure}

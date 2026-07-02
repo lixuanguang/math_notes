@@ -1,0 +1,32 @@
+\subsection{Stochastic Optimization}
+% Stochastic approximation, SGD as stochastic recursion, simulation-based optimization.
+
+\begin{definition} \label{def:online-estimator-recursion} \hlt{Online Estimator}\\
+Let $(X_t)_{t\geq1}$ be observations in $\mathcal{X}$, let $\widehat{\theta}_0\in\Theta\subseteq\mathbb{R}^d$, let $(a_t)_{t\geq0}$ be positive step sizes, and let $H:\Theta\times\mathcal{X}\to\mathbb{R}^d$.\\
+$\widehat{\theta}_{t+1}\defeq\widehat{\theta}_t+a_tH(\widehat{\theta}_t,X_{t+1})$ for $t\geq0$.\\
+\hlt{Structural Commentary}: $(\widehat{\theta}_t)$ is adapted to $\mathcal{F}_t\defeq\sigma(\widehat{\theta}_0,X_1,\ldots,X_t)$.\\
+\hlt{Key Insight}: Under stationarity, analyze the recursion through $h(\theta)\defeq\mathbb{E}H(\theta,X)$.
+\end{definition}
+
+\begin{method} \label{method:sl-sgd-minibatch} \hlt{Minibatch Stochastic Gradient Descent}\\
+Let $J_n(\theta)=n^{-1}\sum\limits_{i=1}^nL(f_\theta(x_i),y_i)$, $|B_k|=b$, and $\eta_k>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Sample $B_k$ uniformly.
+\item Compute $g_k=b^{-1}\sum_{i\in B_k}\nabla_{\theta}L(f_{\theta_k}(x_i),y_i)$.
+\item Update $\theta_{k+1}=\theta_k-\eta_kg_k$.
+\end{enumerate}
+Uniform sampling gives $\mathbb E[g_k\mid\theta_k]=\nabla J_n(\theta_k)$; larger $b$ trades lower noise for higher cost.
+\end{method}
+
+\begin{definition} \label{def:sl-momentum-adaptive-methods} \hlt{Momentum and Adaptive Methods}\\
+Let $g_k$ denote the stochastic gradient at $\theta_k$; $\odot$, division, and square roots are coordinatewise.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Momentum}: $v_k=\mu v_{k-1}+g_k$ and $\theta_{k+1}=\theta_k-\eta_kv_k$, with $0\leq\mu<1$.
+\item \hlt{AdaGrad}: $r_k=r_{k-1}+g_k\odot g_k$ and $\theta_{k+1}=\theta_k-\frac{\eta_kg_k}{\sqrt{r_k}+\varepsilon}$.
+\item \hlt{RMSProp}: $r_k=\rho r_{k-1}+(1-\rho)g_k\odot g_k$ and $\theta_{k+1}=\theta_k-\frac{\eta_kg_k}{\sqrt{r_k}+\varepsilon}$, with $0<\rho<1$.
+\item \hlt{Adam}: update $(m_k,r_k)$ as exponential averages of $(g_k,g_k\odot g_k)$,\\
+set $(\widehat m_k,\widehat r_k)=(\frac{m_k}{1-\beta_1^k},\frac{r_k}{1-\beta_2^k})$, and $\theta_{k+1}=\theta_k-\frac{\eta_k\widehat m_k}{\sqrt{\widehat r_k}+\varepsilon}$.
+\end{enumerate}
+\end{definition}

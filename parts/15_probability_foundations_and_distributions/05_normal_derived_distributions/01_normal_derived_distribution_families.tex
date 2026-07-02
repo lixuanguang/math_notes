@@ -1,0 +1,141 @@
+\subsection{Normal-Derived Distribution Families}
+% Source integration: supplied Chapter 6 screenshots, Sections 6.1--6.4.
+
+Independent $N(0,1)$ variables generate the normal-derived inference laws used below: $\chi^2$ sums, Student $t$ ratios, and $F$ ratios.
+
+\begin{proposition} \label{prop:chi-square-normal-sums} \hlt{Chi-Square Sums}\\
+Let $n\geq1$ and $Z_1,\ldots,Z_n\overset{\mathrm{ind}}{\sim}N(0,1)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $V=\sum\limits_{i=1}^nZ_i^2$, $V\sim\chi_n^2=\operatorname{Gamma}(\frac{n}{2},\frac{1}{2})$ in the rate convention,\\
+$f_V(v)=2^{-\frac{n}{2}}\Gamma(\frac{n}{2})^{-1}v^{\frac{n}{2}-1}e^{-\frac{v}{2}}\mathbf{1}_{(0,\infty)}(v)$, $\psi_V(t)=(1-2t)^{-\frac{n}{2}}$ for $t<\frac{1}{2}$, $\mathbb{E}V=n$, and $\operatorname{Var}(V)=2n$.
+\item If $U\sim\chi_m^2$, $W\sim\chi_n^2$, and $U\perp\!\!\!\perp W$, then $U+W\sim\chi_{m+n}^2$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+For $Z\sim N(0,1)$ and $t<\frac{1}{2}$, $\mathbb{E}e^{tZ^2}=(2\pi)^{-\frac{1}{2}}\int_{\mathbb{R}}e^{-\frac{(1-2t)z^2}{2}}\,dz=(1-2t)^{-\frac{1}{2}}$.\\
+By independence, $\psi_V(t)=\prod\limits_{i=1}^n\mathbb{E}e^{tZ_i^2}=(1-2t)^{-\frac{n}{2}}$.
+By MGF uniqueness, $V\sim\operatorname{Gamma}(\frac{n}{2},\frac{1}{2})$.\\
+Differentiating $\psi_V$ at $0$ gives $\mathbb{E}V=n$ and $\operatorname{Var}(V)=2n$.
+\item If $U\perp\!\!\!\perp W$, then $\psi_{U+W}(t)=(1-2t)^{-\frac{m}{2}}(1-2t)^{-\frac{n}{2}}=(1-2t)^{-\frac{m+n}{2}}$, hence $U+W\sim\chi_{m+n}^2$.
+\end{enumerate}
+\hlt{Structural Commentary}: Chi-square degrees of freedom add by MGF exponents.\\
+\hlt{Key Insight}: Squared independent standard normals form gamma sums.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:normal-sample-mean-variance} \hlt{Normal Sample Statistics}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sample}: $X_1,\ldots,X_n$ are independent with $X_i\sim N(\mu,\sigma^2)$, $n\geq2$, and $\sigma^2>0$.
+\item \hlt{Sample mean}: $\overline{X}\defeq n^{-1}\sum\limits_{i=1}^nX_i$ estimates the location $\mu$.
+\item \hlt{Sample variance}: $S^2\defeq(n-1)^{-1}\sum\limits_{i=1}^n(X_i-\overline{X})^2$ estimates the scale $\sigma^2$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:normal-sample-mean-law} \hlt{Normal Sample Mean}\\
+Let $X_1,\ldots,X_n$ be independent with $X_i\sim N(\mu,\sigma^2)$, and set $\overline{X}\defeq n^{-1}\sum\limits_{i=1}^nX_i$. Then $\overline{X}\sim N(\mu,\frac{\sigma^2}{n})$.
+\begin{proof} Since independent normal sums are normal, $\overline{X}$ is normal.\\
+Also $\mathbb{E}\overline{X}=n^{-1}\sum\limits_i\mathbb{E}X_i=\mu$ and $\operatorname{Var}(\overline{X})=n^{-2}\sum\limits_i\operatorname{Var}(X_i)=\frac{\sigma^2}{n}$. Thus $\overline{X}\sim N(\mu,\frac{\sigma^2}{n})$.\\
+\hlt{Structural Commentary}: Averaging preserves normality and divides variance by $n$.\\
+\hlt{Key Insight}: The sample mean is an exact normal pivot center, not an asymptotic approximation.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:normal-mean-residual-independence} \hlt{Mean-Residual Independence}\\
+Let $X_1,\ldots,X_n$ be independent with $X_i\sim N(\mu,\sigma^2)$, set $\overline{X}\defeq n^{-1}\sum\limits_iX_i$, $R\defeq(X_1-\overline{X},\ldots,X_n-\overline{X})$,\\
+and $S^2\defeq(n-1)^{-1}\sum\limits_iR_i^2$. Then $\overline{X}\perp\!\!\!\perp R$, hence $\overline{X}\perp\!\!\!\perp S^2$.
+\begin{proof} Let $Z_i\defeq\frac{X_i-\mu}{\sigma}$, so $Z\sim N_n(0,I_n)$. Choose orthogonal $Q$ with first row $n^{-\frac{1}{2}}\mathbf{1}^\top$, set $Y\defeq QZ$.\\
+Then $Y\sim N_n(0,I_n)$, $Y_1\perp\!\!\!\perp(Y_2,\ldots,Y_n)$. Since $\overline{X}=\mu+\frac{\sigma Y_1}{\sqrt n}$ and $R=\sigma(I-n^{-1}\mathbf{1}\mathbf{1}^\top)Z=\sigma Q^\top(0,Y_2,\ldots,Y_n)^\top$, $\overline{X}$ is function of $Y_1$, $R$ is function of $(Y_2,\ldots,Y_n)$. Therefore $\overline{X}\perp\!\!\!\perp R$, by $S^2=(n-1)^{-1}\sum\limits_iR_i^2$, $\overline{X}\perp\!\!\!\perp S^2$.\\
+\hlt{Structural Commentary}: Mean and residuals are orthogonal projections.\\
+\hlt{Key Insight}: For Gaussian vectors, orthogonal components are independent.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:normal-sample-variance-chi-square} \hlt{Sample Variance Chi-Square Law}\\
+Given independent $X_1,\ldots,X_n$; $X_i\sim N(\mu,\sigma^2)$;$S^2\defeq(n-1)^{-1}\sum\limits_{i=1}^n(X_i-\overline{X})^2$. Then $\frac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1}$.
+\begin{proof} Let $Z_i\defeq\frac{X_i-\mu}{\sigma}$, so $Z=(Z_1,\ldots,Z_n)\sim N_n(0,I_n)$.\\
+Choose orthogonal matrix $Q$ with first row $n^{-\frac{1}{2}}(1,\ldots,1)$, set $Y\defeq QZ$.\\
+Orthogonal invariance gives $Y\sim N_n(0,I_n)$ with independent coordinates.\\
+Then $Y_1=\frac{\sqrt n(\overline{X}-\mu)}{\sigma}$ and $\sum\limits_{j=2}^nY_j^2=\sum\limits_{i=1}^n(Z_i-\overline{Z})^2=\frac{(n-1)S^2}{\sigma^2}$.\\
+Thus $\frac{(n-1)S^2}{\sigma^2}$ is the sum of squares of $n-1$ independent $N(0,1)$ variables, hence $\chi^2_{n-1}$.\\
+\hlt{Structural Commentary}: Cantering leaves $n-1$ residual directions.\\
+\hlt{Key Insight}: The sample variance is the squared Gaussian residual length scaled by $\sigma^2$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:student-t-distribution} \hlt{Student $t$ Distribution}\\
+If $Z\sim N(0,1)$, $U\sim\chi_n^2$, $Z\perp\!\!\!\perp U$, then $T=Z/\sqrt{\frac{U}{n}}$ has \hlt{Student $t$ distribution} with $df = n \geq 1$, $T\sim t_n$.
+\end{definition}
+
+\begin{proposition} \label{prop:student-t-density} \hlt{Student $t$ Density}\\
+Let $n\geq1$ and $T=Z/\sqrt{\frac{U}{n}}$ with $Z\sim N(0,1)$, $U\sim\chi_n^2$, and $Z\perp\!\!\!\perp U$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $t\in\mathbb{R}$, $f_T(t)=\frac{\Gamma(\frac{n+1}{2})}{\sqrt{n\pi}\Gamma(\frac{n}{2})}(1+\frac{t^2}{n})^{-\frac{n+1}{2}}$.
+\item For all $t\in\mathbb{R}$, $f_T(-t)=f_T(t)$.
+\item For each fixed $t\in\mathbb{R}$, $\lim\limits_{n\to\infty}f_T(t)=\phi(t)=(2\pi)^{-\frac{1}{2}}e^{-\frac{t^2}{2}}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For fixed $u>0$, $z=t\sqrt{\frac{u}{n}}$ has Jacobian $\sqrt{\frac{u}{n}}$, so $f_T(t)=\int_0^\infty\phi(t\sqrt{\frac{u}{n}})\sqrt{\frac{u}{n}}f_U(u)\,du$.\\
+Substituting $\phi(z)=(2\pi)^{-\frac{1}{2}}e^{-\frac{z^2}{2}}$ and $f_U(u)=2^{-\frac{n}{2}}\Gamma(\frac{n}{2})^{-1}u^{\frac{n}{2}-1}e^{-\frac{u}{2}}\mathbf{1}_{(0,\infty)}(u)$ gives\\
+$f_T(t)=\frac{1}{\sqrt{n\pi}2^{\frac{n+1}{2}}\Gamma(\frac{n}{2})}\int_0^\infty u^{\frac{n+1}{2}-1}e^{-\frac{(1+\frac{t^2}{n})u}{2}}\,du$. Then $F_T(t) = \Gamma(\frac{n+1}{2})2^{\frac{n+1}{2}}(1+\frac{t^2}{n})^{-\frac{n+1}{2}}$, yielding density.
+\item By (i), $f_T(t)=c_nh_n(t^2)$ for $c_n>0$, so $f_T(-t)=f_T(t)$ for all $t$.
+\item For fixed $t$, $f_T(t)=(2\pi)^{-\frac{1}{2}}\frac{\Gamma(\frac{n+1}{2})}{\sqrt{\frac{n}{2}}\Gamma(\frac{n}{2})}(1+\frac{t^2}{n})^{-\frac{n+1}{2}}$, gamma ratio tends to $1$, last factor tends to $e^{-\frac{t^2}{2}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Student $t$ is a normal scale mixture with random chi-square scale.\\
+\hlt{Key Insight}: Random denominator uncertainty thickens the normal tails.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:t-one-is-cauchy} \hlt{$t_1$ is Cauchy}\\
+If $T\sim t_1$, then $f_T(t)=\Gamma(1)(\sqrt{\pi}\Gamma(\frac{1}{2}))^{-1}(1+t^2)^{-1}=\frac{1}{\pi(1+t^2)}$, so $T\sim\operatorname{Cauchy}(0,1)$.
+\end{example}
+
+\begin{definition} \label{def:f-distribution} \hlt{$F$ Distribution}\\
+If $U\sim\chi_m^2$, $V\sim\chi_n^2$, $U\perp\!\!\!\perp V$, then $W=(\frac{U}{m})/(\frac{V}{n})$ has \hlt{$F$ distribution}, $df = (m, n)$, $W\sim F_{m,n}$.
+\end{definition}
+
+\begin{proposition} \label{prop:f-density} \hlt{$F$ Density}\\
+Let $m,n\geq1$ and $W=(\frac{U}{m})/(\frac{V}{n})$, where $U\sim\chi_m^2$, $V\sim\chi_n^2$, and $U\perp\!\!\!\perp V$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f_W(w)=\frac{\Gamma(\frac{m+n}{2})}{\Gamma(\frac{m}{2})\Gamma(\frac{n}{2})}(\frac{m}{n})^{\frac{m}{2}}w^{\frac{m}{2}-1}(1+\frac{mw}{n})^{-\frac{m+n}{2}}\mathbf{1}_{(0,\infty)}(w)$.
+\item If $n>2$, then $\mathbb{E}W=\frac{n}{n-2}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $w>0$, set $u=\frac{mwv}{n}$; the Jacobian is $\frac{mv}{n}$, so $f_W(w)=\int_0^\infty f_U(\frac{mwv}{n})f_V(v)(\frac{mv}{n})\,dv$. By substitution,\\
+$f_W(w)=Cw^{\frac{m}{2}-1}\int_0^\infty v^{\frac{m+n}{2}-1}e^{-\frac{(1+\frac{mw}{n})v}{2}}\,dv$; $C=\frac{(\frac{m}{n})^{\frac{m}{2}}}{2^{\frac{m+n}{2}}\Gamma(\frac{m}{2})\Gamma(\frac{n}{2})}$, by gamma integral, QED.
+\item Since $U\perp\!\!\!\perp V$, $\mathbb{E}W=(\frac{n}{m})\mathbb{E}U\,\mathbb{E}(V^{-1})=n\,\mathbb{E}(V^{-1})=\frac{n}{n-2}$ for $n>2$.
+\end{enumerate}
+\hlt{Structural Commentary}: An $F$ variable is a ratio of independent chi-square averages.\\
+\hlt{Key Insight}: Denominator variability controls the right tail and the mean condition $n>2$.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:f-reciprocal-and-squared-t} \hlt{Reciprocal $F$ and Squared $t$}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+For $m,n\geq1$, if $W\sim F_{m,n}$, then $W^{-1}\sim F_{n,m}$.
+\item
+If $T\sim t_n$, then $T^2\sim F_{1,n}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+Write $W=(\frac{U}{m})/(\frac{V}{n})$ with $U\sim\chi_m^2$, $V\sim\chi_n^2$, and $U\perp\!\!\!\perp V$; then $W^{-1}=(\frac{V}{n})/(\frac{U}{m})\sim F_{n,m}$.
+\item
+Write $T=Z/\sqrt{\frac{V}{n}}$ with $Z\sim N(0,1)$, $V\sim\chi_n^2$, and $Z\perp\!\!\!\perp V$; since $Z^2\sim\chi_1^2$, $T^2=(\frac{Z^2}{1})/(\frac{V}{n})\sim F_{1,n}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Reciprocals swap $F$ degrees of freedom, and squaring $t$ removes the normal sign.\\
+\hlt{Key Insight}: Both identities are immediate from the same chi-square-ratio representation.
+\end{proof}
+\end{corollary}

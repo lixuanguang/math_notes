@@ -1,0 +1,81 @@
+\subsection{Expectation, Variance, and LOTUS}
+% Expectation, moments, variance, covariance, Jensen, Markov/Chebyshev inequalities, integration as probabilistic averaging.
+% Source integration: attached notation pages define expectation, variance, covariance, and expectation of functions through the distribution function.
+
+Expectation is the averaging operation attached to a probability law. In the notation of Section \ref{def:probability-space-random-variable-law}, if $X$ has law $F_X$, then integration against $F_X$ is the common notation that covers both sums for discrete variables and ordinary integrals for variables with densities.
+
+\begin{definition} \label{def:expectation-discrete-continuous-and-functionals} \hlt{Expectation Through the Law}\\
+Let $X$ be real-valued with distribution function $F_X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Expectation}: if $\int_{\R}|x|\,dF_X(x)<\infty$, then $\mathbb{E}(X)\defeq\int_{\R}x\,dF_X(x)$.
+\item \hlt{Discrete form}: if $X$ has support $S$, mass function $f_X$, $\mathbb{E}(X)=\sum\limits_{x\in S}xf_X(x)$ when $\sum\limits_{x\in S}|x|f_X(x)<\infty$.
+\item \hlt{Density form}: if $X$ has density $f_X$, then $\mathbb{E}(X)=\int_{\R}xf_X(x)\,dx$ when $\int_{\R}|x|f_X(x)\,dx<\infty$.
+\item \hlt{Function form}: for measurable $r:\R\to\R$, if $\int_{\R}|r(x)|\,dF_X(x)<\infty$, then $\mathbb{E}(r(X))\defeq\int_{\R}r(x)\,dF_X(x)$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:expectation-from-two-coin-count} \hlt{Expectation of the Two-Toss Head Count}\\
+Let $\Omega=\{H,T\}^2$ with $\mathbb{P}(\{\omega\})=\frac{1}{4}$, and let $X(\omega)$ be the number of heads in $\omega$.\\
+Then $f_X(k)=\binom{2}{k}2^{-2}$ for $k=0,1,2$, so $\mathbb{E}(X)=\sum\limits_{k=0}^{2}k f_X(k)=0\cdot\frac{1}{4}+1\cdot\frac{1}{2}+2\cdot\frac{1}{4}=1$.
+\end{example}
+
+\begin{definition} \label{def:variance-covariance-and-standard-deviation} \hlt{Variance and Covariance}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{variance} of $X$ is $\operatorname{Var}(X)\defeq\mathbb{E}[(X-\mathbb{E}X)^2]$, assuming $\mathbb{E}(X^2)<\infty$.
+\item The \hlt{standard deviation} of $X$ is $\operatorname{sd}(X)\defeq\sqrt{\operatorname{Var}(X)}$.
+\item The \hlt{covariance} of $X,Y$ is $\operatorname{Cov}(X,Y)\defeq\mathbb{E}[(X-\mathbb{E}X)(Y-\mathbb{E}Y)]$, assuming $\mathbb{E}(X^2),\mathbb{E}(Y^2)<\infty$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:indicator-expectation-probability} \hlt{Indicators Turn Probabilities into Expectations}\\
+For $A\in\mathcal{F}$, let $\mathbf{1}_A:\Omega\to\{0,1\}$ be $\mathbf{1}_A(\omega)=1$ for $\omega\in A$ and $\mathbf{1}_A(\omega)=0$ for $\omega\notin A$. Then $\mathbb{E}(\mathbf{1}_A)=\mathbb{P}(A)$.
+\begin{proof}
+Since $\Omega=A\sqcup A^c$ and $\mathbf{1}_A=1$ on $A$, $0$ on $A^c$, $\mathbb{E}(\mathbf{1}_A)=1\cdot\mathbb{P}(A)+0\cdot\mathbb{P}(A^c)=\mathbb{P}(A)$.\\
+\hlt{Structural Commentary}: Indicators encode events as $0$-$1$ random variables.\\
+\hlt{Key Insight}: Probabilities are expectations of indicators.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:expectation-section-source-scope} \hlt{Law-Based Integration}\\
+For measurable $r$, $\mathbb{E}(r(X))$ depends only on the law of $X$: $\mathbb{E}(r(X))=\int_{\R}r(x)\,dF_X(x)$ whenever integrable.\\
+Discrete laws give $\sum\limits_x r(x)f_X(x)$; density laws give $\int_{\R}r(x)f_X(x)\,dx$.
+\end{remark}
+
+\begin{example} \label{ex:first-expectation-computations} \hlt{First Expectation Computations}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Bernoulli}(p)$, then $\mathbb{E}X=0(1-p)+1p=p$.
+\item If $X\sim\operatorname{Uniform}(-1,3)$, then $\mathbb{E}X=(\frac{1}{4})\int_{-1}^{3}x\,dx=1$.
+\item If $X\sim\operatorname{Cauchy}(0,1)$, then $\mathbb{E}|X|=(\frac{2}{\pi})\int_0^\infty x(1+x^2)^{-1}\,dx=\infty$, so $\mathbb{E}X$ does not exist.
+\end{enumerate}
+\end{example}
+
+\begin{theorem} \label{thm:law-of-unconscious-statistician} \hlt{Expectation of a Function}\\
+Let $r$ be measurable and assume the displayed expectations exist.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{One variable}: for real-valued $X$, $\mathbb{E}(r(X))=\int_{\R}r(x)\,dF_X(x)$.
+\item \hlt{Several variables}: for $(X,Y)$ with joint law $F_{X,Y}$, $\mathbb{E}(r(X,Y))=\int_{\R^2}r(x,y)\,dF_{X,Y}(x,y)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\mathcal{L}(X)=X_\ast\mathbb{P}$, $\mathbb{E}(r(X))=\int_\Omega r(X(\omega))\,d\mathbb{P}(\omega)=\int_{\R}r(x)\,d\mathcal{L}(X)(x)=\int_{\R}r(x)\,dF_X(x)$.
+\item Let $W=(X,Y)$. Since $\mathcal{L}(W)=W_\ast\mathbb{P}=F_{X,Y}$,\\
+$\mathbb{E}(r(X,Y))=\int_\Omega r(W(\omega))\,d\mathbb{P}(\omega)=\int_{\R^2}r(x,y)\,d\mathcal{L}(W)(x,y)=\int_{\R^2}r(x,y)\,dF_{X,Y}(x,y)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Expectations of transformations integrate over the transformed law.\\
+\hlt{Key Insight}: Pushforward laws let functions move from random variables to their values.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:lotus-transform-examples} \hlt{Using the Function Rule}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Uniform}(0,1)$ and $Y=e^X$, then $\mathbb{E}Y=\mathbb{E}(e^X)=\int_0^1e^x\,dx=e-1$.
+\item If $X\sim\operatorname{Uniform}(0,1)$ and $Y=\max\{X,1-X\}$, then $\mathbb{E}Y=\int_0^{\frac{1}{2}}(1-x)\,dx+\int_{\frac{1}{2}}^{1}x\,dx=\frac{3}{4}$.
+\item If $(X,Y)\sim\operatorname{Uniform}([0,1]^2)$ and $Z=X^2+Y^2$, then $\mathbb{E}Z=\int_0^1\int_0^1(x^2+y^2)\,dx\,dy=\frac{2}{3}$.
+\end{enumerate}
+\end{example}

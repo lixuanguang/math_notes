@@ -1,0 +1,647 @@
+\subsection{Spectral Theory of Structured Operators}
+
+
+% **Role:** structure revealed by invariant subspaces and eigenbehavior.
+%
+% Normal, self-adjoint, positive, unitary operators; Schur theorem; spectral theorem; spectral resolutions.
+
+Structured spectral theory studies operators whose geometry and spectrum align. Normal, self-adjoint, positive, and unitary maps admit orthogonal decompositions and spectral resolutions.
+
+\begin{definition} \label{def:normal-operator} \hlt{Normal Operator}\\
+An operator $T\in\LL(\mathcal{V})$ on a finite-dim inner-product space is \hlt{normal} if it commutes with its adjoint: $TT^*=T^*T$.\\
+A square matrix $A$ is \hlt{normal} if $A^*A=AA^*$.\\
+Every self-adjoint operator, every Hermitian matrix, and every unitary matrix is normal.
+\end{definition}
+
+\begin{theorem} \label{thm:normal-iff-equal-adjoint-norms} \hlt{Normal Operators and Equal Adjoint Norms}\\
+An operator $T\in\LL(\mathcal{V})$ is normal if and only if $\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$ for every $\mathbf{v}\in\mathcal{V}$.
+\begin{proof}
+The operator $A=T^*T-TT^*$ is self-adjoint.\\
+For every $\mathbf{v}\in\mathcal{V}$, $\innerprod{A\mathbf{v},\mathbf{v}} =\innerprod{T^*T\mathbf{v},\mathbf{v}}-\innerprod{TT^*\mathbf{v},\mathbf{v}} =\norm{T\mathbf{v}}^2-\norm{T^*\mathbf{v}}^2$.\\
+Thus $T$ is normal exactly when $A=0$, which by Proposition \ref{prop:self-adjoint-zero-quadratic-form-implies-zero} is equivalent to the displayed quadratic form being zero for every $\mathbf{v}$. This is equivalent to $\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$ for every $\mathbf{v}$.\\
+\hlt{Structural Commentary}: Normality is measured by the self-adjoint commutator $T^*T-TT^*$.\\
+\hlt{Key Insight}: A normal operator and its adjoint move every vector the same distance.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:normal-operator-adjoint-eigenvectors} \hlt{Normal Operators Share Eigenvectors with Their Adjoints}\\
+Let $T\in\LL(\mathcal{V})$ be normal. If $T\mathbf{v}=\lambda\mathbf{v}$ for some $\mathbf{v}\neq\mathbf{0}$, then $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.
+\begin{proof}
+The operator $T-\lambda I_{\mathcal{V}}$ is normal by Proposition \ref{prop:basic-adjoint-identities} and scalar multiples of $I_{\mathcal{V}}$ commute with $T$ and $T^*$. Applying Theorem \ref{thm:normal-iff-equal-adjoint-norms} to $T-\lambda I_{\mathcal{V}}$ gives $0=\norm{(T-\lambda I_{\mathcal{V}})\mathbf{v}} =\norm{(T-\lambda I_{\mathcal{V}})^*\mathbf{v}} =\norm{(T^*-\overline{\lambda}I_{\mathcal{V}})\mathbf{v}}$.\\
+\hlt{Structural Commentary}: For normal operators, kernels of $T-\lambda I$ and $T^*-\overline{\lambda}I$ coincide.\\
+\hlt{Key Insight}: Normality makes eigenvector information visible from both $T$ and $T^*$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/normal_operator_eigenvectors.tikz}
+  \caption{For normal $T$, $T\mathbf{v}=\lambda\mathbf{v}$ implies $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.}
+  \label{fig:normal-operator-eigenvectors}
+\end{figure}
+
+\begin{theorem} \label{thm:normal-eigenvectors-distinct-eigenvalues-orthogonal} \hlt{Orthogonal Eigenvectors for Normal Operators}\\
+Let $T\in\LL(\mathcal{V})$ be normal. Eigenvectors of $T$ corresponding to distinct eigenvalues are orthogonal.
+\begin{proof}
+Suppose $T\mathbf{u}=\alpha\mathbf{u}$ and $T\mathbf{v}=\beta\mathbf{v}$ with $\alpha\neq\beta$. By Theorem \ref{thm:normal-operator-adjoint-eigenvectors}, $T^*\mathbf{v}=\overline{\beta}\mathbf{v}$.\\
+Hence $\alpha\innerprod{\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T^*\mathbf{v}} =\innerprod{\mathbf{u},\overline{\beta}\mathbf{v}} =\beta\innerprod{\mathbf{u},\mathbf{v}}$. Since $\alpha-\beta\neq0$, $\innerprod{\mathbf{u},\mathbf{v}}=0$.\\
+\hlt{Structural Commentary}: Normality lets the operator move from one eigenvector to the other through the adjoint.\\
+\hlt{Key Insight}: Distinct eigenvalue scalings are incompatible unless the inner product is zero.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:self-adjoint-eigenvalues-real} \hlt{Eigenvalues of Self-Adjoint Operators Are Real}\\
+Every eigenvalue of a self-adjoint operator on a finite-dimensional inner-product space is real.
+\begin{proof}
+Let $T=T^*$ and $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $\lambda\norm{\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\innerprod{\mathbf{v},\lambda\mathbf{v}} =\overline{\lambda}\norm{\mathbf{v}}^2$.\\
+Since $\norm{\mathbf{v}}^2>0$, $\lambda=\overline{\lambda}$, so $\lambda\in\mathbb{R}$.\\
+\hlt{Structural Commentary}: Self-adjointness moves $T$ between inner-product slots without changing the value.\\
+\hlt{Key Insight}: An eigenvalue must equal its conjugate because the eigenvector has positive squared norm.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:invertible-quadratic-self-adjoint} \hlt{Invertible Quadratic Expressions}\\
+Let $T\in\LL(\mathcal{V})$ be self-adjoint on a finite-dimensional inner-product space.\\
+If $b,c\in\mathbb{R}$ and $b^2<4c$, then $T^2+bT+cI_{\mathcal{V}}$ is invertible.
+\begin{proof}
+Let $S=T^2+bT+cI_{\mathcal{V}}$. For $\mathbf{v}\neq\mathbf{0}$,
+\begin{align}
+\innerprod{S\mathbf{v},\mathbf{v}} &=\norm{T\mathbf{v}}^2+b\innerprod{T\mathbf{v},\mathbf{v}}+c\norm{\mathbf{v}}^2 \geq \norm{T\mathbf{v}}^2-\abs{b}\norm{T\mathbf{v}}\norm{\mathbf{v}}+c\norm{\mathbf{v}}^2 \nonumber \\
+&=\left(\norm{T\mathbf{v}}-\frac{\abs{b}}{2}\norm{\mathbf{v}}\right)^2+\left(c-\frac{b^2}{4}\right)\norm{\mathbf{v}}^2>0 \nonumber
+\end{align}
+Thus $S\mathbf{v}\neq\mathbf{0}$ for every nonzero $\mathbf{v}$, so $\ker(S)=\{\mathbf{0}\}$. In finite dimensions, injectivity implies invertibility.\\
+\hlt{Structural Commentary}: Negative discriminant keeps this self-adjoint quadratic positive.\\
+\hlt{Key Insight}: Self-adjointness converts $\innerprod{T^2\mathbf{v},\mathbf{v}}$ into $\norm{T\mathbf{v}}^2$, so completing the square controls the kernel.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:self-adjoint-operators-have-eigenvalues} \hlt{Self-Adjoint Operators Have Eigenvalues}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real inner-product space. Every self-adjoint $T\in\LL(\mathcal{V})$ has an eigenvalue.
+\begin{proof}
+Choose $\mathbf{v}\neq\mathbf{0}$ and set $n=\dim(\mathcal{V})$.\\
+The list $\mathbf{v},T\mathbf{v},\ldots,T^n\mathbf{v}$ is linearly dependent, so some nonzero real polynomial $p$ satisfies $p(T)\mathbf{v}=\mathbf{0}$.\\
+Factor $p$ over $\mathbb{R}$ as $p(x)=a\prod\limits_{j=1}^{M}(x^2+b_jx+c_j)\prod\limits_{k=1}^{m}(x-\lambda_k)$, where $a\neq0$, $b_j^2<4c_j$, $\lambda_k\in\mathbb{R}$.\\
+By Proposition \ref{prop:invertible-quadratic-self-adjoint}, each quadratic factor
+$Q_j(T)\defeq T^2+b_jT+c_jI_{\mathcal{V}}$ is invertible. Let
+$R(T)=\prod_j Q_j(T)$ and $L(T)=\prod_k(T-\lambda_kI_{\mathcal{V}})$. The factors commute because they are polynomials in $T$, and $R(T)$ is invertible.\\
+If $m=0$, then $p(T)=aR(T)$ would be invertible, contradicting $p(T)\mathbf{v}=\mathbf{0}$ with $\mathbf{v}\neq\mathbf{0}$. Hence $m\geq1$.\\
+Since $\mathbf{0}=p(T)\mathbf{v}=aR(T)L(T)\mathbf{v}$ and $aR(T)$ is invertible, $L(T)\mathbf{v}=\mathbf{0}$. Thus $L(T)$ has nontrivial kernel.\\
+If every $T-\lambda_kI_{\mathcal{V}}$ were injective, their product $L(T)$ would be injective, a contradiction. Therefore some $T-\lambda_kI_{\mathcal{V}}$ is not injective, and $\lambda_k$ is an eigenvalue of $T$.\\
+\hlt{Structural Commentary}: An annihilating polynomial remains; quadratic factors are invertible.\\
+\hlt{Key Insight}: The nontrivial kernel must come from a real linear factor, hence from an eigenvalue.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:self-adjoint-invariant-subspaces} \hlt{Self-Adjoint Operators and Invariant Subspaces}\\
+Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}$ be a subspace of $\mathcal{V}$ invariant under $T$. Then:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}^{\perp}$ is invariant under $T$;
+\item $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ is self-adjoint;
+\item $T|_{\mathcal{U}^{\perp}}\in\LL(\mathcal{U}^{\perp})$ is self-adjoint.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item
+If $\mathbf{v}\in\mathcal{U}^{\perp}$ and $\mathbf{u}\in\mathcal{U}$, then $\innerprod{T\mathbf{v},\mathbf{u}}=\innerprod{\mathbf{v},T\mathbf{u}}=0$ because $T\mathbf{u}\in\mathcal{U}$. Hence $T\mathbf{v}\in\mathcal{U}^{\perp}$.
+\item For $\mathbf{u},\mathbf{v}\in\mathcal{U}$, $\innerprod{(T|_{\mathcal{U}})\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T\mathbf{v}} =\innerprod{\mathbf{u},(T|_{\mathcal{U}})\mathbf{v}}$. Thus $T|_{\mathcal{U}}$ is self-adjoint.
+\item By (i), $\mathcal{U}^{\perp}$ is invariant, so (ii)'s argument applies to $T|_{\mathcal{U}^{\perp}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Self-adjointness preserves orthogonal complements of invariant subspaces.\\
+\hlt{Key Insight}: Move $T$ across the inner product; invariance of $\mathcal{U}$ then forces orthogonality to persist.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:schur-triangularization} \hlt{Schur Triangularisation}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\begin{proof}
+Proceed by induction on $n=\dim(\mathcal{V})$. The cases $n=0$ and $n=1$ are immediate.\\
+Suppose $n\geq2$ and the result holds for smaller dimensions. By Theorem \ref{thm:complex-operator-has-eigenvalue}, choose a unit eigenvector $\mathbf{e}_1$ of $T$, say $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Let $\mathcal{U}=\operatorname{span}(\mathbf{e}_1)$ and define $S\in\LL(\mathcal{U}^{\perp})$ by $S\mathbf{w}=P_{\mathcal{U}^{\perp}}(T\mathbf{w})$.\\
+By induction, choose an orthonormal basis $(\mathbf{e}_2,\ldots,\mathbf{e}_n)$ of $\mathcal{U}^{\perp}$ with respect to which $S$ has an upper-triangular matrix. Then $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal basis of $\mathcal{V}$.\\
+For $j\geq2$, the coordinates of $T\mathbf{e}_j$ along $\mathbf{e}_2,\ldots,\mathbf{e}_n$ are exactly the coordinates of $S\mathbf{e}_j$, hence have no entries below row $j$. Also $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Therefore $[T]_{\gamma\leftarrow\gamma}$ is upper triangular for $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$.\\
+\hlt{Structural Commentary}: Schur triangularisation builds an eigenline first, then triangularises the projected action on its orthogonal complement.\\
+\hlt{Key Insight}: The lower-right block is controlled by the compression $P_{\mathcal{U}^{\perp}}T|_{\mathcal{U}^{\perp}}$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:matrix-schur-triangularization-ordered} \hlt{Matrix Schur Triangularisation with Ordered Diagonal}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$ in a prescribed order. If $A\mathbf{x}=\lambda_1\mathbf{x}$ and $\norm{\mathbf{x}}_2=1$, then there is a unitary $U=[\mathbf{x}\ U_2]$ such that $U^*AU$ is upper triangular with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+If $A$ is real, all $\lambda_i\in\mathbb{R}$, and $\mathbf{x}\in\mathbb{R}^n$, then $U$ may be chosen real orthogonal.
+\begin{proof}
+Induct on $n$. The case $n=1$ is immediate. Extend $\mathbf{x}$ to an orthonormal basis and set $V=[\mathbf{x}\ V_2]$.\\
+Since $A\mathbf{x}=\lambda_1\mathbf{x}$, the first column of $V^*AV$ is $\lambda_1\mathbf{e}_1$, so $V^*AV=
+\begin{bmatrix}
+\lambda_1 & *\\
+0 & A'
+\end{bmatrix}$.\\
+Block triangularity gives $p_{V^*AV}(z)=(z-\lambda_1)p_{A'}(z)$, so $A'$ has eigenvalues $\lambda_2,\ldots,\lambda_n$, counted with algebraic multiplicity. By induction, choose unitary $W$ with $W^*A'W=T'$ upper triangular and diagonal $\lambda_2,\ldots,\lambda_n$.\\
+Then $U\defeq V(I_1\oplus W)$ has first column $\mathbf{x}$ and $U^*AU=
+\begin{bmatrix}
+\lambda_1 & *\\
+0 & T'
+\end{bmatrix}$.\\
+The real case uses real orthonormal extensions; the block $A'$ is real, and the same characteristic-polynomial factorization leaves the real eigenvalue list $\lambda_2,\ldots,\lambda_n$ for the induction step.\\
+\hlt{Structural Commentary}: Isolate the chosen eigenline, then repeat on the lower-right block.\\
+\hlt{Key Insight}: The diagonal order is controlled by which eigenline is peeled off first.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/schur_ordered_triangularization.tikz}
+  \caption{Schur induction: isolate an eigenline, then triangularise the compressed block.}
+  \label{fig:schur-ordered-triangularization}
+\end{figure}
+
+\begin{corollary} \label{cor:eigenvalues-of-inverse-matrix} \hlt{Eigenvalues of the Inverse}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be invertible with eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity. Then $A^{-1}$ has eigenvalues $\lambda_1^{-1},\ldots,\lambda_n^{-1}$, counted with algebraic multiplicity.
+\begin{proof}
+Take a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+Then $A^{-1}=UT^{-1}U^*$, and $T^{-1}$ is upper triangular with diagonal $\lambda_1^{-1},\ldots,\lambda_n^{-1}$.\\
+\hlt{Structural Commentary}: Invert the Schur form and read the diagonal.\\
+\hlt{Key Insight}: The inverse spectrum is the reciprocal spectrum.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:complex-spectral-theorem} \hlt{Complex Spectral Theorem}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $T$ is normal;
+\item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$
+By Schur triangularisation (Theorem \ref{thm:schur-triangularization}), choose an orthonormal basis $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ in which $A=[T]_{\gamma\leftarrow\gamma}=[a_{ij}]$ is upper triangular. Show by induction on $k$ that the $k$th row has no entries to the right of the diagonal. Assume this has been proved for rows $1,\ldots,k-1$.\\
+Upper triangularity gives $T\mathbf{e}_k=\sum\limits_{i\leq k}a_{ik}\mathbf{e}_i$ and $T^*\mathbf{e}_k=\sum\limits_{j\geq k}\overline{a_{kj}}\mathbf{e}_j$.\\
+The induction hypothesis gives $a_{ik}=0$ for $i<k$, so $\norm{T\mathbf{e}_k}^2=\abs{a_{kk}}^2$.\\
+Since $T$ is normal, Theorem \ref{thm:normal-iff-equal-adjoint-norms} gives $\abs{a_{kk}}^2 =\norm{T\mathbf{e}_k}^2 =\norm{T^*\mathbf{e}_k}^2 =\abs{a_{kk}}^2+\sum\limits_{j>k}\abs{a_{kj}}^2$.\\
+Thus each $a_{kj}$ with $j>k$ is zero. Induction makes $A$ diagonal, so $\gamma$ is an orthonormal basis of eigenvectors.
+\item[$(ii)$]$\Rightarrow(iii)$
+In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
+\item[$(iii)$]$\Rightarrow(i)$
+If $[T]$ is diagonal in an orthonormal basis, then $[T^*]=[T]^*$ is diagonal as well.\\
+Diagonal matrices commute, so $TT^*=T^*T$; hence $T$ is normal.
+\end{enumerate}
+\hlt{Structural Commentary}: Schur gives triangular form; normality kills the upper entries.\\
+\hlt{Key Insight}: Equal norms of $T\mathbf{e}_j$ and $T^*\mathbf{e}_j$ force each row tail to vanish.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/spectral_theorem_triangular_to_diagonal.tikz}
+\caption{Normality turns Schur triangular form diagonal by forcing row tails to vanish.}
+  \label{fig:spectral-theorem-triangular-to-diagonal}
+\end{figure}
+
+\begin{theorem} \label{thm:real-spectral-theorem} \hlt{Real Spectral Theorem}\\
+Let $\mathcal{V}$ be a finite-dimensional real inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $T$ is self-adjoint;
+\item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$
+Assume $T=T^*$ and induct on $n=\dim(\mathcal{V})$. For $n=0$ there is nothing to prove, and for $n=1$ every nonzero vector is an eigenvector after normalization.\\
+Let $n\geq2$. Lemma \ref{lem:self-adjoint-operators-have-eigenvalues} gives a unit eigenvector $\mathbf{u}$, and set $\mathcal{U}=\operatorname{span}(\mathbf{u})$. The subspace $\mathcal{U}$ is $T$-invariant. By Proposition \ref{prop:self-adjoint-invariant-subspaces}, $\mathcal{U}^{\perp}$ is $T$-invariant and the restriction $T|_{\mathcal{U}^{\perp}}$ is self-adjoint.\\
+Since $\dim(\mathcal{U}^{\perp})=n-1$, the induction hypothesis gives an orthonormal eigenbasis of $\mathcal{U}^{\perp}$.\\
+Adjoining $\mathbf{u}$ gives an orthonormal eigenbasis of $\mathcal{V}$ by Theorem \ref{thm:orthogonal-direct-sum-decomposition}.
+\item[$(ii)$]$\Rightarrow (iii)$
+In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
+\item[$(iii)$]$\Rightarrow (i)$
+In an orthonormal basis where $[T]$ is real diagonal, $[T^*]=[T]^t=[T]$. Hence $T=T^*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Split off one eigendirection, then restrict to its orthogonal complement.\\
+\hlt{Key Insight}: One eigenvector reduces the dimension.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:complexification-real-vector-space} \label{def:complexification-real-imaginary-parts} \hlt{Complexification of a Real Vector Space}\\
+Let $\mathcal{V}$ be a real vector space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{complexification} of $\mathcal{V}$ is $\mathcal{V}_{\mathbb{C}}\defeq\mathcal{V}\times\mathcal{V}$, with $(\mathbf{u},\mathbf{v})$ denoted $\mathbf{u}+i\mathbf{v}$.
+\item Addition and $\mathbb{C}$-scalar multiplication are
+\begin{align}
+(\mathbf{u}_1+i\mathbf{v}_1)+(\mathbf{u}_2+i\mathbf{v}_2)
+&=(\mathbf{u}_1+\mathbf{u}_2)+i(\mathbf{v}_1+\mathbf{v}_2), \nonumber\\
+(a+bi)(\mathbf{u}+i\mathbf{v})
+&=(a\mathbf{u}-b\mathbf{v})+i(b\mathbf{u}+a\mathbf{v}),
+\qquad a,b\in\mathbb{R}. \nonumber
+\end{align}
+\item \hlt{Complexification map} is real-linear embedding $\operatorname{cpx}:\mathcal{V}\hookrightarrow\mathcal{V}_{\mathbb{C}}$; $\operatorname{cpx}(\mathbf{u})=\mathbf{u}+i\mathbf{0}$, where $\{\mathbf{u}+i\mathbf{0}:\mathbf{u}\in\mathcal{V}\}$.
+\item For $\mathbf{z}=\mathbf{u}+i\mathbf{v}\in\mathcal{V}_{\mathbb{C}}$, define $\operatorname{Re}\mathbf{z}\defeq\mathbf{u}$ and $\operatorname{Im}\mathbf{z}\defeq\mathbf{v}$. Hence $\mathbf{z}=\mathbf{0}$ iff $\operatorname{Re}\mathbf{z}=\operatorname{Im}\mathbf{z}=\mathbf{0}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:complexification-vector-space-basis} \hlt{Complexification Preserves Bases}\\
+Let $\mathcal{V}$ be real. Then $\mathcal{V}_{\mathbb{C}}$ is complex, and every real basis $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ of $\mathcal{V}$ is a complex basis of $\mathcal{V}_{\mathbb{C}}$.\\
+Thus $\dim_{\mathbb{C}}(\mathcal{V}_{\mathbb{C}})=\dim_{\mathbb{R}}(\mathcal{V})$.
+\begin{proof}
+The vector-space axioms follow componentwise from those of $\mathcal{V}$.\\
+For $\mathbf{u},\mathbf{v}\in\mathcal{V}$, write $\mathbf{u}=\sum\limits_{j=1}^{n}a_j\mathbf{v}_j$ and $\mathbf{v}=\sum\limits_{j=1}^{n}b_j\mathbf{v}_j$, $a_j,b_j\in\mathbb{R}$. Then $\mathbf{u}+i\mathbf{v}=\sum\limits_{j=1}^{n}(a_j+ib_j)\mathbf{v}_j$, so the list spans.\\
+If $\sum\limits_{j=1}^{n}\lambda_j\mathbf{v}_j=\mathbf{0}$ and $\lambda_j=a_j+ib_j$, then $\sum\limits_{j=1}^{n}a_j\mathbf{v}_j=\mathbf{0}$ and $\sum\limits_{j=1}^{n}b_j\mathbf{v}_j=\mathbf{0}$.\\
+Real linear independence gives $a_j=b_j=0$ for all $j$, hence $\lambda_j=0$ for all $j$.\\
+\hlt{Structural Commentary}: Complexification keeps the basis length unchanged.\\
+\hlt{Key Insight}: Separate real and imaginary parts.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:complexification-coordinate-compatibility} \hlt{Coordinates Survive Complexification}\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a real basis of $\mathcal{V}$ and set $\beta_{\mathbb{C}}\defeq\operatorname{cpx}(\beta)$. Then, for all $\mathbf{v}\in\mathcal{V}$, $[\operatorname{cpx}(\mathbf{v})]_{\beta_{\mathbb{C}}}=[\mathbf{v}]_{\beta}\in\mathbb{R}^n\subseteq\mathbb{C}^n$.
+\begin{proof}
+If $[\mathbf{v}]_{\beta}=(a_1,\ldots,a_n)^t$, then $a_j\in\mathbb{R}$ and $\operatorname{cpx}(\mathbf{v})=\mathbf{v}+i\mathbf{0} =\sum\limits_{j=1}^{n}a_j(\mathbf{v}_j+i\mathbf{0}) =\sum\limits_{j=1}^{n}a_j\operatorname{cpx}(\mathbf{v}_j)$.\\
+Thus $[\operatorname{cpx}(\mathbf{v})]_{\beta_{\mathbb{C}}}=(a_1,\ldots,a_n)^t=[\mathbf{v}]_{\beta}$.\\
+\hlt{Structural Commentary}: The embedded real copy keeps exactly the same coordinate columns.\\
+\hlt{Key Insight}: Complexification enlarges the scalar field, not the coordinates of real vectors.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:complexification-real-dimension-and-embedding} \hlt{Complexification as a Real Space}\\
+If $\mathcal{V}$ has real basis $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$, then $\mathcal{V}_{\mathbb{C}}$, as a real vector space, has basis $(\mathbf{v}_1,\ldots,\mathbf{v}_n,i\mathbf{v}_1,\ldots,i\mathbf{v}_n)$.\\
+Hence $\dim_{\mathbb{R}}(\mathcal{V}_{\mathbb{C}})=2\dim_{\mathbb{R}}(\mathcal{V})$, and $\operatorname{cpx}:\mathcal{V}\to\mathcal{V}_{\mathbb{C}}$, $\operatorname{cpx}(\mathbf{v})=\mathbf{v}+i\mathbf{0}$, is real-linear and injective.
+\begin{proof}
+For $\mathbf{u}=\sum a_j\mathbf{v}_j$ and $\mathbf{w}=\sum b_j\mathbf{v}_j$, $\mathbf{u}+i\mathbf{w}=\sum a_j\mathbf{v}_j+\sum b_j(i\mathbf{v}_j)$, so the displayed list spans $\mathcal{V}_{\mathbb{C}}$ over $\mathbb{R}$.\\
+If $\sum a_j\mathbf{v}_j+\sum b_j(i\mathbf{v}_j)=\mathbf{0}$, then $\operatorname{Re}$ and $\operatorname{Im}$ give $\sum a_j\mathbf{v}_j=\sum b_j\mathbf{v}_j=\mathbf{0}$; all $a_j,b_j$ vanish. Thus this is real basis.\\
+For $r\in\mathbb{R}$, $\operatorname{cpx}(r\mathbf{v}+\mathbf{w})=r\operatorname{cpx}(\mathbf{v})+\operatorname{cpx}(\mathbf{w})$, and $\ker(\operatorname{cpx})=\{\mathbf{0}\}$, so $\operatorname{cpx}$ is real-linear and injective.\\
+\hlt{Structural Commentary}: Complexification is two real copies of $\mathcal{V}$.\\
+\hlt{Key Insight}: The real and imaginary parts are independent real copies of the same basis.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:complexification-real-operator} \hlt{Complexification of a Real Operator}\\
+Let $\mathcal{V}$ be a real vector space and let $T\in\LL(\mathcal{V})$.\\
+The \hlt{complexification} of $T$ is the operator $T_{\mathbb{C}}\in\LL(\mathcal{V}_{\mathbb{C}})$ defined by $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})\defeq T\mathbf{u}+iT\mathbf{v}$.
+\end{definition}
+
+\begin{proposition} \label{prop:complexification-operator-basic-properties} \hlt{Complexification Preserves Operator Data}\\
+Let $\mathcal{V}$ be a real vector space and let $T\in\LL(\mathcal{V})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T_{\mathbb{C}}\in\LL(\mathcal{V}_{\mathbb{C}})$.
+\item $(T_{\mathbb{C}})^k(\mathbf{u}+i\mathbf{v})=T^k\mathbf{u}+iT^k\mathbf{v}$ for every integer $k\geq0$.
+\item If $\beta$ is a real basis of $\mathcal{V}$, then $[T_{\mathbb{C}}]_{\beta\leftarrow\beta}=[T]_{\beta\leftarrow\beta}$, now regarded as a complex matrix.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Additivity is immediate. For $\alpha=a+bi\in\mathbb{C}$,
+\begin{align}
+T_{\mathbb{C}}\bigl(\alpha(\mathbf{u}+i\mathbf{v})\bigr) =T(a\mathbf{u}-b\mathbf{v})+iT(b\mathbf{u}+a\mathbf{v}) =(aT\mathbf{u}-bT\mathbf{v})+i(bT\mathbf{u}+aT\mathbf{v}) =\alpha T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v}),
+\nonumber
+\end{align}
+so $T_{\mathbb{C}}$ is complex-linear.
+\item For $k=0$, the claim is the identity. If it holds for $k$, then
+\begin{align}
+(T_{\mathbb{C}})^{k+1}(\mathbf{u}+i\mathbf{v}) =T_{\mathbb{C}}(T^k\mathbf{u}+iT^k\mathbf{v}) =T^{k+1}\mathbf{u}+iT^{k+1}\mathbf{v}.
+\nonumber
+\end{align}
+Thus the formula holds for all $k\geq0$.
+\item If $T\mathbf{v}_j=\sum\limits_i a_{ij}\mathbf{v}_i$ with $a_{ij}\in\mathbb{R}$, then $T_{\mathbb{C}}\mathbf{v}_j=\sum\limits_i a_{ij}\mathbf{v}_i$. Hence the coordinate matrix is unchanged.
+\end{enumerate}
+\hlt{Structural Commentary}: Complexification keeps the coordinate matrix unchanged.\\
+\hlt{Key Insight}: Same real entries; larger scalar field.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/complexification_real_operator.tikz}
+  \caption{Complexification packages two real vectors: $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=T\mathbf{u}+iT\mathbf{v}$.}
+  \label{fig:complexification-real-operator}
+\end{figure}
+
+\begin{method} \label{meth:complexify-real-matrix} \hlt{Complexifying a Real Matrix}\\
+To use complex eigenvalues for a real matrix $A\in\operatorname{Mat}(n,n,\mathbb{R})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Regard the same real matrix $A$ as a complex matrix on $\mathbb{C}^n$.
+\item Find complex eigenpairs or invariant data for this complexified operator.
+\item If $A(\mathbf{u}+i\mathbf{v})=(a+bi)(\mathbf{u}+i\mathbf{v})$, separate parts: $A\mathbf{u}=a\mathbf{u}-b\mathbf{v}$, $A\mathbf{v}=b\mathbf{u}+a\mathbf{v}$
+\item Conclude that $\operatorname{span}(\mathbf{u},\mathbf{v})\subseteq\mathbb{R}^n$ is an invariant line or plane.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:real-operator-invariant-line-or-plane} \hlt{Invariant Line or Plane over $\mathbb{R}$}\\
+Every operator on a nonzero finite-dimensional real vector space has an invariant subspace of dimension $1$ or $2$.
+\begin{proof}
+Let $\mathcal{V}$ be a nonzero finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+By Theorem \ref{thm:complex-operator-has-eigenvalue}, $T_{\mathbb{C}}$ has an eigenvalue $\lambda=a+bi$ with eigenvector $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$.\\
+The equation $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=(a+bi)(\mathbf{u}+i\mathbf{v})$ gives $T\mathbf{u}=a\mathbf{u}-b\mathbf{v}$ and $T\mathbf{v}=b\mathbf{u}+a\mathbf{v}$.\\
+Thus $\mathcal{U}=\operatorname{span}(\mathbf{u},\mathbf{v})$ is nonzero, has dimension $1$ or $2$, and is invariant under $T$.\\
+\hlt{Structural Commentary}: A complex eigenvector decomposes into two real directions that are closed under $T$.\\
+\hlt{Key Insight}: Nonreal eigenvalues become real invariant planes; real eigenvalues become invariant lines.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_invariant_plane_from_complex_eigenpair.tikz}
+  \caption{Separate a complex eigenpair into a real invariant plane.}
+  \label{fig:real-invariant-plane-from-complex-eigenpair}
+\end{figure}
+
+\begin{perspective} \label{per:real-normal-operators-planes} \hlt{Real Normal Operators Use Planes}\\
+Over $\mathbb{R}$, normal operators need not have enough eigenvectors. The replacement for a missing conjugate eigenpair is a two-dimensional invariant plane carrying a rotation-dilation block.
+\end{perspective}
+
+\begin{proposition} \label{prop:two-dimensional-real-normal-block} \hlt{Two-Dimensional Real Normal Blocks}\\
+Let $\dim(\mathcal{V})=2$ over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
+Then $T$ is normal but not self-adjoint if and only if, in every orthonormal basis, $[T]=
+\begin{bmatrix}
+a&-b\\
+b&a
+\end{bmatrix}$, $b\neq0$.\\
+Moreover, some orthonormal basis makes $b>0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] In an orthonormal basis, write $A=[T]=
+\begin{bmatrix}
+a&c\\
+b&d
+\end{bmatrix}$.\\
+Normality gives $A^tA=AA^t$. Comparing the $(1,1)$ and $(2,2)$ entries gives $b^2=c^2$. If $c=b$, then $A=A^t$, impossible because $T$ is not self-adjoint. Thus $c=-b$ and $b\neq0$. Comparing off-diagonal entries gives $-ab+bd=ab-bd$, so $d=a$. Since the original orthonormal basis was arbitrary, every orthonormal basis has the displayed form.
+\item[$(\Leftarrow)$] A matrix $\begin{bmatrix}a&-b\\ b&a\end{bmatrix}$ with $b\neq0$ satisfies $A^tA=AA^t$ and is not symmetric. Hence $T$ is normal but not self-adjoint. If $b<0$, replace the second basis vector by its negative to make $b>0$.
+\end{enumerate}
+\hlt{Structural Commentary}: In real dimension $2$, non-self-adjoint normality is exactly a scalar plus a rotation block.\\
+\hlt{Key Insight}: Normality forces $c=-b$ and $d=a$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:real-normal-operator-block-diagonal-form} \hlt{Real Normal Operator Block Form}\\
+Let $\mathcal{V}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$. Then $T$ is normal if and only if some orthonormal basis makes $[T]$ block diagonal, with each diagonal block either $1$-by-$1$ or of the form $\begin{bmatrix}
+a&-b\\
+b&a
+\end{bmatrix}$, $b > 0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Induct on $n=\dim(\mathcal{V})$. The cases $n\leq1$ are immediate.\\
+For $n\geq2$, Theorem \ref{thm:real-operator-invariant-line-or-plane} gives an invariant subspace $\mathcal{U}$ with $\dim(\mathcal{U})\in\{1,2\}$.\\
+By Corollary \ref{cor:normal-operator-invariant-subspaces-reduce}, $\mathcal{U}^{\perp}$ is invariant under $T$ and both restrictions are normal.\\
+If $\dim(\mathcal{U})=1$, take a unit vector in $\mathcal{U}$. If $\dim(\mathcal{U})=2$, use the Real Spectral Theorem \ref{thm:real-spectral-theorem} when $T|_{\mathcal{U}}$ is self-adjoint, giving scalar $1$-by-$1$ blocks on $\mathcal{U}$, and use Proposition \ref{prop:two-dimensional-real-normal-block} otherwise.\\
+By induction, choose the required orthonormal block basis on $\mathcal{U}^{\perp}$. Concatenating it with the basis chosen on $\mathcal{U}$ gives an orthonormal basis of $\mathcal{V}$ because $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$.
+\item[$(\Leftarrow)$] Each allowed block is normal. If $[T]$ is the block diagonal sum of these blocks, then $[T]^*[T]$ and $[T][T]^*$ are the corresponding block diagonal sums of $B^*B$ and $BB^*$, hence are equal block by block.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality lets invariant lines or planes split orthogonally.\\
+\hlt{Key Insight}: Real normal operators split into scalar lines and rotation-dilation planes.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_normal_block_structure.tikz}
+  \caption{Orthogonal line/plane split into scalar and rotation blocks.}
+  \label{fig:real-normal-block-structure}
+\end{figure}
+
+\begin{example} \label{ex:plane-rotation-isometry} \hlt{Plane Rotations}\\
+For $\theta\in\mathbb{R}$, the real matrix $R_{\theta}=
+\begin{bmatrix}
+\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta
+\end{bmatrix}$ is an isometry of $\mathbb{R}^2$. If $\theta$ is not an integer multiple of $\pi$, then $R_{\theta}$ has no real eigenvalue, which is why real isometries require two-dimensional rotation blocks.
+\end{example}
+
+\begin{theorem} \label{thm:real-isometry-block-diagonal-form} \hlt{Real Isometry Block Form}\\
+Let $\mathcal{V}$ be finite-dimensional over $\mathbb{R}$ and let $S\in\LL(\mathcal{V})$. Then $S$ is an isometry if and only if some orthonormal basis makes $[S]$ block diagonal, with each diagonal block one of $[1]$, $[-1]$, $\begin{bmatrix}
+\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta
+\end{bmatrix}$ with $0<\theta<\pi$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Since $S$ is an isometry, $S^*S=I_{\mathcal{V}}$ by Theorem \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity}. Finite-dimensional invertibility gives $SS^*=I_{\mathcal{V}}$, so $S$ is normal. Apply Theorem \ref{thm:real-normal-operator-block-diagonal-form}. A $1$-by-$1$ block $[\lambda]$ has $\lambda^2=1$, so $\lambda=\pm1$.\\
+A $2$-by-$2$ block $\begin{bmatrix}a&-b\\b&a\end{bmatrix}$ has $a^2+b^2=1$ and $b>0$, so $a=\cos\theta$ and $b=\sin\theta$ for a unique $\theta\in(0,\pi)$.
+\item[$(\Leftarrow)$] Each displayed block $B$ satisfies $B^tB=I$ on its coordinate subspace. Therefore the block diagonal matrix satisfies $[S]^t[S]=I$, so $S$ preserves norms and is an isometry.
+\end{enumerate}
+\hlt{Structural Commentary}: Isometries are the unit-length special case of real normal blocks.\\
+\hlt{Key Insight}: Scalar blocks reduce to $\pm1$, and planar normal blocks reduce to rotations.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_isometry_blocks.tikz}
+  \caption{Normal form: fixed/flipped lines and rotation planes.}
+  \label{fig:real-isometry-blocks}
+\end{figure}
+
+\begin{proposition} \label{prop:real-eigenvalues-complexification} \hlt{Real Eigenvalues of a Complexification}\\
+Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, and let $\lambda\in\mathbb{R}$. Then $\lambda$ is an eigenvalue of $T$ if and only if it is an eigenvalue of $T_{\mathbb{C}}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$, then $T_{\mathbb{C}}(\mathbf{v}+i\mathbf{0})=\lambda(\mathbf{v}+i\mathbf{0})$.
+\item[$(\Leftarrow)$] If $T_{\mathbb{C}}(\mathbf{u}+i\mathbf{v})=\lambda(\mathbf{u}+i\mathbf{v})$ and $\mathbf{u}+i\mathbf{v}\neq\mathbf{0}$, then $T\mathbf{u}=\lambda\mathbf{u}$ and $T\mathbf{v}=\lambda\mathbf{v}$.\\
+Since $\mathbf{u}$ or $\mathbf{v}$ is nonzero, $T$ has eigenvalue $\lambda$.
+\end{enumerate}
+\hlt{Structural Commentary}: Real eigenvalues survive complexification exactly.\\
+\hlt{Key Insight}: For real $\lambda$, real and imaginary parts decouple.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:complexification-conjugate-generalized-eigenspaces} \hlt{Conjugation Transfers Generalized Eigenspaces}\\
+Let $\mathcal{V}$ be real, let $T\in\LL(\mathcal{V})$, let $\lambda\in\mathbb{C}$, and let $k\geq0$. Then $(T_{\mathbb{C}}-\lambda I)^k(\mathbf{u}+i\mathbf{v})=\mathbf{0}$ $\Longleftrightarrow$ $(T_{\mathbb{C}}-\overline{\lambda} I)^k(\mathbf{u}-i\mathbf{v})=\mathbf{0}$.
+\begin{proof}
+Let $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$.\\
+Then $\Gamma$ is a conjugate-linear bijection, $\Gamma T_{\mathbb{C}}=T_{\mathbb{C}}\Gamma$, and $\Gamma\bigl((T_{\mathbb{C}}-\lambda I)^k\mathbf{x}\bigr) =(T_{\mathbb{C}}-\overline{\lambda} I)^k\Gamma\mathbf{x}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Apply the displayed identity to $\mathbf{x}=\mathbf{u}+i\mathbf{v}$.
+\item[$(\Leftarrow)$] Apply the first direction with $\overline{\lambda}$ in place of $\lambda$ and $\mathbf{u}-i\mathbf{v}$ in place of $\mathbf{u}+i\mathbf{v}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation commutes with $T_{\mathbb{C}}$ and conjugates scalars.\\
+\hlt{Key Insight}: Conjugation pairs generalized eigenspaces.
+\end{proof}
+\end{lemma}
+
+\begin{corollary} \label{cor:complexification-conjugate-eigenvalue-multiplicities} \hlt{Conjugate Eigenvalues Have Equal Multiplicity}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$.\\
+If $\lambda$ is an eigenvalue of $T_{\mathbb{C}}$, then $\overline{\lambda}$ is an eigenvalue of $T_{\mathbb{C}}$, and $\dim_{\mathbb{C}}\mathcal{G}_{\lambda}(T_{\mathbb{C}}) =\dim_{\mathbb{C}}\mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$.
+\begin{proof}
+Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces} with $k=1$ sends a nonzero eigenvector for $\lambda$ to a nonzero eigenvector for $\overline{\lambda}$. Thus $\overline{\lambda}$ is an eigenvalue. With $k=\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$, Theorem \ref{thm:generalized-eigenspace-stabilized-kernel} identifies generalized eigenspaces with the corresponding stabilized kernels. By Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces}, $\Gamma(\mathbf{u}+i\mathbf{v})=\mathbf{u}-i\mathbf{v}$ restricts to conjugate-linear bijection $\mathcal{G}_{\lambda}(T_{\mathbb{C}}) \longrightarrow \mathcal{G}_{\overline{\lambda}}(T_{\mathbb{C}})$.\\
+Conjugate-linear bijections preserve complex dimension, so the multiplicities agree.\\
+\hlt{Structural Commentary}: Conjugation mirrors generalized eigenspaces.\\
+\hlt{Key Insight}: Nonreal spectral data of a real operator arrives in equal-sized conjugate pairs.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:odd-dimensional-real-operator-has-eigenvalue} \hlt{Odd-Dimensional Real Operators Have Eigenvalues}\\
+Every operator on a nonzero odd-dimensional real vector space has a real eigenvalue.
+\begin{proof}
+Let $T\in\LL(\mathcal{V})$, where $\dim_{\mathbb{R}}\mathcal{V}$ is odd. By Proposition \ref{prop:complexification-vector-space-basis}, $\dim_{\mathbb{C}}\mathcal{V}_{\mathbb{C}}$ is odd.\\
+The sum of the multiplicities of all eigenvalues of $T_{\mathbb{C}}$ equals this odd dimension by Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities}. Nonreal eigenvalues contribute in conjugate pairs of equal multiplicity by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, hence contribute an even total. Therefore $T_{\mathbb{C}}$ has at least one real eigenvalue, which is an eigenvalue of $T$ by Proposition \ref{prop:real-eigenvalues-complexification}.\\
+\hlt{Structural Commentary}: Odd dimension forces a real eigenvalue.\\
+\hlt{Key Insight}: Parity forces at least one real spectral direction.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:real-operator-characteristic-polynomial} \hlt{Characteristic Polynomial of a Real Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+The \hlt{characteristic polynomial} of $T$ is $q_T\defeq q_{T_{\mathbb{C}}}$, the characteristic polynomial of its complexification.
+\end{definition}
+
+\begin{theorem} \label{thm:real-operator-characteristic-polynomial-properties} \hlt{Characteristic Polynomial over $\mathbb{R}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space, let $T\in\LL(\mathcal{V})$, and let $q_T$ be its characteristic polynomial.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $q_T\in\mathbb{R}[z]$.
+\item $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
+\item The real zeros of $q_T$ are precisely the eigenvalues of $T$.
+\item $q_T(T)=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Factor $q_{T_{\mathbb{C}}}$ over $\mathbb{C}$. Real eigenvalues give real linear factors. If $\lambda\notin\mathbb{R}$ has multiplicity $m$, then $\overline{\lambda}$ has multiplicity $m$ by Corollary \ref{cor:complexification-conjugate-eigenvalue-multiplicities}, and $(z-\lambda)^m(z-\overline{\lambda})^m=\bigl(z^2-2\operatorname{Re}(\lambda)z+\abs{\lambda}^2\bigr)^m$, which is real.
+\item Proposition \ref{prop:operator-characteristic-polynomial-degree-roots} and Proposition \ref{prop:complexification-vector-space-basis} give $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.
+\item Real zeros of $q_T=q_{T_{\mathbb{C}}}$ are real eigenvalues of $T_{\mathbb{C}}$  (Prop \ref{prop:operator-characteristic-polynomial-degree-roots}), hence eigenvalues of $T$ (Prop \ref{prop:real-eigenvalues-complexification}).
+\item Cayley--Hamilton over $\mathbb{C}$ gives $q_T(T_{\mathbb{C}})=0$. By (i) and Proposition \ref{prop:complexification-operator-basic-properties}, $q_T(T_{\mathbb{C}})=(q_T(T))_{\mathbb{C}}$.\\
+If $q_T(T)$ were nonzero on some $\mathbf{u}\in\mathcal{V}$, then $(q_T(T))_{\mathbb{C}}(\mathbf{u}+i\mathbf{0})=q_T(T)\mathbf{u}+i\mathbf{0}$ would be nonzero, a contradiction. Hence $q_T(T)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Nonreal factors pair into real quadratics.\\
+\hlt{Key Insight}: Complexify, then pair conjugates.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/real_characteristic_conjugate_pairs.tikz}
+  \caption{Conjugate factors pair into real quadratics.}
+  \label{fig:real-characteristic-conjugate-pairs}
+\end{figure}
+
+\begin{corollary} \label{cor:real-characteristic-polynomial-multiple-minimal-polynomial} \hlt{$q_T$ Is a Multiple of $\mu_T$ over $\mathbb{R}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real vector space and let $T\in\LL(\mathcal{V})$.\\
+Then $\deg\mu_T\leq\dim_{\mathbb{R}}\mathcal{V}$, and $q_T$ is a polynomial multiple of $\mu_T$ in $\mathbb{R}[z]$.
+\begin{proof}
+Theorem \ref{thm:real-operator-characteristic-polynomial-properties} gives $q_T(T)=0$.\\
+By Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial}, $\mu_T$ divides $q_T$ in $\mathbb{R}[z]$. The degree bound follows from $\deg q_T=\dim_{\mathbb{R}}\mathcal{V}$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton makes $q_T$ a real annihilator of $T$.\\
+\hlt{Key Insight}: The minimal polynomial divides every real annihilator.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:minimal-polynomial-complexification} \hlt{Minimal Polynomial Survives Complexification}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{R}$ and let $T\in\LL(\mathcal{V})$. Then $\mu_{T_{\mathbb{C}}}=\mu_T$ in $\mathbb{C}[z]$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Since $\mu_T(T)=0$, Proposition \ref{prop:complexification-operator-basic-properties} gives $\mu_T(T_{\mathbb{C}})=(\mu_T(T))_{\mathbb{C}}=0$. Hence $\mu_{T_{\mathbb{C}}}$ divides $\mu_T$ in $\mathbb{C}[z]$.
+\item[$(\Leftarrow)$] Let $q=\mu_{T_{\mathbb{C}}}=r+is$, with $r,s\in\mathbb{R}[z]$. Since $q$ is monic, $r$ is monic and $\deg r=\deg q$.\\
+For every $\mathbf{u}\in\mathcal{V}$, $0=q(T_{\mathbb{C}})(\mathbf{u}+i\mathbf{0})=r(T)\mathbf{u}+is(T)\mathbf{u}$. Thus $r(T)=0$, so $\deg\mu_T\leq\deg r=\deg q$. The first part gives opposite degree inequality. As $q$ divides $\mu_T$ and both are monic with equal degree, $q=\mu_T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Annihilation passes to complexification and back by real-part extraction.\\
+\hlt{Key Insight}: Evaluate $q(T_{\mathbb{C}})$ on $\mathbf{u}+i\mathbf{0}$.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:normal-operators-coordinate-free-diagonal} \hlt{Normal Means Diagonal in Orthogonal Coordinates}\\
+Complex spectral theorem states that normal operators are precisely the operators whose full structure is visible in an orthonormal eigenbasis. This is why normality is the natural coordinate-free version of being diagonal.
+\end{perspective}
+
+\begin{proposition} \label{prop:normal-polynomial-kernel-range-properties} \hlt{Basic Spectral Properties of Normal Operators}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space, let $T\in\LL(\mathcal{V})$ be normal, and let $p\in\mathbb{C}[z]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p(T)$ is normal and commutes with $T$.
+\item $T^*$ is normal and $E_{\lambda}(T)=E_{\overline{\lambda}}(T^*)$ for every $\lambda\in\mathbb{C}$.
+\item $\ker T=\ker T^*$ and $\operatorname{range}(T)=\operatorname{range}(T^*)$.
+\end{enumerate}
+\begin{proof}
+Choose an orthonormal eigenbasis $\mathbf{e}_1,\ldots,\mathbf{e}_n$ with $T\mathbf{e}_j=\mu_j\mathbf{e}_j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p(T)\mathbf{e}_j=p(\mu_j)\mathbf{e}_j$, $p(T)$ is diagonal in this basis, hence normal. It commutes with $T$ by Proposition \ref{prop:operator-polynomial-products}.
+\item Since $T^*\mathbf{e}_j=\overline{\mu_j}\mathbf{e}_j$, $T^*$ is diagonal in the same basis, hence normal. Also $T\mathbf{v}=\lambda\mathbf{v}$ iff $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.
+\item Part (ii) with $\lambda=0$ gives $\ker T=\ker T^*$. Both ranges are $\operatorname{span}\{\mathbf{e}_j:\mu_j\neq0\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality gives one orthonormal basis that diagonalises both $T$ and $T^*$.\\
+\hlt{Key Insight}: Kernel and range are read from the nonzero diagonal entries in that basis.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:normal-kernels-of-powers-and-squarefree-minimal-polynomial} \hlt{Normal Operators Have No Nilpotent Primary Part}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$ be normal.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $S=p(T)$ for some $p\in\mathbb{C}[z]$, then $\ker(S^k)=\ker(S)$ for every $k\geq1$.
+\item The minimal polynomial of $T$ is square-free, where $\mu_T(z)=\prod\limits_{\lambda\in\operatorname{spec}(T)}(z-\lambda)$.
+\end{enumerate}
+\begin{proof}
+Let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be an orthonormal eigenbasis with $T\mathbf{e}_j=\lambda_j\mathbf{e}_j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $S=p(T)$, $k\geq1$, $S^k\mathbf{e}_j=p(\lambda_j)^k\mathbf{e}_j$; $\ker(S^k)=\operatorname{span}\{\mathbf{e}_j:p(\lambda_j)^k=0\} =\operatorname{span}\{\mathbf{e}_j:p(\lambda_j)=0\} =\ker(S)$.
+\item Let $m(z)=\prod_{\lambda\in\operatorname{spec}(T)}(z-\lambda)$. Since $m(T)\mathbf{e}_j=0$ for all $j$, $m(T)=0$, so $\mu_T\mid m$. Conversely, every $\lambda\in\operatorname{spec}(T)$ is a root of $\mu_T$ by Theorem \ref{thm:operator-minimal-polynomial-roots-eigenvalues}, hence $m\mid\mu_T$. Since both polynomials are monic, $\mu_T=m$.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality makes every primary component an eigenspace.\\
+\hlt{Key Insight}: A diagonal operator has no hidden nilpotent part.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:spectral-resolution-normal-operator} \hlt{Spectral Resolution of a Normal Operator}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $\mu_1,\ldots,\mu_d$ be distinct scalars.\\
+For $T\in\LL(\mathcal{V})$, consider:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T$ is normal and $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$.
+\item $\exists$ pairwise orthogonal projections $P_1,\ldots,P_d\in\LL(\mathcal{V})$ such that $P_iP_j=0$ for $i\neq j$,\\
+$P_1+\cdots+P_d=I_{\mathcal{V}}$, and $T=\mu_1P_1+\cdots+\mu_dP_d$
+\item Any projections satisfying (ii) obey $\operatorname{range}(P_j)=E_{\mu_j}(T)$ whenever $\mu_j\in\operatorname{spec}(T)$.
+\end{enumerate}
+Then (i) and (ii) are equivalent, and any projections satisfying (ii) satisfy (iii).
+\begin{proof}
+\begin{enumerate}[label=(\roman*).]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$. By Theorem \ref{thm:complex-spectral-theorem}, $\mathcal{V}=\bigoplus\limits_{\lambda\in\operatorname{spec}(T)}E_{\lambda}(T)$ as an orthogonal direct sum.\\
+Let $P_j$ be the orthogonal projection onto $E_{\mu_j}(T)$, and set $P_j=0$ when $\mu_j\notin\operatorname{spec}(T)$. Since $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$, these projections are pairwise orthogonal, sum to $I_{\mathcal{V}}$, and satisfy $T=\sum_j\mu_jP_j$.
+\item[$(ii)$]$\Rightarrow (i)$. Since $P_j^*=P_j$ and $P_iP_j=0$ for $i\neq j$, $T^*=\sum\limits_{j=1}^{d}\overline{\mu_j}P_j$ and $T^*T=\sum\limits_{j=1}^{d}\abs{\mu_j}^2P_j=TT^*$.\\
+Thus $T$ is normal. If $\lambda\in\operatorname{spec}(T)$ and $\mathbf{0}\neq\mathbf{x}\in E_{\lambda}(T)$, then $0=(T-\lambda I_{\mathcal{V}})\mathbf{x} =\sum\limits_{j=1}^{d}(\mu_j-\lambda)P_j\mathbf{x}$.\\
+The summands lie in the pairwise orthogonal ranges $\operatorname{range}(P_j)$, hence $0=\sum\limits_{j=1}^{d}\abs{\mu_j-\lambda}^2\norm{P_j\mathbf{x}}^2$.\\
+Because $\sum_jP_j=I_{\mathcal{V}}$, at least one $P_k\mathbf{x}$ is nonzero, so $\mu_k=\lambda$. Thus $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$.
+\item[$(ii)$]$\Rightarrow (iii)$. For $\mathbf{x}\in\mathcal{V}$, $\mathbf{x} =\sum\limits_{i=1}^{d}P_i\mathbf{x}$ and $(T-\mu_jI_{\mathcal{V}})\mathbf{x} =\sum\limits_{i\neq j}(\mu_i-\mu_j)P_i\mathbf{x}$.\\
+The summands are orthogonal, so $\norm{(T-\mu_jI_{\mathcal{V}})\mathbf{x}}^2 =\sum\limits_{i\neq j}\abs{\mu_i-\mu_j}^2\norm{P_i\mathbf{x}}^2$,
+which vanishes exactly when $P_i\mathbf{x}=0$ for all $i\neq j$, equivalently $\mathbf{x}=P_j\mathbf{x}$. Thus $E_{\mu_j}(T)=\operatorname{range}(P_j)$.
+\end{enumerate}
+\hlt{Structural Commentary}: A normal operator decomposes into scalar actions on orthogonal eigenspaces.\\
+\hlt{Key Insight}: Spectral projections isolate eigenspaces; the operator is the weighted sum of those projections.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/spectral_resolution_projectors.tikz}
+  \caption{Spectral resolution: $\mathcal{V}=\bigoplus_j\operatorname{range}(P_j)$, $P_iP_j=0$ for $i\neq j$, $\sum_jP_j=I_{\mathcal{V}}$, and $T=\sum_j\mu_jP_j$.}
+  \label{fig:spectral-resolution-projectors}
+\end{figure}
+
+\begin{perspective} \label{per:spectral-resolution-as-orthogonal-resolution} \hlt{Spectral Resolutions Are Orthogonal Resolutions}\\
+For the projections $P_j$ in Theorem \ref{thm:spectral-resolution-normal-operator}, $P_j=P_j^*=P_j^2$; $P_iP_j=0\ (i\neq j)$; $\sum_jP_j=I_{\mathcal{V}}$.\\
+Hence $\mathcal{V}=\bigoplus_j^{\perp}\operatorname{range}(P_j)$ is the orthogonal decomposition into $T$-invariant spectral subspaces.\\
+\hlt{Structural Commentary}: Each $P_j$ is forced by its eigenspace: it is the orthogonal projection onto it.\\
+\hlt{Key Insight}: Normality turns diagonalization into a projection-valued decomposition.
+\end{perspective}
+
+\begin{corollary} \label{cor:normal-spectral-resolution-functional-calculus} \hlt{Functional Calculus from Spectral Resolution}\\
+Let $T=\sum_{j=1}^{d}\mu_jP_j$ be the spectral resolution of a normal operator and let $f\in\mathbb{C}[z]$. Then $f(T)=\sum\limits_{j=1}^{d}f(\mu_j)P_j$.\\
+In particular, for each $j$ there is a polynomial $p_j$ such that $p_j(T)=P_j$.
+\begin{proof}
+Since $P_iP_j=0$ for $i\neq j$ and $P_j^2=P_j$, induction gives $T^m=\sum_j\mu_j^mP_j$ for every $m\geq0$.\\
+Linearity then gives the displayed formula for every polynomial $f$.\\
+For the final assertion, choose the Lagrange polynomial $p_j$ satisfying $p_j(\mu_i)=\delta_{ij}$. Then $p_j(T)=P_j$.\\
+\hlt{Structural Commentary}: Orthogonal spectral projections multiply like coordinate idempotents.\\
+\hlt{Key Insight}: Polynomial functions of a normal operator act by scalar functions on each eigenspace.
+\end{proof}
+\end{corollary}

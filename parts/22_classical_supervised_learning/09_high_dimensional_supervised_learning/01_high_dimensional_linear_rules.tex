@@ -1,0 +1,64 @@
+\subsection{High-Dimensional Linear Rules}
+High-dimensional supervised learning studies prediction problems in which the number of candidate features is comparable to, or much larger than, the number of observations.  The central difficulty is not merely computational size: many rules can fit the training data too well, while the scientific question often asks which features or feature groups are driving the prediction.
+
+\begin{principle} \label{prin:sl-high-dimensional-less-fitting} \hlt{Less Fitting in the $p\gg n$ Regime}\\
+Let $X\in\R^{n\times p}$, $r=\operatorname{rank}(X)$, and $p\gg n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $r<p$, least-squares coefficients are nonunique since $\ker(X)\neq\{\mathbf{0}\}$.
+\item Full-covariance discriminant rules are singular when covariance rank is $<p$.\\
+Pooled rank is $\leq n-K$, and class-$k$ rank is $\leq n_k-1$.
+\item Impose effective dimension $<p$ via shrinkage, diagonal covariance, row-space fitting, sparsity, or screening.
+\end{enumerate}
+Measure complexity by $\operatorname{df}(\lambda)$, as in Proposition~\ref{prop:sl-ridge-effective-degrees}: ridge keeps coordinates; sparse rules select features.
+\end{principle}
+
+\begin{method} \label{meth:sl-diagonal-lda-nearest-shrunken-centroids} \hlt{Diagonal LDA and Nearest Shrunken Centroids}\\
+For classes $k=1,\ldots,K$ and features $j=1,\ldots,p$, let $\bar{x}_{kj}$ be the class mean, $\bar{x}_{\cdot j}$ the overall mean, $s_j$ the pooled within-class standard deviation, $\pi_k$ the class prior, $n_k$ the class size, $m_k\defeq(\frac{1}{n_k}-\frac{1}{n})^{1/2}$, and $s_0>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Diagonal LDA}: score $x$ by $\delta_k(x)\defeq-\sum\limits_{j=1}^p \frac{(x_j-\bar{x}_{kj})^2}{s_j^2}+2\log\pi_k$ and set $\widehat{G}(x)\defeq\operatorname*{arg\,max}\limits_k\delta_k(x)$.
+\item \hlt{Nearest shrunken centroids}: for $\Delta\geq0$, set $d_{kj}\defeq\frac{\bar{x}_{kj}-\bar{x}_{\cdot j}}{m_k(s_j+s_0)}$, $d'_{kj}\defeq\sign(d_{kj})(|d_{kj}|-\Delta)_+$,\\
+and $\bar{x}'_{kj}\defeq\bar{x}_{\cdot j}+m_k(s_j+s_0)d'_{kj}$; evaluate the diagonal LDA score with $\bar{x}'_{kj}$ in place of $\bar{x}_{kj}$.
+\end{enumerate}
+Diagonal LDA is nearest-centroid classification after coordinatewise standardization. In nearest shrunken centroids, feature $j$ is removed iff $d'_{kj}=0$ for all $k$; increasing $\Delta$ increases shrinkage and sparsity.
+\end{method}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/soft_thresholding_rule.tikz}
+\caption{Soft thresholding $S_\Delta(d)=\sign(d)(|d|-\Delta)_+$.  The shaded band $|d|\le\Delta$ maps to zero; outside it, contrasts shrink toward zero by $\Delta$.}
+\label{fig:sl-soft-thresholding-rule}
+\end{figure}
+
+\begin{method} \label{meth:sl-quadratic-regularized-high-dimensional-linear-rules} \hlt{Quadratic Regularization for Linear Rules}\\
+Let $\eta_k(x)\defeq\beta_{k0}+x^T\beta_k$, $\lambda>0$, and $\gamma\in[0,1]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{$L_2$ multinomial logits}: set $p_{\beta,k}(x)\defeq\frac{\exp(\eta_k(x))}{\sum\limits_{\ell=1}^K\exp(\eta_\ell(x))}$ and choose $\widehat{\beta}\in\operatorname*{arg\,max}\limits_{\beta}\{\sum\limits_{i=1}^n\log p_{\beta,g_i}(x_i)-\frac{\lambda}{2}\sum\limits_{k=1}^K\norm{\beta_k}_2^2\}$; leave $\beta_{k0}$ unpenalized.
+\item \hlt{Covariance shrinkage}: set $\widehat{\Sigma}_\gamma\defeq\gamma\widehat{\Sigma}+(1-\gamma)\operatorname{diag}(\widehat{\Sigma})$ and use $\widehat{\Sigma}_\gamma$ in the discriminant score.
+\end{enumerate}
+Both variants impose quadratic stabilization without sparsity. The endpoint $\gamma=0$ gives diagonal LDA; increasing $\gamma$ reintroduces off-diagonal covariance information.
+\end{method}
+
+\begin{proposition} \label{prop:sl-row-space-reduction-quadratic-penalties} \hlt{Row-Space Reduction for Quadratic Penalties}\\
+Let $X\in\R^{n\times p}$ have rank $r$ and thin SVD $X=UDV^T=RV^T$, where $R\defeq UD\in\R^{n\times r}$ and $V^TV=I_r$.\\
+Fix $y\in\R^n$ and $\lambda>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Ridge regression satisfies $\widehat{\beta}^{\mathrm{ridge}}_\lambda=V(R^TR+\lambda I_r)^{-1}R^Ty$.
+\item If $F(\beta_0,\beta)\defeq\sum\limits_{i=1}^n L(y_i,\beta_0+x_i^T\beta)+\lambda\norm{\beta}_2^2$ has a minimiser, then one satisfies $\widehat{\beta}\in\operatorname{row}(X)=\operatorname{col}(V)$.
+\end{enumerate}
+Thus quadratic-penalty fitting may be performed in the $r$ row-space coordinates $r_i^T$ and mapped back by $\widehat{\beta}=V\widehat{\theta}$.
+\begin{proof} Every $\beta\in\R^p$ decomposes uniquely as $\beta=V\theta+z$, where $\theta=V^T\beta$ and $z\in\operatorname{col}(V)^\perp=\ker(X)$.\\
+Then $X\beta=R\theta$ and $\norm{\beta}_2^2=\norm{\theta}_2^2+\norm{z}_2^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For ridge, dropping $z$ preserves fitted values and weakly decreases the penalty, so a minimiser has $z=0$.\\
+Thus $\widehat{\theta}\in\operatorname*{arg\,min}\limits_{\theta}\{\norm{y-R\theta}_2^2+\lambda\norm{\theta}_2^2\}$, giving $\widehat{\theta}=(R^TR+\lambda I_r)^{-1}R^Ty$ and $\widehat{\beta}=V\widehat{\theta}$.
+\item If $(\widehat{\beta}_0,\widehat{\beta})$ minimises $F$ and $\widehat{\beta}=V\widehat{\theta}+\widehat{z}$, then $F(\widehat{\beta}_0,V\widehat{\theta})\leq F(\widehat{\beta}_0,\widehat{\beta})$, with the same linear predictors and no larger penalty. Hence $(\widehat{\beta}_0,V\widehat{\theta})$ is also a minimiser and $V\widehat{\theta}\in\operatorname{col}(V)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Kernel components affect only the quadratic penalty, not the fitted values.\\
+\hlt{Key Insight}: Quadratic penalties reduce fitting to $\operatorname{row}(X)$.
+\end{proof}
+\end{proposition}

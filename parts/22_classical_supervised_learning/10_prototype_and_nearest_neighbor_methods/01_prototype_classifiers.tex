@@ -1,0 +1,66 @@
+\subsection{Prototype Classifiers}
+Prototype and nearest-neighbor classifiers are model-free rules built from distances in feature space.  They can fit irregular decision boundaries and are often strong predictors, but their behavior is controlled by geometry: scaling, metric choice, neighborhood size, and storage of representative points.  The local-averaging view appears in Method~\ref{meth:sl-nearest-neighbor-local-averaging}; this subsection records the classification and metric-design side.
+
+\begin{definition} \label{def:sl-prototype-classifier} \hlt{Labeled Prototype Rule}\\
+Let $\mathcal{D}_n=\{(x_i,g_i)\}_{i=1}^n$ with $x_i\in\R^p$ and $g_i\in\{1,\ldots,K\}$.  Fix prototype counts $R_1,\ldots,R_K$, distance $d$ on $\R^p$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A labeled prototype set is $\mathcal{M}=\{(m_j(k),k):m_j(k)\in\R^p,\ 1\leq j\leq R_k,\ 1\leq k\leq K\}$.
+\item For $x\in\R^p$, choose $(\widehat{\jmath},\widehat{k})\in\operatorname*{arg\,min}\limits_{1\leq k\leq K,\ 1\leq j\leq R_k}d(x,m_j(k))$ and define $\widehat{G}(x)=\widehat{k}$.
+\item If $\mathcal{M}=\{(x_i,g_i):1\leq i\leq n\}$, then $\widehat{G}$ is the one-nearest-neighbor classifier.
+\end{enumerate}
+For quantitative features, Euclidean distance requires comparable coordinate scales.
+\end{definition}
+
+\begin{method} \label{meth:sl-kmeans-prototype-classifier} \hlt{$k$-Means Prototypes}\\
+Let $I_k=\{i:g_i=k\}$, fix $R$ prototypes per class, and use $d(x,z)=\norm{x-z}_2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each $k=1,\ldots,K$, choose $m_1(k),\ldots,m_R(k)\in\R^p$ to minimize $\sum\limits_{i\in I_k}\min\limits_{1\leq j\leq R}\norm{x_i-m_j(k)}_2^2$.
+\item For $x\in\R^p$, choose $(\widehat{\jmath},\widehat{k})\in\operatorname*{arg\,min}\limits_{1\leq k\leq K,\ 1\leq j\leq R}\norm{x-m_j(k)}_2$ and set $\widehat{G}(x)=\widehat{k}$.
+\end{enumerate}
+The stored labeled prototype set is $\mathcal{M}=\{(m_j(k),k):1\leq j\leq R,\ 1\leq k\leq K\}$.\\
+The rule has piecewise-linear Euclidean decision boundaries; since classes are compressed independently, prototypes need not move away from competing classes near a boundary.
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Learning Vector Quantization}
+\label{alg:sl-learning-vector-quantization}
+\begin{algorithmic}
+\Require Labeled data $(x_i,g_i)_{i=1}^n$, prototypes per class $R$, learning rates $\epsilon_t\downarrow0$
+\Ensure Labeled prototypes $m_j(k)$
+\State Initialize $m_1(k),\ldots,m_R(k)$ from training observations in class $k$, for each $k$
+\For{$t=1,2,\ldots$}
+\State Sample a training index $i$
+\State Choose the closest prototype $(j,k)$ to $x_i$ over all classes and prototype indices
+\If{$g_i=k$}
+\State $m_j(k)\gets m_j(k)+\epsilon_t\bigl(x_i-m_j(k)\bigr)$
+\Else
+\State $m_j(k)\gets m_j(k)-\epsilon_t\bigl(x_i-m_j(k)\bigr)$
+\EndIf
+\EndFor
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-lvq-geometry} \hlt{Boundary-Aware Prototype Motion}\\
+For a sampled pair $(x_i,g_i)$, let $(j^\star,k^\star)\in\operatorname*{arg\,min}\limits_{1\leq k\leq K,\ 1\leq j\leq R_k}d(x_i,m_j(k))$ and let $\epsilon_t>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $g_i=k^\star$, set $m_{j^\star}(k^\star)\gets m_{j^\star}(k^\star)+\epsilon_t(x_i-m_{j^\star}(k^\star))$.
+\item If $g_i\neq k^\star$, set $m_{j^\star}(k^\star)\gets m_{j^\star}(k^\star)-\epsilon_t(x_i-m_{j^\star}(k^\star))$.
+\end{enumerate}
+Thus every sampled class can move the nearest prototype of any class.\\
+Unlike classwise $k$-means, LVQ is an online algorithmic rule rather than exact minimization of a fixed criterion.
+\end{remark}
+
+\begin{method} \label{meth:sl-gaussian-mixture-prototype-classifier} \hlt{Gaussian Mixtures as Soft Prototypes}\\
+Let $\varphi_p(\cdot;\mu,\Sigma)$ be the $p$-variate Gaussian density.  For class $k$, fix a prior $\rho_k$, component weights $\alpha_{kj}$, centers $\mu_{kj}\in\R^p$, covariances $\Sigma_{kj}\succ0$, and $j=1,\ldots,R_k$, with $\rho_k,\alpha_{kj}\geq0$, $\sum\limits_{k=1}^K\rho_k=1$, and $\sum\limits_{j=1}^{R_k}\alpha_{kj}=1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Define the class density $f_k(x)=\sum\limits_{j=1}^{R_k}\alpha_{kj}\varphi_p(x;\mu_{kj},\Sigma_{kj})$.
+\item For $x\in\R^p$, set $Z(x)=\sum\limits_{\ell=1}^K\rho_\ell f_\ell(x)=\sum\limits_{\ell=1}^K\sum\limits_{r=1}^{R_\ell}\rho_\ell\alpha_{\ell r}\varphi_p(x;\mu_{\ell r},\Sigma_{\ell r})$.
+\item Compute $\tau_k(x)=\frac{\rho_kf_k(x)}{Z(x)}$ and $\omega_{kj}(x)=\frac{\rho_k\alpha_{kj}\varphi_p(x;\mu_{kj},\Sigma_{kj})}{Z(x)}$. Set $\widehat{G}(x)\in\operatorname*{arg\,max}\limits_{1\leq k\leq K}\tau_k(x)$.
+\end{enumerate}
+The pairs $(\mu_{kj},\Sigma_{kj})$ are soft prototypes and $\omega_{kj}(x)$ gives fractional membership.\\
+If $\Sigma_{kj}=\sigma^2I$ and all $\rho_k\alpha_{kj}>0$, then as $\sigma^2\downarrow0$ the dominant component is nearest center $\mu_{kj}$ away from ties.
+\end{method}

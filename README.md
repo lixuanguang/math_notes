@@ -12,7 +12,7 @@ content should not recreate it.
 - `math.tex`: main document entry point.
 - `parts/base.tex`: shared preamble, packages, theorem environments, and macros.
 - `parts/00_notations/`: front-matter notation.
-- `parts/01_...` through `parts/17_...`: mathematical body content.
+- `parts/01_...` through `parts/22_...`: mathematical body content.
 - `references.tex` and `references.bib`: bibliography entry point and BibTeX
   database.
 - `figures/`: figure assets used by the notes.

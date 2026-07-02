@@ -1,0 +1,92 @@
+\subsection{Joint Distributions and Independence}
+\begin{definition} \label{def:joint-distributions-and-marginals} \hlt{Joint and Marginal Distributions}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{joint mass function} of discrete $X,Y$ is $f_{X,Y}(x,y)\defeq\mathbb{P}(X=x,Y=y)$.
+\item The \hlt{discrete marginals} are $f_X(x)=\sum\limits_y f_{X,Y}(x,y)$ and $f_Y(y)=\sum\limits_x f_{X,Y}(x,y)$.
+\item The \hlt{continuous marginals} are $f_X(x)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dy$, and $f_Y(y)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dx$.\\
+$(X,Y)$ has joint density $f_{X,Y}$.
+\item The \hlt{joint CDF} is $F_{X,Y}(x,y)\defeq\mathbb{P}(X\leq x,Y\leq y)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:joint-cdf-rectangular-increments-and-density} \hlt{Rectangular Increments of a Joint CDF}\\
+Let $F(x,y)\defeq\mathbb{P}(X\leq x,Y\leq y)$.\\
+For $x_1<x_2$ and $y_1<y_2$, $\mathbb{P}(x_1<X\leq x_2,\ y_1<Y\leq y_2)=F(x_2,y_2)-F(x_1,y_2)-F(x_2,y_1)+F(x_1,y_1)$.\\
+If $(X,Y)$ has density $f_{X,Y}$ and $F\in C^2$, then $f_{X,Y}(x,y)=\partial_x\partial_yF(x,y)$ and $F(x,y)=\int_{-\infty}^{x}\int_{-\infty}^{y}f_{X,Y}(u,v)\,dv\,du$.
+\begin{proof} Let $A_{ij}=\{X\leq x_i,Y\leq y_j\}$ and $R=\{x_1<X\leq x_2,\ y_1<Y\leq y_2\}$.\\
+Pointwise, $\mathbf{1}_R=\mathbf{1}_{A_{22}}-\mathbf{1}_{A_{12}}-\mathbf{1}_{A_{21}}+\mathbf{1}_{A_{11}}$; taking expectations gives the four-corner identity.\\
+If $F(x,y)=\int_{-\infty}^{x}\int_{-\infty}^{y}f_{X,Y}(u,v)\,dv\,du$ and $F\in C^2$, the two-variable FTC gives $\partial_x\partial_yF=f_{X,Y}$.\\
+\hlt{Structural Commentary}: Joint CDFs encode southwest rectangles; finite rectangles are four-corner increments.\\
+\hlt{Key Insight}: Mixed derivatives are infinitesimal rectangular increments.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/joint_cdf_rectangle.tikz}
+  \caption{The rectangular probability is a four-term increment of the joint CDF.}
+  \label{fig:joint-cdf-rectangular-increment}
+\end{figure}
+
+\begin{example} \label{ex:three-toss-joint-mass-table} \hlt{A Three-Toss Joint Mass Table}\\
+Let $\Omega=\{H,T\}^3$ with $\mathbb{P}(\{\omega\})=2^{-3}$, set $X=\mathbf{1}_{\{\omega_1=H\}}$, $Y=\sum\limits_{i=1}^{3}\mathbf{1}_{\{\omega_i=H\}}$, and write $p_{xy}\defeq\mathbb{P}(X=x,Y=y)$.
+\[
+\begin{array}{c|cccc}
+&Y=0&Y=1&Y=2&Y=3\\ \hline
+X=0&\frac{1}{8}&\frac{2}{8}&\frac{1}{8}&0\\
+X=1&0&\frac{1}{8}&\frac{2}{8}&\frac{1}{8}
+\end{array}
+\]
+Thus $p_{0,2}=\frac{1}{8}$, $\sum\limits_y p_{0y}=\sum\limits_y p_{1y}=\frac{1}{2}$, and $\sum\limits_x p_{xj}=\binom{3}{j}2^{-3}$ for $j=0,\ldots,3$.
+\end{example}
+
+\begin{definition} \label{def:independent-random-variables-and-iid-samples} \hlt{Independent Random Variables and IID Samples}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Random variables $X_1,\ldots,X_n$ are \hlt{independent}\\
+if $\mathbb{P}(X_1\in B_1,\ldots,X_n\in B_n)=\prod\limits_{i=1}^{n}\mathbb{P}(X_i\in B_i)$ for all $B_i\in\mathcal{B}(\R)$.
+\item They are \hlt{identically distributed} if $\mathcal{L}(X_1)=\cdots=\mathcal{L}(X_n)$.
+\item They are \hlt{iid} if they are independent and identically distributed.
+\item The \hlt{random vector} $X=(X_1,\ldots,X_n)$ is a \hlt{random sample} when $X_1,\ldots,X_n$ are iid from a common law.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:factorization-tests-for-random-variable-independence} \hlt{Factorization Tests for Independence}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Discrete factorization}: discrete $X,Y$ are independent iff $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ for all $x,y$.
+\item \hlt{Density factorization}: if $(X,Y)$ has joint density $f_{X,Y}$ and marginals $f_X,f_Y$,\\
+then $X,Y$ are independent iff $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ a.e.
+\item \hlt{Rectangular support test}: if $f_{X,Y}(x,y)=g(x)h(y)\mathbf{1}_{A\times B}(x,y)$ for measurable $A,B$,\\
+then $X,Y$ are independent after normalization.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) If $X\perp\!\!\!\perp Y$, then $f_{X,Y}(x,y)=\mathbb{P}(X=x,Y=y)=\mathbb{P}(X=x)\mathbb{P}(Y=y)=f_X(x)f_Y(y)$.
+\item[$(i)$] ($\Leftarrow$) If $f_{X,Y}=f_Xf_Y$, then for $A,B$, $\mathbb{P}(X\in A,Y\in B)=\sum\limits_{x\in A}\sum\limits_{y\in B}f_X(x)f_Y(y)=\mathbb{P}(X\in A)\mathbb{P}(Y\in B)$.
+\item[$(ii)$] ($\Rightarrow$) If $X\perp\!\!\!\perp Y$, the product law has density $f_Xf_Y$, so uniqueness of densities gives $f_{X,Y}=f_Xf_Y$ a.e.
+\item[$(ii)$] ($\Leftarrow$) If $f_{X,Y}=f_Xf_Y$ a.e., then for Borel $A,B$,\\
+$\mathbb{P}(X\in A,Y\in B)=\int_A\int_Bf_X(x)f_Y(y)\,dy\,dx=\mathbb{P}(X\in A)\mathbb{P}(Y\in B)$.
+\item[$(iii)$] Let $G=\int_Ag$ and $H=\int_Bh$. Normalization gives $GH=1$, while $f_X(x)=g(x)H\mathbf{1}_A(x)$ and\\
+$f_Y(y)=h(y)G\mathbf{1}_B(y)$, hence $f_X(x)f_Y(y)=f_{X,Y}(x,y)$ a.e.; apply (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Independence is product structure of the joint law.\\
+\hlt{Key Insight}: Independence means the joint law factors.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:bivariate-density-nonrectangular-region} \hlt{A Non-Rectangular Bivariate Density}\\
+Let $S=\{(x,y):x^2\leq y\leq1\}$ and $f_{X,Y}(x,y)=cx^2y\mathbf{1}_S(x,y)$.\\
+Since $S=\{(x,y):-1\leq x\leq1,\ x^2\leq y\leq1\}$, $1=c\int_{-1}^{1}\int_{x^2}^{1}x^2y\,dy\,dx=\frac{4c}{21}$, so $c=\frac{21}{4}$.\\
+For $E=\{X\geq Y\}$, $S\cap E=\{(x,y):0\leq x\leq1,\ x^2\leq y\leq x\}$, hence $\mathbb{P}(E)=(\frac{21}{4})\int_0^1\int_{x^2}^{x}x^2y\,dy\,dx=\frac{3}{20}$.\\
+\hlt{Key Insight}: In bivariate integration, pick one variable first and let the other range over the corresponding slice.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/parabolic_bivariate_region.tikz}
+  \caption{\textcolor{gray!70!black}{Gray}: support $x^2\leq y\leq1$; \textcolor{blue!70!black}{blue}: event $X\geq Y$ ($x^2\leq y\leq x$).}
+  \label{fig:parabolic-bivariate-region}
+\end{figure}

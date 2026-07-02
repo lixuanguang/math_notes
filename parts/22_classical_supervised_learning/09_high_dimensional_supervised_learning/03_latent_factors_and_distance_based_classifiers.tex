@@ -1,0 +1,39 @@
+\subsection{Latent Factors and Distance-Based Classifiers}
+\begin{remark} \label{rem:sl-supervised-pc-latent-factor-view} \hlt{Screening Before Components}\\
+Let $s_j$ measure the marginal association between feature $x_j$ and outcome $y$, and set $A_\theta\defeq\{j:|s_j|>\theta\}$.\\
+Supervised principal components compute PCs of $X_{A_\theta}$ rather than all of $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Regression score}: take $s_j$ as a standardized univariate regression coefficient for $y$ on $x_j$.
+\item \hlt{Survival score}: take $s_j$ as the one-feature Cox score for $x_j$.
+\end{enumerate}
+Ordinary PCs follow variance in $X$ alone; screening makes the component outcome-guided.\\
+The resulting component is a denoised latent factor from weak but aligned features.
+\end{remark}
+
+\begin{method} \label{meth:sl-preconditioned-lasso} \hlt{Preconditioned Lasso}\\
+Given $X$, $y$, and $\lambda>0$, preconditioning uses a denoised response before sparse refitting.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fit supervised principal components and compute fitted values $\widehat{y}=(\widehat{y}_1,\ldots,\widehat{y}_n)^T$.
+\item Fit $\widehat{\beta}^{\mathrm{pre}}\in\operatorname*{arg\,min}\limits_{\beta}\{\frac{1}{2}\norm{\widehat{y}-X\beta}_2^2+\lambda\norm{\beta}_1\}$.
+\end{enumerate}
+Stage (i) denoises the target; stage (ii) selects original features that reproduce $\widehat{y}$.
+\end{method}
+
+\begin{method} \label{meth:sl-inner-product-and-distance-only-classifiers} \hlt{Inner-Product and Distance-Only Classifiers}\\
+Let $K_{ii'}\defeq\langle x_i,x_{i'}\rangle$ be a positive semidefinite Gram matrix, $g_i$ class labels, $n_k=\#\{i:g_i=k\}$, and $M\defeq\frac{1}{n}\mathbf{1}\mathbf{1}^T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Nearest neighbor}: compute $\norm{x_i-x_{i'}}^2=K_{ii}+K_{i'i'}-2K_{ii'}$.
+\item \hlt{Nearest centroid}: for test point $x_0$, compute $\norm{x_0-\bar{x}_k}^2=\langle x_0,x_0\rangle-\frac{2}{n_k}\sum\limits_{g_i=k}\langle x_0,x_i\rangle+\frac{1}{n_k^2}\sum\limits_{g_i=k}\sum\limits_{g_{i'}=k}\langle x_i,x_{i'}\rangle$.
+\item \hlt{Distance-only input}: for squared distances $\Delta_{ii'}^2$, set $B_{ii'}\defeq-\frac{1}{2}\Delta_{ii'}^2$ and $\widetilde{K}\defeq(I-M)B(I-M)$.
+\end{enumerate}
+Thus nearest-neighbor, nearest-centroid, kernel PCA, and related classifiers require only inner products or centered distances, not explicit feature vectors.
+\end{method}
+
+\begin{example} \label{ex:sl-string-kernel-high-dimensional-features} \hlt{String Kernels}\\
+For strings over a finite alphabet, let $\mathcal{A}_m$ be the set of length-$m$ substrings, and let $\phi_a(x)$ count occurrences of $a$ in string $x$. Define $\Phi_m(x)\defeq(\phi_a(x))_{a\in\mathcal{A}_m}$ and $K_m(x,x')\defeq\langle\Phi_m(x),\Phi_m(x')\rangle$.\\
+Although $|\mathcal{A}_m|$ grows exponentially in $m$, $K_m(x,x')$ can often be computed without forming $\Phi_m(x)$.\\
+Thus support-vector or centroid classifiers can use sequence similarities directly.
+\end{example}

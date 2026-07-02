@@ -1,0 +1,72 @@
+\subsection{Computation, Prediction, and Asymptotic Bayes}
+
+Except in conjugate models, posterior summaries are integrals that usually require approximation.  Monte Carlo and optimization methods from numerical computation become statistical tools here.
+
+\begin{remark} \label{rem:bayesian-integrals-motivate-simulation} \hlt{Bayesian Integrals as a Motivation}\\
+For prior density $\pi(\theta)$ and likelihood $\mathcal{L}(\theta)$, write $Z=\int \mathcal{L}(u)\pi(u)\,du$.\\
+Then $\pi(\theta\mid X^n)=Z^{-1}\mathcal{L}(\theta)\pi(\theta)$ and $\mathbb{E}[\theta\mid X^n]=Z^{-1}\int \theta\,\mathcal{L}(\theta)\pi(\theta)\,d\theta$.\\
+For $\theta=(\theta_1,\ldots,\theta_k)$, high-dimensional marginalisation is often analytically impractical.
+\end{remark}
+
+\begin{definition} \label{def:bayesian-credible-set} \label{def:mcmc-posterior-integration} \hlt{Credible Sets and Posterior Monte Carlo}\\
+Let $\Pi(\cdot\mid x)$ be the posterior on $\Theta$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Credible set}: $C(x)\subseteq\Theta$ has credibility $1-\alpha$ if $\Pi(C(x)\mid x)\geq1-\alpha$.
+\item \hlt{Conditioning}: credibility is a posterior probability conditional on the observed data $x$.
+\item \hlt{Monte Carlo sample}: let $\theta^{(1)},\ldots,\theta^{(M)}$ be draws, or approximate draws, from $\Pi(\cdot\mid x)$.
+\item \hlt{Posterior mean}: for integrable $g$, $\int g(\theta)\,d\Pi(\theta\mid x)\approx M^{-1}\sum\limits_{m=1}^Mg(\theta^{(m)})$.
+\item \hlt{Dependent draws}: MCMC uses dependent samples but targets the same posterior integrals.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:gibbs-sampling-normal-mean-precision} \hlt{Gibbs Sampling from Full Conditionals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Kernel}: unknown mean $\theta$, precision $\xi$, flat-prior posterior satisfies $\pi(\theta,\xi\mid x)\propto\xi^{\frac{n}{2}-1}\exp\{-\frac{\xi}{2}\sum\limits_i(x_i-\theta)^2\}$.
+\item \hlt{Decomposition}: $\sum\limits_i(x_i-\theta)^2=\sum\limits_i(x_i-\overline{x})^2+n(\theta-\overline{x})^2$.
+\item \hlt{Mean conditional}: $\theta\mid\xi,x\sim N(\overline{x},(n\xi)^{-1})$.
+\item \hlt{Precision conditional}: $\xi\mid\theta,x\sim\operatorname{Gamma}(\frac{n}{2},\frac12\sum\limits_i(x_i-\theta)^2)$ in rate form.
+\item \hlt{Gibbs sampler}: alternate conditionals; post-burn-in averages estimate posterior summaries.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:two-binomial-posterior-simulation} \hlt{Two Binomial Proportions}\\
+Suppose $X\sim\operatorname{Binomial}(n,p_1)$ and $Y\sim\operatorname{Binomial}(m,p_2)$ are independent, with independent flat priors on $p_1,p_2$.\\
+Then $p_1\mid X\sim\operatorname{Beta}(X+1,n-X+1)$ and $p_2\mid Y\sim\operatorname{Beta}(Y+1,m-Y+1)$.\\
+For $\delta=p_2-p_1$, draw $P_1^{(i)}\sim\operatorname{Beta}(X+1,n-X+1)$ and $P_2^{(i)}\sim\operatorname{Beta}(Y+1,m-Y+1)$, set $\delta^{(i)}=P_2^{(i)}-P_1^{(i)}$, and summarize the empirical distribution of $\delta^{(i)}$.
+\end{example}
+
+\begin{method} \label{method:posterior-function-simulation} \hlt{Simulating a Posterior Function}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\delta=g(p_1,\ldots,p_k)$ be the posterior target.
+\item Draw posterior samples $(P_1^{(i)},\ldots,P_k^{(i)})$ for $i=1,\ldots,N$.
+\item Set $\delta^{(i)}=g(P_1^{(i)},\ldots,P_k^{(i)})$, use empirical distribution of $\delta^{(i)}$ to estimate posterior distribution of $\delta$.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:laplace-approximation-posterior} \hlt{Laplace Approximation}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Setup}: let $\pi_n(\theta\mid x)\propto\exp\{-nq_n(\theta)\}$, with interior minimiser $\widehat{\theta}$.
+\item \hlt{Curvature}: set $H_n(\widehat{\theta})\defeq\nabla^2q_n(\widehat{\theta})$, assumed positive definite.
+\item \hlt{Quadratic approximation}: $q_n(\theta)\approx q_n(\widehat{\theta})+\frac12(\theta-\widehat{\theta})^\top H_n(\widehat{\theta})(\theta-\widehat{\theta})$.
+\item \hlt{Normal approximation}: $\Pi(\cdot\mid x)\approx N(\widehat{\theta},\{nH_n(\widehat{\theta})\}^{-1})$.
+\end{enumerate}
+\end{method}
+
+\begin{theorem} \label{thm:bernstein-von-mises-informal} \hlt{Bernstein--von Mises Principle}\\
+Let $X_1,\ldots,X_n\sim P_{\theta_0}$ in a regular $d$-dimensional model with nonsingular information $I(\theta_0)$.\\
+Assume the prior density $\pi$ is positive and continuous near $\theta_0$, and let $\widehat{\theta}_n$ be an efficient center.\\
+Then $\Pi(\sqrt{n}(\theta-\widehat{\theta}_n)\in\cdot\mid X_1,\ldots,X_n)\Rightarrow N_d(0,I(\theta_0)^{-1})$ in $P_{\theta_0}$-probability.
+\begin{proof} Set $h\defeq\sqrt{n}(\theta-\widehat{\theta}_n)$. Local asymptotic normality gives $\ell_n(\widehat{\theta}_n+\frac{h}{\sqrt{n}})-\ell_n(\widehat{\theta}_n)=-\frac12h^\top I(\theta_0)h+o_{P_{\theta_0}}(1)$ uniformly on bounded $h$. Prior continuity gives $\frac{\pi(\widehat{\theta}_n+\frac{h}{\sqrt{n}})}{\pi(\theta_0)}\to1$ in $P_{\theta_0}$-probability on bounded $h$.\\
+After normalization, the posterior density of $h$ converges to the $N_d(0,I(\theta_0)^{-1})$ density, with tail mass outside bounded sets negligible. Thus the displayed posterior weak convergence holds.\\
+\hlt{Structural Commentary}: Locally, the likelihood is quadratic and the prior is flat to first order.\\
+\hlt{Key Insight}: In regular finite-dimensional models, posterior uncertainty is asymptotically frequentist normal.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:bayes-frequentist-alignment-and-limits} \hlt{Alignment and Limits}\\
+In regular fixed-dimensional models, Bayesian credible sets based on the Bernstein--von Mises normal approximation have asymptotic frequentist coverage. This alignment can fail in high-dimensional, nonparametric, weakly identified, or boundary problems, where the prior may remain first-order relevant.
+\end{remark}

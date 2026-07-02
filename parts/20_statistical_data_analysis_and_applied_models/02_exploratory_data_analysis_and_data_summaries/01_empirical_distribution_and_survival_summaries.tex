@@ -1,0 +1,34 @@
+\subsection{Empirical Distribution and Survival Summaries}
+
+Exploratory summaries first treat the observed values as a batch of numbers.  A stochastic model may later explain their variability, but the displays themselves are useful before a model has been chosen.
+
+\begin{definition} \label{def:empirical-cdf-and-survival-summary} \hlt{Empirical CDF and Empirical Survival Function}\\
+Let $x_1,\ldots,x_n\in\R$ be data; for survival summaries assume $x_i\geq0$ for $1\leq i\leq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Empirical CDF}: $F_n:\R\to[0,1]$, $F_n(x)\defeq n^{-1}\#\{i\in\{1,\ldots,n\}:x_i\leq x\}$.
+\item \hlt{Empirical Survival Function}: $S_n:[0,\infty)\to[0,1]$, $S_n(t)\defeq1-F_n(t)=n^{-1}\#\{i\in\{1,\ldots,n\}:x_i>t\}$.
+\end{enumerate}
+\hlt{Key Insight}: $F_n$ and $S_n$ encode complementary empirical tails, with $S_n(t)=1-F_n(t)$ for $t\geq0$.
+\end{definition}
+
+\begin{remark} \label{rem:ecdf-step-convention} \hlt{Step-Function Convention}\\
+Let $v_1<\cdots<v_m$ be the distinct observed values, with multiplicities $r_1,\ldots,r_m$. Then $F_n$ is right-continuous, constant on each component of $\R\setminus\{v_1,\ldots,v_m\}$, and has jump $\Delta F_n(v_j)=\frac{r_j}{n}$.
+\end{remark}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/eda_ecdf_survival_steps.tikz}
+  \caption{Empirical CDF (blue) rises as empirical survival (green) falls.}
+  \label{fig:eda-ecdf-survival-steps}
+\end{figure}
+
+\begin{method} \label{meth:empirical-log-survival-plot} \hlt{Empirical Log-Survival Plot}\\
+Suppose $0\leq T_{(1)}<\cdots<T_{(n)}$ and there are no ties. Set $p_i\defeq\frac{i}{n+1}$ and $y_i\defeq\log(1-p_i)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Plot}: Draw $P_{\log S}^{(n)}\defeq\{(T_{(i)},y_i):1\leq i\leq n\}$; using $n+1$ keeps $y_n$ finite.
+\item \hlt{Hazard Reading}: Since $(\log S)'=-h$, more negative local slopes indicate larger hazards.
+\item \hlt{Tail Variability}: $\operatorname{Var}(\log[1-F_n(t)])\approx n^{-1}\frac{F(t)}{1-F(t)}$, which grows as $F(t)\uparrow1$.
+\end{enumerate}
+\end{method}

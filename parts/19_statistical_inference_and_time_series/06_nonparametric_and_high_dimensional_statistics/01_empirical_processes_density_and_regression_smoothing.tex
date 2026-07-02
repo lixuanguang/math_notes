@@ -1,0 +1,251 @@
+\subsection{Empirical Processes, Density, and Regression Smoothing}
+
+Nonparametric statistics replaces finite-dimensional parameter assumptions by smoothness, shape, sparsity, or complexity restrictions.
+
+\begin{definition} \label{def:empirical-measure-and-process} \hlt{Empirical Measure and Empirical Process}\\
+Let $X_1,\ldots,X_n$ be observations in $(\mathcal{X},\mathcal{A})$ with reference law $P$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Empirical measure}: $\widehat{P}_n\defeq n^{-1}\sum\limits_{i=1}^n\delta_{X_i}$, so $\widehat{P}_nf=n^{-1}\sum\limits_{i=1}^nf(X_i)$.
+\item \hlt{Empirical process}: For measurable $\mathcal{F}$, $\mathbb{G}_n(f)\defeq\sqrt{n}(\widehat{P}_nf-Pf)$ for $f\in\mathcal{F}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:ecdf-fixed-point-mean-variance} \hlt{Fixed-Point Behavior of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent with common CDF $F$.\\
+For $x\in\R$, set $I_i(x)\defeq\mathbf{1}_{(-\infty,x]}(X_i)$ and $F_n(x)\defeq n^{-1}\sum\limits_{i=1}^n I_i(x)$. Then, for each fixed $x\in\R$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Law}: $nF_n(x)\sim\operatorname{Binomial}(n,F(x))$.
+\item \hlt{Mean}: $\mathbb{E}F_n(x)=F(x)$.
+\item \hlt{Variance}: $\operatorname{Var}(F_n(x))=n^{-1}F(x)(1-F(x))$.
+\end{enumerate}
+\begin{proof}
+Fix $x\in\R$ and put $p\defeq F(x)$ and $I_i\defeq I_i(x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $I_i\sim\operatorname{Bernoulli}(p)$ independently, $nF_n(x)=\sum\limits_{i=1}^n I_i\sim\operatorname{Binomial}(n,p)$.
+\item Linearity gives $\mathbb{E}F_n(x)=n^{-1}\sum\limits_{i=1}^n\mathbb{E}I_i=n^{-1}np=p=F(x)$.
+\item Independence gives $\operatorname{Var}(F_n(x))=n^{-2}\sum\limits_{i=1}^n\operatorname{Var}(I_i)=n^{-2}np(1-p)=n^{-1}F(x)(1-F(x))$.
+\end{enumerate}
+\hlt{Structural Commentary}: Pointwise, $F_n(x)=n^{-1}\sum\limits_{i=1}^n I_i(x)$ with $I_i(x)\sim\operatorname{Bernoulli}(F(x))$ independently.\\
+\hlt{Key Insight}: The empirical CDF at one point is a normalised binomial count.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:ecdf-simultaneous-versus-pointwise} \hlt{Pointwise and Simultaneous CDF Uncertainty}\\
+Proposition \ref{prop:ecdf-fixed-point-mean-variance} is pointwise: $x$ is fixed and $F_n(x)$ is a normalised binomial count.\\
+Simultaneous uncertainty controls $\|F_n-F\|_\infty\defeq\sup\limits_x\abs{F_n(x)-F(x)}$, yielding bands and diagnostics.
+\end{remark}
+
+\begin{proposition} \label{prop:ecdf-two-point-covariance} \hlt{Two-Point Covariance of the Empirical CDF}\\
+Let $X_1,\ldots,X_n$ be independent with common CDF $F$.\\
+For $w\in\R$, set $I_i(w)\defeq\mathbf{1}_{(-\infty,w]}(X_i)$, $F_n(w)\defeq n^{-1}\sum\limits_{i=1}^n I_i(w)$. For $u,v\in\R$, put $m\defeq\min\{u,v\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Covariance}: $\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)=n^{-1}\bigl(F(m)-F(u)F(v)\bigr)$.
+\item \hlt{Sign}: $\operatorname{Cov}\bigl(F_n(u),F_n(v)\bigr)\geq0$.
+\end{enumerate}
+\begin{proof}
+Fix $u,v\in\R$ and set $m\defeq\min\{u,v\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Covariance}: $\operatorname{Cov}(F_n(u),F_n(v))=n^{-2}\sum\limits_{i,j}\operatorname{Cov}(I_i(u),I_j(v))$.\\
+For $i\neq j$ the term is $0$ by independence, while for $i=j$,\\
+$\operatorname{Cov}(I_i(u),I_i(v))=\mathbb{E}[I_i(u)I_i(v)]-\mathbb{E}I_i(u)\mathbb{E}I_i(v)=F(m)-F(u)F(v)$.\\
+Hence $\operatorname{Cov}(F_n(u),F_n(v))=n^{-1}(F(m)-F(u)F(v))$.
+\item \hlt{Sign}: If $u\leq v$, then $F(m)-F(u)F(v)=F(u)(1-F(v))\geq0$.\\
+If $v\leq u$, then $F(m)-F(u)F(v)=F(v)(1-F(u))\geq0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $F_n(u)$ and $F_n(v)$ average iid Bernoulli pairs, so covariance scales by $1/n$.\\
+\hlt{Key Insight}: Cross-index independence leaves only the same-observation overlap $\{X_i\leq m\}$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:glivenko-cantelli} \hlt{Glivenko--Cantelli Theorem}\\
+Let $X_1,X_2,\ldots$ be i.i.d. real variables with CDF $F$, and set $\widehat{F}_n(t)\defeq n^{-1}\sum\limits_{i=1}^n\mathbf{1}_{\{X_i\leq t\}}$.\\
+Then $\sup\limits_{t\in\R}\abs{\widehat{F}_n(t)-F(t)}\to0$ almost surely.
+\begin{proof} Add independent $R_i\sim\operatorname{Unif}[0,1]$ and set $U_i\defeq F(X_i-)+R_i\{F(X_i)-F(X_i-)\}$.\\
+Then $U_i$ are i.i.d. $\operatorname{Unif}[0,1]$, and with $H_n(u)\defeq n^{-1}\sum\limits_i\mathbf{1}_{\{U_i\leq u\}}$ one has $\widehat{F}_n(t)=H_n(F(t))$ a.s.\\
+Hence $\sup\limits_t\abs{\widehat{F}_n(t)-F(t)}\leq\sup\limits_{0\leq u\leq1}\abs{H_n(u)-u}$.\\
+Fix $k\geq1$, $u_j\defeq\frac{j}{k}$, let $M_{n,k}\defeq\max\limits_{0\leq j\leq k}\abs{H_n(u_j)-u_j}$.\\
+By the SLLN, $M_{n,k}\to0$ a.s. If $u_{j-1}\leq u\leq u_j$, monotonicity gives $H_n(u_{j-1})-u_j\leq H_n(u)-u\leq H_n(u_j)-u_{j-1}$,\\
+Hence $\sup\limits_{0\leq u\leq1}\abs{H_n(u)-u}\leq M_{n,k}+k^{-1}$, and $\limsup\limits_{n\to\infty}\sup\limits_{0\leq u\leq1}\abs{H_n(u)-u}\leq k^{-1}$ a.s. $\forall k$. Let $k\to\infty$.\\
+\hlt{Structural Commentary}: Finite-grid SLLN plus monotonicity gives uniform CDF control.\\
+\hlt{Key Insight}: Monotonicity bounds between-grid drift by the mesh.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:sample-quantile-variance-delta-method} \hlt{Approximate Variance of a Sample Quantile}\\
+Let $Y_1,\ldots,Y_n$ be iid with continuous CDF $F$ and density $f$. Fix $p\in(0,1)$, set $x_p\defeq F^{-1}(p)$ with $f(x_p)>0$, choose $k$ with $\frac{k}{n+1}\approx p$, and put $\widehat{x}_p\defeq Y_{(k)}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Probability Scale}: $U_{(k)}\defeq F(Y_{(k)})$ has kth uniform order-statistic law. $\operatorname{Var}(U_{(k)})=\frac{k(n+1-k)}{(n+1)^2(n+2)}\approx\frac{p(1-p)}{n}$.
+\item \hlt{Quantile Scale}: $\operatorname{Var}(\widehat{x}_p)\approx\frac{p(1-p)}{n f(x_p)^2}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By probability integral transform, $U_i\defeq F(Y_i)$ are iid $\operatorname{Uniform}(0,1)$, $U_{(k)}=F(Y_{(k)})$.\\
+Theorem \ref{thm:kth-order-statistic-density} gives the stated exact variance, hence $\operatorname{Var}(U_{(k)})\approx\frac{p(1-p)}{n}$ when $\frac{k}{n+1}\approx p$.
+\item Let $g\defeq F^{-1}$. Since $g'(p)=\frac{1}{f(x_p)}$ and $\widehat{x}_p=g(U_{(k)})$, delta approximation $g(U_{(k)})\approx g(p)+g'(p)(U_{(k)}-p)$\\
+gives $\operatorname{Var}(\widehat{x}_p)\approx g'(p)^2\operatorname{Var}(U_{(k)})\approx\frac{p(1-p)}{n f(x_p)^2}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Quantile variance is probability-scale variance multiplied by $(F^{-1})'(p)^2$.\\
+\hlt{Key Insight}: Low density near $x_p$ inflates sample-quantile variability by $1/f(x_p)^2$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:distribution-free-median-confidence-interval} \hlt{Distribution-Free Median Interval}\\
+Let $X_1,\ldots,X_n$ be independent with continuous CDF $F$ and median $\eta$, so $F(\eta)=\frac{1}{2}$.\\
+Let $X_{(1)}\leq\cdots\leq X_{(n)}$ and $1\leq k\leq\floor{\frac{n}{2}}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Interval}: $C_k\defeq[X_{(k)},X_{(n-k+1)}]$.
+\item \hlt{Coverage}: $\mathbb{P}(\eta\in C_k)=1-\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $B_-\defeq\sum\limits_{i=1}^n\mathbf{1}_{\{X_i<\eta\}}$, $B_+\defeq\sum\limits_{i=1}^n\mathbf{1}_{\{X_i>\eta\}}$. By continuity, $B_-+B_+=n$ a.s. and $B_-\sim\operatorname{Binomial}(n,\frac{1}{2})$.
+\item $\eta\notin C_k$ iff $B_-<k$ or $B_+<k$. Since $k\leq\floor{\frac{n}{2}}$, these two events are disjoint.
+\item By symmetry, $\mathbb{P}(\eta\notin C_k)=2\mathbb{P}(B_-<k)=2\sum\limits_{j=0}^{k-1}\binom{n}{j}2^{-n}=\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$, so $\mathbb{P}(\eta\in C_k)=1-\frac{1}{2^{n-1}}\sum\limits_{j=0}^{k-1}\binom{n}{j}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The coverage depends only on the binomial count of observations below $\eta$, not on $F$.\\
+\hlt{Key Insight}: Continuity turns median coverage into a symmetric binomial tail.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:kernel-density-estimator} \hlt{Kernel Density Estimator}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Kernel and bandwidth}: Let $\int K(u)\,du=1$ and $h>0$.
+\item \hlt{Estimator}: For data $X_1,\ldots,X_n$, $\widehat{f}_h(x)\defeq(nh)^{-1}\sum\limits_{i=1}^nK(\frac{x-X_i}{h})$.
+\end{enumerate}
+Larger $h$ lowers variance and raises bias; smaller $h$ does the reverse.
+\end{definition}
+
+\begin{definition} \label{def:nonparametric-regression-smoothing} \hlt{Nonparametric Regression}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Model}: $Y=m(X)+\varepsilon$ with $\mathbb{E}[\varepsilon\mid X]=0$, so $m(x)=\mathbb{E}[Y\mid X=x]$.
+\item \hlt{Weights}: For kernel $K$ and bandwidth $h>0$, set $w_i(x)\defeq K(\frac{x-X_i}{h})$.
+\item \hlt{Estimator}: If $\sum\limits_iw_i(x)>0$, define $\widehat{m}_h(x)\defeq \frac{\sum\limits_{i=1}^nw_i(x)Y_i}{\sum\limits_{i=1}^nw_i(x)}$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:nadaraya-watson-kernel-smoother} \hlt{Kernel-Weighted Local Average}\\
+Let $(X_i,Y_i)_{i=1}^n$ be regression data and fix a query point $x_0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Local kernel}: For a nonnegative profile $D$ and width $h_\lambda(x_0)>0$, set $K_\lambda(x_0,x)\defeq D(\norm{x-x_0}/h_\lambda(x_0))$.
+\item \hlt{Estimator}: If $\sum\limits_{i=1}^nK_\lambda(x_0,X_i)>0$, local-constant (Nadaraya--Watson) estimate is $\widehat{m}(x_0)\defeq\frac{\sum\limits_{i=1}^nK_\lambda(x_0,X_i)Y_i}{\sum\limits_{i=1}^nK_\lambda(x_0,X_i)}$.
+\end{enumerate}
+Metric windows set $h_\lambda(x_0)=\lambda$; nearest-neighbor windows set $h_\lambda(x_0)=\operatorname{dist}(x_0,X_{(k)}(x_0))$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/statistics_time_series/kernel_smoothing_windows.tikz}
+  \caption{Fixed metric and $k$-nearest windows around $x_0$.}
+  \label{fig:kernel-smoothing-windows}
+\end{figure}
+
+\begin{example} \label{ex:compact-kernels-for-local-smoothing} \hlt{Common Local-Smoothing Kernels}\\
+In one dimension, common compact profiles are $D_E(t)\defeq\frac34(1-t^2)\mathbf{1}_{\{\abs{t}\leq1\}}$ for Epanechnikov smoothing and $D_T(t)\defeq(1-\abs{t}^3)^3\mathbf{1}_{\{\abs{t}\leq1\}}$ for tri-cube smoothing.
+Both have support $[-1,1]$; Gaussian profiles have full support, and normalization constants cancel in regression-weight averages but matter for density estimation.
+\end{example}
+
+\begin{method} \label{meth:local-linear-regression-smoothing} \hlt{Local Linear Regression Smoothing}\\
+Fix $x_0$ and bandwidth $h>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Weighted fit}: Set $(\widehat{\beta}_0(x_0),\widehat{\beta}_1(x_0))\in\operatorname*{argmin}\limits_{\beta_0,\beta_1}\sum\limits_{i=1}^n(Y_i-\beta_0-\beta_1(X_i-x_0))^2K(\frac{X_i-x_0}{h})$.
+\item \hlt{Estimate}: Define $\widehat{m}_h(x_0)\defeq\widehat{\beta}_0(x_0)$.
+\end{enumerate}
+Smaller $h$ gives a more variable fit; larger $h$ gives more bias.
+\end{method}
+
+\begin{method} \label{meth:local-polynomial-regression-smoothing} \hlt{Local Polynomial Regression}\\
+Fix a query point $x_0\in\R^p$ and degree $d\in\N_0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Basis}: Let $\mathcal{A}_d\defeq\{\alpha\in\N_0^p:\abs{\alpha}\leq d\}$ and $b_d(u)\defeq(u^\alpha)_{\alpha\in\mathcal{A}_d}$, where $u^\alpha\defeq\prod\limits_{j=1}^pu_j^{\alpha_j}$.
+\item \hlt{Weights}: Set $K_i(x_0)\defeq K_\lambda(x_0,X_i)$.
+\item \hlt{Weighted fit}: For $\beta=(\beta_\alpha)_{\alpha\in\mathcal{A}_d}$, choose $\widehat{\beta}(x_0)\in\operatorname*{argmin}\limits_{\beta\in\R^{|\mathcal{A}_d|}}\sum\limits_{i=1}^nK_i(x_0)(Y_i-b_d(X_i-x_0)^\top\beta)^2$.
+\item \hlt{Estimator}: With $\mathbf{0}\in\mathcal{A}_d$ the constant multi-index, define $\widehat{m}_d(x_0)\defeq\widehat{\beta}_{\mathbf{0}}(x_0)$.
+\end{enumerate}
+$d=0$ is local constant; $d=1$ is local linear with boundary correction.\\
+Larger $d$ trades lower curvature bias for higher variance.
+\end{method}
+
+\begin{proposition} \label{prop:local-linear-equivalent-kernel-moments} \hlt{Equivalent Kernel Moments}\\
+Fix $x_0\in\R$ and set $u_i\defeq X_i-x_0$, $K_i\defeq K_\lambda(x_0,X_i)$, $z_i\defeq(1,u_i)^\top$, $Z\defeq(z_1^\top,\ldots,z_n^\top)^\top$, $W\defeq\operatorname{diag}(K_1,\ldots,K_n)$, $Y\defeq(Y_1,\ldots,Y_n)^\top$, and $G\defeq Z^\top WZ$.\\
+Assume $G$ is nonsingular, let $e_1\defeq(1,0)^\top$, $\widehat{\beta}(x_0)\defeq G^{-1}Z^\top WY$, and $\widehat{m}(x_0)\defeq e_1^\top\widehat{\beta}(x_0)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Equivalent weights}: $\widehat{m}(x_0)=\sum\limits_{i=1}^n\ell_i(x_0)Y_i$ with $\ell_i(x_0)\defeq K_iz_i^\top G^{-1}e_1$.
+\item \hlt{Moment constraints}: $\sum\limits_{i=1}^n\ell_i(x_0)=1$ and $\sum\limits_{i=1}^nu_i\ell_i(x_0)=0$.
+\item \hlt{Affine reproduction}: If $Y_i=a+bX_i$, then $\widehat{m}(x_0)=a+bx_0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Equivalent weights}: The weighted criterion $(Y-Z\beta)^\top W(Y-Z\beta)$ has normal equations $G\widehat{\beta}=Z^\top WY$, so $\widehat{\beta}=G^{-1}Z^\top WY$. Since $G^{-1}$ is symmetric, $\widehat{m}(x_0)=e_1^\top G^{-1}Z^\top WY=\sum\limits_{i=1}^nK_ie_1^\top G^{-1}z_iY_i=\sum\limits_{i=1}^n\ell_i(x_0)Y_i$.
+\item \hlt{Moment constraints}: With $\ell(x_0)\defeq(\ell_1(x_0),\ldots,\ell_n(x_0))^\top=WZG^{-1}e_1$, $Z^\top\ell(x_0)=Z^\top WZG^{-1}e_1=e_1$, hence $\sum\limits_i\ell_i(x_0)=1$ and $\sum\limits_i u_i\ell_i(x_0)=0$.
+\item \hlt{Affine reproduction}: If $Y_i=a+bX_i=(a+bx_0)+bu_i$,\\
+then $\widehat{m}(x_0)=(a+bx_0)\sum\limits_i\ell_i(x_0)+b\sum\limits_i u_i\ell_i(x_0)=a+bx_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Weighted projection onto $\operatorname{span}\{1,x-x_0\}$ imposes two weight moments.\\
+\hlt{Key Insight}: $Z^\top\ell=e_1$ encodes constant reproduction and zero first moment.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:structured-local-kernel-metric} \hlt{Structured Kernel Metric}\\
+Fix $x_0,x\in\R^p$, bandwidth $\lambda>0$, profile $D\geq0$, and a positive semidefinite matrix $A\succeq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Quadratic scale}: Define $\rho_A(x,x_0)\defeq (x-x_0)^\top A(x-x_0)$.
+\item \hlt{Kernel}: Set $K_{\lambda,A}(x_0,x)\defeq D(\rho_A(x,x_0)/\lambda)$.
+\end{enumerate}
+$A$ sets coordinate weights, correlations, and active directions.\\
+Standardise predictors first since $\rho_A$ is unit-dependent.
+\end{definition}
+
+\begin{method} \label{meth:local-likelihood-and-varying-coefficients} \hlt{Local Likelihood and Varying Coefficients}\\
+Let $\ell_i(\theta)$ be the log-likelihood contribution of observation $i$ under parameter $\theta$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Local likelihood}: At target $x_0$, set $K_i(x_0)\defeq K_\lambda(x_0,X_i)$ and choose $\widehat{\theta}(x_0)\in\operatorname*{argmax}\limits_\theta\sum\limits_{i=1}^nK_i(x_0)\ell_i(\theta)$.
+\item \hlt{Local parameterisation}: In generalised models, replace a constant natural parameter by\\
+$\eta_i(\gamma;x_0)\defeq b_d(X_i-x_0)^\top\gamma$ and maximize $\sum\limits_iK_i(x_0)\ell_i(\eta_i(\gamma;x_0))$ over $\gamma$.
+\item \hlt{Varying coefficients}: For predictors $(U,Z)$ with $U\in\R^q$, model $m(U,Z)\defeq\alpha(Z)+\sum\limits_{r=1}^q\beta_r(Z)U_r$.
+\item \hlt{Local fit}: At $z_0$, choose $(\widehat{\alpha},\widehat{\beta})\in\operatorname*{argmin}\limits_{a,b}\sum\limits_iK_\lambda(z_0,Z_i)(Y_i-a-b^\top U_i)^2$ and set $(\widehat{\alpha}(z_0),\widehat{\beta}(z_0))\defeq(\widehat{\alpha},\widehat{\beta})$.
+\end{enumerate}
+The coefficients are ordinary regression coefficients locally in $U$, but functions of the index variable $Z$.
+\end{method}
+
+\begin{remark} \label{rem:kernel-smoothing-practical-tradeoffs} \hlt{Bandwidth, Boundaries, and Dimension}\\
+Let $N_\lambda(x_0)\defeq\{i:K_\lambda(x_0,X_i)>0\}$ and $n_\lambda(x_0)\defeq|N_\lambda(x_0)|$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Bias--variance}: Larger $\lambda$ usually increases $n_\lambda(x_0)$, lowering variance, raising bias; smaller $\lambda$ does reverse.
+\item \hlt{Windows}: Metric windows fix radius; $k$-nearest-neighbor windows choose $\lambda(x_0)$ so that $n_{\lambda(x_0)}(x_0)\approx k$.
+\item \hlt{Dimension}: In $\R^p$, neighborhoods must expand with $p$ to keep $n_\lambda(x_0)$ stable, reducing local resolution.
+\item \hlt{Cost}: Without indexing, one query evaluates $K_\lambda(x_0,X_i)$ for all $i$, costing $O(n)$.
+\end{enumerate}
+\end{remark}
+
+\begin{method} \label{meth:local-linear-bandwidth-cross-validation} \hlt{Bandwidth Choice by Leave-One-Out Cross-Validation}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Candidates}: Fix bandwidths $h_1,\ldots,h_M>0$.
+\item \hlt{Leave-one-out score}: Let $\widehat{m}_{h_k,-i}$ be local linear fit excluding $(X_i,Y_i)$. Set $\operatorname{CV}(h_k)\defeq\sum\limits_{i=1}^n(Y_i-\widehat{m}_{h_k,-i}(X_i))^2$.
+\item \hlt{Selection}: Choose $\widehat{h}\in\operatorname*{argmin}\limits_{1\leq k\leq M}\operatorname{CV}(h_k)$, with a visual smoothness check.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:complexity-controls-nonparametric-estimation} \hlt{Complexity Control}\\
+For a function class $\mathcal{F}$, estimation is stable when $\sup\limits_{f\in\mathcal{F}}\abs{\widehat{P}_nf-Pf}$ is small with high probability or a.s.\\
+Smoothness and entropy control this supremum in place of finite dimension.
+\end{remark}

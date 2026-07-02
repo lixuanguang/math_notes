@@ -1,0 +1,60 @@
+\subsection{ARIMA, State-Space, and Volatility Models}
+
+Classical time-series models combine deterministic filters, stochastic innovations, and likelihood-based estimation.
+
+\begin{definition} \label{def:arma-model} \hlt{ARMA Model}\\
+Let $p,q\in\N_0$, $\phi_i\in\R$ $(1\leq i\leq p)$, $\theta_j\in\R$ $(1\leq j\leq q)$, and let $B$ denote the backshift, $(BX)_t=X_{t-1}$.\\
+Set $\phi(z)\defeq1-\sum\limits_{i=1}^{p}\phi_i z^i$ and $\theta(z)\defeq1+\sum\limits_{j=1}^{q}\theta_j z^j$; empty sums are zero.\\
+$(X_t)_{t\in\Z}$ is ARMA$(p,q)$ with innovations $(\varepsilon_t)_{t\in\Z}$ iff $(\varepsilon_t)$ is white noise and $\phi(B)X_t=\theta(B)\varepsilon_t$ $\forall t\in\Z$.\\
+\hlt{Structural Commentary}: Causal iff $\phi(z)\neq0$ for $\abs{z}\leq1$; invertible iff $\theta(z)\neq0$ for $\abs{z}\leq1$.\\
+\hlt{Key Insight}: AR roots control recursion; MA roots control innovation recovery.
+\end{definition}
+
+\begin{definition} \label{def:arima-model} \hlt{ARIMA Model}\\
+Let $p,q,d\in\N_0$, $\phi_i\in\R$ $(1\leq i\leq p)$, $\theta_j\in\R$ $(1\leq j\leq q)$, and let $B$ denote the backshift.\\
+Set $\Delta^d\defeq(1-B)^d$, $\phi(z)\defeq1-\sum\limits_{i=1}^{p}\phi_i z^i$, and $\theta(z)\defeq1+\sum\limits_{j=1}^{q}\theta_j z^j$.\\
+$(X_t)_{t\in\Z}$ is ARIMA$(p,d,q)$ with innovations $(\varepsilon_t)_{t\in\Z}$ iff $(\varepsilon_t)$ is white noise and $\phi(B)\Delta^dX_t=\theta(B)\varepsilon_t$ $\forall t\in\Z$.\\
+\hlt{Structural Commentary}: $Y_t\defeq\Delta^dX_t$ satisfies ARMA$(p,q)$ with the same innovations.\\
+\hlt{Key Insight}: $d>0$ shifts stationarity from $X_t$ to $\Delta^dX_t$.
+\end{definition}
+
+\begin{definition} \label{def:filtering-problem} \hlt{Filtering Problem}\\
+Let $(Z_t,Y_t)_{t\geq1}$ be a hidden-state model with state space $(E,\mathcal{E})$, and set $\mathcal{F}_t^Y\defeq\sigma(Y_1,\ldots,Y_t)$.\\
+For $A\in\mathcal{E}$, $\pi_t(A)\defeq\mathbb{P}(Z_t\in A\mid\mathcal{F}_t^Y)$; the task is recursive propagation or approximation of $(\pi_t)_{t\geq1}$.\\
+\hlt{Structural Commentary}: $(\pi_t)$ is an $\mathcal{F}_t^Y$-adapted probability-kernel-valued process.\\
+\hlt{Key Insight}: Conditioning converts hidden dynamics into an observable belief-state recursion.
+\end{definition}
+
+\begin{definition} \label{def:state-space-model-kalman} \hlt{Linear Gaussian State-Space Model}\\
+Let $m,r,n\in\N$, $F\in\R^{m\times m}$, $G\in\R^{m\times r}$, $H\in\R^{n\times m}$, and $Q\in\R^{r\times r}$, $R\in\R^{n\times n}$ with $Q,R\succeq0$.\\
+Let $(\eta_t)$ and $(\varepsilon_t)$ be mutually independent Gaussian noises with $\eta_t\sim N(0,Q)$ and $\varepsilon_t\sim N(0,R)$.\\
+Let $\alpha_0$ be independent Gaussian. $(\alpha_t,Y_t)_{t\in\N_0}$ is \hlt{linear Gaussian state-space} iff\\
+$\alpha_t\in\R^m$, $Y_t\in\R^n$, $\alpha_{t+1}=F\alpha_t+G\eta_t$, $Y_t=H\alpha_t+\varepsilon_t$ $\forall t\in\N_0$.\\
+\hlt{Key Insight}: With $\mathcal{F}_t^Y\defeq\sigma(Y_0,\ldots,Y_t)$, Kalman filtering recurses $(a_t,P_t)\defeq(\mathbb{E}(\alpha_t\mid\mathcal{F}_t^Y),\operatorname{Var}(\alpha_t\mid\mathcal{F}_t^Y))$.
+\end{definition}
+
+\begin{definition} \label{def:arch-garch-models} \hlt{ARCH and GARCH Volatility}\\
+Let $p,q\in\N_0$, $\omega>0$, $\alpha_1,\ldots,\alpha_q,\beta_1,\ldots,\beta_p\geq0$, and let $(z_t)_{t\in\Z}$ be standardized white noise.\\
+All processes below are real-valued and indexed by $\Z$; set $A\defeq\sum\limits_{i=1}^{q}\alpha_i+\sum\limits_{j=1}^{p}\beta_j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{ARCH$(q)$}: $(X_t,\sigma_t)_{t\in\Z}$, $\sigma_t\geq0$, satisfies $X_t=\sigma_t z_t$ and $\sigma_t^2=\omega+\sum\limits_{i=1}^{q}\alpha_iX_{t-i}^2$ $\forall t\in\Z$.
+\item \hlt{GARCH$(p,q)$}: $(X_t,\sigma_t)_{t\in\Z}$, $\sigma_t\geq0$, satisfies $X_t=\sigma_t z_t$ and $\sigma_t^2=\omega+\sum_{i=1}^{q}\alpha_iX_{t-i}^2+\sum\limits_{j=1}^{p}\beta_j\sigma_{t-j}^2$ $\forall t\in\Z$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\omega>0$, $\alpha_i,\beta_j\geq0$ force $\sigma_t^2\geq0$; by stationary GARCH, $A<1$ has $\mathbb{E}X_t^2=\frac{\omega}{1-A}$.
+\end{definition}
+
+\begin{remark} \label{rem:time-series-likelihood-filtering} \hlt{Likelihood by Filtering}\\
+If one-step densities exist, likelihood filtering has $S_t=\mathcal{T}_\vartheta(S_{t-1},W_t)$ and $\ell_T(\vartheta)=\sum\limits_{t=1}^{T}\log p_\vartheta(W_t\mid S_{t-1})$.\\
+Inference depends on stability of $S_t$.
+\end{remark}
+
+\begin{method} \label{method:markov-transition-mle} \hlt{Estimating a Finite Transition Matrix}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Observe finite homogeneous chain $X_0,\ldots,X_n$, let $n_{ij}\defeq\sum\limits_{t=0}^{n-1}\mathbf{1}\{X_t=i,X_{t+1}=j\}$, $n_i\defeq\sum\limits_j n_{ij}$.
+\item The row likelihood is proportional to $\prod\limits_j p_{ij}^{n_{ij}}$ subject to $\sum\limits_j p_{ij}=1$.
+\item If $n_i>0$, the rowwise MLE is $\widehat{p}_{ij}=\frac{n_{ij}}{n_i}$.
+\item If $n_i=0$, row $i$ is not identifiable without a convention or prior.
+\end{enumerate}
+\end{method}

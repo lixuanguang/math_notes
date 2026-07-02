@@ -1,0 +1,81 @@
+\subsection{Regularization, Normalization, and Generalization}
+
+Deep-learning regularization combines penalties, stochastic training effects, architecture, and validation-based stopping.
+
+\begin{definition} \label{def:sl-neural-regularized-objective} \hlt{Parameter-Norm Regularization}\\
+Minimize $\widetilde J_\lambda(\theta)=J(\theta)+\lambda\Omega(\theta)$, with $\lambda\geq0$, $\Omega\geq0$, and penalized non-intercept set $\mathcal P$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{$\ell^2$ weight decay}: $\Omega_2(\theta)=\sum\limits_{j\in\mathcal P}\theta_j^2$.
+\item \hlt{$\ell^1$ penalty}: $\Omega_1(\theta)=\sum\limits_{j\in\mathcal P}\abs{\theta_j}$.
+\item \hlt{Single-hidden-layer weight decay}: for weights $\alpha_{m\ell}$ and $\beta_{km}$, $\Omega_2(\theta)=\sum\limits_{m,\ell}\alpha_{m\ell}^2+\sum\limits_{k,m}\beta_{km}^2$.
+\end{enumerate}
+Intercepts such as $\alpha_{0m}$ and $\beta_{0k}$ are excluded unless explicitly included in $\mathcal P$.
+\end{definition}
+
+\begin{definition} \label{def:sl-dropout} \hlt{Dropout}\\
+Let $h\in\R^d$, $q\in(0,1]$, and $m_j\overset{\mathrm{ind}}{\sim}\operatorname{Bernoulli}(q)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Training mask}: replace $h$ by $\widetilde h=\frac{m\odot h}{q}$.
+\item \hlt{Subnetwork}: each mask $m\in\{0,1\}^d$ selects the active coordinates $\{j:m_j=1\}$ with shared parameters.
+\item \hlt{Evaluation}: use the unmasked activation $h$ when inverted dropout scaling is used in training.
+\end{enumerate}
+Dropout optimizes an expected masked loss over tied-parameter subnetworks.
+\end{definition}
+
+\begin{method} \label{method:sl-early-stopping} \hlt{Early Stopping}\\
+Let $\theta_t$ be the parameter after training step $t$ and let $V(\theta)$ be the validation loss.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $V_t=V(\theta_t)$ after selected training steps $t$.
+\item Select $t^\star\in\operatorname*{arg\,min}_{0\leq t\leq T}V_t$.
+\item Return $\widehat\theta_{\mathrm{ES}}=\theta_{t^\star}$.
+\end{enumerate}
+The stopping time $t^\star$ restricts the reachable parameter set and acts as an implicit regularization parameter.
+\end{method}
+
+\begin{remark} \label{rem:sl-neural-training-practicalities} \hlt{Starting Values, Scaling, and Multiple Fits}\\
+For a nonconvex neural objective $J(\theta)$, the fitted parameter can depend on initialization and scaling.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Initialization}: avoid $\theta_0=0$ when symmetry identifies hidden units, and avoid large $\norm{\theta_0}$ when $\sigma'(a)\approx0$.
+\item \hlt{Scaling}: standardize inputs, e.g. $x_j\leftarrow\frac{x_j-\hat\mu_j}{\hat\sigma_j}$, so coordinates have comparable optimization scale.
+\item \hlt{Multiple fits}: run starts $r=1,\ldots,R$, obtain $\widehat\theta^{(r)}$, and choose $\widehat\theta^{(r^\star)}$ by validation or penalized criterion.
+\end{enumerate}
+Thus initialization law, preprocessing, and restart selection are part of the training specification.
+\end{remark}
+
+\begin{remark} \label{rem:sl-hidden-units-and-weight-decay} \hlt{Hidden Units and Weight Decay}\\
+Let $M$ be hidden width, $\lambda$ the weight-decay strength, and $t^\star$ the early-stopping time.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Small $M$}: the model class may have excessive approximation error.
+\item \hlt{Large $M$}: overfitting can occur unless $\lambda>0$, finite $t^\star$, or another constraint limits effective complexity.
+\item \hlt{Selection}: choose $(M,\lambda,t^\star)$ by validation or another held-out criterion.
+\end{enumerate}
+Weight decay and early stopping bias the fit toward smaller effective weights and simpler functions.
+\end{remark}
+
+\begin{definition} \label{def:sl-batch-normalization} \hlt{Batch Normalization}\\
+Let $H=(h_{ij})\in\R^{b\times d}$ be minibatch activations, indexed by example $i$ and coordinate $j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Batch statistics}: $\mu_j=\frac{1}{b}\sum\limits_i h_{ij}$ and $s_j^2=\frac{1}{b}\sum\limits_i(h_{ij}-\mu_j)^2$.
+\item \hlt{Normalization}: $\widehat h_{ij}=\frac{h_{ij}-\mu_j}{\sqrt{s_j^2+\varepsilon}}$.
+\item \hlt{Affine output}: $y_{ij}=\gamma_j\widehat h_{ij}+\beta_j$, with learned $\gamma_j,\beta_j$.
+\item \hlt{Evaluation}: replace $\mu_j$ and $s_j^2$ by running training estimates.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:sl-data-augmentation-noise} \hlt{Augmentation and Noise}\\
+Let $\ell(y,f_\theta(x))$ be the task loss.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Data augmentation}: replace $(X,Y)$ by $(T(X),Y)$ for random label-preserving transforms $T$.
+\item \hlt{Label smoothing}: replace one-hot $y$ by $y^{(\varepsilon)}=(1-\varepsilon)y+\varepsilon u$, where $u$ is a reference class distribution.
+\item \hlt{Noise injection}: train on $x+\xi$ or hidden activations $h+\xi$, with $\mathbb E\xi=0$.
+\item \hlt{Multitask learning}: minimize $\sum\limits_{r=1}^R\omega_r\ell_r(y_r,f_{\theta,r}(x))$ with shared representation parameters.
+\end{enumerate}
+These methods regularize through altered data, targets, perturbations, or shared representations.
+\end{remark}

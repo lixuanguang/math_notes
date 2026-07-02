@@ -1,0 +1,59 @@
+\subsection{Stagewise Boosting}
+Boosting is a stagewise way to build a strong predictor from simple base learners.  The key object is an additive score: later terms are trained against the current fit rather than fit independently.
+
+\begin{definition} \label{def:sl-boosting} \hlt{Boosting}\\
+Let $\mathcal H$ be a weak-learner class and set $F_0\equiv0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Additive score}: $F_M(x)=\sum\limits_{m=1}^M\alpha_m h_m(x)$, with $h_m\in\mathcal H$ and $\alpha_m\in\R$.
+\item \hlt{Stagewise update}: choose $(\alpha_m,h_m)$ using residuals, gradients, or weights from $F_{m-1}$; $F_m=F_{m-1}+\alpha_mh_m$.
+\item \hlt{Prediction}: regression uses $F_M(x)$; binary classification uses $\operatorname{sign}F_M(x)$; multiclass scores use $\operatorname*{argmax}\limits_k F_{Mk}(x)$.
+\end{enumerate}
+Boosting is the stagewise construction of $F_M$ from weak learners.
+\end{definition}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/adaboost_weighted_samples.tikz}
+\caption{AdaBoost alternates \textcolor{blue!70!black}{fitting weak learners} with \textcolor{red!65!black}{updating observation weights}, then \textcolor{orange!80!black}{aggregates} them by a weighted vote.}
+\label{fig:sl-adaboost-weighted-samples}
+\end{figure}
+
+\begin{method} \label{meth:sl-forward-stagewise-additive-modeling} \hlt{Forward Stagewise Additive Modeling}\\
+Let $b(x;\gamma)$ range over a basis class and let $L(y,f)$ be a pointwise loss.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Initialize}: choose $f_0$.
+\item \hlt{Fit step}: at stage $m$, take $(\beta_m,\gamma_m)\in\operatorname*{argmin}\limits_{\beta,\gamma}\sum\limits_{i=1}^n L\{y_i,f_{m-1}(x_i)+\beta b(x_i;\gamma)\}$.
+\item \hlt{Update}: set $f_m(x)=f_{m-1}(x)+\beta_m b(x;\gamma_m)$.
+\item \hlt{Stop}: after $M$ stages, return $f_M$.
+\end{enumerate}
+Previously added terms are fixed; for squared-error loss, step (ii) fits the current residuals.
+\end{method}
+
+\begin{remark} \label{rem:sl-stagewise-lasso-regularization-path} \hlt{Stagewise Paths and Lasso Geometry}\\
+Let $\mathcal T=\{T_1,\ldots,T_K\}$ be a tree dictionary and $f_\alpha(x)=\sum\limits_{k=1}^K\alpha_kT_k(x)$.\\
+For large $K$, direct least squares is ill posed; a penalized target is $\min\limits_\alpha\{\sum\limits_{i=1}^n(y_i-f_\alpha(x_i))^2+\lambda J(\alpha)\}$.\\
+With $J(\alpha)=\sum\limits_{k=1}^K|\alpha_k|$, active trees are sparse.\\
+Small-step boosting traces a forward-stagewise path through this dictionary; shrinkage shortens each move.
+\end{remark}
+
+\begin{breakablealgorithm}
+\caption{AdaBoost.M1}
+\label{alg:sl-adaboost-m1}
+\begin{algorithmic}
+\Require Binary training data $(x_i,y_i)$ with $y_i\in\{-1,1\}$, weighted classification learner, iterations $M$
+\Ensure Classifier $G(x)$
+\State Initialize $w_i\gets 1/n$ for $i=1,\ldots,n$
+\For{$m=1,\ldots,M$}
+\State Fit a classifier $G_m$ using observation weights $w_i$
+\State $\displaystyle \operatorname{err}_m\gets
+\frac{\sum_{i=1}^n w_i\mathbf{1}_{\{y_i\neq G_m(x_i)\}}}{\sum_{i=1}^n w_i}$
+\State $\displaystyle \alpha_m\gets \log\!\left(\frac{1-\operatorname{err}_m}{\operatorname{err}_m}\right)$
+\For{$i=1,\ldots,n$}
+\State $w_i\gets w_i\exp\{\alpha_m\mathbf{1}_{\{y_i\neq G_m(x_i)\}}\}$
+\EndFor
+\EndFor
+\State \textbf{return} $\displaystyle G(x)=\sign\!\left(\sum_{m=1}^M\alpha_mG_m(x)\right)$
+\end{algorithmic}
+\end{breakablealgorithm}

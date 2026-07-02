@@ -1,0 +1,71 @@
+\subsection{Sparse and Structured Penalties}
+\begin{method} \label{meth:sl-sparse-and-structured-high-dimensional-penalties} \hlt{Sparse and Structured Penalties}\\
+Let $\lambda,\lambda_1,\lambda_2\geq0$ and $\alpha\in[0,1]$. Sparse penalties replace quadratic shrinkage by nonsmooth coordinate penalties.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Lasso multinomial logits}: maximize $\sum\limits_{i=1}^n\log\mathbb{P}(g_i\mid x_i)-\lambda\sum\limits_{k=1}^K\sum\limits_{j=1}^p|\beta_{kj}|$.
+\item \hlt{Elastic net}: replace $|\beta_{kj}|$ by $\alpha|\beta_{kj}|+(1-\alpha)\beta_{kj}^2$.
+\item \hlt{Fused lasso}: for ordered features, use $\lambda_1\sum\limits_{j=1}^p|\beta_j|+\lambda_2\sum\limits_{j=1}^{p-1}|\beta_{j+1}-\beta_j|$.
+\end{enumerate}
+The $L_1$ term selects coordinates; the quadratic term shrinks correlated features.\\
+Adjacent differences favor piecewise-constant coefficients.
+\end{method}
+
+\begin{method} \label{meth:sl-dantzig-selector} \hlt{Dantzig Selector}\\
+Assume centered $y$ and standardised columns $x_j$ of $X$.\\
+For residual $r(\beta)\defeq y-X\beta$, the Dantzig selector has two equivalent constrained forms.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Correlation budget}: choose $\widehat{\beta}^{\mathrm{DS}}_s\in\operatorname*{arg\,min}\limits_{\beta}\norm{\beta}_1$ subject to $\norm{X^Tr(\beta)}_\infty\leq s$.
+\item \hlt{Coefficient budget}: choose $\widehat{\beta}^{\mathrm{DS}}_t\in\operatorname*{arg\,min}\limits_{\norm{\beta}_1\leq t}\norm{X^Tr(\beta)}_\infty$.
+\end{enumerate}
+Both Dantzig and lasso control $\norm{\beta}_1$ and monitor residual correlations $x_j^Tr(\beta)$.\\
+Lasso minimises residual sum of squares, while Dantzig directly bounds $\norm{X^Tr(\beta)}_\infty$.
+\end{method}
+
+\begin{method} \label{meth:sl-grouped-lasso} \hlt{Grouped Lasso}\\
+Let $\{1,\ldots,p\}=G_1\sqcup\cdots\sqcup G_L$, with $|G_\ell|=p_\ell$, design block $X_\ell\in\R^{n\times p_\ell}$, coefficient block $\beta_\ell\in\R^{p_\ell}$, and $\lambda\geq0$.\\
+The grouped lasso solves $(\widehat{\beta}_0,\widehat{\beta}_1,\ldots,\widehat{\beta}_L)\in\operatorname*{arg\,min}\limits_{\beta_0,\beta_1,\ldots,\beta_L} \left\{ \norm{y-\beta_0\mathbf{1}-\sum\limits_{\ell=1}^{L}X_\ell\beta_\ell}_2^2 +\lambda\sum\limits_{\ell=1}^{L}\sqrt{p_\ell}\norm{\beta_\ell}_2 \right\}$.\\
+Since $\norm{\beta_\ell}_2=0$ iff $\beta_\ell=\mathbf{0}$, the penalty selects or removes entire groups; $\sqrt{p_\ell}$ normalizes group size.
+\end{method}
+
+\begin{method} \label{meth:sl-relaxed-adaptive-and-nonconvex-lasso-variants} \hlt{Relaxed, Adaptive, and Nonconvex Lasso Variants}\\
+Let $\widehat{\beta}^{\mathrm{lasso}}_\lambda$ be the lasso estimate, $A_\lambda\defeq\{j:\widehat{\beta}^{\mathrm{lasso}}_{\lambda,j}\neq0\}$, $\widetilde{\beta}$ an initial estimate, $\nu>0$, and $a\geq2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Relaxed lasso}: fit the lasso to get $A_\lambda$, then refit on $X_{A_\lambda}$ by least squares or with penalty $\phi\lambda$, $0\leq\phi\leq1$.
+\item \hlt{Adaptive lasso}: set $w_j\defeq\frac{1}{|\widetilde{\beta}_j|^\nu}$ and minimize $\frac{1}{2}\norm{y-X\beta}_2^2+\lambda\sum\limits_{j=1}^p w_j|\beta_j|$.
+\item \hlt{SCAD}: use the nonconvex penalty $J_{a,\lambda}$ with $J'_{a,\lambda}(t)\defeq\lambda\sign(t)\left[\mathbf{1}_{\{|t|\leq\lambda\}}+\frac{(a\lambda-|t|)_+}{(a-1)\lambda}\mathbf{1}_{\{|t|>\lambda\}}\right]$.
+\end{enumerate}
+All three reduce lasso shrinkage bias for large signals.\\
+Relaxed and adaptive lasso keep convex refits or weighted convex fits, while SCAD is nonconvex.
+\end{method}
+
+\begin{remark} \label{rem:sl-high-dimensional-feature-selection-roles} \hlt{Three Roles for Feature Selection}\\
+In high-dimensional learning, feature selection has three distinct roles.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Preprediction screening}: reduce variance before fitting, as in nearest shrunken centroids.
+\item \hlt{Sparse prediction}: estimate a sparse predictive rule, as in lasso or elastic-net logistic regression.
+\item \hlt{Scientific discovery}: report selected features for separate assessment.\\
+Multiplicity control is then inferential, not predictive.
+\end{enumerate}
+\end{remark}
+
+\begin{breakablealgorithm}
+\caption{Supervised Principal Components}
+\label{alg:sl-supervised-principal-components}
+\begin{algorithmic}
+\Require Standardized feature matrix $X$, outcome $y$, association scores $s_j$, thresholds $0\leq\theta_1<\cdots<\theta_K$, candidate component counts $\mathcal{M}$
+\Ensure A selected principal-component predictor
+\For{$k=1,\ldots,K$}
+\State $A_k\gets\{j: |s_j|>\theta_k\}$
+\For{$m\in\mathcal{M}$}
+\State Compute the first $m$ principal components of the submatrix $X_{A_k}$
+\State Fit the outcome model using those components as predictors
+\State Estimate held-out prediction error by cross-validation
+\EndFor
+\EndFor
+\State Choose $(\theta_k,m)$ by the cross-validation criterion and refit using the selected columns
+\end{algorithmic}
+\end{breakablealgorithm}

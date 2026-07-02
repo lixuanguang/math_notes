@@ -1,0 +1,76 @@
+\subsection{Confidence Sets, Pivots, and Asymptotic Intervals}
+
+Confidence procedures attach uncertainty to estimators by controlling coverage probability under repeated sampling.
+
+\begin{definition} \label{def:confidence-set-coverage} \label{def:pivot-confidence-construction} \hlt{Confidence Sets and Pivots}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A random set $C(X)\subseteq\Psi$ is a \hlt{$1-\alpha$ confidence set} for $\psi:\Theta\to\Psi$ if $\inf\limits_{\theta\in\Theta}\mathbb{P}_\theta\{\psi(\theta)\in C(X)\}\geq1-\alpha$.\\
+The left side is the \hlt{coverage guarantee}.
+\item A \hlt{pivot} is a statistic $Q(X,\theta)$ whose distribution under $\mathbb{P}_\theta$ is free of $\theta$.
+\item If constants $a_\alpha,b_\alpha$ satisfy $\mathbb{P}_\theta\{a_\alpha\leq Q(X,\theta)\leq b_\alpha\}=1-\alpha$ for all $\theta\in\Theta$,\\
+then $C(X)\defeq\{\theta\in\Theta:a_\alpha\leq Q(X,\theta)\leq b_\alpha\}$ is an exact $1-\alpha$ confidence set for $\theta$.
+\end{enumerate}
+\end{definition}
+
+\begin{corollary} \label{cor:hoeffding-confidence-interval-bernoulli} \hlt{Hoeffding Confidence Interval for a Bernoulli Parameter}\\
+Let $X_1,\ldots,X_n$ be independent $\operatorname{Bernoulli}(p)$ variables, $\widehat p_n\defeq\overline{X}_n$, and $\alpha\in(0,1)$.\\
+Set $\varepsilon_n\defeq\sqrt{(2n)^{-1}\log(\frac{2}{\alpha})}$ and $C_n\defeq[\widehat p_n-\varepsilon_n,\widehat p_n+\varepsilon_n]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Coverage}: $\mathbb{P}(p\in C_n)\geq1-\alpha$.
+\item \hlt{Length}: $\abs{C_n}=2\varepsilon_n\leq0.05$ whenever $n\geq800\log(\frac{2}{\alpha})$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\{p\notin C_n\}=\{\abs{\widehat p_n-p}>\varepsilon_n\}$, Corollary \ref{cor:hoeffding-bernoulli-average} gives $\mathbb{P}(p\notin C_n)\leq2e^{-2n\varepsilon_n^2}=\alpha$.
+\item If $n\geq800\log(\frac{2}{\alpha})$, then $\varepsilon_n^2\leq\frac{1}{1600}$, hence $\abs{C_n}=2\varepsilon_n\leq0.05$.
+\end{enumerate}
+\hlt{Structural Commentary}: Confidence intervals invert a concentration inequality.\\
+\hlt{Key Insight}: Choose $\varepsilon_n$ so the Hoeffding failure bound equals $\alpha$.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:test-confidence-duality} \hlt{Test--Confidence Duality}\\
+For each $\psi_0\in\Psi$, let $\varphi_{\psi_0}:\mathcal{X}\to\{0,1\}$ satisfy $\sup\limits_{\theta:\psi(\theta)=\psi_0}\mathbb{E}_\theta\varphi_{\psi_0}\leq\alpha$.\\
+Then $C(X)\defeq\{\psi_0\in\Psi:\varphi_{\psi_0}(X)=0\}$ is a $1-\alpha$ confidence set for $\psi(\theta)$.
+\begin{proof}
+Fix $\theta\in\Theta$ and set $\psi_\theta\defeq\psi(\theta)$.\\
+By definition, $\{\psi(\theta)\notin C(X)\}=\{\varphi_{\psi_\theta}(X)=1\}$, so $\mathbb{P}_\theta\{\psi(\theta)\notin C(X)\}=\mathbb{E}_\theta\varphi_{\psi_\theta}\leq\sup\limits_{\eta:\psi(\eta)=\psi_\theta}\mathbb{E}_\eta\varphi_{\psi_\theta}\leq\alpha$.\\
+Hence $\mathbb{P}_\theta\{\psi(\theta)\in C(X)\}\geq1-\alpha$ for every $\theta$, and $\inf\limits_{\theta\in\Theta}\mathbb{P}_\theta\{\psi(\theta)\in C(X)\}\geq1-\alpha$.\\
+\hlt{Structural Commentary}: Inverting all accepted point-null tests turns non-rejection regions into a confidence set.\\
+\hlt{Key Insight}: Coverage failure equals rejection of the true null value.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:confidence-test-converse-duality} \hlt{Confidence--Test Converse}\\
+Let $C(X)\subseteq\Psi$ satisfy $\inf\limits_{\theta\in\Theta}\mathbb{P}_\theta\{\psi(\theta)\in C(X)\}\geq1-\alpha$.\\
+For $\psi_0\in\Psi$, let $\varphi_{\psi_0}(X)\defeq\mathbf{1}_{\{\psi_0\notin C(X)\}}$ for testing $H_0:\psi(\theta)=\psi_0$. Then $\varphi_{\psi_0}$ is level $\alpha$: $\sup\limits_{\theta:\psi(\theta)=\psi_0}\mathbb{E}_\theta\varphi_{\psi_0}\leq\alpha$.
+\begin{proof} Fix $\theta$ with $\psi(\theta)=\psi_0$. Then $\mathbb{E}_\theta\varphi_{\psi_0}=\mathbb{P}_\theta\{\psi_0\notin C(X)\}=\mathbb{P}_\theta\{\psi(\theta)\notin C(X)\}=1-\mathbb{P}_\theta\{\psi(\theta)\in C(X)\}\leq\alpha$.\\
+Taking $\sup\limits_{\theta:\psi(\theta)=\psi_0}$ gives the level bound.\\
+\hlt{Structural Commentary}: A confidence set tests a proposed value by checking membership.\\
+\hlt{Key Insight}: Rejection of $\psi_0$ is exactly non-coverage when $\psi_0$ is true.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:duality-acceptance-regions} \hlt{Acceptance Regions and Confidence Regions}\\
+For level-$\alpha$ point-null tests with acceptance regions $A_{\psi_0}\subseteq\mathcal{X}$, the inversion $C(X)\defeq\{\psi_0\in\Psi:X\in A_{\psi_0}\}$ is the set of null values not rejected at $X$. Conversely, any confidence set $C(X)$ induces point-null tests $\varphi_{\psi_0}(X)=\mathbf{1}_{\{\psi_0\notin C(X)\}}$.
+\end{remark}
+
+\begin{definition} \label{def:wald-score-likelihood-intervals} \hlt{Wald, Score, and Likelihood Intervals}\\
+For scalar regular $\theta$ with estimator $\widehat{\theta}$, standard error $\widehat{\operatorname{se}}(\widehat{\theta})$, score $U_n$, and likelihood ratio $\lambda_n(\theta_0)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Wald}: use $\widehat{\theta}\pm z_{1-\frac{\alpha}{2}}\widehat{\operatorname{se}}(\widehat{\theta})$.
+\item \hlt{Score}: invert $\frac{\abs{U_n(\theta_0)}}{\sqrt{I_n(\theta_0)}}\leq z_{1-\frac{\alpha}{2}}$ over $\theta_0$.
+\item \hlt{Likelihood}: invert $-2\log\lambda_n(\theta_0)\leq\chi^2_{1,1-\alpha}$ over $\theta_0$.
+\end{enumerate}
+\hlt{Key Insight}: Wald, score, and likelihood intervals are first-order equivalent in regular models.
+\end{definition}
+
+\begin{example} \label{ex:poisson-mle-wald-confidence-interval} \hlt{Poisson Mean Wald Interval}\\
+Let $X_1,\ldots,X_n$ be independent $\operatorname{Poisson}(\lambda)$ variables.\\
+Then $\widehat{\lambda}=\overline{X}$ and $\frac{\sqrt n(\overline{X}-\lambda)}{\sqrt{\lambda}}\Rightarrow N(0,1)$, so the plug-in standard error is $\widehat{\operatorname{se}}(\widehat{\lambda})=\sqrt{\frac{\overline{X}}{n}}$.\\
+The Wald interval is $C_\alpha(X)=[\overline{X}-z_{1-\frac{\alpha}{2}}\sqrt{\frac{\overline{X}}{n}},\overline{X}+z_{1-\frac{\alpha}{2}}\sqrt{\frac{\overline{X}}{n}}]$, with asymptotic coverage $1-\alpha$.
+\end{example}

@@ -1,0 +1,104 @@
+\subsection{Change of Basis and Coordinate Transformations}
+\begin{definition} \hlt{Change of Basis Matrix}\\
+Let $\beta$ and $\gamma$ be two bases of the same vector space $\mathcal{V}$. The change-of-basis matrix from $\beta$-coordinates to $\gamma$-coordinates is $C_{\gamma \leftarrow \beta} \defeq [I_{\mathcal{V}}]_{\gamma \leftarrow \beta}$. Thus $[\mathbf{v}]_{\gamma} = C_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}$ for every $\mathbf{v} \in \mathcal{V}$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/change_of_basis_coordinates.tikz}
+  \caption{Change of basis: $[\mathbf{v}]_{\gamma}=C_{\gamma\leftarrow\beta}[\mathbf{v}]_{\beta}$.}
+  \label{fig:change-of-basis-coordinate-triangle}
+\end{figure}
+
+\begin{theorem} \label{thm:change-of-basis-matrices} \hlt{Change-of-Basis Matrices}\\
+Let $\mathcal{V}$ be $n$-dimensional and let $\beta$ be a basis of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\gamma$ is a basis of $\mathcal{V}$, then $C_{\gamma \leftarrow \beta}$ is invertible and $(C_{\gamma \leftarrow \beta})^{-1}=C_{\beta \leftarrow \gamma}$.
+\item If $S\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, then there is a basis $\gamma$ of $\mathcal{V}$ such that $S=C_{\gamma \leftarrow \beta}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman)*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] For any $\mathbf{v}\in\mathcal{V}$, $C_{\beta \leftarrow \gamma}C_{\gamma \leftarrow \beta}[\mathbf{v}]_{\beta}=[\mathbf{v}]_{\beta}$, $C_{\gamma \leftarrow \beta}C_{\beta \leftarrow \gamma}[\mathbf{v}]_{\gamma}=[\mathbf{v}]_{\gamma}$.\\
+Since $[\cdot]_{\beta}$ and $[\cdot]_{\gamma}$ are onto $\mathbb{F}^n$, both products equal $I_n$. Hence $C_{\gamma \leftarrow \beta}$ is invertible with inverse $C_{\beta \leftarrow \gamma}$.
+\item[$(ii)$] Write $S^{-1}=[\mathbf{s}_1\ \cdots\ \mathbf{s}_n]$. For each $j$, choose the unique $\mathbf{w}_j\in\mathcal{V}$ with $[\mathbf{w}_j]_{\beta}=\mathbf{s}_j$, and set $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$.\\
+Since columns of $S^{-1}$ form a basis of $\mathbb{F}^n$ and $[\cdot]_{\beta}$ is an isomorphism, $\gamma$ is a basis of $\mathcal{V}$.\\
+Moreover $C_{\beta \leftarrow \gamma}=S^{-1}$, so $C_{\gamma \leftarrow \beta}=S$.
+\end{enumerate}
+\hlt{Structural Commentary}: Change of basis is an invertible coordinate rewrite.\\
+\hlt{Key Insight}: Every basis change is reversible, and every invertible matrix is one.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:basis-columns-form-invertible-matrix} \hlt{Basis Columns Give an Invertible Matrix}\\
+If $(\mathbf{a}_1,\ldots,\mathbf{a}_n)$ is a basis of $\mathbb{F}^n$, then $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible.
+\begin{proof}
+Let $\epsilon=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be the standard basis and $\alpha=(\mathbf{a}_1,\ldots,\mathbf{a}_n)$. Then
+$C_{\epsilon \leftarrow \alpha} =
+\begin{bmatrix}
+[\mathbf{a}_1]_{\epsilon} & \cdots & [\mathbf{a}_n]_{\epsilon}
+\end{bmatrix} =A$.\\
+Since $\alpha$ is a basis, Theorem \ref{thm:change-of-basis-matrices} gives that $A$ is invertible.\\
+\hlt{Structural Commentary}: Basis columns form a change-of-basis matrix.\\
+\hlt{Key Insight}: Changing coordinates is reversible.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:complete-full-column-rank-matrix} \hlt{Completing a Full-Column-Rank Matrix}\\
+If $X\in\operatorname{Mat}(m,n,\mathbb{F})$ has rank $n<m$, then $\exists$ $X'\in\operatorname{Mat}(m,m-n,\mathbb{F})$ s.t. $\begin{bmatrix}X & X'\end{bmatrix}\in\operatorname{Mat}(m,m,\mathbb{F})$ is invertible.
+\begin{proof}
+Write $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_n]$. Since $\operatorname{rank}(X)=n$, the columns $\mathbf{x}_1,\ldots,\mathbf{x}_n$ are linearly independent in $\mathbb{F}^m$. By Theorem \ref{thm:extending-independent-lists}, extend this list to a basis $(\mathbf{x}_1,\ldots,\mathbf{x}_n,\mathbf{x}_{n+1},\ldots,\mathbf{x}_m)$ of $\mathbb{F}^m$.\\
+Set $X'=[\mathbf{x}_{n+1}\ \cdots\ \mathbf{x}_m]$. Corollary \ref{cor:basis-columns-form-invertible-matrix} shows that $\begin{bmatrix}X & X'\end{bmatrix}$ is invertible.\\
+\hlt{Structural Commentary}: Full column rank means the existing columns are independent directions. Extending them to a basis turns the rectangular matrix into an invertible square matrix.\\
+\hlt{Key Insight}: Independent columns can always be completed to a basis in finite dimensions.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:square-matrix-invertible-iff-full-rank} \hlt{Invertibility and Full Rank}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $A$ is invertible $\Longleftrightarrow$ $\operatorname{rank}(A)=n$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A$ is invertible, its columns form a basis of $\mathbb{F}^n$ by Theorem \ref{thm:invertible-matrix-columns-basis}; hence $\operatorname{rank}(A)=n$.
+\item[$(\Leftarrow)$] If $\operatorname{rank}(A)=n$, then $\operatorname{col}(A)=\mathbb{F}^n$.\\
+Thus the columns of $A$ form a basis by Proposition \ref{prop:full-dimension-basis-criteria}, so Corollary \ref{cor:basis-columns-form-invertible-matrix} gives that $A$ is invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: Full rank is square-matrix invertibility.\\
+\hlt{Key Insight}: Invertibility means the columns fill $\mathbb{F}^n$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:transpose-invertible-iff} \hlt{Transpose Preserves Invertibility}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the matrix $A$ is invertible if and only if $A^t$ is invertible.
+\begin{proof}
+By Theorem \ref{thm:row-rank-equals-column-rank}, $\operatorname{rank}(A)=\operatorname{rank}(A^t)$. Thus $\operatorname{rank}(A)=n$ if and only if $\operatorname{rank}(A^t)=n$.\\
+Corollary \ref{cor:square-matrix-invertible-iff-full-rank} gives the result.\\
+\hlt{Structural Commentary}: Transposition exchanges rows and columns without changing rank.\\
+\hlt{Key Insight}: A square matrix is invertible exactly when either its rows or columns have full rank.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:full-rank-products-preserve-rank} \hlt{Full-Rank Products Preserve Rank}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. If $X\in\operatorname{Mat}(p,m,\mathbb{F})$ has full column rank and $Y\in\operatorname{Mat}(n,q,\mathbb{F})$ has full row rank, then $\operatorname{rank}(A)=\operatorname{rank}(XAY)$. This holds when $X$ and $Y$ are square invertible matrices of appropriate sizes.
+\begin{proof}
+Because $X$ has full column rank, the induced map $L_X:\mathbb{F}^m\to\mathbb{F}^p$, $L_X(\mathbf{u})=X\mathbf{u}$, has kernel $\{\mathbf{0}\}$.\\
+Thus $\mathbf{z}\in\ker(XA) \iff X(A\mathbf{z})=\mathbf{0} \iff A\mathbf{z}=\mathbf{0} \iff \mathbf{z}\in\ker(A)$.\\
+Since $XA$ and $A$ have the same number of columns, Corollary \ref{cor:matrix-rank-nullity} gives $\operatorname{rank}(XA)=\operatorname{rank}(A)$.\\
+Because $Y$ has full row rank, $Y^t$ has full column rank. Applying the left-multiplication result to $A^t$ and $Y^t$, then using Theorem \ref{thm:row-rank-equals-column-rank}, gives $\operatorname{rank}(AY)=\operatorname{rank}((AY)^t) =\operatorname{rank}(Y^tA^t) =\operatorname{rank}(A^t) =\operatorname{rank}(A)$.\\
+Applying the left-multiplication result once more to $AY$ gives $\operatorname{rank}(XAY)=\operatorname{rank}(AY)=\operatorname{rank}(A)$.\\
+\hlt{Structural Commentary}: Multiplication by a full-column-rank matrix on the left loses no output information, while full row rank on the right loses no input information.\\
+\hlt{Key Insight}: Rank changes only when multiplication introduces a new kernel or collapses the row side.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:two-sided-change-of-basis-for-linear-maps} \hlt{Change of Bases for a Linear Map}\\
+Let $T\in\LL(\mathcal{V},\mathcal{W})$. Let $\beta,\beta'$ be bases of $\mathcal{V}$ and let $\gamma,\gamma'$ be bases of $\mathcal{W}$. Then $[T]_{\gamma'\leftarrow\beta'} =C_{\gamma'\leftarrow\gamma}[T]_{\gamma\leftarrow\beta}C_{\beta\leftarrow\beta'}$.
+\begin{proof}
+For every $\mathbf{v}\in\mathcal{V}$, $[T\mathbf{v}]_{\gamma'} =C_{\gamma'\leftarrow\gamma}[T\mathbf{v}]_{\gamma} =C_{\gamma'\leftarrow\gamma}[T]_{\gamma\leftarrow\beta}[\mathbf{v}]_{\beta} =C_{\gamma'\leftarrow\gamma}[T]_{\gamma\leftarrow\beta}C_{\beta\leftarrow\beta'}[\mathbf{v}]_{\beta'}$.\\
+Since $[\cdot]_{\beta'}$ is onto, the representing matrices are equal.\\
+\hlt{Structural Commentary}: Basis changes act by $C_{\gamma'\leftarrow\gamma}$ on the left and $C_{\beta\leftarrow\beta'}$ on the right.\\
+\hlt{Key Insight}: Domain changes act on input coordinates; codomain changes act on output coordinates.
+\end{proof}
+\end{theorem}
+
