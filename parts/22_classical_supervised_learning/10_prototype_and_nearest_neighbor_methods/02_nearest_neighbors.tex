@@ -1,0 +1,55 @@
+\subsection{Nearest Neighbors}
+\begin{method} \label{meth:sl-knn-classifier-metric-form} \hlt{$k$-Nearest-Neighbor Classification}\\
+Fix a distance $d$ on the feature space and an integer $k\in\{1,\ldots,n\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For a query $x_0$, compute $d_i=d(x_i,x_0)$ for $i=1,\ldots,n$.
+\item Let $N_k(x_0)\subset\{1,\ldots,n\}$ be indices of $k$ smallest values among $d_1,\ldots,d_n$. Set $\widehat{G}(x_0)\in\operatorname*{arg\,max}\limits_{g\in\{1,\ldots,K\}}\sum\limits_{i\in N_k(x_0)}\mathbf{1}_{\{g_i=g\}}$.
+\end{enumerate}
+Small $k$ gives lower bias and higher variance; larger $k$ smooths the decision boundary by averaging over more labels. The tuning parameter $k$ is usually chosen by validation or cross-validation.
+\end{method}
+
+\begin{proposition} \label{prop:sl-cover-hart-nearest-neighbor-bound} \hlt{Asymptotic One-Nearest-Neighbor Error}\\
+Assume $K\geq2$ and fix $x$. Let $p_k=\mathbb{P}(G=k\mid X=x)$, choose $k^\star\in\operatorname*{arg\,max}\limits_{1\leq k\leq K}p_k$, and set $L^\star(x)=1-p_{k^\star}$.\\
+In the asymptotic one-nearest-neighbor idealisation, the query label $G$ and nearest-neighbor label $G'$ are independent draws from $(p_1,\ldots,p_K)$, and the classifier predicts $G'$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $L_{1\mathrm{NN}}(x)=\mathbb{P}(G'\neq G)=\sum\limits_{k=1}^K p_k(1-p_k)=1-\sum\limits_{k=1}^K p_k^2$.
+\item $L^\star(x)\leq L_{1\mathrm{NN}}(x)\leq 2L^\star(x)-\frac{K}{K-1}\bigl(L^\star(x)\bigr)^2\leq 2L^\star(x)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Independence gives $\mathbb{P}(G'=G)=\sum\limits_{k=1}^Kp_k^2$, hence $L_{1\mathrm{NN}}(x)=1-\sum\limits_{k=1}^Kp_k^2$.
+\item Let $p_\star=p_{k^\star}$ and $q=1-p_\star=L^\star(x)$.\\
+Since $p_k\leq p_\star$ for every $k$, $\sum\limits_{k=1}^Kp_k^2\leq p_\star\sum\limits_{k=1}^Kp_k=p_\star$, so $L_{1\mathrm{NN}}(x)\geq1-p_\star=L^\star(x)$.\\
+Also $\sum\limits_{k\neq k^\star}p_k=q$, so Cauchy-Schwarz gives $\sum\limits_{k\neq k^\star}p_k^2\geq\frac{q^2}{K-1}$.\\
+Therefore $\sum\limits_{k=1}^Kp_k^2\geq(1-q)^2+\frac{q^2}{K-1}$ and $L_{1\mathrm{NN}}(x)\leq2q-\frac{Kq^2}{K-1}\leq2q=2L^\star(x)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Dominant mass gives the lower bound; uniform residual mass gives the upper bound.
+\hlt{Key Insight}: One-nearest-neighbor error is label-disagreement probability at fixed $x$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:sl-knn-prototype-comparative-study} \hlt{Tuning Depends on the Problem}\\
+Let $X=(X_1,\ldots,X_{10})$ have independent $\operatorname{Unif}(0,1)$ coordinates and let $Y\in\{0,1\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Halfspace}: $Y=\mathbf{1}_{\{X_1>1/2\}}$; the decision boundary is the single hyperplane $X_1=1/2$.
+\item \hlt{Checkerboard}: $Y=\mathbf{1}_{\{\sign(\prod_{j=1}^3(X_j-1/2))>0\}}$.\\
+The planes $X_j=1/2$ for $j=1,2,3$ form eight cells with alternating labels.
+\end{enumerate}
+Across repeated simulations, the preferred neighborhood size $k$ or prototype count $R$ depended on the case.  For memory-based and prototype rules, tuning is geometry-dependent, not a universal complexity constant.
+\end{example}
+
+\begin{example} \label{ex:sl-image-scene-nearest-neighbor-classification} \hlt{Image Scene Classification by Local Pixel Features}\\
+For each pixel $s$, let $b_s\in\R^4$ be its four spectral-band vector and let $g_s\in\{1,\ldots,7\}$ be its land-use label.\\
+Replace $b_s$ by the local feature vector $z_s=(b_t:t\in\mathcal{N}_3(s))\in\R^{36}$, where $\mathcal{N}_3(s)$ is the $3\times3$ pixel patch centered at $s$. A five-nearest-neighbor rule on the features $z_s$ had reported test error about $9.5\%$, showing that local spatial features can make nearest-neighbor classification competitive for irregular class boundaries.
+\end{example}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/pixel_eight_neighbor_feature_map.tikz}
+\caption{A $3\times3$ patch over four bands gives $36$ features per pixel.}
+\label{fig:sl-pixel-eight-neighbor-feature-map}
+\end{figure}

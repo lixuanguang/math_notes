@@ -1,0 +1,53 @@
+\subsection{Discriminant Analysis and Naive Bayes}
+\begin{method} \label{meth:sl-gaussian-discriminant-analysis} \hlt{Gaussian Discriminant Analysis}\\
+If $X\mid G=k$ has density $f_k$ and prior $\pi_k$, then $\mathbb{P}(G=k\mid X=x)=\frac{f_k(x)\pi_k}{\sum\limits_{\ell=1}^{K}f_\ell(x)\pi_\ell}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Score}: If $X\mid G=k\sim N(\mu_k,\Sigma_k)$, compare $\delta_k(x)\defeq-\frac{1}{2}\log|\Sigma_k|-\frac{1}{2}(x-\mu_k)^\top\Sigma_k^{-1}(x-\mu_k)+\log\pi_k$.
+\item \hlt{LDA}: If $\Sigma_k=\Sigma$ for all $k$, equivalent linear scores are $\delta_k^{\mathrm{LDA}}(x)\defeq x^\top\Sigma^{-1}\mu_k-\frac{1}{2}\mu_k^\top\Sigma^{-1}\mu_k+\log\pi_k$.
+\item \hlt{QDA}: If $\Sigma_k$ varies with $k$, the quadratic term remains and the rule is quadratic discriminant analysis.
+\end{enumerate}
+Estimate $\pi_k,\mu_k,\Sigma_k$ from training data; pooled covariance gives LDA and classwise covariances give QDA.\\
+Shared covariance makes the boundaries linear.
+\end{method}
+
+\begin{method} \label{meth:sl-regularized-discriminant-analysis} \hlt{Regularized Discriminant Analysis}\\
+For $0\leq\alpha\leq1$, set $\widehat{\Sigma}_k(\alpha)\defeq\alpha\widehat{\Sigma}_k+(1-\alpha)\widehat{\Sigma}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Endpoints}: $\alpha=0$ gives LDA and $\alpha=1$ gives QDA.
+\item \hlt{Scalar shrinkage}: For $0\leq\gamma\leq1$, replace $\widehat{\Sigma}$ by $\widehat{\Sigma}(\gamma)\defeq\gamma\widehat{\Sigma}+(1-\gamma)\widehat{\sigma}^{2}I$.
+\end{enumerate}
+Shrinkage reduces variance when covariance estimation is unstable.
+\end{method}
+
+\begin{definition} \label{def:sl-naive-bayes-classifier} \hlt{Naive Bayes Classifier}\\
+For $x=(x_1,\ldots,x_p)$, assume $f_j(x)=\prod\limits_{k=1}^{p}f_{jk}(x_k)$ for each class $j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Posterior}: With priors $\pi_j$, $p_j(x)\defeq\mathbb{P}(G=j\mid X=x)\propto\pi_j\prod\limits_{k=1}^{p}f_{jk}(x_k)$.
+\item \hlt{Additive log odds}: Relative to class $J$, $\log\frac{p_\ell(x)}{p_J(x)}=\log\frac{\pi_\ell}{\pi_J}+\sum\limits_{k=1}^{p}\log\frac{f_{\ell k}(x_k)}{f_{Jk}(x_k)}$.
+\end{enumerate}
+On the log scale, features contribute additively.\\
+Even misspecified independence can reduce variance enough to classify well near boundaries.
+\end{definition}
+
+\begin{remark} \label{rem:sl-least-squares-versus-lda} \hlt{Least Squares Versus LDA}\\
+For $K=2$, least-squares regression on any distinct label coding gives $\widehat{\beta}\propto\widehat{\Sigma}^{-1}(\widehat{\mu}_2-\widehat{\mu}_1)$, the LDA direction.\\
+The cutpoint may differ unless classes are balanced or tuned separately.\\
+For $K>2$, LDA uses pooled-Mahalanobis centroid distances and avoids masking.
+\end{remark}
+
+\begin{remark} \label{rem:sl-logistic-versus-lda} \hlt{Logistic Regression Versus LDA}\\
+Both can yield linear log-odds. Logistic regression models class probabilities directly and leaves $P_X$ free; LDA fits a joint Gaussian mixture for $(X,G)$ and uses Bayes' rule.
+\end{remark}
+
+\begin{remark} \label{rem:sl-lda-whitening-and-reduced-rank-view} \hlt{Whitening and Reduced-Rank LDA}\\
+With common covariance $W$, LDA compares $W^{-1/2}x$ to whitened centroids, adjusted by $\log\pi_k$.\\
+The whitened centroids span dimension at most $K-1$, so LDA reduces to this centroid subspace.\\
+Fisher directions maximize $\frac{a^\top Ba}{a^\top Wa}$, equivalently solve $Ba=\lambda Wa$, where $B$ is between-class scatter.
+\end{remark}
+
+\begin{remark} \label{rem:sl-feature-maps-linear-models} \hlt{Feature Maps}\\
+A feature map $\phi:\mathcal{X}\to\mathcal{H}$ gives linear prediction in feature space, $f(x)=w^\top\phi(x)+b$, which is generally nonlinear in $x$. Kernel methods choose $\phi$ implicitly; neural networks learn $\phi$ from data.
+\end{remark}

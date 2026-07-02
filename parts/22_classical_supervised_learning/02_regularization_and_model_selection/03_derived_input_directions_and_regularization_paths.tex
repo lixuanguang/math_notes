@@ -1,0 +1,120 @@
+\subsection{Derived Input Directions and Regularization Paths}
+\begin{method} \label{meth:sl-derived-input-directions} \hlt{Derived Input Directions}\\
+Let $X,y$ be centered. A derived-direction method chooses $Z_M=(z_1,\ldots,z_M)$ with $z_m=Xv_m$ or data-adaptive analogues, then fits $\widehat{y}_M=P_{Z_M}y$, where $P_{Z_M}\defeq Z_M(Z_M^TZ_M)^{-1}Z_M^T$; $M$ is selected by validation.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Principal components regression}: for $X=UDV^T$, take $v_1,\ldots,v_M$ as the leading right singular vectors,\\
+set $z_m=Xv_m=d_mu_m$, and fit $\widehat{y}^{\mathrm{pcr}}_M=\sum\limits_{m=1}^M z_m\frac{z_m^Ty}{z_m^Tz_m}=\sum\limits_{m=1}^M u_mu_m^Ty$.
+\item \hlt{Partial least squares}: set $X^{(0)}=X$ and, for $m=1,\ldots,M$, define $z_m=X^{(m-1)}X^{(m-1)T}y$ and\\
+$X^{(m)}=(I-P_{z_m})X^{(m-1)}$, where $P_{z_m}\defeq \frac{z_mz_m^T}{z_m^Tz_m}$. With $Z_M=(z_1,\ldots,z_M)$, fit $\widehat{y}^{\mathrm{pls}}_M=P_{Z_M}y$.
+\end{enumerate}
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Partial Least Squares Directions}
+\label{alg:sl-partial-least-squares-directions}
+\begin{algorithmic}
+\Require Centered response $y$, standardized columns $x_1,\ldots,x_p$, number of directions $M\leq p$
+\Ensure Fitted vectors $\widehat{y}^{(1)},\ldots,\widehat{y}^{(M)}$
+\State Set $\widehat{y}^{(0)}\gets0$ and $x_j^{(0)}\gets x_j$ for $j=1,\ldots,p$
+\For{$m=1,\ldots,M$}
+\State $z_m\gets\sum\limits_{j=1}^p (x_j^{(m-1)})^Ty\,x_j^{(m-1)}$
+\State $\widehat{\theta}_m\gets \frac{z_m^Ty}{z_m^Tz_m}$
+\State $\widehat{y}^{(m)}\gets\widehat{y}^{(m-1)}+\widehat{\theta}_m z_m$
+\For{$j=1,\ldots,p$}
+\State $x_j^{(m)}\gets x_j^{(m-1)}-\frac{z_m^Tx_j^{(m-1)}}{z_m^Tz_m}z_m$
+\EndFor
+\EndFor
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-pls-pcr-contrast} \hlt{PLS Versus PCR}\\
+PCR chooses $v_m$ from $X^TXv_m=d_m^2v_m$, so directions are ordered only by predictor variance $d_m^2$.\\
+PLS chooses $z_m=X^{(m-1)}X^{(m-1)T}y$ and deflates $X^{(m)}=(I-P_{z_m})X^{(m-1)}$, so each direction depends on both variance in $X^{(m-1)}$ and covariance with $y$.
+\end{remark}
+
+\begin{method} \label{meth:sl-piecewise-linear-paths} \hlt{Piecewise-Linear Path Algorithms}\\
+Let $\widehat{\beta}(\lambda)\in\operatorname*{arg\,min}_{\beta}\{R(\beta)+\lambda J(\beta)\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $R$ is quadratic or piecewise quadratic and $J$ is piecewise linear, fixed active-set and sign regions give affine KKT equations in $\lambda$, so $\widehat{\beta}(\lambda)$ is piecewise linear.
+\item \hlt{Least angle regression}: with residual $r=y-X\beta$ and active set $\mathcal{A}$, move $\beta_{\mathcal{A}}$ in a direction keeping $|x_j^Tr|$ tied for $j\in\mathcal{A}$ until a new variable ties or the least-squares fit is reached.
+\item \hlt{Lasso path}: follow the same tied-correlation path and remove $j\in\mathcal{A}$ when $\beta_j$ reaches $0$.
+\item \hlt{Coordinate descent}: for fixed $\lambda$, update $\beta_j\gets\operatorname*{arg\,min}_{t}\{\frac12\norm{y-X_{-j}\beta_{-j}-x_jt}_2^2+\lambda(|t|+\norm{\beta_{-j}}_1)\}$\\
+and warm-start along $\lambda_1>\cdots>\lambda_L$.
+\end{enumerate}
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Least Angle Regression Path}
+\label{alg:sl-least-angle-regression-path}
+\begin{algorithmic}
+\Require Centered response $y$ and standardized columns $x_1,\ldots,x_p$ with $\norm{x_j}_2=1$
+\Ensure Piecewise-linear coefficient path $\{\beta(t)\}$
+\State Initialize $\beta\gets0$, $r\gets y$, $c\gets X^Tr$, $C\gets\norm{c}_\infty$, and $\mathcal{A}\gets\{j:|c_j|=C\}$
+\Repeat
+\State $s_{\mathcal{A}}\gets\sign(c_{\mathcal{A}})$, $\widetilde{X}_{\mathcal{A}}\gets X_{\mathcal{A}}\operatorname{diag}(s_{\mathcal{A}})$, and $G_{\mathcal{A}}\gets\widetilde{X}_{\mathcal{A}}^T\widetilde{X}_{\mathcal{A}}$
+\State $\alpha_{\mathcal{A}}\gets(\mathbf{1}^TG_{\mathcal{A}}^{-1}\mathbf{1})^{-1/2}$, $w_{\mathcal{A}}\gets\alpha_{\mathcal{A}}G_{\mathcal{A}}^{-1}\mathbf{1}$, $u_{\mathcal{A}}\gets\widetilde{X}_{\mathcal{A}}w_{\mathcal{A}}$, and $a\gets X^Tu_{\mathcal{A}}$
+\State $\gamma\gets\min\{C/\alpha_{\mathcal{A}},\min_{j\notin\mathcal{A}}^+\{(C-c_j)/(\alpha_{\mathcal{A}}-a_j),(C+c_j)/(\alpha_{\mathcal{A}}+a_j)\}\}$
+\State Record $\beta_{\mathcal{A}}(t)=\beta_{\mathcal{A}}+t\operatorname{diag}(s_{\mathcal{A}})w_{\mathcal{A}}$ for $0\leq t\leq\gamma$
+\State $\beta_{\mathcal{A}}\gets\beta_{\mathcal{A}}+\gamma\operatorname{diag}(s_{\mathcal{A}})w_{\mathcal{A}}$ and $r\gets r-\gamma u_{\mathcal{A}}$
+\State $c\gets X^Tr$, $C\gets\norm{c}_\infty$, and $\mathcal{A}\gets\mathcal{A}\cup\{j\notin\mathcal{A}:|c_j|=C\}$
+\Until{$C=0$ or $\mathcal{A}=\{1,\ldots,p\}$}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{method} \label{meth:sl-lar-lasso-modification} \hlt{LAR, Lasso, and Correlation Ties}\\
+Let $\widehat{\beta}_\lambda\in\operatorname*{arg\,min}_{\beta}\{\frac12\norm{y-X\beta}_2^2+\lambda\norm{\beta}_1\}$, $r_\lambda\defeq y-X\widehat{\beta}_\lambda$, and $\mathcal{A}_\lambda\defeq\{j:\widehat{\beta}_{\lambda,j}\neq0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{KKT}: $x_j^Tr_\lambda=\lambda\sign(\widehat{\beta}_{\lambda,j})$ for $j\in\mathcal{A}_\lambda$, and $|x_j^Tr_\lambda|\leq\lambda$ for $j\notin\mathcal{A}_\lambda$.
+\item \hlt{Correlation ties}: active predictors satisfy $|x_j^Tr_\lambda|=\lambda$; inactive predictors satisfy $|x_j^Tr_\lambda|\leq\lambda$.
+\item \hlt{LAR}: with $C=\norm{X^Tr}_\infty$, move in the equiangular active direction preserving $|x_j^Tr|=C$ for $j\in\mathcal{A}$\\
+until some $k\notin\mathcal{A}$ reaches $|x_k^Tr|=C$.
+\item \hlt{Lasso path}: on a fixed active set and sign pattern, the KKT equations are affine in $\lambda$.\\
+When some $\widehat{\beta}_{\lambda,j}$ reaches $0$, remove $j$ and recompute the active direction.
+\end{enumerate}
+\end{method}
+
+\begin{breakablealgorithm}
+\caption{Incremental Forward Stagewise Regression}
+\label{alg:sl-incremental-forward-stagewise-regression}
+\begin{algorithmic}
+\Require Centered response $y$, standardized columns $x_1,\ldots,x_p$, small step size $\varepsilon>0$
+\Ensure A stagewise coefficient path
+\State Initialize $\beta\gets0$ and $r\gets y$
+\Repeat
+\State Choose $j$ maximizing $|x_j^Tr|$
+\State $\delta\gets\varepsilon\,\sign(x_j^Tr)$
+\State $\beta_j\gets\beta_j+\delta$
+\State $r\gets r-\delta x_j$
+\Until{the residual has negligible correlation with every predictor}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{remark} \label{rem:sl-lar-stagewise-comparison} \hlt{Stagewise and Lasso Paths}\\
+Let $c=X^Tr$ and $j\in\operatorname*{arg\,max}_k |c_k|$. Forward stagewise uses $\beta_j\gets\beta_j+\varepsilon\sign(c_j)$ and $r\gets r-\varepsilon\sign(c_j)x_j$; as $\varepsilon\downarrow0$, it follows maximal-correlation directions, tracking LAR/lasso until a sign reversal is required.\\
+Boosting applies the same greedy infinitesimal update to additive fits.
+\end{remark}
+
+\begin{breakablealgorithm}
+\caption{Pathwise Coordinate Descent for the Lasso}
+\label{alg:lasso-pathwise-coordinate-descent}
+\begin{algorithmic}
+\Require Centered response $y$, standardized columns $x_j$ with $\norm{x_j}_2=1$, decreasing penalties $\lambda_1>\cdots>\lambda_L\geq0$
+\Ensure Lasso coefficient vectors $\widehat{\beta}(\lambda_\ell)$ on the penalty grid
+\State Define $S(z,\lambda)=\sign(z)(|z|-\lambda)_+$
+\State Initialize $\beta\gets0$ and $r\gets y-X\beta$
+\For{$\ell=1,\ldots,L$}
+\Repeat
+\For{$j=1,\ldots,p$}
+\State $r\gets r+x_j\beta_j$
+\State $z_j\gets x_j^Tr$
+\State $\beta_j\gets S(z_j,\lambda_\ell)$
+\State $r\gets r-x_j\beta_j$
+\EndFor
+\Until{the coefficient vector has converged}
+\State $\widehat{\beta}(\lambda_\ell)\gets\beta$
+\EndFor
+\end{algorithmic}
+\end{breakablealgorithm}

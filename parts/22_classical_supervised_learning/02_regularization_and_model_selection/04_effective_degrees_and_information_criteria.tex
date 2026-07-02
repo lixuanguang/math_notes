@@ -1,0 +1,40 @@
+\subsection{Effective Degrees and Information Criteria}
+\begin{definition} \label{def:sl-effective-degrees-of-freedom} \hlt{Effective Degrees of Freedom}\\
+Let $\widehat{y}=S_\lambda y$ be a linear smoother with $S_\lambda=S_\lambda(X)$ independent of $y$.\\
+Its \hlt{effective degrees of freedom} are $\operatorname{df}(\lambda)\defeq\operatorname{trace}(S_\lambda)$. If $S_\lambda=P_V$ with $\dim V=m$, then $\operatorname{df}(\lambda)=m$.\\
+For shrinkage smoothers, $\operatorname{df}(\lambda)$ need not be integral.
+\end{definition}
+
+\begin{remark} \label{rem:sl-training-error-optimism} \hlt{Optimism of Training Error}\\
+Assume $y=\mu+\varepsilon$, $\mathbb{E}\varepsilon=0$, $\operatorname{Var}(\varepsilon)=\sigma^2I$, and $\widehat{y}=S_\lambda y$ with $S_\lambda=S_\lambda(X)$.\\
+Let $y^0=\mu+\varepsilon^0$ be independent, $\operatorname{err}_{\mathrm{tr}}(\lambda)\defeq n^{-1}\norm{y-\widehat{y}}_2^2$, and $\operatorname{Err}_{\mathrm{in}}(\lambda)\defeq n^{-1}\mathbb{E}_{y^0}\norm{y^0-\widehat{y}}_2^2$.\\
+Then $\operatorname{Opt}(\lambda)\defeq\mathbb{E}\{\operatorname{Err}_{\mathrm{in}}(\lambda)-\operatorname{err}_{\mathrm{tr}}(\lambda)\}=\frac{2}{n}\sum_{i=1}^n\operatorname{Cov}(\widehat{y}_i,y_i)=\frac{2\sigma^2}{n}\operatorname{trace}(S_\lambda)$.\\
+Thus $\operatorname{df}(\lambda)=\operatorname{trace}(S_\lambda)$ is the covariance penalty.
+\end{remark}
+
+\begin{method} \label{meth:sl-aic-bic-effective-df-selection} \hlt{AIC, $C_p$, and BIC Selection}\\
+Let $\Lambda$ be candidate tuning values. For a criterion $C:\Lambda\to\R$, select $\widehat{\lambda}\in\operatorname*{arg\,min}_{\lambda\in\Lambda}C(\lambda)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For squared error, set $\overline{\operatorname{err}}(\lambda)\defeq \frac{1}{n}\sum_{i=1}^n(y_i-\widehat{y}_{\lambda,i})^2$ and $d_\lambda\defeq\operatorname{df}(S_\lambda)$; use $C_p(\lambda)\defeq\overline{\operatorname{err}}(\lambda)+\frac{2\widehat{\sigma}^2}{n}d_\lambda$.
+\item For likelihood fits with maximized log-likelihood $\ell_\lambda$, use $\operatorname{AIC}(\lambda)\defeq-\frac{2}{n}\ell_\lambda+\frac{2}{n}d_\lambda$.
+\item Use $\operatorname{BIC}(\lambda)\defeq-\frac{2}{n}\ell_\lambda+\frac{\log n}{n}d_\lambda$; the larger penalty favors smaller $d_\lambda$ as $n$ grows.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:sl-bic-bayesian-mdl-view} \hlt{Bayesian and MDL Readings of BIC}\\
+For models $\mathcal{M}_m$ with dimension $d_m$, maximised likelihood $L_m$, and nearly uniform prior $\pi_m$,\\
+set $\operatorname{BIC}_m\defeq-2\log L_m+d_m\log n$. By laplace approximation, posterior weight is $\widehat{\mathbb{P}}(\mathcal{M}_m\mid Z)=\frac{\pi_m\exp\{-\operatorname{BIC}_m/2\}}{\sum_{\ell=1}^M\pi_\ell\exp\{-\operatorname{BIC}_\ell/2\}}$, so $\arg\min_m\operatorname{BIC}_m$ is an approximate MAP model.\\
+In MDL form, $\frac12\operatorname{BIC}_m$ is model code length plus fitted-discrepancy code length up to constants.
+\end{remark}
+
+\begin{method} \label{meth:sl-generalized-cross-validation} \hlt{Generalized Cross-Validation}\\
+Let $\Lambda$ be candidate tuning values and $\widehat{y}_\lambda=S_\lambda y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Define $e_{\lambda i}\defeq y_i-\widehat{y}_{\lambda i}$, $h_{\lambda i}\defeq S_{\lambda,ii}$, and $d_\lambda\defeq\operatorname{trace}(S_\lambda)$.
+\item The leave-one-out residual is $e^{(-i)}_{\lambda i}=y_i-\widehat{f}^{(-i)}_\lambda(x_i)=\frac{e_{\lambda i}}{1-h_{\lambda i}}$.
+\item \hlt{Generalized cross-validation} replaces $h_{\lambda i}$ by $\bar h_\lambda\defeq d_\lambda/n$ and sets $\operatorname{GCV}(\lambda)\defeq\frac{1}{n}\sum_{i=1}^n\left(\frac{e_{\lambda i}}{1-d_\lambda/n}\right)^2$.
+\item Select $\widehat{\lambda}_{\mathrm{gcv}}\in\operatorname*{arg\,min}_{\lambda\in\Lambda}\operatorname{GCV}(\lambda)$; this uses $d_\lambda$ instead of the full leverage diagonal.
+\end{enumerate}
+\end{method}

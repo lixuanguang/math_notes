@@ -1,0 +1,43 @@
+\subsection{CART Splits and Pruning}
+\begin{definition} \label{def:sl-cart-regression-tree-scores} \hlt{CART Regression-Tree Notation and Scores}\\
+Let $D_n=\{(x_i,y_i)\}_{i=1}^n\subseteq\mathcal{X}\times\R$. For $R\subseteq\mathcal{X}$, set $I_R\defeq\{i:x_i\in R\}$ and $n_R\defeq |I_R|$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Cell loss}: if $n_R>0$, define $\bar y_R\defeq n_R^{-1}\sum\limits_{i\in I_R}y_i$ and $\mathrm{SSE}(R)\defeq\sum\limits_{i\in I_R}(y_i-\bar y_R)^2$.
+\item \hlt{Tree predictor}: if $T$ has leaves $R_1(T),\ldots,R_{|T|}(T)$, let $m_T(x)$ be the unique $m\in\{1,\ldots,|T|\}$\\
+with $x\in R_m(T)$ and set $\widehat{f}_T(x)\defeq\bar y_{R_{m_T(x)}(T)}$.
+\item \hlt{Split children}: for $a=(j,s)\in\{1,\ldots,p\}\times\R$, set $R_L(a)\defeq R\cap\{x:x_j\leq s\}$ and $R_R(a)\defeq R\cap\{x:x_j>s\}$.
+\item \hlt{Admissible splits}: set $\mathcal{A}_R\defeq\{a\in\{1,\ldots,p\}\times\R:n_{R_L(a)}>0,n_{R_R(a)}>0\}$.
+\item \hlt{Split score}: for $a\in\mathcal{A}_R$, set $S_R(a)\defeq\mathrm{SSE}(R_L(a))+\mathrm{SSE}(R_R(a))$.
+\item \hlt{Pruning score}: for $\alpha\geq0$, set $C_\alpha(T)\defeq\sum\limits_{m=1}^{|T|}\mathrm{SSE}(R_m(T))+\alpha|T|$.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:sl-cart-tree-growing-and-pruning} \hlt{CART-Style Regression Trees}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Grow}: split eligible leaves by $a_R\in\operatorname*{argmin}\limits_{a\in\mathcal{A}_R}S_R(a)$ until stopping, yielding $T_0$.
+\item \hlt{Prune}: for each $\alpha\geq0$, choose $T_\alpha\in\operatorname*{argmin}\limits_{T\preceq T_0}C_\alpha(T)$.
+\item \hlt{Select}: choose $\widehat{\alpha}\geq0$ by validation or cross-validation and return $T_{\widehat{\alpha}}$.
+\end{enumerate}
+Deep growth lowers bias; the cost-complexity penalty $\alpha|T|$ controls variance by subtree selection.
+\end{method}
+
+\begin{definition} \label{def:sl-classification-tree-impurity} \hlt{Classification Tree Impurity}\\
+For node $m$, let $N_{mk}\defeq|\{i:x_i\in R_m,y_i=k\}|$, $N_m\defeq\sum\limits_{k=1}^K N_{mk}$, $\widehat{p}_{mk}\defeq \frac{N_{mk}}{N_m}$. Common impurity scores are:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Misclassification}: $I_{\mathrm{mis}}(m)\defeq1-\max_{1\leq k\leq K}\widehat{p}_{mk}$.
+\item \hlt{Gini}: $I_{\mathrm{Gini}}(m)\defeq\sum_{k=1}^K\widehat{p}_{mk}(1-\widehat{p}_{mk})=1-\sum_{k=1}^K\widehat{p}_{mk}^2$.
+\item \hlt{Entropy}: $I_{\mathrm{ent}}(m)\defeq-\sum_{k:\widehat{p}_{mk}>0}\widehat{p}_{mk}\log\widehat{p}_{mk}$.
+\end{enumerate}
+The usual leaf prediction is the majority class, $\widehat{k}(m)\in\operatorname*{argmax}\limits_{1\leq k\leq K}\widehat{p}_{mk}$. \\
+With unequal losses $L_{kk}=0$, choose the class minimizing expected loss, $\widehat{\ell}(m)\in\operatorname*{argmin}\limits_{1\leq\ell\leq K}\sum_{k=1}^K L_{k\ell}\widehat{p}_{mk}$.
+\end{definition}
+
+\begin{remark} \label{rem:sl-tree-practical-issues} \hlt{Tree Practicalities}\\
+For categorical levels $\mathcal{A}_j$, split $B\subset\mathcal{A}_j$ versus $B^c$.\\
+For binary responses, set $I_a\defeq\{i:X_{ij}=a\}$ and order levels by $\widehat{p}_a\defeq |I_a|^{-1}\sum_{i\in I_a}Y_i$.\\
+Missing values can be an $\mathrm{NA}$ level or use a surrogate split $g'$ maximising $\sum_i\mathbf{1}\{g'(x_i)=g(x_i)\}$.\\
+Many candidate splits inflate gain; control growth with $N_m\geq n_{\min}$, depth limits, validation, or pruning.
+\end{remark}

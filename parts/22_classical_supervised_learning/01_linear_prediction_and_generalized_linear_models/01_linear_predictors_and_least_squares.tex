@@ -1,0 +1,35 @@
+\subsection{Linear Predictors and Least Squares}
+Linear prediction reduces inputs to scores of the form ``intercept plus weighted features.'' Regression reads scores as predictions; classification compares or transforms them.  Its appeal is geometric: projections, hyperplanes, and feature maps.
+
+\begin{definition} \label{def:sl-linear-predictor} \hlt{Linear Predictor}\\
+For $x\in\R^p$, $w\in\R^p$, and $b\in\R$, the \hlt{linear predictor} is $f_{w,b}(x)\defeq w^\top x+b$.\\
+Regression uses $f_{w,b}$ directly; classification transforms it by $g$. Score level sets are parallel hyperplanes.
+\end{definition}
+
+\begin{definition} \label{def:sl-least-squares-linear-regression} \hlt{Least-Squares Linear Regression}\\
+For $X\in\R^{n\times d}$ and $y\in\R^n$, \hlt{least-squares linear regression} chooses $\widehat{\beta}\in\operatorname*{argmin}\limits_{\beta\in\R^d}\norm{y-X\beta}_2^2$ and $\widehat{y}\defeq X\widehat{\beta}$.\\
+If $X^\top X$ is nonsingular, then $\widehat{\beta}=(X^\top X)^{-1}X^\top y$. Columns of $X$ may be raw variables, transformations, indicators, interactions, or basis functions; linearity is in $\beta$.
+\end{definition}
+
+Geometrically, least squares moves $y$ to the closest point in $\operatorname{col}(X)$.
+
+\begin{method} \label{meth:sl-multiple-output-least-squares} \hlt{Multiple-Output Least Squares}\\
+For $Y\in\R^{n\times K}$ and $B\in\R^{d\times K}$, set $Y=XB+E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Least squares}: If $\operatorname{rank}(X)=d$, then $\widehat{B}=(X^\top X)^{-1}X^\top Y$.
+\item \hlt{Decoupling}: Writing $Y=(y_1,\ldots,y_K)$ gives $\widehat{B}=(\widehat{\beta}_1,\ldots,\widehat{\beta}_K)$, where each $\widehat{\beta}_k$ is the OLS fit of $y_k$ on $X$.
+\end{enumerate}
+Shared responses can be pooled by low-rank $B$ or common-direction shrinkage.
+\end{method}
+
+\begin{method} \label{meth:sl-canonical-correlation-and-reduced-rank-regression} \hlt{Canonical Correlation and Reduced-Rank Regression}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{CCA}: Choose $(v_j,u_j)$ with large $\operatorname{corr}(Xv_j,Yu_j)$, orthogonal across $j$; at most $\min(d,K)$ pairs.
+\item \hlt{Rank constraint}: Fit $Y\approx XB$ with $\operatorname{rank}(B)\leq m$, restricting fitted responses to $m$ dimensions.
+\item \hlt{Objective}: $\widehat{B}^{\mathrm{rr}}_m\in\operatorname*{argmin}\limits_{\operatorname{rank}(B)\leq m}\sum\limits_i(y_i-B^\top x_i)^\top\widehat{\Sigma}^{-1}(y_i-B^\top x_i)$.
+\item \hlt{Role of $m$}: $m=K$ gives separate OLS; smaller $m$ pools shared response structure.
+\end{enumerate}
+Reduced rank assumes the predictable response variation lies in a low-dimensional subspace.
+\end{method}

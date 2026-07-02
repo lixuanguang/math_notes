@@ -8,8 +8,9 @@ structural checks.
 
 - `parts/base.tex`: shared preamble, macros, and theorem environments.
 - `parts/00_notations/`: front-matter notation and symbol scope rules.
-- `parts/01_...` through `parts/17_...`: mathematical body content.
-- Each numbered part has one `overview.tex` with one `\part{...}` and inputs for
+- `parts/01_...` through `parts/22_...`: mathematical body content, numbered
+  in the same order as the main table of contents.
+- Each part folder has one `overview.tex` with one `\part{...}` and inputs for
   its section folders.
 - Each section folder has one `overview.tex` with one `\section{...}` and inputs
   for numbered subsection files.
@@ -23,21 +24,26 @@ The active include order in `math.tex` is:
 \input{parts/00_notations/overview}
 \input{parts/01_set_theory_logic_foundations/overview}
 \input{parts/02_structural_linear_algebra/overview}
-\input{parts/03_geometric_spectral_linear_algebra/overview}
-\input{parts/04_matrix_analysis_numerical_linear_algebra/overview}
-\input{parts/05_groups_rings_fields/overview}
-\input{parts/06_modules_multilinear_homological/overview}
-\input{parts/07_commutative_algebra/overview}
-\input{parts/08_algebraic_geometry/overview}
-\input{parts/09_real_topological_analysis/overview}
-\input{parts/10_calculus_series_approximation/overview}
-\input{parts/11_measure_integration_functional_analysis/overview}
-\input{parts/12_probability_stochastic_systems/overview}
-\input{parts/13_dynamical_pde_systems/overview}
-\input{parts/14_numerical_stochastic_computation/overview}
-\input{parts/15_statistical_inference_and_time_series/overview}
-\input{parts/16_statistical_data_analysis_and_applied_models/overview}
-\input{parts/17_statistical_learning_deep_learning/overview}
+\input{parts/03_linear_maps_and_matrix_representations/overview}
+\input{parts/04_geometric_spectral_linear_algebra/overview}
+\input{parts/05_polynomial_structure_and_canonical_forms/overview}
+\input{parts/06_matrix_analysis_numerical_linear_algebra/overview}
+\input{parts/07_groups_rings_fields/overview}
+\input{parts/08_modules_multilinear_homological/overview}
+\input{parts/09_commutative_algebra/overview}
+\input{parts/10_algebraic_geometry/overview}
+\input{parts/11_real_topological_analysis/overview}
+\input{parts/12_calculus_series_approximation/overview}
+\input{parts/13_measure_foundations_and_extension/overview}
+\input{parts/14_measure_integration_functional_analysis/overview}
+\input{parts/15_probability_foundations_and_distributions/overview}
+\input{parts/16_probability_stochastic_systems/overview}
+\input{parts/17_dynamical_pde_systems/overview}
+\input{parts/18_numerical_stochastic_computation/overview}
+\input{parts/19_statistical_inference_and_time_series/overview}
+\input{parts/20_statistical_data_analysis_and_applied_models/overview}
+\input{parts/21_statistical_learning_deep_learning/overview}
+\input{parts/22_classical_supervised_learning/overview}
 ```
 
 ## Editing Rules
@@ -86,21 +92,36 @@ parts/01_set_theory_logic_foundations/
 parts/02_structural_linear_algebra/
   01_vector_spaces_and_linear_structure/
   02_direct_sums_quotients_and_decomposition/
-  03_linear_maps_and_matrix_representations/
-  04_block_matrices_and_matrix_operations/
-  05_duality_and_multilinear_structure/
-  06_finite_dimensional_topological_vector_spaces/
+  03_block_matrices_and_matrix_operations/
+  04_duality_and_multilinear_structure/
+  05_finite_dimensional_topological_vector_spaces/
 
-parts/03_geometric_spectral_linear_algebra/
+parts/03_linear_maps_and_matrix_representations/
+  01_linear_maps_and_operations/
+  02_kernels_images_rank_and_nullity/
+  03_matrix_representations/
+  04_row_reduction_and_elementary_matrices/
+  05_change_of_basis/
+  06_matrix_equivalence_and_similarity/
+
+parts/04_geometric_spectral_linear_algebra/
   01_inner_product_geometry/
   02_orthogonality_projections_and_least_squares/
   03_bilinear_and_quadratic_forms/
   04_affine_projective_and_convex_geometry/
   05_eigenstructure_and_invariant_subspaces/
-  06_polynomial_structure_and_canonical_forms/
-  07_spectral_theorems_and_operator_functions/
+  06_spectral_theorems_and_operator_functions/
 
-parts/04_matrix_analysis_numerical_linear_algebra/
+parts/05_polynomial_structure_and_canonical_forms/
+  01_operator_polynomials/
+  02_characteristic_and_minimal_polynomials/
+  03_cayley_hamilton_and_annihilators/
+  04_generalized_eigenspaces/
+  05_primary_decomposition/
+  06_jordan_and_canonical_forms/
+  07_transpose_and_conjugate_similarity/
+
+parts/06_matrix_analysis_numerical_linear_algebra/
   01_trace_determinant_rank_and_matrix_invariants/
   02_positive_definite_and_structured_matrices/
   03_matrix_products_vectorization_and_spectral_radius/
@@ -108,13 +129,13 @@ parts/04_matrix_analysis_numerical_linear_algebra/
   05_norms_conditioning_perturbation_and_stability/
   06_numerical_linear_algebra/
 
-parts/05_groups_rings_fields/
+parts/07_groups_rings_fields/
   01_algebraic_language_and_categories/
   02_group_theory/
   03_rings_ideals_and_polynomial_rings/
   04_fields_and_galois_theory/
 
-parts/06_modules_multilinear_homological/
+parts/08_modules_multilinear_homological/
   01_module_theory/
   02_noetherian_modules_and_pid_structure_theorems/
   03_linear_operators_as_modules/
@@ -123,14 +144,14 @@ parts/06_modules_multilinear_homological/
   06_symmetric_and_exterior_algebras/
   07_chain_complexes_and_homology/
 
-parts/07_commutative_algebra/
+parts/09_commutative_algebra/
   01_prime_ideals_and_spectra/
   02_localization_and_local_rings/
   03_noetherian_rings_and_modules/
   04_integral_dependence_and_dimension/
   05_regularity_and_singularities/
 
-parts/08_algebraic_geometry/
+parts/10_algebraic_geometry/
   01_affine_algebraic_sets/
   02_morphisms_and_coordinate_rings/
   03_projective_geometry/
@@ -139,7 +160,7 @@ parts/08_algebraic_geometry/
   06_smoothness_tangent_spaces_and_dimension/
   07_divisors_line_bundles_and_curves/
 
-parts/09_real_topological_analysis/
+parts/11_real_topological_analysis/
   01_number_systems_and_completeness/
   02_real_sequences_and_completeness_methods/
   03_metric_spaces_and_euclidean_topology/
@@ -147,7 +168,7 @@ parts/09_real_topological_analysis/
   05_connectedness_and_continuity/
   06_general_topology_for_analysis/
 
-parts/10_calculus_series_approximation/
+parts/12_calculus_series_approximation/
   01_one_variable_differentiation_and_riemann_integration/
   02_riemann_stieltjes_and_improper_integration/
   03_several_variable_differentiation/
@@ -159,34 +180,49 @@ parts/10_calculus_series_approximation/
   09_power_series_and_approximation/
   10_fourier_structure/
 
-parts/11_measure_integration_functional_analysis/
-  01_sigma_algebras_measures_and_extension/
-  02_measurable_functions_and_lebesgue_integration/
-  03_product_measures_and_fubini_theory/
-  04_radon_nikodym_and_differentiation/
-  05_lp_spaces_and_modes_of_convergence/
-  06_banach_and_hilbert_spaces/
-  07_weak_topologies_compact_operators_and_spectral_theory/
+parts/13_measure_foundations_and_extension/
+  01_sigma_algebras_and_measurable_spaces/
+  02_measures_charges_and_basic_examples/
+  03_outer_measures_and_caratheodory_extension/
+  04_borel_lebesgue_and_stieltjes_measures/
+  05_continuity_and_regularity_of_measures/
+  06_regular_approximation_and_caratheodory_tests/
+  07_vitali_steinhaus_and_nonmeasurable_sets/
+  08_cantor_lebesgue_singular_function/
 
-parts/12_probability_stochastic_systems/
-  01_probability_spaces_random_variables_and_expectation/
-  02_conditional_probability_and_conditional_expectation/
-  03_probabilistic_convergence/
-  04_limit_theorems/
-  05_stochastic_processes/
-  06_stochastic_calculus_and_sdes/
+parts/14_measure_integration_functional_analysis/
+  01_measurable_functions_and_lebesgue_integration/
+  02_product_measures_and_fubini_theory/
+  03_radon_nikodym_and_differentiation/
+  04_lp_spaces_and_modes_of_convergence/
+  05_banach_and_hilbert_spaces/
+  06_weak_topologies_compact_operators_and_spectral_theory/
 
-parts/13_dynamical_pde_systems/
+parts/15_probability_foundations_and_distributions/
+  01_probability_spaces_and_random_variables/
+  02_joint_distributions_multivariate_laws_and_transformations/
+  03_expectation_and_integration_in_probability/
+  04_order_statistics_and_extrema/
+  05_normal_derived_distributions/
+
+parts/16_probability_stochastic_systems/
+  01_conditional_probability_and_conditional_expectation/
+  02_probabilistic_convergence/
+  03_limit_theorems/
+  04_stochastic_processes/
+  05_stochastic_calculus_and_sdes/
+
+parts/17_dynamical_pde_systems/
   01_dynamical_systems_and_odes/
   02_partial_differential_equations/
   03_weak_solutions_and_evolution_equations/
 
-parts/14_numerical_stochastic_computation/
+parts/18_numerical_stochastic_computation/
   01_numerical_analysis/
   02_numerical_differential_systems/
   03_monte_carlo_and_stochastic_computation/
 
-parts/15_statistical_inference_and_time_series/
+parts/19_statistical_inference_and_time_series/
   01_statistical_models_and_experiments/
   02_estimation_theory/
   03_hypothesis_testing_and_confidence/
@@ -196,22 +232,34 @@ parts/15_statistical_inference_and_time_series/
   07_time_series_models/
   08_sequential_inference_and_resampling/
 
-parts/16_statistical_data_analysis_and_applied_models/
+parts/20_statistical_data_analysis_and_applied_models/
   01_survey_sampling/
   02_exploratory_data_analysis_and_data_summaries/
   03_categorical_data_analysis/
   04_analysis_of_variance_and_designed_experiments/
   05_linear_models_and_regression/
 
-parts/17_statistical_learning_deep_learning/
+parts/21_statistical_learning_deep_learning/
   01_learning_problems_and_risk/
   02_generalization_theory/
-  03_classical_supervised_learning/
-  04_unsupervised_and_latent_variable_learning/
-  05_probabilistic_graphical_and_causal_learning/
-  06_neural_network_foundations/
-  07_modern_deep_models/
-  08_learning_systems_and_evaluation/
+  03_unsupervised_and_latent_variable_learning/
+  04_probabilistic_graphical_and_causal_learning/
+  05_neural_network_foundations/
+  06_modern_deep_models/
+  07_learning_systems_and_evaluation/
+
+parts/22_classical_supervised_learning/
+  01_linear_prediction_and_generalized_linear_models/
+  02_regularization_and_model_selection/
+  03_basis_expansions_splines_and_wavelets/
+  04_kernel_methods_and_rkhs_theory/
+  05_support_vector_machines_and_margin_methods/
+  06_trees_forests_and_boosting/
+  07_additive_models_and_adaptive_basis_methods/
+  08_boosting_and_additive_trees/
+  09_high_dimensional_supervised_learning/
+  10_prototype_and_nearest_neighbor_methods/
+  11_flexible_and_mixture_discriminant_analysis/
 ```
 
 ## Notation Files
@@ -235,8 +283,9 @@ parts/00_notations/
 | --- | --- |
 | Global notation, collision index, and symbol scope rules | Notations |
 | Set theory, cardinality, choice | Set Theory, Logic, and Foundations |
-| Finite-dimensional linear maps | Structural Linear Algebra |
+| Finite-dimensional linear maps and matrix representations | Linear Maps and Matrix Representations |
 | Inner products, forms, finite-dimensional metric geometry | Geometric and Spectral Linear Algebra |
+| Operator polynomials, minimal polynomials, and canonical forms | Polynomial Structure and Canonical Forms |
 | Matrix algorithms | Matrix Analysis and Numerical Linear Algebra |
 | Rings, groups, fields | Groups, Rings, and Fields |
 | Modules and Smith/PID/operator-module structure | Modules, Multilinear, and Homological Methods |
@@ -244,13 +293,16 @@ parts/00_notations/
 | Algebraic geometry | Algebraic Geometry |
 | Real/metric/topological foundations | Real and Topological Analysis |
 | Riemann/Stieltjes and classical calculus | Calculus, Series, and Approximation |
-| Abstract measure and Lebesgue integration | Measure, Integration, and Functional Analysis |
-| Probability spaces and limit theorems | Probability and Stochastic Systems |
+| Measure spaces, outer measure, and extension | Measure Foundations and Extension |
+| Lebesgue integration and functional analysis | Measure, Integration, and Functional Analysis |
+| Probability foundations and distributions | Probability Foundations and Distributions |
+| Conditional probability, convergence, limit theorems, stochastic processes, and SDEs | Probability and Stochastic Systems |
 | ODEs, dynamical systems, and PDE | Dynamical and PDE Systems |
 | Numerical algorithms and stochastic computation | Numerical and Stochastic Computation |
 | Statistical models, estimation, tests, Bayes, nonparametrics, time series, and sequential inference | Statistical Inference and Time Series |
 | Survey sampling, exploratory data analysis, categorical data, ANOVA/design, regression, and classical applied models | Statistical Data Analysis and Applied Models |
-| Prediction, representation, learned models | Statistical Learning and Deep Learning |
+| Statistical learning foundations, unsupervised learning, causal/graphical learning, neural networks, and systems | Statistical Learning and Deep Learning |
+| Classical supervised learning | Classical Supervised Learning |
 
 ## Lean
 

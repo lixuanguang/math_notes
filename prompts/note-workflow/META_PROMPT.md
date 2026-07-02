@@ -24,7 +24,7 @@ Start from: Part II Section 1
 Other valid cursors:
 
 ```text
-Start from: parts/09_real_topological_analysis/04_compactness_and_completeness/01_compactness_completeness_and_total_boundedness.tex
+Start from: parts/11_real_topological_analysis/04_compactness_and_completeness/01_compactness_completeness_and_total_boundedness.tex
 Start from: Phase 3, Spectral Theorem
 Start from: Part Linear and Operator Structures Section 2
 ```

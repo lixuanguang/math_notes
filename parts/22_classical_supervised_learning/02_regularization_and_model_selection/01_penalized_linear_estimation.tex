@@ -1,0 +1,43 @@
+\subsection{Penalized Linear Estimation}
+Regularisation controls model complexity by penalising unstable parameter directions or by constraining the feasible set.
+
+\begin{definition} \label{def:sl-penalized-linear-estimator} \hlt{Penalised Linear Estimation}\\
+For empirical loss $L_n(\beta)$, a penalised estimator solves $\widehat{\beta}_{\lambda}\in \operatorname*{arg\,min}_{\beta} \{L_n(\beta)+\lambda\Omega(\beta)\}$.\\
+The choices $\Omega(\beta)=\norm{\beta}_2^2$ and $\Omega(\beta)=\norm{\beta}_1$ give ridge and lasso penalties.
+\end{definition}
+
+\begin{definition} \label{def:sl-subset-ridge-lasso-linear-models} \hlt{Subset Selection, Ridge, and Lasso}\\
+Let $y\in\R^n$ be centered and let $X\in\R^{n\times p}$ have centered, standardised columns.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Best subset}: for a size $m$, solve $\widehat{\beta}^{\mathrm{sub}}_m\in \operatorname*{arg\,min}\limits_{|\operatorname{supp}(\beta)|\leq m}\norm{y-X\beta}_2^2$
+\item \hlt{Ridge}: for $\lambda\geq0$, solve $\widehat{\beta}^{\mathrm{ridge}}_\lambda\in \operatorname*{arg\,min}\limits_{\beta} \{\norm{y-X\beta}_2^2+\lambda\norm{\beta}_2^2\}$
+\item \hlt{Lasso}: for $\lambda\geq0$, solve $\widehat{\beta}^{\mathrm{lasso}}_\lambda\in \operatorname*{arg\,min}\limits_{\beta} \left\{\frac12\norm{y-X\beta}_2^2+\lambda\norm{\beta}_1\right\}$
+\end{enumerate}
+Centering separates the unpenalised intercept, estimated by the mean on the raw scale.
+\end{definition}
+
+\begin{remark} \label{rem:sl-ridge-lasso-geometry} \hlt{Penalty Geometry}\\
+Assume $X^TX=I$ and set $z_j=x_j^Ty$. For subset size $m$, best subset selection keeps the $m$ largest $|z_j|$.\\
+Ridge and lasso have coordinates $\widehat{\beta}^{\mathrm{ridge}}_{\lambda,j}=\frac{z_j}{1+\lambda}$ and $\widehat{\beta}^{\mathrm{lasso}}_{\lambda,j}=\sign(z_j)(|z_j|-\lambda)_+$.\\
+Thus $\ell^2$ shrinkage is smooth, while $\ell^1$ shrinkage can set coefficients exactly to zero.
+\end{remark}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/ridge_lasso_constraint_geometry.tikz}
+\caption{Left: lasso $\ell^1$ diamond; right: ridge $\ell^2$ disk.}
+\label{fig:sl-ridge-lasso-constraint-geometry}
+\end{figure}
+
+\begin{proposition} \label{prop:sl-ridge-effective-degrees} \hlt{Ridge Shrinkage and Effective Degrees}\\
+Let $X\in\R^{n\times p}$ be centered with rank $r$ and thin SVD $X=UDV^T$, where $D=\operatorname{diag}(d_1,\ldots,d_r)$ and $d_j>0$.\\
+For $\lambda>0$, set $S_\lambda\defeq X(X^TX+\lambda I_p)^{-1}X^T$ and $s_j(\lambda)\defeq \frac{d_j^2}{d_j^2+\lambda}$. Then $S_\lambda=U\operatorname{diag}(s_1(\lambda),\ldots,s_r(\lambda))U^T$.\\
+So $\widehat{y}^{\mathrm{ridge}}_\lambda\defeq X\widehat{\beta}^{\mathrm{ridge}}_\lambda=S_\lambda y=\sum\limits_{j=1}^r s_j(\lambda)u_ju_j^Ty$ and $\operatorname{df}(\lambda)\defeq\operatorname{tr}(S_\lambda)=\sum\limits_{j=1}^r s_j(\lambda)$.
+\begin{proof} Since $X^TX=VD^2V^T$ and $X^T=VDU^T$, we have $V^T(X^TX+\lambda I_p)^{-1}V=(D^2+\lambda I_r)^{-1}$.\\
+Hence $S_\lambda=UDV^T(X^TX+\lambda I_p)^{-1}VDU^T=UD(D^2+\lambda I_r)^{-1}DU^T=U\operatorname{diag}(s_1(\lambda),\ldots,s_r(\lambda))U^T$.\\
+Apply to $y$ and take traces, using $U^TU=I_r$.\\
+\hlt{Structural Commentary}: Ridge is diagonal in the left singular-vector basis of $X$.\\
+\hlt{Key Insight}: Ridge keeps direction $u_j$ by $s_j(\lambda)$; weak directions count less in the fit and $\operatorname{df}(\lambda)$.
+\end{proof}
+\end{proposition}

@@ -1,0 +1,41 @@
+\subsection{Generalized Additive Models}
+Additive and adaptive basis methods sit between rigid linear models and fully local learners.  They keep prediction interpretable by building the fitted function from one-dimensional effects, boxes, hinges, or soft routing weights.
+
+\begin{definition} \label{def:sl-generalized-additive-model} \hlt{Generalized Additive Model}\\
+Let $X=(X_1,\ldots,X_p)$, $x=(x_1,\ldots,x_p)$, $\mu(x)\defeq\mathbb{E}[Y\mid X=x]$, $\alpha\in\R$, and $f_j:\mathcal X_j\to\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Additive mean}: $\mu(x)=\alpha+\sum\limits_{j=1}^p f_j(x_j)$.
+\item \hlt{Generalized additive model}: for a link $g$ on the range of $\mu$, $g(\mu(x))=\alpha+\sum\limits_{j=1}^p f_j(x_j)$.
+\item \hlt{Identifiability}: with data $x_i=(x_{i1},\ldots,x_{ip})$, require $\sum\limits_{i=1}^n f_j(x_{ij})=0$ for all $j$; this separates $\alpha$ from the $f_j$.
+\item \hlt{Standard links}: Gaussian $g(t)=t$; binomial $g(t)=\log\left(\frac{t}{1-t}\right)$ or $\Phi^{-1}(t)$; counts $g(t)=\log t$.
+\end{enumerate}
+\end{definition}
+
+\begin{breakablealgorithm}
+\caption{Backfitting for an Additive Regression Model}
+\label{alg:sl-additive-backfitting}
+\begin{algorithmic}
+\Require Training data $(x_i,y_i)_{i=1}^n$, univariate smoothers $S_j$ for predictors $j=1,\ldots,p$
+\Ensure Centered component fits $\widehat{f}_1,\ldots,\widehat{f}_p$ and intercept $\widehat{\alpha}$
+\State Set $\widehat{\alpha}\gets n^{-1}\sum_{i=1}^ny_i$ and initialize $\widehat{f}_j(x_{ij})\gets0$
+\Repeat
+\For{$j=1,\ldots,p$}
+\State $r_{ij}\gets y_i-\widehat{\alpha}-\sum_{k\neq j}\widehat{f}_k(x_{ik})$ for $i=1,\ldots,n$
+\State $\widehat{f}_j\gets S_j(r_{1j},\ldots,r_{nj})$
+\State Center $\widehat{f}_j$ by subtracting $n^{-1}\sum_i\widehat{f}_j(x_{ij})$
+\EndFor
+\Until{the component functions change by less than the chosen tolerance}
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{method} \label{meth:sl-local-scoring-additive-logistic} \hlt{Local Scoring for Additive Logistic Regression}\\
+For binary data $(x_i,y_i)_{i=1}^n$, $y_i\in\{0,1\}$, use the additive predictor $\eta_i=\alpha+\sum\limits_{j=1}^p f_j(x_{ij})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Mean}: set $p_i=\frac{1}{1+\exp(-\eta_i)}$ for $i=1,\ldots,n$.
+\item \hlt{Working pair}: set $z_i=\eta_i+\frac{y_i-p_i}{p_i(1-p_i)}$ and $w_i=p_i(1-p_i)$.
+\item \hlt{Weighted fit}: update $(\alpha,f_1,\ldots,f_p)$ by weighted backfitting, minimizing $\sum\limits_{i=1}^n w_i\{z_i-\alpha-\sum\limits_{j=1}^p f_j(x_{ij})\}^2$.
+\item \hlt{Iteration}: recompute $\eta_i$ and repeat (i)--(iii) until the additive predictor converges.
+\end{enumerate}
+\end{method}

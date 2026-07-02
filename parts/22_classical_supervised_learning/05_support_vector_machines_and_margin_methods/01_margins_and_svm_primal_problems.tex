@@ -1,0 +1,68 @@
+\subsection{Margins and SVM Primal Problems}
+Margin methods prefer classifiers that separate classes with a buffer, not merely with zero training error.  The support-vector construction makes this preference explicit by trading margin width against margin violations.
+
+\begin{definition} \label{def:sl-affine-hyperplane-signed-distance} \hlt{Affine Hyperplane and Signed Distance}\\
+Let $w\in\R^p\setminus\{0\}$, $b\in\R$, and $q_{w,b}(x)\defeq w^\top x+b$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Affine hyperplane}: $H_{w,b}\defeq\{x\in\R^p:q_{w,b}(x)=0\}$, with normal direction $w$.
+\item \hlt{Signed distance}: $d_{w,b}(x)\defeq \frac{q_{w,b}(x)}{\norm{w}_2}$.
+\item \hlt{Scale invariance}: for $c>0$, $H_{cw,cb}=H_{w,b}$ and $q_{cw,cb}=cq_{w,b}$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:sl-functional-margin} \hlt{Margin}\\
+Let $y_i\in\{-1,1\}$ and $q(x)\defeq w^\top x+b$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Functional margin}: $\gamma_i(q)\defeq y_iq(x_i)$.
+\item \hlt{Geometric margin}: for $w\neq0$, $\rho_i(w,b)\defeq \frac{y_i(w^\top x_i+b)}{\norm{w}_2}$.
+\item \hlt{Correct classification}: $\gamma_i(q)>0$; larger $\gamma_i(q)$ means larger signed confidence at fixed score scale.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:sl-hard-margin-svm} \hlt{Hard-Margin Support Vector Machine}\\
+For separable $(x_i,y_i)_{i=1}^n\subseteq\R^p\times\{-1,1\}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Unit-margin scale}: $y_i(w^\top x_i+b)\geq1$ for all $i$.
+\item \hlt{Hard-margin primal}: $(\widehat{w},\widehat{b})\in\operatorname*{argmin}\limits_{w,b}\frac12\norm{w}_2^2$ subject to $y_i(w^\top x_i+b)\geq1$, $i=1,\ldots,n$.
+\item \hlt{Margin width}: the slab $-1\leq w^\top x+b\leq1$ has width $\frac{2}{\norm{w}_2}$, so the primal maximises geometric margin.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:sl-soft-margin-svm} \hlt{Soft-Margin Support Vector Machine}\\
+For possibly nonseparable $(x_i,y_i)_{i=1}^n\subseteq\R^p\times\{-1,1\}$ and $C>0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Slack variables}: $\xi_i\geq0$ and $y_i(w^\top x_i+b)\geq1-\xi_i$, $i=1,\ldots,n$.
+\item \hlt{Soft-margin primal}: $(\widehat{w},\widehat{b},\widehat{\xi})\in\operatorname*{argmin}\limits_{w,b,\xi}\{\frac12\norm{w}_2^2+C\sum\limits_{i=1}^n\xi_i\}$ subject to the slack constraints.
+\item \hlt{Penalty parameter}: $C$ prices $\sum\limits_{i=1}^n\xi_i$; larger $C$ penalises violations more strongly.
+\end{enumerate}
+\end{definition}
+
+\begin{remark} \label{rem:sl-standard-slack-scaling} \hlt{Why the Standard Slack Scaling}\\
+Before score normalisation, additive slack uses $y_i(w^\top x_i+b)\geq M-\xi_i$, relative slack uses $y_i(w^\top x_i+b)\geq M(1-\xi_i)$.\\
+Setting $M=1$ gives convex constraint $y_i(w^\top x_i+b)\geq1-\xi_i$, $\xi_i\geq0$.\\
+Thus $\xi_i$ measures margin failure: $0$ on/outside the margin, $(0,1]$ inside but correct, and $>1$ misclassified.
+\end{remark}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/svm_soft_margin_geometry.tikz}
+\caption{Soft-margin SVM: \textcolor{orange!85!black}{orange} $y=+1$, \textcolor{cyan!70!blue}{blue} $y=-1$; solid $f(x)=0$, dashed $f(x)=\pm1$; circled support vectors, \textcolor{red!70!black}{red} slack arrows $\xi_i$.}
+\label{fig:sl-svm-soft-margin-geometry}
+\end{figure}
+
+\begin{proposition} \label{prop:sl-svm-hinge-loss-penalty-equivalence} \hlt{Hinge-Loss Penalty Form}\\
+Let $(x_i,y_i)_{i=1}^n\subseteq\R^p\times\{-1,1\}$, $C>0$, $f_{w,b}(x)\defeq w^\top x+b$, and $\lambda\defeq1/C$. For soft-margin primal\\
+$\min\limits_{w,b,\xi}\{\frac12\norm{w}_2^2+C\sum\limits_{i=1}^n\xi_i\}$ subject to $\xi_i\geq0$ and $y_if_{w,b}(x_i)\geq1-\xi_i$, eliminating $\xi$ and scaling by $\frac1C$ gives\\
+$\min\limits_{w,b}\sum\limits_{i=1}^n[1-y_if_{w,b}(x_i)]_++\frac{\lambda}{2}\norm{w}_2^2$. For fixed $(w,b)$, minimal feasible slack is $\xi_i^\star=[1-y_if_{w,b}(x_i)]_+$.
+\end{proposition}
+\begin{proof} Fix $(w,b)$ and put $r_i\defeq1-y_if_{w,b}(x_i)$. Feasibility gives $\xi_i\geq0$ and $\xi_i\geq r_i$, hence $\xi_i\geq\max\{0,r_i\}=[r_i]_+$.\\
+Since $C>0$, the objective is strictly increasing in each $\xi_i$, so $\xi_i^\star=[r_i]_+$.\\
+Substitution yields $\frac12\norm{w}_2^2+C\sum\limits_{i=1}^n[1-y_if_{w,b}(x_i)]_+$.\\
+Multiply by $1/C>0$ preserves minimisers, $\sum\limits_{i=1}^n[1-y_if_{w,b}(x_i)]_++\frac{1}{2C}\norm{w}_2^2=\sum\limits_{i=1}^n[1-y_if_{w,b}(x_i)]_++\frac{\lambda}{2}\norm{w}_2^2$.\\
+\hlt{Structural Commentary}: The $\xi_i$ decouple; eliminate them pointwise.\\
+\hlt{Key Insight}: Soft-margin SVM is hinge empirical risk plus an $\ell_2$ penalty on $w$; the intercept $b$ is unpenalized.
+\end{proof}

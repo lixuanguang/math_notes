@@ -1,0 +1,139 @@
+\subsection{Random Variables, Laws, and Distribution Functions}
+\begin{definition} \label{def:random-variable-law-and-cdf} \hlt{Random Variables, Laws, and Distribution Functions}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{real-valued random variable} on $(\Omega,\mathcal{F},\mathbb{P})$ is map $X:\Omega\to\R$ s.t. $\{\omega\in\Omega:X(\omega)\in B\}\in\mathcal{F}$ $\forall B\in\mathcal{B}(\R)$.
+\item Its \hlt{law} or \hlt{distribution} is $\mathcal{L}(X):\mathcal{B}(\R)\to[0,1]$ given by $\mathcal{L}(X)(B)\defeq\mathbb{P}(X^{-1}(B))=\mathbb{P}(X\in B)$.
+\item Its \hlt{cumulative distribution function} is $F_X:\R\to[0,1]$ given by $F_X(x)\defeq\mathbb{P}(X\leq x)=\mathcal{L}(X)((-\infty,x])$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:distribution-function-and-density} \hlt{Distribution Functions and Densities}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{distribution function} is $F:\R\to[0,1]$ such that $x\leq y\Rightarrow F(x)\leq F(y)$, $F(x)=\lim\limits_{t\downarrow x}F(t)$ for all $x\in\R$, $\lim\limits_{x\to-\infty}F(x)=0$, and $\lim\limits_{x\to\infty}F(x)=1$.
+\item A \hlt{density} for $F$ is an integrable $g:\R\to[0,\infty)$ with $\int_{-\infty}^{\infty}g(x)\,dx=1$ and $F(t)=\int_{-\infty}^{t}g(x)\,dx$ $\forall t\in\R$.\\
+If $g$ is continuous, then $F'(t)=g(t)$.
+\end{enumerate}
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/normal_distribution_cdf.tikz}
+  \caption{A normal density accumulates area into the distribution function $\Phi(t)=\int_{-\infty}^{t}g(x)\,dx$.}
+  \label{fig:normal-distribution-cdf}
+\end{figure}
+
+\begin{definition} \label{def:discrete-and-continuous-random-variables} \hlt{Discrete and Continuous Random Variables}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X$ is \hlt{discrete} if $X(\Omega)\subseteq S$ for some finite or countable $S=\{x_1,x_2,\ldots\}\subseteq\R$.
+\item The \hlt{probability mass function} of discrete $X$ is $f_X:S\to[0,1]$, $f_X(x)\defeq\mathbb{P}(X=x)$, $\sum\limits_{x\in S}f_X(x)=1$.
+\item The \hlt{discrete CDF} is $F_X(x)=\mathbb{P}(X\leq x)=\sum\limits_{x_i\leq x}f_X(x_i)$.
+\item $X$ is \hlt{continuous} if its law has a density $f_X:\R\to[0,\infty)$.
+\item The \hlt{continuous probabilities} satisfy $\mathbb{P}(a<X<b)=\int_a^b f_X(t)\,dt$ and $F_X(x)=\int_{-\infty}^{x}f_X(t)\,dt$.
+\item The \hlt{point-mass distinction}: for continuous $X$, $\mathbb{P}(X=x)=0$ for every fixed $x$, so $f_X(x)\neq\mathbb{P}(X=x)$.
+\end{enumerate}
+A law may be mixed. It can have atoms and a continuous density on the remaining part.
+\end{definition}
+
+\begin{remark} \label{rem:mixed-random-variables-source-example} \hlt{Mixed Laws Are Natural}\\
+For a component lifetime $X$, one may have $\mathbb{P}(X=0)=p>0$ and, conditional on $X>0$, a density $g$ on $(0,\infty)$.\\
+Then $\mathcal{L}(X)$ has an atom plus a continuous part, so it is mixed.
+\end{remark}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/probability_stochastic_structure/coin_count_cdf_pmf.tikz}
+  \caption{CDF and PMF for the number of heads in two independent fair coin tosses.}
+  \label{fig:coin-count-cdf-pmf}
+\end{figure}
+
+\begin{example} \label{ex:two-coin-count-random-variable} \hlt{Counting Heads in Two Tosses}\\
+Let $\Omega=\{H,T\}^2$ with $\mathbb{P}(\{\omega\})=\frac{1}{4}$, and set $X(\omega)=|\{j\in\{1,2\}:\omega_j=H\}|$.\\
+Then $f_X(k)=\mathbb{P}(X=k)=\binom{2}{k}2^{-2}$ for $k\in\{0,1,2\}$, so $(f_X(0),f_X(1),f_X(2))=(\frac{1}{4},\frac{1}{2},\frac{1}{4})$.\\
+Hence $F_X(x)=0$ for $x<0$, $F_X(x)=\frac{1}{4}$ for $0\leq x<1$, $F_X(x)=\frac{3}{4}$ for $1\leq x<2$, $F_X(x)=1$ for $x\geq2$.\\
+\hlt{Key Insight}: A CDF is defined for every real $x$, even when a discrete random variable takes only a few values.
+\end{example}
+
+\begin{proposition} \label{prop:cdf-probability-calculus} \hlt{CDF Probability Calculus}\\
+Let $X$ have CDF $F$ and define $F(x^-)\defeq\lim\limits_{y\uparrow x}F(y)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Point mass}: $\mathbb{P}(X=x)=F(x)-F(x^-)$.
+\item \hlt{Half-open interval}: if $x<y$, then $\mathbb{P}(x<X\leq y)=F(y)-F(x)$.
+\item \hlt{Right tail}: $\mathbb{P}(X>x)=1-F(x)$.
+\item \hlt{Continuous endpoints}: if $X$ is continuous and $a<b$,\\
+then $\mathbb{P}(a<X<b)=\mathbb{P}(a\leq X<b)=\mathbb{P}(a<X\leq b)=\mathbb{P}(a\leq X\leq b)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $E_n=\{x-\frac{1}{n}<X\leq x\}$. Then $E_n\downarrow\{X=x\}$ and $\mathbb{P}(E_n)=F(x)-F(x-\frac{1}{n})$.\\
+Hence $\mathbb{P}(X=x)=\lim\limits_n\mathbb{P}(E_n)=F(x)-F(x^-)$.
+\item Since $\{X\leq y\}=\{X\leq x\}\sqcup\{x<X\leq y\}$, $F(y)=F(x)+\mathbb{P}(x<X\leq y)$.
+\item Since $\{X>x\}=\{X\leq x\}^c$, $\mathbb{P}(X>x)=1-\mathbb{P}(X\leq x)=1-F(x)$.
+\item If $X$ is continuous, then $\mathbb{P}(X=t)=0$ for all $t\in\R$. For $I_1=(a,b)$, $I_2=[a,b)$, $I_3=(a,b]$, and $I_4=[a,b]$, each $X^{-1}(I_j)\setminus X^{-1}(I_1)\subseteq\{X=a\}\cup\{X=b\}$, hence all four probabilities are equal.
+\end{enumerate}
+\hlt{Structural Commentary}: CDF calculus subtracts nested lower-level events.\\
+\hlt{Key Insight}: CDF jumps are point masses; continuous laws have none.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:survival-and-hazard-functions} \hlt{Survival and Hazard Functions}\\
+Let $T\geq0$ have CDF $F$ and density $f$, and set $D\defeq\{t\geq0:1-F(t)>0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Survival Function}: $S:[0,\infty)\to[0,1]$, $S(t)\defeq\mathbb{P}(T>t)=1-F(t)$.
+\item \hlt{Hazard Function}: $h:D\to[0,\infty)$, $h(t)\defeq \frac{f(t)}{1-F(t)}=\frac{f(t)}{S(t)}$.
+\end{enumerate}
+\hlt{Structural Commentary}: On intervals where $S$ is differentiable and positive, $h(t)=-\frac{d}{dt}\log S(t)$.
+\end{definition}
+
+\begin{proposition} \label{prop:hazard-determines-density} \hlt{Hazard Determines the Density}\\
+Let $T\geq0$ have survival $S(t)\defeq\mathbb{P}(T>t)$ with $S\in C^1([0,\infty))$, $S(t)>0$, $S(0)=1$, density $f(t)\defeq -S'(t)$, and hazard $h(t)\defeq\frac{f(t)}{S(t)}$. Put $H(t)\defeq\int_0^t h(s)\,ds$. Then, for $t\geq0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Survival}: $S(t)=e^{-H(t)}$.
+\item \hlt{Density}: $f(t)=h(t)e^{-H(t)}$.
+\end{enumerate}
+\begin{proof}
+Fix $t\geq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Survival}: Since $(\log S)'=S'/S=-h$, $\log S(t)-\log S(0)=-H(t)$. Since $S(0)=1$, $S(t)=e^{-H(t)}$.
+\item \hlt{Density}: Since $h=f/S$, $f(t)=h(t)S(t)=h(t)e^{-H(t)}$.
+\end{enumerate}
+\hlt{Structural Commentary}: $h=-S'/S=-(\log S)'$, so $H$ is the cumulative log-decay of survival.\\
+\hlt{Key Insight}: The hazard determines the law through $S=e^{-H}$ and $f=hS$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:exponential-and-weibull-hazards} \hlt{Constant and Power Hazards}\\
+For $t\geq0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Exponential}: If $F(t)=1-e^{-\lambda t}$ with $\lambda>0$, then $S(t)=e^{-\lambda t}$, $f(t)=\lambda e^{-\lambda t}$, and $h(t)=\lambda$.
+\item \hlt{Weibull-Type}: If $F(t)=1-e^{-\alpha t^\beta}$ with $\alpha,\beta>0$, then $S(t)=e^{-\alpha t^\beta}$, $f(t)=\alpha\beta t^{\beta-1}e^{-\alpha t^\beta}$, $h(t)=\alpha\beta t^{\beta-1}$.
+\end{enumerate}
+\hlt{Key Insight}: Power hazards increase for $\beta>1$, decrease for $0<\beta<1$, and are constant for $\beta=1$.
+\end{example}
+
+\begin{definition} \label{def:quantile-and-equality-in-distribution} \hlt{Quantiles and Equality in Distribution}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For a CDF $F$, the \hlt{quantile function} is $F^{-1}(q)\defeq\inf\{x\in\R:F(x)\geq q\}$, $q\in(0,1)$.
+\item If $F$ is continuous and strictly increasing, then $F^{-1}$ is the ordinary inverse:\\
+$F(F^{-1}(q))=q$ for $q\in(0,1)$ and $F^{-1}(F(x))=x$ for $x\in\R$.
+\item The \hlt{$p$th quantile} is $x_p=F^{-1}(p)$; under (ii), $F(x_p)=p$ uniquely.\\
+Here $x_{\frac{1}{2}}$ is the median and $x_{\frac{1}{4}},x_{\frac{3}{4}}$ are the lower and upper quartiles.
+\item Random variables $X,Y$ are \hlt{equal in distribution}, written $X\disteq Y$, iff $F_X=F_Y$ on $\R$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:value-at-risk-as-quantile} \hlt{Value at Risk as a Quantile}\\
+Let $V_0>0$, $R=\frac{V_1-V_0}{V_0}$, and $F_R(x)=\mathbb{P}(R\leq x)$.\\
+The loss is $L=V_0-V_1=-V_0R$, so $\{L\geq v\}=\{R\leq -\frac{v}{V_0}\}$ and $\mathbb{P}(L\geq v)=F_R(-\frac{v}{V_0})$.\\
+If $F_R$ is invertible and $\mathbb{P}(L\geq v_\alpha)=\alpha$, then $v_\alpha=-V_0F_R^{-1}(\alpha)$.\\
+\hlt{Key Insight}: VaR is a lower-tail return quantile converted back into a dollar loss.
+\end{example}

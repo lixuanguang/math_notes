@@ -1,0 +1,55 @@
+\subsection{Probability Inequalities}
+\begin{theorem} \label{thm:markov-and-chebyshev-inequalities} \hlt{Markov and Chebyshev Inequalities}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item \hlt{Markov}: if $X\geq0$ and $\mathbb{E}X<\infty$, then for $t>0$, $\mathbb{P}(X\geq t)\leq\frac{\mathbb{E}X}{t}$.
+\item \hlt{Chebyshev}: if $\mu\defeq\mathbb{E}X$ and $\sigma^2\defeq\operatorname{Var}(X)<\infty$, then for $t>0$, $\mathbb{P}(\abs{X-\mu}\geq t)\leq\frac{\sigma^2}{t^2}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item Since $X\geq t\mathbf{1}_{\{X\geq t\}}$, taking expectations gives $\mathbb{E}X\geq t\mathbb{P}(X\geq t)$.
+\item Apply (i) to $Y\defeq(X-\mu)^2\geq0$ with threshold $t^2$, then $\mathbb{P}(\abs{X-\mu}\geq t)=\mathbb{P}(Y\geq t^2)\leq\frac{\mathbb{E}Y}{t^2}=\frac{\sigma^2}{t^2}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Tail bounds convert moment control into probability control.\\
+\hlt{Key Insight}: Dominate the tail indicator by a scaled nonnegative random variable.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:chebyshev-error-rate-bound} \hlt{A Distribution-Free Error-Rate Bound}\\
+Let $X_1,\ldots,X_n$ be independent $\operatorname{Bernoulli}(p)$ error indicators and $\overline{X}_n\defeq n^{-1}\sum\limits_{i=1}^{n}X_i$. Since $\mathbb{E}\overline{X}_n=p$ and $\operatorname{Var}(\overline{X}_n)=\frac{p(1-p)}{n}$, Chebyshev gives, for $\varepsilon>0$, $\mathbb{P}(\abs{\overline{X}_n-p}>\varepsilon)\leq\frac{p(1-p)}{n\varepsilon^2}\leq\frac{1}{4n\varepsilon^2}$.
+\end{example}
+
+\begin{theorem} \label{thm:hoeffding-bounded-zero-mean} \hlt{Hoeffding's Bounded-Sum Bound}\\
+Let $Y_1,\ldots,Y_n$ be independent, $\mathbb{E}Y_i=0$, $a_i\leq Y_i\leq b_i$ a.s., and $V\defeq\sum\limits_{i=1}^{n}(b_i-a_i)^2$. For $S_n\defeq\sum\limits_{i=1}^{n}Y_i$ and $t,\varepsilon>0$, $\mathbb{P}(S_n\geq\varepsilon)\leq\exp(-t\varepsilon+\frac{t^2V}{8})$; if $V>0$, then $\mathbb{P}(S_n\geq\varepsilon)\leq\exp(-\frac{2\varepsilon^2}{V})$.
+\begin{proof}
+For $t>0$, Markov gives $\mathbb{P}(S_n\geq\varepsilon)=\mathbb{P}(e^{tS_n}\geq e^{t\varepsilon})\leq e^{-t\varepsilon}\mathbb{E}e^{tS_n}$.\\
+Independence gives $\mathbb{E}e^{tS_n}=\prod\limits_{i=1}^{n}\mathbb{E}e^{tY_i}$, and Hoeffding's lemma gives $\mathbb{E}e^{tY_i}\leq\exp(\frac{t^2(b_i-a_i)^2}{8})$.\\
+Hence $\mathbb{P}(S_n\geq\varepsilon)\leq\exp(-t\varepsilon+\frac{t^2V}{8})$. If $V>0$, minimize the exponent at $t=\frac{4\varepsilon}{V}$ to obtain $\exp(-\frac{2\varepsilon^2}{V})$.\\
+\hlt{Structural Commentary}: Hoeffding turns bounded independent increments into exponential tail decay.\\
+\hlt{Key Insight}: Exponentiate the sum, factor the MGF, then optimize $t$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:hoeffding-bernoulli-average} \hlt{Hoeffding for Bernoulli Averages}\\
+If $X_1,\ldots,X_n$ independent $\operatorname{Bernoulli}(p)$ variables, $\overline{X}_n\defeq n^{-1}\sum\limits_{i=1}^{n}X_i$, then $\mathbb{P}(\abs{\overline{X}_n-p}>\varepsilon)\leq2e^{-2n\varepsilon^2}$.
+\begin{proof}
+Set $Y_i^+\defeq\frac{X_i-p}{n}$.\\
+Then $\mathbb{E}Y_i^+=0$, $Y_i^+\in[-\frac{p}{n},\frac{1-p}{n}]$, and $V=\sum\limits_i(\frac{1}{n})^2=\frac{1}{n}$, by Theorem \ref{thm:hoeffding-bounded-zero-mean}, $\mathbb{P}(\overline{X}_n-p\geq\varepsilon)\leq e^{-2n\varepsilon^2}$.\\
+Apply same argument to $Y_i^-\defeq\frac{p-X_i}{n}$, $\mathbb{P}(p-\overline{X}_n\geq\varepsilon)\leq e^{-2n\varepsilon^2}$; the union bound yields the claim.\\
+\hlt{Structural Commentary}: Bernoulli averages are sums of bounded centered increments.\\
+\hlt{Key Insight}: Control both tails separately, then add them.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:cauchy-schwarz-and-jensen-expectations} \hlt{Cauchy--Schwarz and Jensen}\\
+If $X,Y\in L^2$, then $\mathbb{E}\abs{XY}\leq\sqrt{\mathbb{E}(X^2)\mathbb{E}(Y^2)}$.\\
+If $g:I\to\mathbb{R}$ convex, $X\in I$ a.s., $X,g(X)\in L^1$, then $\mathbb{E}g(X)\geq g(\mathbb{E}X)$; for concave $g$, inequality reverses.
+\begin{proof}
+For Cauchy--Schwarz, apply the $L^2$ inner-product inequality to $\abs{X}$ and $\abs{Y}$.\\
+For Jensen, set $m\defeq\mathbb{E}X$ and take an affine support $\ell(x)\defeq g(m)+s(x-m)$ with $\ell\leq g$ on $I$.\\
+Then $\mathbb{E}g(X)\geq\mathbb{E}\ell(X)=g(m)+s(\mathbb{E}X-m)=g(\mathbb{E}X)$. For concave $g$, apply the convex case to $-g$.\\
+\hlt{Structural Commentary}: Cauchy--Schwarz controls products; Jensen moves convexity through expectation.\\
+\hlt{Key Insight}: Use Hilbert-space geometry for products and supporting lines for convex functions.
+\end{proof}
+\end{theorem}

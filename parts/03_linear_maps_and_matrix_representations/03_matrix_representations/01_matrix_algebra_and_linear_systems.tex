@@ -1,0 +1,153 @@
+\subsection{Matrix Algebra and Linear Systems}
+\begin{definition} \label{def:matrices-and-matrix-operations} \hlt{Matrices and Matrix Operations}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Matrix space}: for $m,n\in\mathbb{Z}_{>0}$, $\operatorname{Mat}(m,n,\mathbb{F})=\{[A_{j,k}]_{1\leq j\leq m,1\leq k\leq n}:A_{j,k}\in\mathbb{F}\}$.
+\item \hlt{Entries, rows, columns}: for $A=[A_{j,k}]\in\operatorname{Mat}(m,n,\mathbb{F})$,\\
+$A_{j,k}$ is the $(j,k)$-entry, $A_{j,\cdot}$ is row $j$, and $A_{\cdot,k}$ is column $k$.
+\item \hlt{Transpose}: for $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $A^t\in\operatorname{Mat}(n,m,\mathbb{F})$ is defined by $(A^t)_{k,j}=A_{j,k}$.
+\item \hlt{Main diagonal}: for $A=[A_{j,k}]\in\operatorname{Mat}(m,n,\mathbb{F})$ and $r=\min(m,n)$, $\operatorname{diag}(A)=(A_{1,1},\ldots,A_{r,r})$.
+\item \hlt{Symmetry}: for $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $A$ is symmetric if $A^t=A$ and skew-symmetric if $A^t=-A$.
+\item \hlt{Triangularity}: for $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $A$ is upper triangular if $A_{j,k}=0$ for $j>k$,\\
+lower triangular if $A_{j,k}=0$ for $j<k$, and diagonal if $A_{j,k}=0$ for $j\neq k$.
+\item \hlt{Linear operations}: for $A,C\in\operatorname{Mat}(m,n,\mathbb{F})$ and $a\in\mathbb{F}$, $(A+C)_{j,k}=A_{j,k}+C_{j,k}$ and $(aA)_{j,k}=aA_{j,k}$.
+\item \hlt{Matrix product}: for $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(n,p,\mathbb{F})$, $AB\in\operatorname{Mat}(m,p,\mathbb{F})$ is $(AB)_{j,k}\defeq\sum\limits_{r=1}^{n}A_{j,r}B_{r,k}$.
+\item \hlt{Identity and inverse}: $I_n=[\delta_{j,k}]\in\operatorname{Mat}(n,n,\mathbb{F})$; for $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, $B$ is a two-sided inverse of $A$ if $AB=I_n=BA$, and $A$ is invertible if such $B$ exists.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma} \label{lem:two-sided-inverse-uniqueness} \hlt{Uniqueness of Two-Sided Inverses}\\
+Let $A,B,C\in\operatorname{Mat}(n,n,\mathbb{F})$. If $AB=I_n$ and $BC=I_n$, then $A=C$.
+\begin{proof}
+Using $BC=I_n$ and $AB=I_n$, $A=AI_n=A(BC)=(AB)C=I_nC=C$.\\
+\hlt{Structural Commentary}: A common middle inverse forces the left and right inverses to coincide.\\
+\hlt{Key Insight}: Associativity turns $AB=I_n=BC$ into $A=C$.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \hlt{Inverse Matrix Notation}\\
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, Lemma \ref{lem:two-sided-inverse-uniqueness} shows that its two-sided inverse is unique.\\
+This inverse is denoted $A^{-1}$, and the set of invertible matrices in $\operatorname{Mat}(n,n,\mathbb{F})$ is denoted $\operatorname{Mat}(n,n,\mathbb{F})^{\times}$.
+\end{definition}
+
+\begin{proposition} \label{prop:matrix-spaces-are-vector-spaces} \hlt{Matrix Spaces}\\
+For positive integers $m,n$, $\operatorname{Mat}(m,n,\mathbb{F})$ is a vector space over $\mathbb{F}$ with dimension $mn$.
+\begin{proof}
+Entrywise addition and scalar multiplication satisfy the vector space axioms because $\mathbb{F}$ does. For $1\leq j\leq m$ and $1\leq k\leq n$, let $E_{j,k}$ be the matrix with $1$ in entry $(j,k)$ and $0$ elsewhere.\\
+Every $A=[A_{j,k}]$ has the unique expansion $A=\sum_{j=1}^m\sum\limits_{k=1}^n A_{j,k}E_{j,k}$.\\
+Thus the $mn$ matrices $E_{j,k}$ form a basis, so $\dim(\operatorname{Mat}(m,n,\mathbb{F}))=mn$.\\
+\hlt{Structural Commentary}: A matrix is a finite array of independent scalar slots.\\
+\hlt{Key Insight}: The standard entry matrices isolate those slots one at a time.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:matrix-product-entry-row-column} \hlt{Matrix Product Entries Are Row Times Column}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,p,\mathbb{F})$, then $(AB)_{j,k}=A_{j,\cdot}B_{\cdot,k}$ for $1\leq j\leq m$ and $1\leq k\leq p$.
+\begin{proof}
+The row-column product $A_{j,\cdot}B_{\cdot,k}$ is exactly $\sum_{r=1}^n A_{j,r}B_{r,k}$, which is the definition of $(AB)_{j,k}$.\\
+\hlt{Structural Commentary}: Matrix multiplication is assembled entry-by-entry from row-column pairings.\\
+\hlt{Key Insight}: Each entry of $AB$ sees one row of $A$ and one column of $B$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:matrix-vector-product-column-combination} \hlt{Matrix-Vector Products as Column Combinations}\\
+If $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{x}=(x_1,\ldots,x_n)^t\in\mathbb{F}^n$, then $A\mathbf{x}=x_1\mathbf{a}_1+\cdots+x_n\mathbf{a}_n$.
+\begin{proof}
+The $j$th entry of $A\mathbf{x}$ is $\sum_{k=1}^n A_{j,k}x_k$, which is also the $j$th entry of $x_1\mathbf{a}_1+\cdots+x_n\mathbf{a}_n$.\\
+\hlt{Structural Commentary}: Multiplying by a column selects a linear combination of the columns of $A$.\\
+\hlt{Key Insight}: The coordinates of $\mathbf{x}$ are precisely the column coefficients.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:column-space-matrix-rank-nullity} \hlt{Column Space, Matrix Rank, and Nullity}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{col}(A)\defeq\operatorname{span}(\mathbf{a}_1,\ldots,\mathbf{a}_n)\subseteq\mathbb{F}^m$, and $\operatorname{row}(A)\defeq\operatorname{col}(A^t)\subseteq\mathbb{F}^n$.
+\item $\operatorname{rank}(A)\defeq\dim(\operatorname{col}(A))$; column rank is $\dim(\operatorname{col}(A))$, and row rank is $\dim(\operatorname{row}(A))$.
+\item $A$ has \hlt{full rank} if $\operatorname{rank}(A)=\min(m,n)$, \hlt{full column rank} if $\operatorname{rank}(A)=n$, and \hlt{full row rank} if $\operatorname{rank}(A)=m$.
+\item $\ker(A)\defeq\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{0}\}$ is the \hlt{nullspace}, and $\operatorname{nullity}(A)\defeq\dim(\ker(A))$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:linear-system-solvability-and-affine-solution-set} \hlt{Solvability and Complete Solution Sets}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\mathbb{F})$ and let $\mathbf{b}\in\mathbb{F}^m$. Then $A\mathbf{x}=\mathbf{b}$ is solvable if and only if $\mathbf{b}\in\operatorname{col}(A)$.\\
+If $\mathbf{x}_p$ is one solution, then every solution is of the form $\mathbf{x}=\mathbf{x}_p+\mathbf{x}_0$, where $\mathbf{x}_0\in\ker(A)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A\mathbf{x}=\mathbf{b}$ for some $\mathbf{x}=(x_1,\ldots,x_n)^T$, then $\mathbf{b}=A\mathbf{x}=\sum\limits_{j=1}^n x_j\mathbf{a}_j\in\operatorname{col}(A)$.
+\item[$(\Leftarrow)$] If $\mathbf{b}\in\operatorname{col}(A)$, then $\mathbf{b}=\sum_{j=1}^n x_j\mathbf{a}_j$ for some scalars $x_j$. Hence, for $\mathbf{x}=(x_1,\ldots,x_n)^T$, we have $A\mathbf{x}=\mathbf{b}$.
+\end{enumerate}
+Now suppose $A\mathbf{x}_p=\mathbf{b}$. For any $\mathbf{x}$, $A\mathbf{x}=\mathbf{b}\iff A(\mathbf{x}-\mathbf{x}_p)=\mathbf{0}\iff \mathbf{x}-\mathbf{x}_p\in\ker(A)$.\\
+Thus every solution is exactly of the form $\mathbf{x}=\mathbf{x}_p+\mathbf{x}_0$, where $\mathbf{x}_0\in\ker(A)$.\\
+\hlt{Structural Commentary}: A consistent system is an affine shift of $\ker(A)$ by any particular solution.\\
+\hlt{Key Insight}: Column space decides existence; kernel decides nonuniqueness.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:matrix-product-by-columns} \hlt{Matrix Products by Columns}\\
+If $A\in\operatorname{Mat}(m,r,\mathbb{F})$ and $B=[\mathbf{b}_1\ \cdots\ \mathbf{b}_n]\in\operatorname{Mat}(r,n,\mathbb{F})$, then $AB=[A\mathbf{b}_1\ \cdots\ A\mathbf{b}_n]$.
+\begin{proof}
+For each $k$, the $k$th column of $AB$ has entries $\sum_{\ell=1}^r A_{j,\ell}B_{\ell,k}$, which are exactly the entries of $A\mathbf{b}_k$.\\
+\hlt{Structural Commentary}: Matrix products apply $A$ to columns of $B$.\\
+\hlt{Key Insight}: The columns of $AB$ are obtained by applying $A$ to the columns of $B$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:matrix-product-outer-product-decomposition} \hlt{Matrix Products as Sums of Outer Products}\\
+Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_r]\in\operatorname{Mat}(m,r,\mathbb{F})$, and write $B\in\operatorname{Mat}(r,n,\mathbb{F})$ by rows as
+\begin{align}
+B=
+\begin{bmatrix}
+\mathbf{b}_1^t\\
+\vdots\\
+\mathbf{b}_r^t
+\end{bmatrix}.
+\nonumber
+\end{align}
+Then $AB=\mathbf{a}_1\mathbf{b}_1^t+\cdots+\mathbf{a}_r\mathbf{b}_r^t$.
+\begin{proof}
+The $(j,k)$ entry of $\mathbf{a}_\ell\mathbf{b}_\ell^t$ is $A_{j,\ell}B_{\ell,k}$. Summing over $\ell=1,\ldots,r$ gives $\sum_{\ell=1}^r A_{j,\ell}B_{\ell,k}=(AB)_{j,k}$.\\
+\hlt{Structural Commentary}: Column-row products decompose a matrix product into single column-row pieces.\\
+\hlt{Key Insight}: Each shared index $\ell$ contributes one outer product.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:elementary-transpose-rules} \hlt{Elementary Transpose Rules}\\
+Let $A,C\in\operatorname{Mat}(m,n,\mathbb{F})$ and let $a\in\mathbb{F}$. Then $(A^t)^t=A$; $(A+C)^t=A^t+C^t$; and $(aA)^t=aA^t$.
+\begin{proof}
+For all admissible indices, $((A^t)^t)_{j,k}=(A^t)_{k,j}=A_{j,k}$, so $(A^t)^t=A$.\\
+Also $((A+C)^t)_{j,k}=(A+C)_{k,j}=A_{k,j}+C_{k,j}=(A^t+C^t)_{j,k}$ and $((aA)^t)_{j,k}=(aA)_{k,j}=aA_{k,j}=(aA^t)_{j,k}$.\\
+\hlt{Structural Commentary}: Transpose swaps indices; entrywise algebra is unchanged.\\
+\hlt{Key Insight}: Transpose is linear and involutive.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:matrix-space-symmetric-skew-direct-sum} \hlt{Symmetric and Skew-Symmetric Decomposition}\\
+Assume $\operatorname{char}(\mathbb{F})\neq2$, $M=\operatorname{Mat}(n,n,\mathbb{F})$, let $\operatorname{Sym}_n(\mathbb{F})=\{A\in M:A^t=A\}$, $\operatorname{Skew}_n(\mathbb{F})=\{A\in M:A^t=-A\}$.\\
+For the map $\tau:M\to M$ defined by $\tau(A)=A^t$, linearity follows from Proposition \ref{prop:elementary-transpose-rules}. Hence $\operatorname{Sym}_n(\mathbb{F})=\ker(\tau-I)$ and $\operatorname{Skew}_n(\mathbb{F})=\ker(\tau+I)$, so both are subspaces of $M$.\\
+For every $A\in M$, $A=\frac12(A+A^t)+\frac12(A-A^t) \in\operatorname{Sym}_n(\mathbb{F})+\operatorname{Skew}_n(\mathbb{F})$.\\
+Also $A\in\operatorname{Sym}_n(\mathbb{F})\cap\operatorname{Skew}_n(\mathbb{F})$ implies $A=A^t=-A$, hence $A=0$. Thus $M=\operatorname{Sym}_n(\mathbb{F})\oplus\operatorname{Skew}_n(\mathbb{F})$.\\
+\hlt{Structural Commentary}: Transpose splits a matrix into its even and odd parts.\\
+\hlt{Key Insight}: The directness of the split uses the ability to divide by $2$.
+\end{example}
+
+\begin{proposition} \label{prop:transpose-reverses-products} \hlt{Transpose Reverses Products}\\
+If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,p,\mathbb{F})$, then $(AB)^t=B^tA^t$.
+\begin{proof}
+For $1\leq j\leq p$ and $1\leq k\leq m$, $((AB)^t)_{j,k}=(AB)_{k,j}=\sum\limits_{\ell=1}^n A_{k,\ell}B_{\ell,j}=\sum\limits_{\ell=1}^n (B^t)_{j,\ell}(A^t)_{\ell,k}=(B^tA^t)_{j,k}$.\\
+\hlt{Structural Commentary}: Transposition swaps the order of composition encoded by matrix multiplication.\\
+\hlt{Key Insight}: Rows become columns, so the product order reverses.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:matrix-inverse-product-and-transpose} \hlt{Matrix Inverses and Transposes Reverse Products}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible. Then $AB$, $A^t$ are invertible, and $(AB)^{-1}=B^{-1}A^{-1}$; $(A^t)^{-1}=(A^{-1})^t$.
+\begin{proof}
+First, $(B^{-1}A^{-1})(AB)=B^{-1}(A^{-1}A)B=B^{-1}B=I_n$; $(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AA^{-1}=I_n$.\\
+Hence $(AB)^{-1}=B^{-1}A^{-1}$. By Proposition \ref{prop:transpose-reverses-products}, $(A^{-1})^tA^t=(AA^{-1})^t=I_n$; $A^t(A^{-1})^t=(A^{-1}A)^t=I_n$.\\
+\hlt{Structural Commentary}: Inversion and transposition both reverse multiplication order.\\
+\hlt{Key Insight}: Apply the defining inverse equations and reverse products.
+\end{proof}
+\end{corollary}

@@ -1,0 +1,31 @@
+\subsection{Validation and Selection Bias}
+\begin{definition} \label{def:sl-model-selection-validation} \hlt{Model Selection by Validation}\\
+Let $\mathcal{M}$ be a candidate set of models or hyperparameters.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{validation criterion} is $m\mapsto\widehat{R}_{\mathrm{val}}(m)$; choose $\widehat{m}\in\operatorname*{arg\,min}\limits_{m\in\mathcal{M}}\widehat{R}_{\mathrm{val}}(m)$.
+\item In \hlt{$K$-fold cross-validation}, take folds $I_1,\ldots,I_K$ and fits $\widehat{f}^{(-k)}_m$.\\
+Define $\ell_{ik}(m)\defeq\ell(y_i,\widehat{f}^{(-k)}_m(x_i))$, $\widehat{R}_{\mathrm{cv}}(m)\defeq \frac{1}{n}\sum\limits_{k=1}^K\sum\limits_{i\in I_k}\ell_{ik}(m)$, and choose $\widehat{m}_{\mathrm{cv}}\in\operatorname*{arg\,min}\limits_{m\in\mathcal{M}}\widehat{R}_{\mathrm{cv}}(m)$.
+\end{enumerate}
+\end{definition}
+
+\begin{method} \label{meth:sl-one-standard-error-rule} \hlt{One-Standard-Error Rule}\\
+Let $(\mathcal{M},\preceq)$ order candidates by complexity, with $\widehat{R}_{\mathrm{cv}},\widehat{\operatorname{se}}:\mathcal{M}\to\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $\widehat{m}_{\min}\in\operatorname*{arg\,min}_{m\in\mathcal{M}}\widehat{R}_{\mathrm{cv}}(m)$ and set $\widehat{R}_{\min}\defeq\widehat{R}_{\mathrm{cv}}(\widehat{m}_{\min})$.
+\item Define $\mathcal{M}_{1\mathrm{se}}\defeq\{m\in\mathcal{M}:\widehat{R}_{\mathrm{cv}}(m)\leq\widehat{R}_{\min}+\widehat{\operatorname{se}}(\widehat{m}_{\min})\}$.
+\item Select $\widehat{m}_{1\mathrm{se}}$ as the $\preceq$-minimal element of $\mathcal{M}_{1\mathrm{se}}$; use any final test set only after this choice.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:sl-prostate-selection-shrinkage-workflow} \hlt{A Selection and Shrinkage Workflow}\\
+Let $D=\{(x_i,y_i)\}_{i=1}^n$, where $y_i=\log(\mathrm{PSA}_i)$ and $x_i=(\mathrm{lcavol}_i,\mathrm{lweight}_i,\mathrm{age}_i,\mathrm{lbph}_i,\mathrm{svi}_i,\mathrm{lcp}_i,\mathrm{gleason}_i,\mathrm{pgg45}_i)$.\\
+Split indices into training and test sets $T,E$, standardize $X_T$, and choose each complexity parameter by cross-validation on $T$: subset size $m$, ridge/lasso penalty $\lambda$, or PCR/PLS dimension $M$.\\
+The selected fit $\widehat{f}$ is then evaluated once on $E$ by $\widehat{R}_{\mathrm{test}}\defeq |E|^{-1}\sum\limits_{i\in E}\ell(y_i,\widehat{f}(x_i))$.
+\end{example}
+
+\begin{remark} \label{rem:sl-selection-bias} \hlt{Selection Bias}\\
+If $\widehat{m}\in\operatorname*{arg\,min}\limits_{m\in\mathcal{M}}\widehat{R}_V(m)$ is chosen on validation set $V$, then $\widehat{R}_V(\widehat{m})$ is optimistically biased for $R(\widehat{m})$.\\
+Estimate the selected model with an independent set $E$, using $\widehat{R}_E(\widehat{m})$, or use nested validation.
+\end{remark}

@@ -1,0 +1,59 @@
+\subsection{Moment Generating Functions}
+\begin{definition} \label{def:moment-generating-function} \hlt{Moment Generating Function}\\
+The \hlt{moment generating function} of $X$ is $\psi_X(t)\defeq\mathbb{E}(e^{tX})$ on $D_X\defeq\{t\in\mathbb{R}:\mathbb{E}e^{tX}<\infty\}$.\\
+If $(-\delta,\delta)\subseteq D_X$ for some $\delta>0$, then $\psi_X^{(k)}(0)=\mathbb{E}(X^k)$ for all $k\geq1$.
+\end{definition}
+
+\begin{proposition} \label{prop:mgf-basic-properties} \hlt{Basic MGF Properties}\\
+Assume the MGFs below are finite on a common open interval about $0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Affine transform}: if $a,b\in\mathbb{R}$ and $Y=aX+b$, then $\psi_Y(t)=e^{bt}\psi_X(at)$.
+\item \hlt{Independent sum}: if $X_1,\ldots,X_n$ are independent and $Y\defeq\sum\limits_{i=1}^{n}X_i$, then $\psi_Y(t)=\prod\limits_{i=1}^{n}\psi_{X_i}(t)$.
+\item \hlt{Uniqueness}: if $\psi_X(t)=\psi_Y(t)$ for all $t$ in an open interval containing $0$, then $\mathcal{L}(X)=\mathcal{L}(Y)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\psi_Y(t)=\mathbb{E}e^{t(aX+b)}=e^{bt}\mathbb{E}e^{(at)X}=e^{bt}\psi_X(at)$.
+\item For admissible $t$, $e^{tX_1},\ldots,e^{tX_n}$ are independent and integrable.\\
+Hence $\psi_Y(t)=\mathbb{E}e^{t\sum\limits_{i=1}^{n}X_i}=\mathbb{E}\prod\limits_{i=1}^{n}e^{tX_i}=\prod\limits_{i=1}^{n}\mathbb{E}e^{tX_i}=\prod\limits_{i=1}^{n}\psi_{X_i}(t)$.
+\item Let $\mu\defeq\mathcal{L}(X)$ and $\nu\defeq\mathcal{L}(Y)$. If $\psi_X=\psi_Y$ on $(-\delta,\delta)$, then $\int_{\mathbb{R}}e^{tx}\,d\mu(x)=\int_{\mathbb{R}}e^{tx}\,d\nu(x)$ for all $\abs{t}<\delta$.\\
+Uniqueness of the two-sided Laplace transform gives $\mu=\nu$.
+\end{enumerate}
+\hlt{Structural Commentary}: MGFs turn affine maps and independent sums into algebraic operations.\\
+\hlt{Key Insight}: Exponentials convert sums into products, and the MGF near $0$ determines the law.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:mgf-computations} \hlt{MGF Computations}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X\sim\operatorname{Exp}(1)$, then $\psi_X(t)=\mathbb{E}e^{tX}=\int_{0}^{\infty}e^{(t-1)x}\,dx=(1-t)^{-1}$ for $t<1$.\\
+Hence $\mathbb{E}X=\psi_X'(0)=1$ and $\operatorname{Var}(X)=\psi_X''(0)-(\psi_X'(0))^2=1$.
+\item If $X\sim\operatorname{Binomial}(n,p)$, then $X=\sum\limits_{i=1}^{n}B_i$ with independent $B_i\sim\operatorname{Bernoulli}(p)$.\\
+Hence $\psi_X(t)=\prod\limits_{i=1}^{n}\psi_{B_i}(t)=(pe^t+1-p)^n$.
+\end{enumerate}
+\end{example}
+
+\begin{method} \label{meth:common-moments-and-mgfs-table} \hlt{Common Means, Variances, and MGFs}\\
+MGFs are stated on their natural neighborhood of $0$; values at $t=0$ are by continuity.\\
+The geometric and negative-binomial rows use the total-trials convention.
+\[
+\begin{array}{c|c|c|c}
+\text{Distribution} & \mathbb{E}X & \operatorname{Var}(X) & \psi_X(t)\\ \hline
+\text{point mass at }a & a & 0 & e^{at}\\
+\operatorname{Bernoulli}(p) & p & p(1-p) & 1-p+pe^t\\
+\operatorname{Binomial}(n,p) & np & np(1-p) & (1-p+pe^t)^n\\
+\operatorname{Geometric}(p) & \dfrac{1}{p} & \dfrac{1-p}{p^2} & \dfrac{pe^t}{1-(1-p)e^t}\\
+\operatorname{NegBin}(r,p) & \dfrac{r}{p} & \dfrac{r(1-p)}{p^2} & \left(\dfrac{pe^t}{1-(1-p)e^t}\right)^r\\
+\operatorname{Poisson}(\lambda) & \lambda & \lambda & e^{\lambda(e^t-1)}\\
+\operatorname{Uniform}(a,b) & \dfrac{a+b}{2} & \dfrac{(b-a)^2}{12} & \dfrac{e^{bt}-e^{at}}{(b-a)t}\\
+N(\mu,\sigma^2) & \mu & \sigma^2 & \exp(\mu t+\dfrac{\sigma^2t^2}{2})\\
+\operatorname{Exp}(\lambda) & \dfrac{1}{\lambda} & \dfrac{1}{\lambda^2} & \dfrac{\lambda}{\lambda-t}\\
+\operatorname{Gamma}(\alpha,\lambda) & \dfrac{\alpha}{\lambda} & \dfrac{\alpha}{\lambda^2} & \left(\dfrac{\lambda}{\lambda-t}\right)^\alpha\\
+\operatorname{Beta}(\alpha,\beta) & \dfrac{\alpha}{\alpha+\beta} & \dfrac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)} & \text{not useful}\\
+\chi_p^2 & p & 2p & (1-2t)^{-\frac{p}{2}}
+\end{array}
+\]
+\end{method}

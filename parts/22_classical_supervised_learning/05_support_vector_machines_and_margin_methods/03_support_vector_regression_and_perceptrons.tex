@@ -1,0 +1,33 @@
+\subsection{Support Vector Regression and Perceptrons}
+\begin{method} \label{meth:sl-epsilon-insensitive-support-vector-regression} \hlt{Epsilon-Insensitive Support Vector Regression}\\
+Let $(x_i,y_i)_{i=1}^n\subseteq\R^p\times\R$, $\epsilon>0$, $\lambda>0$, and $f_{w,b}(x)\defeq w^\top x+b$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Define loss}: for residual $r$, set $V_\epsilon(r)\defeq[|r|-\epsilon]_+$.
+\item \hlt{Fit}: solve $\min\limits_{w,b}\sum\limits_{i=1}^n V_\epsilon(y_i-f_{w,b}(x_i))+\frac{\lambda}{2}\norm{w}_2^2$.
+\item \hlt{Read tube}: $|r_i|\leq\epsilon\Rightarrow V_\epsilon(r_i)=0$ and $|r_i|>\epsilon\Rightarrow V_\epsilon(r_i)=|r_i|-\epsilon$.
+\item \hlt{Kernelize}: $\widehat{f}(x)=\sum\limits_{i=1}^n(\widehat{\alpha}_i^*-\widehat{\alpha}_i)k(x,x_i)+\widehat{b}$; tube sides have opposite signs.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:sl-perceptron-update} \hlt{Perceptron Update as a Contrast}\\
+Choose $(w_0,b_0)\in\R^p\times\R$ and learning rate $\rho>0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Scan}: at step $t$, choose $(x_i,y_i)$ and compute $m_i(t)\defeq y_i(w_t^\top x_i+b_t)$.
+\item \hlt{Update}: if $m_i(t)\leq0$, set $(w_{t+1},b_{t+1})\defeq(w_t,b_t)+\rho y_i(x_i,1)$.
+\item \hlt{Keep}: if $m_i(t)>0$, set $(w_{t+1},b_{t+1})\defeq(w_t,b_t)$.
+\item \hlt{Contrast}: perceptron may separate but is order-dependent; SVM solves a convex max-margin problem.
+\end{enumerate}
+\end{method}
+
+\begin{remark} \label{rem:sl-support-vectors} \hlt{Support Vectors}\\
+Let $\widehat{f}(x)=\sum\limits_{i=1}^n\widehat{\alpha}_iy_ik(x,x_i)+\widehat{b}$ and $S\defeq\{i:\widehat{\alpha}_i>0\}$.\\
+Then $\widehat{f}(x)=\sum\limits_{i\in S}\widehat{\alpha}_iy_ik(x,x_i)+\widehat{b}$, and KKT gives $i\in S\Rightarrow y_i\widehat{f}(x_i)\leq1$. Thus only support vectors enter $\widehat{f}$.
+\end{remark}
+
+\begin{remark} \label{rem:sl-margin-generalization} \hlt{Margins and Generalization}\\
+Let $m_i(f)\defeq y_if(x_i)$ and $\widehat{R}_\gamma(f)\defeq n^{-1}\sum\limits_{i=1}^n\mathbf{1}\{m_i(f)\leq\gamma\}$.\\
+Bounds control $R(f)\defeq\mathbb{P}(Yf(X)\leq0)$ by $\widehat{R}_\gamma(f)$ plus a complexity proxy $\mathcal{C}_\gamma(f)\asymp\norm{f}^2/\gamma^2$.\\
+For linear $f_{w,b}$ with $\min_i m_i(f)\geq1$, the geometric margin is $\rho=1/\norm{w}_2$.
+\end{remark}

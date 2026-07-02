@@ -1,0 +1,81 @@
+\subsection{Complex Jordan Form and Block Sizes}
+\begin{theorem} \label{thm:complex-jordan-form} \hlt{Jordan Form over $\mathbb{C}$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$. Then $\mathcal{V}$ has a Jordan basis for $T$.
+\begin{proof}
+Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$, and each $N_j\defeq(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is nilpotent. Apply Theorem \ref{thm:nilpotent-jordan-chain-basis} to $N_j$ on each generalized eigenspace.\\
+The resulting chain basis of $\mathcal{G}_{\lambda_j}(T)$ is a basis of that summand, and the direct-sum decomposition makes the concatenation of these bases a basis of $\mathcal{V}$. In a chain of length $r$ for $N_j$, the matrix of $N_j$ is $J_r(0)$, so the matrix of $T|_{\mathcal{G}_{\lambda_j}(T)}=\lambda_jI+N_j$ on the same chain is $J_r(\lambda_j)$. Therefore the concatenated basis is a Jordan basis for $T$.\\
+\hlt{Structural Commentary}: Primary pieces decompose into nilpotent chains.\\
+\hlt{Key Insight}: Jordan form is ``eigenvalue plus nilpotent chains'' on every generalized eigenspace.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/jordan_form_primary_chains.tikz}
+  \caption{Primary pieces $\mathcal{G}_{\lambda_j}(T)$ give nilpotent chains, hence Jordan blocks.}
+  \label{fig:jordan-form-primary-chains}
+\end{figure}
+
+\begin{corollary} \label{cor:jordan-blocks-diagonalizability} \hlt{Diagonalizability in Jordan Form}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have Jordan form $J$. For each eigenvalue $\lambda$, $\dim E_{\lambda}(A)$ equals the number of $\lambda$-blocks in $J$. Hence $A$ is diagonalizable if and only if every Jordan block has size $1$.
+\begin{proof}
+Write $A=SJS^{-1}$. Then $S:E_{\lambda}(J)\to E_{\lambda}(A)$ is an isomorphism. A block $J_k(\mu)$ contributes to $E_{\lambda}(J)$ only when $\mu=\lambda$, and then $\dim\ker(J_k(\lambda)-\lambda I_k)=\dim\ker J_k(0)=1$.\\
+Thus $\dim E_{\lambda}(A)$ is the number of $\lambda$-blocks. By Theorem \ref{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match}, diagonalizability means geometric and algebraic multiplicities agree for every $\lambda$; here this holds exactly when every block has size $1$.\\
+\hlt{Structural Commentary}: Each Jordan block contributes one eigenvector direction.\\
+\hlt{Key Insight}: Missing eigenvectors are measured by block sizes greater than $1$.
+\end{proof}
+\end{corollary}
+
+\begin{lemma} \label{lem:nilpotent-jordan-block-power-rank} \hlt{Powers of a Nilpotent Jordan Block}\\
+For $k\geq1$ and $p\geq0$, $\operatorname{rank}\bigl(J_k(0)^p\bigr)=\max(k-p,0)$ and $\dim\ker\bigl(J_k(0)^p\bigr)=\min(p,k)$.
+\begin{proof}
+Let $N=J_k(0)$. In the standard basis, $N\mathbf{e}_1=\mathbf{0}$ and $N\mathbf{e}_j=\mathbf{e}_{j-1}$ for $2\leq j\leq k$. Iterating gives
+\begin{align}
+N^p\mathbf{e}_j=
+\begin{cases}
+\mathbf{0}, & j\leq p,\\
+\mathbf{e}_{j-p}, & j>p.
+\end{cases} \nonumber
+\end{align}
+If $p<k$, the image is $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{k-p})$, so the rank is $k-p$; if $p\geq k$, the image is $\{\mathbf{0}\}$, so the rank is $0$.\\
+Hence $\operatorname{rank}(N^p)=\max(k-p,0)$. Rank-nullity gives $\dim\ker(N^p)=k-\max(k-p,0)=\min(p,k)$.\\
+\hlt{Structural Commentary}: A nilpotent Jordan block is a left-shift on the standard basis.\\
+\hlt{Key Insight}: Each power deletes one more leading layer of the chain.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:weyr-characteristic} \hlt{Weyr Characteristic}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\lambda\in\operatorname{spec}(A)$.\\
+For $p\geq1$, define $w_p(\lambda,A)\defeq \operatorname{rank}\bigl((A-\lambda I_n)^{p-1}\bigr) - \operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$.\\
+The positive part of the sequence $w_1,w_2,\ldots$ is the \hlt{Weyr characteristic} of $A$ associated with $\lambda$.
+\end{definition}
+
+\begin{theorem} \label{thm:jordan-block-sizes-from-rank-drops} \hlt{Jordan Block Sizes from Rank Drops}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda\in\operatorname{spec}(A)$, and $p\geq1$. Then $w_p(\lambda,A)$ is the number of $\lambda$-Jordan blocks of size at least $p$; hence $w_p(\lambda,A)-w_{p+1}(\lambda,A)$ is the number of $\lambda$-blocks of size exactly $p$.
+\begin{proof}
+Rank is similarity-invariant, so assume $A$ is in Jordan form.\\
+Blocks $J_k(\mu)$ with $\mu\neq\lambda$ contribute $0$ to the rank drop because $J_k(\mu)-\lambda I_k$ is invertible.\\
+A block $J_k(\lambda)$ contributes $\operatorname{rank}\bigl(J_k(0)^{p-1}\bigr)-\operatorname{rank}\bigl(J_k(0)^p\bigr)$, which is $1$ exactly when $p\leq k$ by Lemma \ref{lem:nilpotent-jordan-block-power-rank}.\\
+Summing over blocks proves the first claim; subtracting the $p+1$ count gives the exact-size count.\\
+\hlt{Structural Commentary}: Rank drops count surviving chain lengths.\\
+\hlt{Key Insight}: A length-$k$ block contributes to drops $1,\ldots,k$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/weyr_rank_drops_jordan_blocks.tikz}
+  \caption{For $r_p=\operatorname{rank}((A-\lambda I)^p)$, drops count surviving chains; $w_p-w_{p+1}$ counts size-$p$ blocks.}
+  \label{fig:weyr-rank-drops-jordan-blocks}
+\end{figure}
+
+\begin{method} \label{meth:jordan-form-from-rank-drops} \hlt{Computing Jordan Blocks by Rank Drops}\\
+For each eigenvalue $\lambda$ of $A\in\operatorname{Mat}(n,n,\mathbb{C})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Compute $r_p=\operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$ for $p=0,1,2,\ldots$ until the differences stabilize at $0$.
+\item Set $w_p=r_{p-1}-r_p$. Then $w_p$ is the number of $\lambda$-blocks of size at least $p$.
+\item The number of blocks $J_p(\lambda)$ is $w_p-w_{p+1}$.
+\item Assemble the Jordan form by taking the direct sum over all eigenvalues.
+\end{enumerate}
+\end{method}

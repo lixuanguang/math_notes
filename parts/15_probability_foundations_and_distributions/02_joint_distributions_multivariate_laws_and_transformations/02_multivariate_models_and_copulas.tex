@@ -1,0 +1,73 @@
+\subsection{Multivariate Models and Copulas}
+\begin{definition} \label{def:multinomial-and-multivariate-normal} \hlt{Two Multivariate Families}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Multinomial}: for $n\in\N$ and $p\in[0,1]^k$ with $\sum\limits_{j=1}^{k}p_j=1$, $X\sim\operatorname{Multinomial}(n,p)$\\
+if $\mathbb{P}(X=x)=n!(x_1!\cdots x_k!)^{-1}\prod\limits_{j=1}^{k}p_j^{x_j}$ for $x\in\N_0^k$ with $\sum\limits_{j=1}^{k}x_j=n$; then $X_j\sim\operatorname{Binomial}(n,p_j)$.
+\item \hlt{Multivariate normal}: for $\mu\in\R^k$ and symmetric positive definite $\Sigma\in\R^{k\times k}$, $X\sim N(\mu,\Sigma)$\\
+if $f_X(x)=((2\pi)^k\det\Sigma)^{-\frac{1}{2}}\exp(-\frac{(x-\mu)^t\Sigma^{-1}(x-\mu)}{2})$ for $x\in\R^k$.\\
+$N(0,I_k)$ has independent $N(0,1)$ coordinates.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:multivariate-normal-affine-standardization} \hlt{Multivariate Normal Affine Standardization}\\
+Let $k\in\N$, $\mu\in\R^k$, $\Sigma\in\R^{k\times k}$ with $\Sigma\succ0$, and $A=\Sigma^{\frac{1}{2}}$. For $X\in\R^k$, $X\sim N(\mu,\Sigma)$ iff $A^{-1}(X-\mu)\sim N(0,I_k)$.\\
+Equivalently, if $Z\sim N(0,I_k)$, then $\mu+AZ\sim N(\mu,\Sigma)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Set $Z=\Sigma^{-\frac{1}{2}}(X-\mu)$, so $x=\mu+\Sigma^{\frac{1}{2}}z$ and $|\det\Sigma^{\frac{1}{2}}|=(\det\Sigma)^{\frac{1}{2}}$.\\
+By change of variables, $f_Z(z)=f_X(\mu+\Sigma^{\frac{1}{2}}z)(\det\Sigma)^{\frac{1}{2}}=(2\pi)^{-\frac{k}{2}}\exp(-\frac{z^tz}{2})$, hence $Z\sim N(0,I_k)$.
+\item[$(\Leftarrow)$] Let $X=\mu+\Sigma^{\frac{1}{2}}Z$ with $Z\sim N(0,I_k)$. Since $z=\Sigma^{-\frac{1}{2}}(x-\mu)$ and $|\det\Sigma^{-\frac{1}{2}}|=(\det\Sigma)^{-\frac{1}{2}}$,\\
+$f_X(x)=f_Z(\Sigma^{-\frac{1}{2}}(x-\mu))(\det\Sigma)^{-\frac{1}{2}}=((2\pi)^k\det\Sigma)^{-\frac{1}{2}}\exp(-\frac{(x-\mu)^t\Sigma^{-1}(x-\mu)}{2})$, so $X\sim N(\mu,\Sigma)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Positive definite covariance is an affine deformation of the standard normal.\\
+\hlt{Key Insight}: Standardize by $\Sigma^{-\frac{1}{2}}$; reconstruct by $\Sigma^{\frac{1}{2}}$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:multivariate-normal-basic-calculus} \hlt{Basic Multivariate Normal Calculus}\\
+Let $X=(X_a,X_b)\sim N(\mu,\Sigma)$ with $X_a\in\R^r$, $X_b\in\R^s$, $\mu=(\mu_a,\mu_b)$, and $\Sigma=\begin{pmatrix}\Sigma_{aa}&\Sigma_{ab}\\ \Sigma_{ba}&\Sigma_{bb}\end{pmatrix}\succ0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Marginal}: $X_a\sim N(\mu_a,\Sigma_{aa})$.
+\item \hlt{Conditional}: $X_b\mid X_a=x_a\sim N(\mu_b+\Sigma_{ba}\Sigma_{aa}^{-1}(x_a-\mu_a),\Sigma_{bb}-\Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab})$.
+\item \hlt{Linear form}: for any vector $a$, $a^tX\sim N(a^t\mu,a^t\Sigma a)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $P_aX=X_a$. By Proposition \ref{prop:multivariate-normal-affine-standardization}, $X=\mu+\Sigma^{\frac{1}{2}}Z$ with $Z\sim N(0,I)$.\\
+Hence $X_a=P_a\mu+P_a\Sigma^{\frac{1}{2}}Z\sim N(\mu_a,P_a\Sigma P_a^t)=N(\mu_a,\Sigma_{aa})$.
+\item Set $S\defeq\Sigma_{bb}-\Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab}$ and $m(x_a)\defeq\mu_b+\Sigma_{ba}\Sigma_{aa}^{-1}(x_a-\mu_a)$.\\
+The block determinant and inverse identities give $\det\Sigma=\det\Sigma_{aa}\det S$ and\\
+$(x-\mu)^t\Sigma^{-1}(x-\mu)=(x_a-\mu_a)^t\Sigma_{aa}^{-1}(x_a-\mu_a)+(x_b-m(x_a))^tS^{-1}(x_b-m(x_a))$.\\
+Thus $f_{b\mid a}(x_b\mid x_a)=\frac{f_{a,b}(x_a,x_b)}{f_a(x_a)}$ is the $N(m(x_a),S)$ density.
+\item With $X=\mu+\Sigma^{\frac{1}{2}}Z$, $a^tX=a^t\mu+(\Sigma^{\frac{1}{2}}a)^tZ$.\\
+Since $Z$ has independent $N(0,1)$ coordinates, $(\Sigma^{\frac{1}{2}}a)^tZ\sim N(0,a^t\Sigma a)$, hence $a^tX\sim N(a^t\mu,a^t\Sigma a)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Marginals, conditionals, and linear projections of Gaussian vectors remain Gaussian.\\
+\hlt{Key Insight}: Gaussian calculus is affine calculus plus Schur complements.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:copulas-and-copula-densities} \hlt{Copulas}\\
+A \hlt{copula} is a joint CDF $C:[0,1]^2\to[0,1]$ with uniform marginals: $C(u,1)=u$ and $C(1,v)=v$ for $u,v\in[0,1]$.\\
+If $C\in C^2$, its \hlt{copula density} is $c(u,v)\defeq\partial_u\partial_vC(u,v)$.
+\end{definition}
+
+\begin{proposition} \label{prop:copula-density-construction} \hlt{Constructing a Joint Law from Marginals and a Copula}\\
+Let $F_X,F_Y$ be continuous CDFs with densities $f_X,f_Y$, and let $C$ be a copula.\\
+Define $F_{X,Y}(x,y)\defeq C(F_X(x),F_Y(y))$. Then $F_{X,Y}$ has marginals $F_X,F_Y$.\\
+If $C\in C^2$ with density $c=\partial_u\partial_vC$, then $f_{X,Y}(x,y)=c(F_X(x),F_Y(y))f_X(x)f_Y(y)$.
+\begin{proof} $F_{X,Y}(x,\infty)=C(F_X(x),1)=F_X(x)$ and $F_{X,Y}(\infty,y)=C(1,F_Y(y))=F_Y(y)$.\\
+If densities exist, $\partial_x\partial_y C(F_X(x),F_Y(y))=(\partial_u\partial_vC)(F_X(x),F_Y(y))f_X(x)f_Y(y)$ by the chain rule.\\
+\hlt{Structural Commentary}: Marginals and dependence are separated into $F_X,F_Y$ and $C$.\\
+\hlt{Key Insight}: Marginals alone do not determine a joint law; the copula supplies the dependence.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:farlie-morgenstern-copulas} \hlt{Farlie--Morgenstern Copulas}\\
+For $|\alpha|\leq1$, $C_\alpha(u,v)=uv\{1+\alpha(1-u)(1-v)\}$ is a copula with density $c_\alpha(u,v)=1+\alpha(1-2u)(1-2v)$.\\
+Here $\alpha=0$ gives the independence copula $uv$, while $\alpha=-1$ and $\alpha=1$ give densities $2u+2v-4uv$ and $2-2u-2v+4uv$ on $[0,1]^2$, respectively; all have uniform marginals.
+\end{example}
