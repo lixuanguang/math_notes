@@ -1,9 +1,32 @@
 \subsection{Uniform Continuity and Compactness}
 
 \begin{definition} \label{def:uniform-continuity} \hlt{Uniform Continuity}\\
-A mapping $f:X\to Y$ between metric spaces is \hlt{uniformly continuous} on $X$ if $\forall$ $\varepsilon>0$ $\exists$ $\delta>0$ such that $d_X(p,q)<\delta$ $\Longrightarrow$ $d_Y(f(p),f(q))<\varepsilon$ $\forall p,q\in X$. The same $\delta$ must work for every point of $X$.\\
+Let $(X,d_X)$ and $(Y,d_Y)$ be metric spaces, and let $f:X\to Y$.\\
+The map $f$ is \hlt{uniformly continuous} on $X$ if $\forall\varepsilon>0\,\exists\delta>0\,\forall p,q\in X$, $d_X(p,q)<\delta\Longrightarrow d_Y(f(p),f(q))<\varepsilon$.\\
 \hlt{Structural Commentary}: Uniform continuity is setwise: for each $\varepsilon$, one $\delta$ must work for all pairs in the set.
 \end{definition}
+
+\begin{definition} \label{def:lipschitz-map} \hlt{Lipschitz Map}\\
+Let $(X,d_X)$ and $(Y,d_Y)$ be metric spaces, let $f:X\to Y$, and let $L\geq0$.\\
+The map $f$ is \hlt{$L$-Lipschitz} if $\forall p,q\in X$, $d_Y(f(p),f(q))\leq Ld_X(p,q)$.\\
+It is \hlt{Lipschitz} if it is $L$-Lipschitz for some $L\geq0$.\\
+\hlt{Key Insight}: Lipschitz control is one global linear modulus of continuity.
+\end{definition}
+
+\begin{proposition} \label{prop:lipschitz-implies-uniform-continuity} \hlt{Lipschitz Implies Uniform Continuity}\\
+Every Lipschitz map between metric spaces is uniformly continuous, hence continuous.
+\begin{proof} Let $f$ be $L$-Lipschitz and let $\varepsilon>0$. If $L=0$, then $d_Y(f(p),f(q))=0$ for all $p,q\in X$.\\
+If $L>0$, take $\delta\defeq\varepsilon/L$; $d_X(p,q)<\delta$ implies $d_Y(f(p),f(q))\leq Ld_X(p,q)<\varepsilon$.\\
+Thus $f$ is uniformly continuous. Fixing one point gives continuity.\\
+\hlt{Structural Commentary}: A global Lipschitz bound gives a global modulus.\\
+\hlt{Key Insight}: One constant controls all pairs.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:square-root-continuous-not-lipschitz} \hlt{Continuous Need Not Be Lipschitz}\\
+On $[0,1]$, $f(x)=\sqrt{x}$ is continuous since $\abs{\sqrt{x}-\sqrt{y}}\leq\sqrt{\abs{x-y}}$.\\
+It is not Lipschitz: $L$-Lipschitz would imply $\sqrt{x}\leq Lx$ for $0<x\leq1$, i.e. $1/\sqrt{x}\leq L$, impossible as $x\downarrow0$.
+\end{example}
 
 \begin{proposition} \label{prop:uniform-continuity-sequential-test} \hlt{Sequential Test for Uniform Continuity}\\
 Let $X,Y$ be metric spaces and let $f:X\to Y$. The following are equivalent:
@@ -36,7 +59,8 @@ Thus $d_X(p_n,q_n)\to0$ but $d_Y(f(p_n),f(q_n))\not\to0$, contradicting (ii).
 If $f:X\to Y$ is continuous and $X$ is compact, then $f$ is uniformly continuous.
 \begin{proof}
 Let $\varepsilon>0$. For each $a\in X$, choose $r_a>0$ such that $d_X(x,a)<r_a$ implies $d_Y(f(x),f(a))<\varepsilon/2$.\\
-Compactness gives a finite cover $X\subseteq\bigcup_{i=1}^n B_{r_{a_i}/2}(a_i)$. Set $\delta\defeq\frac12\min_i r_{a_i}>0$. If $d_X(p,q)<\delta$ and $p\in B_{r_{a_i}/2}(a_i)$, then $d_X(q,a_i)<r_{a_i}$ also; hence $f(p)$ and $f(q)$ are each within $\varepsilon/2$ of $f(a_i)$. Thus $d_Y(f(p),f(q))<\varepsilon$.\\
+Compactness gives a finite cover $X\subseteq\bigcup_{i=1}^n B_{r_{a_i}/2}(a_i)$. Set $\delta\defeq\frac12\min_i r_{a_i}>0$.\\
+If $d_X(p,q)<\delta$ and $p\in B_{r_{a_i}/2}(a_i)$, then $d_X(q,a_i)<r_{a_i}$ also; hence $f(p)$ and $f(q)$ within $\varepsilon/2$ of $f(a_i)$. QED.\\
 \hlt{Structural Commentary}: Compactness converts pointwise radii into finitely many radii with positive minimum.\\
 \hlt{Key Insight}: Uniform continuity is continuity with the point-dependence removed by a finite subcover.
 \end{proof}
