@@ -1,27 +1,59 @@
 \subsection{Cantor-Lebesgue Singular Function Construction}
 
 \begin{definition} \label{def:cantor-lebesgue-singular-function-source} \hlt{Cantor--Lebesgue Singular Function}\\
-Let $P\subseteq[0,1]$ be the Cantor set. For $x=(0.c_1c_2\cdots)_3\in P$ with $c_k\in\{0,2\}$, set $\varphi(x)\defeq(0.(c_1/2)(c_2/2)\cdots)_2$.\\
-If $(a,b)$ is a component of $[0,1]\setminus P$, extend by $\varphi(x)\defeq\varphi(a)=\varphi(b)$ for $x\in(a,b)$.\\
+Let $P$ be the Cantor set. For $k\geq1$, let $I_{k,1},\ldots,I_{k,2^k-1}$ list, left to right, the components of the stage-$k$ removed set $U_k$. Set $U\defeq\bigcup_{k\geq1}U_k=[0,1]\setminus P$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $x\in U$, choose $k\geq1$ and $1\leq j\leq2^k-1$ with $x\in I_{k,j}$, and set $\varphi(x)\defeq\frac{j}{2^k}$.
+\item This value is independent of the chosen stage: if $I_{k,j}=I_{\ell,m}$ with $\ell\geq k$, then $m=2^{\ell-k}j$ and $\frac{m}{2^\ell}=\frac{j}{2^k}$.
+\item On $P$, set $\varphi(0)\defeq0$ and $\varphi(x)\defeq\sup\{\varphi(t):t\in U\cap[0,x]\}$ for $x\in P\setminus\{0\}$.
+\end{enumerate}
 The resulting $\varphi:[0,1]\to[0,1]$ is the \hlt{Cantor--Lebesgue singular function}.
 \end{definition}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/cantor_lebesgue_o3_plateaus.tikz}
+  \caption{Horizontal segments show the Cantor--Lebesgue plateaus on the intervals removed through stage $3$.}
+  \label{fig:cantor-lebesgue-o3-plateaus}
+\end{figure}
+
 \begin{proposition} \label{prop:cantor-singular-function-properties} \hlt{Properties of the Singular Function}\\
-Let $P\subseteq[0,1]$ be the Cantor set and let $\varphi:[0,1]\to[0,1]$ be the Cantor--Lebesgue singular function.\\
-Then $\varphi$ is continuous, nondecreasing, onto, nonconstant, and $\varphi'=0$ on $[0,1]\setminus P$.
-\begin{proof} On $P$, the digit map $\tau((0.c_1c_2\cdots)_3)\defeq(0.(c_1/2)(c_2/2)\cdots)_2$ is nondecreasing and onto $[0,1]$.\\
-The only duplications are endpoint pairs of removed middle-third intervals, where the binary values agree; constant extension across those intervals is therefore nondecreasing with no jumps, hence continuous.\\
-Each component of $[0,1]\setminus P$ is an interval of constancy, so $\varphi'=0$ there. Since $\varphi([0,1])=[0,1]$, $\varphi$ is nonconstant.\\
-\hlt{Structural Commentary}: Variation is confined to $P$; the range is $[0,1]$.\\
-\hlt{Key Insight}: Ternary $0/2$ digits are re-read as binary digits.
+Let $P$ be the Cantor set, $U\defeq[0,1]\setminus P$, and $\varphi:[0,1]\to[0,1]$ the Cantor--Lebesgue singular function. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\varphi$ is nondecreasing.
+\item $\varphi$ is continuous on $[0,1]$.
+\item $\varphi([0,1])=[0,1]$.
+\item $\varphi'(x)=0$ for every $x\in U$.
+\item $m(U)=1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item At each stage $k$, the components $I_{k,1},\ldots,I_{k,2^k-1}$ occur left to right and carry heights $\frac{1}{2^k},\ldots,\frac{2^k-1}{2^k}$.\\
+Thus the prescription on $U$ is nondecreasing, and the supremum extension on $P$ preserves order.
+\item If $x_0\in U$, then $x_0\in J$ for some component $J$ of $U$ and $\varphi|_J$ is constant. If $x_0\in P$, then for each $k$ there are $a_k,b_k\in2^{-k}\mathbb{Z}\cap[0,1]$ with $a_k\leq\varphi(x_0)\leq b_k$, $b_k-a_k\leq2^{-k}$, and $\varphi(y)\in[a_k,b_k]$ for all $y$ near $x_0$.\\
+Thus $\limsup_{y\to x_0}|\varphi(y)-\varphi(x_0)|\leq2^{-k}$ for every $k$, hence $\varphi$ is continuous at $x_0$.
+\item The definition gives $\varphi(0)=0$. For each $k$, the rightmost component of $U_k$ has height $1-2^{-k}$, so $\varphi(1)=1$.\\
+By (ii) and the intermediate value theorem, $\varphi([0,1])=[0,1]$.
+\item For each component $J$ of $U$, $\varphi|_J$ is constant; hence $\varphi'(x)=0$ for every $x\in U$.
+\item Proposition \ref{prop:finite-countable-cantor-null-sets} gives $m(P)=0$; since $[0,1]=P\sqcup U$, $m(U)=m([0,1])-m(P)=1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Plateaus on $U$ force variation onto $P$.\\
+\hlt{Key Insight}: At stage $k$, neighboring plateau heights differ by $2^{-k}$.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:lebesgue-measurable-non-borel-set-exists} \hlt{Lebesgue Measurable Non-Borel Sets Exist}\\
-There exist $A\in\mathcal{L}^1\setminus\mathcal{B}(\R)$ and a homeomorphism $\psi:[0,1]\to[0,2]$ such that $\psi(A)\notin\mathcal{L}^1$.
-\begin{proof} Let $\psi(x)\defeq x+\varphi(x)$, where $\varphi$ is the Cantor--Lebesgue singular function. Since $\varphi$ is continuous and nondecreasing, $\psi$ is continuous, strictly increasing, maps $[0,1]$ onto $[0,2]$, and hence is a homeomorphism.\\
-Let $P$ be the Cantor set and $U\defeq[0,1]\setminus P$. On each component $I$ of $U$, $\varphi$ is constant, so $m(\psi(I))=m(I)$; the intervals $\psi(I)$ are disjoint. Hence $m(\psi(U))=m(U)=1$.\\
-Since $[0,2]=\psi(P)\sqcup\psi(U)$ and $\psi(P)$ is compact, $m(\psi(P))=1$. Choose $W\subseteq\psi(P)$ with $W\notin\mathcal{L}^1$, and set $A\defeq\psi^{-1}(W)\subseteq P$. Since $m(P)=0$, $A\in\mathcal{L}^1$. If $A\in\mathcal{B}(\R)$, then $W=\psi(A)$ is Borel in $[0,2]$, hence Lebesgue measurable, contradiction. Thus $A\in\mathcal{L}^1\setminus\mathcal{B}(\R)$ and $\psi(A)=W\notin\mathcal{L}^1$.\\
+There exist $A\subseteq[0,1]$ and a homeomorphism $\psi:[0,1]\to[0,2]$ such that $A\in\mathcal{L}^1\setminus\mathcal{B}(\R)$ and $\psi(A)\notin\mathcal{L}^1$.
+\begin{proof} Let $P$ be the Cantor set, $U\defeq[0,1]\setminus P$, $\varphi$ the Cantor--Lebesgue singular function, and $\psi\defeq\operatorname{id}_{[0,1]}+\varphi$.\\
+Proposition \ref{prop:cantor-singular-function-properties} gives $\varphi$ continuous and nondecreasing; hence $\psi$ is continuous and strictly increasing.\\
+Since $\psi(0)=0$ and $\psi(1)=2$, $\psi:[0,1]\to[0,2]$ is a homeomorphism.\\
+Let $(J_k)_{k\geq1}$ be the components of $U$. Since $\varphi|_{J_k}$ is constant, $\psi(J_k)$ is a translate of $J_k$ and $m(\psi(J_k))=m(J_k)$.\\
+Thus $m(\psi(U))=\sum\limits_{k\geq1}m(\psi(J_k))=\sum\limits_{k\geq1}m(J_k)=m(U)=1$.\\
+Since $\psi(P)$ is compact and $[0,2]=\psi(P)\sqcup\psi(U)$, $m(\psi(P))=1$.\\
+Choose $W\subseteq\psi(P)$ with $W\notin\mathcal{L}^1$ by Theorem \ref{thm:positive-outer-measure-contains-nonmeasurable-subset}, and set $A\defeq\psi^{-1}(W)$. Then $A\subseteq P$ and $m(P)=0$, so $A\in\mathcal{L}^1$. If $A\in\mathcal{B}(\R)$, then $W=\psi(A)\in\mathcal{B}([0,2])\subseteq\mathcal{L}^1$, contradiction. Hence $A\in\mathcal{L}^1\setminus\mathcal{B}(\R)$ and $\psi(A)=W\notin\mathcal{L}^1$.\\
 \hlt{Structural Commentary}: Completion by null sets creates Lebesgue sets invisible to the Borel hierarchy.\\
 \hlt{Key Insight}: A null Cantor set can be homeomorphically stretched to positive measure.
 \end{proof}
