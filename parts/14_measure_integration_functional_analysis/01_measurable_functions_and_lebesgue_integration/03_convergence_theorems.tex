@@ -28,15 +28,44 @@ By Theorem \ref{thm:monotone-convergence-integral}, $\int_Ef\,d\mu=\lim\limits_{
 \end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:fatou-lemma} \hlt{Fatou's Lemma}\\
-Let $E\in\mathcal{M}$ and let $f_n\geq0$ be measurable. Then $\int_E\liminf_{n\to\infty}f_n\,d\mu\leq\liminf_{n\to\infty}\int_Ef_n\,d\mu$
+\begin{corollary} \label{cor:beppo-levi-bounded-integral-criterion} \hlt{Beppo Levi Bounded-Integral Criterion}\\
+Let $E\in\mathcal{M}$, let $(f_n)$ be measurable on $E$, and assume $0\leq f_n\uparrow f$ with $\sup_n\int_Ef_n\,d\mu<+\infty$.\\
+Then $f<+\infty$ a.e. on $E$ and $\int_Ef\,d\mu=\lim_n\int_Ef_n\,d\mu<+\infty$.
 \begin{proof}
-Set $g_n\defeq\inf_{i\geq n}f_i$. Then $0\leq g_n\uparrow\liminf_i f_i$ and, for every $i\geq n$, $g_n\leq f_i$.\\
-Hence $\int_Eg_n\,d\mu\leq\inf_{i\geq n}\int_Ef_i\,d\mu$. By Theorem \ref{thm:monotone-convergence-integral}, let $n\to\infty$ to obtain the claim.\\
-\hlt{Structural Commentary}: Fatou compares the liminf to tail lower envelopes.\\
-\hlt{Key Insight}: Apply monotone convergence to $g_n=\inf_{i\geq n}f_i$.
+The monotone limit $f$ is measurable, and Theorem \ref{thm:monotone-convergence-integral} gives\\
+$\int_Ef\,d\mu=\lim_n\int_Ef_n\,d\mu\leq\sup_n\int_Ef_n\,d\mu<+\infty$. Corollary \ref{cor:integral-null-and-finite-ae-consequences} gives $f<+\infty$ a.e. on $E$.\\
+\hlt{Structural Commentary}: Bounded mass survives monotone limits.\\
+\hlt{Key Insight}: Finite nonnegative integral forces a.e. finiteness.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:fatou-lemma} \hlt{Fatou's Lemma}\\
+Let $E\in\mathcal{M}$ and let $f_n:E\to[0,+\infty]$ be measurable. Then $\int_E\liminf_nf_n\,d\mu\leq\liminf_n\int_Ef_n\,d\mu$.
+\begin{proof} Set $g_n\defeq\inf_{i\geq n}f_i$. Then $0\leq g_n\uparrow\liminf_if_i$ and $g_n\leq f_i$ for all $i\geq n$, so $\int_Eg_n\,d\mu\leq\inf_{i\geq n}\int_Ef_i\,d\mu$.\\
+By Theorem \ref{thm:monotone-convergence-integral}, $\int_E\liminf_if_i\,d\mu=\lim_n\int_Eg_n\,d\mu\leq\lim_n\inf_{i\geq n}\int_Ef_i\,d\mu=\liminf_n\int_Ef_n\,d\mu$.\\
+\hlt{Structural Commentary}: Replace $\liminf$ by increasing tail infima.\\
+\hlt{Key Insight}: Tail infima are monotone minorants.
 \end{proof}
 \end{theorem}
+
+\begin{example} \label{ex:fatou-strict-concentration-and-escape} \hlt{Strictness in Fatou's Lemma}\\
+Fatou's inequality can be strict by concentration or escape of mass.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Concentration}: On $E=(0,1)$ with Lebesgue measure $m$, set $f_n\defeq n\mathbf{1}_{(0,1/n)}$.\\
+Then $f_n\to0$ pointwise and $\int_Ef_n\,dm=1$ for all $n$.
+\item \hlt{Escape}: On $E=\R$ with Lebesgue measure $m$, set $g_n\defeq\mathbf{1}_{(n,n+1)}$.\\
+Then $g_n\to0$ pointwise and $\int_Eg_n\,dm=1$ for all $n$.
+\end{enumerate}
+In either case, with $h_n=f_n$ or $h_n=g_n$, $\int_E\liminf_nh_n\,dm=0<1=\liminf_n\int_Eh_n\,dm$.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/fatou_concentration_escape.tikz}
+  \caption{Strict Fatou behavior: \textcolor{blue!65!black}{concentration} $f_n=n\mathbf{1}_{(0,1/n)}$ and \textcolor{green!45!black}{escape} $g_n=\mathbf{1}_{(n,n+1)}$ both have integral $1$ while pointwise limits vanish.}
+  \label{fig:fatou-concentration-escape}
+\end{figure}
 
 \begin{theorem} \label{thm:dominated-convergence-lebesgue} \hlt{Dominated Convergence}\\
 Let $E\in\mathcal{M}$, $f_n$ measurable, $f_n\to f$ a.e. on $E$, and $\abs{f_n}\leq g\in\mathscr{L}^1(\mu)$ on $E$.\\
@@ -44,9 +73,24 @@ Then $f\in\mathscr{L}^1(\mu)$ on $E$ and $\lim_{n\to\infty}\int_Ef_n\,d\mu=\int_
 \begin{proof}
 Choose $N\subseteq E$ null such that $f_n\to f$ on $E\setminus N$; replacing all functions by their restrictions off $N$ does not change integrals. Thus assume $f_n\to f$ everywhere. Then $\abs{f}\leq g$, so $f\in\mathscr{L}^1(\mu)$. Put $a_n\defeq\int_Ef_n\,d\mu$.\\
 For $g+f_n\geq0$, by Fatou, $\int_E(g+f)\,d\mu\leq\liminf_n\int_E(g+f_n)\,d\mu =\int_Eg\,d\mu+\liminf_na_n$; $\int_Ef\,d\mu\leq\liminf_na_n$.\\
-For $g-f_n\geq0$, by Fautou, $\int_E(g-f)\,d\mu\leq\liminf_n\int_E(g-f_n)\,d\mu=\int_Eg\,d\mu-\limsup_na_n$; $\limsup_na_n\leq\int_Ef\,d\mu$. Thus $\liminf_na_n=\limsup_na_n=\int_Ef\,d\mu$.\\
+For $g-f_n\geq0$, by Fatou, $\int_E(g-f)\,d\mu\leq\liminf_n\int_E(g-f_n)\,d\mu=\int_Eg\,d\mu-\limsup_na_n$; $\limsup_na_n\leq\int_Ef\,d\mu$. Thus $\liminf_na_n=\limsup_na_n=\int_Ef\,d\mu$.\\
 \hlt{Structural Commentary}: Domination turns signed convergence into two Fatou inequalities.\\
 \hlt{Key Insight}: Apply Fatou to $g+f_n$ and $g-f_n$ to trap liminf and limsup.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:general-dominated-convergence-lebesgue} \hlt{General Dominated Convergence}\\
+Let $E\in\mathcal{M}$, let $f_n$ be measurable on $E$, and let $g_n\geq0$ be integrable on $E$.\\
+Suppose $f_n\to f$ a.e., $g_n\to g$ a.e., $\abs{f_n}\leq g_n$ a.e. for all $n$, and $\lim_n\int_Eg_n\,d\mu=\int_Eg\,d\mu<+\infty$.\\
+Then $f\in\mathscr{L}^1(\mu)$ on $E$ and $\int_Ef_n\,d\mu\to\int_Ef\,d\mu$.
+\begin{proof} Modify on one null set so $f_n\to f$, $g_n\to g$, and $\abs{f_n}\leq g_n$ hold on $E$.\\
+Then $\abs f\leq g$, $\int_Eg\,d\mu<+\infty$, and domination gives $f,f_n\in\mathscr{L}^1(\mu)$ on $E$.\\
+Set $a_n\defeq\int_Ef_n\,d\mu$ and $b_n\defeq\int_Eg_n\,d\mu$, so $b_n\to b\defeq\int_Eg\,d\mu$.\\
+Fatou on $g_n+f_n\geq0$ gives $b+\int_Ef\,d\mu\leq b+\liminf_na_n$.\\
+Fatou on $g_n-f_n\geq0$ gives $b-\int_Ef\,d\mu\leq b-\limsup_na_n$.\\
+Thus $\limsup_na_n\leq\int_Ef\,d\mu\leq\liminf_na_n$, so $a_n\to\int_Ef\,d\mu$.\\
+\hlt{Structural Commentary}: Varying domination works when masses converge.\\
+\hlt{Key Insight}: Fatou on $g_n\pm f_n$ traps the limit.
 \end{proof}
 \end{theorem}
 
@@ -77,7 +121,7 @@ On $([0,+\infty),\mathcal{B},m)$:
 \end{example}
 
 \begin{theorem} \label{thm:fatou-with-integrable-lower-bound} \hlt{Fatou with an Integrable Lower Bound}\\
-Let $h\geq0$, $h\in\mathscr{L}^1(\mu)$, and let $f_n$ be measurable with $f_n\geq-h$.\\\
+Let $h\geq0$, $h\in\mathscr{L}^1(\mu)$, and let $f_n$ be measurable with $f_n\geq-h$.\\
 Then, whenever the signed integrals are defined in $\overline{\R}$, $\int \liminf\limits_{n\to\infty} f_n\,d\mu\leq\liminf\limits_{n\to\infty}\int f_n\,d\mu$.
 \begin{proof}
 Set $F_n\defeq f_n+h\geq0$. Fatou gives $\int \liminf\limits_nF_n\,d\mu\leq\liminf\limits_n\int F_n\,d\mu$.\\
@@ -123,6 +167,15 @@ $\abs{\int_Xf_n\,d\mu-\int_Xf\,d\mu}\leq\int_X\abs{f_n-f}\,d\mu\leq\mu(X)\sup_X\
 \hlt{Key Insight}: Finiteness of $\mu(X)$ turns a supremum bound into an integral bound.
 \end{proof}
 \end{proposition}
+
+\begin{theorem} \label{thm:bounded-convergence-finite-measure} \hlt{Bounded Convergence on Finite Measure Spaces}\\
+Let $\mu(X)<+\infty$, let $f_n:X\to\R$ be measurable, and assume $f_n\to f$ a.e. and $\abs{f_n}\leq M$ a.e. for all $n$ and some $M<+\infty$. Then $f\in\mathscr{L}^1(\mu)$ and $\int_Xf_n\,d\mu\to\int_Xf\,d\mu$.
+\begin{proof}
+Since $\abs{f_n}\leq M$ a.e. and $f_n\to f$ a.e., $\abs f\leq M$ a.e. Set $G\defeq M\mathbf{1}_X\in\mathscr{L}^1(\mu)$, because $\mu(X)<+\infty$. Dominated convergence with $\abs{f_n}\leq G$ gives $f\in\mathscr{L}^1(\mu)$ and $\int_Xf_n\,d\mu\to\int_Xf\,d\mu$.\\
+\hlt{Structural Commentary}: On a finite-measure space, a uniform pointwise bound is an integrable dominator.\\
+\hlt{Key Insight}: Bounded convergence is the finite-measure special case of dominated convergence.
+\end{proof}
+\end{theorem}
 
 \begin{example} \label{ex:uniform-convergence-needs-finite-measure} \hlt{Why the Finite-Measure Hypothesis Matters}\\
 On $(\R,m)$, let $f_n\defeq n^{-1}\mathbf{1}_{[0,n]}$. Then $\norm{f_n}_\infty=1/n\to0$, but $\int_\R f_n\,dm=1$ $\forall n$.\\
