@@ -1,8 +1,20 @@
-# Structure Reference
+# Structure Migration Reference
 
 The canonical LaTeX source tree is `parts/`, and `math.tex` inputs that tree
 directly. This file is a maintenance reference for placement, ownership, and
 structural checks.
+
+## Migration Status
+
+The LaTeX structure migration is complete.
+
+- `parts/` is the canonical LaTeX source tree.
+- `math.tex` should input `parts/` files only.
+- The former repo-level LaTeX `sections/` tree is retired and should not be
+  recreated.
+- `MathNotes/sections/` contains legacy Lean modules only; it is not a LaTeX
+  source tree.
+- New mirrored Lean stubs should live under `MathNotes/parts/`.
 
 ## Source Layout
 
@@ -65,9 +77,34 @@ The active include order in `math.tex` is:
   same change.
 - Keep LeanBlueprint markers in the LaTeX environment they document.
 
-For content-moving work, make one coherent mathematical move at a time, preserve
+## Placement Workflow
+
+When adding or moving material:
+
+1. Pick the likely owner from the ownership table.
+2. Open that part's `overview.tex` and the relevant section `overview.tex`.
+3. Inspect nearby numbered subsection files before creating a new file.
+4. Extend the existing natural owner when one exists.
+5. If a new numbered subsection file is needed, add the next number in that
+   section folder and add one matching `\input{...}` to the section
+   `overview.tex`.
+6. If a new section folder is needed, add its `overview.tex`, add the section
+   input to the part `overview.tex`, and keep the ordering local and
+   mathematical rather than alphabetical by default.
+7. After adding a new `.tex` file under `parts/`, run the Lean scaffolding
+   command in the Lean section if a mirrored Lean stub is expected.
+
+## Content Moves
+
+For content-moving work, make one coherent mathematical move at a time. Preserve
 labels and mathematical content unless rewriting is explicitly requested, update
 only affected inputs, and validate before removing the old included source.
+
+Before deleting or retiring a source file, confirm it is no longer included by
+`math.tex`, a part `overview.tex`, a section `overview.tex`, or
+`blueprint/src/content.tex`.
+
+## Formalization Loop
 
 For formalization-loop work, process one logical unit at a time: either the
 substantive body of a section `overview.tex`, or one numbered subsection file.
@@ -317,7 +354,11 @@ The scaffolding script creates only missing mirrored stubs and regenerates
 `MathNotes.lean`. Existing modules under `MathNotes/sections/` are legacy Lean
 formalization modules, not LaTeX source.
 
+Lean filenames mirror the `.tex` filenames on disk. Numbered path components are
+escaped in Lean import names with guillemets, as described in `LEAN.md`.
+
 Use `LEAN.md` for Lean setup, escaped import names, and LeanBlueprint commands.
+Use `blueprint/README.md` for the LeanBlueprint web/check workflow.
 
 ## Validation
 
@@ -326,5 +367,10 @@ Run the relevant checks after structural edits:
 ```sh
 pdflatex -recorder -interaction=nonstopmode -halt-on-error math.tex
 lake build
-rg -n '^\\subsubsection|^\\paragraph' math.tex parts
+rg -n "\\\\input\\{sections/|sections/" math.tex parts references.tex blueprint/src
+rg -n "\\\\subsubsection|\\\\paragraph" parts
 ```
+
+For bibliography-affecting edits, use the full LaTeX/BibTeX sequence from
+`README.md`. For LeanBlueprint-affecting edits, run the relevant commands from
+`blueprint/README.md` after `lake build`.
