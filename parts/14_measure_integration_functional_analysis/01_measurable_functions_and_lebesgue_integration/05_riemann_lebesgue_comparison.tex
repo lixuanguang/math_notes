@@ -1,26 +1,61 @@
 \subsection{Riemann-Lebesgue Comparison}
 
-\begin{theorem} \label{thm:riemann-lebesgue-comparison} \hlt{Comparison with the Riemann Integral}\\
-On $[a,b]$ with Lebesgue measure $\mu$, $f\in\mathcal{R}$ implies $f\in\mathscr{L}^1(\mu)$ and the integrals agree.\\
-If $f$ is bounded with discontinuity set $D$, then $f\in\mathcal{R}\iff\mu(D)=0$.
-\begin{proof}
-For refining partitions, let $L_n\uparrow L$ and $U_n\downarrow U$ be lower and upper step envelopes.\\
-Monotone convergence identifies $\int L$ and $\int U$ with the lower and upper Riemann integrals; if $f\in\mathcal{R}$, then $L=U$ a.e., so the common Lebesgue integral equals the Riemann integral.\\
-For bounded $f$, put $\omega_f(x)\defeq \lim_{r\downarrow0}\diam f\bigl([a,b]\cap(x-r,x+r)\bigr)$, where $D_k\defeq\{x:\omega_f(x)\geq1/k\}$.\\
-Then $f$ is continuous at $x$ iff $\omega_f(x)=0$, and its discontinuity set is $D=\bigcup_{k\geq1}D_k$.
-\begin{enumerate}[label=\roman*.]
+\begin{lemma} \label{lem:monotone-integrable-squeeze} \hlt{Monotone Integral Squeeze}\\
+Let $E\in\mathcal{M}$, let $(\varphi_n),(\psi_n)\subseteq\mathscr{L}^1(\mu)$ on $E$, and let $f:E\to\R$ satisfy $\varphi_n\uparrow$, $\psi_n\downarrow$, $\varphi_n\leq f\leq\psi_n$ on $E$, and $\int_E(\psi_n-\varphi_n)\,d\mu\to0$. Set $\varphi\defeq\lim_n\varphi_n$ and $\psi\defeq\lim_n\psi_n$. Then:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Fix $k$ and $\varepsilon>0$. Choose $P$ with $U(P,f)-L(P,f)<\varepsilon/k$.\\
-Intervals of $P$ whose interiors meet $D_k$ have total length $<\varepsilon$; adding the finitely many partition points, null by Proposition \ref{prop:finite-countable-cantor-null-sets}, covers $D_k$ by arbitrarily short intervals.\\
-Thus $\mu(D_k)=0$ by Definition \ref{def:null-sets-and-real-line-measure-zero}, and $\mu(D)=0$.
-\item[$(\Leftarrow)$] Suppose $\mu(D)=0$ and $\abs{f}\leq B$. If $B=0$, there is nothing to prove. Given $\varepsilon>0$, choose $k$ with $(b-a)/k<\varepsilon/2$ and cover $D_k$ by intervals of total length $<\varepsilon/(4B)$.\\
-On the compact complement, $\omega_f<1/k$, so a finite refinement makes the good intervals contribute $<\varepsilon/2$ to $U-L$; the covered intervals contribute $<2B\cdot\varepsilon/(4B)=\varepsilon/2$.\\
-Hence $U(P,f)-L(P,f)<\varepsilon$, and Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with $\alpha(x)=x$ gives $f\in\mathcal{R}$.
+\item $\varphi=\psi$ a.e. on $E$.
+\item For $h\defeq\varphi=\psi$ a.e., $f=h$ a.e., $h\in\mathscr{L}^1(\mu)$ on $E$, and $\int_E\varphi_n\,d\mu,\int_E\psi_n\,d\mu\to\int_Eh\,d\mu$.
 \end{enumerate}
-\hlt{Structural Commentary}: Darboux gap measures oscillation sets.\\
-\hlt{Key Insight}: Lebesgue measure turns ``bad discontinuities'' into a null-set condition.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The limits $\varphi,\psi$ are measurable and $\varphi\leq f\leq\psi$.\\
+Since $0\leq\psi-\varphi\leq\psi_n-\varphi_n$, $0\leq\int_E(\psi-\varphi)\,d\mu\leq\int_E(\psi_n-\varphi_n)\,d\mu\to0$; hence $\psi=\varphi$ a.e.
+\item Let $h$ be the common a.e. value from (i). Then $f=h$ a.e. and $\abs h\leq\abs{\varphi_1}+\abs{\psi_1}$ a.e., so $h\in\mathscr{L}^1(\mu)$ on $E$.\\
+By MCT on $\varphi_n-\varphi_1\uparrow h-\varphi_1$ and $\psi_1-\psi_n\uparrow\psi_1-h$ and $\int_E\varphi_n\,d\mu,\int_E\psi_n\,d\mu\to\int_Eh\,d\mu$.
+\end{enumerate}
+\hlt{Structural Commentary}: Vanishing gaps collapse monotone envelopes.\\
+\hlt{Key Insight}: Integral gaps force the two monotone limits to coincide a.e.
+\end{proof}
+\end{lemma}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/lebesgue_step_squeeze.tikz}
+  \caption{Step envelopes squeeze $f$ to a common a.e. limit.}
+  \label{fig:lebesgue-step-squeeze}
+\end{figure}
+
+\begin{theorem} \label{thm:riemann-lebesgue-comparison} \hlt{Comparison with the Riemann Integral}\\
+Let $m$ be Lebesgue measure on $[a,b]$ and let $f:[a,b]\to\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\in\mathcal{R}[a,b]$, then $f\in\mathscr{L}^1(m)$ and $\int_{[a,b]}f\,dm=\int_a^bf(x)\,dx$.
+\item If $f$ is bounded with discontinuity set $D_f$, then $f\in\mathcal{R}[a,b]\Longleftrightarrow m(D_f)=0$.
+\end{enumerate}
+\begin{proof} For bounded $f$, set $\omega_f(x)\defeq\lim\limits_{r\downarrow0}\diam f([a,b]\cap(x-r,x+r))$, $D_k\defeq\{x:\omega_f(x)\geq\frac{1}{k}\}$; then $D_f=\bigcup\limits_{k\geq1}D_k$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Choose nested partitions $P_n$ with $U(P_n,f)-L(P_n,f)\to0$, and let $\varphi_n,\psi_n$ be the lower and upper step envelopes. Lemma \ref{lem:monotone-integrable-squeeze} gives $f\in\mathscr{L}^1(m)$ and $\int_{[a,b]}f\,dm=\lim\limits_nL(P_n,f)=\lim\limits_nU(P_n,f)=\int_a^bf(x)\,dx$.
+\item[$(ii)$] ($\Rightarrow$) Fix $k$ and $\varepsilon>0$. Choose $P$ with $U(P,f)-L(P,f)<\frac{\varepsilon}{k}$. If $\mathcal{B}\defeq\{I\in P:\operatorname{int}I\cap D_k\neq\emptyset\}$.\\
+Then $\frac{1}{k}\sum\limits_{I\in\mathcal{B}}\ell(I)\leq U(P,f)-L(P,f)$, so $\sum\limits_{I\in\mathcal{B}}\ell(I)<\varepsilon$.\\
+These intervals plus the partition points cover $D_k$; hence $m(D_k)=0$ and $m(D_f)=0$.
+\item[$(ii)$] ($\Leftarrow$) Suppose $m(D_f)=0$ and $\abs f\leq B$. If $B=0$, $f\in\mathcal{R}[a,b]$. For $B>0$ and $\varepsilon>0$, choose $k$ with $\frac{b-a}{k}<\frac{\varepsilon}{2}$ and cover the compact null set $D_k$ by finitely many intervals of total length $<\frac{\varepsilon}{4B}$.\\
+Refining by this cover gives $U(P,f)-L(P,f)<\frac{b-a}{k}+\frac{\varepsilon}{2}<\varepsilon$, hence $f\in\mathcal{R}[a,b]$.
+\end{enumerate}
+\hlt{Structural Commentary}: Darboux gaps measure oscillation.\\
+\hlt{Key Insight}: Riemann failure is positive-measure discontinuity.
 \end{proof}
 \end{theorem}
+
+\begin{example} \label{ex:dirichlet-function-lebesgue-not-riemann} \hlt{Dirichlet Function: Lebesgue but Not Riemann}\\
+Let $D\defeq\mathbf{1}_{\Q\cap[0,1]}$. Since $\Q\cap[0,1]$ is countable, $D=0$ a.e. on $[0,1]$, so $\int_{[0,1]}D\,dm=0$.\\
+Every nondegenerate subinterval $I\subseteq[0,1]$ meets both $\Q$ and $\R\setminus\Q$, hence $\inf_ID=0$ and $\sup_ID=1$.\\
+Thus all lower Darboux sums are $0$, all upper Darboux sums are $1$, and $D$ is not Riemann integrable.\\
+\hlt{Structural Commentary}: Null support, dense oscillation.\\
+\hlt{Key Insight}: A dense null set can be harmless for Lebesgue integration and fatal for Riemann integration.
+\end{example}
 
 \begin{corollary} \label{cor:riemann-integrable-monotone-step-approximation} \hlt{Riemann Integrable Functions as Monotone Step Limits}\\
 Let $f:[a,b]\to\R$ be Riemann integrable. Then $\exists$ step functions $(\varphi_n),(\psi_n)$ such that
@@ -36,8 +71,7 @@ Let $f:[a,b]\to\R$ be Riemann integrable. Then $\exists$ step functions $(\varph
 \item Choose nested partitions $P_n$ with $\max_{I\in P_n}\ell(I)\to0$ and $U(P_n,f)-L(P_n,f)\to0$.\\
 Let $\varphi_n,\psi_n$ be the lower and upper step envelopes on $P_n$; refinement gives $\varphi_n\uparrow$, $\psi_n\downarrow$, and $\varphi_n\leq f\leq\psi_n$.
 \item Since $\int_a^b\varphi_n\,dx=L(P_n,f)$ and $\int_a^b\psi_n\,dx=U(P_n,f)$, by Darboux gap condition, both limits equal $\int_a^bf\,dx$.
-\item If $x\notin D_f$, then $\max_{I\in P_n}\ell(I)\to0$ forces $\varphi_n(x),\psi_n(x)\to f(x)$.\\
-Since $m(D_f)=0$, convergence holds a.e.; hence $f$ is measurable and $\int_{[a,b]}f\,dm=\int_a^bf\,dx$.
+\item Lemma \ref{lem:monotone-integrable-squeeze} gives $h\in\mathscr{L}^1(m)$ with $h=f$ a.e., $\varphi_n,\psi_n\to h$ a.e., and $\int_{[a,b]}h\,dm=\lim\limits_n\int_a^b\varphi_n\,dx=\int_a^bf\,dx$.
 \end{enumerate}
 \hlt{Structural Commentary}: Riemann integrability is monotone step squeezing.\\
 \hlt{Key Insight}: Refining partitions make Darboux sums into pointwise a.e. step approximations.

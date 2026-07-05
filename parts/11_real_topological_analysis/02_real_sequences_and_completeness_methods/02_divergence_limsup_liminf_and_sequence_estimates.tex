@@ -1,19 +1,45 @@
 \subsection{Divergence, Upper and Lower Limits, and Sequence Estimates}
 
 \begin{definition} \label{def:sequence-diverges-to-infinity} \hlt{Divergence to $\pm\infty$}\\
-For a real sequence $(s_n)$,
-\begin{align}
-s_n\to+\infty &\iff \forall M\in\R,\ \exists N\in\N:\ n\geq N\Rightarrow s_n\geq M, \nonumber\\
-s_n\to-\infty &\iff \forall M\in\R,\ \exists N\in\N:\ n\geq N\Rightarrow s_n\leq M. \nonumber
-\end{align}
-This extends $\to$ notation for divergent real sequences; Definition \ref{def:real-complex-sequence-convergence} is unchanged.
+Let $s:\N\to\R$ and write $s_n\defeq s(n)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $s_n\to+\infty$ iff $\forall M\in\R,\ \exists N\in\N,\ \forall n\in\N,\ n\geq N\Rightarrow s_n\geq M$.
+\item $s_n\to-\infty$ iff $\forall M\in\R,\ \exists N\in\N,\ \forall n\in\N,\ n\geq N\Rightarrow s_n\leq M$.
+\end{enumerate}
 \end{definition}
+
+\begin{proposition} \label{prop:monotone-sequence-extended-limit} \hlt{Monotone Sequences Have Extended Limits}\\
+Let $(s_n)$ be a real sequence.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $(s_n)$ is increasing, then $s_n\to\sup\{s_n:n\in\N\}$ in $\overline{\R}$.
+\item If $(s_n)$ is decreasing, then $s_n\to\inf\{s_n:n\in\N\}$ in $\overline{\R}$.
+\end{enumerate}
+Thus a monotone real sequence has a finite limit exactly when it is bounded.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Assume $(s_n)$ is increasing and set $a\defeq\sup\{s_n:n\in\N\}\in\overline{\R}$. If $a\in\R$, then for every $\varepsilon>0$ there is $N\in\N$ with $a-\varepsilon<s_N\leq a$, and $n\geq N$ implies $a-\varepsilon<s_n\leq a$, so $s_n\to a$. If $a=+\infty$, then for every $M\in\R$ there is $N\in\N$ with $s_N\geq M$, and $n\geq N$ implies $s_n\geq M$, so $s_n\to+\infty$.
+\item Assume $(s_n)$ is decreasing and set $b\defeq\inf\{s_n:n\in\N\}\in\overline{\R}$. If $b\in\R$, then for every $\varepsilon>0$ there is $N\in\N$ with $b\leq s_N<b+\varepsilon$, and $n\geq N$ implies $b\leq s_n\leq s_N<b+\varepsilon$, so $s_n\to b$. If $b=-\infty$, then for every $M\in\R$ there is $N\in\N$ with $s_N\leq M$, and $n\geq N$ implies $s_n\leq M$, so $s_n\to-\infty$.
+\end{enumerate}
+In (i), $a\in\R$ iff $(s_n)$ is bounded; in (ii), $b\in\R$ iff $(s_n)$ is bounded.\\
+Thus the extended limit is finite exactly when $(s_n)$ is bounded.\\
+\hlt{Structural Commentary}: Monotone tails have one endpoint in $\overline{\R}$.\\
+\hlt{Key Insight}: Finite endpoints give $\varepsilon$-traps; infinite endpoints give threshold tails.
+\end{proof}
+\end{proposition}
 
 \begin{proposition} \label{prop:unbounded-real-sequence-has-infinite-subsequence} \hlt{Unbounded Real Sequences Have Infinite Subsequences}\\
 A real sequence is unbounded iff some subsequence tends to $+\infty$ or $-\infty$.
 \begin{proof}
-Set $n_0=0$. If $(s_n)$ is unbounded above, every tail is unbounded above, so choose $n_k>n_{k-1}$ with $s_{n_k}\geq k$; then $s_{n_k}\to+\infty$. The unbounded-below case similarly gives $s_{n_k}\leq-k$, hence $s_{n_k}\to-\infty$.\\
-Conversely, a subsequence tending to $\pm\infty$ is unbounded, so $(s_n)$ is unbounded.\\
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $(s_n)$ is unbounded above, every tail is unbounded above; with $n_0\defeq0$, choose $n_k>n_{k-1}$ with $s_{n_k}\geq k$, hence $s_{n_k}\to+\infty$. If $(s_n)$ is unbounded below, every tail is unbounded below.\\
+With $n_0\defeq0$, choose $n_k>n_{k-1}$ with $s_{n_k}\leq-k$, hence $s_{n_k}\to-\infty$.
+\item[$(\Leftarrow)$] If $s_{n_k}\to+\infty$, then for every $M\in\R$ some $k$ satisfies $s_{n_k}\geq M$, so $(s_n)$ is unbounded above.\\
+If $s_{n_k}\to-\infty$, then for every $M\in\R$ some $k$ satisfies $s_{n_k}\leq M$, so $(s_n)$ is unbounded below.
+\end{enumerate}
 \hlt{Structural Commentary}: Unbounded tails supply the thresholds $\pm k$.\\
 \hlt{Key Insight}: Large late terms form a divergent subsequence.
 \end{proof}
@@ -27,27 +53,31 @@ Conversely, a subsequence tending to $\pm\infty$ is unbounded, so $(s_n)$ is unb
 \end{figure}
 
 \begin{definition} \label{def:upper-and-lower-limits} \hlt{Upper and Lower Limits}\\
-For real sequence $(s_n)$, let $E\defeq\{x\in\overline{\R}:\exists\, n_1<n_2<\cdots,\ s_{n_k}\to x\}$, allowing $x=\pm\infty$.\\
-Set $s^*\defeq\sup E$ and $s_*\defeq\inf E$; equivalently, $\limsup_{n\to\infty}s_n=s^*$ and $\liminf_{n\to\infty}s_n=s_*$.
+Let $(s_n)$ be a real sequence and set $E\defeq E(s)\defeq\{x\in\overline{\R}:\exists\, n_1<n_2<\cdots,\ s_{n_k}\to x\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{upper limit} of $(s_n)$ is $\limsup_{n\to\infty}s_n\defeq s^*\defeq\sup_{\overline{\R}}E$.
+\item The \hlt{lower limit} of $(s_n)$ is $\liminf_{n\to\infty}s_n\defeq s_*\defeq\inf_{\overline{\R}}E$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:limsup-characterization} \hlt{Characterization of the Upper Limit}\\
-Let $(s_n)$ be a real sequence, and let $E,s^*,s_*$ be as in Definition \ref{def:upper-and-lower-limits}. Then:
+Let $(s_n)$ be real sequence. Set $E\defeq\{x\in\overline{\R}:\exists\, n_1<n_2<\cdots,\ s_{n_k}\to x\}$, $s^*\defeq\sup_{\overline{\R}}E$, $s_*\defeq\inf_{\overline{\R}}E$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $s^*\in E$.
-\item If $x>s^*$, then $s_n<x$ eventually.
-\item These two properties characterize $s^*$ uniquely.
+\item If $x\in\R$ and $x>s^*$, then $s_n<x$ eventually.
+\item $s^*$ is the unique $y\in E$ such that $s_n<x$ eventually for all $x\in\R$ with $x>y$.
 \end{enumerate}
-Dually, $s_*$ is uniquely characterized by $s_*\in E$ and $x<s_*$ implies $s_n>x$ eventually.
+Dually, $s_*$ is the unique $y\in E$ such that $s_n>x$ eventually for all $x\in\R$ with $x<y$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Since $s^*=\sup E$: if $s^*=+\infty$, use Proposition \ref{prop:unbounded-real-sequence-has-infinite-subsequence}; if $s^*\in\R$, use Theorem \ref{thm:subsequential-limits-closed}. If $s^*=-\infty$ and $s_n\nrightarrow-\infty$, infinitely many terms are bounded below; they are either unbounded above or have a bounded subsequence, giving an element of $E$ above $-\infty$, a contradiction.
-\item If $s_n\geq x>s^*$ infinitely often, that subsequence is unbounded above or has a finite subsequential limit $y\geq x$; both contradict $s^*=\sup E<x$. Hence $s_n<x$ eventually.
-\item If $p<q$ both satisfy (i)--(ii), choose $p<x<q$. Then $s_n<x$ eventually, contradicting $q\in E$.
+\item Set $n_0\defeq0$. If $s^*=+\infty$, choose $y_k\in E$ with $y_k>k$; diagonal selection gives $n_k>n_{k-1}$ with $s_{n_k}>k$, hence $+\infty\in E$. If $s^*\in\R$, choose $y_k\in E\cap(s^*-1/k,s^*]$; diagonal selection gives $n_k>n_{k-1}$ with $\abs{s_{n_k}-y_k}<1/k$, hence $s_{n_k}\to s^*$. If $s^*=-\infty$ and $-\infty\notin E$, some tail is bounded below; that tail is unbounded above or bounded, giving respectively $+\infty\in E$ or a finite element of $E$, a contradiction. QED.
+\item If $x>s^*$ and $s_n\geq x$ infinitely often, some subsequence has extended subsequential limit $y\in E\cap[x,+\infty]$, contradicting $s^*=\sup_{\overline{\R}}E<x\leq y$. Thus $s_n<x$ eventually.
+\item By (i)--(ii), $s^*$ satisfies the stated conditions. If $p<q$ both satisfy them, choose $x\in\R$ with $p<x<q$; eventual $s_n<x$ from $p$ contradicts the subsequence tending to $q$.
 \end{enumerate}
-Apply the same argument to $(-s_n)$ for $s_*$.\\
+Apply the upper-limit result to $(-s_n)$; its subsequential-limit set is $-E$ and its upper limit is $-s_*$.\\
 \hlt{Structural Commentary}: Limsup is the maximal subsequential limit and eventual ceiling.\\
 \hlt{Key Insight}: Limsup combines subsequences with eventual upper bounds.
 \end{proof}
@@ -61,12 +91,20 @@ Apply the same argument to $(-s_n)$ for $s_*$.\\
 \end{figure}
 
 \begin{proposition} \label{prop:limsup-liminf-tail-suprema} \hlt{Tail Suprema Formula}\\
-For a real sequence $(s_n)$, put $T_N\defeq\{s_n:n\geq N\}$ and, in $\overline{\R}$, $u_N\defeq\sup T_N$, $\ell_N\defeq\inf T_N$.\\
-Then $u_N\downarrow$, $\ell_N\uparrow$, and $\limsup\limits_{n\to\infty}s_n=\inf_Nu_N$ and $\liminf\limits_{n\to\infty}s_n=\sup_N\ell_N$.
+For a real sequence $(s_n)$ and $N\in\N$, set $T_N\defeq\{s_n:n\geq N\}$, $u_N\defeq\sup_{\overline{\R}}T_N$, and $\ell_N\defeq\inf_{\overline{\R}}T_N$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $u_{N+1}\leq u_N$ and $\ell_{N+1}\geq\ell_N$ for all $N\in\N$.
+\item $\limsup_{n\to\infty}s_n=\inf_{N\in\N}u_N$ and $\liminf_{n\to\infty}s_n=\sup_{N\in\N}\ell_N$.
+\end{enumerate}
 \begin{proof}
-Since $T_{N+1}\subseteq T_N$, $u_N\downarrow$ and $\ell_N\uparrow$. Let $s^*=\limsup s_n$ and $u=\inf_Nu_N$.\\
-If $x>s^*$, then $s_n<x$ eventually, so $u\leq u_N\leq x$ for some $N$. If $y<s^*$, then $s^*\in E$ gives a subsequence tending to $s^*$; hence every tail meets $(y,\infty)$, so $u_N\geq y$ for all $N$ and $u\geq y$. Thus $u=s^*$.\\
-Apply the same formula to $(-s_n)$ and use Corollary \ref{cor:infimum-as-negative-supremum}.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $T_{N+1}\subseteq T_N$, $\sup_{\overline{\R}}T_{N+1}\leq\sup_{\overline{\R}}T_N$ and $\inf_{\overline{\R}}T_{N+1}\geq\inf_{\overline{\R}}T_N$.
+\item Set $s^*\defeq\limsup s_n$, $s_*\defeq\liminf s_n$, $u\defeq\inf_{N\in\N}u_N$, and $\ell\defeq\sup_{N\in\N}\ell_N$.\\
+By Theorem \ref{thm:limsup-characterization}, $x>s^*\Rightarrow u\leq x$ and $y<s^*\Rightarrow u\geq y$ for $x,y\in\R$, hence $u=s^*$.\\
+Dually, $x<s_*\Rightarrow\ell\geq x$ and $y>s_*\Rightarrow\ell\leq y$ for $x,y\in\R$, hence $\ell=s_*$.
+\end{enumerate}
 \hlt{Structural Commentary}: Tail envelopes converge to $\limsup$ and $\liminf$.\\
 \hlt{Key Insight}: Shrinking tails compute the extremal subsequential limits.
 \end{proof}

@@ -1,0 +1,36 @@
+\begin{tikzpicture}[
+  scale=0.82,
+  >=Stealth,
+  every node/.style={font=\scriptsize},
+  axis/.style={->, black!45, line width=0.45pt},
+  curve/.style={blue!70!black, line width=0.9pt},
+  upper/.style={draw=orange!75!black, fill=orange!14, line width=0.45pt},
+  lower/.style={draw=teal!70!black, fill=teal!16, line width=0.45pt},
+  guide/.style={black!18, dashed, line width=0.35pt}
+]
+  \draw[axis] (-0.35,0) -- (7.8,0) node[right] {$x$};
+  \draw[axis] (0,-0.15) -- (0,3.65) node[above] {$y$};
+
+  \foreach \x/\lab in {0/$a$,1.25/$x_1$,2.45/$x_2$,3.85/$x_3$,5.35/$x_4$,7.0/$b$} {
+    \draw[guide] (\x,0) -- (\x,3.35);
+    \node[below] at (\x,0) {\lab};
+  }
+
+  \foreach \xl/\xr/\lo/\up in {
+    0/1.25/1.32/2.18,
+    1.25/2.45/1.58/2.38,
+    2.45/3.85/0.92/1.78,
+    3.85/5.35/1.30/2.08,
+    5.35/7.0/1.05/1.76
+  } {
+    \draw[upper] (\xl,\lo) rectangle (\xr,\up);
+    \draw[lower] (\xl,0) rectangle (\xr,\lo);
+  }
+
+  \draw[curve, domain=0:7, samples=130]
+    plot (\x,{1.58 + 0.36*sin(105*\x) + 0.24*cos(210*\x) - 0.045*\x});
+
+  \node[teal!70!black, anchor=west, fill=white, inner sep=1pt] at (7.05,1.15) {$\varphi_n$};
+  \node[blue!70!black, anchor=west, fill=white, inner sep=1pt] at (7.05,1.78) {$f$};
+  \node[orange!75!black, anchor=west, fill=white, inner sep=1pt] at (7.05,2.34) {$\psi_n$};
+\end{tikzpicture}

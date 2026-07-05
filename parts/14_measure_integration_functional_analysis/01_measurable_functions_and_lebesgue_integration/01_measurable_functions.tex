@@ -11,7 +11,8 @@
 \item \hlt{Lebesgue}: $\mathcal{B}(\R^p)\subseteq\mathcal{L}^p$, and $\mathcal{L}^p$ is obtained by adjoining subsets of Lebesgue null sets.
 \item \hlt{Maps}: measurable spaces $(X,\mathcal{M})$, $(Y,\mathcal{N})$, $f:X\to Y$ is \hlt{$(\mathcal{M},\mathcal{N})$-measurable} iff $f^{-1}(E)\in\mathcal{M}$$\forall E\in\mathcal{N}$.
 \item \hlt{Borel maps}: $f:\R^p\to\R^q$ is \hlt{Borel measurable} iff $f^{-1}(B)\in\mathcal{B}(\R^p)$ for all $B\in\mathcal{B}(\R^q)$.
-\item \hlt{Thresholds}: write $\{f\bowtie a\}\defeq\{x\in X:f(x)\bowtie a\}$ for $\bowtie\in\{>,\geq,<,\leq\}$; extended-real $f$ is \hlt{$\mathcal{M}$-measurable} iff $\{f>a\}\in\mathcal{M}$ for all $a\in\R$.
+\item \hlt{Thresholds}: write $\{f\bowtie a\}\defeq\{x\in X:f(x)\bowtie a\}$ for $\bowtie\in\{>,\geq,<,\leq\}$.\\
+Extended-real $f$ is \hlt{$\mathcal{M}$-measurable} iff $\{f>a\}\in\mathcal{M}$ for all $a\in\R$.
 \end{enumerate}
 \hlt{Structural Commentary}: Borel measurability tracks topology; Lebesgue measurability adds null-set completion.\\
 \hlt{Key Insight}: Measurability is inverse-image stability.
@@ -98,6 +99,40 @@ Then $\{F(f,g)>a\}=\bigcup\limits_k\bigl(\{\alpha_k<f<\beta_k\}\cap\{\gamma_k<g<
 \hlt{Key Insight}: Once threshold sets are measurable, ordinary limiting and algebraic operations stay measurable.
 \end{proof}
 \end{theorem}
+
+\begin{corollary} \label{cor:continuous-composition-and-finite-lattice-measurable} \hlt{Continuous Composition and Finite Lattice Operations}\\
+Let $(X,\mathcal{M})$ be a measurable space and let $n\in\mathbb{N}_{\geq1}$.\\
+For $f_1,\ldots,f_n:X\to\R$, set $\bigvee_{k=1}^{n}f_k\defeq\max\{f_1,\ldots,f_n\}$ and $\bigwedge_{k=1}^{n}f_k\defeq\min\{f_1,\ldots,f_n\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $g:X\to\R$ is measurable and $\varphi:\R\to\R$ is continuous, then $\varphi\circ g$ is measurable.
+\item If $f_1,\ldots,f_n:X\to\R$ are measurable, then $\bigvee_{k=1}^{n}f_k$ and $\bigwedge_{k=1}^{n}f_k$ are measurable.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $a\in\R$, $\{\varphi\circ g>a\}=g^{-1}(\varphi^{-1}((a,+\infty)))\in\mathcal{M}$, since $\varphi^{-1}((a,+\infty))\in\mathcal{B}(\R)$ and $g$ is measurable.
+\item Set $h_k=f_k$ for $1\leq k\leq n$ and $h_k=f_n$ for $k>n$. Then $(h_k)$ is measurable, $\bigvee_{k=1}^{n}f_k=\sup_{k\geq1}h_k$, and $\bigwedge_{k=1}^{n}f_k=\inf_{k\geq1}h_k$, hence both are measurable by Theorem \ref{thm:measurable-function-closure}(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: Pullbacks preserve Borel thresholds; finite lattices are finite suprema and infima.\\
+\hlt{Key Insight}: Continuity and finite lattice operations preserve measurable threshold structure.
+\end{proof}
+\end{corollary}
+
+\begin{example} \label{ex:measurable-composition-can-fail} \hlt{Measurable Composition Can Fail}\\
+Choose $A\in\mathcal{L}^1$ with $A\subseteq[0,1]$ and an increasing homeomorphism $\psi:[0,1]\to[0,2]$ such that $\psi(A)\notin\mathcal{L}^1$. Define
+\begin{equation}
+\widetilde{\psi}(x)\defeq
+\begin{cases}
+x,&x\leq0,\\
+\psi(x),&0\leq x\leq1,\\
+x+1,&x\geq1.
+\end{cases} \nonumber
+\end{equation}
+Then $\widetilde{\psi}:\R\to\R$ is a homeomorphism. Put $h\defeq\mathbf{1}_A\circ\widetilde{\psi}^{-1}$.\\
+The maps $\mathbf{1}_A$ and $\widetilde{\psi}^{-1}$ are measurable, but $h^{-1}((1/2,3/2))=\widetilde{\psi}(A)=\psi(A)\notin\mathcal{L}^1$.\\
+Hence $h$ is not Lebesgue measurable, so Lebesgue measurable functions are not composition-closed.
+\end{example}
 
 \begin{definition} \label{def:positive-negative-parts-measurable-functions} \hlt{Positive and Negative Parts}\\
 For an extended-real-valued function $f$, define $f^+(x)\defeq\sup\{f(x),0\}$; $f^-(x)\defeq\sup\{-f(x),0\}$.\\
@@ -199,12 +234,36 @@ If $s,t$ are measurable, the atoms $P_{ij}\defeq\{s=c_i\}\cap\{t=d_j\}$ are meas
 \end{proof}
 \end{proposition}
 
+\begin{lemma} \label{lem:bounded-simple-approximation-brackets} \hlt{Bounded Simple Approximation Brackets}\\
+Let $(X,\mathcal{M})$ be a measurable space and let $f:X\to\R$ be bounded and $\mathcal{M}$-measurable. For every $\varepsilon>0$, there exist $\mathcal{M}$-measurable simple functions $\varphi_\varepsilon,\psi_\varepsilon:X\to\R$ such that $\varphi_\varepsilon\leq f\leq\psi_\varepsilon$ and $0\leq\psi_\varepsilon-\varphi_\varepsilon<\varepsilon$ on $X$.
+\begin{proof} Choose $c=y_0<\cdots<y_N=d$ with $f(X)\subseteq(c,d)$ and $\max_k(y_k-y_{k-1})<\varepsilon$.\\
+Set $E_k\defeq\{y_{k-1}\leq f<y_k\}=\{f\geq y_{k-1}\}\cap\{f<y_k\}\in\mathcal{M}$; then $(E_k)_{k=1}^{N}$ partitions $X$.\\
+Define $\varphi_\varepsilon\defeq\sum\limits_{k=1}^{N}y_{k-1}\mathbf{1}_{E_k}$ and $\psi_\varepsilon\defeq\sum\limits_{k=1}^{N}y_k\mathbf{1}_{E_k}$; these are $\mathcal{M}$-measurable simple functions.\\
+For $x\in E_k$, $\varphi_\varepsilon(x)=y_{k-1}\leq f(x)<y_k=\psi_\varepsilon(x)$ and $\psi_\varepsilon(x)-\varphi_\varepsilon(x)=y_k-y_{k-1}<\varepsilon$.\\
+\hlt{Structural Commentary}: Pull back a finite range partition.\\
+\hlt{Key Insight}: Mesh size controls the bracket gap.
+\end{proof}
+\end{lemma}
+
 \begin{theorem} \label{thm:simple-approximation-measurable-functions} \hlt{Approximation by Simple Functions}\\
-Every real $f$ on $X$ is the pointwise limit of simple functions $s_n$.\\
-If $f$ is measurable, choose $s_n$ measurable; if $f\geq0$, choose $0\leq s_n\uparrow f$.
-\begin{proof}
-For $f\geq0$, set $E_{ni}=\left\{x:\frac{i-1}{2^n}\leq f(x)<\frac{i}{2^n}\right\}$; $F_n=\{f\geq n\}$; and $s_n=\sum\limits_{i=1}^{n2^n}\frac{i-1}{2^n}\mathbf{1}_{E_{ni}}+n\mathbf{1}_{F_n}$.\\
-Then $s_n$ is simple, measurable when $f$ is, and $0\leq s_n\uparrow f$. For general $f$, approximate $f^+$ and $f^-$ and subtract.\\
+Let $(X,\mathcal{M})$ be a measurable space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Every $f:X\to\R$ is the pointwise limit of simple functions.
+\item For $f:X\to\overline{\R}$, $f$ is $\mathcal{M}$-measurable iff $f$ is the pointwise limit of $\mathcal{M}$-measurable simple functions.
+\item If $f:X\to\overline{\R}$ is $\mathcal{M}$-measurable, the approximants in (ii) may be chosen with $\abs{s_n}\leq\abs{f}$.\\
+If $f\geq0$, they may be chosen with $0\leq s_n\uparrow f$.
+\end{enumerate}
+\begin{proof} For $u:X\to[0,+\infty]$, set $Q_nu\defeq2^{-n}\lfloor2^n(u\wedge n)\rfloor$.\\
+Then $Q_nu(X)\subseteq2^{-n}\{0,\ldots,n2^n\}$, so $Q_nu$ is simple, and binary truncation gives $0\leq Q_nu\uparrow u$.\\
+If $u$ is measurable, the level sets of $Q_nu$ are threshold sets of $u\wedge n$, hence $Q_nu$ is measurable.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $f:X\to\R$, write $f=f^+-f^-$ and set $s_n\defeq Q_nf^+-Q_nf^-$. Then $s_n$ is simple and $s_n\to f$ pointwise.
+\item[$(ii)$] ($\Rightarrow$) If $f:X\to\overline{\R}$ is measurable, then $f^+,f^-$ are measurable and $s_n\defeq Q_nf^+-Q_nf^-$ is measurable simple. Since at each $x$ at most one of $f^+(x),f^-(x)$ is infinite, $s_n(x)\to f(x)$ in $\overline{\R}$.
+\item[$(ii)$] ($\Leftarrow$) If measurable simple $s_n\to f$ pointwise, then $f=\liminf_ns_n$ is measurable.
+\item[$(iii)$] In $(ii)\Rightarrow$, $\abs{s_n}\leq Q_nf^++Q_nf^-\leq\abs{f}$. If $f\geq0$, take $s_n\defeq Q_nf$.
+\end{enumerate}
 \hlt{Structural Commentary}: Simple functions quantize the range of $f$.\\
 \hlt{Key Insight}: Dyadic range partitions give pointwise approximation while preserving measurability.
 \end{proof}
@@ -246,6 +305,27 @@ In the completion, every $E\subseteq N$ is measurable, so null modifications pre
 \hlt{Key Insight}: Almost-everywhere statements are most stable on complete measure spaces.
 \end{remark}
 
+\begin{corollary} \label{cor:pointwise-ae-limits-measurable} \hlt{Pointwise and Almost-Everywhere Limits}\\
+Let $(f_n)$ be $\overline{\R}$-valued measurable functions on $(X,\mathcal{M})$, and let $f:X\to\overline{\R}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f_n\to f$ pointwise on $X$, then $f$ is measurable.
+\item If $(X,\mathcal{M},\mu)$ is complete and $f_n\to f$ a.e. on $X$, then $f$ is measurable.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Pointwise, $f=\liminf_nf_n=\limsup_nf_n$; closure under $\liminf$ and $\limsup$ gives measurability.
+\item Choose $N\in\mathcal{M}$ with $\mu(N)=0$ and $f_n\to f$ on $X\setminus N$.\\
+Define $g=f$ and $g_n=f_n$ on $X\setminus N$, and $g=g_n=0$ on $N$.\\
+Then each $g_n$ is measurable and $g_n\to g$ pointwise, so $g$ is measurable by (i).\\
+Since $\{f>a\}\triangle\{g>a\}\subseteq N$ for all $a\in\R$, completeness gives $\{f>a\}\in\mathcal{M}$; hence $f$ is measurable.
+\end{enumerate}
+\hlt{Structural Commentary}: Limits reduce to limsup/liminf; a.e. limits require completion.\\
+\hlt{Key Insight}: Completion is exactly what lets null modifications preserve measurability.
+\end{proof}
+\end{corollary}
+
 \begin{proposition} \label{prop:completed-measurable-function-has-original-representative} \hlt{Completed Measurable Functions Have Original Representatives}\\
 Let $(X,\mathcal{M},\mu)$ be a measure space with completion $(X,\overline{\mathcal{M}}_\mu,\overline{\mu})$.\\
 If $f:X\to\overline{\R}$ is $\overline{\mathcal{M}}_\mu$-measurable, then $\exists$ $\mathcal{M}$-measurable $g:X\to\overline{\R}$ with $f=g$ $\mu$-a.e.
@@ -271,11 +351,12 @@ Thus $g$ is $\mathcal{M}$-measurable and $f=g$ on $X\setminus N$.\\
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Disjointize}. If $A_n\uparrow$, set $B_1\defeq A_1$, $B_n\defeq A_n\setminus A_{n-1}$; then $A_n=\bigsqcup_{k\leq n}B_k$ and $\bigcup_nA_n=\bigsqcup_nB_n$.
-\item \hlt{Approximate}. Prove on $\mathcal{E}$; if $d_\mu(A_n,A),d_\mu(B_n,B)\to0$ with $d_\mu(C,D)\defeq\mu^\ast(C\triangle D)$, pass limits through $\cup,\cap,\setminus$ via $\triangle$ estimates.
+\item \hlt{Approximate}. Prove on $\mathcal{E}$; use $d_\mu(C,D)\defeq\mu^\ast(C\triangle D)$ and $\triangle$ estimates to pass limits through $\cup,\cap,\setminus$.
 \item \hlt{Threshold}. For real $f$, show $\{f>a\}\in\mathcal{M}$ for all $a\in\R$; for $f:X\to\R^m$, use coordinate/open-set tests.
 \item \hlt{Generators}. For $f:X\to(Y,\sigma(\mathcal{A}))$, check $f^{-1}(A)\in\mathcal{M}$ for all $A\in\mathcal{A}$.
 \item \hlt{Truncate}. For $f:X\to\overline{\R}$, prove results for $f_n\defeq(-n)\vee(f\wedge n)$, then let $n\to\infty$.
-\item \hlt{Topological bridge}. Continuous maps satisfy $f^{-1}(V)$ open; reduce Borel tests to countable interval or rectangle preimages.
+\item \hlt{Topological bridge}. Use continuous open preimages.\\
+Teduce Borel tests to countable interval or rectangle preimages.
 \end{enumerate}
 \hlt{Key Insight}: Measure theory alternates between countable set algebra and approximation by elementary sets.
 \end{method}
