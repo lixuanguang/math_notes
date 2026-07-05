@@ -367,8 +367,8 @@ Run the relevant checks after structural edits:
 ```sh
 pdflatex -recorder -interaction=nonstopmode -halt-on-error math.tex
 lake build
-rg -n "\\\\input\\{sections/|sections/" math.tex parts references.tex blueprint/src
-rg -n "\\\\subsubsection|\\\\paragraph" parts
+rg -n '\\input\{sections/|sections/' math.tex parts references.tex blueprint/src
+rg -n '\\subsubsection|\\paragraph' parts
 ```
 
 For bibliography-affecting edits, use the full LaTeX/BibTeX sequence from
