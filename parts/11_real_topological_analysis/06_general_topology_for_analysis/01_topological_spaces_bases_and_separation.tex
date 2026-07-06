@@ -2,10 +2,10 @@
 
 % **Role:** abstract structure behind limits and continuity.
 %
-% Topological spaces, bases, product topology, quotient topology, countability axioms.
+% Topological spaces, bases, subspaces, closure, and separation axioms.
 
 
-General topology abstracts the open-set behavior of metric spaces. This selective pass records spaces, bases, products, quotients, and countability axioms for later use.
+General topology abstracts the open-set behavior of metric spaces. This selective pass records spaces, bases, subspaces, closure, and separation axioms for later use.
 
 \begin{definition} \label{def:topological-space} \hlt{Topological Space}\\
 A \hlt{topology} on a set $X$ is a collection $\mathcal{T}\subseteq 2^X$ such that:
@@ -15,11 +15,40 @@ A \hlt{topology} on a set $X$ is a collection $\mathcal{T}\subseteq 2^X$ such th
 \item if $\{\mathcal{O}_\alpha\}_{\alpha\in A}\subseteq\mathcal{T}$, then $\bigcup_{\alpha\in A}\mathcal{O}_\alpha\in\mathcal{T}$;
 \item if $\mathcal{O}_1,\ldots,\mathcal{O}_n\in\mathcal{T}$ with $n\geq1$, then $\bigcap_{j=1}^n\mathcal{O}_j\in\mathcal{T}$.
 \end{enumerate}
-Then $(X,\mathcal{T})$ is a \hlt{topological space}. A set $U\subseteq X$ is \hlt{open} iff $U\in\mathcal{T}$, and $F\subseteq X$ is \hlt{closed} iff $X\setminus F\in\mathcal{T}$.
+Then $(X,\mathcal{T})$ is a \hlt{topological space}.
 \end{definition}
 
+\begin{definition} \label{def:open-closed-neighborhood-topological} \hlt{Open, Closed, and Neighborhoods}\\
+Let $(X,\mathcal{T})$ be a topological space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A set $U\subseteq X$ is \hlt{open} iff $U\in\mathcal{T}$.
+\item A set $F\subseteq X$ is \hlt{closed} iff $X\setminus F\in\mathcal{T}$.
+\item For $x\in X$, a \hlt{neighborhood} of $x$ is an open set $U\subseteq X$ with $x\in U$.
+\item For $A\subseteq X$, a \hlt{neighborhood} of $A$ is an open set $U\subseteq X$ with $A\subseteq U$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:open-neighborhood-test-topological} \hlt{Open Sets by Neighborhoods}\\
+Let $(X,\mathcal{T})$ be a topological space and let $E\subseteq X$. Then $E\in\mathcal{T}$ iff for every $x\in E$ there exists an open set $U_x\in\mathcal{T}$ such that $x\in U_x\subseteq E$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $E\in\mathcal{T}$, take $U_x=E$ for each $x\in E$.
+\item[$(\Leftarrow)$] If such $U_x$ exists for every $x\in E$, then $E=\bigcup_{x\in E}U_x$. Since arbitrary unions of open sets are open, $E\in\mathcal{T}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Openness is checked pointwise by open subsets.\\
+\hlt{Key Insight}: Openness is exactly the local ability to fit an open neighborhood inside the set.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:discrete-and-trivial-topologies} \hlt{Discrete and Trivial Topologies}\\
+On a nonempty set $X$, the \hlt{discrete topology} is $2^X$, so every subset is open and closed. It is induced by the discrete metric. The \hlt{trivial topology} is $\{\emptyset,X\}$, so the only neighborhood of any point is $X$.
+\end{example}
+
 \begin{proposition} \label{prop:metric-open-sets-form-topology} \hlt{Metric Open Sets Form a Topology}\\
-Let $(X,d)$ be metric space, $B_r(x)\defeq\{y\in X:d(x,y)<r\}$, and $\tau_d\defeq\{U\subseteq X:\forall x\in U,\ \exists r>0,\ B_r(x)\subseteq U\}$. Then $\tau_d$ is a topology on $X$.
+Let $(X,d)$ be metric space, $B_r(x)\defeq\{y\in X:d(x,y)<r\}$, and $\tau_d\defeq\{U\subseteq X:\forall x\in U,\ \exists r>0,\ B_r(x)\subseteq U\}$.\\
+Then $\tau_d$ is a topology on $X$.
 \begin{proof}
 Clearly $\emptyset,X\in\tau_d$. If $\{\mathcal{O}_\alpha\}_{\alpha\in A}\subseteq\tau_d$ and $x\in\bigcup_{\alpha\in A}\mathcal{O}_\alpha$, choose $\alpha$ with $x\in\mathcal{O}_\alpha$ and $r>0$ with $B_r(x)\subseteq\mathcal{O}_\alpha$; hence $B_r(x)\subseteq\bigcup_{\alpha\in A}\mathcal{O}_\alpha$. If $\mathcal{O}_1,\ldots,\mathcal{O}_n\in\tau_d$, $n\geq1$, and $x\in\bigcap_{j=1}^n\mathcal{O}_j$, choose $r_j>0$ with $B_{r_j}(x)\subseteq\mathcal{O}_j$ and set $r\defeq\min_{1\leq j\leq n} r_j$; then $B_r(x)\subseteq\bigcap_{j=1}^n\mathcal{O}_j$. Thus $\tau_d$ is a topology on $X$.\\
 \hlt{Structural Commentary}: Metric balls generate an open-set system with the exact axioms of a topology.\\
@@ -27,17 +56,149 @@ Clearly $\emptyset,X\in\tau_d$. If $\{\mathcal{O}_\alpha\}_{\alpha\in A}\subsete
 \end{proof}
 \end{proposition}
 
-\begin{definition} \label{def:basis-for-topology} \hlt{Basis}\\
-Let $X$ be a set. A collection $\mathcal{B}\subseteq 2^X$ is a \hlt{basis} for a topology on $X$ iff:
+\begin{definition} \label{def:topological-closure-interior-boundary} \hlt{Closure, Interior, and Boundary}\\
+Let $E\subseteq X$ in a topological space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $X=\bigcup_{B\in\mathcal{B}}B$;
-\item if $B_1,B_2\in\mathcal{B}$ and $x\in B_1\cap B_2$, then there exists $B_3\in\mathcal{B}$ with $x\in B_3\subseteq B_1\cap B_2$.
+\item The \hlt{closure} $\overline{E}$ is the set of all $x\in X$ such that every neighborhood of $x$ meets $E$.
+\item The \hlt{interior} $\operatorname{int}(E)$ is the union of all open sets contained in $E$.
+\item The \hlt{exterior} of $E$ is $\operatorname{int}(X\setminus E)$.
+\item The \hlt{boundary} of $E$ is $\operatorname{bd}(E)\defeq\overline{E}\setminus\operatorname{int}(E)$.
 \end{enumerate}
-The \hlt{topology generated by $\mathcal{B}$} is $\mathcal{T}_{\mathcal{B}}\defeq\{\bigcup_{B\in\mathcal{U}}B:\mathcal{U}\subseteq\mathcal{B}\}$.\\
-A collection $\mathcal{S}\subseteq 2^X$ is a \hlt{subbasis} iff $\{\bigcap_{j=1}^n S_j:n\geq1,\ S_1,\ldots,S_n\in\mathcal{S}\}$ is a basis.
 \end{definition}
 
+\begin{proposition} \label{prop:topological-closure-closed-calculus} \hlt{Closure, Interior, and Boundary Tests}\\
+Let $(X,\mathcal{T})$ be a topological space and let $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{int}(E)$ is the largest open subset of $E$, and $E$ is open iff $E=\operatorname{int}(E)$;
+\item $\overline{E}$ is the smallest closed subset of $X$ containing $E$, and $E$ is closed iff $E=\overline{E}$;
+\item $x\in\operatorname{bd}(E)$ iff every neighborhood of $x$ meets both $E$ and $X\setminus E$;
+\item $\operatorname{bd}(E)=\overline{E}\cap\overline{X\setminus E}$, so $\operatorname{bd}(E)$ is closed.
+\end{enumerate}
+\begin{proof}
+By definition, $\operatorname{int}(E)=\bigcup\{U\in\mathcal{T}:U\subseteq E\}$, hence it is the largest open subset of $E$. If $x\notin\overline{E}$, choose a neighborhood $U$ of $x$ with $U\cap E=\emptyset$; then $U\subseteq X\setminus\overline{E}$, so $\overline{E}$ is closed. If $F$ is closed and $E\subseteq F$, then $X\setminus F$ is disjoint from $E$, so $\overline{E}\subseteq F$. Thus $\overline{E}$ is the smallest closed subset of $X$ containing $E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) If $E$ is open, then $E\subseteq\operatorname{int}(E)\subseteq E$, so $E=\operatorname{int}(E)$.
+\item[$(i)$] ($\Leftarrow$) If $E=\operatorname{int}(E)$, then $E$ is open because $\operatorname{int}(E)$ is open.
+\item[$(ii)$] ($\Rightarrow$) If $E$ is closed, then the smallest-closed-superset property gives $\overline{E}\subseteq E$, while $E\subseteq\overline{E}$. Hence $E=\overline{E}$.
+\item[$(ii)$] ($\Leftarrow$) If $E=\overline{E}$, then $E$ is closed because $\overline{E}$ is closed.
+\item[$(iii)$] ($\Rightarrow$) If $x\in\operatorname{bd}(E)=\overline{E}\setminus\operatorname{int}(E)$, then every neighborhood of $x$ meets $E$. Since $x\notin\operatorname{int}(E)$, no neighborhood of $x$ is contained in $E$, so every neighborhood of $x$ also meets $X\setminus E$.
+\item[$(iii)$] ($\Leftarrow$) If every neighborhood of $x$ meets both $E$ and $X\setminus E$, then $x\in\overline{E}$ and $x\notin\operatorname{int}(E)$. Hence $x\in\operatorname{bd}(E)$.
+\item[$(iv)$] By (iii), $x\in\operatorname{bd}(E)$ iff $x\in\overline{E}$ and $x\in\overline{X\setminus E}$. Thus $\operatorname{bd}(E)=\overline{E}\cap\overline{X\setminus E}$, which is closed by (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Interior, closure, and boundary are neighborhood tests.\\
+\hlt{Key Insight}: $\operatorname{int}(E)$ is certified inside; $\overline{E}$ is neighborhood-forced; $\operatorname{bd}(E)$ is where both sides persist.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:basis-for-topology} \hlt{Bases and Subbases}\\
+Let $X$ be a set.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{T}$ is a topology on $X$ and $x\in X$, then a collection $\mathcal{B}_x$ of neighborhoods of $x$ is a \hlt{neighborhood basis at $x$} iff every neighborhood $U$ of $x$ contains some $B\in\mathcal{B}_x$ with $B\subseteq U$.
+\item A collection $\mathcal{B}\subseteq 2^X$ is a \hlt{basis} for a topology on $X$ iff $X=\bigcup_{B\in\mathcal{B}}B$ and, whenever $B_1,B_2\in\mathcal{B}$ and $x\in B_1\cap B_2$, there exists $B_3\in\mathcal{B}$ with $x\in B_3\subseteq B_1\cap B_2$.
+\item If $\mathcal{B}$ is a basis on $X$, the \hlt{topology generated by $\mathcal{B}$} is $\mathcal{T}_{\mathcal{B}}\defeq\{\bigcup_{B\in\mathcal{U}}B:\mathcal{U}\subseteq\mathcal{B}\}$.
+\item A collection $\mathcal{S}\subseteq 2^X$ is a \hlt{subbasis} on $X$ iff $\bigcup\mathcal{S}=X$ and its finite intersections form a basis on $X$.
+\end{enumerate}
+\hlt{Key Insight}: Bases generate open sets by unions; subbases generate bases by finite intersections.
+\end{definition}
+
+\begin{proposition} \label{prop:basis-generated-topology-characterization} \hlt{Basis Characterization}\\
+Let $X$ be a set and let $\mathcal{B}\subseteq 2^X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{B}$ is a basis on $X$, then $\mathcal{T}_{\mathcal{B}}\defeq\{\bigcup\mathcal{U}:\mathcal{U}\subseteq\mathcal{B}\}$ is the unique topology on $X$ of all $\mathcal{B}$-unions.
+\item If $\mathcal{T}$ is a topology on $X$, $\mathcal{B}\subseteq\mathcal{T}$, and $\forall\emptyset\ne U\in\mathcal{T}$ there is $\mathcal{U}\subseteq\mathcal{B}$ with $U=\bigcup\mathcal{U}$, then $\mathcal{B}$ is a basis for $\mathcal{T}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $O_{\mathcal{U}}\defeq\bigcup\mathcal{U}$ for $\mathcal{U}\subseteq\mathcal{B}$. Then $X=O_{\mathcal{B}}$, $\emptyset=O_{\emptyset}$, and $\bigcup_\alpha O_{\mathcal{U}_\alpha}=O_{\bigcup_\alpha\mathcal{U}_\alpha}$. If $x\in O_{\mathcal{U}}\cap O_{\mathcal{V}}$, choose $B_1\in\mathcal{U}$ and $B_2\in\mathcal{V}$ with $x\in B_1\cap B_2$; by refinement, $x\in B_3\subseteq B_1\cap B_2$ for some $B_3\in\mathcal{B}$. Hence $O_{\mathcal{U}}\cap O_{\mathcal{V}}=\bigcup\{B\in\mathcal{B}:B\subseteq O_{\mathcal{U}}\cap O_{\mathcal{V}}\}$, so $\mathcal{T}_{\mathcal{B}}$ is a topology. Uniqueness follows from the definition.
+\item If $X\ne\emptyset$, apply the hypothesis to $U=X$ to get $X=\bigcup\mathcal{U}$ for some $\mathcal{U}\subseteq\mathcal{B}$; if $X=\emptyset$, the cover axiom is void. If $B_1,B_2\in\mathcal{B}$ and $x\in B_1\cap B_2$, then $B_1\cap B_2\in\mathcal{T}$ and $B_1\cap B_2\ne\emptyset$, so $B_1\cap B_2=\bigcup\mathcal{V}$ for some $\mathcal{V}\subseteq\mathcal{B}$. Choose $B_3\in\mathcal{V}$ with $x\in B_3\subseteq B_1\cap B_2$. Hence $\mathcal{B}$ is a basis and $\mathcal{T}=\mathcal{T}_{\mathcal{B}}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Local refinements make intersections open.\\
+\hlt{Key Insight}: Basis pieces generate opens by unions.
+\end{proof}
+\end{proposition}
+
 \begin{example} \label{ex:metric-balls-basis} \hlt{Metric Balls as a Basis}\\
-In a metric space, the collection of all open balls is a basis for the metric topology. On $\R^k$, balls with rational centers and rational radii form a countable basis.
+In a metric space $(X,d)$, $\{B_d(x,r):x\in X,\ r>0\}$ is a basis. On $\R^k$, $\{B(q,r):q\in\Q^k,\ r\in\Q_{>0}\}$ is a countable basis. In $[a,b]\subseteq\R$, $\{[a,c):a<c<b\}\cup\{(c,b]:a<c<b\}$ is a subbasis.
 \end{example}
+
+\begin{definition} \label{def:topological-subspace} \hlt{Subspace Topology}\\
+Let $(X,\mathcal{T})$ be a topological space and let $\emptyset\ne E\subseteq X$.\\
+The \hlt{subspace topology} on $E$ is $\mathcal{T}_E\defeq\{E\cap U:U\in\mathcal{T}\}$, and $(E,\mathcal{T}_E)$ is a \hlt{subspace} of $X$.
+\end{definition}
+
+\begin{definition} \label{def:separation-axioms} \hlt{Separation Properties}\\
+Let $(X,\mathcal{T})$ be a topological space. Disjoint sets $A,B\subseteq X$ are \hlt{separated by disjoint neighborhoods} if there exist $U,V\in\mathcal{T}$ such that $A\subseteq U$, $B\subseteq V$, and $U\cap V=\emptyset$. The space $X$ is:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{$T_1$} iff $\{x\}$ is closed for every $x\in X$;
+\item \hlt{Hausdorff} iff $\{x\}$ and $\{y\}$ can be separated by disjoint neighborhoods for all distinct $x,y\in X$;
+\item \hlt{regular} iff $X$ is $T_1$ and $\{x\},F$ are separable by disjoint neighborhoods for closed $F\subseteq X$ and $x\notin F$;
+\item \hlt{normal} iff $X$ is $T_1$ and any disjoint closed $F,G\subseteq X$ can be separated by disjoint neighborhoods.
+\end{enumerate}
+\hlt{Key Insight}: Stronger separation axioms separate larger closed objects.
+\end{definition}
+
+\begin{proposition} \label{prop:t1-iff-singletons-closed}\label{prop:tychonoff-iff-singletons-closed} \hlt{$T_1$ Spaces and Closed Points}\\
+Let $(X,\mathcal{T})$ be a topological space. Then $X$ is $T_1$ iff $\forall$ distinct $x,y\in X$ $\exists U\in\mathcal{T}$ with $x\in U$ and $y\notin U$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $X$ is $T_1$. If $x\ne y$, then $\{y\}$ is closed, so $U=X\setminus\{y\}\in\mathcal{T}$ satisfies $x\in U$ and $y\notin U$.
+\item[$(\Leftarrow)$] Assume the stated condition. Fix $y\in X$. For each $x\in X\setminus\{y\}$, choose $U_x\in\mathcal{T}$ with $x\in U_x$ and $y\notin U_x$. Then $X\setminus\{y\}=\bigcup_{x\in X\setminus\{y\}}U_x\in\mathcal{T}$, so $\{y\}$ is closed. Hence $X$ is $T_1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Point exclusion makes singleton complements open.\\
+\hlt{Key Insight}: $T_1$ means each point can be omitted near every other point.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:metric-spaces-are-normal} \hlt{Metric Spaces Are Normal}\\
+Let $(X,d)$ be a metric space with its metric topology.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\{x\}$ is closed for every $x\in X$.
+\item If $F_1,F_2\subseteq X$ closed and $F_1\cap F_2=\emptyset$, then $\exists$ disjoint open sets $O_1,O_2\subseteq X$ with $F_i\subseteq O_i$ for $i=1,2$.
+\end{enumerate}
+Hence $X$ is normal.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $x\in X$. For each $y\in X\setminus\{x\}$, $B_d(y,d(x,y)/2)\subseteq X\setminus\{x\}$, so $X\setminus\{x\}$ is open and $\{x\}$ is closed.
+\item If one $F_i$ is empty, take $O_i=\emptyset$ and $O_{3-i}=X$. Assume $F_1,F_2\ne\emptyset$. Set $d_i(x)\defeq\operatorname{dist}(x,F_i)$ and $O_i\defeq\{x\in X:d_i(x)<d_{3-i}(x)\}$ for $i=1,2$. By Proposition \ref{prop:distance-to-set-is-continuous}, $d_i$ is continuous and $d_i^{-1}(\{0\})=F_i$.\\
+Hence $O_i=(d_i-d_{3-i})^{-1}((-\infty,0))$ is open, and if $x\in F_i$, then $d_i(x)=0<d_{3-i}(x)$, so $F_i\subseteq O_i$.\\
+Finally, $O_1\cap O_2=\emptyset$, since $d_1(x)<d_2(x)$ and $d_2(x)<d_1(x)$ cannot both hold.
+\end{enumerate}
+By Definition \ref{def:separation-axioms}, (i) and (ii) imply that $X$ is normal.\\
+\hlt{Structural Commentary}: Distance inequalities separate closed sets.\\
+\hlt{Key Insight}: Compare distances to build disjoint neighborhoods.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:normality-nested-neighborhoods} \hlt{Normality by Nested Neighborhoods}\\
+Let $X$ be a $T_1$ topological space. Then $X$ is normal iff for every closed $F\subseteq X$ and every open $U\subseteq X$ with $F\subseteq U$, there exists an open $O\subseteq X$ such that $F\subseteq O\subseteq\overline{O}\subseteq U$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $X$ is normal. Let $F\subseteq X$ be closed and let $U\subseteq X$ be open with $F\subseteq U$.\\
+The closed sets $F$ and $X\setminus U$ are disjoint, so choose disjoint open sets $O,V$ with $F\subseteq O$ and $X\setminus U\subseteq V$.\\
+Then $O\subseteq X\setminus V\subseteq U$, and since $X\setminus V$ is closed, $\overline{O}\subseteq X\setminus V\subseteq U$.
+\item[$(\Leftarrow)$] Assume the nested-neighborhood property. Let $A,B\subseteq X$ be closed with $A\cap B=\emptyset$.\\
+Apply the property to $F=A$ and $U=X\setminus B$ to get open $O$ with $A\subseteq O\subseteq\overline{O}\subseteq X\setminus B$.\\
+Then $O$ and $X\setminus\overline{O}$ are disjoint open neighborhoods of $A$ and $B$, respectively. Since $X$ is $T_1$, $X$ is normal.
+\end{enumerate}
+\hlt{Structural Commentary}: Normality controls closures inside neighborhoods.\\
+\hlt{Key Insight}: Thicken $F$ without leaving $U$.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/normality_nested_neighborhoods.tikz}
+  \caption{Normality thickens closed $F\subseteq U$ to an open $O$ with $F\subseteq O\subseteq\overline{O}\subseteq U$.}
+  \label{fig:normality-nested-neighborhoods}
+\end{figure}
