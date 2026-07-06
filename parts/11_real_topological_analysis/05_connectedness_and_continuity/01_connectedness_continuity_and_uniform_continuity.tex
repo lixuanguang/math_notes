@@ -138,6 +138,15 @@ Let $(X,d_X),(Y,d_Y)$ be metric spaces, $E\subseteq X$, and $f:E\to Y$.
 \end{enumerate}
 \end{definition}
 
+\begin{corollary} \label{cor:discrete-domain-maps-continuous} \hlt{Discrete Domains Make Every Map Continuous}\\
+If $X$ carries the discrete metric, then every map $f:X\to Y$ into any metric space $Y$ is continuous.
+\begin{proof}
+For $p\in X$, $B_{1/2}(p)=\{p\}$. Take $\delta=\frac{1}{2}$. If $d_X(x,p)<\delta$, then $x=p$, so $d_Y(f(x),f(p))=0<\varepsilon$.\\
+\hlt{Structural Commentary}: In the discrete metric, no distinct point can approach $p$.\\
+\hlt{Key Insight}: Pointwise continuity is automatic when small enough balls are singletons.
+\end{proof}
+\end{corollary}
+
 \begin{figure}[H]
   \centering
   \input{figures/analysis/metric_continuity_ball_mapping.tikz}
@@ -260,6 +269,43 @@ Let $X,Y$ be metric spaces, $f:X\to Y$. Then $f$ is continuous iff $f^{-1}(C)$ i
 \end{enumerate}
 \hlt{Structural Commentary}: Closed-set continuity is the complement form of open-set continuity.\\
 \hlt{Key Insight}: $f^{-1}(Y\setminus C)=X\setminus f^{-1}(C)$ transfers open and closed formulations.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:distance-to-set-is-continuous} \hlt{Distance-to-Set Is Continuous}\\
+Let $(X,d)$ be a metric space, let $\emptyset\neq E\subseteq X$, and define $f:X\to\R$ by $f(p)\defeq\operatorname{dist}(p,E)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f$ is $1$-Lipschitz: $\abs{f(p)-f(q)}\leq d(p,q)$ for all $p,q\in X$; in particular, $f$ is continuous.
+\item $f^{-1}(\{0\})=\overline{E}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $p,q\in X$ and $e\in E$, $d(p,e)\leq d(p,q)+d(q,e)$. Taking the infimum over $e\in E$ gives $f(p)\leq d(p,q)+f(q)$, hence $f(p)-f(q)\leq d(p,q)$. Hence $f(q)-f(p)\leq d(p,q)$, so $\abs{f(p)-f(q)}\leq d(p,q)$, QED.
+\item For $p\in X$, $p\in f^{-1}(\{0\})$ iff $\operatorname{dist}(p,E)=0$ iff $p\in\overline{E}$ by Proposition \ref{prop:set-distance-closure-criterion}.
+\end{enumerate}
+\hlt{Structural Commentary}: Distance to a fixed set changes no faster than the point itself moves.\\
+\hlt{Key Insight}: The triangle inequality turns nearest-set distance into a continuous detector of closure.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:open-closed-sets-by-continuous-real-functions} \hlt{Open and Closed Sets by Distance Functions}\\
+Let $X$ be a metric space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A set $O\subseteq X$ is open if and only if there is a continuous $f:X\to\R$ such that $O=\{x\in X:f(x)>0\}$.
+\item A set $F\subseteq X$ is closed if and only if there is a continuous $g:X\to\R$ such that $F=g^{-1}(\{0\})$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $O=X$, take $f\equiv1$. Otherwise set $f(x)\defeq\operatorname{dist}(x,O^c)$. Since $O^c$ is closed, Proposition \ref{prop:distance-to-set-is-continuous} gives $\{f=0\}=O^c$, hence $O=\{f>0\}$. Conversely, $\{f>0\}=f^{-1}((0,\infty))$ is open by Theorem \ref{thm:continuity-open-preimages}.
+\item If $F=\emptyset$, take $g\equiv1$. Otherwise set $g(x)\defeq\operatorname{dist}(x,F)$.\\
+If $F$ closed, by Proposition \ref{prop:distance-to-set-is-continuous}, $g^{-1}(\{0\})=\overline{F}=F$. Conversely, $g^{-1}(\{0\})$ closed by Corollary \ref{cor:continuity-closed-preimages}.
+\end{enumerate}
+\hlt{Structural Commentary}: Metric spaces encode open and closed sets by continuous real-valued distance functions.\\
+\hlt{Key Insight}: A set is closed exactly when its distance-zero locus has no extra points.
 \end{proof}
 \end{corollary}
 
