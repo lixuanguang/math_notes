@@ -1,12 +1,13 @@
 \subsection{Heine--Borel and Euclidean Compactness}
 
 \begin{theorem} \label{thm:nested-closed-intervals-intersect} \hlt{Nested Closed Intervals Intersect}\\
-If $I_1\supseteq I_2\supseteq I_3\supseteq\cdots$ is a sequence of closed intervals in $\R$, then $\bigcap_{n=1}^{\infty}I_n\neq\emptyset$.
-\begin{proof}
-Let $I_n=[a_n,b_n]$. The set $\{a_n:n\in\N\}$ is nonempty and bounded above by each $b_m$.\\
-Let $x=\sup\{a_n:n\in\N\}$. Then $a_m\leq x\leq b_m$ for every $m$, so $x\in I_m$ for all $m$.\\
-\hlt{Structural Commentary}: Completeness traps a common point.\\
-\hlt{Key Insight}: The least upper bound of the left endpoints lies in every interval.
+Let $(I_n)_{n\in\N}$ be nonempty compact intervals in $\R$, with $I_n=[a_n,b_n]$, such that $I_{n+1}\subseteq I_n$ $\forall n$. Then $\bigcap_{n=1}^{\infty}I_n\neq\emptyset$.
+\begin{proof} Set $A\defeq\{a_n:n\in\N\}$. Fix $m\in\N$. If $n\geq m$, then $a_n\in I_n\subseteq I_m$, so $a_n\leq b_m$.\\
+If $n<m$, then $b_m\in I_m\subseteq I_n$, so $a_n\leq b_m$. Hence $b_m$ is an upper bound for $A$.\\
+Let $x\defeq\sup A$. Since $a_m\in A$, $a_m\leq x$; since $b_m$ is an upper bound for $A$, $x\leq b_m$.\\
+Hence $x\in I_m$ for every $m$, and therefore $x\in\bigcap_{n=1}^{\infty}I_n$.\\
+\hlt{Structural Commentary}: Nested endpoints form a LUB trap.\\
+\hlt{Key Insight}: $\sup_n a_n$ lies in every interval.
 \end{proof}
 \end{theorem}
 
@@ -18,11 +19,12 @@ Let $x=\sup\{a_n:n\in\N\}$. Then $a_m\leq x\leq b_m$ for every $m$, so $x\in I_m
 \end{figure}
 
 \begin{theorem} \label{thm:nested-k-cells-intersect} \hlt{Nested $k$-Cells Intersect}\\
-If $I_1\supseteq I_2\supseteq I_3\supseteq\cdots$ is a sequence of $k$-cells in $\R^k$, then $\bigcap_{n=1}^{\infty}I_n\neq\emptyset$.
-\begin{proof}
-Let $I_n=\{\mathbf{x}\in\R^k:a_{n,j}\leq x_j\leq b_{n,j},\ 1\leq j\leq k\}$. For each coordinate $j$, the intervals $[a_{n,j},b_{n,j}]$ are nested, so Theorem \ref{thm:nested-closed-intervals-intersect} gives a point $x_j^*$ lying in all of them. Then $\mathbf{x}^*=(x_1^*,\ldots,x_k^*)$ lies in every $I_n$.\\
-\hlt{Structural Commentary}: A nested cell problem reduces coordinatewise to nested intervals.\\
-\hlt{Key Insight}: Choose one persistent coordinate at a time.
+Let $k\in\N$, and for each $n\in\N$ let $I_n=\prod_{j=1}^{k}[a_{n,j},b_{n,j}]\subseteq\R^k$ be a nonempty $k$-cell.\\
+Assume $I_{n+1}\subseteq I_n$ for every $n$. Then $\bigcap_{n=1}^{\infty}I_n\neq\emptyset$.
+\begin{proof} For each $j$, the $j$th coordinate projection of $I_{n+1}\subseteq I_n$ gives $[a_{n+1,j},b_{n+1,j}]\subseteq[a_{n,j},b_{n,j}]$.\\
+By Theorem \ref{thm:nested-closed-intervals-intersect}, choose $x_j^*\in\bigcap_{n=1}^{\infty}[a_{n,j},b_{n,j}]$. Then $\mathbf{x}^*\defeq(x_1^*,\ldots,x_k^*)$ satisfies $\mathbf{x}^*\in I_n$ $\forall n$, so $\mathbf{x}^*\in\bigcap_{n=1}^{\infty}I_n$.\\
+\hlt{Structural Commentary}: Cells reduce coordinatewise to intervals.\\
+\hlt{Key Insight}: Pick one persistent coordinate per axis.
 \end{proof}
 \end{theorem}
 
@@ -34,13 +36,12 @@ Let $I_n=\{\mathbf{x}\in\R^k:a_{n,j}\leq x_j\leq b_{n,j},\ 1\leq j\leq k\}$. For
 \end{figure}
 
 \begin{theorem} \label{thm:k-cells-compact} \hlt{$k$-Cells Are Compact}\\
-Every $k$-cell in $\R^k$ is compact.
-\begin{proof}
-Let $I=\{\mathbf{x}:a_j\leq x_j\leq b_j,\ 1\leq j\leq k\}$ and set $\delta\defeq\left(\sum
-\limits_{j=1}^{k}(b_j-a_j)^2\right)^{1/2}$. Suppose an open cover $\{G_\alpha\}$ of $I$ has no finite subcover. Bisect each coordinate interval. Among the resulting $2^k$ subcells, at least one cannot be finitely covered by the $G_\alpha$; call it $I_1$. Continue inductively, obtaining nested cells $I\supseteq I_1\supseteq I_2\supseteq\cdots$ such that no $I_n$ is finitely covered and every two points of $I_n$ are within $2^{-n}\delta$ of each other.\\
-By Theorem \ref{thm:nested-k-cells-intersect}, choose $\mathbf{x}^*\in\bigcap_n I_n$. Since $\{G_\alpha\}$ covers $I$, some $G_\alpha$ contains $\mathbf{x}^*$. Because $G_\alpha$ is open, $B_r(\mathbf{x}^*)\subseteq G_\alpha$ for some $r>0$. By the Archimedean property in Theorem \ref{thm:archimedean-and-rational-density}, choose $n$ with $n>\delta/r$; since $2^n\geq n$, we have $2^{-n}\delta<r$. Then $I_n\subseteq G_\alpha$, contradicting the construction of $I_n$.\\
-\hlt{Structural Commentary}: Repeated bisection traps a point in cells whose diameters shrink to zero.\\
-\hlt{Key Insight}: An open set around the trapped point eventually contains the whole small cell.
+Let $k\in\N$, and let $I=\prod_{j=1}^{k}[a_j,b_j]\subseteq\R^k$ be a nonempty $k$-cell. Then $I$ is compact.
+\begin{proof} Set $\delta\defeq\left(\sum_{j=1}^{k}(b_j-a_j)^2\right)^{1/2}=\diam I$. Suppose open cover $\mathcal{G}=\{G_\alpha\}_{\alpha\in A}$ of $I$ has no finite subcover.\\
+Bisect each coordinate interval of $I$. If every resulting subcell had a finite $\mathcal{G}$-subcover, their union would finitely cover $I$, so choose a subcell $I_1$ with no finite $\mathcal{G}$-subcover. Repeating inside $I_{n-1}$ gives nested $k$-cells $I\supseteq I_1\supseteq I_2\supseteq\cdots$ such that $I_n$ has no finite $\mathcal{G}$-subcover and $\diam I_n\leq2^{-n}\delta$.\\
+By Theorem \ref{thm:nested-k-cells-intersect}, choose $\mathbf{x}^*\in\bigcap_{n=1}^{\infty}I_n$. Since $\mathcal{G}$ covers $I$, choose $\alpha$ with $\mathbf{x}^*\in G_\alpha$. Openness gives $r>0$ such that $B_r(\mathbf{x}^*)\subseteq G_\alpha$. Choose $n$ with $2^{-n}\delta<r$. Since $\mathbf{x}^*\in I_n$ and $\diam I_n<r$, one has $I_n\subseteq B_r(\mathbf{x}^*)\subseteq G_\alpha$, contradicting the choice of $I_n$. Thus every open cover of $I$ has a finite subcover.\\
+\hlt{Structural Commentary}: Bisection gives shrinking nested cells.\\
+\hlt{Key Insight}: One open set eventually contains the trapped cell.
 \end{proof}
 \end{theorem}
 
@@ -52,18 +53,17 @@ By Theorem \ref{thm:nested-k-cells-intersect}, choose $\mathbf{x}^*\in\bigcap_n 
 \end{figure}
 
 \begin{lemma} \label{lem:bounded-rk-set-contained-in-k-cell} \hlt{Bounded Euclidean Sets Fit in $k$-Cells}\\
-Every bounded subset $E\subseteq\R^k$ is contained in some $k$-cell.
-\begin{proof}
-If $E=\emptyset$, any $k$-cell contains $E$. Suppose $E\neq\emptyset$. By Definition \ref{def:bounded-and-perfect-metric-sets}, choose $\mathbf{q}=(q_1,\ldots,q_k)\in\R^k$ and $M>0$ such that $\norm{\mathbf{p}-\mathbf{q}}_2<M$ for all $\mathbf{p}\in E$. Let $I\defeq\{\mathbf{x}=(x_1,\ldots,x_k):q_j-M\leq x_j\leq q_j+M,\ 1\leq j\leq k\}$.\\
-For $\mathbf{p}=(p_1,\ldots,p_k)\in E$, $\abs{p_j-q_j}\leq\norm{\mathbf{p}-\mathbf{q}}_2<M$ for each $j$, so $\mathbf{p}\in I$.\\
-Thus $E\subseteq I$, and $I$ is a $k$-cell by Definition \ref{def:euclidean-intervals-cells-balls-convex}.\\
-\hlt{Structural Commentary}: A Euclidean ball centered at $\mathbf{q}$ sits inside the coordinate box with side half-length $M$.\\
-\hlt{Key Insight}: Boundedness supplies one radius; coordinates turn it into interval bounds.
+Let $k\in\N$ and let $E\subseteq\R^k$ be bounded. Then there exists a $k$-cell $I\subseteq\R^k$ such that $E\subseteq I$.
+\begin{proof} If $E=\emptyset$, take $I=\prod_{j=1}^{k}[0,0]$. Assume $E\neq\emptyset$.\\
+Choose $\mathbf{q}=(q_1,\ldots,q_k)\in\R^k$ and $M>0$ such that $E\subseteq B_M(\mathbf{q})$. Set $I\defeq\prod_{j=1}^{k}[q_j-M,q_j+M]$.\\
+For $\mathbf{p}=(p_1,\ldots,p_k)\in E$ and $1\leq j\leq k$, $\abs{p_j-q_j}\leq\norm{\mathbf{p}-\mathbf{q}}_2<M$, hence $\mathbf{p}\in I$. Thus $E\subseteq I$.\\
+\hlt{Structural Commentary}: One ball fits inside one coordinate box.\\
+\hlt{Key Insight}: A radius gives coordinate bounds.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:heine-borel-rk} \hlt{Heine--Borel in $\R^k$}\\
-For $E\subseteq\R^k$, any one of the following three properties implies the other two:
+Let $k\in\N$ and let $E\subseteq\R^k$. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $E$ is closed and bounded;
@@ -73,17 +73,17 @@ For $E\subseteq\R^k$, any one of the following three properties implies the othe
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow(ii)$: Since $E$ is bounded, Lemma \ref{lem:bounded-rk-set-contained-in-k-cell} gives $E\subseteq I$ for some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact; since $E$ is closed, Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $E$ is compact.
-\item[$(ii)$]$\Rightarrow(iii)$: This is Theorem \ref{thm:infinite-subset-of-compact-has-limit-point}.
-\item[$(iii)$]$\Rightarrow(i)$: If $E$ is unbounded, choose $\mathbf{x}_n\in E$ with $\norm{\mathbf{x}_n}_2>n$ and set $S\defeq\{\mathbf{x}_n:n\in\N\}$. If $\mathbf{x}_n\in B_R(\mathbf{y})$, then $n<\norm{\mathbf{y}}_2+R$; hence $S$ has no limit point, contradicting (iii). Thus $E$ is bounded. If $E$ is not closed, choose $\mathbf{x}_0\in E^{\operatorname{acc}}\setminus E$ and $\mathbf{x}_n\in E$ with $0<\norm{\mathbf{x}_n-\mathbf{x}_0}_2<1/n$. Then $S\defeq\{\mathbf{x}_n:n\in\N\}$ is infinite and $S^{\operatorname{acc}}\subseteq\{\mathbf{x}_0\}\subseteq E^c$, contradicting (iii). Thus $E$ is closed.
+\item[$(i)$]$\Rightarrow (ii)$ Since $E$ is bounded, Lemma \ref{lem:bounded-rk-set-contained-in-k-cell} gives a $k$-cell $I$ with $E\subseteq I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact. Since $E$ is closed in $\R^k$, $E$ is closed in $I$, so Theorem \ref{thm:closed-subsets-of-compact-sets-compact} implies that $E$ is compact.
+\item[$(ii)$]$\Rightarrow (iii)$ Theorem \ref{thm:infinite-subset-of-compact-has-limit-point} applies directly to the compact set $E$.
+\item[$(iii)$]$\Rightarrow (i)$ Suppose first that $E$ is unbounded. Choose $\mathbf{x}_n\in E$ with $\norm{\mathbf{x}_n}_2>n$ and set $S\defeq\{\mathbf{x}_n:n\in\N\}$. For any $\mathbf{y}\in\R^k$, the set $S\cap B_1(\mathbf{y})$ is finite because $\mathbf{x}_n\in B_1(\mathbf{y})$ implies $n<\norm{\mathbf{y}}_2+1$. Hence $S$ has no limit point, contradicting (iii). Thus $E$ is bounded. Suppose next that $E$ is not closed. Choose $\mathbf{x}_0\in\overline{E}\setminus E$ and distinct $\mathbf{x}_n\in E$ with $0<\norm{\mathbf{x}_n-\mathbf{x}_0}_2<1/n$. Then $S\defeq\{\mathbf{x}_n:n\in\N\}$ is infinite, and every limit point of $S$ equals $\mathbf{x}_0\notin E$, contradicting (iii). Thus $E$ is closed.
 \end{enumerate}
-\hlt{Structural Commentary}: In $\R^k$, the three tests coincide.\\
-\hlt{Key Insight}: Heine--Borel is the bridge between open-cover compactness and Euclidean bounded geometry.
+\hlt{Structural Commentary}: Compactness equals closed boundedness in $\R^k$.\\
+\hlt{Key Insight}: Cells convert bounded geometry into compactness.
 \end{proof}
 \end{theorem}
 
-\begin{corollary} \label{cor:heine-borel-real-line-sequential-form} \hlt{Heine--Borel on the Real Line}\\
-For $E\subseteq\R$, the following are equivalent:
+\begin{corollary} \label{cor:heine-borel-rk-sequential-form} \hlt{Euclidean Compactness Tests}\\
+Let $k\in\N$ and let $E\subseteq\R^k$, with the subspace metric. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $E$ is closed and bounded;
@@ -91,32 +91,54 @@ For $E\subseteq\R$, the following are equivalent:
 \item every sequence in $E$ has a subsequence converging to a point of $E$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ Since $E\subseteq\R=\R^1$ is closed and bounded, Theorem \ref{thm:heine-borel-rk} with $k=1$ implies $E$ is compact.
-\item[$(ii)$]$\Rightarrow (iii)$ Compactness and Theorem \ref{thm:compact-complete-totally-bounded} give convergent subsequence; compactness keeps limit in $E$.
-\item[$(iii)$]$\Rightarrow (i)$ Let $F\subseteq E$ be infinite. Choose distinct $x_n\in F$ using Principle \ref{princ:axiom-of-choice-analysis}. By (iii), some $x_{n_j}\to x\in E$. Since the $x_n$ are distinct, $x$ is a limit point of $F$ in the sense of Definition \ref{def:metric-topology-core-definitions}. Hence every infinite subset of $E$ has a limit point in $E$, so Theorem \ref{thm:heine-borel-rk} gives that $E$ is closed and bounded.
+\item[$(i)$]$\Rightarrow (ii)$ This is Theorem \ref{thm:heine-borel-rk}.
+\item[$(ii)$]$\Rightarrow (iii)$ Let $(x_n)_{n\in\N}$ be a sequence in $E$.\\
+Since $E$ is compact, Theorem \ref{thm:compact-complete-totally-bounded} gives indices $n_1<n_2<\cdots$ and $x\in E$ such that $x_{n_j}\to x$.
+\item[$(iii)$]$\Rightarrow (i)$ By (iii), $E$ is sequentially compact. Theorem \ref{thm:compact-complete-totally-bounded}, applied to $X=E$, gives that $E$ is compact.\\
+Then Theorem \ref{thm:heine-borel-rk} implies that $E$ is closed and bounded.
 \end{enumerate}
-\hlt{Structural Commentary}: Real-line compactness equals closed-bounded sequential compactness.\\
-\hlt{Key Insight}: Closed bounded sets keep sequences from escaping.
+\hlt{Structural Commentary}: Euclidean compactness has three tests.\\
+\hlt{Key Insight}: Heine--Borel links geometry to sequences.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:heine-borel-real-line-sequential-form} \hlt{Heine--Borel on the Real Line}\\
+Let $E\subseteq\R$, with the usual metric. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E$ is closed and bounded;
+\item $E$ is compact;
+\item every sequence in $E$ has a subsequence converging to a point of $E$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ By (i), $E$ is closed, bounded as a subset of $\R^1$. Theorem \ref{thm:heine-borel-rk} with $k=1$ gives that $E$ is compact.
+\item[$(ii)$]$\Rightarrow (iii)$ Let $(x_n)_{n\in\N}$ be a sequence in $E$.\\
+By compactness of $E$, Theorem \ref{thm:compact-complete-totally-bounded} gives indices $n_1<n_2<\cdots$ and $x\in E$ such that $x_{n_j}\to x$.
+\item[$(iii)$]$\Rightarrow (i)$ Let $F\subseteq E$ be infinite, and choose distinct $x_n\in F$. By (iii), some subsequence satisfies $x_{n_j}\to x\in E$. Since the $x_n$ are distinct, $x$ is a limit point of $F$. Thus every infinite subset of $E$ has a limit point in $E$, so Theorem \ref{thm:heine-borel-rk} with $k=1$ gives that $E$ is closed and bounded.
+\end{enumerate}
+\hlt{Structural Commentary}: On $\R$, compactness is sequential.\\
+\hlt{Key Insight}: Closed bounded sets trap subsequences.
 \end{proof}
 \end{corollary}
 
 \begin{corollary} \label{cor:nested-closed-bounded-real-sets-intersect} \hlt{Nested Closed Bounded Real Sets Intersect}\\
 Let $(F_n)_{n\in\N}$ be nonempty closed subsets of $\R$ with $F_{n+1}\subseteq F_n$ for all $n$. If $F_1$ is bounded, then $\bigcap_{n=1}^{\infty}F_n\neq\emptyset$.
 \begin{proof}
-By Corollary \ref{cor:heine-borel-real-line-sequential-form}, $F_1$ is compact. For each $n$, $F_n$ is closed in $\R$, $F_n\subseteq F_1$, and $F_n\ne\emptyset$; hence $F_n$ is a nonempty compact subset of $F_1$ by Theorem \ref{thm:closed-subsets-of-compact-sets-compact}. Since $F_{n+1}\subseteq F_n$, Corollary \ref{cor:nested-nonempty-compact-intersection} gives $\bigcap_{n=1}^{\infty}F_n\neq\emptyset$.\\
-\hlt{Structural Commentary}: Compact nested sets have the finite-intersection property.\\
-\hlt{Key Insight}: Heine--Borel upgrades the real-line nested set theorem to compactness.
+By Corollary \ref{cor:heine-borel-real-line-sequential-form}, $F_1$ is compact. For each $n$, $F_n$ is a nonempty closed subset of the compact set $F_1$, so Theorem \ref{thm:closed-subsets-of-compact-sets-compact} gives that $F_n$ is compact. Since $F_{n+1}\subseteq F_n$, Corollary \ref{cor:nested-nonempty-compact-intersection} gives $\bigcap_{n=1}^{\infty}F_n\neq\emptyset$.\\
+\hlt{Structural Commentary}: Nested compact sets intersect.\\
+\hlt{Key Insight}: Heine--Borel supplies compactness.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:weierstrass-limit-point-rk} \hlt{Weierstrass Limit-Point Theorem}\\
-Every bounded infinite subset of $\R^k$ has a limit point in $\R^k$.
-\begin{proof}
-By Lemma \ref{lem:bounded-rk-set-contained-in-k-cell}, a bounded set $E$ lies in some $k$-cell $I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
+Let $k\in\N$ and let $E\subseteq\R^k$ be bounded and infinite. Then $E$ has a limit point in $\R^k$.
+\begin{proof} By Lemma \ref{lem:bounded-rk-set-contained-in-k-cell}, choose a $k$-cell $I$ with $E\subseteq I$. By Theorem \ref{thm:k-cells-compact}, $I$ is compact.\\
 Since $E$ is an infinite subset of $I$, Theorem \ref{thm:infinite-subset-of-compact-has-limit-point} gives a limit point of $E$ in $I\subseteq\R^k$.\\
-\hlt{Structural Commentary}: Boundedness places the set inside a compact cell.\\
-\hlt{Key Insight}: Compact cells force bounded infinite sets to accumulate.
+\hlt{Structural Commentary}: Bounded sets sit in compact cells.\\
+\hlt{Key Insight}: Infinite compact subsets accumulate.
 \end{proof}
 \end{theorem}
