@@ -1,13 +1,21 @@
 \subsection{Differentiability and Linear Approximation}
 
 \begin{theorem} \label{thm:bounded-derivative-convex-mean-value} \hlt{Mean-Value Inequality on Convex Sets}\\
-Let $E\subseteq\R^n$ be open and convex.\\
-If $\f:E\to\R^m$ is differentiable and $\normop{D\f}\leq M$ on $E$, then for all $\a,\b\in E$, $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$.\\
-If $D\f=0$ on $E$, then $\f$ is constant.
+Let $E\subseteq\R^n$ be open and convex, and let $\f:E\to\R^m$ be differentiable.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $M\geq0$ and $\normop{D\f(\x)}\leq M$ for all $\x\in E$, then $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$ for all $\a,\b\in E$.
+\item If $D\f(\x)=0$ for all $\x\in E$, then $\f$ is constant on $E$.
+\end{enumerate}
 \begin{proof}
-Fix $\a,\b\in E$, set $\gamma(t)=(1-t)\a+t\b$, and let $\mathbf{g}=\f\circ\gamma$. Then $\gamma([0,1])\subseteq E$ and $\norm{\mathbf{g}'(t)}_2=\norm{D\f(\gamma(t))(\b-\a)}_2\leq M\norm{\b-\a}_2$. Apply Theorem \ref{thm:vector-valued-mean-value-inequality}; the constant case is $M=0$.\\
-\hlt{Structural Commentary}: Restricting to a line segment reduces the estimate to one variable.\\
-\hlt{Key Insight}: A uniform bound on the derivative bounds every secant displacement.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $\a,\b\in E$, set $\gamma(t)\defeq(1-t)\a+t\b$, and put $\mathbf{g}\defeq\f\circ\gamma$. Convexity gives $\gamma([0,1])\subseteq E$, and the chain rule gives $\mathbf{g}'(t)=D\f(\gamma(t))(\b-\a)$, so $\norm{\mathbf{g}'(t)}_2\leq M\norm{\b-\a}_2$.\\
+Theorem \ref{thm:vector-valued-mean-value-inequality} gives $\norm{\f(\b)-\f(\a)}_2=\norm{\mathbf{g}(1)-\mathbf{g}(0)}_2\leq M\norm{\b-\a}_2$.
+\item If $D\f(\x)=0$ on $E$, apply (i) with $M=0$: for all $\a,\b\in E$, $\norm{\f(\b)-\f(\a)}_2=0$, hence $\f(\a)=\f(\b)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Line restriction gives a one-variable estimate.\\
+\hlt{Key Insight}: Derivative bounds control secants.
 \end{proof}
 \end{theorem}
 
@@ -27,21 +35,34 @@ $C^1$ continuity measures $\x\mapsto D\f(\x)$ in operator norm. In coordinates t
 \end{figure}
 
 \begin{theorem} \label{thm:c1-iff-continuous-partials} \hlt{$C^1$ Means Continuous Partials}\\
-A map $\f:E\subseteq\R^n\to\R^m$ is $C^1$ iff all $D_jf_i$ exist and are continuous on $E$.
+Let $E\subseteq\R^n$ be open and let $\f=(f_1,\ldots,f_m):E\to\R^m$.\\
+Then $\f$ is $C^1$ on $E$ iff each $D_jf_i$ exists and is continuous on $E$, for $1\leq i\leq m$ and $1\leq j\leq n$.
 \begin{proof}
-If $\f$ is $C^1$, Theorem \ref{thm:total-derivative-matrix-partials} makes each $D_jf_i$ a continuous matrix entry of $D\f$.\\
-Conversely reduce componentwise to $m=1$. Fix $\x\in E$ and take $\h$ small enough that the coordinate polygon from $\x$ to $\x+\h$ lies in $E$. Put $\x^{(0)}=\x$ and $\x^{(j)}=\x+h_1\mathbf{e}_1+\cdots+h_j\mathbf{e}_j$. By one-variable MVT on each coordinate segment, $f(\x+\h)-f(\x)=\sum\limits_{j=1}^{n}h_j(D_jf)(\xi_j)$ for points $\xi_j$ on corresponding segments. Continuity of partials at $\x$ gives $\abs{f(\x+\h)-f(\x)-\sum\limits_{j=1}^{n}h_j(D_jf)(\x)} \leq \sum\limits_{j=1}^{n}\abs{h_j}\abs{(D_jf)(\xi_j)-(D_jf)(\x)} =o(\norm{\h}_2)$.\\
-Hence $Df(\x)$ has row matrix $[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$. Since operator norm is controlled by the Euclidean norm of the matrix entries, continuity of the partials gives continuity of $\x\mapsto Df(\x)$.\\
-\hlt{Structural Commentary}: Continuous partial derivatives assemble into a continuous total derivative.\\
-\hlt{Key Insight}: Coordinate-by-coordinate increments work only because the partials vary continuously.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\f$ is $C^1$, then $D\f:E\to\LL(\R^n,\R^m)$ is continuous. By Theorem \ref{thm:total-derivative-matrix-partials}, $(D_jf_i)(\x)$ is the $(i,j)$ matrix entry of $D\f(\x)$; matrix-entry projections are continuous, so each $D_jf_i$ is continuous on $E$.
+\item[$(\Leftarrow)$] By Theorem \ref{thm:several-variable-componentwise-differentiability}, it suffices to treat $m=1$. Fix $\x\in E$ and small $\h$ with coordinate polygon in $E$.\\
+Set $\x^{(0)}\defeq\x$ and $\x^{(j)}\defeq\x+\sum\limits_{k=1}^{j}h_k\mathbf{e}_k$. Telescoping and the one-variable MVT give\\
+$f(\x+\h)-f(\x)=\sum\limits_{j=1}^{n}h_j(D_jf)(\xi_j)$ for some $\xi_j\in[\x^{(j-1)},\x^{(j)}]$. Let $A_\x\h\defeq\sum\limits_{j=1}^{n}h_j(D_jf)(\x)$.\\
+Since $\xi_j\to\x$ as $\h\to\ze$, $\abs{f(\x+\h)-f(\x)-A_\x\h}\leq\sum\limits_{j=1}^{n}\abs{h_j}\abs{(D_jf)(\xi_j)-(D_jf)(\x)}=o(\norm{\h}_2)$.\\
+Thus $Df(\x)=A_\x$, i.e. $Df(\x)=[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$, and continuity of the entries gives $\f\in C^1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Continuous partials form the derivative matrix.\\
+\hlt{Key Insight}: Coordinate telescoping gives the linear approximation.
 \end{proof}
 \end{theorem}
 
 Higher derivatives repeat the same idea: once $D\f$ is itself a map into the finite-dimensional vector space $\LL(\R^n,\R^m)$, we differentiate it again. The linear-algebra viewpoint matters here because the second derivative is naturally bilinear, not merely an array of second partial derivatives.
 
 \begin{definition} \label{def:higher-order-partials-and-c2} \hlt{Higher Derivatives and $C^r$}\\
-Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\LL^r(\R^n,\R^m)$ be space of $r$-linear maps $(\R^n)^r\to\R^m$. Set $D^1\f\defeq D\f$. Recursively, if $D^{r-1}\f:E\to\LL^{r-1}(\R^n,\R^m)$ differentiable at $\x$, let $D^r\f(\x)(\mathbf{v}_1,\ldots,\mathbf{v}_r) \defeq \bigl(D(D^{r-1}\f)(\x)\mathbf{v}_1\bigr)(\mathbf{v}_2,\ldots,\mathbf{v}_r)$.\\
-For real-valued $f$, write $D_{ij}f\defeq D_i(D_jf)$ when defined. The map $\f$ is $C^r$ if derivatives through order $r$ exist and $D^r\f:E\to\LL^r(\R^n,\R^m)$ is continuous; it is $C^\infty$ if it is $C^r$ for all $r$.
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $r\geq1$, and let $\LL^r(\R^n,\R^m)$ denote the space of $r$-linear maps $(\R^n)^r\to\R^m$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{$r$th derivative} is recursive: $D^1\f\defeq D\f$.\\
+For $r\geq2$, if $D^{r-1}\f$ is differentiable at $\x$, then $D^r\f(\x)(\mathbf{v}_1,\ldots,\mathbf{v}_r)\defeq\bigl(D(D^{r-1}\f)(\x)\mathbf{v}_1\bigr)(\mathbf{v}_2,\ldots,\mathbf{v}_r)$.
+\item For real-valued $f:E\to\R$, the mixed second partial is $D_{ij}f\defeq D_i(D_jf)$ where defined.
+\item $\f$ is \hlt{$C^r$} on $E$ iff $D^r\f:E\to\LL^r(\R^n,\R^m)$ exists and is continuous; $\f$ is \hlt{$C^\infty$} iff $\f$ is $C^r$ for every $r\geq1$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:second-derivative-partials-and-continuity} \hlt{Second Derivatives and Second Partials}\\
@@ -74,7 +95,7 @@ If $D^2\f(p)$ exists, then $D^2\f(p)(\mathbf{v},\mathbf{w})=D^2\f(p)(\mathbf{w},
 \begin{proof}
 Reduce to scalar $f$ by Theorem \ref{thm:several-variable-componentwise-differentiability}.\\
 For small $t$, set $\Delta(t,\mathbf{v},\mathbf{w})\defeq f(p+t\mathbf{v}+t\mathbf{w})-f(p+t\mathbf{v})-f(p+t\mathbf{w})+f(p)$.\\
-Then $\Delta(t,\mathbf{v},\mathbf{w})=\Delta(t,\mathbf{w},\mathbf{v})$; see Figure \ref{fig:signed-parallelogram-second-derivative}. The one-variable mean value theorem and differentiability of $Df$ at $p$ give $D^2 f(p)(\mathbf{v},\mathbf{w}) =\lim\limits_{t\to0}\frac{\Delta(t,\mathbf{v},\mathbf{w})}{t^2}$. The same formula with $\mathbf{v},\mathbf{w}$ reversed proves symmetry.\\
+Then $\Delta(t,\mathbf{v},\mathbf{w})=\Delta(t,\mathbf{w},\mathbf{v})$. The one-variable mean value theorem and differentiability of $Df$ at $p$ give $D^2 f(p)(\mathbf{v},\mathbf{w}) =\lim\limits_{t\to0}\frac{\Delta(t,\mathbf{v},\mathbf{w})}{t^2}$. The same formula with $\mathbf{v},\mathbf{w}$ reversed proves symmetry.\\
 \hlt{Structural Commentary}: A pointwise second derivative is already forced to be a symmetric bilinear form.\\
 \hlt{Key Insight}: The parallelogram difference is symmetric in the two directions.
 \end{proof}
@@ -91,37 +112,34 @@ Theorem \ref{thm:second-derivative-symmetric} makes the two right-hand sides equ
 \end{corollary}
 
 \begin{corollary} \label{cor:higher-derivatives-symmetric} \hlt{Symmetry of Higher Derivatives}\\
-If $D^r\f(p)$ exists, then the $r$-linear map $D^r\f(p)$ is unchanged by permuting its arguments.
-\begin{proof}
-It suffices to prove invariance under adjacent transpositions. Fix all arguments except positions $k,k+1$.\\
-Resulting two-variable second derivative is $(\mathbf{u},\mathbf{v})\longmapsto D^r\f(p)(\mathbf{v}_1,\ldots,\mathbf{v}_{k-1},\mathbf{u},\mathbf{v},\mathbf{v}_{k+2},\ldots,\mathbf{v}_r)$, so Theorem \ref{thm:second-derivative-symmetric} allows $\mathbf{u}$ and $\mathbf{v}$ to be swapped. Since adjacent transpositions generate all permutations, $D^r\f(p)$ is symmetric.\\
-\hlt{Structural Commentary}: Higher derivatives are iterated second-derivative symmetries.\\
-\hlt{Key Insight}: Adjacent swaps generate every permutation.
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $p\in E$, and $r\geq2$.\\
+If $D^r\f(p)$ exists, then for every $\sigma\in S_r$ and $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\R^n$, $D^r\f(p)(\mathbf{v}_{\sigma(1)},\ldots,\mathbf{v}_{\sigma(r)})=D^r\f(p)(\mathbf{v}_1,\ldots,\mathbf{v}_r)$.
+\begin{proof} Induct on $r$; $r=2$ is Theorem \ref{thm:second-derivative-symmetric}. For $r>2$, the induction hypothesis gives symmetry in slots $2,\ldots,r$ of $D^r\f(p)$. Applying Theorem \ref{thm:second-derivative-symmetric} to $D^{r-2}\f:E\to\LL^{r-2}(\R^n,\R^m)$ and evaluating at $\mathbf{v}_3,\ldots,\mathbf{v}_r$ gives symmetry in slots $1,2$. Hence every adjacent transposition fixes $D^r\f(p)$, so every $\sigma\in S_r$ fixes it.\\
+\hlt{Structural Commentary}: Symmetry propagates from $D^2$.\\
+\hlt{Key Insight}: Adjacent swaps generate $S_r$.
 \end{proof}
 \end{corollary}
 
 The next rectangle argument is the classical coordinate route to equality of mixed partials. It is weaker in hypothesis than global $C^2$, but it proves the same compatibility of coordinate second derivatives.
 
 \begin{theorem} \label{thm:rectangle-mean-value-mixed-partial} \hlt{Rectangle Mean Value Formula}\\
-Let $E\subseteq\R^2$ be open, and suppose $D_1f$ and $D_{21}f$ exist on $E$. For a closed coordinate rectangle $Q\subseteq E$ with opposite vertices $(a,b)$ and $(a+h,b+k)$, $h,k\neq0$, set $\Delta(f,Q)\defeq f(a+h,b+k)-f(a+h,b)-f(a,b+k)+f(a,b)$.\\
-Then some $(x,y)\in\operatorname{int}Q$ satisfies $\Delta(f,Q)=hk(D_{21}f)(x,y)$.
+Let $E\subseteq\R^2$ be open, let $f:E\to\R$, and assume $D_1f$ and $D_{21}f=D_2(D_1f)$ exist on $E$. Let $h,k\neq0$, let $Q\subseteq E$ be the closed coordinate rectangle with opposite vertices $(a,b)$ and $(a+h,b+k)$, and set $\Delta(f,Q)\defeq f(a+h,b+k)-f(a+h,b)-f(a,b+k)+f(a,b)$.\\
+Then there exists $(x,y)\in\operatorname{int}Q$ such that $\Delta(f,Q)=hk(D_{21}f)(x,y)$.
 \begin{proof}
-Set $u(t)=f(t,b+k)-f(t,b)$.\\
-By Corollary \ref{cor:mean-value-theorem}, for some $x \in (a, a+h)$, $\Delta(f,Q)=u(a+h)-u(a)=h\bigl[(D_1f)(x,b+k)-(D_1f)(x,b)\bigr]$.\\
-Apply same corollary to $s\mapsto(D_1f)(x,s)$; for some $y \in (b, b+k)$, the bracket equals $k(D_{21}f)(x,y)$.\\
-Hence $(x,y)\in\operatorname{int}Q$ and the formula follows.\\
-\hlt{Structural Commentary}: The rectangle difference is a two-step one-variable mean value calculation.\\
-\hlt{Key Insight}: Mixed second derivatives measure the first-order change of a first partial across the other coordinate.
+Let $I,J$ be the open intervals with endpoints $a,a+h$ and $b,b+k$. Set $u(t)\defeq f(t,b+k)-f(t,b)$.\\
+By Corollary \ref{cor:mean-value-theorem}, $\Delta(f,Q)=u(a+h)-u(a)=h[(D_1f)(x,b+k)-(D_1f)(x,b)]$ for some $x\in I$. Applying the same result to $s\mapsto(D_1f)(x,s)$ gives $(D_1f)(x,b+k)-(D_1f)(x,b)=k(D_{21}f)(x,y)$ for some $y\in J$.\\
+Thus $(x,y)\in I\times J=\operatorname{int}Q$ and $\Delta(f,Q)=hk(D_{21}f)(x,y)$.\\
+\hlt{Structural Commentary}: Two MVT steps factor the rectangle increment.\\
+\hlt{Key Insight}: $D_{21}f$ tracks vertical change of $D_1f$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:equality-of-mixed-partials} \hlt{Equality of Mixed Partials}\\
 Let $(a,b)$ lie in an open set $E\subseteq\R^2$. If $D_1f$, $D_2f$, and $D_{21}f$ exist on $E$, and $D_{21}f$ is continuous at $(a,b)$, then $D_{12}f(a,b)$ exists and $(D_{12}f)(a,b)=(D_{21}f)(a,b)$. Hence $D_{12}f=D_{21}f$ when $f\in C^2(E)$.
-\begin{proof}
-Let $A=(D_{21}f)(a,b)$.\\
-Given $\varepsilon>0$, continuity of $D_{21}f$ and Theorem \ref{thm:rectangle-mean-value-mixed-partial} give, for all small $h,k\neq0$, $\abs{\frac{\Delta(f,Q)}{hk}-A}<\varepsilon$.\\
+\begin{proof} Let $A=(D_{21}f)(a,b)$, $\varepsilon>0$.\\
+Continuity of $D_{21}f$, Theorem \ref{thm:rectangle-mean-value-mixed-partial} gives $\forall$ small $h,k\neq0$, $\abs{\frac{\Delta(f,Q)}{hk}-A}<\varepsilon$.\\
 Fix such an $h$ and let $k\to0$. Since $D_2f$ exists at $(a+h,b)$ and $(a,b)$, $\frac{\Delta(f,Q)}{hk}\to \frac{(D_2f)(a+h,b)-(D_2f)(a,b)}{h}$.\\
-Thus this last quotient differs from $A$ by at most $\varepsilon$ for all sufficiently small $h\neq0$.\\
+Thus this last quotient differs from $A$ by at most $\varepsilon$ $\forall$ sufficiently small $h\neq0$.\\
 Since $\varepsilon$ was arbitrary, the quotient tends to $A$ as $h\to0$, so $D_{12}f(a,b)$ exists and equals $A$.\\
 \hlt{Structural Commentary}: Continuity of $D_{21}f$ controls local rectangle quotients.\\
 \hlt{Key Insight}: The missing mixed partial is recovered by taking the two one-variable limits in the reverse order.
@@ -133,14 +151,15 @@ $D_{12}f$ and $D_{21}f$ are different iterated limits. Theorems \ref{thm:second-
 \end{perspective}
 
 \begin{theorem} \label{thm:differentiation-under-riemann-stieltjes-integral} \hlt{Differentiation Under a Riemann--Stieltjes Integral}\\
-Let $\alpha$ be increasing on $[a,b]$, let $\varphi:[a,b]\times[c,d]\to\R$, and put $\varphi^t(x)\defeq\varphi(x,t)$.\\
-Assume $\varphi^t\in\mathcal{R}(\alpha)$ for all $t$ and $D_2\varphi(\cdot,t)\rightrightarrows D_2\varphi(\cdot,s)$ on $[a,b]$ as $t\to s\in(c,d)$.\\
+Let $\alpha:[a,b]\to\R$ be increasing, let $\varphi:[a,b]\times[c,d]\to\R$, write $\varphi^t(x)\defeq\varphi(x,t)$, and fix $s\in(c,d)$.\\
+Assume $\varphi^t\in\mathcal{R}(\alpha)$ for every $t\in[c,d]$, and for some $\eta>0$ with $(s-\eta,s+\eta)\subseteq(c,d)$, $D_2\varphi$ exists on $[a,b]\times(s-\eta,s+\eta)$ and $(D_2\varphi)^t\rightrightarrows(D_2\varphi)^s$ on $[a,b]$ as $t\to s$.\\
 If $F(t)\defeq\int_a^b \varphi(x,t)\,d\alpha(x)$, then $(D_2\varphi)^s\in\mathcal{R}(\alpha)$ and $F'(s)=\int_a^b (D_2\varphi)(x,s)\,d\alpha(x)$.
 \begin{proof}
-For $t\neq s$, set $\psi_t=(\varphi^t-\varphi^s)/(t-s)$. Corollary \ref{cor:mean-value-theorem} and the uniform hypothesis give $\psi_t\rightrightarrows(D_2\varphi)^s$.\\
-Since $\psi_t\in\mathcal{R}(\alpha)$, Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration} gives $\frac{F(t)-F(s)}{t-s}=\int_a^b\psi_t\,d\alpha \longrightarrow \int_a^b(D_2\varphi)(x,s)\,d\alpha(x)$.\\
-\hlt{Structural Commentary}: Uniform parameter control lets limits pass under the integral.\\
-\hlt{Key Insight}: The theorem is exactly the commutation of a derivative limit with a Riemann--Stieltjes integral.
+For $t\neq s$, set $\psi_t\defeq(\varphi^t-\varphi^s)/(t-s)\in\mathcal{R}(\alpha)$.\\
+By Corollary \ref{cor:mean-value-theorem}, $\psi_t(x)=D_2\varphi(x,\tau_x(t))$ for some $\tau_x(t)$ between $s$ and $t$; hence $\psi_t\rightrightarrows(D_2\varphi)^s$.\\
+Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration} gives $(D_2\varphi)^s\in\mathcal{R}(\alpha)$ and $\frac{F(t)-F(s)}{t-s}=\int_a^b\psi_t\,d\alpha\to\int_a^b(D_2\varphi)^s\,d\alpha$, so $F'(s)=\int_a^b(D_2\varphi)(x,s)\,d\alpha(x)$.\\
+\hlt{Structural Commentary}: Integrable difference quotients converge uniformly.\\
+\hlt{Key Insight}: Uniform convergence permits $D_t\int=\int D_t$.
 \end{proof}
 \end{theorem}
 
@@ -150,6 +169,7 @@ Then $f'(t)=g(t)$, and integration by parts gives $2f'(t)+tf(t)=0$. Since $f(0)=
 \end{example}
 
 \begin{definition} \label{def:jacobian-determinant} \hlt{Jacobian}\\
-If $\f:E\subseteq\R^n\to\R^n$ is differentiable at $\x$, define $J_{\f}(\x)\defeq \det D\f(\x) =\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}$ when $f=(y_1,\ldots,y_n)$.\\
-By Theorem \ref{thm:determinant-basic-laws}, $D\f(\x)$ is invertible if and only if $J_{\f}(\x)\neq0$. The absolute value $\abs{J_{\f}(\x)}$ is the local version of determinant volume scaling from Theorem \ref{thm:linear-map-volume-scaling-determinant}, used again in the change-of-variables theorem.
+Let $E\subseteq\R^n$, let $\f=(y_1,\ldots,y_n):E\to\R^n$, and suppose $\f$ is differentiable at $\x\in E$.\\
+The \hlt{Jacobian determinant} is $J_{\f}(\x)\defeq\det D\f(\x)=\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}(\x)$.\\
+Then $D\f(\x)$ is invertible iff $J_{\f}(\x)\neq0$. Interpretation: $\abs{J_{\f}(\x)}$ is the infinitesimal volume-scaling factor.
 \end{definition}
