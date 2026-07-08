@@ -7,13 +7,23 @@
 This subsection moves from Euclidean-region integration and change of variables to differential forms, pullbacks, and oriented parametrized surfaces.
 
 \begin{theorem} \label{thm:linear-map-volume-scaling-determinant} \hlt{Linear Maps Scale Volume by $\abs{\det T}$}\\
-Let $T\in\LL(\mathbb{R}^n)$ and let $\Omega\subseteq\mathbb{R}^n$ be a sufficiently regular measurable set. Then $\operatorname{vol}(T(\Omega))=\abs{\det T}\operatorname{vol}(\Omega)$.
+Let $T\in\LL(\mathbb{R}^n)$ and let $\Omega\subseteq\mathbb{R}^n$ be bounded Jordan measurable.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T(\Omega)$ is Jordan measurable.
+\item $\operatorname{vol}(T(\Omega))=\abs{\det T}\operatorname{vol}(\Omega)$.
+\end{enumerate}
 \begin{proof}
-It is enough to prove the formula first for invertible $T$. Let $T=SP$ by polar decomposition, where $S$ is an isometry and $P=\sqrt{T^*T}$ is positive definite. Isometries preserve Euclidean volume, so $\operatorname{vol}(T(\Omega))=\operatorname{vol}(P(\Omega))$.\\
-By the real spectral theorem, choose orthonormal coordinates with $P=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ and $\lambda_j>0$. Rectangles are sent to rectangles with side lengths multiplied by $\lambda_j$, hence their volumes are multiplied by $\prod_j\lambda_j=\det P$. Finite unions of disjoint rectangles have the same scaling by additivity, and the usual inner-outer rectangle approximation of a sufficiently regular measurable set gives $\operatorname{vol}(P(\Omega))=(\det P)\operatorname{vol}(\Omega)$.\\
-If $T$ is singular, then $T(\Omega)$ lies in a proper subspace after an orthogonal change of coordinates, so its $n$-dimensional volume is $0$; also $\abs{\det T}=0$. Finally, Proposition \ref{prop:absolute-determinant-positive-polar-factor} gives $\det P=\abs{\det T}$ in the invertible case.\\
-\hlt{Structural Commentary}: Polar decomposition reduces volume scaling to diagonal stretching.\\
-\hlt{Key Insight}: The determinant is the product of independent stretch factors.
+If $T$ invertible, let $T=SP$ with $S$ orthogonal, $P=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$, $\lambda_j>0$, in orthonormal coordinates.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T$ is invertible, $P$ and $S$ preserve Jordan measurability, so $T(\Omega)$ is Jordan measurable.\\
+If $T$ is singular, $T(\Omega)\subseteq W$ for a proper affine subspace $W$, hence $T(\Omega)$ is Jordan null.
+\item If $T$ is invertible, rectangle scaling gives $\operatorname{vol}(P\Omega)=(\det P)\operatorname{vol}(\Omega)$ by Jordan approximation.\\
+Hhence $\operatorname{vol}(T\Omega)=\operatorname{vol}(P\Omega)=\abs{\det T}\operatorname{vol}(\Omega)$. If $T$ is singular, (i) gives $\operatorname{vol}(T\Omega)=0=\abs{\det T}\operatorname{vol}(\Omega)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Polar decomposition leaves only diagonal stretching.\\
+\hlt{Key Insight}: $\abs{\det T}$ is total coordinate stretch.
 \end{proof}
 \end{theorem}
 
@@ -47,18 +57,27 @@ Thus volume integrals acquire the factor $\rho^2\sin\varphi\,d\rho\,d\varphi\,d\
 \end{example}
 
 \begin{definition} \label{def:multiple-integration-core-source-todo}\label{def:k-cell-and-multiple-integral} \hlt{$k$-Cells and Multiple Integrals}\\
-A \hlt{$k$-cell} is $I^k\defeq\prod\limits_{i=1}^k[a_i,b_i]\subseteq\R^k$ or $I^j\defeq\prod\limits_{i=1}^j[a_i,b_i]$.\\
-For $f\in C(I^k)$, set $f_k=f$ and, for $j=k,\ldots,1$, define $f_{j-1}(x_1,\ldots,x_{j-1})\defeq\int_{a_j}^{b_j}f_j(x_1,\ldots,x_j)\,dx_j$.\\
-The \hlt{integral of $f$ over $I^k$} is $\int_{I^k}f(\x)\,d\x\defeq f_0$, also written $\int_{I^k}f$.
+Let $a_i\leq b_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $I^j\defeq\prod\limits_{i=1}^{j}[a_i,b_i]\subseteq\R^j$ for $0\leq j\leq k$, with $I^0$ a point. The \hlt{$k$-cell} is $I^k$.
+\item For $f\in C(I^k)$, set $f_k\defeq f$ and $f_{j-1}(x_1,\ldots,x_{j-1})\defeq\int_{a_j}^{b_j}f_j(x_1,\ldots,x_j)\,dx_j$, $j=k,\ldots,1$.\\
+The \hlt{multiple integral} is $\int_{I^k}f(\x)\,d\x\defeq f_0$, also written $\int_{I^k}f$.
+\end{enumerate}
 \end{definition}
 
 For bounded functions on rectangles, the Darboux picture from Definition \ref{def:partition-and-riemann-upper-lower-sums} generalizes by replacing intervals with grid rectangles.
 
 \begin{definition} \label{def:rectangular-grid-riemann-sum} \hlt{Rectangular Grids and Riemann Sums}\\
-For $R=[a,b]\times[c,d]\subseteq\R^2$ and partitions $P:a=x_0<\cdots<x_m=b$; and $Q:c=y_0<\cdots<y_n=d$,\\
-put $G=P\times Q$, where $R_{ij}\defeq[x_{i-1},x_i]\times[y_{j-1},y_j]$ and $\abs{R_{ij}}\defeq (x_i-x_{i-1})(y_j-y_{j-1})$.\\
-For sample points $(s_{ij},t_{ij})\in R_{ij}$, $R(f,G,S)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n} f(s_{ij},t_{ij})\abs{R_{ij}}$. For bounded real $f$, with $m_{ij}\defeq\inf_{R_{ij}}f$ and $M_{ij}\defeq\sup_{R_{ij}}f$, set $L(f,G)\defeq\sum\limits_{i,j}m_{ij}\abs{R_{ij}}$ and $U(f,G)\defeq\sum\limits_{i,j}M_{ij}\abs{R_{ij}}$.\\
-The lower and upper integrals over $R$ are $\sup_G L(f,G)$ and $\inf_G U(f,G)$. If equal, their common value is $\int_R f$.
+Let $R=[a,b]\times[c,d]\subseteq\R^2$, let $P:a=x_0<\cdots<x_m=b$, let $Q:c=y_0<\cdots<y_n=d$, and set $G\defeq P\times Q$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{grid rectangles} are $R_{ij}\defeq[x_{i-1},x_i]\times[y_{j-1},y_j]$, with $\abs{R_{ij}}\defeq(x_i-x_{i-1})(y_j-y_{j-1})$.
+\item For tags $S=\{(s_{ij},t_{ij})\in R_{ij}\}$, the \hlt{Riemann sum} is $R(f,G,S)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}f(s_{ij},t_{ij})\abs{R_{ij}}$.
+\item For bounded $f:R\to\R$, set $(m_{ij},M_{ij})\defeq(\inf_{R_{ij}}f,\sup_{R_{ij}}f)$ and $(L(f,G),U(f,G))\defeq\sum\limits_{i,j}(m_{ij},M_{ij})\abs{R_{ij}}$.
+\item The \hlt{lower} and \hlt{upper integrals} are $\underline{\int_R}f\defeq\sup_G L(f,G)$ and $\overline{\int_R}f\defeq\inf_G U(f,G)$.\\
+If they agree, $f$ is Riemann integrable on $R$, and $\int_R f$ denotes the common value.
+\end{enumerate}
 \end{definition}
 
 \begin{figure}[H]
@@ -69,14 +88,25 @@ The lower and upper integrals over $R$ are $\sup_G L(f,G)$ and $\inf_G U(f,G)$. 
 \end{figure}
 
 \begin{theorem} \label{thm:fubini-riemann-rectangle-slices} \hlt{Fubini on a Rectangle, Darboux Form}\\
-Let $R=[a,b]\times[c,d]$ and let $f:R\to\R$ be Riemann integrable.\\
-For $y\in[c,d]$, set $f_y(x)\defeq f(x,y)$ and $\underline{F}(y)\defeq \sup_P L(P,f_y)$; $\overline{F}(y)\defeq \inf_P U(P,f_y)$, where $P$ ranges over partitions of $[a,b]$. Then $\underline{F},\overline{F}$ are Riemann integrable on $[c,d]$ and $\int_R f=\int_c^d \underline{F}(y)\,dy=\int_c^d \overline{F}(y)\,dy$.\\
-If $\int_a^b f(x,y)\,dx$ exists for every $y$, this is the usual iterated integral formula.
+Let $R=[a,b]\times[c,d]$, let $f:R\to\R$ be Riemann integrable, and set $f_y(x)\defeq f(x,y)$.\\
+For $y\in[c,d]$, define $\underline{F}(y)\defeq\sup_P L(P,f_y)$ and $\overline{F}(y)\defeq\inf_P U(P,f_y)$, with $P$ ranging over partitions of $[a,b]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\underline{F},\overline{F}$ are Riemann integrable on $[c,d]$.
+\item $\int_R f=\int_c^d\underline{F}(y)\,dy=\int_c^d\overline{F}(y)\,dy$.
+\end{enumerate}
+If $\int_a^b f(x,y)\,dx$ exists for every $y$, then $\underline{F}(y)=\overline{F}(y)=\int_a^b f(x,y)\,dx$.
 \begin{proof}
-For $G=P\times Q$, horizontal slice sums give $L(f,G)\leq L(Q,\underline{F})\leq U(Q,\overline{F})\leq U(f,G)$.\\
-As $f$ is integrable on $R$, the outer terms can be made arbitrarily close. The upper--lower criterion, Theorem \ref{thm:riemann-stieltjes-integrability-criterion}, squeezes $\underline{F}$ and $\overline{F}$ to the common value $\int_R f$.\\
-\hlt{Structural Commentary}: Product grids turn area sums into slice sums.\\
-\hlt{Key Insight}: Fubini is a squeeze between lower and upper sums before it is an equality of iterated integrals.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $G=P\times Q$, horizontal slice sums give $L(f,G)\leq L(Q,\underline{F})\leq U(Q,\overline{F})\leq U(f,G)$.\\
+Since $f$ is integrable on $R$, choose $G$ with $U(f,G)-L(f,G)<\varepsilon$; hence $U(Q,\overline{F})-L(Q,\underline{F})<\varepsilon$.\\
+Thus $\underline{F}$ and $\overline{F}$ are integrable and have the same integral by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.
+\item The same inequalities give $L(f,G)\leq\int_c^d\underline{F}\leq\int_c^d\overline{F}\leq U(f,G)$.\\
+Letting $U(f,G)-L(f,G)\to0$ gives both integrals equal to $\int_R f$.
+\end{enumerate}
+\hlt{Structural Commentary}: Product grids become slice sums.\\
+\hlt{Key Insight}: Fubini is a Darboux squeeze.
 \end{proof}
 \end{theorem}
 
@@ -97,28 +127,46 @@ Theorems \ref{thm:fubini-riemann-rectangle-slices} and \ref{thm:iterated-integra
 \end{perspective}
 
 \begin{definition} \label{def:support-and-compact-support-integral} \hlt{Support and Simplex Integrals}\\
-For $f:\R^k\to\R$ or $\C$, define $\operatorname{supp}(f)\defeq\overline{\{\x:f(\x)\neq0\}}$.\\
-If $f$ is continuous with compact support and $\operatorname{supp}(f)\subseteq I^k$, set $\int_{\R^k}f\defeq\int_{I^k}f$. This is independent of the containing cell $I^k$. The \hlt{standard $k$-simplex} is $Q^k\defeq\{\x\in\R^k:x_i\geq0,\ x_1+\cdots+x_k\leq1\}$.\\
-For $f\in C(Q^k)$, extend $f$ by $0$ to unit cube; resulting order-independent iterated integral is denoted $\int_{Q^k}f$.
+For $f:\R^k\to\R$ or $\C$, define $\operatorname{supp}f\defeq\overline{\{\x\in\R^k:f(\x)\neq0\}}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $f\in C_c(\R^k)$ and any cell $I^k\supseteq\operatorname{supp}f$, define $\int_{\R^k}f\defeq\int_{I^k}f$; this is independent of $I^k$.
+\item The \hlt{standard $k$-simplex} is $Q^k\defeq\{\x\in\R^k:x_i\geq0,\ \sum\limits_{i=1}^{k}x_i\leq1\}$.\\
+For $f\in C(Q^k)$, extend $f$ by $0$ to $[0,1]^k$ and define $\int_{Q^k}f$ as the corresponding multiple integral.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:primitive-mapping-and-flip} \hlt{Primitive Mappings and Flips}\\
-Let $E\subseteq\R^n$ be open.\\
-A map $G:E\to\R^n$ is \hlt{primitive} if, for some coordinate $m$ and real function $g$, $G(\x)=\x+\bigl(g(\x)-x_m\bigr)\mathbf{e}_m$.\\
-If $g$ is differentiable at $\a$, then $DG(\a)$ is the identity matrix with row $m$ replaced by $\bigl((D_1g)(\a),\ldots,(D_ng)(\a)\bigr)$, hence $J_G(\a)=\det DG(\a)=(D_mg)(\a)$ by Theorem \ref{thm:determinant-basic-laws}.\\
-A \hlt{flip} is the linear map that swaps two standard-basis vectors and fixes the rest.
+Let $E\subseteq\R^n$ be open.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $G:E\to\R^n$ is \hlt{primitive in coordinate $m$} if $G(\x)=(x_1,\ldots,x_{m-1},g(\x),x_{m+1},\ldots,x_n)$.
+\item If $g$ is differentiable at $\a\in E$, then $DG(\a)$ is $I_n$ except row $m$ is $\nabla g(\a)$, and $J_G(\a)=(D_mg)(\a)$.
+\item A \hlt{flip} is a linear map $B:\R^n\to\R^n$ with $B\mathbf{e}_p=\mathbf{e}_q$, $B\mathbf{e}_q=\mathbf{e}_p$, and $B\mathbf{e}_i=\mathbf{e}_i$ for $i\notin\{p,q\}$, $p\neq q$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:local-decomposition-primitive-mappings} \hlt{Local Decomposition into Primitive Mappings}\\
-Let $\F:E\subseteq\R^n\to\R^n$ be $C^1$, let $\ze\in E$, and suppose $\F(\ze)=\ze$ and $D\F(\ze)$ is invertible.\\
-Then, near $\ze$, $\F(\x)=B_1\cdots B_{n-1}G_n\circ\cdots\circ G_1(\x)$, where each $G_i$ is a primitive $C^1$ map with $G_i(\ze)=\ze$ and $DG_i(\ze)$ invertible, and each $B_i$ is a flip or the identity.
+Let $E\subseteq\R^n$ be open, let $\F\in C^1(E,\R^n)$, let $\ze\in E$, and assume $\F(\ze)=\ze$ and $D\F(\ze)$ is invertible. Then there exist a neighborhood $U$ of $\ze$, primitive $C^1$ maps $G_1,\ldots,G_n$ near $\ze$, and maps $B_1,\ldots,B_{n-1}$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $G_i(\ze)=\ze$, $DG_i(\ze)$ is invertible, and each $B_i$ is a flip or $I$.
+\item $\F=B_1\cdots B_{n-1}G_n\circ\cdots\circ G_1$ on $U$.
+\end{enumerate}
 \begin{proof}
-Let $P_m\x\defeq x_1\mathbf{e}_1+\cdots+x_m\mathbf{e}_m$. Put $\F_1=\F$ and inductively assume that $\F_m$ is defined near $\ze$, $\F_m(\ze)=\ze$, $D\F_m(\ze)$ is invertible, and $P_{m-1}\F_m=P_{m-1}$. Then $\F_m(\x)=P_{m-1}\x+\sum\limits_{i=m}^n\alpha_i(\x)\mathbf{e}_i$.\\
-Since $D\F_m(\ze)\mathbf{e}_m\neq\ze$, some $k\in\{m,\ldots,n\}$ has $(D_m\alpha_k)(\ze)\neq0$. Let $B_m$ swap coordinates $m$ and $k$ (or be the identity if $k=m$), and set $G_m(\x)\defeq \x+\bigl(\alpha_k(\x)-x_m\bigr)\mathbf{e}_m$.\\
-By Definition \ref{def:primitive-mapping-and-flip}, $G_m$ is primitive and $DG_m(\ze)$ is invertible. The inverse function theorem, Theorem \ref{thm:inverse-function-theorem-rn}, gives a local inverse for $G_m$, so define $\F_{m+1}\defeq B_m\F_m\circ G_m^{-1}$. Then $P_m\F_{m+1}=P_m$, and the induction continues. After $m=n-1$, $\F_n$ is primitive with invertible derivative.\\
-Taking $G_n=\F_n$ and using $B_m^2=I$ gives $\F=\F_1=B_1\cdots B_{n-1}G_n\circ G_{n-1}\circ\cdots\circ G_1$ near $\ze$.\\
-\hlt{Structural Commentary}: Invertible $C^1$ maps factor locally into coordinate changes and flips.\\
-\hlt{Key Insight}: Gaussian elimination on $D\F$ becomes nonlinear via the inverse function theorem.
+Let $P_m\x\defeq\sum\limits_{i=1}^{m}x_i\mathbf{e}_i$ and set $\F_1\defeq\F$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Suppose $P_{m-1}\F_m=P_{m-1}$, $\F_m(\ze)=\ze$, and $D\F_m(\ze)$ invertible, and write $\F_m=P_{m-1}+\sum\limits_{i=m}^{n}\alpha_i\mathbf{e}_i$.\\
+Choose $k\geq m$ with $(D_m\alpha_k)(\ze)\neq0$, let $B_m$ swap $m,k$ (or $B_m=I$), set $G_m(\x)\defeq\x+(\alpha_k(\x)-x_m)\mathbf{e}_m$.\\
+Then $G_m$ is primitive, $G_m(\ze)=\ze$, $J_{G_m}(\ze)\neq0$, and $G_m$ is locally invertible.\\
+With $\F_{m+1}\defeq B_m\F_m\circ G_m^{-1}$, one has $P_m\F_{m+1}=P_m$, $\F_{m+1}(\ze)=\ze$, and $D\F_{m+1}(\ze)$ invertible.\\
+Iterate for $m=1,\ldots,n-1$ and set $G_n\defeq\F_n$.
+\item From $\F_{m+1}=B_m\F_m\circ G_m^{-1}$ and $B_m^2=I$, $\F_m=B_m\F_{m+1}\circ G_m$.\\
+Iteration gives $\F=\F_1=B_1\cdots B_{n-1}G_n\circ G_{n-1}\circ\cdots\circ G_1$ near $\ze$.
+\end{enumerate}
+\hlt{Structural Commentary}: Local diffeomorphisms factor by coordinate elimination.\\
+\hlt{Key Insight}: Nonlinear elimination follows $D\F(\ze)$.
 \end{proof}
 \end{theorem}
 
