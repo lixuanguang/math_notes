@@ -1,14 +1,15 @@
 \subsection{Approximation Methods}
 
 \begin{theorem} \label{thm:weierstrass-polynomial-approximation}\label{thm:power-approx-fourier-main-source-todo} \hlt{Weierstrass Polynomial Approximation}\\
-If $f:[a,b]\to\C$ is continuous, then polynomials $P_n$ satisfy $P_n\rightrightarrows f$ on $[a,b]$. If $f$ is real-valued, take $P_n$ real.
-\begin{proof}
-By an affine change of variables and subtraction of the endpoint interpolant, assume $[a,b]=[0,1]$ and $f(0)=f(1)=0$; extend $f$ by $0$ outside $[0,1]$. For $n\geq1$, let $Q_n(x)\defeq c_n(1-x^2)^n$ and $\int_{-1}^{1}Q_n(x)\,dx=1$.\\
-Source estimates give $c_n<\sqrt n$ and $Q_n(t)\leq\sqrt n(1-\delta^2)^n$ for $\delta\leq\abs{t}\leq1$.\\
-Define $P_n(x)\defeq\int_{-1}^{1}f(x+t)Q_n(t)\,dt$, $(0\leq x\leq1)$. By change of variables, $P_n(x)=\int_0^1 f(u)Q_n(u-x)\,du$, so $P_n$ is a polynomial in $x$ (real if $f$ is real). Given $\varepsilon>0$, choose $\delta>0$ so $\abs{u-v}<\delta$ implies $\abs{f(u)-f(v)}<\varepsilon/2$, and set $M=\sup\abs{f}$. Since $Q_n\geq0$ and $\int Q_n=1$, $\abs{P_n(x)-f(x)} \leq \int_{-1}^{1}\abs{f(x+t)-f(x)}Q_n(t)\,dt \leq \frac{\varepsilon}{2}+4M\sqrt n(1-\delta^2)^n$.\\
-The last term tends to $0$, so $P_n\rightrightarrows f$ on $[0,1]$. Undoing the reductions proves the theorem.\\
-\hlt{Structural Commentary}: The kernels $Q_n$ form polynomial approximate identities.\\
-\hlt{Key Insight}: Uniform continuity controls the near part, and concentration of $Q_n$ kills the far part.
+Let $a<b$ and $f\in C([a,b],\C)$. Then $\exists (P_n)\subset\C[x]$ with $P_n\rightrightarrows f$ on $[a,b]$. If $f([a,b])\subset\R$, choose $(P_n)\subset\R[x]$.
+\begin{proof} By affine change and subtraction of the endpoint interpolant, reduce to $[0,1]$ with $f(0)=f(1)=0$.\\
+Extend $f=0$ off $[0,1]$; then $f$ is uniformly continuous on $[-1,2]$. Choose $c_n>0$ so $Q_n(t)\defeq c_n(1-t^2)^n$ satisfies $\int_{-1}^{1}Q_n=1$. Use $c_n<\sqrt n$ and $Q_n(t)\leq\sqrt n(1-\delta^2)^n$ for $0<\delta\leq\abs{t}\leq1$. Set $P_n(x)\defeq\int_{-1}^{1}f(x+t)Q_n(t)\,dt$.\\
+Since $P_n(x)=\int_0^1 f(u)Q_n(u-x)\,du$, $P_n\in\C[x]$, and $P_n\in\R[x]$ if $f$ is real-valued.\\
+Given $\varepsilon>0$, choose $0<\delta\leq1$ with $\abs{u-v}<\delta\Rightarrow\abs{f(u)-f(v)}<\varepsilon/2$ on $[-1,2]$, and set $M=\sup_{[-1,2]}\abs{f}$.\\
+For $x\in[0,1]$, $Q_n\geq0$, $\int_{-1}^{1}Q_n=1$ give $\abs{P_n(x)-f(x)}\leq\int_{-1}^{1}\abs{f(x+t)-f(x)}Q_n(t)\,dt\leq\frac{\varepsilon}{2}+4M\sqrt n(1-\delta^2)^n$.\\
+Thus $\norm{P_n-f}_\infty\to0$ on $[0,1]$; undo the reductions.\\
+\hlt{Structural Commentary}: Polynomial kernels approximate the identity.\\
+\hlt{Key Insight}: Uniform continuity handles near mass; kernel concentration removes far mass.
 \end{proof}
 \end{theorem}
 
@@ -27,12 +28,11 @@ The last term tends to $0$, so $P_n\rightrightarrows f$ on $[0,1]$. Undoing the 
 \end{figure}
 
 \begin{corollary} \label{cor:absolute-value-polynomial-approximation} \hlt{Polynomial Approximation of $\abs{x}$}\\
-For every interval $[-a,a]$, there are real polynomials $P_n$ such that $P_n(0)=0$ and $P_n\rightrightarrows \abs{x}$ on $[-a,a]$.
-\begin{proof}
-By Theorem \ref{thm:weierstrass-polynomial-approximation}, choose real polynomials $P_n^\ast$ converging uniformly to $\abs{x}$ on $[-a,a]$.\\
-Since $P_n^\ast(0)\to0$, the polynomials $P_n(x)\defeq P_n^\ast(x)-P_n^\ast(0)$ have $P_n(0)=0$ and still converge uniformly to $\abs{x}$.\\
-\hlt{Structural Commentary}: Normalize the approximants at the base point.\\
-\hlt{Key Insight}: Subtracting the value at $0$ fixes the normalization without changing the uniform limit.
+Let $a>0$. There exists $(P_n)\subset\R[x]$ such that $P_n(0)=0$ and $P_n\rightrightarrows\abs{x}$ on $[-a,a]$.
+\begin{proof} By Theorem \ref{thm:weierstrass-polynomial-approximation}, choose $Q_n\in\R[x]$ with $Q_n\rightrightarrows\abs{x}$ on $[-a,a]$. Set $P_n(x)\defeq Q_n(x)-Q_n(0)$.\\
+Then $P_n\in\R[x]$, $P_n(0)=0$, and $Q_n(0)\to0$, so $\norm{P_n-\abs{x}}_\infty\leq\norm{Q_n-\abs{x}}_\infty+\abs{Q_n(0)}\to0$.\\
+\hlt{Structural Commentary}: Normalize at $0$.\\
+\hlt{Key Insight}: The constant correction vanishes uniformly.
 \end{proof}
 \end{corollary}
 
@@ -68,13 +68,13 @@ Let $\mathcal{A}$ be a family of functions on $E$.
 \end{definition}
 
 \begin{theorem} \label{thm:two-point-interpolation-in-separating-algebra} \hlt{Two-Point Interpolation in a Separating Algebra}\\
-If an algebra $\mathcal{A}$ on $E$ separates points and vanishes nowhere, then for distinct $x_1,x_2\in E$ and scalars $c_1,c_2$, there is $f\in\mathcal{A}$ with $f(x_i)=c_i$, $(i=1,2)$.
-\begin{proof}
-Choose $g,h,k\in\mathcal{A}$ with $g(x_1)\neq g(x_2)$, $h(x_1)\neq0$, and $k(x_2)\neq0$.\\
-Let $u\defeq gk-g(x_1)k$ and $v\defeq gh-g(x_2)h$. Then $u(x_1)=v(x_2)=0$ and $u(x_2)v(x_1)\neq0$.\\
-Hence $f\defeq \frac{c_1v}{v(x_1)}+\frac{c_2u}{u(x_2)}$ lies in $\mathcal{A}$ and satisfies $f(x_i)=c_i$.\\
-\hlt{Structural Commentary}: Separation and nonvanishing build two functions that isolate the two points.\\
-\hlt{Key Insight}: Once two point-isolating functions are in the algebra, interpolation is linear algebra.
+Let $\mathcal{A}$ be a scalar algebra on $E$ that separates points and vanishes nowhere.\\
+For $x_1\neq x_2$ in $E$ and scalars $c_1,c_2$, $\exists f\in\mathcal{A}$ such that $f(x_i)=c_i$, $i=1,2$.
+\begin{proof} Choose $g,h,k\in\mathcal{A}$ with $g(x_1)\neq g(x_2)$, $h(x_1)\neq0$, $k(x_2)\neq0$. Set $u\defeq gk-g(x_1)k$ and $v\defeq gh-g(x_2)h$.\\
+Then $u(x_1)=v(x_2)=0$, while $u(x_2)=(g(x_2)-g(x_1))k(x_2)\neq0$ and $v(x_1)=(g(x_1)-g(x_2))h(x_1)\neq0$.\\
+Hence $f\defeq \frac{c_1v}{v(x_1)}+\frac{c_2u}{u(x_2)}\in\mathcal{A}$ and $f(x_i)=c_i$, $i=1,2$.\\
+\hlt{Structural Commentary}: Build point-isolating functions.\\
+\hlt{Key Insight}: Isolation reduces interpolation to linear combination.
 \end{proof}
 \end{theorem}
 
@@ -83,29 +83,43 @@ The two-point interpolation step can also be written as a $2\times2$ linear syst
 \end{perspective}
 
 \begin{theorem} \label{thm:real-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Real Form}\\
-$\mathcal{A}\subset C(K,\R)$ is algebra on compact $K$ that separates points, vanishes nowhere, then uniform closure is $C(K,\R)$.
+Let $K$ be compact Hausdorff; $\mathcal{A}\subset C(K,\R)$ point-separating, nowhere-vanishing real algebra. $\overline{\mathcal{A}}^{\norm{\cdot}_\infty}=C(K,\R)$.
+\begin{proof} Put $\mathcal{B}\defeq\overline{\mathcal{A}}^{\norm{\cdot}_\infty}$. By Theorem \ref{thm:uniform-closure-algebra}, $\mathcal{B}$ is a uniformly closed algebra and inherits separation/nonvanishing.\\
+For $r\in\mathcal{B}$, if $a=\norm{r}_\infty>0$, Corollary \ref{cor:absolute-value-polynomial-approximation} gives $p_n(0)=0$ with $p_n\rightrightarrows\abs{t}$ on $[-a,a]$, hence $p_n(r)\rightrightarrows\abs{r}$.\\
+$a=0$ is trivial. Thus $\abs{r}\in\mathcal{B}$, so for $r,s\in\mathcal{B}$, $r\vee s=\frac{r+s+\abs{r-s}}{2}$ and $r\wedge s=\frac{r+s-\abs{r-s}}{2}$ lie in $\mathcal{B}$.\\
+Fix $f\in C(K,\R)$ and $\varepsilon>0$. For $x,y\in K$, choose $h_{x,y}\in\mathcal{B}$ with $h_{x,y}(x)=f(x)$, $h_{x,y}(y)=f(y)$, using Theorem \ref{thm:two-point-interpolation-in-separating-algebra} if $x\neq y$ and $f(x)q/q(x)$ with $q\in\mathcal{B}$, $q(x)\neq0$, if $x=y$. For fixed $x$, set $V_y\defeq\{h_{x,y}>f-\varepsilon\}$.\\
+Since $y\in V_y$, choose $y_i$ with $K=\bigcup_iV_{y_i}$ and put $g_x\defeq\bigvee_i h_{x,y_i}\in\mathcal{B}$. Then $f-\varepsilon<g_x$ and $g_x(x)=f(x)$.\\
+Set $U_x\defeq\{g_x<f+\varepsilon\}$. Since $x\in U_x$, choose $x_j$ with $K=\bigcup_jU_{x_j}$ and put $h\defeq\bigwedge_j g_{x_j}\in\mathcal{B}$.\\
+Then $f-\varepsilon<h<f+\varepsilon$, so $\norm{h-f}_\infty<\varepsilon$. Since $\mathcal{B}$ is uniformly closed, $f\in\mathcal{B}$.\\
+\hlt{Structural Commentary}: Finite joins/meets globalize interpolation.\\
+\hlt{Key Insight}: Compactness upgrades pointwise to uniform.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:riesz-cx-separable-iff-metrizable} \hlt{Riesz Separability Criterion for $C(K)$}\\
+Let $K$ be a compact Hausdorff space. Then $(C(K,\R),\norm{\cdot}_\infty)$ is separable iff $K$ is metrizable.
 \begin{proof}
-Let $\mathcal{B}$ be the uniform closure of $\mathcal{A}$; by Theorem \ref{thm:uniform-closure-algebra}, $\mathcal{B}$ is a uniformly closed algebra.\\
-If $f\in\mathcal{B}$, then $\abs{f}\in\mathcal{B}$: for $a=\norm{f}_{\infty}$, approximate $\abs{y}$ on $[-a,a]$ by polynomials $p_n$ with $p_n(0)=0$ using Corollary \ref{cor:absolute-value-polynomial-approximation}; then $p_n(f)\in\mathcal{B}$ and $p_n(f)\rightrightarrows\abs{f}$.\\
-Hence $\max(f,g),\min(f,g)\in\mathcal{B}$ whenever $f,g\in\mathcal{B}$, as $\max(f,g)=\frac{f+g}{2}+\frac{\abs{f-g}}{2}$; $\min(f,g)=\frac{f+g}{2}-\frac{\abs{f-g}}{2}$.\\
-Fix $f\in C(K,\R)$, $x\in K$, $\varepsilon>0$. $\forall y\in K$, Theorem \ref{thm:two-point-interpolation-in-separating-algebra} gives $h_y\in\mathcal{B}$, $h_y(x)=f(x)$, $h_y(y)=f(y)$.\\
-Compactness gives $y_1,\ldots,y_r$ s.t. $g_x\defeq\max(h_{y_1},\ldots,h_{y_r})$ satisfies $g_x(x)=f(x)$ and $g_x>f-\varepsilon$ on $K$.\\
-Compactness gives $x_1,\ldots,x_m$ such that $h\defeq\min(g_{x_1},\ldots,g_{x_m})$ satisfies $\abs{h-f}<\varepsilon$ on $K$.\\
-Thus every $f\in C(K,\R)$ is a uniform limit of members of $\mathcal{B}$, so $f\in\mathcal{B}$.\\
-\hlt{Structural Commentary}: Local supports plus finite max/min give global approximation.\\
-\hlt{Key Insight}: Separation plus compactness gives uniform approximation.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $\{g_n\}$ be dense in $C(K,\R)$ and $O_n\defeq\{g_n>1/2\}$. Each $O_n$ is open. For open $O\ni x$, Urysohn gives $g\in C(K,\R)$ with $0\leq g\leq1$, $g(x)=1$, and $g|_{K\setminus O}=0$. Pick $n$ with $\norm{g-g_n}_\infty<1/3$; then $x\in O_n\subseteq O$.\\
+Thus $\{O_n\}$ is a countable basis, so Theorem \ref{thm:urysohn-metrization-second-countable} makes $K$ metrizable.
+\item[$(\Leftarrow)$] Let $d$ metrize $K$ and choose dense $\{x_n:n\geq1\}\subset K$. Put $f_0=1$ and $f_n(x)=d(x,x_n)$.\\
+If $x\neq y$, choose $x_n$ with $d(x,x_n)<d(x,y)/3$; then $f_n(x)\neq f_n(y)$. Hence $\{f_n:n\geq0\}$ separates points and vanishes nowhere, so Theorem \ref{thm:real-stone-weierstrass} makes $\operatorname{alg}(f_n:n\geq0)$ dense in $C(K,\R)$.\\
+Its rational polynomial subalgebra is countable and dense.
+\end{enumerate}
+\hlt{Structural Commentary}: Dense functions give a base; dense points give generators.\\
+\hlt{Key Insight}: Countability moves between $K$ and $C(K)$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:complex-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Complex Form}\\
-If $\mathcal{A}\subset C_b(K)$ is self-adjoint, separates points, and vanishes nowhere on compact $K$, then $\overline{\mathcal{A}}=C_b(K)$.
+Let $K$ be compact Hausdorff and let $\mathcal{A}\subset C(K,\C)$ be a self-adjoint, point-separating, nowhere-vanishing complex algebra. Then $\overline{\mathcal{A}}^{\norm{\cdot}_\infty}=C(K,\C)$.
 \begin{proof}
-Let $\mathcal{A}_{\R}\defeq\{f\in\mathcal{A}:f\text{ real-valued}\}$.\\
-If $f=u+iv\in\mathcal{A}$, self-adjointness gives $u=\frac{f+\overline{f}}{2}\in\mathcal{A}_{\R}$ and $v=\frac{f-\overline{f}}{2i}\in\mathcal{A}_{\R}$.\\
-Thus $\mathcal{A}_{\R}$ separates points; rescaling a nonzero value and taking real parts shows it vanishes nowhere.\\
-By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R)$. Approximate the real and imaginary parts separately, then combine.\\
-\hlt{Structural Commentary}: Self-adjointness lets the complex algebra expose enough real functions.\\
-\hlt{Key Insight}: The complex theorem is the real theorem applied to real and imaginary parts.
+Set $\mathcal{A}_{\R}\defeq\mathcal{A}\cap C(K,\R)$. Self-adjointness gives $\operatorname{Re}f,\operatorname{Im}f\in\mathcal{A}_{\R}$ for all $f\in\mathcal{A}$. If $f(x)\neq f(y)$ or $f(x)\neq0$, then one of $\operatorname{Re}f,\operatorname{Im}f$ witnesses the same condition; hence $\mathcal{A}_{\R}$ is point-separating and nowhere-vanishing.\\
+By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R)$. For $F=u+iv\in C(K,\C)$, take $u_n,v_n\in\mathcal{A}_{\R}$ with $u_n\rightrightarrows u$, $v_n\rightrightarrows v$.\\
+Then $u_n+iv_n\in\mathcal{A}$ and $u_n+iv_n\rightrightarrows F$.\\
+\hlt{Structural Commentary}: Self-adjointness yields a real subalgebra.\\
+\hlt{Key Insight}: Approximate real and imaginary parts.
 \end{proof}
 \end{theorem}
 
