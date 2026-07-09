@@ -29,14 +29,22 @@ Let $(X,\mathcal{M},\mu)$ be a measure space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For nonnegative terms, $\sum_{n=1}^{\infty}a_n\defeq\lim_{N\to\infty}\sum_{n=1}^{N}a_n\in[0,+\infty]$.
-\item $\mu$ is \hlt{finite} iff $\mu(E)<+\infty$ for every $E\in\mathcal{M}$.
-\item $\mu$ is \hlt{$\sigma$-finite} iff there exist $E_n\in\mathcal{M}$ such that $X=\bigcup_{n=1}^{\infty}E_n$, $\mu(E_n)<+\infty$ for $n\in\N$
+\item $\mu$ is \hlt{finite} iff $\mu(X)<+\infty$.
+\item $\mu$ is \hlt{$\sigma$-finite} iff there exist $E_n\in\mathcal{M}$ such that $X=\bigcup_{n=1}^{\infty}E_n$ and $\mu(E_n)<+\infty$ for all $n$.
+\item A measurable set $E\in\mathcal{M}$ has \hlt{finite measure} iff $\mu(E)<+\infty$.
+\item A measurable set $E\in\mathcal{M}$ is \hlt{$\sigma$-finite} iff $E=\bigcup_{n=1}^{\infty}E_n$ for some $E_n\in\mathcal{M}$ with $\mu(E_n)<+\infty$ for all $n$.
 \end{enumerate}
+\hlt{Key Insight}: $\sigma$-finiteness replaces one finite global bound by a countable finite-measure exhaustion.
 \end{definition}
 
 \begin{definition} \label{def:charges-finite-signed-measures} \hlt{Charges}\\
-Let $(X,\mathcal{M})$ be a measurable space. A \hlt{charge} is a map $\lambda:\mathcal{M}\to\R$ with $\lambda(\emptyset)=0$ such that for every pairwise disjoint sequence $(E_n)\subseteq\mathcal{M}$, the series $\sum_{n=1}^{\infty}\lambda(E_n)$ converges in $\R$ and $\lambda(\bigcup_{n=1}^{\infty}E_n)=\sum_{n=1}^{\infty}\lambda(E_n)$.\\
-\hlt{Key Insight}: Charges are real-valued signed measures with unconditional sums.
+Let $(X,\mathcal{M})$ be a measurable space. A \hlt{charge} is a map $\lambda:\mathcal{M}\to\R$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\lambda(\emptyset)=0$.
+\item For every pairwise disjoint $(E_n)\subseteq\mathcal{M}$, $\sum\limits_{n=1}^{\infty}\lambda(E_n)$ converges in $\R$ and $\lambda\left(\bigcup\limits_{n=1}^{\infty}E_n\right)=\sum\limits_{n=1}^{\infty}\lambda(E_n)$.
+\end{enumerate}
+\hlt{Key Insight}: A charge is a real-valued countably additive set function.
 \end{definition}
 
 \begin{example} \label{ex:first-abstract-measures} \hlt{First Abstract Measures}
@@ -48,6 +56,8 @@ Let $(X,\mathcal{M})$ be a measurable space. A \hlt{charge} is a map $\lambda:\m
 \item On $2^\N$, \hlt{counting measure} is $\#(E)$ for finite $E$ and $+\infty$ otherwise; it is $\sigma$-finite.\\
 More generally, $(a_n)\subseteq[0,+\infty]$ gives $\mu(E)\defeq\sum_{n\in E}a_n$, and every measure on $2^\N$ is uniquely of this form.
 \item If $X$ is uncountable and $\mathcal{M}=2^X$, $\mu(E)=0$ for countable $E$ and $\mu(E)=+\infty$ otherwise defines a measure.
+\item If $X$ is uncountable and $\mathcal{C}_X=\{E\subseteq X:E\text{ is countable or }X\setminus E\text{ is countable}\}$, then
+$\mu(E)=0$ on countable sets and $\mu(E)=1$ on cocountable sets defines a measure on $\mathcal{C}_X$.
 \item On $2^\N$, $\mu(E)=0$ for finite $E$ and $\mu(E)=+\infty$ otherwise is not a measure, since $\N=\bigcup_{n=1}^{\infty}\{n\}$ gives $+\infty\neq0$; the constant $+\infty$ rule fails at $\emptyset$.
 \item Lebesgue measure on $\mathcal{B}(\R)$ is $\sigma$-finite and gives length $b-a$ to standard intervals; Borel--Stieltjes measures come from increasing right-continuous functions as in Theorem \ref{thm:borel-stieltjes-measure-generation}.
 \end{enumerate}
@@ -76,37 +86,37 @@ Also $\lambda(X)=\sum_n2^{-n}\mu_n(X)=\sum_n2^{-n}=1$.
 \end{proof}
 \end{proposition}
 
-\begin{proposition} \label{prop:additive-set-function-basic-laws} \hlt{Basic Laws for Additive Set Functions}\\
-Let $\phi$ be additive on a ring $\mathcal{A}$. Then:
+\begin{proposition} \label{prop:measure-basic-laws} \hlt{Basic Laws for Measures}\\
+Let $(X,\mathcal{M},\mu)$ be a measure space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\phi(\emptyset)=0$;
-\item $\phi(A_1\cup\cdots\cup A_n)=\phi(A_1)+\cdots+\phi(A_n)$ for pairwise disjoint $A_i\in\mathcal{A}$;
-\item $\phi(A\cup B)+\phi(A\cap B)=\phi(A)+\phi(B)$;
-\item if $\phi$ is nonnegative and $A\subseteq B$, then $\phi(A)\leq\phi(B)$;
-\item if $B\subseteq A$ and $\abs{\phi(B)}<+\infty$, then $\phi(A\setminus B)=\phi(A)-\phi(B)$.
+\item For every $n\geq1$, if $E_1,\ldots,E_n\in\mathcal{M}$ are pairwise disjoint, then $\mu\left(\bigcup\limits_{k=1}^{n}E_k\right)=\sum\limits_{k=1}^{n}\mu(E_k)$.
+\item If $A,B\in\mathcal{M}$ and $A\subseteq B$, then $\mu(A)\leq\mu(B)$.
+\item If $A,B\in\mathcal{M}$, $A\subseteq B$, and $\mu(A)<+\infty$, then $\mu(B\setminus A)=\mu(B)-\mu(A)$.\\
+In particular, if $\mu(A)=0$, then $\mu(B\setminus A)=\mu(B)$.
+\item If $E\in\mathcal{M}$ and $(E_k)_{k\geq1}\subseteq\mathcal{M}$ satisfy $E\subseteq\bigcup\limits_{k=1}^{\infty}E_k$, then $\mu(E)\leq\sum\limits_{k=1}^{\infty}\mu(E_k)$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Apply additivity to the empty disjoint union.
-\item Induct on $n$, applying additivity to $(A_1\cup\cdots\cup A_{n-1})\cup A_n$.
-\item By disjoint decompositions, $A\cup B=(A\setminus B)\cup(B\setminus A)\cup(A\cap B)$; $A=(A\setminus B)\cup(A\cap B)$; $B=(B\setminus A)\cup(A\cap B)$
-\item If $A\subseteq B$, then $B=A\cup(B\setminus A)$ disjointly, so nonnegativity gives $\phi(A)\leq\phi(B)$.
-\item If $B\subseteq A$, then $A=B\cup(A\setminus B)$ disjointly; since $\abs{\phi(B)}<+\infty$, subtract $\phi(B)$.
+\item Define $G_k=E_k$ for $1\leq k\leq n$ and $G_k=\emptyset$ for $k>n$. Then $(G_k)$ is pairwise disjoint and countable additivity gives $\mu\left(\bigcup\limits_{k=1}^{n}E_k\right)=\mu\left(\bigcup\limits_{k=1}^{\infty}G_k\right)=\sum\limits_{k=1}^{\infty}\mu(G_k)=\sum\limits_{k=1}^{n}\mu(E_k)$.
+\item Since $B=A\sqcup(B\setminus A)$, (i) gives $\mu(B)=\mu(A)+\mu(B\setminus A)$, and $\mu(B\setminus A)\geq0$, hence $\mu(A)\leq\mu(B)$.
+\item Since $B=A\sqcup(B\setminus A)$, (i) gives $\mu(B)=\mu(A)+\mu(B\setminus A)$. Because $\mu(A)<+\infty$, subtraction yields $\mu(B\setminus A)=\mu(B)-\mu(A)$. If $\mu(A)=0$, this becomes $\mu(B\setminus A)=\mu(B)$.
+\item Set $F_1=E\cap E_1$ and $F_k=E\cap\left(E_k\setminus\bigcup\limits_{j=1}^{k-1}E_j\right)$ for $k\geq2$. Then $(F_k)_{k\geq1}\subseteq\mathcal{M}$ is pairwise disjoint, $\bigcup\limits_{k=1}^{\infty}F_k=E$, and $F_k\subseteq E_k$ for all $k$. Countable additivity and (ii) give $\mu(E)=\sum\limits_{k=1}^{\infty}\mu(F_k)\leq\sum\limits_{k=1}^{\infty}\mu(E_k)$.
 \end{enumerate}
-\hlt{Structural Commentary}: Finite additivity plus disjoint decompositions controls all elementary identities.\\
-\hlt{Key Insight}: Rewrite overlaps as disjoint pieces before applying $\phi$.
+\hlt{Structural Commentary}: Finite additivity yields order and excision; disjointization turns covers into sums.\\
+\hlt{Key Insight}: Measure disjoint pieces, then compare.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:continuity-from-below-set-functions} \hlt{Continuity from Below}\\
-Suppose $\phi$ is countably additive on a ring $\mathcal{A}$.\\
-If $A_1\subseteq A_2\subseteq A_3\subseteq\cdots$, and $A=\bigcup\limits_{n=1}^{\infty}A_n$ with all $A_n,A\in\mathcal{A}$, then $\phi(A_n)\to\phi(A)$.
-\begin{proof}
-Put $B_1=A_1$ and $B_n=A_n\setminus A_{n-1}$ for $n\geq2$. Then $B_n$ are pairwise disjoint, $A_n=B_1\cup\cdots\cup B_n$, and $A=\bigcup_nB_n$. Countable additivity turns $\phi(A_n)$ and $\phi(A)$ into partial sums and full sum of same series.\\
-\hlt{Structural Commentary}: Increasing unions are disjoint tail decompositions in disguise.\\
-\hlt{Key Insight}: Countable additivity converts set convergence into series convergence.
+Let $\mathcal{A}$ be a ring of subsets of $X$, and let $\phi$ be a countably additive set function on $\mathcal{A}$.\\
+If $(A_n)_{n\geq1}\subseteq\mathcal{A}$ and $A\in\mathcal{A}$ satisfy $A_n\subseteq A_{n+1}$ for all $n$ and $A=\bigcup_{n=1}^{\infty}A_n$, then $\lim_{N\to\infty}\phi(A_N)=\phi(A)$.
+\begin{proof} Set $B_1=A_1$ and $B_n=A_n\setminus A_{n-1}$ for $n\geq2$. Since $\mathcal{A}$ is a ring, each $B_n\in\mathcal{A}$.\\
+The sets $(B_n)$ are pairwise disjoint, $A_N=\bigsqcup_{n=1}^{N}B_n$, and $A=\bigsqcup_{n=1}^{\infty}B_n$.\\
+Countable additivity, applied to the finite union by appending empty sets, gives $\phi(A_N)=\sum_{n=1}^{N}\phi(B_n)$, while countable additivity gives $\phi(A)=\sum_{n=1}^{\infty}\phi(B_n)$. Thus $\lim_{N\to\infty}\phi(A_N)=\phi(A)$.\\
+\hlt{Structural Commentary}: Increasing chains split into disjoint increments.\\
+\hlt{Key Insight}: Continuity is convergence of partial sums.
 \end{proof}
 \end{theorem}
 
@@ -122,22 +132,26 @@ For $E=\emptyset$, the empty partition is allowed and contributes $0$.
 \end{definition}
 
 \begin{proposition} \label{prop:charges-linear-combinations-and-variation} \hlt{Charge Operations and Variation Measures}\\
-Let $\lambda,\lambda_1,\ldots,\lambda_m$ be charges on $\mathcal{M}$.
+Let $(X,\mathcal{M})$ be a measurable space, let $m\geq1$, and let $\lambda,\lambda_1,\ldots,\lambda_m$ be charges on $\mathcal{M}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $a_1,\ldots,a_m\in\R$, then $\Lambda\defeq\sum_{j=1}^{m}a_j\lambda_j$ is a charge.
-\item If $f\in\mathscr{L}^1(\mu)$ on $(X,\mathcal{M},\mu)$, then $\lambda_f(A)\defeq\int_A f\,d\mu$ is a charge.
-\item The set functions $\pi_\lambda$ and $\nu_\lambda$ are measures on $\mathcal{M}$.
+\item If $a_1,\ldots,a_m\in\R$ and $\Lambda:\mathcal{M}\to\R$ is defined by $\Lambda(E)\defeq\sum\limits_{j=1}^{m}a_j\lambda_j(E)$, then $\Lambda$ is a charge.
+\item If $\mu$ is a measure on $\mathcal{M}$, $f\in\mathscr{L}^1(\mu)$, and $\lambda_f:\mathcal{M}\to\R$ is defined by $\lambda_f(A)\defeq\int_A f\,d\mu$, then $\lambda_f$ is a charge.
+\item $\pi_\lambda:\mathcal{M}\to[0,+\infty]$ is a measure.
+\item $\nu_\lambda:\mathcal{M}\to[0,+\infty]$ is a measure.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $E=\bigsqcup_nE_n$, then $\Lambda(E)=\sum_{j=1}^{m}a_j\sum_n\lambda_j(E_n)=\sum_n\Lambda(E_n)$.
-\item By Theorem \ref{thm:integral-countably-additive-set-function}, $A\mapsto\int_A f\,d\mu$ is countably additive, and $\abs{\lambda_f(A)}\leq\int_X\abs{f}\,d\mu<+\infty$.
-\item Let $E=\bigsqcup_nE_n$. For $A\subseteq E$, $A=\bigsqcup_n(A\cap E_n)$, so $\lambda(A)\leq\sum_n\pi_\lambda(E_n)$; by suprema, $\pi_\lambda(E)\leq\sum_n\pi_\lambda(E_n)$. Conversely, for $N\in\N$ choose $A_n\subseteq E_n$ with $\lambda(A_n)>\pi_\lambda(E_n)-\varepsilon2^{-n}$ for $n\leq N$.\\
-Then $\pi_\lambda(E)\geq\sum_{n=1}^{N}\pi_\lambda(E_n)-\varepsilon$. Let $N\to\infty$ and $\varepsilon\downarrow0$. For $\nu_\lambda$, every $(A_j)_{j=1}^{r}\in\mathfrak{P}_{\mathcal{M}}(E)$ satisfies $\sum_{j=1}^{r}\abs{\lambda(A_j)}\leq\sum_n\nu_\lambda(E_n)$ after refining by $A_j\cap E_n$, hence $\nu_\lambda(E)\leq\sum_n\nu_\lambda(E_n)$. Conversely, combine near-optimal finite partitions of $E_1,\ldots,E_N$, add $\bigcup_{n>N}E_n$ as one part; let $N\to\infty$.
+\item $\Lambda(\emptyset)=0$. For $E=\bigsqcup\limits_nE_n$, $\sum\limits_n\Lambda(E_n)$ converges as $\sum\limits_{j=1}^{m}a_j\sum\limits_n\lambda_j(E_n)$; $\Lambda(E)=\sum\limits_{j=1}^{m}a_j\sum\limits_n\lambda_j(E_n)=\sum\limits_n\Lambda(E_n)$.
+\item $\lambda_f(\emptyset)=0$. For disjoint $(A_n)$, $\sum\limits_n\abs{\lambda_f(A_n)}\leq\int_{\bigsqcup\limits_nA_n}\abs{f}\,d\mu<+\infty$\\
+and $\lambda_f(\bigsqcup\limits_nA_n)=\int_{\bigsqcup\limits_nA_n}f\,d\mu=\sum\limits_n\int_{A_n}f\,d\mu=\sum\limits_n\lambda_f(A_n)$.
+\item $\pi_\lambda(\emptyset)=0$ and $\pi_\lambda\geq0$. Let $E=\bigsqcup\limits_nE_n$. For measurable $A\subseteq E$, $\lambda(A)=\sum\limits_n\lambda(A\cap E_n)\leq\sum\limits_n\pi_\lambda(E_n)$, so $\pi_\lambda(E)\leq\sum\limits_n\pi_\lambda(E_n)$. Put $S_N=\sum\limits_{n=1}^{N}\pi_\lambda(E_n)$. If $S_N<+\infty$, choose measurable $A_n\subseteq E_n$ for $n\leq N$ with $\lambda(A_n)>\pi_\lambda(E_n)-\frac{\varepsilon}{N}$; then $\pi_\lambda(E)>S_N-\varepsilon$. If $S_N=+\infty$, some $E_\ell$ has $\pi_\lambda(E_\ell)=+\infty$, hence $\pi_\lambda(E)=+\infty$. Thus $\pi_\lambda(E)\geq S_N$ for all $N$, and $N\to\infty$ gives equality.
+\item $\nu_\lambda(\emptyset)=0$ and $\nu_\lambda\geq0$. Let $E=\bigsqcup\limits_nE_n$ and $v(P)=\sum\limits_{A\in P}\abs{\lambda(A)}$. Refining $P=(A_j)_{j=1}^{r}\in\mathfrak{P}_{\mathcal{M}}(E)$ by $E_n$ gives $v(P)\leq\sum\limits_{j=1}^{r}\sum\limits_n\abs{\lambda(A_j\cap E_n)}\leq\sum\limits_n\nu_\lambda(E_n)$, so $\nu_\lambda(E)\leq\sum\limits_n\nu_\lambda(E_n)$. Put $T_N=\sum\limits_{n=1}^{N}\nu_\lambda(E_n)$.\\
+If $T_N<+\infty$, choose $P_n\in\mathfrak{P}_{\mathcal{M}}(E_n)$ for $n\leq N$ with $v(P_n)>\nu_\lambda(E_n)-\frac{\varepsilon}{N}$.\\
+Adjoining the tail $\bigcup\limits_{n>N}E_n$ gives $\nu_\lambda(E)>T_N-\varepsilon$. If $T_N=+\infty$, some $E_\ell$ has $\nu_\lambda(E_\ell)=+\infty$, and partitions of $E_\ell$ extend to $E$, so $\nu_\lambda(E)=+\infty$. Thus $\nu_\lambda(E)\geq T_N$ for all $N$, and $N\to\infty$ gives equality.
 \end{enumerate}
-\hlt{Structural Commentary}: Variation turns signed additivity into measure.\\
-\hlt{Key Insight}: Refine partitions against a disjoint decomposition.
+\hlt{Structural Commentary}: Suprema preserve additivity after refinement.\\
+\hlt{Key Insight}: Refine first, then take suprema.
 \end{proof}
 \end{proposition}
