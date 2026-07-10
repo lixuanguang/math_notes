@@ -4,30 +4,45 @@
 %
 % Nonnegative integration, integrable functions, comparison with Riemann integration, absolute integrability.
 
-Lebesgue integration starts with simple functions, then extends by monotone approximation and positive--negative decomposition.
+Lebesgue integration is calibrated on indicators, extended linearly to nonnegative simple functions, then extended by monotone approximation and positive--negative decomposition.
+
+\begin{perspective} \label{per:why-general-integral-uses-simple-minorants} \hlt{Simple Minorants Are the Right Primitive}\\
+For Lebesgue measure on $\R$, bounded measurable functions supported on finite-measure sets form a useful intermediate class; arbitrary measure spaces need not admit that reduction.\\
+Let $X\neq\emptyset$, $\mathcal{M}=\{\emptyset,X\}$, and $\mu(X)=+\infty$. If $g$ is measurable and vanishes outside some $F\in\mathcal{M}$ with $\mu(F)<+\infty$, then $F=\emptyset$ and $g=0$; hence finite-measure-support minorants of $\mathbf{1}_X$ have supremal integral $0$, while the required normalization is $\int_X\mathbf{1}_X\,d\mu=\mu(X)=+\infty$. Thus the defining minorants must be all nonnegative simple $s\leq f$, in particular $\mathbf{1}_A$ for every $A\in\mathcal{M}$.\\
+\hlt{Key Insight}: The primitive calibration is $\int_X\mathbf{1}_A\,d\mu=\mu(A)$, with $\mu(A)=+\infty$ allowed.
+\end{perspective}
 
 \begin{definition} \label{def:lebesgue-product-core-source-todo}\label{def:simple-functions-and-lebesgue-integral} \hlt{Lebesgue Integral}\\
-Let $(X,\mathcal{M},\mu)$ be a measure space and $E\in\mathcal{M}$.
+Let $(X,\mathcal{M},\mu)$ be a measure space and $E\in\mathcal{M}$; let $\mathcal{S}^+$ be nonnegative measurable simple functions on $X$.\\
+Write $s\in\mathcal{S}^+$ as $s=\sum_{i=1}^{n}c_i\mathbf{1}_{A_i}$ with $c_i\geq0$ and pairwise disjoint $A_i\in\mathcal{M}$.\\
+For measurable $f\geq0$, put $\mathcal{S}^+(f)\defeq\{s\in\mathcal{S}^+:s\leq f\}$; for measurable $f:X\to\overline{\R}$, put $f^\pm\defeq(\pm f)\vee0$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Simple}: if $0\leq s=\sum_{i=1}^{n}c_i\mathbf{1}_{E_i}$ with $c_i\geq0$, $E_i\in\mathcal{M}$ disjoint, set $\mathcal{I}_E(s)\defeq\sum\limits_{i=1}^{n}c_i\mu(E\cap E_i)$; $0\cdot(+\infty)\defeq0$.
-\item \hlt{Nonnegative}: measurable $f\geq0$, $\mathcal{S}^+(f)\defeq\{s:0\leq s\leq f,\ s\text{ simple measurable}\}$; $\int_E f\,d\mu\defeq\sup\limits_{s\in\mathcal{S}^+(f)}\mathcal{I}_E(s)$
-\item \hlt{Signed}: real measurable $f$, $f^+\defeq f\vee0$, $f^-\defeq(-f)\vee0$.\\
-If at least one of $\int_Ef^+\,d\mu,\int_Ef^-\,d\mu$ is finite, define $\int_E f\,d\mu\defeq\int_Ef^+\,d\mu-\int_Ef^-\,d\mu$.
-\item \hlt{Integrable}: $f$ is Lebesgue integrable on $E$, written $f\in\mathscr{L}^1(\mu)$ on $E$, iff $\int_Ef^+\,d\mu,\int_Ef^-\,d\mu<+\infty$.
-\item \hlt{Whole space}: if $E=X$, this gives the real-valued integrable, or summable, functions on $(X,\mathcal{M},\mu)$.
+\item \hlt{Simple}: $\mathcal{I}_E(s)\defeq\sum_{i=1}^{n}c_i\mu(E\cap A_i)$, with $0\cdot(+\infty)\defeq0$.
+\item \hlt{Nonnegative}: $\int_Ef\,d\mu\defeq\sup_{s\in\mathcal{S}^+(f)}\mathcal{I}_E(s)$; $f$ integrable on $E\Longleftrightarrow\int_Ef\,d\mu<+\infty$.
+\item \hlt{Signed}: if $\min\{\int_Ef^+\,d\mu,\int_Ef^-\,d\mu\}<+\infty$, set $\int_Ef\,d\mu\defeq\int_Ef^+\,d\mu-\int_Ef^-\,d\mu$.
+\item \hlt{$L^1$}: $f\in\mathscr{L}^1(\mu)$ on $E$ iff $f$ is measurable and $\int_E\abs f\,d\mu<+\infty$.
 \end{enumerate}
+When $E=X$, write $\int f\,d\mu\defeq\int_Xf\,d\mu$ and drop ``on $E$''.
 \end{definition}
 
 \begin{proposition} \label{prop:signed-integral-independent-of-decomposition} \hlt{Signed Decompositions Give the Same Integral}\\
-Let $E\in\mathcal{M}$ and $f=f_1-f_2$ on $E$, with $f_i\geq0$ measurable and $\int_Ef_i\,d\mu<+\infty$ for $i=1,2$.\\
-Then $f\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E f\,d\mu=\int_E f_1\,d\mu-\int_E f_2\,d\mu$.
+Let $(X,\mathcal{M},\mu)$ be a measure space, let $E\in\mathcal{M}$, and let $f,f_1,f_2:X\to\overline{\R}$ be measurable.\\
+Assume $f_i\geq0$, $\int_Ef_i\,d\mu<+\infty$ for $i=1,2$, and $f=f_1-f_2$ on $E$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\in\mathscr{L}^1(\mu)$ on $E$.
+\item $\int_E f\,d\mu=\int_E f_1\,d\mu-\int_E f_2\,d\mu$.
+\end{enumerate}
 \begin{proof}
-On $E$, $f^+\leq f_1$, $f^-\leq f_2$, hence $\int_Ef^\pm\,d\mu<+\infty$.\\
-Also $f^++f_2=f_1+f^-$, so nonnegative additivity gives $\int_E f^+\,d\mu+\int_E f_2\,d\mu=\int_E f_1\,d\mu+\int_E f^-\,d\mu$.\\
-Subtract the finite terms $\int_Ef^-\,d\mu$ and $\int_Ef_2\,d\mu$.\\
-\hlt{Structural Commentary}: Any finite nonnegative decomposition gives the same signed value.\\
-\hlt{Key Insight}: Move all positive pieces to one side, use nonnegative additivity, then subtract finite numbers.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $-f_2\leq f\leq f_1$ on $E$, $f^+\leq f_1$ and $f^-\leq f_2$ on $E$; monotonicity gives $\int_Ef^\pm\,d\mu<+\infty$.
+\item Since $f^+-f^-=f_1-f_2$ on $E$, $f^++f_2=f_1+f^-$ on $E$.\\
+Nonnegative additivity gives $\int_E f^+\,d\mu+\int_E f_2\,d\mu=\int_E f_1\,d\mu+\int_E f^-\,d\mu$; subtract the finite terms.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite positive decompositions determine one signed integral.\\
+\hlt{Key Insight}: Move all nonnegative terms to one equality, integrate, then cancel finite terms.
 \end{proof}
 \end{proposition}
 
@@ -46,15 +61,24 @@ $\mathcal{I}_E(s)=\sum\limits_\eta c_\eta\mu(E\cap G_\eta) =\sum\limits_{k=1}^{m
 \end{lemma}
 
 \begin{proposition} \label{prop:simple-integral-linearity-and-measure} \hlt{Simple Integral Algebra}\\
-If $s,t\geq0$ are simple measurable, $c\geq0$, and $E\in\mathcal{M}$, then $\mathcal{I}_E(cs)=c\mathcal{I}_E(s)$; $\mathcal{I}_E(s+t)=\mathcal{I}_E(s)+\mathcal{I}_E(t)$.\\
-For fixed $s\geq0$, $\nu_s(A)\defeq\mathcal{I}_A(s)$ is a measure on $\mathcal{M}$.
-\begin{proof} Let $s=\sum_ia_i\mathbf{1}_{A_i}$ and $t=\sum_jb_j\mathbf{1}_{B_j}$ be standard.\\
-Homogeneity follows from $\mathcal{I}_E(cs)=\sum_i(ca_i)\mu(E\cap A_i)$ and $0\cdot(+\infty)=0$.\\
-On the common refinement, $s+t=\sum\limits_{i,j}(a_i+b_j)\mathbf{1}_{A_i\cap B_j}$.\\
-By Lemma \ref{lem:simple-integral-refinement}, $\mathcal{I}_E(s+t) =\sum\limits_{i,j}(a_i+b_j)\mu(E\cap A_i\cap B_j) =\sum\limits_ia_i\mu(E\cap A_i)+\sum_jb_j\mu(E\cap B_j)$.\\
-Finally, $\nu_s=\sum_ia_i\,\mu(\,\cdot\,\cap A_i)$ is a finite nonnegative linear combination of measures.\\
-\hlt{Structural Commentary}: The integral is additive first on finite measurable partitions.\\
-\hlt{Key Insight}: Add simple functions on the common refinement of their level sets.
+Let $(X,\mathcal{M},\mu)$ be a measure space, let $E\in\mathcal{M}$, let $c\geq0$, and let $s,t\in\mathcal{S}^+$. For fixed $s\in\mathcal{S}^+$, define $\nu_s:\mathcal{M}\to[0,+\infty]$ by $\nu_s(A)\defeq\mathcal{I}_A(s)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{I}_E(cs)=c\mathcal{I}_E(s)$.
+\item $\mathcal{I}_E(s+t)=\mathcal{I}_E(s)+\mathcal{I}_E(t)$.
+\item $\nu_s$ is a measure on $\mathcal{M}$.
+\end{enumerate}
+\begin{proof} Write $s=\sum_ia_i\mathbf{1}_{A_i}$ and $t=\sum_jb_j\mathbf{1}_{B_j}$ on finite measurable partitions of $X$, with $a_i,b_j\geq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{I}_E(cs)=\sum_i(ca_i)\mu(E\cap A_i)=c\sum_ia_i\mu(E\cap A_i)=c\mathcal{I}_E(s)$, with $0\cdot(+\infty)=0$.
+\item On the common refinement $A_i\cap B_j$, $s+t=\sum_{i,j}(a_i+b_j)\mathbf{1}_{A_i\cap B_j}$.\\
+Lemma \ref{lem:simple-integral-refinement} gives $\mathcal{I}_E(s+t)=\sum_{i,j}(a_i+b_j)\mu(E\cap A_i\cap B_j)=\sum_ia_i\mu(E\cap A_i)+\sum_jb_j\mu(E\cap B_j)$.
+\item For $A\in\mathcal{M}$, $\nu_s(A)=\sum_ia_i\mu(A\cap A_i)$.\\
+Each $A\mapsto\mu(A\cap A_i)$ is a measure, and finite nonnegative sums of measures are measures.
+\end{enumerate}
+\hlt{Structural Commentary}: Simple integration is weighted measure summation on finite partitions.\\
+\hlt{Key Insight}: Refine to common atoms, then use finite additivity.
 \end{proof}
 \end{proposition}
 
@@ -78,10 +102,10 @@ Let $f,g\geq0$ be measurable and let $E,F\in\mathcal{M}$.
 
 \begin{proposition} \label{prop:chebyshev-inequality-nonnegative-integral} \hlt{Chebyshev Inequality for Nonnegative Integrals}\\
 Let $(X,\mathcal{M},\mu)$ be a measure space, let $E\in\mathcal{M}$, and let $f:X\to[0,+\infty]$ be measurable.\\
-For $\lambda>0$, set $E_\lambda\defeq E\cap\{f\geq\lambda\}$. Then $\mu(E_\lambda)\leq\frac{1}{\lambda}\int_Ef\,d\mu$.
-\begin{proof} Since $\lambda\mathbf{1}_{E_\lambda}\leq f$ on $E$, monotonicity gives $\lambda\mu(E_\lambda)=\int_E\lambda\mathbf{1}_{E_\lambda}\,d\mu\leq\int_Ef\,d\mu$. Divide by $\lambda>0$.\\
-\hlt{Structural Commentary}: A lower level set converts integral mass into measure control.\\
-\hlt{Key Insight}: Compare $f$ with the constant minorant on $\{f\geq\lambda\}$.
+For $\lambda>0$, set $E_\lambda\defeq E\cap\{f\geq\lambda\}$. Then $E_\lambda\in\mathcal{M}$ and $\mu(E_\lambda)\leq\lambda^{-1}\int_Ef\,d\mu$.
+\begin{proof} Measurability gives $E_\lambda\in\mathcal{M}$. Since $\lambda\mathbf{1}_{E_\lambda}\leq f$ on $E$, monotonicity gives $\lambda\mu(E_\lambda)=\int_E\lambda\mathbf{1}_{E_\lambda}\,d\mu\leq\int_Ef\,d\mu$; divide by $\lambda>0$.\\
+\hlt{Structural Commentary}: Level-set minorants convert mass to measure.\\
+\hlt{Key Insight}: Use $\lambda\mathbf{1}_{E_\lambda}\leq f$ on $E$.
 \end{proof}
 \end{proposition}
 
@@ -98,14 +122,19 @@ Let $E\in\mathcal{M}$, $f,g\geq0$ measurable, and $\omega\in\mathcal{S}^+(f+g)$ 
 \end{method}
 
 \begin{proposition} \label{prop:nonnegative-integral-homogeneity-additivity} \hlt{Homogeneity and Additivity for Nonnegative Integrals}\\
-Let $f,g\geq0$ be measurable, let $c\geq0$, and let $E\in\mathcal{M}$. Then $\int_E cf\,d\mu=c\int_E f\,d\mu$; and $\int_E(f+g)\,d\mu=\int_Ef\,d\mu+\int_Eg\,d\mu$, where the identities are interpreted in $[0,+\infty]$ with $0\cdot(+\infty)=0$.
+Let $f,g\geq0$ be measurable, let $c\geq0$, and let $E\in\mathcal{M}$. All identities are in $[0,+\infty]$, with $0\cdot(+\infty)=0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Homogeneity}: $\int_E cf\,d\mu=c\int_E f\,d\mu$.
+\item \hlt{Additivity}: $\int_E(f+g)\,d\mu=\int_Ef\,d\mu+\int_Eg\,d\mu$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $c=0$, both sides are $0$. If $c>0$, $s\mapsto cs$ bijects $\mathcal{S}^+(f)$ with $\mathcal{S}^+(cf)$ and $\mathcal{I}_E(cs)=c\mathcal{I}_E(s)$; take suprema.
-\item If $s\in\mathcal{S}^+(f)$ and $t\in\mathcal{S}^+(g)$, then $s+t\in\mathcal{S}^+(f+g)$ and $\mathcal{I}_E(s)+\mathcal{I}_E(t)=\mathcal{I}_E(s+t)\leq\int_E(f+g)\,d\mu$.\\
-Taking $\sup_{s,t}$ gives $\int_Ef\,d\mu+\int_Eg\,d\mu\leq\int_E(f+g)\,d\mu$. Conversely, for $\omega\in\mathcal{S}^+(f+g)$, choose simple $\varphi_n\leq f$, $\psi_n\leq g$ with $(1-\frac1n)\omega\leq\varphi_n+\psi_n$. Then $\left(1-\frac1n\right)\mathcal{I}_E(\omega) \leq \mathcal{I}_E(\varphi_n)+\mathcal{I}_E(\psi_n) \leq \int_E f\,d\mu+\int_E g\,d\mu$.\\
-Let $n\to\infty$, then take $\sup_{\omega\in\mathcal{S}^+(f+g)}$.
+\item If $c=0$, both sides are $0$; if $c>0$, $s\mapsto cs$ bijects $\mathcal{S}^+(f)$ with $\mathcal{S}^+(cf)$ and satisfies $\mathcal{I}_E(cs)=c\mathcal{I}_E(s)$.\\
+Hence taking suprema gives the claim.
+\item If $s\in\mathcal{S}^+(f)$ and $t\in\mathcal{S}^+(g)$, then $s+t\in\mathcal{S}^+(f+g)$ and $\mathcal{I}_E(s)+\mathcal{I}_E(t)=\mathcal{I}_E(s+t)\leq\int_E(f+g)\,d\mu$, so taking $\sup_{s,t}$ gives $\int_Ef\,d\mu+\int_Eg\,d\mu\leq\int_E(f+g)\,d\mu$. Conversely, for $\omega\in\mathcal{S}^+(f+g)$, choose simple $\varphi_n\leq f$ and $\psi_n\leq g$ with $(1-\frac1n)\omega\leq\varphi_n+\psi_n$.\\
+Then $\left(1-\frac1n\right)\mathcal{I}_E(\omega)\leq\mathcal{I}_E(\varphi_n)+\mathcal{I}_E(\psi_n)\leq\int_E f\,d\mu+\int_E g\,d\mu$. Let $n\to\infty$, then take $\sup_{\omega\in\mathcal{S}^+(f+g)}$.
 \end{enumerate}
 \hlt{Structural Commentary}: The nonnegative integral is linear before signed integrability is introduced.\\
 \hlt{Key Insight}: Scale minorants; split sum-minorants on a finite grid.
@@ -157,13 +186,21 @@ Let $E\in\mathcal{M}$.
 \end{proposition}
 
 \begin{theorem} \label{thm:integral-countably-additive-set-function} \hlt{The Integral as a Measure or Charge}\\
-If $f\geq0$ is measurable, then $\phi_f:\mathcal{M}\to[0,+\infty]$, $\phi_f(A)\defeq\int_A f\,d\mu$, is a measure.\\
-If $f\in\mathscr{L}^1(\mu)$, then $\lambda_f:\mathcal{M}\to\R$, $\lambda_f(A)\defeq\int_A f\,d\mu$, is finite-valued and countably additive.
-\begin{proof} For simple $s\geq0$, $A\mapsto\mathcal{I}_A(s)$ is a measure.\\
-If $A=\dot\bigcup_nA_n$ and $s\in\mathcal{S}^+(f)$, then $\mathcal{I}_A(s)=\sum_n\mathcal{I}_{A_n}(s)\leq\sum_n\phi_f(A_n)$; taking $\sup_s$ gives $\phi_f(A)\leq\sum_n\phi_f(A_n)$.\\
-Conversely, for every $N$, finite additivity gives $\sum_{n=1}^{N}\phi_f(A_n)=\phi_f(\bigcup_{n=1}^{N}A_n)\leq\phi_f(A)$; let $N\to\infty$.\\
-Hence $\phi_f$ is countably additive. If $f\in\mathscr{L}^1(\mu)$, then $\phi_{f^+}(X),\phi_{f^-}(X)<+\infty$ and $\lambda_f=\phi_{f^+}-\phi_{f^-}$.\\
-Thus, for $A=\dot\bigcup_nA_n$, $\lambda_f(A)=\sum_n\phi_{f^+}(A_n)-\sum_n\phi_{f^-}(A_n)=\sum_n\lambda_f(A_n)$.\\
+For $A\in\mathcal{M}$, define $\phi_f(A)\defeq\int_Af\,d\mu$ when $f\geq0$ is measurable, and define $\lambda_f(A)\defeq\int_Af\,d\mu$ when $f\in\mathscr{L}^1(\mu)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\geq0$ is measurable, then $\phi_f:\mathcal{M}\to[0,+\infty]$ is a measure.
+\item If $f\in\mathscr{L}^1(\mu)$, then $\lambda_f:\mathcal{M}\to\R$ is finite-valued and countably additive.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For simple $s\geq0$, $A\mapsto\mathcal{I}_A(s)$ is a measure, so $\phi_f(\emptyset)=0$.\\
+If $A=\dot\bigcup_nA_n$, $s\in\mathcal{S}^+(f)$, then $\mathcal{I}_A(s)=\sum_n\mathcal{I}_{A_n}(s)\leq\sum_n\phi_f(A_n)$; taking $\sup_s$ gives $\phi_f(A)\leq\sum_n\phi_f(A_n)$. Conversely, for every $N$, finite additivity gives $\sum_{n=1}^{N}\phi_f(A_n)=\phi_f(\bigcup_{n=1}^{N}A_n)\leq\phi_f(A)$.\\
+Let $N\to\infty$. Hence $\phi_f(A)=\sum_n\phi_f(A_n)$.
+\item Since $f\in\mathscr{L}^1(\mu)$, $\phi_{f^+}(X),\phi_{f^-}(X)<+\infty$ and $\lambda_f=\phi_{f^+}-\phi_{f^-}$ is finite-valued.\\
+If $A=\dot\bigcup_nA_n$, then item (i) gives $\lambda_f(A)=\sum_n\phi_{f^+}(A_n)-\sum_n\phi_{f^-}(A_n)=\sum_n\lambda_f(A_n)$.
+\end{enumerate}
 \hlt{Structural Commentary}: Setwise integration turns densities into measures.\\
 \hlt{Key Insight}: Sup simple measures; subtract finite signs.
 \end{proof}
@@ -194,16 +231,45 @@ Hence $\lambda(A_n)=\lambda(A_1)-\lambda(C_n)\to\lambda(A_1)-\lambda(C)=\lambda(
 
 \begin{proposition} \label{prop:finite-measure-support-integrals} \hlt{Finite-Measure Support}\\
 Let $(X,\mathcal{M},\mu)$ be a measure space, let $E\in\mathcal{M}$, and let $h:E\to\R$ be bounded and measurable.\\
-Suppose $h=0$ on $E\setminus E_0$ for some $E_0\in\mathcal{M}$ with $E_0\subseteq E$ and $\mu(E_0)<+\infty$.\\
-Then $h\in\mathscr{L}^1(\mu)$ on $E$, $\int_Eh\,d\mu=\int_{E_0}h\,d\mu$, and this value is independent of $E_0$.
-\begin{proof} Choose $M<+\infty$ with $\abs h\leq M$ on $E$.\\
-Since $h=0$ on $E\setminus E_0$, $0\leq h^\pm\leq M\mathbf{1}_{E_0}$ on $E$, so $\int_Eh^\pm\,d\mu\leq M\mu(E_0)<+\infty$\\
- Thus $h\in\mathscr{L}^1(\mu)$ on $E$. Also $\int_{E\setminus E_0}h\,d\mu=0$, so Corollary \ref{cor:integration-countable-additivity-and-continuity-over-domains} gives $\int_Eh\,d\mu=\int_{E_0}h\,d\mu$.\\
- If $E_1$ is another such set, then $E_0,E_1\subseteq E_0\cup E_1$, $h=0$ off each support. $\int_{E_0}h\,d\mu=\int_{E_0\cup E_1}h\,d\mu=\int_{E_1}h\,d\mu$.\\
+Suppose $h=0$ on $E\setminus E_0$ for some $E_0\in\mathcal{M}$ with $E_0\subseteq E$ and $\mu(E_0)<+\infty$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $h\in\mathscr{L}^1(\mu)$ on $E$.
+\item $\int_Eh\,d\mu=\int_{E_0}h\,d\mu$.
+\item If $E_1\in\mathcal{M}$, $E_1\subseteq E$, $\mu(E_1)<+\infty$, and $h=0$ on $E\setminus E_1$, then $\int_{E_0}h\,d\mu=\int_{E_1}h\,d\mu$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $M<+\infty$ with $\abs h\leq M$ on $E$.\\
+Since $h=0$ on $E\setminus E_0$, $0\leq h^\pm\leq M\mathbf{1}_{E_0}$ on $E$, so $\int_Eh^\pm\,d\mu\leq M\mu(E_0)<+\infty$.
+\item Since $\int_{E\setminus E_0}h\,d\mu=0$, Corollary \ref{cor:integration-countable-additivity-and-continuity-over-domains} gives $\int_Eh\,d\mu=\int_{E_0}h\,d\mu$.
+\item Apply item (ii) with $E_0$ and with $E_1$: $\int_{E_0}h\,d\mu=\int_Eh\,d\mu=\int_{E_1}h\,d\mu$.
+\end{enumerate}
 \hlt{Structural Commentary}: Finite support turns boundedness into integrability.\\
 \hlt{Key Insight}: The integral only sees where $h$ can be nonzero.
 \end{proof}
 \end{proposition}
+
+\begin{corollary} \label{cor:compact-continuous-finite-measure-integrable} \hlt{Compact Continuous Functions on Finite Measure Spaces}\\
+Let $X$ be a compact topological space, let $\mathcal{M}$ be a $\sigma$-algebra containing the topology of $X$, and let $\mu(X)<+\infty$.\\
+If $f:X\to\R$ is continuous, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f$ is measurable.
+\item $f\in\mathscr{L}^1(\mu)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For every open $O\subseteq\R$, continuity gives $f^{-1}(O)$ open in $X$, hence $f^{-1}(O)\in\mathcal{M}$.
+\item The continuous image $f(X)$ is compact in $\R$, hence bounded.\\
+Since $\mu(X)<+\infty$, Proposition \ref{prop:basic-lebesgue-integral-properties}(i) gives $f\in\mathscr{L}^1(\mu)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Compactness supplies boundedness, while the measure hypothesis supplies finite mass.\\
+\hlt{Key Insight}: Continuous on compact plus finite measure implies bounded measurable, hence integrable.
+\end{proof}
+\end{corollary}
 
 \begin{corollary} \label{cor:integral-null-and-finite-ae-consequences} \hlt{Null and Finiteness Consequences for $f\geq0$}\\
 Let $f:X\to[0,+\infty]$ be measurable and $\phi_f(A)\defeq\int_A f\,d\mu$.
@@ -229,21 +295,41 @@ Also $\{f>0\}=\bigcup_n\{f>1/n\}$ and $\mu\{f>1/n\}\leq n\int_X f\,d\mu<+\infty$
 \end{corollary}
 
 \begin{theorem} \label{thm:absolute-integrability-and-domination} \hlt{Absolute Integrability and Domination}\\
-If $f\in\mathscr{L}^1(\mu)$ on $E$, then $\abs{f}\in\mathscr{L}^1(\mu)$ and $\abs{\int_E f\,d\mu}\leq\int_E\abs{f}\,d\mu$.\\
-If $f$ is measurable and $\abs{f}\leq g\in\mathscr{L}^1(\mu)$ on $E$, then $f\in\mathscr{L}^1(\mu)$ on $E$.
+Let $(X,\mathcal{M},\mu)$ be a measure space and let $E\in\mathcal{M}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\in\mathscr{L}^1(\mu)$ on $E$, then $\abs{f}\in\mathscr{L}^1(\mu)$ on $E$ and $\abs{\int_E f\,d\mu}\leq\int_E\abs{f}\,d\mu$.
+\item If $f:X\to\overline{\R}$ is measurable, $g\in\mathscr{L}^1(\mu)$ on $E$, and $\abs{f}\leq g$ on $E$, then $f\in\mathscr{L}^1(\mu)$ on $E$.
+\end{enumerate}
 \begin{proof}
-Use $\abs{f}=f^++f^-$, $f\leq\abs{f}$, and $-f\leq\abs{f}$. If $\abs{f}\leq g$, then $0\leq f^\pm\leq g$, so $\int_Ef^\pm\,d\mu<+\infty$.\\
-\hlt{Structural Commentary}: Lebesgue integrability is absolute integrability.\\
-\hlt{Key Insight}: A single integrable majorant controls both signs.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $a\defeq\int_Ef^+\,d\mu$ and $b\defeq\int_Ef^-\,d\mu$. Since $f\in\mathscr{L}^1(\mu)$ on $E$, $a,b<+\infty$; hence $\int_E\abs f\,d\mu=\int_E(f^++f^-)\,d\mu=a+b<+\infty$, and $\abs{\int_Ef\,d\mu}=\abs{a-b}\leq a+b=\int_E\abs f\,d\mu$.
+\item Since $\abs f\leq g$ on $E$, $g\geq0$ on $E$ and $\int_Eg\,d\mu<+\infty$. Also $0\leq f^\pm\leq\abs f\leq g$ on $E$, so monotonicity gives $\int_Ef^\pm\,d\mu<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: Both claims reduce to finite positive and negative parts.\\
+\hlt{Key Insight}: Use $\abs f=f^++f^-$ and $0\leq f^\pm\leq g$.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:lebesgue-integral-linearity} \hlt{Linearity of the Lebesgue Integral}\\
 Let $(X,\mathcal{M},\mu)$ be a measure space, let $E\in\mathcal{M}$, let $f,g\in\mathscr{L}^1(\mu)$ on $E$, and let $a,b\in\R$.\\
-Then $af+bg\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(af+bg)\,d\mu=a\int_Ef\,d\mu+b\int_Eg\,d\mu$.
-\begin{proof} For $c\in\R$ and $u\in\mathscr{L}^1(\mu)$ on $E$, $(cu)^\pm=c^+u^\pm+c^-u^\mp$, hence $cu\in\mathscr{L}^1(\mu)$ and $\int_Ecu\,d\mu=c\int_Eu\,d\mu$. Since $\abs{f+g}\leq\abs f+\abs g\in\mathscr{L}^1(\mu)$, domination gives $f+g\in\mathscr{L}^1(\mu)$. Integrating $(f+g)^+ + f^- + g^- = (f+g)^- + f^+ + g^+$ on $E$ and subtracting finite terms gives $\int_E(f+g)\,d\mu=\int_Ef\,d\mu+\int_Eg\,d\mu$. Combine homogeneity and additivity.\\
-\hlt{Structural Commentary}: Signed linearity is finite nonnegative linearity plus the positive--negative decomposition.\\
-\hlt{Key Insight}: Move all nonnegative pieces to one equality, integrate, then subtract only finite terms.
+Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $c\in\R$ and $u\in\mathscr{L}^1(\mu)$ on $E$, $cu\in\mathscr{L}^1(\mu)$ on $E$ and $\int_Ecu\,d\mu=c\int_Eu\,d\mu$.
+\item $f+g\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(f+g)\,d\mu=\int_Ef\,d\mu+\int_Eg\,d\mu$.
+\item $af+bg\in\mathscr{L}^1(\mu)$ on $E$ and $\int_E(af+bg)\,d\mu=a\int_Ef\,d\mu+b\int_Eg\,d\mu$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $(cu)^\pm=c^+u^\pm+c^-u^\mp$, both $(cu)^+$ and $(cu)^-$ have finite integral. Nonnegative linearity gives $\int_Ecu\,d\mu=(c^+a_u+c^-b_u)-(c^+b_u+c^-a_u)=c(a_u-b_u)$, where $a_u\defeq\int_Eu^+\,d\mu$ and $b_u\defeq\int_Eu^-\,d\mu$.
+\item Since $\abs{f+g}\leq\abs f+\abs g$ and $\abs f+\abs g\in\mathscr{L}^1(\mu)$ on $E$, Theorem \ref{thm:absolute-integrability-and-domination}(ii) gives $f+g\in\mathscr{L}^1(\mu)$ on $E$. The identity $(f+g)^+ + f^- + g^- = (f+g)^- + f^+ + g^+$ on $E$ has finite nonnegative integrals; integrate and subtract finite terms.
+\item Apply item (i) with $(c,u)=(a,f)$ and $(c,u)=(b,g)$, then item (ii) to $af$ and $bg$.
+\end{enumerate}
+\hlt{Structural Commentary}: Signed linearity follows from finite sign pieces.\\
+\hlt{Key Insight}: Integrate one nonnegative equality, then cancel finite terms.
 \end{proof}
 \end{proposition}
 
@@ -308,9 +394,15 @@ Let $A\subseteq\R$ be Lebesgue measurable with $m(A)<+\infty$. For every $\varep
 \end{proof}
 \end{proposition}
 
-\begin{example} \label{ex:counting-measure-l1-absolute-series} \hlt{Counting Measure Gives Absolute Series}\\
-Let $\mu$ be counting measure on $(\N,2^\N)$. For $f:\N\to\R$,\\
-$f\in\mathscr{L}^1(\mu)\Longleftrightarrow\sum_{n=1}^{\infty}\abs{f(n)}<+\infty$; $\int_{\N}f\,d\mu=\sum_{n=1}^{\infty}f(n)$ when these equivalent conditions hold.
+\begin{example} \label{ex:counting-and-unit-mass-integrals} \hlt{Counting and Unit-Mass Integrals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Counting}: for counting measure $\#$ on $(\N,2^\N)$ and $f:\N\to\R$,\\
+$f\in\mathscr{L}^1(\#)\Longleftrightarrow\sum_{n=1}^{\infty}\abs{f(n)}<+\infty$, and then $\int_{\N}f\,d\#=\sum_{n=1}^{\infty}f(n)$.
+\item \hlt{Unit mass}: for $(X,\mathcal{M})$, $p\in X$, and $\delta_p(E)\defeq\mathbf{1}_E(p)$, $\int_Xf\,d\delta_p=f(p)$ for measurable $f:X\to[0,+\infty]$.\\
+If $f:X\to\R$ is measurable, then $f\in\mathscr{L}^1(\delta_p)$ and the same formula holds.
+\end{enumerate}
+For $\delta_p$, verify first on indicators, then extend to simple functions by finite linearity, to nonnegative functions by monotone simple approximation, and to real-valued functions by positive--negative splitting.
 \end{example}
 
 \begin{example} \label{ex:l1-not-closed-under-squaring} \hlt{$L^1$ Is Not Closed Under Squaring}\\
