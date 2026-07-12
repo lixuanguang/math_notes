@@ -1,0 +1,248 @@
+\subsection{Absolute Continuity and BV Decomposition}
+
+Absolute continuity is the part of bounded variation detected by integration. The remaining bounded-variation behavior is singular: it may be monotone and continuous, but its derivative vanishes almost everywhere.
+
+\begin{proposition} \label{prop:absolute-continuity-variation-function} \hlt{Absolutely Continuous Variation Function}\\
+Let $F\in AC([a,b])$ and let $T_F(x)\defeq V_a^x(F)$ be its total variation function.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T_F\in AC([a,b])$.
+\item $F=(F+T_F)-T_F$ is a difference of two nondecreasing absolutely continuous functions.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\varepsilon>0$ and choose $\delta>0$ from absolute continuity of $F$ for the challenge $\frac{\varepsilon}{2}$.\\
+Suppose $(c_k,d_k)_{k=1}^n$ are disjoint subintervals of $(a,b)$ with $\sum\limits_k(d_k-c_k)<\delta$.\\
+Choose partitions $P_k$ of $[c_k,d_k]$ such that $V_{c_k}^{d_k}(F)\leq V(F,P_k)+\frac{\varepsilon}{2n}$.\\
+Let $\mathcal I$ be all subintervals of all $P_k$; then $\mathcal I$ is disjoint up to endpoints and $\sum\limits_{I\in\mathcal I}|I|=\sum\limits_k(d_k-c_k)$.\\
+Hence absolute continuity of $F$ gives $\sum\limits_kV(F,P_k)<\frac{\varepsilon}{2}$, thus $\sum\limits_{k=1}^n\abs{T_F(d_k)-T_F(c_k)} =\sum\limits_{k=1}^nV_{c_k}^{d_k}(F)<\varepsilon.$
+\item By (i), $T_F\in AC([a,b])$, hence $F+T_F\in AC([a,b])$.\\
+For $x<y$, $T_F(y)-T_F(x)=V_x^y(F)\geq0$ and $(F+T_F)(y)-(F+T_F)(x)=F(y)-F(x)+V_x^y(F)\geq0$.\\
+Thus $T_F$ and $F+T_F$ are nondecreasing, and $F=(F+T_F)-T_F$.
+\end{enumerate}
+\hlt{Structural Commentary}: Absolute continuity controls local variation, not just endpoint displacement.\\
+\hlt{Key Insight}: Partition each local variation, then apply one absolute-continuity test to all pieces.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:absolute-continuity-divided-differences-uniform-integrability} \hlt{Absolute Continuity via Divided Differences}\\
+Let $F\in C([a,b])$, extend $F$ constantly by $F(b)$ on $(b,b+1]$. Let
+$\operatorname{Diff}_hF(x)\defeq\frac{F(x+h)-F(x)}{h}, \; 0<h\leq1,\; x\in[a,b]$.\\
+Then $F\in AC([a,b])$ iff $\{\operatorname{Diff}_hF:0<h\leq1\}$ is uniformly integrable:\\
+$\forall\varepsilon>0\ \exists\delta>0\ \forall E\in\mathcal{L}^1$, $E\subseteq[a,b]$ and $m(E)<\delta$ imply $\sup\limits_{0<h\leq1}\int_E\abs{\operatorname{Diff}_hF}\,dm<\varepsilon$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(\Leftarrow)$] Assume the divided differences are uniformly integrable. Given $\varepsilon>0$, choose $\delta>0$ for $\frac{\varepsilon}{2}$.\\
+For disjoint $(c_k,d_k)$ with total length below $\delta$, set $E\defeq\bigcup\limits_k(c_k,d_k)$.\\
+By Proposition \ref{prop:divided-difference-average-identity}, $\sum\limits_k\abs{\operatorname{Av}_hF(d_k)-\operatorname{Av}_hF(c_k)}\leq\int_E\abs{\operatorname{Diff}_hF}\,dm<\frac{\varepsilon}{2}$.\\
+Letting $h\downarrow0$ gives $\sum\limits_k\abs{F(d_k)-F(c_k)}\leq\frac{\varepsilon}{2}<\varepsilon$.
+\item[$(\Rightarrow)$] Suppose $F\in AC([a,b])$. By Proposition \ref{prop:absolute-continuity-variation-function}, write $F=U-V$ with $U,V$ nondecreasing and absolutely continuous; since $\abs{\operatorname{Diff}_hF}\leq\operatorname{Diff}_hU+\operatorname{Diff}_hV$, assume $F$ nondecreasing.\\
+Let $\widetilde F$ be the constant extension to $[a,b+1]$.\\
+Choose $\eta>0$ for $\frac{\varepsilon}{2}$ in the absolute continuity of $\widetilde F$ and set $\delta\defeq\frac{\eta}{2}$. If $m(E)<\delta$, take open $O\supseteq E\cap(a,b)$ with $O\cap(a,b)=\bigsqcup\limits_j(\alpha_j,\beta_j)$ and $m(O\cap(a,b))<\eta$; set $O_N\defeq\bigcup\limits_{j\leq N}(\alpha_j,\beta_j)$.\\
+For $0<t\leq h$, $\sum\limits_{j\leq N}((\beta_j+t)-(\alpha_j+t))<\eta$, so $\sum\limits_{j\leq N}(\widetilde F(\beta_j+t)-\widetilde F(\alpha_j+t))<\frac{\varepsilon}{2}$.\\
+Hence $\int_{O_N}\operatorname{Diff}_hF\,dm=\frac{1}{h}\int_0^h\sum\limits_{j\leq N}(\widetilde F(\beta_j+t)-\widetilde F(\alpha_j+t))\,dt<\frac{\varepsilon}{2}$.\\
+Let $N\to\infty$ and use $E\subseteq O$ to get $\sup\limits_{0<h\leq1}\int_E\operatorname{Diff}_hF\,dm<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: Absolute continuity is uniform small-set control for translated secants.\\
+\hlt{Key Insight}: Moving averages turn endpoint increments into integrals of divided differences.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:fundamental-theorem-absolutely-continuous-lebesgue} \hlt{Fundamental Theorem for Absolutely Continuous Functions}\\
+Let $F\in AC([a,b])$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $F'$ exists a.e. on $[a,b]$.
+\item $F'\in\mathscr{L}^1([a,b])$.
+\item $F(y)-F(x)=\int_x^yF'\,dm$ for $a\leq x\leq y\leq b$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Corollary \ref{cor:absolute-continuity-bv-and-differentiability}(ii) gives $\exists E\subseteq[a,b]$ with $m([a,b]\setminus E)=0$ and $F'(x)\in\R$ $\forall x\in E$.
+\item Corollary \ref{cor:absolute-continuity-bv-and-differentiability}(i) gives $F\in BV([a,b])$, so Corollary \ref{cor:monotone-and-bv-derivatives-integrable}(iv) gives $F'\in\mathscr{L}^1([a,b])$.
+\item Set $f_n\defeq\operatorname{Diff}_{\frac{1}{n}}F$. By Theorem \ref{thm:absolute-continuity-divided-differences-uniform-integrability}, $(f_n)$ is uniformly integrable; by (i), $f_n\to F'$ a.e.\\
+Fix $a\leq x<y\leq b$ and $\varepsilon>0$. Choose $M>0$ with $\int_{\{\abs{F'}>M\}}\abs{F'}\,dm<\frac{\varepsilon}{6}$ and then $\delta>0$ such that $M\delta<\frac{\varepsilon}{6}$ and $m(A)<\delta$ implies $\sup\limits_n\int_A\abs{f_n}\,dm<\frac{\varepsilon}{3}$. By Egorov's theorem, $f_n\to F'$ uniformly on $[x,y]\setminus A$ for some measurable $A$ with $m(A)<\delta$. For large $n$, $\int_x^y\abs{f_n-F'}\,dm<\varepsilon$.\\
+Thus $\int_x^yf_n\,dm\to\int_x^yF'\,dm$. By Proposition \ref{prop:divided-difference-average-identity}, $\int_x^yf_n\,dm=\operatorname{Av}_{\frac{1}{n}}F(y)-\operatorname{Av}_{\frac{1}{n}}F(x)\to F(y)-F(x)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Uniform integrability is the condition that permits the discrete secant formula to pass to the derivative under the integral sign.\\
+\hlt{Key Insight}: Uniform small-set control upgrades a.e. secant convergence to convergence of interval integrals.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:absolute-continuity-indefinite-integral-characterization} \hlt{Indefinite Integral Characterization of Absolute Continuity}\\
+A function $F:[a,b]\to\R$ satisfies:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $F\in AC([a,b])$ iff $\exists g\in\mathscr{L}^1([a,b])$ such that $F(x)=F(a)+\int_a^xg\,dm$ for $x\in[a,b]$.
+\item Any such $g$ satisfies $g=F'$ a.e.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$(\Rightarrow)$ If $F\in AC([a,b])$, Theorem \ref{thm:fundamental-theorem-absolutely-continuous-lebesgue} gives $F'\in\mathscr{L}^1([a,b])$ and $F(x)=F(a)+\int_a^xF'\,dm$; take $g=F'$. 
+\item[$(i)$]$(\Leftarrow)$ If $F(x)=F(a)+\int_a^xg\,dm$ with $g\in\mathscr{L}^1([a,b])$, Theorem \ref{thm:lebesgue-antiderivative-theorem} gives $F\in AC([a,b])$.
+\item[$(ii)$] If $F(x)=F(a)+\int_a^xg\,dm$, then Theorem \ref{thm:lebesgue-antiderivative-theorem} gives $F'=g$ a.e.
+\end{enumerate}
+\hlt{Structural Commentary}: The two directions are the fundamental theorem and the antiderivative theorem.\\
+\hlt{Key Insight}: Absolute continuity is exactly representability by an $L^1$ density.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:rn-interval-cdf-absolute-continuity} \hlt{Radon--Nikodym on an Interval Recovers Absolute Continuity}\\
+Let $\lambda$ be a finite measure on $\mathcal{B}([a,b])$ with $\lambda\ll m$, let $f\defeq\frac{d\lambda}{dm}$, and set $F(x)\defeq\lambda([a,x])$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $F(y)-F(x)=\int_x^yf\,dm$ for $a\leq x\leq y\leq b$.
+\item $F\in AC([a,b])$.
+\item $F'=f$ a.e. on $[a,b]$.
+\end{enumerate}
+\begin{proof} By Theorem \ref{thm:radon-nikodym-sigma-finite}, $f\in L^1(m)$, $\lambda(E)=\int_Ef\,dm$ for $E\in\mathcal{B}([a,b])$. Since $\lambda\ll m$, $\lambda(\{x\})=0$ for $x\in[a,b]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $a\leq x\leq y\leq b$, $\lambda(\{x\})=0$ gives $F(y)-F(x)=\lambda((x,y])=\int_{(x,y]}f\,dm=\int_x^yf\,dm$.
+\item Taking $x=a$ in (i), $F(y)=F(a)+\int_a^yf\,dm$ for $y\in[a,b]$; Corollary \ref{cor:absolute-continuity-indefinite-integral-characterization}(i) gives $F\in AC([a,b])$.
+\item Since $F=F(a)+\int_a^{(\cdot)}f\,dm$, Corollary \ref{cor:absolute-continuity-indefinite-integral-characterization}(ii) gives $F'=f$ a.e. on $[a,b]$.
+\end{enumerate}
+\hlt{Structural Commentary}: Interval RN representation differentiates cumulative mass.\\
+\hlt{Key Insight}: No atoms, so interval increments equal density integrals.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:cantor-function-not-absolutely-continuous} \hlt{Cantor--Lebesgue Function Is Not Absolutely Continuous}\\
+Let $\varphi:[0,1]\to[0,1]$ be the Cantor--Lebesgue function: $\varphi$ is continuous, nondecreasing, $\varphi(0)=0$, $\varphi(1)=1$, and constant on every complementary interval of the Cantor set.\\
+At stage $n$, write the remaining intervals as $I_{n,k}=[c_{n,k},d_{n,k}]$, $1\leq k\leq2^n$, so $\sum\limits_k|I_{n,k}|=(\frac{2}{3})^n$.\\
+Since $\varphi$ is constant on the deleted gaps, $\sum\limits_{k=1}^{2^n}(\varphi(d_{n,k})-\varphi(c_{n,k}))=1$.\\
+By continuity, choose $c_{n,k}<\alpha_{n,k}<\beta_{n,k}<d_{n,k}$ such that
+$\sum\limits_k(\beta_{n,k}-\alpha_{n,k})<(\frac{2}{3})^n$ and $\sum\limits_k(\varphi(\beta_{n,k})-\varphi(\alpha_{n,k}))>\frac{1}{2}.$
+Since $(\frac{2}{3})^n\to0$, absolute continuity fails for $\varepsilon=\frac{1}{2}$.\\
+\hlt{Key Insight}: The increase of $\varphi$ lies on intervals with arbitrarily small total length.
+\end{example}
+
+\begin{proposition} \label{prop:lipschitz-ac-bv-strict-inclusions} \hlt{Lipschitz, Absolutely Continuous, and BV Classes}\\
+Let $[a,b]$ be nondegenerate, and let $\mathcal{F}_{\operatorname{Lip}}$ denote the Lipschitz functions on $[a,b]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{F}_{\operatorname{Lip}}\subsetneq AC([a,b])\subsetneq BV([a,b])$.
+\item For $\mathcal{C}\in\{\mathcal{F}_{\operatorname{Lip}},AC([a,b]),BV([a,b])\}$, $F,G\in\mathcal{C}$ and $\alpha,\beta\in\R$ imply $\alpha F+\beta G\in\mathcal{C}$.
+\item If $F\in\mathcal{C}$ for some $\mathcal{C}\in\{\mathcal{F}_{\operatorname{Lip}},AC([a,b]),BV([a,b])\}$, then $T_F(x)\defeq V_a^x(F)$ lies in $\mathcal{C}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $F$ is $L$-Lipschitz, then $\sum\limits_j|F(d_j)-F(c_j)|\leq L\sum\limits_j(d_j-c_j)$, so $F\in AC([a,b])$.\\
+Corollary \ref{cor:absolute-continuity-bv-and-differentiability}(i) gives $AC([a,b])\subseteq BV([a,b])$.\\
+Strictness: $x\mapsto\sqrt{\frac{x-a}{b-a}}$ lies in $AC([a,b])\setminus\mathcal{F}_{\operatorname{Lip}}$, and $x\mapsto\varphi(\frac{x-a}{b-a})$, with $\varphi$ Cantor--Lebesgue, lies in $BV([a,b])\setminus AC([a,b])$ because $\varphi$ is nondecreasing and its Cantor-stage intervals have total length $(\frac{2}{3})^n\to0$ but total $\varphi$-increase $1$.
+\item If $F,G$ are Lipschitz with constants $L_F,L_G$, then $\alpha F+\beta G$ is Lipschitz with constant $\abs{\alpha}L_F+\abs{\beta}L_G$.\\
+If $F,G\in AC([a,b])$, the interval criterion gives $\alpha F+\beta G\in AC([a,b])$.\\
+If $F,G\in BV([a,b])$, then $V(\alpha F+\beta G,P)\leq\abs{\alpha}V(F,P)+\abs{\beta}V(G,P)$, so $V_a^b(\alpha F+\beta G)<+\infty$.
+\item If $F$ is $L$-Lipschitz, then $T_F(v)-T_F(u)=V_u^v(F)\leq L(v-u)$.\\
+If $F\in AC([a,b])$, Proposition \ref{prop:absolute-continuity-variation-function}(i) gives $T_F\in AC([a,b])$.\\
+If $F\in BV([a,b])$, then $T_F$ is nondecreasing and $V_a^b(T_F)=T_F(b)-T_F(a)=V_a^b(F)<+\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\mathcal{F}_{\operatorname{Lip}}\subsetneq AC\subsetneq BV$ is a strict control hierarchy.\\
+\hlt{Key Insight}: $\sqrt{\cdot}$ breaks Lipschitz; Cantor mass breaks absolute continuity.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:absolute-continuity-algebra-and-composition} \hlt{Algebra and Safe Composition}\\
+Let $F,G\in AC([a,b])$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\alpha,\beta\in\R$, $\alpha F+\beta G\in AC([a,b])$.
+\item $FG\in AC([a,b])$.
+\item If $\Phi:\R\to\R$ is Lipschitz, then $\Phi\circ G\in AC([a,b])$.
+\item If $G$ is strictly monotone and $\Phi\in AC(J)$ on a compact interval $J\supseteq G([a,b])$, then $\Phi\circ G\in AC([a,b])$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For disjoint $(c_k,d_k)$, $\sum\limits_k\abs{(\alpha F+\beta G)(d_k)-(\alpha F+\beta G)(c_k)}\leq\abs{\alpha}\sum\limits_k\abs{F(d_k)-F(c_k)}+\abs{\beta}\sum\limits_k\abs{G(d_k)-G(c_k)}$. Thus the right side is $<\varepsilon$ whenever $\sum\limits_k(d_k-c_k)<\delta$ for a common AC scale of $F,G$, QED.
+\item Let $\abs F\leq M_F$ and $\abs G\leq M_G$. For $\Delta F_k\defeq F(d_k)-F(c_k)$ and $\Delta G_k\defeq G(d_k)-G(c_k)$,\\
+$\abs{F(d_k)G(d_k)-F(c_k)G(c_k)}\leq M_F\abs{\Delta G_k}+M_G\abs{\Delta F_k}$. Choose a common AC scale with\\
+$\sum\limits_k\abs{\Delta F_k}<\frac{\varepsilon}{2(1+M_G)}$ and $\sum\limits_k\abs{\Delta G_k}<\frac{\varepsilon}{2(1+M_F)}$; then $\sum\limits_k\abs{F(d_k)G(d_k)-F(c_k)G(c_k)}<\varepsilon$.
+\item If $\Phi$ is $L$-Lipschitz, then $\sum\limits_k\abs{\Phi(G(d_k))-\Phi(G(c_k))}\leq L\sum\limits_k\abs{G(d_k)-G(c_k)}$.\\
+Choose the AC scale of $G$ for $\frac{\varepsilon}{L}$ if $L>0$; the case $L=0$ is trivial.
+\item Suppose $G$ is strictly increasing. Choose $\eta>0$ from $AC(\Phi)$ for $\varepsilon$ and $\delta>0$ from $AC(G)$ for $\eta$.\\
+If $\sum\limits_k(d_k-c_k)<\delta$, then $\sum\limits_k(G(d_k)-G(c_k))<\eta$.\\
+Since $(G(c_k),G(d_k))$ are disjoint, $\sum\limits_k\abs{\Phi(G(d_k))-\Phi(G(c_k))}<\varepsilon$.\\
+If $G$ is strictly decreasing, replace $(G(c_k),G(d_k))$ by $(G(d_k),G(c_k))$.
+\end{enumerate}
+\hlt{Structural Commentary}: AC is stable under algebra and controlled composition.\\
+\hlt{Key Insight}: Lipschitz bounds sizes; monotonicity preserves disjoint intervals.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:absolute-continuity-composition-can-fail-bv} \hlt{Absolutely Continuous Composition Can Fail}\\
+Define $f,g:[-1,1]\to\R$ by $f(x)\defeq\operatorname{sgn}(x)\abs{x}^{\frac{1}{3}}$, $g(0)\defeq0$, and $g(x)\defeq x^2\cos\frac{\pi}{2x}$ for $x\neq0$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f,g\in AC([-1,1])$.
+\item $f\circ g\notin BV([-1,1])$, hence $f\circ g\notin AC([-1,1])$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $h(t)\defeq\frac{1}{3}\abs{t}^{-\frac{2}{3}}\mathbf{1}_{t\neq0}$. Then $h\in L^1([-1,1])$ and $f(x)=\int_0^xh\,dm$, so $f\in AC([-1,1])$.\\
+For $x\neq0$, $g'(x)=2x\cos\frac{\pi}{2x}+\frac{\pi}{2}\sin\frac{\pi}{2x}$, hence $\abs{g'}\leq2+\frac{\pi}{2}$ off $0$.\\
+Together with $\abs{g(x)}\leq x^2$, this gives $g$ Lipschitz, so $g\in AC([-1,1])$.
+\item For $k\geq1$, $g(\frac{1}{2k-1})=0$ and $g(\frac{1}{2k})=\frac{(-1)^k}{4k^2}$. With $P_n\defeq\{0\}\cup\{\frac{1}{j}:1\leq j\leq2n\}$,\\
+$V(f\circ g,P_n)\geq\sum\limits_{k=1}^n\abs{f(g(\frac{1}{2k}))-f(g(\frac{1}{2k-1}))}=4^{-\frac{1}{3}}\sum\limits_{k=1}^nk^{-\frac{2}{3}}\to+\infty$. Thus $f\circ g\notin BV([-1,1])$.
+\end{enumerate}
+\hlt{Key Insight}: The cube root amplifies the inner oscillations until variation diverges.
+\end{proof}
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/ac_bv_hierarchy_decomposition.tikz}
+  \caption{$\operatorname{Lip}\subsetneq AC\subsetneq BV$, and each $F\in BV$ decomposes as $F=G+H$ with $G\in AC$ and $H'=0$ a.e.}
+  \label{fig:ac-bv-hierarchy-decomposition}
+\end{figure}
+
+\begin{definition} \label{def:singular-bounded-variation-function} \hlt{Singular Bounded-Variation Function}\\
+A function $S\in BV([a,b])$ is \hlt{singular} if $S'=0$ a.e. on $[a,b]$.
+\end{definition}
+
+\begin{theorem} \label{thm:lebesgue-decomposition-bv-functions} \hlt{Lebesgue Decomposition of a BV Function}\\
+Let $F\in BV([a,b])$. Define
+$G(x)\defeq F(a)+\int_a^xF'\,dm, \; H(x)\defeq F(x)-G(x).$
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $G\in AC([a,b])$ and $G'=F'$ a.e.
+\item $H\in BV([a,b])$, $H'=0$ a.e., $H(a)=0$, and $F=G+H$.
+\item If $F=G_1+H_1$ with $G_1\in AC([a,b])$, $H_1'=0$ a.e., and $H_1(a)=0$, then $G_1=G$ and $H_1=H$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Corollary \ref{cor:monotone-and-bv-derivatives-integrable}, $F'\in\mathscr{L}^1([a,b])$. By Theorem \ref{thm:lebesgue-antiderivative-theorem}, $G\in AC([a,b])$ and $G'=F'$ a.e.
+\item Since $F,G\in BV([a,b])$, $H=F-G\in BV([a,b])$.\\
+Moreover, $H'=F'-G'=0$ a.e., $H(a)=0$, and $F=G+H$.
+\item If $F=G_1+H_1$ is another normalized decomposition, then $G_1-G=H-H_1$ is absolutely continuous, has derivative $0$ a.e., and vanishes at $a$. By Theorem \ref{thm:fundamental-theorem-absolutely-continuous-lebesgue}, $G_1-G=0$, hence $G_1=G$ and $H_1=H$.
+\end{enumerate}
+\hlt{Structural Commentary}: A BV function splits into an $L^1$-density part and a derivative-invisible singular part.\\
+\hlt{Key Insight}: Integrating the a.e. derivative separates the absolutely continuous and singular parts.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:absolutely-continuous-singular-functions-constant} \hlt{Absolutely Continuous Singular Functions Are Constant}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $F\in AC([a,b])$ and $F'=0$ a.e., then $F$ is constant.
+\item The Cantor--Lebesgue function is nonconstant and singular.
+\item The Cantor--Lebesgue function is not absolutely continuous.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:fundamental-theorem-absolutely-continuous-lebesgue}, $F(y)-F(x)=\int_x^yF'\,dm=0$.
+\item The function $\varphi$ is nondecreasing, hence in $BV([0,1])$, and $\varphi'=0$ on the full-measure set $[0,1]\setminus P$ by Proposition \ref{prop:cantor-singular-function-properties}. Since $\varphi(0)=0$ and $\varphi(1)=1$, it is nonconstant.
+\item If $\varphi\in AC([0,1])$, then $\varphi'=0$ a.e. by (ii), so (i) gives $\varphi$ constant, contradicting $\varphi(0)=0\neq1=\varphi(1)$.
+\end{enumerate}
+\hlt{Structural Commentary}: The fundamental theorem makes absolute continuity exclude nonconstant singularity.\\
+\hlt{Key Insight}: Derivative-invisible increase can occur in BV but not in absolute continuity.
+\end{proof}
+\end{corollary}
