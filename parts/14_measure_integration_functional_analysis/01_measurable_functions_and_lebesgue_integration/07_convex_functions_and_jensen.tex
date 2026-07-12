@@ -6,8 +6,8 @@ Convexity is the geometric condition behind Jensen's inequality: averages move i
 Let $I\subseteq\R$ be an interval and let $\varphi:I\to\R$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\varphi$ is \hlt{convex} iff $\varphi(\lambda x_1+(1-\lambda)x_2)\leq\lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)$ for all $x_1,x_2\in I$ and $\lambda\in[0,1]$.
-\item Equivalently, for all $x_1<x<x_2$ in $I$, $\varphi(x)\leq\frac{x_2-x}{x_2-x_1}\varphi(x_1)+\frac{x-x_1}{x_2-x_1}\varphi(x_2)$.
+\item $\varphi$ is \hlt{convex} iff $\forall x_1,x_2\in I\ \forall\lambda\in[0,1]$, $\varphi(\lambda x_1+(1-\lambda)x_2)\leq\lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)$.
+\item Equivalently, $\forall x_1<x<x_2$ in $I$, $\varphi(x)\leq\frac{x_2-x}{x_2-x_1}\varphi(x_1)+\frac{x-x_1}{x_2-x_1}\varphi(x_2)$.
 \end{enumerate}
 \hlt{Key Insight}: Graphs lie below enclosing chords.
 \end{definition}
@@ -33,7 +33,7 @@ Divide by $(x-x_1)(x_2-x_1)>0$ and $(x_2-x)(x_2-x_1)>0$, respectively.\\
 \begin{proposition} \label{prop:increasing-derivative-convex-function} \hlt{Increasing Derivative Gives Convexity}\\
 Let $I\subseteq\R$ be open and let $\varphi:I\to\R$ be differentiable. If $\varphi'$ is increasing on $I$, then $\varphi$ is convex on $I$.\\
 In particular, this holds if $\varphi$ is twice differentiable and $\varphi''\geq0$ on $I$.
-\begin{proof} For $a<b$ in $I$, set $S(a,b)\defeq(\varphi(b)-\varphi(a))/(b-a)$. Let $u<v$ and $0<\lambda<1$, and put $x=\lambda u+(1-\lambda)v$.\\
+\begin{proof} For $a<b$ in $I$, set $S(a,b)\defeq\frac{\varphi(b)-\varphi(a)}{b-a}$. Let $u<v$ and $0<\lambda<1$, and put $x=\lambda u+(1-\lambda)v$.\\
 By MVT, $S(u,x)=\varphi'(c_1)$, $S(x,v)=\varphi'(c_2)$ for some $c_1\in(u,x)$, $c_2\in(x,v)$. As $c_1<c_2$, $S(u,x)\leq S(x,v)$.\\
 Clearing denominators, $\varphi(x)\leq\frac{v-x}{v-u}\varphi(u)+\frac{x-u}{v-u}\varphi(v)=\lambda\varphi(u)+(1-\lambda)\varphi(v)$; the cases $\lambda=0,1$ are equality.\\
 If $\varphi''\geq0$, for $a<b$, MVT gives $\varphi'(b)-\varphi'(a)=\varphi''(d)(b-a)\geq0$ for some $d\in(a,b)$, so $\varphi'$ is increasing.\\
@@ -43,16 +43,16 @@ If $\varphi''\geq0$, for $a<b$, MVT gives $\varphi'(b)-\varphi'(a)=\varphi''(d)(
 \end{proposition}
 
 \begin{example} \label{ex:basic-convex-functions-second-derivative} \hlt{Basic Convex Functions}\\
-By Proposition \ref{prop:increasing-derivative-convex-function}, $x\mapsto x^p$ for $p\geq1$, $x\mapsto e^{ax}$, and $x\mapsto\log(1/x)$ are convex on $(0,+\infty)$, $\R$, and $(0,+\infty)$.
+By Proposition \ref{prop:increasing-derivative-convex-function}, $x\mapsto x^p$ for $p\geq1$, $x\mapsto e^{ax}$, and $x\mapsto\log(\frac{1}{x})$ are convex on $(0,+\infty)$, $\R$, and $(0,+\infty)$.
 \end{example}
 
 \begin{proposition} \label{prop:finite-jensen-inequality} \hlt{Finite Jensen Inequality}\\
-Let $I\subseteq\R$ be an interval, $\varphi:I\to\R$ be convex, $x_1,\ldots,x_n\in I$, $\lambda_1,\ldots,\lambda_n\geq0$ with $n\in\N$, $\sum_{k=1}^{n}\lambda_k=1$.\\
-Set $\bar{x}\defeq\sum_{k=1}^{n}\lambda_kx_k$. Then $\bar{x}\in I$ and $\varphi(\bar{x})\leq\sum_{k=1}^{n}\lambda_k\varphi(x_k)$.
+Let $I\subseteq\R$ be an interval, $\varphi:I\to\R$ be convex, $x_1,\ldots,x_n\in I$, $\lambda_1,\ldots,\lambda_n\geq0$ with $n\in\N$, $\sum\limits_{k=1}^{n}\lambda_k=1$.\\
+Set $\bar{x}\defeq\sum\limits_{k=1}^{n}\lambda_kx_k$. Then $\bar{x}\in I$ and $\varphi(\bar{x})\leq\sum\limits_{k=1}^{n}\lambda_k\varphi(x_k)$.
 \begin{proof} Induct on $m=\#\{k:\lambda_k>0\}$. If $m=1$, equality holds.\\
-For $m\geq2$, relabel so $\lambda_1,\ldots,\lambda_m>0$ and $\lambda_k=0$ for $k>m$. Let $\Lambda=1-\lambda_m$ and $y=\Lambda^{-1}\sum_{k=1}^{m-1}\lambda_kx_k$.\\
-By induction, $y\in I$ and $\varphi(y)\leq\Lambda^{-1}\sum_{k=1}^{m-1}\lambda_k\varphi(x_k)$.\\
-Since $\bar{x}=\Lambda y+\lambda_mx_m$, convexity gives $\bar{x}\in I$ and $\varphi(\bar{x})\leq\Lambda\varphi(y)+\lambda_m\varphi(x_m)\leq\sum_{k=1}^{n}\lambda_k\varphi(x_k)$.\\
+For $m\geq2$, relabel so $\lambda_1,\ldots,\lambda_m>0$ and $\lambda_k=0$ for $k>m$. Let $\Lambda=1-\lambda_m$ and $y=\Lambda^{-1}\sum\limits_{k=1}^{m-1}\lambda_kx_k$.\\
+By induction, $y\in I$ and $\varphi(y)\leq\Lambda^{-1}\sum\limits_{k=1}^{m-1}\lambda_k\varphi(x_k)$.\\
+Since $\bar{x}=\Lambda y+\lambda_mx_m$, convexity gives $\bar{x}\in I$ and $\varphi(\bar{x})\leq\Lambda\varphi(y)+\lambda_m\varphi(x_m)\leq\sum\limits_{k=1}^{n}\lambda_k\varphi(x_k)$.\\
 \hlt{Structural Commentary}: Induct by peeling off one weight.\\
 \hlt{Key Insight}: Jensen iterates convexity.
 \end{proof}
@@ -62,17 +62,17 @@ Since $\bar{x}=\Lambda y+\lambda_mx_m$, convexity gives $\bar{x}\in I$ and $\var
 Let $I\subseteq\R$ be open and let $\varphi:I\to\R$ be convex.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For every $x\in I$, $\varphi'(x-)$ and $\varphi'(x+)$ exist and are finite.
+\item $\forall x\in I$, $\varphi'(x-)$ and $\varphi'(x+)$ exist and are finite.
 \item If $u<v$ in $I$, then $\varphi'(u-)\leq\varphi'(u+)\leq\frac{\varphi(v)-\varphi(u)}{v-u}\leq\varphi'(v-)\leq\varphi'(v+)$.
-\item If $\alpha\in I$ and $\varphi'(\alpha-)\leq m_0\leq\varphi'(\alpha+)$, then $\varphi(t)\geq\varphi(\alpha)+m_0(t-\alpha)$ for all $t\in I$.
+\item If $\alpha\in I$ and $\varphi'(\alpha-)\leq m_0\leq\varphi'(\alpha+)$, then $\forall t\in I$, $\varphi(t)\geq\varphi(\alpha)+m_0(t-\alpha)$.
 \end{enumerate}
 \begin{proof}
-For $a<b$ in $I$, write $S(a,b)\defeq(\varphi(b)-\varphi(a))/(b-a)$.
+For $a<b$ in $I$, write $S(a,b)\defeq\frac{\varphi(b)-\varphi(a)}{b-a}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Fix $x\in I$ and choose $a<x<b$ in $I$.\\
-If $a<r<s<x$, Lemma \ref{lem:convex-chordal-slope-lemma} gives $S(a,x)\leq S(r,x)\leq S(s,x)\leq S(x,b)$, so $\lim_{r\uparrow x}S(r,x)$ exists in $\R$.\\
-If $x<r<s<b$, the same lemma gives $S(a,x)\leq S(x,r)\leq S(x,s)\leq S(x,b)$, so $\lim_{r\downarrow x}S(x,r)$ exists in $\R$.
+If $a<r<s<x$, then $S(a,x)\leq S(r,x)\leq S(s,x)\leq S(x,b)$ by Lemma \ref{lem:convex-chordal-slope-lemma}, so $\lim\limits_{r\uparrow x}S(r,x)$ exists in $\R$.\\
+If $x<r<s<b$, the same lemma gives $S(a,x)\leq S(x,r)\leq S(x,s)\leq S(x,b)$, so $\lim\limits_{r\downarrow x}S(x,r)$ exists in $\R$.
 \item Let $u<v$ in $I$. For $r<u<s<v$ and $u<q<v<t$, the chordal slope inequalities give\\
 $S(r,u)\leq S(u,s)\leq S(u,v)\leq S(q,v)\leq S(v,t)$. Letting $r\uparrow u$, $s\downarrow u$, $q\uparrow v$, and $t\downarrow v$ gives asserted chain.
 \item If $t=\alpha$, equality holds. If $t>\alpha$, then (ii) gives $m_0\leq\varphi'(\alpha+)\leq S(\alpha,t)$, hence $\varphi(t)\geq\varphi(\alpha)+m_0(t-\alpha)$.\\
@@ -95,5 +95,6 @@ Substituting $t=f$ and integrating gives $\int\varphi(f)\,dm\geq\varphi(\alpha)+
 \end{theorem}
 
 \begin{remark} \label{rem:jensen-integrability-growth-condition} \hlt{Integrability in Jensen}\\
-Linear growth, $\abs{\varphi(t)}\leq c_1+c_2\abs t$, makes $\varphi\circ f\in L^1([0,1])$ by Proposition \ref{prop:lp-composition-growth-and-continuity}; if $\varphi\circ f\geq0$, Jensen's right side may be extended-valued.
+Linear growth, $\abs{\varphi(t)}\leq c_1+c_2\abs t$, makes $\varphi\circ f\in L^1([0,1])$ by Proposition \ref{prop:lp-composition-growth-and-continuity}.\\
+If $\varphi\circ f\geq0$, Jensen's right side may be extended-valued.
 \end{remark}
