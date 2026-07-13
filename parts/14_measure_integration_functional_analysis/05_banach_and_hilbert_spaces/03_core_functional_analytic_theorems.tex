@@ -2,63 +2,131 @@
 
 % **Role:** infinite-dimensional linear algebra powered by analysis.
 %
-% Hahn--Banach, uniform boundedness, open mapping, closed graph theorem.
+% Hahn--Banach, Riesz representation, uniform boundedness, Banach--Steinhaus.
 
-The core theorems explain why complete normed spaces behave rigidly under linear maps. Baire category turns pointwise control, surjectivity, and closed graphs into operator statements.
+The core theorems explain why complete normed spaces behave rigidly under linear maps. Hahn--Banach supplies norm-preserving extensions, while Baire category turns pointwise control into uniform boundedness.
 
 \begin{theorem} \label{thm:hahn-banach-extension} \hlt{Hahn--Banach Extension Theorem}\\
-Let $\mathcal{X}$ be a real normed space, let $M\subseteq\mathcal{X}$ be a linear subspace, and let $p:\mathcal{X}\to\R$ be sublinear. If $\varphi:M\to\R$ is linear and $\varphi(x)\leq p(x)$ for all $x\in M$, then $\varphi$ extends to a linear functional $\Phi:\mathcal{X}\to\R$ with $\Phi(x)\leq p(x)$ for all $x\in\mathcal{X}$. In the normed complex form, every bounded functional on a subspace extends with the same norm.
-\end{theorem}
-
-\begin{theorem} \label{thm:positive-riesz-representation-c-interval} \hlt{Positive Riesz Representation on $C([a,b])$}\\
-Let $J=[a,b]$ and let $G\in C(J)^*$ be positive, i.e. $f\geq0$ on $J$ implies $G(f)\geq0$.\\
-Then $\exists$ a finite positive Borel measure $\gamma$ on $\R$ with $\operatorname{supp}\gamma\subseteq J$ s.t. $G(f)=\int_J f\,d\gamma$ $\forall f\in C(J)$.\\
-Moreover, $\normop{G}=G(\mathbf{1}_J)=\gamma(J)$.
+Let $\mathcal{X}$ be a real normed space, $M\leq\mathcal{X}$, $p:\mathcal{X}\to\R$ sublinear, and $\varphi:M\to\R$ linear with $\varphi\leq p$ on $M$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x_0\in\mathcal X\setminus M$ and $M_0\defeq M+\R x_0$, then $\exists\varphi_0:M_0\to\R$ linear such that $\varphi_0|_M=\varphi$ and $\varphi_0\leq p$ on $M_0$.
+\item $\exists\Phi:\mathcal{X}\to\R$ linear such that $\Phi|_M=\varphi$ and $\Phi\leq p$ on $\mathcal X$.
+\end{enumerate}
 \begin{proof}
-For $a\leq t<b$ and $n$ large, set
-\begin{align}
-\varphi_{t,n}(s)\defeq
-\begin{cases}
-1, & a\leq s\leq t,\\
-n(t+1/n-s), & t<s<t+1/n,\\
-0, & t+1/n\leq s\leq b.
-\end{cases} \nonumber
-\end{align}
-Then $\varphi_{t,n}\downarrow \mathbf{1}_{[a,t]}$ pointwise, hence $G(\varphi_{t,n})$ decreases.\\
-Define $g(t)\defeq\lim_{n\to\infty}G(\varphi_{t,n})$; $g(t)=0$ for $t<a$; and $g(t)=G(\mathbf{1}_J)$ for $t \geq b$.\\
-Ramp comparisons give $g$ increasing and right-continuous.\\
-By Theorem \ref{thm:borel-stieltjes-measure-generation}, $g$ induces a finite Borel--Stieltjes measure $\gamma$ with $\operatorname{supp}\gamma\subseteq J$ and $\gamma(J)=g(b)=G(\mathbf{1}_J)$.\\
-Fix $f\in C(J)$ and $\varepsilon>0$. Choose $P:a=t_0<\cdots<t_m=b$ with oscillation $\omega_f(P)\leq\varepsilon$.\\
-Put $\Delta g_k\defeq g(t_k)-g(t_{k-1})$. For $n$ large, ramp increments $\varphi_{t_k,n}-\varphi_{t_{k-1},n}$ give continuous approximant $f_{P,n}$ whose $G$-increments approximate $\sum_k f(t_k)\Delta g_k$ within $\varepsilon$, while step approximant $s_P$ satisfies $\norm{f-s_P}_{L^1(\gamma)}\leq\varepsilon\gamma(J)$.\\
-Hence $\left|G(f)-\int_Jf\,d\gamma\right|\leq \varepsilon(2\normop{G}+1)$ after absorbing constants into $\varepsilon$. Letting $\varepsilon\downarrow0$ gives $G(f)=\int_Jf\,d\gamma$.\\
-Finally, positivity gives $\abs{G(f)}\leq G(\mathbf{1}_J)\norm{f}_\infty=\gamma(J)\norm{f}_\infty$, and $f=\mathbf{1}_J$ gives $\normop{G}\geq\gamma(J)$.\\
-\hlt{Structural Commentary}: Positivity turns ramp limits into interval masses, hence a Stieltjes measure.\\
-\hlt{Key Insight}: Ramps turn order on $C(J)$ into interval masses.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $y,z\in M$, $\varphi(y)+\varphi(z)=\varphi(y+z)\leq p(y+z)\leq p(y-x_0)+p(z+x_0)$; $\varphi(y)-p(y-x_0)\leq p(z+x_0)-\varphi(z)$.\\
+Set $a\defeq\sup\limits_{y\in M}(\varphi(y)-p(y-x_0))$, $b\defeq\inf\limits_{z\in M}(p(z+x_0)-\varphi(z))$. Then $-p(-x_0)\leq a\leq b\leq p(x_0)$; $\alpha\in[a,b]$.\\
+Since $x_0\notin M$, $y+tx_0$ has unique coordinates, so define $\varphi_0(y+tx_0)\defeq\varphi(y)+t\alpha$.\\
+If $t>0$, then $\varphi_0(y+tx_0)=t(\varphi(y/t)+\alpha)\leq tp(y/t+x_0)=p(y+tx_0)$.\\
+If $t<0$, then $\varphi_0(y+tx_0)=(-t)(\varphi(y/(-t))-\alpha)\leq(-t)p(y/(-t)-x_0)=p(y+tx_0)$.\\
+If $t=0$, domination is $\varphi\leq p$ on $M$.
+\item Let $\mathscr E$ be $(N,\psi)$, $M\leq N\leq\mathcal X$, $\psi:N\to\R$ linear, $\psi|_M=\varphi$, $\psi\leq p$ on $N$, ordered by extension.\\
+Chains have upper bound $(\bigcup N_i,\psi_*)$, where $\psi_*|_{N_i}=\psi_i$, so Principle \ref{princ:zorns-lemma} gives maximal $(N_*,\psi_*)\in\mathscr E$.\\
+If $N_*\neq\mathcal X$, choose $x_0\in\mathcal X\setminus N_*$; by (i), $\psi_*$ extends to $N_*+\R x_0$, contradiction. Thus $N_*=\mathcal X$ and $\Phi\defeq\psi_*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Extend across one new direction while preserving domination, then use maximality.\\
+\hlt{Key Insight}: Sublinearity leaves a nonempty interval of admissible values on each added direction.
 \end{proof}
 \end{theorem}
 
+\begin{corollary} \label{cor:hahn-banach-norm-preserving-extension-and-norming-functionals} \hlt{Norm-Preserving Extensions and Norming Functionals}\\
+Let $\mathcal{X}$ be a normed space and let $M\subseteq\mathcal{X}$ be a linear subspace.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A bounded linear functional $\varphi:M\to\mathbb{F}$ admits an extension $\Phi\in\mathcal{X}^*$ with $\normop{\Phi}=\normop{\varphi}$.
+\item $\forall 0\neq x\in\mathcal{X}\ \exists\Phi\in\mathcal{X}^*$ such that $\normop{\Phi}=1$ and $\Phi(x)=\norm{x}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathbb F=\R$, apply Theorem \ref{thm:hahn-banach-extension} with $p(u)\defeq\normop{\varphi}\norm{u}$ to get $\Phi|_M=\varphi$ and $\Phi\leq p$.\\
+Since $-\Phi(u)=\Phi(-u)\leq p(u)$, $\abs{\Phi(u)}\leq\normop{\varphi}\norm{u}$$\forall u\in\mathcal X$, so $\normop{\Phi}\leq\normop{\varphi}$; restriction gives equality.\\
+If $\mathbb F=\C$, apply the real case to $\operatorname{Re}\varphi$ and set $\Phi(u)\defeq F(u)-iF(iu)$.\\
+Then $\Phi|_M=\varphi$, $\Phi$ is complex-linear, and $\abs{\Phi(u)}=\sup\limits_{\abs{\alpha}=1}F(\alpha u)\leq\normop{\varphi}\norm{u}$, so again $\normop{\Phi}=\normop{\varphi}$.
+\item Fix $0\neq x\in\mathcal X$, put $M_x\defeq\mathbb F x$, and define $\varphi_x(\lambda x)\defeq\lambda\norm{x}$.\\
+Then $\normop{\varphi_x}=1$ and $\varphi_x(x)=\norm{x}$; by (i), choose $\Phi\in\mathcal X^*$ with $\Phi|_{M_x}=\varphi_x$ and $\normop{\Phi}=1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Preserve the norm, then extend a one-dimensional norming functional.\\
+\hlt{Key Insight}: Hahn--Banach continues a bounded scalar test without weakening its norm bound.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:natural-embedding-isometry} \hlt{Natural Embedding Is an Isometry}\\
+For a normed space $\mathcal{X}$, the canonical map $J:\mathcal{X}\to\mathcal{X}^{**}$, $Jx(\Phi)=\Phi(x)$, satisfies
+$\normop{Jx}=\norm{x}\;(x\in\mathcal{X}).$
+\begin{proof}
+$\forall\Phi\in\mathcal{X}^*$, $\abs{Jx(\Phi)}=\abs{\Phi(x)}\leq\normop{\Phi}\norm{x}$, so $\normop{Jx}\leq\norm{x}$. If $x\neq0$, choose $\Phi\in\mathcal{X}^*$ with $\normop{\Phi}=1$ and $\Phi(x)=\norm{x}$ by Corollary \ref{cor:hahn-banach-norm-preserving-extension-and-norming-functionals}; hence $\normop{Jx}\geq\norm{x}$. The case $x=0$ is immediate.\\
+\hlt{Structural Commentary}: The upper bound is duality; a norming functional attains the matching lower bound.\\
+\hlt{Key Insight}: The double dual records every vector without changing its norm.
+\end{proof}
+\end{corollary}
+
+\begin{example} \label{ex:banach-limit-hahn-banach} \hlt{A Dominated Extension of the Limit Functional}\\
+On real $\ell^\infty$, set $p((x_n))\defeq\limsup\limits_{n\to\infty}x_n$. This functional is subadditive and positively homogeneous.\\
+If $c\subseteq\ell^\infty$ is the subspace of convergent sequences and $L((x_n))\defeq\lim\limits_{n\to\infty}x_n$, then $L\leq p$ on $c$. \\
+By Theorem \ref{thm:hahn-banach-extension}, $L$ extends to a linear functional $\Lambda:\ell^\infty\to\R$ with $\Lambda(x)\leq\limsup\limits_{n\to\infty}x_n\;(x\in\ell^\infty)$.\\
+This is the Hahn--Banach domination step behind limit-extension arguments on $\ell^\infty$.
+\end{example}
+
+\begin{corollary} \label{cor:positive-riesz-representation-c-interval} \hlt{Positive Riesz Representation on $C([a,b])$}\\
+Let $J=[a,b]$ and let $G\in C(J)^*$ be positive, i.e. $f\geq0$ on $J$ implies $G(f)\geq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists\gamma:\mathcal{B}(\R)\to[0,+\infty]$ a finite Borel measure with $\operatorname{supp}\gamma\subseteq J$ and $\forall f\in C(J)$, $G(f)=\int_J f\,d\gamma$.
+\item $\normop{G}=G(\mathbf{1}_J)=\gamma(J)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:riesz-markov-positive-functional-cc}, $\exists$ finite Radon $\mu$ on $J$ such that $G(f)=\int_J f\,d\mu$ for $f\in C(J)$.\\
+Define $\gamma(E)\defeq\mu(E\cap J)$ for $E\in\mathcal B(\R)$. Then $\gamma(\R\setminus J)=0$, so $\operatorname{supp}\gamma\subseteq J$, and $\int_J f\,d\gamma=\int_J f\,d\mu=G(f)$.
+\item If $\norm{f}_\infty\leq1$, then $\mathbf{1}_J\pm f\geq0$, hence $-G(\mathbf{1}_J)\leq G(f)\leq G(\mathbf{1}_J)$ and $\abs{G(f)}\leq G(\mathbf{1}_J)$.\\
+Thus $\normop{G}\leq G(\mathbf{1}_J)$; taking $f=\mathbf{1}_J$ gives $\normop{G}\geq G(\mathbf{1}_J)$. Also $G(\mathbf{1}_J)=\int_J\mathbf{1}_J\,d\gamma=\gamma(J)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Specialize Riesz--Markov to the interval, then extend the measure by zero.\\
+\hlt{Key Insight}: Positivity converts the order unit $\mathbf{1}_J$ into the exact dual norm.
+\end{proof}
+\end{corollary}
+
 \begin{corollary} \label{cor:riesz-representation-by-charges-conditional} \hlt{Signed Riesz Representation by a Charge}\\
-Let $J=[a,b]$ and let $G\in C(J)^*$ admit $G=G^+-G^-$, $G^\pm\in C(J)^*$; for $G^\pm\geq0$.\\
-Then $\exists$ a charge $\lambda:\mathcal{B}(\R)\to\R$ with $\operatorname{supp}\lambda\subseteq J$ such that $G(f)=\int_J f\,d\lambda$ $\forall f\in C(J)$.
-\begin{proof} By Theorem \ref{thm:positive-riesz-representation-c-interval}, $\exists$ finite positive Borel measures $\gamma^\pm$ with $\operatorname{supp}\gamma^\pm\subseteq J$; $G^\pm(f)=\int_J f\,d\gamma^\pm$ $\forall f\in C(J)$.\\
-Set $\lambda\defeq\gamma^+-\gamma^-$, i.e. $\lambda(E)\defeq\gamma^+(E)-\gamma^-(E)$ for $E\in\mathcal{B}(\R)$. Then $\lambda$ is a charge by Proposition \ref{prop:charges-linear-combinations-and-variation}, $\operatorname{supp}\lambda\subseteq J$, and $G(f)=G^+(f)-G^-(f)=\int_J f\,d\gamma^+-\int_J f\,d\gamma^-=\int_J f\,d\lambda$.\\
-\hlt{Structural Commentary}: Positive representations subtract to a charge representation.\\
+Let $J=[a,b]$, and suppose $G\in C(J)^*$ admits $G=G^+-G^-$ with positive $G^\pm\in C(J)^*$.\\
+Then $\exists\lambda:\mathcal{B}(\R)\to\R$ a charge with $\operatorname{supp}\lambda\subseteq J$ and $\forall f\in C(J),\ G(f)=\int_J f\,d\lambda$.
+\begin{proof} By Corollary \ref{cor:positive-riesz-representation-c-interval}, choose finite Borel measures $\gamma^\pm$ on $\R$ such that $\gamma^\pm(\R\setminus J)=0$ and $G^\pm(f)=\int_J f\,d\gamma^\pm$ for $f\in C(J)$. Define $\lambda(E)\defeq\gamma^+(E)-\gamma^-(E)$ for $E\in\mathcal B(\R)$.\\
+Then $\lambda$ is a charge, $\lambda(\R\setminus J)=0$, and for $f\in C(J)$, $G(f)=G^+(f)-G^-(f)=\int_J f\,d\gamma^+-\int_J f\,d\gamma^-=\int_J f\,d\lambda$.\\
+\hlt{Structural Commentary}: Subtract the positive representing measures.\\
 \hlt{Key Insight}: Signed representation is positive representation plus subtraction.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:uniform-boundedness-principle} \hlt{Uniform Boundedness Principle}\\
-Let $\mathcal{X}$ be Banach and let $\mathcal{Y}$ be normed. If $\mathcal{F}\subseteq\LL(\mathcal{X},\mathcal{Y})$ is pointwise bounded, meaning $\sup_{T\in\mathcal{F}}\norm{Tx}<\infty$ for every $x\in\mathcal{X}$, then $\sup_{T\in\mathcal{F}}\normop{T}<\infty$.
+Let $\mathcal{X}$ be Banach, $\mathcal{Y}$ normed. If $\mathcal{F}\subseteq\LL(\mathcal{X},\mathcal{Y})$ pointwise bounded, $\forall x\in\mathcal{X}$, $\sup\limits_{T\in\mathcal{F}}\norm{Tx}<\infty$, then $\sup\limits_{T\in\mathcal{F}}\normop{T}<\infty$.
+\begin{proof}
+For $T\in\mathcal F$, $f_T(x)\defeq\norm{Tx}$ is continuous. Pointwise boundedness and Theorem \ref{thm:baire-local-uniform-boundedness-continuous-family} give $x_0\in\mathcal X$, $r>0$, and $C<\infty$ with $\sup\limits_{T\in\mathcal F}\norm{Tz}\leq C$ for $z\in B(x_0,r)$. Set $M_0\defeq\sup\limits_{T\in\mathcal F}\norm{Tx_0}<\infty$.\\
+If $\norm{y}<r$, then $\sup\limits_{T\in\mathcal F}\norm{Ty}\leq\sup\limits_{T\in\mathcal F}\norm{T(x_0+y)}+\sup\limits_{T\in\mathcal F}\norm{Tx_0}\leq C+M_0$.\\
+For $\norm{x}=1$ and $0<t<r$, $t\sup\limits_{T\in\mathcal F}\norm{Tx}=\sup\limits_{T\in\mathcal F}\norm{T(tx)}\leq C+M_0$. By $t\uparrow r$, $\sup\limits_{T\in\mathcal F}\normop{T}\leq\frac{C+M_0}{r}<\infty$.\\
+\hlt{Structural Commentary}: Baire controls one ball; translation and scaling transfer control to the unit ball.\\
+\hlt{Key Insight}: Baire and linearity turn pointwise bounds into one uniform operator bound.
+\end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:open-mapping-theorem} \hlt{Open Mapping Theorem}\\
-A surjective bounded linear map $T:\mathcal{X}\to\mathcal{Y}$ between Banach spaces is open. Equivalently, $T$ maps neighborhoods of $0$ onto neighborhoods of $0$.
-\end{theorem}
-
-\begin{theorem} \label{thm:closed-graph-theorem} \hlt{Closed Graph Theorem}\\
-Let $\mathcal{X}$ and $\mathcal{Y}$ be Banach spaces. A linear map $T:\mathcal{X}\to\mathcal{Y}$ is bounded if and only if its graph
-\[
-\Gamma(T)\defeq\{(x,Tx):x\in\mathcal{X}\}
-\]
-is closed in $\mathcal{X}\times\mathcal{Y}$.
-\end{theorem}
+\begin{corollary} \label{cor:banach-steinhaus-pointwise-limits} \hlt{Banach--Steinhaus Pointwise Limit Theorem}\\
+Let $\mathcal{X}$ be Banach, $\mathcal{Y}$ normed, $(T_n)\subseteq\LL(\mathcal{X},\mathcal{Y})$. Suppose $\forall x\in\mathcal{X}$, $T_nx$ converges in $\mathcal{Y}$, $Tx\defeq\lim\limits_{n\to\infty}T_nx$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\sup\limits_n\normop{T_n}<\infty$.
+\item $T$ is linear.
+\item $T\in\LL(\mathcal{X},\mathcal{Y})$ and $\normop{T}\leq\liminf\limits_{n\to\infty}\normop{T_n}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each $x\in\mathcal X$, convergence of $(T_nx)$ gives $\sup\limits_n\norm{T_nx}<\infty$; hence Theorem \ref{thm:uniform-boundedness-principle} gives $\sup\limits_n\normop{T_n}<\infty$.
+\item For $\alpha,\beta\in\mathbb F$ and $x,y\in\mathcal X$, $T(\alpha x+\beta y)=\lim\limits_nT_n(\alpha x+\beta y)=\alpha Tx+\beta Ty$.
+\item Let $L\defeq\liminf\limits_n\normop{T_n}<\infty$. For $x\in\mathcal X$, $\norm{Tx}=\lim\limits_n\norm{T_nx}\leq L\norm{x}$, so $T\in\LL(\mathcal X,\mathcal Y)$ and $\normop{T}\leq L$.
+\end{enumerate}
+\hlt{Structural Commentary}: Uniform boundedness controls the family before taking its pointwise limit.\\
+\hlt{Key Insight}: Completeness prevents the norms of pointwise-convergent operators from escaping.
+\end{proof}
+\end{corollary}
