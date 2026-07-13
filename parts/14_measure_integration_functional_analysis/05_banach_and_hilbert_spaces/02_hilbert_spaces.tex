@@ -7,18 +7,27 @@
 Hilbert spaces are complete inner-product spaces. They extend the orthogonal geometry of Definition \ref{def:inner-product} to function and sequence spaces, supporting projection, Fourier expansion, and Riesz representation.
 
 \begin{definition} \label{def:hilbert-space} \hlt{Hilbert Space}\\
-An inner-product space $\mathcal{H}$ is a \hlt{Hilbert space} if the norm $\norm{x}\defeq\sqrt{\innerprod{x,x}}$ makes $\mathcal{H}$ complete.\\
-A subset $M\subseteq\mathcal{H}$ is \hlt{orthonormal} if $\innerprod{e_i,e_j}=\delta_{ij}$ for all indexed vectors in $M$.
+Let $\mathcal{H}$ be an inner-product space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Hilbert space}: $\mathcal{H}$ is complete in the norm $\norm{x}\defeq\sqrt{\innerprod{x,x}}$.
+\item \hlt{Orthonormal family}: $(e_i)_{i\in I}\subseteq\mathcal{H}$ satisfies $\forall i,j\in I$, $\innerprod{e_i,e_j}=\delta_{ij}$.
+\end{enumerate}
 \end{definition}
 
 \begin{proposition} \label{prop:inner-product-and-norm-continuity} \hlt{Continuity of the Inner Product}\\
-Let $\mathcal{V}$ be an inner-product space. For sequences $(x_n),(y_n)\subseteq\mathcal{V}$ and $x,y\in\mathcal{V}$,\\
-$\norm{x_n-x}\to0$, $\norm{y_n-y}\to0$ $\Longrightarrow$ $\innerprod{x_n,y_n}\to\innerprod{x,y}$, $x_n\to x\Longrightarrow\norm{x_n}\to\norm{x}$.
+Let $\mathcal{V}$ be an inner-product space, let $(x_n),(y_n)\subseteq\mathcal{V}$, and let $x,y\in\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $x_n\to x\Longrightarrow\norm{x_n}\to\norm{x}$.
+\item $x_n\to x$ and $y_n\to y\Longrightarrow\innerprod{x_n,y_n}\to\innerprod{x,y}$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\abs{\norm{x_n}-\norm{x}}\leq\norm{x_n-x}\to0$, hence $\norm{x_n}\to\norm{x}$.
-\item Since $y_n\to y$, choose $M<\infty$ with $\norm{y_n}\leq M$; Cauchy--Schwarz gives $\abs{\innerprod{x_n,y_n}-\innerprod{x,y}}\leq\abs{\innerprod{x_n-x,y_n}}+\abs{\innerprod{x,y_n-y}}\leq M\norm{x_n-x}+\norm{x}\norm{y_n-y}\to0$.
+\item Since $(y_n)$ is bounded, choose $M<\infty$ with $\norm{y_n}\leq M$.\\
+Cauchy--Schwarz gives $\abs{\innerprod{x_n,y_n}-\innerprod{x,y}}\leq M\norm{x_n-x}+\norm{x}\norm{y_n-y}\to0$.
 \end{enumerate}
 \hlt{Structural Commentary}: Cauchy--Schwarz turns norm convergence in either coordinate into scalar convergence.\\
 \hlt{Key Insight}: Inner products are continuous because their errors are controlled by products of norms.
@@ -26,15 +35,22 @@ $\norm{x_n-x}\to0$, $\norm{y_n-y}\to0$ $\Longrightarrow$ $\innerprod{x_n,y_n}\to
 \end{proposition}
 
 \begin{theorem} \label{thm:hilbert-completion-inner-product-space} \hlt{Hilbert Completion}\\
-For every inner-product space $\mathcal{V}$, $\exists$ Hilbert space $\widehat{\mathcal{V}}$, linear isometry $J:\mathcal{V}\to\widehat{\mathcal{V}}$ such that $\overline{J(\mathcal{V})}=\widehat{\mathcal{V}}$.\\
-If $(\mathcal{K},I)$ is another such pair, then $\exists!$ surjective linear isometry $U:\widehat{\mathcal{V}}\to\mathcal{K}$ with $U\circ J=I$.
+Let $\mathcal{V}$ be an inner-product space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists(\widehat{\mathcal{V}},J)$ such that $\widehat{\mathcal{V}}$ is Hilbert, $J:\mathcal{V}\to\widehat{\mathcal{V}}$ is a linear isometry, and $\overline{J(\mathcal{V})}=\widehat{\mathcal{V}}$.
+\item If $(\mathcal{K},I)$ also satisfies (i), then $\exists!U:\widehat{\mathcal{V}}\to\mathcal{K}$ a surjective linear isometry with $U\circ J=I$.
+\end{enumerate}
 \begin{proof}
-Let $C(\mathcal{V})$ be Cauchy sequences, $(x_n)\sim(y_n)\iff\norm{x_n-y_n}\to0$, $\widehat{\mathcal{V}}\defeq C(\mathcal{V})/\sim$.\\
-Set $[x_n]+[y_n]\defeq[x_n+y_n]$, $a[x_n]\defeq[ax_n]$, $Jx\defeq[(x)]$, and $\innerprod[\widehat{\mathcal{V}}]{[x_n],[y_n]}\defeq\lim_{n\to\infty}\innerprod[\mathcal{V}]{x_n,y_n}$.\\
-As Cauchy sequences bounded, $\abs{\innerprod{x_n,y_n}-\innerprod{x_m,y_m}}\leq M\norm{x_n-x_m}+N\norm{y_n-y_m}$;\\
-and $\abs{\innerprod{x_n,y_n}-\innerprod{x'_n,y'_n}}\leq M\norm{x_n-x'_n}+N\norm{y_n-y'_n}$ for suitable $M,N<\infty$, hence limit exists, and is representative-independent. Sesquilinearity and positivity pass to limits, and $\norm{[x_n]-[y_n]}=\lim_{n\to\infty}\norm{x_n-y_n}$.\\
-Thus induced metric is the completion metric, so $\widehat{\mathcal{V}}$ is Hilbert, $J$ is a linear isometry, and $\overline{J(\mathcal{V})}=\widehat{\mathcal{V}}$.\\
-For another pair $(\mathcal{K},I)$, metric-completion uniqueness gives a unique surjective isometry $U:\widehat{\mathcal{V}}\to\mathcal{K}$ with $U\circ J=I$; density gives $U(ax+by)=aU(x)+bU(y)$, and Theorem \ref{thm:polarization-identities} gives $\innerprod[\mathcal{K}]{Ux,Uy}=\innerprod[\widehat{\mathcal{V}}]{x,y}$.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $C(\mathcal{V})$ be the Cauchy sequences, set $(x_n)\sim(y_n)\iff\norm{x_n-y_n}\to0$, and define $\widehat{\mathcal{V}}\defeq C(\mathcal{V})/\sim$.\\
+Set $[x_n]+[y_n]\defeq[x_n+y_n]$, $a[x_n]\defeq[ax_n]$, $Jx\defeq[(x)]$, and $\innerprod[\widehat{\mathcal{V}}]{[x_n],[y_n]}\defeq\lim\limits_{n\to\infty}\innerprod[\mathcal{V}]{x_n,y_n}$.\\
+If $(x_n),(y_n)$ are bounded by $M$, then $\abs{\innerprod{x_n,y_n}-\innerprod{x_m,y_m}}\leq M\norm{y_n-y_m}+M\norm{x_n-x_m}\to0$.\\
+The same estimate for equivalent representatives makes the limit well defined.\\
+Also $\norm{[x_n]-[y_n]}=\lim\limits_n\norm{x_n-y_n}$, the metric-completion norm; hence $\widehat{\mathcal{V}}$ is Hilbert and $\overline{J(\mathcal{V})}=\widehat{\mathcal{V}}$.
+\item Since $(\widehat{\mathcal V},J)$ and $(\mathcal K,I)$ are metric completions of $\mathcal V$, there is a unique surjective isometry $U:\widehat{\mathcal V}\to\mathcal K$ with $U\circ J=I$. For $x,y\in\mathcal V$ and $a,b\in\mathbb F$, $U(aJx+bJy)=U(J(ax+by))=I(ax+by)=aUJx+bUJy$; by density and continuity, $U$ is linear. Since $\norm{Uz-Uw}=\norm{z-w}$, polarization gives $\innerprod[\mathcal K]{Uz,Uw}=\innerprod[\widehat{\mathcal V}]{z,w}$.
+\end{enumerate}
 \hlt{Structural Commentary}: Complete the metric first, then recover the inner product by taking limits.\\
 \hlt{Key Insight}: Cauchy--Schwarz makes the lifted inner product well defined.
 \end{proof}
@@ -51,16 +67,16 @@ Let $\mathcal{S}$ be a subspace of an inner-product space $\mathcal{V}$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $(s_n)\subseteq\mathcal{S}$ and $s_n\to v\in\mathcal{V}$.\\
-Then $(s_n)$ is Cauchy in $\mathcal{S}$, so $\exists s\in\mathcal{S}:s_n\to s$, $v=s\in\mathcal{S}$ by uniqueness, and $\mathcal{S}$ is closed.
-\item Assume $\mathcal{V}$ is Hilbert; if $\mathcal{S}$ is closed and $(s_n)\subseteq\mathcal{S}$ is Cauchy.\\
-Then $\exists v\in\mathcal{V}:s_n\to v$, closedness gives $v\in\mathcal{S}$, and the converse follows from (i).
-\item Let $\dim\mathcal{S}=m$ and choose an orthonormal basis $e_1,\ldots,e_m$.\\
-If $(s_n)\subseteq\mathcal{S}$ is Cauchy and $s_n=\sum_{j=1}^m a_{n,j}e_j$, then $|a_{n,j}-a_{k,j}|=|\innerprod{s_n-s_k,e_j}|\le\norm{s_n-s_k}$.\\
-So $a_{n,j}\to a_j\in\mathbb{F}$ and $s_n\to\sum_{j=1}^m a_je_j\in\mathcal{S}$, hence $\mathcal{S}$ is complete and closed by (i).
+\item Let $v\in\overline{\mathcal S}$ and choose $s_n\in\mathcal S$ with $s_n\to v$ in $\mathcal V$. Then $(s_n)$ is Cauchy in $\mathcal S$, so $s_n\to s\in\mathcal S$ by completeness.\\
+Uniqueness of limits gives $v=s$, hence $\overline{\mathcal S}=\mathcal S$.
+\item Assume $\mathcal V$ Hilbert. If $\mathcal S$ is closed and $(s_n)\subseteq\mathcal S$ is Cauchy, then $s_n\to v\in\mathcal V$ and $v\in\mathcal S$, so $\mathcal S$ is complete.\\
+Conversely, if $\mathcal S$ is Hilbert, then $\mathcal S$ is complete, hence closed by (i).
+\item Let $\dim\mathcal S=m$ and choose an orthonormal basis $e_1,\ldots,e_m$.\\
+If $(s_n)$ is Cauchy in $\mathcal S$ and $s_n=\sum\limits_{j=1}^m a_{n,j}e_j$, then $\abs{a_{n,j}-a_{k,j}}=\abs{\innerprod{s_n-s_k,e_j}}\leq\norm{s_n-s_k}$.\\
+Thus $a_{n,j}\to a_j\in\mathbb F$ for each $j$, and $s_n\to s\defeq\sum\limits_{j=1}^m a_je_j\in\mathcal S$. Hence $\mathcal S$ is complete, so closed by (i).
 \end{enumerate}
-\hlt{Structural Commentary}: Closedness is the ambient form of internal completeness.\\
-\hlt{Key Insight}: Finite orthonormal coordinates reduce completeness to completeness of $\mathbb{F}$.
+\hlt{Structural Commentary}: In a complete ambient space, closed subspaces are exactly complete subspaces.\\
+\hlt{Key Insight}: Finite orthonormal coordinates reduce completeness to $\mathbb F^m$.
 \end{proof}
 \end{theorem}
 
@@ -68,36 +84,37 @@ So $a_{n,j}\to a_j\in\mathbb{F}$ and $s_n\to\sum_{j=1}^m a_je_j\in\mathcal{S}$, 
 Let $(x_k)\subseteq\mathcal{V}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The \hlt{partial sums} are $s_n\defeq\sum_{k=1}^{n}x_k$.
-\item The \hlt{series} $\sum_{k=1}^{\infty}x_k$ \hlt{converges} to $s\in\mathcal{V}$ iff $s_n\to s$.
-\item The series is \hlt{absolutely convergent} iff $\sum_{k=1}^{\infty}\norm{x_k}<\infty$.
+\item The \hlt{partial sums} are $s_n\defeq\sum\limits_{k=1}^{n}x_k$.
+\item The \hlt{series} $\sum\limits_{k=1}^{\infty}x_k$ \hlt{converges} to $s\in\mathcal{V}$ iff $s_n\to s$.
+\item The series is \hlt{absolutely convergent} iff $\sum\limits_{k=1}^{\infty}\norm{x_k}<\infty$.
 \end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:hilbert-completeness-absolute-series} \hlt{Completeness via Absolutely Convergent Series}\\
-$\mathcal{V}$ is complete $\Longleftrightarrow$ every series $\sum_{k=1}^{\infty}x_k$ in $\mathcal{V}$ with $\sum_{k=1}^{\infty}\norm{x_k}<\infty$ converges in $\mathcal{V}$.
+$\mathcal{V}$ is complete $\Longleftrightarrow$ every series $\sum\limits_{k=1}^{\infty}x_k$ in $\mathcal{V}$ with $\sum\limits_{k=1}^{\infty}\norm{x_k}<\infty$ converges in $\mathcal{V}$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $s_n=\sum_{k=1}^{n}x_k$ and $\sum_{k=1}^{\infty}\norm{x_k}<\infty$.\\
-For $n>m$, $\norm{s_n-s_m}\leq\sum_{k=m+1}^{n}\norm{x_k}\to0$, so $(s_n)$ is Cauchy and hence convergent.
-\item[$(\Leftarrow)$] Let $(x_n)$ be Cauchy and choose $N_1<N_2<\cdots$ with $i,j\geq N_k\Longrightarrow\norm{x_i-x_j}<2^{-k}$.\\
-Then $\sum_{k=1}^{\infty}\norm{x_{N_{k+1}}-x_{N_k}}\leq\sum_{k=1}^{\infty}2^{-k}<\infty$, so $\sum_{k=1}^{\infty}(x_{N_{k+1}}-x_{N_k})$ converges, whence $(x_{N_k})$ converges, and Lemma \ref{lem:cauchy-sequence-with-convergent-subsequence} gives $x_n\to x$.
+\item[$(\Rightarrow)$] Let $s_n\defeq\sum\limits_{k=1}^{n}x_k$ and assume $\sum\limits_k\norm{x_k}<+\infty$. For $n>m$, $\norm{s_n-s_m}\leq\sum\limits_{k=m+1}^{n}\norm{x_k}\to0$ as $m,n\to\infty$.\\
+Thus $(s_n)$ is Cauchy, hence convergent by completeness.
+\item[$(\Leftarrow)$] Let $(x_n)$ be Cauchy. Let $N_1<N_2<\cdots$ such that $i,j\geq N_k\Rightarrow\norm{x_i-x_j}<2^{-k}$, $y_k\defeq x_{N_{k+1}}-x_{N_k}$.\\
+Then $\sum\limits_k\norm{y_k}\leq\sum\limits_k2^{-k}<+\infty$, so $\sum\limits_ky_k$ converges. Since $x_{N_m}=x_{N_1}+\sum\limits_{k<m}y_k$, the subsequence $(x_{N_m})$ converges; because $(x_n)$ is Cauchy, $(x_n)$ converges.
 \end{enumerate}
-\hlt{Structural Commentary}: Absolute convergence controls tails; subsequences recover Cauchy limits.\\
-\hlt{Key Insight}: Completeness is exactly the ability to sum every norm-controlled vector tail.
+\hlt{Structural Commentary}: Absolute tails make partial sums Cauchy; Cauchy tails contain summable increments.\\
+\hlt{Key Insight}: Completeness is summability of norm-controlled series.
 \end{proof}
 \end{theorem}
 
 \begin{example} \label{ex:l2-hilbert-and-lp-parallelogram-test} \hlt{$\ell^2$ and the Parallelogram Test}\\
-Let $\ell^2\defeq\{x=(x_n):\sum_{n=1}^{\infty}\abs{x_n}^2<\infty\}$. With $\innerprod{x,y}\defeq\sum_{n=1}^{\infty}x_n\overline{y_n}$ and $\norm{x}_2=\innerprod{x,x}^{1/2}$, Cauchy coordinate limits and finite-set estimates give completeness, so $\ell^2$ is Hilbert.
-For $p\neq2$, $\norm{\cdot}_p$ is not inner-product-induced: with $x=(1,1,0,\ldots)$ and $y=(1,-1,0,\ldots)$, $\norm{x+y}_p^2+\norm{x-y}_p^2=8$ while $2\norm{x}_p^2+2\norm{y}_p^2=4\cdot2^{2/p}$, so the parallelogram identity holds only for $p=2$.\\
+Let $\ell^2\defeq\{x=(x_n):\sum\limits_{n=1}^{\infty}\abs{x_n}^2<\infty\}$. With $\innerprod{x,y}\defeq\sum\limits_{n=1}^{\infty}x_n\overline{y_n}$ and $\norm{x}_2=\innerprod{x,x}^{\frac{1}{2}}$, Cauchy coordinate limits and finite-set estimates give completeness, so $\ell^2$ is Hilbert.\\
+For $p\neq2$, $\norm{\cdot}_p$ is not inner-product-induced: with $x=(1,1,0,\ldots)$ and $y=(1,-1,0,\ldots)$,\\
+$\norm{x+y}_p^2+\norm{x-y}_p^2=8$ while $2\norm{x}_p^2+2\norm{y}_p^2=4\cdot2^{\frac{2}{p}}$, so the parallelogram identity holds only for $p=2$.\\
 \hlt{Structural Commentary}: Completeness alone does not make a Banach space Hilbert.\\
 \hlt{Key Insight}: The parallelogram identity detects whether a norm really came from an inner product.
 \end{example}
 
 \begin{example} \label{ex:sup-norm-continuous-functions-not-hilbert} \hlt{The Supremum Norm Is Not Hilbertian}\\
-For $a<b$, $C([a,b],\mathbb{F})$ with $\norm{h}_\infty\defeq\sup_{t\in[a,b]}\abs{h(t)}$ is Banach but not Hilbertian: take $f(t)=1$ and $g(t)=(t-a)/(b-a)$, so $\norm{f}_\infty=\norm{g}_\infty=1$, $\norm{f+g}_\infty=2$, $\norm{f-g}_\infty=1$, and $\norm{f+g}_\infty^2+\norm{f-g}_\infty^2=5\neq4=2\norm{f}_\infty^2+2\norm{g}_\infty^2$, violating the parallelogram identity.\\
+For $a<b$, $C([a,b],\mathbb{F})$ with $\norm{h}_\infty\defeq\sup\limits_{t\in[a,b]}\abs{h(t)}$ is Banach but not Hilbertian: take $f(t)=1$ and $g(t)=\frac{t-a}{b-a}$, so $\norm{f}_\infty=\norm{g}_\infty=1$, $\norm{f+g}_\infty=2$, $\norm{f-g}_\infty=1$, and $\norm{f+g}_\infty^2+\norm{f-g}_\infty^2=5\neq4=2\norm{f}_\infty^2+2\norm{g}_\infty^2$, violating the parallelogram identity.\\
 \hlt{Structural Commentary}: Banach need not mean Hilbert.\\
 \hlt{Key Insight}: One failed parallelogram identity rules out every possible inner product inducing the norm.
 \end{example}
@@ -105,26 +122,50 @@ For $a<b$, $C([a,b],\mathbb{F})$ with $\norm{h}_\infty\defeq\sup_{t\in[a,b]}\abs
 \begin{figure}[H]
   \centering
   \input{figures/analysis/hilbert_best_approximation_convex_set.tikz}
-  \caption{A minimizing sequence in $C$ converges to the nearest point $p$ to $x$.}
+  \caption{Hilbert projection: $q_n\in C$, $\norm{x-q_n}\to d=\operatorname{dist}(x,C)\Rightarrow q_n\to p\in C$ and $\norm{x-p}=d$.}
   \label{fig:hilbert-best-approximation-convex-set}
 \end{figure}
 
 \begin{theorem} \label{thm:hilbert-projection-theorem} \hlt{Hilbert Projection Theorem}\\
-Let $C\subseteq\mathcal{H}$ be nonempty, closed, and convex. For every $x\in\mathcal{H}$ there is a unique $p\in C$ minimizing $\norm{x-p}$.\\
-If $M\subseteq\mathcal{H}$ is a closed subspace, then $x=p+(x-p)$ with $p\in M$ and $x-p\in M^\perp$.
-\begin{proof}
-Let $d=\inf_{q\in C}\norm{x-q}$ and choose $q_n\in C$ with $\norm{x-q_n}\to d$.\\
-Since $C$ is convex, $(q_n+q_m)/2\in C$. The parallelogram identity gives\\
-$\norm{q_n-q_m}^2 =2\norm{x-q_n}^2+2\norm{x-q_m}^2-4\norm{x-\frac{q_n+q_m}{2}}^2 \leq2\norm{x-q_n}^2+2\norm{x-q_m}^2-4d^2$, so $(q_n)$ is Cauchy. Completeness and closedness give $q_n\to p\in C$, and continuity of the norm gives $\norm{x-p}=d$. If $p_1,p_2$ both minimize, the same identity with $q_n=p_1$, $q_m=p_2$ gives $\norm{p_1-p_2}=0$. Now let $C=M$ and $r=x-p$.\\
-For $y\in M$ and $t\in\mathbb{R}$, minimality of $p+ty\in M$ gives $0\leq\norm{r-ty}^2-\norm{r}^2=-2t\operatorname{Re}\innerprod{r,y}+t^2\norm{y}^2$, hence $\operatorname{Re}\innerprod{r,y}=0$. Replacing $y$ by $iy$ in the complex case gives $\innerprod{r,y}=0$. Thus $r\in M^\perp$ and $x=p+r$.\\
-\hlt{Structural Commentary}: Convexity makes minimizing sequences Cauchy; closedness keeps the limit.\\
-\hlt{Key Insight}: The nearest point is characterized by an orthogonal error.
+Let $C\subseteq\mathcal{H}$ be nonempty, closed, and convex. Then $\forall x\in\mathcal{H}\ \exists!p\in C$ such that $\norm{x-p}=\inf\limits_{q\in C}\norm{x-q}$.
+\begin{proof} Let $d\defeq\inf\limits_{q\in C}\norm{x-q}$, $q_n\in C$, $\norm{x-q_n}\to d$. Since $\frac{q_n+q_m}{2}\in C$, by parallelogram identity,\\
+$\norm{q_n-q_m}^2=2\norm{x-q_n}^2+2\norm{x-q_m}^2-4\norm{x-\frac{q_n+q_m}{2}}^2\leq2\norm{x-q_n}^2+2\norm{x-q_m}^2-4d^2\to0$.\\
+Thus $(q_n)$ is Cauchy. Hence $q_n\to p\in\mathcal H$; closedness gives $p\in C$, and $\norm{x-p}=d$.\\
+If $p_1,p_2\in C$ both minimize, the same identity gives $\norm{p_1-p_2}^2\leq2d^2+2d^2-4d^2=0$.\\
+\hlt{Structural Commentary}: Convexity and parallelogram force minimizing sequences to converge in $C$.\\
+\hlt{Key Insight}: Midpoint minimality turns near minimizers into a Cauchy sequence.
 \end{proof}
 \end{theorem}
 
+\begin{corollary} \label{cor:hilbert-orthogonal-decomposition} \hlt{Orthogonal Projection onto a Closed Subspace}\\
+Let $M\leq\mathcal{H}$ be closed.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\forall x\in\mathcal{H}\ \exists!p\in M$ such that $x-p\in M^\perp$.
+\item $\mathcal{H}=M\odot M^\perp$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:hilbert-projection-theorem}, choose the unique $p\in M$ minimizing $\norm{x-p}$, and set $r\defeq x-p$.\\
+For $y\in M$ and $t\in\mathbb R$, $p+ty\in M$, so $0\leq\norm{r-ty}^2-\norm r^2=-2t\operatorname{Re}\innerprod{r,y}+t^2\norm y^2$.\\
+Thus $\operatorname{Re}\innerprod{r,y}=0$; over $\mathbb C$, replace $y$ by $iy$ to get $\operatorname{Im}\innerprod{r,y}=0$. Hence $r\in M^\perp$.\\
+If $x=p_1+r_1=p_2+r_2$ with $p_i\in M$, $r_i\in M^\perp$, then $p_1-p_2=r_2-r_1\in M\cap M^\perp=\{0\}$.
+\item By (i), each $x\in\mathcal H$ has $x=p+r$ with $p\in M$, $r\in M^\perp$, so $\mathcal H=M+M^\perp$.\\
+Since $M\cap M^\perp=\{0\}$, the sum is direct: $\mathcal H=M\odot M^\perp$.
+\end{enumerate}
+\hlt{Structural Commentary}: Nearest points are characterized by orthogonal residuals.\\
+\hlt{Key Insight}: Every vector splits uniquely into $M$ and $M^\perp$ parts.
+\end{proof}
+\end{corollary}
+
 \begin{definition} \label{def:closed-linear-span-hilbert} \hlt{Closed Linear Span and Total Sets}\\
-For $A\subseteq\mathcal{H}$, define the \hlt{closed linear span} $\operatorname{cspan}(A)\defeq\overline{\operatorname{span}(A)}$.
-The set $A$ is \hlt{total} in $\mathcal{H}$ if $\operatorname{cspan}(A)=\mathcal{H}$.
+For $A\subseteq\mathcal{H}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Closed linear span}: $\operatorname{cspan}(A)\defeq\overline{\operatorname{span}(A)}$.
+\item \hlt{Total}: $A$ is total in $\mathcal{H}$ iff $\operatorname{cspan}(A)=\mathcal{H}$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:hilbert-double-orthogonal-complement} \hlt{Double Orthogonal Complements in Hilbert Spaces}\\
@@ -139,62 +180,63 @@ Let $\mathcal{H}$ be a Hilbert space.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $B=\operatorname{cspan}(A)$. Then $B$ is closed, so Theorem \ref{thm:hilbert-projection-theorem} gives $\mathcal{H}=B\odot B^\perp$ and $B^{\perp\perp}=B$.\\
-Also $B^\perp=A^\perp$, since $A\subseteq B$ and $x\in A^\perp\Rightarrow x\perp\operatorname{span}(A)\Rightarrow x\perp B$ by Proposition \ref{prop:inner-product-and-norm-continuity}.\\
-Hence $A^{\perp\perp}=B^{\perp\perp}=B=\operatorname{cspan}(A)$.
-\item Apply (i) with $A=\mathcal{S}$: $\mathcal{S}^{\perp\perp}=\operatorname{cspan}(\mathcal{S})=\overline{\operatorname{span}(\mathcal{S})}=\overline{\mathcal{S}}$.
-\item By (ii), $\mathcal{K}^{\perp\perp}=\overline{\mathcal{K}}$; hence $\mathcal{K}$ closed $\Longleftrightarrow\overline{\mathcal{K}}=\mathcal{K}\Longleftrightarrow\mathcal{K}^{\perp\perp}=\mathcal{K}$.
-\item $\operatorname{span}(A)$ dense $\Longleftrightarrow\operatorname{cspan}(A)=\mathcal{H}\Longleftrightarrow A^{\perp\perp}=\mathcal{H}$. If $A^\perp=\{\mathbf{0}\}$, then $A^{\perp\perp}=\mathcal{H}$.\\
-Conversely $A^{\perp\perp}=\mathcal{H}\Rightarrow A^\perp\subseteq A^\perp\cap A^{\perp\perp}=\{\mathbf{0}\}$.
+\item Let $B\defeq\operatorname{cspan}(A)$. Since $A\subseteq B$, $B^\perp\subseteq A^\perp$. If $y\in A^\perp$, by $y\perp\operatorname{span}(A)$, continuity of $z\mapsto\innerprod{z,y}$, $y\perp B$, so $A^\perp=B^\perp$. By Corollary \ref{cor:hilbert-orthogonal-decomposition}, $\mathcal H=B\odot B^\perp$; $B^{\perp\perp}=B$. Therefore $A^{\perp\perp}=B^{\perp\perp}=B=\operatorname{cspan}(A)$.
+\item With $A=\mathcal S$ in (i), $\mathcal S^{\perp\perp}=\operatorname{cspan}(\mathcal S)=\overline{\operatorname{span}(\mathcal S)}=\overline{\mathcal S}$.
+\item By (ii), $\mathcal K^{\perp\perp}=\overline{\mathcal K}$; thus $\mathcal K=\mathcal K^{\perp\perp}\Longleftrightarrow\mathcal K=\overline{\mathcal K}\Longleftrightarrow\mathcal K$ is closed.
+\item By (i), $\operatorname{span}(A)$ is dense $\Longleftrightarrow A^{\perp\perp}=\mathcal H$. If $A^\perp=\{\mathbf0\}$, then $A^{\perp\perp}=\{\mathbf0\}^\perp=\mathcal H$.\\
+Conversely, if $A^{\perp\perp}=\mathcal H$ and $y\in A^\perp$, then $y\in A^{\perp\perp}$, so $\norm y^2=\innerprod{y,y}=0$; hence $A^\perp=\{\mathbf0\}$.
 \end{enumerate}
-\hlt{Structural Commentary}: In a Hilbert space, closure is encoded by taking the orthogonal complement twice.\\
-\hlt{Key Insight}: A missing direction from a closed span is detected by a nonzero orthogonal vector.
+\hlt{Structural Commentary}: Double orthogonal complement equals closed linear span.\\
+\hlt{Key Insight}: Missing closed-span directions are exactly nonzero orthogonal vectors.
 \end{proof}
 \end{theorem}
 
 \begin{example} \label{ex:closed-subspace-double-complement-can-fail-without-completeness} \hlt{Completeness Is Needed for Double Complements}\\
-Let $\mathcal{V}\defeq c_{00}(\mathbb{N};\mathbb{R})\subseteq\ell^2$ with inherited inner product, $Lx\defeq\sum_{n=1}^{\infty}x_n/n$, and $\mathcal{K}\defeq\ker L$.\\
-Then $\abs{Lx}\leq\norm{x}_2\left(\sum_{n=1}^{\infty}n^{-2}\right)^{1/2}$, so $L$ is continuous and $\mathcal{K}$ is a closed subspace of $\mathcal{V}$.\\
+Let $\mathcal{V}\defeq c_{00}(\mathbb{N};\mathbb{R})\subseteq\ell^2$ with inherited inner product, $Lx\defeq\sum\limits_{n=1}^{\infty}\frac{x_n}{n}$, and $\mathcal{K}\defeq\ker L$.\\
+Then $\abs{Lx}\leq\norm{x}_2\left(\sum\limits_{n=1}^{\infty}n^{-2}\right)^{\frac{1}{2}}$, so $L$ is continuous and $\mathcal{K}$ is a closed subspace of $\mathcal{V}$.\\
 If $y\in\mathcal{K}^{\perp}$, then $e_1-ne_n\in\mathcal{K}$ for $n\geq2$, hence $0=\innerprod{y,e_1-ne_n}=y_1-ny_n$.\\
-Since $y\in c_{00}$, choose $n\geq2$ with $y_n=0$, so $y_1=0$ and then $y_n=0$ for every $n$.\\
+Since $y\in c_{00}$, choose $n\geq2$ with $y_n=0$, so $y_1=0$ and then $\forall n,\ y_n=0$.\\
 Thus $\mathcal{K}^{\perp}=\{\mathbf{0}\}$ and $\mathcal{K}^{\perp\perp}=\mathcal{V}$. But $e_1\notin\mathcal{K}$, hence $\mathcal{K}\neq\mathcal{V}=\mathcal{K}^{\perp\perp}$.\\
 \hlt{Structural Commentary}: Closedness need not recover double complements without completeness.\\
 \hlt{Key Insight}: The identity $\mathcal{K}=\mathcal{K}^{\perp\perp}$ is genuinely Hilbert-space geometry.
 \end{example}
 
-\begin{perspective} \label{per:hamel-hilbert-basis-warning} \hlt{Hamel and Hilbert Basis Caution}\\
-Here an \hlt{orthonormal basis} is a Hamel basis that is orthonormal.\\
-In infinite dimensions, a \hlt{Hilbert basis} usually means a maximal orthonormal set, not necessarily a Hamel basis.\\
-For example, the standard $(\mathbf{e}_j)$ in $\ell^2(\mathbb{F})$ is maximal orthonormal, but $\operatorname{span}\{\mathbf{e}_j:j\geq1\}=\mathbb{F}^{(\mathbb{N})}\subsetneq\ell^2(\mathbb{F})$.
+\begin{perspective} \label{per:hamel-hilbert-basis-warning} \hlt{Hilbert and Hamel Basis Caution}\\
+In Hilbert-space theory, an \hlt{orthonormal basis} usually means a complete orthonormal family: vectors are recovered by convergent Fourier expansion, not necessarily by finite linear combinations.\\
+A \hlt{Hamel basis} is a vector-space basis and is much stronger in infinite dimension.\\
+For example, the standard $(\mathbf{e}_j)$ in $\ell^2(\mathbb{F})$ is a complete orthonormal family, but $\operatorname{span}\{\mathbf{e}_j:j\geq1\}=\mathbb{F}^{(\mathbb{N})}\subsetneq\ell^2(\mathbb{F})$.
 \end{perspective}
 
 \begin{definition} \label{def:hilbert-basis-versus-hamel-basis} \hlt{Hilbert Basis}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A \hlt{Hilbert basis} is a maximal orthonormal set under inclusion.
+\item A \hlt{Hilbert basis}, or complete orthonormal family, is a maximal orthonormal set under inclusion.
 \item A \hlt{Hamel basis} is a vector-space basis.
-\item An \hlt{orthonormal basis} is an orthonormal Hamel basis.
+\item Here \hlt{orthonormal basis} means Hilbert basis outside finite-dimensional Hamel context.
 \end{enumerate}
 \end{definition}
 
-\begin{proposition} \label{prop:finite-hilbert-basis-hamel-basis} \hlt{Finite Hilbert Bases Are Orthonormal Bases}\\
+\begin{proposition} \label{prop:finite-hilbert-basis-hamel-basis} \hlt{Finite Hilbert Bases Are Hamel Bases}\\
 Let $\mathcal{O}=\{\mathbf{e}_1,\ldots,\mathbf{e}_m\}$ be orthonormal in $\mathcal{V}$ and set $W=\operatorname{span}(\mathcal{O})$.\\
 Then $\mathcal{O}$ is a Hilbert basis $\Longleftrightarrow$ $W=\mathcal{V}$ $\Longleftrightarrow$ $\mathcal{O}$ is an orthonormal Hamel basis.
 \begin{proof}
-Since $\mathcal{O}$ is orthonormal, Corollary \ref{cor:orthonormal-list-linearly-independent} gives independence; hence $W=\mathcal{V}$ iff $\mathcal{O}$ is an orthonormal Hamel basis. It remains to prove maximality iff spanning.
+Since $\mathcal O$ is orthonormal, it is linearly independent; hence $W=\mathcal V\Longleftrightarrow\mathcal O$ is an orthonormal Hamel basis.\\
+It remains to show maximality $\Longleftrightarrow W=\mathcal V$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $\mathcal{O}$ is a Hilbert basis. If $W\neq\mathcal{V}$, choose $\mathbf{v}\notin W$ and set $\mathbf{u}=\mathbf{v}-\sum_j\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$. Then $\innerprod{\mathbf{u},\mathbf{e}_i}=0 \ \forall i$, and $\mathbf{u}\neq\mathbf{0}$ since $\mathbf{v}\notin W$. Thus $\mathcal{O}\cup\{\mathbf{u}/\norm{\mathbf{u}}\}$ is orthonormal, contradicting maximality. Hence $W=\mathcal{V}$.
-\item[$(\Leftarrow)$] Suppose $W=\mathcal{V}$. If $\mathbf{w}\perp\mathcal{O}$, write $\mathbf{w}=\sum_j a_j\mathbf{e}_j$. Then $a_j=\innerprod{\mathbf{w},\mathbf{e}_j}=0$ for all $j$, so $\mathbf{w}=\mathbf{0}$.\\
-Hence no nonzero vector can be adjoined, and $\mathcal{O}$ is maximal orthonormal.
+\item[$(\Rightarrow)$] Suppose $\mathcal O$ is maximal orthonormal and $W\ne\mathcal V$. Choose $\mathbf v\notin W$ and set $\mathbf u\defeq\mathbf v-\sum\limits_{j=1}^{m}\innerprod{\mathbf v,\mathbf e_j}\mathbf e_j$.\\
+Then $\innerprod{\mathbf u,\mathbf e_i}=0$ for $1\leq i\leq m$, and $\mathbf u\ne\mathbf0$ since $\mathbf v\notin W$.\\
+Thus $\mathcal O\cup\{\mathbf u/\norm{\mathbf u}\}$ is orthonormal, contradiction. Hence $W=\mathcal V$.
+\item[$(\Leftarrow)$] Suppose $W=\mathcal V$. If $\mathbf w\perp\mathcal O$, write $\mathbf w=\sum\limits_{j=1}^{m}a_j\mathbf e_j$. Then $a_j=\innerprod{\mathbf w,\mathbf e_j}=0$ for every $j$, so $\mathbf w=\mathbf0$.\\
+Hence no nonzero vector can be adjoined orthogonally to $\mathcal O$; $\mathcal O$ is maximal orthonormal.
 \end{enumerate}
-\hlt{Structural Commentary}: Finite maximal orthonormal sets span.\\
-\hlt{Key Insight}: Missing directions can be orthogonalized and adjoined.
+\hlt{Structural Commentary}: In finite orthonormal families, maximality equals spanning.\\
+\hlt{Key Insight}: Any missing vector has a nonzero orthogonal residual.
 \end{proof}
 \end{proposition}
 
 \begin{example} \label{ex:hilbert-basis-not-hamel-basis-l2} \hlt{A Hilbert Basis Need Not Be a Hamel Basis}\\
-In $\ell^2(\mathbb{F})$, let $\mathbf{e}_j=(0,\ldots,0,1,0,\ldots)$. Then $\{\mathbf{e}_j:j\geq1\}$ is orthonormal and maximal, since $\mathbf{x}\perp\mathbf{e}_j$ for all $j$ implies $x_j=\innerprod{\mathbf{x},\mathbf{e}_j}=0$ for all $j$. Its finite span is $\mathbb{F}^{(\mathbb{N})}\subsetneq\ell^2(\mathbb{F})$, so it is a Hilbert basis but not a Hamel basis.
+In $\ell^2(\mathbb{F})$, let $\mathbf{e}_j=(0,\ldots,0,1,0,\ldots)$. Then $\{\mathbf{e}_j:j\geq1\}$ is orthonormal and maximal, since $\forall j,\ \mathbf{x}\perp\mathbf{e}_j$ implies $\forall j,\ x_j=\innerprod{\mathbf{x},\mathbf{e}_j}=0$. Its finite span is $\mathbb{F}^{(\mathbb{N})}\subsetneq\ell^2(\mathbb{F})$, so it is a Hilbert basis but not a Hamel basis.
 \end{example}
 
 \begin{theorem} \label{thm:hilbert-basis-total-characterizations} \hlt{Hilbert Basis Characterizations}\\
@@ -206,14 +248,15 @@ Let $\mathcal{O}\subseteq\mathcal{H}$ be orthonormal. The following are equivale
 \item $\operatorname{cspan}(\mathcal{O})=\mathcal{H}$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ If $0\neq v\in\mathcal{O}^{\perp}$, then $\mathcal{O}\cup\{v/\norm{v}\}$ is orthonormal, contradicting maximality; hence $\mathcal{O}^{\perp}=\{\mathbf{0}\}$.
-\item[$(ii)$]$\Rightarrow (iii)$ By Theorem \ref{thm:hilbert-double-orthogonal-complement}, $\operatorname{cspan}(\mathcal{O})=\mathcal{O}^{\perp\perp}=(\mathcal{O}^{\perp})^\perp=\{\mathbf{0}\}^\perp=\mathcal{H}$.
-\item[$(iii)$]$\Rightarrow (i)$ If $\mathcal{O}$ is not maximal, $\exists$ unit $u\in\mathcal{O}^{\perp}$; but (iii) and Theorem \ref{thm:hilbert-double-orthogonal-complement} give $\mathcal{O}^{\perp}=\{\mathbf{0}\}$, a contradiction.
+\item[$(i)$]$\Rightarrow (ii)$ If $0\ne v\in\mathcal O^\perp$, then $\mathcal O\cup\{v/\norm v\}$ is orthonormal, contradicting maximality. Hence $\mathcal O^\perp=\{\mathbf0\}$.
+\item[$(ii)$]$\Rightarrow (iii)$ By Theorem \ref{thm:hilbert-double-orthogonal-complement}, $\operatorname{cspan}(\mathcal O)=\mathcal O^{\perp\perp}=(\mathcal O^\perp)^\perp=\{\mathbf0\}^\perp=\mathcal H$.
+\item[$(iii)$]$\Rightarrow (i)$ If $\mathcal O\subsetneq\mathcal O\cup\{u\}$ is orthonormal with $\norm u=1$, then $u\in\mathcal O^\perp$.\\
+By (iii) and Theorem \ref{thm:hilbert-double-orthogonal-complement}(iv), $\mathcal O^\perp=\{\mathbf0\}$, contradiction. Thus $\mathcal O$ is maximal orthonormal.
 \end{enumerate}
-\hlt{Structural Commentary}: Maximality means no orthogonal direction remains.\\
-\hlt{Key Insight}: Hilbert bases span by closure, not usually by finite linear combinations.
+\hlt{Structural Commentary}: Maximality, trivial orthogonal complement, and closed span are equivalent.\\
+\hlt{Key Insight}: A Hilbert basis is total, not necessarily Hamel.
 \end{proof}
 \end{theorem}
 
@@ -221,20 +264,28 @@ Let $\mathcal{O}\subseteq\mathcal{H}$ be orthonormal. The following are equivale
 Let $(x_k)_{k\in K}\subseteq\mathcal{H}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Finite partial sums}: $\mathcal{F}(K)\defeq\{J\subseteq K:\abs{J}<\infty\}$, ordered by $\subseteq$, and $s_J\defeq\sum_{k\in J}x_k$.
-\item \hlt{Arbitrary convergence}: $\sum_{k\in K}x_k=x\Longleftrightarrow\forall\varepsilon>0\,\exists S\in\mathcal{F}(K)\,\forall T\in\mathcal{F}(K):S\subseteq T\Rightarrow\norm{s_T-x}\leq\varepsilon$.
-\item \hlt{Nonnegative scalar sum}: for $(a_k)_{k\in K}\subseteq[0,\infty)$, $\sum_{k\in K}a_k<\infty\Longleftrightarrow\sup_{J\in\mathcal{F}(K)}\sum_{k\in J}a_k<\infty$.
+\item \hlt{Finite partial sums}: $\mathcal{F}(K)\defeq\{J\subseteq K:\abs{J}<\infty\}$, ordered by $\subseteq$, and $s_J\defeq\sum\limits_{k\in J}x_k$.
+\item \hlt{Arbitrary convergence}: $\sum\limits_{k\in K}x_k=x\Longleftrightarrow\forall\varepsilon>0\,\exists S\in\mathcal{F}(K)\,\forall T\in\mathcal{F}(K):S\subseteq T\Rightarrow\norm{s_T-x}\leq\varepsilon$.
+\item \hlt{Nonnegative scalar sum}: for $(a_k)_{k\in K}\subseteq[0,\infty)$, $\sum\limits_{k\in K}a_k<\infty\Longleftrightarrow\sup\limits_{J\in\mathcal{F}(K)}\sum\limits_{k\in J}a_k<\infty$.
 \end{enumerate}
 \end{definition}
 
 \begin{proposition} \label{prop:arbitrary-hilbert-sums-basic-properties} \hlt{Basic Properties of Arbitrary Sums}\\
-Let $(x_k)_{k\in K},(y_k)_{k\in K}\subseteq\mathcal{H}$ with $\sum_{k\in K}x_k=x$ and $\sum_{k\in K}y_k=y$. Then $\forall a,b\in\mathbb{F}$, $\sum_{k\in K}(ax_k+by_k)=ax+by$.\\
-Moreover, $\forall z\in\mathcal{H}$, $\sum_{k\in K}\innerprod{x_k,z}=\innerprod{x,z}$ and $\sum_{k\in K}\innerprod{z,x_k}=\innerprod{z,x}$.
+Let $(x_k)_{k\in K},(y_k)_{k\in K}\subseteq\mathcal{H}$ satisfy $\sum\limits_{k\in K}x_k=x$ and $\sum\limits_{k\in K}y_k=y$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\forall a,b\in\mathbb{F}$, $\sum\limits_{k\in K}(ax_k+by_k)=ax+by$.
+\item $\forall z\in\mathcal{H}$, $\sum\limits_{k\in K}\innerprod{x_k,z}=\innerprod{x,z}$.
+\item $\forall z\in\mathcal{H}$, $\sum\limits_{k\in K}\innerprod{z,x_k}=\innerprod{z,x}$.
+\end{enumerate}
 \begin{proof}
-For $J\in\mathcal{F}(K)$, set $s_J\defeq\sum_{k\in J}x_k$ and $t_J\defeq\sum_{k\in J}y_k$.\\
-Then $s_J\to x$ and $t_J\to y$, hence $as_J+bt_J\to ax+by$, proving $\sum_{k\in K}(ax_k+by_k)=ax+by$.\\
-For $z\in\mathcal{H}$, Proposition \ref{prop:inner-product-and-norm-continuity} gives $\innerprod{s_J,z}\to\innerprod{x,z}$ and $\innerprod{z,s_J}\to\innerprod{z,x}$,\\
-i.e. $\sum_{k\in K}\innerprod{x_k,z}=\innerprod{x,z}$ and $\sum_{k\in K}\innerprod{z,x_k}=\innerprod{z,x}$.\\
+For $J\in\mathcal{F}(K)$, set $s_J\defeq\sum\limits_{k\in J}x_k$ and $t_J\defeq\sum\limits_{k\in J}y_k$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $s_J\to x$ and $t_J\to y$, $as_J+bt_J\to ax+by$.
+\item For $z\in\mathcal H$ and $J\in\mathcal F(K)$, $\sum\limits_{k\in J}\innerprod{x_k,z}=\innerprod{s_J,z}$; since $s_J\to x$, Proposition \ref{prop:inner-product-and-norm-continuity} gives $\innerprod{s_J,z}\to\innerprod{x,z}$.
+\item For $z\in\mathcal H$ and $J\in\mathcal F(K)$, $\sum\limits_{k\in J}\innerprod{z,x_k}=\innerprod{z,s_J}$; since $s_J\to x$, Proposition \ref{prop:inner-product-and-norm-continuity} gives $\innerprod{z,s_J}\to\innerprod{z,x}$.
+\end{enumerate}
 \hlt{Structural Commentary}: Arbitrary sums are ordinary finite sums plus a convergence net.\\
 \hlt{Key Insight}: Once the vector sum converges, continuous linear tests may pass through the sum.
 \end{proof}
@@ -244,46 +295,52 @@ i.e. $\sum_{k\in K}\innerprod{x_k,z}=\innerprod{x,z}$ and $\sum_{k\in K}\innerpr
 Let $(u_k)_{k\in K}\subseteq\mathcal{H}$ be orthonormal.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\forall(r_k)_{k\in K}\subseteq\mathbb{F}$, $\sum_{k\in K}r_ku_k$ converges $\Longleftrightarrow\sup_{J\in\mathcal{F}(K)}\sum_{k\in J}\abs{r_k}^2<\infty$; then $\norm{\sum_{k\in K}r_ku_k}^2=\sum_{k\in K}\abs{r_k}^2$.
-\item $\forall(x_k)_{k\in K}\subseteq\mathcal{H}$, $\sum_{k\in K}x_k$ converges $\Longrightarrow\abs{\{k\in K:x_k\neq\mathbf{0}\}}\leq\aleph_0$.
+\item For $(r_k)_{k\in K}\subseteq\mathbb{F}$, $\sum\limits_{k\in K}r_ku_k$ converges iff $\sup\limits_{J\in\mathcal{F}(K)}\sum\limits_{k\in J}\abs{r_k}^2<\infty$.
+\item Under the conditions in (i), $\norm{\sum\limits_{k\in K}r_ku_k}^2=\sum\limits_{k\in K}\abs{r_k}^2$.
+\item $\forall(x_k)_{k\in K}\subseteq\mathcal{H}$, $\sum\limits_{k\in K}x_k$ convergent implies $\abs{\{k\in K:x_k\neq\mathbf{0}\}}\leq\aleph_0$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]($\Rightarrow$) Let $s_J\defeq\sum_{k\in J}r_ku_k$. If $s_J\to x$, choose $S\in\mathcal{F}(K)$ such that $S\subseteq T\Rightarrow\norm{s_T-x}\leq1$.\\
-For any $J\in\mathcal{F}(K)$, $\sum_{k\in J}\abs{r_k}^2\leq\sum_{k\in J\cup S}\abs{r_k}^2=\norm{s_{J\cup S}}^2\leq(\norm{x}+1)^2$.
-\item[$(i)$]($\Leftarrow$) Let $M\defeq\sup_{J\in\mathcal{F}(K)}\sum_{k\in J}\abs{r_k}^2<\infty$. Given $\varepsilon>0$, choose $S\in\mathcal{F}(K)$ with $M-\sum_{k\in S}\abs{r_k}^2<\varepsilon^2$.\\
-If $S\subseteq J,L$, then $\norm{s_J-s_L}^2\leq\sum_{k\in(J\cup L)\setminus S}\abs{r_k}^2<\varepsilon^2$, so $(s_J)$ is Cauchy and converges in $\mathcal{H}$.\\
-Passing $\norm{s_J}^2=\sum_{k\in J}\abs{r_k}^2$ to limits gives $\norm{\sum_{k\in K}r_ku_k}^2=\sum_{k\in K}\abs{r_k}^2$.
-\item[$(ii)$] If $\sum_{k\in K}x_k$ converges, then $\forall n\geq1$ choose $I_n\in\mathcal{F}(K)$ such that $F\in\mathcal{F}(K\setminus I_n)\Rightarrow\norm{\sum_{k\in F}x_k}\leq1/n$.\\
-With $I\defeq\bigcup_{n\geq1}I_n$, $I$ is countable; if $k\notin I$, then $\norm{x_k}\leq1/n$ for all $n$, hence $x_k=\mathbf{0}$.
+\item[$(i)$] ($\Rightarrow$) Let $s_J\defeq\sum\limits_{k\in J}r_ku_k$. If $s_J\to x$, choose $S\in\mathcal F(K)$ with $S\subseteq T\Rightarrow\norm{s_T-x}\leq1$.\\
+For $J\in\mathcal F(K)$, $\sum\limits_{k\in J}\abs{r_k}^2\leq\norm{s_{J\cup S}}^2\leq(\norm{x}+1)^2$.
+\item[$(i)$] ($\Leftarrow$) Let $M\defeq\sup\limits_{J\in\mathcal F(K)}\sum\limits_{k\in J}\abs{r_k}^2<+\infty$. Given $\varepsilon>0$, choose $S\in\mathcal F(K)$ with $M-\sum\limits_{k\in S}\abs{r_k}^2<\varepsilon^2$.\\
+If $S\subseteq J,L$, then $\norm{s_J-s_L}^2=\sum\limits_{k\in J\triangle L}\abs{r_k}^2\leq\sum\limits_{k\in(J\cup L)\setminus S}\abs{r_k}^2<\varepsilon^2$.\\
+Thus $(s_J)$ is Cauchy, hence converges in $\mathcal H$.
+\item[$(ii)$] If $s_J\to s\defeq\sum\limits_{k\in K}r_ku_k$, then $\norm{s}^2=\lim\limits_J\norm{s_J}^2=\sup\limits_{J\in\mathcal F(K)}\sum\limits_{k\in J}\abs{r_k}^2=\sum\limits_{k\in K}\abs{r_k}^2$.
+\item[$(iii)$] If $s_J\defeq\sum\limits_{k\in J}x_k$ converges, then $(s_J)$ is Cauchy.\\
+For each $n\geq1$, choose $I_n\in\mathcal F(K)$ such that $I_n\subseteq J,L\Rightarrow\norm{s_J-s_L}\leq\frac{1}{n}$.\\
+Then $F\in\mathcal F(K\setminus I_n)$ implies $\norm{\sum\limits_{k\in F}x_k}=\norm{s_{I_n\cup F}-s_{I_n}}\leq\frac{1}{n}$.\\
+With $I\defeq\bigcup\limits_{n\geq1}I_n$, $I$ is countable; if $k\notin I$, then $\norm{x_k}\leq\frac{1}{n}$ for all $n$, so $x_k=\mathbf0$.
 \end{enumerate}
-\hlt{Structural Commentary}: Orthonormal sums reduce vector convergence to scalar square-summability.\\
-\hlt{Key Insight}: A genuinely convergent arbitrary sum can hide no uncountable collection of nonzero terms.
+\hlt{Structural Commentary}: Orthonormal finite sums turn net tails into square-sum tails.\\
+\hlt{Key Insight}: Convergent arbitrary sums have countable support.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:hilbert-fourier-expansion-general} \hlt{Fourier Expansion in a Hilbert Space}\\
-Let $\mathcal{O}=(u_k)_{k\in K}\subseteq\mathcal{H}$ be orthonormal. For $x\in\mathcal{H}$, set $\widehat{x}_{\mathcal{O}}\defeq\sum_{k\in K}\innerprod{x,u_k}u_k$.
+Let $\mathcal{O}=(u_k)_{k\in K}\subseteq\mathcal{H}$ be orthonormal. For $x\in\mathcal{H}$, set $\widehat{x}_{\mathcal{O}}\defeq\sum\limits_{k\in K}\innerprod{x,u_k}u_k$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\widehat{x}_{\mathcal{O}}$ converges in $\mathcal{H}$ and $\norm{\widehat{x}_{\mathcal{O}}}^2=\sum_{k\in K}\abs{\innerprod{x,u_k}}^2\leq\norm{x}^2$.
+\item $\widehat{x}_{\mathcal{O}}$ converges in $\mathcal{H}$.
+\item $\norm{\widehat{x}_{\mathcal{O}}}^2=\sum\limits_{k\in K}\abs{\innerprod{x,u_k}}^2\leq\norm{x}^2$.
 \item $\widehat{x}_{\mathcal{O}}$ is the unique minimizer of $\norm{x-y}$ over $y\in\operatorname{cspan}(\mathcal{O})$.
 \item $\norm{\widehat{x}_{\mathcal{O}}}=\norm{x}\Longleftrightarrow x\in\operatorname{cspan}(\mathcal{O})$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] Finite Bessel gives $\sup_{J\in\mathcal{F}(K)}\sum_{k\in J}\abs{\innerprod{x,u_k}}^2\leq\norm{x}^2$. With $r_k\defeq\innerprod{x,u_k}$, Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert} applies, so $\widehat{x}_{\mathcal{O}}=\sum_{k\in K}r_ku_k$ converges and $\norm{\widehat{x}_{\mathcal{O}}}^2=\sum_{k\in K}\abs{r_k}^2=\sum_{k\in K}\abs{\innerprod{x,u_k}}^2\leq\norm{x}^2$.
-\item[$(ii)$] Proposition \ref{prop:arbitrary-hilbert-sums-basic-properties} gives $\innerprod{x-\widehat{x}_{\mathcal{O}},u_k}=0$ for all $k$, hence $r\defeq x-\widehat{x}_{\mathcal{O}}\in\operatorname{cspan}(\mathcal{O})^\perp$. Let $M\defeq\operatorname{cspan}(\mathcal{O})$.\\
-For $y\in M$, $x-y=r+(\widehat{x}_{\mathcal{O}}-y)$ orthogonally,\\
-so $\norm{x-y}^2=\norm{r}^2+\norm{\widehat{x}_{\mathcal{O}}-y}^2\geq\norm{r}^2=\norm{x-\widehat{x}_{\mathcal{O}}}^2$, with equality iff $y=\widehat{x}_{\mathcal{O}}$.
-\item[$(iii)$]($\Rightarrow$) If $\norm{\widehat{x}_{\mathcal{O}}}=\norm{x}$, then $x=\widehat{x}_{\mathcal{O}}+(x-\widehat{x}_{\mathcal{O}})$ orthogonally,\\
-so $\norm{x-\widehat{x}_{\mathcal{O}}}^2=\norm{x}^2-\norm{\widehat{x}_{\mathcal{O}}}^2=0$ and $x=\widehat{x}_{\mathcal{O}}\in\operatorname{cspan}(\mathcal{O})$.
-\item[$(iii)$]($\Leftarrow$) If $x\in\operatorname{cspan}(\mathcal{O})$, then the unique minimizer in (ii) is $x$, so $\widehat{x}_{\mathcal{O}}=x$ and $\norm{\widehat{x}_{\mathcal{O}}}=\norm{x}$.
+\item[$(i)$] For $J\in\mathcal F(K)$, finite Bessel gives $\sum\limits_{k\in J}\abs{\innerprod{x,u_k}}^2\leq\norm{x}^2$.\\
+Hence $\sup\limits_J\sum\limits_{k\in J}\abs{\innerprod{x,u_k}}^2<+\infty$, so $\sum\limits_{k\in K}\innerprod{x,u_k}u_k$ converges by Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert}(i).
+\item[$(ii)$] Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert}(ii) gives $\norm{\widehat{x}_{\mathcal O}}^2=\sum\limits_{k\in K}\abs{\innerprod{x,u_k}}^2$; finite Bessel gives the inequality $\sum\limits_{k\in K}\abs{\innerprod{x,u_k}}^2\leq\norm{x}^2$.
+\item[$(iii)$] For $i\in K$, Proposition \ref{prop:arbitrary-hilbert-sums-basic-properties} gives $\innerprod{\widehat{x}_{\mathcal O},u_i}=\sum\limits_{k\in K}\innerprod{x,u_k}\innerprod{u_k,u_i}=\innerprod{x,u_i}$, so $r\defeq x-\widehat{x}_{\mathcal O}\perp\mathcal O$.\\
+By continuity, $r\perp M\defeq\operatorname{cspan}(\mathcal O)$. For $y\in M$, $x-y=r+(\widehat{x}_{\mathcal O}-y)$ orthogonally,\\
+so $\norm{x-y}^2=\norm r^2+\norm{\widehat{x}_{\mathcal O}-y}^2\geq\norm r^2=\norm{x-\widehat{x}_{\mathcal O}}^2$, with equality iff $y=\widehat{x}_{\mathcal O}$.
+\item[$(iv)$] ($\Rightarrow$) As $x=\widehat{x}_{\mathcal O}+r$ orthogonally, $\norm{x}^2=\norm{\widehat{x}_{\mathcal O}}^2+\norm r^2$. If $\norm{\widehat{x}_{\mathcal O}}=\norm{x}$, then $r=0$, $x=\widehat{x}_{\mathcal O}\in\operatorname{cspan}(\mathcal O)$.
+\item[$(iv)$] ($\Leftarrow$) If $x\in\operatorname{cspan}(\mathcal O)$, the minimizer of $\norm{x-y}$ over $y\in\operatorname{cspan}(\mathcal O)$ is $x$; by (iii), $\widehat{x}_{\mathcal O}=x$, $\norm{\widehat{x}_{\mathcal O}}=\norm{x}$.
 \end{enumerate}
-\hlt{Structural Commentary}: Fourier expansion is projection onto the closed span.\\
-\hlt{Key Insight}: Bessel bounds coefficients; completeness sums them.
+\hlt{Structural Commentary}: Fourier expansion is orthogonal projection onto $\operatorname{cspan}(\mathcal O)$.\\
+\hlt{Key Insight}: Bessel bounds the coefficients; completeness sums them.
 \end{proof}
 \end{theorem}
 
@@ -292,60 +349,99 @@ For an orthonormal family $\mathcal{O}=\{u_k:k\in K\}$ in $\mathcal{H}$, the fol
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\mathcal{O}$ is a Hilbert basis.
-\item $x=\sum_{k\in K}\innerprod{x,u_k}u_k$ for every $x\in\mathcal{H}$.
-\item Parseval's identity $\innerprod{x,y}=\sum_{k\in K}\innerprod{x,u_k}\overline{\innerprod{y,u_k}}$ holds for all $x,y\in\mathcal{H}$.
-\item $\norm{x}^2=\sum_{k\in K}\abs{\innerprod{x,u_k}}^2$ for every $x\in\mathcal{H}$.
+\item $\forall x\in\mathcal{H}$, $x=\sum\limits_{k\in K}\innerprod{x,u_k}u_k$.
+\item $\forall x,y\in\mathcal{H}$, Parseval's identity $\innerprod{x,y}=\sum\limits_{k\in K}\innerprod{x,u_k}\overline{\innerprod{y,u_k}}$ holds.
+\item $\forall x\in\mathcal{H}$, $\norm{x}^2=\sum\limits_{k\in K}\abs{\innerprod{x,u_k}}^2$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ By Theorem \ref{thm:hilbert-basis-total-characterizations}, $\operatorname{cspan}(\mathcal{O})=\mathcal{H}$. For $x\in\mathcal{H}$, both $x$, $\widehat{x}_{\mathcal{O}}$ minimize $\norm{x-y}$ over $y\in\operatorname{cspan}(\mathcal{O})$, so Theorem \ref{thm:hilbert-fourier-expansion-general} gives $x=\widehat{x}_{\mathcal{O}}=\sum_{k\in K}\innerprod{x,u_k}u_k$.
-\item[$(ii)$]$\Rightarrow (iii)$ For $x,y\in\mathcal{H}$, (ii) and Proposition \ref{prop:arbitrary-hilbert-sums-basic-properties} give $\innerprod{x,y}=\sum_{k\in K}\innerprod{x,u_k}\innerprod{u_k,y}=\sum_{k\in K}\innerprod{x,u_k}\overline{\innerprod{y,u_k}}$.
-\item[$(iii)$]$\Rightarrow (iv)$ Setting $y=x$ in (iii) gives $\norm{x}^2=\innerprod{x,x}=\sum_{k\in K}\innerprod{x,u_k}\overline{\innerprod{x,u_k}}=\sum_{k\in K}\abs{\innerprod{x,u_k}}^2$ for all $x\in\mathcal{H}$.
-\item[$(iv)$]$\Rightarrow (i)$ By Theorem \ref{thm:hilbert-fourier-expansion-general}, (iv) implies $\norm{\widehat{x}_{\mathcal{O}}}=\norm{x}$, hence $x\in\operatorname{cspan}(\mathcal{O})$ for all $x\in\mathcal{H}$.\\
-Therefore $\operatorname{cspan}(\mathcal{O})=\mathcal{H}$ and Theorem \ref{thm:hilbert-basis-total-characterizations} gives (i).
+\item[$(i)$]$\Rightarrow (ii)$ By Theorem \ref{thm:hilbert-basis-total-characterizations}, $\operatorname{cspan}(\mathcal O)=\mathcal H$. For $x\in\mathcal H$, both $x$ and $\widehat{x}_{\mathcal O}$ minimize $\norm{x-y}$ over $y\in\operatorname{cspan}(\mathcal O)$.\\
+By uniqueness in Theorem \ref{thm:hilbert-fourier-expansion-general}(iii), $x=\widehat{x}_{\mathcal O}=\sum\limits_{k\in K}\innerprod{x,u_k}u_k$.
+\item[$(ii)$]$\Rightarrow (iii)$ For $x,y\in\mathcal H$, (ii) and Proposition \ref{prop:arbitrary-hilbert-sums-basic-properties} give $\innerprod{x,y}=\sum\limits_{k\in K}\innerprod{x,u_k}\innerprod{u_k,y}=\sum\limits_{k\in K}\innerprod{x,u_k}\overline{\innerprod{y,u_k}}$.
+\item[$(iii)$]$\Rightarrow (iv)$ Put $y=x$: $\norm{x}^2=\innerprod{x,x}=\sum\limits_{k\in K}\innerprod{x,u_k}\overline{\innerprod{x,u_k}}=\sum\limits_{k\in K}\abs{\innerprod{x,u_k}}^2$.
+\item[$(iv)$]$\Rightarrow (i)$ By Theorem \ref{thm:hilbert-fourier-expansion-general}(ii), (iv) gives $\norm{\widehat{x}_{\mathcal O}}=\norm{x}$ for every $x\in\mathcal H$.\\
+By Theorem \ref{thm:hilbert-fourier-expansion-general}(iv), $x\in\operatorname{cspan}(\mathcal O)$ for every $x$, so $\operatorname{cspan}(\mathcal O)=\mathcal H$. Theorem \ref{thm:hilbert-basis-total-characterizations} gives (i).
 \end{enumerate}
-\hlt{Structural Commentary}: Completeness is detected by expansion, norms, or inner products.\\
-\hlt{Key Insight}: Parseval says the Hilbert basis loses no length or angle information.
+\hlt{Structural Commentary}: Totality, Fourier expansion, Parseval, and norm equality are equivalent.\\
+\hlt{Key Insight}: Parseval preserves all Hilbert geometry.
 \end{proof}
 \end{corollary}
 
-\begin{definition} \label{def:hilbert-dimension} \hlt{Hilbert Dimension}\\
-For a Hilbert space $\mathcal{H}$ with Hilbert basis $\mathcal{B}$, define $\operatorname{hdim}(\mathcal{H})\defeq\abs{\mathcal{B}}$.
-\end{definition}
-
-\begin{theorem} \label{thm:hilbert-dimension-and-l2-model} \hlt{Hilbert Dimension and $\ell^2(K)$ Models}\\
-Let $K$ be a set.
+\begin{theorem} \label{thm:hilbert-basis-existence-and-cardinality} \hlt{Existence and Cardinality of Hilbert Bases}\\
+Let $\mathcal{H}$ be a Hilbert space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Every Hilbert space has a Hilbert basis $(\delta_k)_{k\in K}$; if $\mathcal{B},\mathcal{C}$ are Hilbert bases of $\mathcal{H}$, then $\abs{\mathcal{B}}=\abs{\mathcal{C}}$.
-\item $\ell^2(K)\defeq\{f:K\to\mathbb{F}:\sum_{k\in K}\abs{f(k)}^2<\infty\}$ is Hilbert under $\innerprod{f,g}=\sum_{k\in K}f(k)\overline{g(k)}$, with $(\delta_k)_{k\in K}$.
-\item For Hilbert spaces $\mathcal{H}_1,\mathcal{H}_2$, $\mathcal{H}_1\cong_{\mathrm{iso}}\mathcal{H}_2\Longleftrightarrow\operatorname{hdim}(\mathcal{H}_1)=\operatorname{hdim}(\mathcal{H}_2)$.
+\item $\mathcal{H}$ admits a Hilbert basis.
+\item If $\mathcal{B},\mathcal{C}$ are Hilbert bases of $\mathcal{H}$, then $\abs{\mathcal{B}}=\abs{\mathcal{C}}$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] Zorn's lemma, Principle \ref{princ:zorns-lemma}, gives a maximal orthonormal set, hence a Hilbert basis by Theorem \ref{thm:hilbert-basis-total-characterizations}.\\
-If $\mathcal{B}=\{b_i:i\in I\}$ and $\mathcal{C}=\{c_j:j\in J\}$ are infinite Hilbert bases, set $J_i\defeq\{j\in J:\innerprod{b_i,c_j}\neq0\}$.\\
-Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert} gives $\abs{J_i}\leq\aleph_0$, and totality of $\mathcal{B}$ gives $J=\bigcup_{i\in I}J_i$; hence $\abs{J}\leq\aleph_0\abs{I}=\abs{I}$, and symmetry with Theorem \ref{thm:schroeder-bernstein} gives $\abs{I}=\abs{J}$. The finite case is ordinary dimension.
-\item[$(ii)$] Finite-subset Cauchy--Schwarz makes $\innerprod{f,g}$ well defined on $\ell^2(K)$. If $(f_n)$ is Cauchy, $f(k)\defeq\lim_n f_n(k)$ exists for each $k$, and finite-subset estimates give $f\in\ell^2(K)$ and $f_n\to f$; hence $\ell^2(K)$ is Hilbert.\\
-The family $(\delta_k)_{k\in K}$ is orthonormal, and $(\delta_k)_{k\in K}^{\perp}=\{\mathbf{0}\}$, so it is a Hilbert basis by Theorem \ref{thm:hilbert-basis-total-characterizations}.
-\item[$(iii)$]($\Rightarrow$) If $U:\mathcal{H}_1\to\mathcal{H}_2$ is a surjective linear isometry and $\mathcal{B}$ is a Hilbert basis of $\mathcal{H}_1$, then $U\mathcal{B}$ is a Hilbert basis of $\mathcal{H}_2$; hence $\operatorname{hdim}(\mathcal{H}_1)=\operatorname{hdim}(\mathcal{H}_2)$.
-\item[$(iii)$]($\Leftarrow$) If $\operatorname{hdim}(\mathcal{H}_1)=\operatorname{hdim}(\mathcal{H}_2)$, choose Hilbert bases $(b_i)_{i\in I}$ and $(c_i)_{i\in I}$.\\
-Parseval gives isometric isomorphisms $\Phi_1x=(i\mapsto\innerprod{x,b_i})$ and $\Phi_2y=(i\mapsto\innerprod{y,c_i})$ onto $\ell^2(I)$.\\
-Thus $\Phi_2^{-1}\Phi_1:\mathcal{H}_1\to\mathcal{H}_2$ is a surjective linear isometry.
+\item Let $\mathfrak O$ be the orthonormal subsets of $\mathcal H$, ordered by $\subseteq$. Chains in $\mathfrak O$ have orthonormal unions, so Principle \ref{princ:zorns-lemma} gives maximal $\mathcal O\in\mathfrak O$; by Theorem \ref{thm:hilbert-basis-total-characterizations}, $\mathcal O$ is a Hilbert basis.
+\item Let $\mathcal B=\{b_i:i\in I\}$ and $\mathcal C=\{c_j:j\in J\}$ be Hilbert bases.\\
+If $\abs I<\infty$, Proposition \ref{prop:finite-hilbert-basis-hamel-basis} gives $\dim\mathcal H=\abs I$; orthonormality gives $\abs J\leq\dim\mathcal H$, hence $\abs J<\infty$, and Proposition \ref{prop:finite-hilbert-basis-hamel-basis} gives $\abs J=\dim\mathcal H$. The case $\abs J<\infty$ is symmetric.\\
+Assume $I,J$ infinite. For $i\in I$, set $J_i\defeq\{j\in J:\innerprod{b_i,c_j}\neq0\}$. By Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert}(iii), $\abs{J_i}\leq\aleph_0$.\\
+Since $\mathcal B^\perp=\{\mathbf0\}$, $j\notin\bigcup\limits_{i\in I}J_i$ is impossible; hence $J=\bigcup\limits_{i\in I}J_i$ and $\abs J\leq\sum\limits_{i\in I}\abs{J_i}\leq\aleph_0\abs I=\abs I$.\\
+Symmetry gives $\abs I\leq\abs J$; Theorem \ref{thm:schroeder-bernstein} gives $\abs I=\abs J$.
 \end{enumerate}
-\hlt{Structural Commentary}: Hilbert bases classify Hilbert spaces by cardinality.\\
-\hlt{Key Insight}: Every Hilbert space is a coordinate $\ell^2(K)$ after choosing a Hilbert basis.
+\hlt{Structural Commentary}: Zorn gives existence; countable coordinate supports compare cardinalities.\\
+\hlt{Key Insight}: Hilbert-basis size is intrinsic.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:hilbert-dimension} \hlt{Hilbert Dimension}\\
+For a Hilbert space $\mathcal{H}$ with Hilbert basis $\mathcal{B}$, define $\operatorname{hdim}(\mathcal{H})\defeq\abs{\mathcal{B}}$; this is well defined by Theorem \ref{thm:hilbert-basis-existence-and-cardinality}.
+\end{definition}
+
+\begin{proposition} \label{prop:l2-arbitrary-index-hilbert-model} \hlt{The Hilbert Space $\ell^2(K)$}\\
+Let $K$ be a set and set $\ell^2(K)\defeq\{f:K\to\mathbb{F}:\sum\limits_{k\in K}\abs{f(k)}^2<\infty\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\ell^2(K)$ is Hilbert under $\innerprod{f,g}\defeq\sum\limits_{k\in K}f(k)\overline{g(k)}$.
+\item The coordinate family $(\delta_k)_{k\in K}$ is a Hilbert basis of $\ell^2(K)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $f,g\in\ell^2(K)$ and finite $F\subseteq K$, $\sum\limits_{k\in F}\abs{f(k)\overline{g(k)}}\leq(\sum\limits_{k\in F}\abs{f(k)}^2)^{1/2}(\sum\limits_{k\in F}\abs{g(k)}^2)^{1/2}\leq\norm{f}_2\norm{g}_2$, so $\innerprod{f,g}$ is well defined. If $(f_n)$ is Cauchy, then $\abs{f_m(k)-f_n(k)}\leq\norm{f_m-f_n}_2$ for each $k$, so set $f(k)\defeq\lim\limits_nf_n(k)$.\\
+Given $\varepsilon>0$, choose $N$ with $\norm{f_m-f_n}_2<\varepsilon$ for $m,n\geq N$.\\
+Then for finite $F\subseteq K$ and $n\geq N$, $\sum\limits_{k\in F}\abs{f(k)-f_n(k)}^2=\lim\limits_m\sum\limits_{k\in F}\abs{f_m(k)-f_n(k)}^2\leq\varepsilon^2$.\\
+Hence $f-f_n\in\ell^2(K)$, $\norm{f-f_n}_2\leq\varepsilon$, $f\in\ell^2(K)$, and $f_n\to f$.
+\item $\innerprod{\delta_j,\delta_k}=\mathbf1_{\{j=k\}}$. If $f\perp\delta_k$ for every $k\in K$, then $f(k)=\innerprod{f,\delta_k}=0$ for every $k$, so $(\delta_k)_{k\in K}^{\perp}=\{\mathbf0\}$.\\
+By Theorem \ref{thm:hilbert-basis-total-characterizations}, $(\delta_k)_{k\in K}$ is a Hilbert basis.
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinatewise limits and uniform finite-subset bounds prove completeness.\\
+\hlt{Key Insight}: Square-summability is precisely the norm condition for arbitrary orthogonal coordinates.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:hilbert-spaces-classified-by-dimension} \hlt{Classification by Hilbert Dimension}\\
+For Hilbert spaces $\mathcal{H}_1,\mathcal{H}_2$, $\mathcal{H}_1\cong_{\mathrm{iso}}\mathcal{H}_2$ iff $\operatorname{hdim}(\mathcal{H}_1)=\operatorname{hdim}(\mathcal{H}_2)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $U:\mathcal H_1\to\mathcal H_2$ be a surjective linear isometry and let $\mathcal B$ be a Hilbert basis of $\mathcal H_1$.\\
+Then $U\mathcal B$ is orthonormal and $\operatorname{cspan}(U\mathcal B)=U(\operatorname{cspan}\mathcal B)=\mathcal H_2$.\\
+Thus $U\mathcal B$ is a Hilbert basis and $\operatorname{hdim}(\mathcal H_1)=\abs{\mathcal B}=\abs{U\mathcal B}=\operatorname{hdim}(\mathcal H_2)$.
+\item[$(\Leftarrow)$] Let $\operatorname{hdim}(\mathcal H_1)=\operatorname{hdim}(\mathcal H_2)=\abs I$, and choose Hilbert bases $(b_i)_{i\in I}$ and $(c_i)_{i\in I}$.\\
+Define $\Phi_1x\defeq(i\mapsto\innerprod{x,b_i})$ and $\Phi_2y\defeq(i\mapsto\innerprod{y,c_i})$. By Corollary \ref{cor:parseval-hilbert-basis-characterization}, $\norm{\Phi_1x}_2=\norm{x}$, $\norm{\Phi_2y}_2=\norm{y}$.\\
+If $a=(a_i)\in\ell^2(I)$, then $\sum\limits_{i\in I}a_ib_i$ and $\sum\limits_{i\in I}a_ic_i$ converge by Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert}, with images $a$ under $\Phi_1$ and $\Phi_2$.\\
+Hence $U\defeq\Phi_2^{-1}\Phi_1:\mathcal H_1\to\mathcal H_2$ is a surjective linear isometry.
+\end{enumerate}
+\hlt{Structural Commentary}: Map both spaces isometrically onto the same coordinate model.\\
+\hlt{Key Insight}: Hilbert spaces are classified by the number of orthogonal coordinate directions.
+\end{proof}
+\end{corollary}
 
 \begin{corollary} \label{cor:separable-hilbert-space-countable-hilbert-dimension} \hlt{Separable Hilbert Spaces}\\
 $\mathcal{H}$ separable $\Longleftrightarrow\operatorname{hdim}(\mathcal{H})\leq\aleph_0$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $D\subseteq\mathcal{H}$ be countable dense and let $\mathcal{O}$ be a Hilbert basis. For each $u\in\mathcal{O}$ choose $d_u\in D$ with $\norm{u-d_u}<1/3$. If $u\neq v$ and $d_u=d_v$, then $\sqrt{2}=\norm{u-v}\leq\norm{u-d_u}+\norm{d_v-v}<2/3$, impossible. Hence $u\mapsto d_u$ injects $\mathcal{O}$ into $D$, so $\operatorname{hdim}(\mathcal{H})=\abs{\mathcal{O}}\leq\aleph_0$.
+\item[$(\Rightarrow)$] Let $D\subseteq\mathcal{H}$ be countable dense and let $\mathcal{O}$ be a Hilbert basis. $\forall u\in\mathcal{O}$, choose $d_u\in D$ with $\norm{u-d_u}<\frac{1}{3}$.\\
+If $u\neq v$ and $d_u=d_v$, then $\sqrt{2}=\norm{u-v}\leq\norm{u-d_u}+\norm{d_v-v}<\frac{2}{3}$, impossible.\\
+Hence $u\mapsto d_u$ injects $\mathcal{O}$ into $D$, so $\operatorname{hdim}(\mathcal{H})=\abs{\mathcal{O}}\leq\aleph_0$.
 \item[$(\Leftarrow)$] Let $\mathcal{O}$ be a Hilbert basis with $\abs{\mathcal{O}}\leq\aleph_0$. The finite $\mathbb{Q}$-span of $\mathcal{O}$ over $\mathbb{R}$, respectively finite $(\mathbb{Q}+i\mathbb{Q})$-span over $\mathbb{C}$, is countable and dense in $\operatorname{cspan}(\mathcal{O})=\mathcal{H}$.
 \end{enumerate}
 \hlt{Structural Commentary}: Countable bases and countable dense sets force each other.\\
@@ -356,67 +452,239 @@ $\mathcal{H}$ separable $\Longleftrightarrow\operatorname{hdim}(\mathcal{H})\leq
 \begin{corollary} \label{cor:infinite-hilbert-basis-not-hamel} \hlt{Infinite Hilbert Bases Are Not Hamel Bases}\\
 If $\operatorname{hdim}(\mathcal{H})$ is infinite, no Hilbert basis of $\mathcal{H}$ is a Hamel basis.
 \begin{proof}
-Let $\mathcal{O}$ be a Hilbert basis and choose pairwise distinct $(u_n)\subseteq\mathcal{O}$.\\
-Since $\sum_{n=1}^{\infty}4^{-n}<\infty$, Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert} gives $x\defeq\sum_{n=1}^{\infty}2^{-n}u_n\in\mathcal{H}$. Proposition \ref{prop:arbitrary-hilbert-sums-basic-properties} gives $\innerprod{x,u_n}=2^{-n}\neq0$ for all $n$, so $x$ has infinitely many nonzero $\mathcal{O}$-coordinates and $x\notin\operatorname{span}(\mathcal{O})$.\\
+Let $\mathcal O$ be Hilbert basis, choose distinct $u_n\in\mathcal O$.\\
+Since $\sum\limits_n4^{-n}<\infty$, $x\defeq\sum\limits_n2^{-n}u_n\in\mathcal H$ by Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert}.\\
+For every $n$, continuity of $\innerprod{\cdot,u_n}$ gives $\innerprod{x,u_n}=2^{-n}\neq0$. If $\mathcal O$ were Hamel, then $x=\sum\limits_{j=1}^Na_jv_j$ with $v_j\in\mathcal O$; choosing $n$ with $u_n\notin\{v_1,\ldots,v_N\}$ gives $\innerprod{x,u_n}=0$, contradiction.\\
 \hlt{Structural Commentary}: Infinite Hilbert coordinates allow square-summable infinite expansions.\\
 \hlt{Key Insight}: A Hilbert basis spans by limits, while a Hamel basis spans by finite sums.
 \end{proof}
 \end{corollary}
 
 \begin{perspective} \label{per:bounded-functionals-riesz-transition} \hlt{Bounded Functionals}\\
-Here $\mathcal{H}^*$ denotes the continuous dual of $\mathcal{H}$. By Definition \ref{def:bounded-linear-maps-and-operator-norm} and Theorem \ref{thm:bounded-linear-map-continuity-equivalences}, $\mathcal{H}^*=\{\varphi:\mathcal{H}\to\mathbb{F}:\varphi\ \mathrm{linear},\ \normop{\varphi}<\infty\}$.
+Here $\mathcal{H}^*=\LL(\mathcal{H},\mathbb{F})$ by Definition \ref{def:bounded-linear-maps-and-operator-norm} and Theorem \ref{thm:bounded-linear-map-continuity-equivalences}.
 \end{perspective}
 
 \begin{proposition} \label{prop:bounded-operators-on-hilbert-space-norm-algebra} \hlt{Operator Norm Algebra}\\
-Let $\mathcal{B}(\mathcal{H})$ be the bounded linear operators $\mathcal{H}\to\mathcal{H}$.\\
-For $S,T\in\mathcal{B}(\mathcal{H})$ and $a\in\mathbb{F}$,
-$\normop{aT}=\abs{a}\normop{T}$, $\normop{S+T}\leq\normop{S}+\normop{T}$, and $\normop{ST}\leq\normop{S}\normop{T}$.\\
-Hence $\mathcal{B}(\mathcal{H})$ is a normed algebra.
+Let $S,T\in\LL(\mathcal{H})$ and $a\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\normop{aT}=\abs{a}\normop{T}$.
+\item $\normop{S+T}\leq\normop{S}+\normop{T}$.
+\item $\normop{ST}\leq\normop{S}\normop{T}$.
+\item $\LL(\mathcal{H})$ is a normed algebra under composition.
+\end{enumerate}
 \begin{proof}
-Taking $\sup_{\norm{x}\leq1}$ in $\norm{aTx}=\abs{a}\norm{Tx}$ and $\norm{(S+T)x}\leq\norm{Sx}+\norm{Tx}\leq(\normop{S}+\normop{T})\norm{x}$ gives homogeneity and subadditivity. Also $\norm{STx}\leq\normop{S}\norm{Tx}\leq\normop{S}\normop{T}\norm{x}$, so $\normop{ST}\leq\normop{S}\normop{T}$.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\normop{aT}=\sup\limits_{\norm{x}\leq1}\norm{aTx}=\abs{a}\sup\limits_{\norm{x}\leq1}\norm{Tx}=\abs{a}\normop{T}$.
+\item For $\norm{x}\leq1$, $\norm{(S+T)x}\leq\norm{Sx}+\norm{Tx}\leq\normop{S}+\normop{T}$; taking sup gives the claim.
+\item For $\norm{x}\leq1$, $\norm{STx}\leq\normop{S}\norm{Tx}\leq\normop{S}\normop{T}$; taking sup gives the claim.
+\item Items (i)--(ii), with $\normop{T}=0\Rightarrow T=0$, give a norm on $\LL(\mathcal{H})$.\\
+Item (iii) gives closure and submultiplicativity for associative composition.
+\end{enumerate}
 \hlt{Structural Commentary}: Composition multiplies stretch bounds.\\
 \hlt{Key Insight}: Bounded operators behave like matrices with a compatible norm.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:riesz-representation-hilbert-space} \hlt{Riesz Representation for Hilbert Spaces}\\
-For every bounded linear functional $\varphi:\mathcal{H}\to\mathbb{F}$, $\exists!y\in\mathcal{H}$ such that $\forall x\in\mathcal{H}$, $\varphi(x)=\innerprod{x,y}$; moreover $\normop{\varphi}=\norm{y}$.
+For $\varphi\in\mathcal{H}^*$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists!y\in\mathcal{H}$ such that $\forall x\in\mathcal{H}$, $\varphi(x)=\innerprod{x,y}$.
+\item The representing vector satisfies $\normop{\varphi}=\norm{y}$.
+\end{enumerate}
 \begin{proof}
-If $\varphi=0$, take $y=0$. If $\varphi\neq0$, let $M\defeq\ker\varphi$ and choose $a\notin M$. Since $M$ is closed, Theorem \ref{thm:hilbert-projection-theorem} gives $a=p+u$ with $p\in M$ and $0\neq u\in M^\perp$; hence $\varphi(u)=\varphi(a)\neq0$. For $x\in\mathcal{H}$, $x-\varphi(x)\varphi(u)^{-1}u\in M$, so $\innerprod{x,u}=\varphi(x)\varphi(u)^{-1}\norm{u}^2$. Put $y\defeq\overline{\varphi(u)}\norm{u}^{-2}u$; conjugate linearity in the second slot gives $\innerprod{x,y}=\varphi(x)$.\\
-If $z$ also represents $\varphi$, then $\innerprod{x,y-z}=0$ for all $x$, so $x=y-z$ gives $y=z$.\\
-Finally, $\abs{\varphi(x)}\leq\norm{x}\norm{y}$ gives $\normop{\varphi}\leq\norm{y}$, while $y\neq0$ gives $\normop{\varphi}\geq\abs{\varphi(y)}/\norm{y}=\norm{y}$; $y=0$ is immediate.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\varphi=0$, take $y=0$. If $\varphi\neq0$, set $M\defeq\ker\varphi$, $a\notin M$, $a=p+u$, $p\in M$, $u\in M^\perp$ by Corollary \ref{cor:hilbert-orthogonal-decomposition}.\\
+Then $u\neq0$ and $\varphi(u)=\varphi(a)\neq0$. For $x\in\mathcal{H}$, $x-\frac{\varphi(x)}{\varphi(u)}u\in M$, hence $\innerprod{x,u}=\frac{\varphi(x)}{\varphi(u)}\norm{u}^2$.\\
+Thus $y\defeq\overline{\varphi(u)}\norm{u}^{-2}u$ satisfies $\varphi(x)=\innerprod{x,y}$ for every $x$.\\
+If $z$ also represents $\varphi$, then $\innerprod{x,y-z}=0$ for every $x$; with $x=y-z$, $z=y$.
+\item For every $x$, $\abs{\varphi(x)}=\abs{\innerprod{x,y}}\leq\norm{x}\norm{y}$, so $\normop{\varphi}\leq\norm{y}$.\\
+If $y\neq0$, then $\normop{\varphi}\geq\frac{\abs{\varphi(y)}}{\norm{y}}=\norm{y}$; if $y=0$, both norms vanish.
+\end{enumerate}
 \hlt{Structural Commentary}: The kernel is a hyperplane; its orthogonal direction represents the functional.\\
 \hlt{Key Insight}: Bounded functionals are exactly inner products with fixed vectors.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:hilbert-space-continuous-dual-riesz-isometric} \hlt{Riesz Identifies the Continuous Dual}\\
-The Riesz map $R:\mathcal{H}\to\mathcal{H}^*$, $Ry\defeq(x\mapsto\innerprod{x,y})$, is an isometric bijection.\\
-It is conjugate-linear over $\mathbb{C}$ and linear over $\mathbb{R}$.
-\begin{proof} Theorem \ref{thm:riesz-representation-hilbert-space} gives $\forall\varphi\in\mathcal{H}^*\,\exists!y\in\mathcal{H}:\varphi=Ry$ and $\normop{Ry}=\norm{y}$, so $R$ is bijective and isometric.\\
-Also $R(\alpha y+\beta z)=\overline{\alpha}Ry+\overline{\beta}Rz$ over $\mathbb{C}$, while $R(\alpha y+\beta z)=\alpha Ry+\beta Rz$ over $\mathbb{R}$.\\
+Define $R:\mathcal{H}\to\mathcal{H}^*$ by $Ry\defeq(x\mapsto\innerprod{x,y})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $R$ is an isometric bijection.
+\item $R$ is conjugate-linear over $\C$ and linear over $\R$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $y\in\mathcal{H}$, $\abs{Ry(x)}=\abs{\innerprod{x,y}}\leq\norm{x}\norm{y}$, so $Ry\in\mathcal{H}^*$. By Theorem \ref{thm:riesz-representation-hilbert-space}, $\mathcal{H}^*=R(\mathcal{H})$ and $\normop{Ry}=\norm{y}$.\\
+If $Ry=Rz$, then $0=\normop{R(y-z)}=\norm{y-z}$; hence $R$ is bijective and isometric.
+\item For $x,y,z\in\mathcal{H}$ and $\alpha,\beta\in\C$, $R(\alpha y+\beta z)(x)=\innerprod{x,\alpha y+\beta z}=\overline{\alpha}Ry(x)+\overline{\beta}Rz(x)$.\\
+Over $\R$, $R(\alpha y+\beta z)=\alpha Ry+\beta Rz$.
+\end{enumerate}
 \hlt{Structural Commentary}: Continuous functionals are represented by vectors.\\
 \hlt{Key Insight}: Riesz identifies $\mathcal{H}^*$ with $\mathcal{H}$, up to complex conjugation.
 \end{proof}
 \end{corollary}
 
+\begin{theorem} \label{thm:hilbert-adjoint-existence-bounded} \hlt{Bounded Hilbert Adjoints}\\
+Let $T\in\LL(\mathcal{H})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists!T^*\in\LL(\mathcal{H})$ such that $\forall u,v\in\mathcal{H}$, $\innerprod{Tu,v}=\innerprod{u,T^*v}$.
+\item $\normop{T^*}=\normop{T}$.
+\item $(T^*)^*=T$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $v\in\mathcal{H}$, set $\phi_v(u)\defeq\innerprod{Tu,v}$. Since $\abs{\phi_v(u)}\leq\normop{T}\norm{v}\norm{u}$, $\phi_v\in\mathcal{H}^*$.\\
+By Theorem \ref{thm:riesz-representation-hilbert-space}, $\exists!T^*v\in\mathcal{H}$ with $\phi_v(u)=\innerprod{u,T^*v}$ for every $u$.\\
+For $\alpha,\beta\in\mathbb F$, $\phi_{\alpha v+\beta w}=\overline{\alpha}\phi_v+\overline{\beta}\phi_w$, so uniqueness gives $T^*(\alpha v+\beta w)=\alpha T^*v+\beta T^*w$.\\
+Also $\norm{T^*v}=\normop{\phi_v}\leq\normop{T}\norm{v}$, hence $T^*\in\LL(\mathcal{H})$.\\
+If $A$ also satisfies the adjoint identity, then $\innerprod{u,(T^*-A)v}=0$ for every $u,v$, so $A=T^*$.
+\item If $\mathcal{H}=\{\mathbf0\}$, immediate. Else $\normop{T}=\sup\limits_{\norm{u}=\norm{v}=1}\abs{\innerprod{Tu,v}}=\sup\limits_{\norm{u}=\norm{v}=1}\abs{\innerprod{u,T^*v}}=\normop{T^*}$.
+\item For $u,v\in\mathcal{H}$, $\innerprod{T^*u,v}=\overline{\innerprod{v,T^*u}}=\overline{\innerprod{Tv,u}}=\innerprod{u,Tv}$.\\
+Thus $T$ satisfies the adjoint identity for $T^*$; by uniqueness, $(T^*)^*=T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Riesz turns the scalar tests induced by an operator back into vectors.\\
+\hlt{Key Insight}: The adjoint is the dual action transported through the Hilbert-space Riesz map.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:hilbert-adjoint-algebra-identities} \hlt{Hilbert Adjoint Algebra Identities}\\
+Let $S,T\in\LL(\mathcal{H})$ and $a\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(aS+T)^*=\overline{a}S^*+T^*$.
+\item $(ST)^*=T^*S^*$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $u,v\in\mathcal H$, $\innerprod{(aS+T)u,v}=a\innerprod{Su,v}+\innerprod{Tu,v}=\innerprod{u,\overline{a}S^*v+T^*v}$.\\
+Uniqueness of adjoints gives $(aS+T)^*=\overline{a}S^*+T^*$.
+\item For $u,v\in\mathcal H$, $\innerprod{STu,v}=\innerprod{Tu,S^*v}=\innerprod{u,T^*S^*v}$; uniqueness gives $(ST)^*=T^*S^*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Move each operator across one inner product and invoke adjoint uniqueness.\\
+\hlt{Key Insight}: Taking adjoints reverses composition and conjugates scalars.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:hilbert-self-adjoint-positive-coercive} \hlt{Self-Adjoint, Nonnegative, and Coercive Operators}\\
+Let $T\in\LL(\mathcal{H})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Self-adjoint}: $T=T^*$.
+\item \hlt{Nonnegative}: $T=T^*$ and $\forall h\in\mathcal{H}$, $\innerprod{Th,h}\geq0$; write $T\geq0$.
+\item \hlt{Coercive}: if $\mathcal{H}$ is real, $\exists c>0$ such that $\forall h\in\mathcal{H}$, $\innerprod{Th,h}\geq c\norm{h}^2$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:self-adjoint-positive-order-polarization} \hlt{Positive Order, Polarization, and Reducing Complements}\\
+Let $\mathcal{H}$ be a real Hilbert space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T\geq0$ and $S\in\LL(\mathcal{H})$, then $S^*TS\geq0$.
+\item If $T\in\LL(\mathcal{H})$ is self-adjoint and $Q_T(u)\defeq\innerprod{Tu,u}$, then $\innerprod{Tu,v}=\frac{1}{4}\brk{Q_T(u+v)-Q_T(u-v)}$.
+\item If $T\in\LL(\mathcal{H})$ is self-adjoint and $Q_T\equiv0$, then $T=0$.
+\item If $T\in\LL(\mathcal{H})$ is self-adjoint and $V\leq\mathcal{H}$ satisfies $T(V)\subseteq V$, then $T(V^\perp)\subseteq V^\perp$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $T=T^*$, $(S^*TS)^*=S^*T^*S=S^*TS$. For $h\in\mathcal H$, $\innerprod{S^*TSh,h}=\innerprod{TSh,Sh}\geq0$; hence $S^*TS\geq0$.
+\item For $u,v\in\mathcal H$, self-adjointness gives $Q_T(u\pm v)=Q_T(u)\pm2\innerprod{Tu,v}+Q_T(v)$.\\
+Subtracting gives $Q_T(u+v)-Q_T(u-v)=4\innerprod{Tu,v}$.
+\item By (ii), $\innerprod{Tu,v}=0$ for all $u,v\in\mathcal H$; with $v=Tu$, $\norm{Tu}^2=0$ for every $u$, so $T=0$.
+\item If $w\in V^\perp$ and $v\in V$, then $Tv\in V$ and $\innerprod{Tw,v}=\innerprod{w,Tv}=0$; hence $Tw\in V^\perp$.
+\end{enumerate}
+\hlt{Structural Commentary}: Adjoints transfer positivity and invariance; polarization recovers mixed terms.\\
+\hlt{Key Insight}: For self-adjoint operators, the diagonal quadratic form controls the mixed inner products.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:self-adjoint-operator-norm-quadratic-form} \hlt{Self-Adjoint Operator Norm from the Quadratic Form}\\
+If $\mathcal{H}$ is real and $T\in\LL(\mathcal{H})$ is self-adjoint, then
+$\normop{T}=\sup\limits_{\norm{u}=1}\abs{\innerprod{Tu,u}}.$
+\begin{proof}
+Let $\eta\defeq\sup\limits_{\norm{u}=1}\abs{\innerprod{Tu,u}}$. By Cauchy--Schwarz, $\eta\leq\normop{T}$.\\
+If $\eta=0$, then $Q_T\equiv0$ by scaling, so $T=0$ by Proposition \ref{prop:self-adjoint-positive-order-polarization}(iii).\\
+Assume $\eta>0$ and set $A_\pm\defeq\eta I\pm T$. For $u\in\mathcal H$, $\abs{\innerprod{Tu,u}}\leq\eta\norm{u}^2$, hence $\innerprod{A_\pm u,u}\geq0$ and $A_\pm\geq0$.\\
+By Proposition \ref{prop:self-adjoint-positive-order-polarization}(i), $A_+^*A_-A_+\geq0$ and $A_-^*A_+A_-\geq0$.\\
+Since $A_\pm=A_\pm^*$ and $A_+A_-=A_-A_+=\eta^2I-T^2$, their sum is $2\eta(\eta^2I-T^2)\geq0$, so $\eta^2I-T^2\geq0$.\\
+Thus $\norm{Tu}^2=\innerprod{T^2u,u}\leq\eta^2\norm{u}^2$ for every $u$, hence $\normop{T}\leq\eta$.\\
+\hlt{Structural Commentary}: Self-adjointness lets order information about $\eta I\pm T$ control $T^2$.\\
+\hlt{Key Insight}: A bounded self-adjoint operator is normed by its one-vector quadratic tests.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:closed-range-splitting-coercive-invertibility} \hlt{Closed Range and the Adjoint Kernel}\\
+If $T\in\LL(\mathcal{H})$ has closed range, then $\mathcal{H}=\operatorname{range}(T)\odot\ker(T^*)$.
+\begin{proof}
+For $z\in\mathcal{H}$, $z\in\ker(T^*)\Longleftrightarrow\forall u\in\mathcal H,\ \innerprod{u,T^*z}=0\Longleftrightarrow\forall u\in\mathcal H,\ \innerprod{Tu,z}=0\Longleftrightarrow z\in\operatorname{range}(T)^\perp$.\\
+Thus $\ker(T^*)=\operatorname{range}(T)^\perp$, and Corollary \ref{cor:hilbert-orthogonal-decomposition} gives $\mathcal H=\operatorname{range}(T)\odot\ker(T^*)$ since $\operatorname{range}(T)$ is closed.\\
+\hlt{Structural Commentary}: Identify the orthogonal complement of the range by moving $T$ across the inner product.\\
+\hlt{Key Insight}: The directions missed by $T$ are exactly the vectors annihilated by $T^*$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:coercive-hilbert-operator-invertibility} \hlt{Coercive Operators Are Invertible}\\
+Let $\mathcal{H}$ be real and let $T\in\LL(\mathcal{H})$ satisfy $\exists c>0$ such that $\forall h\in\mathcal{H}$, $\innerprod{Th,h}\geq c\norm{h}^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T$ is bijective.
+\item $T^{-1}\in\LL(\mathcal{H})$ and $\normop{T^{-1}}\leq c^{-1}$.
+\end{enumerate}
+\begin{proof}
+For $u\neq\mathbf0$, $c\norm{u}^2\leq\innerprod{Tu,u}\leq\norm{Tu}\norm{u}$, hence $\norm{Tu}\geq c\norm{u}$; the same holds for $u=\mathbf0$, so $\ker T=\{\mathbf0\}$.\\
+If $Tu_n\to y$, then $\norm{u_n-u_m}\leq c^{-1}\norm{Tu_n-Tu_m}$; hence $u_n\to u$ and $Tu=y$, so $\operatorname{range}(T)$ is closed.\\
+Also $\innerprod{T^*h,h}=\innerprod{Th,h}\geq c\norm{h}^2$, so $\ker(T^*)=\{\mathbf0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Proposition \ref{prop:closed-range-splitting-coercive-invertibility}, $\mathcal H=\operatorname{range}(T)\odot\ker(T^*)=\operatorname{range}(T)$; with $\ker T=\{\mathbf0\}$, $T$ is bijective.
+\item For $y\in\mathcal H$, put $u=T^{-1}y$. Then $c\norm{T^{-1}y}=c\norm{u}\leq\norm{Tu}=\norm{y}$, so $T^{-1}\in\LL(\mathcal H)$ and $\normop{T^{-1}}\leq c^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Coercivity closes the range and kills both kernels; adjoint splitting gives surjectivity.\\
+\hlt{Key Insight}: Coercivity supplies both a lower Lipschitz bound and, through the adjoint, surjectivity.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:lax-milgram-hilbert} \hlt{Lax--Milgram Lemma}\\
+Let $\mathcal{H}$ be a real Hilbert space and let $B:\mathcal{H}\times\mathcal{H}\to\mathbb{R}$ be bilinear.\\
+Suppose there are constants $M,c>0$ such that $\abs{B(u,v)}\leq M\norm{u}\norm{v}$ and $B(h,h)\geq c\norm{h}^2$ $\forall u,v,h\in\mathcal{H}$.\\
+Then $\forall\psi\in\mathcal{H}^*\ \exists!h\in\mathcal{H}$ such that $\psi(u)=B(h,u)\;(u\in\mathcal{H}).$
+\begin{proof}
+Let $R:\mathcal{H}\to\mathcal{H}^*$ be the real Riesz isometry, $Ry(u)=\innerprod{u,y}$, and define $S:\mathcal{H}\to\mathcal{H}^*$ by $Sh(u)=B(h,u)$. For $h,u\in\mathcal H$, $\abs{Sh(u)}\leq M\norm{h}\norm{u}$, hence $S\in\LL(\mathcal H,\mathcal H^*)$.\\
+Set $A\defeq R^{-1}S\in\LL(\mathcal H)$. For $h\in\mathcal H$, $\innerprod{Ah,h}=\innerprod{h,Ah}=(RAh)(h)=Sh(h)=B(h,h)\geq c\norm{h}^2$.\\
+By Theorem \ref{thm:coercive-hilbert-operator-invertibility}, $A$ is bijective, hence $S=RA$ is bijective.\\
+For $\psi\in\mathcal H^*$, set $h\defeq A^{-1}R^{-1}\psi$; then $\forall u\in\mathcal H$, $\psi(u)=(RAh)(u)=Sh(u)=B(h,u)$.\\
+If $h_1,h_2$ solve this identity, then $S(h_1-h_2)=0$, so $h_1=h_2$.\\
+\hlt{Structural Commentary}: A coercive bilinear form is a Riesz-represented coercive operator in disguise.\\
+\hlt{Key Insight}: Solving $B(h,\cdot)=\psi$ is solving an invertible operator equation after Riesz representation.
+\end{proof}
+\end{theorem}
+
 \begin{theorem} \label{thm:l2-orthonormal-systems-riesz-fischer-parseval} \hlt{Orthonormal Systems in $L^2$}\\
 Let $(\phi_n)_{n\geq1}\subseteq L^2(\mu)$ be orthonormal, $\innerprod{\phi_n,\phi_m}=\delta_{nm}$, and $c_n(f)\defeq\innerprod{f,\phi_n}=\int_Xf\overline{\phi_n}\,d\mu$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\forall f\in L^2(\mu)$, $\sum_{n=1}^{\infty}\abs{c_n(f)}^2\leq\norm{f}_2^2$ and $f\sim_{\mathrm{coef}}\sum c_n(f)\phi_n$.
-\item If $(c_n)\in\ell^2$, then $s_N\defeq\sum_{k=1}^{N}c_k\phi_k$ converges in $L^2(\mu)$.
-\item If $(\phi_n)$ is complete, then $\forall f\in L^2(\mu)$, $\norm{f}_2^2=\sum_{n=1}^{\infty}\abs{c_n(f)}^2$.
+\item $\forall f\in L^2(\mu)$, $\sum\limits_{n=1}^{\infty}\abs{c_n(f)}^2\leq\norm{f}_2^2$.
+\item If $(c_n)\in\ell^2$, then $s_N\defeq\sum\limits_{k=1}^{N}c_k\phi_k$ converges in $L^2(\mu)$.
+\item If $(\phi_n)$ is complete, then $\forall f\in L^2(\mu)$, $\norm{f}_2^2=\sum\limits_{n=1}^{\infty}\abs{c_n(f)}^2$.
 \end{enumerate}
-For the trigonometric system on $[-\pi,\pi]$, this is $L^2$ Parseval and a.e. uniqueness.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Finite orthonormality gives $\norm{f-\sum_{k=1}^{N}c_k(f)\phi_k}_2^2=\norm{f}_2^2-\sum_{k=1}^{N}\abs{c_k(f)}^2\geq0$.\\
-Hence $\sum_{n=1}^{\infty}\abs{c_n(f)}^2\leq\norm{f}_2^2$ and $f\sim_{\mathrm{coef}}\sum c_n(f)\phi_n$.
-\item For $m<N$, $\norm{s_N-s_m}_2^2=\sum_{k=m+1}^{N}\abs{c_k}^2\to0$ since $(c_n)\in\ell^2$.\\
-Completeness of $L^2(\mu)$ gives $s_N\to g\in L^2(\mu)$.
-\item If $(\phi_n)$ is complete, then (i) gives $(c_n(f))\in\ell^2$, so (ii) gives $s_N\to g$. For every $j$, $\innerprod{f-g,\phi_j}=c_j(f)-\lim_N\innerprod{s_N,\phi_j}=0$. Completeness gives $f=g$, hence $\norm{f}_2^2=\lim_N\norm{s_N}_2^2=\sum_{n=1}^{\infty}\abs{c_n(f)}^2$.
+\item Set $s_N(f)\defeq\sum\limits_{k=1}^{N}c_k(f)\phi_k$. Finite orthonormality gives $\norm{f-s_N(f)}_2^2=\norm{f}_2^2-\sum\limits_{k=1}^{N}\abs{c_k(f)}^2\geq0$.\\
+Monotone convergence of the partial sums yields $\sum\limits_{n=1}^{\infty}\abs{c_n(f)}^2\leq\norm{f}_2^2$.
+\item If $m<N$, then $\norm{s_N-s_m}_2^2=\sum\limits_{k=m+1}^{N}\abs{c_k}^2$. Since $(c_n)\in\ell^2$, $(s_N)$ is Cauchy.\\
+By completeness, $\exists g\in L^2(\mu)$ with $s_N\to g$.
+\item Assume $(\phi_n)$ is complete. By (i), $(c_n(f))\in\ell^2$; by (ii), $s_N(f)\to g$.\\
+For fixed $j$, $\innerprod{s_N(f),\phi_j}=c_j(f)$ for $N\geq j$, hence $\innerprod{f-g,\phi_j}=c_j(f)-\lim\limits_N\innerprod{s_N(f),\phi_j}=0$.\\
+Thus $f-g\perp\{\phi_j:j\geq1\}$, so $f=g$; therefore $\norm{f}_2^2=\lim\limits_N\norm{s_N(f)}_2^2=\sum\limits_{n=1}^{\infty}\abs{c_n(f)}^2$.
 \end{enumerate}
 \hlt{Structural Commentary}: Complete orthonormal systems coordinatize $L^2$ by square-summable sequences.\\
 \hlt{Key Insight}: Parseval is Pythagoras after passing from finite coordinates to an $L^2$ limit.
@@ -429,11 +697,11 @@ Completeness of $L^2(\mu)$ gives $s_N\to g\in L^2(\mu)$.
 \item \hlt{Complete}: Cauchy tails, completions, and convergent subsequences force limits.
 \item \hlt{Parallelogram}: test Hilbertian norms and make distance-minimizing sequences Cauchy.
 \item \hlt{Project}: for closed $M$, write $x=p+r$, $p\in M$, $r\in M^\perp$.
-\item \hlt{Separate}: density/equality via $M^\perp=\{\mathbf{0}\}$ and $M^{\perp\perp}=\overline{M}$.
+\item \hlt{Separate}: density and equality via $M^\perp=\{\mathbf{0}\}$ and $M^{\perp\perp}=\overline{M}$.
 \item \hlt{Sum}: arbitrary convergence is net convergence over $\mathcal{F}(K)$; control finite tails.
 \item \hlt{Expand}: orthonormal finite identities $+$ Bessel bounds $+$ completeness $\Rightarrow$ Fourier expansions.
 \item \hlt{Classify}: Hilbert bases give $\operatorname{hdim}$, separability, and $\mathcal{H}\cong\ell^2(K)$.
-\item \hlt{Dualize}: $\mathcal{B}(\mathcal{H})$ norm algebra and Riesz $\mathcal{H}^*\cong\mathcal{H}$.
+\item \hlt{Dualize}: Riesz identifies $\mathcal{H}^*$ with $\mathcal{H}$, producing adjoints and coercive operator equations.
 \end{enumerate}
 \hlt{Key Insight}: Hilbert-space arguments are finite orthogonal geometry plus completeness.
 \end{method}
