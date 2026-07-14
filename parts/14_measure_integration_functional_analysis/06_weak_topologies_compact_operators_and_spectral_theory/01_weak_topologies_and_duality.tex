@@ -4,27 +4,362 @@
 %
 % Weak convergence, weak-* convergence, dual spaces, reflexivity, Banach--Alaoglu.
 
-Weak topologies replace norm control with scalar tests by functionals, exposing compactness and duality that strong topology can hide.
+Weak topologies replace norm control by scalar tests. They are usually too weak to preserve distances, but strong enough to expose compactness phenomena that are invisible in norm topology.
 
-\begin{definition} \label{def:dual-space-and-weak-convergence} \hlt{Dual Space and Weak Convergence}\\
-For a normed space $\mathcal{X}$, its continuous dual is $\mathcal{X}^*\defeq\LL(\mathcal{X},\mathbb{F})$. A sequence $(x_n)$ \hlt{converges weakly} to $x$, written $x_n\rightharpoonup x$, if
-\[
-\varphi(x_n)\to\varphi(x)\qquad\text{for every }\varphi\in\mathcal{X}^*.
-\]
+\begin{definition} \label{def:weak-and-weak-star-topologies} \hlt{Dual Space, Weak Topology, and Weak-* Topology}\\
+For a normed space $\mathcal{X}$ over $\mathbb{F}$, its continuous dual is $\mathcal{X}^*\defeq\LL(\mathcal{X},\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{weak topology} on $\mathcal{X}$ is the weakest topology making $\varphi:\mathcal{X}\to\mathbb{F}$ continuous $\forall\varphi\in\mathcal{X}^*$.
+\item The \hlt{weak-* topology} on $\mathcal{X}^*$ is the weakest topology making the evaluation $\varphi\mapsto\varphi(x)$ continuous $\forall x\in\mathcal{X}$.
+\item The \hlt{strong topology} is the norm topology.
+\end{enumerate}
+For $m\in\N$, $\varepsilon>0$, $\varphi_\bullet=(\varphi_1,\ldots,\varphi_m)\in(\mathcal{X}^*)^m$, and $x_\bullet=(x_1,\ldots,x_m)\in\mathcal{X}^m$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Weak: $N(x;\varphi_\bullet;\varepsilon)\defeq\{y\in\mathcal{X}:\abs{\varphi_j(y-x)}<\varepsilon\ \forall j\}$.
+\item Weak-*: $N_*(\varphi;x_\bullet;\varepsilon)\defeq\{\psi\in\mathcal{X}^*:\abs{(\psi-\varphi)(x_j)}<\varepsilon\ \forall j\}$.
+\end{enumerate}
 \end{definition}
 
-\begin{definition} \label{def:weak-star-convergence} \hlt{Weak-* Convergence}\\
-If $(\varphi_n)\subseteq\mathcal{X}^*$ and $\varphi\in\mathcal{X}^*$, then $\varphi_n$ \hlt{converges weak-*} to $\varphi$ if
-\[
-\varphi_n(x)\to\varphi(x)\qquad\text{for every }x\in\mathcal{X}.
-\]
-This is weak convergence in the dual tested only against evaluation at points of the original space.
+\begin{definition} \label{def:weak-and-weak-star-convergence} \hlt{Weak and Weak-* Convergence}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(x_n)\subseteq\mathcal{X}$ \hlt{converges weakly} to $x$, written $x_n\rightharpoonup x$, iff $\varphi(x_n)\to\varphi(x)$ $\forall\varphi\in\mathcal{X}^*$.
+\item $(\varphi_n)\subseteq\mathcal{X}^*$ \hlt{converges weak-*} to $\varphi\in\mathcal{X}^*$ iff $\varphi_n(x)\to\varphi(x)$ $\forall x\in\mathcal{X}$.
+\end{enumerate}
 \end{definition}
+
+\begin{proposition} \label{prop:strong-convergence-implies-weak-convergence} \hlt{Strong Convergence Implies Weak Convergence}\\
+If $x_n\to x$ in norm in a normed space $\mathcal{X}$, then $x_n\rightharpoonup x$.
+\begin{proof}
+$\forall\varphi\in\mathcal{X}^*$, $\abs{\varphi(x_n)-\varphi(x)}=\abs{\varphi(x_n-x)}\leq\normop{\varphi}\norm{x_n-x}\to0$.\\
+\hlt{Structural Commentary}: Apply an arbitrary bounded scalar test to the norm error.\\
+\hlt{Key Insight}: Norm convergence controls every bounded linear test.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:weakly-convergent-sequences-bounded} \hlt{Weakly Convergent Sequences Are Bounded}\\
+If $x_n\rightharpoonup x$ in a normed space $\mathcal{X}$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\sup\limits_n\norm{x_n}<+\infty$.
+\item $\norm{x}\leq\liminf\limits_{n\to\infty}\norm{x_n}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\forall\varphi\in\mathcal{X}^*$, the scalar sequence $(\varphi(x_n))$ is bounded. The space $\mathcal{X}^*$ is Banach by Theorem \ref{thm:operator-space-banach}, so the Uniform Boundedness Principle, Theorem \ref{thm:uniform-boundedness-principle}, applies to $Jx_n:\mathcal{X}^*\to\mathbb{F}$, $Jx_n(\varphi)\defeq\varphi(x_n)$.\\
+Since $\normop{Jx_n}=\norm{x_n}$ by Corollary \ref{cor:natural-embedding-isometry}, the sequence is norm bounded.
+\item If $x\neq0$, choose $\varphi\in\mathcal{X}^*$ with $\normop{\varphi}=1$ and $\varphi(x)=\norm{x}$ by Corollary \ref{cor:hahn-banach-norm-preserving-extension-and-norming-functionals}.\\
+Then $\norm{x}=\lim\limits_{n\to\infty}\abs{\varphi(x_n)}\leq\liminf\limits_{n\to\infty}\norm{x_n}$. The case $x=0$ is immediate.
+\end{enumerate}
+\hlt{Structural Commentary}: Uniform boundedness proves (i); one norming functional proves (ii).\\
+\hlt{Key Insight}: Scalar-test boundedness forces norm boundedness.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \label{def:reflexive-banach-space} \hlt{Reflexivity}\\
-The canonical map $J:\mathcal{X}\to\mathcal{X}^{**}$ is defined by $Jx(\varphi)=\varphi(x)$. A Banach space is \hlt{reflexive} if $J$ is onto.
+For a normed space $\mathcal{X}$, the canonical map $J:\mathcal{X}\to\mathcal{X}^{**}$ is defined by $Jx(\varphi)\defeq\varphi(x)$.\\
+A Banach space $\mathcal{X}$ is \hlt{reflexive} if $J(\mathcal{X})=\mathcal{X}^{**}$.
 \end{definition}
 
 \begin{theorem} \label{thm:banach-alaoglu} \hlt{Banach--Alaoglu Theorem}\\
-The closed unit ball of $\mathcal{X}^*$ is compact in the weak-* topology. Consequently, bounded nets of functionals have weak-* cluster points.
+For a normed space $\mathcal{X}$, the closed unit ball $\overline{B}_{\mathcal{X}^*}$ is weak-* compact.
+\begin{proof} Let $B\defeq\overline{B}_{\mathcal{X}}$, $B^*\defeq\overline{B}_{\mathcal{X}^*}$, and $D\defeq\{a\in\mathbb{F}:\abs{a}\leq1\}$. By Theorem \ref{thm:tychonoff-product-theorem}, $D^B$ is compact.\\
+The injection $R:B^*\hookrightarrow D^B$, $R\varphi=\varphi|_B$, identifies $\sigma(\mathcal{X}^*,\mathcal{X})|_{B^*}$ with pointwise convergence on $B$.\\
+Let $f\in\overline{R(B^*)}\subseteq D^B$. If $x_j\in B$, $a_j\in\mathbb{F}$, and $\sum_j a_jx_j\in B$, then $f(\sum_j a_jx_j)=\sum_j a_jf(x_j)$ by passage from the identities for $R\varphi$. Define $\Phi(0)\defeq0$ and $\Phi(x)\defeq\norm{x}f(x/\norm{x})$ for $x\neq0$.\\
+Then $\Phi$ is linear, $\abs{\Phi(x)}\leq\norm{x}$, and $R\Phi=f$; hence $R(B^*)$ is closed in $D^B$. Therefore $B^*$ is weak-* compact.\\
+\hlt{Structural Commentary}: $B^*\hookrightarrow D^B$; closed linear constraints plus Tychonoff give compactness.\\
+\hlt{Key Insight}: Weak-* topology records precisely the coordinates used in Tychonoff compactness.
+\end{proof}
 \end{theorem}
+
+\begin{remark} \label{rem:weak-compactness-versus-sequences} \hlt{Compactness and Sequences}\\
+Weak-* compactness need not be weak-* sequential compactness. For $\mathcal{X}=\ell^\infty$, let $\varphi_n(x)\defeq x_n$.\\
+Then $\varphi_n\in\overline{B}_{\mathcal{X}^*}$, but for any subsequence $(n_k)$, choosing $x\in\ell^\infty$ with $x_{n_k}=(-1)^k$ makes $\varphi_{n_k}(x)=(-1)^k$, so no subsequence is weak-* convergent. Helly's theorem gives a sequential substitute when $\mathcal{X}$ is separable.
+\end{remark}
+
+\begin{theorem} \label{thm:helly-selection-bounded-dual-sequences} \hlt{Helly Selection for Bounded Dual Sequences}\\
+Let $\mathcal{X}$ be a separable normed space. If $(T_n)\subseteq\mathcal{X}^*$ and $\sup\limits_n\normop{T_n}<+\infty$, then $\exists$ a subsequence $(T_{n_k})$ and $T\in\mathcal{X}^*$ such that
+$\forall x\in\mathcal{X},\; T_{n_k}(x)\to T(x).$
+\begin{proof}
+Let $D=\{x_j:j\geq1\}\subseteq\mathcal X$ be dense and set $M\defeq\sup_n\normop{T_n}$.\\
+If $M=0$, take $T=0$; assume $M>0$. By diagonal extraction, choose $(n_k)$ such that $T_{n_k}x_j$ converges $\forall j$.\\
+For $x\in\mathcal X$ and $\varepsilon>0$, choose $j$ with $\norm{x-x_j}<\varepsilon/(4M)$ and then $k,\ell$ large with $\abs{T_{n_k}x_j-T_{n_\ell}x_j}<\varepsilon/2$.\\
+Then $\abs{T_{n_k}x-T_{n_\ell}x}\leq2M\norm{x-x_j}+\abs{T_{n_k}x_j-T_{n_\ell}x_j}<\varepsilon$, so $(T_{n_k}x)$ is Cauchy. Define $Tx\defeq\lim_kT_{n_k}x$.\\
+Linearity passes to limits, and $\abs{Tx}\leq M\norm{x}$; hence $T\in\mathcal X^*$ and $T_{n_k}x\to Tx$ $\forall x\in\mathcal X$.\\
+\hlt{Structural Commentary}: Diagonalize on dense $D$; use $M=\sup_n\normop{T_n}$ to extend $D$-limits to $\mathcal X$.\\
+\hlt{Key Insight}: A countable dense set reduces pointwise convergence to diagonal convergence.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:banach-space-embeds-into-c-of-compact} \hlt{Embedding into a Continuous Function Space}\\
+For every normed space $\mathcal{X}$, $\exists$ compact Hausdorff $K$ and a linear isometry $\Phi:\mathcal{X}\to C(K)$.
+\begin{proof}
+Let $K\defeq\overline{B}_{\mathcal{X}^*}$ with the weak-* topology. By Theorem \ref{thm:banach-alaoglu}, $K$ is compact; since evaluations separate points of $K$, $K$ is Hausdorff. Define $\Phi:\mathcal{X}\to C(K)$ by $\Phi(x)(\varphi)\defeq\varphi(x)$. Each $\Phi(x)$ is weak-* continuous, $\Phi$ is linear, and by Corollary \ref{cor:natural-embedding-isometry}, $\norm{\Phi(x)}_\infty=\norm{x}$.\\
+\hlt{Structural Commentary}: $K=\overline{B}_{\mathcal X^*}^{w^*}$ turns scalar tests into compact coordinates.\\
+\hlt{Key Insight}: Evaluation turns each vector into a continuous function without changing its norm.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:natural-embedding-weak-homeomorphism} \hlt{Natural Embedding and Weak Topologies}\\
+For a normed space $\mathcal{X}$, the canonical map $J:\mathcal{X}\to\mathcal{X}^{**}$ is a homeomorphism $(\mathcal X,w)\to(J(\mathcal X),w^*|_{J(\mathcal X)})$.
+\begin{proof}
+By Corollary \ref{cor:natural-embedding-isometry}, $J$ is injective. Fix $x_0\in\mathcal X$, $\varphi_\bullet=(\varphi_1,\ldots,\varphi_m)\in(\mathcal X^*)^m$, and $\varepsilon>0$.\\
+Since $(Jx-Jx_0)(\varphi_j)=\varphi_j(x-x_0)$, $J^{-1}(N_*(Jx_0;\varphi_\bullet;\varepsilon)\cap J(\mathcal X))=N(x_0;\varphi_\bullet;\varepsilon)$.\\
+Thus $J$ and $J^{-1}:J(\mathcal X)\to\mathcal X$ are continuous.\\
+\hlt{Structural Commentary}: Pullbacks of weak-* tests are weak tests.\\
+\hlt{Key Insight}: $J$ preserves precisely the scalar tests that define the weak topology.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:kakutani-reflexivity-weak-compactness} \hlt{Kakutani's Weak Compactness Criterion}\\
+For a Banach space $\mathcal{X}$, the following are equivalent.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{X}$ is reflexive.
+\item The closed unit ball $\overline{B}_{\mathcal{X}}$ is weakly compact.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow(ii)$ If $J(\mathcal X)=\mathcal X^{**}$, then by Corollary \ref{cor:natural-embedding-isometry}, $J(\overline{B}_{\mathcal X})=\overline{B}_{\mathcal X^{**}}$.\\
+By Theorem \ref{thm:banach-alaoglu} applied to $\mathcal X^*$, $\overline{B}_{\mathcal X^{**}}$ is weak-* compact. By Proposition \ref{prop:natural-embedding-weak-homeomorphism}, $\overline{B}_{\mathcal X}$ is weakly compact.
+\item[$(ii)$]$\Rightarrow(i)$ By Proposition \ref{prop:natural-embedding-weak-homeomorphism}, $K\defeq J(\overline{B}_{\mathcal X})$ is weak-* compact, hence weak-* closed, in $\mathcal X^{**}$.\\
+If $F\in\overline{B}_{\mathcal X^{**}}\setminus K$, weak-* separation yields $\varphi\in\mathcal X^*$ with $\operatorname{Re}F(\varphi)>\sup_{\norm{x}\leq1}\operatorname{Re}Jx(\varphi)=\normop{\varphi}$.\\
+But $\operatorname{Re}F(\varphi)\leq\abs{F(\varphi)}\leq\normop{F}\normop{\varphi}\leq\normop{\varphi}$, a contradiction. Thus $\overline{B}_{\mathcal X^{**}}\subseteq K$.\\
+For $F\in\mathcal X^{**}$ with $F\neq0$, $F/\normop{F}\in K$, so $F\in J(\mathcal X)$; hence $J(\mathcal X)=\mathcal X^{**}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Reflexivity identifies $J(\overline{B}_{\mathcal X})$ with $\overline{B}_{\mathcal X^{**}}$; weak-* separation forces the converse.\\
+\hlt{Key Insight}: Reflexivity identifies the weak-* compact bidual ball with the embedded original ball.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:closed-bounded-convex-reflexive-weakly-compact} \hlt{Closed Bounded Convex Sets in Reflexive Spaces}\\
+Let $\mathcal X$ be reflexive Banach. If $C\subseteq\mathcal X$ is norm-closed, bounded, and convex, then $C$ is weakly compact.
+\begin{proof}
+If $C=\emptyset$, the claim is trivial. Choose $r>0$ with $C\subseteq r\overline{B}_{\mathcal X}$. By Theorem \ref{thm:kakutani-reflexivity-weak-compactness}, $r\overline{B}_{\mathcal X}$ is weakly compact.\\
+For $x_0\notin C$, by Hahn--Banach separation, $\varphi\in\mathcal X^*$ and $\alpha\in\mathbb R$ with $\operatorname{Re}\varphi(x_0)>\alpha\geq\sup_{c\in C}\operatorname{Re}\varphi(c)$; hence $\{\operatorname{Re}\varphi>\alpha\}$ is weakly open, contains $x_0$, and misses $C$. Thus $C$ is weakly closed, so $C$ is weakly compact.
+\hlt{Structural Commentary}: $C\subseteq r\overline{B}_{\mathcal X}$ and $C$ weakly closed inside a weakly compact ball.\\
+\hlt{Key Insight}: Convex norm-closed sets remain closed when the topology is weakened to scalar tests.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:goldstine-unit-ball} \hlt{Goldstine's Theorem}\\
+For a normed space $\mathcal{X}$, the weak-* closure of $J(\overline{B}_{\mathcal{X}})$ in $\mathcal{X}^{**}$ is $\overline{B}_{\mathcal{X}^{**}}$.
+\begin{proof}
+Set $C\defeq\overline{J(\overline{B}_{\mathcal X})}^{\sigma(\mathcal X^{**},\mathcal X^*)}$. $J$ is isometric by Corollary \ref{cor:natural-embedding-isometry}, $\overline{B}_{\mathcal X^{**}}=\bigcap_{\varphi\in\overline{B}_{\mathcal X^*}}\{F\in\mathcal X^{**}:\abs{F(\varphi)}\leq1\}$ is weak-* closed, hence $C\subseteq\overline{B}_{\mathcal X^{**}}$. Suppose $F\in\overline{B}_{\mathcal X^{**}}\setminus C$. By weak-* Hahn--Banach separation,\\
+$\exists\varphi\in\mathcal X^*$ and $\alpha\in\mathbb R$ such that $\operatorname{Re}F(\varphi)>\alpha\geq\sup_{\norm{x}\leq1}\operatorname{Re}Jx(\varphi)=\sup_{\norm{x}\leq1}\operatorname{Re}\varphi(x)=\normop{\varphi}$.\\
+But $\operatorname{Re}F(\varphi)\leq\abs{F(\varphi)}\leq\normop{F}\normop{\varphi}\leq\normop{\varphi}$, a contradiction. Hence $\overline{B}_{\mathcal X^{**}}\subseteq C$.\\
+\hlt{Structural Commentary}: $J(\overline{B}_{\mathcal X})\subseteq\overline{B}_{\mathcal X^{**}}$; weak-* separation excludes $\overline{B}_{\mathcal X^{**}}\setminus C$.\\
+\hlt{Key Insight}: $J(\overline{B}_{\mathcal X})$ is weak-* dense in $\overline{B}_{\mathcal X^{**}}$ even when $J\mathcal X\neq\mathcal X^{**}$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:eberlein-smulian-unit-ball} \hlt{Eberlein--Smulian Theorem for Unit Balls}\\
+Let $\mathcal{X}$ be Banach and set $B\defeq\overline{B}_{\mathcal{X}}$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $B$ is compact in $(\mathcal{X},w)$.
+\item Every $(x_n)\subseteq B$ has a subsequence $x_{n_k}\rightharpoonup x$ for some $x\in B$.
+\end{enumerate}
+\begin{proof}
+By Eberlein--Smulian, for bounded $A\subseteq\mathcal{X}$, $A$ is relatively weakly compact iff every sequence in $A$ has a weakly convergent subsequence with limit in $\overline{A}^{\,w}$. By Hahn--Banach separation, $B$ is weakly closed, so $\overline{B}^{\,w}=B$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ Apply the criterion with $A=B$.
+\item[$(ii)$]$\Rightarrow (i)$ The criterion makes $B$ relatively weakly compact; since $\overline{B}^{\,w}=B$, $B$ is weakly compact.
+\end{enumerate}
+\hlt{Structural Commentary}: For $B=\overline{B}_{\mathcal X}$, weak compactness $\Longleftrightarrow$ weak subsequential compactness.\\
+\hlt{Key Insight}: Weak compactness of $B$ is sequence-detectable.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:weak-compactness-reflexivity-characterization} \hlt{Reflexive Unit-Ball Characterization}\\
+Let $\mathcal{X}$ be Banach, set $B\defeq\overline{B}_{\mathcal{X}}$, and let $J:\mathcal{X}\to\mathcal{X}^{**}$ be canonical. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $J(\mathcal{X})=\mathcal{X}^{**}$.
+\item $B$ is compact in $(\mathcal{X},w)$.
+\item Every $(x_n)\subseteq B$ has a subsequence $x_{n_k}\rightharpoonup x$ for some $x\in B$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ $J(\mathcal{X})=\mathcal{X}^{**}\Rightarrow B$ is compact in $(\mathcal{X},w)$ by Theorem \ref{thm:kakutani-reflexivity-weak-compactness}.
+\item[$(ii)$]$\Rightarrow (iii)$ By Theorem \ref{thm:eberlein-smulian-unit-ball}, $B$ weakly compact implies every $(x_n)\subseteq B$ has $x_{n_k}\rightharpoonup x\in B$.
+\item[$(iii)$]$\Rightarrow (i)$ By Theorem \ref{thm:eberlein-smulian-unit-ball}, (iii) implies $B$ weakly compact; by Theorem \ref{thm:kakutani-reflexivity-weak-compactness}, $J(\mathcal{X})=\mathcal{X}^{**}$.
+\end{enumerate}
+\hlt{Structural Commentary}: $J(\mathcal X)=\mathcal X^{**}\Longleftrightarrow B_w$ compact $\Longleftrightarrow B_w$ subsequentially compact.\\
+\hlt{Key Insight}: Reflexivity is unit-ball compactness.
+\end{proof}
+\end{corollary}
+
+\begin{proposition} \label{prop:hilbert-weak-convergence-inner-product-tests} \hlt{Hilbert Weak Convergence Tests}\\
+Let $\mathcal{H}$ be a Hilbert space, let $(h_n),(u_n)\subseteq\mathcal{H}$, and let $h,u\in\mathcal{H}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $h_n\rightharpoonup h$ if and only if
+$\forall u\in\mathcal{H},\; \innerprod{h_n,u}\to\innerprod{h,u}.$
+\item If $h_n\rightharpoonup h$ and $u_n\to u$ strongly, then
+$\innerprod{h_n,u_n}\to\innerprod{h,u}.$
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) For $u\in\mathcal{H}$, $\phi_u(x)\defeq\innerprod{x,u}\in\mathcal{H}^*$, so $\innerprod{h_n,u}=\phi_u(h_n)\to\phi_u(h)=\innerprod{h,u}$.
+\item[$(i)$] ($\Leftarrow$) For $\phi\in\mathcal{H}^*$, $u_\phi\in\mathcal{H}$ with $\phi(x)=\innerprod{x,u_\phi}$ by Theorem \ref{thm:riesz-representation-hilbert-space}; $\phi(h_n)=\innerprod{h_n,u_\phi}\to\innerprod{h,u_\phi}=\phi(h)$.
+\item[$(ii)$] Let $C\defeq\sup_n\norm{h_n}<+\infty$ by Proposition \ref{prop:weakly-convergent-sequences-bounded}(i).\\
+Since $\abs{\innerprod{h_n,u_n}-\innerprod{h,u}}\leq C\norm{u_n-u}+\abs{\innerprod{h_n-h,u}}$, the limit is $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\mathcal H^*=\{\innerprod{\cdot,u}:u\in\mathcal H\}$; boundedness controls $u_n-u$.\\
+\hlt{Key Insight}: $h_n\rightharpoonup h\Longleftrightarrow\innerprod{h_n,u}\to\innerprod{h,u}$ for all fixed $u\in\mathcal H$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:hilbert-weak-subsequential-compactness} \hlt{Bounded Hilbert Sequences Have Weak Subsequences}\\
+Let $\mathcal{H}$ be Hilbert and let $(h_n)\subseteq\mathcal{H}$ satisfy $C\defeq\sup_n\norm{h_n}<+\infty$. Then $\exists n_k\uparrow\infty$ and $h\in\mathcal{H}$ such that $h_{n_k}\rightharpoonup h$.
+\begin{proof} Set $M\defeq\operatorname{cspan}\{h_n:n\geq1\}$. Then $M$ is a separable Hilbert space.\\
+If $\dim M<+\infty$, then $C\overline{B}_M$ is compact by Theorem \ref{thm:finite-dimensional-normed-spaces}(iii); choose $h_{n_k}\to h\in M$ strongly, hence weakly.\\
+Assume $\dim M=\infty$. Choose a Hilbert basis $(e_j)_{j\geq1}$ of $M$ by Corollary \ref{cor:separable-hilbert-space-countable-hilbert-dimension}.\\
+Diagonalize so $\innerprod{h_{n_k},e_j}\to a_j$ $\forall j$. For $m\geq1$, $\sum_{j=1}^m\abs{a_j}^2=\lim_k\sum_{j=1}^m\abs{\innerprod{h_{n_k},e_j}}^2\leq C^2$ by Theorem \ref{thm:hilbert-fourier-expansion-general}(ii).\\
+Hence $a\in\ell^2$ and $h\defeq\sum_j a_je_j\in M$ by Theorem \ref{thm:arbitrary-orthonormal-sums-hilbert}(i). If $v\in\operatorname{span}\{e_j:j\geq1\}$, then $\innerprod{h_{n_k}-h,v}\to0$.\\
+For $u\in M$, $\varepsilon>0$, $\norm{u-v}<\varepsilon$ for $v$; then $\limsup_k\abs{\innerprod{h_{n_k}-h,u}}\leq(C+\norm h)\varepsilon$, so $\innerprod{h_{n_k}-h,u}\to0$.\\
+For $u\in\mathcal H$, write $u=P_Mu+u_\perp$, $u_\perp\in M^\perp$. Since $h_{n_k}-h\in M$, $\innerprod{h_{n_k}-h,u}=\innerprod{h_{n_k}-h,P_Mu}\to0$.\\
+Thus $h_{n_k}\rightharpoonup h$ by Proposition \ref{prop:hilbert-weak-convergence-inner-product-tests}.\\
+\hlt{Structural Commentary}: Work in $M=\operatorname{cspan}\{h_n\}$; diagonal limits on $(e_j)$ extend by $\overline{\operatorname{span}}\{e_j\}=M$ and $M^\perp$.\\
+\hlt{Key Insight}: Bounded Hilbert sequences have countably coordinatized weak limits.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:hilbert-spaces-reflexive} \hlt{Hilbert Spaces Are Reflexive}\\
+For every Hilbert space $\mathcal H$, the canonical embedding $J:\mathcal H\to\mathcal H^{**}$ is onto.
+\begin{proof}
+Set $B\defeq\overline{B}_{\mathcal H}$. If $(h_n)\subseteq B$, then by Theorem \ref{thm:hilbert-weak-subsequential-compactness}, $h_{n_k}\rightharpoonup h$ for some $h\in\mathcal H$.\\
+By Proposition \ref{prop:weakly-convergent-sequences-bounded}, $\norm h\leq\liminf_k\norm{h_{n_k}}\leq1$, so $h\in B$.\\
+Thus $B$ is weakly subsequentially compact, hence $J(\mathcal H)=\mathcal H^{**}$ by Corollary \ref{cor:weak-compactness-reflexivity-characterization}.\\
+\hlt{Structural Commentary}: $B_w$ subsequentially compact $\Longrightarrow J(\mathcal H)=\mathcal H^{**}$.\\
+\hlt{Key Insight}: Hilbert coordinates make $B_w$ sequence-compact.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:banach-saks-hilbert-space} \hlt{Banach--Saks Theorem in Hilbert Spaces}\\
+Let $\mathcal H$ be Hilbert and let $h_n\rightharpoonup h$. Then $\exists n_k\uparrow\infty$ such that $\frac{1}{k}\sum\limits_{j=1}^kh_{n_j}\to h$ strongly.
+\begin{proof} Replace $h_n$ by $h_n-h$; let $h=0$. Put $C\defeq\sup\limits_n\norm{h_n}^2<+\infty$.\\
+Let $n_1=1$, $n_1<\cdots<n_k$, $s_k\defeq\sum\limits_{j=1}^kh_{n_j}$; $n_{k+1}>n_k$ with $\abs{\innerprod{s_k,h_{n_{k+1}}}}\leq1$, since $\innerprod{s_k,h_n}\to0$.\\
+Then $\norm{s_{k+1}}^2=\norm{s_k}^2+2\operatorname{Re}\innerprod{s_k,h_{n_{k+1}}}+\norm{h_{n_{k+1}}}^2\leq\norm{s_k}^2+C+2$, so $\norm{s_k}^2\leq(C+2)k$.\\
+Hence $\norm{\frac{1}{k}s_k}^2\leq\frac{C+2}{k}\to0$. For the original sequence, $\frac{1}{k}\sum\limits_{j=1}^kh_{n_j}=h+\frac{1}{k}\sum\limits_{j=1}^k(h_{n_j}-h)\to h$.\\
+\hlt{Structural Commentary}: Choose $n_{k+1}$ so $\abs{\innerprod{s_k,h_{n_{k+1}}}}\leq1$; then $\norm{s_k}^2=O(k)$.\\
+\hlt{Key Insight}: Weak-null subsequences can have $o(k)$ Ces\`aro norm.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:radon-riesz-hilbert-space} \hlt{Radon--Riesz Theorem in Hilbert Spaces}\\
+Let $\mathcal H$ be Hilbert and let $h_n\rightharpoonup h$. Then $h_n\to h$ in norm iff $\norm{h_n}\to\norm h$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\norm{h_n-h}\to0$, then $\abs{\norm{h_n}-\norm h}\leq\norm{h_n-h}\to0$.
+\item[$(\Leftarrow)$] Since $h_n\rightharpoonup h$, $\innerprod{h_n,h}\to\norm h^2$. If also $\norm{h_n}\to\norm h$, then $\norm{h_n-h}^2=\norm{h_n}^2-2\operatorname{Re}\innerprod{h_n,h}+\norm h^2\to0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Weak convergence fixes $\innerprod{h_n,h}$; norm convergence fixes $\norm{h_n}^2$.\\
+\hlt{Key Insight}: $\norm{h_n-h}^2$ has no remaining term.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/weak_compactness_reflexivity_triangle.tikz}
+  \caption{For Banach $\mathcal X$: $\mathcal X$ reflexive $\Longleftrightarrow \overline B_{\mathcal X}$ weakly compact $\Longleftrightarrow \overline B_{\mathcal X}$ weakly sequentially compact.}
+  \label{fig:weak-compactness-reflexivity-triangle}
+\end{figure}
+
+\begin{theorem} \label{thm:separable-test-metrizes-weak-ball} \hlt{Metrizing Weak Topologies on the Unit Ball}\\
+Let $\mathcal X$ be normed, $W\leq\mathcal X^*$ separable and point-separating $B\defeq\overline{B}_{\mathcal X}$. Choose $(\varphi_k)_{k\geq1}$ dense in $W\cap\overline{B}_{\mathcal X^*}$.\\
+Then $\rho(u,v)\defeq\sum\limits_{k\geq1}2^{-k}\abs{\varphi_k(u-v)}$ is a metric on $B$ inducing $\sigma(\mathcal X,W)|_B$.
+\begin{proof} For $u,v\in B$, $\abs{\varphi_k(u-v)}\leq2$, hence $\rho(u,v)<+\infty$; symmetry and the triangle inequality are termwise.\\
+If $\rho(u,v)=0$, then $\varphi_k(u-v)=0$ for all $k$; for $\psi\in W\setminus\{0\}$, density gives $\varphi_{k_j}\to\frac{\psi}{\norm{\psi}}$, hence $\psi(u-v)=0$.\\
+Since $W$ separates points, $u=v$, so $\rho$ is a metric.
+Fix $u\in B$. It remains to compare neighborhoods at $u$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Given $r>0$, choose $N$ with $\sum\limits_{k>N}2^{1-k}<\frac{r}{2}$ and $\delta>0$ with $\delta\sum\limits_{k\leq N}2^{-k}<\frac{r}{2}$.\\
+Then $V\defeq\{v\in B:\abs{\varphi_k(v-u)}<\delta, 1\leq k\leq N\}$ is a $\sigma(\mathcal X,W)|_B$-neighborhood of $u$.\\
+By $v\in V$, $\rho(u,v)\leq\delta\sum\limits_{k\leq N}2^{-k}+\sum\limits_{k>N}2^{1-k}<r$, hence $V\subseteq B_\rho(u,r)$.
+\item[$(\Leftarrow)$] Let $U=\{v\in B:\abs{\psi_j(v-u)}<\varepsilon, 1\leq j\leq m\}$ with $\psi_j\in W$ and $\varepsilon>0$. Put $K\defeq\{j:\psi_j\neq0\}$.\\
+For $j\in K$, choose $k_j$ with $\norm{\frac{\psi_j}{\norm{\psi_j}}-\varphi_{k_j}}<\frac{\varepsilon}{4\norm{\psi_j}}$, then choose $r>0$ with $2^{k_j}r<\frac{\varepsilon}{2\norm{\psi_j}}$ $\forall j\in K$.\\
+If $\rho(u,v)<r$, then $\abs{\varphi_{k_j}(v-u)}<2^{k_j}r$, $\norm{v-u}\leq2$,\\
+so $\abs{\psi_j(v-u)}\leq\norm{\psi_j}\abs{\varphi_{k_j}(v-u)}+\norm{\psi_j}\norm{\frac{\psi_j}{\norm{\psi_j}}-\varphi_{k_j}}\norm{v-u}<\varepsilon$ for $j\in K$.\\
+For $j\notin K$, $\psi_j=0$. Thus $B_\rho(u,r)\subseteq U$.
+\end{enumerate}
+Therefore $\rho$ induces $\sigma(\mathcal X,W)|_B$.\\
+\hlt{Structural Commentary}: $\rho=\sum\limits_{k\geq1}2^{-k}\abs{\varphi_k(\cdot)}$ metrizes the bounded test topology generated by $W$.\\
+\hlt{Key Insight}: On $B$, dense countable tests determine all $W$-tests.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:metrizability-of-weak-unit-balls} \hlt{Metrizability of Weak Unit Balls}\\
+Let $\mathcal X$ be normed, write $B_{\mathcal Y}\defeq\overline{B}_{\mathcal Y}$ for normed $\mathcal Y$, and let $J:\mathcal X\to\mathcal X^{**}$ be canonical.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal X^*$ is separable, then $(B_{\mathcal X},\sigma(\mathcal X,\mathcal X^*))$ is metrizable.
+\item If $\mathcal X$ is separable, then $(B_{\mathcal X^*},\sigma(\mathcal X^*,J(\mathcal X)))$ is metrizable.
+\item If $\mathcal X$ is reflexive Banach, then $(B_{\mathcal X},\sigma(\mathcal X,\mathcal X^*))$ is metrizable iff $\mathcal X$ is separable.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal X^*$ is separable and point-separating on $\mathcal X$: if $x\neq y$, then $\exists\varphi\in\mathcal X^*$ with $\varphi(x-y)\neq0$.\\
+Theorem \ref{thm:separable-test-metrizes-weak-ball} with $(\mathcal Y,W)=(\mathcal X,\mathcal X^*)$ metrizes $(B_{\mathcal X},\sigma(\mathcal X,\mathcal X^*))$.
+\item Since $J$ is an isometry, $\mathcal X$ separable implies $J(\mathcal X)$ separable.\\
+If $\varphi\neq\psi$ in $\mathcal X^*$, choose $x\in\mathcal X$ with $(\varphi-\psi)(x)\neq0$, hence $Jx(\varphi-\psi)\neq0$, $J(\mathcal X)$ point-separating on $\mathcal X^*$.\\
+Theorem \ref{thm:separable-test-metrizes-weak-ball} with $(\mathcal Y,W)=(\mathcal X^*,J(\mathcal X))$ metrizes $(B_{\mathcal X^*},\sigma(\mathcal X^*,J(\mathcal X)))$.
+\item[$(iii)$] ($\Rightarrow$) Let $B\defeq B_{\mathcal X}$, $B_w$ metrizable. By reflexivity, Theorem \ref{thm:kakutani-reflexivity-weak-compactness}, $B_w$ is compact metrizable, separable.\\
+Choose countable $D\subseteq B$ with $\overline D^w=B$. Set $K\defeq\overline{\operatorname{co}D}^{\norm{\cdot}}$. If $K\neq B$, choose $x\in B\setminus K$.\\
+Hahn--Banach gives $\varphi\in\mathcal X^*$ with $\operatorname{Re}\varphi(x)>\sup_{y\in K}\operatorname{Re}\varphi(y)$.\\
+Since $D\subseteq K$ and $x\in\overline D^w$, weak continuity gives $\operatorname{Re}\varphi(x)\leq\sup_{y\in K}\operatorname{Re}\varphi(y)$, contradiction.\\
+Thus $B=K=\overline{\operatorname{co}_{\Q}D}^{\norm{\cdot}}$; $\operatorname{co}_{\Q}D$ is countable, so $B$ is norm separable, and $\mathcal X=\bigcup_{m\geq1}mB$ is separable.
+\item[$(iii)$] ($\Leftarrow$) Assume $\mathcal X$ separable. By (ii), Theorem \ref{thm:banach-alaoglu}, $J(\mathcal X)=\mathcal X^{**}$, $B_{\mathcal X^*}$ compact metrizable in $\sigma(\mathcal X^*,\mathcal X^{**})$.\\
+Pick countable dense $D\subseteq B_{\mathcal X^*}$. The $(\Rightarrow)$ argument in $\mathcal X^*$ gives $B_{\mathcal X^*}=\overline{\operatorname{co}_{\Q}D}^{\norm{\cdot}}$.\\
+Since $\operatorname{co}_{\Q}D$ is countable, $B_{\mathcal X^*}$ is norm separable and $\mathcal X^*=\bigcup_{m\geq1}mB_{\mathcal X^*}$ is separable, so (i) applies.
+\end{enumerate}
+\hlt{Structural Commentary}: $W$ separable metrizes $B_{\sigma(\mathcal X,W)}$; compact metrizable $B_w$ yields $B=\overline{\operatorname{co}_{\Q}D}^{\norm{\cdot}}$.\\
+\hlt{Key Insight}: Reflexive $B_{\mathcal X}$ is weakly metrizable iff $\mathcal X$ is separable.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:whole-weak-topologies-nonmetrizable} \hlt{Whole Weak Topologies Are Not Metrizable in Infinite Dimension}\\
+Let $\mathcal{X}$ be Banach with $\dim\mathcal{X}=+\infty$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\mathcal{X},\sigma(\mathcal{X},\mathcal{X}^*))$ is not metrizable.
+\item $(\mathcal{X}^*,\sigma(\mathcal{X}^*,J(\mathcal{X})))$ is not metrizable.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Suppose $\rho$ metrizes $\sigma(\mathcal{X},\mathcal{X}^*)$. $\forall n$, choose $U_n\subseteq B_\rho(0,\frac1n)$ with $U_n=\{x:\abs{\varphi_{n,j}(x)}<\varepsilon_n,\;1\leq j\leq m_n\}$.\\
+Since $\bigcap_{j=1}^{m_n}\ker\varphi_{n,j}\neq\{0\}$, choose $x_n$ in this kernel with $\norm{x_n}=n$.\\
+Then $x_n\in U_n$, so $\rho(x_n,0)<\frac1n$ and $x_n\rightharpoonup0$, contradicting Proposition \ref{prop:weakly-convergent-sequences-bounded}(i).
+\item Suppose $\rho_*$ metrizes $\sigma(\mathcal{X}^*,J(\mathcal{X}))$. $\forall n$, choose finite-dim $M_n\leq\mathcal X$ with $M_n^\perp\defeq\{\varphi:\varphi|_{M_n}=0\}\subseteq B_{\rho_*}(0,\frac1n)$.\\
+Choose $y_n\notin M_n$ and define $\psi_n$ on $M_n+\operatorname{span}\{y_n\}$ by $\psi_n|_{M_n}=0$ and $\psi_n(y_n)=1$.\\
+Extend $\psi_n$ to $\mathcal{X}$ by Corollary \ref{cor:hahn-banach-norm-preserving-extension-and-norming-functionals}(i), and rescale to $\varphi_n\in M_n^\perp$ with $\normop{\varphi_n}=n$.\\
+Then $\rho_*(\varphi_n,0)<\frac1n$, so $\varphi_n\to0$ weak-*. By Theorem \ref{thm:uniform-boundedness-principle}, $(\normop{\varphi_n})$ is bounded, a contradiction.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite tests leave nonzero kernels in $\mathcal{X}$ and nonzero annihilators in $\mathcal{X}^*$.\\
+\hlt{Key Insight}: Metric convergence would force bounded norms; finite scalar tests cannot.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:weak-compactness-proof-patterns} \hlt{Weak Compactness Proof Patterns}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Compactify}: replace $\norm{x}$ by finite coordinates $(\varphi_1(x),\ldots,\varphi_m(x))$.
+\item \hlt{Embed}: use $J:\mathcal{X}\to\mathcal{X}^{**}$ and compare $\sigma(\mathcal{X},\mathcal{X}^*)$ with $\sigma(\mathcal{X}^{**},\mathcal{X}^*)|_{J(\mathcal{X})}$.
+\item \hlt{Separate}: if $F\notin J(B)$, choose $\varphi\in\mathcal{X}^*$ separating $F$ from $J(B)$.
+\item \hlt{Metrize on balls}: for separable $W\leq\mathcal{X}^*$, use $\rho(u,v)=\sum_{k\geq1}2^{-k}\abs{\varphi_k(u-v)}$ on bounded $B$.
+\item \hlt{Hilbertize}: replace $\varphi$ by $\innerprod{\cdot,h}$ and use orthogonal coordinates/projections.
+\end{enumerate}
+\hlt{Key Insight}: Weak compactness is compactness for scalar coordinates $\varphi(x)$ on bounded sets.
+\end{method}
