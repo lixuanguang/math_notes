@@ -1,2 +1,72 @@
 \subsection{ODE Foundations and Flows}
 % Existence/uniqueness, flows, phase portraits, invariant sets.
+
+Ordinary differential equations can often be rewritten as fixed-point problems on a complete function space.
+
+\begin{definition} \label{def:scalar-initial-value-problem} \hlt{Scalar Initial-Value Problem}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, and $g:O\to\R$. The scalar initial-value problem determined by $(O,g,x_0,y_0)$ is $y'=g(x,y)$ with $y(x_0)=y_0$. For an interval $J\subseteq\R$, a function $f:J\to\R$ solves this problem on $J$ iff
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $J$ is open, $x_0\in J$, and $f$ is differentiable.
+\item $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$.
+\item $f'(x)=g(x,f(x))$ for every $x\in J$, and $f(x_0)=y_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: The graph condition makes the right-hand side defined along $f$; the initial condition selects the integral curve through $(x_0,y_0)$.
+\end{definition}
+
+\begin{proposition} \label{prop:ode-integral-equation-equivalence} \hlt{Differential and Integral Forms}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g\in C(O,\R)$, $J\subseteq\R$ be open interval with $x_0\in J$. For $f\in C(J,\R)$ with $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$, $f$ solves $y'=g(x,y)$, $y(x_0)=y_0$, on $J$ iff $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f'(x)=g(x,f(x))$ on $J$ and $f(x_0)=y_0$, then by Fundamental Theorem of Calculus (Theorem \ref{thm:fundamental-theorem-calculus-riemann}),\\
+$f(x)-y_0=\int_{x_0}^{x}f'(t)\,dt=\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\item[$(\Leftarrow)$] If $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ for every $x\in J$, then $g(\,\cdot\,,f(\,\cdot\,))$ is continuous on $J$.\\
+By Theorem \ref{thm:integral-function-continuity-and-derivative}, $f'(x)=g(x,f(x))$ on $J$. Evaluating at $x=x_0$ gives $f(x_0)=y_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Differentiation and integration are inverse along the continuous graph.\\
+\hlt{Key Insight}: The IVP is equivalent to its Volterra integral equation.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:picard-local-existence-uniqueness} \hlt{Picard Local Existence Theorem}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, and $g\in C(O,\R)$.\\
+Assume $\abs{g(x,y_1)-g(x,y_2)}\leq M\abs{y_1-y_2}$ for some $M>0$ whenever $(x,y_1),(x,y_2)\in O$.\\
+Then $\exists a,b,\ell>0$, $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, and $J_\ell\defeq(x_0-\ell,x_0+\ell)$ such that the IVP $y'=g(x,y)$, $y(x_0)=y_0$, has a unique differentiable solution $f:J_\ell\to\R$ with $\Gamma_f\subseteq Q$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Local box}: Choose $a,b>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, choose $K<\infty$ with $\abs{g}\leq K$ on $Q$, and choose $\ell>0$ with $\ell\leq a$, $\ell K\leq b$, and $\ell M<1$. Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$.
+\item \hlt{Complete space}: Let $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\abs{u-y_0}_\infty\leq b\}$. This is a complete closed subset of $C(I_\ell,\R)$ by Theorem \ref{thm:complete-supremum-metric-space} and Proposition \ref{prop:basic-completeness-consequences}. Define $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.
+\item \hlt{Contraction.} For $u\in\mathcal{X}_\ell$, $\abs{(Tu)(x)-y_0}\leq \abs{x-x_0}K\leq b$, so $T(\mathcal{X}_\ell)\subseteq\mathcal{X}_\ell$.\\
+For $u,v\in\mathcal{X}_\ell$, $\norm{Tu-Tv}_{\infty}\leq \ell M\norm{u-v}_{\infty}$, so $T$ is a contraction.
+\item \hlt{Fixed point}: Theorem \ref{thm:contraction-principle} gives a unique fixed point $u_*\in\mathcal{X}_\ell$.\\
+With $f\defeq u_*|_{J_\ell}$, Proposition \ref{prop:ode-integral-equation-equivalence} gives $f'=g(\,\cdot\,,f)$ and $f(x_0)=y_0$, while $\Gamma_f\subseteq Q$.
+\item \hlt{Uniqueness}: If $h:J_\ell\to\R$ is another solution with $\Gamma_h\subseteq Q$, then $\forall 0<r<\ell$ the same operator on $I_r\defeq[x_0-r,x_0+r]$ is a contraction, and both $h|_{I_r}$ and $u_*|_{I_r}$ are fixed points.\\
+Hence $h=f$ on every $I_r$, and therefore on $J_\ell$.
+\end{enumerate}
+\hlt{Structural Commentary}: Box control plus short-time contraction.\\
+\hlt{Key Insight}: Picard iteration is Banach iteration.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/picard_rectangle_integral_operator.tikz}
+  \caption{Picard setup: choose $\ell$ with $\ell K\leq b$ so $T(\mathcal X_\ell)\subseteq\mathcal X_\ell$ and graphs stay in $Q$.}
+  \label{fig:picard-rectangle-integral-operator}
+\end{figure}
+
+\begin{method} \label{meth:picard-iteration-local-ode} \hlt{Picard Iteration}\\
+Let $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, assume $\abs{g(x,y)}\leq K$ for $(x,y)\in Q$,\\
+$\abs{g(x,y_1)-g(x,y_2)}\leq M\abs{y_1-y_2}$ whenever $(x,y_1),(x,y_2)\in Q$. Let $\ell>0$ with $\ell\leq a$, $\ell K\leq b$, and $\ell M<1$.\\
+Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $J_\ell\defeq(x_0-\ell,x_0+\ell)$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\abs{u-y_0}_\infty\leq b\}$,\\
+$(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$. Then
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Initialize $f_0(x)\equiv y_0$ on $I_\ell$.
+\item Iterate $f_{n+1}\defeq Tf_n$, i.e. $f_{n+1}(x)=y_0+\int_{x_0}^{x}g(t,f_n(t))\,dt$ for $x\in I_\ell$.
+\item Let $f_\infty\defeq\lim_{n\to\infty}f_n$ uniformly on $I_\ell$, and output $f\defeq f_\infty|_{J_\ell}$.
+\end{enumerate}
+Since $T$ is a contraction on $\mathcal{X}_\ell$, the limit exists; the output is the unique local solution with graph in $Q$.
+\end{method}
