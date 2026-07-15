@@ -1,7 +1,8 @@
 \subsection{Arzela-Ascoli-Type Compactness}
 
 \begin{theorem} \label{thm:arzela-ascoli-compact-metric} \hlt{Arzela--Ascoli Selection Theorem}\\
-Let $K$ be compact. If $(f_n)\subset C_b(K)$ is pointwise bounded and equicontinuous on $K$, then:
+Let $K$ be a compact metric space and let $(f_n)\subset C_b(K)$.\\
+If $\sup_n\abs{f_n(x)}<\infty$ for each $x\in K$ and $(f_n)$ is equicontinuous on $K$, then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $(f_n)$ is uniformly bounded on $K$;
@@ -10,17 +11,47 @@ Let $K$ be compact. If $(f_n)\subset C_b(K)$ is pointwise bounded and equicontin
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Choose $\delta>0$ from equicontinuity with tolerance $1$. Compactness gives $K\subseteq\bigcup_{j=1}^{r}B_{\delta}(p_j)$.\\
-Pointwise boundedness gives $M_j$ such that $\abs{f_n(p_j)}\leq M_j \forall n$.\\
-If $x\in B_{\delta}(p_j)$, then $\abs{f_n(x)}\leq\abs{f_n(x)-f_n(p_j)}+\abs{f_n(p_j)}<1+M_j$, seq uniformly bounded by $1+\max_jM_j$.
-\item For each $m$, compactness gives a finite $1/m$-net in $K$; the union of these finite nets is a countable dense set $E\subset K$. By Theorem \ref{thm:diagonal-selection-countable-pointwise}, some subsequence $(g_i)$ converges pointwise on $E$.\\
-Given $\varepsilon>0$, choose $\delta>0$ from equicontinuity with tolerance $\varepsilon/3$, and points $x_1,\ldots,x_r\in E$ with $K\subseteq\bigcup_sB_{\delta}(x_s)$. As $(g_i(x_s))$ converges for each of finitely many $x_s$, $\exists N$ s.t. $i,j\geq N$ implies $\abs{g_i(x_s)-g_j(x_s)}<\varepsilon/3 \ \forall s$. If $d(x,x_s)<\delta$, then $\abs{g_i(x)-g_j(x)} \leq\abs{g_i(x)-g_i(x_s)}+\abs{g_i(x_s)-g_j(x_s)}+\abs{g_j(x_s)-g_j(x)} <\varepsilon$.\\
-Thus $(g_i)$ is uniformly Cauchy and converges uniformly by Theorem \ref{thm:uniform-cauchy-criterion}.
+\item Choose $\delta>0$ so $d(x,y)<\delta\Rightarrow\abs{f_n(x)-f_n(y)}<1$ $\forall n$. Let $K\subseteq\bigcup_{j=1}^{r}B_{\delta}(p_j)$, $M_j\defeq\sup_n\abs{f_n(p_j)}<\infty$.\\
+If $x\in B_{\delta}(p_j)$, then $\abs{f_n(x)}<1+M_j$; hence $\sup_{n,x\in K}\abs{f_n(x)}\leq1+\max_jM_j$.
+\item Let $E\subset K$ be countable dense, obtained from finite $1/m$-nets. Pointwise boundedness on $E$ and diagonal selection give a subsequence $(g_i)$ converging pointwise on $E$. Given $\varepsilon>0$, choose $\delta>0$ for equicontinuity with tolerance $\varepsilon/3$ and $x_1,\ldots,x_r\in E$ with $K\subseteq\bigcup_sB_{\delta}(x_s)$. For large $i,j$, $\abs{g_i(x_s)-g_j(x_s)}<\varepsilon/3$ $\forall s$.\\
+If $d(x,x_s)<\delta$, then $\abs{g_i(x)-g_j(x)}<\varepsilon$, so $(g_i)$ is uniformly Cauchy and hence uniformly convergent.
 \end{enumerate}
 \hlt{Structural Commentary}: Dense convergence plus equicontinuity becomes uniform convergence.\\
-\hlt{Key Insight}: Equicontinuity is exactly the compactness-compatible hypothesis missing from Example \ref{ex:uniform-boundedness-without-uniform-subsequence}.
+\hlt{Key Insight}: Equicontinuity turns finite sampling into uniform control.
 \end{proof}
 \end{theorem}
+
+\begin{theorem} \label{thm:arzela-ascoli-compact-subsets-c-k} \hlt{Compact Subsets of $C(K)$}\\
+Let $K$ be a compact metric space and let $C(K,\R)$ carry the supremum metric.\\
+For $\mathcal{F}\subseteq C(K,\R)$, the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{F}$ is compact.
+\item $\mathcal{F}$ is closed, uniformly bounded, and equicontinuous.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ Compactness gives closedness and total boundedness in $\norm{\cdot}_{\infty}$. If $\mathcal{F}\neq\emptyset$, choose $g\in\mathcal{F}$; boundedness follows from $\norm{f}_{\infty}\leq\norm{f-g}_{\infty}+\norm{g}_{\infty}$. Given $\varepsilon>0$, take a finite $\varepsilon/3$-net $g_1,\ldots,g_r\in\mathcal{F}$.\\
+For $d(x,y)<\delta$, chosen so $\abs{g_i(x)-g_i(y)}<\frac{\varepsilon}{3}$ $\forall i$, any $f$ with $\norm{f-g_i}_{\infty}<\frac{\varepsilon}{3}$ satisfies $\abs{f(x)-f(y)}<\varepsilon$.
+\item[$(ii)$]$\Rightarrow (i)$ Closedness makes $\mathcal{F}$ complete. For total boundedness, fix $\varepsilon>0$, choose $\delta$ from equicontinuity at $\varepsilon/3$, and a finite $\delta$-net $x_1,\ldots,x_r\subset K$. With $\abs{f}\leq M$ on $K$ for $f\in\mathcal{F}$, partition $[-M,M]$ into intervals of length $<\varepsilon/3$ and classify $f$ by the interval data of $(f(x_1),\ldots,f(x_r))$. For one representative $g$ per class and $d(x,x_i)<\delta$, $\abs{f(x)-g(x)}\leq\abs{f(x)-f(x_i)}+\abs{f(x_i)-g(x_i)}+\abs{g(x_i)-g(x)}<\varepsilon$. Hence $\mathcal{F}$ is totally bounded, so complete plus totally bounded implies compact.
+\end{enumerate}
+\hlt{Structural Commentary}: Compactness in $C(K)$ is finite-resolution control plus closedness.\\
+\hlt{Key Insight}: Equicontinuity lets finitely many sample values control whole functions.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:holder-unit-ball-precompact-arzela-ascoli} \hlt{H\"older Balls Have Compact Closure}\\
+For $0<\alpha\leq1$, define $[f]_{\alpha}\defeq\sup\limits_{x\ne y}\frac{\abs{f(x)-f(y)}}{\abs{x-y}^{\alpha}}$ when finite.\\
+Set $\mathcal{H}_{\alpha}\defeq\{f\in C([0,1],\R):\norm{f}_{\infty}+[f]_{\alpha}\leq1\}$, with closure taken in $C([0,1],\R)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f\in\mathcal{H}_{\alpha}$, then $\norm{f}_{\infty}\leq1$.
+\item If $f\in\mathcal{H}_{\alpha}$, then $\abs{f(x)-f(y)}\leq\abs{x-y}^{\alpha}$, so $\mathcal{H}_{\alpha}$ is equicontinuous.
+\item Uniform limits preserve $\norm{f}_{\infty}\leq1$ and $\abs{f(x)-f(y)}\leq\abs{x-y}^{\alpha}$.
+\end{enumerate}
+Thus $\overline{\mathcal{H}_{\alpha}}$ is closed, uniformly bounded, and equicontinuous; hence it is compact.
+\end{example}
 
 \begin{figure}[H]
   \centering
@@ -34,22 +65,31 @@ A metric space $X$ is \hlt{$\sigma$-compact} if $X=\bigcup\limits_{j=1}^{\infty}
 \end{definition}
 
 \begin{theorem} \label{thm:arzela-ascoli-sigma-compact-locally-uniform} \hlt{Arzela--Ascoli on $\sigma$-Compact Spaces}\\
-Let $X$ be $\sigma$-compact, $Y$ a metric space, and $(f_n)$ pointwise equicontinuous maps $X\to Y$. If each orbit $\{f_n(x):n\in\N\}$ lies in a compact subset of $Y$, then some subsequence converges uniformly on compact subsets of $X$.
+Let $X$ be a $\sigma$-compact metric space, $Y$ a metric space, $f_n:X\to Y$ pointwise equicontinuous. If $\overline{\{f_n(x):n\in\N\}}$ is compact in $Y$ $\forall x\in X$, then some subsequence $(g_m)$ converges uniformly on every compact $K\subseteq X$.
 \begin{proof}
-Choose an increasing compact exhaustion $X=\bigcup_jK_j$.\\
-By Theorem \ref{thm:pointwise-equicontinuity-compact-uniform}, each restriction $f_n|_{K_j}$ is uniformly equicontinuous. Applying Theorem \ref{thm:arzela-ascoli-compact-metric} on $K_1,K_2,\ldots$ and diagonalizing gives a subsequence $(g_m)$ converging uniformly on every $K_j$, hence pointwise on $X$.\\
-If $K\subseteq X$ is compact, then $(g_m|_K)$ is uniformly equicontinuous, and a finite-net argument upgrades pointwise convergence on $K$ to uniform convergence on $K$.\\
-\hlt{Structural Commentary}: Exhaust $X$ by compact pieces and diagonalize the compact theorem.\\
-\hlt{Key Insight}: Local uniform convergence replaces global uniform convergence.
+Choose an increasing compact exhaustion $X=\bigcup_jK_j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item On each $K_j$, the restrictions $(f_n|_{K_j})$ are uniformly equicontinuous and pointwise relatively compact in $Y$.
+\item Choose subsequences successively so the $j$th one converges uniformly on $K_j$.\\
+The diagonal $g_m$ satisfies $g_m|_{K_j}\rightrightarrows g|_{K_j}$ for every $j$.
+\item For compact $K\subseteq X$, $(g_m|_K)$ is uniformly equicontinuous and $g_m\to g$ pointwise.\\
+Given $\varepsilon>0$, take a finite $\delta$-net $E\subset K$ with equicontinuity tolerance $\varepsilon/3$.\\
+Convergence on $E$ gives $\sup_{x\in K}d_Y(g_m(x),g_n(x))<\varepsilon$ for large $m,n$, hence $g_m\rightrightarrows g$ on $K$.
+\end{enumerate}
+\hlt{Structural Commentary}: Exhaust, select, diagonalize.\\
+\hlt{Key Insight}: Compact-local control gives compact-local uniform convergence.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:arzela-ascoli-real-line-locally-uniform} \hlt{Real-Line Local Uniform Subsequence}\\
-If $(f_n)$ is pointwise equicontinuous on $\R$ and bounded at one point, then it has a subsequence converging uniformly on compact subsets of $\R$.
-\begin{proof}
-Let $(f_n(x_0))$ be bounded. On any compact interval containing $x_0$, Theorem \ref{thm:pointwise-equicontinuity-compact-uniform} gives uniform equicontinuity; finitely many $\delta$-steps from $x_0$ to $x$ bound each orbit $(f_n(x))$. Hence Theorem \ref{thm:arzela-ascoli-sigma-compact-locally-uniform} applies on $\R$.
-\hlt{Structural Commentary}: One bounded anchor propagates across compact intervals.\\
-\hlt{Key Insight}: Pointwise equicontinuity turns local boundedness into compactwise compactness.
+Let $f_n:\R\to\R$ be pointwise equicontinuous and suppose $\sup_n\abs{f_n(x_0)}<\infty$ for some $x_0\in\R$.\\
+Then some subsequence converges uniformly on every compact $K\subseteq\R$.
+\begin{proof} For $x\in\R$, take compact $I\supset\{x_0,x\}$. Uniform equicontinuity on $I$ gives $\delta>0$ with step-size tolerance $1$.\\
+Choose a finite $\delta$-chain $x_0=t_0,\ldots,t_m=x$; then $\abs{f_n(x)}\leq\abs{f_n(x_0)}+m$ for all $n$.\\
+Thus each orbit $\{f_n(x):n\in\N\}$ has compact closure in $\R$, and the $\sigma$-compact theorem applies.\\
+\hlt{Structural Commentary}: One bounded orbit propagates by finite chains.\\
+\hlt{Key Insight}: Equicontinuity turns one anchor into compact-local control.
 \end{proof}
 \end{corollary}
 

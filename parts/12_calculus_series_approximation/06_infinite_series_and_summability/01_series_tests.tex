@@ -8,9 +8,14 @@
 Series are sequences of partial sums. Comparison, condensation, root and ratio tests, rearrangements, products, and double sums all refine that viewpoint.
 
 \begin{definition} \label{def:series-core-definitions-source-todo}\label{def:series-and-partial-sums} \hlt{Series and Partial Sums}\\
-Let $(a_n)$ be a complex sequence, and for $p\leq q$ put $\sum\limits_{n=p}^{q}a_n\defeq a_p+a_{p+1}+\cdots+a_q$.\\
-The index $n$ in the displayed finite sum is a bound variable, in the sense of Principle \ref{princ:well-formed-statements-and-bound-variables}; it may be renamed when its scope is unchanged.\\
-The \hlt{series} $\sum_{n=1}^{\infty}a_n$ (or $a_1+a_2+\cdots$) is the partial-sum sequence $s_n\defeq\sum\limits_{k=1}^{n}a_k$. If $s_n\to s$, then $\sum\limits_{n=1}^{\infty}a_n=s$ and series \hlt{converges}; otherwise it \hlt{diverges}. The same convention applies to series starting at $n=0$.
+Let $(a_n)_{n\geq1}\subseteq\C$. Summation indices are bound variables and may be renamed within unchanged scope.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For integers $1\leq p\leq q$, $\sum\limits_{n=p}^{q}a_n\defeq a_p+a_{p+1}+\cdots+a_q$.
+\item The \hlt{series} $\sum\limits_{n=1}^{\infty}a_n$ is the \hlt{partial-sum sequence} $(s_N)$, where $s_N\defeq\sum\limits_{n=1}^{N}a_n$.
+\item The series \hlt{converges to} $s$, written $\sum\limits_{n=1}^{\infty}a_n=s$, iff $s_N\to s$; otherwise it \hlt{diverges}. Also for $n=0$.
+\end{enumerate}
+\hlt{Key Insight}: A series is a sequence first; its sum is a limit when that limit exists.
 \end{definition}
 
 
@@ -39,8 +44,7 @@ Hence $(s_n)$ is Cauchy and converges by Theorem \ref{thm:cauchy-convergence-cri
 
 \begin{corollary} \label{cor:series-terms-tend-to-zero} \hlt{Terms of a Convergent Series Tend to Zero}\\
 If $\sum a_n$ converges, then $a_n\to0$.
-\begin{proof}
-Let $\varepsilon>0$. By Theorem \ref{thm:series-cauchy-criterion}, there is $N$ such that $m\geq n\geq N$ implies $\abs{\sum_{k=n}^{m}a_k}\leq\varepsilon$.\\
+\begin{proof} Let $\varepsilon>0$. By Theorem \ref{thm:series-cauchy-criterion}, there is $N$ such that $m\geq n\geq N$ implies $\abs{\sum_{k=n}^{m}a_k}\leq\varepsilon$.\\
 Taking $m=n$ gives $\abs{a_n}\leq\varepsilon$ for all $n\geq N$, hence $a_n\to0$.\\
 \hlt{Structural Commentary}: A single term is the shortest possible tail.\\
 \hlt{Key Insight}: The condition $a_n\to0$ is necessary, but not sufficient for convergence.
@@ -103,7 +107,7 @@ $b_N\cdots b_0.a_1a_2\cdots \defeq \sum\limits_{i=0}^{N}b_i10^i+\sum\limits_{j=1
 \begin{proposition} \label{prop:decimal-terminal-nine-nonuniqueness} \hlt{Terminal Nines Are Nonunique}\\
 The same real number can have two decimal representations: $1.000\ldots=0.999\ldots$.
 \begin{proof}
-By Definition \ref{def:real-decimal-as-series} and Theorem \ref{thm:geometric-series-nonnegative}, $1.000\ldots=1$; $0.999\ldots=\sum\limits_{j=1}^{\infty}9\cdot10^{-j} =9\cdot\frac{10^{-1}}{1-10^{-1}}=1$.\\
+$1.000\ldots=1+\sum\limits_{j=1}^{\infty}0\cdot10^{-j}=1$, while $0.999\ldots=\sum\limits_{j=1}^{\infty}9\cdot10^{-j}=9\cdot\frac{10^{-1}}{1-10^{-1}}=1$.\\
 \hlt{Structural Commentary}: The two digit strings have the same partial-sum limit.\\
 \hlt{Key Insight}: Uniqueness requires excluding terminal $9$ tails.
 \end{proof}
@@ -114,24 +118,34 @@ Proposition \ref{prop:decimal-truncations-squeeze-real} gives decimal truncation
 \end{perspective}
 
 \begin{theorem} \label{thm:cauchy-condensation-test} \hlt{Cauchy Condensation Test}\\
-Suppose $a_1\geq a_2\geq a_3\geq\cdots\geq0$. Then $\sum_{n=1}^{\infty}a_n$ converges if and only if $\sum\limits_{k=0}^{\infty}2^k a_{2^k}$ converges.
+Let $(a_n)_{n\geq1}$ satisfy $a_1\geq a_2\geq\cdots\geq0$. Then $\sum\limits_{n=1}^{\infty}a_n$ converges iff $\sum\limits_{k=0}^{\infty}2^k a_{2^k}$ converges.
 \begin{proof}
-Let $s_n\defeq a_1+\cdots+a_n$ and $t_k\defeq a_1+2a_2+\cdots+2^k a_{2^k}$.\\
-If $n<2^k$, then grouping by dyadic blocks gives $s_n\leq a_1+(a_2+a_3)+\cdots+(a_{2^k}+\cdots+a_{2^{k+1}-1})\leq t_k$.\\
-If $n>2^k$, grouping from the other side gives $2s_n\geq t_k$. Hence the nonnegative partial sums $(s_n)$ and $(t_k)$ are either both bounded or both unbounded; apply Theorem \ref{thm:nonnegative-series-bounded-partial-sums}.\\
-\hlt{Structural Commentary}: Monotonicity lets dyadic blocks be compared to their endpoint terms.\\
-\hlt{Key Insight}: A sparse dyadic subsequence detects the whole monotone nonnegative series.
+Let $s_n\defeq\sum\limits_{j=1}^{n}a_j$ and $t_k\defeq\sum\limits_{j=0}^{k}2^j a_{2^j}$. Both partial-sum sequences are nondecreasing.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $(s_n)$ is bounded, then $t_m\leq2\sum\limits_{j=1}^{2^m}a_j=2s_{2^m}$, so $(t_m)$ is bounded and the condensed series converges.
+\item[$(\Leftarrow)$] If $(t_k)$ is bounded, then for $2^m\leq n<2^{m+1}$, $s_n\leq\sum\limits_{j=0}^{m}2^j a_{2^j}=t_m$; hence $(s_n)$ is bounded, QED.
+\end{enumerate}
+\hlt{Structural Commentary}: Dyadic blocks compare to endpoint terms.\\
+\hlt{Key Insight}: Monotone tails are detected on dyadic scales.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:p-series-test} \hlt{$p$-Series Test}\\
-The series $\sum\limits_{n=1}^{\infty}\frac{1}{n^p}$ converges if $p>1$ and diverges if $p\leq1$.
+For $p\in\R$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $p>1$, then $\sum\limits_{n=1}^{\infty}n^{-p}$ converges.
+\item If $p\leq1$, then $\sum\limits_{n=1}^{\infty}n^{-p}$ diverges.
+\end{enumerate}
 \begin{proof}
-If $p\leq0$, the terms do not tend to $0$, so Corollary \ref{cor:series-terms-tend-to-zero} gives divergence.\\
-If $p>0$, Theorem \ref{thm:cauchy-condensation-test} reduces the question to $\sum\limits_{k=0}^{\infty}2^k\frac{1}{(2^k)^p}=\sum\limits_{k=0}^{\infty}2^{(1-p)k}$.\\
-This geometric series converges exactly when $2^{1-p}<1$, i.e. $p>1$, by Theorem \ref{thm:geometric-series-nonnegative}.\\
-\hlt{Structural Commentary}: Condensation turns powers of $n$ into powers of $2$.\\
-\hlt{Key Insight}: The boundary is $p=1$ because the condensed ratio is $2^{1-p}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $p>1$, condensation reduces to $\sum\limits_{k=0}^{\infty}2^k(2^k)^{-p}=\sum\limits_{k=0}^{\infty}2^{(1-p)k}$, a geometric series with ratio $2^{1-p}<1$.
+\item If $p\leq0$, then $n^{-p}\not\to0$; if $0<p\leq1$, condensation gives a geometric series with ratio $2^{1-p}\geq1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Condensation turns $n$-powers into a geometric series.\\
+\hlt{Key Insight}: The threshold is the ratio $2^{1-p}=1$.
 \end{proof}
 \end{corollary}
 
@@ -144,17 +158,20 @@ This geometric series converges exactly when $2^{1-p}<1$, i.e. $p>1$, by Theorem
 
 \begin{theorem} \label{thm:integral-test-series} \hlt{Integral Test}\\
 Let $N\in\N$ and let $f:[N,\infty)\to[0,\infty)$ be decreasing and Riemann integrable on compact subintervals.\\
-Then $\sum\limits_{k=N}^{\infty}f(k)$ converges iff $\int_N^\infty f(x)\,dx$ converges.\\
-For $M\geq N$, $\int_N^{M+1} f(x)\,dx \leq \sum\limits_{k=N}^{M}f(k) \leq f(N)+\int_N^M f(x)\,dx$.
-\begin{proof}
-For a monotone function, compact-subinterval Riemann integrability follows from Theorem \ref{thm:monotone-functions-integrable-continuous-integrator} with $\alpha(x)=x$; it is kept in the statement to make the improper-integral dependency explicit.
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] For $x\in[k,k+1]$, monotonicity gives $f(x)\leq f(k)$. Hence $\int_N^{M+1}f(x)\,dx\leq\sum_{k=N}^{M}f(k)$. If the series converges, these truncations are bounded, so $\int_N^\infty f$ converges by Theorem \ref{thm:nonnegative-improper-integral-supremum}.
-\item[$(\Leftarrow)$] For $k\geq N+1$ and $x\in[k-1,k]$, monotonicity gives $f(k)\leq f(x)$. Hence $\sum_{k=N}^{M}f(k)\leq f(N)+\int_N^M f(x)\,dx$. If $\int_N^\infty f$ converges, the partial sums are bounded, so the series converges by Theorem \ref{thm:nonnegative-series-bounded-partial-sums}.
+\item For $M\geq N$, $\int_N^{M+1}f(x)\,dx\leq\sum\limits_{k=N}^{M}f(k)\leq f(N)+\int_N^M f(x)\,dx$.
+\item $\sum\limits_{k=N}^{\infty}f(k)$ converges iff $\int_N^\infty f(x)\,dx$ converges.
 \end{enumerate}
-\hlt{Structural Commentary}: A monotone sequence can be compared to neighboring unit-width areas.\\
-\hlt{Key Insight}: The integral test is comparison of two infinite accumulations with the same tail size.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $x\in[k,k+1]$, $f(x)\leq f(k)$, so $\int_N^{M+1}f\leq\sum\limits_{k=N}^{M}f(k)$.\\
+For $k\geq N+1$ and $x\in[k-1,k]$, $f(k)\leq f(x)$, so $\sum\limits_{k=N}^{M}f(k)\leq f(N)+\int_N^M f$.
+\item The truncations $\sum\limits_{k=N}^{M}f(k)$ and $\int_N^M f$ are nondecreasing in $M$. By (i), either both are bounded or both are unbounded; hence the series and improper integral converge or diverge together.
+\end{enumerate}
+\hlt{Structural Commentary}: Unit intervals compare samples to area.\\
+\hlt{Key Insight}: Same monotone tail, same boundedness.
 \end{proof}
 \end{theorem}
 
@@ -347,14 +364,26 @@ If $(k_n)$ lists each positive integer exactly once and $a'_n\defeq a_{k_n}$, th
 \end{definition}
 
 \begin{theorem} \label{thm:riemann-rearrangement-theorem} \hlt{Riemann Rearrangement Theorem}\\
-If real $\sum a_n$ converges nonabsolutely and $-\infty\leq\alpha\leq\beta\leq\infty$,\\
-then some rearrangement has partial sums $s'_n$ with $\liminf\limits_{n\to\infty}s'_n=\alpha$ and $\limsup\limits_{n\to\infty}s'_n=\beta$.
+Let $\sum a_n$ be a real series converging but not absolutely, and let $\alpha,\beta\in[-\infty,\infty]$ with $\alpha\leq\beta$.\\
+Then there exists a bijection $\pi:\N\to\N$ such that, for $s'_N\defeq\sum\limits_{n=1}^{N}a_{\pi(n)}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\pi$ rearranges every term of $\sum a_n$ exactly once.
+\item $\liminf\limits_{N\to\infty}s'_N=\alpha$.
+\item $\limsup\limits_{N\to\infty}s'_N=\beta$.
+\end{enumerate}
 \begin{proof}
-Write $a_n=p_n-q_n$, where $p_n=\max(a_n,0)$ and $q_n=\max(-a_n,0)$. Since $\sum a_n$ converges but not absolutely, $\sum p_n=\sum q_n=+\infty$, and $p_n,q_n\to0$. List the positive nonzero $p_n$ as $P_1,P_2,\ldots$ and the positive nonzero $q_n$ as $Q_1,Q_2,\ldots$, preserving their original orders.\\
-Choose finite numbers $\ell_N<u_N$ with $\ell_N\to\alpha$ and $u_N\to\beta$ in the extended sense. Starting from partial sum $0$, add unused $P$ terms until the sum is $>u_N$, then add unused terms $-Q$ until the sum is $<\ell_N$; repeat for $N=1,2,\ldots$. Divergence of both positive series makes each stopping time finite, and the alternating stages use every nonzero positive and negative term eventually. Insert zero terms anywhere.\\
-After the $N$th upward crossing, the partial sum lies between $u_N$ and $u_N+P_j$ for the next positive term used; after the downward crossing, it lies between $\ell_N-Q_j$ and $\ell_N$ for the next negative term used. Since $P_j,Q_j\to0$, these overshoots vanish. Hence subsequences of partial sums approach the upper targets and lower targets, while all later partial sums stay within vanishing error of $[\ell_N,u_N]$. Therefore $\liminf s'_n=\alpha$ and $\limsup s'_n=\beta$.\\
-\hlt{Structural Commentary}: Conditional convergence leaves enough mass to steer partial sums.\\
-\hlt{Key Insight}: Vanishing terms make the steering increasingly precise.
+Write $a_n=p_n-q_n$, where $p_n\defeq\max(a_n,0)$ and $q_n\defeq\max(-a_n,0)$. Then $\sum p_n=\sum q_n=+\infty$ and $p_n,q_n\to0$. List the nonzero $p_n$ as $P_1,P_2,\ldots$ and the nonzero $q_n$ as $Q_1,Q_2,\ldots$, preserving order.\\
+Choose finite targets $\ell_N<u_N$ with $\ell_N\to\alpha$, $u_N\to\beta$, and $\ell_N<u_{N+1}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Alternately add unused $P$ terms until $s'>u_N$, then unused $-Q$ terms until $s'<\ell_N$.\\
+Since $\sum P_j=\sum Q_j=+\infty$, all stops are finite and every nonzero term is used; insert zeros anywhere.
+\item At the $N$th down-crossing, $\ell_N-Q_j\leq s'_k<\ell_N$ with $Q_j\to0$. Thus lower crossing subsequences tend to $\alpha$, and later sums stay above later $\ell_N$ up to $o(1)$; hence $\liminf s'_N=\alpha$.
+\item At the $N$th up-crossing, $u_N<s'_k\leq u_N+P_j$ with $P_j\to0$. Thus upper crossing subsequences tend to $\beta$, and later sums stay below later $u_N$ up to $o(1)$; hence $\limsup s'_N=\beta$.
+\end{enumerate}
+\hlt{Structural Commentary}: Divergent one-sided masses steer the partial sums.\\
+\hlt{Key Insight}: Vanishing terms make the overshoot vanish.
 \end{proof}
 \end{theorem}
 
@@ -375,29 +404,44 @@ If $\sum\limits_{n=1}^{\infty}\abs{f(g_n)}<\infty$, then $\sum\limits_{x\in X}f(
 \end{definition}
 
 \begin{theorem} \label{thm:absolute-countable-sums-well-defined} \hlt{Countable Sums Are Order-Free Under Absolute Convergence}\\
-Let $X,Y$ be countable, $f:X\to\C$ be absolutely summable, and $h:Y\to X$ be a bijection.\\
-Then $f\circ h$ is absolutely summable and $\sum\limits_{y\in Y}f(h(y))=\sum\limits_{x\in X}f(x)$.\\
-In particular, a countable absolutely convergent sum is independent of the enumeration.
+Let $X,Y$ be countable, let $f:X\to\C$ be absolutely summable, and let $h:Y\to X$ be a bijection.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\circ h:Y\to\C$ is absolutely summable.
+\item $\sum\limits_{y\in Y}f(h(y))=\sum\limits_{x\in X}f(x)$.
+\item Countable absolutely convergent sums are independent of enumeration.
+\end{enumerate}
 \begin{proof}
 Let $g:\N\to X$ and $k:\N\to Y$ be enumerations, and set $\sigma\defeq g^{-1}\circ h\circ k:\N\to\N$.\\
-Then $\sigma$ is a bijection and $h(k_n)=g_{\sigma(n)}$. Hence $\sum\limits_{n=1}^{\infty}\abs{f(h(k_n))} =\sum\limits_{n=1}^{\infty}\abs{f(g_{\sigma(n)})}<\infty$.\\
-Thus $\sum\limits_{y\in Y}f(h(y)) =\sum\limits_{n=1}^{\infty}f(g_{\sigma(n)}) =\sum\limits_{n=1}^{\infty}f(g_n) =\sum\limits_{x\in X}f(x)$, where the middle equality is Theorem \ref{thm:absolute-convergence-rearrangements}.\\
-Taking $Y=\N$ and $h$ to be any enumeration of $X$ gives enumeration independence.\\
-\hlt{Structural Commentary}: Absolute convergence turns an enumeration into harmless bookkeeping.\\
-\hlt{Key Insight}: Once absolute tails are controlled, the order of a countable listing no longer changes the sum.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item As $\sigma$ is bijection, $h(k_n)=g_{\sigma(n)}$; $\sum\limits_{n=1}^{\infty}\abs{f(h(k_n))}=\sum\limits_{n=1}^{\infty}\abs{f(g_{\sigma(n)})}<\infty$ by absolute rearrangement invariance.
+\item The same invariance gives $\sum\limits_{y\in Y}f(h(y))=\sum\limits_{n=1}^{\infty}f(g_{\sigma(n)})=\sum\limits_{n=1}^{\infty}f(g_n)=\sum\limits_{x\in X}f(x)$.
+\item Take $Y=\N$ and let $h$ be any enumeration of $X$.
+\end{enumerate}
+\hlt{Structural Commentary}: Bijections only reorder an absolutely summable list.\\
+\hlt{Key Insight}: Absolute tails make enumeration irrelevant.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:fubini-countable-absolute-series} \hlt{Fubini for Absolutely Summable Arrays}\\
-Let $a_{mn}\in\C$ and suppose $L\defeq\sum\limits_{(m,n)\in\N\times\N}\abs{a_{mn}}<\infty$. Then each row and column is absolutely summable.\\
-With $r_m\defeq\sum\limits_{n=1}^{\infty}a_{mn}$ and $c_n\defeq\sum\limits_{m=1}^{\infty}a_{mn}$, the row-total and column-total series are absolutely convergent,\\
-where $\sum\limits_{m=1}^{\infty}\abs{r_m}<\infty$; $\sum\limits_{n=1}^{\infty}\abs{c_n}<\infty$, and $\sum\limits_{m=1}^{\infty}r_m =\sum\limits_{(m,n)\in\N\times\N}a_{mn} =\sum\limits_{n=1}^{\infty}c_n$.
+Let $(a_{mn})_{m,n\geq1}\subseteq\C$ and $L\defeq\sum\limits_{(m,n)\in\N^2}\abs{a_{mn}}<\infty$. Define $S\defeq\sum\limits_{(m,n)\in\N^2}a_{mn}$ when summed absolutely over $\N^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Each row $\sum\limits_{n=1}^{\infty}a_{mn}$ and column $\sum\limits_{m=1}^{\infty}a_{mn}$ converges absolutely.
+\item With $r_m\defeq\sum\limits_{n=1}^{\infty}a_{mn}$ and $c_n\defeq\sum\limits_{m=1}^{\infty}a_{mn}$, $\sum\limits_m\abs{r_m}\leq L$ and $\sum\limits_n\abs{c_n}\leq L$.
+\item $\sum\limits_{m=1}^{\infty}r_m=S=\sum\limits_{n=1}^{\infty}c_n$.
+\end{enumerate}
 \begin{proof}
-For finite $F\subseteq\N\times\N$, $\sum_{(m,n)\in F}\abs{a_{mn}}\leq L$. Hence each row and column has bounded absolute partial sums, so rows and columns converge absolutely by Theorem \ref{thm:nonnegative-series-bounded-partial-sums}.\\
-Moreover, for $M\geq1$, $\sum\limits_{m=1}^{M}\abs{r_m} \leq \sum\limits_{m=1}^{M}\sum\limits_{n=1}^{\infty}\abs{a_{mn}} =\lim\limits_{N\to\infty}\sum\limits_{m=1}^{M}\sum\limits_{n=1}^{N}\abs{a_{mn}} \leq L$, so $\sum\limits_m\abs{r_m}<\infty$.\\
-Similarly $\sum\limits_n\abs{c_n}<\infty$. Let $\varepsilon>0$. Choose finite $F\subseteq\N\times\N$ with $\sum\limits_{(m,n)\in(\N\times\N)\setminus F}\abs{a_{mn}}<\varepsilon$, and choose a rectangle $R=\{1,\ldots,M\}\times\{1,\ldots,N\}\supseteq F$. The full sum, row-iterated sum, and column-iterated sum each differ from $\sum\limits_{(m,n)\in R}a_{mn}$ by at most $\sum\limits_{(m,n)\in(\N\times\N)\setminus R}\abs{a_{mn}}\leq\varepsilon$. Let $\varepsilon\downarrow0$.\\
-\hlt{Structural Commentary}: Finite rectangles plus absolute tails justify Fubini.\\
-\hlt{Key Insight}: Double sums can be rearranged only after the entire array is absolutely summable.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For fixed $m$, $N$, $\sum\limits_{n=1}^{N}\abs{a_{mn}}\leq L$; similarly $\sum\limits_{m=1}^{M}\abs{a_{mn}}\leq L$. Hence every row, column absolutely summable.
+\item For $M\geq1$, $\sum\limits_{m=1}^{M}\abs{r_m}\leq\sum\limits_{m=1}^{M}\sum\limits_{n=1}^{\infty}\abs{a_{mn}}\leq L$; let $M\to\infty$. The column estimate is identical.
+\item Given $\varepsilon>0$, choose finite $F\subseteq\N^2$ with $\sum\limits_{\N^2\setminus F}\abs{a_{mn}}<\varepsilon$, then $R=\{1,\ldots,M\}\times\{1,\ldots,N\}\supseteq F$.\\
+Each of $S$, $\sum_m r_m$, and $\sum_n c_n$ differs from $S_R\defeq\sum\limits_{(m,n)\in R}a_{mn}$ by at most $\sum\limits_{\N^2\setminus R}\abs{a_{mn}}\leq\varepsilon$. Let $\varepsilon\downarrow0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rectangles plus absolute tails justify Fubini.\\
+\hlt{Key Insight}: Absolute summability makes order irrelevant.
 \end{proof}
 \end{theorem}
 

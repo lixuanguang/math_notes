@@ -91,7 +91,7 @@ expansion.
 | `02`-`04` | Linear algebra, spectral theory, and matrix analysis | Garcia-Horn, Axler, Strang, and Roman are in the active bibliography. |
 | `05`-`08` | Abstract algebra, commutative algebra, and algebraic geometry | Structured notes tree is in place. Bibliography expansion pending as these parts are developed. |
 | `09`-`10` | Real analysis, topology, calculus, series, and approximation | Rudin, Grinberg, Abbott, Ross, Pugh, and Tao I-II are in the active bibliography. |
-| `11` | Measure, integration, and functional analysis | Bartle is in the active bibliography. The source library also includes Royden, Rudin real/complex analysis, Oxtoby, Dunford-Schwartz, and functional analysis references. |
+| `11` | Measure, integration, and functional analysis | Bartle is in the active bibliography. Royden-Fitzpatrick's Real Analysis, 4th edition, is also marked completed and included in the active bibliography. The source library also includes Rudin real/complex analysis, Oxtoby, Dunford-Schwartz, and functional analysis references. |
 | `12` | Probability and stochastic systems | Source library includes Ross, Lamperti, Billingsley, and stochastic calculus references. Bibliography expansion pending. |
 | `13`-`14` | Dynamical systems, PDEs, numerical analysis, and stochastic computation | Structured notes tree is in place. Bibliography expansion pending as these parts are developed. |
 | `15`-`16` | Statistics, time series, statistical data analysis, and applied models | Hamilton and Rice are in the active bibliography. The source library also includes Casella-Berger, Lehmann-Casella, Lehmann-Romano, van der Vaart, Schervish, Berger, nonparametric statistics texts, and resampling references. |

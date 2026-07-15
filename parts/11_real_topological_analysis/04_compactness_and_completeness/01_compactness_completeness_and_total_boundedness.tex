@@ -7,14 +7,28 @@
 
 Compactness extracts finite or convergent structure from infinite behavior; completeness asks whether Cauchy approximations converge internally.
 
-\begin{definition} \label{def:open-cover-and-compactness} \hlt{Open Covers and Compact Sets}\\
+\begin{definition} \label{def:open-cover-and-compactness}\label{def:finite-intersection-property} \hlt{Open Covers, Compact Sets, and Finite Intersection Property}\\
 Let $(X,d)$ be a metric space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $E\subseteq X$, an \hlt{open cover} of $E$ is a family $(G_\alpha)_{\alpha\in A}$ such that each $G_\alpha\subseteq X$ is open and $E\subseteq\bigcup_{\alpha\in A}G_\alpha$.
 \item A set $K\subseteq X$ is \hlt{compact} iff every open cover $(G_\alpha)_{\alpha\in A}$ of $K$ admits $\alpha_1,\ldots,\alpha_n\in A$ with $K\subseteq\bigcup_{j=1}^{n}G_{\alpha_j}$.
+\item Family $\mathcal{F}\subseteq\mathcal{P}(X)$ has \hlt{finite intersection property} iff $\bigcap_{F\in\mathcal{F}_0}F\neq\emptyset$ $\forall$ finite nonempty subfamily $\mathcal{F}_0\subseteq\mathcal{F}$.
 \end{enumerate}
 \end{definition}
+
+\begin{proposition} \label{prop:compactness-closed-fip-characterization} \hlt{Closed-Set Compactness Test}\\
+Let $(X,d)$ be a metric space. Then $X$ is compact iff every nonempty family $\mathcal{F}$ of closed subsets of $X$ with the finite intersection property satisfies $\bigcap_{F\in\mathcal{F}}F\neq\emptyset$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $X$ is compact. Let $\emptyset\ne\mathcal{F}\subseteq\mathcal{P}(X)$ consist of closed sets and have the finite intersection property. If $\bigcap_{F\in\mathcal{F}}F=\emptyset$, then $\{X\setminus F:F\in\mathcal{F}\}$ is an open cover of $X$. Compactness gives $F_1,\ldots,F_n\in\mathcal{F}$ with $X=\bigcup_{j=1}^{n}(X\setminus F_j)$; hence $\bigcap_{j=1}^{n}F_j=\emptyset$, contradicting the finite intersection property.
+\item[$(\Leftarrow)$] Assume every nonempty closed family with the finite intersection property has nonempty intersection. Let $(G_\alpha)_{\alpha\in A}$ be an open cover of $X$. If no finite subcover exists, then $\mathcal{F}\defeq\{X\setminus G_\alpha:\alpha\in A\}$ is a nonempty family of closed subsets of $X$ with the finite intersection property. Thus $\exists x\in\bigcap_{\alpha\in A}(X\setminus G_\alpha)$, contradicting $X\subseteq\bigcup_{\alpha\in A}G_\alpha$. Hence every open cover has a finite subcover, so $X$ is compact.
+\end{enumerate}
+\hlt{Structural Commentary}: Complements turn finite subcovers into finite intersections.\\
+\hlt{Key Insight}: Compactness can be read dually through closed sets.
+\end{proof}
+\end{proposition}
 
 \begin{figure}[H]
   \centering
@@ -101,6 +115,15 @@ If $m,n\geq N_0$, then $p_m,p_n\in E_{N_0}$, hence $d(p_m,p_n)\leq\diam E_{N_0}<
 \end{proof}
 \end{proposition}
 
+\begin{definition} \label{def:contracting-sequence-of-metric-sets} \hlt{Contracting Sequence of Sets}\\
+Let $(X,d)$ be a metric space and let $(F_n)_{n\geq1}$ satisfy $\emptyset\ne F_n\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(F_n)$ is \hlt{descending} iff $\forall n\geq1$, $F_{n+1}\subseteq F_n$.
+\item $(F_n)$ is \hlt{contracting} iff it is descending and $\diam F_n\to0$.
+\end{enumerate}
+\end{definition}
+
 \begin{figure}[H]
   \centering
   \input{figures/analysis/cauchy_tail_diameters.tikz}
@@ -139,7 +162,7 @@ Let $X$ be a metric space.
 \item If $p_n\to p$, choose $N$ with $d(p_n,p)<\varepsilon/2$ for $n\geq N$. For $m,n\geq N$, $d(p_n,p_m)<\varepsilon$.
 \item Let $E_N\defeq\{p_j:j\geq N\}$ and $F_N\defeq\overline{E_N}$. Then $\diam F_N\to0$, the $F_N$ are compact and nested, and Theorem \ref{thm:nested-compact-diameters-singleton} gives $\bigcap_NF_N=\{p\}$. If $\diam F_N<\varepsilon$, then $p,p_n\in F_N$ for $n\geq N$, so $d(p_n,p)<\varepsilon$.
 \item For Cauchy $(\mathbf{x}_n)\subseteq\R^k$, choose $N$ with $\diam\{\mathbf{x}_j:j\geq N\}<1$.\\
-\item Its range is bounded, hence has compact closure by Theorem \ref{thm:heine-borel-rk}; apply (ii).
+Its range is bounded, hence has compact closure by Theorem \ref{thm:heine-borel-rk}; apply (ii).
 \end{enumerate}
 \hlt{Structural Commentary}: Cauchy controls $\diam E_N$; compactness turns $\bigcap_NF_N$ into the limit.\\
 \hlt{Key Insight}: In $\R^k$, the Cauchy criterion is equivalent to convergence.
@@ -204,136 +227,20 @@ Since $p\in\overline{E}^{\,X}=E$, every Cauchy sequence in $(E,d_E)$ converges i
 \end{proof}
 \end{proposition}
 
-\begin{example} \label{ex:finite-dimensional-complete-metric-spaces} \hlt{Finite-Dimensional Complete Metric Spaces}\\
-For $k\in\N$, $(\R^k,d_2)$ and $(\C^k,d_2)$ are complete; in particular, so are $\R$ and $\C$.
-\begin{proof}
-Completeness of $\R$ is Theorem \ref{thm:real-cauchy-convergence-criterion}.\\
-If $z_n=x_n+iy_n$ is Cauchy in $\C$, then $(x_n)$ and $(y_n)$ are Cauchy in $\R$, so $z_n\to x+iy\in\C$.\\
-Theorem \ref{thm:cauchy-convergence-criterion} gives completeness of $\R^k$, and the isometry $\C^k\cong\R^{2k}$ gives completeness of $\C^k$.\\
-\hlt{Structural Commentary}: Finite-dimensional completeness is coordinatewise completeness.\\
-\hlt{Key Insight}: A Cauchy sequence in finitely many coordinates converges coordinate by coordinate.
-\end{proof}
-\end{example}
-
-\begin{example} \label{ex:continuous-functions-sup-complete-integral-not-complete} \hlt{Two Metrics on $C[0,1]$}\\
-For $\mathbb{F}\in\{\R,\C\}$, $C_{\mathbb{F}}:=C([0,1],\mathbb{F})$ is complete under $d_\infty(f,g):=\sup_{x\in[0,1]}\abs{f(x)-g(x)}$ by Theorem \ref{thm:complete-supremum-metric-space}, but not under $d_1(f,g):=\int_0^1\abs{f(x)-g(x)}\,dx$.
-\begin{proof}
-For $n\ge2$, define $f_n\in C_{\mathbb{F}}$ by
-\begin{equation*}
-f_n(x)\defeq
-\begin{cases}
-0,&0\le x\le \frac12,\\
-n(x-\frac12),&\frac12\le x\le \frac12+\frac1n,\\
-1,&\frac12+\frac1n\le x\le1.
-\end{cases}
-\end{equation*}
-Let $s:=\mathbf{1}_{(1/2,1]}$. Then $d_1(f_n,s)=1/(2n)$, hence $(f_n)$ is $d_1$-Cauchy. If $f_n\to g\in C_{\mathbb{F}}$ in $d_1$, then $d_1(g,s)=0$, so $g=s$ a.e. Continuity forces $g=0$ on $[0,1/2]$ and $g=1$ on $(1/2,1]$, impossible at $1/2$.\\
-\hlt{Structural Commentary}: The integral metric permits a continuous ramp to collapse to a jump.\\
-\hlt{Key Insight}: Supremum control preserves continuity; integral control can miss jumps.
-\end{proof}
-\end{example}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/continuous_functions_integral_metric_not_complete.tikz}
-  \caption{The continuous ramps $f_n$ converge in the integral metric to a
-  discontinuous step function.}
-  \label{fig:continuous-functions-integral-metric-not-complete}
-\end{figure}
-
-\begin{example} \label{ex:sequence-spaces-complete} \hlt{Completeness of $\ell^\infty$ and $\ell^p$}\\
-For $\mathbb{F}\in\{\R,\C\}$, $(\ell^\infty(\mathbb{F}),\norm{\cdot}_\infty)$ and $(\ell^p(\mathbb{F}),\norm{\cdot}_p)$, $1\leq p<\infty$, are complete.
-\begin{proof}
-For $\ell^\infty$, let $\mathbf{x}^{(n)}=(x_j^{(n)})_j$ be Cauchy. Then $x_j^{(n)}\to y_j\in\mathbb{F}$ for each $j$.\\
-If $\norm{\mathbf{x}^{(n)}-\mathbf{x}^{(m)}}_\infty<\varepsilon$ for $m,n\geq N$, then $\abs{x_j^{(n)}-y_j}\leq\varepsilon$ for all $j$, so $\norm{\mathbf{x}^{(n)}-\mathbf{y}}_\infty\leq\varepsilon$.\\
-Taking $n=N$ gives $\mathbf{y}\in\ell^\infty$, hence $\mathbf{x}^{(n)}\to\mathbf{y}$.\\
-For $\ell^p$, let $\mathbf{x}^{(n)}$ be Cauchy and define $\mathbf{y}=(y_j)$ by coordinatewise limits.\\
-If $\norm{\mathbf{x}^{(n)}-\mathbf{x}^{(m)}}_p<\varepsilon$ for $m,n\geq N$, then for each $r$, $\sum\limits_{j=1}^{r}\abs{x_j^{(n)}-y_j}^{p}=\lim\limits_{m\to\infty}\sum\limits_{j=1}^{r}\abs{x_j^{(n)}-x_j^{(m)}}^{p}\leq\varepsilon^p$.\\
-Letting $r\to\infty$ gives $\norm{\mathbf{x}^{(n)}-\mathbf{y}}_p\leq\varepsilon$ for $n\geq N$. Taking $n=N$ gives $\mathbf{y}\in\ell^p$, hence $\mathbf{x}^{(n)}\to\mathbf{y}$.\\
-\hlt{Structural Commentary}: Completeness of scalar coordinates combines with uniform tail control.\\
-\hlt{Key Insight}: Norm-Cauchy control keeps coordinatewise limits inside the space.
-\end{proof}
-\end{example}
-
-\begin{definition} \label{def:contraction-mapping} \hlt{Contraction}\\
-Let $X$ be a metric space with metric $d$.\\
-A map $\varphi:X\to X$ is a \hlt{contraction} if $\exists$ a constant $0\leq c<1$ such that $d(\varphi(x),\varphi(y))\leq c\,d(x,y)$ for $x,y\in X$.\\
-\hlt{Structural Commentary}: Bound $c<1$ excludes nonexpansive maps and is the hypothesis in Theorem \ref{thm:contraction-principle}.
-\end{definition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/contraction_fixed_point_iteration.tikz}
-  \caption{A contraction pulls iterates toward the unique fixed point.}
-  \label{fig:contraction-fixed-point-iteration}
-\end{figure}
-
-\begin{theorem} \label{thm:contraction-principle} \hlt{Contraction Principle}\\
-If $X$ is a complete metric space and $\varphi:X\to X$ is a contraction, then $\exists$ a unique $x\in X$ such that $\varphi(x)=x$.
-\begin{proof}
-Choose $x_0\in X$ and define $x_{n+1}=\varphi(x_n)$.\\
-If $c<1$ is a contraction constant, induction gives $d(x_{n+1},x_n)\leq c^n d(x_1,x_0)$.\\
-For $n<m$, the triangle inequality and the finite geometric sum give $d(x_n,x_m)\leq \sum\limits_{j=n}^{m-1}d(x_j,x_{j+1}) \leq \frac{c^n}{1-c}d(x_1,x_0)$.\\
-Thus $(x_n)$ is Cauchy, so completeness gives $x_n\to x\in X$.\\
-Since a contraction is continuous, $\varphi(x)=\lim\varphi(x_n)=\lim x_{n+1}=x$.\\
-If $\varphi(x)=x$ and $\varphi(y)=y$, then $d(x,y)\leq c\,d(x,y)$, hence $d(x,y)=0$ and $x=y$.\\
-\hlt{Structural Commentary}: Iteration turns the contraction estimate into a geometric Cauchy estimate.\\
-\hlt{Key Insight}: Completeness supplies the limiting point; the strict constant $c<1$ forces uniqueness.
-\end{proof}
-\end{theorem}
-
-\begin{perspective} \label{per:contractions-feed-local-analysis} \hlt{Fixed Points as Existence Proofs}\\
-A contraction proof solves $x=\varphi(x)$ by iteration in a complete metric space. This is the template behind the inverse function theorem, Theorem \ref{thm:inverse-function-theorem-rn}.
-\end{perspective}
-
-\begin{example} \label{ex:rational-metric-not-complete} \hlt{A Noncomplete Metric Space}\\
-The rational numbers with $d(x,y)=\abs{x-y}$ are not complete.\\
-Let $(r_n)$ be the decimal truncation sequence $1.4,\ 1.41,\ 1.414,\ 1.4142,\ldots$, for $\sqrt{2}$.\\
-This is a concrete instance of the truncation squeeze in Proposition \ref{prop:decimal-truncations-squeeze-real}. If $k,n\geq N$, then $\abs{r_k-r_n}\leq10^{-N}$, so $(r_n)$ is Cauchy in $\Q$. As a sequence in $\R$, it converges to $\sqrt{2}$.\\
-If it converged to some $r\in\Q$ in the inherited metric, uniqueness of limits in $\R$ would force $r=\sqrt{2}$, contradicting Proposition \ref{prop:rational-square-root-two-gap}. Thus $\Q$ is not complete in the inherited metric.\\
-\hlt{Structural Commentary}: The decimal approximants are Cauchy before their missing limit is available inside $\Q$.\\
-\hlt{Key Insight}: Completeness asks whether every internally Cauchy approximation has an internal endpoint.
-\end{example}
-
-\begin{perspective} \label{per:cauchy-completion-skeleton} \hlt{Completion by Cauchy Sequences}\\
-Complete by identifying Cauchy sequences with $d(p_n,q_n)\to0$ and setting $D([(p_n)],[(q_n)])=\lim_{n\to\infty}d(p_n,q_n)$.\\
-Constant sequences embed the original space; triangle inequalities and diagonals give a complete metric.
-\end{perspective}
-
-\begin{theorem} \label{thm:metric-completion-existence-uniqueness} \hlt{Metric Completion}\\
-For every metric space $(X,d)$, $\exists$ complete metric space $(\widehat{X},\widehat{d})$, isometry $\iota:X\to\widehat{X}$ with $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$.\\
-If $(Y,d_Y,\tau)$, $(Z,d_Z,\sigma)$ are two such completions, then $\exists!$ bijective isometry $\Phi:Y\to Z$ s.t. $\Phi\circ\tau=\sigma$.
+\begin{theorem} \label{thm:cantor-intersection-complete-metric-space} \hlt{Cantor Intersection Theorem}\\
+Let $(X,d)$ be a metric space. Then $X$ is complete iff every sequence $(F_n)_{n\geq1}$ with $\emptyset\ne F_n\subseteq X$ closed, $F_{n+1}\subseteq F_n$, and $\diam F_n\to0$ satisfies $\bigcap_{n=1}^{\infty}F_n=\{x\}$ for some $x\in X$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item \hlt{Existence}. Let $\operatorname{CS}(X)$ be the Cauchy sequences in $X$.\\
-For $a=(a_n),b=(b_n)\in\operatorname{CS}(X)$, $\abs{d(a_n,b_n)-d(a_m,b_m)}\leq d(a_n,a_m)+d(b_n,b_m)$, so $D(a,b)\defeq\lim\limits_{n\to\infty} d(a_n,b_n)$ exists. Put $a\sim b\Leftrightarrow D(a,b)=0$, $\widehat{X}\defeq\operatorname{CS}(X)/{\sim}$, and $\widehat{d}([a],[b])\defeq D(a,b)$.\\
-The estimate gives well-definedness; metric axioms pass to limits. Map $\iota(x)\defeq[(x,x,\ldots)]$ is an isometry.\\
-If $a=(a_n)$ and $d(a_n,a_N)<\varepsilon$ for $n\geq N$, then $\widehat{d}(\iota(a_N),[a])\leq\varepsilon$, hence $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$.\\
-Let $([a^{(k)}])$ be Cauchy in $\widehat{X}$. Choose $x_k\in X$ with $\widehat{d}(\iota(x_k),[a^{(k)}])<1/k$.\\
-Since $d(x_k,x_l)\leq1/k+\widehat{d}([a^{(k)}],[a^{(l)}])+1/l$, $(x_k)$ is Cauchy in $X$,\\
-and $\widehat{d}([a^{(k)}],[(x_j)])\leq1/k+\limsup_{j\to\infty}d(x_k,x_j)\to0$. Thus $([a^{(k)}])\to[(x_j)]$, so $(\widehat{X},\widehat{d})$ is complete.
-\item \hlt{Uniqueness}. Let $(Y,d_Y,\tau)$ and $(Z,d_Z,\sigma)$ be completions.\\
-Define $\rho_0:\tau(X)\to\sigma(X)$ by $\rho_0(\tau x)\defeq\sigma x$; it is an isometry.\\
-For $y\in Y$, choose $y_n\in\tau(X)$ with $y_n\to y$. Since $\rho_0(y_n)$ is Cauchy in $Z$, define $\Phi(y)\defeq\lim\limits_{n\to\infty}\rho_0(y_n)$.\\
-If $z_n\in\tau(X)$ and $z_n\to y$, then $d_Z(\rho_0(y_n),\rho_0(z_n))=d_Y(y_n,z_n)\to0$, so $\Phi$ is well defined.\\
-If $y_n'\to y'$, then $d_Z(\Phi(y),\Phi(y'))=\lim\limits_{n\to\infty} d_Z(\rho_0(y_n),\rho_0(y_n'))=\lim\limits_{n\to\infty} d_Y(y_n,y_n')=d_Y(y,y')$.\\
-Hence $\Phi$ is an isometry extending $\rho_0$. Its image is complete, hence closed in $Z$, and contains the dense set $\sigma(X)$; therefore $\Phi(Y)=Z$. Uniqueness follows from continuity and density of $\tau(X)$.
+\item[$(\Rightarrow)$] Assume $X$ is complete, and let $(F_n)$ satisfy the stated hypotheses. Choose $x_n\in F_n$. For $m,n\geq N$, descendingness gives $x_m,x_n\in F_N$, so $d(x_m,x_n)\leq\diam F_N$; hence $(x_n)$ is Cauchy. Let $x_n\to x\in X$. For each fixed $N$, the tail $(x_n)_{n\geq N}$ lies in closed $F_N$, so $x\in F_N$. Thus $x\in\bigcap_nF_n$. If $y\in\bigcap_nF_n$, then $d(x,y)\leq\diam F_N$ for all $N$, so $x=y$.
+\item[$(\Leftarrow)$] Assume the stated intersection property. Let $(x_n)$ be Cauchy, set $E_N\defeq\{x_n:n\geq N\}$, and set $F_N\defeq\overline{E_N}$. Then $F_N$ is nonempty, closed, and descending. By Proposition \ref{prop:cauchy-tail-diameters} and Theorem \ref{thm:nested-compact-diameters-singleton}(i), $\diam F_N=\diam E_N\to0$, so $\bigcap_NF_N=\{x\}$ for some $x\in X$. Given $\varepsilon>0$, choose $N$ with $\diam F_N<\varepsilon$. If $n\geq N$, then $x_n,x\in F_N$, so $d(x_n,x)<\varepsilon$. Hence $x_n\to x$, and $X$ is complete.
 \end{enumerate}
-\hlt{Structural Commentary}: Missing limits are installed as equivalence classes of Cauchy approximations.\\
-\hlt{Key Insight}: Completion adds Cauchy limits and is unique over the dense copy of $X$.
+\hlt{Structural Commentary}: Contracting closed nests have one point exactly in complete spaces.\\
+\hlt{Key Insight}: Cauchy tails are the canonical contracting closed sets.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/metric_completion_uniqueness.tikz}
-  \caption{For completions $Y,Z$, the dense-copy isometry
-  $\sigma\tau^{-1}:\tau(X)\to\sigma(X)$ extends uniquely to
-  $\overline{\rho}:Y\cong Z$.}
-  \label{fig:metric-completion-uniqueness}
-\end{figure}
-
+We now turn from contracting closed families to the finite-resolution side of compact metric spaces.
 
 \begin{figure}[H]
   \centering
@@ -343,13 +250,17 @@ Hence $\Phi$ is an isometry extending $\rho_0$. Its image is complete, hence clo
 \end{figure}
 
 \begin{definition} \label{def:totally-bounded-metric-space} \hlt{Total Boundedness}\\
-Let $(X,d)$ be a metric space. It is \hlt{totally bounded} if, $\forall \varepsilon>0$, $\exists$ a finite set $F\subseteq X$ such that $X\subseteq\bigcup\limits_{x\in F}B_\varepsilon(x)$.\\
-$F$ is a finite $\varepsilon$-net. $E\subseteq X$ totally bounded if same condition holds with finite $F\subseteq E$ and $X$.
+Let $(X,d)$ be a metric space and let $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E$ is \hlt{totally bounded} iff $\forall\varepsilon>0$, $\exists x_1,\ldots,x_N\in X$ with $E\subseteq\bigcup_{i=1}^{N}B_\varepsilon(x_i)$.
+\item Such a finite family $\{B_\varepsilon(x_i)\}_{i=1}^{N}$ is a finite $\varepsilon$-\hlt{net} for $E$. If $E\neq\emptyset$, centers may equivalently be chosen in $E$.
+\item The metric space $X$ is \hlt{totally bounded} iff $E=X$ satisfies (i).
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:total-bounded-implies-bounded} \hlt{Total Boundedness Implies Boundedness}\\
-Let $X$ be a metric space.
-If $X$ is totally bounded, then $X$ is bounded.
+Let $X$ be a metric space. If $X$ is totally bounded, then $X$ is bounded.
 \begin{proof}
 If $X=\emptyset$, this is trivial. Otherwise cover $X$ by finitely many $1$-balls $B_1(x_i)$ and fix $x_1$.\\
 Then $d(x,x_1)<1+\max_i d(x_i,x_1)$ for every $x\in X$.\\
@@ -358,21 +269,63 @@ Then $d(x,x_1)<1+\max_i d(x_i,x_1)$ for every $x\in X$.\\
 \end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:compact-complete-totally-bounded} \hlt{Compactness as Complete Finite Resolution}\\
-Let $X$ be a metric space. Then, $X$ is compact $\Longleftrightarrow$ $X$ is complete and totally bounded.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{example} \label{ex:l2-closed-unit-ball-bounded-not-totally-bounded} \hlt{Bounded Need Not Mean Totally Bounded}\\
+In $\ell^2(\mathbb{F})$, let $B\defeq\{\mathbf{x}\in\ell^2:\norm{\mathbf{x}}_2\leq1\}$. Then $B$ is bounded, since $B\subseteq B_2(0)$. It is not totally bounded: the standard unit vectors $e_n\in B$ satisfy $\norm{e_n-e_m}_2=\sqrt2$ for $n\neq m$. If $B\subseteq\bigcup_{i=1}^{N}B_{1/2}(x_i)$, then two distinct $e_n,e_m$ lie in the same $B_{1/2}(x_i)$, so $\norm{e_n-e_m}_2<1$, contradicting $\norm{e_n-e_m}_2=\sqrt2$.\\
+\hlt{Structural Commentary}: Bounded balls can contain infinite separated sets.\\
+\hlt{Key Insight}: Total boundedness forbids an infinite separated family at a fixed scale.
+\end{example}
+
+\begin{definition} \label{def:lebesgue-number-open-cover} \hlt{Lebesgue Number}\\
+Let $(X,d)$ be a metric space and let $\mathcal{U}$ be an open cover of $X$.\\
+A number $\delta>0$ is a \hlt{Lebesgue number} for $\mathcal{U}$ iff $\forall x\in X$, $\exists U\in\mathcal{U}$ such that $B_\delta(x)\subseteq U$.
+\end{definition}
+
+\begin{lemma} \label{lem:lebesgue-covering-lemma} \hlt{Lebesgue Covering Lemma}\\
+Let $(X,d)$ be a metric space.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $(p_k)$ be Cauchy in $X$. By Theorem \ref{thm:cauchy-convergence-criterion}, compactness forces $(p_k)$ to converge, so $X$ is complete.\\
-Given $\varepsilon>0$, cover $\{B_\varepsilon(x):x\in X\}$ has finite subcover $B_\varepsilon(y_1),\ldots,B_\varepsilon(y_m)$; hence $X$ is totally bounded.
-\item[$(\Leftarrow)$] Let $(x_n)\subseteq X$. Choose nested subsequences $(x_k^{(j)})_{k\geq1}$ and points $a_j\in X$ with $x_k^{(j)}\in B_{1/j}(a_j) \ \forall k$.\\
-Diagonal $y_j\defeq x_j^{(j)}$ satisfies $y_k,y_\ell\in B_{1/j}(a_j)$ for $k,\ell\geq j$, so it is Cauchy and converges by completeness; hence $X$ is sequentially compact. Now let $\{U_\alpha\}$ cover $X$. If no $\delta>0$ has every $B_\delta(x)$ contained in some $U_\alpha$, choose $x_n$ with $B_{1/n}(x_n)\nsubseteq U_\alpha \ \forall\alpha$. Passing to $x_{n_k}\to x\in U_{\alpha_0}$, and openness gives $B_{1/n_k}(x_{n_k})\subseteq U_{\alpha_0}$ for large $k$, a contradiction. Thus such $\delta$ exists.\\
-Choose a finite $\delta/2$-net $\{z_i\}_{i=1}^m$ and $\alpha_i$ with $B_\delta(z_i)\subseteq U_{\alpha_i}$; then $\{U_{\alpha_i}\}_{i=1}^m$ covers $X$.
+\item If $X$ is sequentially compact, then every open cover of $X$ has a Lebesgue number.
+\item If $X$ is compact, then every open cover of $X$ has a Lebesgue number.
 \end{enumerate}
-\hlt{Structural Commentary}: Finite nets plus completeness force compactness.\\
-\hlt{Key Insight}: Compact metric spaces are exactly complete spaces visible at every finite scale.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathcal{U}=\{U_\alpha\}_{\alpha\in A}$ be an open cover of sequentially compact $X$. If $\mathcal{U}$ has no Lebesgue number, then $\forall n\geq1$, $\exists x_n\in X$ such that $B_{1/n}(x_n)\nsubseteq U_\alpha$ for all $\alpha\in A$. Choose a subsequence $x_{n_k}\to x\in X$. Since $\mathcal{U}$ covers $X$, choose $\alpha_0$ and $r>0$ with $x\in U_{\alpha_0}$ and $B_r(x)\subseteq U_{\alpha_0}$. For large $k$, $d(x_{n_k},x)<r/2$ and $1/n_k<r/2$; hence $y\in B_{1/n_k}(x_{n_k})$ gives $d(y,x)<r$, so $B_{1/n_k}(x_{n_k})\subseteq U_{\alpha_0}$, a contradiction.
+\item If $X$ is compact, then Theorem \ref{thm:compact-sequential-subsequence} gives sequential compactness.\\
+(i) gives a Lebesgue number for every open cover of $X$.
+\end{enumerate}
+\hlt{Structural Commentary}: Convergent subsequences force uniform cover radii.\\
+\hlt{Key Insight}: Small balls near a convergent subsequence eventually stay in one cover set.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:compact-complete-totally-bounded} \hlt{Compactness as Complete Finite Resolution}\\
+Let $(X,d)$ be a metric space. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X$ is compact;
+\item $X$ is complete and totally bounded;
+\item $X$ is sequentially compact.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ Let $(p_k)$ be Cauchy in $X$. By Theorem \ref{thm:cauchy-convergence-criterion}, $(p_k)$ converges, so $X$ is complete. For $\varepsilon>0$, compactness applied to the cover $\{B_\varepsilon(x):x\in X\}$ gives a finite $\varepsilon$-net, so $X$ is totally bounded.
+\item[$(ii)$]$\Rightarrow (iii)$ Let $(x_n)$ be a sequence in $X$. Using finite $1/j$-ball covers, recursively choose nested infinite subsequences so that the $j$th subsequence lies in some ball $B_{1/j}(a_j)$. Let $y_j$ be the $j$th term of the $j$th subsequence. If $k,\ell\geq j$, nestedness gives $y_k,y_\ell\in B_{1/j}(a_j)$, hence $d(y_k,y_\ell)<2/j$. Thus $(y_j)$ is Cauchy; completeness gives $y_j\to y\in X$, so $(x_n)$ has a convergent subsequence.
+\item[$(iii)$]$\Rightarrow (ii)$ If $X$ is not totally bounded, then for some $\varepsilon>0$ no finite $\varepsilon$-balls cover $X$. Choose $x_1\in X$ and inductively $x_{n+1}\notin\bigcup_{j=1}^{n}B_\varepsilon(x_j)$. Then $d(x_n,x_j)\geq\varepsilon$ for $j<n$, so no subsequence is Cauchy or convergent, contradicting sequential compactness. If $(p_n)$ is Cauchy, sequential compactness gives a convergent subsequence, and Lemma \ref{lem:cauchy-sequence-with-convergent-subsequence} gives convergence of $(p_n)$. Hence $X$ is complete.
+\item[$(ii)$]$\Rightarrow (i)$ By $(ii)\Rightarrow(iii)$, $X$ is sequentially compact. Let $(U_\alpha)_{\alpha\in A}$ be an open cover of $X$, and let $\delta>0$ be a Lebesgue number from Lemma \ref{lem:lebesgue-covering-lemma}. Choose a finite $\delta/2$-net $\{z_1,\ldots,z_m\}$ for $X$. For each $i$, choose $\alpha_i$ with $B_\delta(z_i)\subseteq U_{\alpha_i}$. Since every $x\in X$ lies in some $B_{\delta/2}(z_i)$, the finite family $U_{\alpha_1},\ldots,U_{\alpha_m}$ covers $X$.
+\end{enumerate}
+\hlt{Structural Commentary}: Compactness is complete finite-scale control.\\
+\hlt{Key Insight}: Total boundedness gives Cauchy subsequences; completeness gives limits.
 \end{proof}
 \end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/compact_metric_characterization_triangle.tikz}
+\caption{Equivalent compactness tests in a metric space $X$: finite subcovers for open covers, finite $\varepsilon$-nets with Cauchy limits in $X$, and convergent subsequences for every sequence.}
+  \label{fig:compact-metric-characterization-triangle}
+\end{figure}
 
 \begin{example} \label{ex:open-interval-cover-without-finite-subcover} \hlt{An Open Cover Without a Finite Subcover}\\
 For $x\in(0,1)$, set $O_x\defeq(x/2,1)$. These sets cover $(0,1)$, since $y\in O_x$ whenever $0<x<y<1$.\\

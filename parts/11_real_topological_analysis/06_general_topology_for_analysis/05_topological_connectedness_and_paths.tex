@@ -1,0 +1,107 @@
+\subsection{Topological Connectedness and Paths}
+
+Connectedness is an open-set obstruction to splitting a space into two visible pieces. In general topology it is most naturally phrased by separations and then transported through continuous maps.
+
+\begin{definition} \label{def:topological-connectedness} \hlt{Connected Topological Spaces}\\
+Let $(X,\tau)$ be a topological space, and let $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{separation} of $X$ is a pair $(U,V)$ with $U,V\in\tau$, $U,V\neq\emptyset$, $U\cap V=\emptyset$, and $X=U\cup V$.
+\item $X$ is \hlt{connected} iff no separation of $X$ exists.
+\item $E$ is \hlt{connected} iff $(E,\tau_E)$ is connected, where $\tau_E\defeq\{E\cap U:U\in\tau\}$.\\
+Equivalently, $E$ is disconnected iff $\exists U,V\in\tau$ with $U\cap E\neq\emptyset$, $V\cap E\neq\emptyset$, $E\subseteq U\cup V$, and $E\cap U\cap V=\emptyset$.
+\end{enumerate}
+\hlt{Key Insight}: Connectedness forbids a nonempty disjoint open split.
+\end{definition}
+
+\begin{proposition} \label{prop:topological-connected-clopen-characterization} \hlt{Connectedness and Clopen Sets}\\
+Let $(X,\tau)$ be a topological space. Then $X$ is connected iff every clopen $A\subseteq X$ satisfies $A=\emptyset$ or $A=X$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $A\subseteq X$ is clopen, nonempty, and proper, then $(A,X\setminus A)$ is a separation of $X$, impossible.
+\item[$(\Leftarrow)$] If $(U,V)$ separates $X$, then $U=X\setminus V$ is clopen, nonempty, and proper, impossible.
+\end{enumerate}
+\hlt{Structural Commentary}: Complements convert separations into clopen sets.\\
+\hlt{Key Insight}: Connected means no nontrivial clopen subset.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:continuous-image-connected-topological} \hlt{Continuous Images of Connected Spaces Are Connected}\\
+Let $f:X\to Y$ be continuous. If $X$ is connected, then $f(X)$ is connected in the subspace topology.
+\begin{proof}
+Let $g:X\to f(X)$ be $f$ with codomain restricted to $f(X)$. If $(U,V)$ separates $f(X)$, then $g^{-1}(U)$ and $g^{-1}(V)$ are nonempty disjoint open subsets of $X$ with union $X$, contradicting connectedness.\\
+\hlt{Structural Commentary}: Restrict the codomain to make the image map surjective.\\
+\hlt{Key Insight}: Separations pull back by continuity.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:topological-intermediate-value-property} \hlt{Intermediate Value Property}\\
+A space $X$ has the \hlt{intermediate value property} iff $f(X)$ is an interval for every continuous $f:X\to\R$.
+\end{definition}
+
+\begin{theorem} \label{thm:topological-connected-iff-ivp} \hlt{Connectedness and the Intermediate Value Property}\\
+Let $X$ be a topological space. Then $X$ is connected iff $X$ has the intermediate value property.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f:X\to\R$ is continuous, then $f(X)$ is connected (Proposition \ref{prop:continuous-image-connected-topological}), hence an interval (Theorem \ref{thm:connected-subsets-of-real-line-interval-property}).
+\item[$(\Leftarrow)$] If $(U,V)$ separates $X$, define $f:X\to\R$ by $f|_U=0$ and $f|_V=1$.\\
+Since $U,V$ are clopen, $f$ is continuous, but $f(X)=\{0,1\}$ is not an interval.
+\end{enumerate}
+\hlt{Structural Commentary}: Separations produce continuous two-valued tests.\\
+\hlt{Key Insight}: Intermediate values are connectedness seen by $\R$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:connected-union-common-point} \hlt{Unions Through a Common Point}\\
+Let $\{C_\alpha\}_{\alpha\in A}$ be connected subsets of a topological space $X$ with $\bigcap\limits_{\alpha\in A}C_\alpha\neq\emptyset$. Then $C\defeq\bigcup\limits_{\alpha\in A}C_\alpha$ is connected.
+\begin{proof}
+Choose $p\in\bigcap\limits_{\alpha\in A}C_\alpha$. Suppose $(U,V)$ separates $C$ and $p\in U$. For each $\alpha$, the connected set $C_\alpha$ meets $U$ at $p$, so $C_\alpha\cap V=\emptyset$. Hence $V\cap C=\emptyset$, contradicting that $V$ is a nonempty side of the separation.\\
+\hlt{Structural Commentary}: Each connected piece must stay on the side containing the shared point.\\
+\hlt{Key Insight}: A common point blocks separation.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:connected-closure-sandwich} \hlt{Connectedness Between a Set and Its Closure}\\
+Let $A\subseteq B\subseteq\overline{A}$ in a topological space $X$. If $A$ is connected, then $B$ and $\overline{A}$ are connected.
+\begin{proof} Suppose $(P,Q)$ separates $B$. Since $A$ is connected, $A\subseteq P$ or $A\subseteq Q$; assume $A\subseteq P$.\\
+If $q\in Q$, choose $O\in\tau_X$ with $q\in O$ and $O\cap B\subseteq Q$.\\
+Since $q\in B\subseteq\overline{A}$, $O\cap A\neq\emptyset$, contradicting $A\subseteq P$ and $P\cap Q=\emptyset$. Thus $Q=\emptyset$, impossible.\\
+\hlt{Structural Commentary}: Relative open separation near $\overline{A}$ must meet $A$.\\
+\hlt{Key Insight}: Closure points cannot form a new component.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:topological-path-connected} \hlt{Path-Connected and Arcwise Connected Spaces}\\
+A topological space $X$ is \hlt{path-connected}, or \hlt{arcwise connected}, iff for all $u,v\in X$ there exists continuous $\gamma:[0,1]\to X$ with $\gamma(0)=u$ and $\gamma(1)=v$.
+\end{definition}
+
+\begin{theorem} \label{thm:path-connected-implies-connected-topological} \hlt{Path-Connected Spaces Are Connected}\\
+Let $X$ be path-connected. Then $X$ is connected.
+\begin{proof} Suppose $(U,V)$ separates $X$. Choose $u\in U$, $v\in V$, and a path $\gamma:[0,1]\to X$ from $u$ to $v$.\\
+By Proposition \ref{prop:continuous-image-connected-topological}, $\gamma([0,1])$ is connected, but $(U\cap\gamma([0,1]),V\cap\gamma([0,1]))$ separates it, a contradiction.\\
+\hlt{Structural Commentary}: A path imports interval connectedness into $X$.\\
+\hlt{Key Insight}: Paths cannot cross a separation.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:connected-open-euclidean-path-connected} \hlt{Connected Open Sets in Euclidean Space Are Path-Connected}\\
+Let $O\subseteq\R^n$ be open and connected. Then any $x,y\in O$ can be joined in $O$ by a finite polygonal arc.
+\begin{proof} Fix $x_0\in O$. Write $a\sim b$ if $a,b\in O$ joined in $O$ by finite polygonal arc. Set $C\defeq\{x\in O:x_0\sim x\}$.\\
+Then $x_0\in C$. If $B(x,r)\subseteq O$, any two points of $B(x,r)$ are joined by a segment, so $B(x,r)\subseteq C$ when $x\in C$, and $B(x,r)\cap C=\emptyset$ when $x\notin C$. Thus $C$ and $O\setminus C$ are open in $O$; connectedness gives $C=O$.\\
+\hlt{Structural Commentary}: Polygonal reachability is both open and closed in an open set.\\
+\hlt{Key Insight}: Local line segments make one component all of $O$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:topologist-sine-curve-connected-not-path-connected} \hlt{A Connected Space That Is Not Path-Connected}\\
+Let $G\defeq\{(x,\sin(1/x)):0<x\leq1\}$, $L\defeq\{0\}\times[-1,1]$, and $T\defeq G\cup L\subseteq\R^2$. Then $T$ is connected but not path-connected. Since $G$ is the continuous image of connected $(0,1]$ and $T=\overline{G}$, Proposition \ref{prop:connected-closure-sandwich} gives connectedness. No path can join $L$ to $G$ without forcing an impossible one-sided limit of $\sin(1/x)$ as $x\to0^+$.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/topologist_sine_curve_connected_not_path.tikz}
+  \caption{Topologist's sine curve: \textcolor{red!75!black}{$y=\sin(1/x)$} accumulates on \textcolor{blue!70!black}{$\{0\}\times[-1,1]$}; connected, not path-connected.}
+  \label{fig:topologist-sine-curve-connected-not-path}
+\end{figure}

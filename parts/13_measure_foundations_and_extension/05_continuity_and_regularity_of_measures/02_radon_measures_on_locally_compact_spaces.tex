@@ -1,0 +1,259 @@
+\subsection{Radon Measures on Locally Compact Spaces}
+
+Radon measure theory is where topology and measure start determining one another. The topological input is a locally compact Hausdorff space; the measure-theoretic output is a Borel measure that can be recovered from open neighborhoods, compact subsets, and compactly supported continuous test functions.
+
+\begin{definition} \label{def:locally-compact-borel-cc-radon-setup} \hlt{Locally Compact Borel Setup}\\
+Let $(X,\mathcal{T})$ be a topological space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X$ is \hlt{locally compact} if every $x\in X$ admits $U\in\mathcal{T}$ with $x\in U$ and $\overline{U}$ compact.
+\item The \hlt{Borel $\sigma$-algebra} is $\mathcal{B}(X)\defeq\sigma(\mathcal{T})$.
+\item For $f:X\to\R$, define $\operatorname{supp}f\defeq\overline{\{x\in X:f(x)\neq0\}}$.
+\item $C_c(X)$ is the subspace of $C(X,\R)$ consisting of functions with compact support.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:lch-compact-neighborhood-shrinking} \hlt{Compact Neighborhood Shrinking}\\
+Let $X$ be locally compact and Hausdorff, $K\subseteq X$ compact, and $O\subseteq X$ open with $K\subseteq O$.\\
+Then there is an open $V\subseteq X$ such that $K\subseteq V$, $\overline{V}\subseteq O$, and $\overline{V}$ is compact.
+\begin{proof} For each $x\in K$, choose open $U_x\ni x$ with $\overline{U_x}$ compact.\\
+Normality of the compact Hausdorff space $\overline{U_x}$ gives a relatively open $W_x\ni x$ with $\overline{W_x}^{\,\overline{U_x}}\subseteq O\cap U_x$.\\
+Choose open $A_x\subseteq X$ with $W_x=A_x\cap\overline{U_x}$ and set $V_x\defeq A_x\cap U_x$. Then $x\in V_x$ and $\overline{V_x}\subseteq\overline{W_x}^{\,\overline{U_x}}\subseteq O\cap U_x$.\\
+The family $(V_x)_{x\in K}$ covers $K$, so $K\subseteq\bigcup_{i=1}^nV_{x_i}$ for some $x_1,\ldots,x_n\in K$.\\
+Set $V\defeq\bigcup_{i=1}^nV_{x_i}$. Then $\overline{V}=\bigcup_{i=1}^n\overline{V_{x_i}}\subseteq O$, and $\overline{V}$ is compact as a finite union of compact sets.\\
+\hlt{Structural Commentary}: Shrink each point neighborhood inside $O$, then take a finite union.\\
+\hlt{Key Insight}: Compactness converts local shrinkings into one global compact neighborhood.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:lch-compactly-supported-cutoff} \hlt{Compactly Supported Cutoff}\\
+Let $X$ be locally compact and Hausdorff, $K\subseteq X$ compact, and $O\subseteq X$ open with $K\subseteq O$.\\
+Then there is $f\in C_c(X)$ such that $0\leq f\leq1$ on $X$, $f|_K=1$, and $\operatorname{supp}f\subseteq O$.
+\begin{proof} Choose open $V\subseteq X$ as in Proposition \ref{prop:lch-compact-neighborhood-shrinking}, so $K\subseteq V$, $\overline{V}$ is compact, and $\overline{V}\subseteq O$.\\
+The disjoint sets $K$ and $\overline{V}\setminus V$ are closed in the compact Hausdorff space $\overline{V}$.\\
+By Urysohn's lemma, Theorem \ref{thm:urysohn-lemma-normal-space}, there is $f_0:\overline{V}\to[0,1]$ with $f_0|_K=1$ and $f_0|_{\overline{V}\setminus V}=0$.\\
+Define $f:X\to[0,1]$ by $f|_{\overline{V}}=f_0$ and $f|_{X\setminus V}=0$.\\
+Closed-set pasting gives $f\in C_c(X)$ with $f|_K=1$ and $\operatorname{supp}f\subseteq\overline{V}\subseteq O$.\\
+\hlt{Structural Commentary}: Apply Urysohn separation on $\overline{V}$ and extend by zero.\\
+\hlt{Key Insight}: The compact neighborhood forces the extension to have compact support.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:lch-finite-partition-of-unity-compact-set} \hlt{Finite Partition of Unity on a Compact Set}\\
+Let $X$ be locally compact and Hausdorff, $K\subseteq X$ compact, and $O_1,\ldots,O_n\subseteq X$ open with $K\subseteq\bigcup_{i=1}^nO_i$.\\
+Then there are $\varphi_1,\ldots,\varphi_n\in C_c(X)$ such that $0\leq\varphi_i\leq1$, $\operatorname{supp}\varphi_i\subseteq O_i$ for every $i$, and $(\sum_{i=1}^n\varphi_i)|_K=1$.
+\begin{proof}
+For each $x\in K$, choose $i(x)$ with $x\in O_{i(x)}$ and, by Proposition \ref{prop:lch-compact-neighborhood-shrinking}, an open $V_x\ni x$ with $\overline{V_x}$ compact and $\overline{V_x}\subseteq O_{i(x)}$. Choose $x_1,\ldots,x_m\in K$ with $K\subseteq\bigcup_{j=1}^mV_{x_j}$, write $i_j\defeq i(x_j)$, and set $U_i\defeq\bigcup_{\{j:i_j=i\}}V_{x_j}$.\\
+Then $K\subseteq\bigcup_iU_i$, each $U_i$ is open, and $\overline{U_i}$ is compact with $\overline{U_i}\subseteq O_i$.\\
+For $U_i\neq\emptyset$, Proposition \ref{prop:lch-compactly-supported-cutoff} gives $f_i\in C_c(X)$ with $0\leq f_i\leq1$, $f_i|_{\overline{U_i}}=1$, $\operatorname{supp}f_i\subseteq O_i$; set $f_i=0$ otherwise. Applying the same proposition to $K\subseteq\bigcup_iU_i$ gives $h\in C_c(X)$ with $0\leq h\leq1$, $h|_K=1$, and $\operatorname{supp}h\subseteq\bigcup_iU_i$.\\
+Set $g\defeq\sum_{i=1}^nf_i$ and $d\defeq g+1-h$. Since $g\geq1$ on $\operatorname{supp}h$ and $h=0$ off $\operatorname{supp}h$, $d\geq1$. Hence $\varphi_i\defeq f_i/d$ belongs to $C_c(X)$, satisfies $0\leq\varphi_i\leq1$, and has $\operatorname{supp}\varphi_i\subseteq O_i$. On $K$, $h=1$ and $g\geq1$, so $d=g$ and $(\sum_{i=1}^n\varphi_i)|_K=1$.\\
+\hlt{Structural Commentary}: Build finitely many local cutoffs, then normalize their sum.\\
+\hlt{Key Insight}: The auxiliary cutoff keeps the denominator positive where local cutoffs vanish.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:lch-equivalent-compact-cutoff-package} \hlt{Locally Compact Separation and Cutoff Package}\\
+Let $X$ be Hausdorff. The following are equivalent.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X$ is locally compact.
+\item For every compact $K\subseteq O\in\mathcal{T}$, there is open $V\supseteq K$ with $\overline{V}$ compact and $\overline{V}\subseteq O$.
+\item For every compact $K\subseteq O\in\mathcal{T}$, there is $f\in C_c(X)$ with $0\leq f\leq1$, $f|_K=1$, and $f|_{X\setminus O}=0$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ Proposition \ref{prop:lch-compact-neighborhood-shrinking}.
+\item[$(i)$]$\Rightarrow (iii)$ Proposition \ref{prop:lch-compactly-supported-cutoff}.
+\item[$(ii)$]$\Rightarrow (i)$ For $x\in X$, apply (ii) to $K=\{x\}$ and $O=X$; the resulting open $V\ni x$ has compact closure.
+\item[$(iii)$]$\Rightarrow (i)$ For $x\in X$, apply (iii) to $K=\{x\}$ and $O=X$, and set $U\defeq f^{-1}((1/2,3/2))$.\\
+Then $x\in U$ and $\overline{U}\subseteq f^{-1}([1/2,3/2])\subseteq\operatorname{supp}f$, so $\overline{U}$ is compact.
+\end{enumerate}
+\hlt{Structural Commentary}: Compact cutoffs recover compact neighborhoods through level sets.\\
+\hlt{Key Insight}: Compact-neighborhood shrinking and compactly supported cutoffs are equivalent local forms of local compactness.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:lch-metric-distance-cutoff} \hlt{Metric Cutoff Formula}\\
+Let $X$ be locally compact and Hausdorff, assume that $\rho$ induces its topology.\\
+Let $K\subseteq O\subseteq X$ with $K$ compact and $O$ open, and choose open $U\subseteq X$ with $K\subseteq U$, $\overline{U}$ compact, and $\overline{U}\subseteq O$.\\
+For every nonempty $A\subseteq X$, set $\operatorname{dist}_A(x)\defeq\inf_{a\in A}\rho(x,a)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Empty Set}: If $K=\emptyset$, set $f\defeq0$.
+\item \hlt{Trivial Complement}: If $K\neq\emptyset$ and $X\setminus U=\emptyset$, set $f\defeq1$.
+\item \hlt{Distance Ratio}: Otherwise, set $f(x)\defeq\frac{\operatorname{dist}_{X\setminus U}(x)}{\operatorname{dist}_{X\setminus U}(x)+\operatorname{dist}_{K}(x)}$.
+\end{enumerate}
+In case (iii), $K$ and $X\setminus U$ are disjoint closed sets, so the denominator is positive; continuity of distance functions gives $f\in C(X,[0,1])$. In all cases, $f\in C_c(X)$, $f|_K=1$, $f|_{X\setminus U}=0$, and $\operatorname{supp}f\subseteq\overline{U}\subseteq O$.\\
+\hlt{Key Insight}: Metric distances give an explicit compactly supported cutoff.
+\end{method}
+
+\begin{proposition} \label{prop:alexandroff-one-point-compactification} \hlt{Alexandroff One-Point Compactification}\\
+Let $(X,\mathcal{T})$ be locally compact and Hausdorff, let $\omega\notin X$, and write $\mathcal{K}(X)$ for the compact subsets of $X$.\\
+Set $X^\ast\defeq X\cup\{\omega\}$ and $\mathcal{T}^\ast\defeq\mathcal{T}\cup\{X^\ast\setminus K:K\in\mathcal{K}(X)\}$. Let $\iota:X\hookrightarrow X^\ast$ be the inclusion.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{T}^\ast$ is a topology on $X^\ast$, $(X^\ast,\mathcal{T}^\ast)$ is compact Hausdorff, and $\iota:X\to X^\ast\setminus\{\omega\}$ is a homeomorphism.
+\item Every $h\in C(K,\R)$ with $K\subseteq X$ compact has an extension $\widetilde{h}\in C(X,\R)$ satisfying $\widetilde{h}|_K=h$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[(i)] Compact subsets of the Hausdorff space $X$ are closed.\\
+Thus $U\setminus C\in\mathcal{T}$ and $(X^\ast\setminus C)\cap(X^\ast\setminus D)=X^\ast\setminus(C\cup D)$ for $U\in\mathcal{T}$ and $C,D\in\mathcal{K}(X)$.\\
+If $\omega\notin\bigcup_\alpha U_\alpha$, then $\bigcup_\alpha U_\alpha\in\mathcal{T}$; otherwise choose $U_{\alpha_0}=X^\ast\setminus C$, so $X^\ast\setminus\bigcup_\alpha U_\alpha$ is closed in $C$ and hence compact. Thus $\mathcal{T}^\ast$ is a topology.\\
+Any open cover contains $X^\ast\setminus C$ for some $C\in\mathcal{K}(X)$, and finitely many remaining members cover $C$; hence $X^\ast$ is compact. Points of $X$ are already separated.\\
+For $x\in X$, choose open $V\ni x$ with $\overline{V}$ compact; then $V$ and $X^\ast\setminus\overline{V}$ separate $x$ and $\omega$.\\
+Finally, $\mathcal{T}^\ast|_X=\mathcal{T}$ since $X\setminus C\in\mathcal{T}$ for $C\in\mathcal{K}(X)$, so $\iota$ is a homeomorphism onto $X^\ast\setminus\{\omega\}$.
+\item[(ii)] By (i), $X^\ast$ is compact Hausdorff and hence normal. The compact set $K$ is closed in $X^\ast$, and $h$ is bounded.\\
+Tietze extension, Theorem \ref{thm:tietze-extension-bounded-normal-space}, gives $H\in C(X^\ast,\R)$ with $H|_K=h$. Set $\widetilde{h}\defeq H|_X$.
+\end{enumerate}
+\hlt{Structural Commentary}: Neighborhoods of $\omega$ are complements of compact subsets of $X$.\\
+\hlt{Key Insight}: Compactification transfers extension problems to a compact Hausdorff space.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:radon-measure-and-radon-premeasure} \hlt{Radon Measures and Radon Premeasures}\\
+Let $(X,\mathcal{T})$ be a topological space, and write $\mathcal{K}(X)$ for its compact subsets.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\nu:\mathcal{B}(X)\to[0,+\infty]$ is a \hlt{Radon measure} if $\nu(K)<+\infty$ $\forall K\in\mathcal{K}(X)$, $\nu(E)=\inf\{\nu(O):E\subseteq O,\ O\in\mathcal{T}\}$ $\forall E\in\mathcal{B}(X)$, and $\nu(O)=\sup\{\nu(K):K\subseteq O,\ K\in\mathcal{K}(X)\}$ $\forall O\in\mathcal{T}$.
+\item $\mu:\mathcal{T}\to[0,+\infty]$ is a \hlt{Radon premeasure} if $\mu(U)<+\infty$ $\forall U\in\mathcal{T}$ with $\overline{U}\in\mathcal{K}(X)$ and\\
+$\mu(O)=\sup\{\mu(U):U\in\mathcal{T},\ \overline{U}\in\mathcal{K}(X),\ \overline{U}\subseteq O\}$ $\forall O\in\mathcal{T}$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma} \label{lem:topological-premeasure-open-envelope} \hlt{Open Envelope for a Topological Premeasure}\\
+Let $\mu:\mathcal{T}\to[0,+\infty]$ be a premeasure. For $E\subseteq X$, define $\mu^\ast(E)\defeq\inf\{\sum_{j=1}^{\infty}\mu(U_j):E\subseteq\bigcup_{j=1}^{\infty}U_j,\ U_j\in\mathcal{T}\}$.\\
+Then $\mu^\ast(E)=\inf\{\mu(U):E\subseteq U,\ U\in\mathcal{T}\}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Set $I(E)\defeq\inf\{\mu(U):E\subseteq U,\ U\in\mathcal{T}\}$. Every $U\in\mathcal{T}$ with $E\subseteq U$ is a one-set cover, so $\mu^\ast(E)\leq I(E)$.
+\item[$(\Leftarrow)$] If $(U_j)_{j\geq1}\subseteq\mathcal{T}$ covers $E$, then $U\defeq\bigcup_{j=1}^{\infty}U_j$ belongs to $\mathcal{T}$ and satisfies $\mu(U)\leq\sum_{j=1}^{\infty}\mu(U_j)$.\\
+Hence $I(E)\leq\sum_{j=1}^{\infty}\mu(U_j)$; taking the infimum over covers gives $I(E)\leq\mu^\ast(E)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Replace each countable cover by its union.\\
+\hlt{Key Insight}: Subadditivity makes the union no more expensive than the cover.
+\end{proof}
+\end{lemma}
+
+\begin{lemma} \label{lem:topological-premeasure-open-measurability-test} \hlt{Open-Set Test for Caratheodory Measurability}\\
+Let $\mu:\mathcal{T}\to[0,+\infty]$ be a premeasure, let $\mu^\ast$ be the outer measure induced by open covers, and let $E\subseteq X$.\\
+Assume $\mu(O)\geq\mu^\ast(O\cap E)+\mu^\ast(O\setminus E)$ for every $O\in\mathcal{T}$ with $\mu(O)<+\infty$. Then $E$ is $\mu^\ast$-measurable.
+\begin{proof} Fix $A\subseteq X$. Outer subadditivity gives $\mu^\ast(A)\leq\mu^\ast(A\cap E)+\mu^\ast(A\setminus E)$.\\
+If $\mu^\ast(A)=+\infty$, the reverse inequality is automatic. Otherwise, for $\varepsilon>0$, Lemma \ref{lem:topological-premeasure-open-envelope} gives $O\in\mathcal{T}$ with $A\subseteq O$ and $\mu(O)<\mu^\ast(A)+\varepsilon$, so $\mu^\ast(A\cap E)+\mu^\ast(A\setminus E)\leq\mu^\ast(O\cap E)+\mu^\ast(O\setminus E)\leq\mu(O)<\mu^\ast(A)+\varepsilon$.\\
+Letting $\varepsilon\downarrow0$ gives the reverse inequality, hence the Caratheodory criterion.\\
+\hlt{Structural Commentary}: Approximate $A$ by an open envelope of nearly equal outer mass.\\
+\hlt{Key Insight}: Open-set splitting propagates to all sets through outer regularity.
+\end{proof}
+\end{lemma}
+
+\begin{proposition} \label{prop:radon-premeasure-open-sets-measurable} \hlt{Open Sets from a Radon Premeasure Are Measurable}\\
+Let $X$ be locally compact and Hausdorff, $\mu:\mathcal{T}\to[0,+\infty]$ Radon premeasure,  $\mu^\ast$ open-cover outer measure.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mu^\ast|_{\mathcal{T}}=\mu$.
+\item Every $V\in\mathcal{T}$ is $\mu^\ast$-measurable.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[(i)] The one-set cover gives $\mu^\ast(V)\leq\mu(V)$ for $V\in\mathcal{T}$.\\
+Every $(U_j)_{j\geq1}\subseteq\mathcal{T}$ covering $V$ satisfies $\mu(V)\leq\mu(\bigcup_jU_j)\leq\sum_j\mu(U_j)$, so $\mu(V)\leq\mu^\ast(V)$.
+\item[(ii)] Let $V,O\in\mathcal{T}$ with $\mu(O)<+\infty$.\\
+For $\varepsilon>0$, choose $U\in\mathcal{T}$ with $\overline{U}$ compact, $\overline{U}\subseteq O\cap V$, and $\mu(U)>\mu(O\cap V)-\varepsilon$.\\
+Since $U$ and $O\setminus\overline{U}$ are disjoint open subsets of $O$ and $O\setminus V\subseteq O\setminus\overline{U}$,\\
+$\mu(O)\geq\mu(U)+\mu(O\setminus\overline{U})\geq\mu^\ast(O\cap V)-\varepsilon+\mu^\ast(O\setminus V)$ by (i). Let $\varepsilon\downarrow0$ and apply Lemma \ref{lem:topological-premeasure-open-measurability-test}.
+\end{enumerate}
+\hlt{Structural Commentary}: Inner approximation leaves an open remainder containing $O\setminus V$.\\
+\hlt{Key Insight}: Open inner regularity yields Caratheodory splitting.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:radon-premeasure-caratheodory-extension} \hlt{Radon Premeasure Extension}\\
+Let $X$ be locally compact and Hausdorff, let $\mu:\mathcal{T}\to[0,+\infty]$ be a Radon premeasure, let $\mu^\ast$ be its open-cover outer measure, write $\mathcal{K}(X)$ for the compact subsets of $X$, and set $\widehat{\mu}\defeq\mu^\ast|_{\mathcal{B}(X)}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\widehat{\mu}|_{\mathcal{T}}=\mu$.
+\item $\widehat{\mu}$ is a Radon measure on $\mathcal{B}(X)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[(i)] For $O\in\mathcal{T}\subseteq\mathcal{B}(X)$, $\widehat{\mu}(O)=\mu^\ast(O)=\mu(O)$ by Proposition \ref{prop:radon-premeasure-open-sets-measurable}; hence $\widehat{\mu}|_{\mathcal{T}}=\mu$.
+\item[(ii)] Let $\mathcal{C}_{\mu^\ast}$ be the Caratheodory $\sigma$-algebra of $\mu^\ast$. Proposition \ref{prop:radon-premeasure-open-sets-measurable} gives $\mathcal{T}\subseteq\mathcal{C}_{\mu^\ast}$, hence $\mathcal{B}(X)=\sigma(\mathcal{T})\subseteq\mathcal{C}_{\mu^\ast}$.\\
+As $\mu^\ast|_{\mathcal{C}_{\mu^\ast}}$ is measure, so is $\widehat{\mu}$. Lemma \ref{lem:topological-premeasure-open-envelope}, (i) give $\widehat{\mu}(E)=\inf\{\widehat{\mu}(O):E\subseteq O,\ O\in\mathcal{T}\}$ for $E\in\mathcal{B}(X)$.\\
+For $K\in\mathcal{K}(X)$, Proposition \ref{prop:lch-compact-neighborhood-shrinking} gives $K\subseteq U\in\mathcal{T}$ with $\overline{U}\in\mathcal{K}(X)$, so $\widehat{\mu}(K)\leq\widehat{\mu}(U)=\mu(U)<+\infty$.\\
+For $O\in\mathcal{T}$, inner regularity and (i) give\\
+$\widehat{\mu}(O)=\sup\{\mu(U):U\in\mathcal{T},\ \overline{U}\in\mathcal{K}(X),\ \overline{U}\subseteq O\}\leq\sup\{\widehat{\mu}(K):K\in\mathcal{K}(X),\ K\subseteq O\}\leq\widehat{\mu}(O)$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\mathcal{T}\subseteq\mathcal{C}_{\mu^\ast}$ yields $\widehat{\mu}$ on $\mathcal{B}(X)$; $K\in\mathcal{K}(X)\Rightarrow\widehat{\mu}(K)<+\infty$.\\
+\hlt{Key Insight}: Open inner regularity becomes compact inner regularity after extension.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:radon-measures-determined-by-cc-integrals} \hlt{Radon Measures Determined by $C_c(X)$}\\
+Let $X$ be locally compact and Hausdorff, and let $\mu_1,\mu_2$ be Radon measures on $\mathcal{B}(X)$.\\
+If $\int_X f\,d\mu_1=\int_X f\,d\mu_2$ for every $f\in C_c(X)$, then $\mu_1=\mu_2$.
+\begin{proof} Write $\mathcal{K}(X)$ for the compact subsets of $X$. Let $K\in\mathcal{K}(X)$ and $\varepsilon>0$.\\
+By outer regularity, choose $O\in\mathcal{T}$ with $K\subseteq O$ and $\mu_i(O\setminus K)<\varepsilon$ for $i=1,2$.\\
+Choose $f\in C_c(X)$ with $0\leq f\leq1$, $f|_K=1$, and $\operatorname{supp}f\subseteq O$, and set $r_i\defeq\int_{O\setminus K}f\,d\mu_i$.\\
+Then $0\leq r_i<\varepsilon$ and $\int_X f\,d\mu_i=\mu_i(K)+r_i$, so $|\mu_1(K)-\mu_2(K)|=|r_1-r_2|<\varepsilon$.\\
+Hence $\mu_1=\mu_2$ on $\mathcal{K}(X)$, and inner then outer regularity give $\mu_1|_{\mathcal{T}}=\mu_2|_{\mathcal{T}}$ and $\mu_1=\mu_2$ on $\mathcal{B}(X)$.\\
+\hlt{Structural Commentary}: $C_c(X)$ identifies $\mu_1$ and $\mu_2$ on $\mathcal{K}(X)$.\\
+\hlt{Key Insight}: $\mathcal{K}(X)\to\mathcal{T}\to\mathcal{B}(X)$ by Radon regularity.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/riesz_markov_open_set_measure_flow.tikz}
+  \caption{Riesz--Markov: local compactness supplies cutoffs; \textcolor{orange!75!black}{orange} denotes Caratheodory extension.}
+  \label{fig:riesz-markov-open-set-measure-flow}
+\end{figure}
+
+\begin{theorem} \label{thm:riesz-markov-positive-functional-cc} \hlt{Riesz--Markov Theorem on $C_c(X)$}\\
+Let $X$ be locally compact and Hausdorff, $I:C_c(X)\to\R$ linear with $I(f)\geq0$ $\forall f\in C_c(X)$ satisfying $f\geq0$.\\
+Then $\exists$ a unique Radon measure $\widehat{\mu}$ on $\mathcal{B}(X)$ such that $I(f)=\int_X f\,d\widehat{\mu}$ $\forall f\in C_c(X)$.
+\begin{proof}
+For $O\in\mathcal{T}$, define $\mu(O)\defeq\sup\limits\{I(f):f\in C_c(X),\ 0\leq f\leq1,\ \operatorname{supp}f\subseteq O\}$ and $\mu(\emptyset)\defeq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Premeasure}: If $O\subseteq\bigcup\limits_{j=1}^\infty O_j$ and $f$ is admissible for $\mu(O)$, a finite partition $(\varphi_\ell)_{\ell=1}^m$ subordinate to a finite subcover of $\operatorname{supp}f$ gives $f=\sum\limits_{\ell=1}^m f\varphi_\ell$ and $I(f)\leq\sum\limits_{\ell=1}^m\mu(O_{j_\ell})\leq\sum\limits_{j=1}^\infty\mu(O_j)$, so $\mu$ is countably subadditive. For disjoint $O_1,O_2\in\mathcal{T}$, countable subadditivity gives one inequality and admissible $f_1,f_2$ give\\
+$\mu(O_1)+\mu(O_2)\leq\mu(O_1\cup O_2)$, hence finite additivity.
+\item \hlt{Radon Regularity}: For $a<\mu(O)$, choose admissible $f$ with $I(f)>a$ and $U\in\mathcal{T}$ with $\operatorname{supp}f\subseteq U\subseteq\overline{U}\subseteq O$ and $\overline{U}$ compact. Then $\mu(U)>a$, proving inner regularity. If $\overline{U}$ is compact, a cutoff $g\in C_c(X)$ with $g|_{\overline{U}}=1$ dominates every admissible $f$ for $\mu(U)$, so $\mu(U)\leq I(g)<+\infty$. Thus $\mu$ is a Radon premeasure.
+\item \hlt{Extension}: Stages (i)--(ii) make $\mu$ a Radon premeasure on $\mathcal{T}$. Theorem \ref{thm:radon-premeasure-caratheodory-extension} applies to its open-cover outer measure and yields the Radon measure $\widehat{\mu}\defeq\mu^\ast|_{\mathcal{B}(X)}$ with $\widehat{\mu}|_{\mathcal{T}}=\mu$.
+\item \hlt{Identification}: Let $0\leq f\leq1$ belong to $C_c(X)$, choose $O\in\mathcal{T}$ with $\operatorname{supp}f\subseteq O$ and $\overline{O}$ compact, and set $\psi_k\defeq\min\{1,\max\{0,nf-(k-1)\}\}$, $O_0\defeq O$, $O_{n+1}\defeq\emptyset$, $O_k\defeq\{x\in O:f(x)>\frac{k-1}{n}\}$ for $1\leq k\leq n$.\\
+Then $f=\frac{1}{n}\sum\limits_{k=1}^n\psi_k$, $\operatorname{supp}\psi_k\subseteq O_{k-1}$, and $\psi_k|_{O_{k+1}}=1$, so $\mu(O_{k+1})\leq I(\psi_k)\leq\mu(O_{k-1})$\\
+and $\mu(O_{k+1})\leq\int_X\psi_k\,d\widehat{\mu}\leq\mu(O_{k-1})$. Therefore $|I(f)-\int_X f\,d\widehat{\mu}|\leq\frac{1}{n}\sum\limits_{k=1}^n(\mu(O_{k-1})-\mu(O_{k+1}))\leq\frac{2\mu(O)}{n}$.\\
+Letting $n\to\infty$, scaling, and $f=f^+-f^-$ give $I(f)=\int_X f\,d\widehat{\mu}$ for every $f\in C_c(X)$.\\
+Uniqueness follows from Theorem \ref{thm:radon-measures-determined-by-cc-integrals}.
+\end{enumerate}
+\hlt{Structural Commentary}: Open-set contents and compactly supported cutoffs build the Radon measure before identifying its integral.\\
+\hlt{Key Insight}: Layer functions recover $I$ from $\widehat{\mu}$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:lusin-radon-locally-compact} \hlt{Lusin Approximation for Radon Measures}\\
+Let $X$ be locally compact Hausdorff, let $\mu$ be Radon on $\mathcal{B}(X)$, let $f:X\to\R$ be Borel, and set $A\defeq\{f\neq0\}$ with $\mu(A)<+\infty$. For every $\varepsilon>0$, there exist $X_0\in\mathcal{B}(X)$ and $g\in C_c(X)$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $g=f$ on $X_0$.
+\item $\mu(X\setminus X_0)<\varepsilon$.
+\end{enumerate}
+\begin{proof} Set $\delta\defeq\varepsilon/4$. Choose $M>0$ with $\mu(A_M)<\delta$, where $A_M\defeq A\cap\{|f|>M\}$, and put $B\defeq A\setminus A_M$.\\
+For $n\geq1$, choose finite-valued Borel $s_n:B\to[-M,M]$ with $\norm{s_n-f}_{\infty,B}\leq\frac{1}{n}$.\\
+Let $s_n(B)=\{a_{n,1},\ldots,a_{n,m_n}\}$ and $E_{n,j}\defeq s_n^{-1}(\{a_{n,j}\})$. Inner regularity gives compact $K_{n,j}\subseteq E_{n,j}$, $\mu(E_{n,j}\setminus K_{n,j})<\frac{\delta}{2^n m_n}$. Set $F_n\defeq\bigcup\limits_{j=1}^{m_n}K_{n,j}$ and $F\defeq\bigcap\limits_{n=1}^{\infty}F_n$.\\
+Then $F$ is compact, $B\setminus F\subseteq\bigcup\limits_{n\geq1}\bigcup\limits_{j=1}^{m_n}(E_{n,j}\setminus K_{n,j})$, and $\mu(B\setminus F)\leq\delta$.\\
+For each $n$, $F\cap E_{n,j}=F\cap K_{n,j}$ is closed in $F$, so $s_n|_F\in C(F)$; since $s_n|_F\to f|_F$ uniformly, $f|_F\in C(F)$.\\
+Choose $W\in\mathcal{T}$ with $F\subseteq W$ and $\mu(W\setminus F)<\delta$, then choose $O\in\mathcal{T}$ by Proposition \ref{prop:lch-compact-neighborhood-shrinking} with $F\subseteq O\subseteq\overline{O}\subseteq W$ and $\overline{O}$ compact. Extend $f|_F$ to $H\in C(X)$ by Proposition \ref{prop:alexandroff-one-point-compactification}, choose $q\in C_c(X)$ with $q|_F=1$ and $\operatorname{supp}q\subseteq O$ by Proposition \ref{prop:lch-compactly-supported-cutoff}, and set $g\defeq qH$, $X_0\defeq F\cup(X\setminus(A\cup O))$. Then $g\in C_c(X)$ and $X_0\in\mathcal{B}(X)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[(i)] On $F$, $g=qH=f$; on $X\setminus(A\cup O)$, $f=q=0$.
+\item[(ii)] $X\setminus X_0\subseteq(A\setminus F)\cup(O\setminus F)$, $\mu(A\setminus F)\leq\mu(A_M)+\mu(B\setminus F)<2\delta$, $\mu(O\setminus F)\leq\mu(W\setminus F)<\delta$; $\mu(X\setminus X_0)<3\delta<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: Compact core plus cutoff extension.\\
+\hlt{Key Insight}: Discard a small set to make Borel data continuous.
+\end{proof}
+\end{theorem}

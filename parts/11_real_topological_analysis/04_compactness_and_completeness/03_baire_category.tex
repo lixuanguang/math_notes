@@ -33,15 +33,20 @@ Moreover $F_m\subseteq G$. For $x\in G$, $r>0$ with $(x-r,x+r)\subseteq G$, $m\g
 \end{proposition}
 
 \begin{definition} \label{def:first-category-set} \hlt{First Category}\\
-A set $E\subseteq X$ is \hlt{of first category}, \hlt{meager}, or \hlt{thin}, if covered by countably many nowhere-dense sets: $E\subseteq \bigcup\limits_{n=1}^{\infty}E_n$.\\
-The Baire Category Theorem states that a nonempty complete metric space is not first category in itself.
+Let $X$ be a metric space and let $E\subseteq X$. The set $E$ is \hlt{of first category}, \hlt{meager}, or \hlt{thin} in $X$ if there are nowhere-dense sets $N_n\subseteq X$ such that $E\subseteq\bigcup_{n=1}^{\infty}N_n$.\\
+\hlt{Structural Commentary}: Meagerness is relative to the ambient space $X$.\\
+\hlt{Key Insight}: The Baire Category Theorem says a nonempty complete metric space is not meager in itself.
 \end{definition}
 
 \begin{definition} \label{def:residual-thick-generic-set} \hlt{Residual, Thick, and Generic Sets}\\
-A set $G\subseteq X$ is \hlt{residual}, or \hlt{thick}, if it contains a countable intersection $\bigcap\limits_{n=1}^{\infty}O_n$ of dense open subsets of $X$.\\
-A property is \hlt{generic} in $X$ if the set of points satisfying it is residual.\\
-By Theorem \ref{thm:dense-open-baire-complete-metric-space}, residual subsets of a complete metric space are dense.\\
-In this sense, meager sets are topologically small and residual sets are topologically large.
+Let $X$ be a metric space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A set $G\subseteq X$ is \hlt{residual}, or \hlt{thick}, in $X$ if there are dense open sets $O_n\subseteq X$ such that $\bigcap_{n=1}^{\infty}O_n\subseteq G$.
+\item A property $P$ is \hlt{generic} in $X$ if $\{x\in X:P(x)\}$ is residual in $X$.
+\end{enumerate}
+If $X$ is complete, then every residual subset of $X$ is dense by Theorem \ref{thm:dense-open-baire-complete-metric-space}.\\
+\hlt{Key Insight}: Meager sets are topologically small; residual sets contain a countable dense-open core.
 \end{definition}
 
 \begin{theorem} \label{thm:dense-open-baire-real-line}\label{thm:completeness-and-baire-source-todo} \hlt{Dense Open Intersections in $\R$}\\
@@ -84,6 +89,63 @@ Then each $O_n$ is dense open: it is open, and every nonempty open set meets it 
 By Theorem \ref{thm:dense-open-baire-complete-metric-space}, choose $x\in\bigcap_nO_n$. Then $x\notin E_n$ for all $n$, contradicting $X=\bigcup_nE_n$.\\
 \hlt{Structural Commentary}: Countably many nowhere-dense sets have dense open complements.\\
 \hlt{Key Insight}: Completeness forbids countable assembly from thin pieces.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:baire-closed-cover-has-interior} \hlt{Closed Cover Interior Test}\\
+Let $X$ be a complete metric space and let $(F_n)_{n\in\N}$ be closed subsets of $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\emptyset\neq U\subseteq X$ is open and $U\subseteq\bigcup_{n=1}^{\infty}F_n$, then $F_N^\circ\neq\emptyset$ for some $N\in\N$.
+\item If $X\neq\emptyset$ and $F_n^\circ=\emptyset$ for every $n\in\N$, then $X\neq\bigcup_{n=1}^{\infty}F_n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Assume $\emptyset\neq U\subseteq X$ is open and $U\subseteq\bigcup_{n=1}^{\infty}F_n$. Suppose $F_n^\circ=\emptyset$ for every $n$ and set $O_n\defeq X\setminus F_n$. Since $F_n$ is closed, $O_n$ is open. If $V\subseteq X$ nonempty and open, then $V\nsubseteq F_n$, so $V\cap O_n\neq\emptyset$; hence $O_n$ dense.\\
+Theorem \ref{thm:dense-open-baire-complete-metric-space} gives $x\in U\cap\bigcap_{n=1}^{\infty}O_n$. Then $x\in U\subseteq\bigcup_{n=1}^{\infty}F_n$ and $x\notin F_n$ $\forall n$, contradiction. QED.
+\item[$(ii)$] Assume $X\neq\emptyset$ and $F_n^\circ=\emptyset$ for every $n$. If $X=\bigcup_{n=1}^{\infty}F_n$, then (i) with $U=X$ gives $F_N^\circ\neq\emptyset$ for some $N$, a contradiction. Hence $X\neq\bigcup_{n=1}^{\infty}F_n$.
+\end{enumerate}
+\hlt{Structural Commentary}: Empty interiors give dense open complements.\\
+\hlt{Key Insight}: Baire forces one complement-avoiding point.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:baire-local-uniform-boundedness-continuous-family} \hlt{Pointwise Bounded Families Are Locally Uniformly Bounded}\\
+Let $(X,d)$ be a nonempty complete metric space, and let $\mathcal{F}\subseteq C(X,\R)$.\\
+Assume that for every $x\in X$ there is $M_x<\infty$ such that $\abs{f(x)}\leq M_x$ for every $f\in\mathcal{F}$.\\
+Then there exist a nonempty open set $O\subseteq X$ and $M<\infty$ such that $\abs{f(x)}\leq M$ for all $x\in O$ and $f\in\mathcal{F}$.
+\begin{proof} For $n\in\N$, set $E_n\defeq\{x\in X:\forall f\in\mathcal{F},\ \abs{f(x)}\leq n\}$.\\
+As $E_n=\bigcap_{f\in\mathcal{F}}\{x\in X:\abs{f(x)}\leq n\}$ and each $f$ is continuous, $E_n$ is closed. The hypothesis gives $X=\bigcup_{n=1}^{\infty}E_n$.\\
+By Corollary \ref{cor:baire-closed-cover-has-interior}, $E_N^\circ\neq\emptyset$ for some $N\in\N$. Take $O\defeq E_N^\circ$, $M\defeq N$. Then $x\in O$ and $f\in\mathcal{F}$ imply $\abs{f(x)}\leq M$.\\
+\hlt{Structural Commentary}: Pointwise bounds form a closed cover.\\
+\hlt{Key Insight}: Completeness turns pointwise control into uniform control somewhere.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:pointwise-limit-continuous-on-dense-set} \hlt{Dense Continuity Set for Pointwise Limits}\\
+Let $(X,d)$ be a complete metric space, let $f:X\to\R$, let $f_n:X\to\R$ be continuous for every $n\in\N$, and assume $f_n(x)\to f(x)$ for every $x\in X$. Then there exists $D\subseteq X$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $D$ is dense in $X$;
+\item $(f_n)$ is equicontinuous at every $x_0\in D$;
+\item $f$ is continuous at every $x_0\in D$.
+\end{enumerate}
+\begin{proof} For $m,n\in\N$, set $E_{m,n}\defeq\{x\in X:\forall j,k\geq n,\ \abs{f_j(x)-f_k(x)}\leq 1/m\}$.\\
+Since $E_{m,n}=\bigcap_{j,k\geq n}\{x\in X:\abs{f_j(x)-f_k(x)}\leq 1/m\}$, each $E_{m,n}$ is closed. \\
+or fixed $m$, pointwise convergence makes $(f_n(x))$ Cauchy for every $x\in X$, hence $X=\bigcup_{n=1}^{\infty}E_{m,n}$.\\
+For closed $E\subseteq X$, $\operatorname{bd}(E)=E\setminus E^\circ$ is closed and nowhere dense: if nonempty open $V\subseteq\operatorname{bd}(E)$, then $V\subseteq E^\circ$ and $V\subseteq E\setminus E^\circ$, a contradiction. Thus each $X\setminus\operatorname{bd}(E_{m,n})$ is dense open. Set $D\defeq X\setminus\bigcup_{m,n\in\N}\operatorname{bd}(E_{m,n})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Since $\N^2$ is countable, $D=\bigcap_{m,n\in\N}(X\setminus\operatorname{bd}(E_{m,n}))$ is a countable intersection of dense open sets.\\
+By Theorem \ref{thm:dense-open-baire-complete-metric-space}, $D$ is dense in $X$.
+\item[$(ii)$] Fix $x_0\in D$ and $\varepsilon>0$. Choose $m\in\N$ with $3/m<\varepsilon$. Since $(f_n(x_0))$ is Cauchy, choose $N$ such that $x_0\in E_{m,N}$. Since $x_0\notin\operatorname{bd}(E_{m,N})$, actually $x_0\in E_{m,N}^\circ$; choose $r>0$ with $B_r(x_0)\subseteq E_{m,N}$. By continuity of $f_1,\ldots,f_N$ at $x_0$, choose $0<\delta<r$ such that $d(x,x_0)<\delta$ implies $\abs{f_i(x)-f_i(x_0)}<1/m$ for $1\leq i\leq N$.\\
+If $d(x,x_0)<\delta$ and $j>N$, then $x,x_0\in E_{m,N}$, so $\abs{f_j(x)-f_N(x)}\leq1/m$ and $\abs{f_N(x_0)-f_j(x_0)}\leq1/m$. Hence $\abs{f_j(x)-f_j(x_0)}\leq\abs{f_j(x)-f_N(x)}+\abs{f_N(x)-f_N(x_0)}+\abs{f_N(x_0)-f_j(x_0)}<3/m<\varepsilon$.\\
+For $1\leq j\leq N$, the choice of $\delta$ gives $\abs{f_j(x)-f_j(x_0)}<1/m<\varepsilon$. Thus $(f_n)$ is equicontinuous at $x_0$.
+\item[$(iii)$] Fix $x_0\in D$ and $\varepsilon>0$, and choose $m,N,\delta$ as in (ii). If $d(x,x_0)<\delta$, the estimate in (ii) gives $\abs{f_j(x)-f_j(x_0)}<3/m<\varepsilon$ for all $j>N$. Letting $j\to\infty$ gives $\abs{f(x)-f(x_0)}\leq3/m<\varepsilon$. QED.
+\end{enumerate}
+\hlt{Structural Commentary}: Baire avoids all layer boundaries.\\
+\hlt{Key Insight}: Interior tail-Cauchy control gives equicontinuity.
 \end{proof}
 \end{theorem}
 
