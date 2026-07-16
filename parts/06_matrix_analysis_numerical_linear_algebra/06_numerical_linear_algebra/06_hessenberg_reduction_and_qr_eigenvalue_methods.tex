@@ -1,0 +1,55 @@
+\subsection{Hessenberg Reduction and QR Eigenvalue Methods}
+
+\begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if $a_{ij}=0$ whenever $i>j+1$.\\
+Equivalently, all entries below the first subdiagonal are zero.
+\end{definition}
+
+Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
+  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
+  \label{fig:upper-hessenberg-pattern}
+\end{figure}
+
+\begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
+Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
+\begin{proof}
+Set $A_0=A$. For $k=1,\ldots,n-2$, suppose columns $1,\ldots,k-1$ of $A_{k-1}$ already have zeros below the first subdiagonal. Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$.\\
+By Corollary \ref{cor:householder-unitary-annihilator}, choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$.\\
+Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Right multiplication by $U_k$ changes only columns $k+1,\ldots,n$, so columns $1,\ldots,k-1$ keep their existing Hessenberg zeros. Left multiplication by $U_k^*$ acts only on rows $k+1,\ldots,n$; those rows are already zero in columns $1,\ldots,k-1$, so the zeros remain. In column $k$, the tail becomes $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, so entries below row $k+1$ are zero and the new subdiagonal entry is real nonnegative.\\
+After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$ is unitary.\\
+\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
+\hlt{Key Insight}: Kill one column tail at a time.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
+Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
+\end{perspective}
+
+\begin{method} \label{meth:qr-eigenvalue-algorithm-preview} \hlt{QR Eigenvalue Algorithm Preview}\\
+For a square matrix $A_0$, the basic QR eigenvalue iteration is:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item In practice, first reduce $A_0$ to Hessenberg form by Theorem \ref{thm:unitary-upper-hessenberg-reduction}.
+\item Factor $A_k=Q_kR_k$, with $Q_k$ unitary and $R_k$ upper triangular.
+\item Set $A_{k+1}=R_kQ_k=Q_k^*A_kQ_k$, using shifts to speed convergence.
+\end{enumerate}
+Each step is a unitary similarity, so the spectrum is preserved.
+\end{method}
+
+\begin{method} \label{meth:hessenberg-qr-step-plane-rotations} \hlt{Hessenberg QR Step by Plane Rotations}\\
+Let $H\in\operatorname{Mat}(n,n,\mathbb{C})$ be upper Hessenberg and let $\mu\in\mathbb{C}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $B_0=H-\mu I_n$.
+\item For $j=1,\ldots,n-1$, choose a unitary plane rotation $G_j$ acting on coordinates $j,j+1$,\\
+so that $(G_j^*B_{j-1})_{j+1,j}=0$ and $B_j=G_j^*B_{j-1}$.
+\item Put $Q=G_1\cdots G_{n-1}$ and $R=B_{n-1}$; then $H-\mu I_n=QR$.
+\item Define the shifted QR update $H_+=RQ+\mu I_n=Q^*HQ$
+\end{enumerate}
+Adjacent rotations implement the Hessenberg step by local bulge chasing.
+\end{method}
