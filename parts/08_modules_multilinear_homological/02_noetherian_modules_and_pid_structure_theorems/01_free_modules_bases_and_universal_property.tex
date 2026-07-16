@@ -1,0 +1,78 @@
+\subsection{Free Modules, Bases, and Universal Property}
+
+This section begins with the structure facts that make free modules and
+finite generation usable: rank, splitting maps onto free modules, Noetherian
+modules. It then develops the classification of
+finitely generated modules over a principal ideal domain. The guiding model is
+the abelian-group theorem over $\Z$ and, later, the polynomial-module
+classification behind rational canonical form.
+
+\begin{definition} \label{def:free-module-basis} \hlt{Free Module and Basis}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A subset $\mathcal{B}\subseteq M$ is a \hlt{basis} of $M$ if $\mathcal{B}$ is $R$-linearly independent and $\langle\!\langle\mathcal{B}\rangle\!\rangle_R=M$.
+\item An $R$-module $M$ is \hlt{free} if $M=\{0\}$ or $M$ has a basis.
+\item If $\mathcal{B}$ is a basis of $M$, then $M$ is \hlt{free on $\mathcal{B}$}.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:module-basis-unique-coordinates} \hlt{Basis Means Unique Finite Coordinates}\\
+A subset $\mathcal{B}\subseteq M$ is a basis if and only if $\forall v\in M,\ \exists!\,(F,(r_b)_{b\in F})$, with $F\subseteq_{\operatorname{fin}}\mathcal{B},\ r_b\in R\setminus\{0\}$, $v=\sum\limits_{b\in F}r_bb$.\\
+The case $F=\emptyset$ gives the empty sum $0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Spanning gives a finite expression; collecting equal basis elements and deleting zero coefficients gives the displayed form. If $\sum\limits_{b\in F}r_bb=\sum\limits_{b\in G}s_bb$, then $\sum\limits_{b\in F\cup G}(r_b-s_b)b=0$, where missing coefficients are $0$.\\
+Independence gives $r_b=s_b$ for all $b$, hence $F=G$ and the coefficients agree.
+\item[$(\Leftarrow)$] Existence gives $\langle\!\langle\mathcal{B}\rangle\!\rangle_R=M$. If $\sum\limits_{b\in F}r_bb=0$ and $F_0\defeq\{b\in F:r_b\neq0\}$ is nonempty, then $0=\sum\limits_{b\in F_0}r_bb$ contradicts uniqueness of the empty expression. Thus all $r_b=0$, so $\mathcal{B}$ is independent.
+\end{enumerate}
+\hlt{Structural Commentary}: Bases give unique finite coordinates.\\
+\hlt{Key Insight}: Existence is spanning; uniqueness is independence.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:module-basis-minimal-maximal} \hlt{Bases Are Minimal Spanning and Maximal Independent}\\
+If $\mathcal{B}$ is a basis of $M$, then $\forall b\in\mathcal{B}$, $\langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R\neq M$, and $\forall v\in M\setminus\mathcal{B}$, $\mathcal{B}\cup\{v\}$ is $R$-linearly dependent.
+\begin{proof}
+If $b\in\mathcal{B}$ and $b\in\langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R$, then $b$ has two finite coordinate expressions, contradicting Theorem \ref{thm:module-basis-unique-coordinates}.\\
+Hence deleting $b$ destroys spanning. If $v\notin\mathcal{B}$, write $v=\sum_{b\in F}r_bb$ with $F\subseteq_{\operatorname{fin}}\mathcal{B}$.\\
+Then $v-\sum\limits_{b\in F}r_bb=0$ is a nontrivial relation in $\mathcal{B}\cup\{v\}$, so $\mathcal{B}\cup\{v\}$ is dependent.\\
+\hlt{Structural Commentary}: Basis still implies the familiar minimal/maximal properties.\\
+\hlt{Key Insight}: The converses are vector-space privileges, not general module facts.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:free-module-map-extension} \hlt{Maps Out of a Free Module}\\
+Let $M$ be free on $\mathcal{B}$ and let $N$ be an $R$-module.\\
+For every function $f:\mathcal{B}\to N$, there exists a unique $\widetilde{f}\in\operatorname{Hom}_R(M,N)$ such that $\widetilde{f}|_{\mathcal{B}}=f$.
+\begin{proof} For $v=\sum\limits_{b\in F}r_bb$ with $F\subseteq_{\operatorname{fin}}\mathcal{B}$, define $\widetilde{f}(v)\defeq\sum\limits_{b\in F}r_bf(b)$.\\
+Theorem \ref{thm:module-basis-unique-coordinates} makes the expression of $v$ unique, so $\widetilde{f}$ is well-defined.\\
+For $x=\sum a_bb$ and $y=\sum c_bb$, combining supports gives $\widetilde{f}(rx+sy)=r\widetilde{f}(x)+s\widetilde{f}(y)$, so $\widetilde{f}$ is $R$-linear and clearly extends $f$. If $\phi\in\operatorname{Hom}_R(M,N)$ also extends $f$, then $\phi\left(\sum\limits_{b\in F}r_bb\right)=\sum\limits_{b\in F}r_bf(b)=\widetilde{f}\left(\sum\limits_{b\in F}r_bb\right)$, hence $\phi=\widetilde{f}$.\\
+\hlt{Structural Commentary}: A free module is controlled entirely by its basis values.\\
+\hlt{Key Insight}: Freeness is the universal permission to choose images of basis elements arbitrarily.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:free-module-with-nonfree-submodule} \hlt{A Free Module with a Nonfree Submodule}\\
+Let $R=\mathbb{Z}\times\mathbb{Z}$ with componentwise multiplication. As an $R$-module, $R=R(1,1)$, so $R$ is free on $\{(1,1)\}$.\\
+Set $N\defeq\mathbb{Z}\times\{0\}\leq R$. For every $0\neq(a,0)\in N$, $(0,1)(a,0)=0$.\\
+Thus every nonzero element of $N$ is torsion, so $N$ has no nonempty independent subset and is not free.
+\end{example}
+
+\begin{example} \label{ex:quotient-free-module-need-not-free} \hlt{A Quotient of a Free Module Need Not Be Free}\\
+As a $\mathbb{Z}$-module, $\mathbb{Z}$ is free on $\{1\}$. For $n>1$, the submodule $n\mathbb{Z}$ is cyclic, but the quotient $\mathbb{Z}/n\mathbb{Z}$ is torsion by Example \ref{ex:zn-is-torsion-module}. Hence $\mathbb{Z}/n\mathbb{Z}$ is not free as a $\mathbb{Z}$-module.
+\end{example}
+
+\begin{principle} \label{princ:modules-not-vector-spaces} \hlt{Modules Are Not Just Vector Spaces with New Letters}\\
+For a general ring $R$, the following vector-space implications fail:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $N\leq M\nRightarrow\exists\,H\leq M$ with $M=N\oplus H$.
+\item $M$ finitely generated and $N\leq M\nRightarrow N$ finitely generated.
+\item $M\neq0\nRightarrow\exists\,\emptyset\neq S\subseteq M$ linearly independent.
+\item $S$ minimal spanning or maximal independent $\nRightarrow S$ is a basis.
+\item $M$ free and $N\leq M\nRightarrow N$ free.
+\item $F$ free and $S\leq F\nRightarrow F/S$ free.
+\end{enumerate}
+Over a field, these obstructions vanish because $R\setminus\{0\}\subseteq R^\times$.
+\end{principle}
