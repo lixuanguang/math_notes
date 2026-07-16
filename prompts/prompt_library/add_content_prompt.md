@@ -44,6 +44,8 @@ Classify the sources first:
 1. Contents or outline only: do not edit. Give a concise coverage and placement audit.
 2. Substantive pages: integrate conservatively.
 3. Mixed: use contents pages only for placement and coverage; integrate only what the substantive pages support.
+4. For substantive material, extract and classify supported formulas, definitions, claims, theorems, propositions, lemmas, corollaries, examples, methods, remarks, exercises, diagrams, tables, proof ideas, notation, and prerequisites before choosing the insertion point.
+5. Report ambiguous classifications before insertion instead of silently forcing them into an environment.
 
 Placement rules:
 1. Prefer an existing subsection file whenever reasonable.
@@ -92,6 +94,7 @@ If edits were made, report:
 - chosen target and why;
 - files changed;
 - main definitions, results, examples, methods, algorithms, figures, or source notes added;
+- extracted source blocks grouped by classification when that clarifies coverage;
 - existing material cross-referenced instead of duplicated;
 - any exercises or questions integrated;
 - any uncertainties, gaps, TODOs, or blocked section/part needs;
@@ -99,4 +102,4 @@ If edits were made, report:
 - that no build, staging, commit, push, reset, checkout, revert, delete, or clean action was performed.
 ```
 
-After source intake, run `prompts/prompt_library/formalize_content.md` on the changed/new files with `FILE_COVERAGE: changed-and-new` when you want full environment-level formalization and build verification.
+After source intake, use `prompts/prompt_library/reorganize_content_prompt.md` or `prompts/prompt_library/dependency_flow_prompt.md` if placement or prerequisite order is still uncertain. Then run `prompts/prompt_library/formalize_content.md` on the changed/new files with `FILE_COVERAGE: changed-and-new` when you want full environment-level formalization and build verification.
