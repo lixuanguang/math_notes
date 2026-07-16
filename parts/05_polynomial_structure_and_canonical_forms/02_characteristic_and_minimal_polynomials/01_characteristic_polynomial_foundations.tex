@@ -1,7 +1,7 @@
-\subsection{Characteristic and Minimal Polynomial Foundations}
+\subsection{Characteristic Polynomial Foundations}
 
 \begin{motivation} \label{mot:characteristic-and-minimal-polynomials} \hlt{Two Spectral Polynomials}\\
-The characteristic polynomial records the whole primary decomposition with dimensions.\\
+The characteristic polynomial records eigenvalues with algebraic multiplicity.\\
 The minimal polynomial records the shortest polynomial relation satisfied by the operator.
 \end{motivation}
 
@@ -103,7 +103,7 @@ S^{-1}AS=
 \end{bmatrix}.
 \nonumber
 \end{align}
-By Theorem \ref{thm:similarity-preserves-characteristic-polynomial}, Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}, $p_A(z)=p_{S^{-1}AS}(z)=(z-\lambda)^kp_C(z)$. Thus $m_A(\lambda)\geq k=\dim E_{\lambda}(A)$.\\
+By Theorem \ref{thm:similarity-preserves-characteristic-polynomial} and Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}, $p_A(z)=p_{S^{-1}AS}(z)=(z-\lambda)^kp_C(z)$. Thus $m_A(\lambda)\geq k=\dim E_{\lambda}(A)$.\\
 \hlt{Structural Commentary}: An eigenspace-first basis exposes a $\lambda I_k$ block.\\
 \hlt{Key Insight}: Each independent eigenvector forces one visible factor $z-\lambda$ in the characteristic polynomial.
 \end{proof}
@@ -125,54 +125,25 @@ Theorem \ref{thm:conditions-equivalent-to-diagonalizability} gives an eigenbasis
 \end{theorem}
 
 \begin{definition} \label{def:operator-characteristic-polynomial} \hlt{Characteristic Polynomial of an Operator}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, and let $T\in\LL(\mathcal{V})$. If $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues of $T$ and $d_j=\dim \mathcal{G}_{\lambda_j}(T)$, then the \hlt{characteristic polynomial} of $T$ is $q_T(z)\defeq\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$, let $n=\dim(\mathcal{V})$, and let $T\in\LL(\mathcal{V})$. For a basis $\beta$ of $\mathcal{V}$, the \hlt{characteristic polynomial} of $T$ is $q_T(z)\defeq p_{[T]_{\beta\leftarrow\beta}}(z)=\det(zI_n-[T]_{\beta\leftarrow\beta})$.\\
+This is independent of $\beta$ by Theorems \ref{thm:change-of-basis-formula} and \ref{thm:similarity-preserves-characteristic-polynomial}.
 \end{definition}
 
 \begin{proposition} \label{prop:operator-characteristic-polynomial-degree-roots} \hlt{Degree and Roots of $q_T$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $q_T$ be the characteristic polynomial of $T$.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$, let $T\in\LL(\mathcal{V})$, and let $q_T$ be the characteristic polynomial of $T$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\deg q_T=\dim(\mathcal{V})$.
 \item The roots of $q_T$ are precisely the eigenvalues of $T$.
 \end{enumerate}
 \begin{proof}
-Write $q_T(z)=\prod\limits_{j=1}^{m}(z-\lambda_j)^{d_j}$, where $\lambda_1,\ldots,\lambda_m$ are the distinct eigenvalues and $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.
+Choose a basis $\beta$ of $\mathcal{V}$ and set $A=[T]_{\beta\leftarrow\beta}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Proposition \ref{prop:sum-of-complex-eigenvalue-multiplicities} gives $\deg q_T=\sum_jd_j=\dim(\mathcal{V})$.
-\item The displayed factorization has exactly the roots $\lambda_1,\ldots,\lambda_m$.
+\item Definition \ref{def:operator-characteristic-polynomial} gives $q_T=p_A$, so Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $\deg q_T=\dim(\mathcal{V})$.
+\item For $\mathbf{v}\in\mathcal{V}$, $T\mathbf{v}=\lambda\mathbf{v}$ if and only if $A[\mathbf{v}]_{\beta}=\lambda[\mathbf{v}]_{\beta}$. Since the coordinate map is bijective, $\operatorname{spec}(T)=\operatorname{spec}(A)$. Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} identifies this set with the roots of $p_A=q_T$.
 \end{enumerate}
-\hlt{Structural Commentary}: Each primary summand contributes one root factor.\\
-\hlt{Key Insight}: Multiplicity is dimension.
+\hlt{Structural Commentary}: Coordinates transfer degree and eigenvalue data from $A$ to $T$.\\
+\hlt{Key Insight}: The characteristic polynomial is independent of the chosen basis.
 \end{proof}
 \end{proposition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/operator_characteristic_polynomial_primary_blocks.tikz}
-  \caption{Each primary summand contributes $(z-\lambda_j)^{d_j}$, where $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.}
-  \label{fig:operator-characteristic-polynomial-primary-blocks}
-\end{figure}
-
-\begin{definition} \label{def:monic-polynomial} \hlt{Monic Polynomial}\\
-A nonzero polynomial is \hlt{monic} if its highest-degree coefficient is $1$.
-\end{definition}
-
-\begin{theorem} \label{thm:operator-minimal-polynomial-existence} \hlt{Existence of the Minimal Polynomial}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then $T$ has a unique least-degree monic annihilator $\mu_T$.
-\begin{proof}
-Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} gives a nonzero annihilator; scaling makes it monic, so a least-degree monic annihilator exists. If $p$ and $q$ are two of them, then $(p-q)(T)=0$ and $\deg(p-q)<\deg p$.\\
-If $p\neq q$, scaling $p-q$ gives a smaller monic annihilator, impossible. Hence $p=q$.\\
-\hlt{Structural Commentary}: Existence comes from finite-dimensional dependence; uniqueness from minimality.\\
-\hlt{Key Insight}: Two least monic annihilators cannot differ.
-\end{proof}
-\end{theorem}
-
-\begin{definition} \label{def:operator-minimal-polynomial} \hlt{Minimal Polynomial of an Operator}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} of $T$, denoted $\mu_T$, is the unique monic polynomial of smallest degree such that $\mu_T(T)=0$.
-\end{definition}
-
-\begin{definition} \label{def:minimal-polynomial-matrix} \hlt{Minimal Polynomial of a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. The \hlt{minimal polynomial} of $A$, denoted $\mu_A$, is the unique monic polynomial of smallest positive degree such that $\mu_A(A)=0$.
-\end{definition}
-
