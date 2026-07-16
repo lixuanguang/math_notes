@@ -5,6 +5,32 @@ For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, a \hlt{principal minor} is the det
 A \hlt{leading principal minor} is the determinant of the leading $k\times k$ principal submatrix for some $k=1,\ldots,n$.
 \end{definition}
 
+\begin{corollary} \label{cor:positive-semidefinite-principal-block-column-inclusion} \hlt{Principal Blocks and Column Inclusion}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be PSD, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and partition $A=
+\begin{bmatrix}
+A_{11} & A_{12}\\
+A_{12}^* & A_{22}
+\end{bmatrix}$, $A_{11}\in\operatorname{Mat}(k,k,\mathbb{F})$.\\
+Then $A_{11}\succeq0$, $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$, and $\operatorname{rank}(A_{12})\leq\operatorname{rank}(A_{11})$. If $A\succ0$, then $A_{11}\succ0$.
+\begin{proof}
+Write $A=B^*B$ and partition $B=[B_1\ B_2]$ conformally. Then $A_{11}=B_1^*B_1$ and $A_{12}=B_1^*B_2$.\\
+Hence $A_{11}\succeq0$ and $\operatorname{col}(A_{12})=\operatorname{col}(B_1^*B_2)\subseteq\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)=\operatorname{col}(A_{11})$, equality $\operatorname{col}(B_1^*)=\operatorname{col}(B_1^*B_1)$ follows from Theorem \ref{thm:gram-factor-kernel-rank-column-data}. The rank inequality follows by taking dimensions\\
+If $A\succ0$ and $\mathbf{x}\neq0$ in $\mathbb{F}^k$, then $\mathbf{x}^*A_{11}\mathbf{x}=
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}^*
+A
+\begin{bmatrix}\mathbf{x}\\0\end{bmatrix}>0$, so $A_{11}\succ0$.\\
+\hlt{Structural Commentary}: In a positive block matrix, cross-block columns lie in principal block's column space.\\
+\hlt{Key Insight}: Factor first; then column inclusion is immediate from $A_{12}=B_1^*B_2$.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/principal_block_column_inclusion.tikz}
+  \caption{For $A\succeq0$, factorisation forces $\operatorname{col}(A_{12})\subseteq\operatorname{col}(A_{11})$.}
+  \label{fig:principal-block-column-inclusion}
+\end{figure}
+
 \begin{theorem} \label{thm:sylvester-positive-definite-criterion-leading-minors} \hlt{Sylvester's Criterion}\\
 A Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is positive definite if and only if all leading principal minors are positive.
 \begin{proof}
@@ -43,55 +69,6 @@ This is the $2\times2$ form of Sylvester's criterion and inertia.\\
 \hlt{Structural Commentary}: Completing the square is the $2\times2$ shadow of the $LDL^*$ and Schur-complement tests.\\
 \hlt{Key Insight}: $\Delta$ and the leading sign classify the form.
 \end{method}
-
-\begin{corollary} \label{cor:positive-semidefinite-zero-quadratic-form} \hlt{Zero Quadratic Form Detects the Kernel}\\
-If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is positive semidefinite, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\mathbf{x}^*A\mathbf{x}=0$ if and only if $A\mathbf{x}=0$.
-\begin{proof}
-Write $A=B^*B$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\mathbf{x}^*A\mathbf{x}=0$, then $\norm{B\mathbf{x}}_2^2=0$, so $B\mathbf{x}=0$ and hence $A\mathbf{x}=B^*B\mathbf{x}=0$.
-\item[$(\Leftarrow)$] If $A\mathbf{x}=0$, then $\mathbf{x}^*A\mathbf{x}=0$.
-\end{enumerate}
-\hlt{Structural Commentary}: A zero PSD quadratic value has no hidden cancellation.\\
-\hlt{Key Insight}: Zero length-square means the factored vector itself is zero.
-\end{proof}
-\end{corollary}
-
-\begin{theorem} \label{thm:positive-semidefinite-stability-rules} \hlt{Stability Rules for Positive Semidefinite Matrices}\\
-Let $A,B\succeq0$ over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. Whenever the expressions are defined:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $aA+bB\succeq0$ for $a,b\geq0$; if $a,b>0$ and one of $A,B$ is positive definite, then $aA+bB\succ0$.
-\item $S^*AS\succeq0$; moreover, $S^*AS\succ0$ if and only if $S\mathbf{x}\notin\ker(A)$ for all $\mathbf{x}\neq\mathbf{0}$.
-\item $A\oplus B\succeq0$, with $A\oplus B\succ0$ if and only if $A\succ0$ and $B\succ0$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\mathbf{x}^*(aA+bB)\mathbf{x}=a\mathbf{x}^*A\mathbf{x}+b\mathbf{x}^*B\mathbf{x}\geq0$. If, for example, $A\succ0$ and $a>0$, then for every nonzero $\mathbf{x}$ the first summand is positive and the second is nonnegative, so $aA+bB\succ0$; the case $B\succ0$ is identical.
-\item $\mathbf{x}^*S^*AS\mathbf{x}=(S\mathbf{x})^*A(S\mathbf{x})\geq0$. By Corollary \ref{cor:positive-semidefinite-zero-quadratic-form}, equality occurs exactly when $S\mathbf{x}\in\ker(A)$.
-\item $(\mathbf{x}\oplus\mathbf{y})^*(A\oplus B)(\mathbf{x}\oplus\mathbf{y})=\mathbf{x}^*A\mathbf{x}+\mathbf{y}^*B\mathbf{y}\geq0$. This expression is positive for every nonzero $\mathbf{x}\oplus\mathbf{y}$ exactly when each summand is positive on its own nonzero vectors, namely when $A\succ0$ and $B\succ0$.
-\end{enumerate}
-\hlt{Structural Commentary}: The PSD cone is stable under sums, pullbacks, and direct sums.\\
-\hlt{Key Insight}: Test the quadratic form after each construction.
-\end{proof}
-\end{theorem}
-
-\begin{proposition} \label{prop:two-by-two-positive-semidefinite-square-root} \hlt{Explicit Square Root for a $2\times2$ Positive Semidefinite Matrix}\\
-Let $A\in\operatorname{Mat}(2,2,\mathbb{F})$, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, be positive semidefinite and nonzero. Set $\tau=\bigl(\operatorname{tr}A+2\sqrt{\det A}\bigr)^{1/2}$.\\
-Then $\tau>0$ and $A^{1/2}=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$.
-\begin{proof}
-Let $C=\frac{1}{\tau}\bigl(A+\sqrt{\det A}\,I_2\bigr)$. By Proposition \ref{prop:trace-determinant-positive-semidefinite}, $\det A\geq0$ and $\operatorname{tr}A>0$, hence $\tau>0$; by Theorem \ref{thm:positive-semidefinite-stability-rules}, $C\succeq0$. Cayley--Hamilton gives $A^2-(\operatorname{tr}A)A+(\det A)I_2=0$, so
-\begin{align}
-C^2 =\frac{1}{\tau^2}\bigl(A^2+2\sqrt{\det A}\,A+(\det A)I_2\bigr) =\frac{1}{\tau^2}\bigl((\operatorname{tr}A)A+2\sqrt{\det A}\,A\bigr)=A.
-\nonumber
-\end{align}
-Thus $C=A^{1/2}$ by uniqueness of the positive semidefinite square root.\\
-\hlt{Structural Commentary}: In dimension $2$, Cayley--Hamilton makes $A^{1/2}$ linear in $A$.\\
-\hlt{Key Insight}: Square the linear candidate and use Cayley--Hamilton.
-\end{proof}
-\end{proposition}
 
 \begin{theorem} \label{thm:simultaneous-congruence-one-positive-definite-form} \hlt{Simultaneous Congruence with One Positive Definite Form}\\
 Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be Hermitian, where $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and let $A\succ0$.\\
