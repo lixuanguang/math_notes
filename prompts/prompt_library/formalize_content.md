@@ -1,7 +1,5 @@
 # Formalize Content Prompt
 
-Run with GPT-5.6 Sol and Extra High reasoning.
-
 ```text
 I am working in:
 /Users/lxg/Documents/GitHub/math_notes
