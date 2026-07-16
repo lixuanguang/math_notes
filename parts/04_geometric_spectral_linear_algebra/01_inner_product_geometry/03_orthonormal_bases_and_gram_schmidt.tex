@@ -1,0 +1,146 @@
+\subsection{Orthonormal Bases and Gram--Schmidt}
+
+\begin{definition} \label{def:orthonormal-list} \hlt{Orthonormal List}\\
+A list $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ of vectors in an inner-product space $\mathcal{V}$ is \hlt{orthonormal} if
+\begin{align}
+\innerprod{\mathbf{e}_j,\mathbf{e}_k}=
+\begin{cases}
+1, & j=k,\\
+0, & j\neq k.
+\end{cases}
+\nonumber
+\end{align}
+Equivalently, every $\mathbf{e}_j$ has norm $1$ and distinct vectors in the list are orthogonal.
+\end{definition}
+
+\begin{definition} \label{def:orthogonal-and-orthonormal-sets} \hlt{Orthogonal and Orthonormal Sets}\\
+An indexed family $(\mathbf{u}_i)_{i\in I}$ is \hlt{orthogonal} if $\innerprod{\mathbf{u}_i,\mathbf{u}_j}=0$ for $i\neq j$, and \hlt{orthonormal} if $\innerprod{\mathbf{u}_i,\mathbf{u}_j}=\delta_{ij}$, $i,j\in I$.\\
+A nonzero orthogonal family becomes orthonormal after replacing each $\mathbf{u}_i$ by $\mathbf{u}_i/\norm{\mathbf{u}_i}$.
+\end{definition}
+
+\begin{proposition} \label{prop:orthonormal-linear-combination-norm} \hlt{Norm of an Orthonormal Linear Combination}\\
+If $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ is an orthonormal list in $\mathcal{V}$, then $\norm{a_1\mathbf{e}_1+\cdots+a_m\mathbf{e}_m}^2=\abs{a_1}^2+\cdots+\abs{a_m}^2$ for all $a_1,\ldots,a_m\in\mathbb{F}$.
+\begin{proof}
+Using orthonormality, $\norm{\sum\limits_{j=1}^{m}a_j\mathbf{e}_j}^2 =\innerprod{\sum\limits_{j=1}^{m}a_j\mathbf{e}_j,\sum\limits_{k=1}^{m}a_k\mathbf{e}_k} =\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{m}a_j\overline{a_k}\innerprod{\mathbf{e}_j,\mathbf{e}_k} =\sum\limits_{j=1}^{m}\abs{a_j}^2$.\\
+\hlt{Structural Commentary}: Orthonormality deletes every cross term in the squared-norm expansion.\\
+\hlt{Key Insight}: In orthonormal coordinates, length is computed coefficient-by-coefficient.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:orthonormal-list-linearly-independent} \hlt{Orthonormal Lists Are Linearly Independent}\\
+Every orthonormal list of vectors in an inner-product space is linearly independent.
+\begin{proof}
+If $a_1\mathbf{e}_1+\cdots+a_m\mathbf{e}_m=\mathbf{0}$, then Proposition \ref{prop:orthonormal-linear-combination-norm} gives $0=\norm{\mathbf{0}}^2=\norm{a_1\mathbf{e}_1+\cdots+a_m\mathbf{e}_m}^2=\sum\limits_{j=1}^{m}\abs{a_j}^2$.\\
+Hence each $a_j=0$, so the list is linearly independent.\\
+\hlt{Structural Commentary}: The norm identity converts a linear relation into a sum of nonnegative scalars.\\
+\hlt{Key Insight}: A zero orthonormal linear combination can only have zero coefficients.
+\end{proof}
+\end{corollary}
+
+\begin{definition} \label{def:orthonormal-basis} \hlt{Orthonormal Basis}\\
+An \hlt{orthonormal basis} of $\mathcal{V}$ is a basis of $\mathcal{V}$ that is an orthonormal list.
+\end{definition}
+
+\begin{proposition} \label{prop:right-length-orthonormal-list-is-basis} \hlt{Right-Length Orthonormal Lists Are Bases}\\
+If $\mathcal{V}$ is finite-dimensional and $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal list in $\mathcal{V}$ with $n=\dim(\mathcal{V})$, then $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal basis of $\mathcal{V}$.
+\begin{proof}
+By Corollary \ref{cor:orthonormal-list-linearly-independent}, the list is linearly independent.\\
+Since its length is $\dim(\mathcal{V})$, Proposition \ref{prop:full-dimension-basis-criteria} implies that it is a basis.\\
+\hlt{Structural Commentary}: Orthonormality gives independence; the correct length forces spanning.\\
+\hlt{Key Insight}: In finite dimensions, $n$ independent vectors in an $n$-dimensional space already form a basis.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:gram-schmidt-process} \hlt{Gram--Schmidt Process}\\
+Let $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a linearly independent list in an inner-product space $\mathcal{V}$.\\
+Define $\mathbf{u}_1=\mathbf{v}_1$, $\mathbf{e}_1=\frac{\mathbf{u}_1}{\norm{\mathbf{u}_1}}$ and, for $2\leq j\leq m$, $\mathbf{u}_j=\mathbf{v}_j-\sum\limits_{k=1}^{j-1}\innerprod{\mathbf{v}_j,\mathbf{e}_k}\mathbf{e}_k$, $\mathbf{e}_j=\frac{\mathbf{u}_j}{\norm{\mathbf{u}_j}}$.\\
+Then $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ is orthonormal and $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)=\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$.
+\begin{proof}
+Proceed by induction on $j$. The case $j=1$ is normalization of the nonzero vector $\mathbf{v}_1$.\\
+Assume the result holds through $j-1$. Since $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{j-1})=\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{j-1})$ and the $\mathbf{v}$-list is linearly independent, $\mathbf{v}_j\notin\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{j-1})$. Hence $\mathbf{u}_j\neq\mathbf{0}$, because $\mathbf{u}_j=\mathbf{0}$ would put $\mathbf{v}_j$ in that span.\\
+For $k<j$, $\innerprod{\mathbf{u}_j,\mathbf{e}_k} =\innerprod{\mathbf{v}_j,\mathbf{e}_k} -\sum\limits_{i=1}^{j-1}\innerprod{\mathbf{v}_j,\mathbf{e}_i}\innerprod{\mathbf{e}_i,\mathbf{e}_k} =\innerprod{\mathbf{v}_j,\mathbf{e}_k}-\innerprod{\mathbf{v}_j,\mathbf{e}_k}=0$.\\
+Thus $\mathbf{e}_j$ is a unit vector orthogonal to $\mathbf{e}_1,\ldots,\mathbf{e}_{j-1}$.\\
+Also $\mathbf{e}_j$ lies in $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)$ because it is a nonzero scalar multiple of $\mathbf{u}_j$, and $\mathbf{u}_j$ is built from $\mathbf{v}_j$ and the previous $\mathbf{e}_k$, whose span agrees with $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_{j-1})$.\\
+Conversely, $\mathbf{v}_j=\mathbf{u}_j+\sum\limits_{k=1}^{j-1}\innerprod{\mathbf{v}_j,\mathbf{e}_k}\mathbf{e}_k$ lies in $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_j)$. \\
+Combining this with the induction hypothesis gives equality of the two spans at step $j$.\\
+\hlt{Structural Commentary}: Subtract the previous-span component, then normalize.\\
+\hlt{Key Insight}: Gram--Schmidt changes the basis vectors but preserves every initial span.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:gram-schmidt-arbitrary-list} \hlt{Gram--Schmidt for Arbitrary Finite Lists}\\
+Let $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ be a finite list in an inner-product space.\\
+Define $\mathbf{u}_1=\mathbf{v}_1$ and, for $2\leq k\leq m$, $\mathbf{u}_k=\mathbf{v}_k-\sum\limits_{\substack{1\leq j<k\\ \mathbf{u}_j\neq\mathbf{0}}} \frac{\innerprod{\mathbf{v}_k,\mathbf{u}_j}}{\innerprod{\mathbf{u}_j,\mathbf{u}_j}}\mathbf{u}_j$.\\
+Set $U_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$ and $V_k=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_k)$, with $U_0=V_0=\{\mathbf{0}\}$.\\
+Then $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ is orthogonal, $U_k=V_k$ for $1\leq k\leq m$.\\
+\begin{proof}
+Induct on $k$. The case $k=0$ is trivial. Assume $(\mathbf{u}_1,\ldots,\mathbf{u}_{k-1})$ is orthogonal and $U_{k-1}=V_{k-1}$.\\
+For $i<k$ with $\mathbf{u}_i\neq\mathbf{0}$, $\innerprod{\mathbf{u}_k,\mathbf{u}_i} =\innerprod{\mathbf{v}_k,\mathbf{u}_i} -\frac{\innerprod{\mathbf{v}_k,\mathbf{u}_i}}{\innerprod{\mathbf{u}_i,\mathbf{u}_i}}\innerprod{\mathbf{u}_i,\mathbf{u}_i} =0$, while $\mathbf{u}_i=\mathbf{0}$ is trivial.\\
+Hence the list remains orthogonal. Also $\mathbf{u}_k\in V_k$ and $\mathbf{v}_k\in U_k$, so $U_k=V_k$.\\
+\hlt{Structural Commentary}: Gram--Schmidt preserves every prefix span.\\
+\hlt{Key Insight}: Each step subtracts previous orthogonal directions.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:gram-schmidt-zero-remainders} \hlt{Zero Remainders Detect Dependence}\\
+Let $(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ be constructed from $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ by Theorem \ref{thm:gram-schmidt-arbitrary-list},\\
+and set $U_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$, $V_k=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_k)$, with $U_0=V_0=\{\mathbf{0}\}$.\\
+Then $\mathbf{u}_k=\mathbf{0}\Longleftrightarrow \mathbf{v}_k\in V_{k-1}$, $1\leq k\leq m$.
+\begin{proof}
+The case $k=1$ follows from $\mathbf{u}_1=\mathbf{v}_1$ and $V_0=\{\mathbf{0}\}$. Let $2\leq k\leq m$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\mathbf{u}_k=\mathbf{0}$, the recursion gives $\mathbf{v}_k\in U_{k-1}=V_{k-1}$.
+\item[$(\Leftarrow)$] If $\mathbf{v}_k\in V_{k-1}=U_{k-1}$, write $\mathbf{v}_k=\sum_{\substack{1\leq j<k\\ \mathbf{u}_j\neq\mathbf{0}}}a_j\mathbf{u}_j$. Orthogonality gives $a_j=\frac{\innerprod{\mathbf{v}_k,\mathbf{u}_j}}{\innerprod{\mathbf{u}_j,\mathbf{u}_j}}$, recursion gives $\mathbf{u}_k=\mathbf{0}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Zero remainders certify dependence.\\
+\hlt{Key Insight}: A nonzero remainder is a new direction.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/gram_schmidt_step.tikz}
+  \caption{One Gram--Schmidt step: subtract the previous-span component, then normalize.}
+  \label{fig:gram-schmidt-step}
+\end{figure}
+
+\begin{example} \label{ex:gram-schmidt-legendre-polynomials} \hlt{Legendre Polynomials from Gram--Schmidt}\\
+Let $\mathbb{R}[x]$ have inner product $\innerprod{p,q}=\int_{-1}^{1}p(x)q(x)\,dx$, and apply Gram--Schmidt to $(1,x,x^2,x^3,\ldots)$.\\
+The first unnormalized vectors are $u_1(x)=1$, $u_2(x)=x$, $u_3(x)=x^2-\frac{1}{3}$, $u_4(x)=x^3-\frac{3}{5}x$.\\
+Thus $(u_n)$ is, up to nonzero scalar multiples, the Legendre sequence.\\
+\hlt{Structural Commentary}: Orthogonal polynomials are orthogonalized monomials.\\
+\hlt{Key Insight}: Changing the inner product changes the polynomial family produced by Gram--Schmidt.
+\end{example}
+
+\begin{lemma} \label{lem:gram-schmidt-preserves-orthogonal-lists} \hlt{Gram--Schmidt on Orthogonal Lists}\\
+If $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is a nonzero mutually orthogonal list, then Gram--Schmidt produces $\mathbf{e}_j=\frac{\mathbf{v}_j}{\norm{\mathbf{v}_j}}$, $j=1,\ldots,m$.\\
+In particular, if the original list is orthonormal, Gram--Schmidt leaves it unchanged.
+\begin{proof}
+Assume $\mathbf{e}_i=\mathbf{v}_i/\norm{\mathbf{v}_i}$ for $i<j$. Since $\mathbf{v}_j\perp\mathbf{v}_i$, we have $\innerprod{\mathbf{v}_j,\mathbf{e}_i}=0$ for every $i<j$.\\
+Hence the Gram--Schmidt remainder at step $j$ is $\mathbf{u}_j=\mathbf{v}_j$, so $\mathbf{e}_j=\mathbf{v}_j/\norm{\mathbf{v}_j}$.\\
+If the original list is orthonormal, then $\norm{\mathbf{v}_j}=1$ for every $j$.\\
+\hlt{Structural Commentary}: Orthogonal input has no previous-span component to subtract.\\
+\hlt{Key Insight}: Gram--Schmidt only removes nonorthogonal overlap.
+\end{proof}
+\end{lemma}
+
+\begin{corollary} \label{cor:finite-dimensional-inner-product-space-has-orthonormal-basis} \hlt{Existence of Orthonormal Bases}\\
+Every finite-dimensional inner-product space has an orthonormal basis.
+\begin{proof}
+Choose any basis of $\mathcal{V}$ and apply Theorem \ref{thm:gram-schmidt-process}.\\
+The resulting orthonormal list has the same span as the original basis, hence spans $\mathcal{V}$.\\
+\hlt{Structural Commentary}: Gram--Schmidt orthonormalizes a basis without changing its span.\\
+\hlt{Key Insight}: Finite-dimensional inner-product spaces always admit geometry-friendly coordinates.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:orthonormal-list-extends-to-basis} \hlt{Extending an Orthonormal List}\\
+Every orthonormal list in a finite-dimensional inner-product space can be extended to an orthonormal basis.
+\begin{proof}
+Let $(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ be orthonormal. It is linearly independent by Corollary \ref{cor:orthonormal-list-linearly-independent}, so extend it to a basis $(\mathbf{e}_1,\ldots,\mathbf{e}_m,\mathbf{v}_{m+1},\ldots,\mathbf{v}_n)$ by Theorem \ref{thm:extending-independent-lists}. \\
+During Gram--Schmidt, the first $m$ remainders are the original $\mathbf{e}_j$ because the list is already orthonormal; after normalization they remain unchanged. The remaining vectors are orthonormalized by Theorem \ref{thm:gram-schmidt-process}, and the final list spans $\mathcal{V}$ because Gram--Schmidt preserves the total span.\\
+\hlt{Structural Commentary}: Extend to a basis, then orthonormalize the new part.\\
+\hlt{Key Insight}: Existing orthonormal directions are already cleaned up, so Gram--Schmidt does not move them.
+\end{proof}
+\end{corollary}
