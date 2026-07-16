@@ -1,0 +1,68 @@
+\subsection{Rayleigh Quotients and Minimax}
+
+\begin{definition} \label{def:increasing-hermitian-eigenvalue-ordering} \hlt{Increasing Hermitian Eigenvalue Order}\\
+For a Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$, write $\lambda_1(A)\leq\lambda_2(A)\leq\cdots\leq\lambda_n(A)$ for its eigenvalues counted with algebraic multiplicity. If only one Hermitian matrix is under discussion, we write $\lambda_i$ instead of $\lambda_i(A)$.
+\end{definition}
+
+\begin{theorem} \label{thm:rayleigh-quotient-spectral-interval} \hlt{Rayleigh Quotient on a Spectral Interval}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$. For a unit vector, write $\operatorname{Ray}_A(\mathbf{x})\defeq\mathbf{x}^*A\mathbf{x}$. If $1\leq p\leq q\leq n$ and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ is a unit vector, then $\lambda_p\leq \operatorname{Ray}_A(\mathbf{x})\leq \lambda_q$.
+\begin{proof}
+Write $\mathbf{x}=\sum_{i=p}^{q}c_i\mathbf{u}_i$. Orthonormality gives $\sum_{i=p}^{q}\abs{c_i}^2=1$, and $\mathbf{x}^*A\mathbf{x} =\sum\limits_{i=p}^{q}\lambda_i\abs{c_i}^2$.\\
+This is a convex combination of $\lambda_p,\ldots,\lambda_q$, so it lies between the smallest and largest of them.\\
+\hlt{Structural Commentary}: In an eigenbasis, the Rayleigh quotient is an eigenvalue average.\\
+\hlt{Key Insight}: Spectral coordinates turn a quadratic form into weighted scalar data.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:rayleigh-extrema-and-diagonal-entry-bounds} \hlt{Rayleigh Extrema and Diagonal Entry Bounds}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{U}_{p,q}=\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$, then $\min\limits_{\substack{\mathbf{x}\in\mathcal{U}_{p,q}\\ \norm{\mathbf{x}}_2=1}}\mathbf{x}^*A\mathbf{x}=\lambda_p(A)$, and $\max\limits_{\substack{\mathbf{x}\in\mathcal{U}_{p,q}\\ \norm{\mathbf{x}}_2=1}}\mathbf{x}^*A\mathbf{x}=\lambda_q(A).$
+\item For every unit vector $\mathbf{x}$, $\lambda_1(A)\leq \mathbf{x}^*A\mathbf{x}\leq\lambda_n(A)$.
+\item If $A=[a_{ij}]$, then $\lambda_1(A)\leq a_{ii}\leq\lambda_n(A)$ for $i=1,\ldots,n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Theorem \ref{thm:rayleigh-quotient-spectral-interval} gives the inequalities on $\mathcal{U}_{p,q}$, with equality at $\mathbf{u}_p$ and $\mathbf{u}_q$.
+\item This is (i) with $p=1$ and $q=n$.
+\item Apply (ii) to $\mathbf{x}=\mathbf{e}_i$, since $\mathbf{e}_i^*A\mathbf{e}_i=a_{ii}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rayleigh extrema on extreme eigendirections; diagonal entries are coordinate quotients.\\
+\hlt{Key Insight}: The whole numerical range of a Hermitian matrix sits inside its spectral interval.
+\end{proof}
+\end{corollary}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/rayleigh_quotient_convex_combination.tikz}
+  \caption{For $\mathbf{x}\in\mathcal{U}_{p,q}$, $\operatorname{Ray}_A(\mathbf{x})$ is a convex combination of $\lambda_p,\ldots,\lambda_q$.}
+  \label{fig:rayleigh-quotient-convex-combination}
+\end{figure}
+
+\begin{theorem} \label{thm:courant-fischer-rayleigh-minmax} \hlt{Rayleigh Minimax Principle}\\
+Let $A=A^*\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$, and set $R_A(\mathbf{x})=\mathbf{x}^*A\mathbf{x}/(\mathbf{x}^*\mathbf{x})$ for $\mathbf{x}\neq\mathbf{0}$.\\
+For $1\leq k\leq n$, $\lambda_k =\min\limits_{\substack{\mathcal{S}\subseteq\mathbb{C}^n\\ \dim\mathcal{S}=k}}\; \max\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}} R_A(\mathbf{x}) =\max\limits_{\substack{\mathcal{S}\subseteq\mathbb{C}^n\\ \dim\mathcal{S}=n-k+1}}\; \min\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}} R_A(\mathbf{x})$.
+\begin{proof}
+Let $\mathbf{u}_1,\ldots,\mathbf{u}_n$ be an orthonormal eigenbasis in increasing order.\\
+Set $E_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$; $F_k=\operatorname{span}(\mathbf{u}_k,\ldots,\mathbf{u}_n)$.\\
+By Theorem \ref{thm:rayleigh-quotient-spectral-interval}, $\max_{\mathbf{0}\neq\mathbf{x}\in E_k}R_A(\mathbf{x})=\lambda_k$ and $\min_{\mathbf{0}\neq\mathbf{x}\in F_k}R_A(\mathbf{x})=\lambda_k$.\\
+If $\dim\mathcal{S}=k$, then $\mathcal{S}\cap F_k\neq\{\mathbf{0}\}$, so $\max_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}}R_A(\mathbf{x})\geq\lambda_k$; equality is attained by $E_k$.\\
+If $\dim\mathcal{T}=n-k+1$, then $\mathcal{T}\cap E_k\neq\{\mathbf{0}\}$, so $\min_{\mathbf{0}\neq\mathbf{x}\in\mathcal{T}}R_A(\mathbf{x})\leq\lambda_k$; equality is attained by $F_k$.\\
+\hlt{Structural Commentary}: Dimension forces intersections with spectral flags.\\
+\hlt{Key Insight}: Minimax is Rayleigh's quotient plus dimension counting.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:rayleigh-eigenbasis-method} \hlt{Rayleigh Eigenbasis Method}\\
+To bound a Hermitian quadratic form:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item diagonalise $A$ with an orthonormal eigenbasis;
+\item expand the unit vector in that basis;
+\item rewrite $\mathbf{x}^*A\mathbf{x}$ as $\sum_i\lambda_i\abs{c_i}^2$;
+\item use the eigenvalue range allowed by the support of $\mathbf{x}$.
+\end{enumerate}
+\end{method}
+

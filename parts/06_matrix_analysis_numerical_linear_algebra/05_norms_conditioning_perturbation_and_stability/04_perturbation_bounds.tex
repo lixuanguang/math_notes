@@ -41,10 +41,6 @@ To bound eigenvalue movement for a diagonalizable matrix:
 \end{enumerate}
 \end{method}
 
-\begin{perspective} \label{per:pseudospectral-intuition} \hlt{Pseudospectral Intuition}\\
-For a matrix $A$, the $\varepsilon$-pseudospectrum records complex numbers $z$ for which $A-zI$ is singular or nearly singular. Equivalently, it asks where a perturbation of size at most $\varepsilon$ can move the spectrum. Bauer--Fike gives a clean enclosure for diagonalizable matrices, while Gersgorin and norm bounds give cruder but often cheaper enclosures. The main lesson is that eigenvalues of nonnormal matrices can be much more sensitive than their locations alone suggest.
-\end{perspective}
-
 \begin{definition} \label{def:gersgorin-disks} \hlt{Gersgorin Disks}\\
 Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{deleted absolute row sum} in row $k$ is $R_k^{\mathrm{off}}(A)\defeq\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
 The \hlt{$k$th Gersgorin disk} of $A$ is $\operatorname{Ger}_k(A)\defeq\{z\in\mathbb{C}:\abs{z-a_{kk}}\leq R_k^{\mathrm{off}}(A)\}$, where $\operatorname{Ger}(A)\defeq\bigcup\limits_{k=1}^{n}\operatorname{Ger}_k(A)$.
@@ -61,6 +57,18 @@ Thus $\lambda\in \operatorname{Ger}_k(A)\subseteq \operatorname{Ger}(A)$.\\
 \hlt{Key Insight}: Row $k$ traps $\lambda$ in the disk centered at $a_{kk}$ with radius $R_k^{\mathrm{off}}(A)$.
 \end{proof}
 \end{theorem}
+
+\begin{corollary} \label{cor:gersgorin-row-column-refinement} \hlt{Row-Column Gersgorin Refinement}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$.\\
+If $R_k(A)=\sum\limits_{j=1}^{n}\abs{a_{kj}}$ and $R_{\max}(A)=\max_{1\leq k\leq n}R_k(A)$, then $\operatorname{spec}(A)\subseteq\{z\in\mathbb{C}:\abs{z}\leq \min(R_{\max}(A),R_{\max}(A^t))\}$.
+\begin{proof}
+Theorem \ref{thm:gersgorin-disk-theorem} gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)$.\\
+Proposition \ref{prop:transpose-preserves-spectrum-and-geometric-multiplicity} gives $\operatorname{spec}(A)=\operatorname{spec}(A^t)$, so applying Gersgorin to $A^t$ gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A^t)$.\\
+Also $\operatorname{Ger}_k(A)\subseteq\{z:\abs{z}\leq \abs{a_{kk}}+R_k^{\mathrm{off}}(A)=R_k(A)\}$, and similarly for $A^t$.\\
+\hlt{Structural Commentary}: Row disks and column disks are both valid because $A$ and $A^t$ have the same spectrum.\\
+\hlt{Key Insight}: Intersecting independent enclosures usually sharpens the eigenvalue search region.
+\end{proof}
+\end{corollary}
 
 \begin{method} \label{meth:gersgorin-disk-localisation} \hlt{Gersgorin Localisation Method}\\
 For $A=[a_{ij}]$, Gersgorin localisation gives a disk enclosure for the spectrum.
@@ -81,15 +89,6 @@ This is the intersection of two unions of disks; an eigenvalue need not lie in t
   \label{fig:gersgorin-disk-method}
 \end{figure}
 
-\begin{corollary} \label{cor:gersgorin-row-column-refinement} \hlt{Row-Column Gersgorin Refinement}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$.\\
-If $R_k(A)=\sum\limits_{j=1}^{n}\abs{a_{kj}}$ and $R_{\max}(A)=\max_{1\leq k\leq n}R_k(A)$, then $\operatorname{spec}(A)\subseteq\{z\in\mathbb{C}:\abs{z}\leq \min(R_{\max}(A),R_{\max}(A^t))\}$.
-\begin{proof}
-Theorem \ref{thm:gersgorin-disk-theorem} gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)$.\\
-Proposition \ref{prop:transpose-preserves-spectrum-and-geometric-multiplicity} gives $\operatorname{spec}(A)=\operatorname{spec}(A^t)$, so applying Gersgorin to $A^t$ gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A^t)$.\\
-Also $\operatorname{Ger}_k(A)\subseteq\{z:\abs{z}\leq \abs{a_{kk}}+R_k^{\mathrm{off}}(A)=R_k(A)\}$, and similarly for $A^t$.\\
-\hlt{Structural Commentary}: Row disks and column disks are both valid because $A$ and $A^t$ have the same spectrum.\\
-\hlt{Key Insight}: Intersecting independent enclosures usually sharpens the eigenvalue search region.
-\end{proof}
-\end{corollary}
-
+\begin{perspective} \label{per:pseudospectral-intuition} \hlt{Pseudospectral Intuition}\\
+For a matrix $A$, the $\varepsilon$-pseudospectrum records complex numbers $z$ for which $A-zI$ is singular or nearly singular. Equivalently, it asks where a perturbation of size at most $\varepsilon$ can move the spectrum. Bauer--Fike gives a clean enclosure for diagonalizable matrices, while Gersgorin and norm bounds give cruder but often cheaper enclosures. The main lesson is that eigenvalues of nonnormal matrices can be much more sensitive than their locations alone suggest.
+\end{perspective}
