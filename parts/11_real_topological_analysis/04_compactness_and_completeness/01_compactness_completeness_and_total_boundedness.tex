@@ -37,6 +37,96 @@ Let $(X,d)$ be a metric space. Then $X$ is compact iff every nonempty family $\m
   \label{fig:compactness-finite-subcover}
 \end{figure}
 
+\begin{example} \label{ex:open-interval-cover-without-finite-subcover} \hlt{An Open Cover Without a Finite Subcover}\\
+For $x\in(0,1)$, set $O_x\defeq(x/2,1)$. These sets cover $(0,1)$, since $y\in O_x$ whenever $0<x<y<1$.\\
+No finite subcollection covers $(0,1)$: if $x'=\min\{x_1,\ldots,x_n\}$, then $(0,x'/2]$ is missed by $O_{x_1}\cup\cdots\cup O_{x_n}$.
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/open_cover_no_finite_subcover.tikz}
+  \caption{For finite choice, $x'=\min_i x_i$ makes $O_{x'}$ largest selected interval, but $(0,x'/2]$ remains uncovered.}
+  \label{fig:open-cover-no-finite-subcover}
+\end{figure}
+
+\begin{theorem} \label{thm:compactness-independent-of-ambient-space} \hlt{Compactness Is Independent of the Ambient Space}\\
+Suppose $K\subseteq Y\subseteq X$, where $X$ is a metric space.\\
+Then $K$ is compact relative to $X$ if and only if $K$ is compact relative to $Y$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $\{V_\alpha\}_{\alpha\in A}$ be a relative-open cover of $K$ in $Y$.\\
+By Theorem \ref{thm:relative-open-intersection-with-open-set}, write $V_\alpha=Y\cap G_\alpha$ with $G_\alpha$ open in $X$. Since $\{G_\alpha\}_{\alpha\in A}$ covers $K$, compactness in $X$ gives a finite $F\subseteq A$ such that $K\subseteq\bigcup_{\alpha\in F}G_\alpha$. As $K\subseteq Y$, $K\subseteq\bigcup_{\alpha\in F}V_\alpha$.
+\item[$(\Leftarrow)$] Let $\{G_\alpha\}_{\alpha\in A}$ be an open cover of $K$ in $X$. Then $\{Y\cap G_\alpha\}_{\alpha\in A}$ is a relative-open cover of $K$ in $Y$.\\
+Compactness in $Y$ gives a finite $F\subseteq A$ such that $K\subseteq\bigcup_{\alpha\in F}(Y\cap G_\alpha)\subseteq\bigcup_{\alpha\in F}G_\alpha$.
+\end{enumerate}
+\hlt{Structural Commentary}: Relative covers are ambient covers intersected with $Y$.\\
+\hlt{Key Insight}: Openness depends on the ambient space, but compactness does not.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:compact-subsets-of-metric-spaces-closed} \hlt{Compact Sets Are Closed}\\
+Every compact subset of a metric space is closed.
+\begin{proof}
+Let $K$ be compact in $X$. To prove $K^c$ is open.\\
+Fix $p\in K^c$. For each $q\in K$, put $V_q\defeq B_{\frac12d(p,q)}(p)$, $W_q\defeq B_{\frac12d(p,q)}(q)$.\\
+The sets $W_q$ form an open cover of $K$, so compactness gives $q_1,\ldots,q_n\in K$ with $K\subseteq W_{q_1}\cup\cdots\cup W_{q_n}$.\\
+Let $V\defeq V_{q_1}\cap\cdots\cap V_{q_n}$, which is open by Theorem \ref{thm:metric-open-closed-set-calculus}.\\
+No point of $V$ lies in any $W_{q_i}$, by the triangle inequality. Hence $V\cap K=\emptyset$, so $p$ is an interior point of $K^c$.\\
+\hlt{Structural Commentary}: Compactness makes the separation finite.\\
+\hlt{Key Insight}: A finite subcover lets local point-separations become one open neighborhood of the complement.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:closed-subsets-of-compact-sets-compact} \hlt{Closed Subsets of Compact Sets Are Compact}\\
+Suppose $F\subseteq K\subseteq X$, where $F$ is closed in $X$ and $K$ is compact. Then $F$ is compact.
+\begin{proof}
+Let $\{V_\alpha\}_{\alpha\in A}$ cover $F$. Since $F^c$ is open, $\{V_\alpha\}_{\alpha\in A}\cup\{F^c\}$ covers $K$.\\
+Thus $K\subseteq F^c\cup\bigcup\limits_{\alpha\in F_0}V_\alpha$ for some finite $F_0\subseteq A$, so $F\subseteq\bigcup\limits_{\alpha\in F_0}V_\alpha$.\\
+\hlt{Structural Commentary}: The open complement of a closed set covers exactly the part of $K$ not under discussion.\\
+\hlt{Key Insight}: Cover $K$, then discard the complement piece.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:closed-intersection-compact} \hlt{Closed Intersections with Compact Sets}\\
+If $F$ is closed in $X$ and $K$ is compact in $X$, then $F\cap K$ is compact.
+\begin{proof}
+By Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}, $K$ is closed in $X$. Since $F$ is closed, Theorem \ref{thm:metric-open-closed-set-calculus} gives that $F\cap K$ is closed in $X$. Also $F\cap K\subseteq K$, so Theorem \ref{thm:closed-subsets-of-compact-sets-compact} implies $F\cap K$ is compact.\\
+\hlt{Structural Commentary}: The intersection is closed inside a compact set.\\
+\hlt{Key Insight}: Closed subsets of compact sets remain compact.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:compact-finite-intersection-property} \hlt{Finite Intersection Property for Compact Sets}\\
+Let $\{K_\alpha\}_{\alpha\in A}$ be compact subsets of a metric space $X$, with $A\neq\emptyset$.\\
+If $\bigcap\limits_{\alpha\in F}K_\alpha\neq\emptyset$ for every finite nonempty $F\subseteq A$, then $\bigcap\limits_{\alpha\in A}K_\alpha\neq\emptyset$.
+\begin{proof}
+Choose $\alpha_0\in A$ and suppose $\bigcap\limits_{\alpha\in A}K_\alpha=\emptyset$. Then $K_{\alpha_0}\subseteq\bigcup\limits_{\alpha\in A}K_\alpha^c$. Since each $K_\alpha^c$ is open by Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}, compactness of $K_{\alpha_0}$ gives a finite $F\subseteq A$ with $K_{\alpha_0}\subseteq\bigcup\limits_{\alpha\in F}K_\alpha^c$. Hence $\bigcap\limits_{\alpha\in F\cup\{\alpha_0\}}K_\alpha=\emptyset$, a contradiction.\\
+\hlt{Structural Commentary}: Complements turn failure into a finite cover.\\
+\hlt{Key Insight}: For compact sets, failure of intersection is already witnessed finitely.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:nested-nonempty-compact-intersection} \hlt{Nested Nonempty Compact Sets Intersect}\\
+If $K_1\supseteq K_2\supseteq K_3\supseteq\cdots$ is a sequence of nonempty compact sets, then $\bigcap_{n=1}^{\infty}K_n\neq\emptyset$.
+\begin{proof}
+Let $\emptyset\neq F\subseteq\N$ be finite and put $m\defeq\max F$. Since the sequence is nested, $\bigcap\limits_{n\in F}K_n=K_m\neq\emptyset$.\\
+Thus $\{K_n\}_{n\in\N}$ has the finite intersection property, so Theorem \ref{thm:compact-finite-intersection-property} gives $\bigcap\limits_{n=1}^{\infty}K_n\neq\emptyset$.\\
+\hlt{Structural Commentary}: Nestedness reduces finite intersections to one term.\\
+\hlt{Key Insight}: A nested compact sequence has the finite intersection property.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:infinite-subset-of-compact-has-limit-point} \hlt{Infinite Subsets of Compact Sets Have Limit Points}\\
+Let $K\subseteq X$ be compact in a metric space $X$. If $E\subseteq K$ is infinite, then $E^{\operatorname{acc}}\cap K\neq\emptyset$.
+\begin{proof} Suppose $E^{\operatorname{acc}}\cap K=\emptyset$. $\forall q\in K$, choose $r_q>0$ such that $B_{r_q}(q)\cap(E\setminus\{q\})=\emptyset$, so $\#(B_{r_q}(q)\cap E)\leq1$.\\
+Since $\{B_{r_q}(q):q\in K\}$ covers $K$, compactness gives $q_1,\ldots,q_n\in K$ with $K\subseteq\bigcup\limits_{i=1}^{n}B_{r_{q_i}}(q_i)$.\\
+As $E\subseteq K$, $E\subseteq\bigcup\limits_{i=1}^{n}B_{r_{q_i}}(q_i)$, finite union of sets meeting $E$ in at most one point. Thus $E$ is finite, contradiction.\\
+\hlt{Structural Commentary}: Compactness makes the local ``at most one point'' obstruction finite.\\
+\hlt{Key Insight}: Infinite subsets of compact sets must accumulate somewhere inside the compact set.
+\end{proof}
+\end{theorem}
+
 \begin{definition} \label{def:sequentially-compact-metric-space} \hlt{Sequential Compactness}\\
 A metric space is \hlt{sequentially compact} if every sequence has a convergent subsequence.
 \end{definition}
@@ -55,16 +145,6 @@ A metric space is \hlt{sequentially compact} if every sequence has a convergent 
 \end{enumerate}
 \hlt{Structural Commentary}: Compactness turns arbitrary infinite behavior into an accumulating subsequence.\\
 \hlt{Key Insight}: In $\R^k$, boundedness is enough because bounded sets sit inside compact closed cells.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:subsequential-limits-closed} \hlt{Subsequential Limits Form a Closed Set}\\
-For a sequence $(p_n)$ in a metric space $X$, the set of all subsequential limits is closed.
-\begin{proof}
-Let $E^*$ be the set of subsequential limits and let $q$ be a limit point of $E^*$. Set $n_0=0$.\\
-For each $i$, choose $x_i\in E^*$ with $d(x_i,q)<2^{-i}$. Since $x_i$ is a subsequential limit, choose $n_i>n_{i-1}$ such that $d(p_{n_i},x_i)<2^{-i}$. Then $d(p_{n_i},q)<2^{1-i}$, so $p_{n_i}\to q$, and $q\in E^*$.\\
-\hlt{Structural Commentary}: A limit of subsequential limits is reached by diagonalizing through those subsequences.\\
-\hlt{Key Insight}: Choose later and closer terms at the same time.
 \end{proof}
 \end{theorem}
 
@@ -338,93 +418,3 @@ Thus $a\in B_r(x)\cap D$, so every $X$-open ball around $x$ meets $D$. Hence $x\
 \hlt{Key Insight}: Total boundedness converts compactness into countably many finite approximations.
 \end{proof}
 \end{proposition}
-
-\begin{example} \label{ex:open-interval-cover-without-finite-subcover} \hlt{An Open Cover Without a Finite Subcover}\\
-For $x\in(0,1)$, set $O_x\defeq(x/2,1)$. These sets cover $(0,1)$, since $y\in O_x$ whenever $0<x<y<1$.\\
-No finite subcollection covers $(0,1)$: if $x'=\min\{x_1,\ldots,x_n\}$, then $(0,x'/2]$ is missed by $O_{x_1}\cup\cdots\cup O_{x_n}$.
-\end{example}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/open_cover_no_finite_subcover.tikz}
-  \caption{For finite choice, $x'=\min_i x_i$ makes $O_{x'}$ largest selected interval, but $(0,x'/2]$ remains uncovered.}
-  \label{fig:open-cover-no-finite-subcover}
-\end{figure}
-
-\begin{theorem} \label{thm:compactness-independent-of-ambient-space} \hlt{Compactness Is Independent of the Ambient Space}\\
-Suppose $K\subseteq Y\subseteq X$, where $X$ is a metric space.\\
-Then $K$ is compact relative to $X$ if and only if $K$ is compact relative to $Y$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $\{V_\alpha\}_{\alpha\in A}$ be a relative-open cover of $K$ in $Y$.\\
-By Theorem \ref{thm:relative-open-intersection-with-open-set}, write $V_\alpha=Y\cap G_\alpha$ with $G_\alpha$ open in $X$. Since $\{G_\alpha\}_{\alpha\in A}$ covers $K$, compactness in $X$ gives a finite $F\subseteq A$ such that $K\subseteq\bigcup_{\alpha\in F}G_\alpha$. As $K\subseteq Y$, $K\subseteq\bigcup_{\alpha\in F}V_\alpha$.
-\item[$(\Leftarrow)$] Let $\{G_\alpha\}_{\alpha\in A}$ be an open cover of $K$ in $X$. Then $\{Y\cap G_\alpha\}_{\alpha\in A}$ is a relative-open cover of $K$ in $Y$.\\
-Compactness in $Y$ gives a finite $F\subseteq A$ such that $K\subseteq\bigcup_{\alpha\in F}(Y\cap G_\alpha)\subseteq\bigcup_{\alpha\in F}G_\alpha$.
-\end{enumerate}
-\hlt{Structural Commentary}: Relative covers are ambient covers intersected with $Y$.\\
-\hlt{Key Insight}: Openness depends on the ambient space, but compactness does not.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:compact-subsets-of-metric-spaces-closed} \hlt{Compact Sets Are Closed}\\
-Every compact subset of a metric space is closed.
-\begin{proof}
-Let $K$ be compact in $X$. To prove $K^c$ is open.\\
-Fix $p\in K^c$. For each $q\in K$, put $V_q\defeq B_{\frac12d(p,q)}(p)$, $W_q\defeq B_{\frac12d(p,q)}(q)$.\\
-The sets $W_q$ form an open cover of $K$, so compactness gives $q_1,\ldots,q_n\in K$ with $K\subseteq W_{q_1}\cup\cdots\cup W_{q_n}$.\\
-Let $V\defeq V_{q_1}\cap\cdots\cap V_{q_n}$, which is open by Theorem \ref{thm:metric-open-closed-set-calculus}.\\
-No point of $V$ lies in any $W_{q_i}$, by the triangle inequality. Hence $V\cap K=\emptyset$, so $p$ is an interior point of $K^c$.\\
-\hlt{Structural Commentary}: Compactness makes the separation finite.\\
-\hlt{Key Insight}: A finite subcover lets local point-separations become one open neighborhood of the complement.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:closed-subsets-of-compact-sets-compact} \hlt{Closed Subsets of Compact Sets Are Compact}\\
-Suppose $F\subseteq K\subseteq X$, where $F$ is closed in $X$ and $K$ is compact. Then $F$ is compact.
-\begin{proof}
-Let $\{V_\alpha\}_{\alpha\in A}$ cover $F$. Since $F^c$ is open, $\{V_\alpha\}_{\alpha\in A}\cup\{F^c\}$ covers $K$.\\
-Thus $K\subseteq F^c\cup\bigcup\limits_{\alpha\in F_0}V_\alpha$ for some finite $F_0\subseteq A$, so $F\subseteq\bigcup\limits_{\alpha\in F_0}V_\alpha$.\\
-\hlt{Structural Commentary}: The open complement of a closed set covers exactly the part of $K$ not under discussion.\\
-\hlt{Key Insight}: Cover $K$, then discard the complement piece.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:closed-intersection-compact} \hlt{Closed Intersections with Compact Sets}\\
-If $F$ is closed in $X$ and $K$ is compact in $X$, then $F\cap K$ is compact.
-\begin{proof}
-By Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}, $K$ is closed in $X$. Since $F$ is closed, Theorem \ref{thm:metric-open-closed-set-calculus} gives that $F\cap K$ is closed in $X$. Also $F\cap K\subseteq K$, so Theorem \ref{thm:closed-subsets-of-compact-sets-compact} implies $F\cap K$ is compact.\\
-\hlt{Structural Commentary}: The intersection is closed inside a compact set.\\
-\hlt{Key Insight}: Closed subsets of compact sets remain compact.
-\end{proof}
-\end{corollary}
-
-\begin{theorem} \label{thm:compact-finite-intersection-property} \hlt{Finite Intersection Property for Compact Sets}\\
-Let $\{K_\alpha\}_{\alpha\in A}$ be compact subsets of a metric space $X$, with $A\neq\emptyset$.\\
-If $\bigcap\limits_{\alpha\in F}K_\alpha\neq\emptyset$ for every finite nonempty $F\subseteq A$, then $\bigcap\limits_{\alpha\in A}K_\alpha\neq\emptyset$.
-\begin{proof}
-Choose $\alpha_0\in A$ and suppose $\bigcap\limits_{\alpha\in A}K_\alpha=\emptyset$. Then $K_{\alpha_0}\subseteq\bigcup\limits_{\alpha\in A}K_\alpha^c$. Since each $K_\alpha^c$ is open by Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}, compactness of $K_{\alpha_0}$ gives a finite $F\subseteq A$ with $K_{\alpha_0}\subseteq\bigcup\limits_{\alpha\in F}K_\alpha^c$. Hence $\bigcap\limits_{\alpha\in F\cup\{\alpha_0\}}K_\alpha=\emptyset$, a contradiction.\\
-\hlt{Structural Commentary}: Complements turn failure into a finite cover.\\
-\hlt{Key Insight}: For compact sets, failure of intersection is already witnessed finitely.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:nested-nonempty-compact-intersection} \hlt{Nested Nonempty Compact Sets Intersect}\\
-If $K_1\supseteq K_2\supseteq K_3\supseteq\cdots$ is a sequence of nonempty compact sets, then $\bigcap_{n=1}^{\infty}K_n\neq\emptyset$.
-\begin{proof}
-Let $\emptyset\neq F\subseteq\N$ be finite and put $m\defeq\max F$. Since the sequence is nested, $\bigcap\limits_{n\in F}K_n=K_m\neq\emptyset$.\\
-Thus $\{K_n\}_{n\in\N}$ has the finite intersection property, so Theorem \ref{thm:compact-finite-intersection-property} gives $\bigcap\limits_{n=1}^{\infty}K_n\neq\emptyset$.\\
-\hlt{Structural Commentary}: Nestedness reduces finite intersections to one term.\\
-\hlt{Key Insight}: A nested compact sequence has the finite intersection property.
-\end{proof}
-\end{corollary}
-
-\begin{theorem} \label{thm:infinite-subset-of-compact-has-limit-point} \hlt{Infinite Subsets of Compact Sets Have Limit Points}\\
-Let $K\subseteq X$ be compact in a metric space $X$. If $E\subseteq K$ is infinite, then $E^{\operatorname{acc}}\cap K\neq\emptyset$.
-\begin{proof} Suppose $E^{\operatorname{acc}}\cap K=\emptyset$. $\forall q\in K$, choose $r_q>0$ such that $B_{r_q}(q)\cap(E\setminus\{q\})=\emptyset$, so $\#(B_{r_q}(q)\cap E)\leq1$.\\
-Since $\{B_{r_q}(q):q\in K\}$ covers $K$, compactness gives $q_1,\ldots,q_n\in K$ with $K\subseteq\bigcup\limits_{i=1}^{n}B_{r_{q_i}}(q_i)$.\\
-As $E\subseteq K$, $E\subseteq\bigcup\limits_{i=1}^{n}B_{r_{q_i}}(q_i)$, finite union of sets meeting $E$ in at most one point. Thus $E$ is finite, contradiction.\\
-\hlt{Structural Commentary}: Compactness makes the local ``at most one point'' obstruction finite.\\
-\hlt{Key Insight}: Infinite subsets of compact sets must accumulate somewhere inside the compact set.
-\end{proof}
-\end{theorem}
