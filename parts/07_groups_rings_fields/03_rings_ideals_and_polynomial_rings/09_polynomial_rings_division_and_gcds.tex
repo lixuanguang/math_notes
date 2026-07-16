@@ -1,0 +1,51 @@
+\subsection{Polynomial Rings, Division, and GCDs}
+
+Polynomial rings over fields behave like the integers in the ways linear algebra needs: division with remainder, gcds, Bezout identities, irreducible factorization, and principal ideals.
+
+\begin{definition} \label{def:polynomial-degree-monic-splitting} \hlt{Polynomials over a Field}\\
+Let $\mathbb{F}$ be a field.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{F}[x]$ denotes the ring of polynomials in one variable over $\mathbb{F}$.
+\item If $0\neq p\in\mathbb{F}[x]$ and $p(x)=a_0+a_1x+\cdots+a_nx^n$, $a_n\neq0$, then $\operatorname{lc}(p)\defeq a_n$, $\deg p\defeq n$.\\
+Also, $p$ is \hlt{monic} iff $\operatorname{lc}(p)=1$. Set $\deg0=-\infty$.
+\item A nonzero $p\in\mathbb{F}[x]$ \hlt{splits over $\mathbb{F}$} iff $p=\alpha\prod\limits_{i=1}^{m}(x-\lambda_i)$ for some $m\geq0$, $\alpha\in\mathbb{F}^{\times}$, and $\lambda_i\in\mathbb{F}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:polynomial-division-algorithm} \hlt{Polynomial Division Algorithm}\\
+Let $f,g\in\mathbb{F}[x]$ with $g\neq0$. Then $\exists!\,(q,r)\in\mathbb{F}[x]^2$ such that  $f=qg+r$, $r=0$ or $\deg r<\deg g$.
+\begin{proof}
+Let $d=\deg g$ and $\ell=\operatorname{lc}(g)$. Existence follows by induction on $\deg f$. If $f=0$ or $\deg f<d$, take $(q,r)=(0,f)$. Otherwise, let $n=\deg f$, $a=\operatorname{lc}(f)$, and $f_1=f-a\ell^{-1}x^{n-d}g$. Then $\deg f_1<n$.\\
+By induction, $f_1=q_1g+r$ with $r=0$ or $\deg r<d$, hence $f=(q_1+a\ell^{-1}x^{n-d})g+r$.\\
+For uniqueness, if $qg+r=q'g+r'$ with admissible remainders, then $(q-q')g=r'-r$.\\
+If $q\neq q'$, then $\deg((q-q')g)\geq d$, while $\deg(r'-r)<d$, contradiction. Hence $q=q'$ and then $r=r'$.\\
+\hlt{Structural Commentary}: Division works because the leading coefficient of $g$ is invertible in the field.\\
+\hlt{Key Insight}: Cancel leading terms until the remainder is too small to divide again.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:polynomial-divisibility-gcd-coprime} \hlt{Divisibility, GCDs, and Coprimality}\\
+For $p,q\in\mathbb{F}[x]$, write $p\mid q$ if $q=hp$ for some $h\in\mathbb{F}[x]$.\\
+A \hlt{greatest common divisor} of $f,g\in\mathbb{F}[x]$, not both zero, is the unique monic polynomial $\gcd(f,g)$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\gcd(f,g)\mid f$ and $\gcd(f,g)\mid g$;
+\item every common divisor of $f$ and $g$ divides $\gcd(f,g)$.
+\end{enumerate}
+The polynomials $f,g$ are \hlt{relatively prime} if $\gcd(f,g)=1$.
+\end{definition}
+
+\begin{theorem} \label{thm:polynomial-gcd-bezout} \hlt{Polynomial GCD and Bezout Identity}\\
+For $f,g\in\mathbb{F}[x]$, not both zero, $\exists$ a unique monic $d\in\mathbb{F}[x]$ s.t. $d\mid f$, $d\mid g$, $h\mid f$, $h\mid g\Longrightarrow h\mid d$\\
+Moreover, $d=\gcd(f,g)$ satisfies $d=af+bg$ for some $a,b\in\mathbb{F}[x]$.\\
+Hence $\gcd(f,g)=1$ iff $\exists\,a,b\in\mathbb{F}[x]$ with $af+bg=1$.
+\begin{proof}
+If one of $f,g$ is $0$, the claim is immediate from the monic associate of the other.\\
+Assume $f,g\neq0$ and run the Euclidean algorithm: $r_{i-1}=q_ir_i+r_{i+1}$, where $r_{i+1}<\deg r_i$, starting with $(r_0,r_1)=(f,g)$ and ending with $r_N\neq0$, $r_{N+1}=0$. Then $r_N\mid r_{N-1}$, and upward substitution gives $r_N\mid f,g$.\\
+Conversely, any common divisor of $f,g$ divides every $r_i$, hence divides $r_N$. Thus $d\defeq\operatorname{lc}(r_N)^{-1}r_N$ is a monic gcd; uniqueness follows since two monic gcds divide each other.\\
+Back-substitution gives $d=af+bg$ for some $a,b\in\mathbb{F}[x]$. Finally, $d=1$ gives $af+bg=1$; conversely, if $af+bg=1$, every common divisor divides $1$, so $d=1$.\\
+\hlt{Structural Commentary}: The Euclidean algorithm produces both the gcd and its Bezout certificate.\\
+\hlt{Key Insight}: GCD data is ideal data in $\mathbb{F}[x]$.
+\end{proof}
+\end{theorem}
