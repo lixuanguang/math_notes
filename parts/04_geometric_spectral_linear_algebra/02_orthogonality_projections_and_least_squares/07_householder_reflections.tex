@@ -1,1 +1,57 @@
-% Placeholder for future Householder-reflection content.
+\subsection{Householder Reflections}
+
+\begin{definition} \label{def:householder-matrix} \hlt{Householder Matrix}\\
+Let $\mathbf{w}\in\mathbb{F}^n$ be nonzero and set $\mathbf{u}=\mathbf{w}/\norm{\mathbf{w}}_2$.\\
+The \hlt{Householder matrix} associated to $\mathbf{w}$ is $U_{\mathbf{w}}\defeq I_n-2P_{\mathbf{u}}=I_n-2\frac{\mathbf{w}\mathbf{w}^*}{\norm{\mathbf{w}}_2^2}$.\\
+It acts by $\mathbf{x}\mapsto U_{\mathbf{w}}\mathbf{x}=\mathbf{x}-2\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{u}}\mathbf{u}$.
+\end{definition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/householder_reflection.tikz}
+  \caption{A Householder matrix fixes $\mathbf{w}^{\perp}$ and flips the $\operatorname{span}(\mathbf{w})$ component.}
+  \label{fig:householder-reflection}
+\end{figure}
+
+\begin{theorem} \label{thm:householder-matrix-properties} \hlt{Householder Matrices Are Unitary Reflections}\\
+Every Householder matrix $U_{\mathbf{w}}$ is unitary, Hermitian, and involutive: $U_{\mathbf{w}}^*U_{\mathbf{w}}=I_n$, $U_{\mathbf{w}}^*=U_{\mathbf{w}}$, $U_{\mathbf{w}}^2=I_n$.\\
+If $\mathbf{w}\in\mathbb{R}^n$, then $U_{\mathbf{w}}$ is real orthogonal and symmetric.
+\begin{proof}
+Let $\mathbf{u}=\mathbf{w}/\norm{\mathbf{w}}_2$. By Proposition \ref{prop:rank-one-projection-matrix-properties}, $P_{\mathbf{u}}^*=P_{\mathbf{u}}$ and $P_{\mathbf{u}}^2=P_{\mathbf{u}}$.\\
+Therefore $U_{\mathbf{w}}^*=I_n-2P_{\mathbf{u}}=U_{\mathbf{w}}$, $U_{\mathbf{w}}^2=(I_n-2P_{\mathbf{u}})^2=I_n-4P_{\mathbf{u}}+4P_{\mathbf{u}}^2=I_n$.\\
+Thus $U_{\mathbf{w}}^*U_{\mathbf{w}}=U_{\mathbf{w}}^2=I_n$, so $U_{\mathbf{w}}$ is unitary. The real case is the same statement with conjugation removed.\\
+\hlt{Structural Commentary}: A Householder matrix reflects across an orthogonal hyperplane.\\
+\hlt{Key Insight}: The identity $P_{\mathbf{u}}^2=P_{\mathbf{u}}$ makes $(I-2P_{\mathbf{u}})^2=I$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:householder-maps-equal-norm-vectors} \hlt{Householder Map Between Equal-Norm Vectors}\\
+Let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$ satisfy $\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2\neq0$. Define $\sigma=
+\begin{cases}
+1, & \innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}=0,\\
+-\dfrac{\overline{\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}}}{\abs{\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}}}, & \innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}\neq0,
+\end{cases}$, where $\mathbf{w}=\mathbf{y}-\sigma\mathbf{x}$.\\
+Then $\mathbf{w}\neq\mathbf{0}$, $\abs{\sigma}=1$, and $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}$.
+\begin{proof}
+Clearly $\abs{\sigma}=1$. Let $z=\innerprod{\mathbf{x},\mathbf{y}}$ and $r=\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2$. By construction, $\sigma z=-\abs{z}$, with the convention that this equals $0$ when $z=0$. Hence $\norm{\mathbf{w}}_2^2 =\norm{\mathbf{y}-\sigma\mathbf{x}}_2^2 =2r^2-\sigma z-\overline{\sigma z} =2\left(r^2+\abs{z}\right)>0$, so $\mathbf{w}\neq\mathbf{0}$.\\
+Since $\mathbf{y}=\mathbf{w}+\sigma\mathbf{x}$, $\sigma U_{\mathbf{w}}\mathbf{x} =\sigma\mathbf{x}-2\sigma\frac{\innerprod{\mathbf{x},\mathbf{w}}}{\norm{\mathbf{w}}_2^2}\mathbf{w} =\mathbf{y}-\left(1+2\sigma\frac{\innerprod{\mathbf{x},\mathbf{w}}}{\norm{\mathbf{w}}_2^2}\right)\mathbf{w}$.\\
+But $\innerprod{\mathbf{x},\mathbf{w}}=z-\overline{\sigma}r^2$, so $2\sigma\innerprod{\mathbf{x},\mathbf{w}}=2\sigma z-2r^2=-2(r^2+\abs{z})=-\norm{\mathbf{w}}_2^2$.\\
+Coefficient of $\mathbf{w}$ is hence zero, proving $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}$.\\
+\hlt{Structural Commentary}: The scalar $\sigma$ chooses the phase so that $\mathbf{y}-\sigma\mathbf{x}$ gives a stable reflection direction.\\
+\hlt{Key Insight}: Householder reflections connect equal-norm vectors up to a unit scalar.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:householder-unitary-annihilator} \hlt{Householder Unitary Annihilator}\\
+Let $\mathbf{x}=[x_1\ \cdots\ x_n]^t\in\mathbb{F}^n$ be nonzero. Define $\sigma=
+\begin{cases}
+1, & x_1=0,\\
+-\dfrac{\overline{x_1}}{\abs{x_1}}, & x_1\neq0,
+\end{cases}$, where $\mathbf{w}=\norm{\mathbf{x}}_2\mathbf{e}_1-\sigma\mathbf{x}$.\\
+Then $\sigma U_{\mathbf{w}}\mathbf{x}=\norm{\mathbf{x}}_2\mathbf{e}_1$. If $\mathbf{x}$ is a unit vector, then $\overline{\sigma}U_{\mathbf{w}}$ is unitary and has $\mathbf{x}$ as its first column.
+\begin{proof}
+Apply Theorem \ref{thm:householder-maps-equal-norm-vectors} with $\mathbf{y}=\norm{\mathbf{x}}_2\mathbf{e}_1$, noting that $\innerprod{\mathbf{x},\mathbf{y}}=x_1\norm{\mathbf{x}}_2$. If $\norm{\mathbf{x}}_2=1$, then $(\sigma U_{\mathbf{w}})\mathbf{x}=\mathbf{e}_1$, so $(\sigma U_{\mathbf{w}})^*\mathbf{e}_1=\mathbf{x}$. Since $(\sigma U_{\mathbf{w}})^*=\overline{\sigma}U_{\mathbf{w}}$, this says the first column of $\overline{\sigma}U_{\mathbf{w}}$ is $\mathbf{x}$.\\
+\hlt{Structural Commentary}: The reflector concentrates all mass of $\mathbf{x}$ into the first coordinate.\\
+\hlt{Key Insight}: Householder matrices produce explicit unitary matrices with a prescribed first column.
+\end{proof}
+\end{corollary}
