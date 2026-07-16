@@ -1,9 +1,9 @@
-\subsection{Positive Systems, Convexity, and Separation}
+\subsection{Positive Orthants, Alternatives, and Farkas's Lemma}
 
 
-% **Role:** finite-dimensional real convex geometry for positive solutions.
+% **Role:** finite-dimensional positive systems and dual certificates.
 %
-% Positive orthants, convex hulls, affine hyperplanes, separation, alternatives, and Farkas's lemma.
+% Positive orthants, row-space alternatives, certificates, and Farkas's lemma.
 
 This subsection uses finite-dimensional real inner-product geometry to decide when linear systems have positive solutions. The guiding theme is that a missing positive solution is often detected by a separating hyperplane, hence by a dual vector certificate.
 
@@ -37,131 +37,12 @@ Hence $\{\mathbf{x}\in\R^n:A\mathbf{x}=\mathbf{0},\ \mathbf{x}>\mathbf{0}\} =\op
 Thus \hlt{positive null vectors} are precisely orthant intersections with $\operatorname{row}(A)^\perp$.
 \end{principle}
 
-\begin{definition} \label{def:convex-combinations-cones-hulls} \hlt{Convex Combinations, Cones, and Hulls}\\
-Let $\mathbf{x}_1,\ldots,\mathbf{x}_k\in\R^n$.
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item A \hlt{convex combination} of these vectors is a vector $t_1\mathbf{x}_1+\cdots+t_k\mathbf{x}_k$, $t_i\geq0$, $\sum\limits_{i=1}^k t_i=1$.
-\item A set $C\subseteq\R^n$ is \hlt{convex} if the line segment between any two of its points lies in $C$.
-\item A set $K\subseteq\R^n$ is a \hlt{cone} if $\mathbf{x}\in K$ and $a\geq0$ imply $a\mathbf{x}\in K$.
-\item \hlt{Convex hull} of finite set $S=\{\mathbf{x}_1,\ldots,\mathbf{x}_k\}$ is smallest convex subset of $\R^n$ containing $S$, denoted $\operatorname{conv}(S)$.
-\end{enumerate}
-Closedness and compactness use the Euclidean metric conventions from Definitions \ref{def:metric-topology-core-definitions} and \ref{def:open-cover-and-compactness}.
-\end{definition}
-
-\begin{proposition} \label{prop:convex-hull-finite-set-combinations-compact} \hlt{Finite Convex Hulls}\\
-Let $S=\{\mathbf{x}_1,\ldots,\mathbf{x}_k\}\subseteq\R^n$ and $\Delta_{k-1}\defeq\left\{(t_1,\ldots,t_k)\in\R^k:t_i\geq0,\ \sum\limits_{i=1}^k t_i=1\right\}$.\\
-Then $\operatorname{conv}(S) = \left\{\sum\limits_{i=1}^k t_i\mathbf{x}_i:(t_1,\ldots,t_k)\in\Delta_{k-1}\right\}$. Moreover, $\operatorname{conv}(S)$ is compact.
-\begin{proof}
-Let $T:\Delta_{k-1}\to\R^n$ be $T(t_1,\ldots,t_k)=\sum\limits_{i=1}^k t_i\mathbf{x}_i$, and set $C\defeq T(\Delta_{k-1})$. Taking $t_i=1$ and $t_j=0$ for $j\neq i$ gives $S\subseteq C$. If $K\subseteq\R^n$ is convex and $S\subseteq K$, then $C\subseteq K$, hence $C\subseteq\operatorname{conv}(S)$.\\
-Conversely, $\Delta_{k-1}$ is convex and $T$ is affine, so $C$ is convex; since $S\subseteq C$, $\operatorname{conv}(S)\subseteq C$. Thus $\operatorname{conv}(S)=C$.\\
-The simplex $\Delta_{k-1}$ is closed and bounded, hence compact by Heine--Borel, Theorem \ref{thm:heine-borel-rk}.\\
-Since $T$ is continuous, $\operatorname{conv}(S)=T(\Delta_{k-1})$ is compact by Theorem \ref{thm:continuous-image-compact}.\\
-\hlt{Structural Commentary}: A finite convex hull is the continuous image of a compact coefficient simplex.\\
-\hlt{Key Insight}: Convexity is carried by the coefficients $t_i$, not by the ambient coordinates.
-\end{proof}
-\end{proposition}
-
-\begin{proposition} \label{prop:minkowski-sum-convex-compact-closed} \hlt{Sums of Convex and Closed Sets}\\
-For $X,Y\subseteq\R^n$, set $X+Y\defeq\{\mathbf{x}+\mathbf{y}:\mathbf{x}\in X,\ \mathbf{y}\in Y\}$. Then:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $X,Y$ convex $\implies X+Y$ convex.
-\item $X$ compact and $Y$ closed $\implies X+Y$ closed.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Assume $X,Y$ are convex. Let $\mathbf{z}_r=\mathbf{x}_r+\mathbf{y}_r\in X+Y$ for $r=0,1$, and let $0\leq t\leq1$. Then\\
-$t\mathbf{z}_0+(1-t)\mathbf{z}_1 =\bigl(t\mathbf{x}_0+(1-t)\mathbf{x}_1\bigr) +\bigl(t\mathbf{y}_0+(1-t)\mathbf{y}_1\bigr)\in X+Y$. Thus $X+Y$ is convex.
-\item Assume $X$ is compact and $Y$ is closed. Let $\mathbf{z}_j\in X+Y$ and $\mathbf{z}_j\to\mathbf{z}$.\\
-Let $\mathbf{z}_j=\mathbf{x}_j+\mathbf{y}_j$ with $\mathbf{x}_j\in X$ and $\mathbf{y}_j\in Y$. Since $X$ is compact, a subsequence satisfies $\mathbf{x}_{j_\ell}\to\mathbf{x}\in X$.\\
-Then $\mathbf{y}_{j_\ell}=\mathbf{z}_{j_\ell}-\mathbf{x}_{j_\ell}\to\mathbf{z}-\mathbf{x}\in Y$, as $Y$ is closed. Hence $\mathbf{z}=\mathbf{x}+(\mathbf{z}-\mathbf{x})\in X+Y$, so $X+Y$ is closed.
-\end{enumerate}
-\hlt{Structural Commentary}: Compactness lets one hold the $X$-part still enough for closedness of $Y$ to apply.\\
-\hlt{Key Insight}: A limit in a sum can be split by passing to a convergent compact subsequence.
-\end{proof}
-\end{proposition}
-
-\begin{definition} \label{def:affine-hyperplanes-halfspaces-separation} \hlt{Hyperplanes, Half-Spaces, and Separation}\\
-Let $\mathbf{N}\in\R^n\setminus\{\mathbf{0}\}$ and $b\in\R$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item The \hlt{affine hyperplane} with normal $\mathbf{N}$ and level $b$ is $\mathcal{H}(\mathbf{N},b) \defeq \{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}=b\}$.
-\item The case $b=0$ gives the \hlt{linear hyperplane} $\mathcal{H}(\mathbf{N},0)=\operatorname{span}(\mathbf{N})^\perp$.
-\item The \hlt{closed half-spaces} determined by $\mathcal{H}(\mathbf{N},b)$ are\\
-$\mathcal{H}_+(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}\geq b\}$ and $\mathcal{H}_-(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}\leq b\}$.\\
-The \hlt{open half-spaces} are obtained by replacing $\geq,\leq$ with $>,<$.
-\item For $X\subseteq\R^n$ and $\star\in\{<,\leq,>,\geq\}$, use the \hlt{set-inequality convention} $\innerprod{\mathbf{N},X}\star b$ $\Longleftrightarrow$ $\innerprod{\mathbf{N},\mathbf{x}}\star b \ \forall \mathbf{x}\in X$.
-\item An \hlt{orientation} of $\mathcal{H}(\mathbf{N},b)$ is $\sigma(\mathbf{N},b)\defeq(\sigma\mathbf{N},\sigma b)$ for $\sigma\in\{\pm1\}$.
-\item Sets $X,Y\subseteq\R^n$ are \hlt{strictly separated} by $\mathcal{H}(\mathbf{N},b)$ if $\exists\sigma\in\{\pm1\}$ such that $\innerprod{\sigma\mathbf{N},X}<\sigma b<\innerprod{\sigma\mathbf{N},Y}$
-\item Sets $X,Y\subseteq\R^n$ are \hlt{strongly separated} by $\mathcal{H}(\mathbf{N},b)$ if $\exists\sigma\in\{\pm1\}$ and $\varepsilon>0$ such that\\
-$\innerprod{\sigma\mathbf{N},X}<\sigma b-\varepsilon<\sigma b+\varepsilon<\innerprod{\sigma\mathbf{N},Y}$.
-\end{enumerate}
-\end{definition}
-
-\begin{remark} \label{rem:hyperplane-basic-geometry} \hlt{Hyperplane Geometry}\\
-The half-spaces satisfy $\mathcal{H}_+(\mathbf{N},b)\cap\mathcal{H}_-(\mathbf{N},b)=\mathcal{H}(\mathbf{N},b)$, and two open half-spaces with $\mathcal{H}(\mathbf{N},b)$ partition $\R^n$.\\
-Moreover, $\mathbf{N}\in\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2)$, by Cauchy--Schwarz (Theorem \ref{thm:cauchy-schwarz-inequality}), $\mathbf{N}$ is closest point of this hyperplane to $\mathbf{0}$.
-\end{remark}
-
 \begin{figure}[H]
   \centering
   \input{figures/linear_algebra/positive_orthant_subspace_alternative.tikz}
   \caption{In $\R^2$, a negative-slope line $S$ has $S^\perp$ meeting the strongly positive orthant.}
   \label{fig:positive-orthant-subspace-alternative}
 \end{figure}
-
-\begin{theorem} \label{thm:nearest-point-and-point-separation-convex-set} \hlt{Nearest Points and Separating a Point}\\
-Let $C\subseteq\R^n$ be nonempty, closed, and convex.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item There exists a unique $\mathbf{N}_C\in C$ such that $\norm{\mathbf{N}_C}=\min_{\mathbf{x}\in C}\norm{\mathbf{x}}$.
-\item If $\mathbf{b}\notin C$, set $D\defeq C-\mathbf{b}$ and let $\mathbf{N}\in D$ satisfy $\norm{\mathbf{N}}=\min_{\mathbf{z}\in D}\norm{\mathbf{z}}$.\\
-Then $\mathbf{N}\neq\mathbf{0}$ and $\innerprod{\mathbf{N},C} \geq \norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}} > \innerprod{\mathbf{N},\mathbf{b}}$.\\
-With $\alpha\defeq\innerprod{\mathbf{N},\mathbf{b}}+\frac{1}{2}\norm{\mathbf{N}}^2$, the hyperplane $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $\{\mathbf{b}\}$ and $C$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Choose $\mathbf{x}_0\in C$ and $s\geq\norm{\mathbf{x}_0}$. Then $K\defeq C\cap\overline{B}_s(\mathbf{0})$ is nonempty and compact by Theorem \ref{thm:heine-borel-rk}.\\
-Since $\norm{\cdot}$ is continuous, Theorem \ref{thm:extreme-value-theorem-compact} gives $\mathbf{N}_C\in K$ minimizing $\norm{\cdot}$ on $K$.\\
-If $\mathbf{x}\in C$ and $\norm{\mathbf{x}}<\norm{\mathbf{N}_C}$, then $\mathbf{x}\in K$, a contradiction; hence $\mathbf{N}_C$ minimizes on $C$.\\
-If $\mathbf{u}\neq\mathbf{v}$ are minimizers of norm $m$, then $\mathbf{w}\defeq(\mathbf{u}+\mathbf{v})/2\in C$ and, by the parallelogram identity, Theorem \ref{thm:parallelogram-identity-inner-product}, $\norm{\mathbf{w}}^2 =m^2-\frac{1}{4}\norm{\mathbf{u}-\mathbf{v}}^2 <m^2$, a contradiction.
-\item The set $D=C-\mathbf{b}$ is nonempty, closed, and convex, so (i) gives its unique minimum-norm vector $\mathbf{N}$.\\
-Since $\mathbf{b}\notin C$, $\mathbf{0}\notin D$, hence $\mathbf{N}\neq\mathbf{0}$. For $\mathbf{z}\in D$, define $\phi(t)\defeq\norm{\mathbf{N}+t(\mathbf{z}-\mathbf{N})}^2$, $0\leq t\leq1$.\\
-Minimality gives $\phi'_+(0)\geq0$, hence $\innerprod{\mathbf{N},\mathbf{z}}\geq\norm{\mathbf{N}}^2$. Taking $\mathbf{z}=\mathbf{x}-\mathbf{b}$ yields $\innerprod{\mathbf{N},\mathbf{x}}\geq\norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}}$ for all $\mathbf{x}\in C$. For $\alpha\defeq\innerprod{\mathbf{N},\mathbf{b}}+\norm{\mathbf{N}}^2/2$ and $\varepsilon\defeq\norm{\mathbf{N}}^2/4$, then $\innerprod{\mathbf{N},\mathbf{b}} <\alpha-\varepsilon<\alpha+\varepsilon<\innerprod{\mathbf{N},C}$, so $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $\{\mathbf{b}\}$ and $C$.
-\end{enumerate}
-\hlt{Structural Commentary}: The nearest point in $C-\mathbf{b}$ supplies the normal vector to a separating hyperplane.\\
-\hlt{Key Insight}: Minimal norm turns a metric problem into the linear inequality $\innerprod{\mathbf{N},\mathbf{z}}\geq\norm{\mathbf{N}}^2$.
-\end{proof}
-\end{theorem}
-
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/convex_point_separating_hyperplane.tikz}
-  \caption{A nearest vector in $C-\mathbf{b}$ gives a normal direction and a strongly separating hyperplane.}
-  \label{fig:convex-point-separating-hyperplane}
-\end{figure}
-
-\begin{theorem} \label{thm:compact-convex-set-separated-from-subspace} \hlt{Separating a Compact Convex Set from a Subspace}\\
-Let $C\subseteq\R^n$ be nonempty, compact, and convex, and let $S\leq\R^n$ satisfy $C\cap S=\emptyset$.\\
-Then there exists $\mathbf{N}\in S^\perp\setminus\{\mathbf{0}\}$ such that $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2>0$.\\
-Consequently, $\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2/2)$ strongly separates $S$ and $C$.
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Set $D\defeq S+C$. Since $S$ is closed in finite dimension, Proposition \ref{prop:minkowski-sum-convex-compact-closed} gives $D$ closed and convex.\\
-Also $\mathbf{0}\notin D$, for $\mathbf{0}=\mathbf{s}+\mathbf{c}$ would imply $\mathbf{c}=-\mathbf{s}\in C\cap S$.
-\item Apply Theorem \ref{thm:nearest-point-and-point-separation-convex-set} to $D$ and $\mathbf{0}$. Then $\exists\mathbf{N}\neq\mathbf{0}$ such that $\innerprod{\mathbf{N},\mathbf{s}+\mathbf{c}}\geq\norm{\mathbf{N}}^2$, $\mathbf{s}\in S,\ \mathbf{c}\in C$.\\
-Fix $\mathbf{c}_0\in C$. If $a\defeq\innerprod{\mathbf{N},\mathbf{s}}\neq0$ for some $\mathbf{s}\in S$, then $\innerprod{\mathbf{N},\lambda\mathbf{s}+\mathbf{c}_0}=\lambda a+\innerprod{\mathbf{N},\mathbf{c}_0}\to-\infty$ for $\lambda$ of opposite sign and $|\lambda|\to\infty$, a contradiction. Hence $\mathbf{N}\in S^\perp$. Taking $\mathbf{s}=\mathbf{0}$ gives $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2>0$.\\
-Since $\innerprod{\mathbf{N},\mathbf{s}}=0$ for all $\mathbf{s}\in S$, the choice $\varepsilon\defeq\norm{\mathbf{N}}^2/4$ gives strong separation by $\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2/2)$.
-\end{enumerate}
-\hlt{Structural Commentary}: The sum $S+C$ is a closed convex set disjoint from $\mathbf{0}$, so point separation applies.\\
-\hlt{Key Insight}: Since the separating inequality holds for all translates by $S$, scaling inside $S$ forces $\mathbf{N}$ to annihilate $S$.
-\end{proof}
-\end{theorem}
 
 \begin{theorem} \label{thm:positive-subspace-alternatives} \hlt{Positive Orthant Alternatives for Subspaces}\\
 Let $S\leq\R^n$. Then:
