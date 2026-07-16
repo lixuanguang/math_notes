@@ -3,10 +3,11 @@
 %
 % Jordan form, rational/canonical form if desired, complexification, real block forms.
 
-Jordan and canonical forms turn primary decomposition into explicit blocks. Jordan chains, complexification, and real block forms organize the nilpotent and real spectral structure. Jordan blocks are elementary divisors $(z-\lambda)^k$ after the relevant polynomial factors split into linear factors.
+Jordan and canonical forms turn primary decomposition into explicit blocks. Jordan chains, complexification, and real block forms organize the nilpotent and real spectral structure. Each Jordan block records one eigenvalue together with the length of a nilpotent chain.
 
 \begin{definition} \label{def:jordan-chain-block-and-matrix} \hlt{Jordan Chains, Blocks, and Matrices}\\
-For $k\geq1$, the \hlt{nilpotent Jordan block} $J_k(0)$ is the $k\times k$ matrix with $1$ on the first superdiagonal and $0$ elsewhere:
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $\lambda\in\mathbb{C}$, and let $k\geq1$. A \hlt{Jordan chain} for $A$ at $\lambda$ is a list $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ such that $(A-\lambda I_n)\mathbf{x}_1=\mathbf{0}$ and $(A-\lambda I_n)\mathbf{x}_j=\mathbf{x}_{j-1}$ for $2\leq j\leq k$.\\
+The \hlt{nilpotent Jordan block} $J_k(0)$ is the $k\times k$ matrix with $1$ on the first superdiagonal and $0$ elsewhere:
 \begin{align}
 J_k(0)=
 \begin{bmatrix}
@@ -18,13 +19,12 @@ J_k(0)=
 \end{bmatrix}.
 \nonumber
 \end{align}
-For $\lambda\in\mathbb{C}$, set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
+Set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
 \end{definition}
 
-\begin{perspective} \label{per:jordan-strings-as-columns} \hlt{Jordan Strings as Columns}\\
-A length-$k$ Jordan string for $A$ at $\lambda$ is $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ with $(A-\lambda I)\mathbf{x}_1=\mathbf{0}$; $(A-\lambda I)\mathbf{x}_j=\mathbf{x}_{j-1}$, $2\leq j\leq k$.\\
-For $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_k]$, $AX=XJ_k(\lambda)$.\\
-If all strings form the columns of a basis matrix $M$, then $AM=MJ$ and $M^{-1}AM=J$.
+\begin{perspective} \label{per:jordan-strings-as-columns} \hlt{Jordan Chains as Columns}\\
+For a Jordan chain $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ and $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_k]$, $AX=XJ_k(\lambda)$.\\
+If all chains form the columns of a basis matrix $M$, then $AM=MJ$ and $M^{-1}AM=J$.
 \end{perspective}
 
 \begin{figure}[H]
@@ -33,32 +33,6 @@ If all strings form the columns of a basis matrix $M$, then $AM=MJ$ and $M^{-1}A
   \caption{Jordan chain for $N=A-\lambda I$; columns give $AX=XJ_k(\lambda)$.}
   \label{fig:jordan-string-columns-similarity}
 \end{figure}
-
-\begin{method} \label{meth:filippov-column-space-jordan-strings} \hlt{Filippov Column-Space Jordan Strings}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $\lambda\in\operatorname{spec}(A)$, and set $N=A-\lambda I_n$ on the generalized eigenspace $\mathcal{G}_{\lambda}(A)=\ker(N^n)$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Work first inside $\operatorname{range}(N)\cap\mathcal{G}_{\lambda}(A)$, where $N$ is again nilpotent.
-\item Build Jordan strings for this smaller nilpotent operator.
-\item For each string ending in $\mathbf{u}$, solve $N\mathbf{v}=\mathbf{u}$ in $\mathcal{G}_{\lambda}(A)$ and lift the string by appending $\mathbf{v}$.
-\item Add enough vectors from $\ker(N)$ to complete a basis of $\mathcal{G}_{\lambda}(A)$; these added vectors are length-one strings.
-\item Repeat the process recursively until all of $\mathcal{G}_{\lambda}(A)$ is covered, then concatenate the strings for all eigenvalues.
-\end{enumerate}
-Theorem \ref{thm:nilpotent-jordan-chain-basis} justifies the lifts; Perspective \ref{per:jordan-strings-as-columns} turns the resulting columns into $AM=MJ$.
-\end{method}
-
-\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
-For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
-\setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
-\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then for each fixed $0\leq r<k$ the scalar $\binom{p}{r}\lambda^{p-r}$ tends to $0$, because a polynomial in $p$ is dominated by the exponential decay of $\abs{\lambda}^{p}$.
-\end{enumerate}
-\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
-\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
-\end{proof}
-\end{proposition}
 
 \begin{theorem} \label{thm:nilpotent-jordan-chain-basis} \hlt{Nilpotent Jordan Chain Basis}\\
 Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ such that $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
@@ -80,3 +54,29 @@ The remaining relation is a relation among $N^{m_j+1}\mathbf{v}_j=N^{m_j}\mathbf
   \caption{A nilpotent chain shifts left under $N$; in this basis order it becomes one Jordan block.}
   \label{fig:jordan-chain-nilpotent-basis}
 \end{figure}
+
+\begin{method} \label{meth:filippov-column-space-jordan-strings} \hlt{Filippov Column-Space Jordan Chains}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $\lambda\in\operatorname{spec}(A)$, and set $N=A-\lambda I_n$ on the generalized eigenspace $\mathcal{G}_{\lambda}(A)=\ker(N^n)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Work first inside $\operatorname{range}(N)\cap\mathcal{G}_{\lambda}(A)$, where $N$ is again nilpotent.
+\item Build Jordan chains for this smaller nilpotent operator.
+\item For each chain ending in $\mathbf{u}$, solve $N\mathbf{v}=\mathbf{u}$ in $\mathcal{G}_{\lambda}(A)$ and lift the chain by appending $\mathbf{v}$.
+\item Add enough vectors from $\ker(N)$ to complete a basis of $\mathcal{G}_{\lambda}(A)$; these added vectors are length-one chains.
+\item Repeat the process recursively until all of $\mathcal{G}_{\lambda}(A)$ is covered, then concatenate the chains for all eigenvalues.
+\end{enumerate}
+The lifting steps are valid by Theorem \ref{thm:nilpotent-jordan-chain-basis}; the chain relations give $AM=MJ$ for the resulting basis matrix.
+\end{method}
+
+\begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
+Let $k\geq1$ and $\lambda\in\mathbb{C}$. For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
+\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then for each fixed $0\leq r<k$ the scalar $\binom{p}{r}\lambda^{p-r}$ tends to $0$, because a polynomial in $p$ is dominated by the exponential decay of $\abs{\lambda}^{p}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
+\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
+\end{proof}
+\end{proposition}
