@@ -57,6 +57,11 @@ If $n\geq\max\{N,N'\}$, then $d(p,p')\leq d(p,p_n)+d(p_n,p')<\varepsilon$, so $d
 \end{proof}
 \end{theorem}
 
+\begin{example} \label{ex:coordinate-norm-metrics-rk} \hlt{Coordinate Norm Metrics on $\R^k$}\\
+By Proposition \ref{prop:coordinate-norms-on-fn} and Theorem \ref{thm:cauchy-schwarz-inequality}, $d_1(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_1$; $d_2(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_2$; $d_\infty(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_\infty$ are metrics on $\R^k$, and $\forall \mathbf{x},\mathbf{y}\in\R^k$, $d_\infty(\mathbf{x},\mathbf{y})\leq d_2(\mathbf{x},\mathbf{y})\leq d_1(\mathbf{x},\mathbf{y})\leq \sqrt{k}\,d_2(\mathbf{x},\mathbf{y})$; $d_2(\mathbf{x},\mathbf{y})\leq \sqrt{k}\,d_\infty(\mathbf{x},\mathbf{y})$.\\
+Hence $d_1,d_2,d_\infty$ have the same convergent sequences.
+\end{example}
+
 \begin{theorem} \label{thm:rk-sequence-coordinate-convergence} \hlt{Coordinatewise Convergence in $\R^k$}\\
 Let $k\in\N$, $\mathbf{x}_n=(\alpha_{j,n})$, $\mathbf{x}=(\alpha_j)$, $\mathbf{y}_n=(\gamma_{j,n})$, $\mathbf{y}=(\gamma_j)$ in $\R^k$, and let $(\beta_n)\subset\R$, $\beta\in\R$.
 \begin{enumerate}[label=(\roman*)]
@@ -79,6 +84,60 @@ Let $k\in\N$, $\mathbf{x}_n=(\alpha_{j,n})$, $\mathbf{x}=(\alpha_j)$, $\mathbf{y
 \hlt{Key Insight}: The norm packages finitely many coordinate estimates into one estimate.
 \end{proof}
 \end{theorem}
+
+\begin{definition} \label{def:product-metrics} \hlt{Product Metrics}\\
+For metric spaces $(X,d_X)$ and $(Y,d_Y)$, and $p=(x,y)$, $p'=(x',y')$ in $X\times Y$, define
+\begin{align}
+d_E(p,p')&\defeq\sqrt{d_X(x,x')^2+d_Y(y,y')^2},\nonumber \\
+d_{\max}(p,p')&\defeq\max\{d_X(x,x'),d_Y(y,y')\},\nonumber \\
+d_{\mathrm{sum}}(p,p')&\defeq d_X(x,x')+d_Y(y,y') \nonumber
+\end{align}
+These are the Euclidean, maximum, and sum product metrics; the sum metric is often simplest for estimates.
+\end{definition}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/analysis/product_metric_unit_balls.tikz}
+  \caption{Unit balls in $\R^2$: \textcolor{blue!60!black}{$\max\{\abs{x},\abs{y}\}<1$} and \textcolor{orange!80!black}{$\abs{x}+\abs{y}<1$}.}
+  \label{fig:product-metric-unit-balls}
+\end{figure}
+
+\begin{proposition} \label{prop:product-metric-comparison} \hlt{Comparing Product Metrics}\\
+On $X\times Y$, $d_{\max}\leq d_E\leq d_{\mathrm{sum}}\leq2d_{\max}$. Hence the three product metrics have same convergent sequences.
+\begin{proof}
+Let $a=d_X(x,x')$ and $b=d_Y(y,y')$.\\
+Then $\max\{a,b\}\leq\sqrt{a^2+b^2}\leq a+b\leq2\max\{a,b\}$; convergence follows by squeezing.\\
+\hlt{Structural Commentary}: The three product metrics differ by controlled constants.\\
+\hlt{Key Insight}: Equivalent metric estimates preserve convergence.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:equivalent-metrics} \hlt{Equivalent Metrics}\\
+Let $X$ be a set and let $\rho,\sigma:X\times X\to[0,\infty)$ be metrics.\\
+They are \hlt{equivalent}, written $\rho\sim\sigma$, iff $\exists c_1,c_2>0$ with $\forall x,y\in X$, $c_1\sigma(x,y)\leq\rho(x,y)\leq c_2\sigma(x,y)$.
+\end{definition}
+
+\begin{proposition} \label{prop:equivalent-metrics-preserve-tests} \hlt{Equivalent Metrics Preserve Topological Tests}\\
+Let $X$ be a set, let $\rho,\sigma:X\times X\to[0,\infty)$ be metrics with $\rho\sim\sigma$, and let $\tau_\rho,\tau_\sigma$ be the induced topologies.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\tau_\rho=\tau_\sigma$.
+\item For every $E\subseteq X$, $E$ is $\rho$-closed iff $E$ is $\sigma$-closed.
+\item For every sequence $(x_n)$ in $X$ and every $x\in X$, $\rho(x_n,x)\to0$ iff $\sigma(x_n,x)\to0$.
+\end{enumerate}
+\begin{proof} Choose $c_1,c_2>0$ such that $c_1\sigma(u,v)\leq\rho(u,v)\leq c_2\sigma(u,v)$ for all $u,v\in X$.\\
+For $x\in X$ and $r>0$, $B_\sigma(x,r/c_2)\subseteq B_\rho(x,r)\subseteq B_\sigma(x,r/c_1)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $U\in\tau_\rho$ and $x\in U$, choose $r>0$ with $B_\rho(x,r)\subseteq U$; then $B_\sigma(x,r/c_2)\subseteq U$, so $U\in\tau_\sigma$.\\
+If $U\in\tau_\sigma$ and $x\in U$, choose $s>0$ with $B_\sigma(x,s)\subseteq U$; then $B_\rho(x,c_1s)\subseteq U$, so $U\in\tau_\rho$.
+\item Let $E\subseteq X$. By (i), $E^c\in\tau_\rho$ iff $E^c\in\tau_\sigma$; hence $E$ is $\rho$-closed iff $E$ is $\sigma$-closed.
+\item For every $n\in\N$, $c_1\sigma(x_n,x)\leq\rho(x_n,x)\leq c_2\sigma(x_n,x)$; hence $\rho(x_n,x)\to0$ iff $\sigma(x_n,x)\to0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Ball inclusions transfer local tests between metrics.\\
+\hlt{Key Insight}: Constant-comparison estimates let each metric ball contain a smaller ball for the other metric.
+\end{proof}
+\end{proposition}
 
 \begin{corollary} \label{cor:metric-convergent-subsequences} \hlt{Subsequences Preserve Metric Limits}\\
 If $p_n\to p$ in a metric space, then every subsequence $(p_{n_k})$ also converges to $p$.
