@@ -1,0 +1,43 @@
+\subsection{QR Least Squares}
+
+\begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
+Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
+\begin{proof}
+The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
+Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
+\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
+\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
+\end{proof}
+\end{proposition}
+
+Successive orthogonalization fits in an orthogonal basis for the same column space.
+
+\begin{breakablealgorithm}
+\caption{Least Squares by Successive Orthogonalization}
+\label{alg:sl-successive-orthogonalization-least-squares}
+\begin{algorithmic}
+\Require Full-column-rank design columns $x_0,\ldots,x_p$ and response vector $y$
+\Ensure Least-squares coefficients $\widehat{\beta}$
+\For{$j=0,\ldots,p$}
+\State $z_j\gets x_j$
+\For{$\ell=0,\ldots,j-1$}
+\State $r_{\ell j}\gets q_\ell^Tx_j$
+\State $z_j\gets z_j-r_{\ell j}q_\ell$
+\EndFor
+\State $r_{jj}\gets \norm{z_j}_2$
+\State $q_j\gets z_j/r_{jj}$
+\EndFor
+\State Form $Q=[q_0,\ldots,q_p]$ and the upper-triangular matrix $R=(r_{\ell j})$
+\State Solve $R\widehat{\beta}=Q^Ty$ by back-substitution
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{perspective} \label{per:normal-equations-squaring-condition-number} \hlt{Why Normal Equations Can Be Numerically Fragile}\\
+For full-column-rank least squares, solving $A^*A\mathbf{x}=A^*\mathbf{y}$ squares the spectral condition number because $\kappa_2(A^*A)=\kappa_2(A)^2$. QR-based methods avoid this squaring and therefore preserve conditioning better.
+\end{perspective}
+
+\begin{perspective} \label{per:linear-model-numerical-solution-route} \hlt{Solve Least Squares with Factors}\\
+For $X\in\R^{n\times p}$ with $\operatorname{rank}(X)=p$, normal equations use $X^tX\widehat{\beta}=X^tY$ but $\kappa_2(X^tX)=\kappa_2(X)^2$.\\
+Prefer $X=QR$ with $Q^tQ=I_p$ and $R$ nonsingular, giving $\widehat{\beta}=R^{-1}Q^tY$.\\
+Use Cholesky on $X^tX$ only when $X^tX$ is well conditioned.
+\end{perspective}
