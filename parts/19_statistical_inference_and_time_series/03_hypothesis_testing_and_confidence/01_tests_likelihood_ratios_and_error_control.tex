@@ -112,12 +112,7 @@ hence $p(X)=1-U\sim\operatorname{Uniform}(0,1)$. Thus $\mathbb{E}_\theta\varphi_
 
 \begin{remark} \label{rem:p-values-are-not-posterior-probabilities} \hlt{$p$-Values Are Tail Probabilities}\\
 A $p$-value is a null tail probability, e.g. $p(x)=\mathbb{P}_{H_0}\{T(X)\geq T(x)\}$ for a right-tail statistic $T$.\\
-It is not $\mathbb{P}(H_0\mid x)$; posterior probabilities require priors and an alternative likelihood, as in Proposition \ref{prop:posterior-odds-likelihood-ratio}.
-\end{remark}
-
-\begin{remark} \label{rem:error-control-families} \hlt{Error Rates}\\
-For one test $\varphi$, size is $\alpha(\varphi)=\sup\limits_{\theta\in\Theta_0}\mathbb{E}_\theta\varphi$.
-For a family of tests, let $R$ be the number of rejections and $V$ the number of false rejections; common targets are $\operatorname{FWER}=\mathbb{P}\{V\geq1\}$ and $\operatorname{FDR}=\mathbb{E}[\frac{V}{R\vee1}]$, while directional or selective rates replace $V$ by the corresponding error count.
+It is not $\mathbb{P}(H_0\mid x)$; posterior probabilities require priors and an alternative likelihood.
 \end{remark}
 
 \begin{definition} \label{def:false-discovery-rate} \hlt{Multiple-Testing Error Counts and FDR}\\
@@ -135,6 +130,21 @@ The total number of discoveries is $R=V+S$.
 Thus FWER controls the chance of any false discovery.\\
 FDR controls the expected false fraction among the reported discoveries.
 \end{definition}
+
+\begin{remark} \label{rem:error-control-families} \hlt{Error Rates}\\
+For one test $\varphi$, size is $\alpha(\varphi)=\sup\limits_{\theta\in\Theta_0}\mathbb{E}_\theta\varphi$.
+For a family of tests, let $R$ be the number of rejections and $V$ the number of false rejections; common targets are $\operatorname{FWER}=\mathbb{P}\{V\geq1\}$ and $\operatorname{FDR}=\mathbb{E}[\frac{V}{R\vee1}]$, while directional or selective rates replace $V$ by the corresponding error count.
+\end{remark}
+
+\begin{method} \label{prin:fishing-expeditions-and-bonferroni} \hlt{Fishing Expeditions and Bonferroni Control}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $N$ null hypotheses, let $R_i$ be the event that null $i$ is rejected.
+\item By the union bound, $\mathbb{P}(\bigcup\limits_{i=1}^{N}R_i)\leq\sum\limits_{i=1}^{N}\mathbb{P}(R_i)$.
+\item To control family-wise error at level $\alpha$, test each null at level $\frac{\alpha}{N}$; then $\mathbb{P}(\text{at least one false rejection})\leq\alpha$.
+\item Without such correction, many tests can produce small $p$-values even when all nulls are true.
+\end{enumerate}
+\end{method}
 
 \begin{definition} \label{def:pfd-local-fdr-and-q-value} \hlt{Positive FDR, Local FDR, and $q$-Values}\\
 Let $Z_j=0$ indicate a true null, $Z_j=1$ a false null, $t_j$ a test statistic, and $\Gamma$ a rejection region.
@@ -172,13 +182,3 @@ then $\operatorname{FDR}\leq(M_0/M)\alpha\leq\alpha$, where $M_0$ is the number 
 \caption{Benjamini--Hochberg threshold: \textcolor{red!70!black}{red} points reject, \textcolor{blue!70!black}{blue} points do not; line is $\alpha j/M$.}
 \label{fig:benjamini-hochberg-step-up}
 \end{figure}
-
-\begin{method} \label{prin:fishing-expeditions-and-bonferroni} \hlt{Fishing Expeditions and Bonferroni Control}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item For $N$ null hypotheses, let $R_i$ be the event that null $i$ is rejected.
-\item By the union bound, $\mathbb{P}(\bigcup\limits_{i=1}^{N}R_i)\leq\sum\limits_{i=1}^{N}\mathbb{P}(R_i)$.
-\item To control family-wise error at level $\alpha$, test each null at level $\frac{\alpha}{N}$; then $\mathbb{P}(\text{at least one false rejection})\leq\alpha$.
-\item Without such correction, many tests can produce small $p$-values even when all nulls are true.
-\end{enumerate}
-\end{method}
