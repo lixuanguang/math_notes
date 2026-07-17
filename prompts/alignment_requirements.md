@@ -106,11 +106,14 @@ For source intake, use only provided sources and existing repository content. Cl
 
 Do not browse, guess unreadable content, or closely paraphrase long source passages. Mark genuine uncertainty with a concise `% TODO(source): ...`.
 
+When a prompt-library workflow references this file, the workflow inherits the complete standards in Sections 4-7 unless it explicitly narrows scope, source material, or build behavior. A narrow target, source-grounded intake run, structural reorganization pass, or dependency-flow pass may restrict what is edited, but it does not relax the applicable writing, proof, layout, citation, safety, or validation standard for any environment it touches. New or materially amended source-grounded content must be finalized locally; do not leave a rough block for a later formalization prompt when the same source and earlier repository content already support the repair.
+
 ## 5. Canonical writing standard
 
 ### 5.1 Formal language and notation
 
 - Bind every local symbol before use. Theorem-style statements must contain their own local objects, hypotheses, and conclusions without restating whole earlier theories.
+- A theorem-style statement, definition, or method preamble must not use a reference to a definition, theorem, proposition, lemma, corollary, example, or remark as a substitute for the actual local hypothesis or object. State the needed condition directly when it is short enough, e.g. a local Lipschitz condition, extension order, admissible-solution convention, graph notation, or compactness hypothesis. Use references in proof steps only when they supply a genuine earlier result.
 - Formal definitions, claims, proofs, methods, and calculations use `\forall`, `\exists`, and `\exists!` instead of mathematical “for all/every/each” and “there exists/is a unique.” Keep prose quantifiers only in genuine exposition.
 - Prefer `\defeq`, maps, set-builder notation, recurrences, `\implies`, and `\iff` when clearer.
 - During the explicit-formal-notation-succinct loop, inspect every sentence after the explicit draft. Replace mathematical prose wherever possible: domains and membership by `x\in X`; quantifiers by `\forall`, `\exists`, or `\exists!`; maps by `f:X\to Y`; definitions by `\defeq`; conditions by relations; implication/equivalence by `\implies`/`\iff`; convergence by `\to`; bounds by inequalities; and parallel cases by symbolic items. Repeat this audit after compression because rewriting can reintroduce prose.
@@ -209,7 +212,7 @@ Any continuation line with fewer than five lexical words—or a comparably short
 4. split genuine logical units;
 5. use a display only if the active layout exception independently applies.
 
-It may remain only as an intentional irreducible unit whose alternatives reduce clarity. Never repair layout by shrinking fonts, changing margins, arbitrary spacing, or mid-expression breaks.
+It may remain only as an intentional irreducible unit whose alternatives reduce clarity. Never repair layout by shrinking fonts, changing margins, arbitrary spacing, mid-expression breaks, or unnecessary displays. If rendered lines overflow or become sparse, first introduce compact semantic notation or a local relation/order/convention, then reread the statement and proof with that notation.
 
 ## 6. Dependencies, labels, notation, and figures
 
@@ -251,7 +254,7 @@ build_dir="$(mktemp -d /private/tmp/math_notes_alignment.XXXXXX)"
 latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir="$build_dir" math.tex
 ```
 
-10. Render every affected page individually at readable resolution and inspect each changed environment. Contact sheets and overfull-box scans are navigation aids, not final visual QA. Iterate until no avoidable display, sparse tail, missing or weak commentary, underformalized proof, missed enumeration, repeated item setup, claim mismatch, invalid reference, or figure collision remains.
+10. Render every affected page individually at readable resolution and inspect each changed environment. Also inspect the build log for the edited line range, distinguishing unrelated warnings elsewhere. Contact sheets and overfull-box scans are navigation aids, not final visual QA. Iterate until no avoidable display, sparse tail, missing or weak commentary, underformalized proof, missed enumeration, repeated item setup, claim mismatch, invalid reference, overfull edited line, or figure collision remains.
 
 The active batch is complete only when all selected files satisfy these rules, the isolated build passes unless disabled, unrelated work is preserved, and only genuine out-of-scope/source/authorization issues remain. Under `RUN_BATCH: one-numbered-file`, completing one file is success even when the wider part or section remains; report the exact next cursor. Under `all-selected`, stop at a file boundary if rigor would otherwise fall.
 

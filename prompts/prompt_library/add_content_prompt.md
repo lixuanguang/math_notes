@@ -6,6 +6,8 @@ I am working in:
 
 I attached screenshots, source images, PDFs, or exact source files from a mathematics text. Inspect the repository and choose the best target under the current `parts/` structure. Use `STRUCTURE_MIGRATION_README.md` as the placement and ownership reference.
 
+The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, proof, commentary, citation, layout, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
+
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
@@ -26,7 +28,7 @@ Configuration:
 - BUILD: no
 
 Authority and safety:
-1. Read `prompts/alignment_requirements.md` completely and treat it as canonical except where this prompt is stricter. This source-intake prompt overrides `prompts/alignment_requirements.md` on building: do not run a LaTeX build.
+1. Read `prompts/alignment_requirements.md` completely and treat it as canonical except where this prompt is stricter. This prompt overrides `prompts/alignment_requirements.md` on building: do not run a LaTeX build.
 2. Use only SOURCE_MATERIAL and existing repository content. Do not search online, browse, or add unsupported material from memory.
 3. Do not stage, commit, push, reset, checkout, restore, revert, delete files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Assume unrelated uncommitted edits may exist from parallel runs. Preserve them. Before editing, run `git status --short`, inspect the target files, and use focused patches only.
@@ -46,13 +48,22 @@ Manual screenshot intake loop:
 4. Select exactly one numbered subsection file for the active batch. If `START_CURSOR` names a file, start there; otherwise choose the first source-supported numbered file in active order. Do not spread one run across several numbered files.
 5. Compare the source ledger against that file and nearby prerequisites. For each source block, classify the status as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, or `needs later file`.
 6. Edit only `partial`, `missing`, or locally `misplaced` material for the active file. Leave covered material unchanged unless a tiny local amendment is needed to integrate a new block.
-7. If the screenshots still contain usable material for earlier files, run another `gap-fill` or `second-pass` batch starting at the earliest affected file. Do not advance to later files merely because the source set is long.
-8. Do not advance past the last file actually supported by SOURCE_MATERIAL. Report the next cursor, and explicitly say when later files need new source material.
+7. After each inserted or materially amended block, run the final-quality loop below before moving to the next block.
+8. If the screenshots still contain usable material for earlier files, run another `gap-fill` or `second-pass` batch starting at the earliest affected file. Do not advance to later files merely because the source set is long.
+9. Do not advance past the last file actually supported by SOURCE_MATERIAL. Report the next cursor, and explicitly say when later files need new source material.
 
 PASS_MODE meanings:
-- `first-pass`: place the main supported material for the chosen numbered file.
+- `first-pass`: place the main supported material for the chosen numbered file at final local quality.
 - `gap-fill`: compare screenshots against existing additions and add only genuinely missing source-supported content.
 - `second-pass`: restart from the earliest affected numbered file and catch omissions from the same source set; do not duplicate first-pass coverage.
+
+Final-quality loop for every inserted or touched environment:
+1. Apply the complete canonical row workflow and Sections 5.1-5.5 of `prompts/alignment_requirements.md` to each new or materially touched block.
+2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, proof steps, convergence claims, complexity bounds, or implementation details.
+3. Re-read the source block, the LaTeX preamble, each statement item, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, and proof-complete when written as a theorem-style result.
+4. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
+5. Run the standard gates on the active numbered file after each batch and `git diff --check`. If `BUILD: yes`, build and inspect edited line ranges for overfull/underfull warnings; if `BUILD: no`, report that this visual check was intentionally skipped.
+6. Fix every current-edit gate hit and distinguish genuinely pre-existing hits in the report. Do not leave a block that would require a later targeted-refinement pass just to reach canonical quality.
 
 Classify the sources first:
 1. Contents or outline only: do not edit. Give a concise coverage and placement audit.
@@ -74,8 +85,8 @@ Integration style:
 1. Add a polished, compact, source-grounded integration, not a full textbook transcription.
 2. Preserve source-supported coverage; mark genuine uncertainty with concise comments such as `% TODO(source): verify ...`.
 3. Use existing theorem environments, macros, labels, and nearby style. Use `\hlt{...}` for result titles when local style does.
-4. Prefer concise definitions, propositions, lemmas, corollaries, examples, methods, remarks, proof ideas, and algorithms only when the source supports them.
-5. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, or proof steps.
+4. Prefer concise definitions, propositions, lemmas, corollaries, examples, methods, remarks, and algorithms only when the source and existing repo content support them.
+5. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, or proof steps. If a theorem-style proof cannot be completed from the source plus earlier repository results, do not promote it to a theorem-style result; use a source TODO, remark, or report the blocker.
 6. Do not closely paraphrase long textbook passages. Write original notes in the repository's style.
 7. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `meth:...`, `alg:...`, and `fig:...`.
 8. For exercises or questions, integrate only useful supported mathematics; otherwise leave at most a concise TODO/source note.
@@ -88,21 +99,11 @@ Algorithms:
 3. Follow nearby repository style, for example `\begin{breakablealgorithm}`, `\caption{...}`, `\begin{algorithmic}`, `\Require`, `\Ensure`, and `\State`.
 4. Keep algorithms compact and mathematically focused; do not transcribe long textbook pseudocode mechanically.
 
-Formalization level:
-1. This is source intake, so do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Bind local symbols, hypotheses, domains, conclusions, and proof obligations clearly enough that the added material is usable without a later rescue pass.
-3. Use notation-driven prose where natural: `\forall`, `\exists`, maps, set-builder notation, implications, equivalences, and explicit bounds.
-4. For theorem, lemma, proposition, corollary, proof, and method blocks, follow the manual refinement style:
-   - statements make assumptions, objects, and conclusions explicit;
-   - enumerate only actual claims, conditions, cases, or executable steps;
-   - setup notation, definitions, interpretation, and commentary stay outside item lists;
-   - proofs match enumerated statement claims one-for-one when claims are enumerated;
-   - simple iff proofs use `$(\Rightarrow)$` and `$(\Leftarrow)$` items only when that reflects the proof structure;
-   - equivalent-condition proofs use flat implication items such as `\item[$(i)$]$\Rightarrow(ii)$ ...`;
-   - methods use enumerate only for actual solving steps.
-5. If a full proof is present and source-supported, integrate it compactly. If only a proof idea is supported, label it honestly as a proof idea or leave a TODO rather than inventing a proof.
-6. Add required theorem-style Structural Commentary and Key Insight when the result is new or materially rewritten; keep each line short and mechanism-focused.
-7. Leave global book-wide polishing to `prompts/prompt_library/formalize_content.md`, but make the inserted source material locally coherent now.
+Canonical quality reminders:
+1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
+2. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 directly, especially self-contained theorem-style and method preambles, factored setup, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
+3. For methods, enumerate only actual executable solving steps. Cases, definitions, summaries, and interpretation stay in prose or formulas.
+4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 
 Planning-only report:
 If the sources are only contents or outline pages, report:
@@ -124,8 +125,10 @@ If edits were made, report:
 - any exercises or questions integrated;
 - any uncertainties, gaps, TODOs, or blocked section/part needs;
 - exact next cursor and whether another pass over earlier numbered files is needed;
+- final-quality confirmation for new/touched environments: preambles self-contained, proof items matched, notation audit done, standard gates clean for current edits, and no rough block deferred to later formalization;
+- build/log status for edited line ranges when BUILD is enabled, or an explicit BUILD-disabled note;
 - whether uncommitted edits were detected and preserved;
-- that no build, staging, commit, push, reset, checkout, revert, delete, or clean action was performed.
+- build action taken or intentionally skipped according to `BUILD`, and confirmation that no staging, commit, push, reset, checkout, revert, delete, or clean action was performed.
 ```
 
-After source intake, use `prompts/prompt_library/reorganize_content_prompt.md` or `prompts/prompt_library/dependency_flow_prompt.md` if placement or prerequisite order is still uncertain. Then run `prompts/prompt_library/formalize_content.md` on the changed/new files with `FILE_COVERAGE: changed-and-new` when you want full environment-level formalization and build verification.
+After this prompt, use `prompts/prompt_library/reorganize_content_prompt.md` or `prompts/prompt_library/dependency_flow_prompt.md` if placement or prerequisite order is still uncertain. Use `prompts/prompt_library/formalize_content.md` for later wider-scope review and build verification, not as a substitute for finalizing the new source-grounded blocks here.
