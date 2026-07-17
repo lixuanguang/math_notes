@@ -1,27 +1,111 @@
 \subsection{ODE Foundations and Flows}
 % Existence/uniqueness, flows, phase portraits, invariant sets.
 
-Ordinary differential equations can often be rewritten as fixed-point problems on a complete function space.
+Ordinary differential equations prescribe the evolution of an unknown curve through relations among the curve and its derivatives. Their order, dependence on time, and linearity determine the natural state variables and solution methods.
 
-\begin{definition} \label{def:scalar-initial-value-problem} \hlt{Scalar Initial-Value Problem}\\
-Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, and $g:O\to\R$. The scalar initial-value problem determined by $(O,g,x_0,y_0)$ is $y'=g(x,y)$ with $y(x_0)=y_0$. For an interval $J\subseteq\R$, a function $f:J\to\R$ solves this problem on $J$ iff
+\begin{definition} \label{def:explicit-ode-systems-and-classes} \hlt{Explicit ODE Systems and Classes}\\
+Let $k,n\in\N$, $k\geq1$, $U\subseteq\R\times(\R^n)^k$ open, and $f:U\to\R^n$.\\
+Use $X_x(t)\defeq(x(t),x^{(1)}(t),\ldots,x^{(k-1)}(t))$, $\xi=(\xi_0,\ldots,\xi_{k-1})$, and $\pi(U)\defeq\{\xi\in(\R^n)^k:\exists t\in\R,\ (t,\xi)\in U\}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $J$ is open, $x_0\in J$, and $f$ is differentiable.
-\item $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$.
-\item $f'(x)=g(x,f(x))$ for every $x\in J$, and $f(x_0)=y_0$.
+\item $x^{(k)}(t)=f(t,X_x(t))$ is an \hlt{explicit ODE system of order $k$}.
+\item For an interval $I\subseteq\R$, $x\in C^k(I,\R^n)$ is a \hlt{solution} iff $\forall t\in I$, $(t,X_x(t))\in U$ and $x^{(k)}(t)=f(t,X_x(t))$.
+\item The system is \hlt{autonomous} iff $\exists F:\pi(U)\to\R^n$ with $f(t,\xi)=F(\xi)$ $\forall(t,\xi)\in U$.
+\item On an interval $I$, the system is \hlt{linear} iff $\exists g\in C(I,\R^n)$ and $A_j\in C(I,\R^{n\times n})$, $0\leq j<k$,\\
+with $f(t,\xi)=g(t)+\sum\limits_{j=0}^{k-1}A_j(t)\xi_j$ $\forall(t,\xi)\in U\cap(I\times(\R^n)^k)$.
+\item A linear system on $I$ is \hlt{homogeneous} iff (iv) holds with $g=0$.
+\item A solution $x:I\to\R^n$ is \hlt{global} iff $I=\R$.
+\item A solution $x:I\to\R^n$ is \hlt{maximal} iff $\nexists$ solution $\bar{x}:\bar{I}\to\R^n$ with $I\subsetneq\bar{I}$ and $\bar{x}|_I=x$.
 \end{enumerate}
-\hlt{Structural Commentary}: The graph condition makes the right-hand side defined along $f$; the initial condition selects the integral curve through $(x_0,y_0)$.
+\hlt{Key Insight}: The state lift $X_x$ has dimension $kn$.
 \end{definition}
 
-\begin{proposition} \label{prop:ode-integral-equation-equivalence} \hlt{Differential and Integral Forms}\\
-Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g\in C(O,\R)$, $J\subseteq\R$ be open interval with $x_0\in J$. For $f\in C(J,\R)$ with $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$, $f$ solves $y'=g(x,y)$, $y(x_0)=y_0$, on $J$ iff $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\begin{proposition} \label{prop:higher-order-ode-first-order-reduction} \hlt{Reduction to First Order}\\
+Let $k,n\in\N$, $k\geq1$, $U\subseteq\R\times(\R^n)^k$ open, $f:U\to\R^n$; $G:U\to(\R^n)^k$; $G(t,y_1,\ldots,y_k)\defeq(y_2,\ldots,y_k,f(t,y_1,\ldots,y_k))$.\\
+For an interval $I\subseteq\R$ and $x\in C^k(I,\R^n)$, set $y\defeq(x,x^{(1)},\ldots,x^{(k-1)})$ and assume $(t,y(t))\in U$ $\forall t\in I$.\\
+Then $y\in C^1(I,(\R^n)^k)$, and $x^{(k)}(t)=f(t,y(t))$ $\forall t\in I$ iff $y'(t)=G(t,y(t))$ $\forall t\in I$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $f'(x)=g(x,f(x))$ on $J$ and $f(x_0)=y_0$, then by Fundamental Theorem of Calculus (Theorem \ref{thm:fundamental-theorem-calculus-riemann}),\\
-$f(x)-y_0=\int_{x_0}^{x}f'(t)\,dt=\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
-\item[$(\Leftarrow)$] If $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ for every $x\in J$, then $g(\,\cdot\,,f(\,\cdot\,))$ is continuous on $J$.\\
+\item[$(\Rightarrow)$] Since $x\in C^k(I,\R^n)$, $y\in C^1(I,(\R^n)^k)$. For $1\leq j<k$, $y_j'=x^{(j)}=y_{j+1}$, $y_k'=x^{(k)}=f(t,y(t))$. QED.
+\item[$(\Leftarrow)$] Since $y_k=x^{(k-1)}$, the $k$th coordinate gives $x^{(k)}(t)=y_k'(t)=G_k(t,y(t))=f(t,y(t))$ $\forall t\in I$.
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinates shift; the last coordinate carries $f$.\\
+\hlt{Key Insight}: Adjoin derivatives to get first order.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:newtonian-motion-first-order-state} \hlt{Newtonian Motion as a First-Order System}\\
+Let $q:\R\to\R^3$ be the position of a particle of mass $m>0$, let $v\defeq q'$, and let $F:\R^3\to\R^3$ be a position-dependent force. Newton's equation $mq''(t)=F(q(t))$ becomes $(q,v)'=(v,m^{-1}F(q))$ by Proposition \ref{prop:higher-order-ode-first-order-reduction}. For uniform gravity $F(q)=-mg e_3$, where $e_3\defeq(0,0,1)^\mathsf{T}$ and $g>0$, the initial state $(q(0),v(0))=(q_0,v_0)$ gives $q(t)=q_0+v_0t-\frac{g}{2}e_3t^2$. Thus position and velocity together determine the mechanical state.
+\end{example}
+
+\begin{proposition} \label{prop:scalar-autonomous-separation-maximal-branch} \hlt{Scalar Autonomous Separation}\\
+Let $D\subseteq\R$ be open, $f\in C(D,\R)$, $D_f\defeq\{x\in D:f(x)\neq0\}$, and $x_0\in D_f$. Let $C$ be the component of $D_f$ containing $x_0$, and set $H(x)\defeq\int_{x_0}^{x}\frac{du}{f(u)}$, $K\defeq H(C)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $K$ is an open interval and $H:C\to K$ is a differentiable bijection.
+\item $\phi\defeq H^{-1}:K\to C$ is the unique $C$-valued solution of $x'=f(x)$ with $x(0)=x_0$.
+\item $K$ is maximal among intervals of $C$-valued solutions through $x_0$, and $\phi$ is global iff $K=\R$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $D_f$ is open, $C$ is an open interval. By Theorem \ref{thm:integral-function-continuity-and-derivative}, $H'=1/f\neq0$ on $C$.\\
+Since $f$ has constant sign on $C$ by Theorem \ref{thm:intermediate-value-theorem}, $H$ is strictly monotone.\\
+Hence $H:C\to K=H(C)$ is bijective and $K$ is an open interval.
+\item By Corollary \ref{cor:one-dimensional-inverse-function-theorem}, $\phi\in C^1(K,C)$ and $\phi'=1/(H'\circ\phi)=f\circ\phi$. Also $H(x_0)=0$, so $\phi(0)=x_0$.\\
+If $u:L\to C$ solves $u'=f(u)$ with $0\in L$ and $u(0)=x_0$, then $(H\circ u)'=H'(u)u'=1$ and $(H\circ u)(0)=0$.\\
+Hence $H(u(t))=t$, so $L\subseteq K$ and $u=\phi|_L$.
+\item If $\bar{\phi}:\bar{K}\to C$ solves $x'=f(x)$, $K\subseteq\bar{K}$, and $\bar{\phi}|_K=\phi$, then (ii) gives $\bar{K}\subseteq K$; hence $\bar{K}=K$.\\
+Thus $K$ is maximal. Since $\operatorname{dom}\phi=K$, $\phi$ is global iff $K=\R$.
+\end{enumerate}
+\hlt{Structural Commentary}: Monotone coordinate, inverse trajectory.\\
+\hlt{Key Insight}: Time is accumulated reciprocal speed.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:separable-first-order-equation} \hlt{Separation of Variables}\\
+Let $D\subseteq\R$ be open, $J\subseteq\R$ open interval, $f\in C(D,\R)$, $g\in C(J,\R)$, $t_0\in J$, $x_0\in D_f\defeq\{x\in D:f(x)\neq0\}$.\\
+Let $C\ni x_0$ be the component of $D_f$, $H(x)\defeq\int_{x_0}^{x}\frac{du}{f(u)}$. Then $H:C\to H(C)$ is invertible by Proposition \ref{prop:scalar-autonomous-separation-maximal-branch}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $G(t)\defeq\int_{t_0}^{t}g(s)\,ds$ and let $L$ be the component of $\{t\in J:G(t)\in H(C)\}$ containing $t_0$.
+\item Output $x\defeq H^{-1}\circ G$ on $L$; then $x'=f(x)g$ on $L$ and $x(t_0)=x_0$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:autonomous-growth-blowup-and-waiting} \hlt{Global Growth, Finite-Time Blow-Up, and Nonuniqueness}\\
+The separation coordinate distinguishes three basic behaviors.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $x'=x$ and $x(0)=x_0>0$, $H(x)=\log\left(\frac{x}{x_0}\right)$ and $x(t)=x_0e^t$ on $\R$.
+\item For $x'=x^2$ and $x(0)=x_0>0$, $H(x)=x_0^{-1}-x^{-1}$ and $x(t)=\frac{x_0}{1-x_0t}$ on $(-\infty,x_0^{-1})$; $x(t)\to+\infty$ as $t\uparrow x_0^{-1}$.
+\item For $x'=\sqrt{\abs{x}}$ and $x(0)=0$, $a\in[0,+\infty)$ determines $x_a(t)\defeq\left\{\begin{smallmatrix}0,&t\leq a,\\\frac{(t-a)^2}{4},&t\geq a.\end{smallmatrix}\right.$ Then $x_a\in C^1(\R)$, $x_a'=\sqrt{\abs{x_a}}$, $x_a(0)=0$, and if $0\leq a<b$, then $x_a=x_b$ on $(-\infty,a]$ while $x_a>x_b$ on $(a,b]$; hence the IVP is nonunique.
+\end{enumerate}
+\end{example}
+
+First-order equations can also be rewritten as fixed-point problems on complete function spaces.
+
+\begin{definition} \label{def:scalar-initial-value-problem} \hlt{Scalar Initial-Value Problem}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g:O\to\R$, and $\operatorname{IVP}(O,g,x_0,y_0)\defeq\{y'=g(x,y),\ y(x_0)=y_0\}$.\\
+For $J\subseteq\R$ with $x_0\in J$, $f:J\to\R$ solves $\operatorname{IVP}(O,g,x_0,y_0)$ iff
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $J$ is open and $f$ is differentiable.
+\item $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$.
+\item $f'(x)=g(x,f(x))$ $\forall x\in J$, and $f(x_0)=y_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\Gamma_f\subseteq O$ makes $g(\,\cdot\,,f)$ defined; $f(x_0)=y_0$ selects the curve.
+\end{definition}
+
+\begin{proposition} \label{prop:ode-integral-equation-equivalence} \hlt{Differential and Integral Forms}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g\in C(O,\R)$, $J\subseteq\R$ open with $x_0\in J$, and $f\in C(J,\R)$.\\
+Let $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$. Then $f$ solves $\operatorname{IVP}(O,g,x_0,y_0)$ iff $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f'(x)=g(x,f(x))$ on $J$, $f(x_0)=y_0$, by Theorem \ref{thm:fundamental-theorem-calculus-riemann}, $f(x)-y_0=\int_{x_0}^{x}f'(t)\,dt=\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\item[$(\Leftarrow)$] If $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$, then $g(\,\cdot\,,f(\,\cdot\,))$ is continuous on $J$.\\
 By Theorem \ref{thm:integral-function-continuity-and-derivative}, $f'(x)=g(x,f(x))$ on $J$. Evaluating at $x=x_0$ gives $f(x_0)=y_0$.
 \end{enumerate}
 \hlt{Structural Commentary}: Differentiation and integration are inverse along the continuous graph.\\
@@ -32,18 +116,25 @@ By Theorem \ref{thm:integral-function-continuity-and-derivative}, $f'(x)=g(x,f(x
 \begin{theorem} \label{thm:picard-local-existence-uniqueness} \hlt{Picard Local Existence Theorem}\\
 Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, and $g\in C(O,\R)$.\\
 Assume $\abs{g(x,y_1)-g(x,y_2)}\leq M\abs{y_1-y_2}$ for some $M>0$ whenever $(x,y_1),(x,y_2)\in O$.\\
-Then $\exists a,b,\ell>0$, $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, and $J_\ell\defeq(x_0-\ell,x_0+\ell)$ such that the IVP $y'=g(x,y)$, $y(x_0)=y_0$, has a unique differentiable solution $f:J_\ell\to\R$ with $\Gamma_f\subseteq Q$.
+Then $\exists a,b,\ell>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$ and $J_\ell\defeq(x_0-\ell,x_0+\ell)$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The IVP $y'=g(x,y)$, $y(x_0)=y_0$, has a differentiable solution $f:J_\ell\to\R$ with $\Gamma_f\subseteq Q$.
+\item If $h:J_\ell\to\R$ is a differentiable solution with $\Gamma_h\subseteq Q$, then $h=f$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Local box}: Choose $a,b>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, choose $K<\infty$ with $\abs{g}\leq K$ on $Q$, and choose $\ell>0$ with $\ell\leq a$, $\ell K\leq b$, and $\ell M<1$. Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$.
-\item \hlt{Complete space}: Let $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\abs{u-y_0}_\infty\leq b\}$. This is a complete closed subset of $C(I_\ell,\R)$ by Theorem \ref{thm:complete-supremum-metric-space} and Proposition \ref{prop:basic-completeness-consequences}. Define $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.
-\item \hlt{Contraction.} For $u\in\mathcal{X}_\ell$, $\abs{(Tu)(x)-y_0}\leq \abs{x-x_0}K\leq b$, so $T(\mathcal{X}_\ell)\subseteq\mathcal{X}_\ell$.\\
-For $u,v\in\mathcal{X}_\ell$, $\norm{Tu-Tv}_{\infty}\leq \ell M\norm{u-v}_{\infty}$, so $T$ is a contraction.
-\item \hlt{Fixed point}: Theorem \ref{thm:contraction-principle} gives a unique fixed point $u_*\in\mathcal{X}_\ell$.\\
-With $f\defeq u_*|_{J_\ell}$, Proposition \ref{prop:ode-integral-equation-equivalence} gives $f'=g(\,\cdot\,,f)$ and $f(x_0)=y_0$, while $\Gamma_f\subseteq Q$.
-\item \hlt{Uniqueness}: If $h:J_\ell\to\R$ is another solution with $\Gamma_h\subseteq Q$, then $\forall 0<r<\ell$ the same operator on $I_r\defeq[x_0-r,x_0+r]$ is a contraction, and both $h|_{I_r}$ and $u_*|_{I_r}$ are fixed points.\\
-Hence $h=f$ on every $I_r$, and therefore on $J_\ell$.
+\item Choose $a,b>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$.\\
+Let $K\defeq\sup_Q\abs{g}<+\infty$, and choose $0<\ell\leq a$ with $\ell K\leq b$ and $\ell M<1$.\\
+Put $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\norm{u-y_0}_\infty\leq b\}$, and $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.\\
+The space $\mathcal{X}_\ell$ is complete, and for $u,v\in\mathcal{X}_\ell$, $\norm{Tu-y_0}_\infty\leq\ell K\leq b$ and $\norm{Tu-Tv}_\infty\leq\ell M\norm{u-v}_\infty$.\\
+Thus $T:\mathcal{X}_\ell\to\mathcal{X}_\ell$ is a contraction, so $\exists!u_*\in\mathcal{X}_\ell$ with $Tu_*=u_*$.\\
+For $f\defeq u_*|_{J_\ell}$, $\Gamma_f\subseteq Q$ and Proposition \ref{prop:ode-integral-equation-equivalence} gives $f'=g(\,\cdot\,,f)$, $f(x_0)=y_0$.
+\item Let $h:J_\ell\to\R$ solve the IVP with $\Gamma_h\subseteq Q$. For $0<r<\ell$, put $I_r\defeq[x_0-r,x_0+r]$,\\
+$\mathcal{X}_r\defeq\{u\in C(I_r,\R):\norm{u-y_0}_\infty\leq b\}$, and $(T_ru)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.\\
+Since $rM<1$, $T_r$ is a contraction. Proposition \ref{prop:ode-integral-equation-equivalence} gives $T_r(h|_{I_r})=h|_{I_r}$ and $T_r(u_*|_{I_r})=u_*|_{I_r}$.\\
+Uniqueness gives $h=f$ on $I_r$. Hence $h=f$ on $\bigcup\limits_{0<r<\ell}I_r=J_\ell$.
 \end{enumerate}
 \hlt{Structural Commentary}: Box control plus short-time contraction.\\
 \hlt{Key Insight}: Picard iteration is Banach iteration.
@@ -53,13 +144,13 @@ Hence $h=f$ on every $I_r$, and therefore on $J_\ell$.
 \begin{method} \label{meth:picard-iteration-local-ode} \hlt{Picard Iteration}\\
 Let $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, assume $\abs{g(x,y)}\leq K$ for $(x,y)\in Q$,\\
 $\abs{g(x,y_1)-g(x,y_2)}\leq M\abs{y_1-y_2}$ whenever $(x,y_1),(x,y_2)\in Q$. Let $\ell>0$ with $\ell\leq a$, $\ell K\leq b$, and $\ell M<1$.\\
-Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $J_\ell\defeq(x_0-\ell,x_0+\ell)$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\abs{u-y_0}_\infty\leq b\}$,\\
+Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $J_\ell\defeq(x_0-\ell,x_0+\ell)$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\norm{u-y_0}_\infty\leq b\}$,\\
 $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$. Then
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Initialize $f_0(x)\equiv y_0$ on $I_\ell$.
 \item Iterate $f_{n+1}\defeq Tf_n$, i.e. $f_{n+1}(x)=y_0+\int_{x_0}^{x}g(t,f_n(t))\,dt$ for $x\in I_\ell$.
-\item Let $f_\infty\defeq\lim_{n\to\infty}f_n$ uniformly on $I_\ell$, and output $f\defeq f_\infty|_{J_\ell}$.
+\item Let $f_\infty\defeq\lim\limits_{n\to\infty}f_n$ uniformly on $I_\ell$, and output $f\defeq f_\infty|_{J_\ell}$.
 \end{enumerate}
 Since $T$ is a contraction on $\mathcal{X}_\ell$, the limit exists; the output is the unique local solution with graph in $Q$.
 \end{method}
@@ -70,3 +161,24 @@ Since $T$ is a contraction on $\mathcal{X}_\ell$, the limit exists; the output i
   \caption{Picard setup: choose $\ell$ with $\ell K\leq b$ so $T(\mathcal X_\ell)\subseteq\mathcal X_\ell$ and graphs stay in $Q$.}
   \label{fig:picard-rectangle-integral-operator}
 \end{figure}
+
+\begin{proposition} \label{prop:autonomous-time-translation-flow-law} \hlt{Time Translation and the Local Flow Law}\\
+Let $D\subseteq\R^n$ be open, $f:D\to\R^n$, and assume each $(t_0,x_0)\in\R\times D$ has a unique local solution of $x'=f(x)$, $x(t_0)=x_0$. For $x\in D$, let $\phi_x'=f(\phi_x)$, $\phi_x(0)=x$, set $\Phi_t(x)\defeq\phi_x(t)$, and put $\mathcal{D}_\Phi\defeq\operatorname{dom}\Phi$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\phi:I\to D$ solves $\phi'=f(\phi)$, $0\in I$, and $\tau\in\R$,\\
+then $\psi_\tau(t)\defeq\phi(t-\tau)$ on $\tau+I$ satisfies $\psi_\tau'=f(\psi_\tau)$ and $\psi_\tau(\tau)=\phi(0)$.
+\item The time-$0$ map fixes every state: $\Phi_0=\operatorname{id}_D$.
+\item Admissible two-step evolution composes: if $(s,x),(t,\Phi_s(x)),(t+s,x)\in\mathcal{D}_\Phi$, then $\Phi_{t+s}(x)=\Phi_t(\Phi_s(x))$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $t\in\tau+I$, $\psi_\tau'(t)=\phi'(t-\tau)=f(\phi(t-\tau))=f(\psi_\tau(t))$, and $\psi_\tau(\tau)=\phi(0)$.
+\item For $x\in D$, $\phi_x$ is defined by $\phi_x'=f(\phi_x)$ and $\phi_x(0)=x$; hence $\Phi_0(x)=\phi_x(0)=x$. Thus $\Phi_0=\operatorname{id}_D$.
+\item On $R\defeq\{r:(r+s,x),(r,\Phi_s(x))\in\mathcal{D}_\Phi\}$, set $u(r)\defeq\Phi_{r+s}(x)$ and $v(r)\defeq\Phi_r(\Phi_s(x))$. By (i), $u'=f(u)$; by definition, $v'=f(v)$ and $u(0)=v(0)=\Phi_s(x)$. Uniqueness gives $u=v$, so $r=t$ gives $\Phi_{t+s}(x)=\Phi_t(\Phi_s(x))$.
+\end{enumerate}
+\hlt{Structural Commentary}: Time shift plus uniqueness gives composition.\\
+\hlt{Key Insight}: Autonomy makes elapsed time additive.
+\end{proof}
+\end{proposition}
