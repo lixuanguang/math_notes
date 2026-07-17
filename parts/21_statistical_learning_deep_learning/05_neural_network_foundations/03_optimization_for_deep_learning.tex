@@ -1,6 +1,6 @@
 \subsection{Optimization for Deep Learning}
 
-The old optimization notes are migrated here only where the algorithms are used as training methods for neural networks.  General numerical optimization belongs to Part 14.
+The old optimization notes are migrated here only where the algorithms are used as training methods for neural networks.  General numerical optimization belongs to Part 18.
 
 \begin{definition} \label{def:sl-neural-empirical-objective} \hlt{Neural Empirical Objective}\\
 For data $(x_i,y_i)_{i=1}^n$, network $f_\theta:x\mapsto f(x;\theta)$, loss $L$, neural empirical objective is $J_n(\theta)=n^{-1}\sum\limits_{i=1}^nL(f_\theta(x_i),y_i)$.\\
@@ -28,4 +28,15 @@ For empirical loss $J_n(\theta)$, deep optimization is shaped by:
 \item \hlt{stabilization}: initialization, normalization, gradient clipping, skip connections, and learning-rate schedules control scale, conditioning, and update variance.
 \end{enumerate}
 These choices are part of the training specification, not post hoc implementation details.
+\end{remark}
+
+\begin{remark} \label{rem:sl-second-order-methods} \hlt{Second-Order Methods}\\
+Let $J:\R^d\to\R$, $g_k=\nabla J(\theta_k)$, and $H_k=\nabla^2J(\theta_k)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Newton}: choose $p_k$ from $H_kp_k=-g_k$ and set $\theta_{k+1}=\theta_k+\eta_kp_k$.
+\item \hlt{Conjugate gradient}: solve $H_kp=-g_k$ approximately using only products $H_kv$.
+\item \hlt{BFGS/L-BFGS}: use $p_k=-B_kg_k$, where $B_k\approx H_k^{-1}$; L-BFGS stores few curvature pairs.
+\end{enumerate}
+Large networks make explicit $H_k$ storage or factorization prohibitive, so these methods usually act as preconditioners, curvature approximations, or analysis tools.
 \end{remark}
