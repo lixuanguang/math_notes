@@ -28,6 +28,28 @@ The columns of $V_r$ are the rank-$r$ PCA directions, $Z_r$ contains the princip
 and $\widehat{X}_r$ is the orthogonal rank-$r$ reconstruction minimizing $\norm{X-\widehat{X}}_F^2$.
 \end{method}
 
+\begin{method} \label{meth:sl-kernel-pca} \hlt{Kernel PCA}\\
+Let $k$ be a positive definite kernel on observations $x_1,\ldots,x_n$, fix $r$, and set $M=n^{-1}\mathbf{1}\mathbf{1}^T$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Form the Gram matrix $K=(k(x_i,x_{i'}))_{i,i'}$.
+\item Center it by $\widetilde{K}=(I_n-M)K(I_n-M)$.
+\item Compute $\widetilde{K}u_j=\lambda_ju_j$ with $\lambda_1\geq\cdots\geq\lambda_r>0$, and set $U_r=[u_1\ \cdots\ u_r]$, $\Lambda_r=\operatorname{diag}(\lambda_1,\ldots,\lambda_r)$.
+\item Return coordinates $Z=U_r\Lambda_r^{1/2}$.
+\end{enumerate}
+Kernel PCA is spectral PCA on $\widetilde{K}$; radial kernels encode local similarity.
+\end{method}
+
+\begin{method} \label{meth:sl-sparse-pca-objectives} \hlt{Sparse Principal Components}\\
+Let centered data have rows $x_i^T$ in $X\in\R^{n\times p}$, and let $v\in\R^p$ be a loading vector.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Variance form}: set $\mathcal{V}_t=\{a\in\R^p:a^Ta=1,\ \sum\limits_{j=1}^p\abs{a_j}\leq t\}$ and choose $v\in\operatorname*{argmax}\limits_{a\in\mathcal{V}_t}a^TX^TXa$.
+\item \hlt{Reconstruction form}: for one component, choose $(\theta,v)\in\operatorname*{argmin}\limits_{\norm{\theta}_2=1}\sum\limits_{i=1}^n\norm{x_i-\theta v^Tx_i}_2^2+\lambda\norm{v}_2^2+\lambda_1\norm{v}_1$.
+\end{enumerate}
+$L_1$ regularization sparsifies loadings; multiple components alternate sparse-loading and orthogonal-score updates.
+\end{method}
+
 \begin{definition} \label{def:sl-multidimensional-scaling} \hlt{Multidimensional Scaling}\\
 Let $D=(d_{ii'})$ be a symmetric dissimilarity matrix with $d_{ii}=0$, fix $r<n$, and write $Z=(z_1^T,\ldots,z_n^T)^T\in\R^{n\times r}$ with fitted distances $\delta_{ii'}(Z)=\norm{z_i-z_{i'}}_2$.
 Multidimensional scaling chooses $Z$ so that $\delta_{ii'}(Z)$ approximates $d_{ii'}$.
@@ -171,28 +193,6 @@ Both self-organizing maps and principal surfaces approximate data by low-dimensi
 \end{enumerate}
 With many prototypes and kernel neighborhood weights, batch SOM updates resemble coordinate-wise surface smoothing, but one fit is smooth-parametric and the other is finite-prototype.
 \end{remark}
-
-\begin{method} \label{meth:sl-kernel-pca} \hlt{Kernel PCA}\\
-Let $k$ be a positive definite kernel on observations $x_1,\ldots,x_n$, fix $r$, and set $M=n^{-1}\mathbf{1}\mathbf{1}^T$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Form the Gram matrix $K=(k(x_i,x_{i'}))_{i,i'}$.
-\item Center it by $\widetilde{K}=(I_n-M)K(I_n-M)$.
-\item Compute $\widetilde{K}u_j=\lambda_ju_j$ with $\lambda_1\geq\cdots\geq\lambda_r>0$, and set $U_r=[u_1\ \cdots\ u_r]$, $\Lambda_r=\operatorname{diag}(\lambda_1,\ldots,\lambda_r)$.
-\item Return coordinates $Z=U_r\Lambda_r^{1/2}$.
-\end{enumerate}
-Kernel PCA is spectral PCA on $\widetilde{K}$; radial kernels encode local similarity.
-\end{method}
-
-\begin{method} \label{meth:sl-sparse-pca-objectives} \hlt{Sparse Principal Components}\\
-Let centered data have rows $x_i^T$ in $X\in\R^{n\times p}$, and let $v\in\R^p$ be a loading vector.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Variance form}: set $\mathcal{V}_t=\{a\in\R^p:a^Ta=1,\ \sum\limits_{j=1}^p\abs{a_j}\leq t\}$ and choose $v\in\operatorname*{argmax}\limits_{a\in\mathcal{V}_t}a^TX^TXa$.
-\item \hlt{Reconstruction form}: for one component, choose $(\theta,v)\in\operatorname*{argmin}\limits_{\norm{\theta}_2=1}\sum\limits_{i=1}^n\norm{x_i-\theta v^Tx_i}_2^2+\lambda\norm{v}_2^2+\lambda_1\norm{v}_1$.
-\end{enumerate}
-$L_1$ regularization sparsifies loadings; multiple components alternate sparse-loading and orthogonal-score updates.
-\end{method}
 
 \begin{remark} \label{rem:sl-local-versus-global-scaling} \hlt{Local versus Global Scaling}\\
 Let $d_E(i,j)=\norm{x_i-x_j}_2$ and let $\mathcal{N}$ be a neighborhood relation.

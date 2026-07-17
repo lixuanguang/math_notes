@@ -2,6 +2,15 @@
 
 Transformers combine attention, feedforward blocks, normalization, and residual connections into architectures that scale well on sequence and multimodal data.
 
+\begin{definition} \label{def:sl-self-attention} \hlt{Self-Attention}\\
+For $X\in\R^{T\times d}$, head dimension $d_h$, and projection matrices $W_Q,W_K,W_V,W_O$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Self-attention}: $Q=XW_Q$, $K=XW_K$, $V=XW_V$, and $\operatorname{SA}(X)\defeq\operatorname{Attn}(Q,K,V)$.
+\item \hlt{Multi-head attention}: with heads $H_r\defeq\operatorname{Attn}(XW_Q^{(r)},XW_K^{(r)},XW_V^{(r)})$, set $\operatorname{MHA}(X)\defeq[H_1|\cdots|H_R]W_O$.
+\end{enumerate}
+\end{definition}
+
 \begin{definition} \label{def:sl-transformer-block} \hlt{Transformer Block}\\
 For $X\in\R^{T\times d}$, let $\operatorname{MHA}$ be multi-head attention, $\operatorname{FFN}$ positionwise feedforward, and $\operatorname{LN}_1,\operatorname{LN}_2$ layer normalizations. A pre-norm block $B:\R^{T\times d}\to\R^{T\times d}$ is:
 \begin{enumerate}[label=(\roman*)]
@@ -10,15 +19,6 @@ For $X\in\R^{T\times d}$, let $\operatorname{MHA}$ be multi-head attention, $\op
 \item \hlt{Feedforward sublayer}: $B(X)\defeq Z+\operatorname{FFN}(\operatorname{LN}_2Z)$.
 \end{enumerate}
 Stacking blocks gives $B_L\circ\cdots\circ B_1(X)$.
-\end{definition}
-
-\begin{definition} \label{def:sl-self-attention} \hlt{Self-Attention}\\
-For $X\in\R^{T\times d}$, head dimension $d_h$, and projection matrices $W_Q,W_K,W_V,W_O$:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Self-attention}: $Q=XW_Q$, $K=XW_K$, $V=XW_V$, and $\operatorname{SA}(X)\defeq\operatorname{Attn}(Q,K,V)$.
-\item \hlt{Multi-head attention}: with heads $H_r\defeq\operatorname{Attn}(XW_Q^{(r)},XW_K^{(r)},XW_V^{(r)})$, set $\operatorname{MHA}(X)\defeq[H_1|\cdots|H_R]W_O$.
-\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:sl-large-scale-training} \hlt{Large-Scale Training}\\

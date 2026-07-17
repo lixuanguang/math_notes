@@ -11,6 +11,17 @@ A map $k:\mathcal{X}\times\mathcal{X}\to\R$ is a \hlt{positive definite kernel} 
 \end{enumerate}
 \end{definition}
 
+\begin{example} \label{ex:sl-common-kernels} \hlt{Common Kernels}\\
+For $x,y\in\R^p$, common positive definite kernels include:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Polynomial}: for $d\in\N_{>0}$, $k_d(x,y)\defeq(\langle x,y\rangle+1)^d=\langle h_d(x),h_d(y)\rangle$, encoding monomials of degree $\leq d$.\\
+If $p=2$ and $d=2$, one feature map is $h_2(x)=(1,\sqrt{2}x_1,\sqrt{2}x_2,x_1^2,x_2^2,\sqrt{2}x_1x_2)\in\R^6$.
+\item \hlt{Gaussian RBF}: for $\nu>0$, $k_\nu(x,y)\defeq\exp(-\nu\norm{x-y}_2^2)$; it is radial and translation invariant,\\
+with $k_\nu(x,y)$ decreasing as $\norm{x-y}_2$ increases.
+\end{enumerate}
+\end{example}
+
 \begin{definition} \label{def:sl-rkhs} \hlt{Reproducing Kernel Hilbert Space}\\
 A Hilbert space $\mathcal{H}\subseteq\R^{\mathcal{X}}$ is a \hlt{reproducing kernel Hilbert space} if point evaluation is continuous; explicitly:
 \begin{enumerate}[label=(\roman*)]
@@ -38,16 +49,17 @@ Since $S=\{\sum\limits_{i=1}^n\alpha_i k(x_i,\cdot):\alpha\in\R^n\}$, finite exp
 \end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:sl-common-kernels} \hlt{Common Kernels}\\
-For $x,y\in\R^p$, common positive definite kernels include:
+\begin{method} \label{meth:sl-kernel-ridge-regression} \hlt{Kernel Ridge Regression}\\
+Let $(x_i,y_i)_{i=1}^n\subseteq\mathcal{X}\times\R$, $y\defeq(y_1,\ldots,y_n)^\top$, $\lambda>0$, and $K_{ij}\defeq k(x_i,x_j)$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Polynomial}: for $d\in\N_{>0}$, $k_d(x,y)\defeq(\langle x,y\rangle+1)^d=\langle h_d(x),h_d(y)\rangle$, encoding monomials of degree $\leq d$.\\
-If $p=2$ and $d=2$, one feature map is $h_2(x)=(1,\sqrt{2}x_1,\sqrt{2}x_2,x_1^2,x_2^2,\sqrt{2}x_1x_2)\in\R^6$.
-\item \hlt{Gaussian RBF}: for $\nu>0$, $k_\nu(x,y)\defeq\exp(-\nu\norm{x-y}_2^2)$; it is radial and translation invariant,\\
-with $k_\nu(x,y)$ decreasing as $\norm{x-y}_2$ increases.
+\item \hlt{RKHS problem}. Solve $\widehat{f}\in\operatorname*{argmin}\limits_{f\in\mathcal{H}}\sum\limits_{i=1}^n(y_i-f(x_i))^2+\lambda\norm{f}_{\mathcal{H}}^2$.
+\item \hlt{Representer reduction}. Write $\widehat{f}(\cdot)=\sum\limits_{i=1}^n\widehat{\alpha}_ik(x_i,\cdot)$; then $\widehat{f}(x_j)=(K\widehat{\alpha})_j$ and $\norm{\widehat{f}}_{\mathcal{H}}^2=\widehat{\alpha}^\top K\widehat{\alpha}$.
+\item \hlt{Finite problem}. Minimise $\widehat{\alpha}\in\operatorname*{argmin}\limits_{\alpha\in\R^n}\norm{y-K\alpha}_2^2+\lambda\alpha^\top K\alpha$.
+\item \hlt{Solution}. Since $K\succeq0$ and $\lambda>0$, $K+\lambda I\succ0$ and $\widehat{\alpha}=(K+\lambda I)^{-1}y$.\\
+Hence $\widehat{y}=K\widehat{\alpha}$ and $\widehat{f}(x)=k_x^\top\widehat{\alpha}$, where $k_x\defeq(k(x,x_1),\ldots,k(x,x_n))^\top$.
 \end{enumerate}
-\end{example}
+\end{method}
 
 \begin{remark} \label{rem:sl-localization-kernels-versus-rkhs-kernels} \hlt{Localisation Kernels and RKHS Kernels}\\
 \hlt{Localisation kernel} has weights $w_i(x_0)\propto K_\lambda(x_0,x_i)$. $w_i(x_0)$ is large when $x_i$ close to $x_0$; small otherwise.\\
@@ -65,18 +77,6 @@ Then $h_j(x)\geq0$ and $\sum\limits_{j=1}^M h_j(x)=1$.
 \item \hlt{Training-point centers}: $M=n$, $\xi_i=x_i$, $\beta_i=Y_i$ give $\widehat{f}(x)\defeq\sum\limits_{i=1}^nY_i h_i(x)$ (Nadaraya--Watson local avg).
 \end{enumerate}
 \end{example}
-
-\begin{method} \label{meth:sl-kernel-ridge-regression} \hlt{Kernel Ridge Regression}\\
-Let $(x_i,y_i)_{i=1}^n\subseteq\mathcal{X}\times\R$, $y\defeq(y_1,\ldots,y_n)^\top$, $\lambda>0$, and $K_{ij}\defeq k(x_i,x_j)$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{RKHS problem}. Solve $\widehat{f}\in\operatorname*{argmin}\limits_{f\in\mathcal{H}}\sum\limits_{i=1}^n(y_i-f(x_i))^2+\lambda\norm{f}_{\mathcal{H}}^2$.
-\item \hlt{Representer reduction}. Write $\widehat{f}(\cdot)=\sum\limits_{i=1}^n\widehat{\alpha}_ik(x_i,\cdot)$; then $\widehat{f}(x_j)=(K\widehat{\alpha})_j$ and $\norm{\widehat{f}}_{\mathcal{H}}^2=\widehat{\alpha}^\top K\widehat{\alpha}$.
-\item \hlt{Finite problem}. Minimise $\widehat{\alpha}\in\operatorname*{argmin}\limits_{\alpha\in\R^n}\norm{y-K\alpha}_2^2+\lambda\alpha^\top K\alpha$.
-\item \hlt{Solution}. Since $K\succeq0$ and $\lambda>0$, $K+\lambda I\succ0$ and $\widehat{\alpha}=(K+\lambda I)^{-1}y$.\\
-Hence $\widehat{y}=K\widehat{\alpha}$ and $\widehat{f}(x)=k_x^\top\widehat{\alpha}$, where $k_x\defeq(k(x,x_1),\ldots,k(x,x_n))^\top$.
-\end{enumerate}
-\end{method}
 
 \begin{remark} \label{rem:sl-rkhs-regularization-spline-kernel-link} \hlt{Spline and Kernel Viewpoints}\\
 Common form: $\min\limits_f\sum\limits_{i=1}^n\ell(f(x_i),y_i)+\lambda\norm{Pf}_{\mathcal{H}}^2$, where $P$ removes an unpenalised $\mathcal{U}$, gives $\widehat{f}=u+\sum\limits_{i=1}^n\alpha_i k(x_i,\cdot)$ with $u\in\mathcal{U}$. Splines choose $P$, kernel methods choose $k$, and SVMs choose a margin loss $\ell$.
