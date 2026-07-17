@@ -1,2 +1,74 @@
 \subsection{Nonlinear Stability Theory}
 % Lyapunov functions, invariant manifolds, linearization, Hartman-Grobman flavor.
+
+Exact formulas are often unnecessary for proving that scalar trajectories remain ordered or trapped. Differential inequalities provide comparison curves for this purpose.
+
+\begin{definition} \label{def:scalar-upper-lower-solutions} \hlt{Upper and Lower Solutions}\\
+Let $U\subseteq\R^2$ be open, $f:U\to\R$, $J\subseteq\R$ be open interval. For $u\in C^1(J,\R)$ with $\Gamma_u\defeq\{(t,u(t)):t\in J\}\subseteq U$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Upper solution}: $u'(t)\geq f(t,u(t))$ $\forall t\in J$; it is \hlt{strict} iff the inequality is strict on $J$.
+\item \hlt{Lower solution}: $u'(t)\leq f(t,u(t))$ $\forall t\in J$; it is \hlt{strict} iff the inequality is strict on $J$.
+\end{enumerate}
+\hlt{Key Insight}: Differential inequalities encode one-sided barriers without solving the ODE.
+\end{definition}
+
+\begin{lemma} \label{lem:strict-scalar-comparison} \hlt{Strict Scalar Comparison}\\
+Let $U\subseteq\R^2$ be open, $f\in C(U,\R)$, $J\subseteq\R$ open, and $[t_0,T]\subseteq J$ with $t_0<T$.\\
+Let $I_+\defeq(t_0,T]$ and suppose $x\in C^1(J,\R)$, $\Gamma_x\subseteq U$, $x'=f(\,\cdot\,,x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $u\in C^1(J,\R)$ is a strict upper solution and $x(t_0)\leq u(t_0)$, then $x<u$ on $I_+$.
+\item If $v\in C^1(J,\R)$ is a strict lower solution and $v(t_0)\leq x(t_0)$, then $v<x$ on $I_+$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\Delta\defeq u-x$. If $\Delta(t)=0$, then $x(t)=u(t)$ and $\Delta'(t)=u'(t)-x'(t)=u'(t)-f(t,u(t))>0$.\\
+From $\Delta(t_0)\geq0$, continuity if $\Delta(t_0)>0$, and $\Delta'(t_0)>0$ if $\Delta(t_0)=0$, get $\Delta>0$ on $(t_0,t_0+\varepsilon]$.\\
+If $t_1\defeq\inf\{t>t_0:\Delta(t)=0\}\leq T$, then $\Delta>0$ on $(t_0,t_1)$ and $\Delta(t_1)=0$, so $\Delta'(t_1)\leq0$.\\
+This contradicts $\Delta'(t_1)>0$. Thus $\Delta>0$ on $I_+$.
+\item Set $\Delta\defeq x-v$. If $\Delta(t)=0$, then $x(t)=v(t)$ and $\Delta'(t)=x'(t)-v'(t)=f(t,v(t))-v'(t)>0$.\\
+As above, $\Delta(t_0)\geq0$ gives $\Delta>0$ near $t_0^+$.\\
+A first zero $t_1\in I_+$ would force $\Delta'(t_1)\leq0$, contradicting $\Delta'(t_1)>0$. Hence $\Delta>0$ on $I_+$.
+\end{enumerate}
+\hlt{Structural Commentary}: At contact, $\Delta'=+$ forbids crossing.\\
+\hlt{Key Insight}: Strict differential inequalities forbid barrier crossing.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:locally-lipschitz-uniform-in-time} \hlt{Local State Lipschitz Condition}\\
+Let $U\subseteq\R^2$ be open, $f:U\to\R$, and $\mathcal{K}(U)\defeq\{K\subseteq U:K\text{ is compact}\}$. $f$ is \hlt{locally Lipschitz in the state, uniformly in time}\\
+iff $\forall K\in\mathcal{K}(U)$, $\exists L_K<+\infty$ such that $\abs{f(t,x)-f(t,y)}\leq L_K\abs{x-y}$ whenever $(t,x),(t,y)\in K$.
+\end{definition}
+
+\begin{theorem} \label{thm:scalar-lipschitz-comparison} \hlt{Scalar Lipschitz Comparison}\\
+Let $U\subseteq\R^2$ be open, $f\in C(U,\R)$, and $\operatorname{Lip}_x(K,L)$ mean $\abs{f(t,p)-f(t,q)}\leq L\abs{p-q}$ whenever $(t,p),(t,q)\in K$.\\
+Assume every compact $K\subseteq U$ has some $L_K<+\infty$ with $\operatorname{Lip}_x(K,L_K)$.\\
+Let $I\defeq[t_0,T]\subseteq J$, $J\subseteq\R$ open, $t_0<T$. For $z:J\to\R$, set $\Gamma_z(A)\defeq\{(t,z(t)):t\in A\}$, $R_z\defeq z'-f(\,\cdot\,,z)$.\\
+Suppose $x,y\in C^1(J,\R)$, $\Gamma_x(J)\cup\Gamma_y(J)\subseteq U$, and $R_x\leq R_y$ on $I$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x(t_0)\leq y(t_0)$, then $x\leq y$ on $I$.
+\item If $t_1\in I$ and $x(t_1)<y(t_1)$, then $x<y$ on $[t_1,T]$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\Delta\defeq x-y$, $S\defeq\{\Delta>0\}\cap I\neq\emptyset$. Since $\Delta(t_0)\leq0$, a component $C$ of $S$ has left endpoint $\alpha$ with $\Delta(\alpha)=0$; choose $t_2\in C$, so $\Delta>0$ on $(\alpha,t_2]$.\\
+With $K\defeq\Gamma_x([\alpha,t_2])\cup\Gamma_y([\alpha,t_2])$ and $L=L_K$, $R_x\leq R_y$ gives $\Delta'\leq f(\,\cdot\,,x)-f(\,\cdot\,,y)\leq L\Delta$ on $(\alpha,t_2]$.\\
+Thus $(e^{-L(t-\alpha)}\Delta)'\leq0$, so $\Delta(t_2)\leq e^{L(t_2-\alpha)}\Delta(\alpha)=0$, contradicting $t_2\in S$.
+\item Set $\delta\defeq y-x$. If $t_2\in(t_1,T]$ is the first zero of $\delta$, then $\delta>0$ on $[t_1,t_2)$.\\
+With $K\defeq\Gamma_x([t_1,t_2])\cup\Gamma_y([t_1,t_2])$ and $L=L_K$, by $R_x\leq R_y$, $\delta'\geq f(\,\cdot\,,y)-f(\,\cdot\,,x)\geq-L\delta$ on $[t_1,t_2)$.\\
+Hence $(e^{L(t-t_1)}\delta)'\geq0$ and $0=e^{L(t_2-t_1)}\delta(t_2)\geq\delta(t_1)>0$, contradiction.
+\end{enumerate}
+\hlt{Structural Commentary}: $\Delta'\leq L\Delta$ makes $e^{-Lt}\Delta$ monotone.\\
+\hlt{Key Insight}: A nonpositive order defect cannot become positive.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:riccati-wedge-comparison} \hlt{A Trapping Wedge for $x'=x^2-t^2$}\\
+For $f(t,x)\defeq x^2-t^2$ on $(0,+\infty)\times\R$, set $u(t)\defeq t$ and $v(t)\defeq -t$.\\
+Then $u'=1>0=f(t,u)$ and $v'=-1<0=f(t,v)$.\\
+If $t_0>0$, $x(t_0)=x_0\in[-t_0,t_0]$, $x'=x^2-t^2$, by Lemma \ref{lem:strict-scalar-comparison}, $-t<x(t)<t$ on forward interval with $t>t_0$.
+\end{example}
