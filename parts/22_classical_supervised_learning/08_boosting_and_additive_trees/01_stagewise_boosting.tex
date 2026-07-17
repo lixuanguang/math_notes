@@ -12,13 +12,6 @@ Let $\mathcal H$ be a weak-learner class and set $F_0\equiv0$.
 Boosting is the stagewise construction of $F_M$ from weak learners.
 \end{definition}
 
-\begin{figure}[H]
-\centering
-\input{figures/machine_learning/adaboost_weighted_samples.tikz}
-\caption{AdaBoost alternates \textcolor{blue!70!black}{fitting weak learners} with \textcolor{red!65!black}{updating observation weights}, then \textcolor{orange!80!black}{aggregates} them by a weighted vote.}
-\label{fig:sl-adaboost-weighted-samples}
-\end{figure}
-
 \begin{method} \label{meth:sl-forward-stagewise-additive-modeling} \hlt{Forward Stagewise Additive Modeling}\\
 Let $b(x;\gamma)$ range over a basis class and let $L(y,f)$ be a pointwise loss.
 \begin{enumerate}[label=(\roman*)]
@@ -37,23 +30,3 @@ For large $K$, direct least squares is ill posed; a penalized target is $\min\li
 With $J(\alpha)=\sum\limits_{k=1}^K|\alpha_k|$, active trees are sparse.\\
 Small-step boosting traces a forward-stagewise path through this dictionary; shrinkage shortens each move.
 \end{remark}
-
-\begin{breakablealgorithm}
-\caption{AdaBoost.M1}
-\label{alg:sl-adaboost-m1}
-\begin{algorithmic}
-\Require Binary training data $(x_i,y_i)$ with $y_i\in\{-1,1\}$, weighted classification learner, iterations $M$
-\Ensure Classifier $G(x)$
-\State Initialize $w_i\gets 1/n$ for $i=1,\ldots,n$
-\For{$m=1,\ldots,M$}
-\State Fit a classifier $G_m$ using observation weights $w_i$
-\State $\displaystyle \operatorname{err}_m\gets
-\frac{\sum_{i=1}^n w_i\mathbf{1}_{\{y_i\neq G_m(x_i)\}}}{\sum_{i=1}^n w_i}$
-\State $\displaystyle \alpha_m\gets \log\!\left(\frac{1-\operatorname{err}_m}{\operatorname{err}_m}\right)$
-\For{$i=1,\ldots,n$}
-\State $w_i\gets w_i\exp\{\alpha_m\mathbf{1}_{\{y_i\neq G_m(x_i)\}}\}$
-\EndFor
-\EndFor
-\State \textbf{return} $\displaystyle G(x)=\sign\!\left(\sum_{m=1}^M\alpha_mG_m(x)\right)$
-\end{algorithmic}
-\end{breakablealgorithm}

@@ -1,4 +1,31 @@
 \subsection{AdaBoost and Exponential Loss}
+\begin{breakablealgorithm}
+\caption{AdaBoost.M1}
+\label{alg:sl-adaboost-m1}
+\begin{algorithmic}
+\Require Binary training data $(x_i,y_i)$ with $y_i\in\{-1,1\}$, weighted classification learner, iterations $M$
+\Ensure Classifier $G(x)$
+\State Initialize $w_i\gets 1/n$ for $i=1,\ldots,n$
+\For{$m=1,\ldots,M$}
+\State Fit a classifier $G_m$ using observation weights $w_i$
+\State $\displaystyle \operatorname{err}_m\gets
+\frac{\sum_{i=1}^n w_i\mathbf{1}_{\{y_i\neq G_m(x_i)\}}}{\sum_{i=1}^n w_i}$
+\State $\displaystyle \alpha_m\gets \log\!\left(\frac{1-\operatorname{err}_m}{\operatorname{err}_m}\right)$
+\For{$i=1,\ldots,n$}
+\State $w_i\gets w_i\exp\{\alpha_m\mathbf{1}_{\{y_i\neq G_m(x_i)\}}\}$
+\EndFor
+\EndFor
+\State \textbf{return} $\displaystyle G(x)=\sign\!\left(\sum_{m=1}^M\alpha_mG_m(x)\right)$
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\begin{figure}[H]
+\centering
+\input{figures/machine_learning/adaboost_weighted_samples.tikz}
+\caption{AdaBoost alternates \textcolor{blue!70!black}{fitting weak learners} with \textcolor{red!65!black}{updating observation weights}, then \textcolor{orange!80!black}{aggregates} them by a weighted vote.}
+\label{fig:sl-adaboost-weighted-samples}
+\end{figure}
+
 \begin{proposition} \label{prop:sl-adaboost-exponential-stagewise} \hlt{AdaBoost as Exponential-Loss Stagewise Fitting}\\
 For $y_i\in\{-1,1\}$, use $L(y,f)=\exp(-yf)$.  Fix stage $m$, current score $f_{m-1}$, weights $w_i^{(m)}\defeq\exp\{-y_if_{m-1}(x_i)\}$, and classifier $G:\mathcal X\to\{-1,1\}$.  Set $Q_m(\beta,G)\defeq\sum\limits_{i=1}^n L\{y_i,f_{m-1}(x_i)+\beta G(x_i)\}$ and $E_m(G)\defeq\sum\limits_{i=1}^n w_i^{(m)}\mathbf{1}_{\{y_i\neq G(x_i)\}}$.
 \begin{enumerate}[label=(\roman*)]
