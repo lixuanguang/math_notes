@@ -1,2 +1,117 @@
 \subsection{Dynamical Systems Structure}
 % Limit cycles, Poincare maps, chaos, attractors, symbolic dynamics preview.
+
+For a time-periodic scalar equation, one period of continuous evolution can be compressed into a discrete map. Periodic solutions then become fixed points, and their long-time behavior can be studied through iteration.
+
+\begin{definition} \label{def:scalar-poincare-map} \hlt{Scalar Poincar\'e Map}\\
+Let $f:\R^2\to\R$ be one-periodic in $t$: $f(t+1,x)=f(t,x)$.\\
+For $x_0\in\R$, let $\phi_{x_0}:I_{x_0}\to\R$ be maximal solution of $x'=f(t,x)$, $\phi_{x_0}(0)=x_0$, and write $\phi(t,x_0)\defeq\phi_{x_0}(t)$.\\
+Put $\mathcal{D}\defeq\{x_0\in\R:[0,1]\subseteq I_{x_0}\}$. The \hlt{Poincar\'e map} is $P:\mathcal{D}\to\R$, $P(x_0)\defeq\phi(1,x_0)$.\\
+\hlt{Key Insight}: $P$ is the time-$1$ flow map on $\mathcal{D}$.
+\end{definition}
+
+\begin{proposition} \label{prop:scalar-poincare-periodic-fixed-point} \hlt{Periodic Orbits and Ordered Returns}\\
+Let $f\in C^1(\R^2,\R)$ satisfy $f(t+1,x)=f(t,x)$.\\
+For $x_0\in\R$, let $\phi_{x_0}:I_{x_0}\to\R$ be maximal solution of $x'=f(t,x)$, $\phi_{x_0}(0)=x_0$; set $\phi(t,x_0)\defeq\phi_{x_0}(t)$.\\
+Set $\mathcal{D}\defeq\{x_0\in\R:[0,1]\subseteq I_{x_0}\}$ and $P:\mathcal{D}\to\R$, $P(x_0)\defeq\phi(1,x_0)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $x_0\in\mathcal{D}$, $P(x_0)=x_0$ iff $\phi(\,\cdot\,,x_0)$ extends to a one-periodic solution on $\R$.
+\item If $x_0,y_0\in\mathcal{D}$ and $x_0<y_0$, then $P(x_0)<P(y_0)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) Suppose $P(x_0)=x_0$. For $t\in[n,n+1]$, $n\in\Z$, set $u(t)\defeq\phi(t-n,x_0)$. Since $\phi(1,x_0)=x_0=\phi(0,x_0)$ and $f(n+1,x_0)=f(n,x_0)$, the pieces match in value and derivative at each $n\in\Z$.\\
+Thus $u\in C^1(\R,\R)$, $u'=f(t,u)$, and $u(t+1)=u(t)$. By local uniqueness, $u$ extends $\phi(\,\cdot\,,x_0)$.
+\item[$(i)$] ($\Leftarrow$) If $u$ is a one-periodic solution with $u(0)=x_0$, then by local uniqueness $u=\phi(\,\cdot\,,x_0)$ on $[0,1]$.\\
+Hence $P(x_0)=\phi(1,x_0)=u(1)=u(0)=x_0$.
+\item[$(ii)$] Let $K\defeq\{(t,\phi(t,x_0)):t\in[0,1]\}\cup\{(t,\phi(t,y_0)):t\in[0,1]\}$.\\
+Since $\partial_x f$ is continuous on the compact set $K$, $f$ is state-Lipschitz on a compact neighborhood of $K$.\\
+By Theorem \ref{thm:scalar-lipschitz-comparison}(ii), $\phi(t,x_0)<\phi(t,y_0)$ for $t\in[0,1]$; at $t=1$, $P(x_0)<P(y_0)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Periodicity closes the segment exactly when $P(x_0)=x_0$.\\
+\hlt{Key Insight}: Scalar uniqueness preserves order; $P$ is strictly increasing.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:periodic-logistic-poincare-geometry} \hlt{Geometry of the Periodically Harvested Return Map}\\
+Let $g(t)\defeq1-\sin(2\pi t)$, $F_\eta(t,z)\defeq(1-z)z-\eta g(t)$, and $(h,x)\in[0,+\infty)\times\R$.\\
+Assume $\exists W\ni(h,x)$ such that $\phi_\eta(\,\cdot\,,y)$ solves $z'=F_\eta(t,z)$, $z(0)=y$, on $[0,1]$ $\forall (\eta,y)\in W$.\\
+Set $P_\eta(y)\defeq\phi_\eta(1,y)$ and $\theta_h(t,x)\defeq\partial_x\phi_h(t,x)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $P_h'(x)=\exp\!\left(\int_0^1(1-2\phi_h(s,x))\,ds\right)>0$.
+\item $P_h''(x)=-2P_h'(x)\int_0^1\theta_h(s,x)\,ds<0$.
+\item $\partial_hP_h(x)=-\int_0^1\exp\!\left(\int_s^1(1-2\phi_h(r,x))\,dr\right)g(s)\,ds<0$.
+\end{enumerate}
+\begin{proof}
+By smooth dependence on $W$, all derivatives below exist.\\
+Put $\phi(t)\defeq\phi_h(t,x)$, $a(t)\defeq1-2\phi(t)$, $\theta\defeq\partial_x\phi_h(\,\cdot\,,x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\theta'=a\theta$, $\theta(0)=1$, so $\theta(t)=\exp\!\left(\int_0^t a(s)\,ds\right)>0$ and $P_h'(x)=\theta(1)=\exp\!\left(\int_0^1 a(s)\,ds\right)>0$.
+\item For $\zeta\defeq\partial_x^2\phi_h(\,\cdot\,,x)$, $\zeta'=a\zeta-2\theta^2$, $\zeta(0)=0$.\\
+By variation of constants, $P_h''(x)=\zeta(1)=-2\theta(1)\int_0^1\theta(s)\,ds=-2P_h'(x)\int_0^1\theta_h(s,x)\,ds<0$.
+\item For $\psi\defeq\partial_h\phi_h(\,\cdot\,,x)$, $\psi'=a\psi-g$, $\psi(0)=0$. By variation of constants,\\
+$\partial_hP_h(x)=\psi(1)=-\int_0^1\exp\!\left(\int_s^1 a(r)\,dr\right)g(s)\,ds<0$, since $\exp\!\left(\int_s^1 a(r)\,dr\right)>0$, $g\geq0$, and $g\not\equiv0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Variational equations control $P_h'$, $P_h''$, and $\partial_hP_h$.\\
+\hlt{Key Insight}: $P_h$ is increasing, concave, and decreases with $h$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:unharvested-logistic-poincare-map} \hlt{The Unharvested Return Map}\\
+For $h=0$ and $x\geq0$, separation of variables gives $\phi_0(t,x)=\frac{e^t x}{1+(e^t-1)x}$ and hence $P_0(x)=\frac{ex}{1+(e-1)x}$.\\
+Its fixed points are $x_1=0$ and $x_2=1$, corresponding to the two constant one-periodic solutions.
+\end{example}
+
+\begin{theorem} \label{thm:increasing-concave-map-iteration} \hlt{Iteration of an Increasing Concave Map}\\
+Let $I\subseteq\R$ be an interval, $P:I\to I$ continuous, strictly increasing, strictly concave, and $\operatorname{Fix}(P)=\{x_1,x_2\}$ with $x_1<x_2$. For $x\in I$, set $x_0\defeq x$ and $x_{n+1}\defeq P(x_n)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x>x_1$, then $x_n\to x_2$.
+\item If $x=x_1$, then $x_n=x_1$ for all $n\geq0$.
+\item If $x<x_1$, then $x_{n+1}<x_n$ and $x_n\downarrow\inf I$ in $\overline{\R}$; in particular, $x_n\to-\infty$ if $\inf I=-\infty$.
+\end{enumerate}
+\begin{proof}
+Set $m(a,b)\defeq\frac{P(b)-P(a)}{b-a}$, $a<b$ in $I$. By strict concavity, $a<b<c\Rightarrow m(a,b)>m(b,c)$, $m(x_1,x_2)=1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x\in(x_1,x_2)$, then $m(x_1,x)>1$, hence $x<P(x)<x_2$; thus $x_n\uparrow\ell\leq x_2$.\\
+If $\ell<x_2$, then by continuity, $P(\ell)=\ell\notin\{x_1,x_2\}$, contradiction. Hence $\ell=x_2$. If $x=x_2$, then $x_n=x_2$.\\
+If $x>x_2$, then $m(x_2,x)<1$, hence $x_2<P(x)<x$; thus $x_n\downarrow\ell\geq x_2$, and continuity forces $\ell=x_2$.
+\item Since $P(x_1)=x_1$, induction yields $x_0=x_1\Rightarrow x_n=x_1$ for all $n\geq0$.
+\item If $x<x_1$, then $m(x,x_1)>1$, so $P(x)<x$. Hence $x_{n+1}<x_n<x_1$ and $x_n\downarrow\ell$ in $\overline{\R}$ with $\ell\geq\inf I$.\\
+If $\ell>\inf I$, then $\ell\in I$ and, by continuity, $P(\ell)=\ell<x_1$, impossible. Thus $\ell=\inf I$.
+\end{enumerate}
+\hlt{Structural Commentary}: Decreasing secant slopes determine the sign of $P(x)-x$ across the fixed points.\\
+\hlt{Key Insight}: The upper fixed point attracts all iterates above the lower threshold.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:periodic-logistic-fixed-point-structure} \hlt{Periodic Logistic Threshold Structure}\\
+Let $J$ be an interval contained in the one-period domain of $P_h$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\#\operatorname{Fix}(P_h|_J)\leq2$; hence there are at most two one-periodic solutions with initial values in $J$.
+\item If $P_h(J)\subseteq J$, $\operatorname{Fix}(P_h|_J)=\{x_1,x_2\}$ with $x_1<x_2$, and $x>x_1$, then $P_h^n(x)\to x_2$.
+\item If $P_h(J)\subseteq J$, $\operatorname{Fix}(P_h|_J)=\{x_1,x_2\}$ with $x_1<x_2$, and $x<x_1$, then $P_h^n(x)\downarrow\inf J$ in $\overline{\R}$.
+\item Wherever $(h,x)\mapsto P_h(x)$ is locally defined, $\partial_hP_h(x)<0$.
+\end{enumerate}
+\begin{proof}
+For (ii),(iii), write $H_J$ for $P_h(J)\subseteq J$, $\operatorname{Fix}(P_h|_J)=\{x_1,x_2\}$, and $x_1<x_2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Suppose $a<b<c$ lie in $\operatorname{Fix}(P_h|_J)$. By Proposition \ref{prop:periodic-logistic-poincare-geometry}(ii), $P_h|_J$ is strictly concave.\\
+Hence $P_h(b)>L_{a,c}(b)=b$, where $L_{a,c}$ is the chord through $(a,a)$ and $(c,c)$, contradicting $P_h(b)=b$.\\
+Thus $\#\operatorname{Fix}(P_h|_J)\leq2$. By Proposition \ref{prop:scalar-poincare-periodic-fixed-point}(i), $\operatorname{Fix}(P_h|_J)$ is the set of one-periodic initial values in $J$.
+\item Under $H_J$, $P_h|_J:J\to J$ is continuous, strictly increasing, and strictly concave, with fixed points $x_1<x_2$.\\
+For $x>x_1$, Theorem \ref{thm:increasing-concave-map-iteration}(i) applies: $P_h^n(x)\to x_2$.
+\item Under $H_J$ and $x<x_1$, Theorem \ref{thm:increasing-concave-map-iteration}(iii) applied to $P_h|_J:J\to J$ yields $P_h^n(x)\downarrow\inf J$ in $\overline{\R}$.
+\item Local definition of $(h,x)\mapsto P_h(x)$ is the hypothesis of Proposition \ref{prop:periodic-logistic-poincare-geometry}(iii); hence $\partial_hP_h(x)<0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Periodic dynamics reduce to a concave return graph versus the diagonal.\\
+\hlt{Key Insight}: Two periodic states form a threshold and an attracting upper response.
+\end{proof}
+\end{corollary}
