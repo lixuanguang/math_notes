@@ -1,0 +1,204 @@
+\subsection{Adjoints and Fundamental Subspaces}
+
+
+% **Role:** linear algebra with metric and angle structure.
+%
+% Adjoints, conjugate transpose, invariant subspaces, kernels, and ranges.
+
+Adjoints express dual action in inner-product language. They become conjugate transposes in orthonormal coordinates and exchange kernels, ranges, and orthogonal complements.
+
+\begin{definition} \label{def:adjoint-linear-map} \hlt{Adjoint of a Linear Map}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be inner-product spaces and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+A function $S:\mathcal{W}\to\mathcal{V}$ is an \hlt{adjoint} of $T$ if $\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}} =\innerprod[\mathcal{V}]{\mathbf{v},S\mathbf{w}}$, $\mathbf{v}\in\mathcal{V},\ \mathbf{w}\in\mathcal{W}$.
+\end{definition}
+
+\begin{perspective} \label{per:dual-map-versus-inner-product-adjoint} \hlt{Dual Map and Inner-Product Adjoint}\\
+For $T:\mathcal{V}\to\mathcal{W}$, the pullback $\varphi\mapsto\varphi\circ T$ is the \hlt{dual map} $T':\mathcal{W}'\to\mathcal{V}'$. Also called \hlt{operator adjoint} and written $T^\times$. It is distinct from the inner-product adjoint $T^*$ of Definition \ref{def:adjoint-linear-map}, which requires inner products.
+\end{perspective}
+
+\begin{lemma} \label{lem:adjoint-unique-if-exists} \hlt{Uniqueness of Adjoints}\\
+A linear map has at most one adjoint.
+\begin{proof}
+Suppose $S_1,S_2:\mathcal{W}\to\mathcal{V}$ are adjoints of $T$. For each $\mathbf{w}\in\mathcal{W}$ and every $\mathbf{v}\in\mathcal{V}$, $\innerprod[\mathcal{V}]{\mathbf{v},S_1\mathbf{w}-S_2\mathbf{w}}=0$.\\
+Taking $\mathbf{v}=S_1\mathbf{w}-S_2\mathbf{w}$ gives $S_1\mathbf{w}=S_2\mathbf{w}$. Hence $S_1=S_2$.\\
+\hlt{Structural Commentary}: Same tests force candidate adjoints to agree.\\
+\hlt{Key Insight}: Inner products separate vectors.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:finite-dimensional-adjoint-exists} \hlt{Existence of the Adjoint}\\
+Let $\mathcal{V}$ be a finite-dimensional inner-product space, let $\mathcal{W}$ be an inner-product space, and let $T\in\LL(\mathcal{V},\mathcal{W})$. Then $T$ has a unique adjoint $T^*:\mathcal{W}\to\mathcal{V}$, and $T^*$ is linear.
+\begin{proof}
+For each $\mathbf{w}\in\mathcal{W}$, the map $\varphi_{\mathbf{w}}:\mathcal{V}\to\mathbb{F}$ defined by $\varphi_{\mathbf{w}}(\mathbf{v})=\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}}$ is a linear functional. By Theorem \ref{thm:riesz-representation-finite-dimensional}, there is a unique vector $T^*\mathbf{w}\in\mathcal{V}$ such that $\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}} =\innerprod[\mathcal{V}]{\mathbf{v},T^*\mathbf{w}}$ for every $\mathbf{v}\in\mathcal{V}$.\\
+Thus $T^*$ is an adjoint, and it is unique by Lemma \ref{lem:adjoint-unique-if-exists}. For $\mathbf{w}_1,\mathbf{w}_2\in\mathcal{W}$ and $a\in\mathbb{F}$,
+\begin{align}
+\innerprod[\mathcal{V}]{\mathbf{v},T^*(a\mathbf{w}_1+\mathbf{w}_2)}
+=\innerprod[\mathcal{W}]{T\mathbf{v},a\mathbf{w}_1+\mathbf{w}_2}
+=\overline{a}\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}_1}+\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}_2}
+=\innerprod[\mathcal{V}]{\mathbf{v},aT^*\mathbf{w}_1+T^*\mathbf{w}_2}. \nonumber
+\end{align}
+for every $\mathbf{v}\in\mathcal{V}$. Taking the difference of the two second-slot vectors and then setting $\mathbf{v}$ equal to that difference gives $T^*(a\mathbf{w}_1+\mathbf{w}_2)=aT^*\mathbf{w}_1+T^*\mathbf{w}_2$.\\
+\hlt{Structural Commentary}: Each $\mathbf{w}$ gives a Riesz-represented functional on $\mathcal{V}$.\\
+\hlt{Key Insight}: The adjoint is pointwise Riesz representation for $T$.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/adjoint_inner_product_bridge.tikz}
+  \caption{Adjoint relation: $\innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}}=\innerprod[\mathcal{V}]{\mathbf{v},T^*\mathbf{w}}$.}
+  \label{fig:adjoint-inner-product-bridge}
+\end{figure}
+
+\begin{perspective} \label{per:hilbert-adjoint-riesz-dual-map} \hlt{Hilbert Adjoints as Riesz-Transported Dual Maps}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces, and let $R_{\mathcal{V}}:\mathcal{V}'\to\mathcal{V}$ and $R_{\mathcal{W}}:\mathcal{W}'\to\mathcal{W}$ send each functional to its Riesz vector from Definition \ref{def:riesz-vector}. If $T\in\LL(\mathcal{V},\mathcal{W})$, then the dual map $T':\mathcal{W}'\to\mathcal{V}'$ from Definition \ref{def:dual-map} and the Hilbert-space adjoint $T^*$ satisfy $T'=\bigl(R_{\mathcal{V}}\bigr)^{-1}\circ T^*\circ R_{\mathcal{W}}$.\\
+Indeed, for $\varphi\in\mathcal{W}'$ and $\mathbf{v}\in\mathcal{V}$, $(T'\varphi)(\mathbf{v})=\varphi(T\mathbf{v}) =\innerprod[\mathcal{W}]{T\mathbf{v},R_{\mathcal{W}}\varphi} =\innerprod[\mathcal{V}]{\mathbf{v},T^*R_{\mathcal{W}}\varphi}$. Thus the algebraic pullback of functionals is the same operation as moving Riesz vectors by $T^*$ and then returning to functionals.\\
+\hlt{Structural Commentary}: The dual map belongs to the algebraic theory of Definition \ref{def:dual-map}; the adjoint appears only after the Riesz identification from Theorem \ref{thm:riesz-representation-finite-dimensional}.\\
+\hlt{Key Insight}: $T'$ and $T^*$ encode the same reversed action after functionals have been identified with vectors.
+\end{perspective}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/riesz_dual_hilbert_adjoint_square.tikz}
+  \caption{Riesz transports the dual map to the adjoint: $R_{\mathcal{V}}T'=T^*R_{\mathcal{W}}$.}
+  \label{fig:riesz-dual-hilbert-adjoint-square}
+\end{figure}
+
+\begin{definition} \label{def:conjugate-transpose} \hlt{Conjugate Transpose}\\
+For $A=[a_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$, the \hlt{conjugate transpose} of $A$ is $A^*=[\overline{a_{ji}}]\in\operatorname{Mat}(n,m,\mathbb{F})$.\\
+Over $\mathbb{R}$, this is the ordinary transpose.
+\end{definition}
+
+\begin{theorem} \label{thm:matrix-of-adjoint-is-conjugate-transpose} \hlt{Matrix of the Adjoint}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces. Let $\beta=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ be an orthonormal basis of $\mathcal{V}$ and let $\gamma=(\mathbf{f}_1,\ldots,\mathbf{f}_m)$ be an orthonormal basis of $\mathcal{W}$. If $T\in\LL(\mathcal{V},\mathcal{W})$, then $[T^*]_{\beta\leftarrow\gamma} =\bigl([T]_{\gamma\leftarrow\beta}\bigr)^*$.
+\begin{proof}
+Let $A=[T]_{\gamma\leftarrow\beta}$ and $B=[T^*]_{\beta\leftarrow\gamma}$.\\
+By Theorem \ref{thm:matrix-entries-from-orthonormal-codomain}, $B_{i,j}=\innerprod[\mathcal{V}]{T^*\mathbf{f}_j,\mathbf{e}_i} =\overline{\innerprod[\mathcal{V}]{\mathbf{e}_i,T^*\mathbf{f}_j}} =\overline{\innerprod[\mathcal{W}]{T\mathbf{e}_i,\mathbf{f}_j}} =\overline{A_{j,i}}$. Thus $B=A^*$.\\
+\hlt{Structural Commentary}: Entries swap by moving $T$ across the inner product.\\
+\hlt{Key Insight}: In orthonormal coordinates, taking adjoints is exactly taking conjugate transposes.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:basic-adjoint-identities} \hlt{Basic Adjoint Identities}\\
+For finite-dimensional inner-product spaces and composable linear maps:
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item $(aS+T)^*=\overline{a}S^*+T^*$ for $S,T\in\LL(\mathcal{V},\mathcal{W})$ and $a\in\mathbb{F}$;
+\item $(SR)^*=R^*S^*$ for $R\in\LL(\mathcal{U},\mathcal{V})$ and $S\in\LL(\mathcal{V},\mathcal{W})$;
+\item $(T^*)^*=T$;
+\item $I_{\mathcal{V}}^*=I_{\mathcal{V}}$.
+\end{enumerate}
+\begin{proof}
+Verify the defining identity; uniqueness gives equality.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\mathbf{v}\in\mathcal{V}$, $\mathbf{w}\in\mathcal{W}$, $\innerprod{(aS+T)\mathbf{v},\mathbf{w}} =a\innerprod{S\mathbf{v},\mathbf{w}}+\innerprod{T\mathbf{v},\mathbf{w}} =\innerprod{\mathbf{v},\overline{a}S^*\mathbf{w}+T^*\mathbf{w}}$, so $(aS+T)^*=\overline{a}S^*+T^*$.
+\item For $\mathbf{u}\in\mathcal{U}$ and $\mathbf{w}\in\mathcal{W}$, $\innerprod{SR\mathbf{u},\mathbf{w}} =\innerprod{R\mathbf{u},S^*\mathbf{w}} =\innerprod{\mathbf{u},R^*S^*\mathbf{w}}$, so $(SR)^*=R^*S^*$.
+\item Conjugating $\innerprod{T\mathbf{v},\mathbf{w}}=\innerprod{\mathbf{v},T^*\mathbf{w}}$ gives $\innerprod{T^*\mathbf{w},\mathbf{v}}=\innerprod{\mathbf{w},T\mathbf{v}}$, so $T$ is the adjoint of $T^*$.
+\item Since $\innerprod{I\mathbf{v},\mathbf{w}}=\innerprod{\mathbf{v},I\mathbf{w}}$, the identity map is its own adjoint.
+\end{enumerate}
+\hlt{Structural Commentary}: Put both sides in one inner-product slot, then use uniqueness.\\
+\hlt{Key Insight}: Like matrix transposes, adjoints reverse products and conjugate scalars.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:adjoints-inverses-and-polynomials} \hlt{Adjoints of Inverses and Polynomials}\\
+Let $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space. For $p(z)=\sum\limits_{j=0}^{m}a_jz^j\in\mathbb{F}[z]$, set $p^{\#}(z)=\sum\limits_{j=0}^{m}\overline{a_j}z^j$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $T$ is invertible, then $T^*$ is invertible and $(T^{-1})^*=(T^*)^{-1}$.
+\item $p(T)^*=p^{\#}(T^*)$. In particular, $p\in\mathbb{R}[z]\Rightarrow p(T)^*=p(T^*)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Proposition \ref{prop:basic-adjoint-identities} gives $(T^{-1})^*T^*=(TT^{-1})^*=I_{\mathcal{V}}$ and $T^*(T^{-1})^*=(T^{-1}T)^*=I_{\mathcal{V}}$.
+\item By conjugate-linearity in scalars and product reversal, $p(T)^*=\left(\sum\limits_{j=0}^{m}a_jT^j\right)^* =\sum\limits_{j=0}^{m}\overline{a_j}(T^*)^j =p^{\#}(T^*)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Adjoint reverses multiplication and conjugates scalars.\\
+\hlt{Key Insight}: Adjoints send $p(T)$ to $p^{\#}(T^*)$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:adjoint-invariant-subspace-orthogonal-complement} \hlt{Adjoints and Invariant Orthogonal Complements}\\
+Let $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space and let $\mathcal{U}\leq\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}\in\operatorname{Inv}(T)\Longleftrightarrow\mathcal{U}^{\perp}\in\operatorname{Inv}(T^*)$.
+\item $(\mathcal{U},\mathcal{U}^{\perp})$ reduces $T\Longleftrightarrow\mathcal{U}\in\operatorname{Inv}(T)\cap\operatorname{Inv}(T^*)$.
+\item If $(\mathcal{U},\mathcal{U}^{\perp})$ reduces $T$, then $(T|_{\mathcal{U}})^*=(T^*)|_{\mathcal{U}}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\mathcal{U}=(\mathcal{U}^{\perp})^{\perp}$, $\mathcal{U}\in\operatorname{Inv}(T)$ $\Longleftrightarrow$ $\innerprod{T\mathbf{u},\mathbf{z}}=0\quad(\mathbf{u}\in\mathcal{U},\ \mathbf{z}\in\mathcal{U}^{\perp})$\\
+$\Longleftrightarrow$ $\innerprod{\mathbf{u},T^*\mathbf{z}}=0$, where $\mathbf{u}\in\mathcal{U},\ \mathbf{z}\in\mathcal{U}^{\perp}$ $\Longleftrightarrow$ $\mathcal{U}^{\perp}\in\operatorname{Inv}(T^*)$.
+\item By definition and then (i) applied to $T^*$, $(\mathcal{U},\mathcal{U}^{\perp})$ reduces $T$ $\Longleftrightarrow$ $\mathcal{U},\mathcal{U}^{\perp}\in\operatorname{Inv}(T)$ $\Longleftrightarrow$ $\mathcal{U}\in\operatorname{Inv}(T)\cap\operatorname{Inv}(T^*)$.
+\item By (ii), $(T^*)|_{\mathcal{U}}$ is well-defined. For $\mathbf{u},\mathbf{v}\in\mathcal{U}$,\\
+$\innerprod[\mathcal{U}]{T|_{\mathcal{U}}\mathbf{u},\mathbf{v}} =\innerprod[\mathcal{V}]{T\mathbf{u},\mathbf{v}} =\innerprod[\mathcal{V}]{\mathbf{u},T^*\mathbf{v}} =\innerprod[\mathcal{U}]{\mathbf{u},(T^*)|_{\mathcal{U}}\mathbf{v}}$, so uniqueness of adjoints on $\mathcal{U}$ gives the claim.
+\end{enumerate}
+\hlt{Structural Commentary}: Adjoints trade invariance with orthogonal-complement invariance.\\
+\hlt{Key Insight}: A subspace reduces $T$ precisely when it is stable under both $T$ and $T^*$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:adjoint-kernel-range-orthogonality} \hlt{Adjoint Kernel-Range Orthogonality}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces and let $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+Then $\ker(T^*)=(\operatorname{range}(T))^{\perp}$, $\operatorname{range}(T^*)=(\ker(T))^{\perp}$, and $\ker(T)=(\operatorname{range}(T^*))^{\perp}$, $\operatorname{range}(T)=(\ker(T^*))^{\perp}$.\\
+Equivalently, the nullspace of an adjoint is the orthogonal complement of the range of the original map.
+\begin{proof}
+For $\mathbf{w}\in\mathcal{W}$,
+\begin{align}
+\mathbf{w}\in\ker(T^*)
+&\Longleftrightarrow \innerprod[\mathcal{V}]{\mathbf{v},T^*\mathbf{w}}=0\quad\text{for every }\mathbf{v}\in\mathcal{V} \nonumber\\
+&\Longleftrightarrow \innerprod[\mathcal{W}]{T\mathbf{v},\mathbf{w}}=0\quad\text{for every }\mathbf{v}\in\mathcal{V} \nonumber\\
+&\Longleftrightarrow \mathbf{w}\in(\operatorname{range}(T))^{\perp}.
+\nonumber
+\end{align}
+Applying this identity to $T^*$ gives $\ker(T)=(\operatorname{range}(T^*))^{\perp}$.\\
+Since all spaces are finite-dimensional, the ranges and kernels are finite-dimensional subspaces.\\
+Taking orthogonal complements and using Corollary \ref{cor:double-orthogonal-complement} gives
+\begin{align}
+(\ker(T^*))^{\perp}=((\operatorname{range}(T))^{\perp})^{\perp}=\operatorname{range}(T),
+\qquad
+(\ker(T))^{\perp}=((\operatorname{range}(T^*))^{\perp})^{\perp}=\operatorname{range}(T^*) \nonumber
+\end{align}
+\hlt{Structural Commentary}: Adjoints trade ranges for kernels, and orthogonal complements reverse that trade.\\
+\hlt{Key Insight}: A vector is killed by $T^*$ exactly when it is orthogonal to everything $T$ can produce.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:adjoint-product-kernels-ranges-and-projections} \hlt{Adjoint Products and Algebraic Projections}\\
+Let $\mathcal{V}$ and $\mathcal{W}$ be finite-dimensional inner-product spaces and let $T\in\LL(\mathcal{V},\mathcal{W})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\ker(T^*T)=\ker(T)$ and $\ker(TT^*)=\ker(T^*)$.
+\item $\operatorname{range}(T^*T)=\operatorname{range}(T^*)$ and $\operatorname{range}(TT^*)=\operatorname{range}(T)$.
+\item If $\mathcal{V}=\mathcal{U}\oplus\mathcal{Z}$, then $\bigl(\rho_{\mathcal{U},\mathcal{Z}}\bigr)^*=\rho_{\mathcal{Z}^{\perp},\mathcal{U}^{\perp}}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}\in\ker(T^*T)$ $\Longleftrightarrow$ $0=\innerprod[\mathcal{V}]{T^*T\mathbf{v},\mathbf{v}} =\norm{T\mathbf{v}}^2$ $\Longleftrightarrow$ $\mathbf{v}\in\ker(T)$.\\
+Apply this to $T^*$ for $\ker(TT^*)=\ker(T^*)$.
+\item The inclusions $\operatorname{range}(T^*T)\subseteq\operatorname{range}(T^*)$ and $\operatorname{range}(TT^*)\subseteq\operatorname{range}(T)$ are immediate.\\
+By (i), rank-nullity, and Proposition \ref{prop:adjoint-kernel-range-orthogonality}, $\dim\operatorname{range}(T^*T)=\dim\mathcal{V}-\dim\ker(T) =\dim\operatorname{range}(T^*)$, so equality holds; the $TT^*$ identity follows similarly.
+\item Put $P=\rho_{\mathcal{U},\mathcal{Z}}$ and $Q=\rho_{\mathcal{Z}^{\perp},\mathcal{U}^{\perp}}$. Since $\mathcal{Z}^{\perp}\cap\mathcal{U}^{\perp}=(\mathcal{U}+\mathcal{Z})^{\perp}=\{\mathbf{0}\}$ and the dimensions add, $\mathcal{V}=\mathcal{Z}^{\perp}\oplus\mathcal{U}^{\perp}$. Write $\mathbf{x}=\mathbf{u}+\mathbf{z}$ and $\mathbf{y}=\mathbf{a}+\mathbf{b}$ with $\mathbf{u}\in\mathcal{U}$, $\mathbf{z}\in\mathcal{Z}$, $\mathbf{a}\in\mathcal{Z}^{\perp}$, $\mathbf{b}\in\mathcal{U}^{\perp}$.\\
+Then $\innerprod{P\mathbf{x},\mathbf{y}} =\innerprod{\mathbf{u},\mathbf{a}+\mathbf{b}} =\innerprod{\mathbf{u},\mathbf{a}} =\innerprod{\mathbf{u}+\mathbf{z},\mathbf{a}} =\innerprod{\mathbf{x},Q\mathbf{y}}$, so $P^*=Q$.
+\end{enumerate}
+\hlt{Structural Commentary}: Oblique projection adjoints swap orthogonal-complement summands.\\
+\hlt{Key Insight}: Orthogonal projections are exactly the self-adjoint special case $\mathcal{Z}=\mathcal{U}^{\perp}$.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:matrix-fundamental-subspaces-orthogonal-complements} \hlt{Matrix Fundamental Subspaces as Orthogonal Complements}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ act as $A:\mathbb{F}^n\to\mathbb{F}^m$ with standard inner products.\\
+Then $\ker(A)=\operatorname{col}(A^*)^{\perp}$ and $\operatorname{col}(A^*)=\ker(A)^{\perp}$; $\ker(A^*)=\operatorname{col}(A)^{\perp}$ and $\operatorname{col}(A)=\ker(A^*)^{\perp}$.\\
+Over $\mathbb{R}$, this says $\ker(A)\perp\operatorname{row}(A)$ in $\mathbb{R}^n$ and $\ker(A^t)\perp\operatorname{col}(A)$ in $\mathbb{R}^m$, with both pairs complementary.
+\begin{proof}
+By Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}, the adjoint of $A$ is represented by $A^*$.\\
+Proposition \ref{prop:adjoint-kernel-range-orthogonality} gives $\ker(A^*)=\operatorname{col}(A)^{\perp}$ and $\ker(A)=\operatorname{col}(A^*)^{\perp}$. Taking orthogonal complements and using Corollary \ref{cor:double-orthogonal-complement} gives the two column-space identities. Over $\mathbb{R}$, $A^*=A^t$ and $\operatorname{col}(A^t)=\operatorname{row}(A)$.\\
+\hlt{Structural Commentary}: The four fundamental subspaces form two orthogonal-complement pairs.\\
+\hlt{Key Insight}: Adjoints turn missing directions into kernels.
+\end{proof}
+\end{corollary}

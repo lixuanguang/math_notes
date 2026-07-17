@@ -1,16 +1,4 @@
 \subsection{Cayley-Hamilton and Minimal Polynomials}
-\begin{theorem} \label{thm:cayley-hamilton-operator} \hlt{Cayley--Hamilton Theorem for Operators}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, $q_T$ be characteristic polynomial of $T\in\LL(\mathcal{V})$. Then $q_T(T)=0$.
-\begin{proof}
-Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues and set $d_j=\dim \mathcal{G}_{\lambda_j}(T)$.\\
-It suffices, by primary decomposition, to show $q_T(T)$ kills each $\mathcal{G}_{\lambda_j}(T)$.\\
-On $\mathcal{G}_{\lambda_j}(T)$, the operator $T-\lambda_jI_{\mathcal{V}}$ is nilpotent, so Corollary \ref{cor:nilpotent-power-dimension-zero} gives $(T-\lambda_jI_{\mathcal{V}})^{d_j}=0$ on $\mathcal{G}_{\lambda_j}(T)$.\\
-Since the factors of $q_T(T)$ commute, this factor kills the whole product on $\mathcal{G}_{\lambda_j}(T)$. Hence $q_T(T)=0$.\\
-\hlt{Structural Commentary}: Check the polynomial on each primary summand.\\
-\hlt{Key Insight}: One factor of $q_T(T)$ kills each summand.
-\end{proof}
-\end{theorem}
-
 \begin{theorem} \label{thm:cayley-hamilton-matrix} \hlt{Cayley--Hamilton Theorem}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have characteristic polynomial $p_A(z)=\det(zI_n-A)$. Then $p_A(A)=0$.
 \begin{proof}
@@ -31,24 +19,63 @@ At $j=n$, all columns of $Q_n$ are zero, so $Q_n=0$.\\
   \label{fig:cayley-hamilton-triangular-killing}
 \end{figure}
 
+\begin{theorem} \label{thm:cayley-hamilton-operator} \hlt{Cayley--Hamilton Theorem for Operators}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $q_T$ be the characteristic polynomial of $T$. Then $q_T(T)=0$.
+\begin{proof}
+Choose a basis $\beta$ of $\mathcal{V}$ and set $A=[T]_{\beta\leftarrow\beta}$. Definition \ref{def:operator-characteristic-polynomial} gives $q_T=p_A$.\\
+Propositions \ref{prop:matrix-representation-respects-linear-combinations} and \ref{prop:composition-and-matrix-multiplication} give $[q_T(T)]_{\beta\leftarrow\beta}=q_T(A)=p_A(A)=0$ by Theorem \ref{thm:cayley-hamilton-matrix}.\\
+Theorem \ref{thm:linear-maps-and-matrices-same-data} then gives $q_T(T)=0$.\\
+\hlt{Structural Commentary}: Coordinates reduce the operator theorem to the matrix theorem.\\
+\hlt{Key Insight}: Polynomial evaluation commutes with taking a matrix representation.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:polynomial-reduction-by-characteristic-polynomial} \hlt{Reduction Modulo the Characteristic Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and let $f\in\mathbb{C}[z]$. If $f=p_Aq+r$ with $\deg r<n$, then $f(A)=r(A)$.
+\begin{proof}
+Evaluate division identity at $A$: $f(A)=p_A(A)q(A)+r(A)=0q(A)+r(A)=r(A)$.\\
+Theorem \ref{thm:cayley-hamilton-matrix} gives $p_A(A)=0$.\\
+\hlt{Structural Commentary}: Cayley--Hamilton makes polynomial expressions in $A$ reducible modulo $p_A$.\\
+\hlt{Key Insight}: Every high power of $A$ can be rewritten using powers below $n$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:powers-of-matrix-span-dimension-at-most-n} \hlt{Powers Span at Most $n$ Dimensions}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{span}(I_n,A,A^2,\ldots)=\operatorname{span}(I_n,A,\ldots,A^{n-1})$, so this has dimension at most $n$.
+\begin{proof}
+For each $k\geq0$, Corollary \ref{cor:polynomial-reduction-by-characteristic-polynomial} applied to $f(z)=z^{n+k}$ gives a polynomial $r_k$ of degree at most $n-1$ such that $A^{n+k}=r_k(A)$. Thus every power of $A$ lies in $\operatorname{span}(I_n,A,\ldots,A^{n-1})$.\\
+\hlt{Structural Commentary}: Polynomial reduction collapses the infinite power list to its first $n$ terms.\\
+\hlt{Key Insight}: Cayley--Hamilton gives the recurrence relation for powers of $A$.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:inverse-from-characteristic-polynomial} \hlt{Inverse from the Characteristic Polynomial}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have $p_A(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$.\\
+If $A$ is invertible, then $A^{-1}=-c_0^{-1}(A^{n-1}+c_{n-1}A^{n-2}+\cdots+c_2A+c_1I_n)$.
+\begin{proof}
+Since $A$ is invertible, $0\notin\operatorname{spec}(A)$, so $c_0=p_A(0)=(-1)^n\det A\neq0$.\\
+Cayley--Hamilton gives $A^n+c_{n-1}A^{n-1}+\cdots+c_1A+c_0I_n=0$.\\
+Move $c_0I_n$ to the other side and multiply by $-c_0^{-1}A^{-1}$.\\
+\hlt{Structural Commentary}: The characteristic equation contains an identity term exactly when $A$ is invertible.\\
+\hlt{Key Insight}: Solve Cayley--Hamilton for $A^{-1}$ after factoring out one $A$.
+\end{proof}
+\end{corollary}
+
 \begin{theorem} \label{thm:minimal-polynomial-basic-properties} \hlt{Basic Properties of the Minimal Polynomial}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_d$ be the distinct eigenvalues of $A$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\mu_A$ exists, is unique, and $\deg\mu_A\leq n$.
-\item If a nonzero polynomial $f$ annihilates $A$, then $\mu_A$ divides $f$. In particular, $\mu_A$ divides $p_A$.
-\item There are integers $q_i$ satisfying $1\leq q_i\leq m_A(\lambda_i)$ such that $\mu_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$.
+\item $\deg\mu_A\leq n$.
+\item There are integers $q_i$ satisfying $1\leq q_i\leq m_A(\lambda_i)$ such that $\mu_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$; in particular, $\mu_A\mid p_A$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Cayley--Hamilton supplies the monic annihilator $p_A$, so a least-degree monic annihilator $\mu_A$ exists and has degree at most $n$. If $g$ is another least-degree monic annihilator, write $g=h\mu_A+r$, where $r=0$ or $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$. If $r\neq0$, scaling $r$ to be monic would give a smaller-degree monic annihilator, a contradiction. Hence $r=0$, so $g=h\mu_A$.\\
-Since $g$ and $\mu_A$ are monic of the same degree, $h=1$ and $g=\mu_A$.
-\item If $f(A)=0$, divide $f=q\mu_A+r$ with $\deg r<\deg\mu_A$. Evaluating at $A$ gives $r(A)=0$, hence $r=0$ and $\mu_A\mid f$. Taking $f=p_A$ gives $\mu_A\mid p_A$.
-\item Since $\mu_A\mid p_A=\prod_{i=1}^{d}(z-\lambda_i)^{m_A(\lambda_i)}$, its roots are eigenvalues with exponents at most the algebraic multiplicities. If $A\mathbf{v}=\lambda_i\mathbf{v}$ and $\mathbf{v}\neq\mathbf{0}$, then $\mu_A(\lambda_i)\mathbf{v}=\mu_A(A)\mathbf{v}=0$, so every $\lambda_i$ occurs.
+\item Apply Theorem \ref{thm:operator-minimal-polynomial-existence} to the operator induced by $A$. By Theorem \ref{thm:cayley-hamilton-matrix}, $p_A(A)=0$; hence minimality gives $\deg\mu_A\leq n$.
+\item By Theorem \ref{thm:cayley-hamilton-matrix}, $p_A(A)=0$. By Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial}, applied to the operator induced by $A$, $\mu_A\mid p_A=\prod_{i=1}^{d}(z-\lambda_i)^{m_A(\lambda_i)}$. Thus the roots of $\mu_A$ are eigenvalues with exponents at most the algebraic multiplicities. If $A\mathbf{v}=\lambda_i\mathbf{v}$ and $\mathbf{v}\neq\mathbf{0}$, then $\mu_A(\lambda_i)\mathbf{v}=\mu_A(A)\mathbf{v}=0$, so every $\lambda_i$ occurs.
 \end{enumerate}
-\hlt{Structural Commentary}: Polynomial division makes $\mu_A$ the least monic generator of annihilators.\\
-\hlt{Key Insight}: Cayley--Hamilton gives existence; eigenvectors force the roots.
+\hlt{Structural Commentary}: Cayley--Hamilton bounds degree and divisibility; eigenvectors identify the roots.\\
+\hlt{Key Insight}: The least monic annihilator retains every eigenvalue with minimal exponents.
 \end{proof}
 \end{theorem}
 
@@ -58,17 +85,6 @@ Since $g$ and $\mu_A$ are monic of the same degree, $h=1$ and $g=\mu_A$.
   \caption{$\mu_A$ is the least monic annihilator; arrows indicate that $\mu_A$ divides $p_A$ and every annihilator $f$.}
   \label{fig:minimal-polynomial-divisibility}
 \end{figure}
-
-\begin{theorem} \label{thm:minimal-polynomial-direct-sum-disjoint-spectra} \hlt{Minimal Polynomial of a Spectrally Disjoint Direct Sum}\\
-Let $A=A_1\oplus\cdots\oplus A_d$, where the spectra of $A_1,\ldots,A_d$ are pairwise disjoint. Then $\mu_A=\mu_{A_1}\mu_{A_2}\cdots\mu_{A_d}$.
-\begin{proof}
-Let $f=\prod\limits_i\mu_{A_i}$. Since $f(A_i)=0$ for all $i$, blockwise evaluation gives $f(A)=0$, and therefore $\mu_A\mid f$.\\
-Conversely, $\mu_A(A_i)=0$ for each $i$, so $\mu_{A_i}\mid\mu_A$ for each $i$. The roots of $\mu_{A_i}$ are exactly $\operatorname{spec}(A_i)$ by Theorem \ref{thm:operator-minimal-polynomial-roots-eigenvalues}, so the disjointness of the spectra makes the polynomials $\mu_{A_i}$ pairwise relatively prime.\\
-Hence their product $f$ divides $\mu_A$. Since $\mu_A\mid f$ and $f\mid\mu_A$, and both are monic, $\mu_A=f$.\\
-\hlt{Structural Commentary}: Direct sums are annihilated blockwise; disjoint spectra make the block factors coprime.\\
-\hlt{Key Insight}: Each spectral component contributes its own minimal-polynomial factor.
-\end{proof}
-\end{theorem}
 
 \begin{theorem} \label{thm:similarity-preserves-minimal-polynomial} \hlt{Similarity Preserves the Minimal Polynomial}\\
 If $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are similar, then $p_A=p_B$ and $\mu_A=\mu_B$.

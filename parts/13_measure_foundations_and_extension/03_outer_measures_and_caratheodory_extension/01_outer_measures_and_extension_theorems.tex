@@ -1,5 +1,15 @@
 \subsection{Outer Measures and Extension Theorems}
 
+\begin{definition} \label{def:abstract-outer-measure-clean-division} \hlt{Abstract Outer Measure and Clean Division}\\
+Let $M$ be a set.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item An \hlt{abstract outer measure} on $M$ is a map $\omega:2^M\to[0,+\infty]$ such that $\omega(\emptyset)=0$, $A\subseteq B\Rightarrow\omega(A)\leq\omega(B)$, and $\omega(\bigcup_{k=1}^{\infty}A_k)\leq\sum_{k=1}^{\infty}\omega(A_k)$ for all $A,B,A_k\subseteq M$.
+\item For an outer measure $\omega$, $E\subseteq M$ is \hlt{$\omega$-measurable} iff $\omega(X)=\omega(X\cap E)+\omega(X\cap E^c)$ for every $X\subseteq M$.
+\end{enumerate}
+For $\omega=m_n^\ast$, $\omega$-measurability is Caratheodory measurability.
+\end{definition}
+
 \begin{definition} \label{def:cover-induced-outer-measure} \hlt{Outer Measure Induced by a Covering Family}\\
 Let $\mathcal{S}\subseteq\mathcal{P}(X)$ and let $\rho:\mathcal{S}\to[0,+\infty]$.
 \begin{enumerate}[label=(\roman*)]
@@ -22,6 +32,72 @@ Since $(S_{k,j})_{k\in I,j\geq1}$ covers $E$, $\rho^\ast(E)\leq\sum\limits_{k\in
 \hlt{Key Insight}: Covers generate subadditivity.
 \end{proof}
 \end{proposition}
+
+\begin{lemma} \label{lem:caratheodory-finite-measure-test} \hlt{Finite-Measure Test for Caratheodory Measurability}\\
+Let $\omega:2^M\to[0,+\infty]$ be an outer measure. Then $E\subseteq M$ is $\omega$-measurable iff, for all $X\subseteq M$,\\
+$\omega(X)<+\infty\Longrightarrow \omega(X)\geq\omega(X\cap E)+\omega(X\cap E^c)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $E$ is $\omega$-measurable, then $\omega(X)=\omega(X\cap E)+\omega(X\cap E^c)$ $\forall X\subseteq M$, hence finite-test inequality holds.
+\item[$(\Leftarrow)$] For all $X\subseteq M$, $X=(X\cap E)\sqcup(X\cap E^c)$ gives $\omega(X)\leq\omega(X\cap E)+\omega(X\cap E^c)$. If $\omega(X)<+\infty$, the hypothesis gives $\geq$; if $\omega(X)=+\infty$, $\geq$ is automatic in $[0,+\infty]$. Thus equality holds for every $X$.
+\end{enumerate}
+\hlt{Structural Commentary}: To verify a clean split, only finite outer-measure test sets need real work.\\
+\hlt{Key Insight}: Subadditivity supplies one inequality for free.
+\end{proof}
+\end{lemma}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/measurable_difference_four_regions.tikz}
+  \caption{Two cuts split $X$ into four regions; $E_1\setminus E_2$ is region $2$.}
+  \label{fig:measurable-difference-four-regions}
+\end{figure}
+
+\begin{definition} \label{def:outer-measure-zero-sets} \hlt{Zero Sets}\\
+For outer measure $\omega:2^M\to[0,+\infty]$, \hlt{$\omega$-zero set} is $Z\subseteq M$ with $\omega(Z)=0$; $\mathcal{Z}_\omega\defeq\{Z\subseteq M:\omega(Z)=0\}$.
+\end{definition}
+
+\begin{theorem} \label{thm:caratheodory-measurable-sets-sigma-algebra} \hlt{Caratheodory Measurable Sets}\\
+Let $\omega:2^M\to[0,+\infty]$ be an outer measure.\\
+Let $\mathcal{M}_\omega\defeq\{E\subseteq M:\omega(X)=\omega(X\cap E)+\omega(X\cap E^c)\ \forall X\subseteq M\}$ and $\mathcal{Z}_\omega\defeq\{Z\subseteq M:\omega(Z)=0\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{Z}_\omega\subseteq\mathcal{M}_\omega$;
+\item $\mathcal{M}_\omega$ is a $\sigma$-algebra;
+\item $\omega|_{\mathcal{M}_\omega}$ is countably additive;
+\item if $E\in\mathcal{M}_\omega$ and $Z\in\mathcal{Z}_\omega$, then $E\cup Z,E\setminus Z,E\triangle Z\in\mathcal{M}_\omega$ and $\omega(E\cup Z)=\omega(E\setminus Z)=\omega(E\triangle Z)=\omega(E)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $Z\in\mathcal{Z}_\omega$ and $X\subseteq M$, then $\omega(X)\leq\omega(X\cap Z)+\omega(X\cap Z^c)\leq0+\omega(X)$, so equality holds and $Z\in\mathcal{M}_\omega$.
+\item Complements are immediate. If $E,F\in\mathcal{M}_\omega$, with $E^1=E$, $E^0=E^c$, $F^1=F$, and $F^0=F^c$, then $\omega(X)=\sum_{\epsilon,\eta\in\{0,1\}}\omega(X\cap E^\epsilon\cap F^\eta)$; hence finite Boolean combinations are measurable.\\
+For pairwise disjoint $E_i\in\mathcal{M}_\omega$, set $E=\bigsqcup_iE_i$ and $F_N=(\bigcup_{i=1}^{N}E_i)^c$.\\
+Finite splitting gives $\omega(X)\geq\sum_{i=1}^{N}\omega(X\cap E_i)+\omega(X\cap E^c)$ for every $N$.\\
+Letting $N\to\infty$ and using subadditivity gives $\omega(X)=\sum_{i=1}^{\infty}\omega(X\cap E_i)+\omega(X\cap E^c)$.\\
+Since $\omega(X\cap E)\leq\sum_i\omega(X\cap E_i)$ and $\omega(X)\leq\omega(X\cap E)+\omega(X\cap E^c)$, $E\in\mathcal{M}_\omega$.\\
+General countable unions follow from $H_1=E_1$ and $H_n=E_n\setminus\bigcup_{i<n}E_i$.
+\item If $E=\bigsqcup_{i=1}^{\infty}E_i$ with $E_i\in\mathcal{M}_\omega$, then the equality in (ii) with $X=E$ gives $\omega(E)=\sum_{i=1}^{\infty}\omega(E_i)$.
+\item By (i)--(ii), $E\cup Z,E\setminus Z,E\triangle Z\in\mathcal{M}_\omega$.\\
+Since $E\cap Z$ and $Z\setminus E$ are null, additivity gives $\omega(E\setminus Z)=\omega(E\cup Z)=\omega(E\triangle Z)=\omega(E)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Measurable sets preserve countable additivity.\\
+\hlt{Key Insight}: Measurable cuts turn subadditivity into equality.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:caratheodory-disjointization-countable-additivity} \hlt{Disjointization of Countable Measurable Unions}\\
+Let $\omega:2^M\to[0,+\infty]$ be an outer measure and let $(E_k)_{k\geq1}\subseteq\mathcal{M}_\omega$.\\
+Set $F_1\defeq E_1$ and $F_k\defeq E_k\setminus\bigcup\limits_{i=1}^{k-1}E_i$ for $k\geq2$.\\
+Then $(F_k)$ is pairwise disjoint in $\mathcal{M}_\omega$, $\bigcup\limits_{k\geq1}F_k=\bigcup\limits_{k\geq1}E_k$, and $\omega(\bigcup\limits_{k\geq1}E_k)=\sum\limits_{k\geq1}\omega(F_k)$ in $[0,+\infty]$.
+\begin{proof}
+Since $\mathcal{M}_\omega$ is a $\sigma$-algebra, $F_k=E_k\cap(\bigcup\limits_{i<k}E_i)^c\in\mathcal{M}_\omega$. If $i<k$, then $F_i\cap F_k\subseteq E_i\cap(\bigcup\limits_{j<k}E_j)^c=\emptyset$.\\
+For $x\in\bigcup\limits_{k\geq1}E_k$, $x\in F_{\min\{j:x\in E_j\}}$; hence $\bigcup\limits_{k\geq1}F_k=\bigcup\limits_{k\geq1}E_k$, and countable additivity gives $\omega(\bigcup\limits_{k\geq1}E_k)=\sum\limits_{k\geq1}\omega(F_k)$.\\
+\hlt{Structural Commentary}: Disjointization turns unions into sums.\\
+\hlt{Key Insight}: Peel off earlier pieces so a countable union becomes a disjoint sum.
+\end{proof}
+\end{corollary}
 
 \begin{definition} \label{def:sigma-and-sigma-delta-cover-classes} \hlt{Countable Cover Classes}\\
 Let $\mathcal{S}\subseteq\mathcal{P}(X)$.
@@ -109,13 +185,6 @@ Conversely, $E\subseteq C\in\mathcal{A}$ implies $\mu(E)\leq\mu(C)$ by monotonic
 \hlt{Key Insight}: The single-set envelope is larger.
 \end{proof}
 \end{proposition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/open_cell_inner_shrink.tikz}
-  \caption{Inner cells $I_k$ exhaust $I$; the collar $I\setminus I_k$ has vanishing volume.}
-  \label{fig:open-cell-inner-shrink}
-\end{figure}
 
 \begin{example} \label{ex:single-set-envelope-not-outer-measure} \hlt{Single-Set Envelopes Need Not Be Outer Measures}\\
 Let $X$ be uncountable, let $\mathcal{A}$ be the finite--cofinite algebra on $X$, and set $\mu(E)\defeq0$ for finite $E$, $\mu(E)\defeq+\infty$ for cofinite $E$. Then $\mu$ is a premeasure, $\mu^\ast(B)=0$ iff $B$ is countable, and $\mu^\sharp(B)=0$ iff $B$ is finite.\\

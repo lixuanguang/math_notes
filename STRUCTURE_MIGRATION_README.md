@@ -131,7 +131,6 @@ parts/02_structural_linear_algebra/
   02_direct_sums_quotients_and_decomposition/
   03_block_matrices_and_matrix_operations/
   04_duality_and_multilinear_structure/
-  05_finite_dimensional_topological_vector_spaces/
 
 parts/03_linear_maps_and_matrix_representations/
   01_linear_maps_and_operations/
@@ -204,6 +203,7 @@ parts/11_real_topological_analysis/
   04_compactness_and_completeness/
   05_connectedness_and_continuity/
   06_general_topology_for_analysis/
+  07_finite_dimensional_topological_vector_spaces/
 
 parts/12_calculus_series_approximation/
   01_one_variable_differentiation_and_riemann_integration/

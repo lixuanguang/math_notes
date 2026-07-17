@@ -1,5 +1,40 @@
 \subsection{Tensor Product Bases and Maps}
 
+\begin{definition} \label{def:finite-coordinate-tensor-product-model} \hlt{Finite-Coordinate Tensor Product Model}\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$ be ordered bases of $\mathcal{V}$ and $\mathcal{W}$.\\
+Define the \hlt{coordinate tensor model} $\mathcal{V}\otimes_{\beta,\gamma}\mathcal{W}\defeq\operatorname{Mat}(m,n,\mathbb{F})$ by $\mathbf{v}_i\otimes_{\beta,\gamma}\mathbf{w}_j\defeq E_{i,j}$.\\
+If $\mathbf{v}=\sum\limits_{i=1}^m x_i\mathbf{v}_i$ and $\mathbf{w}=\sum\limits_{j=1}^n y_j\mathbf{w}_j$, then $\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w}\defeq \sum\limits_{i=1}^m\sum\limits_{j=1}^n x_iy_jE_{i,j}\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\end{definition}
+
+\begin{proposition} \label{prop:tensor-product-matrix-basis-model} \hlt{Tensor Model Basis and Bilinear Evaluation}\\
+In the coordinate tensor model associated to bases $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ and $\gamma=(\mathbf{w}_1,\ldots,\mathbf{w}_n)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item the matrices $E_{i,j}=\mathbf{v}_i\otimes_{\beta,\gamma}\mathbf{w}_j$ form a basis;
+\item the map $(\mathbf{v},\mathbf{w})\mapsto\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w}$ is bilinear;
+\item every bilinear form $B:\mathcal{V}\times\mathcal{W}\to\mathbb{F}$ determines a unique linear functional $\Theta_B$ on $\operatorname{Mat}(m,n,\mathbb{F})$ such that\\
+$\Theta_B(\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w})=B(\mathbf{v},\mathbf{w})$ for all $\mathbf{v}\in\mathcal{V}$ and $\mathbf{w}\in\mathcal{W}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item This is the standard entry-matrix basis of $\operatorname{Mat}(m,n,\mathbb{F})$ from Proposition \ref{prop:matrix-spaces-are-vector-spaces}.
+\item The coordinates of $a\mathbf{v}_1+\mathbf{v}_2$ are the same linear combination of the coordinates of $\mathbf{v}_1$ and $\mathbf{v}_2$, and the displayed formula is linear in those coordinates. The same argument applies in the second variable.
+\item Define $\Theta_B(E_{i,j})=B(\mathbf{v}_i,\mathbf{w}_j)$ on the basis from (i), and extend linearly by Proposition \ref{prop:linear-map-determined-by-basis}. If $\mathbf{v}=\sum_i x_i\mathbf{v}_i$ and $\mathbf{w}=\sum_j y_j\mathbf{w}_j$, then $\Theta_B(\mathbf{v}\otimes_{\beta,\gamma}\mathbf{w}) =\sum\limits_{i=1}^m\sum\limits_{j=1}^n x_i y_j B(\mathbf{v}_i,\mathbf{w}_j) =B(\mathbf{v},\mathbf{w})$, by bilinearity of $B$.\\
+Uniqueness follows since the values on basis matrices $E_{i,j}$ are forced by $\mathbf{v}_i,\mathbf{w}_j$.
+\end{enumerate}
+\hlt{Structural Commentary}: The coordinate tensor model stores each pair of basis directions in its own matrix slot, so a bilinear form can be evaluated by a single linear functional on those slots.\\
+\hlt{Key Insight}: Tensor coordinates turn products of coordinates into linear coordinates.
+\end{proof}
+\end{proposition}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/tensor_product_matrix_basis.tikz}
+  \caption{A basis pair occupies the $(i,j)$ matrix slot.}
+  \label{fig:tensor-product-matrix-basis}
+\end{figure}
+
 \begin{theorem} \label{thm:tensor-bases-dimension-and-rank} \hlt{Tensor Bases, Dimension, and Coordinate Rank}\\
 Let $\mathcal{U}$ and $\mathcal{V}$ be finite-dimensional with bases $\beta=(\mathbf{u}_1,\ldots,\mathbf{u}_m)$ and $\gamma=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$.
 \begin{enumerate}[label=(\roman*)]
@@ -57,30 +92,6 @@ Conversely, any sum of $s$ decomposable tensors gives a sum of $s$ rank-one coor
 \hlt{Key Insight}: Tensor rank is matrix rank after choosing bases, but the number itself survives changing bases.
 \end{proof}
 \end{theorem}
-
-\begin{theorem} \label{thm:tensor-linearizes-bilinear-maps} \hlt{Bilinearity Equals Linearity on a Tensor Product}\\
-For $\mathbb{F}$-vector spaces $\mathcal{U},\mathcal{V},\mathcal{W}$, the map $\Phi:\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})\to\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$, $\Phi(f)=\widetilde{f}$,\\
-where $\widetilde{f}(\mathbf{u}\otimes\mathbf{v})=f(\mathbf{u},\mathbf{v})$, is an isomorphism.
-\begin{proof}
-The universal property gives existence and uniqueness of $\widetilde{f}$.\\
-Define $\Psi:\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})\to\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ by $\Psi(L)\defeq L\circ t$.\\
-Then $\Psi(\Phi(f))=\widetilde{f}\circ t=f$, and $\Phi(\Psi(L))=L$ by uniqueness of the mediating map for $L\circ t$. Hence $\Phi$ is bijective.\\
-For $a\in\mathbb{F}$ and $f,g$ bilinear, $\Phi(af+g)(\mathbf{u}\otimes\mathbf{v})=af(\mathbf{u},\mathbf{v})+g(\mathbf{u},\mathbf{v})=(a\Phi(f)+\Phi(g))(\mathbf{u}\otimes\mathbf{v})$, so $\Phi$ is linear.\\
-\hlt{Structural Commentary}: Tensor products package bilinear maps as ordinary linear maps.\\
-\hlt{Key Insight}: To define a linear map out of $\mathcal{U}\otimes\mathcal{V}$, define a bilinear rule on $\mathcal{U}\times\mathcal{V}$.
-\end{proof}
-\end{theorem}
-
-\begin{method} \label{meth:defining-linear-maps-on-tensor-products} \hlt{Defining Maps on Tensor Products}\\
-To define $L\in\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item define a candidate rule $f:\mathcal{U}\times\mathcal{V}\to\mathcal{W}$ by $f(\mathbf{u},\mathbf{v})$;
-\item prove $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$;
-\item set $L\defeq\Phi(f)$ from Theorem \ref{thm:tensor-linearizes-bilinear-maps}, so $L(\mathbf{u}\otimes\mathbf{v})=f(\mathbf{u},\mathbf{v})$.
-\end{enumerate}
-Do not assign arbitrary values on decomposable tensors: they span $\mathcal{U}\otimes\mathcal{V}$ but are usually linearly dependent.
-\end{method}
 
 \begin{theorem} \label{thm:tensor-product-of-linear-maps} \hlt{Tensor Product of Linear Maps}\\
 Let $A\in\LL(\mathcal{U},\mathcal{U}')$ and $B\in\LL(\mathcal{V},\mathcal{V}')$.\\

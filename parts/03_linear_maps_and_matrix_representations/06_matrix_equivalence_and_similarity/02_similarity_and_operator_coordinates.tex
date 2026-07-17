@@ -1,0 +1,143 @@
+\subsection{Similarity and Operator Coordinates}
+\begin{theorem} \label{thm:change-of-basis-formula} \hlt{Change of Basis Formula}\\
+Let $\mathcal{V}$ be finite-dimensional, let $T \in \LL(\mathcal{V})$, and let $\beta$ be a basis of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\gamma$ is a basis of $\mathcal{V}$ and $S=C_{\gamma \leftarrow \beta}$, then $[T]_{\gamma \leftarrow \gamma} = S[T]_{\beta \leftarrow \beta}S^{-1}$.
+\item If $S\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, then there is a basis $\gamma$ of $\mathcal{V}$ such that $[T]_{\gamma \leftarrow \gamma} = S[T]_{\beta \leftarrow \beta}S^{-1}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Suppose $\gamma$ is a basis and $S=C_{\gamma \leftarrow \beta}$. By Theorem \ref{thm:change-of-basis-matrices}, $S^{-1}=C_{\beta \leftarrow \gamma}$.\\
+For every $\mathbf{v}\in\mathcal{V}$, $[T\mathbf{v}]_{\gamma} =S[T\mathbf{v}]_{\beta} =S[T]_{\beta \leftarrow \beta}[\mathbf{v}]_{\beta} =S[T]_{\beta \leftarrow \beta}S^{-1}[\mathbf{v}]_{\gamma}$.\\
+Since $[\cdot]_{\gamma}$ is onto $\mathbb{F}^n$, the representing matrices are equal.
+\item If $S$ is invertible, Theorem \ref{thm:change-of-basis-matrices} supplies a basis $\gamma$ with $S=C_{\gamma \leftarrow \beta}$, and part (i) applies.
+\end{enumerate}
+\hlt{Structural Commentary}: Changing basis conjugates operator matrices.\\
+\hlt{Key Insight}: Similarity is a coordinate rewrite.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:similar-matrices} \hlt{Similarity}\\
+Matrices $A,B \in \operatorname{Mat}(n,n,\mathbb{F})$ are similar if there exists an invertible matrix $P$ such that $B = PAP^{-1}$.
+\end{definition}
+
+\begin{proposition} \label{prop:similarity-equivalence-relation} \hlt{Similarity Is an Equivalence Relation}\\
+Similarity is an equivalence relation on $\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{proof}
+For any $A$, $A=I_nAI_n^{-1}$, so similarity is reflexive. If $B=PAP^{-1}$, then $A=P^{-1}BP$, so it is symmetric. If $B=PAP^{-1}$ and $C=QBQ^{-1}$, then $C=Q(PAP^{-1})Q^{-1}=(QP)A(QP)^{-1}$ so it is transitive.\\
+\hlt{Structural Commentary}: Similarity groups matrices by change of basis.\\
+\hlt{Key Insight}: Identity, inverse, and composition give the three equivalence properties.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:upper-block-triangular-similarity-shift} \hlt{Upper Block-Triangular Similarity Shift}\\
+Let $B\in\operatorname{Mat}(m,m,\mathbb{F})$, let $D\in\operatorname{Mat}(n,n,\mathbb{F})$, and let $C,X\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
+Then $\begin{bmatrix}
+B & C\\
+0 & D
+\end{bmatrix}
+$ is similar to $\begin{bmatrix}
+B & C+XD-BX\\
+0 & D
+\end{bmatrix}$.
+\begin{proof}
+The matrices $\begin{bmatrix} I_m & X\\ 0 & I_n \end{bmatrix}$ and $\begin{bmatrix} I_m & -X\\ 0 & I_n \end{bmatrix}$ are inverses in $\operatorname{Mat}(m+n,m+n,\mathbb{F})$, by block multiplication,
+\begin{align}
+\begin{bmatrix}
+I_m & X\\
+0 & I_n
+\end{bmatrix}
+\begin{bmatrix}
+B & C\\
+0 & D
+\end{bmatrix}
+\begin{bmatrix}
+I_m & -X\\
+0 & I_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+B & C+XD-BX\\
+0 & D
+\end{bmatrix}.
+\nonumber
+\end{align}
+\hlt{Structural Commentary}: Unit upper block-triangular conjugation changes only the coupling block.\\
+\hlt{Key Insight}: Similarity can adjust the connecting block while preserving the diagonal blocks.
+\end{proof}
+\end{proposition}
+
+\begin{remark} \label{rem:similarity-convention} \hlt{Similarity Convention}\\
+The forms $PAP^{-1}$ and $M^{-1}AM$ are the same convention with $P=M^{-1}$. In Theorem \ref{thm:change-of-basis-formula}, this means choosing opposite coordinate-change directions.
+\end{remark}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/similarity_change_of_basis_bridge.tikz}
+  \caption{One operator in two bases: $PA=BP$, so $B=PAP^{-1}$.}
+  \label{fig:similarity-change-of-basis-bridge}
+\end{figure}
+
+\begin{corollary} \label{cor:similar-iff-same-linear-operator} \hlt{Similarity as One Operator in Two Bases}\\
+For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A$ and $B$ are similar.
+\item There are an $n$-dim vector space $\mathcal{V}$, bases $\beta,\gamma$ of $\mathcal{V}$, and $T\in\LL(\mathcal{V})$ such that $A=[T]_{\beta \leftarrow \beta}$ and $B=[T]_{\gamma \leftarrow \gamma}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman)*.]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$: Suppose $B=PAP^{-1}$ with $P$ invertible.\\
+Let $\mathcal{V}=\mathbb{F}^n$, let $\beta$ be the standard basis, and let $T_A(\mathbf{x})=A\mathbf{x}$. By Theorem \ref{thm:change-of-basis-matrices}, choose $\gamma$ with $P=C_{\gamma \leftarrow \beta}$. Then $[T_A]_{\beta \leftarrow \beta}=A$, and Theorem \ref{thm:change-of-basis-formula} gives $[T_A]_{\gamma \leftarrow \gamma}=B$.
+\item[$(ii)$] $\Rightarrow (i)$: If $A=[T]_{\beta \leftarrow \beta}$ and $B=[T]_{\gamma \leftarrow \gamma}$, then $B=C_{\gamma \leftarrow \beta}AC_{\beta \leftarrow \gamma}$ with $C_{\gamma \leftarrow \beta}$ invertible.
+\end{enumerate}
+\hlt{Structural Commentary}: Similar matrices are one operator in different bases.\\
+\hlt{Key Insight}: Conjugation records a change of basis.
+\end{proof}
+\end{corollary}
+
+\begin{perspective} \hlt{Similarity as Same Operator, New Coordinates}\\
+Similarity does not mean two operators are merely related; it means they are the same operator written in two different bases. This is the structural content behind change of basis.
+\end{perspective}
+
+\begin{definition} \label{def:similar-linear-operators} \hlt{Similarity of Operators}\\
+For $T\in\LL(\mathcal{V})$ and $S\in\LL(\mathcal{W})$, $T\sim S$ $\Longleftrightarrow$ $\exists\,\Phi:\mathcal{V}\xrightarrow{\sim}\mathcal{W}$ such that $ S=\Phi T\Phi^{-1}$.\\
+If $\mathcal{V}=\mathcal{W}$, then $\Phi\in\operatorname{Aut}(\mathcal{V})$ and similarity is conjugacy in $\LL(\mathcal{V})$.
+\end{definition}
+
+\begin{proposition} \label{prop:operator-similarity-and-common-matrices} \hlt{Operator Similarity and Common Matrix Representatives}\\
+Let $\dim\mathcal{V}=\dim\mathcal{W}=n$, $T\in\LL(\mathcal{V})$, and $S\in\LL(\mathcal{W})$.\\
+Then $T\sim S$ $\Longleftrightarrow$ $\exists\,A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $A=[T]_{\beta\leftarrow\beta}=[S]_{\gamma\leftarrow\gamma}$ for some bases $\beta$ of $\mathcal{V}$ and $\gamma$ of $\mathcal{W}$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $S=\Phi T\Phi^{-1}$ and $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$. Put $\gamma=(\Phi\mathbf{v}_1,\ldots,\Phi\mathbf{v}_n)$.\\
+Then $\gamma$ is a basis and, for all $j$, $S(\Phi\mathbf{v}_j)=\Phi T\mathbf{v}_j$, so $[S]_{\gamma\leftarrow\gamma}=[T]_{\beta\leftarrow\beta}$.
+\item[$(\Leftarrow)$] Suppose $[T]_{\beta\leftarrow\beta}=[S]_{\gamma\leftarrow\gamma}$. Define $\Phi:\mathcal{V}\to\mathcal{W}$ by $\Phi(\beta_j)=\gamma_j$.\\
+Then $\Phi$ is an isomorphism and $\Phi T\beta_j=S\Phi\beta_j$ for every $j$, hence $\Phi T=S\Phi$. Thus $S=\Phi T\Phi^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity is equality of matrices after identifying bases.\\
+\hlt{Key Insight}: A common matrix is an operator-level conjugacy written in bases.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:similarity-preserves-scalar-shifts} \hlt{Similarity and Scalar Shifts}\\
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ and $B$ are similar, then $A-\lambda I_n$ and $B-\lambda I_n$ are similar for every $\lambda\in\mathbb{F}$.
+\item If $A-\lambda I_n$ and $B-\lambda I_n$ are similar for some $\lambda\in\mathbb{F}$, then $A$ and $B$ are similar.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $B=PAP^{-1}$ with $P$ invertible, then $B-\lambda I_n=PAP^{-1}-\lambda PP^{-1}=P(A-\lambda I_n)P^{-1}$.
+\item If $B-\lambda I_n=P(A-\lambda I_n)P^{-1}$ with $P$ invertible, then adding $\lambda I_n=\lambda PP^{-1}$ gives $B=PAP^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Scalar shifts commute with change of basis.\\
+\hlt{Key Insight}: The identity matrix is basis-independent.
+\end{proof}
+\end{theorem}

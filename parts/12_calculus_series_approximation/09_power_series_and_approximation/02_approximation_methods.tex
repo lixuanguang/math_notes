@@ -1,5 +1,12 @@
 \subsection{Approximation Methods}
 
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/polygonal_approximation_sqrt_one_minus_x.tikz}
+  \caption{Finer piecewise-linear interpolants approach $f(x)=\sqrt{1-x}$ uniformly on $[0,1]$.}
+  \label{fig:polygonal-approximation-sqrt-one-minus-x}
+\end{figure}
+
 \begin{theorem} \label{thm:weierstrass-polynomial-approximation}\label{thm:power-approx-fourier-main-source-todo} \hlt{Weierstrass Polynomial Approximation}\\
 Let $a<b$ and $f\in C([a,b],\C)$. Then $\exists (P_n)\subset\C[x]$ with $P_n\rightrightarrows f$ on $[a,b]$. If $f([a,b])\subset\R$, choose $(P_n)\subset\R[x]$.
 \begin{proof} By affine change and subtraction of the endpoint interpolant, reduce to $[0,1]$ with $f(0)=f(1)=0$.\\
@@ -18,13 +25,6 @@ Thus $\norm{P_n-f}_\infty\to0$ on $[0,1]$; undo the reductions.\\
   \input{figures/analysis/polynomial_bump_kernel.tikz}
   \caption{The normalized kernels $Q_n(t)=c_n(1-t^2)^n$ concentrate near $0$ while retaining integral $1$.}
   \label{fig:polynomial-bump-kernel}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/polygonal_approximation_sqrt_one_minus_x.tikz}
-  \caption{Finer piecewise-linear interpolants approach $f(x)=\sqrt{1-x}$ uniformly on $[0,1]$.}
-  \label{fig:polygonal-approximation-sqrt-one-minus-x}
 \end{figure}
 
 \begin{corollary} \label{cor:absolute-value-polynomial-approximation} \hlt{Polynomial Approximation of $\abs{x}$}\\
@@ -96,6 +96,17 @@ Then $f-\varepsilon<h<f+\varepsilon$, so $\norm{h-f}_\infty<\varepsilon$. Since 
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:complex-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Complex Form}\\
+Let $K$ be compact Hausdorff and let $\mathcal{A}\subset C(K,\C)$ be a self-adjoint, point-separating, nowhere-vanishing complex algebra. Then $\overline{\mathcal{A}}^{\norm{\cdot}_\infty}=C(K,\C)$.
+\begin{proof}
+Set $\mathcal{A}_{\R}\defeq\mathcal{A}\cap C(K,\R)$. Self-adjointness gives $\operatorname{Re}f,\operatorname{Im}f\in\mathcal{A}_{\R}$ for all $f\in\mathcal{A}$. If $f(x)\neq f(y)$ or $f(x)\neq0$, then one of $\operatorname{Re}f,\operatorname{Im}f$ witnesses the same condition; hence $\mathcal{A}_{\R}$ is point-separating and nowhere-vanishing.\\
+By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R)$. For $F=u+iv\in C(K,\C)$, take $u_n,v_n\in\mathcal{A}_{\R}$ with $u_n\rightrightarrows u$, $v_n\rightrightarrows v$.\\
+Then $u_n+iv_n\in\mathcal{A}$ and $u_n+iv_n\rightrightarrows F$.\\
+\hlt{Structural Commentary}: Self-adjointness yields a real subalgebra.\\
+\hlt{Key Insight}: Approximate real and imaginary parts.
+\end{proof}
+\end{theorem}
+
 \begin{theorem} \label{thm:riesz-cx-separable-iff-metrizable} \hlt{Riesz Separability Criterion for $C(K)$}\\
 Let $K$ be a compact Hausdorff space. Then $(C(K,\R),\norm{\cdot}_\infty)$ is separable iff $K$ is metrizable.
 \begin{proof}
@@ -112,14 +123,55 @@ Its rational polynomial subalgebra is countable and dense.
 \end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:complex-stone-weierstrass} \hlt{Stone--Weierstrass Theorem, Complex Form}\\
-Let $K$ be compact Hausdorff and let $\mathcal{A}\subset C(K,\C)$ be a self-adjoint, point-separating, nowhere-vanishing complex algebra. Then $\overline{\mathcal{A}}^{\norm{\cdot}_\infty}=C(K,\C)$.
+\begin{theorem} \label{thm:continuous-nowhere-differentiable-example} \hlt{A Continuous Nowhere Differentiable Function Exists}\\
+There exists a real continuous function on $\R$ which is nowhere differentiable.
 \begin{proof}
-Set $\mathcal{A}_{\R}\defeq\mathcal{A}\cap C(K,\R)$. Self-adjointness gives $\operatorname{Re}f,\operatorname{Im}f\in\mathcal{A}_{\R}$ for all $f\in\mathcal{A}$. If $f(x)\neq f(y)$ or $f(x)\neq0$, then one of $\operatorname{Re}f,\operatorname{Im}f$ witnesses the same condition; hence $\mathcal{A}_{\R}$ is point-separating and nowhere-vanishing.\\
-By Theorem \ref{thm:real-stone-weierstrass}, $\overline{\mathcal{A}_{\R}}=C(K,\R)$. For $F=u+iv\in C(K,\C)$, take $u_n,v_n\in\mathcal{A}_{\R}$ with $u_n\rightrightarrows u$, $v_n\rightrightarrows v$.\\
-Then $u_n+iv_n\in\mathcal{A}$ and $u_n+iv_n\rightrightarrows F$.\\
-\hlt{Structural Commentary}: Self-adjointness yields a real subalgebra.\\
-\hlt{Key Insight}: Approximate real and imaginary parts.
+Let $\varphi$ be the $2$-periodic extension of $\abs{x}$ on $[-1,1]$. Then $0\leq\varphi\leq1$ and $\abs{\varphi(s)-\varphi(t)}\leq\abs{s-t}$.\\
+Define $f(x)\defeq\sum\limits_{n=0}^{\infty}\left(\frac34\right)^n\varphi(4^n x)$, converges uniformly (Theorem \ref{thm:weierstrass-m-test}); hence $f$ is continuous  (Theorem \ref{thm:uniform-convergence-preserves-continuity}).\\
+Fix $x$ and $m\in\N$. Choose $\delta_m=\pm\frac12 4^{-m}$ so that no integer lies between $4^m x$ and $4^m(x+\delta_m)$.\\
+Set $\gamma_{n,m}\defeq\frac{\varphi(4^n(x+\delta_m))-\varphi(4^n x)}{\delta_m}$. If $n>m$, then $4^n\delta_m$ is an even integer, so $\gamma_{n,m}=0$.\\
+If $0\leq n\leq m$, then $\abs{\gamma_{n,m}}\leq4^n$, and the choice of $\delta_m$ gives $\abs{\gamma_{m,m}}=4^m$.\\
+Hence $\abs{\frac{f(x+\delta_m)-f(x)}{\delta_m}} =\abs{\sum\limits_{n=0}^{m}\left(\frac34\right)^n\gamma_{n,m}} \geq 3^m-\sum\limits_{n=0}^{m-1}3^n =\frac12(3^m+1)$\\
+Since $\delta_m\to0$, the difference quotients are unbounded near $x$; since $x$ was arbitrary, $f$ is nowhere differentiable.\\
+\hlt{Structural Commentary}: Uniform sums give continuity; scaled cusps force unbounded quotients.\\
+\hlt{Key Insight}: Uniform convergence preserves continuity, not differentiability.
+\end{proof}
+\end{theorem}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/analysis/compressed_sawtooth_family.tikz}
+  \caption{The first compressed sawtooth terms $\sigma_k(x)=(3/4)^k\varphi(4^kx)$: heights shrink, slopes grow.}
+  \label{fig:takagi-sawtooth-building-block}
+\end{figure}
+
+\begin{perspective} \label{per:nowhere-differentiability-explicit-and-generic} \hlt{Explicit Versus Generic Pathology}\\
+The sawtooth series proves existence; Baire category shows nowhere differentiability is residual in $C([a,b],\R)$.
+\end{perspective}
+
+\begin{theorem} \label{thm:differentiable-somewhere-first-category} \hlt{Generic Nowhere Differentiability on Compact Intervals}\\
+Let $a<b$, and let $C=C([a,b],\R)$ with the supremum metric. There exists a residual set $\mathcal{G}\subseteq C$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item no $f\in\mathcal{G}$ has an available one-sided derivative at any point of $[a,b]$;
+\item no $f\in\mathcal{G}$ is monotone on any nondegenerate subinterval of $[a,b]$;
+\item the set $\{f\in C:f\text{ is differentiable at some point of }[a,b]\}$ is first category.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write $\Delta_hf(x)\defeq f(x+h)-f(x)$, and choose $N_0$ with $1/N_0<b-a$. For $n\geq N_0$, define
+\begin{align}
+R_n&\defeq\left\{f\in C:\forall x\in[a,b-1/n]\ \exists h>0\text{ with }\left|\frac{\Delta_hf(x)}{h}\right|>n\right\}, \nonumber\\
+L_n&\defeq\left\{f\in C:\forall x\in[a+1/n,b]\ \exists h<0\text{ with }\left|\frac{\Delta_hf(x)}{h}\right|>n\right\}, \nonumber\\
+G_n&\defeq\{f\in C:f\text{ is nonmonotone on every subinterval of length }1/n\}. \nonumber
+\end{align}
+Each $R_n,L_n,G_n$ is open and dense in $C$ (Weierstrass Approximation Theorem \ref{thm:weierstrass-polynomial-approximation}), plus small high-slope sawtooth perturbation; openness follows from compactness and uniform perturbation estimates.
+\item Set $\mathcal{G}\defeq\bigcap_{n\geq N_0}(R_n\cap L_n\cap G_n)$. By Definition \ref{def:residual-thick-generic-set}, $\mathcal{G}$ is residual. If $f\in\mathcal{G}$, then the $R_n$ and $L_n$ conditions give one-sided difference quotients of arbitrarily large absolute value; since $f$ is bounded, the corresponding increments tend to $0$. Thus no available one-sided derivative exists.
+\item Let $f\in\mathcal{G}$. Every nondegenerate subinterval contains a subinterval of length $1/n$ for all sufficiently large $n$, so the $G_n$ conditions make $f$ nonmonotone on every nondegenerate subinterval. If $f$ is differentiable somewhere, then $f\notin\mathcal{G}$; hence the differentiable-somewhere set lies in $C\setminus\mathcal{G}$, which is first category.
+\end{enumerate}
+\hlt{Structural Commentary}: Baire category turns dense sawtooth perturbability into a generic regularity failure.\\
+\hlt{Key Insight}: The explicit construction shows existence; the category proof shows typicality.
 \end{proof}
 \end{theorem}
 

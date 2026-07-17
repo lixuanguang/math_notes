@@ -1,0 +1,20 @@
+\subsection{Fast Fourier Transform}
+
+\begin{method} \label{meth:radix-two-fft-split} \hlt{Radix-Two FFT Split}\\
+Let $n=2m$ and $\mathbf{y}=F_n\mathbf{c}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Split $\mathbf{c}'\defeq(c_{2r})_{r=0}^{m-1}$ and $\mathbf{c}''\defeq(c_{2r+1})_{r=0}^{m-1}$.
+\item Compute $\mathbf{y}'\defeq F_m\mathbf{c}'$ and $\mathbf{y}''\defeq F_m\mathbf{c}''$.
+\item With $d_j\defeq\omega_n^j$, and using $\omega_n^2=\omega_m$ and $\omega_n^m=-1$, set $y_j=y'_j+d_jy''_j$; and $y_{j+m}=y'_j-d_jy''_j$ for $0\leq j<m$.
+\item For $n=2^\ell$, repeat (i)--(iii) for $\ell$ stages.\\
+$n^2$ dense products become about $\frac12 n\log_2 n$ twiddle multiplications plus additions.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/fft_butterfly_n4.tikz}
+  \caption{For $n=4$: split, apply two $F_2$ transforms, then $B_4\binom{\mathbf{y}'}{\mathbf{y}''}=\binom{\mathbf{y}'+D\mathbf{y}''}{\mathbf{y}'-D\mathbf{y}''}$ with $D=\operatorname{diag}(1,i)$.}
+  \label{fig:fft-butterfly-n4}
+\end{figure}

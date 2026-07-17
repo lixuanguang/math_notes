@@ -1,0 +1,94 @@
+\subsection{Perturbation Bounds}
+
+% **Role:** quantitative matrix behavior and computation.
+%
+% Gershgorin, Bauer--Fike, Weyl inequalities, interlacing, pseudospectral intuition, stability of algorithms.
+
+Perturbation theory studies how matrix information changes under small errors. Bauer--Fike, Gersgorin, interlacing, Weyl inequalities, and pseudospectra measure robustness.
+
+\begin{lemma} \label{lem:small-spectral-norm-perturbation-invertible} \hlt{Small Spectral-Norm Perturbations of the Identity}\\
+If $E\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\norm{E}_2<1$, then $I_n+E$ is invertible.
+\begin{proof}
+Theorem \ref{thm:eigenvalues-versus-singular-values} gives $\rho(E)\leq\norm{E}_2<1$, so $-1\notin\operatorname{spec}(E)$.\\
+Hence $0\notin\operatorname{spec}(I_n+E)$, and $I_n+E$ is invertible.\\
+\hlt{Structural Commentary}: Spectral-norm smallness traps every eigenvalue inside the unit disk.\\
+\hlt{Key Insight}: If $-1$ is not an eigenvalue of $E$, then $I+E$ has no kernel.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:bauer-fike-eigenvalue-perturbation} \hlt{Bauer--Fike Eigenvalue Perturbation Bound}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be diagonalizable, with $A=S\Lambda S^{-1}$ and $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$.\\
+If $\Delta A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\mu\in\operatorname{spec}(A+\Delta A)$, then $\min_{1\leq j\leq n}\abs{\mu-\lambda_j} \leq \kappa_2(S)\norm{\Delta A}_2$.
+\begin{proof}
+If $\mu=\lambda_j$ for some $j$, the claim is immediate. Otherwise $\Lambda-\mu I_n$ is invertible.\\
+Since $\mu$ is an eigenvalue of $A+\Delta A$, the matrix $A+\Delta A-\mu I_n$ is singular.\\
+Conjugating gives $S^{-1}(A+\Delta A-\mu I_n)S =(\Lambda-\mu I_n)\left(I_n+(\Lambda-\mu I_n)^{-1}S^{-1}\Delta AS\right)$ so the second factor is singular.\\
+Lemma \ref{lem:small-spectral-norm-perturbation-invertible} implies $1\leq \norm{(\Lambda-\mu I_n)^{-1}S^{-1}\Delta AS}_2 \leq \frac{\norm{S^{-1}}_2\norm{\Delta A}_2\norm{S}_2}{\min_j\abs{\mu-\lambda_j}}$.
+Rearranging gives the bound.\\
+\hlt{Structural Commentary}: Diagonalize, then test how perturbation breaks shifted invertibility.\\
+\hlt{Key Insight}: Eigenvalue sensitivity is controlled by how ill-conditioned the eigenvector matrix $S$ is.
+\end{proof}
+\end{theorem}
+
+\begin{method} \label{meth:bauer-fike-perturbation-method} \hlt{Bauer--Fike Perturbation Method}\\
+To bound eigenvalue movement for a diagonalizable matrix:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item diagonalize $A=S\Lambda S^{-1}$;
+\item estimate $\norm{\Delta A}_2$;
+\item compute or bound $\kappa_2(S)$;
+\item place every eigenvalue of $A+\Delta A$ inside the union of disks $\abs{z-\lambda_j}\leq\kappa_2(S)\norm{\Delta A}_2$.
+\end{enumerate}
+\end{method}
+
+\begin{definition} \label{def:gersgorin-disks} \hlt{Gersgorin Disks}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{deleted absolute row sum} in row $k$ is $R_k^{\mathrm{off}}(A)\defeq\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
+The \hlt{$k$th Gersgorin disk} of $A$ is $\operatorname{Ger}_k(A)\defeq\{z\in\mathbb{C}:\abs{z-a_{kk}}\leq R_k^{\mathrm{off}}(A)\}$, where $\operatorname{Ger}(A)\defeq\bigcup\limits_{k=1}^{n}\operatorname{Ger}_k(A)$.
+\end{definition}
+
+\begin{theorem} \label{thm:gersgorin-disk-theorem} \hlt{Gersgorin Disk Theorem}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)=\bigcup\limits_{k=1}^{n}\operatorname{Ger}_k(A)$.
+\begin{proof}
+Let $\lambda\in\operatorname{spec}(A)$ and choose an eigenvector $\mathbf{x}=[x_1\ \cdots\ x_n]^t$.\\
+Pick $k$ such that $\abs{x_k}=\max_j\abs{x_j}$; then $x_k\neq0$. The $k$th row of $A\mathbf{x}=\lambda\mathbf{x}$ gives $(\lambda-a_{kk})x_k=\sum\limits_{j\neq k}a_{kj}x_j$.\\
+Divide by $x_k$ and use $\abs{x_j/x_k}\leq1$: $\abs{\lambda-a_{kk}} =\abs{\sum\limits_{j\neq k}a_{kj}\frac{x_j}{x_k}} \leq\sum\limits_{j\neq k}\abs{a_{kj}}\abs{\frac{x_j}{x_k}} \leq R_k^{\mathrm{off}}(A)$.\\
+Thus $\lambda\in \operatorname{Ger}_k(A)\subseteq \operatorname{Ger}(A)$.\\
+\hlt{Structural Commentary}: Normalize by a largest component; all row ratios have modulus at most one.\\
+\hlt{Key Insight}: Row $k$ traps $\lambda$ in the disk centered at $a_{kk}$ with radius $R_k^{\mathrm{off}}(A)$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:gersgorin-row-column-refinement} \hlt{Row-Column Gersgorin Refinement}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$.\\
+If $R_k(A)=\sum\limits_{j=1}^{n}\abs{a_{kj}}$ and $R_{\max}(A)=\max_{1\leq k\leq n}R_k(A)$, then $\operatorname{spec}(A)\subseteq\{z\in\mathbb{C}:\abs{z}\leq \min(R_{\max}(A),R_{\max}(A^t))\}$.
+\begin{proof}
+Theorem \ref{thm:gersgorin-disk-theorem} gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)$.\\
+Proposition \ref{prop:transpose-preserves-spectrum-and-geometric-multiplicity} gives $\operatorname{spec}(A)=\operatorname{spec}(A^t)$, so applying Gersgorin to $A^t$ gives $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A^t)$.\\
+Also $\operatorname{Ger}_k(A)\subseteq\{z:\abs{z}\leq \abs{a_{kk}}+R_k^{\mathrm{off}}(A)=R_k(A)\}$, and similarly for $A^t$.\\
+\hlt{Structural Commentary}: Row disks and column disks are both valid because $A$ and $A^t$ have the same spectrum.\\
+\hlt{Key Insight}: Intersecting independent enclosures usually sharpens the eigenvalue search region.
+\end{proof}
+\end{corollary}
+
+\begin{method} \label{meth:gersgorin-disk-localisation} \hlt{Gersgorin Localisation Method}\\
+For $A=[a_{ij}]$, Gersgorin localisation gives a disk enclosure for the spectrum.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For each row $k$, place a disk at the diagonal entry $a_{kk}$ with radius $R_k^{\mathrm{off}}(A)=\sum\limits_{j\neq k}\abs{a_{kj}}$.\\
+The row enclosure is $\operatorname{Ger}(A)=\bigcup_{k=1}^{n}\operatorname{Ger}_k(A)$.
+\item Theorem \ref{thm:gersgorin-disk-theorem} guarantees that every eigenvalue of $A$ lies in $\operatorname{Ger}(A)$.
+\item For a sharper enclosure, repeat the same construction for $A^t$. The centers are still $a_{kk}$, while the radii becomes deleted column sums of $A$. Then use $\operatorname{spec}(A)\subseteq \operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$.
+This is the intersection of two unions of disks; an eigenvalue need not lie in the overlap of each individual row-column disk pair.
+\end{enumerate}
+\end{method}
+
+\begin{figure}[H]
+  \centering
+  \input{figures/linear_algebra/gersgorin_disk_method.tikz}
+  \caption{Blue row disks contain the spectrum; green dashed column disks give the sharper row-column enclosure $\operatorname{Ger}(A)\cap \operatorname{Ger}(A^t)$. Red points illustrate possible eigenvalue locations.}
+  \label{fig:gersgorin-disk-method}
+\end{figure}
+
+\begin{perspective} \label{per:pseudospectral-intuition} \hlt{Pseudospectral Intuition}\\
+For a matrix $A$, the $\varepsilon$-pseudospectrum records complex numbers $z$ for which $A-zI$ is singular or nearly singular. Equivalently, it asks where a perturbation of size at most $\varepsilon$ can move the spectrum. Bauer--Fike gives a clean enclosure for diagonalizable matrices, while Gersgorin and norm bounds give cruder but often cheaper enclosures. The main lesson is that eigenvalues of nonnormal matrices can be much more sensitive than their locations alone suggest.
+\end{perspective}

@@ -46,6 +46,27 @@ The partial sums of $\sum z^n$ are bounded because $\abs{\sum\limits_{m=0}^{n}z^
 \end{proof}
 \end{theorem}
 
+\begin{theorem} \label{thm:abel-endpoint-theorem} \hlt{Abel's Endpoint Theorem}\\
+Let $s_n\defeq\sum_{k=0}^{n}c_k\to s$. For $\abs{x}<1$, set $f(x)\defeq\sum\limits_{n\geq0}c_nx^n$. Then $\lim\limits_{x\to1^-}f(x)=s$.
+\begin{proof} Set $s_{-1}\defeq0$. Since $c_n=s_n-s_{n-1}$, for $\abs{x}<1$, $f(x)=\sum\limits_{n\geq0}(s_n-s_{n-1})x^n=(1-x)\sum\limits_{n\geq0}s_nx^n$.\\
+Thus $f(x)-s=(1-x)\sum\limits_{n\geq0}(s_n-s)x^n$. Given $\varepsilon>0$, choose $N$ with $\abs{s_n-s}<\varepsilon/2$ for $n>N$.\\
+For $0<x<1$, $\abs{f(x)-s}\leq(1-x)\sum\limits_{n=0}^{N}\abs{s_n-s}x^n+\frac{\varepsilon}{2}(1-x)\sum\limits_{n>N}x^n$.\\
+The first term tends to $0$ as $x\to1^-$, and the second is $\leq\varepsilon/2$; hence $f(x)\to s$.\\
+\hlt{Structural Commentary}: Endpoint convergence is one-sided Abel continuity.\\
+\hlt{Key Insight}: $(1-x)\sum s_nx^n$ is a geometric average of partial sums.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:abel-product-theorem} \hlt{Abel Product Theorem for Cauchy Products}\\
+Let $\sum a_n=A$ and $\sum b_n=B$. Define $c_n\defeq\sum\limits_{k=0}^{n}a_kb_{n-k}$, and suppose $\sum c_n=C$. Then $C=AB$.
+\begin{proof}
+For $\abs{x}<1$, set $f(x)\defeq\sum\limits_{n\geq0}a_nx^n$, $g(x)\defeq\sum\limits_{n\geq0}b_nx^n$, and $h(x)\defeq\sum\limits_{n\geq0}c_nx^n$. Since $(a_n),(b_n),(c_n)$ are bounded, these series converge absolutely on $\abs{x}<1$. Hence $f(x)g(x)=\sum\limits_{n\geq0}\bigl(\sum\limits_{k=0}^{n}a_kb_{n-k}\bigr)x^n=\sum\limits_{n\geq0}c_nx^n=h(x)$.\\
+By Abel's endpoint thm, $f(x)\to A$, $g(x)\to B$, $h(x)\to C$ as $x\to1^-$;$C=\lim\limits_{x\to1^-}h(x)=\lim\limits_{x\to1^-}f(x)g(x)=AB$.\\
+\hlt{Structural Commentary}: Regularize by $x$, multiply inside, pass to $x=1$.\\
+\hlt{Key Insight}: Abel moves the safe product identity to the endpoint.
+\end{proof}
+\end{theorem}
+
 \begin{perspective} \label{per:centered-power-series-translation} \hlt{Centered Series Are Translated Series}\\
 $\sum c_n(x-a)^n$ is $\sum c_ny^n$ with $y=x-a$ and radius $R$: absolute convergence for $\abs{x-a}<R$, divergence for $\abs{x-a}>R$, and separate endpoint tests for $\abs{x-a}=R$.
 \end{perspective}
@@ -66,6 +87,7 @@ Let $E\subseteq\R$, $f:E\to\R$, $a\in\operatorname{int}E$. The function $f$ is \
 \item $f(x)=\sum\limits_{n=0}^{\infty}c_n(x-a)^n$ for all $x\in(a-r,a+r)$.
 \end{enumerate}
 If $E$ is open and $f$ is real analytic at every $a\in E$, then $f$ is \hlt{real analytic on $E$}.
+Analytic functions form the class $C^\omega$.
 \end{definition}
 
 \begin{theorem} \label{thm:power-series-uniform-differentiation} \hlt{Power Series May Be Differentiated Term by Term}\\
@@ -131,6 +153,45 @@ Suppose $f(x)=\sum\limits_{n=0}^{\infty}c_n(x-a)^n$ for $\abs{x-a}<r$, with $r>0
 \hlt{Key Insight}: Analytic representation forces its own Taylor series.
 \end{proof}
 \end{corollary}
+
+\begin{theorem} \label{thm:power-series-reexpansion-and-identity} \hlt{Re-Expansion and Identity for Power Series}\\
+Let $f(x)=\sum_{n\ge0}c_nx^n$ have radius $R>0$, and set $S=(-R,R)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $a\in S$, then $f(x)=\sum\limits_{m\geq0}\frac{f^{(m)}(a)}{m!}(x-a)^m$ for $\abs{x-a}<R-\abs a$.
+\item Let $F(x)=\sum\limits_{n\geq0}a_nx^n$ and $G(x)=\sum\limits_{n\geq0}b_nx^n$ converge on $S$.\\
+If $\mathcal{Z}_{F,G}\defeq\{x\in S:F(x)=G(x)\}$ has a limit point in $S$, then $a_n=b_n$ for all $n\ge0$, hence $F=G$ on $S$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $\rho\defeq\abs{x-a}+\abs a<R$. Since $\sum\limits_{n\geq0}\abs{c_n}\rho^n<\infty$, the binomial double sum is absolutely rearrangeable:\\
+$f(x)=\sum\limits_{m\geq0}A_m(x-a)^m$, where $A_m\defeq\sum\limits_{n\geq m}\binom{n}{m}c_na^{n-m}$. Also $f^{(m)}(a)=\sum\limits_{n\geq m}\frac{n!}{(n-m)!}c_na^{n-m}=m!A_m$.
+\item Set $H\defeq F-G=\sum\limits_{n\geq0}d_nx^n$, $d_n\defeq a_n-b_n$, $Z\defeq\{x\in S:H(x)=0\}$, and $A\defeq Z'\cap S$.\\
+For $x_0\in A$, (i) gives $H(x)=\sum e_n(x-x_0)^n$ near $x_0$.\\
+If $k=\min\{n:e_n\neq0\}$ existed, then $H=(x-x_0)^kg$ with $g(x_0)=e_k\neq0$, so $x_0$ would be isolated in $Z$, contradiction. Thus all $e_n=0$, so $H=0$ near $x_0$ and $A$ is open. Since $S\setminus A$ is open, $A\neq\emptyset$, and $S$ is connected, $A=S$. As $Z$ is closed in $S$, $Z=S$; hence $d_n=H^{(n)}(0)/n!=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Re-expand locally; connectedness propagates zeros.\\
+\hlt{Key Insight}: Accumulating zeros force every local coefficient to vanish.
+\end{proof}
+\end{theorem}
+
+\begin{perspective} \label{per:regularity-hierarchy-one-variable} \hlt{Regularity Hierarchy}\\
+The inclusions are $C^\omega\subseteq C^\infty\subseteq \cdots \subseteq C^2\subseteq C^1\subseteq C^0$.\\
+The inclusions follow from Theorem \ref{thm:power-series-uniform-differentiation} and Definition \ref{def:smoothness-classes-one-variable}; they are generally proper.\\
+\hlt{Key Insight}: Higher regularity is extra structure, not just a different notation for continuity.
+\end{perspective}
+
+\begin{example} \label{ex:smooth-flat-nonanalytic-function} \hlt{Smooth but Not Analytic}\\
+Define $e(x)=
+\begin{cases}
+e^{-1/x},&x>0,\\
+0,&x\leq0.
+\end{cases}$.
+By repeated L'Hospital, Theorem \ref{thm:lhospital-one-sided}, $e\in C^\infty$ and $e^{(r)}(0)=0$ for all $r$.\\
+Its Taylor series at $0$ is zero, but $e(x)>0$ for $x>0$, so $e$ is not analytic at $0$ (Definition \ref{def:real-analytic-at-point}).\\
+\hlt{Key Insight}: A function can be infinitely tangent to the $x$-axis without being locally equal to its Taylor series.
+\end{example}
 
 \begin{perspective} \label{per:taylor-coefficients-need-a-remainder} \hlt{Taylor Coefficients Are Only the First Half}\\
 Power-series coefficients are forced by derivatives (Corollary \ref{cor:analytic-functions-smooth-and-unique-taylor}); for a function not already known to be analytic, proving the Taylor series represents the function needs a remainder estimate (Theorem \ref{thm:taylor-theorem-lagrange-remainder}).
@@ -240,45 +301,9 @@ Beta duplication gives the duplication formula, and $t=x(1+u)$ with Laplace asym
 \end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:abel-endpoint-theorem} \hlt{Abel's Endpoint Theorem}\\
-Let $s_n\defeq\sum_{k=0}^{n}c_k\to s$. For $\abs{x}<1$, set $f(x)\defeq\sum\limits_{n\geq0}c_nx^n$. Then $\lim\limits_{x\to1^-}f(x)=s$.
-\begin{proof} Set $s_{-1}\defeq0$. Since $c_n=s_n-s_{n-1}$, for $\abs{x}<1$, $f(x)=\sum\limits_{n\geq0}(s_n-s_{n-1})x^n=(1-x)\sum\limits_{n\geq0}s_nx^n$.\\
-Thus $f(x)-s=(1-x)\sum\limits_{n\geq0}(s_n-s)x^n$. Given $\varepsilon>0$, choose $N$ with $\abs{s_n-s}<\varepsilon/2$ for $n>N$.\\
-For $0<x<1$, $\abs{f(x)-s}\leq(1-x)\sum\limits_{n=0}^{N}\abs{s_n-s}x^n+\frac{\varepsilon}{2}(1-x)\sum\limits_{n>N}x^n$.\\
-The first term tends to $0$ as $x\to1^-$, and the second is $\leq\varepsilon/2$; hence $f(x)\to s$.\\
-\hlt{Structural Commentary}: Endpoint convergence is one-sided Abel continuity.\\
-\hlt{Key Insight}: $(1-x)\sum s_nx^n$ is a geometric average of partial sums.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:abel-product-theorem} \hlt{Abel Product Theorem for Cauchy Products}\\
-Let $\sum a_n=A$ and $\sum b_n=B$. Define $c_n\defeq\sum\limits_{k=0}^{n}a_kb_{n-k}$, and suppose $\sum c_n=C$. Then $C=AB$.
-\begin{proof}
-For $\abs{x}<1$, set $f(x)\defeq\sum\limits_{n\geq0}a_nx^n$, $g(x)\defeq\sum\limits_{n\geq0}b_nx^n$, and $h(x)\defeq\sum\limits_{n\geq0}c_nx^n$. Since $(a_n),(b_n),(c_n)$ are bounded, these series converge absolutely on $\abs{x}<1$. Hence $f(x)g(x)=\sum\limits_{n\geq0}\bigl(\sum\limits_{k=0}^{n}a_kb_{n-k}\bigr)x^n=\sum\limits_{n\geq0}c_nx^n=h(x)$.\\
-By Abel's endpoint thm, $f(x)\to A$, $g(x)\to B$, $h(x)\to C$ as $x\to1^-$;$C=\lim\limits_{x\to1^-}h(x)=\lim\limits_{x\to1^-}f(x)g(x)=AB$.\\
-\hlt{Structural Commentary}: Regularize by $x$, multiply inside, pass to $x=1$.\\
-\hlt{Key Insight}: Abel moves the safe product identity to the endpoint.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:power-series-reexpansion-and-identity} \hlt{Re-Expansion and Identity for Power Series}\\
-Let $f(x)=\sum_{n\ge0}c_nx^n$ have radius $R>0$, and set $S=(-R,R)$.
+\begin{method} \label{meth:gamma-function-proof-pattern} \hlt{Gamma Function Proof Pattern}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $a\in S$, then $f(x)=\sum\limits_{m\geq0}\frac{f^{(m)}(a)}{m!}(x-a)^m$ for $\abs{x-a}<R-\abs a$.
-\item Let $F(x)=\sum\limits_{n\geq0}a_nx^n$ and $G(x)=\sum\limits_{n\geq0}b_nx^n$ converge on $S$.\\
-If $\mathcal{Z}_{F,G}\defeq\{x\in S:F(x)=G(x)\}$ has a limit point in $S$, then $a_n=b_n$ for all $n\ge0$, hence $F=G$ on $S$.
+\item \hlt{Gamma function}: use $\Gamma(x+1)=x\Gamma(x)$, $\Gamma(1)=1$, and log-convexity for uniqueness.
 \end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Put $\rho\defeq\abs{x-a}+\abs a<R$. Since $\sum\limits_{n\geq0}\abs{c_n}\rho^n<\infty$, the binomial double sum is absolutely rearrangeable:\\
-$f(x)=\sum\limits_{m\geq0}A_m(x-a)^m$, where $A_m\defeq\sum\limits_{n\geq m}\binom{n}{m}c_na^{n-m}$. Also $f^{(m)}(a)=\sum\limits_{n\geq m}\frac{n!}{(n-m)!}c_na^{n-m}=m!A_m$.
-\item Set $H\defeq F-G=\sum\limits_{n\geq0}d_nx^n$, $d_n\defeq a_n-b_n$, $Z\defeq\{x\in S:H(x)=0\}$, and $A\defeq Z'\cap S$.\\
-For $x_0\in A$, (i) gives $H(x)=\sum e_n(x-x_0)^n$ near $x_0$.\\
-If $k=\min\{n:e_n\neq0\}$ existed, then $H=(x-x_0)^kg$ with $g(x_0)=e_k\neq0$, so $x_0$ would be isolated in $Z$, contradiction. Thus all $e_n=0$, so $H=0$ near $x_0$ and $A$ is open. Since $S\setminus A$ is open, $A\neq\emptyset$, and $S$ is connected, $A=S$. As $Z$ is closed in $S$, $Z=S$; hence $d_n=H^{(n)}(0)/n!=0$.
-\end{enumerate}
-\hlt{Structural Commentary}: Re-expand locally; connectedness propagates zeros.\\
-\hlt{Key Insight}: Accumulating zeros force every local coefficient to vanish.
-\end{proof}
-\end{theorem}
+\end{method}
