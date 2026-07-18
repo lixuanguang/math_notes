@@ -23,7 +23,7 @@ Instruction precedence is: current user prompt; safety and mathematical correctn
 | `TARGET` | required | Exact path or unambiguous part-scoped cursor. |
 | `START_CURSOR` | `beginning` | Exact file when resuming. |
 | `FILE_COVERAGE` | `all-active` | `all-active`, `changed-and-new`, `tracked-modified`, or `untracked-new`. |
-| `RUN_BATCH` | `one-numbered-file` | Recommended high-assurance batch; `all-selected` is permitted only without relaxing environment-level review. |
+| `RUN_BATCH` | `one-numbered-file` | Recommended high-assurance batch; source-intake prompts may use `all-source-supported`; `all-selected` is permitted only without relaxing environment-level review. |
 | `MATH_LAYOUT` | `inline-strict` | `inline-strict`, `inline-first`, or `preserve-essential-displays`. |
 | `COMMENTARY_POLICY` | `required-new-and-rewritten` | May be `required-all-reviewed` or `preserve-existing`. |
 | `PROOF_REFERENCE_POLICY` | `earlier-theorem-style-only` | See Section 5.4. |
@@ -46,7 +46,7 @@ Inspect inactive untracked files for ownership, but do not add an input edge wit
 
 `COMMENTARY_POLICY` modes: `required-new-and-rewritten` applies to new or materially rewritten theorem-style results; `required-all-reviewed` applies to every reviewed theorem-style result; `preserve-existing` adds none. A material rewrite changes the statement, claims, hypotheses, conclusion, proof argument, or result decomposition—not typography alone.
 
-`RUN_BATCH: one-numbered-file` means a part or section target defines traversal, while one invocation completes only the next numbered subsection file and reports the exact next cursor. This is the default because broad section runs have repeatedly passed aggregate checks while missing environment-level defects. `all-selected` must still stop at a file boundary rather than trade semantic quality for coverage.
+`RUN_BATCH: one-numbered-file` means a part or section target defines traversal, while one invocation completes only the next numbered subsection file and reports the exact next cursor. This is the default because broad section runs have repeatedly passed aggregate checks while missing environment-level defects. `RUN_BATCH: all-source-supported` is reserved for source-intake prompts: process every source-supported target file allowed by the configured structure and permissions in active order, without asking whether to continue to the next subsection, section, or part. `all-selected` must still stop at a file boundary rather than trade semantic quality for coverage.
 
 ## 3. Repository, structure, and safety
 

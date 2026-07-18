@@ -11,7 +11,7 @@ Use one prompt directly instead of running a monolithic workflow.
 Recommended sequence for a new source batch:
 
 ```text
-add_content_prompt.md -> reorganize_content_prompt.md -> dependency_flow_prompt.md -> formalize_content.md
+add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.md with PASS_MODE: second-pass -> reorganize_content_prompt.md -> dependency_flow_prompt.md -> formalize_content.md
 ```
 
 For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.
