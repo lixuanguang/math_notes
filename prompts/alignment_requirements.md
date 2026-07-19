@@ -66,7 +66,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 Traverse active `\input` order. The atomic unit of completion is one formal environment, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
-Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, remark, perspective, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
+Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, perspective, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
 
 Process exactly one ledger row at a time. Read the whole environment, its proof, and the immediately relevant earlier owners; then apply:
 
@@ -87,7 +87,7 @@ After each row, perform this adversarial check before moving on:
 3. Is setup repeated across items instead of factored into a preamble?
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
 5. For a method row, does the block use the correct environment and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
-6. For an example, remark, motivation, perspective, principle, process, exercise, or question-bank row, does the environment perform its proper role without becoming a hidden theorem, proof, method, prerequisite owner, or duplicate summary?
+6. For an example, counterexample, remark, motivation, perspective, principle, process, exercise, or question-bank row, does the environment perform its proper role without becoming a hidden theorem, proof, method, prerequisite owner, or duplicate summary?
 7. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
 8. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
 9. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
@@ -194,7 +194,8 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Theorem/proposition/lemma/corollary | Source-proportional setup before claims. One conclusion: no list. Two or more independent conclusions: claim items or a logical-weight split. Do not turn a result statement into a construction ledger. |
 | Proof | Direct argument: compact prose. Multiple statement claims: matching proof items in the same order. Iff directions may remain inside their matching claim item when concise. |
 | Proof/computation method/process | Transferable problem-solving pattern; see Section 5.6. Use `proofmethod` for proof patterns, `computationmethod` for computations/constructions/diagnostics, and legacy `method` only for justified hybrid/other cases. Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
-| Example | See Section 5.7. Name what it illustrates, bind exact data, verify the relevant property or failure, and end with the takeaway. Enumerate only distinct steps/cases/comparisons. |
+| Example | See Section 5.7. Name what it illustrates, bind exact data, verify the relevant property or computation, and end with the takeaway. Enumerate only distinct steps/cases/comparisons. |
+| Counterexample | See Section 5.7. State the claim being refuted, bind exact admissible data, verify the hypotheses/ambient assumptions, verify the failing conclusion, and state the precise lesson. |
 | Remark | See Section 5.7. One focused compact paragraph; no enumerate or commentary labels. Convert hidden claims, proof obligations, or reusable procedures to the proper environment. |
 | Perspective/motivation/principle | See Section 5.7. Concise expository prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
 | Algorithm | Use a prose method unless real pseudocode helps. Otherwise use repository `breakablealgorithm`/`algorithmic` style with supported inputs, outputs, claims, and `alg:...` label. |
@@ -339,7 +340,7 @@ Computational method steps may contain formulas and short ordered procedures, bu
 
 When extracting methods from source material, prefer the source's natural level of generality. Do not invent alternative approaches, success criteria, convergence guarantees, complexity claims, or edge cases. If a useful method is only implicit, include only the shortest source-grounded abstraction needed to make the approach reusable.
 
-### 5.7 Examples, remarks, and expository environments
+### 5.7 Examples, counterexamples, remarks, and expository environments
 
 This environment standard is distilled from:
 
@@ -350,19 +351,29 @@ This environment standard is distilled from:
 - `The Manual of Scientific Style`, "Style and Usage for Mathematics": https://www.sciencedirect.com/science/chapter/edited-volume/abs/pii/B9780123739803500101
 - Montana State University, "Proof Guidelines": https://math.montana.edu/courses/m242/proof-guidelines.html
 - Oxford Mathematical Institute, "Introduction to University Mathematics: Logic and Proof": https://courses.maths.ox.ac.uk/mod/page/view.php?id=65664
+- Millersville University, "Counterexamples": https://sites.millersville.edu/bikenaga/math-proof/counterexamples/counterexamples.html
+- Lancaster University, "Counterexamples": https://www.lancaster.ac.uk/~prendivs/accessible/math111/doth3.S5.html
 
-Examples, remarks, motivations, perspectives, principles, processes, exercises, and question-bank blocks are explanatory or pedagogical environments. They may clarify, test, warn, motivate, compare, or organize mathematics, but they must not own prerequisites needed by later formal results. If a block contains a reusable claim, proof obligation, definition, construction, method, or algorithm, promote or split that content into the appropriate environment and leave only the explanatory residue.
+Examples, counterexamples, remarks, motivations, perspectives, principles, processes, exercises, and question-bank blocks are explanatory or pedagogical environments. They may clarify, test, warn, motivate, compare, or organize mathematics, but they must not own prerequisites needed by later formal results. If a block contains a reusable claim, proof obligation, definition, construction, method, or algorithm, promote or split that content into the appropriate environment and leave only the explanatory residue.
 
-An `example` should do at least one clear job: instantiate a definition, verify a hypothesis, compute an invariant, test a theorem, exhibit a boundary case, give a counterexample/nonexample, compare two nearby notions, or show a method in action. A nontrivial example has four supported components:
+A standard `example` should do at least one clear non-refutational job: instantiate a definition, verify a hypothesis, compute an invariant, test a theorem in a positive case, exhibit a model case, show a boundary case that still satisfies the intended property, compare two nearby notions, or show a method in action. Use `counterexample`, not `example`, when the purpose is to disprove a statement, show that a hypothesis is necessary, or exhibit failure of a proposed identity/implication. A nontrivial example has four supported components:
 
 1. **Target:** the concept, hypothesis, result, or method being illustrated.
 2. **Data:** the concrete object, parameters, map, space, sequence, matrix, equation, or probability model.
-3. **Verification:** the calculation, membership check, hypothesis check, counterexample failure, or comparison that makes the example meaningful.
-4. **Takeaway:** the exact lesson, boundary, contrast, or reusable intuition.
+3. **Verification:** the calculation, membership check, hypothesis check, computation, or comparison that makes the example meaningful.
+4. **Takeaway:** the exact positive lesson, model behavior, boundary, contrast, or reusable intuition.
 
 Do not include all four labels unless they reduce ambiguity; the content must still be present. If an example is merely a source-stated object with no verification or lesson, either add the source-supported check or keep it as a short sentence near the definition. If the example proves a general assertion, convert that assertion to a theorem-style result and keep the example as an illustration. If the example is a worked computation with a reusable procedure, extract or cross-reference a `computationmethod`.
 
-For a counterexample or nonexample, state the claim or property being tested, give exact data satisfying the relevant ambient assumptions, and verify the failure in one compact check. Prefer simple exact objects over elaborate constructions unless the source requires the latter. A counterexample disproves only the stated universal/conditional claim; do not let it imply broader failure than it verifies.
+Use `counterexample` for refutational examples. A counterexample has five supported components:
+
+1. **Claim tested:** the exact universal statement, implication, identity, equivalence, uniqueness claim, hypothesis-removal claim, or informal conjecture being refuted.
+2. **Admissible data:** exact objects or values inside the claimed domain. Do not use undefined or out-of-domain values as counterexamples.
+3. **Hypothesis check:** for a conditional statement, verify that the "if" part and all ambient assumptions hold.
+4. **Failure check:** verify that the claimed conclusion, equality, implication, uniqueness, inclusion, convergence, or property fails.
+5. **Lesson:** state exactly which statement or hypothesis fails; do not claim a broader failure.
+
+Do not include all five labels unless they reduce ambiguity; the content must still be present. Prefer simple exact objects, particular values for all variables, and extreme cases such as zero objects, empty sets, constants, degenerate dimensions, or boundary parameters when they reveal the issue. A single counterexample can refute a universal statement or conditional claim, but it cannot prove a universal theorem or disprove a bare existence statement without proving the negation. If a source gives several counterexamples for the same failure, keep the minimal one unless different examples show genuinely different failure modes. Use label prefix `cex:` for counterexample anchors.
 
 A `remark` records one local caveat, interpretation, warning, comparison, convention, variant, notation clarification, boundary condition, or source-proportional aside. It should normally be one compact paragraph. Do not enumerate inside a remark; split multiple independent points into separate remarks or convert them to examples, typed methods, definitions, or theorem-style results. A remark may contain a short formula, but a result-like sentence with quantifiers, equivalences, existence, uniqueness, or a proof obligation must be promoted unless it is explicitly a non-authoritative intuition.
 
@@ -380,7 +391,7 @@ Exercises and `qnbank` items should specify givens and the task precisely. Retai
 
 - Definitions, notation, and prerequisites precede use. Formal results and typed methods must not depend on remarks or examples; promote or move essential content.
 - Resolve ownership structurally by reordering, moving, splitting, promoting, or citing the correct earlier owner—not by an ad hoc prerequisite paragraph.
-- Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `rem:`, `per:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
+- Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `cex:`, `rem:`, `per:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
 - Read the collision index and relevant notation file. Disambiguate reused glyphs by font, decoration, arguments, or local declaration. Reuse base macros; add global notation/macros only when durable across major sections.
 - Figures must clarify mathematics. Prefer editable TikZ, nearby house colors/weights, essential labels only, and succinct captions; move explanatory prose, legends, and equations into a succinct color-coded caption when clearer.
 - Every touched TikZ figure requires a temporary standalone compile, rendered preview, visual inspection, and iteration. Source or compile inspection alone is insufficient.
@@ -460,7 +471,7 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, counterexample claim/admissibility/hypothesis/failure/lesson checks, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
