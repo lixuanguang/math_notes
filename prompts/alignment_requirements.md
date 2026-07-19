@@ -393,11 +393,57 @@ A `process` records an organizational workflow or document-level procedure. Use 
 
 Exercises and `qnbank` items should specify givens and the task precisely. Retain them only when they add source-supported practice, examples, counterexamples, or useful mathematical prompts. They must not be the sole source of a definition, theorem, method, notation, or prerequisite; promote any needed mathematical content before later use. Avoid answerless exercises during source-grounded integration unless the source itself is an exercise list and the item is worth preserving.
 
+### 5.8 Applied, scientific, empirical, and finance environments
+
+This applied-environment standard is distilled from:
+
+- NIST SP 811, "Check List for Reviewing Manuscripts": https://www.nist.gov/pml/special-publication-811/nist-guide-si-check-list-reviewing-manuscripts
+- AIP Publishing, "Author Instructions": https://publishing.aip.org/resources/researchers/author-instructions/
+- OpenStax University Physics, "Dimensional Analysis": https://openstax.org/books/university-physics-volume-1/pages/1-4-dimensional-analysis
+- Federal Reserve, "Supervisory Guidance on Model Risk Management": https://www.federalreserve.gov/frrs/guidance/supervisory-guidance-on-model-risk-management.htm
+- American Economic Association, "Data and Code Policies and Guidance": https://www.aeaweb.org/journals/data
+- Sandve et al., "Ten Simple Rules for Reproducible Computational Research": https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003285
+- International Valuation Standards Council, "International Standards for International Markets": https://ivsc.org/standards/
+- CFA Institute, "Equity Valuation: Applications and Processes": https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/equity-valuation-applications-and-processes
+- CFA Institute, "Standard V(A) Diligence and Reasonable Basis": https://www.cfainstitute.org/standards/professionals/code-ethics-standards/standards-of-practice-v-a
+- CFA Institute, "Standard V(B) Communication with Clients and Prospective Clients": https://www.cfainstitute.org/standards/professionals/code-ethics-standards/standards-of-practice-v-b
+
+Use these environments only when their role is genuinely clearer than an existing definition, theorem-style result, typed method, example, counterexample, or remark. They are formal exposition environments, not proof authority by default. If an applied block contains a universal mathematical claim, split the claim into a theorem-style result with proof and leave the applied environment for assumptions, interpretation, validation, or domain meaning.
+
+`assumption` records a standing or local hypothesis. State the scope, objects, domains, regularity/distributional/market/physical conditions, and where the assumption is used. Do not hide conclusions, definitions, or model equations inside an assumption. If the assumption is source-specific, keep it near the source block; if it recurs across a section or future PDF, place it before all dependent material and cross-reference it sparingly.
+
+`convention` records a deliberate notational, sign, coordinate, unit, discounting, compounding, frequency, calendar, or modeling convention. State the scope and any exceptions. Use it for choices such as Fourier-transform normalization, metric signature, risk-neutral vs physical measure notation, currency/period conventions, or nominal vs real quantities. A convention is not a result and should not carry proof obligations.
+
+`model` records a physical, stochastic, economic, financial, or computational model. A nontrivial model should identify:
+
+1. **Purpose:** the phenomenon, instrument, system, decision, or question the model addresses.
+2. **State space and variables:** objects, dimensions, units/currency/frequency, measures, dates, and parameters.
+3. **Assumptions:** idealizations, market/physical/statistical conditions, boundary or initial conditions, and admissible regimes.
+4. **Equations or structure:** laws, constraints, dynamics, objective functions, accounting identities, or data-generating relations.
+5. **Inputs and outputs:** required data/parameters and produced observables, prices, risks, forecasts, diagnostics, or qualitative behavior.
+6. **Validation and limitations:** calibration, benchmarks, dimensional checks, empirical tests, failure modes, and intended-use boundary when the source supports them.
+
+Do not overload a model block with proofs or worked computations. Put reusable computations in `computationmethod`, pseudocode in `breakablealgorithm`, source-supported empirical checks in `empiricalstudy`, and mathematical consequences in theorem-style environments.
+
+`law` records a source-presented physical law, conservation principle, accounting relation treated as a lawlike identity, no-arbitrage principle, or durable empirical relation. State the quantities with units/currency/date/frequency, the regime of validity, the assumptions or idealizations, and the consequence. Use `law` sparingly: if the repository proves it mathematically, use theorem-style; if it is only a modeling choice, use `model` or `assumption`; if it is a heuristic, use `principle`.
+
+`derivation` records a disciplined chain from assumptions, laws, definitions, or models to a formula. State the starting point and target, then keep each transformation checkable. Include unit/dimensional consistency for physical formulas when relevant, and sign/date/frequency/currency consistency for finance formulas. A derivation may motivate a theorem or model equation, but it is not a substitute for a proof when a theorem-style claim is made.
+
+`approximation` records an asymptotic, perturbative, linearized, discretized, numerical, or modeling approximation. State the small/large parameter or limit, baseline expression/model, retained terms, discarded terms, validity regime, and error/order/stability claim only when source-supported. If the approximation is a reusable procedure, pair or replace it with a `computationmethod`. If it is a formal limit theorem, use theorem-style.
+
+`dimensionalcheck` records a unit or dimension audit. State dimensions for all active physical quantities, verify each additive term has the same dimension, verify both sides of equations agree, verify function arguments are dimensionless, and conclude only consistency or inconsistency. Do not present dimensional consistency as proof that an equation, model, or law is true; it is an error screen and sometimes a guide to form.
+
+`empiricalstudy` records a data-backed result, backtest, simulation study, calibration exercise, or numerical experiment. A nontrivial empirical study should identify the question, dataset/source/sample window, preprocessing, model/strategy/computation, parameters and random seeds when relevant, metric or test, uncertainty/robustness or sensitivity check, reproducibility handle, result, and limitation. Do not turn a backtest into a forecast or recommendation. Distinguish observed fact, simulated output, statistical estimate, model-implied value, and interpretation.
+
+`valuationcase` records a fundamental-finance or asset-valuation application. State valuation purpose, subject asset/company/security, valuation date, currency, basis of value, approach and method, key operating/financial assumptions, input sources, forecast horizon, discount/growth/multiple choices, sensitivity or scenario checks, value conclusion, and risks/limitations. Distinguish historical financial facts from forecasts, estimates, and opinions. Do not label a valuation output as exact, and do not imply investment advice unless the source explicitly frames it as a recommendation and the educational context is clear.
+
+`warning` records one pitfall, misuse, or boundary hazard. State the trigger, failure mode, consequence, and safe correction or reference. A warning should normally be one compact paragraph. Use `counterexample` when the warning is demonstrated by a refutation, `remark` when it is only a local aside, and theorem-style when it is a proved impossibility.
+
 ## 6. Dependencies, labels, notation, and figures
 
 - Definitions, notation, and prerequisites precede use. Formal results and typed methods must not depend on remarks or examples; promote or move essential content.
 - Resolve ownership structurally by reordering, moving, splitting, promoting, or citing the correct earlier owner—not by an ad hoc prerequisite paragraph.
-- Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `cex:`, `rem:`, `per:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
+- Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `cex:`, `rem:`, `per:`, `assump:`, `conv:`, `model:`, `law:`, `der:`, `approx:`, `dim:`, `emp:`, `val:`, `warn:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
 - Read the collision index and relevant notation file. Disambiguate reused glyphs by font, decoration, arguments, or local declaration. Reuse base macros; add global notation/macros only when durable across major sections.
 - Figures must clarify mathematics. Prefer editable TikZ, nearby house colors/weights, essential labels only, and succinct captions; move explanatory prose, legends, and equations into a succinct color-coded caption when clearer.
 - Every touched TikZ figure requires a temporary standalone compile, rendered preview, visual inspection, and iteration. Source or compile inspection alone is insufficient.
@@ -427,12 +473,14 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 - Put durable notation in `parts/00_notations/` only when it recurs across major sections. Put section-local notation near its first section-level use. Put one-off notation inside the smallest block that needs it.
 - Before adding notation, check nearby files, active notation files, and base macros for existing symbols and naming patterns. Resolve collisions by context, font, decoration, arguments, or a local declaration.
 - A repeated expression used three or more times in a local argument is a candidate for notation; a one-off expression normally is not. Do not introduce notation that is cleverer than the concept or hides the active variables.
+- For applied material, record unit, dimension, currency, date, compounding, frequency, measure, and convention choices at the smallest durable scope. Never let a financial symbol such as $r$, $R$, $P$, $V$, or $D$ silently change meaning across pricing, accounting, probability, and dynamics contexts.
 
 ### 7.4 Examples, counterexamples, and boundary tests
 
 - Major definitions and nontrivial hypotheses should have a nearby source-supported example, nonexample, counterexample, or test computation when the source or existing repository content provides one.
 - An example should do mathematical work: instantiate a definition, verify a hypothesis, compute an invariant, show a boundary case, or distinguish two similar concepts. Avoid decorative examples.
 - Counterexamples and nonexamples are especially valuable when a hypothesis is easy to overlook. Do not invent them during source-grounded intake.
+- In physics, computation, and finance material, prefer a nearby source-supported dimensional check, sanity check, benchmark case, limiting case, or sensitivity check when it clarifies a model, approximation, empirical result, or valuation assumption.
 - Exercises may be kept only when they add useful source-supported mathematics or practice. They must not be the sole owner of a prerequisite needed by later formal results.
 
 ### 7.5 Equation numbering and referenceability
@@ -454,6 +502,15 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 - Use stable result titles, environment labels, and canonical terms so concepts can be found by `rg`.
 - Do not introduce multiple synonymous names for the same concept inside a local development unless the distinction is mathematically meaningful and stated.
 - If the repository later adopts an index or glossary convention, add entries only for durable recurring concepts, not every local symbol.
+
+### 7.8 Subject expansion and multi-PDF readiness
+
+- Keep shared environments and prompt standards domain-neutral. Future physics, quant-finance, and fundamental-finance PDFs may add subject-specific notation files or preamble layers, but they should inherit the same environment roles unless a subject-specific style file explicitly overrides them.
+- Before adding a new environment, ask whether an existing environment already owns the role. Prefer the smallest stable vocabulary: definitions/results/proofs for mathematics, typed methods/algorithms for procedures, examples/counterexamples for pedagogy, and Section 5.8 environments for applied assumptions, models, checks, empirical studies, and valuation cases.
+- Record future cross-volume dependencies explicitly in overviews or reports when a subsection will rely on material that may move to another PDF. Keep local labels stable and descriptive enough that cross-PDF references can later be mapped or duplicated intentionally.
+- Separate universal mathematical content from domain applications. A stochastic-process theorem should remain in the mathematics owner; a Black-Scholes model, calibration, backtest, or valuation case belongs in the applied owner and cites the mathematical prerequisites.
+- Distinguish source types in reports and local prose when relevant: textbook theorem, model assumption, physical law, empirical dataset, simulated output, market convention, accounting identity, valuation input, analyst forecast, and author interpretation.
+- Applied blocks must be date/context aware. Physical constants need units and source context; market data, statements, forecasts, valuations, and performance results need date, currency, frequency, and data source when available.
 
 ## 8. Validation and completion
 
@@ -477,11 +534,11 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, counterexample claim/admissibility/hypothesis/failure/lesson checks, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, counterexample claim/admissibility/hypothesis/failure/lesson checks, applied-environment checks from Section 5.8, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
-7. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples, equation numbering, TODO taxonomy, and naming/searchability.
+7. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples/applied checks, equation numbering, TODO taxonomy, naming/searchability, and multi-PDF readiness.
 8. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
 9. Run `git diff --check` and distinguish pre-existing failures from current edits.
 10. Build outside the repository:
