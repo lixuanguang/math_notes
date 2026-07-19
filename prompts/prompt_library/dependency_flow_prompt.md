@@ -8,7 +8,7 @@ Goal: audit and repair prerequisite, notation/context-before-use, authority, and
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
-- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | registered domain from prompts/standards/domains/README.md | mixed>
 - TARGET: <exact parts/... path or unambiguous active-tree cursor>
 - START_CURSOR: <beginning | exact resume file>
 - FILE_COVERAGE: <all-active | changed-and-new | tracked-modified | untracked-new>
@@ -23,7 +23,7 @@ Load before editing:
 2. `prompts/standards/structure/organization_and_dependencies.md`.
 3. `prompts/standards/structure/collection_quality.md`.
 4. `prompts/standards/validation.md` (structural-only profile).
-5. `prompts/standards/domains/README.md`, then only the configured or affected-block domain overlay(s).
+5. Domain overlays: for one explicit DOMAIN, resolve only its row in `prompts/standards/domains/README.md`; for auto/mixed, read the router and load only affected-block matches.
 6. Load `prompts/standards/structure/notation_lifecycle.md` for notation findings and `prompts/standards/layout/figures.md` for figure-dependent findings.
 
 Execution:

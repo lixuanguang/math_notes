@@ -14,10 +14,22 @@ Maintain recommendations in `Content_Enhancement_Recommendations.md`. Do not edi
 6. Apply the domain authority order:
    - math: canonical books, surveys, and landmark papers;
    - computer science: exact normative specifications and official documentation, peer-reviewed texts/surveys/landmark papers, and archived artifact or benchmark records;
+   - linguistics: language-community and primary-data records, reference grammars/dictionaries/corpora, LSA/IPA/ISO conventions, and peer-reviewed descriptive or theoretical work;
+   - philosophy: primary texts in identified editions/translations, peer-reviewed arguments and surveys, and established reference works;
+   - literature: primary texts and critical editions/translations, MLA/TEI textual standards, peer-reviewed criticism, and archival or reception records;
+   - history: primary archival/oral/material records and finding aids, scholarly editions, and peer-reviewed monographs, articles, and historiography;
+   - political science: official legal/institutional records, APSA/AAPOR transparency standards, trusted datasets, and peer-reviewed theoretical or empirical work;
+   - economics: official statistical series with methodology and vintage, peer-reviewed work, AEA data/code records, and applicable standards or regulators;
+   - chemistry: IUPAC/ACS/NIST authorities, exact primary experimental or computational data, standard references, and peer-reviewed work;
+   - materials science and engineering: exact test standards and sourced property data, NIST/standards-body metrology and metadata, standard texts, and peer-reviewed studies;
+   - chemical engineering: current process/industry standards, exact property and vendor data, standard texts, peer-reviewed studies, and CCPS safety guidance;
    - electronic engineering: current standards-body records, exact manufacturer datasheets for component claims, standard texts, peer-reviewed work, and metrology/simulation/measurement documentation;
+   - nuclear science and engineering: IAEA/ISO and the applicable regulator, exact evaluated/experimental nuclear-data releases, standard texts, and peer-reviewed work;
    - quantitative finance: peer-reviewed texts/papers plus regulator, exchange, reproducibility, and model-risk sources;
    - fundamental finance: accounting/valuation standards, official filings/regulators, and peer-reviewed finance/accounting;
-   - physics: peer-reviewed work, standard texts, societies, NIST/unit/uncertainty standards, and experiment/simulation documentation.
+   - physics: peer-reviewed work, standard texts, societies, NIST/unit/uncertainty standards, and experiment/simulation documentation;
+   - music: primary scores/manuscripts/recordings, critical editions and catalogues, MLA/MEI/MusicXML conventions, and peer-reviewed scholarship;
+   - fine arts: direct object, repository, conservation, and provenance records; Getty vocabularies/CDWA; archival and peer-reviewed scholarship; and CAA rights guidance.
 7. Reject low-authority summaries, link farms, vague-fit sources, and metadata too thin for reliable identification.
 
 ## Duplicate gate

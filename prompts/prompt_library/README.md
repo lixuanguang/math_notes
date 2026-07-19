@@ -21,12 +21,13 @@ Every entry point provides:
 - task-specific configuration and batching;
 - a validation profile.
 
-The module contract is in `prompts/standards/README.md`. Conditional does not mean optional: if the target contains that block type, its module must be read completely before editing it. With `DOMAIN: auto`, classify affected rows using `prompts/standards/domains/README.md` and load only domain overlays actually represented.
+The module contract is in `prompts/standards/README.md`. Conditional does not mean optional: if the target contains that block type, its module must be read completely before editing it. Resolve only one registry row for an explicit `DOMAIN`; with `auto` or `mixed`, classify affected rows using `prompts/standards/domains/README.md` and load only overlays actually represented.
 
 Examples:
 
 - Refining one theorem proof loads repository/scope, mathematical style, theorem/proof, math layout, the matching domain, and targeted validation. It does not load figures, applied finance, source ingestion, or research recommendations.
 - Refining a benchmark or circuit-measurement block loads only the matching CS or EE overlay plus the shared block/layout modules it actually uses; embedded firmware may load both overlays.
+- Refining a close reading, archival claim, laboratory result, score analysis, or artwork record loads only its matching domain overlay; mixed methods add another overlay only for evidence the second domain substantively owns.
 - Moving a figure loads repository/scope, organization/dependencies, collection quality, figures, the relevant domain, and structural validation. It does not load theorem proof-writing rules unless theorem content is changed.
 - Adding a mixed paper loads source grounding and the domain router, then only the environment/domain modules used by the extraction ledger.
 

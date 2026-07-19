@@ -3,12 +3,12 @@
 ```text
 Repository: /Users/lxg/Documents/GitHub/math_notes
 
-Goal: align the selected active LaTeX scope to the repository's canonical technical, mathematical, structural, and rendered standard.
+Goal: align the selected active LaTeX scope to the repository's canonical scholarly, technical, mathematical, structural, and rendered standard.
 
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
-- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | registered domain from prompts/standards/domains/README.md | mixed>
 - TARGET: <exact parts/... path or unambiguous active-tree cursor>
 - START_CURSOR: <beginning | exact resume file>
 - FILE_COVERAGE: <all-active | changed-and-new | tracked-modified | untracked-new>
@@ -27,14 +27,14 @@ Configuration:
 
 Load before editing:
 1. `prompts/standards/repository_and_scope.md`.
-2. `prompts/standards/writing/mathematical_style.md`.
-3. `prompts/standards/layout/math_layout.md` — mandatory; preserve all inline/display and no-overflow requirements.
-4. `prompts/standards/structure/organization_and_dependencies.md`.
-5. `prompts/standards/structure/collection_quality.md`.
-6. `prompts/standards/validation.md` (full semantic and render profile).
-7. `prompts/standards/domains/README.md`, followed by only the configured or ledger-matched domain overlay(s).
+2. `prompts/standards/layout/math_layout.md` — mandatory; preserve all inline/display and no-overflow requirements.
+3. `prompts/standards/structure/organization_and_dependencies.md`.
+4. `prompts/standards/structure/collection_quality.md`.
+5. `prompts/standards/validation.md` (full semantic and render profile).
+6. Domain overlays: for one explicit DOMAIN, resolve only its row in `prompts/standards/domains/README.md`; for auto/mixed, read the router and load only ledger matches.
 
 After the initial target census, load every applicable conditional module before editing its first matching row:
+- mathematical prose/definition/result/calculation/notation -> `prompts/standards/writing/mathematical_style.md`;
 - theorem/proof -> `prompts/standards/writing/theorems_and_proofs.md`;
 - method/process/algorithm -> `prompts/standards/writing/methods_and_algorithms.md`;
 - example/counterexample/intuition/remark/motivation/perspective/principle/exercise/qnbank -> `prompts/standards/writing/expository_environments.md`;

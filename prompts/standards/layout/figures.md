@@ -2,11 +2,11 @@
 
 Before adding, moving, or materially editing a figure, assign one primary role and use its typed wrapper:
 
-1. `illustrationfigure`: conceptual, geometric, commutative, dependency, payoff-shape, balance-sheet-relationship, or qualitative diagram that explains structure but is not data evidence.
+1. `illustrationfigure`: conceptual, geometric, commutative, dependency, linguistic-tree, argument-map, timeline, musical-analysis, payoff-shape, balance-sheet-relationship, or qualitative diagram that explains structure but is not data evidence.
 2. `visualizationfigure`: plot of mathematical, numerical, empirical, simulated, backtested, or model-implied values.
-3. `schematicfigure`: physical, engineering, market-microstructure, trading-system, accounting-flow, or modeling setup.
+3. `schematicfigure`: physical, engineering, chemical-process, material/test, reactor-system, market-microstructure, trading-system, accounting-flow, or modeling setup.
 4. `financialexhibitfigure`: valuation bridge, comparable-company plot, performance/factor chart, capital structure, waterfall, margin bridge, fan, or sensitivity grid.
-5. `sourceimagefigure`: raster source image, experimental image, scanned diagram, screenshot, photograph, or externally generated graphic whose visual content is itself the source.
+5. `sourceimagefigure`: raster source image, experimental image, manuscript, score, artwork, archival document, scanned diagram, screenshot, photograph, or externally generated graphic whose visual content is itself the source.
 6. `tablevisualfigure`: a grid, matrix, term sheet, statement excerpt, assumptions panel, or results panel that must remain visual. Prefer searchable `table`/`tabular` whenever exact structured data can be represented textually.
 
 These wrappers share ordinary Figure numbering. Keep generic `figure` only for untouched legacy content or a genuinely inseparable mixed role; report the exception.
@@ -31,7 +31,7 @@ These wrappers share ordinary Figure numbering. Keep generic `figure` only for u
 
 **Financial exhibit.** State valuation/reporting date, currency, period/frequency, nominal/real basis when relevant, historical/forecast/simulated/model-implied status, source, benchmark/base index, and aggregation basis. Avoid axis truncation, selective windows, rebasing, smoothing, cumulative-return framing, or scenario colors that imply unsupported certainty. Put exact important values in text or a table.
 
-**Source image.** Do not reproduce text screenshots or decorative images. Preserve provenance. For scientific images, include scale bars and acquisition/processing context when supported; disclose or avoid cropping, filtering, recoloring, and contrast changes that could alter interpretation.
+**Source image.** Do not reproduce text screenshots or decorative images. Preserve identity, provenance, rights status, and alterations required by the matching domain overlay. For scientific images, include scale bars and acquisition/processing context when supported; disclose or avoid cropping, filtering, recoloring, and contrast changes that could alter interpretation.
 
 ## Accessibility and rendered inspection
 

@@ -33,8 +33,8 @@ Use only precise typed comments: `% TODO(source):`, `% TODO(proof):`, `% TODO(st
 - Keep shared standards and environments domain-neutral; place domain-specific notation or preamble layers at their natural future volume scope.
 - Separate universal mathematics from applications. Applied owners cite mathematical prerequisites; they do not absorb them.
 - Record cross-volume dependencies in overviews/reports when content may later move to another PDF.
-- Distinguish source types where relevant: theorem, specification, implementation, benchmark, assumption, physical/circuit law, datasheet value, calculation, simulation, measurement, compliance evidence, dataset, market convention, accounting identity, valuation input, forecast, and interpretation.
-- Date- and context-sensitive material must retain units/source context or market/reporting date, currency, frequency, and source.
+- Distinguish evidence authority where relevant: formal result or argument; source text, record, artifact, object, or performance; specification or standard; model, calculation, or simulation; experiment, measurement, or dataset; filing, market, accounting, or valuation input; forecast, interpretation, or opinion.
+- Date- and context-sensitive material must retain the matching domain context—for example source/edition/provenance; units and data vintage; jurisdiction; material/specimen/process state; score/recording identity; or market/reporting date, currency, and frequency.
 
 ## New environment or figure role
 

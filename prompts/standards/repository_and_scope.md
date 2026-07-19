@@ -2,13 +2,13 @@
 
 ## Objective and authority
 
-Produce a technically and mathematically correct, explicit, formal, notation-aware, succinct, logically ordered, source-honest, and visually sound reference.
+Produce a scholarly and technically correct, explicit, formal where appropriate, notation-aware, succinct, logically ordered, source-honest, and visually sound reference.
 
-Use this editing loop whenever mathematical or technical content is changed:
+Use this editing loop whenever scholarly, mathematical, or technical content is changed:
 
 > Make the content explicit, formalize it, replace repeated boilerplate with readable notation, reuse applicable earlier results, compress without information loss, and verify the rendered result.
 
-Instruction precedence is: the current user request; safety and mathematical correctness; the selected prompt-library entry point and its loaded modules; `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, and active `parts/` content; nearby style. `prompts/alignment_requirements.md` is a compatibility router, not a competing monolithic prompt.
+Instruction precedence is: the current user request; safety, evidence integrity, and mathematical correctness; the selected prompt-library entry point and its loaded modules; `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, and active `parts/` content; nearby style. `prompts/alignment_requirements.md` is a compatibility router, not a competing monolithic prompt.
 
 ## Repository ownership
 
@@ -30,7 +30,7 @@ Instruction precedence is: the current user request; safety and mathematical cor
 
 - `MODE`: `edit` unless the entry point or user requests `audit-only`.
 - `SCOPE_LEVEL`: `part`, `section`, `subsection`, or `file`, plus workflow-specific values such as `notation-list`.
-- `DOMAIN`: `auto`, `math`, `computer-science`, `electronic-engineering`, `quant-finance`, `fundamental-finance`, `physics`, or `mixed`.
+- `DOMAIN`: `auto`, `mixed`, or one registered value from `prompts/standards/domains/README.md`. The router is the single owner of the domain list.
 - `TARGET`: an exact path or unambiguous active-tree cursor.
 - `START_CURSOR`: `beginning` or an exact resume file.
 - `FILE_COVERAGE`:

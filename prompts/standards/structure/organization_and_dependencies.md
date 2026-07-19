@@ -15,7 +15,7 @@ Only earlier active theorem-style results with adequate proofs may serve as math
 
 When later work needs content hidden in a non-authoritative block, promote the required definition, assumption, relation, method, or result to the proper earlier owner; leave only explanatory residue in the original block.
 
-Applied and technical context must also precede use: language/runtime/platform and version, specification/interface/protocol revision, system or trust boundary, circuit topology/reference/operating regime, units/dimensions, currency/date/frequency, probability measure/filtration, accounting or valuation basis, sample window, source data, and model assumptions. Do not let a figure or caption be the only owner of a required input or relation.
+Domain context must also precede use. The matching overlay owns the exact requirements, including as relevant: language/variety and gloss convention; edition/witness/translation; time/place/jurisdiction and archival provenance; runtime/specification/system boundary; circuit or process topology and operating basis; material/specimen history; chemical identity and conditions; nuclide/library/facility state; units, data vintage, currency, probability, accounting, valuation, and model assumptions; score/performance/recording identity; and artwork/image provenance. Do not let a figure or caption be the only owner of a required input or relation.
 
 ## Structural audit
 
@@ -28,10 +28,10 @@ For the selected batch, check:
 - methods relying on examples or explanatory/applied blocks as authority;
 - hidden formal content needed later;
 - examples/counterexamples/intuitions/checks too late to illuminate their anchor;
-- universal mathematical prerequisites mixed into applied owners, or implementation/benchmark/simulation/measurement/valuation/physical evidence miscast as mathematics;
+- universal mathematical prerequisites mixed into domain owners, or argument, interpretation, archival evidence, implementation, benchmark, simulation, measurement, valuation, performance, or artifact evidence miscast as mathematics or stronger authority;
 - duplicate content, labels, or multiple labels on one environment/object;
 - stale equation anchors and untyped TODOs;
-- figures cited before introduction, visualizations before their data/model, schematics away from assumptions, financial exhibits away from date/currency/basis, and table-like visuals that should be searchable tables;
+- figures cited before introduction, visualizations before their data/model, schematics away from assumptions, financial exhibits away from date/currency/basis, source images away from identity/provenance/rights, and table-like visuals that should be searchable tables;
 - local `\input`/`\include` order that breaks dependency flow.
 
 ## Edit rules

@@ -7,7 +7,7 @@ Goal: refine only the blocks explicitly named by the user or visible in attached
 
 Configuration:
 - MODE: edit
-- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | registered domain from prompts/standards/domains/README.md | mixed>
 - TARGET: <exact parts/... file and block/label, or screenshot-selected block>
 - MATH_LAYOUT: inline-strict
 - COMMENTARY_POLICY: required-new-and-rewritten
@@ -17,10 +17,10 @@ Configuration:
 
 Load before editing:
 1. `prompts/standards/repository_and_scope.md`.
-2. `prompts/standards/writing/mathematical_style.md`.
-3. `prompts/standards/layout/math_layout.md` — mandatory, including rendered no-overflow checks.
-4. `prompts/standards/validation.md` (targeted-block profile).
-5. `prompts/standards/domains/README.md`, then only the configured or target-matched domain overlay(s).
+2. `prompts/standards/layout/math_layout.md` — mandatory, including rendered no-overflow checks.
+3. `prompts/standards/validation.md` (targeted-block profile).
+4. Domain overlays: for one explicit DOMAIN, resolve only its row in `prompts/standards/domains/README.md`; for auto/mixed, read the router and load only target matches.
+5. Load `prompts/standards/writing/mathematical_style.md` when TARGET contains mathematical prose, definitions, results, calculations, or notation.
 6. Load only the block modules present in TARGET: `prompts/standards/writing/theorems_and_proofs.md`, `prompts/standards/writing/methods_and_algorithms.md`, `prompts/standards/writing/expository_environments.md`, `prompts/standards/writing/applied_environments.md`, and/or `prompts/standards/layout/figures.md`.
 7. Load `prompts/standards/structure/organization_and_dependencies.md`, `prompts/standards/structure/notation_lifecycle.md`, or `prompts/standards/structure/collection_quality.md` only when the local repair affects those concerns.
 

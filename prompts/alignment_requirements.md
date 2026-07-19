@@ -36,6 +36,6 @@ Scope and build exceptions in an entry point may narrow what work is performed; 
 - `prompts/standards/layout/` — inline/display layout, overflow prevention, figures, and accessibility.
 - `prompts/standards/structure/` — placement, dependencies, collection quality, and notation lifecycle.
 - `prompts/standards/sources/` — source-grounded ingestion and later research recommendations.
-- `prompts/standards/domains/` — math, computer-science, electronic-engineering, quantitative-finance, fundamental-finance, and physics overlays.
+- `prompts/standards/domains/` — the registered formal/computing, humanities, social-science, science/engineering, finance, and arts overlays.
 - `prompts/standards/validation.md` — structural, targeted, and full render-validation profiles.
 - `prompts/standards/external_sources.md` — current external basis; not normally loaded during an editing run.
