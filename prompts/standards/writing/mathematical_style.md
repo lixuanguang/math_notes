@@ -24,7 +24,12 @@ Apply this loop to every changed definition, statement, proof, method, calculati
 
 A theorem-style statement, definition, or typed-method preamble must state its short local condition directly instead of using a reference as a substitute for the object or hypothesis. References belong in proofs when they supply an actual earlier result. Do not use “obvious,” “clearly,” unexplained “similarly,” or vague symmetry when a short operative equality, implication, bound, construction, or limit argument is available.
 
-Prefer one complete sentence per source line. Do not split a sentence or equation solely for source wrapping.
+### Render-aligned source lines
+
+- A physical source newline must correspond to rendered or structural organization. Keep each uninterrupted rendered paragraph—and the uninterrupted body of each `\item`—on one logical source line; let the editor soft-wrap it.
+- Start a new source line only after an intended `\\`, a blank-line paragraph break, or at a genuine structural boundary such as `\begin`, `\end`, `\item`, a heading, list setup, display, figure/table/algorithm command, or comment. Keep structural commands on their own lines when that exposes nesting.
+- Join adjacent prose lines when TeX would replace their source newline with an ordinary space. Never insert `\\` merely to justify source formatting: it must represent an intended rendered break.
+- Source wrapping does not satisfy the 100-horizontal-character-equivalent preflight. Resolve a rendered-width excess by notation, semantic compression, or a genuine structural split, not by inserting an inert source newline.
 
 ### Quantifier compression
 

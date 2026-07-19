@@ -26,9 +26,10 @@ rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:' <target>
 rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:[^%\n]*[^\\]$' <target>
 rg -n -U '\\end\{definition\}\s*\n\s*\\begin\{example\}' <target>
 ruby scripts/check_environment_title_breaks.rb <target>
+ruby scripts/check_render_aligned_source_lines.rb <target>
 ```
 
-Treat each verbal-quantifier hit as a presumptive notation-policy violation: use scoped `\forall`, `\exists`, or `\exists!` and retain prose only when it adds specific meaning or context not encoded symbolically. Cold-read every mathematical clause for other prose renderings of notation-capable content because regex gates cannot enumerate them. Review every adjacent definition/example hit against the environment-granularity rule; adjacency is a review trigger, not an automatic merge. Also review repeated parallel setup, long statement scaffolding, and each retained display/matrix exception. A hit may be valid; a clean search may still hide a semantic defect.
+Treat each verbal-quantifier hit as a presumptive notation-policy violation: use scoped `\forall`, `\exists`, or `\exists!` and retain prose only when it adds specific meaning or context not encoded symbolically. Cold-read every mathematical clause for other prose renderings of notation-capable content because regex gates cannot enumerate them. Join every source-line hit unless the newline has genuine rendered or structural meaning; do not silence the checker by adding an unintended `\\`. Review every adjacent definition/example hit against the environment-granularity rule; adjacency is a review trigger, not an automatic merge. Also review repeated parallel setup, long statement scaffolding, and each retained display/matrix exception. A hit may be valid; a clean search may still hide a semantic defect.
 
 ## Structural-only profile
 
