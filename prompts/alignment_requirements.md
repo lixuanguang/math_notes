@@ -67,7 +67,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 Traverse active `\input` order. The atomic unit of completion is one formal environment, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
-Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, motivation, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
+Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, motivation, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, algorithm, and figure forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, figure role when relevant, required commentary status, and final rendered page. Do not mark rows in bulk.
 
 Process exactly one ledger row at a time. Read the whole environment, its proof, and the immediately relevant earlier owners; then apply:
 
@@ -89,13 +89,14 @@ After each row, perform this adversarial check before moving on:
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
 5. For a method row, does the block use the correct environment and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
 6. For an example, counterexample, intuition, remark, motivation, perspective, principle, process, exercise, or question-bank row, does the environment perform its proper role without becoming a hidden theorem, proof, method, prerequisite owner, or duplicate summary?
-7. For an applied/scientific/finance row, is the role correct and are assumptions, units/currency/date/sample, inputs, outputs, validation, and limitations present when relevant?
-8. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
-9. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
-10. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
-11. If Structural Commentary / Key Insight is required or present, are the two lines adjacent, terminal, in the exact order, and immediately before the correct `\end{proof}` or theorem-style `\end{...}`, with `\\` at the end of both lines?
-12. Are commentary lines genuinely structural/insightful and maximally concise?
-13. Does the rendered block have clean semantic breaks and no sparse tail?
+7. For a figure row, is the primary role clear, and does the caption, callout, labeling, source/data/model provenance, accessibility, and rendered placement satisfy the role-specific figure standard?
+8. For an applied/scientific/finance row, is the role correct and are assumptions, units/currency/date/sample, inputs, outputs, validation, and limitations present when relevant?
+9. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
+10. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
+11. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
+12. If Structural Commentary / Key Insight is required or present, are the two lines adjacent, terminal, in the exact order, and immediately before the correct `\end{proof}` or theorem-style `\end{...}`, with `\\` at the end of both lines?
+13. Are commentary lines genuinely structural/insightful and maximally concise?
+14. Does the rendered block have clean semantic breaks and no sparse tail?
 
 If any answer exposes a defect, rewrite the entire affected environment again. Do not stop at the longer explicit/formal draft, a surface copyedit, or a passing search.
 
@@ -493,8 +494,42 @@ Do not overload a model block with proofs or worked computations. Put reusable c
 - Resolve ownership structurally by reordering, moving, splitting, promoting, or citing the correct earlier owner—not by an ad hoc prerequisite paragraph.
 - Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `cex:`, `int:`, `rem:`, `mot:`, `per:`, `assump:`, `conv:`, `model:`, `law:`, `der:`, `approx:`, `dim:`, `emp:`, `val:`, `warn:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
 - Read the collision index and relevant notation file. Disambiguate reused glyphs by font, decoration, arguments, or local declaration. Reuse base macros; add global notation/macros only when durable across major sections.
-- Figures must clarify mathematics. Prefer editable TikZ, nearby house colors/weights, essential labels only, and succinct captions; move explanatory prose, legends, and equations into a succinct color-coded caption when clearer.
-- Every touched TikZ figure requires a temporary standalone compile, rendered preview, visual inspection, and iteration. Source or compile inspection alone is insufficient.
+
+### 6.1 Figure roles and standards
+
+The figure standard is distilled from:
+
+- AMS, "AMS Author Handbook, Journals": https://www.ams.org/publications/authors/tex/Author_Handbook_Journals.pdf
+- SIAM, "Macro Instructions for LaTeX": https://www.siam.org/publications/journals/about-siam-journals/information-for-authors/macro-instructions-for-latex
+- AIP Publishing, "Author Instructions": https://publishing.aip.org/resources/researchers/author-instructions/
+- Nature Research, "Preparing your figures": https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/
+- Matplotlib, "Choosing Colormaps": https://matplotlib.org/stable/users/explain/colors/colormaps.html
+- Consumer Financial Protection Bureau, "Data Visualization": https://cfpb.github.io/design-system/foundation/data-visualization
+- SEC, "Plain English Handbook": https://www.sec.gov/files/handbook.pdf
+- CFA Institute, "Global Investment Performance Standards for Firms": https://www.gipsstandards.org/standards/gips-standards-for-firms/
+
+A figure is a visual float or visual asset. Before adding, moving, or editing one, classify exactly one primary role and report it:
+
+1. **Illustration:** a conceptual, geometric, commutative, dependency, payoff-shape, balance-sheet-relationship, or qualitative diagram that explains structure but is not data evidence.
+2. **Visualization:** a plot of mathematical, numerical, empirical, simulated, backtested, or model-implied values: function graph, phase portrait, vector field, trajectory, histogram, scatterplot, heatmap, sensitivity curve, return series, or error plot.
+3. **Schematic:** a physics, engineering, market-microstructure, trading-system, accounting-flow, or modeling setup diagram with objects, coordinates, signs, interfaces, or information flows.
+4. **Financial exhibit:** a finance/accounting visual such as a valuation bridge, comparable-company plot, performance chart, factor exposure chart, capital-structure diagram, revenue/cost waterfall, margin bridge, scenario fan, or sensitivity grid.
+5. **Image:** a raster source image, experimental image, scanned diagram, screenshot, photograph, or externally generated graphic whose visual content itself is the source.
+6. **Table-like visual:** a grid, matrix, term sheet, financial statement excerpt, assumptions table, or results panel. Prefer `table`/`tabular` for searchable structured data; use a figure only when layout, graphics, or source fidelity is essential.
+
+Common standard. A figure must have a nearby textual callout, one stable `fig:` label, and a succinct caption that states what is being shown and why it matters. The caption or adjacent prose must define symbols, units, panels, colors, line styles, and abbreviations needed to read the figure. Do not rely on "above" or "below"; use `Figure \ref{fig:...}`. Keep figures near the text that introduces or uses them, and do not make later formal results depend on information that exists only inside a figure. If a visual owns data, assumptions, a reusable construction, or a formal relation needed later, promote that content into text, a table, a method, an applied environment, or a theorem-style owner.
+
+Illustration standard. Prefer editable TikZ or `tikz-cd` for mathematical diagrams and conceptual illustrations when feasible. Show only the objects, arrows, regions, symmetries, constraints, or correspondences needed for the local point. Labels should be mathematical, short, and close to the object they name. The caption should name the formal anchor and the structural takeaway. Do not use illustrations as proof authority unless the proof also gives a rigorous argument.
+
+Visualization standard. A visualization must identify the plotted quantity, horizontal and vertical axes, units or dimensionless status, scale or transformation, parameter values, data/model/source, sample window or simulation regime, and uncertainty/sensitivity when relevant. Choose the chart type for the data structure: line for ordered paths or time series, scatter for relationships, histogram/density for distributions, heatmap/matrix for two-index quantities, surface/contour for two-variable functions, and phase portrait/vector field for dynamical systems. Use sequential, diverging, cyclic, or qualitative colormaps according to the encoded quantity. Avoid decorative gradients, unlabeled axes, unexplained normalization, cherry-picked windows, dual axes without strong justification, and visual claims unsupported by the source or computation.
+
+Schematic standard. A schematic must state the modeled system, coordinate/sign convention, boundary or interface conditions, inputs/outputs, and whether geometry is to scale. For physics, include units or dimensions for displayed quantities and distinguish forces, fields, fluxes, constraints, and measurements. For computational or market-structure schematics, distinguish state, observation, decision, execution, data feed, and feedback edges.
+
+Financial-exhibit standard. A financial visual must state valuation/reporting date, currency, period or frequency, nominal/real basis when relevant, historical versus forecast versus simulated versus model-implied status, data source, benchmark or base index, and aggregation basis. Do not allow axis truncation, selective windows, rebasing, smoothing, cumulative returns, or scenario colors to imply more certainty than the source supports. If exact values matter, provide them in text or table rather than only as plotted pixels.
+
+Image standard. Do not reproduce text screenshots or decorative source images. Use raster images only when the image content itself matters. Preserve source provenance in the report or caption as appropriate. For scientific images, include scale bars, acquisition or processing context when source-supported, and avoid undisclosed cropping, filtering, recoloring, or contrast changes that alter interpretation.
+
+Accessibility and render checks. Figures must remain legible after scaling in the PDF. Do not rely on color alone; use labels, line styles, markers, shapes, or annotations in addition to color. Use sufficient contrast, consistent fonts, and line weights matching nearby figures. No labels, legends, axes, tick marks, captions, or neighboring text may overlap. Every touched TikZ, `tikz-cd`, PGFPlots-style plot, or included image requires rendered inspection; source inspection alone is insufficient.
 
 ## 7. Collection-level standards
 
@@ -571,6 +606,7 @@ rg -n -i '\b(for all|for every|for each|there exists|there is a unique)\b' <targ
 rg -n -i '(Theorem|Proposition|Lemma|Corollary) \\ref\{[^}]+\} (gives|give|yields|shows|makes|implies|ensures|provides)\b' <target>
 rg -n '\\\[|\\begin\{(displaymath|equation\*?|align\*?|gather\*?|multline\*?)\}|\$\$' <target>
 rg -n '\\begin\{(smallmatrix|matrix|pmatrix|bmatrix|vmatrix|Vmatrix)\}' <target>
+rg -n '\\begin\{figure\}|\\includegraphics|\\begin\{tikzpicture\}|\\begin\{tikzcd\}|\\begin\{axis\}' <target>
 rg -n '\b(Moreover|Furthermore|In addition|Also|In particular)\b' <target>
 rg -n -i '\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$[^%\n.]*\b(for all|for every|for each|there exists|there is a unique)\b|\b(for all|for every|for each|there exists|there is a unique)\b[^%\n.]*\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$|\b(dummy parameter)\b' <target>
 rg -n -i '\\[A-Za-z]+:[^.\n]*,\s*with \$?[A-Z][A-Za-z_0-9]*\\defeq|\$\\exists [^$]*\\ni [^$]*\$ (compact|open)' <target>
@@ -590,17 +626,18 @@ At scope completion:
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality, exact syntax, and placement, not merely matching counts: the pair must be adjacent, terminal, ordered Structural Commentary then Key Insight, and both lines must end with `\\`.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
-7. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples/applied checks, equation numbering, TODO taxonomy, naming/searchability, and multi-PDF readiness.
-8. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
-9. Run `git diff --check` and distinguish pre-existing failures from current edits.
-10. Build outside the repository:
+7. Reconcile figure roles and quality: every touched figure has a primary role, callout, `fig:` label, caption, source/data/model provenance when relevant, axes/units/date/currency/window/context where applicable, accessibility checks, and rendered inspection.
+8. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples/applied checks, equation numbering, TODO taxonomy, naming/searchability, and multi-PDF readiness.
+9. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
+10. Run `git diff --check` and distinguish pre-existing failures from current edits.
+11. Build outside the repository:
 
 ```sh
 build_dir="$(mktemp -d /private/tmp/math_notes_alignment.XXXXXX)"
 latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir="$build_dir" math.tex
 ```
 
-11. Render every affected page individually at readable resolution and inspect each changed environment. Also inspect the build log for the edited line range, distinguishing unrelated warnings elsewhere. Contact sheets and overfull-box scans are navigation aids, not final visual QA. Iterate until no avoidable display, sparse tail, missing or weak commentary, underformalized proof, missed enumeration, repeated item setup, claim mismatch, invalid reference, overfull edited line, or figure collision remains.
+12. Render every affected page individually at readable resolution and inspect each changed environment. Also inspect the build log for the edited line range, distinguishing unrelated warnings elsewhere. Contact sheets and overfull-box scans are navigation aids, not final visual QA. Iterate until no avoidable display, sparse tail, missing or weak commentary, underformalized proof, missed enumeration, repeated item setup, claim mismatch, invalid reference, overfull edited line, or figure collision remains.
 
 The active batch is complete only when all selected files satisfy these rules, the isolated build passes unless disabled, unrelated work is preserved, and only genuine out-of-scope/source/authorization issues remain. Under `RUN_BATCH: one-numbered-file`, completing one file is success even when the wider part or section remains; report the exact next cursor. Under `all-selected`, stop at a file boundary if rigor would otherwise fall.
 
