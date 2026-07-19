@@ -51,7 +51,7 @@ Use for screenshot/named-block refinement:
 Use only with `formalize_content.md`:
 
 1. Keep a compact source-order ledger; perform one semantic pass, then cold-read changed rows and their affected dependants only.
-2. Normalize `\limits`, fractions, and local notation, then apply the 100-horizontal-character-equivalent preflight to every changed prose–inline-math span. Stacked material counts by widest horizontal layer; references/citations count by printed form rather than source label keys.
+2. Normalize limits, fractions, scripts, stacked constructs, and local notation, then apply the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
 3. Run applicable search gates and `git diff --check` once after the target file stabilizes.
 4. Run one isolated full build. Inspect overfull/underfull boxes, unresolved references, and errors near changed lines.
 5. Render affected pages once and inspect the changed blocks and any touched visual. Repeat only for a concrete defect found in this final pass.
