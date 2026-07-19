@@ -92,8 +92,9 @@ After each row, perform this adversarial check before moving on:
 8. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
 9. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
 10. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
-11. Are commentary lines genuinely structural/insightful and maximally concise?
-12. Does the rendered block have clean semantic breaks and no sparse tail?
+11. If Structural Commentary / Key Insight is required or present, are the two lines adjacent, terminal, in the exact order, and immediately before the correct `\end{proof}` or theorem-style `\end{...}`, with `\\` at the end of both lines?
+12. Are commentary lines genuinely structural/insightful and maximally concise?
+13. Does the rendered block have clean semantic breaks and no sparse tail?
 
 If any answer exposes a defect, rewrite the entire affected environment again. Do not stop at the longer explicit/formal draft, a surface copyedit, or a passing search.
 
@@ -198,8 +199,10 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Example | See Section 5.7. Name what it illustrates, bind exact data, verify the relevant property or computation, and end with the takeaway. Enumerate only distinct steps/cases/comparisons. |
 | Counterexample | See Section 5.7. State the claim being refuted, bind exact admissible data, verify the hypotheses/ambient assumptions, verify the failing conclusion, and state the precise lesson. |
 | Intuition | See Section 5.7. Give a source-supported mental model, picture, analogy, or heuristic bridge for a formal object, with scope and limitation. It is not proof authority. |
-| Remark | See Section 5.7. One focused compact paragraph; no enumerate or commentary labels. Convert hidden claims, proof obligations, or reusable procedures to the proper environment. |
-| Perspective/motivation/principle | See Section 5.7. Concise expository prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
+| Remark | See Section 5.7. One focused local aside with anchor, role, boundary, and no hidden authority. Convert hidden claims, proof obligations, or reusable procedures to the proper environment. |
+| Motivation | See Section 5.7. Precede the formal object it motivates; state the obstruction/question, why the next object is natural, and the forward target. |
+| Perspective | See Section 5.7. Synthesize already owned material through a viewpoint, dictionary, analogy, contrast, or conceptual map; do not introduce prerequisites. |
+| Principle | See Section 5.7. Durable heuristic or organizing doctrine with scope and limitation; if it is proof authority, make it theorem-style. |
 | Assumption/convention | See Section 5.8. State scope, objects, and effect on later use. An assumption is a declared hypothesis; a convention is a notational, sign, unit, or modeling choice. Neither is proof authority. |
 | Model/law | See Section 5.8. State purpose/regime, quantities, equations/relations, assumptions, parameters, inputs/outputs, and limits. Use `law` only for a source-presented physical/economic law, conservation principle, or durable empirical relation. |
 | Derivation/approximation/dimensional check | See Section 5.8. A derivation traces assumptions to a formula; an approximation states the expansion regime and retained/dropped terms; a dimensional check verifies consistency but does not prove truth. |
@@ -230,14 +233,20 @@ For induction, bootstrap, or parameter-uniform proofs, name the predicate once, 
 
 Use result references as `$P$ by Theorem \ref{...}.` or `By Lemma \ref{...}, $P$.` Never make a result the subject of “gives,” “yields,” “shows,” “makes,” “implies,” “ensures,” or “provides.”
 
-**Commentary.** The Structural Commentary / Key Insight pair is a local annotation convention, not an external theorem-writing baseline. Under `required-new-and-rewritten`, every new or materially rewritten theorem-style result requires both lines after proof items and immediately before `\end{proof}`:
+**End commentary.** The Structural Commentary / Key Insight pair is a local annotation convention, not an external theorem-writing baseline. It is justified by the external writing baseline: good exposition makes the proof plan, big picture, crucial detail, and significance visible without weakening proof rigor. Under `required-new-and-rewritten`, every new or materially rewritten theorem-style result requires both lines.
+
+Placement is strict. If the result has a proof, the pair must be the final two content lines of the proof, immediately before `\end{proof}`. If the result is an allowed proofless exception, the pair must be the final two content lines of the theorem-style environment, immediately before `\end{theorem}`, `\end{proposition}`, `\end{lemma}`, or `\end{corollary}`. Do not place these labels in the statement, before the proof, after the proof, in the middle of a proof, inside an example/remark/intuition/method/applied environment, or in surrounding prose.
+
+Use the exact line form, including `\\` on both lines:
 
 ```tex
 \hlt{Structural Commentary}: <proof architecture or dependency>.\\
-\hlt{Key Insight}: <intuition or invariant>.
+\hlt{Key Insight}: <intuition or invariant>.\\
 ```
 
-For a proofless result, place both before the result ends. Apply the explicit-formal-notation-succinct loop to both lines. Structural Commentary names the actual proof architecture or dependency, uses notation when it shortens the mechanism, and should normally contain at most 18 lexical words. Key Insight states one invariant or idea, normally in at most 12 lexical words. Each should fit one rendered line when feasible. Neither may restate the result or carry required hypotheses or conclusions. A short proof is not an exception. `COMMENTARY_POLICY` does not automatically add this pair to non-theorem environments. Use a separate `intuition` block only when the reader needs more than this one-line proof-level insight.
+Structural Commentary names the actual architecture or dependency pattern: direct verification, two directions, induction, compactness extraction, fixed point, approximation, energy estimate, diagonalization, reduction to an earlier result, or similar proof structure. It should identify how the proof is organized, not repeat the theorem statement, summarize every step, or say only "by definition" / "standard argument." Key Insight states the one invariant, obstruction, mechanism, choice, or mental picture that makes the proof work. It should answer "why this proof works" in one line, not restate the conclusion or add a new hypothesis.
+
+Apply the explicit-formal-notation-succinct loop to both lines. Structural Commentary should normally contain at most 18 lexical words; Key Insight should normally contain at most 12 lexical words. Each should fit one rendered line when feasible. Neither line may carry required hypotheses, conclusions, proof obligations, or source claims that are not already owned by the statement/proof. A short proof is not an exception. `COMMENTARY_POLICY` does not automatically add this pair to non-theorem environments. Use a separate `intuition` block only when the reader needs more than this one-line proof-level insight.
 
 ### 5.5 Inline mathematics and rendered layout
 
@@ -364,8 +373,10 @@ This environment standard is distilled from:
 - Dimitri Bertsekas, "Ten simple rules for mathematical writing": https://faculty.engineering.asu.edu/bertsekas/ten-simple-rules-for-mathematical-writing/
 - Virginia Tech Proofs Project, "Heuristics": https://math.vt.edu/proofs-project/Instructional_Modules/heuristics.html
 - American Mathematical Society, `How to Write Mathematics`: https://bookstore.ams.org/hwm
+- AMS Notices, "Why YOU Should Write an Article for the Notices!": https://jointmathematicsmeetings.org/journals/notices/202602/noti3300/noti3300.html
+- American Meteorological Society, "Significance Statements": https://www.ametsoc.org/AMS/publications/author-information/significance-statements/
 
-Examples, counterexamples, intuitions, remarks, motivations, perspectives, principles, processes, exercises, and question-bank blocks are explanatory or pedagogical environments. They may clarify, test, warn, motivate, compare, or organize mathematics, but they must not own prerequisites needed by later formal results. If a block contains a reusable claim, proof obligation, definition, construction, method, or algorithm, promote or split that content into the appropriate environment and leave only the explanatory residue.
+Examples, counterexamples, intuitions, remarks, motivations, perspectives, principles, processes, exercises, and question-bank blocks are explanatory or pedagogical environments. They may clarify, test, warn, motivate, compare, or organize mathematics, but they must not own prerequisites needed by later formal results. The common standard is: anchor the block to a nearby formal owner, state one clear expository job, include only the detail needed for that job, and leave no reusable claim, definition, proof obligation, construction, method, or algorithm hidden inside the block. If such formal content appears, promote or split that content into the appropriate environment and leave only the explanatory residue.
 
 A standard `example` should do at least one clear non-refutational job: instantiate a definition, verify a hypothesis, compute an invariant, test a theorem in a positive case, exhibit a model case, show a boundary case that still satisfies the intended property, compare two nearby notions, or show a method in action. Use `counterexample`, not `example`, when the purpose is to disprove a statement, show that a hypothesis is necessary, or exhibit failure of a proposed identity/implication. A nontrivial example has four supported components:
 
@@ -396,13 +407,34 @@ Use `intuition` for a source-supported mental model, picture, analogy, heuristic
 
 Do not include all five labels unless they reduce ambiguity; the content must still be present. An intuition block must be concise, honest about its scope, and close to the formal object it explains. It may use a diagram, model case, analogy, or limiting picture, but it must not introduce unsupported claims, hide a proof step, replace hypothesis verification, or be cited as authority in proofs. Use `motivation` when the main job is why the next object is introduced, `perspective` when the main job is to synthesize established material, `principle` for a durable rule of thumb, `example` or `counterexample` for concrete data, and `remark` for a short local aside. Use label prefix `int:` for intuition anchors.
 
-A `remark` records one local caveat, interpretation, comparison, variant, notation clarification, boundary condition, or source-proportional aside. It should normally be one compact paragraph. Use `warning` for a dedicated pitfall with a trigger and correction, and use `convention` for a durable notation, sign, unit, or modeling choice. Do not enumerate inside a remark; split multiple independent points into separate remarks or convert them to examples, typed methods, definitions, applied environments, or theorem-style results. A remark may contain a short formula, but a result-like sentence with quantifiers, equivalences, existence, uniqueness, or a proof obligation must be promoted unless it is explicitly a non-authoritative intuition.
+A `remark` records one local caveat, interpretation, comparison, variant, notation clarification, boundary condition, or source-proportional aside. A nontrivial remark should have:
 
-A `motivation` block explains why the next definition, result, method, or section is natural: the obstruction, model case, guiding question, or structural need. It belongs before the object it motivates and must not contain a hidden formal result. Keep it short enough that the reader reaches the formal object quickly.
+1. **Anchor:** the exact nearby definition, result, method, model, or notation it comments on.
+2. **Role:** caveat, comparison, convention note, boundary, interpretation, variant, or local consequence.
+3. **Scope:** where the aside applies and where it should not be used.
+4. **Non-authority:** no later theorem-style proof should need the remark as a premise.
 
-A `perspective` block synthesizes or reinterprets already established material: a dictionary, analogy, change of viewpoint, forward/backward connection, or conceptual map. It may point to earlier formal owners but cannot introduce prerequisites for later use. If the perspective contains a classification, theorem, or workflow that later arguments need, split that content into the formal owner first.
+It should normally be one compact paragraph. Use `warning` for a dedicated pitfall with a trigger and correction, and use `convention` for a durable notation, sign, unit, or modeling choice. Do not enumerate inside a remark unless the source gives a short list whose point is still a single local aside; otherwise split multiple independent points into separate remarks or convert them to examples, typed methods, definitions, applied environments, or theorem-style results. A remark may contain a short formula, but a result-like sentence with quantifiers, equivalences, existence, uniqueness, or a proof obligation must be promoted unless it is explicitly a non-authoritative intuition.
 
-A `principle` records a durable heuristic, organizing doctrine, or source-supported rule of thumb. It is not a theorem. State its scope and limitation; if it is universally true and used as proof authority, recast it as a theorem-style result with proof.
+A `motivation` block explains why the next definition, result, method, model, or section is natural. It belongs before the object it motivates. A nontrivial motivation should have:
+
+1. **Need:** the obstruction, gap, recurring pattern, problem pressure, model case, or guiding question.
+2. **Natural move:** why the next formal object addresses that need.
+3. **Forward target:** what the reader should expect the next object to do.
+4. **Boundary:** no hidden theorem, proof step, or prerequisite needed later.
+
+Keep it short enough that the reader reaches the formal object quickly. Do not use motivation to summarize an entire subsection, duplicate an overview, or state results before their formal owners. If the material answers "how to solve this class of problems," use a typed method; if it explains a mental model for an already introduced object, use `intuition`.
+
+A `perspective` block synthesizes or reinterprets already established material. It belongs after the relevant formal owners. A nontrivial perspective should have:
+
+1. **Anchors:** the earlier definitions, results, methods, models, examples, or conventions being connected.
+2. **Viewpoint:** dictionary, analogy, change of coordinates, hierarchy, duality, limiting picture, comparison, or conceptual map.
+3. **Synthesis:** what becomes simpler, comparable, or unified from this viewpoint.
+4. **Boundary:** what the perspective does not prove or where the analogy breaks.
+
+It may point to earlier formal owners but cannot introduce prerequisites for later use. If the perspective contains a classification, theorem, reusable workflow, or domain assumption that later arguments need, split that content into the formal owner first.
+
+A `principle` records a durable heuristic, organizing doctrine, or source-supported rule of thumb. It is not a theorem. State its scope, use case, and limitation; if it is universally true and used as proof authority, recast it as a theorem-style result with proof.
 
 A `process` records an organizational workflow or document-level procedure. Use `proofmethod` or `computationmethod` for mathematical problem-solving patterns, and use `breakablealgorithm` for executable pseudocode. Do not duplicate the same process as a method.
 
@@ -540,9 +572,11 @@ rg -n '\\begin\{(smallmatrix|matrix|pmatrix|bmatrix|vmatrix|Vmatrix)\}' <target>
 rg -n '\b(Moreover|Furthermore|In addition|Also|In particular)\b' <target>
 rg -n -i '\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$[^%\n.]*\b(for all|for every|for each|there exists|there is a unique)\b|\b(for all|for every|for each|there exists|there is a unique)\b[^%\n.]*\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$|\b(dummy parameter)\b' <target>
 rg -n -i '\\[A-Za-z]+:[^.\n]*,\s*with \$?[A-Z][A-Za-z_0-9]*\\defeq|\$\\exists [^$]*\\ni [^$]*\$ (compact|open)' <target>
+rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:' <target>
+rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:[^%\n]*[^\\]$' <target>
 ```
 
-These are review gates, not blind replacements and not evidence that the semantic ledger is complete. In particular, a prose-quantifier hit may be acceptable when its scope is clear and prose is more readable; a symbolic-quantifier hit may still fail if the symbol is being used as an English-word substitute or makes the sentence harder to parse.
+These are review gates, not blind replacements and not evidence that the semantic ledger is complete. In particular, a prose-quantifier hit may be acceptable when its scope is clear and prose is more readable; a symbolic-quantifier hit may still fail if the symbol is being used as an English-word substitute or makes the sentence harder to parse. For commentary hits, manually verify adjacency, terminal placement, exact order, and the required `\\` on both lines.
 
 Also manually review every theorem-style statement that spans many source lines before its first conclusion, contains several `Set`, `Let`, `Put`, `Define`, or `Choose` clauses, or exposes construction machinery such as Picard operators, iterates, local boxes, suprema/maxima, or error constants. Confirm each such item is a source-supported reusable part of the result rather than proof scaffolding. If not, simplify the statement and move the machinery into the proof, a method, an example, or a separate source-supported proposition.
 
@@ -552,7 +586,7 @@ At scope completion:
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
 3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, counterexample claim/admissibility/hypothesis/failure/lesson checks, intuition anchor/mental-model/correspondence/scope/formal-bridge checks, applied-environment checks from Section 5.8, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
-5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
+5. Reconcile `COMMENTARY_POLICY` for quality, exact syntax, and placement, not merely matching counts: the pair must be adjacent, terminal, ordered Structural Commentary then Key Insight, and both lines must end with `\\`.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
 7. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples/applied checks, equation numbering, TODO taxonomy, naming/searchability, and multi-PDF readiness.
 8. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
