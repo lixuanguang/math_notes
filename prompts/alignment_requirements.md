@@ -122,6 +122,7 @@ This section records the baseline used by all prompt-library workflows. It is di
 - Donald E. Knuth, Tracy L. Larrabee, and Paul M. Roberts, `Mathematical Writing`: https://cs.stanford.edu/~knuth/klr.html
 - AMS Author Handbook: https://www.jointmathematicsmeetings.org/arc/handbook/index.html
 - Terence Tao, "Give appropriate amounts of detail": https://terrytao.wordpress.com/advice-on-writing-papers/give-appropriate-amounts-of-detail/
+- Terence Tao, "Use good notation": https://terrytao.wordpress.com/advice-on-writing-papers/use-good-notation/
 - UIUC NetMath, "Writing up proofs": https://new.math.uiuc.edu/netgeom/advice/howto-proofs.html
 
 Baseline principles:
@@ -282,6 +283,7 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 
 ### 7.3 Notation lifecycle
 
+- The notation baseline is: define global notation near the front, define local notation near first use, prefer established conventions, use notation only when it reduces cognitive load, keep symbols precise and unambiguous, and use stable macros/operators only for recurring durable expressions.
 - Classify new notation as proof-local, block-local, subsection-local, section-local, or global before introducing it. Proof-local notation must not be used later as if it were durable.
 - Put durable notation in `parts/00_notations/` only when it recurs across major sections. Put section-local notation near its first section-level use. Put one-off notation inside the smallest block that needs it.
 - Before adding notation, check nearby files, active notation files, and base macros for existing symbols and naming patterns. Resolve collisions by context, font, decoration, arguments, or a local declaration.
