@@ -66,7 +66,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 Traverse active `\input` order. The atomic unit of completion is one formal environment, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
-Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, method, example, remark, perspective, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
+Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, remark, perspective, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
 
 Process exactly one ledger row at a time. Read the whole environment, its proof, and the immediately relevant earlier owners; then apply:
 
@@ -86,7 +86,7 @@ After each row, perform this adversarial check before moving on:
 2. Would removing any sentence delete an independent component or claim that should be itemized?
 3. Is setup repeated across items instead of factored into a preamble?
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
-5. For a method row, does the block classify its subtype and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
+5. For a method row, does the block use the correct environment and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
 6. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
 7. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
 8. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
@@ -144,7 +144,7 @@ These principles are a floor, not a license to weaken this file's stricter sourc
 ### 5.1 Formal language and notation
 
 - Bind every local symbol before use. Theorem-style statements must contain their own local objects, hypotheses, and conclusions without restating whole earlier theories.
-- A theorem-style statement, definition, or method preamble must not use a reference to a definition, theorem, proposition, lemma, corollary, example, or remark as a substitute for the actual local hypothesis or object. State the needed condition directly when it is short enough, e.g. a local Lipschitz condition, extension order, admissible-solution convention, graph notation, or compactness hypothesis. Use references in proof steps only when they supply a genuine earlier result.
+- A theorem-style statement, definition, or typed-method preamble must not use a reference to a definition, theorem, proposition, lemma, corollary, example, or remark as a substitute for the actual local hypothesis or object. State the needed condition directly when it is short enough, e.g. a local Lipschitz condition, extension order, admissible-solution convention, graph notation, or compactness hypothesis. Use references in proof steps only when they supply a genuine earlier result.
 - Formal definitions, claims, proofs, methods, and calculations must bind quantifier scope explicitly. Use `\forall`, `\exists`, and `\exists!` inside mathematical clauses when they improve precision or compactness; use concise prose quantifiers when they read better. Do not use symbols as English-word substitutes outside mathematical clauses.
 - Prefer `\defeq`, maps, set-builder notation, recurrences, `\implies`, and `\iff` when clearer.
 - During the explicit-formal-notation-succinct loop, inspect every sentence after the explicit draft. Replace vague or repetitive mathematical prose when notation improves readability: domains and membership by `x\in X`; quantifiers by `\forall`, `\exists`, or `\exists!`; maps by `f:X\to Y`; definitions by `\defeq`; conditions by relations; implication/equivalence by `\implies`/`\iff`; convergence by `\to`; bounds by inequalities; and parallel cases by symbolic items. Repeat this audit after compression because rewriting can reintroduce prose or over-symbolize a clear sentence.
@@ -192,7 +192,7 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Definition | One component: compact prose/formula. Two or more parallel objects, constructions, characterizations, or tests: itemize them; factor common setup first. A parallel postamble may be a second list. After `\item \hlt{Keyword}:` begin with notation or a condition and do not echo the keyword. |
 | Theorem/proposition/lemma/corollary | Source-proportional setup before claims. One conclusion: no list. Two or more independent conclusions: claim items or a logical-weight split. Do not turn a result statement into a construction ledger. |
 | Proof | Direct argument: compact prose. Multiple statement claims: matching proof items in the same order. Iff directions may remain inside their matching claim item when concise. |
-| Method/process | Transferable problem-solving pattern; see Section 5.6. Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
+| Proof/computation method/process | Transferable problem-solving pattern; see Section 5.6. Use `proofmethod` for proof patterns, `computationmethod` for computations/constructions/diagnostics, and legacy `method` only for justified hybrid/other cases. Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
 | Example | Setup, computation, conclusion. Enumerate only distinct steps/cases/comparisons. |
 | Remark | One compact paragraph; no enumerate or commentary labels. |
 | Perspective/motivation/principle | Concise prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
@@ -270,16 +270,17 @@ This method standard is distilled from:
 - Texas A&M CSCE 481, "Algorithm Description": https://people.engr.tamu.edu/schaefer/teaching/481_Spring2017/assignments/algorithm_description.html
 - Victorian Curriculum and Assessment Authority, "Pseudocode": https://www.vcaa.vic.edu.au/curriculum/vce-curriculum/vce-study-designs/pseudocode
 
-A `method` environment records a reusable way to attack a class of problems. It is not a theorem statement, a proof, a worked example, a glossary entry, or pseudocode by default. Use a method when the source or existing repository content supports a transferable approach: a proof pattern, computation pattern, diagnostic workflow, construction recipe, approximation/decomposition scheme, or algorithm preview. Use an example for a one-off worked problem; use theorem-style environments for claims; use `breakablealgorithm` only when executable pseudocode is the point.
+The typed method environments record reusable ways to attack classes of problems. They are not theorem statements, proofs, worked examples, glossary entries, or pseudocode by default. Use a typed method when the source or existing repository content supports a transferable approach: a proof pattern, computation pattern, diagnostic workflow, construction recipe, approximation/decomposition scheme, or algorithm preview. Use an example for a one-off worked problem; use theorem-style environments for claims; use `breakablealgorithm` only when executable pseudocode is the point.
 
-The repository uses one LaTeX `method` environment by default, but every nontrivial method must have an explicit subtype before it is written:
+Use these LaTeX environments:
 
-- **Proof-pattern method:** a reusable proof strategy for a class of claims. Its output is a proof route, reduction, obligation checklist, or recognition criterion, not a numerical value or implementation.
-- **Computational method:** a reusable procedure for computing, constructing, estimating, approximating, diagnosing, or testing an object. Its output is a mathematical object, value, approximation, decomposition, certificate, or diagnostic.
-- **Hybrid method:** a source-presented workflow that genuinely mixes proof-pattern and computational content. Split it into two methods, a method plus theorem/proof, or a method plus algorithm unless the source presents the pieces as inseparable.
-- **Other method:** a short convention, classification workflow, or conceptual diagnostic that is neither mainly proof-pattern nor computational; state the subtype in the edit report and keep the block minimal.
+- `proofmethod`: a reusable proof strategy for a class of claims. Its output is a proof route, reduction, obligation checklist, or recognition criterion, not a numerical value or implementation. It prints as "Proof Method".
+- `computationmethod`: a reusable procedure for computing, constructing, estimating, approximating, diagnosing, or testing an object. Its output is a mathematical object, value, approximation, decomposition, certificate, or diagnostic. It prints as "Computation Method".
+- `method`: legacy/fallback only. Use it for a short convention, classification workflow, or source-presented hybrid that cannot be split cleanly. State the reason in the edit report.
 
-Make the subtype searchable. Prefer a descriptive `meth:` label containing the subtype or mathematical role, such as `meth:compactness-proof-pattern`, `meth:picard-iteration-computation`, or `meth:spectral-diagnostic`. When ambiguity is likely, make the title explicit, e.g. `\hlt{Proof Pattern: Compactness Extraction}` or `\hlt{Computational Method: Picard Iteration}`. Do not introduce new LaTeX environments such as `proofmethod` or `computationalmethod` unless the user explicitly asks for a preamble/schema change.
+During formalization, an existing unclassified `method` must be converted to `proofmethod` or `computationmethod` whenever the subtype is clear. If it is hybrid, split it into two typed methods, a typed method plus theorem/proof, or a typed method plus algorithm unless the source presents the pieces as inseparable. Keep `method` only for a justified residual case.
+
+Make the subtype searchable. Prefer a descriptive `meth:` label containing the subtype or mathematical role, such as `meth:compactness-proof-pattern`, `meth:picard-iteration-computation`, or `meth:spectral-diagnostic`. Keep titles precise, e.g. `\hlt{Compactness Extraction}` in `proofmethod` or `\hlt{Picard Iteration}` in `computationmethod`; do not duplicate the printed environment name in every title unless it reduces ambiguity.
 
 Before writing or rewriting a method, extract the problem-solving core:
 
@@ -294,21 +295,23 @@ Before writing or rewriting a method, extract the problem-solving core:
 The final method need not display these seven labels. It must, however, contain their supported mathematical content when the method is nontrivial. A compact form is:
 
 ```tex
-\begin{method} \label{meth:...} \hlt{Proof Pattern: ...}\\
+\begin{proofmethod} \label{meth:...} \hlt{...}\\
 \hlt{Use When}: <problem type, data, and target>.\\
 \hlt{Key Idea}: <approach cue and driver>.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item ...
 \end{enumerate}
-\end{method}
+\end{proofmethod}
 ```
 
-For a computational method, replace the title with `\hlt{Computational Method: ...}` or another precise searchable subtype title such as `\hlt{Construction: ...}`, `\hlt{Diagnostic: ...}`, or `\hlt{Iteration: ...}`.
+For a computational method, use `computationmethod` with a precise searchable title such as `\hlt{Picard Iteration}`, `\hlt{Spectral Diagnostic}`, or `\hlt{Normal-Form Construction}`.
 
 Use `\hlt{Use When}` and `\hlt{Key Idea}` only when they reduce ambiguity; omit them for a one-line convention or a very short computational recipe. If several approaches are genuinely available, state a short selection rule before the steps, e.g. choose a direct theorem when its hypotheses are visible, reduce to a special case when the target is invariant under approximation, or split into cases when the obstruction is local. Do not list a menu of generic tactics unless each branch has a source-supported cue and consequence.
 
-Method steps must be operative and ordered. Generic steps such as "understand the problem," "apply the theorem," "simplify," or "check the answer" are too vague unless specialized into the actual givens, theorem hypotheses, simplification, or verification. Conversely, do not turn a method into a full worked example: keep sample calculations in an `example`, proof obligations in a proof, and detailed iteration code in an algorithm.
+Method steps must be operative and ordered. Generic steps such as "understand the problem," "apply the theorem," "simplify," or "check the answer" are too vague unless specialized into the actual givens, theorem hypotheses, simplification, or verification. Conversely, do not turn a typed method into a full worked example: keep sample calculations in an `example`, proof obligations in a proof, and detailed iteration code in an algorithm.
+
+When adding or formalizing theorem-style results, examples, or algorithms, audit nearby existing `proofmethod`, `computationmethod`, and legacy `method` blocks. If the new material reveals a reusable proof route, computational recipe, verification checklist, construction step, diagnostic, or limitation that complements an existing method, update the existing method instead of duplicating prose. If no suitable method exists and the source supports a transferable pattern, add the smallest appropriate typed method near the first place it becomes useful. Do not invent methods merely to summarize every new result.
 
 For a proof-pattern method, require:
 
@@ -337,7 +340,7 @@ When extracting methods from source material, prefer the source's natural level 
 
 ## 6. Dependencies, labels, notation, and figures
 
-- Definitions, notation, and prerequisites precede use. Formal results/methods must not depend on remarks or examples; promote or move essential content.
+- Definitions, notation, and prerequisites precede use. Formal results and typed methods must not depend on remarks or examples; promote or move essential content.
 - Resolve ownership structurally by reordering, moving, splitting, promoting, or citing the correct earlier owner—not by an ad hoc prerequisite paragraph.
 - Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `rem:`, `per:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
 - Read the collision index and relevant notation file. Disambiguate reused glyphs by font, decoration, arguments, or local declaration. Reuse base macros; add global notation/macros only when durable across major sections.
@@ -419,7 +422,7 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, method subtype/problem-type/data/target/approach/verification extraction, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
