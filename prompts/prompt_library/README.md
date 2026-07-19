@@ -8,11 +8,12 @@ Use one prompt directly instead of running a monolithic workflow.
 - `dependency_flow_prompt.md`: dependency-order audit, figure-only prerequisite audit, and structural repair.
 - `formalize_content.md`: full environment-level formalization against `prompts/alignment_requirements.md`.
 - `notation_list_prompt.md`: post-formalization notation-list audit and repair.
+- `further_research_prompt.md`: web-based reference recommendation pass that updates `Content_Enhancement_Recommendations.md` without editing bibliography or LaTeX content.
 
 Recommended sequence for a new source batch:
 
 ```text
-add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.md with PASS_MODE: second-pass -> reorganize_content_prompt.md -> dependency_flow_prompt.md -> formalize_content.md -> notation_list_prompt.md
+add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.md with PASS_MODE: second-pass -> reorganize_content_prompt.md -> dependency_flow_prompt.md -> formalize_content.md -> notation_list_prompt.md -> further_research_prompt.md
 ```
 
 Phase ownership:
@@ -23,9 +24,10 @@ Phase ownership:
 - `dependency_flow_prompt.md` repairs prerequisite order, notation lifecycle, source ownership after movement, and invalid dependency authority.
 - `formalize_content.md` performs the row-by-row theorem/proof/typed-method/figure/example/counterexample/intuition/applied/remark/style/layout/build pass after the structure is stable, migrates legacy `method` blocks to `proofmethod` or `computationmethod` when clear, classifies figures by role, converts refutational examples to `counterexample`, extracts supported intuitive prose to `intuition`, and repairs applied blocks against Section 5.8.
 - `notation_list_prompt.md` audits `parts/00_notations/` after formalization, promotes only durable notation, repairs collision entries, removes verified stale entries, and reports macro candidates.
+- `further_research_prompt.md` runs after the notes structure and notation are stable, searches the web for high-quality references that could enhance the selected scope, skips sources already present in `references.bib`, and records only non-duplicative recommendations in `Content_Enhancement_Recommendations.md`.
 
 For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.
 
-Skip any prompt whose work is already settled. For canonical theorem/proof, typed-method, figure-role, example/counterexample/intuition/remark/motivation/perspective/expository, applied/scientific/finance, mathematical, layout, source-provenance, and collection-level requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline, Section 5.7 for examples, counterexamples, intuition, remarks, motivation, and perspective, Section 5.8 for applied environments, Section 6.1 for typed figures (`illustrationfigure`, `visualizationfigure`, `schematicfigure`, `financialexhibitfigure`, `sourceimagefigure`, `tablevisualfigure`), and Section 7 for collection-level standards.
+Skip any prompt whose work is already settled. For canonical theorem/proof, typed-method, figure-role, example/counterexample/intuition/remark/motivation/perspective/expository, applied/scientific/finance, mathematical, layout, source-provenance, and collection-level requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline, Section 5.7 for examples, counterexamples, intuition, remarks, motivation, and perspective, Section 5.8 for applied environments, Section 6.1 for typed figures (`illustrationfigure`, `visualizationfigure`, `schematicfigure`, `financialexhibitfigure`, `sourceimagefigure`, `tablevisualfigure`), Section 7 for collection-level standards, and Section 7.9 for further research recommendations.
 
 When prompt requirements overlap, keep the shared standard in `prompts/alignment_requirements.md` and leave only workflow-specific instructions in the library prompt.

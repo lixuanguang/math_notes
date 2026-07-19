@@ -601,6 +601,26 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 - Distinguish source types in reports and local prose when relevant: textbook theorem, model assumption, physical law, empirical dataset, simulated output, market convention, accounting identity, valuation input, analyst forecast, and author interpretation.
 - Applied blocks must be date/context aware. Physical constants need units and source context; market data, statements, forecasts, valuations, and performance results need date, currency, frequency, and data source when available.
 
+### 7.9 Further research recommendations
+
+Further research is a recommendation phase, not a content-insertion or bibliography-editing phase. It is based on:
+
+- Cornell University Library, "Getting Started with Library Research": https://www.library.cornell.edu/study/introduction-to-research/
+- University of Arizona Libraries, "Conduct a literature review": https://lib.arizona.edu/research/sources/lit-review
+- Purdue Global Academic Success Center, "Writing an Annotated Bibliography": https://purdueglobalwriting.center/writing-an-annotated-bibliography/
+- PRISMA 2020 statement: https://www.prisma-statement.org/prisma-2020
+- Crossref, "Metadata Retrieval": https://www.crossref.org/documentation/retrieve-metadata/
+- DataCite Metadata Schema, "Citation": https://datacite-metadata-schema.readthedocs.io/en/4.6/introduction/citation/
+- OCLC WorldCat support, "WorldCat": https://help.oclc.org/Discovery_and_Reference/FirstSearch/FirstSearch_databases/WorldCat
+
+Use further research only to identify books, papers, surveys, monographs, standards, or authoritative technical references that could improve a part, section, or subsection in a later source-grounded run. Do not add mathematical content, citations, `\nocite`s, or BibTeX entries during this phase.
+
+Maintain recommendations in `Content_Enhancement_Recommendations.md`. Each entry must be scoped to an exact target path or active part/section, tied to a concrete local gap or enrichment opportunity, and annotated with the source's role, authority, fit, and how it could enhance the notes. Record search terms, search venues, date searched, and enough metadata to later add a BibTeX entry: authors/editors, title, year, edition/version if applicable, publisher or journal, DOI/ISBN/arXiv/URL when available, and candidate BibTeX key.
+
+Before adding a recommendation, check `references.bib` by normalized title, authors/editors, year, DOI, ISBN, arXiv identifier, URL, and plausible BibTeX key. If the reference is already in the bibliography, do not add it to `Content_Enhancement_Recommendations.md`; report it as skipped because already bibliographed. Also check the recommendation file itself and update an existing recommendation rather than duplicating it.
+
+Prefer authoritative references in this order when available: standard graduate or advanced undergraduate books, peer-reviewed survey articles, landmark papers, official standards or regulator/publisher documents for applied topics, and well-maintained open course notes only when no stronger citable source exists. Exclude low-authority webpages, unreviewed summaries, link farms, inaccessible metadata-only records without enough bibliographic information, and sources whose proposed value is vague.
+
 ## 8. Validation and completion
 
 Before marking a file complete, inspect every formal environment and review matches for:
