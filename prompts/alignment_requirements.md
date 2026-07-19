@@ -505,6 +505,7 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 - Each part and section overview should be a concise navigation map, not a duplicate mini-chapter. When touched for structural reasons, it should state the role of the unit, main prerequisites, main objects/results, and forward dependencies when that helps placement.
 - Overviews own structure and route-finding. Put mathematical substance in numbered subsection files unless the existing local convention clearly uses the overview for a short orienting paragraph.
 - A new subsection must have a real mathematical payload, an active input edge, and a clear local owner. Do not add empty future headings, broad skeletons, or source-table placeholders.
+- Existing active empty subsections may be intentional placeholders. Preserve their overview/input references and broad titles unless the current reorganization moved their content elsewhere and made the active placeholder misleading.
 - When moving or adding material, preserve a readable path: definition or notation before first use, examples near the definitions they test, and major results after their prerequisites.
 
 ### 7.2 Source provenance and coverage
