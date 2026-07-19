@@ -38,16 +38,19 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 - Never repair layout by shrinking fonts, changing margins, adding arbitrary spacing, inserting mid-expression breaks, or creating unnecessary displays.
 - If inline pressure introduces extra notation or proof construction into a theorem statement, restore statement proportionality first. If the resulting formula still breaks badly, use the narrowest documented display exception or the configured less-strict mode.
 
+## Mixed prose–math line budget
+
+For formalization, use 100 rendered-visible characters as the preflight cap for one intended prose–inline-math span. This is calibrated to the current 8pt body and 175mm text block. It reduces repeated rendering but does not authorize overfull output.
+
+- Count the visible printed result: letters, digits, punctuation, spaces, and math symbols each count once. Count `\ref`, `\eqref`, and citations by their expected printed text; do not count LaTeX command names, braces, comments, or label keys.
+- If a span exceeds 100, remove duplication, reuse established notation, or split at a genuine semantic boundary. Do not delete hypotheses, quantifiers, conclusions, source qualifiers, or required commentary.
+- Treat the cap as an early trigger, not a geometric proof. Wide fractions, radicals, long arrows or limits, matrices, URLs, identifiers, and dense bold/calligraphic math can overflow below 100; the final TeX overfull-box check remains decisive.
+
 ## No-overflow requirement
 
-No changed equation, inline formula, display, matrix, commentary line, caption, or neighboring text may extend into the margin, collide, or become unreadably dense when rendered. Source inspection and successful compilation are insufficient.
+No changed equation, inline formula, display, matrix, commentary line, caption, or neighboring text may extend into the margin, collide, or become unreadably dense when rendered. The character budget is preflight, not proof.
 
-For every changed page:
-
-1. inspect the build log for overfull/underfull boxes near the edited lines;
-2. render the affected page at readable resolution;
-3. inspect the exact changed block, including page boundaries and continuation lines;
-4. apply the semantic repair order above and repeat until no avoidable overflow or sparse tail remains.
+After the selected batch stabilizes, build once, inspect overfull/underfull boxes near edited lines, and render each affected page once at readable resolution. Rebuild or rerender only if that final pass finds a current-edit overflow, sparse tail, collision, or unreadable visual; repair the defect and verify the repaired page.
 
 Do not dismiss a small overfull box in edited content as cosmetic. Distinguish and report unrelated pre-existing warnings elsewhere.
 

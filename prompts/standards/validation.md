@@ -46,9 +46,19 @@ Use for screenshot/named-block refinement:
 - inspect the edited line range in the log and the exact rendered page/block;
 - report any wider dependency that could not safely be repaired inside the target boundary.
 
+## Fast formalization profile
+
+Use only with `formalize_content.md`:
+
+1. Keep a compact source-order ledger; perform one semantic pass, then cold-read changed rows and their affected dependants only.
+2. Apply the 100 rendered-visible-character preflight to every changed prose–inline-math span, counting printed references/citations rather than source label keys.
+3. Run applicable search gates and `git diff --check` once after the target file stabilizes.
+4. Run one isolated full build. Inspect overfull/underfull boxes, unresolved references, and errors near changed lines.
+5. Render affected pages once and inspect the changed blocks and any touched visual. Repeat only for a concrete defect found in this final pass.
+
 ## Full semantic and render profile
 
-Use for formalization, notation-list work with `BUILD: yes`, and any content workflow configured to build.
+Use for notation-list work with `BUILD: yes`, source intake, and any content workflow explicitly requesting the full profile.
 
 1. Complete first-pass and cold second-pass ledgers.
 2. Build outside the repository:
