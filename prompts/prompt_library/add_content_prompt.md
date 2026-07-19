@@ -60,7 +60,7 @@ PASS_MODE meanings:
 Final-quality loop for every inserted or touched environment:
 1. Apply the complete canonical row workflow and Sections 5.1-7.7 of `prompts/alignment_requirements.md` to each new or materially touched block.
 2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, proof steps, convergence claims, complexity bounds, or implementation details.
-3. Re-read the source block, the LaTeX preamble, each statement item, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, and proof-complete when written as a theorem-style result.
+3. Re-read the source block, the LaTeX preamble, each statement item, each method step, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, method-complete when written as a method, and proof-complete when written as a theorem-style result.
 4. Keep theorem-style statements source-proportional. Do not move proof scaffolding, Picard iteration machinery, local construction constants, or proof-only error estimates into the statement unless the source presents them as reusable conclusions.
 5. Run the semantic deduplication and bundled-data ordering checks from `prompts/alignment_requirements.md`: no adjacent clause may repeat the same quantifier, scope, hypothesis, induction assumption, or conclusion in both prose and notation, and no map may use a derived domain before that domain is defined.
 6. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
@@ -88,7 +88,7 @@ Integration style:
 1. Add a polished, compact, source-grounded integration, not a full textbook transcription.
 2. Preserve source-supported coverage; mark genuine uncertainty with concise comments such as `% TODO(source): verify ...`.
 3. Use existing theorem environments, macros, labels, and nearby style. Use `\hlt{...}` for result titles when local style does.
-4. Prefer concise definitions, propositions, lemmas, corollaries, examples, methods, remarks, and algorithms only when the source and existing repo content support them.
+4. Prefer concise definitions, propositions, lemmas, corollaries, examples, methods, remarks, and algorithms only when the source and existing repo content support them. Use a `method` only when there is a transferable problem-solving pattern, not merely a one-off worked computation.
 5. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, or proof steps. If a theorem-style proof cannot be completed from the source plus earlier repository results, do not promote it to a theorem-style result; use a source TODO, remark, or report the blocker.
 6. Do not closely paraphrase long textbook passages. Write original notes in the repository's style.
 7. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `meth:...`, `alg:...`, and `fig:...`.
@@ -107,7 +107,7 @@ Algorithms:
 Canonical quality reminders:
 1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
 2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 directly, especially source-proportional theorem-style statements, self-contained theorem-style and method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples, equation numbering, and TODO discipline.
-3. For methods, enumerate only actual executable solving steps. Cases, definitions, summaries, and interpretation stay in prose or formulas.
+3. For methods, extract the problem type, data, target, entry cue, approach choice, operative steps, verification check, and reusable limitation/transfer point supported by the source. Enumerate only actual solving steps; cases, definitions, summaries, and interpretation stay in prose or formulas.
 4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 
 Planning-only report:
@@ -124,6 +124,7 @@ If edits were made, report:
 - PASS_MODE and all active planned target files processed;
 - files changed;
 - main definitions, results, examples, methods, algorithms, figures, or source notes added;
+- method approach decisions: problem types, entry cues, selected approaches, verification checks, and alternatives intentionally omitted as unsupported;
 - extracted source blocks grouped by classification and provenance when that clarifies coverage;
 - coverage ledger summary: covered, partial, missing, misplaced, unsupported, and needs-later-file blocks;
 - existing material cross-referenced instead of duplicated;

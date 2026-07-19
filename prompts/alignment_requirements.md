@@ -86,11 +86,12 @@ After each row, perform this adversarial check before moving on:
 2. Would removing any sentence delete an independent component or claim that should be itemized?
 3. Is setup repeated across items instead of factored into a preamble?
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
-5. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
-6. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
-7. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
-8. Are commentary lines genuinely structural/insightful and maximally concise?
-9. Does the rendered block have clean semantic breaks and no sparse tail?
+5. For a method row, does the block identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
+6. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
+7. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
+8. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
+9. Are commentary lines genuinely structural/insightful and maximally concise?
+10. Does the rendered block have clean semantic breaks and no sparse tail?
 
 If any answer exposes a defect, rewrite the entire affected environment again. Do not stop at the longer explicit/formal draft, a surface copyedit, or a passing search.
 
@@ -191,7 +192,7 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Definition | One component: compact prose/formula. Two or more parallel objects, constructions, characterizations, or tests: itemize them; factor common setup first. A parallel postamble may be a second list. After `\item \hlt{Keyword}:` begin with notation or a condition and do not echo the keyword. |
 | Theorem/proposition/lemma/corollary | Source-proportional setup before claims. One conclusion: no list. Two or more independent conclusions: claim items or a logical-weight split. Do not turn a result statement into a construction ledger. |
 | Proof | Direct argument: compact prose. Multiple statement claims: matching proof items in the same order. Iff directions may remain inside their matching claim item when concise. |
-| Method/process | Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
+| Method/process | Transferable problem-solving pattern; see Section 5.6. Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
 | Example | Setup, computation, conclusion. Enumerate only distinct steps/cases/comparisons. |
 | Remark | One compact paragraph; no enumerate or commentary labels. |
 | Perspective/motivation/principle | Concise prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
@@ -253,6 +254,47 @@ Any continuation line with fewer than five lexical words—or a comparably short
 5. use a display only if the active layout exception independently applies.
 
 It may remain only as an intentional irreducible unit whose alternatives reduce clarity. Never repair layout by shrinking fonts, changing margins, arbitrary spacing, mid-expression breaks, or unnecessary displays. If rendered lines overflow or become sparse, first introduce compact semantic notation or a local relation/order/convention, then reread the statement and proof with that notation.
+
+### 5.6 Method environments and problem-solving approaches
+
+This method standard is distilled from:
+
+- G. Polya, `How to Solve It`, as excerpted at Buffalo State: https://math.buffalostate.edu/jcushman/MED383polya.html
+- Johns Hopkins Mathematics Survival Guide, "How To Solve It": https://math.jhu.edu/~wsw/guide/node5.html
+- Common Core Standards for Mathematical Practice, MP1: https://www.thecorestandards.org/Math/Practice/MP1/
+- Terence Tao, "245A: Problem solving strategies": https://terrytao.wordpress.com/2010/10/21/245a-problem-solving-strategies/
+- Dimitri Bertsekas, "Ten simple rules for mathematical writing": https://faculty.engineering.asu.edu/bertsekas/ten-simple-rules-for-mathematical-writing/
+
+A `method` environment records a reusable way to attack a class of problems. It is not a theorem statement, a proof, a worked example, a glossary entry, or pseudocode by default. Use a method when the source or existing repository content supports a transferable approach: a proof pattern, computation pattern, diagnostic workflow, construction recipe, approximation/decomposition scheme, or algorithm preview. Use an example for a one-off worked problem; use theorem-style environments for claims; use `breakablealgorithm` only when executable pseudocode is the point.
+
+Before writing or rewriting a method, extract the problem-solving core:
+
+1. **Problem type:** what kind of task the method addresses.
+2. **Data and target:** the given objects, constraints, unknown, desired conclusion, or computable output.
+3. **Entry cue:** the feature that suggests this method rather than another one.
+4. **Approach choice:** the theorem, transformation, normal form, invariant, estimate, induction, contradiction, compactness/fixed-point argument, decomposition, approximation, special case, symmetry, coordinate change, equation, diagram, or model that drives the solution.
+5. **Operative steps:** the actual mathematical actions needed to get from data to target.
+6. **Verification:** the check that the output satisfies the goal and hypotheses; include boundary, degenerate, convergence, dimensional, uniqueness, or consistency checks when relevant.
+7. **Look-back/transfer:** the reusable idea, limitation, or alternate approach supported by the source.
+
+The final method need not display these seven labels. It must, however, contain their supported mathematical content when the method is nontrivial. A compact form is:
+
+```tex
+\begin{method} \label{meth:...} \hlt{...}\\
+\hlt{Use When}: <problem type, data, and target>.\\
+\hlt{Key Idea}: <approach cue and driver>.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item ...
+\end{enumerate}
+\end{method}
+```
+
+Use `\hlt{Use When}` and `\hlt{Key Idea}` only when they reduce ambiguity; omit them for a one-line convention or a very short computational recipe. If several approaches are genuinely available, state a short selection rule before the steps, e.g. choose a direct theorem when its hypotheses are visible, reduce to a special case when the target is invariant under approximation, or split into cases when the obstruction is local. Do not list a menu of generic tactics unless each branch has a source-supported cue and consequence.
+
+Method steps must be operative and ordered. Generic steps such as "understand the problem," "apply the theorem," "simplify," or "check the answer" are too vague unless specialized into the actual givens, theorem hypotheses, simplification, or verification. Conversely, do not turn a method into a full worked example: keep sample calculations in an `example`, proof obligations in a proof, and detailed iteration code in an algorithm.
+
+When extracting methods from source material, prefer the source's natural level of generality. Do not invent alternative approaches, success criteria, convergence guarantees, complexity claims, or edge cases. If a useful method is only implicit, include only the shortest source-grounded abstraction needed to make the approach reusable.
 
 ## 6. Dependencies, labels, notation, and figures
 
@@ -338,7 +380,7 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile component/claim counts, method problem-type/data/target/approach/verification extraction, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
