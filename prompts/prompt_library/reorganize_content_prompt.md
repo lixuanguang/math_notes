@@ -35,7 +35,7 @@ For the current topic batch, check:
 - placeholder files that should be filled or removed from the active path;
 - material that belongs in a different file, subsection, or order;
 - content whose size, independence, or prerequisite role suggests promotion from subsection to section or from section to part;
-- definitions, notation, examples, results, methods, and proofs appearing in an illogical order;
+- definitions, notation, examples, applied environments, results, methods, and proofs appearing in an illogical order;
 - major definitions without nearby source-supported examples, nonexamples, counterexamples, or test computations;
 - prerequisites that should move before dependants;
 - formal results or methods depending on remarks or examples;
@@ -70,14 +70,14 @@ Report before editing when the placement is nontrivial:
 - whether the move fills a placeholder, fixes reference-before-label order, or repairs prerequisite flow;
 - whether any subsection-to-section or section-to-part promotion is recommended or blocked by configuration;
 - duplicate-label consolidation, if any, with canonical label and references to update;
-- notation lifecycle, equation-label, TODO, and example/counterexample placement concerns;
+- notation lifecycle, equation-label, TODO, example/counterexample placement, and applied-environment ownership concerns;
 - figure placement concerns;
 - ambiguous candidates under `Needs Human Review`.
 
 Validation and final report:
 - re-check affected references, labels, inputs, and figure placement;
 - confirm no formal result or method still depends on a remark/example in the affected batch;
-- confirm collection-level checks in the affected batch: overview orientation, notation lifecycle, source provenance when applicable, example placement, equation labels, and typed TODOs;
+- confirm collection-level checks in the affected batch: overview orientation, notation lifecycle, source provenance when applicable, example placement, applied-environment ownership, equation labels, typed TODOs, and multi-PDF readiness;
 - confirm moved mathematical content was preserved verbatim except for reported local glue/reference edits;
 - list files changed, blocks moved, labels/references updated, and remaining structural blockers;
 - state that no build, staging, commit, push, reset, checkout, revert, unrelated delete, or clean action was performed.
