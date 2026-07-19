@@ -82,7 +82,7 @@ Report before editing when the placement is nontrivial:
 
 Validation and final report:
 - re-check affected references, labels, inputs, and figure placement;
-- confirm moved figures retain their primary role, callout, caption, label, source/data/model context, and proximity to the formal or applied owner they explain;
+- confirm moved figures retain their primary role, typed wrapper when already classified, callout, caption, label, source/data/model context, and proximity to the formal or applied owner they explain;
 - confirm existing active placeholder subsections and broad future-facing subsection titles were preserved unless this run emptied and displaced their content;
 - confirm no formal result or method still depends on an intuition/remark/motivation/perspective/example in the affected batch;
 - confirm collection-level checks in the affected batch: overview orientation, notation lifecycle, source provenance when applicable, example/intuition placement, applied-environment ownership, equation labels, typed TODOs, and multi-PDF readiness;

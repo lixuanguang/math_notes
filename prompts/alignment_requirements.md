@@ -510,12 +510,14 @@ The figure standard is distilled from:
 
 A figure is a visual float or visual asset. Before adding, moving, or editing one, classify exactly one primary role and report it:
 
-1. **Illustration:** a conceptual, geometric, commutative, dependency, payoff-shape, balance-sheet-relationship, or qualitative diagram that explains structure but is not data evidence.
-2. **Visualization:** a plot of mathematical, numerical, empirical, simulated, backtested, or model-implied values: function graph, phase portrait, vector field, trajectory, histogram, scatterplot, heatmap, sensitivity curve, return series, or error plot.
-3. **Schematic:** a physics, engineering, market-microstructure, trading-system, accounting-flow, or modeling setup diagram with objects, coordinates, signs, interfaces, or information flows.
-4. **Financial exhibit:** a finance/accounting visual such as a valuation bridge, comparable-company plot, performance chart, factor exposure chart, capital-structure diagram, revenue/cost waterfall, margin bridge, scenario fan, or sensitivity grid.
-5. **Image:** a raster source image, experimental image, scanned diagram, screenshot, photograph, or externally generated graphic whose visual content itself is the source.
-6. **Table-like visual:** a grid, matrix, term sheet, financial statement excerpt, assumptions table, or results panel. Prefer `table`/`tabular` for searchable structured data; use a figure only when layout, graphics, or source fidelity is essential.
+1. **Illustration** uses `illustrationfigure`: a conceptual, geometric, commutative, dependency, payoff-shape, balance-sheet-relationship, or qualitative diagram that explains structure but is not data evidence.
+2. **Visualization** uses `visualizationfigure`: a plot of mathematical, numerical, empirical, simulated, backtested, or model-implied values: function graph, phase portrait, vector field, trajectory, histogram, scatterplot, heatmap, sensitivity curve, return series, or error plot.
+3. **Schematic** uses `schematicfigure`: a physics, engineering, market-microstructure, trading-system, accounting-flow, or modeling setup diagram with objects, coordinates, signs, interfaces, or information flows.
+4. **Financial exhibit** uses `financialexhibitfigure`: a finance/accounting visual such as a valuation bridge, comparable-company plot, performance chart, factor exposure chart, capital-structure diagram, revenue/cost waterfall, margin bridge, scenario fan, or sensitivity grid.
+5. **Image** uses `sourceimagefigure`: a raster source image, experimental image, scanned diagram, screenshot, photograph, or externally generated graphic whose visual content itself is the source.
+6. **Table-like visual** uses `tablevisualfigure` only when the material must remain a visual: a grid, matrix, term sheet, financial statement excerpt, assumptions table, or results panel. Prefer `table`/`tabular` for searchable structured data; use a figure only when layout, graphics, or source fidelity is essential.
+
+Use these typed figure wrappers for every new or materially touched figure. They share the ordinary `figure` counter and `Figure` caption style; the environment name records the semantic role in source. Keep a generic `figure` only for untouched legacy content or a genuinely mixed visual that cannot be cleanly split; report that exception.
 
 Common standard. A figure must have a nearby textual callout, one stable `fig:` label, and a succinct caption that states what is being shown and why it matters. The caption or adjacent prose must define symbols, units, panels, colors, line styles, and abbreviations needed to read the figure. Do not rely on "above" or "below"; use `Figure \ref{fig:...}`. Keep figures near the text that introduces or uses them, and do not make later formal results depend on information that exists only inside a figure. If a visual owns data, assumptions, a reusable construction, or a formal relation needed later, promote that content into text, a table, a method, an applied environment, or a theorem-style owner.
 
@@ -606,7 +608,7 @@ rg -n -i '\b(for all|for every|for each|there exists|there is a unique)\b' <targ
 rg -n -i '(Theorem|Proposition|Lemma|Corollary) \\ref\{[^}]+\} (gives|give|yields|shows|makes|implies|ensures|provides)\b' <target>
 rg -n '\\\[|\\begin\{(displaymath|equation\*?|align\*?|gather\*?|multline\*?)\}|\$\$' <target>
 rg -n '\\begin\{(smallmatrix|matrix|pmatrix|bmatrix|vmatrix|Vmatrix)\}' <target>
-rg -n '\\begin\{figure\}|\\includegraphics|\\begin\{tikzpicture\}|\\begin\{tikzcd\}|\\begin\{axis\}' <target>
+rg -n '\\begin\{(figure|illustrationfigure|visualizationfigure|schematicfigure|financialexhibitfigure|sourceimagefigure|tablevisualfigure)\}|\\includegraphics|\\begin\{tikzpicture\}|\\begin\{tikzcd\}|\\begin\{axis\}' <target>
 rg -n '\b(Moreover|Furthermore|In addition|Also|In particular)\b' <target>
 rg -n -i '\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$[^%\n.]*\b(for all|for every|for each|there exists|there is a unique)\b|\b(for all|for every|for each|there exists|there is a unique)\b[^%\n.]*\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$|\b(dummy parameter)\b' <target>
 rg -n -i '\\[A-Za-z]+:[^.\n]*,\s*with \$?[A-Z][A-Za-z_0-9]*\\defeq|\$\\exists [^$]*\\ni [^$]*\$ (compact|open)' <target>
@@ -626,7 +628,7 @@ At scope completion:
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality, exact syntax, and placement, not merely matching counts: the pair must be adjacent, terminal, ordered Structural Commentary then Key Insight, and both lines must end with `\\`.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
-7. Reconcile figure roles and quality: every touched figure has a primary role, callout, `fig:` label, caption, source/data/model provenance when relevant, axes/units/date/currency/window/context where applicable, accessibility checks, and rendered inspection.
+7. Reconcile figure roles and quality: every touched figure has a primary role, the corresponding typed wrapper unless a reported exception applies, callout, `fig:` label, caption, source/data/model provenance when relevant, axes/units/date/currency/window/context where applicable, accessibility checks, and rendered inspection.
 8. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples/applied checks, equation numbering, TODO taxonomy, naming/searchability, and multi-PDF readiness.
 9. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
 10. Run `git diff --check` and distinguish pre-existing failures from current edits.
