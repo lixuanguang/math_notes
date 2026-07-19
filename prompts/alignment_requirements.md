@@ -86,7 +86,7 @@ After each row, perform this adversarial check before moving on:
 2. Would removing any sentence delete an independent component or claim that should be itemized?
 3. Is setup repeated across items instead of factored into a preamble?
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
-5. For a method row, does the block identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
+5. For a method row, does the block classify its subtype and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
 6. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
 7. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
 8. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
@@ -419,7 +419,7 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, method problem-type/data/target/approach/verification extraction, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile component/claim counts, method subtype/problem-type/data/target/approach/verification extraction, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
