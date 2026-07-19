@@ -108,7 +108,7 @@ For source intake, use only provided sources and existing repository content. Cl
 
 Do not browse, guess unreadable content, or closely paraphrase long source passages. Mark genuine uncertainty with a concise `% TODO(source): ...`.
 
-When a prompt-library workflow references this file, the workflow inherits the complete standards in Sections 4-7 unless it explicitly narrows scope, source material, or build behavior. A narrow target, source-grounded intake run, structural reorganization pass, or dependency-flow pass may restrict what is edited, but it does not relax the applicable writing, proof, layout, citation, safety, or validation standard for any environment it touches. New or materially amended source-grounded content must be finalized locally; do not leave a rough block for a later formalization prompt when the same source and earlier repository content already support the repair.
+When a prompt-library workflow references this file, the workflow inherits the complete standards below unless it explicitly narrows scope, source material, or build behavior. A narrow target, source-grounded intake run, structural reorganization pass, or dependency-flow pass may restrict what is edited, but it does not relax the applicable writing, proof, layout, source-provenance, collection-level, safety, or validation standard for any environment it touches. New or materially amended source-grounded content must be finalized locally; do not leave a rough block for a later formalization prompt when the same source and earlier repository content already support the repair.
 
 ## 5. Canonical writing standard
 
@@ -262,7 +262,59 @@ It may remain only as an intentional irreducible unit whose alternatives reduce 
 - Figures must clarify mathematics. Prefer editable TikZ, nearby house colors/weights, essential labels only, and succinct captions; move explanatory prose, legends, and equations into a succinct color-coded caption when clearer.
 - Every touched TikZ figure requires a temporary standalone compile, rendered preview, visual inspection, and iteration. Source or compile inspection alone is insufficient.
 
-## 7. Validation and completion
+## 7. Collection-level standards
+
+Local environment quality is necessary but not sufficient. A proper notes collection must also preserve orientation, provenance, notation hygiene, examples, referenceability, and unfinished-work discipline across parts and sections.
+
+### 7.1 Reader orientation and overview hygiene
+
+- Each part and section overview should be a concise navigation map, not a duplicate mini-chapter. When touched for structural reasons, it should state the role of the unit, main prerequisites, main objects/results, and forward dependencies when that helps placement.
+- Overviews own structure and route-finding. Put mathematical substance in numbered subsection files unless the existing local convention clearly uses the overview for a short orienting paragraph.
+- A new subsection must have a real mathematical payload, an active input edge, and a clear local owner. Do not add empty future headings, broad skeletons, or source-table placeholders.
+- When moving or adding material, preserve a readable path: definition or notation before first use, examples near the definitions they test, and major results after their prerequisites.
+
+### 7.2 Source provenance and coverage
+
+- For `CONTENT_POLICY: source-grounded`, maintain a source-to-target ledger for the run. Each source block should have an exact source identifier, mathematical type, target owner, and status: `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, or `blocked-new-section-or-part`.
+- Distinguish `source-stated`, `source-derived`, and `repo-derived` material. Source-stated material is explicitly present in SOURCE_MATERIAL; source-derived material is a direct formalization or short consequence needed to make the source statement usable; repo-derived material comes from earlier active results used to complete a proof or avoid duplication.
+- Do not litter the LaTeX with source bookkeeping. Put provenance in the edit report unless a local `% TODO(source): ...` is necessary because the mathematical content is genuinely unreadable, ambiguous, or incomplete.
+- A source-grounded pass is incomplete if it merely adds the easiest visible result and leaves other supported source blocks unclassified.
+
+### 7.3 Notation lifecycle
+
+- Classify new notation as proof-local, block-local, subsection-local, section-local, or global before introducing it. Proof-local notation must not be used later as if it were durable.
+- Put durable notation in `parts/00_notations/` only when it recurs across major sections. Put section-local notation near its first section-level use. Put one-off notation inside the smallest block that needs it.
+- Before adding notation, check nearby files, active notation files, and base macros for existing symbols and naming patterns. Resolve collisions by context, font, decoration, arguments, or a local declaration.
+- A repeated expression used three or more times in a local argument is a candidate for notation; a one-off expression normally is not. Do not introduce notation that is cleverer than the concept or hides the active variables.
+
+### 7.4 Examples, counterexamples, and boundary tests
+
+- Major definitions and nontrivial hypotheses should have a nearby source-supported example, nonexample, counterexample, or test computation when the source or existing repository content provides one.
+- An example should do mathematical work: instantiate a definition, verify a hypothesis, compute an invariant, show a boundary case, or distinguish two similar concepts. Avoid decorative examples.
+- Counterexamples and nonexamples are especially valuable when a hypothesis is easy to overlook. Do not invent them during source-grounded intake.
+- Exercises may be kept only when they add useful source-supported mathematics or practice. They must not be the sole owner of a prerequisite needed by later formal results.
+
+### 7.5 Equation numbering and referenceability
+
+- Number and label only equations that are referenced later or are central enough to deserve an anchor. Use `\eqref{...}` for equation references.
+- Do not label one-off displays, decorative derivations, or formulas that can remain inline under the active layout mode.
+- Use stable descriptive labels. In addition to the environment prefixes in Section 6, use `eq:` for referenced equations when the surrounding file has no stronger local convention.
+- When moving content, update every affected reference and remove stale labels. A formula should not have multiple labels unless the labels denote genuinely distinct anchors.
+
+### 7.6 TODO and errata discipline
+
+- Use TODO comments sparingly and with a type: `% TODO(source):`, `% TODO(proof):`, `% TODO(structure):`, `% TODO(notation):`, or `% TODO(build):`.
+- A TODO must name the missing object, source uncertainty, proof gap, structure issue, notation collision, or build/render issue precisely enough that a later run can resolve it.
+- Do not use a TODO as a substitute for a proof required under `PROOF_COMPLETENESS: full`, except to report an explicit blocker outside the authorized scope or SOURCE_MATERIAL.
+- Report every new or retained TODO in the final report. Remove obsolete TODOs when the issue is resolved.
+
+### 7.7 Searchability and naming consistency
+
+- Use stable result titles, environment labels, and canonical terms so concepts can be found by `rg`.
+- Do not introduce multiple synonymous names for the same concept inside a local development unless the distinction is mathematically meaningful and stated.
+- If the repository later adopts an index or glossary convention, add entries only for durable recurring concepts, not every local symbol.
+
+## 8. Validation and completion
 
 Before marking a file complete, inspect every formal environment and review matches for:
 
@@ -288,17 +340,18 @@ At scope completion:
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
-7. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
-8. Run `git diff --check` and distinguish pre-existing failures from current edits.
-9. Build outside the repository:
+7. Reconcile collection-level standards: overview orientation, source provenance and coverage ledger, notation lifecycle, source-supported examples/counterexamples, equation numbering, TODO taxonomy, and naming/searchability.
+8. Check dependency order, labels/references, notation, input edges, structural depth, retired `sections/` inputs, and touched figures.
+9. Run `git diff --check` and distinguish pre-existing failures from current edits.
+10. Build outside the repository:
 
 ```sh
 build_dir="$(mktemp -d /private/tmp/math_notes_alignment.XXXXXX)"
 latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir="$build_dir" math.tex
 ```
 
-10. Render every affected page individually at readable resolution and inspect each changed environment. Also inspect the build log for the edited line range, distinguishing unrelated warnings elsewhere. Contact sheets and overfull-box scans are navigation aids, not final visual QA. Iterate until no avoidable display, sparse tail, missing or weak commentary, underformalized proof, missed enumeration, repeated item setup, claim mismatch, invalid reference, overfull edited line, or figure collision remains.
+11. Render every affected page individually at readable resolution and inspect each changed environment. Also inspect the build log for the edited line range, distinguishing unrelated warnings elsewhere. Contact sheets and overfull-box scans are navigation aids, not final visual QA. Iterate until no avoidable display, sparse tail, missing or weak commentary, underformalized proof, missed enumeration, repeated item setup, claim mismatch, invalid reference, overfull edited line, or figure collision remains.
 
 The active batch is complete only when all selected files satisfy these rules, the isolated build passes unless disabled, unrelated work is preserved, and only genuine out-of-scope/source/authorization issues remain. Under `RUN_BATCH: one-numbered-file`, completing one file is success even when the wider part or section remains; report the exact next cursor. Under `all-selected`, stop at a file boundary if rigor would otherwise fall.
 
-The final report must state: scope, active batch, and coverage completed; ledger counts; files changed; main structural/mathematical/environment/notation/figure changes; result splits, proof additions, proofless exceptions, and proof-reference changes; commentary, display, and matrix exceptions; cold-pass and build results; preserved pre-existing work; remaining blockers; and the exact next cursor or explicit wider-scope completion.
+The final report must state: scope, active batch, and coverage completed; ledger counts; files changed; main structural/mathematical/environment/notation/figure changes; source-provenance and collection-level decisions when applicable; result splits, proof additions, proofless exceptions, and proof-reference changes; commentary, display, equation-numbering, and matrix exceptions; cold-pass and build results; preserved pre-existing work; remaining blockers; and the exact next cursor or explicit wider-scope completion.
