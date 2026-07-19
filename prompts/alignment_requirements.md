@@ -264,8 +264,22 @@ This method standard is distilled from:
 - Common Core Standards for Mathematical Practice, MP1: https://www.thecorestandards.org/Math/Practice/MP1/
 - Terence Tao, "245A: Problem solving strategies": https://terrytao.wordpress.com/2010/10/21/245a-problem-solving-strategies/
 - Dimitri Bertsekas, "Ten simple rules for mathematical writing": https://faculty.engineering.asu.edu/bertsekas/ten-simple-rules-for-mathematical-writing/
+- Stanford CS103, "Proofwriting Checklist": https://web.stanford.edu/class/archive/cs/cs103/cs103.1262/proofwriting_checklist
+- Montana State University, "Proof Guidelines": https://math.montana.edu/courses/m242/proof-guidelines.html
+- Chalmers/GU DSABook, "Invariants, preconditions, and postconditions": https://chalmersgu-data-structure-courses.github.io/dsabook/html/section-2.2.html
+- Texas A&M CSCE 481, "Algorithm Description": https://people.engr.tamu.edu/schaefer/teaching/481_Spring2017/assignments/algorithm_description.html
+- Victorian Curriculum and Assessment Authority, "Pseudocode": https://www.vcaa.vic.edu.au/curriculum/vce-curriculum/vce-study-designs/pseudocode
 
 A `method` environment records a reusable way to attack a class of problems. It is not a theorem statement, a proof, a worked example, a glossary entry, or pseudocode by default. Use a method when the source or existing repository content supports a transferable approach: a proof pattern, computation pattern, diagnostic workflow, construction recipe, approximation/decomposition scheme, or algorithm preview. Use an example for a one-off worked problem; use theorem-style environments for claims; use `breakablealgorithm` only when executable pseudocode is the point.
+
+The repository uses one LaTeX `method` environment by default, but every nontrivial method must have an explicit subtype before it is written:
+
+- **Proof-pattern method:** a reusable proof strategy for a class of claims. Its output is a proof route, reduction, obligation checklist, or recognition criterion, not a numerical value or implementation.
+- **Computational method:** a reusable procedure for computing, constructing, estimating, approximating, diagnosing, or testing an object. Its output is a mathematical object, value, approximation, decomposition, certificate, or diagnostic.
+- **Hybrid method:** a source-presented workflow that genuinely mixes proof-pattern and computational content. Split it into two methods, a method plus theorem/proof, or a method plus algorithm unless the source presents the pieces as inseparable.
+- **Other method:** a short convention, classification workflow, or conceptual diagnostic that is neither mainly proof-pattern nor computational; state the subtype in the edit report and keep the block minimal.
+
+Make the subtype searchable. Prefer a descriptive `meth:` label containing the subtype or mathematical role, such as `meth:compactness-proof-pattern`, `meth:picard-iteration-computation`, or `meth:spectral-diagnostic`. When ambiguity is likely, make the title explicit, e.g. `\hlt{Proof Pattern: Compactness Extraction}` or `\hlt{Computational Method: Picard Iteration}`. Do not introduce new LaTeX environments such as `proofmethod` or `computationalmethod` unless the user explicitly asks for a preamble/schema change.
 
 Before writing or rewriting a method, extract the problem-solving core:
 
@@ -280,7 +294,7 @@ Before writing or rewriting a method, extract the problem-solving core:
 The final method need not display these seven labels. It must, however, contain their supported mathematical content when the method is nontrivial. A compact form is:
 
 ```tex
-\begin{method} \label{meth:...} \hlt{...}\\
+\begin{method} \label{meth:...} \hlt{Proof Pattern: ...}\\
 \hlt{Use When}: <problem type, data, and target>.\\
 \hlt{Key Idea}: <approach cue and driver>.
 \begin{enumerate}[label=\roman*.]
@@ -290,9 +304,34 @@ The final method need not display these seven labels. It must, however, contain 
 \end{method}
 ```
 
+For a computational method, replace the title with `\hlt{Computational Method: ...}` or another precise searchable subtype title such as `\hlt{Construction: ...}`, `\hlt{Diagnostic: ...}`, or `\hlt{Iteration: ...}`.
+
 Use `\hlt{Use When}` and `\hlt{Key Idea}` only when they reduce ambiguity; omit them for a one-line convention or a very short computational recipe. If several approaches are genuinely available, state a short selection rule before the steps, e.g. choose a direct theorem when its hypotheses are visible, reduce to a special case when the target is invariant under approximation, or split into cases when the obstruction is local. Do not list a menu of generic tactics unless each branch has a source-supported cue and consequence.
 
 Method steps must be operative and ordered. Generic steps such as "understand the problem," "apply the theorem," "simplify," or "check the answer" are too vague unless specialized into the actual givens, theorem hypotheses, simplification, or verification. Conversely, do not turn a method into a full worked example: keep sample calculations in an `example`, proof obligations in a proof, and detailed iteration code in an algorithm.
+
+For a proof-pattern method, require:
+
+1. the claim form or problem type it applies to;
+2. the hypotheses, objects, or conclusion features that cue the pattern;
+3. the proof architecture: direct proof, contrapositive, contradiction, induction, cases, two inclusions/inequalities, construction plus verification, compactness, limiting argument, fixed point, energy estimate, approximation, normal form, or other source-supported driver;
+4. the earlier definitions, lemmas, theorems, invariants, or estimates that may be invoked;
+5. the proof obligations in the order they must be discharged;
+6. the endpoint check: the exact conclusion now proved, plus boundary, degenerate, equality-case, uniqueness, or quantifier-scope checks when relevant.
+
+Proof-pattern steps should be proof actions: choose an arbitrary object, reduce to a definition, prove each direction, construct a witness, establish an invariant, close an estimate, pass to a limit, invoke a prior result, or verify hypotheses. Do not present proof-pattern methods as recipes for computing an output, do not include implementation-style loops, and do not replace the actual proof of a nearby theorem with a vague method block.
+
+For a computational method, require:
+
+1. the input data and admissibility assumptions;
+2. the output object, quantity, approximation, certificate, or diagnostic;
+3. the setup, normalization, initialization, or representation choice;
+4. the update rule, construction step, recurrence, solve step, decomposition, or test;
+5. the stopping, selection, branch, or termination criterion when the source supports one;
+6. the postcondition or verification check that the output satisfies the target;
+7. error bounds, convergence, stability, uniqueness, or complexity only when the source or earlier repository results support them.
+
+Computational method steps may contain formulas and short ordered procedures, but if the source supports executable step-by-step pseudocode with inputs and outputs, use `breakablealgorithm` instead or add a compact algorithm after the conceptual method. Keep one statement per algorithmic step, keep nesting readable, and record preconditions/postconditions or invariants at the method or algorithm boundary rather than burying them inside prose.
 
 When extracting methods from source material, prefer the source's natural level of generality. Do not invent alternative approaches, success criteria, convergence guarantees, complexity claims, or edge cases. If a useful method is only implicit, include only the shortest source-grounded abstraction needed to make the approach reusable.
 
