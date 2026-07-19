@@ -9,6 +9,9 @@ OPAQUE_ENVIRONMENTS = %w[
   algorithm algorithmic lstlisting verbatim
 ].freeze
 
+REPOSITORY_ROOT = File.expand_path("..", __dir__)
+FORMAL_ENVIRONMENTS = (File.read(File.join(REPOSITORY_ROOT, "parts", "base.tex")).scan(/\\newtheorem\{([^}]+)\}/).flatten + ["proof"]).uniq.freeze
+
 STRUCTURAL_START = /\A\\(?:begin|end)\{|\A\\(?:part|section|subsection|subsubsection)\*?\{|\A\\item(?:\[[^\]]*\])?(?:\s|\z)|\A\\setlength\{|\A\\(?:label|caption|includegraphics)\{|\A\\(?:newpage|clearpage|pagebreak|centering|noindent)\b/
 STRUCTURAL_ONLY = /\A(?:\\begin\{[^}]+\}(?:\[[^\]]*\])?(?:\s+\\label\{[^}]+\})?|\\end\{[^}]+\}|\\setlength\{[^}]+\}\{[^}]+\}|\\(?:part|section|subsection|subsubsection)\*?\{.*\}(?:\s*\\label\{[^}]+\})?|\\(?:newpage|clearpage|pagebreak|centering|noindent))\s*\z/
 ITEM_ONLY = /\A\\item(?:\[[^\]]*\])?\s*\z/
@@ -54,12 +57,31 @@ def opaque_lines(lines)
   end
 end
 
+def blank_formal_lines(lines)
+  stack = []
+  violations = []
+  lines.each_with_index do |line, index|
+    violations << index + 1 if line.strip.empty? && stack.any? { |name| FORMAL_ENVIRONMENTS.include?(name) }
+    line.scan(/\\(begin|end)\{([^}]+)\}/).each do |kind, name|
+      if kind == "begin"
+        stack << name
+      else
+        stack_index = stack.rindex(name)
+        stack.delete_at(stack_index) if stack_index
+      end
+    end
+  end
+  violations
+end
+
 paths = ARGV
 abort "Usage: ruby scripts/check_render_aligned_source_lines.rb <target.tex> [...]" if paths.empty?
 
 violations = []
+blank_violations = []
 paths.each do |path|
   lines = File.readlines(path, chomp: true)
+  blank_formal_lines(lines).each { |line_number| blank_violations << [path, line_number] }
   opaque = opaque_lines(lines)
   lines.each_cons(2).with_index(1) do |(current, following), line_number|
     next if opaque[line_number - 1] || opaque[line_number]
@@ -71,7 +93,11 @@ paths.each do |path|
   end
 end
 
-if violations.empty?
+blank_violations.each do |path, line_number|
+  warn "#{path}:#{line_number}: blank source line inside a formal statement or proof creates a forbidden paragraph break"
+end
+
+if violations.empty? && blank_violations.empty?
   puts "Render-aligned source-line check passed."
   exit 0
 end

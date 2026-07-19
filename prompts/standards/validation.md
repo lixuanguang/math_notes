@@ -15,7 +15,7 @@ Run the applicable searches on each changed target and review every hit manually
 
 ```sh
 rg -n -i '\b(for all|for every|for each|at every( index)?|for some|there exists|there is a unique)\b' <target>
-rg -n -i '(Theorem|Proposition|Lemma|Corollary) \\ref\{[^}]+\} (gives|give|yields|shows|makes|implies|ensures|provides)\b' <target>
+rg -n -i '\b(we|one) (apply|invoke|use|employ)\b|\b(apply|invoke|use|employ)(ing|s|ed)? (Theorem|Proposition|Lemma|Corollary|Definition|Assumption|part|claim)\b|\b(Theorem|Proposition|Lemma|Corollary|Definition|Assumption) \\ref\{[^}]+\} (gives?|yields?|shows?|makes?|implies|ensures?|provides?|proves?)\b' <target>
 rg -n '\\\[|\\begin\{(displaymath|equation\*?|align\*?|gather\*?|multline\*?)\}|\$\$' <target>
 rg -n '\\begin\{(smallmatrix|matrix|pmatrix|bmatrix|vmatrix|Vmatrix)\}' <target>
 rg -n '\\begin\{(figure|illustrationfigure|visualizationfigure|schematicfigure|financialexhibitfigure|sourceimagefigure|tablevisualfigure)\}|\\includegraphics|\\begin\{tikzpicture\}|\\begin\{tikzcd\}|\\begin\{axis\}' <target>
@@ -27,9 +27,10 @@ rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:[^%\n]*[^\\]$' <target>
 rg -n -U '\\end\{definition\}\s*\n\s*\\begin\{example\}' <target>
 ruby scripts/check_environment_title_breaks.rb <target>
 ruby scripts/check_render_aligned_source_lines.rb <target>
+ruby scripts/check_by_authority_style.rb <target>
 ```
 
-Treat each verbal-quantifier hit as a presumptive notation-policy violation: use scoped `\forall`, `\exists`, or `\exists!` and retain prose only when it adds specific meaning or context not encoded symbolically. Cold-read every mathematical clause for other prose renderings of notation-capable content because regex gates cannot enumerate them. Join every source-line hit unless the newline has genuine rendered or structural meaning; do not silence the checker by adding an unintended `\\`. Review every adjacent definition/example hit against the environment-granularity rule; adjacency is a review trigger, not an automatic merge. Also review repeated parallel setup, long statement scaffolding, and each retained display/matrix exception. A hit may be valid; a clean search may still hide a semantic defect.
+Treat each verbal-quantifier hit as a presumptive notation-policy violation: use scoped `\forall`, `\exists`, or `\exists!` and retain prose only when it adds specific meaning or context not encoded symbolically. Cold-read every mathematical clause for other prose renderings of notation-capable content because regex gates cannot enumerate them. Rewrite every authority-language hit into a `by`-clause carrying its conclusion. Join every source-line hit unless the newline has genuine rendered or structural meaning, and remove every reported blank line; do not silence either checker by adding an unintended `\\`. Review every adjacent definition/example hit against the environment-granularity rule; adjacency is a review trigger, not an automatic merge. Also review repeated parallel setup, long statement scaffolding, and each retained display/matrix exception. A hit may be valid; a clean search may still hide a semantic defect.
 
 ## Structural-only profile
 

@@ -37,7 +37,12 @@ Search only earlier active theorems, propositions, lemmas, and corollaries. Cite
 
 Definitions, examples, counterexamples, intuitions, remarks, motivations, perspectives, methods, applied environments, algorithms, and figures are not proof authority. Do not cite later results.
 
-Use `$P$ by Theorem \ref{...}.` or `By Lemma \ref{...}, $P$.` Do not make a result the grammatical subject of “gives,” “yields,” “shows,” “makes,” “implies,” “ensures,” or “provides.” Keep a short calculation inline when it is clearer than a citation.
+Authority language is strictly `by`-only: use `$P$ by Theorem \ref{...}.` or `By Lemma \ref{...}, $P$.` Apply the same form to definitions, assumptions, numbered parts, induction hypotheses, and other cited proof authority. Never write “we/one apply, invoke, use, or employ,” an imperative or participial “apply/applying/using,” or make an authority the grammatical subject of “gives,” “yields,” “shows,” “makes,” “implies,” “ensures,” “provides,” or “proves.” State the conclusion in the same sentence as its `by`-clause; do not leave a bare `By Theorem ...` invocation. Keep a short calculation inline when it is clearer than a citation.
+
+## Compact statement and proof paragraphs
+
+- Do not place a blank source line inside a theorem-style statement or its `proof`; it creates an unwanted paragraph break, vertical gap, and indentation.
+- Keep consecutive statement/proof sentences in one rendered paragraph and therefore one logical source line. Use a semantic list/case environment for genuine proof divisions, or an intended `\\` for a compact rendered break; never use an empty line or an unintended `\\` as visual padding.
 
 ## Structural Commentary and Key Insight
 
