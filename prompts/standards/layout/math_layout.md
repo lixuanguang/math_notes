@@ -38,6 +38,12 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 - Never repair layout by shrinking fonts, changing margins, adding arbitrary spacing, inserting mid-expression breaks, or creating unnecessary displays.
 - If inline pressure introduces extra notation or proof construction into a theorem statement, restore statement proportionality first. If the resulting formula still breaks badly, use the narrowest documented display exception or the configured less-strict mode.
 
+## Titled environment line break
+
+- Every titled theorem-style environment must end its opening `\hlt{Title}` immediately with `\\`, before any body prose, even when the title and prose would fit on one rendered line. Use the canonical opening `\begin{example} \label{...} \hlt{Title}\\` and apply the same rule to every other titled custom environment.
+- This rule governs environment titles only. It does not apply to untitled environments or inline semantic labels such as `\item \hlt{Keyword}: ...`.
+- Run `ruby scripts/check_environment_title_breaks.rb <target>` after formalization; the checker handles nested braces inside titles.
+
 ## Mixed prose–math line budget
 
 For formalization, use 100 horizontal character-equivalents as the preflight cap for one intended prose–inline-math span. This is calibrated to the current 8pt body and 175mm text block. It reduces repeated rendering but does not authorize overfull output.
