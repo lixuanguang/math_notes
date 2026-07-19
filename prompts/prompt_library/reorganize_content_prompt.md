@@ -4,7 +4,7 @@
 I am working in:
 /Users/lxg/Documents/GitHub/math_notes
 
-Reorganize the selected LaTeX scope so structure, placement, file order, source ownership, and section hierarchy are ready for dependency checks and later formalization.
+Reorganize the selected LaTeX scope so structure, placement, file order, source ownership, applied-environment ownership, and section hierarchy are ready for dependency checks and later formalization.
 
 Configuration:
 - MODE: edit

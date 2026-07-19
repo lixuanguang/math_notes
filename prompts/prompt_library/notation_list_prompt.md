@@ -30,9 +30,10 @@ External notation baseline:
 4. AMS Author Handbook (https://www.jointmathematicsmeetings.org/arc/handbook/index.html): use standard LaTeX structures, keep reusable mathematical commands in the preamble when they are truly frequent, do not redefine existing commands, use math mode for mathematical expressions, use roman operator commands for operator names, and use `\eqref` for numbered-equation references.
 5. AMS/EMS/LMS/SIAM accessible-math guidance (https://www.lms.ac.uk/publications/accessiblemaths): source should remain structurally convertible and figures/tables should not rely on visual styling alone; notation-list edits must preserve accessible source structure.
 6. Shoemaker et al., "Writing mathematical ecology" (https://doi.org/10.1002/ecs2.3701): define all notation used in key formulas, keep notation consistent with the manuscript and broader literature where possible, and avoid similar-looking symbols for dissimilar meanings.
+7. NIST SP 811, "Check List for Reviewing Manuscripts" (https://www.nist.gov/pml/special-publication-811/nist-guide-si-check-list-reviewing-manuscripts): physical quantities should keep quantity symbols, numerical values, and unit symbols distinct and consistently formatted.
 
 Authority and safety:
-1. Read `prompts/alignment_requirements.md` completely, especially Sections 5.1, 6, 7.3, 7.5, 7.6, 7.7, and 8. This prompt is stricter for notation-list ownership and collision edits.
+1. Read `prompts/alignment_requirements.md` completely, especially Sections 5.1, 5.8, 6, 7.3, 7.5, 7.6, 7.7, 7.8, and 8. This prompt is stricter for notation-list ownership and collision edits.
 2. Run `git status --short` before editing and preserve unrelated work.
 3. Do not stage, commit, push, reset, checkout, restore, revert, delete unrelated files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Do not browse during a normal run. Use the external baseline above and the repository standards already recorded here.
@@ -58,6 +59,7 @@ Before editing, build a ledger with one row per candidate notation symbol, macro
 - surface form and source file/line;
 - first active use and nearby definition;
 - intended meaning;
+- applied context when relevant: unit, physical dimension, currency, date, compounding, frequency, measure, basis of value, or data source;
 - scope: proof-local, block-local, subsection-local, section-local, part-local, or global;
 - recurrence count and spread across files/sections/parts;
 - existing notation-list owner, if any;
@@ -72,7 +74,7 @@ Edit standard:
 4. Use the smallest correct owner: collision rules in `00_collision_index_and_scope_rules.tex`, basic global conventions in `01_global_conventions.tex`, and subject-specific notation in the corresponding subject file.
 5. Prefer existing macros and operator names. Do not add a macro when a notation entry or local declaration is enough.
 6. With `ALLOW_NEW_MACRO: no`, report macro candidates instead of editing `parts/base.tex`. With `ALLOW_NEW_MACRO: yes`, add a macro only for a recurring expression whose spelling must be globally stable; use `\newcommand` or `\DeclareMathOperator` according to existing style, and do not redefine existing commands.
-7. Entries must be compact and distinguish meaning by subject, argument type, font, decoration, or local declaration. Avoid prose bloat, source commentary, proof context, and textbook explanation.
+7. Entries must be compact and distinguish meaning by subject, argument type, font, decoration, unit/dimension, currency/date/frequency, measure, or local declaration. Avoid prose bloat, source commentary, proof context, valuation narrative, and textbook explanation.
 8. If one glyph carries multiple deliberate meanings, either record the disambiguating feature in the collision index or split the subject entries so each meaning is findable.
 9. If two entries describe the same notation with inconsistent meanings, do not average them. Verify active usage, choose the canonical owner, update or merge entries, and report any local-content files that need follow-up.
 10. Remove a stale entry only after verifying it has no active uses or is fully superseded by another entry. If unsure, keep it and mark/report `% TODO(notation): verify ...`.
@@ -82,7 +84,7 @@ Edit standard:
 Collision checks:
 1. Search for each candidate surface form and macro in active content before editing the notation list.
 2. Check similar glyphs: roman/calligraphic/script/bold variants, bars, stars, primes, hats, tildes, subscripts, superscripts, and overloaded operators.
-3. Check overloaded single letters and common symbols such as `B`, `I`, `P`, `R`, `L`, `M`, `Q`, `\Delta`, `\Omega`, `\mu`, `\sigma`, `\lambda`, `*`, prime, and overline before adding a durable entry.
+3. Check overloaded single letters and common symbols such as `B`, `I`, `P`, `R`, `r`, `V`, `D`, `L`, `M`, `Q`, `\Delta`, `\Omega`, `\mu`, `\sigma`, `\lambda`, `*`, prime, and overline before adding a durable entry, especially across probability, dynamics, pricing, valuation, and accounting contexts.
 4. Do not resolve a collision by inventing a new notation in mathematical content unless the local file already supports that change and the edit is minimal.
 
 Validation:

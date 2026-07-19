@@ -4,9 +4,9 @@
 I am working in:
 /Users/lxg/Documents/GitHub/math_notes
 
-I attached screenshots, source images, PDFs, or exact source files from a mathematics text. Inspect the repository and choose the best target under the current `parts/` structure. Use `STRUCTURE_MIGRATION_README.md` as the placement and ownership reference.
+I attached screenshots, source images, PDFs, or exact source files from a mathematics, physics, quantitative-finance, fundamental-finance, or other technical source. Inspect the repository and choose the best target under the current `parts/` structure. Use `STRUCTURE_MIGRATION_README.md` as the placement and ownership reference.
 
-The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, proof, commentary, citation, layout, source-provenance, collection-level, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
+The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, applied/scientific/finance, proof, commentary, citation, layout, source-provenance, collection-level, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
 
 Configuration:
 - MODE: edit
@@ -92,9 +92,9 @@ Integration style:
 5. When adding a theorem, lemma, proposition, corollary, example, or algorithm, compare it against existing `proofmethod`, `computationmethod`, and legacy `method` blocks in the nearby owner and prerequisites. If the new source-supported material provides a reusable proof route, construction, diagnostic, verification check, limitation, or selection cue, extend the existing method or add the smallest appropriate typed method instead of duplicating that prose inside multiple results.
 6. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, or proof steps. If a theorem-style proof cannot be completed from the source plus earlier repository results, do not promote it to a theorem-style result; use a source TODO, remark, or report the blocker.
 7. Do not closely paraphrase long textbook passages. Write original notes in the repository's style.
-8. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `cex:...`, `meth:...`, `alg:...`, and `fig:...`.
+8. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `cex:...`, `meth:...`, `assump:...`, `model:...`, `law:...`, `der:...`, `approx:...`, `dim:...`, `emp:...`, `val:...`, `warn:...`, `alg:...`, and `fig:...`.
 9. For exercises or questions, integrate only useful supported mathematics; otherwise leave at most a concise TODO/source note.
-10. Add TikZ figures only when a diagram is mathematically useful. Do not reproduce text screenshots or decorative figures.
+10. Add TikZ figures only when a diagram is mathematically, scientifically, or financially useful. Do not reproduce text screenshots or decorative figures.
 11. Update notation files only for notation that will recur across major sections. Keep local notation near first use and do not let proof-local notation leak into later blocks.
 12. Add source-supported examples, nonexamples, counterexamples, or test computations when they clarify major definitions or hypotheses. Use `example` for positive/illustrative instances and `counterexample` for refutations or hypothesis-necessity failures. Each nontrivial example must identify what it illustrates, bind exact data, verify the relevant property or computation, and state the takeaway. Each counterexample must state the claim tested, give admissible data, verify any hypotheses, verify the failing conclusion, and state the precise lesson. Do not invent examples or counterexamples during screenshot intake.
 13. Keep remarks, motivations, perspectives, principles, processes, exercises, and question-bank items within the roles in `prompts/alignment_requirements.md` Section 5.7, and keep assumptions, conventions, models, laws, derivations, approximations, dimensional checks, empirical studies, valuation cases, and warnings within the roles in Section 5.8. Promote hidden results, methods, algorithms, definitions, notation, or prerequisites before later use.

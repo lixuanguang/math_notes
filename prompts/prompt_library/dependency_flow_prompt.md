@@ -4,7 +4,7 @@
 I am working in:
 /Users/lxg/Documents/GitHub/math_notes
 
-Audit and repair mathematical dependency flow in the selected LaTeX scope. Organization should already be broadly stable; this pass verifies that definitions, notation, prerequisites, source ownership, and formal results appear before use.
+Audit and repair mathematical and applied dependency flow in the selected LaTeX scope. Organization should already be broadly stable; this pass verifies that definitions, notation, assumptions, prerequisites, source ownership, applied context, and formal results appear before use.
 
 Configuration:
 - MODE: edit
@@ -35,10 +35,10 @@ For the current section or topic, check:
 - notation used before it is introduced;
 - proof-local or block-local notation reused later without a durable declaration;
 - theorem-style results depending on later theorem-style results;
-- methods relying on examples or remarks;
-- theorem, proposition, lemma, corollary, or method environments referencing examples or remarks as authority;
-- formal content hidden inside remarks or examples but needed later;
-- examples, counterexamples, or test computations placed too late to illuminate the definition or hypothesis they are meant to test;
+- methods relying on examples, remarks, warnings, empirical studies, or valuation cases as authority;
+- theorem, proposition, lemma, corollary, or method environments referencing examples, remarks, warnings, empirical studies, or valuation cases as authority;
+- formal content hidden inside remarks, examples, warnings, empirical studies, valuation cases, or other applied environments but needed later;
+- examples, counterexamples, applied checks, or test computations placed too late to illuminate the definition, hypothesis, model, law, approximation, or valuation assumption they are meant to test;
 - explicit references to remarks, examples, or numbered definitions that should instead become direct conditions or prior exposition;
 - ad hoc prerequisite paragraphs that should be moved, promoted, or removed through reordering;
 - equation references before the referenced formula or equation labels that are stale after movement;
@@ -62,8 +62,8 @@ Findings or edit report:
 - notation introduced too late;
 - proof-local notation reused outside its scope;
 - formal results or methods that reference remarks/examples;
-- content promoted from a remark/example into formal exposition;
-- examples/counterexamples moved earlier to support definitions or hypotheses;
+- content promoted from a remark/example/applied environment into formal exposition;
+- examples/counterexamples/applied checks moved earlier to support definitions, hypotheses, models, laws, approximations, or valuation assumptions;
 - equation-reference and TODO-discipline findings;
 - duplicate-label findings and any canonical label chosen;
 - minimal fixes applied or proposed, grouped as one coherent batch;
@@ -75,7 +75,7 @@ Validation:
 - re-check dependency order in affected files;
 - confirm no dependency issue was hidden by a shortcut paragraph;
 - re-check references, labels, and input order;
-- confirm no affected formal result or method depends on a remark/example;
+- confirm no affected formal result or method depends on a remark, example, warning, empirical study, valuation case, or other non-authoritative applied block;
 - confirm affected environments or objects have at most one label unless distinct anchors justify multiple labels.
 - confirm notation scope, equation references, typed TODOs, and source provenance remain coherent after movement.
 ```
