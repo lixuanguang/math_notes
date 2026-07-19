@@ -6,7 +6,7 @@ I am working in:
 
 I attached screenshots, source images, PDFs, or exact source files from a mathematics text. Inspect the repository and choose the best target under the current `parts/` structure. Use `STRUCTURE_MIGRATION_README.md` as the placement and ownership reference.
 
-The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, proof, commentary, citation, layout, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
+The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, proof, commentary, citation, layout, source-provenance, collection-level, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
 
 Configuration:
 - MODE: edit
@@ -45,7 +45,7 @@ Manual screenshot intake loop:
 1. Inspect all screenshots in order first. Treat them as the source ledger, not as a vague topic suggestion.
 2. Group the screenshots into coherent source blocks: definitions, results, proofs, methods, examples, algorithms, figures, exercises, or outline material.
 3. Resolve the natural owner from the active `parts/` tree. With `TARGET: auto-place from SOURCE_MATERIAL`, choose the best existing part/section/subsection from the screenshots and repository structure.
-4. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; use active `\input` order for the target files, not screenshot order, when editing.
+4. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; record each block as `source-stated`, `source-derived`, or `repo-derived` when applicable; use active `\input` order for the target files, not screenshot order, when editing.
 5. With `RUN_BATCH: all-source-supported`, process every planned target file in the same run. Do not ask whether to continue to the next subsection, section, or part. Continue until all source-supported, permission-allowed blocks are classified and integrated or explicitly reported as blocked.
 6. If a source block naturally requires a new section or part, do not stop to ask mid-run. Mark that block `blocked-new-section-or-part`, continue with the remaining allowed blocks, and report the exact proposed higher-level location.
 7. For each planned target file, compare the source ledger against that file and nearby prerequisites. Classify each source block as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, or `blocked-new-section-or-part`.
@@ -55,17 +55,18 @@ Manual screenshot intake loop:
 
 PASS_MODE meanings:
 - `first-pass`: place all supported material from SOURCE_MATERIAL across every allowed target file at final local quality.
-- `second-pass`: rerun over the same SOURCE_MATERIAL from the earliest affected target, compare against the current LaTeX state, and add only genuinely missing or still-partial source-supported content. Do not duplicate first-pass coverage.
+- `second-pass`: rerun over the same SOURCE_MATERIAL from the earliest affected target, compare against the current LaTeX state, and add only genuinely missing or still-partial source-supported content. Explicitly check for duplicated prose, repeated theorem payloads, and first-pass material that should be compressed, merged, or cross-referenced instead of repeated.
 
 Final-quality loop for every inserted or touched environment:
-1. Apply the complete canonical row workflow and Sections 5.1-5.5 of `prompts/alignment_requirements.md` to each new or materially touched block.
+1. Apply the complete canonical row workflow and Sections 5.1-7.7 of `prompts/alignment_requirements.md` to each new or materially touched block.
 2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, proof steps, convergence claims, complexity bounds, or implementation details.
 3. Re-read the source block, the LaTeX preamble, each statement item, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, and proof-complete when written as a theorem-style result.
 4. Keep theorem-style statements source-proportional. Do not move proof scaffolding, Picard iteration machinery, local construction constants, or proof-only error estimates into the statement unless the source presents them as reusable conclusions.
 5. Run the semantic deduplication and bundled-data ordering checks from `prompts/alignment_requirements.md`: no adjacent clause may repeat the same quantifier, scope, hypothesis, induction assumption, or conclusion in both prose and notation, and no map may use a derived domain before that domain is defined.
 6. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
 7. Run the standard gates on each active planned target file after its current edits and run `git diff --check`. If `BUILD: yes`, build and inspect edited line ranges for overfull/underfull warnings; if `BUILD: no`, report that this visual check was intentionally skipped.
-8. Fix every current-edit gate hit and distinguish genuinely pre-existing hits in the report. Do not leave a block that would require a later targeted-refinement pass just to reach canonical quality.
+8. Apply collection-level checks locally: orientation text only where structural, new notation scoped at the smallest durable level, source-supported examples/counterexamples placed near the definitions they test, equation labels only when referenced, and TODO comments typed and reported.
+9. Fix every current-edit gate hit and distinguish genuinely pre-existing hits in the report. Do not leave a block that would require a later targeted-refinement pass just to reach canonical quality.
 
 Classify the sources first:
 1. Contents or outline only: do not edit. Give a concise coverage and placement audit.
@@ -77,7 +78,7 @@ Classify the sources first:
 Placement rules:
 1. Prefer an existing subsection file whenever reasonable.
 2. Add a new numbered subsection only when the material clearly does not fit an existing subsection.
-3. Do not create a new section or part. If one seems necessary, stop and ask.
+3. Do not create a new section or part. If one seems necessary, classify the affected source block as `blocked-new-section-or-part`, continue all other allowed blocks, and report the exact proposed location.
 4. Do not create broad skeletons, placeholder files, or empty future headings.
 5. Keep visible depth exactly `\part`, `\section`, `\subsection`; do not add book-body `\subsubsection` or `\paragraph`.
 6. If a new subsection file is added, update only the necessary `overview.tex` or active `\input` edge.
@@ -93,7 +94,9 @@ Integration style:
 7. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `meth:...`, `alg:...`, and `fig:...`.
 8. For exercises or questions, integrate only useful supported mathematics; otherwise leave at most a concise TODO/source note.
 9. Add TikZ figures only when a diagram is mathematically useful. Do not reproduce text screenshots or decorative figures.
-10. Update notation files only for notation that will recur across major sections.
+10. Update notation files only for notation that will recur across major sections. Keep local notation near first use and do not let proof-local notation leak into later blocks.
+11. Add source-supported examples, nonexamples, counterexamples, or test computations when they clarify major definitions or hypotheses. Do not invent examples during screenshot intake.
+12. Number and label equations only when they are referenced later or central enough to need an anchor; otherwise keep formulas inline or unnumbered according to `MATH_LAYOUT`.
 
 Algorithms:
 1. Prefer a prose `method` environment for short conceptual procedures.
@@ -103,7 +106,7 @@ Algorithms:
 
 Canonical quality reminders:
 1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 directly, especially source-proportional theorem-style statements, self-contained theorem-style and method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
+2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 directly, especially source-proportional theorem-style statements, self-contained theorem-style and method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples, equation numbering, and TODO discipline.
 3. For methods, enumerate only actual executable solving steps. Cases, definitions, summaries, and interpretation stay in prose or formulas.
 4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 
@@ -121,11 +124,12 @@ If edits were made, report:
 - PASS_MODE and all active planned target files processed;
 - files changed;
 - main definitions, results, examples, methods, algorithms, figures, or source notes added;
-- extracted source blocks grouped by classification when that clarifies coverage;
+- extracted source blocks grouped by classification and provenance when that clarifies coverage;
 - coverage ledger summary: covered, partial, missing, misplaced, unsupported, and needs-later-file blocks;
 - existing material cross-referenced instead of duplicated;
 - any exercises or questions integrated;
 - any uncertainties, gaps, TODOs, or blocked section/part needs;
+- collection-level decisions: overview/input updates, notation lifecycle, examples/counterexamples, equation labels, and TODO taxonomy;
 - completion cursor, source-boundary status, and whether a later `second-pass` over the same SOURCE_MATERIAL is recommended;
 - final-quality confirmation for new/touched environments: preambles self-contained, proof items matched, notation audit done, standard gates clean for current edits, and no rough block deferred to later formalization;
 - build/log status for edited line ranges when BUILD is enabled, or an explicit BUILD-disabled note;
