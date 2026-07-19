@@ -42,6 +42,8 @@ For the current section or topic, check:
 - explicit references to intuitions, remarks, motivations, perspectives, examples, or numbered definitions that should instead become direct conditions or prior exposition;
 - ad hoc prerequisite paragraphs that should be moved, promoted, or removed through reordering;
 - equation references before the referenced formula or equation labels that are stale after movement;
+- figures cited before they are introduced, visualizations placed before their data/model owner, or illustrations placed too late to clarify the formal object they depict;
+- assumptions, data, parameter values, units, currency/date, or source facts needed later but present only in a figure or caption;
 - labels and references whose order may confuse the reader;
 - multiple labels on one environment or mathematical object;
 - TODOs that conceal dependency, source, proof, notation, or build blockers;
@@ -65,6 +67,7 @@ Findings or edit report:
 - content promoted from an intuition/remark/motivation/perspective/example/applied environment into formal exposition;
 - examples/counterexamples/intuitions/applied checks moved earlier to support definitions, hypotheses, results, models, laws, approximations, or valuation assumptions;
 - equation-reference and TODO-discipline findings;
+- figure dependency findings: figures cited before use, visual-only prerequisite ownership, visualizations missing earlier data/model owners, and figures that should move closer to the relevant definition, result, model, method, or valuation case;
 - duplicate-label findings and any canonical label chosen;
 - minimal fixes applied or proposed, grouped as one coherent batch;
 - why the fix is structural rather than a shortcut prerequisite paragraph;
@@ -76,6 +79,7 @@ Validation:
 - confirm no dependency issue was hidden by a shortcut paragraph;
 - re-check references, labels, and input order;
 - confirm no affected formal result or method depends on an intuition, remark, motivation, perspective, example, warning, empirical study, valuation case, or other non-authoritative block;
+- confirm no affected formal result, method, or applied block depends on data, assumptions, units, date/currency context, or formal relations that appear only in a figure or caption;
 - confirm affected environments or objects have at most one label unless distinct anchors justify multiple labels.
 - confirm notation scope, equation references, typed TODOs, and source provenance remain coherent after movement.
 ```

@@ -65,7 +65,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 ## 4. Execution workflow
 
-Traverse active `\input` order. The atomic unit of completion is one formal environment, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
+Traverse active `\input` order. The atomic unit of completion is one formal environment or figure, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
 Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, motivation, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, algorithm, and figure forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, figure role when relevant, required commentary status, and final rendered page. Do not mark rows in bulk.
 

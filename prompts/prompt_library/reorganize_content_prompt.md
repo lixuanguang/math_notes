@@ -46,6 +46,7 @@ For the current topic batch, check:
 - stale, untyped, or misplaced TODO comments;
 - figures far from the text that introduces or uses them;
 - back-to-back figures that are not an intentional comparison;
+- figure-role placement problems: illustrations too late to clarify the formal object, visualizations before their data/model owner, schematics separated from modeled assumptions, financial exhibits separated from valuation/date/currency context, or table-like visuals that should be searchable tables;
 - displayed indexed operators to leave as later formalization candidates.
 
 Batch limits:
@@ -76,11 +77,12 @@ Report before editing when the placement is nontrivial:
 - whether any subsection-to-section or section-to-part promotion is recommended or blocked by configuration;
 - duplicate-label consolidation, if any, with canonical label and references to update;
 - notation lifecycle, equation-label, TODO, example/counterexample/intuition placement, and applied-environment ownership concerns;
-- figure placement concerns;
+- figure role and placement concerns;
 - ambiguous candidates under `Needs Human Review`.
 
 Validation and final report:
 - re-check affected references, labels, inputs, and figure placement;
+- confirm moved figures retain their primary role, callout, caption, label, source/data/model context, and proximity to the formal or applied owner they explain;
 - confirm existing active placeholder subsections and broad future-facing subsection titles were preserved unless this run emptied and displaced their content;
 - confirm no formal result or method still depends on an intuition/remark/motivation/perspective/example in the affected batch;
 - confirm collection-level checks in the affected batch: overview orientation, notation lifecycle, source provenance when applicable, example/intuition placement, applied-environment ownership, equation labels, typed TODOs, and multi-PDF readiness;
