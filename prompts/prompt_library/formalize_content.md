@@ -13,6 +13,8 @@ Configuration:
 - START_CURSOR: <beginning | exact resume file>
 - FILE_COVERAGE: <all-active | changed-and-new | tracked-modified | untracked-new>
 - RUN_BATCH: one-numbered-file
+- EXISTING_EDIT_POLICY: supersede-in-scope-unless-protected
+- PROTECTED_EXISTING_EDITS: <none | exact paths/labels/blocks explicitly marked preserve>
 - MATH_LAYOUT: inline-strict
 - INLINE_LINE_BUDGET: 100-horizontal-character-equivalents
 - COMMENTARY_POLICY: required-new-and-rewritten
@@ -45,15 +47,15 @@ After the initial target census, load every applicable conditional module before
 - supplied source material -> `prompts/standards/sources/source_grounding.md`.
 
 Execution:
-1. Run `git status --short`; read `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, relevant notation/overview/target/prerequisite files, and resolve active input order and exact coverage.
+1. Run `git status --short`; capture the current in-scope diff and any explicitly protected paths/labels/blocks. Read `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, relevant notation/overview/target/prerequisite files, and resolve active input order and exact coverage.
 2. Apply RUN_BATCH. For a file target, use that file; otherwise choose only the next active numbered subsection at START_CURSOR. Build a compact source-order ledger containing row identity/type/domain, proof or commentary status when applicable, and action.
-3. Make one semantic pass in source order. For each changed row, enforce explicit claims, correct environment and authority, complete proof obligations, scoped notation, the domain overlay, and source limits. Keep patches atomic; do not emit per-row progress messages.
+3. Make one semantic pass in source order. Existing edits inside coverage are input, not wording or structure that must be preserved: rewrite or supersede them whenever the loaded standards support a better result, unless the user explicitly protected that edit. Enforce explicit claims, correct environment and authority, complete proof obligations, scoped notation, the domain overlay, and source limits. Keep patches atomic; do not emit per-row progress messages.
 4. Normalize math layout first, including required `\limits`, fractions, scripts, stacked constructs, and established notation. Then apply the recursive 100-horizontal-character-equivalent preflight in `math_layout.md` to every changed prose–inline-math span. Count printed references/citations, not command names or label keys; split or compress semantically when over budget without omitting needed content. Flag forced display style or nested vertical stacks for the one final render.
 5. Cold-read only changed rows and rows whose authority, notation, reference, or placement they affect. Run applicable search gates and `git diff --check` once after the file stabilizes.
 6. Run exactly one isolated full build and render the affected pages once. Inspect overfull boxes near changed lines and the changed blocks. Rebuild or rerender only when this final pass finds an actual current-edit overflow, collision, broken reference, or unreadable visual.
 7. Stop at the active file boundary and report the next cursor.
 
-Final report: scope/domain/file and next cursor; rows changed and substantive proof/environment/notation/source decisions; display/matrix/figure exceptions; horizontal-budget preflight, search, diff, single-build, log, and one-pass render results; preserved unrelated work and genuine blockers.
+Final report: scope/domain/file and next cursor; pre-existing in-scope edits superseded and explicitly protected edits retained; rows changed and substantive proof/environment/notation/source decisions; display/matrix/figure exceptions; horizontal-budget preflight, search, diff, single-build, log, and one-pass render results; preserved out-of-scope work and genuine blockers.
 ```
 
 For existing edits/new files only, use `FILE_COVERAGE: changed-and-new`. Use `COMMENTARY_POLICY: required-all-reviewed` when every reviewed theorem-style result needs the commentary pair. Keep `RUN_BATCH: one-numbered-file` unless the selected scope is already one small file and the user explicitly accepts a broader batch.

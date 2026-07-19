@@ -52,6 +52,8 @@ Before editing, run `git status --short` and read the structural owners, target 
 
 Preserve all unrelated tracked and untracked work. Do not reset, checkout, restore, revert, clean, delete unrelated files, stage, commit, push, or edit repository-generated PDF/auxiliary files. Use focused patches. Do not overwrite whole content files for a local change. If an overlapping target changes unexpectedly or a patch fails, stop on that file and report the conflict.
 
+`formalize_content.md` supplies the deliberate exception for pre-existing edits inside its exact coverage: those edits may be rewritten or superseded by the canonical formalization unless the user explicitly marks a path, label, or block for preservation. Work from the current file state—never restore a baseline with Git—and preserve all out-of-scope and explicitly protected edits. Record superseded and protected edits in the final report. A concurrent change after the initial census is still an unexpected overlap and must not be overwritten silently.
+
 ## Semantic review protocol
 
 The atomic review unit is a logical environment or figure, not a file, page, grep match, or environment count. For a full formalization or source-intake pass:
