@@ -4,7 +4,7 @@
 I am working in:
 /Users/lxg/Documents/GitHub/math_notes
 
-Audit and repair mathematical dependency flow in the selected LaTeX scope. Organization should already be broadly stable; this pass verifies that definitions, notation, prerequisites, and formal results appear before use.
+Audit and repair mathematical dependency flow in the selected LaTeX scope. Organization should already be broadly stable; this pass verifies that definitions, notation, prerequisites, source ownership, and formal results appear before use.
 
 Configuration:
 - MODE: edit
@@ -19,7 +19,7 @@ Configuration:
 - BUILD: no
 
 Authority and safety:
-1. Read `prompts/alignment_requirements.md` for canonical dependency, label, structure, and safety rules.
+1. Read `prompts/alignment_requirements.md` for canonical dependency, label, structure, collection-level, and safety rules.
 2. This prompt fixes dependency order structurally. Do not use shortcut prerequisite paragraphs to hide ordering problems.
 3. Do not build LaTeX, stage, commit, push, reset, checkout, restore, revert, delete unrelated files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Run `git status --short` before editing. Preserve unrelated tracked and untracked work. If a patch conflicts or a target file changed unexpectedly, stop and report the conflict.
@@ -33,14 +33,18 @@ Dependency checks:
 For the current section or topic, check:
 - definitions used before they are stated;
 - notation used before it is introduced;
+- proof-local or block-local notation reused later without a durable declaration;
 - theorem-style results depending on later theorem-style results;
 - methods relying on examples or remarks;
 - theorem, proposition, lemma, corollary, or method environments referencing examples or remarks as authority;
 - formal content hidden inside remarks or examples but needed later;
+- examples, counterexamples, or test computations placed too late to illuminate the definition or hypothesis they are meant to test;
 - explicit references to remarks, examples, or numbered definitions that should instead become direct conditions or prior exposition;
 - ad hoc prerequisite paragraphs that should be moved, promoted, or removed through reordering;
+- equation references before the referenced formula or equation labels that are stale after movement;
 - labels and references whose order may confuse the reader;
 - multiple labels on one environment or mathematical object;
+- TODOs that conceal dependency, source, proof, notation, or build blockers;
 - local `\input` or `\include` order affecting dependency flow.
 
 Edit rules:
@@ -50,13 +54,17 @@ Edit rules:
 4. Do not rename labels unless explicitly approved; if duplicate-label consolidation is approved, keep one stable canonical label and update references.
 5. Do not process later sections merely because they might also need refinement.
 6. Do not add unsupported theory. If required prerequisite machinery is missing, report the blocker or add only source/repo-supported content within the selected scope.
+7. Preserve or reconstruct source provenance in the report for any moved source-grounded block. Do not use provenance bookkeeping as mathematical prose.
 
 Findings or edit report:
 - file path, section heading, and mathematical role of the section;
 - dependencies used in the section and whether each was introduced earlier;
 - notation introduced too late;
+- proof-local notation reused outside its scope;
 - formal results or methods that reference remarks/examples;
 - content promoted from a remark/example into formal exposition;
+- examples/counterexamples moved earlier to support definitions or hypotheses;
+- equation-reference and TODO-discipline findings;
 - duplicate-label findings and any canonical label chosen;
 - minimal fixes applied or proposed, grouped as one coherent batch;
 - why the fix is structural rather than a shortcut prerequisite paragraph;
@@ -69,4 +77,5 @@ Validation:
 - re-check references, labels, and input order;
 - confirm no affected formal result or method depends on a remark/example;
 - confirm affected environments or objects have at most one label unless distinct anchors justify multiple labels.
+- confirm notation scope, equation references, typed TODOs, and source provenance remain coherent after movement.
 ```

@@ -14,8 +14,16 @@ Recommended sequence for a new source batch:
 add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.md with PASS_MODE: second-pass -> reorganize_content_prompt.md -> dependency_flow_prompt.md -> formalize_content.md
 ```
 
+Phase ownership:
+
+- `add_content_prompt.md` classifies every source block, auto-places allowed material when configured, integrates all source-supported content in one run, and records source provenance.
+- `add_content_prompt.md` with `PASS_MODE: second-pass` catches missed supported content and removes/merges accidental duplicate coverage from the first pass.
+- `reorganize_content_prompt.md` handles movement, splitting, same-level placement, subsection creation when allowed, duplicate labels, and promotion recommendations. It is the phase that identifies subsection-to-section or section-to-part promotion; it performs the promotion only when `ALLOW_NEW_SECTION_OR_PART: yes`.
+- `dependency_flow_prompt.md` repairs prerequisite order, notation lifecycle, source ownership after movement, and invalid dependency authority.
+- `formalize_content.md` performs the row-by-row theorem/proof/style/layout/build pass after the structure is stable.
+
 For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.
 
-Skip any prompt whose work is already settled. For canonical theorem/proof, mathematical, and layout requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline.
+Skip any prompt whose work is already settled. For canonical theorem/proof, mathematical, layout, source-provenance, and collection-level requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline and Section 7 for collection-level standards.
 
 When prompt requirements overlap, keep the shared standard in `prompts/alignment_requirements.md` and leave only workflow-specific instructions in the library prompt.

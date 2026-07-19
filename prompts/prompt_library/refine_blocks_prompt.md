@@ -23,9 +23,9 @@ Safety:
 5. If the target block changes unexpectedly, stop and report the conflict.
 
 Refinement standard:
-1. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 to the target block: source-proportional theorem-style statements, explicit-formal-notation-succinct rewriting, self-contained preambles, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
+1. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 to the target block: source-proportional theorem-style statements, explicit-formal-notation-succinct rewriting, self-contained preambles, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, inline layout, notation lifecycle, equation numbering, and TODO discipline.
 2. Keep the target boundary tight. Edit only the named/screenshot-selected block plus necessary local labels, references, notation declarations, or immediately adjacent proof/commentary lines.
-3. Use the proof-segmentation patterns in Section 5.2 for iff directions and equivalent conditions. Do not add lists for setup, interpretation, or label-only scaffolding.
+3. Keep proof segmentation available. Use proof items for independent statement claims, iff directions, equivalent-condition implications, genuine cases, or named proof stages; use compact prose for a single direct argument. Do not add lists for setup, interpretation, or label-only scaffolding.
 4. Use compact local notation when it reduces repeated setup or repairs layout, but only when the notation is bound in the block or nearby context.
 5. If the screenshot/user request exposes a defect that cannot be fixed inside the target boundary, stop after the safe local edits and report the exact wider dependency or placement blocker.
 
@@ -33,5 +33,5 @@ Validation:
 1. Run `git diff --check`.
 2. Run the standard gates from `prompts/alignment_requirements.md` on the target file and fix current-edit hits.
 3. If `BUILD: yes`, build and inspect the edited line ranges for overfull/underfull warnings; distinguish unrelated warnings elsewhere.
-4. Report the exact block changed, the main statement/proof/commentary changes, validation results, and any pre-existing issues left untouched.
+4. Report the exact block changed, the main statement/proof/commentary changes, any collection-level effects inside the target boundary, validation results, and any pre-existing issues left untouched.
 ```
