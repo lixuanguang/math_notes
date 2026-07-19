@@ -35,11 +35,11 @@ For the current section or topic, check:
 - notation used before it is introduced;
 - proof-local or block-local notation reused later without a durable declaration;
 - theorem-style results depending on later theorem-style results;
-- methods relying on examples, remarks, warnings, empirical studies, or valuation cases as authority;
-- theorem, proposition, lemma, corollary, or method environments referencing examples, remarks, warnings, empirical studies, or valuation cases as authority;
-- formal content hidden inside remarks, examples, warnings, empirical studies, valuation cases, or other applied environments but needed later;
-- examples, counterexamples, applied checks, or test computations placed too late to illuminate the definition, hypothesis, model, law, approximation, or valuation assumption they are meant to test;
-- explicit references to remarks, examples, or numbered definitions that should instead become direct conditions or prior exposition;
+- methods relying on examples, intuitions, remarks, warnings, empirical studies, or valuation cases as authority;
+- theorem, proposition, lemma, corollary, or method environments referencing examples, intuitions, remarks, warnings, empirical studies, or valuation cases as authority;
+- formal content hidden inside intuitions, remarks, examples, warnings, empirical studies, valuation cases, or other applied environments but needed later;
+- examples, counterexamples, intuitions, applied checks, or test computations placed too late to illuminate the definition, hypothesis, result, model, law, approximation, or valuation assumption they are meant to explain or test;
+- explicit references to intuitions, remarks, examples, or numbered definitions that should instead become direct conditions or prior exposition;
 - ad hoc prerequisite paragraphs that should be moved, promoted, or removed through reordering;
 - equation references before the referenced formula or equation labels that are stale after movement;
 - labels and references whose order may confuse the reader;
@@ -61,9 +61,9 @@ Findings or edit report:
 - dependencies used in the section and whether each was introduced earlier;
 - notation introduced too late;
 - proof-local notation reused outside its scope;
-- formal results or methods that reference remarks/examples;
-- content promoted from a remark/example/applied environment into formal exposition;
-- examples/counterexamples/applied checks moved earlier to support definitions, hypotheses, models, laws, approximations, or valuation assumptions;
+- formal results or methods that reference intuitions/remarks/examples;
+- content promoted from an intuition/remark/example/applied environment into formal exposition;
+- examples/counterexamples/intuitions/applied checks moved earlier to support definitions, hypotheses, results, models, laws, approximations, or valuation assumptions;
 - equation-reference and TODO-discipline findings;
 - duplicate-label findings and any canonical label chosen;
 - minimal fixes applied or proposed, grouped as one coherent batch;
@@ -75,7 +75,7 @@ Validation:
 - re-check dependency order in affected files;
 - confirm no dependency issue was hidden by a shortcut paragraph;
 - re-check references, labels, and input order;
-- confirm no affected formal result or method depends on a remark, example, warning, empirical study, valuation case, or other non-authoritative applied block;
+- confirm no affected formal result or method depends on an intuition, remark, example, warning, empirical study, valuation case, or other non-authoritative applied block;
 - confirm affected environments or objects have at most one label unless distinct anchors justify multiple labels.
 - confirm notation scope, equation references, typed TODOs, and source provenance remain coherent after movement.
 ```
