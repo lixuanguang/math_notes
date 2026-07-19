@@ -62,7 +62,7 @@ def blank_formal_lines(lines)
   violations = []
   lines.each_with_index do |line, index|
     violations << index + 1 if line.strip.empty? && stack.any? { |name| FORMAL_ENVIRONMENTS.include?(name) }
-    line.scan(/\\(begin|end)\{([^}]+)\}/).each do |kind, name|
+    source_text(line).scan(/\\(begin|end)\{([^}]+)\}/).each do |kind, name|
       if kind == "begin"
         stack << name
       else

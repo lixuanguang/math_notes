@@ -5,7 +5,7 @@ AUTHORITY_REFERENCE = /\b(?:Theorem|Proposition|Lemma|Corollary|Definition|Assum
 BANNED_FORMS = [
   /\b(?:we|one)\s+(?:apply|invoke|use|employ)\b/i,
   /\b(?:apply|invoke|use|employ)(?:ing|s|ed)?\s+(?:(?:Theorem|Proposition|Lemma|Corollary|Definition|Assumption)\b|\([ivx]+\)|(?:part|claim)\b)/i,
-  /(?:(?:Theorem|Proposition|Lemma|Corollary|Definition|Assumption)\s+\\ref\{[^}]+\}|\b(?:part|claim)\s+\([^)]+\)|\$P[^$]*\$)\s+(?:gives?|yields?|shows?|makes?|implies|ensures?|provides?|proves?)\b/i
+  /(?:(?:Theorem|Proposition|Lemma|Corollary|Definition|Assumption)\s+\\ref\{[^}]+\}|\b(?:part|claim)\s+\([^)]+\)|\$P[^$]*\$)\s+(?:gives?|yields?|shows?|makes?|implies|ensures?|provides?|proves?|applied)\b/i
 ].freeze
 
 def source_text(line)
