@@ -87,11 +87,12 @@ After each row, perform this adversarial check before moving on:
 3. Is setup repeated across items instead of factored into a preamble?
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
 5. For a method row, does the block use the correct environment and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
-6. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
-7. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
-8. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
-9. Are commentary lines genuinely structural/insightful and maximally concise?
-10. Does the rendered block have clean semantic breaks and no sparse tail?
+6. For an example, remark, motivation, perspective, principle, process, exercise, or question-bank row, does the environment perform its proper role without becoming a hidden theorem, proof, method, prerequisite owner, or duplicate summary?
+7. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
+8. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
+9. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
+10. Are commentary lines genuinely structural/insightful and maximally concise?
+11. Does the rendered block have clean semantic breaks and no sparse tail?
 
 If any answer exposes a defect, rewrite the entire affected environment again. Do not stop at the longer explicit/formal draft, a surface copyedit, or a passing search.
 
@@ -193,9 +194,9 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Theorem/proposition/lemma/corollary | Source-proportional setup before claims. One conclusion: no list. Two or more independent conclusions: claim items or a logical-weight split. Do not turn a result statement into a construction ledger. |
 | Proof | Direct argument: compact prose. Multiple statement claims: matching proof items in the same order. Iff directions may remain inside their matching claim item when concise. |
 | Proof/computation method/process | Transferable problem-solving pattern; see Section 5.6. Use `proofmethod` for proof patterns, `computationmethod` for computations/constructions/diagnostics, and legacy `method` only for justified hybrid/other cases. Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
-| Example | Setup, computation, conclusion. Enumerate only distinct steps/cases/comparisons. |
-| Remark | One compact paragraph; no enumerate or commentary labels. |
-| Perspective/motivation/principle | Concise prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
+| Example | See Section 5.7. Name what it illustrates, bind exact data, verify the relevant property or failure, and end with the takeaway. Enumerate only distinct steps/cases/comparisons. |
+| Remark | See Section 5.7. One focused compact paragraph; no enumerate or commentary labels. Convert hidden claims, proof obligations, or reusable procedures to the proper environment. |
+| Perspective/motivation/principle | See Section 5.7. Concise expository prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
 | Algorithm | Use a prose method unless real pseudocode helps. Otherwise use repository `breakablealgorithm`/`algorithmic` style with supported inputs, outputs, claims, and `alg:...` label. |
 | Exercise/question bank | Retain useful supported mathematics; otherwise a concise exercise or source TODO. Never make it the sole prerequisite for later formal results. |
 
@@ -338,6 +339,43 @@ Computational method steps may contain formulas and short ordered procedures, bu
 
 When extracting methods from source material, prefer the source's natural level of generality. Do not invent alternative approaches, success criteria, convergence guarantees, complexity claims, or edge cases. If a useful method is only implicit, include only the shortest source-grounded abstraction needed to make the approach reusable.
 
+### 5.7 Examples, remarks, and expository environments
+
+This environment standard is distilled from:
+
+- MIT, "Writing a Math Phase Two Paper" checklist: https://web.mit.edu/mathp2/www/checklist.html
+- University of Minnesota School of Mathematics Writing Across the Curriculum plan: https://wac.umn.edu/wec-program/academic-units/mathematics
+- MIT OpenCourseWare 18.821, "Criteria for Good Writing": https://ocw.mit.edu/courses/18-821-project-laboratory-in-mathematics-spring-2013/pages/writing/
+- University of Texas, "Guidelines for Writing Up Problems": https://web.ma.utexas.edu/users/mks/360M04/write.html
+- `The Manual of Scientific Style`, "Style and Usage for Mathematics": https://www.sciencedirect.com/science/chapter/edited-volume/abs/pii/B9780123739803500101
+- Montana State University, "Proof Guidelines": https://math.montana.edu/courses/m242/proof-guidelines.html
+- Oxford Mathematical Institute, "Introduction to University Mathematics: Logic and Proof": https://courses.maths.ox.ac.uk/mod/page/view.php?id=65664
+
+Examples, remarks, motivations, perspectives, principles, processes, exercises, and question-bank blocks are explanatory or pedagogical environments. They may clarify, test, warn, motivate, compare, or organize mathematics, but they must not own prerequisites needed by later formal results. If a block contains a reusable claim, proof obligation, definition, construction, method, or algorithm, promote or split that content into the appropriate environment and leave only the explanatory residue.
+
+An `example` should do at least one clear job: instantiate a definition, verify a hypothesis, compute an invariant, test a theorem, exhibit a boundary case, give a counterexample/nonexample, compare two nearby notions, or show a method in action. A nontrivial example has four supported components:
+
+1. **Target:** the concept, hypothesis, result, or method being illustrated.
+2. **Data:** the concrete object, parameters, map, space, sequence, matrix, equation, or probability model.
+3. **Verification:** the calculation, membership check, hypothesis check, counterexample failure, or comparison that makes the example meaningful.
+4. **Takeaway:** the exact lesson, boundary, contrast, or reusable intuition.
+
+Do not include all four labels unless they reduce ambiguity; the content must still be present. If an example is merely a source-stated object with no verification or lesson, either add the source-supported check or keep it as a short sentence near the definition. If the example proves a general assertion, convert that assertion to a theorem-style result and keep the example as an illustration. If the example is a worked computation with a reusable procedure, extract or cross-reference a `computationmethod`.
+
+For a counterexample or nonexample, state the claim or property being tested, give exact data satisfying the relevant ambient assumptions, and verify the failure in one compact check. Prefer simple exact objects over elaborate constructions unless the source requires the latter. A counterexample disproves only the stated universal/conditional claim; do not let it imply broader failure than it verifies.
+
+A `remark` records one local caveat, interpretation, warning, comparison, convention, variant, notation clarification, boundary condition, or source-proportional aside. It should normally be one compact paragraph. Do not enumerate inside a remark; split multiple independent points into separate remarks or convert them to examples, typed methods, definitions, or theorem-style results. A remark may contain a short formula, but a result-like sentence with quantifiers, equivalences, existence, uniqueness, or a proof obligation must be promoted unless it is explicitly a non-authoritative intuition.
+
+A `motivation` block explains why the next definition, result, method, or section is natural: the obstruction, model case, guiding question, or structural need. It belongs before the object it motivates and must not contain a hidden formal result. Keep it short enough that the reader reaches the formal object quickly.
+
+A `perspective` block synthesizes or reinterprets already established material: a dictionary, analogy, change of viewpoint, forward/backward connection, or conceptual map. It may point to earlier formal owners but cannot introduce prerequisites for later use. If the perspective contains a classification, theorem, or workflow that later arguments need, split that content into the formal owner first.
+
+A `principle` records a durable heuristic, organizing doctrine, or source-supported rule of thumb. It is not a theorem. State its scope and limitation; if it is universally true and used as proof authority, recast it as a theorem-style result with proof.
+
+A `process` records an organizational workflow or document-level procedure. Use `proofmethod` or `computationmethod` for mathematical problem-solving patterns, and use `breakablealgorithm` for executable pseudocode. Do not duplicate the same process as a method.
+
+Exercises and `qnbank` items should specify givens and the task precisely. Retain them only when they add source-supported practice, examples, counterexamples, or useful mathematical prompts. They must not be the sole source of a definition, theorem, method, notation, or prerequisite; promote any needed mathematical content before later use. Avoid answerless exercises during source-grounded integration unless the source itself is an exercise list and the item is worth preserving.
+
 ## 6. Dependencies, labels, notation, and figures
 
 - Definitions, notation, and prerequisites precede use. Formal results and typed methods must not depend on remarks or examples; promote or move essential content.
@@ -422,7 +460,7 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality and placement, not merely matching counts.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
