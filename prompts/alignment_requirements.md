@@ -66,7 +66,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 Traverse active `\input` order. The atomic unit of completion is one formal environment, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
-Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, perspective, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
+Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
 
 Process exactly one ledger row at a time. Read the whole environment, its proof, and the immediately relevant earlier owners; then apply:
 
@@ -88,11 +88,12 @@ After each row, perform this adversarial check before moving on:
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
 5. For a method row, does the block use the correct environment and identify the problem type, givens, target, approach-selection cue, operative steps, verification check, and limitation/transfer point appropriate to the source?
 6. For an example, counterexample, remark, motivation, perspective, principle, process, exercise, or question-bank row, does the environment perform its proper role without becoming a hidden theorem, proof, method, prerequisite owner, or duplicate summary?
-7. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
-8. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
-9. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
-10. Are commentary lines genuinely structural/insightful and maximally concise?
-11. Does the rendered block have clean semantic breaks and no sparse tail?
+7. For an applied/scientific/finance row, is the role correct and are assumptions, units/currency/date/sample, inputs, outputs, validation, and limitations present when relevant?
+8. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
+9. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
+10. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
+11. Are commentary lines genuinely structural/insightful and maximally concise?
+12. Does the rendered block have clean semantic breaks and no sparse tail?
 
 If any answer exposes a defect, rewrite the entire affected environment again. Do not stop at the longer explicit/formal draft, a surface copyedit, or a passing search.
 
@@ -198,6 +199,11 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Counterexample | See Section 5.7. State the claim being refuted, bind exact admissible data, verify the hypotheses/ambient assumptions, verify the failing conclusion, and state the precise lesson. |
 | Remark | See Section 5.7. One focused compact paragraph; no enumerate or commentary labels. Convert hidden claims, proof obligations, or reusable procedures to the proper environment. |
 | Perspective/motivation/principle | See Section 5.7. Concise expository prose; use semantic `\\` breaks between context, setup/contrast, consequence, and interpretation when several roles occur. |
+| Assumption/convention | See Section 5.8. State scope, objects, and effect on later use. An assumption is a declared hypothesis; a convention is a notational, sign, unit, or modeling choice. Neither is proof authority. |
+| Model/law | See Section 5.8. State purpose/regime, quantities, equations/relations, assumptions, parameters, inputs/outputs, and limits. Use `law` only for a source-presented physical/economic law, conservation principle, or durable empirical relation. |
+| Derivation/approximation/dimensional check | See Section 5.8. A derivation traces assumptions to a formula; an approximation states the expansion regime and retained/dropped terms; a dimensional check verifies consistency but does not prove truth. |
+| Empirical study/valuation case | See Section 5.8. Record question, data/source/sample, method/model, assumptions, outputs, uncertainty/sensitivity, reproducibility, and limitations. Distinguish fact, estimate, and opinion. |
+| Warning | See Section 5.8. One local pitfall: trigger, failure mode, consequence, and safe correction. Do not use it as theorem authority. |
 | Algorithm | Use a prose method unless real pseudocode helps. Otherwise use repository `breakablealgorithm`/`algorithmic` style with supported inputs, outputs, claims, and `alg:...` label. |
 | Exercise/question bank | Retain useful supported mathematics; otherwise a concise exercise or source TODO. Never make it the sole prerequisite for later formal results. |
 
