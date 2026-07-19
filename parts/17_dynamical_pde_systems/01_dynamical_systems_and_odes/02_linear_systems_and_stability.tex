@@ -1,14 +1,145 @@
 \subsection{Linear Systems and Stability}
 % Matrix exponentials, stable/unstable subspaces, Lyapunov stability, hyperbolicity.
 
-\begin{method} \label{meth:solve-linear-ode-by-jordan-form} \hlt{Solving $\mathbf{x}'(t)=A\mathbf{x}(t)$ by Jordan Form}\\
-To solve $\mathbf{x}'(t)=A\mathbf{x}(t)$ with $\mathbf{x}(0)=\mathbf{x}_0$:
+Scalar first-order linear equations admit an explicit evolution factor and a variation-of-constants representation.
+
+\begin{proposition} \label{prop:scalar-linear-variation-of-constants} \hlt{Scalar Variation of Constants}\\
+Let $I\subseteq\R$ be open, $a,g\in C(I,\R)$, and $(t_0,x_0)\in I\times\R$.\\
+Put $E(t,s)\defeq\exp\left(\int_s^t a(r)\,dr\right)$ and $\phi(t)\defeq E(t,t_0)x_0+\int_{t_0}^tE(t,s)g(s)\,ds$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Put $A=SJS^{-1}$, where $J=\bigoplus_{i=1}^rJ_{k_i}(\lambda_i)$.
+\item $\phi\in C^1(I,\R)$ and $(\phi'-a\phi,\phi(t_0))=(g,x_0)$.
+\item If $x\in C^1(I,\R)$ and $(x'-ax,x(t_0))=(g,x_0)$, then $x=\phi$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $B(t)\defeq x_0+\int_{t_0}^tE(t_0,s)g(s)\,ds$. By additivity, $E(t,s)=E(t,t_0)E(t_0,s)$, so $\phi(t)=E(t,t_0)B(t)$.\\
+By Theorem \ref{thm:integral-function-continuity-and-derivative}, $B\in C^1$, $\partial_tE(t,t_0)=a(t)E(t,t_0)$, and $B'(t)=E(t_0,t)g(t)$.\\
+Hence $\phi\in C^1$, $\phi'(t)=a(t)\phi(t)+E(t,t_0)E(t_0,t)g(t)=a(t)\phi(t)+g(t)$, and $\phi(t_0)=x_0$.
+\item If $(x'-ax,x(t_0))=(g,x_0)$, then $\frac{d}{dt}(E(t_0,t)x(t))=E(t_0,t)(x'(t)-a(t)x(t))=E(t_0,t)g(t)$.\\
+By Theorem \ref{thm:fundamental-theorem-calculus-riemann}, $E(t_0,t)x(t)=x_0+\int_{t_0}^tE(t_0,s)g(s)\,ds$.\\
+Multiplying by $E(t,t_0)$ and using $E(t,t_0)E(t_0,s)=E(t,s)$ gives $x(t)=\phi(t)$.
+\end{enumerate}
+\hlt{Structural Commentary}: $E(t_0,t)$ removes $a(t)x$; integration accumulates $g$.\\
+\hlt{Key Insight}: $(E(t_0,t)x)'=E(t_0,t)g$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:fiber-preserving-ode-transformation} \hlt{Fiber-Preserving Change of Variables}\\
+Let $\Omega,\widetilde{\Omega}\subseteq\R^2$ be open, $f:\Omega\to\R$, and $T:\Omega\to\widetilde{\Omega}$ be a $C^1$ diffeomorphism.\\
+Assume $T(t,x)=(\sigma(t),\eta(t,x))$ and $T^{-1}(s,y)=(\tau(s),\xi(s,y))$. Put $G\defeq\partial_t\eta+\partial_x\eta\,f$.\\
+Define $\widetilde f:\widetilde\Omega\to\R$ by $\widetilde f(s,y)\defeq\tau'(s)G(\tau(s),\xi(s,y))$.\\
+Let $I\subseteq\R$ be an interval, $x\in C^1(I,\R)$, $\Gamma_x\defeq\{(t,x(t)):t\in I\}\subseteq\Omega$, and $J\defeq\sigma(I)$.\\
+Set $y:J\to\R$ by $y(s)\defeq\eta(\tau(s),x(\tau(s)))$. Then $y\in C^1(J,\R)$, and $x'=f(\,\cdot\,,x)$ on $I$ iff $y'=\widetilde f(\,\cdot\,,y)$ on $J$.
+\begin{proof}
+Since $\det DT(t,x)=\sigma'(t)\partial_x\eta(t,x)\neq0$, $\sigma'\neq0$, $\partial_x\eta\neq0$, and $\tau'(\sigma(t))\sigma'(t)=1$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $x'=f(\,\cdot\,,x)$ and $s\in J$, then $y'(s)=\tau'(s)G(\tau(s),x(\tau(s)))$. Since $\xi(s,y(s))=x(\tau(s))$, $y'(s)=\widetilde f(s,y(s))$.
+\item[$(\Leftarrow)$] Let $t\in I$. Differentiating $y(\sigma(t))=\eta(t,x(t))$ gives $\sigma'(t)y'(\sigma(t))=\partial_t\eta(t,x(t))+\partial_x\eta(t,x(t))x'(t)$.\\
+Since $y'=\widetilde f(\,\cdot\,,y)$, $\sigma'(t)y'(\sigma(t))=G(t,x(t))$. Hence $\partial_x\eta(t,x(t))[x'(t)-f(t,x(t))]=0$, so $x'=f(\,\cdot\,,x)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Transform graphs; apply the chain rule.\\
+\hlt{Key Insight}: $\widetilde f$ is the pushed-forward vector field.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:homogeneous-first-order-reduction} \hlt{Homogeneous First-Order Reduction}\\
+For $x'=f(x/t)$ on an interval with $t\neq0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $y\defeq x/t$, so $x=ty$.
+\item Differentiate to obtain $y'=(tx'-x)/t^2=[f(y)-y]/t$.
+\item Each root $c$ of $f(c)=c$ gives the constant-ratio solution $x(t)=ct$.
+\item On every branch where $f(y)\neq y$, separate $dy/(f(y)-y)=dt/t$, solve for $y$, and recover $x=ty$.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:affine-fractional-first-order-reduction} \hlt{Affine-Fractional First-Order Reduction}\\
+Let $A(t,x)\defeq ax+bt+c$, $B(t,x)\defeq\alpha x+\beta t+\gamma$, $B\neq0$, and $\Delta\defeq a\beta-\alpha b$. For $x'=f(A/B)$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\Delta\neq0$, choose $(t_*,x_*)$ with $A(t_*,x_*)=B(t_*,x_*)=0$. Set $s\defeq t-t_*$ and $y\defeq x-x_*$.\\
+Then $\frac{dy}{ds}=f(\frac{ay+bs}{\alpha y+\beta s})$; for $s\neq0$, $z\defeq y/s$ satisfies $s\frac{dz}{ds}=f(\frac{az+b}{\alpha z+\beta})-z$.
+\item If $\Delta=0$, $(a,b)\neq(0,0)$, and $(\alpha,\beta)=\lambda(a,b)$, set $\widehat{f}(u)\defeq f(\frac{u+c}{\lambda u+\gamma})$.\\
+If $a\neq0$, use $u\defeq ax+bt$: $u'=a\widehat{f}(u)+b$, with $x=\frac{u-bt}{a}$. If $a=0$, then $x'=\widehat{f}(bt)$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:euler-equation-log-time} \hlt{Euler Equation Under Logarithmic Time}\\
+For $t>0$, set $s\defeq\log t$ and $y(s)\defeq x(e^s)$. Then $x'(t)=t^{-1}y'(s)$ and $x''(t)=t^{-2}(y''(s)-y'(s))$.\\
+Hence Euler equation $t^2x''+3tx'+x=2/t$ becomes constant-coefficient equation $y''+2y'+y=2e^{-s}$.
+\end{example}
+
+\begin{proposition} \label{prop:exact-first-order-equation-potential} \hlt{Exact First-Order Equations}\\
+Let $R\defeq I\times J$ be an open rectangle, let $p,q\in C^1(R,\R)$, and fix $(x_0,y_0)\in R$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists F\in C^2(R,\R)$ with $\partial_yF=p$ and $\partial_xF=q$.
+\item $\partial_xp=\partial_yq$ on $R$.
+\end{enumerate}
+Assume (i)--(ii), and set $F_0(x,y)\defeq\int_{x_0}^{x}q(s,y_0)\,ds+\int_{y_0}^{y}p(x,r)\,dr$.\\
+Then $F_0$ satisfies (i). If $F_1$ satisfies (i), then $\exists c\in\R$ with $F_1=F_0+c$.\\
+Moreover, for every interval $L\subseteq I$ and $y\in C^1(L,J)$, $p(\,\cdot\,,y)y'+q(\,\cdot\,,y)=0$ iff $F_0(\,\cdot\,,y)$ is constant on $L$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ If $\partial_yF=p$ and $\partial_xF=q$, then by Corollary \ref{cor:mixed-partials-from-second-derivative}, $\partial_xp=\partial_x\partial_yF=\partial_y\partial_xF=\partial_yq$.
+\item[$(ii)$]$\Rightarrow (i)$ For $F_0$, $\partial_yF_0=p$ and $\partial_xF_0=q(x,y_0)+\int_{y_0}^{y}\partial_xp(x,r)\,dr$.\\
+By (ii), $\partial_xF_0=q(x,y_0)+\int_{y_0}^{y}\partial_yq(x,r)\,dr=q(x,y)$. Since $p,q\in C^1(R,\R)$, $F_0\in C^2(R,\R)$.
+\end{enumerate}
+If $F_1$ also satisfies (i), set $H\defeq F_1-F_0$. Then $\nabla H=0$.\\
+By the one-variable fundamental theorem along rectangle sides, $H(x,y)=H(x_0,y_0)$; hence $F_1=F_0+c$.\\
+For $y\in C^1(L,J)$, the chain rule gives $(F_0(\,\cdot\,,y))'=q(\,\cdot\,,y)+p(\,\cdot\,,y)y'$.\\
+Hence $p(\,\cdot\,,y)y'+q(\,\cdot\,,y)=0$ iff $F_0(\,\cdot\,,y)$ is constant on $L$.\\
+\hlt{Structural Commentary}: Build a potential; differentiate along graphs.\\
+\hlt{Key Insight}: Mixed partials are the compatibility condition.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:integrating-factor-dependent-on-x} \hlt{Integrating Factor Depending Only on $x$}\\
+Let $R\subseteq\R^2$ be a rectangle, let $p,q\in C^1(R,\R)$, and assume $p\neq0$ on $R$. For $p(x,y)y'+q(x,y)=0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $r(x,y)\defeq(\partial_yq-\partial_xp)/p$.
+\item If $r(x,y)=r_0(x)$ on $R$, set $\mu(x)\defeq\exp(\int_{x_0}^{x}r_0(s)\,ds)$.
+\item Multiply by $\mu$: $\partial_x(\mu p)=\mu(r_0p+\partial_xp)=\mu\partial_yq=\partial_y(\mu q)$, so $\mu p\,y'+\mu q=0$ is exact by Proposition \ref{prop:exact-first-order-equation-potential}.
+\end{enumerate}
+For example, $xy'+3x-2y=0$ has $r_0(x)=-3/x$ on $x\neq0$, so one may take $\mu(x)=x^{-3}$.\\
+A potential is $F(x,y)=y/x^2-3/x$, and the solutions are $y=3x+Cx^2$.
+\end{method}
+
+\begin{method} \label{meth:bernoulli-equation-linearization} \hlt{Bernoulli Linearization}\\
+Let $I\subseteq\R$ be open, $a,b\in C(I,\R)$, $n\in\R\setminus\{0,1\}$. Restrict to subinterval $J\subseteq I$, $x>0$ for $x'=a(t)x+b(t)x^n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $y\defeq x^{1-n}$.
+\item Linearize: $y'=(1-n)x^{-n}x'=(1-n)a(t)y+(1-n)b(t)$ on $J$.
+\item Solve $y'=\alpha y+\beta$ with $\alpha\defeq(1-n)a$, $\beta\defeq(1-n)b$ (Proposition \ref{prop:scalar-linear-variation-of-constants}); recover $x=y^{1/(1-n)}$ on $\{y>0\}$.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:riccati-equation-linearization} \hlt{Riccati Linearization from a Particular Solution}\\
+Let $I\subseteq\R$ be open, $a,b,c\in C(I,\R)$, and let $x_p\in C^1(I,\R)$ solve $x_p'=ax_p+bx_p^2+c$.\\
+Work on a subinterval $J\subseteq I$ with $x\neq x_p$ for $x'=ax+bx^2+c$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $u\defeq x-x_p$ and $y\defeq u^{-1}$ on $J$.
+\item Subtract and invert: $u'=(a+2bx_p)u+bu^2$, so $y'=-(a+2bx_p)y-b$.
+\item Solve $y'=\alpha y+\beta$ with $\alpha\defeq-(a+2bx_p)$, $\beta\defeq-b$ (Proposition \ref{prop:scalar-linear-variation-of-constants}); recover $x=x_p+y^{-1}$ on $\{y\neq0\}$.
+\end{enumerate}
+\end{method}
+
+\begin{method} \label{meth:solve-linear-ode-by-jordan-form} \hlt{Solving $\mathbf{x}'(t)=A\mathbf{x}(t)$ by Jordan Form}\\
+Let $A\in\C^{n\times n}$ and $\mathbf{x}_0\in\C^n$. To solve $\mathbf{x}'(t)=A\mathbf{x}(t)$ with $\mathbf{x}(0)=\mathbf{x}_0$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:complex-jordan-form}, choose $S\in GL_n(\C)$ with $A=SJS^{-1}$, where $J=\bigoplus\limits_{i=1}^rJ_{k_i}(\lambda_i)$.
 \item Set $\mathbf{y}(t)=S^{-1}\mathbf{x}(t)$ and $\mathbf{y}_0=S^{-1}\mathbf{x}_0$. Then $\mathbf{y}'(t)=J\mathbf{y}(t)$ and $\mathbf{x}(t)=S\mathbf{y}(t)$.
 \item Split $\mathbf{y}=(\mathbf{y}_1,\ldots,\mathbf{y}_r)$ according to the Jordan blocks. Then $\mathbf{y}_i'(t)=J_{k_i}(\lambda_i)\mathbf{y}_i(t)$.
-\item For each block, use Proposition \ref{prop:exponential-of-jordan-block}: $\mathbf{y}_i(t) =e^{tJ_{k_i}(\lambda_i)}\mathbf{y}_i(0) =e^{\lambda_i t}\sum\limits_{q=0}^{k_i-1}\frac{t^q}{q!}J_{k_i}(0)^q\mathbf{y}_i(0)$.
+\item By Proposition \ref{prop:exponential-of-jordan-block}, $\mathbf{y}_i(t)=e^{tJ_{k_i}(\lambda_i)}\mathbf{y}_i(0)=e^{\lambda_i t}\sum\limits_{q=0}^{k_i-1}\frac{t^q}{q!}J_{k_i}(0)^q\mathbf{y}_i(0)$ for $1\leq i\leq r$.\\
+Differentiating verifies the block equation.
 \item Reassemble $\mathbf{y}(t)$ and transform back: $\mathbf{x}(t)=S\mathbf{y}(t)$.
 \end{enumerate}
 Thus a size-$k$ block with eigenvalue $\lambda$ contributes entries of the form $e^{\lambda t}p(t)$, where $\deg p<k$.
@@ -16,21 +147,10 @@ Thus a size-$k$ block with eigenvalue $\lambda$ contributes entries of the form 
 
 \begin{perspective} \label{per:jordan-functions-polynomial-factors} \hlt{Jordan Functions and Polynomial Factors}\\
 For a Jordan block $J_k(\lambda)=\lambda I_k+N$ with $N^k=0$, any polynomial $f$ satisfies $f(J_k(\lambda))=\sum\limits_{r=0}^{k-1}\frac{f^{(r)}(\lambda)}{r!}N^r$.\\
-Nilpotent part adds derivative terms; exponentials gives polynomial factors (Proposition \ref{prop:exponential-of-jordan-block}, Method \ref{meth:solve-linear-ode-by-jordan-form}).
+The nilpotent part contributes derivative terms; for the exponential these become polynomial factors in $t$ by Proposition \ref{prop:exponential-of-jordan-block}. As $t\to+\infty$, $\operatorname{Re}\lambda<0$ gives blockwise decay and $\operatorname{Re}\lambda>0$ gives growth.\\
+If $\operatorname{Re}\lambda=0$, the block evolution is bounded iff $N=0$.
 \end{perspective}
 
 \begin{example} \label{ex:nilpotent-jordan-block-linear-evolution} \hlt{Nilpotent Jordan Block Evolution}\\
-$N=J_3(0)=
-\begin{bmatrix}
-0&1&0\\
-0&0&1\\
-0&0&0
-\end{bmatrix}$. Since $N^3=0$, $e^{tN}=I_3+tN+\frac{t^2}{2}N^2
-=
-\begin{bmatrix}
-1&t&\frac{t^2}{2}\\
-0&1&t\\
-0&0&1
-\end{bmatrix}$.\\
-Nilpotent Jordan blocks create polynomial, not exponential, growth along chains.
+Let $N\defeq J_3(0)=\left(\begin{smallmatrix}0&1&0\\0&0&1\\0&0&0\end{smallmatrix}\right)$, so $N^3=0$. By Proposition \ref{prop:exponential-of-jordan-block}, $e^{tN}=I_3+tN+\frac{t^2}{2}N^2=\left(\begin{smallmatrix}1&t&\frac{t^2}{2}\\0&1&t\\0&0&1\end{smallmatrix}\right)$. Nilpotent Jordan blocks create polynomial, rather than exponential, growth along generalized-eigenvector chains.
 \end{example}

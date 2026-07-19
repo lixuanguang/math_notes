@@ -1,2 +1,180 @@
 \subsection{Bifurcation Theory}
 % Saddle-node, pitchfork, Hopf bifurcation, normal forms.
+
+A parameter can change not merely the position of equilibria but also their number and stability. The harvested logistic equation is a complete scalar model of such a transition.
+
+\begin{definition} \label{def:scalar-saddle-node-pattern} \hlt{Scalar Saddle-Node Pattern}\\
+Let $\Lambda\subseteq\R$ be an interval, $F:\R\times\Lambda\to\R$, and $F_h(x)\defeq F(x,h)$.\\
+For $h_c\in\Lambda$ and $x_c\in\R$, say $h_c$ exhibits a \hlt{saddle-node pattern} at $x_c$ iff $\exists\varepsilon>0$, a neighborhood $X$ of $x_c$,\\
+and $\sigma\in\{-1,1\}$ with nonempty $H_\pm\defeq\{h\in\Lambda:0<\pm\sigma(h-h_c)<\varepsilon\}$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $F_{h_c}^{-1}(0)\cap X=\{x_c\}$.
+\item $\exists x_\pm:H_+\to X$ with $x_-(h)<x_+(h)$ and $F_h(x_\pm(h))=0$ $\forall h\in H_+$, and $\lim\limits_{h\to h_c,\ h\in H_+}x_\pm(h)=x_c$.
+\item $F_h^{-1}(0)\cap X=\emptyset$ $\forall h\in H_-$.
+\end{enumerate}
+\hlt{Key Insight}: A saddle-node is local creation or annihilation of two equilibria.
+\end{definition}
+
+\begin{proposition} \label{prop:harvested-logistic-equilibria} \hlt{Equilibrium Branches of the Harvested Logistic Equation}\\
+For $h\in[0,+\infty)$, let $F_h(x)\defeq(1-x)x-h$, $h_c\defeq\frac14$, and $x_c\defeq\frac12$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $0\leq h<h_c$, then $F_h^{-1}(0)=\{x_-(h),x_+(h)\}$, where $x_\pm(h)\defeq\frac12(1\pm\sqrt{1-4h})$ and $x_-(h)<x_+(h)$.
+\item If $h=h_c$, then $F_{h_c}^{-1}(0)=\{x_c\}$ and $F_{h_c}(x)=-(x-x_c)^2$.
+\item If $h>h_c$, then $F_h^{-1}(0)=\emptyset$.
+\item The branches $x_\pm:(0,h_c)\to\R$ coalesce at $x_c$: $x_\pm(h)\to x_c$ as $h\uparrow h_c$.
+\end{enumerate}
+\begin{proof}
+For all $h\geq0$, $F_h(x)=h_c-h-(x-x_c)^2$, hence $F_h(x)=0$ iff $(x-x_c)^2=h_c-h$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $0\leq h<h_c$, then $h_c-h>0$, so $F_h^{-1}(0)=\{x_c\pm\sqrt{h_c-h}\}=\{x_-(h),x_+(h)\}$.
+\item If $h=h_c$, then $F_{h_c}(x)=-(x-x_c)^2$, so $F_{h_c}^{-1}(0)=\{x_c\}$ and the zero is double.
+\item If $h>h_c$, then $h_c-h<0$, so $(x-x_c)^2=h_c-h$ has no real solution.
+\item Since $x_\pm(h)=x_c\pm\sqrt{h_c-h}$ and $h_c-h\downarrow0$ as $h\uparrow h_c$, $x_\pm(h)\to x_c$.
+\end{enumerate}
+\hlt{Structural Commentary}: Completing the square isolates the zero count.\\
+\hlt{Key Insight}: The critical value is exactly where the two roots merge.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:scalar-phase-line-barrier-limit} \hlt{Scalar Phase-Line Barriers and Limits}\\
+Let $F\in C^1(\R,\R)$, and let $x:[t_0,T_+)\to\R$ be a maximal forward solution of $x'=F(x)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $e\in F^{-1}(0)$ and $x(\tau)=e$ for some $\tau\in[t_0,T_+)$, then $x\equiv e$ near $\tau$; no nonconstant branch crosses $e$.
+\item If $x$ is monotone and bounded, then $\ell\defeq\lim\limits_{t\uparrow T_+}x(t)$ exists, $T_+=+\infty$, and $\ell\in F^{-1}(0)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $u\equiv e$. Then $u'=F(u)=0$ and $u(\tau)=x(\tau)$.\\
+By uniqueness, $\exists\eta>0$ such that $x=u$ on $(\tau-\eta,\tau+\eta)\cap[t_0,T_+)$.\\
+A crossing would force contact at $e$ without local equality.
+\item By monotone boundedness, $\ell\in\R$. If $T_+<+\infty$, local existence at $(T_+,\ell)$ extends $x$, contradiction; hence $T_+=+\infty$. If $F(\ell)\neq0$, then $\exists c>0,t_1$ such that $|F(x(t))|\geq c$ with fixed sign for $t\geq t_1$, so $|x(t)-x(s)|=\left|\int_s^t F(x(r))\,dr\right|\geq c(t-s)$ for $t>s\geq t_1$, contradicting convergence. Thus $F(\ell)=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Equilibria block crossings; bounded monotone limits are equilibria.\\
+\hlt{Key Insight}: Phase-line signs determine invariant intervals.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:autonomous-scalar-phase-line-classification} \hlt{Autonomous Scalar Phase-Line Classification}\\
+Let $F\in C^1(\R,\R)$ and let $x:[t_0,T_+)\to\R$ be the maximal forward solution of $x'=F(x)$ with $x(t_0)=x_0$.\\
+Set $E\defeq F^{-1}(0)$ and, for $\sigma\in\{-1,1\}$, put $Z_\sigma\defeq\{e\in E:\sigma(e-x_0)>0\}$.\\
+When $\sigma F(x_0)>0$ and $Z_\sigma\neq\emptyset$, let $e_\sigma\in Z_\sigma$ satisfy $\sigma e_\sigma=\inf\{\sigma e:e\in Z_\sigma\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x_0\in E$, then $x\equiv x_0$.
+\item If $\sigma F(x_0)>0$ for $\sigma\in\{-1,1\}$, then $\sigma x$ is strictly increasing.\\
+If $Z_\sigma\neq\emptyset$, then $T_+=+\infty$ and $\sigma(x(t)-e_\sigma)\uparrow0$ as $t\to+\infty$; if $Z_\sigma=\emptyset$, then $\sigma x(t)\uparrow+\infty$ as $t\uparrow T_+$.
+\end{enumerate}
+\begin{proof}
+$E$ is closed, and $F$ has constant sign on each component of $\R\setminus E$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $S\defeq\{t\in[t_0,T_+):x(t)=x_0\}$. Since $u\equiv x_0$ solves the same IVP, uniqueness makes $S$ relatively open, and continuity makes $S$ relatively closed. Since $t_0\in S$ and $[t_0,T_+)$ is connected, $S=[t_0,T_+)$.
+\item Fix $\sigma\in\{-1,1\}$ with $\sigma F(x_0)>0$, let $C$ be component of $\R\setminus E$ containing $x_0$.\\
+Then $\sigma F>0$ on $C$. By Lemma \ref{lem:scalar-phase-line-barrier-limit}(i), $x([t_0,T_+))\subseteq C$, hence $(\sigma x)'>0$.\\
+If $Z_\sigma\neq\emptyset$, then no point of $E$ lies strictly between $x_0$ and $e_\sigma$.\\
+Thus $\sigma(x-e_\sigma)<0$, so $\sigma x$ is increasing and bounded above by $\sigma e_\sigma$.\\
+Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii) gives $T_+=+\infty$ and $\ell\defeq\lim_{t\to+\infty}x(t)\in E$; minimality gives $\ell=e_\sigma$.\\
+If $Z_\sigma=\emptyset$, $\sigma x$ had finite upper limit $\ell$, by Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell\in Z_\sigma$, contradiction; $\sigma x(t)\uparrow+\infty$ as $t\uparrow T_+$.
+\end{enumerate}
+\hlt{Structural Commentary}: Signed half-lines unify monotone trapping.\\
+\hlt{Key Insight}: Nearest signed zero traps; absent zero, the orbit escapes.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:subcritical-harvest-phase-line} \hlt{Subcritical Harvest Phase Line}\\
+Let $h_c\defeq\frac14$, $F_h(x)\defeq(1-x)x-h$, $0\leq h<h_c$, and $x_\pm\defeq\frac12(1\pm\sqrt{1-4h})$.\\
+Let $x:[t_0,T_+)\to\R$ be the maximal forward solution of $x'=F_h(x)$, $x(t_0)=x_0$. All limits are as $t\uparrow T_+$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x_0\in\{x_-,x_+\}$, then $x\equiv x_0$.
+\item If $x_0<x_-$, then $x'<0$ and $x\to-\infty$.
+\item If $x_-<x_0<x_+$, then $x'>0$ and $x\to x_+$.
+\item If $x_0>x_+$, then $x'<0$ and $x\to x_+$.
+\end{enumerate}
+\begin{proof}
+Set $I_-\defeq(-\infty,x_-)$, $I_0\defeq(x_-,x_+)$, and $I_+\defeq(x_+,+\infty)$.\\
+Since $F_h=-(\,\cdot\,-x_-)(\,\cdot\,-x_+)$, $F_h<0$ on $I_-\cup I_+$, $F_h>0$ on $I_0$. By Lemma \ref{lem:scalar-phase-line-barrier-limit}(i), $I_-,I_0,I_+$ invariant.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $F_h(x_\pm)=0$, by uniqueness the branch is constant.
+\item By invariance, $x([t_0,T_+))\subseteq I_-$, hence $x'<0$.\\
+If $x$ had a finite lower limit $\ell$, then by Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell\in F_h^{-1}(0)\cap I_-=\emptyset$; hence $x\to-\infty$.
+\item By invariance, $x([t_0,T_+))\subseteq I_0$, hence $x'>0$. By Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell=\lim x\in[x_0,x_+]\cap F_h^{-1}(0)=\{x_+\}$.
+\item By invariance, $x([t_0,T_+))\subseteq I_+$, hence $x'<0$. By Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell=\lim x\in[x_+,x_0]\cap F_h^{-1}(0)=\{x_+\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Two barriers split $\R$ into three invariant intervals.\\
+\hlt{Key Insight}: The upper root attracts from both adjacent sides.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:critical-harvest-phase-line} \hlt{Critical Harvest Phase Line}\\
+Let $h_c\defeq\frac14$, $x_c\defeq\frac12$, $F_h(x)\defeq(1-x)x-h$, and $h=h_c$.\\
+Let $x:[t_0,T_+)\to\R$ be the maximal forward solution of $x'=F_h(x)$, $x(t_0)=x_0$. All limits are as $t\uparrow T_+$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x_0=x_c$, then $x\equiv x_c$.
+\item If $x_0>x_c$, then $x'<0$ and $x\to x_c$.
+\item If $x_0<x_c$, then $x'<0$ and $x\to-\infty$.
+\end{enumerate}
+\begin{proof}
+Since $F_{h_c}=-(\,\cdot\,-x_c)^2$, $F_{h_c}<0$ on $\R\setminus\{x_c\}$ and $F_{h_c}^{-1}(0)=\{x_c\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $F_{h_c}(x_c)=0$, by uniqueness the branch is constant.
+\item By Lemma \ref{lem:scalar-phase-line-barrier-limit}(i), $x>x_c$, hence $x'<0$. By Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell=\lim x\in[x_c,x_0]\cap F_{h_c}^{-1}(0)=\{x_c\}$.
+\item By Lemma \ref{lem:scalar-phase-line-barrier-limit}(i), $x<x_c$, hence $x'<0$.\\
+If $x$ had a finite lower limit $\ell$, then by Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell\in F_{h_c}^{-1}(0)\cap(-\infty,x_c)=\emptyset$; hence $x\to-\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: One double barrier remains at $x_c$.\\
+\hlt{Key Insight}: The double root attracts from above only.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:supercritical-harvest-phase-line} \hlt{Supercritical Harvest Phase Line}\\
+Let $h_c\defeq\frac14$, $x_c\defeq\frac12$, $F_h(x)\defeq(1-x)x-h$, and $h>h_c$.\\
+Let $x:[t_0,T_+)\to\R$ be the maximal forward solution of $x'=F_h(x)$, $x(t_0)=x_0$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $x'<0$ on $[t_0,T_+)$.
+\item $x\to-\infty$ as $t\uparrow T_+$.
+\end{enumerate}
+\begin{proof}
+For $h>h_c$, $F_h=-(\,\cdot\,-x_c)^2-(h-h_c)<0$ on $\R$ and $F_h^{-1}(0)=\emptyset$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $x'=F_h(x)$, $x'<0$.
+\item If $x$ had a finite lower limit $\ell$, then by Lemma \ref{lem:scalar-phase-line-barrier-limit}(ii), $\ell\in F_h^{-1}(0)=\emptyset$; hence $x\to-\infty$.
+\end{enumerate}
+\hlt{Structural Commentary}: No equilibrium barrier remains.\\
+\hlt{Key Insight}: Strictly negative velocity precludes a finite limiting zero.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:critical-logistic-harvest} \hlt{Critical Dimensional Harvest Rate}\\
+Let $\kappa,N_{\max}>0$, $H\geq0$, $G_H(N)\defeq\kappa(1-\frac{N}{N_{\max}})N-H$, $H_c\defeq\frac{\kappa N_{\max}}4$. For forward solution $N$, $N(t_0)=N_0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $G_H^{-1}(0)\cap(0,+\infty)\neq\emptyset \iff 0\leq H\leq H_c$; $H_c=\max\{H\geq0:G_H^{-1}(0)\cap(0,+\infty)\neq\emptyset\}$.
+\item For $0\leq H<H_c$, $G_H^{-1}(0)=\{N_-(H),N_+(H)\}$ with $N_\pm(H)\defeq\frac{N_{\max}}2(1\pm\sqrt{1-\frac{4H}{\kappa N_{\max}}})$; $G_{H_c}^{-1}(0)=\{\frac{N_{\max}}2\}$.
+\item If $0\leq H<H_c$ and $N_0>N_-(H)$, then $\lim\limits_{t\uparrow T_+}N(t)=N_+(H)$.
+\end{enumerate}
+\begin{proof}
+Set $x\defeq\frac{N}{N_{\max}}$, $x_0\defeq\frac{N_0}{N_{\max}}$, $\tau\defeq\kappa t$, $h\defeq\frac{H}{\kappa N_{\max}}$, $h_c\defeq\frac14$. Then $\frac{dx}{d\tau}=F_h(x)$, $G_H(N)=\kappa N_{\max}F_h(\frac{N}{N_{\max}})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Proposition \ref{prop:harvested-logistic-equilibria}, $F_h$ has a positive zero iff $0\leq h\leq h_c$.\\
+Since $H=\kappa N_{\max}h$, this is $0\leq H\leq H_c$, and the maximal value is $H_c$.
+\item By Proposition \ref{prop:harvested-logistic-equilibria}, $F_h^{-1}(0)=\{x_-(h),x_+(h)\}$ for $h<h_c$ and $F_{h_c}^{-1}(0)=\{x_c\}$.\\
+After multiplication by $N_{\max}$, $N_\pm(H)=N_{\max}x_\pm(h)$ and $N_{\max}x_c=\frac{N_{\max}}2$.
+\item If $N_0>N_-(H)$, then $x_0>\frac{N_-(H)}{N_{\max}}=x_-(h)$.\\
+By Theorem \ref{thm:subcritical-harvest-phase-line}(i),(iii),(iv), $\lim\limits_{\tau\uparrow +\infty}x(\tau)=x_+(h)$, hence $\lim\limits_{t\uparrow T_+}N(t)=N_{\max}x_+(h)=N_+(H)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Scaling sends $H$ to $h=\frac{H}{\kappa N_{\max}}$, so the universal threshold $h_c=\frac14$ returns as $H_c=\frac{\kappa N_{\max}}4$.\\
+\hlt{Key Insight}: Critical harvest is one quarter of the unharvested maximal growth scale.
+\end{proof}
+\end{corollary}

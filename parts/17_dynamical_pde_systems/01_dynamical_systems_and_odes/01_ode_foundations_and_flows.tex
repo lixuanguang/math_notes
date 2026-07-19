@@ -1,27 +1,166 @@
 \subsection{ODE Foundations and Flows}
 % Existence/uniqueness, flows, phase portraits, invariant sets.
 
-Ordinary differential equations can often be rewritten as fixed-point problems on a complete function space.
+Ordinary differential equations prescribe the evolution of an unknown curve through relations among the curve and its derivatives. Their order, dependence on time, and linearity determine the natural state variables and solution methods.
 
-\begin{definition} \label{def:scalar-initial-value-problem} \hlt{Scalar Initial-Value Problem}\\
-Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, and $g:O\to\R$. The scalar initial-value problem determined by $(O,g,x_0,y_0)$ is $y'=g(x,y)$ with $y(x_0)=y_0$. For an interval $J\subseteq\R$, a function $f:J\to\R$ solves this problem on $J$ iff
+\begin{definition} \label{def:implicit-scalar-ode-and-regular-point} \hlt{Implicit Scalar ODE and Regular Point}\\
+Let $k\in\N$, $U\subseteq\R^{k+2}$ be open, $F\in C(U,\R)$. For $I\subseteq\R$, $x\in C^k(I,\R)$, set $J_x^k(t)\defeq(t,x(t),x^{(1)}(t),\ldots,x^{(k)}(t))$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $J$ is open, $x_0\in J$, and $f$ is differentiable.
-\item $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$.
-\item $f'(x)=g(x,f(x))$ for every $x\in J$, and $f(x_0)=y_0$.
+\item $F(t,y_0,\ldots,y_k)=0$ is an \hlt{implicit scalar ODE written through order $k$}; its $k$-jet form is $F(J_x^k(t))=0$.
+\item $x$ is a \hlt{solution} on $I$ iff $J_x^k(t)\in U$ and $F(J_x^k(t))=0$ $\forall t\in I$.
+\item $F\in C^1(U,\R)$; $p=(t_*,y_0^*,\ldots,y_k^*)\in F^{-1}(0)$ is \hlt{regular w.r.t. highest derivative} iff $\partial_{y_k}F(p)\neq0$.
 \end{enumerate}
-\hlt{Structural Commentary}: The graph condition makes the right-hand side defined along $f$; the initial condition selects the integral curve through $(x_0,y_0)$.
+\hlt{Key Insight}: $\partial_{y_k}F(p)\neq0$ locally solves the relation for $x^{(k)}$.
 \end{definition}
 
-\begin{proposition} \label{prop:ode-integral-equation-equivalence} \hlt{Differential and Integral Forms}\\
-Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g\in C(O,\R)$, $J\subseteq\R$ be open interval with $x_0\in J$. For $f\in C(J,\R)$ with $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$, $f$ solves $y'=g(x,y)$, $y(x_0)=y_0$, on $J$ iff $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\begin{proposition} \label{prop:implicit-ode-local-explicit-form} \hlt{Local Explicit Form of a Regular Implicit ODE}\\
+Let $k\in\N$, $U\subseteq\R^{k+2}$ be open, $F\in C^1(U,\R)$, $u_*=(t_*,y_0^*,\ldots,y_{k-1}^*)$, and $p=(u_*,y_k^*)\in U$ with $F(p)=0$ and $\partial_{y_k}F(p)\neq0$. Then $\exists$ open $V\subseteq\R^{k+1}$, $W\subseteq\R$ with $u_*\in V$, $y_k^*\in W$, and a unique $f\in C^1(V,\R)$ such that $f(V)\subseteq W$, $f(u_*)=y_k^*$, $V\times W\subseteq U$, and:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(u,v)\in V\times W$, $F(u,v)=0$ iff $v=f(u)$.
+\item If $x\in C^k(I,\R)$ and $J_x^k(I)\subseteq V\times W$, then $F(J_x^k(t))=0$ $\forall t\in I$ iff $x^{(k)}(t)=f(t,x(t),\ldots,x^{(k-1)}(t))$ $\forall t\in I$.
+\end{enumerate}
+\begin{proof}
+Let $u=(t,y_0,\ldots,y_{k-1})$, $v=y_k$, $\widehat U\defeq\{(v,u):(u,v)\in U\}$, and $\widehat F(v,u)\defeq F(u,v)$.\\
+Since $\partial_v\widehat F(y_k^*,u_*)=\partial_{y_k}F(p)\neq0$, Theorem \ref{thm:implicit-function-theorem-rn-rm} yields $W,V$ and a unique $f\in C^1(V,\R)$ with $W\times V\subseteq\widehat U$, $f(V)\subseteq W$, $f(u_*)=y_k^*$, and $\widehat F(v,u)=0$ iff $v=f(u)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) If $F(u,v)=0$, then $\widehat F(v,u)=0$, hence $v=f(u)$.
+\item[$(i)$] ($\Leftarrow$) If $v=f(u)$, then $\widehat F(v,u)=0$, hence $F(u,v)=0$.
+\item[$(ii)$] ($\Rightarrow$) Set $u_x(t)\defeq(t,x(t),\ldots,x^{(k-1)}(t))$ and $v_x(t)\defeq x^{(k)}(t)$.\\
+If $F(J_x^k(t))=0$ $\forall t\in I$, then by (i), $v_x(t)=f(u_x(t))$ $\forall t\in I$.
+\item[$(ii)$] ($\Leftarrow$) With $u_x,v_x$ as above, if $v_x(t)=f(u_x(t))$ $\forall t\in I$, then by (i), $F(J_x^k(t))=0$ $\forall t\in I$.
+\end{enumerate}
+\hlt{Structural Commentary}: IFT solves $F(u,y_k)=0$ for $y_k$.\\
+\hlt{Key Insight}: $\partial_{y_k}F(p)\neq0$ turns $F=0$ into $y_k=f(u)$ locally.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:explicit-ode-systems-and-classes} \hlt{Explicit ODE Systems and Classes}\\
+Let $k,n\in\N$, $k\geq1$, $U\subseteq\R\times(\R^n)^k$ open, and $f:U\to\R^n$.\\
+Use $X_x(t)\defeq(x(t),x^{(1)}(t),\ldots,x^{(k-1)}(t))$, $\xi=(\xi_0,\ldots,\xi_{k-1})$, and $\pi(U)\defeq\{\xi\in(\R^n)^k:\exists t\in\R,\ (t,\xi)\in U\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $x^{(k)}(t)=f(t,X_x(t))$ is an \hlt{explicit ODE system of order $k$}.
+\item For an interval $I\subseteq\R$, $x\in C^k(I,\R^n)$ is a \hlt{solution} iff $\forall t\in I$, $(t,X_x(t))\in U$ and $x^{(k)}(t)=f(t,X_x(t))$.
+\item The system is \hlt{autonomous} iff $\exists F:\pi(U)\to\R^n$ with $f(t,\xi)=F(\xi)$ $\forall(t,\xi)\in U$.
+\item On an interval $I$, the system is \hlt{linear} iff $\exists g\in C(I,\R^n)$ and $A_j\in C(I,\R^{n\times n})$, $0\leq j<k$,\\
+with $f(t,\xi)=g(t)+\sum\limits_{j=0}^{k-1}A_j(t)\xi_j$ $\forall(t,\xi)\in U\cap(I\times(\R^n)^k)$.
+\item A linear system on $I$ is \hlt{homogeneous} iff (iv) holds with $g=0$.
+\item A solution $x:I\to\R^n$ is \hlt{global} iff $I=\R$.
+\item A solution $x:I\to\R^n$ is \hlt{maximal} iff $\nexists$ solution $\bar{x}:\bar{I}\to\R^n$ with $I\subsetneq\bar{I}$ and $\bar{x}|_I=x$.
+\end{enumerate}
+\hlt{Key Insight}: The state lift $X_x$ has dimension $kn$.
+\end{definition}
+
+\begin{proposition} \label{prop:higher-order-ode-first-order-reduction} \hlt{Reduction to First Order}\\
+Let $k,n\in\N$, $k\geq1$, $U\subseteq\R\times(\R^n)^k$ open, $f:U\to\R^n$; $G:U\to(\R^n)^k$; $G(t,y_1,\ldots,y_k)\defeq(y_2,\ldots,y_k,f(t,y_1,\ldots,y_k))$.\\
+For an interval $I\subseteq\R$ and $x\in C^k(I,\R^n)$, set $y\defeq(x,x^{(1)},\ldots,x^{(k-1)})$ and assume $(t,y(t))\in U$ $\forall t\in I$.\\
+Then $y\in C^1(I,(\R^n)^k)$, and $x^{(k)}(t)=f(t,y(t))$ $\forall t\in I$ iff $y'(t)=G(t,y(t))$ $\forall t\in I$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $f'(x)=g(x,f(x))$ on $J$ and $f(x_0)=y_0$, then by Fundamental Theorem of Calculus (Theorem \ref{thm:fundamental-theorem-calculus-riemann}),\\
-$f(x)-y_0=\int_{x_0}^{x}f'(t)\,dt=\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
-\item[$(\Leftarrow)$] If $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ for every $x\in J$, then $g(\,\cdot\,,f(\,\cdot\,))$ is continuous on $J$.\\
+\item[$(\Rightarrow)$] Since $x\in C^k(I,\R^n)$, $y\in C^1(I,(\R^n)^k)$. For $1\leq j<k$, $y_j'=x^{(j)}=y_{j+1}$, $y_k'=x^{(k)}=f(t,y(t))$. QED.
+\item[$(\Leftarrow)$] Since $y_k=x^{(k-1)}$, the $k$th coordinate gives $x^{(k)}(t)=y_k'(t)=G_k(t,y(t))=f(t,y(t))$ $\forall t\in I$.
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinates shift; the last coordinate carries $f$.\\
+\hlt{Key Insight}: Adjoin derivatives to get first order.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:nonautonomous-system-autonomization} \hlt{Autonomization by Adjoining Time}\\
+Let $m\in\N$, $U\subseteq\R\times\R^m$ be open, $f:U\to\R^m$, and $\widetilde f(s,\xi)\defeq(1,f(s,\xi))$. For an interval $I\subseteq\R$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $y\in C^1(I,\R^m)$, $(t,y(t))\in U$, and $y'=f(t,y)$, then $z(t)\defeq(t,y(t))$ solves $z'=\widetilde{f}(z)$.
+\item If $z=(s,y)\in C^1(I,\R^{m+1})$, $z(I)\subseteq U$, $z'=\widetilde{f}(z)$, and $s(t_0)=t_0$ for some $t_0\in I$,\\
+then $s=\operatorname{id}_I$ and $y'(t)=f(t,y(t))$ on $I$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $z=(t,y)$, $z'=(1,y')=(1,f(t,y))=\widetilde{f}(t,y)=\widetilde{f}(z)$.
+\item Since $(s',y')=z'=\widetilde{f}(s,y)=(1,f(s,y))$, $s'=1$ and $y'=f(s,y)$.\\
+With $s(t_0)=t_0$, $s=\operatorname{id}_I$; hence $y'(t)=f(t,y(t))$.
+\end{enumerate}
+\hlt{Structural Commentary}: The clock coordinate has $s'=1$.\\
+\hlt{Key Insight}: $y'=f(t,y)$ becomes $z'=\widetilde{f}(z)$ with $z=(t,y)$.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:newtonian-motion-first-order-state} \hlt{Newtonian Motion as a First-Order System}\\
+Let $q:\R\to\R^3$ be the position of a particle of mass $m>0$, let $v\defeq q'$, and let $F:\R^3\to\R^3$ be a position-dependent force. Newton's equation $mq''(t)=F(q(t))$ becomes $(q,v)'=(v,m^{-1}F(q))$ by Proposition \ref{prop:higher-order-ode-first-order-reduction}. For uniform gravity $F(q)=-mg e_3$, where $e_3\defeq(0,0,1)^\mathsf{T}$ and $g>0$, the initial state $(q(0),v(0))=(q_0,v_0)$ gives $q(t)=q_0+v_0t-\frac{g}{2}e_3t^2$. Thus position and velocity together determine the mechanical state.
+\end{example}
+
+\begin{proposition} \label{prop:scalar-autonomous-separation-maximal-branch} \hlt{Scalar Autonomous Separation}\\
+Let $D\subseteq\R$ be open, $f\in C(D,\R)$, $D_f\defeq\{x\in D:f(x)\neq0\}$, and $x_0\in D_f$.\\
+Let $C$ be the component of $D_f$ containing $x_0$, and set $H(x)\defeq\int_{x_0}^{x}\frac{du}{f(u)}$, $K\defeq H(C)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $K$ is an open interval and $H:C\to K$ is a differentiable bijection.
+\item $\phi\defeq H^{-1}:K\to C$ is the unique $C$-valued solution of $x'=f(x)$ with $x(0)=x_0$.
+\item $K$ is maximal among intervals of $C$-valued solutions through $x_0$, and $\phi$ is global iff $K=\R$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $D_f$ is open, $C$ is an open interval. By Theorem \ref{thm:integral-function-continuity-and-derivative}, $H'=1/f\neq0$ on $C$.\\
+Since $f$ has constant sign on $C$ by Theorem \ref{thm:intermediate-value-theorem}, $H$ is strictly monotone.\\
+Hence $H:C\to K=H(C)$ is bijective and $K$ is an open interval.
+\item By Corollary \ref{cor:one-dimensional-inverse-function-theorem}, $\phi\in C^1(K,C)$ and $\phi'=1/(H'\circ\phi)=f\circ\phi$. Also $H(x_0)=0$, so $\phi(0)=x_0$.\\
+If $u:L\to C$ solves $u'=f(u)$ with $0\in L$ and $u(0)=x_0$, then $(H\circ u)'=H'(u)u'=1$ and $(H\circ u)(0)=0$.\\
+Hence $H(u(t))=t$, so $L\subseteq K$ and $u=\phi|_L$.
+\item If $\bar{\phi}:\bar{K}\to C$ solves $x'=f(x)$, $K\subseteq\bar{K}$, and $\bar{\phi}|_K=\phi$, then (ii) gives $\bar{K}\subseteq K$; hence $\bar{K}=K$.\\
+Thus $K$ is maximal. Since $\operatorname{dom}\phi=K$, $\phi$ is global iff $K=\R$.
+\end{enumerate}
+\hlt{Structural Commentary}: Monotone coordinate, inverse trajectory.\\
+\hlt{Key Insight}: Time is accumulated reciprocal speed.
+\end{proof}
+\end{proposition}
+
+\begin{method} \label{meth:separable-first-order-equation} \hlt{Separation of Variables}\\
+Let $D\subseteq\R$ be open, $J\subseteq\R$ open interval, $f\in C(D,\R)$, $g\in C(J,\R)$, $t_0\in J$, $x_0\in D_f\defeq\{x\in D:f(x)\neq0\}$.\\
+Let $C\ni x_0$ be the component of $D_f$, $H(x)\defeq\int_{x_0}^{x}\frac{du}{f(u)}$. Then $H:C\to H(C)$ is invertible by Proposition \ref{prop:scalar-autonomous-separation-maximal-branch}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $G(t)\defeq\int_{t_0}^{t}g(s)\,ds$ and let $L$ be the component of $\{t\in J:G(t)\in H(C)\}$ containing $t_0$.
+\item Output $x\defeq H^{-1}\circ G$ on $L$; then $x'=f(x)g$ on $L$ and $x(t_0)=x_0$.
+\end{enumerate}
+\end{method}
+
+\begin{example} \label{ex:autonomous-growth-blowup-and-waiting} \hlt{Global Growth, Finite-Time Blow-Up, and Nonuniqueness}\\
+The separation coordinate distinguishes three basic behaviors.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $x'=x$ and $x(0)=x_0>0$, $H(x)=\log\left(\frac{x}{x_0}\right)$ and $x(t)=x_0e^t$ on $\R$.
+\item For $x'=x^2$ and $x(0)=x_0>0$, $H(x)=x_0^{-1}-x^{-1}$ and $x(t)=\frac{x_0}{1-x_0t}$ on $(-\infty,x_0^{-1})$; $x(t)\to+\infty$ as $t\uparrow x_0^{-1}$.
+\item For $x'=\sqrt{\abs{x}}$ and $x(0)=0$, $a\in[0,+\infty)$ determines $x_a(t)\defeq\left\{\begin{smallmatrix}0,&t\leq a,\\\frac{(t-a)^2}{4},&t\geq a.\end{smallmatrix}\right.$ Then $x_a\in C^1(\R)$, $x_a'=\sqrt{\abs{x_a}}$, $x_a(0)=0$, and if $0\leq a<b$, then $x_a=x_b$ on $(-\infty,a]$ while $x_a>x_b$ on $(a,b]$; hence the IVP is nonunique.
+\end{enumerate}
+\end{example}
+
+First-order equations can also be rewritten as fixed-point problems on complete function spaces.
+
+\begin{definition} \label{def:scalar-initial-value-problem} \hlt{Scalar Initial-Value Problem}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g:O\to\R$, and $\operatorname{IVP}(O,g,x_0,y_0)\defeq\{y'=g(x,y),\ y(x_0)=y_0\}$.\\
+For $J\subseteq\R$ with $x_0\in J$, $f:J\to\R$ solves $\operatorname{IVP}(O,g,x_0,y_0)$ iff
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $J$ is open and $f$ is differentiable.
+\item $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$.
+\item $f'(x)=g(x,f(x))$ $\forall x\in J$, and $f(x_0)=y_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: $\Gamma_f\subseteq O$ makes $g(\,\cdot\,,f)$ defined; $f(x_0)=y_0$ selects the curve.
+\end{definition}
+
+\begin{proposition} \label{prop:ode-integral-equation-equivalence} \hlt{Differential and Integral Forms}\\
+Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, $g\in C(O,\R)$, $J\subseteq\R$ open with $x_0\in J$, and $f\in C(J,\R)$.\\
+Let $\Gamma_f\defeq\{(x,f(x)):x\in J\}\subseteq O$. Then $f$ solves $\operatorname{IVP}(O,g,x_0,y_0)$ iff $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $f'(x)=g(x,f(x))$ on $J$, $f(x_0)=y_0$, by Theorem \ref{thm:fundamental-theorem-calculus-riemann}, $f(x)-y_0=\int_{x_0}^{x}f'(t)\,dt=\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$.
+\item[$(\Leftarrow)$] If $f(x)=y_0+\int_{x_0}^{x}g(t,f(t))\,dt$ $\forall x\in J$, then $g(\,\cdot\,,f(\,\cdot\,))$ is continuous on $J$.\\
 By Theorem \ref{thm:integral-function-continuity-and-derivative}, $f'(x)=g(x,f(x))$ on $J$. Evaluating at $x=x_0$ gives $f(x_0)=y_0$.
 \end{enumerate}
 \hlt{Structural Commentary}: Differentiation and integration are inverse along the continuous graph.\\
@@ -32,18 +171,25 @@ By Theorem \ref{thm:integral-function-continuity-and-derivative}, $f'(x)=g(x,f(x
 \begin{theorem} \label{thm:picard-local-existence-uniqueness} \hlt{Picard Local Existence Theorem}\\
 Let $O\subseteq\R^2$ be open, $(x_0,y_0)\in O$, and $g\in C(O,\R)$.\\
 Assume $\abs{g(x,y_1)-g(x,y_2)}\leq M\abs{y_1-y_2}$ for some $M>0$ whenever $(x,y_1),(x,y_2)\in O$.\\
-Then $\exists a,b,\ell>0$, $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, and $J_\ell\defeq(x_0-\ell,x_0+\ell)$ such that the IVP $y'=g(x,y)$, $y(x_0)=y_0$, has a unique differentiable solution $f:J_\ell\to\R$ with $\Gamma_f\subseteq Q$.
+Then $\exists a,b,\ell>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$ and $J_\ell\defeq(x_0-\ell,x_0+\ell)$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The IVP $y'=g(x,y)$, $y(x_0)=y_0$, has a differentiable solution $f:J_\ell\to\R$ with $\Gamma_f\subseteq Q$.
+\item If $h:J_\ell\to\R$ is a differentiable solution with $\Gamma_h\subseteq Q$, then $h=f$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Local box}: Choose $a,b>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, choose $K<\infty$ with $\abs{g}\leq K$ on $Q$, and choose $\ell>0$ with $\ell\leq a$, $\ell K\leq b$, and $\ell M<1$. Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$.
-\item \hlt{Complete space}: Let $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\abs{u-y_0}_\infty\leq b\}$. This is a complete closed subset of $C(I_\ell,\R)$ by Theorem \ref{thm:complete-supremum-metric-space} and Proposition \ref{prop:basic-completeness-consequences}. Define $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.
-\item \hlt{Contraction.} For $u\in\mathcal{X}_\ell$, $\abs{(Tu)(x)-y_0}\leq \abs{x-x_0}K\leq b$, so $T(\mathcal{X}_\ell)\subseteq\mathcal{X}_\ell$.\\
-For $u,v\in\mathcal{X}_\ell$, $\norm{Tu-Tv}_{\infty}\leq \ell M\norm{u-v}_{\infty}$, so $T$ is a contraction.
-\item \hlt{Fixed point}: Theorem \ref{thm:contraction-principle} gives a unique fixed point $u_*\in\mathcal{X}_\ell$.\\
-With $f\defeq u_*|_{J_\ell}$, Proposition \ref{prop:ode-integral-equation-equivalence} gives $f'=g(\,\cdot\,,f)$ and $f(x_0)=y_0$, while $\Gamma_f\subseteq Q$.
-\item \hlt{Uniqueness}: If $h:J_\ell\to\R$ is another solution with $\Gamma_h\subseteq Q$, then $\forall 0<r<\ell$ the same operator on $I_r\defeq[x_0-r,x_0+r]$ is a contraction, and both $h|_{I_r}$ and $u_*|_{I_r}$ are fixed points.\\
-Hence $h=f$ on every $I_r$, and therefore on $J_\ell$.
+\item Choose $a,b>0$ with $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$.\\
+Let $K\defeq\sup_Q\abs{g}<+\infty$, and choose $0<\ell\leq a$ with $\ell K\leq b$ and $\ell M<1$.\\
+Put $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\norm{u-y_0}_\infty\leq b\}$, and $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.\\
+The space $\mathcal{X}_\ell$ is complete, and for $u,v\in\mathcal{X}_\ell$, $\norm{Tu-y_0}_\infty\leq\ell K\leq b$ and $\norm{Tu-Tv}_\infty\leq\ell M\norm{u-v}_\infty$.\\
+Thus $T:\mathcal{X}_\ell\to\mathcal{X}_\ell$ is a contraction, so $\exists!u_*\in\mathcal{X}_\ell$ with $Tu_*=u_*$.\\
+For $f\defeq u_*|_{J_\ell}$, $\Gamma_f\subseteq Q$ and Proposition \ref{prop:ode-integral-equation-equivalence} gives $f'=g(\,\cdot\,,f)$, $f(x_0)=y_0$.
+\item Let $h:J_\ell\to\R$ solve the IVP with $\Gamma_h\subseteq Q$. For $0<r<\ell$, put $I_r\defeq[x_0-r,x_0+r]$,\\
+$\mathcal{X}_r\defeq\{u\in C(I_r,\R):\norm{u-y_0}_\infty\leq b\}$, and $(T_ru)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$.\\
+Since $rM<1$, $T_r$ is a contraction. Proposition \ref{prop:ode-integral-equation-equivalence} gives $T_r(h|_{I_r})=h|_{I_r}$ and $T_r(u_*|_{I_r})=u_*|_{I_r}$.\\
+Uniqueness gives $h=f$ on $I_r$. Hence $h=f$ on $\bigcup\limits_{0<r<\ell}I_r=J_\ell$.
 \end{enumerate}
 \hlt{Structural Commentary}: Box control plus short-time contraction.\\
 \hlt{Key Insight}: Picard iteration is Banach iteration.
@@ -53,13 +199,13 @@ Hence $h=f$ on every $I_r$, and therefore on $J_\ell$.
 \begin{method} \label{meth:picard-iteration-local-ode} \hlt{Picard Iteration}\\
 Let $Q\defeq[x_0-a,x_0+a]\times[y_0-b,y_0+b]\subseteq O$, assume $\abs{g(x,y)}\leq K$ for $(x,y)\in Q$,\\
 $\abs{g(x,y_1)-g(x,y_2)}\leq M\abs{y_1-y_2}$ whenever $(x,y_1),(x,y_2)\in Q$. Let $\ell>0$ with $\ell\leq a$, $\ell K\leq b$, and $\ell M<1$.\\
-Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $J_\ell\defeq(x_0-\ell,x_0+\ell)$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\abs{u-y_0}_\infty\leq b\}$,\\
+Set $I_\ell\defeq[x_0-\ell,x_0+\ell]$, $J_\ell\defeq(x_0-\ell,x_0+\ell)$, $\mathcal{X}_\ell\defeq\{u\in C(I_\ell,\R):\norm{u-y_0}_\infty\leq b\}$,\\
 $(Tu)(x)\defeq y_0+\int_{x_0}^{x}g(t,u(t))\,dt$. Then
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Initialize $f_0(x)\equiv y_0$ on $I_\ell$.
 \item Iterate $f_{n+1}\defeq Tf_n$, i.e. $f_{n+1}(x)=y_0+\int_{x_0}^{x}g(t,f_n(t))\,dt$ for $x\in I_\ell$.
-\item Let $f_\infty\defeq\lim_{n\to\infty}f_n$ uniformly on $I_\ell$, and output $f\defeq f_\infty|_{J_\ell}$.
+\item Let $f_\infty\defeq\lim\limits_{n\to\infty}f_n$ uniformly on $I_\ell$, and output $f\defeq f_\infty|_{J_\ell}$.
 \end{enumerate}
 Since $T$ is a contraction on $\mathcal{X}_\ell$, the limit exists; the output is the unique local solution with graph in $Q$.
 \end{method}
@@ -70,3 +216,464 @@ Since $T$ is a contraction on $\mathcal{X}_\ell$, the limit exists; the output i
   \caption{Picard setup: choose $\ell$ with $\ell K\leq b$ so $T(\mathcal X_\ell)\subseteq\mathcal X_\ell$ and graphs stay in $Q$.}
   \label{fig:picard-rectangle-integral-operator}
 \end{figure}
+
+The same fixed-point formulation applies to vector fields and supports quantitative iteration estimates.
+
+\begin{definition} \label{def:vector-ivp-and-local-state-lipschitz} \hlt{Vector IVP and Local State Lipschitz Condition}\\
+Let $n\in\N$, $U\subseteq\R\times\R^n$ be open, $f:U\to\R^n$, and $(t_0,x_0)\in U$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{initial-value problem} is $x'=f(t,x)$, $x(t_0)=x_0$; a solution on an interval $I\ni t_0$ is $x\in C^1(I,\R^n)$ with $(t,x(t))\in U$ and $x'(t)=f(t,x(t))$ $\forall t\in I$.
+\item $f$ is \hlt{locally Lipschitz in the state, uniformly in time} iff $\forall$ compact $V\subseteq U$, $\exists L_V<+\infty$ such that $\norm{f(t,x)-f(t,y)}\leq L_V\norm{x-y}$ whenever $(t,x),(t,y)\in V$.
+\end{enumerate}
+\hlt{Key Insight}: State-Lipschitz control makes the integral operator asymptotically contractive under iteration.
+\end{definition}
+
+\begin{lemma} \label{lem:c1-vector-field-locally-state-lipschitz} \hlt{$C^1$ Vector Fields Are Locally State-Lipschitz}\\
+Let $n\in\N$, $U\subseteq\R\times\R^n$ be open, and $f\in C^1(U,\R^n)$.\\
+$\forall$ compact $K\subseteq U$, $\exists L_K<+\infty$ such that $\norm{f(t,x)-f(t,y)}\leq L_K\norm{x-y}$ whenever $(t,x),(t,y)\in K$.
+\begin{proof}
+Fix compact $K\subseteq U$. If $K=\emptyset$, take $L_K=0$. Otherwise choose $r>0$, $K_r\defeq\{z:\operatorname{dist}(z,K)\leq r\}\subseteq U$.\\
+Set $A\defeq\max_{K_r}\norm{D_xf}$, $M\defeq\max_K\norm f$, and $L_K\defeq\max\{A,\frac{2M}{r}\}$. For $(t,x),(t,y)\in K$, put $\rho\defeq\norm{x-y}$.\\
+If $\rho<r$, then $\sigma(s)\defeq(t,x+s(y-x))\in K_r$ for $s\in[0,1]$; by Theorem \ref{thm:bounded-derivative-convex-mean-value}, $\norm{f(t,x)-f(t,y)}\leq A\rho$.\\
+If $\rho\geq r$, then $\norm{f(t,x)-f(t,y)}\leq2M\leq\frac{2M}{r}\rho$. Thus $\norm{f(t,x)-f(t,y)}\leq L_K\rho$.\\
+\hlt{Structural Commentary}: Nearby pairs use $D_xf$; separated pairs use boundedness.\\
+\hlt{Key Insight}: Compactness yields one state-Lipschitz constant.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:quantitative-vector-picard-lindelof} \hlt{Quantitative Vector Picard--Lindel\"of Theorem}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, and $(t_0,x_0)\in U$. Choose $T,\delta>0$ and set $V\defeq[t_0,t_0+T]\times\overline{B}_\delta(x_0)\subseteq U$.\\
+Assume $L\geq0$ and $\norm{f(t,x)-f(t,y)}\leq L\norm{x-y}$ for all $(t,x),(t,y)\in V$.\\
+Set $M\defeq\max_V\norm{f}$, $T_0\defeq\min\{T,\delta/M\}$ with $\delta/0\defeq+\infty$, and $I\defeq[t_0,t_0+T_0]$.\\
+Let $X\defeq C(I,\R^n)$, $\norm{u}_\infty\defeq\max_{t\in I}\norm{u(t)}$, and $\mathcal{C}\defeq\{u\in X:\norm{u-x_0}_\infty\leq\delta\}$.\\
+Define $Ku\defeq x_0+\int_{t_0}^{(\cdot)} f(s,u(s))\,ds$, $u_0\equiv x_0$, and $u_{m+1}\defeq Ku_m$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(u_m)\subseteq\mathcal{C}$ and $u_m\to\phi$ uniformly for some $\phi\in\mathcal{C}$ satisfying $K\phi=\phi$; hence $\phi\in C^1(I,\R^n)$ solves the IVP.
+\item $\phi$ is the unique solution on $I$ whose graph lies in $V$.
+\item If $M_0\defeq\max_{t\in I}\norm{f(t,x_0)}$, then $\norm{\phi-u_m}_\infty\leq T_0M_0e^{LT_0}\frac{(LT_0)^m}{m!}$ $\forall m\geq1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $u\in\mathcal{C}$, $\norm{Ku-x_0}_\infty\leq MT_0\leq\delta$; hence $K(\mathcal{C})\subseteq\mathcal{C}$.\\
+For $u,v\in\mathcal{C}$, induction on $m\geq1$ yields $\norm{K^mu(t)-K^mv(t)}\leq\frac{L^m(t-t_0)^m}{m!}\norm{u-v}_\infty$ for $t\in I$.\\
+Hence $\norm{u_{m+1}-u_m}_\infty\leq\frac{(LT_0)^m}{m!}\norm{Ku_0-u_0}_\infty$, so $(u_m)$ is uniformly Cauchy.\\
+By Theorem \ref{thm:complete-supremum-metric-space}, $X$ is complete; since $\mathcal{C}$ is closed, $u_m\to\phi\in\mathcal{C}$.\\
+The case $m=1$ implies $K$ is continuous on $\mathcal{C}$, so $K\phi=\lim\limits_{m\to\infty}Ku_m=\lim\limits_{m\to\infty}u_{m+1}=\phi$.\\
+Thus $\phi(t)=x_0+\int_{t_0}^t f(s,\phi(s))\,ds$, so $\phi\in C^1(I,\R^n)$, $\phi(t_0)=x_0$, and $\phi'=f(\,\cdot\,,\phi)$.
+\item If $Ku=u$ and $Kv=v$ in $\mathcal{C}$, then $\norm{u-v}_\infty=\norm{K^mu-K^mv}_\infty\leq\frac{(LT_0)^m}{m!}\norm{u-v}_\infty$ for all $m\geq1$.\\
+Choose $m$ with $(LT_0)^m/m!<1$; hence $u=v$.\\
+If $y$ solves the IVP on $I$ with graph in $V$, then $y\in\mathcal{C}$ and integration implies $Ky=y$; hence $y=\phi$.
+\item Since $\norm{Ku_0-u_0}_\infty\leq T_0M_0$, (i) implies $\norm{\phi-u_m}_\infty\leq\sum\limits_{j=m}^{\infty}\norm{u_{j+1}-u_j}_\infty\leq T_0M_0\sum\limits_{j=m}^{\infty}\frac{(LT_0)^j}{j!}$.\\
+For $a\geq0$, $(m+k)!\geq m!k!$ implies $\sum\limits_{j=m}^{\infty}\frac{a^j}{j!}\leq\frac{a^m}{m!}e^a$; set $a=LT_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Factorial iterate bounds replace the short-time contraction restriction.\\
+\hlt{Key Insight}: Iterates contract after sufficiently many integrations.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:picard-integrable-lipschitz-bound} \hlt{Picard--Lindel\"of with an Integrable Lipschitz Bound}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, $(t_0,x_0)\in U$, and choose $T,\delta>0$ with $V\defeq[t_0,t_0+T]\times\overline B_\delta(x_0)\subseteq U$.\\
+Set $b(t)\defeq\max\limits_{x\in\overline B_\delta(x_0)}\norm{f(t,x)}$. Let $L:[t_0,t_0+T]\to[0,+\infty)$ be integrable,\\
+satisfy $\norm{f(t,x)-f(t,y)}\leq L(t)\norm{x-y}$ for $(t,x),(t,y)\in V$. Choose $0<T_0\leq T$ with $\int_{t_0}^{t_0+T_0}b(s)\,ds\leq\delta$.\\
+Put $I\defeq[t_0,t_0+T_0]$, $A(t)\defeq\int_{t_0}^tL(s)\,ds$, $A\defeq A(t_0+T_0)$, and $B_0\defeq\int_{t_0}^{t_0+T_0}\norm{f(s,x_0)}\,ds$.\\
+Let $\mathcal C\defeq\{u\in C(I,\R^n):\norm{u-x_0}_\infty\leq\delta\}$, $(Ku)(t)\defeq x_0+\int_{t_0}^tf(s,u(s))\,ds$, $u_0\equiv x_0$, and $u_{m+1}\defeq Ku_m$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $K(\mathcal C)\subseteq\mathcal C$ and $u_m\to\phi\in\mathcal C$ uniformly, where $K\phi=\phi$.
+\item $\phi\in C^1(I,\R^n)$ is the unique solution of $x'=f(t,x)$, $x(t_0)=x_0$, whose graph lies in $V$.
+\item $\norm{\phi-u_m}_\infty\leq B_0e^A\frac{A^m}{m!}$ for $m\geq0$.
+\end{enumerate}
+\begin{proof}
+For $u\in\mathcal C$ and $t\in I$, $\norm{Ku(t)-x_0}\leq\int_{t_0}^tb(s)\,ds\leq\delta$; hence $K(\mathcal C)\subseteq\mathcal C$.\\
+Induction and $dA=L\,ds$ give $\norm{K^mu(t)-K^mv(t)}\leq\frac{A(t)^m}{m!}\norm{u-v}_\infty$ for $u,v\in\mathcal C$ and $m\geq1$.\\
+With $u=Ku_0$ and $v=u_0$, $\norm{u_{j+1}-u_j}_\infty\leq B_0\frac{A^j}{j!}$ for $j\geq0$. Thus $(u_m)$ is uniformly Cauchy.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:complete-supremum-metric-space}, $C(I,\R^n)$ is complete; closedness of $\mathcal C$ gives $u_m\to\phi\in\mathcal C$.\\
+The case $m=1$ makes $K$ continuous, so $K\phi=\lim\limits_{m\to\infty}Ku_m=\lim\limits_{m\to\infty}u_{m+1}=\phi$.
+\item The fixed-point identity and the fundamental theorem give $\phi\in C^1(I,\R^n)$, $\phi(t_0)=x_0$, and $\phi'=f(\,\cdot\,,\phi)$.\\
+If $y$ is a solution with graph in $V$, then $y\in\mathcal C$ and $Ky=y$.\\
+If $Ku=u$ and $Kv=v$, then $\norm{u-v}_\infty\leq\frac{A^m}{m!}\norm{u-v}_\infty$ for $m\geq1$; choose $m$ with $\frac{A^m}{m!}<1$, hence $u=v$.
+\item By telescoping, $\norm{\phi-u_m}_\infty\leq B_0\sum\limits_{j=m}^{\infty}\frac{A^j}{j!}$. Since $(m+r)!\geq m!r!$, $\sum\limits_{j=m}^{\infty}\frac{A^j}{j!}\leq e^A\frac{A^m}{m!}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Integrated Lipschitz mass gives factorial iterate bounds.\\
+\hlt{Key Insight}: Repeated integration contracts eventually.
+\end{proof}
+\end{theorem}
+
+\begin{remark} \label{rem:caratheodory-ode-solutions} \hlt{Carath\'eodory Solutions}\\
+Let $I\subseteq\R$, $t_0\in I$, $x_0\in\R^n$, $\delta>0$, $V\defeq I\times\overline B_\delta(x_0)$, and $f:V\to\R^n$.\\
+Suppose $f(\,\cdot\,,x)$ is measurable, $f(t,\,\cdot\,)$ is continuous for a.e. $t$, and $\exists b,L\in L^1(I,[0,+\infty))$ with $\norm{f(t,x)}\leq b(t)$ and $\norm{f(t,x)-f(t,y)}\leq L(t)\norm{x-y}$ for a.e. $t$ and $x,y\in\overline B_\delta(x_0)$.\\
+Then a fixed point of $(Kx)(t)\defeq x_0+\int_{t_0}^tf(s,x(s))\,ds$ lies in $AC(I,\R^n)$ and satisfies $x'=f(\,\cdot\,,x)$ a.e.\\
+Generally $AC$ cannot be replaced by $C^1$. For $f(t,x)=\sign(t)x$, $x(t)\defeq e^{\abs t}$ satisfies $x(0)=1$,\\
+$x(t)=1+\int_0^t\sign(s)x(s)\,ds$, and $x'=\sign(t)x$ for $t\neq0$, but $x\notin C^1((-1,1))$.
+\end{remark}
+
+\begin{lemma} \label{lem:ode-solution-time-regularity} \hlt{Time Regularity of ODE Solutions}\\
+Let $I\subseteq\R$ be an interval, $k,n\in\N$, $k\geq1$, $U\subseteq\R\times\R^n$ open, and $f\in C^k(U,\R^n)$.\\
+Let $x\in C^1(I,\R^n)$ and $\gamma\defeq(\operatorname{id}_I,x)$. If $\gamma(I)\subseteq U$ and $x'=f\circ\gamma$, then $x\in C^{k+1}(I,\R^n)$.
+\begin{proof}
+Let $P_j$ mean $x\in C^j(I,\R^n)$. Since $x\in C^1$, $P_1$ holds.\\
+If $P_j$ holds and $1\leq j\leq k$, then $\gamma\in C^j(I,U)$, so $x'=f\circ\gamma\in C^j(I,\R^n)$; hence $P_{j+1}$. Thus $P_{k+1}$.\\
+\hlt{Structural Commentary}: Bootstrap $x'=f\circ\gamma$.\\
+\hlt{Key Insight}: Vector-field regularity lifts the trajectory by one derivative.
+\end{proof}
+\end{lemma}
+
+\begin{lemma} \label{lem:generalized-gronwall-integral-inequality} \hlt{Generalized Gronwall Inequality}\\
+Let $\alpha,\beta,\psi\in C([0,T],\R)$ with $\beta\geq0$ and $\psi(t)\leq\alpha(t)+\int_0^t\beta(s)\psi(s)\,ds$ $\forall t\in[0,T]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\psi(t)\leq\alpha(t)+\int_0^t\alpha(s)\beta(s)\exp\left(\int_s^t\beta(r)\,dr\right)ds$ $\forall t\in[0,T]$.
+\item If $\alpha(s)\leq\alpha(t)$ whenever $0\leq s\leq t\leq T$, then $\psi(t)\leq\alpha(t)\exp\left(\int_0^t\beta(s)\,ds\right)$ $\forall t\in[0,T]$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $q(t)\defeq\int_0^t\beta(s)\psi(s)\,ds$ and $w(t)\defeq\exp\left(-\int_0^t\beta(s)\,ds\right)$. Then $(wq)'=w\beta(\psi-q)\leq w\beta\alpha$.\\
+Since $q(0)=0$, integration gives $q(t)\leq\int_0^t\alpha(s)\beta(s)\exp\left(\int_s^t\beta(r)\,dr\right)ds$; combine this with $\psi\leq\alpha+q$.
+\item Under the monotonicity hypothesis, (i) gives $\psi(t)\leq\alpha(t)\left(1+\int_0^t\beta(s)\exp\left(\int_s^t\beta(r)\,dr\right)ds\right)$.\\
+The parenthesis equals $\exp\left(\int_0^t\beta(s)\,ds\right)$ by the fundamental theorem of calculus.
+\end{enumerate}
+\hlt{Structural Commentary}: An integrating factor controls the accumulated integral term.\\
+\hlt{Key Insight}: Exponential growth is the exact cost of repeated feedback.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:continuous-dependence-ode-data} \hlt{Continuous Dependence on Initial Data and Vector Fields}\\
+Let $U\subseteq\R\times\R^n$ be open, $f,g\in C(U,\R^n)$, $I\defeq[t_0,T]$, and $x,y\in C^1(I,\R^n)$ satisfy $x'=f(\,\cdot\,,x)$, $y'=g(\,\cdot\,,y)$.\\
+For $w:I\to\R^n$, set $\Gamma_w\defeq\{(t,w(t)):t\in I\}$. Assume $\Gamma_x\cup\Gamma_y\subseteq V\subseteq U$ with $V$ compact.\\
+Assume $\exists L\geq0$ such that $\norm{f(t,p)-f(t,q)}\leq L\norm{p-q}$ whenever $(t,p),(t,q)\in V$.\\
+Set $a\defeq\norm{x(t_0)-y(t_0)}$, $E\defeq f-g$, $M\defeq\max_V\norm{E}$, $\rho_0(h)\defeq h$, and $\rho_L(h)\defeq L^{-1}(e^{Lh}-1)$ for $L>0$.\\
+Then $\norm{x(t)-y(t)}\leq e^{L(t-t_0)}a+M\rho_L(t-t_0)$ $\forall t\in I$.
+\begin{proof}
+Put $\Delta\defeq x-y$, $\psi\defeq\norm{\Delta}$, and $R(s)\defeq f(s,x(s))-f(s,y(s))+E(s,y(s))$.\\
+Then $\Delta(t)=\Delta(t_0)+\int_{t_0}^tR(s)\,ds$ and $\norm{R(s)}\leq L\psi(s)+M$. Hence $\psi(t)\leq a+\int_{t_0}^t(L\psi(s)+M)\,ds$.\\
+If $L=0$, then $\psi(t)\leq a+M(t-t_0)=a+M\rho_0(t-t_0)$.\\
+If $L>0$, set $\chi\defeq\psi+M/L$. Then $\chi(t)\leq a+M/L+\int_{t_0}^tL\chi(s)\,ds$.\\
+By Lemma \ref{lem:generalized-gronwall-integral-inequality}(ii), $\chi(t)\leq(a+M/L)e^{L(t-t_0)}$, hence $\psi(t)\leq e^{L(t-t_0)}a+M\rho_L(t-t_0)$.\\
+\hlt{Structural Commentary}: Split state error from field error; apply Gronwall.\\
+\hlt{Key Insight}: Initial and model errors propagate exponentially.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:local-lipschitz-dependence-initial-pair} \hlt{Local Lipschitz Dependence on the Initial Pair}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, and $(t_*,x_*)\in U$. Assume $f$ is locally state-Lipschitz:\\
+$\forall$ compact $K\subseteq U$, $\exists L_K<+\infty$ such that $\norm{f(t,p)-f(t,q)}\leq L_K\norm{p-q}$ whenever $(t,p),(t,q)\in K$.\\
+Then $\exists I,B,V,\Phi$ with $I\ni t_*$ compact, $B\ni x_*$ an open ball, $V\subseteq U$ compact, and $\Phi:I\times I\times B\to\R^n$.\\
+Set $H\defeq\sup I-\inf I$, $M\defeq\max_V\norm f$, choose a state-Lipschitz constant $L$ for $f$ on $V$.\\
+Let $D((r,x),(q,y))\defeq\norm{x-y}+M\abs{r-q}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\Phi(r,r,x)=x$, $(t,\Phi(t,r,x))\in V$, and $\partial_t\Phi(t,r,x)=f(t,\Phi(t,r,x))$ for $(t,r,x)\in I\times I\times B$.
+\item $\norm{\Phi(t,r,x)-\Phi(s,q,y)}\leq e^{LH}D((r,x),(q,y))+M\abs{t-s}$ for $(t,r,x),(s,q,y)\in I\times I\times B$.
+\end{enumerate}
+\begin{proof}
+Choose $a,\delta>0$ with $Q\defeq[t_*-a,t_*+a]\times\overline B_\delta(x_*)\subseteq U$, and set $M_Q\defeq\max_Q\norm f$.\\
+Choose $0<h<a/2$ with $2hM_Q<\delta/2$, set $I\defeq[t_*-h,t_*+h]$, $B\defeq B_{\delta/2}(x_*)$, and $V\defeq I\times\overline B_\delta(x_*)$.\\
+Set $H\defeq2h$, $M\defeq\max_V\norm f$, and choose a state-Lipschitz constant $L$ for $f$ on $V$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $(r,x)\in I\times B$, set $I_r^+\defeq[r,t_*+h]$ and $I_r^-\defeq[t_*-h,r]$.\\
+Since $I_r^\pm\times\overline B_{\delta/2}(x)\subseteq Q$ and $\abs{I_r^\pm}\leq2h$, Theorem \ref{thm:quantitative-vector-picard-lindelof}, applied forward on $I_r^+$ and backward on $I_r^-$, gives a unique $u_{r,x}\in C^1(I,\R^n)$ with $u_{r,x}(r)=x$ and $u_{r,x}'=f(\,\cdot\,,u_{r,x})$.\\
+For $t\in I$, $\norm{u_{r,x}(t)-x}\leq M_Q\abs{t-r}<\delta/2$, hence $\norm{u_{r,x}(t)-x_*}<\delta$ and $(t,u_{r,x}(t))\in V$.\\
+Set $\Phi(t,r,x)\defeq u_{r,x}(t)$; then $\Phi(r,r,x)=x$, $(t,\Phi(t,r,x))\in V$, and $\partial_t\Phi(t,r,x)=f(t,\Phi(t,r,x))$.
+\item Let $(t,r,x),(s,q,y)\in I\times I\times B$, $p\defeq\max\{r,q\}$, and $D_0\defeq D((r,x),(q,y))$.\\
+By (i) and $\norm{\partial_t\Phi}\leq M$, $\norm{\Phi(p,r,x)-\Phi(p,q,y)}\leq D_0$.\\
+Gronwall on the interval with endpoints $p,t$ gives $\norm{\Phi(t,r,x)-\Phi(t,q,y)}\leq e^{L\abs{t-p}}D_0\leq e^{LH}D_0$.\\
+Also $\norm{\Phi(t,q,y)-\Phi(s,q,y)}\leq M\abs{t-s}$; the triangle inequality gives (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Compare at the later start time, then apply Gronwall.\\
+\hlt{Key Insight}: Initial-time error first becomes state error.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:smooth-ode-dependence-and-variational-equations} \hlt{Smooth Dependence and First Variational Equations}\\
+Let $n,p\in\N$, $\Omega\subseteq\R\times\R^n\times\R^p$ be open, $f\in C^1(\Omega,\R^n)$, and $(t_0,x_0,\lambda_0)\in\Omega$.\\
+Then $\exists I,B,\Lambda_0,\phi$ with $I\ni t_0$ compact, $B\ni x_0$ and $\Lambda_0\ni\lambda_0$ open, and $\phi:I\times B\times\Lambda_0\to\R^n$.\\
+Moreover $\phi(t_0,x,\lambda)=x$ $\partial_t\phi=f(\,\cdot\,,\phi,\lambda)$ on $I\times B\times\Lambda_0$. For $(x,\lambda)\in B\times\Lambda_0$, set $\gamma_{x,\lambda}(t)\defeq(t,\phi(t,x,\lambda),\lambda)$.\\
+Write $A_{x,\lambda}\defeq D_xf\circ\gamma_{x,\lambda}$ and $G_{x,\lambda}\defeq D_\lambda f\circ\gamma_{x,\lambda}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\phi\in C^1(I\times B\times\Lambda_0,\R^n)$.
+\item For each $(x,\lambda)$, $D_x\phi(\,\cdot\,,x,\lambda)$ is the unique solution of $Y'=A_{x,\lambda}Y$, $Y(t_0)=I_n$, in $C^1(I,\R^{n\times n})$.
+\item For each $(x,\lambda)$, $D_\lambda\phi(\,\cdot\,,x,\lambda)$ is the unique solution of $Z'=A_{x,\lambda}Z+G_{x,\lambda}$, $Z(t_0)=0_{n\times p}$, in $C^1(I,\R^{n\times p})$.
+\end{enumerate}
+\begin{proof}
+Put $z\defeq(x,\lambda)$, $z_0\defeq(x_0,\lambda_0)$. Let $F(t,z)\defeq(f(t,x,\lambda),0)\in C^1(\Omega,\R^{n+p})$.\\
+Choose $a,r>0$ with $W\defeq[t_0-a,t_0+a]\times\overline{B}_{2r}(z_0)\subseteq\Omega$. Set $H\defeq\max_W\norm{F}$.\\
+Let $\tau\defeq a$ if $H=0$, and $\tau\defeq\min\{a,\frac{r}{H}\}$ if $H>0$. For $z\in B_r(z_0)$, $[t_0-\tau,t_0+\tau]\times\overline{B}_r(z)\subseteq W$.\\
+By Lemma \ref{lem:c1-vector-field-locally-state-lipschitz}, $F$ is state-Lipschitz on $W$. Set $I\defeq[t_0-\tau,t_0+\tau]$.\\
+By Theorem \ref{thm:quantitative-vector-picard-lindelof} forward/backward, $\Phi'=F(\,\cdot\,,\Phi)$, $\Phi(t_0,z)=z$, has a unique solution on $I$.\\
+Choose open $B,\Lambda_0$ with $x_0\in B$, $\lambda_0\in\Lambda_0$, and $B\times\Lambda_0\subseteq B_r(z_0)$.\\
+Since the last $p$ components of $F$ vanish, $\Phi(t,x,\lambda)=(\phi(t,x,\lambda),\lambda)$, and $\phi$ has the stated IVP property.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:continuous-dependence-ode-data}, $\Phi$ is continuous in $z$ uniformly on $I$. Hence $\partial_t\Phi=F(t,\Phi)$ is continuous.\\
+Fix $z\in B_r(z_0)$, $\Phi_z\defeq\Phi(\,\cdot\,,z)$. Set $\mathcal L_z(t)\defeq D_zF(t,\Phi_z(t))$. Let $P_z'=\mathcal L_zP_z$ and $P_z(t_0)=I_{n+p}$.\\
+For $h\to0$ with $z+h\in B_r(z_0)$, put $\Delta_h\defeq\Phi_{z+h}-\Phi_z$ and $e_h\defeq\Delta_h-P_zh$.\\
+Set $\eta_{h,s}\defeq\Phi_z+s\Delta_h$, $\mathcal R_h(t,s)\defeq D_zF(t,\eta_{h,s}(t))-\mathcal L_z(t)$; $R_h(t)\defeq\int_0^1\mathcal R_h(t,s)\,ds$, $\varepsilon_h\defeq\norm{R_h}_\infty$; $\varepsilon_h\to0$.\\
+$e_h'=\mathcal L_ze_h+R_h\Delta_h$, $e_h(t_0)=0$, $\norm{\Delta_h}_\infty\leq C\norm{h}$. By Gronwall, $\norm{e_h}_\infty=O(\varepsilon_h\norm{h})=o(\norm{h})$; $D_z\Phi=P_z$.\\
+Since $z\mapsto\mathcal L_z$ is continuous uniformly on $I$, hence $z\mapsto P_z$ continuous. Thus $\Phi$, hence $\phi$, is $C^1$.
+\item Fix $(x,\lambda)$ and set $z=(x,\lambda)$. Put $Y\defeq D_x\phi(\,\cdot\,,x,\lambda)$, $A\defeq A_{x,\lambda}$, and $G\defeq G_{x,\lambda}$.\\
+Here $\mathcal L_z(\xi,\mu)=(A\xi+G\mu,0)$ and $D_x\Phi=(Y,0)$. The $x$-columns of $P_z'=\mathcal L_zP_z$ give $Y'=AY$, $Y(t_0)=I_n$.\\
+If $\widetilde Y$ also solves this IVP, $W\defeq Y-\widetilde Y$ satisfies $W'=AW$, $W(t_0)=0$; by Gronwall, $W=0$.
+\item Fix $(x,\lambda)$ and set $z=(x,\lambda)$. Put $Z\defeq D_\lambda\phi(\,\cdot\,,x,\lambda)$, $A\defeq A_{x,\lambda}$, and $G\defeq G_{x,\lambda}$.\\
+Here $\mathcal L_z(\xi,\mu)=(A\xi+G\mu,0)$. Since $D_\lambda\Phi=(Z,I_p)$, the $\lambda$-columns give $Z'=AZ+G$, $Z(t_0)=0_{n\times p}$.\\
+If $\widetilde Z$ also solves this IVP, $W\defeq Z-\widetilde Z$ satisfies $W'=AW$, $W(t_0)=0$; by Gronwall, $W=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Lift parameters; differentiate the extended flow.\\
+\hlt{Key Insight}: Flow derivatives satisfy variational equations.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:higher-order-smooth-ode-dependence} \hlt{Higher-Order Smooth Dependence}\\
+Let $k,n,p\in\N$, $k\geq1$, $\Omega\subseteq\R\times\R^n\times\R^p$ be open, $f\in C^k(\Omega,\R^n)$, $(t_0,x_0,\lambda_0)\in\Omega$. Then $\exists$ compact interval $I\ni t_0$, open neighborhoods $B\subseteq\R^n$ of $x_0$ and $\Lambda_0\subseteq\R^p$ of $\lambda_0$, and $\phi:I\times B\times\Lambda_0\to\R^n$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\phi(t_0,\cdot,\cdot)=\pi_{\R^n}$ on $B\times\Lambda_0$ and $\partial_t\phi=f(\,\cdot\,,\phi,\,\cdot\,)$ on $I\times B\times\Lambda_0$.
+\item $\phi\in C^k(I\times B\times\Lambda_0,\R^n)$.
+\end{enumerate}
+\begin{proof}
+Let $(\mathsf H_k)_d$ denote the theorem in state dimension $d$. By Theorem \ref{thm:smooth-ode-dependence-and-variational-equations}(i), $(\mathsf H_1)_d$ holds.\\
+The case $p=0$ is obtained from $\widetilde f(t,y,\mu)\defeq f(t,y)$ at $\mu=0$.\\
+Assume $(\mathsf H_k)_d$ for all finite $d$ and let $f\in C^{k+1}(\Omega,\R^n)$. Identify $\R^m=\R^n\times\R^p$ by $z=(x,\lambda)$.\\
+Let $m\defeq n+p$, $z_0\defeq(x_0,\lambda_0)$, and set $F(t,z)\defeq(f(t,x,\lambda),0_p)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By $(\mathsf H_k)_m$, after shrinking, choose $I,U_0,\Phi$ with $\Phi\in C^k(I\times U_0,\R^m)$, $\Phi'=F(\,\cdot\,,\Phi)$, and $\Phi(t_0,z)=z$.\\
+Choose open $B\ni x_0$ and $\Lambda_0\ni\lambda_0$ with $B\times\Lambda_0\subseteq U_0$. By $\pi_{\R^p}F=0$, $\pi_{\R^p}\Phi(t,x,\lambda)=\lambda$; put $\phi\defeq\pi_{\R^n}\Phi$.\\
+By projection, $\phi(t_0,x,\lambda)=x$ and $\partial_t\phi=f(t,\phi(t,x,\lambda),\lambda)$.
+\item By Theorem \ref{thm:smooth-ode-dependence-and-variational-equations}(ii), for $Q\defeq D_z\Phi$, $Q'=D_zF(\,\cdot\,,\Phi)Q$ and $Q(t_0,z)=I_m$.\\
+Let $\mathcal H(t,\zeta,P)\defeq(F(t,\zeta),D_zF(t,\zeta)P)$, $\Psi\defeq(\Phi,Q)$, and $\iota(z)\defeq(z,I_m)$.\\
+Then $\mathcal H\in C^k$, $\Psi'=\mathcal H(\,\cdot\,,\Psi)$, and $\Psi(t_0,z)=\iota(z)$.\\
+By $(\mathsf H_k)_{m+m^2}$, choose local $\Theta\in C^k$ with $\Theta'=\mathcal H(\,\cdot\,,\Theta)$ and $\Theta(t_0,\xi)=\xi$.\\
+By local uniqueness for $\mathcal H\in C^1$, $\Psi(t,z)=\Theta(t,\iota(z))$, hence $\Psi\in C^k$.\\
+Therefore $D_z\Phi\in C^k$, $\partial_t\Phi=F(\,\cdot\,,\Phi)\in C^k$, $\Phi\in C^{k+1}$, and $\phi\in C^{k+1}$.
+\end{enumerate}
+Thus $(\mathsf H_{k+1})_n$ holds; by induction, (i)--(ii) hold for all $k\geq1$.\\
+\hlt{Structural Commentary}: Differentiate once; bootstrap the augmented flow.\\
+\hlt{Key Insight}: Variational dynamics raise flow regularity.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:regular-perturbation-taylor-recursion} \hlt{Regular Perturbation Expansion}\\
+Let $k,n\in\N$, $k\geq1$, let $\Omega\subseteq\R\times\R^n\times\R$ be open, $f\in C^k(\Omega,\R^n)$, and $(t_0,x_0,\varepsilon_0)\in\Omega$.\\
+Let $I\ni t_0$ be compact, $\Lambda_0\ni\varepsilon_0$ open, and $\phi\in C^k(I\times\Lambda_0,\R^n)$ satisfy $\phi(t_0,\varepsilon)=x_0$ and $\partial_t\phi(t,\varepsilon)=f(t,\phi(t,\varepsilon),\varepsilon)$.\\
+Write $Z_j\defeq(z_0,\ldots,z_j)$, $Z_j^+\defeq(z_1,\ldots,z_{j+1})$, and $\mathcal D_j g\defeq\partial_\varepsilon g+\sum\limits_{r=0}^jD_{z_r}g\,z_{r+1}$ for $g=g(t,Z_j,\varepsilon)$.\\
+Set $f_0(t,z_0,\varepsilon)\defeq f(t,z_0,\varepsilon)$, $f_{j+1}\defeq\mathcal D_j f_j$ for $0\leq j<k$, $\phi_j(t)\defeq\partial_\varepsilon^j\phi(t,\varepsilon_0)$, and $\Phi_j(t)\defeq(\phi_0(t),\ldots,\phi_j(t))$.\\
+For a remainder $r_k$, put $\rho_k(\varepsilon)\defeq\sup\limits_{t\in I}\norm{r_k(t,\varepsilon)}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $0\leq j\leq k$, $\phi_j'=f_j(t,\Phi_j,\varepsilon_0)$, with $\phi_0(t_0)=x_0$ and $\phi_j(t_0)=0$ for $1\leq j\leq k$.
+\item $\phi(t,\varepsilon)=\sum\limits_{j=0}^k\frac{\phi_j(t)}{j!}(\varepsilon-\varepsilon_0)^j+r_k(t,\varepsilon)$ and $\rho_k(\varepsilon)=o(\abs{\varepsilon-\varepsilon_0}^k)$.
+\item If $f\in C^{k+1}(\Omega,\R^n)$, then, after shrinking $I$ and $\Lambda_0$ if necessary, $\rho_k(\varepsilon)=O(\abs{\varepsilon-\varepsilon_0}^{k+1})$.
+\end{enumerate}
+\begin{proof}
+For $0\leq j\leq k$, put $z_j(t,\varepsilon)\defeq\partial_\varepsilon^j\phi(t,\varepsilon)$, $Z_j(t,\varepsilon)\defeq(z_0(t,\varepsilon),\ldots,z_j(t,\varepsilon))$, and $R_j(t,\varepsilon)\defeq f_j(t,Z_j(t,\varepsilon),\varepsilon)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $\partial_t\phi=f(t,\phi,\varepsilon)$ and $\phi(t_0,\varepsilon)=x_0$, $\phi(t,\varepsilon)=x_0+\int_{t_0}^tf(s,\phi(s,\varepsilon),\varepsilon)\,ds$.\\
+By the chain rule, $\partial_\varepsilon R_j=R_{j+1}$ for $0\leq j<k$; hence by induction, $\partial_\varepsilon^j[f(t,\phi(t,\varepsilon),\varepsilon)]=R_j(t,\varepsilon)$.\\
+By differentiation under the integral sign, $z_j(t,\varepsilon)=\delta_{j0}x_0+\int_{t_0}^tR_j(s,\varepsilon)\,ds$.\\
+At $\varepsilon=\varepsilon_0$, $z_j=\phi_j$, $R_j=f_j(t,\Phi_j,\varepsilon_0)$, and $z_j(t_0,\varepsilon_0)=\delta_{j0}x_0$; differentiating in $t$ proves (i).
+\item Put $h\defeq\varepsilon-\varepsilon_0$ and $G_t(\eta)\defeq\partial_\varepsilon^k\phi(t,\eta)-\partial_\varepsilon^k\phi(t,\varepsilon_0)$.\\
+By the integral Taylor formula, $r_k(t,\varepsilon)=\frac{h^k}{(k-1)!}\int_0^1(1-s)^{k-1}G_t(\varepsilon_0+sh)\,ds$.\\
+Set $\omega(h)\defeq\sup\limits_{t\in I,\ s\in[0,1]}\norm{G_t(\varepsilon_0+sh)}$. By uniform continuity, $\omega(h)\to0$, and $\rho_k(\varepsilon)\leq\frac{\abs{h}^k}{k!}\omega(h)$.
+\item If $f\in C^{k+1}$, then by Theorem \ref{thm:higher-order-smooth-ode-dependence}, $\phi\in C^{k+1}$ after shrinking $\Lambda_0$.\\
+Choose compact $J\subseteq\Lambda_0$ with $\varepsilon_0\in J^\circ$ and set $C_J\defeq\max\limits_{(t,\eta)\in I\times J}\norm{\partial_\varepsilon^{k+1}\phi(t,\eta)}$.\\
+For $\varepsilon\in J$, by the integral remainder, $\rho_k(\varepsilon)\leq\frac{C_J\abs{h}^{k+1}}{(k+1)!}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Differentiate, then Taylor expand.\\
+\hlt{Key Insight}: Coefficients satisfy forced IVPs.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:regular-perturbation-linear-drag} \hlt{Linear Drag as a Regular Perturbation}\\
+Let $g>0$, $\varepsilon\geq0$, and $v'=-\varepsilon v-g$, $v(0)=0$. Then $v(t,\varepsilon)=\frac{g(e^{-\varepsilon t}-1)}{\varepsilon}$ if $\varepsilon>0$, and $v_0(t)\defeq v(t,0)=-gt$.\\
+At $\varepsilon_0=0$, $v_1'=-v_0=gt$, $v_1(0)=0$, hence $v_1(t)=\frac{gt^2}{2}$ and $v(t,\varepsilon)=v_0(t)+\varepsilon v_1(t)+o(\varepsilon)$ on compact $t$-intervals.\\
+For fixed $\varepsilon>0$, $t\to+\infty$ gives $v(t,\varepsilon)\to-\frac{g}{\varepsilon}$ but $v_0(t)+\varepsilon v_1(t)\to+\infty$; the expansion is local for bounded $t$.
+\end{example}
+
+\begin{theorem} \label{thm:unique-maximal-ode-solution} \hlt{Unique Maximal Solution}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, and $(t_0,x_0)\in U$.\\
+Assume $\forall$ compact $V\subseteq U$, $\exists L_V<+\infty$ such that $\norm{f(t,p)-f(t,q)}\leq L_V\norm{p-q}$ whenever $(t,p),(t,q)\in V$.\\
+For an open interval $J\ni t_0$, write $u\in\mathcal{A}(J)$ iff $u\in C^1(J,\R^n)$, $u(t_0)=x_0$, $(t,u(t))\in U$, and $u'=f(\,\cdot\,,u)$.\\
+Let $\mathcal{S}$ be all such pairs $(J,u)$. For $(J,u),(K,v)\in\mathcal{S}$, write $(J,u)\preceq(K,v)$ iff $J\subseteq K$ and $v|_J=u$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists$ a maximal $(I_*,\phi_*)\in\mathcal{S}$ with $I_*=(T_-,T_+)$.
+\item $(J,u)\preceq(I_*,\phi_*)$ $\forall (J,u)\in\mathcal{S}$; hence the maximal solution is unique.
+\end{enumerate}
+\begin{proof} By Theorem \ref{thm:quantitative-vector-picard-lindelof} forward/backward, $\mathcal{S}\neq\emptyset$. For $(J,u),(K,v)\in\mathcal{S}$, set $E\defeq\{t\in J\cap K:u(t)=v(t)\}$.\\
+Then $t_0\in E$, $E$ is closed, and local uniqueness at each $s\in E$ makes $E$ open in $J\cap K$.\\
+Hence $E=J\cap K$; thus $(*)$ $u=v$ on $J\cap K$ for all $(J,u),(K,v)\in\mathcal{S}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $I_*\defeq\bigcup_{(J,u)\in\mathcal{S}}J$ and $\phi_*(t)\defeq u(t)$ for any $(J,u)\in\mathcal{S}$ with $t\in J$. By $(*)$, $\phi_*$ is well defined.\\
+Since all $J$ are open intervals containing $t_0$, $I_*=(T_-,T_+)$. Locally $\phi_*=u$, so $(I_*,\phi_*)\in\mathcal{S}$.\\
+If $(I_*,\phi_*)\preceq(\widehat I,\widehat\phi)\in\mathcal{S}$, then $I_*\subseteq\widehat I\subseteq I_*$; hence $\widehat I=I_*$.
+\item For $(J,u)\in\mathcal{S}$, $J\subseteq I_*$ and $(*)$ gives $u=\phi_*|_J$, hence $(J,u)\preceq(I_*,\phi_*)$.\\
+If $(K,\psi)$ is maximal, then $(K,\psi)\preceq(I_*,\phi_*)$; maximality gives $K=I_*$ and $\psi=\phi_*$.
+\end{enumerate}
+\hlt{Structural Commentary}: Local uniqueness makes solution germs compatible.\\
+\hlt{Key Insight}: The maximal solution is their union.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:maximal-solution-extension-criterion} \hlt{Extension Criterion at a Finite Endpoint}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, and assume $f$ is locally Lipschitz in $x$ on compact subsets of $U$.\\
+Let $\phi:(T_-,T_+)\to\R^n$ be maximal for $x'=f(t,x)$, with $(t,\phi(t))\in U$, and assume $T_+<+\infty$.\\
+Then $\phi$ extends to $(T_-,T_++\varepsilon)$ for some $\varepsilon>0$ iff $\exists t_m\uparrow T_+$ and $y\in\R^n$ such that $\phi(t_m)\to y$ and $(T_+,y)\in U$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Let $\widehat\phi$ extend $\phi$ and take $t_m\uparrow T_+$. Put $y\defeq\widehat\phi(T_+)$. Then $\phi(t_m)=\widehat\phi(t_m)\to y$ and $(T_+,y)\in U$.
+\item[$(\Leftarrow)$] Choose $r,\eta>0$ with $W\defeq[T_+-\eta,T_++\eta]\times\overline B_r(y)\subseteq U$ and set $M\defeq\max_W\norm{f}$.\\
+Fix $m$, put $J\defeq[t_m,T_+)$, $B\defeq B_r(y)$, $a\defeq\norm{\phi(t_m)-y}$, and $h\defeq T_+-t_m$, with $a<\frac{r}{2}$, $Mh<\frac{r}{2}$.\\
+If $\tau\in J$ is the first exit from $B$, then $r\leq a+M(\tau-t_m)\leq a+Mh<r$, impossible. Hence $\phi(J)\subseteq B$.\\
+For $s,t\in J$, $\norm{\phi(t)-\phi(s)}\leq M\abs{t-s}$, so $\phi(t)$ is Cauchy as $t\uparrow T_+$. Since $\phi(t_m)\to y$, $\lim_{t\uparrow T_+}\phi(t)=y$.\\
+Local existence gives $\widetilde\phi$ on $I_\varepsilon\defeq[T_+,T_++\varepsilon)$ with $\widetilde\phi(T_+)=y$. Define $\Phi=\phi$ on $(T_-,T_+)$ and $\Phi=\widetilde\phi$ on $I_\varepsilon$.\\
+Since $\phi'(t)\to f(T_+,y)=\widetilde\phi'(T_+)$, $\Phi\in C^1$ and extends $\phi$.
+\end{enumerate}
+\hlt{Structural Commentary}: A convergent endpoint subsequence traps the tail for gluing.\\
+\hlt{Key Insight}: Finite endpoint limits are exactly extendible states.
+\end{proof}
+\end{lemma}
+
+\begin{corollary} \label{cor:maximal-solution-compact-escape} \hlt{Compact Escape at a Finite Maximal Endpoint}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, $K\Subset U$ for compact $K\subseteq U$.\\
+Assume $\forall C\Subset U$, $\exists L_C<+\infty$ such that $(t,p),(t,q)\in C\Rightarrow\norm{f(t,p)-f(t,q)}\leq L_C\norm{p-q}$.\\
+Let $J\defeq(T_-,T_+)$ and let $\phi:J\to\R^n$ be maximal for $x'=f(t,x)$, with $\gamma(t)\defeq(t,\phi(t))\in U$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T_+<+\infty\Rightarrow\forall K\Subset U,\ \exists\tau<T_+:\gamma((\tau,T_+))\cap K=\emptyset$.
+\item $T_->-\infty\Rightarrow\forall K\Subset U,\ \exists\tau>T_-:\gamma((T_-,\tau))\cap K=\emptyset$.
+\item If $U=\R\times\R^n$, then $T_+<+\infty\Rightarrow\norm{\phi(t)}\to+\infty$ as $t\uparrow T_+$ and $T_->-\infty\Rightarrow\norm{\phi(t)}\to+\infty$ as $t\downarrow T_-$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If (i) fails for some $K\Subset U$, then $\exists t_m\uparrow T_+$ with $\gamma(t_m)\in K$. By compactness, after passing to a subsequence,\\
+$\gamma(t_m)\to(T_+,y)\in K\subseteq U$. By Lemma \ref{lem:maximal-solution-extension-criterion}, $\phi$ admits a proper extension past $T_+$, contradiction.
+\item Set $\widetilde U\defeq\{(s,x):(-s,x)\in U\}$, $\widetilde f(s,x)\defeq-f(-s,x)$, $\widetilde J\defeq(-T_+,-T_-)$, and $u(s)\defeq\phi(-s)$.\\
+Then $u:\widetilde J\to\R^n$ is maximal for $u'=\widetilde f(\,\cdot\,,u)$. For $K\Subset U$, put $\widetilde K\defeq\{(-t,x):(t,x)\in K\}\Subset\widetilde U$.\\
+By (i) applied to $u$ at $-T_-$, $\exists a<-T_-$ such that $(s,u(s))\notin\widetilde K$ for $a<s<-T_-$.\\
+With $\tau\defeq-a$, $\gamma((T_-,\tau))\cap K=\emptyset$.
+\item Assume $U=\R\times\R^n$ and $T_+<+\infty$. For $R>0$, set $K_R\defeq[T_+-1,T_+]\times\overline B_R(0)$.\\
+By (i), $\exists\tau<T_+$ such that $\gamma((\tau,T_+))\cap K_R=\emptyset$, hence $\norm{\phi(t)}>R$ for $\max\{\tau,T_+-1\}<t<T_+$.\\
+Since $R$ is arbitrary, $\norm{\phi(t)}\to+\infty$ as $t\uparrow T_+$. The case $T_->-\infty$ is identical by (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Compact recurrence creates an endpoint extension.\\
+\hlt{Key Insight}: Finite maximal time forces compact escape.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:global-ode-solutions-linear-growth} \hlt{Global Existence under Linear Growth}\\
+Let $f:\R\times\R^n\to\R^n$ be continuous.\\
+Assume (LL): $\forall$ compact $V\subseteq\R\times\R^n$, $\exists L_V<+\infty$ such that $\norm{f(t,p)-f(t,q)}\leq L_V\norm{p-q}$ $\forall (t,p),(t,q)\in V$.\\
+Assume (LG): $\forall T>0$, $\exists M_T,L_T\geq0$ such that $\norm{f(t,x)}\leq M_T+L_T\norm{x}$ $\forall (t,x)\in[-T,T]\times\R^n$.\\
+If $\phi:(T_-,T_+)\to\R^n$ is maximal and $\phi'=f(\,\cdot\,,\phi)$, then $(T_-,T_+)=\R$.
+\begin{proof} Fix $t_0\in(T_-,T_+)$, $x_0\defeq\phi(t_0)$. If $T_+<+\infty$, choose $T>\max\{\abs{t_0},\abs{T_+}\}$ and $M_T,L_T$ from (LG).\\
+With $q\defeq\norm{\phi}$, $q(t)\leq\norm{x_0}+\int_{t_0}^t(M_T+L_Tq(s))\,ds$ on $[t_0,T_+)$, so $q\leq C_T<+\infty$ by Gronwall.\\
+Thus $\Gamma_+\defeq\{(t,\phi(t)):t\in[t_0,T_+)\}\subseteq K_T\defeq[-T,T]\times\overline B_{C_T}(0)$. For $t_m\uparrow T_+$, compactness gives $\phi(t_{m_j})\to y$ and $(T_+,y)\in K_T$. By (LL) and Lemma \ref{lem:maximal-solution-extension-criterion}, $\phi$ extends past $T_+$, contradiction. Hence $T_+=+\infty$.\\
+Set $g(s,x)\defeq-f(t_0-s,x)$ and $u(s)\defeq\phi(t_0-s)$ on $(t_0-T_+,t_0-T_-)$. Then $u'=g(\,\cdot\,,u)$, $u$ is maximal, and $g$ satisfies (LL),(LG) on bounded $s$-intervals. Apply right-endpoint result to $u$, then $t_0-T_-=+\infty$, $T_-=-\infty$.\\
+\hlt{Structural Commentary}: Gronwall bounds; compactness forces extension.\\
+\hlt{Key Insight}: Linear growth rules out finite escape.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:peano-local-existence} \hlt{Peano Local Existence Theorem}\\
+Let $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, and $(t_0,x_0)\in U$. Choose $T,\delta>0$ with $V\defeq[t_0,t_0+T]\times\overline B_\delta(x_0)\subseteq U$.\\
+Set $M\defeq\max_V\norm{f}$, $T_0\defeq\min\{T,\delta/M\}$ with $\delta/0\defeq+\infty$, and $I\defeq[t_0,t_0+T_0]$.\\
+For $y:I\to\R^n$, write $\Gamma_y\defeq\{(t,y(t)):t\in I\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\exists\phi\in C(I,\R^n)$ with $\Gamma_\phi\subseteq V$ and $\phi=x_0+\int_{t_0}^{(\cdot)} f(s,\phi(s))\,ds$ on $I$.
+\item This $\phi$ lies in $C^1(I,\R^n)$ and satisfies $\phi(t_0)=x_0$, $\phi'=f(\,\cdot\,,\phi)$.
+\end{enumerate}
+\begin{proof}
+For $N\geq1$, set $h_N\defeq T_0/N$, $t_j\defeq t_0+jh_N$, and $\tau_N(t)\defeq t_j$ on $[t_j,t_{j+1})$.\\
+Write $(\mathcal IG)(t)\defeq\int_{t_0}^tG(s)\,ds$. Define $x_N(t_0)\defeq x_0$, $Y_N\defeq(\tau_N,x_N\circ\tau_N)$, $F_N\defeq f\circ Y_N$, and $x_N=x_0+\mathcal IF_N$.\\
+By induction, $\norm{x_N(t)-x_0}\leq M(t-t_0)\leq\delta$ and $\norm{x_N(t)-x_N(s)}\leq M\abs{t-s}$.\\
+Hence $\Gamma_{x_N}\subseteq V$ and $(x_N)$ is uniformly bounded/equicontinuous.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Theorem \ref{thm:arzela-ascoli-compact-metric}, applied coordinatewise, $x_{N_k}\to\phi\in C(I,\R^n)$ uniformly.\\
+Then $\Gamma_\phi\subseteq V$. Set $Y_\phi\defeq(\operatorname{id}_I,\phi)$ and $f_\phi\defeq f\circ Y_\phi$.\\
+Since $\norm{\operatorname{id}_I-\tau_N}_\infty\leq h_N$ and $\norm{x_N-x_N\circ\tau_N}_\infty\leq Mh_N$, $Y_{N_k}(I),Y_\phi(I)\subseteq V$ and $Y_{N_k}\to Y_\phi$ uniformly.\\
+By uniform continuity of $f|_V$, $F_{N_k}\to f_\phi$ uniformly.\\
+Passing to the limit in $x_{N_k}=x_0+\mathcal IF_{N_k}$ gives $\phi=x_0+\mathcal If_\phi$.
+\item Since $f_\phi\in C(I,\R^n)$, by the fundamental theorem applied to (i), $\phi\in C^1(I,\R^n)$, $\phi(t_0)=x_0$, and $\phi'=f_\phi$.
+\end{enumerate}
+\hlt{Structural Commentary}: Euler polygons plus Arzel\`a--Ascoli produce a convergent approximate trajectory.\\
+\hlt{Key Insight}: Continuity yields existence through compactness, without uniqueness.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:osgood-modulus-of-continuity} \hlt{Osgood Modulus of Continuity}\\
+Let $\rho\in C([0,+\infty),[0,+\infty))$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\rho$ is a \hlt{modulus of continuity} iff $\rho(0)=0$ and $\rho$ is nondecreasing.
+\item A modulus $\rho$ satisfies the \hlt{Osgood condition} iff $\int_0^1\frac{dr}{\rho(r)}=+\infty$, interpreted as an improper extended integral; equivalently, $\int_0^a\frac{dr}{\rho(r)}=+\infty$ $\forall a>0$.
+\end{enumerate}
+\hlt{Key Insight}: Osgood divergence prevents a zero separation from becoming positive in finite time.
+\end{definition}
+
+\begin{example} \label{ex:osgood-modulus-threshold} \hlt{Lipschitz, H\"older, and Almost-Lipschitz Moduli}\\
+For $0<\alpha<1$, set $\rho_1(r)\defeq r$, $\rho_\alpha(r)\defeq r^\alpha$, $\rho_{\log}(0)\defeq0$, and $\rho_{\log}(r)\defeq r(1+\abs{\log r})$ for $r>0$.\\
+These functions are continuous, nondecreasing, and vanish at $0$.\\
+Since $\int_0^1\frac{dr}{r}=+\infty$ and $\int_0^1r^{-\alpha}\,dr=\frac{1}{1-\alpha}<+\infty$, $\rho_1$ is Osgood while the H\"older modulus $\rho_\alpha$ is not.\\
+For the almost-Lipschitz modulus, $s=-\log r$ gives $\int_0^1\frac{dr}{r(1+\abs{\log r})}=\int_0^{+\infty}\frac{ds}{1+s}=+\infty$, so $\rho_{\log}$ is Osgood.
+\end{example}
+
+\begin{theorem} \label{thm:osgood-uniqueness-criterion} \hlt{Osgood Uniqueness Criterion}\\
+Let $n\in\N$, $U\subseteq\R\times\R^n$ be open, $f\in C(U,\R^n)$, $(t_0,x_0)\in U$, $T>t_0$, and $\delta>0$.\\
+Put $J\defeq[t_0,T]$, $V\defeq J\times\overline B_\delta(x_0)$, and assume $V\subseteq U$.\\
+Let $\rho\in C([0,+\infty),[0,+\infty))$ be nondecreasing, $\rho(0)=0$, and $\int_0^a\frac{dr}{\rho(r)}=+\infty$ $\forall a>0$.\\
+ For $(t,p),(t,q)\in V$, set $A_t(p,q)\defeq\abs{\langle p-q,f(t,p)-f(t,q)\rangle}$.\\
+Assume $\exists C\geq0$ such that $A_t(p,q)\leq C\norm{p-q}\rho(\norm{p-q})$ $\forall (t,p),(t,q)\in V$.\\
+For $w\in C(J,\R^n)$, set $\Gamma_w\defeq\{(t,w(t)):t\in J\}$.\\
+If $u,v\in C^1(J,\R^n)$ satisfy $\Gamma_u\cup\Gamma_v\subseteq V$, $u(t_0)=v(t_0)=x_0$, $u'=f(\,\cdot\,,u)$, and $v'=f(\,\cdot\,,v)$, then $u=v$ on $J$.
+\begin{proof}
+Assume $S\defeq\{t\in(t_0,T]:u(t)\neq v(t)\}\neq\emptyset$ and fix $t\in S$. Put $\Delta\defeq u-v$ and $d\defeq\norm{\Delta}$.\\
+For $s\in J$, $E(s)\defeq f(s,u(s))-f(s,v(s))$. As $Z_t\defeq\{s\in[t_0,t]:d(s)=0\}$ nonempty compact, $\exists a\defeq\max Z_t$.\\
+Then $a<t$, $d(a)=0$, and $d>0$ on $(a,t]$. On $(a,t]$, $d\in C^1$ and $d'(s)=\frac{\langle\Delta(s),E(s)\rangle}{d(s)}$. Hence $d'(s)\leq\frac{A_s(u(s),v(s))}{d(s)}\leq C\rho(d(s))$.\\
+For $m\geq1$, set $H_m(r)\defeq\int_0^r\frac{dq}{\rho(q)+\frac{1}{m}}$. For $s\in(a,t]$, set $b_m(s)\defeq\frac{\rho(d(s))}{\rho(d(s))+\frac{1}{m}}\leq1$.\\
+If $a<r<t$, then on $[r,t]$, $(H_m\circ d)'(s)=\frac{d'(s)}{\rho(d(s))+\frac{1}{m}}\leq Cb_m(s)\leq C$.\\
+Thus $H_m(d(t))-H_m(d(r))\leq C(t-r)$. Letting $r\downarrow a$ gives $H_m(d(t))\leq C(t-a)$.\\
+By Theorem \ref{thm:monotone-convergence-integral}, $H_m(d(t))\uparrow\int_0^{d(t)}\frac{dq}{\rho(q)}=+\infty$, contradiction. Hence $S=\emptyset$ and $u=v$.\\
+\hlt{Structural Commentary}: Regularize $1/\rho$; separate variables.\\
+\hlt{Key Insight}: Divergence forbids first separation.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:autonomous-time-translation-flow-law} \hlt{Time Translation and the Local Flow Law}\\
+Let $D\subseteq\R^n$ be open, $f:D\to\R^n$. Assume each $(a,y)\in\R\times D$ has unique local solution of $x'=f(x)$, $x(a)=y$.\\
+For $x\in D$, let $\phi_x:I_x\to D$ be the maximal solution with $0\in I_x$, $\phi_x(0)=x$, and $\phi_x'=f(\phi_x)$.\\
+Define $\mathcal D_\Phi\defeq\{(t,x)\in\R\times D:t\in I_x\}$ and $\Phi_t(x)\defeq\phi_x(t)$ for $(t,x)\in\mathcal D_\Phi$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\phi:I\to D$, $0\in I$, $\phi'=f(\phi)$, then each $\tau\in\R$ shift $\psi_\tau(t)\defeq\phi(t-\tau)$ on $\tau+I$ solves $\psi_\tau'=f(\psi_\tau)$.\\
+Its initial value is $\psi_\tau(\tau)=\phi(0)$.
+\item $(0,x)\in\mathcal D_\Phi$ and $\Phi_0(x)=x$ for every $x\in D$; hence $\Phi_0=\operatorname{id}_D$.
+\item If $(s,x),(t,\Phi_s(x)),(t+s,x)\in\mathcal D_\Phi$, then $\Phi_{t+s}(x)=\Phi_t(\Phi_s(x))$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $t\in\tau+I$, $\psi_\tau'(t)=\phi'(t-\tau)=f(\phi(t-\tau))=f(\psi_\tau(t))$ and $\psi_\tau(\tau)=\phi(0)$.
+\item Since $0\in I_x$, $(0,x)\in\mathcal D_\Phi$ and $\Phi_0(x)=\phi_x(0)=x$ for every $x\in D$.
+\item Set $R\defeq(I_x-s)\cap I_{\Phi_s(x)}$. Then $0,t\in R$ and $(r+s,x),(r,\Phi_s(x))\in\mathcal D_\Phi$ for $r\in R$.\\
+Define $u,v:R\to D$ by $u(r)\defeq\Phi_{r+s}(x)$, $v(r)\defeq\Phi_r(\Phi_s(x))$.\\
+Then $u'=f(u)$ by (i), $v'=f(v)$, $u(0)=v(0)=\Phi_s(x)$.\\
+Uniqueness gives $u=v$ on $R$, so $\Phi_{t+s}(x)=\Phi_t(\Phi_s(x))$.
+\end{enumerate}
+\hlt{Structural Commentary}: Shift time; use uniqueness.\\
+\hlt{Key Insight}: Autonomy makes elapsed time compose.
+\end{proof}
+\end{proposition}

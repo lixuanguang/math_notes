@@ -36,6 +36,12 @@ Use `STRUCTURE_MIGRATION_README.md` for the current part and section index,
 ownership rules, content-adding guidance, content-moving guidance, and
 formalization-loop guidance.
 
+Executable editing prompts live in `prompts/prompt_library/`. Each entry point
+loads only the applicable shared modules under `prompts/standards/` (writing,
+layout, structure, sources, domains, and validation). The legacy
+`prompts/alignment_requirements.md` path is retained as a compatibility router.
+See `prompts/README.md` for the directory map.
+
 ## Building
 
 Build the PDF from the project root:

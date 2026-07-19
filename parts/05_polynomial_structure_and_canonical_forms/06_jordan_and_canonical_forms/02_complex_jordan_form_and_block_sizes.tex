@@ -1,11 +1,41 @@
 \subsection{Complex Jordan Form and Block Sizes}
+
 \begin{theorem} \label{thm:complex-jordan-form} \hlt{Jordan Form over $\mathbb{C}$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$. Then $\mathcal{V}$ has a Jordan basis for $T$.
+Let $\dim_{\mathbb{C}}\mathcal{V}=n\geq1$ and let $T\in\LL(\mathcal{V})$. Then $\exists$ a basis $\mathcal{B}$ of $\mathcal{V}$ and a Jordan matrix $J$ with $[T]_{\mathcal{B}}=J$.
 \begin{proof}
-Let $\lambda_1,\ldots,\lambda_m$ be the distinct eigenvalues of $T$. By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\mathcal{G}_{\lambda_1}(T)\oplus\cdots\oplus \mathcal{G}_{\lambda_m}(T)$, and each $N_j\defeq(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{G}_{\lambda_j}(T)}$ is nilpotent. Apply Theorem \ref{thm:nilpotent-jordan-chain-basis} to $N_j$ on each generalized eigenspace.\\
-The resulting chain basis of $\mathcal{G}_{\lambda_j}(T)$ is a basis of that summand, and the direct-sum decomposition makes the concatenation of these bases a basis of $\mathcal{V}$. In a chain of length $r$ for $N_j$, the matrix of $N_j$ is $J_r(0)$, so the matrix of $T|_{\mathcal{G}_{\lambda_j}(T)}=\lambda_jI+N_j$ on the same chain is $J_r(\lambda_j)$. Therefore the concatenated basis is a Jordan basis for $T$.\\
-\hlt{Structural Commentary}: Primary pieces decompose into nilpotent chains.\\
-\hlt{Key Insight}: Jordan form is ``eigenvalue plus nilpotent chains'' on every generalized eigenspace.
+Let $\operatorname{spec}(T)=\{\lambda_1,\ldots,\lambda_m\}$, set $G_j=\mathcal{G}_{\lambda_j}(T)$, $N_j=(T-\lambda_jI_{\mathcal{V}})|_{G_j}$, and $T_j=T|_{G_j}$.\\
+By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\bigoplus\limits_{j=1}^mG_j$ and each $N_j$ is nilpotent. By Theorem \ref{thm:nilpotent-jordan-chain-basis}, choose an $N_j$-chain basis $\mathcal{B}_j$ of $G_j$.\\
+For an $N_j$-chain $\mathcal{C}\subset\mathcal{B}_j$ of length $r$, $[N_j]_{\mathcal{C}}=J_r(0)$ and $[T_j]_{\mathcal{C}}=\lambda_jI_r+J_r(0)=J_r(\lambda_j)$. Let $\mathcal{B}=\mathcal{B}_1\sqcup\cdots\sqcup\mathcal{B}_m$.\\
+By directness, $\mathcal{B}$ is a basis of $\mathcal{V}$, and $[T]_{\mathcal{B}}$ is a direct sum of Jordan blocks.\\
+\hlt{Structural Commentary}: Primary decomposition reduces $T$ to nilpotent chain bases.\\
+\hlt{Key Insight}: On $G_j$, $T=\lambda_jI+N_j$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:real-jordan-block-form} \hlt{Real Jordan Block Form}\\
+Let $n\in\mathbb{N}$, $A\in\operatorname{Mat}(n,n,\mathbb{R})$. For $a\in\mathbb{R}$, $b>0$, set $R(a,b)\defeq\left(\begin{smallmatrix}a&b\\-b&a\end{smallmatrix}\right)$.\\
+Let $\mathcal{J}_k(a,b)=[C_{rs}]_{r,s=1}^k$ with $C_{rr}=R(a,b)$, $C_{r,r+1}=I_2$ for $r<k$, and $C_{rs}=0_2$ otherwise.\\
+Then $\exists S\in\operatorname{GL}_n(\mathbb{R})$ such that $S^{-1}AS$ is a direct sum of blocks of the following types:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $J_k(\lambda)$, where $k\in\mathbb{N}$ and $\lambda\in\mathbb{R}$;
+\item $\mathcal{J}_k(a,b)$, where $k\in\mathbb{N}$, $a\in\mathbb{R}$, and $b>0$.
+\end{enumerate}
+\begin{proof} Complexify $A$ to $A_{\mathbb{C}}$. By Theorem \ref{thm:complex-jordan-form}, choose Jordan chains for $A_{\mathbb{C}}$.\\
+By $\chi_A\in\mathbb{R}[t]$, $\lambda\notin\mathbb{R}$ implies $\overline\lambda\in\operatorname{spec}(A_{\mathbb{C}})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\lambda\in\mathbb{R}$, let $G_{\lambda}^{\mathbb{R}}=\ker(A-\lambda I_n)^n$ and $N_{\lambda}=(A-\lambda I_n)|_{G_{\lambda}^{\mathbb{R}}}$. \\
+Then $(G_{\lambda}^{\mathbb{R}})_{\mathbb{C}}=\ker(A_{\mathbb{C}}-\lambda I_n)^n$ and $N_{\lambda}$ is nilpotent.\\
+By Theorem \ref{thm:nilpotent-jordan-chain-basis}, take an $N_{\lambda}$-chain basis $\mathcal{B}_{\lambda}$; $[A]_{\mathcal{B}_{\lambda}}$ is a direct sum of $J_k(\lambda)$ blocks.
+\item Let $\lambda=a+ib$, $b>0$, and let $v=(v_1,\ldots,v_k)$ be a $\lambda$-chain. By Lemma \ref{lem:complexification-conjugate-generalized-eigenspaces}, $\overline v$ is a $\overline\lambda$-chain.\\
+Let $v_j=u_j+iw_j$; $U_j=[u_j\ w_j]$, $U_0=0$, $\mathcal{U}_v=(u_1,w_1,\ldots,u_k,w_k)$,  $W_v=\operatorname{span}_{\mathbb{C}}(v,\overline v)\cap\mathbb{R}^n$.\\
+By $(v,\overline v)\leftrightarrow\mathcal{U}_v$, $\mathcal{U}_v$ is real basis of $W_v$. By chain relations, $AU_j=U_jR(a,b)+U_{j-1}$; $[A]_{\mathcal{U}_v}=\mathcal{J}_k(a,b)$.
+\end{enumerate}
+Let $\mathcal{B}$ concatenate all $\mathcal{B}_{\lambda}$ and one $\mathcal{U}_v$ for each pair $(\lambda,\overline\lambda)$, $\operatorname{Im}\lambda>0$.\\
+By primary directness, $\mathcal{B}$ is a real basis of $\mathbb{R}^n$. With $S=[\mathcal{B}]$, $S^{-1}AS$ has the asserted blocks.\\
+\hlt{Structural Commentary}: Real chains and conjugate-pair chains exhaust the primary decomposition.\\
+\hlt{Key Insight}: A nonreal chain becomes one real block chain.
 \end{proof}
 \end{theorem}
 
@@ -17,48 +47,74 @@ The resulting chain basis of $\mathcal{G}_{\lambda_j}(T)$ is a basis of that sum
 \end{figure}
 
 \begin{corollary} \label{cor:jordan-blocks-diagonalizability} \hlt{Diagonalizability in Jordan Form}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have Jordan form $J$. For each eigenvalue $\lambda$, $\dim E_{\lambda}(A)$ equals the number of $\lambda$-blocks in $J$. Hence $A$ is diagonalizable if and only if every Jordan block has size $1$.
+Let $n\in\mathbb{N}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $J=\bigoplus\limits_{\alpha=1}^s J_{k_{\alpha}}(\mu_{\alpha})$ be Jordan form of $A$.\\
+Set $\delta_{\lambda\alpha}\defeq\delta_{\lambda,\mu_{\alpha}}$ and $b_J(\lambda)=\sum\limits_{\alpha=1}^s\delta_{\lambda\alpha}$ for $\lambda\in\operatorname{spec}(A)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\dim E_{\lambda}(A)=b_J(\lambda)$, $\lambda\in\operatorname{spec}(A)$;
+\item $A$ is diagonalizable if and only if every Jordan block in $J$ has size $1$.
+\end{enumerate}
 \begin{proof}
-Write $A=SJS^{-1}$. Then $S:E_{\lambda}(J)\to E_{\lambda}(A)$ is an isomorphism. A block $J_k(\mu)$ contributes to $E_{\lambda}(J)$ only when $\mu=\lambda$, and then $\dim\ker(J_k(\lambda)-\lambda I_k)=\dim\ker J_k(0)=1$.\\
-Thus $\dim E_{\lambda}(A)$ is the number of $\lambda$-blocks. By Theorem \ref{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match}, diagonalizability means geometric and algebraic multiplicities agree for every $\lambda$; here this holds exactly when every block has size $1$.\\
-\hlt{Structural Commentary}: Each Jordan block contributes one eigenvector direction.\\
-\hlt{Key Insight}: Missing eigenvectors are measured by block sizes greater than $1$.
+Choose $S\in\operatorname{GL}_n(\mathbb{C})$ such that $A=SJS^{-1}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $\lambda\in\operatorname{spec}(A)$, $S:E_{\lambda}(J)\cong E_{\lambda}(A)$ and $\dim E_{\lambda}(J_{k_{\alpha}}(\mu_{\alpha}))=\delta_{\lambda\alpha}$. Thus $\dim E_{\lambda}(A)=\sum\limits_{\alpha=1}^s\delta_{\lambda\alpha}=b_J(\lambda)$.
+\item Put $a_J(\lambda)=\sum\limits_{\alpha=1}^s k_{\alpha}\delta_{\lambda\alpha}$. By Theorem \ref{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match} and (i), $A$ is diagonalizable $\Longleftrightarrow a_J=b_J$ on $\operatorname{spec}(A)$.\\
+Since $a_J(\lambda)-b_J(\lambda)=\sum\limits_{\alpha=1}^s(k_{\alpha}-1)\delta_{\lambda\alpha}$ and $k_{\alpha}\geq1$, this is equivalent to $k_{\alpha}=1$ for every $\alpha$.
+\end{enumerate}
+\hlt{Structural Commentary}: Similarity transfers eigenspaces; block kernels count directions.\\
+\hlt{Key Insight}: Algebraic multiplicity counts block lengths.
 \end{proof}
 \end{corollary}
 
 \begin{lemma} \label{lem:nilpotent-jordan-block-power-rank} \hlt{Powers of a Nilpotent Jordan Block}\\
-For $k\geq1$ and $p\geq0$, $\operatorname{rank}\bigl(J_k(0)^p\bigr)=\max(k-p,0)$ and $\dim\ker\bigl(J_k(0)^p\bigr)=\min(p,k)$.
+Let $k\in\mathbb{N}$, let $p\in\mathbb{N}_0$, and set $N=J_k(0)\in\operatorname{Mat}(k,k,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{rank}(N^p)=\max(k-p,0)$;
+\item $\dim\ker(N^p)=\min(p,k)$.
+\end{enumerate}
 \begin{proof}
-Let $N=J_k(0)$. In the standard basis, $N\mathbf{e}_1=\mathbf{0}$ and $N\mathbf{e}_j=\mathbf{e}_{j-1}$ for $2\leq j\leq k$. Iterating gives
-\begin{align}
-N^p\mathbf{e}_j=
-\begin{cases}
-\mathbf{0}, & j\leq p,\\
-\mathbf{e}_{j-p}, & j>p.
-\end{cases} \nonumber
-\end{align}
-If $p<k$, the image is $\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_{k-p})$, so the rank is $k-p$; if $p\geq k$, the image is $\{\mathbf{0}\}$, so the rank is $0$.\\
-Hence $\operatorname{rank}(N^p)=\max(k-p,0)$. Rank-nullity gives $\dim\ker(N^p)=k-\max(k-p,0)=\min(p,k)$.\\
-\hlt{Structural Commentary}: A nilpotent Jordan block is a left-shift on the standard basis.\\
-\hlt{Key Insight}: Each power deletes one more leading layer of the chain.
+Let $(\mathbf{e}_j)_{j=1}^k$ be the standard basis. Set $(q)_+\defeq\max(q,0)$ and $\mathcal{E}_m=\operatorname{span}(\mathbf{e}_1,\ldots,\mathbf{e}_m)$ for $0\leq m\leq k$, with $\mathcal{E}_0=\{\mathbf{0}\}$. By $N\mathbf{e}_j=\mathbf{e}_{j-1}$ for $j>1$ and $N\mathbf{e}_1=\mathbf{0}$, $N^p\mathbf{e}_j=\mathbf{e}_{j-p}$ for $j>p$ and $\mathbf{0}$ otherwise.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{im}(N^p)=\mathcal{E}_{(k-p)_+}$, hence $\operatorname{rank}(N^p)=\dim\mathcal{E}_{(k-p)_+}=(k-p)_+=\max(k-p,0)$.
+\item By rank-nullity and (i), $\dim\ker(N^p)=k-(k-p)_+=\min(p,k)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Powers shift the chain and truncate its span.\\
+\hlt{Key Insight}: Rank counts surviving positions.
 \end{proof}
 \end{lemma}
 
 \begin{definition} \label{def:weyr-characteristic} \hlt{Weyr Characteristic}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\lambda\in\operatorname{spec}(A)$.\\
-For $p\geq1$, define $w_p(\lambda,A)\defeq \operatorname{rank}\bigl((A-\lambda I_n)^{p-1}\bigr) - \operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$.\\
-The positive part of the sequence $w_1,w_2,\ldots$ is the \hlt{Weyr characteristic} of $A$ associated with $\lambda$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and let $\lambda\in\operatorname{spec}(A)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $p\in\mathbb{N}_0$, define the shifted-power rank $r_p(\lambda,A)\defeq\operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$.
+\item For $p\in\mathbb{N}$, define the Weyr number $w_p(\lambda,A)\defeq r_{p-1}(\lambda,A)-r_p(\lambda,A)$. If $s\defeq\max\{p\in\mathbb{N}:w_p(\lambda,A)>0\}$, then the finite sequence $\bigl(w_1(\lambda,A),\ldots,w_s(\lambda,A)\bigr)$ is the \hlt{Weyr characteristic} of $A$ associated with $\lambda$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:jordan-block-sizes-from-rank-drops} \hlt{Jordan Block Sizes from Rank Drops}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda\in\operatorname{spec}(A)$, and $p\geq1$. Then $w_p(\lambda,A)$ is the number of $\lambda$-Jordan blocks of size at least $p$; hence $w_p(\lambda,A)-w_{p+1}(\lambda,A)$ is the number of $\lambda$-blocks of size exactly $p$.
+Let $n\in\mathbb{N}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda\in\operatorname{spec}(A)$, and $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\mu_{\alpha})$ be a Jordan form of $A$.\\
+For $q\in\mathbb{N}_0$, set $r_q=\operatorname{rank}\bigl((A-\lambda I_n)^q\bigr)$; for $q\in\mathbb{N}$, set $w_q=r_{q-1}-r_q$.\\
+For $p\in\mathbb{N}$, set $I_p=\{\alpha:\mu_{\alpha}=\lambda,\ k_{\alpha}\geq p\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $w_p=\# I_p$;
+\item $w_p-w_{p+1}=\#(I_p\setminus I_{p+1})=\#\{\alpha:\mu_{\alpha}=\lambda,\ k_{\alpha}=p\}$.
+\end{enumerate}
 \begin{proof}
-By Theorem \ref{thm:complex-jordan-form}, $A$ is similar to a Jordan matrix. Rank is similarity-invariant, so assume $A$ is in Jordan form.\\
-Blocks $J_k(\mu)$ with $\mu\neq\lambda$ contribute $0$ to the rank drop because $J_k(\mu)-\lambda I_k$ is invertible.\\
-A block $J_k(\lambda)$ contributes $\operatorname{rank}\bigl(J_k(0)^{p-1}\bigr)-\operatorname{rank}\bigl(J_k(0)^p\bigr)$, which is $1$ exactly when $p\leq k$ by Lemma \ref{lem:nilpotent-jordan-block-power-rank}.\\
-Summing over blocks proves the first claim; subtracting the $p+1$ count gives the exact-size count.\\
-\hlt{Structural Commentary}: Rank drops count surviving chain lengths.\\
-\hlt{Key Insight}: A length-$k$ block contributes to drops $1,\ldots,k$.
+By similarity-invariance of rank, assume $A=J$. Let $\mathbf{1}_E$ be the indicator of $E$.\\
+Set $B_{\alpha}=J_{k_{\alpha}}(\mu_{\alpha})$ and $\rho_q(B)=\operatorname{rank}\bigl((B-\lambda I)^q\bigr)$.\\
+Put $\Delta_{p,\alpha}=\rho_{p-1}(B_{\alpha})-\rho_p(B_{\alpha})$. By rank additivity, $w_p=\sum\limits_{\alpha=1}^s\Delta_{p,\alpha}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By invertibility for $\mu_{\alpha}\neq\lambda$ and by Lemma \ref{lem:nilpotent-jordan-block-power-rank} for $\mu_{\alpha}=\lambda$, $\Delta_{p,\alpha}=\mathbf{1}_{I_p}(\alpha)$. Hence $w_p=\sum\limits_{\alpha=1}^s\mathbf{1}_{I_p}(\alpha)=\#I_p$.
+\item By (i), $w_p-w_{p+1}=\#I_p-\#I_{p+1}=\#(I_p\setminus I_{p+1})=\#\{\alpha:\mu_{\alpha}=\lambda,\ k_{\alpha}=p\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Rank drops split into blockwise indicators.\\
+\hlt{Key Insight}: A block contributes until its length.
 \end{proof}
 \end{theorem}
 
@@ -70,22 +126,33 @@ Summing over blocks proves the first claim; subtracting the $p+1$ count gives th
 \end{figure}
 
 \begin{corollary} \label{cor:jordan-form-unique-up-to-block-permutation} \hlt{Uniqueness of Jordan Form}\\
-If $J$ and $J'$ are Jordan matrices similar to $A\in\operatorname{Mat}(n,n,\mathbb{C})$, they differ only by a permutation of Jordan blocks.
+Let $n\in\mathbb{N}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Let $J,J'$ be Jordan matrices similar to $A$.\\
+For $M\in\{J,J'\}$, let $\mathfrak{B}(M)$ be its multiset of Jordan blocks, set $m_M(\lambda,k)=\#\{B\in\mathfrak{B}(M):B=J_k(\lambda)\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $m_J(\lambda,k)=m_{J'}(\lambda,k)$ for all $(\lambda,k)\in\operatorname{spec}(A)\times\mathbb{N}$;
+\item $\exists$ a block-permutation matrix $P$ such that $J'=P^{-1}JP$.
+\end{enumerate}
 \begin{proof}
-Similarity preserves spectra and shifted-power ranks, so $J$ and $J'$ have the same Weyr characteristic for each eigenvalue. By Theorem \ref{thm:jordan-block-sizes-from-rank-drops}, they have the same block multiplicities, so only block order may differ.\\
-\hlt{Structural Commentary}: Weyr data is similarity-invariant and fixes block multiplicities.\\
-\hlt{Key Insight}: Jordan form is unique modulo block order.
+Set $d_k^{\lambda}(M)=w_k(\lambda,M)-w_{k+1}(\lambda,M)$. By similarity invariance, $d_k^{\lambda}(J)=d_k^{\lambda}(J')$ $\forall (\lambda,k)\in\operatorname{spec}(A)\times\mathbb{N}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $(\lambda,k)\in\operatorname{spec}(A)\times\mathbb{N}$, by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}, $m_J(\lambda,k)=d_k^{\lambda}(J)=d_k^{\lambda}(J')=m_{J'}(\lambda,k)$.
+\item By (i), $\mathfrak{B}(J)=\mathfrak{B}(J')$, so $\exists$ a block-permutation matrix $P$ with $J'=P^{-1}JP$.
+\end{enumerate}
+\hlt{Structural Commentary}: Shifted ranks determine block multiplicities.\\
+\hlt{Key Insight}: Weyr data fixes Jordan blocks.
 \end{proof}
 \end{corollary}
 
 \begin{method} \label{meth:jordan-form-from-rank-drops} \hlt{Computing Jordan Blocks by Rank Drops}\\
-For each eigenvalue $\lambda$ of $A\in\operatorname{Mat}(n,n,\mathbb{C})$:
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and let $\lambda\in\operatorname{spec}(A)$. To determine the $\lambda$-Jordan blocks:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Compute $r_p=\operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$ for $p=0,1,2,\ldots$ until the differences stabilize at $0$.
-\item Set $w_p=r_{p-1}-r_p$. Then $w_p$ is the number of $\lambda$-blocks of size at least $p$.
-\item The number of blocks $J_p(\lambda)$ is $w_p-w_{p+1}$.
-\item Assemble the Jordan form by taking the direct sum over all eigenvalues.
+\item Compute $r_p(\lambda,A)=\operatorname{rank}\bigl((A-\lambda I_n)^p\bigr)$ for $p=0,1,2,\ldots$ until $r_{p-1}(\lambda,A)=r_p(\lambda,A)$.
+\item Set $w_p(\lambda,A)=r_{p-1}(\lambda,A)-r_p(\lambda,A)$. This is the number of $\lambda$-blocks of size at least $p$.
+\item For $p\in\mathbb{N}$, take $w_p(\lambda,A)-w_{p+1}(\lambda,A)$ copies of $J_p(\lambda)$.
+\item Repeat (i)--(iii) as $\lambda$ ranges over $\operatorname{spec}(A)$, and take the direct sum of all resulting blocks.
 \end{enumerate}
-Steps (ii)--(iii) are valid by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}.
+The validity of steps (ii)--(iii) follows from Theorem \ref{thm:jordan-block-sizes-from-rank-drops}.
 \end{method}
