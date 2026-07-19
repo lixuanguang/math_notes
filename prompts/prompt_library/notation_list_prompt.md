@@ -8,7 +8,7 @@ Goal: after formalization, make the notation layer durable, compact, searchable,
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file | notation-list>
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <parts/... scope, parts/00_notations, exact notation file, or changed formalization scope>
 - START_CURSOR: <beginning | exact notation file>
 - FILE_COVERAGE: <changed-and-new | tracked-modified | all-active>

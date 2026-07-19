@@ -25,7 +25,7 @@ Build a complete source-to-target ledger before editing. For each block record e
 
 Record bibliographic metadata, paper type, domain, target, and an extraction decision for each major component. Inspect the abstract, introduction, main results/methods, figures/tables, discussion/conclusion, and supplements only as needed to identify durable content.
 
-Ingest only material that creates or repairs a durable local owner: a main definition/result, sharp hypothesis, essential example/counterexample, proof architecture, transferable proof/computation method, model, law, derivation, approximation, empirical study, valuation case, central figure/table, notation convention, validation check, or limitation.
+Ingest only material that creates or repairs a durable local owner: a main definition/result, specification, algorithm or contract, sharp hypothesis, essential example/counterexample, proof architecture, transferable method, system/circuit model, law, derivation, approximation, benchmark or empirical study, measurement, valuation case, central figure/table, notation convention, validation check, or limitation.
 
 Skip literature reviews, broad background already owned, rhetoric, duplicated preliminaries, routine derivations, exhaustive robustness tables, implementation minutiae, and appendices unless they contain a needed owner, proof, dataset, diagnostic, reproducibility fact, limitation, or visual.
 
@@ -34,6 +34,8 @@ Do not promote an abstract/introduction/discussion assertion into formal content
 Apply the matching domain file:
 
 - **Mathematics:** main definitions/results, exact hypotheses, essential examples/counterexamples, reusable proof architecture; auxiliary lemmas only when reused or the cleanest owner.
+- **Computer science:** abstraction/language/system and version, specification or contract, inputs/outputs/state, algorithm and correctness/complexity basis, implementation/runtime/configuration, dataset/workload/metric, experiment protocol, artifacts, security/privacy assumptions, and limitations.
+- **Electronic engineering:** device/system/topology, operating regime and conventions, source/datasheet conditions, circuit/model/equations, schematic, calculation/simulation setup, test equipment and loading, measurement uncertainty, requirement/compliance status, and validity limits.
 - **Quantitative finance:** problem/market/model/data/sample, measure/admissibility, objective, pricing/hedging/risk/calibration/backtest method, costs/constraints, benchmark/metric, validation, availability, and limitations.
 - **Fundamental finance:** entity/security/industry, date/currency/basis, data and adjustments, valuation/accounting method, drivers, forecasts/scenarios/sensitivities, risks, conflicts, and fact/estimate/opinion status.
 - **Physics:** system/regime, quantities/units, laws/equations, conditions, approximations, derivation, experiment/simulation, uncertainty, availability, and validity limits.

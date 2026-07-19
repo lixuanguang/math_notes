@@ -3,12 +3,12 @@
 ```text
 Repository: /Users/lxg/Documents/GitHub/math_notes
 
-Goal: align the selected active LaTeX scope to the repository's canonical mathematical, structural, and rendered standard.
+Goal: align the selected active LaTeX scope to the repository's canonical technical, mathematical, structural, and rendered standard.
 
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <exact parts/... path or unambiguous active-tree cursor>
 - START_CURSOR: <beginning | exact resume file>
 - FILE_COVERAGE: <all-active | changed-and-new | tracked-modified | untracked-new>

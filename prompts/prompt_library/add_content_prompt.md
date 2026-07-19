@@ -8,7 +8,7 @@ Goal: inspect supplied screenshots, images, PDFs, papers, or exact files; choose
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <exact parts/... path, active-tree cursor, or auto-place from SOURCE_MATERIAL>
 - START_CURSOR: beginning
 - FILE_COVERAGE: changed-and-new

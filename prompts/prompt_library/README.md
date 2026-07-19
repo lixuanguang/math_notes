@@ -26,6 +26,7 @@ The module contract is in `prompts/standards/README.md`. Conditional does not me
 Examples:
 
 - Refining one theorem proof loads repository/scope, mathematical style, theorem/proof, math layout, the matching domain, and targeted validation. It does not load figures, applied finance, source ingestion, or research recommendations.
+- Refining a benchmark or circuit-measurement block loads only the matching CS or EE overlay plus the shared block/layout modules it actually uses; embedded firmware may load both overlays.
 - Moving a figure loads repository/scope, organization/dependencies, collection quality, figures, the relevant domain, and structural validation. It does not load theorem proof-writing rules unless theorem content is changed.
 - Adding a mixed paper loads source grounding and the domain router, then only the environment/domain modules used by the extraction ledger.
 
@@ -48,6 +49,6 @@ add_content_prompt.md (first-pass)
 - Dependency flow owns prerequisite, notation/context-before-use, authority, and figure-only ownership repairs.
 - Formalization owns the row-by-row explicit/formal/notation/succinct pass, environment typing, proof completion, inline layout, cold pass, build, and rendered inspection.
 - Notation work runs after local wording stabilizes and promotes only durable notation.
-- Further research recommends authoritative non-duplicate sources but never edits current mathematical content or the bibliography.
+- Further research recommends authoritative non-duplicate sources but never edits current technical/mathematical content or the bibliography.
 
 For manual corrections to existing blocks, use `refine_blocks_prompt.md` directly. Skip any phase whose work is already settled.

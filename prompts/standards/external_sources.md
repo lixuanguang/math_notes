@@ -31,8 +31,22 @@ No external guide can verify this repository's no-overflow requirement; it must 
 
 ## Physical quantities and uncertainty
 
+- [BIPM SI Brochure, 9th edition](https://www.bipm.org/en/publications/si-brochure/) is the authoritative SI reference; the English text and concise summary are current to 2026. It supports explicit quantity/unit distinctions and current SI names, symbols, and conventions.
 - [NIST Special Publication 811](https://www.nist.gov/pml/special-publication-811) and its [manuscript checklist](https://www.nist.gov/pml/special-publication-811/nist-guide-si-check-list-reviewing-manuscripts) support keeping quantity symbols, numerical values, unit symbols, and SI conventions distinct and consistent.
 - [NIST Technical Note 1297](https://www.nist.gov/pml/nist-technical-note-1297), especially [reporting uncertainty](https://www.nist.gov/pml/nist-technical-note-1297/nist-tn-1297-7-reporting-uncertainty), supports explicit uncertainty components, evaluation methods, coverage factors, interpretation basis, and current measurement-process documentation.
+
+## Computer science
+
+- [ACM Artifact Review and Badging, current version](https://www.acm.org/publications/policies/artifact-review-and-badging-current) defines computational artifacts and distinguishes repeatability, reproducibility, and replicability. Its functional/reusable/available criteria support artifact inventories, documentation, completeness, executability, validation evidence, archival identifiers, and precise status claims.
+- [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) and its update [RFC 8174](https://www.rfc-editor.org/info/rfc8174/) are the BCP 14 authority for requirement-level terms in IETF-style specifications. RFC 8174 clarifies that their special meanings apply only to the uppercase forms when the document declares the convention.
+- [NIST SP 800-218, Secure Software Development Framework 1.1](https://csrc.nist.gov/pubs/sp/800/218/final) supports documenting software-security requirements, protecting development artifacts, verifying releases, recording provenance, and responding to residual vulnerabilities. The CS overlay applies these checks only to security-relevant content; it does not turn the notes into a compliance claim.
+
+## Electronic engineering
+
+- [IEEE Editorial Style Manual for Authors](https://journals.ieeeauthorcenter.ieee.org/your-role-in-article-production/ieee-editorial-style-manual/) provides first-party guidance for equations, numbers, abbreviations, quantities, units, and technical references in electrical/electronic writing. Repository-specific inline-first and no-overflow rules remain stricter and controlling.
+- [IEC 60617 Graphical Symbols for Diagrams](https://library.iec.ch/grasymb/grasymb.nsf/welcome?OpenPage) is the official maintained source for standardized electrotechnical diagram symbols; the current database includes conductors, passive and semiconductor components, energy conversion, measurement, communications, and logic elements.
+- [IEC 61082-1:2014](https://webstore.iec.ch/en/publication/4469), stable through 2029, establishes presentation rules for electrotechnical diagrams, drawings, and tables, including reference designations and wireless interconnections.
+- The BIPM/NIST quantity and uncertainty sources above govern units and measurement reporting. They support recording setup-dependent uncertainty and conditions; they do not establish circuit performance, traceability, safety, or regulatory compliance by themselves.
 
 ## Empirical and model-based work
 

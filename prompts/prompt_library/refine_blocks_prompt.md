@@ -7,7 +7,7 @@ Goal: refine only the blocks explicitly named by the user or visible in attached
 
 Configuration:
 - MODE: edit
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | math | computer-science | electronic-engineering | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <exact parts/... file and block/label, or screenshot-selected block>
 - MATH_LAYOUT: inline-strict
 - COMMENTARY_POLICY: required-new-and-rewritten

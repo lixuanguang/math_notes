@@ -11,7 +11,13 @@ Maintain recommendations in `Content_Enhancement_Recommendations.md`. Do not edi
 3. Make a concise search plan: concepts, prerequisites, adjacent topics, desired source types, venues, and exclusions.
 4. Search authoritative primary metadata/host pages first: publishers, authors, DOI/Crossref/DataCite, arXiv, university catalogs/WorldCat, professional societies, official standards/regulators, and journal pages.
 5. Prefer, when available: established graduate/advanced-undergraduate books; peer-reviewed surveys; landmark papers; official standards/regulatory material for applied topics; stable open course notes only when no stronger citable source exists.
-6. Apply the domain authority order: canonical books/surveys/landmark papers for math; peer-reviewed texts/papers plus regulator, exchange, reproducibility, and model-risk sources for quant finance; accounting/valuation standards, official filings/regulators, and peer-reviewed finance/accounting for fundamental finance; peer-reviewed work, standard texts, societies, NIST/unit/uncertainty standards, and experiment/simulation documentation for physics.
+6. Apply the domain authority order:
+   - math: canonical books, surveys, and landmark papers;
+   - computer science: exact normative specifications and official documentation, peer-reviewed texts/surveys/landmark papers, and archived artifact or benchmark records;
+   - electronic engineering: current standards-body records, exact manufacturer datasheets for component claims, standard texts, peer-reviewed work, and metrology/simulation/measurement documentation;
+   - quantitative finance: peer-reviewed texts/papers plus regulator, exchange, reproducibility, and model-risk sources;
+   - fundamental finance: accounting/valuation standards, official filings/regulators, and peer-reviewed finance/accounting;
+   - physics: peer-reviewed work, standard texts, societies, NIST/unit/uncertainty standards, and experiment/simulation documentation.
 7. Reject low-authority summaries, link farms, vague-fit sources, and metadata too thin for reliable identification.
 
 ## Duplicate gate

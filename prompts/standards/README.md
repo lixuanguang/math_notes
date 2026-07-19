@@ -34,8 +34,8 @@ The files in this directory are shared requirements, not entry-point prompts. St
 
 ## Non-negotiable cross-module rules
 
-- Mathematical succinctness must never hide objects, domains, hypotheses, quantifiers, conclusions, proof obligations, units, dates, source status, or limitations required to interpret a claim.
+- Technical and mathematical succinctness must never hide objects, domains, hypotheses, quantifiers, conclusions, proof obligations, interfaces, operating conditions, units, dates, source status, or limitations required to interpret a claim.
 - Under `MATH_LAYOUT: inline-strict`, the inline/display rules and rendered overflow checks in `prompts/standards/layout/math_layout.md` are mandatory.
 - Only earlier theorem-style results with adequate proofs may serve as mathematical proof authority.
-- Expository, applied, empirical, financial, physical, and visual blocks are not proof authority unless their mathematical consequence is separately stated and proved in a theorem-style environment.
+- Expository, applied, empirical, computational, engineering, financial, physical, and visual blocks are not proof authority unless their mathematical consequence is separately stated and proved in a theorem-style environment.
 - Preserve unrelated work and the active `parts/` hierarchy.

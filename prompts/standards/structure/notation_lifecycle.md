@@ -26,7 +26,7 @@ Before adding or changing a durable entry:
 
 1. search active content for the surface form, macro, and nearby variants;
 2. check roman/calligraphic/script/bold forms, bars, stars, primes, hats, tildes, subscripts, superscripts, and overloaded operators;
-3. pay special attention to `B`, `I`, `P`, `R`, `r`, `V`, `D`, `L`, `M`, `Q`, `\Delta`, `\Omega`, `\mu`, `\sigma`, `\lambda`, `*`, prime, and overline across probability, dynamics, pricing, valuation, accounting, and physics;
+3. pay special attention to `B`, `I`, `P`, `R`, `r`, `V`, `D`, `L`, `M`, `Q`, `\Delta`, `\Omega`, `\mu`, `\sigma`, `\lambda`, `*`, prime, and overline across algorithms/programs, circuits/signals, probability, dynamics, pricing, valuation, accounting, and physics;
 4. disambiguate through existing context, font, decoration, arguments, or a local declaration; do not invent unrelated notation merely to make the global list look unique.
 
 If two entries conflict, verify active use, choose the natural owner, and merge/split explicitly; never average meanings. Remove a stale entry only after proving no active use remains or another entry fully supersedes it. If uncertain, retain it and record `% TODO(notation): verify ...`.

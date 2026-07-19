@@ -2,9 +2,9 @@
 
 ## Objective and authority
 
-Produce a mathematically correct, explicit, formal, notation-aware, succinct, logically ordered, source-honest, and visually sound reference.
+Produce a technically and mathematically correct, explicit, formal, notation-aware, succinct, logically ordered, source-honest, and visually sound reference.
 
-Use this editing loop whenever mathematical content is changed:
+Use this editing loop whenever mathematical or technical content is changed:
 
 > Make the content explicit, formalize it, replace repeated boilerplate with readable notation, reuse applicable earlier results, compress without information loss, and verify the rendered result.
 
@@ -30,7 +30,7 @@ Instruction precedence is: the current user request; safety and mathematical cor
 
 - `MODE`: `edit` unless the entry point or user requests `audit-only`.
 - `SCOPE_LEVEL`: `part`, `section`, `subsection`, or `file`, plus workflow-specific values such as `notation-list`.
-- `DOMAIN`: `auto`, `math`, `quant-finance`, `fundamental-finance`, `physics`, or `mixed`.
+- `DOMAIN`: `auto`, `math`, `computer-science`, `electronic-engineering`, `quant-finance`, `fundamental-finance`, `physics`, or `mixed`.
 - `TARGET`: an exact path or unambiguous active-tree cursor.
 - `START_CURSOR`: `beginning` or an exact resume file.
 - `FILE_COVERAGE`:
