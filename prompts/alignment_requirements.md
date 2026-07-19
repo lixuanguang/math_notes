@@ -56,6 +56,7 @@ Inspect inactive untracked files for ownership, but do not add an input edge wit
 - Visible book depth is exactly `\part -> \section -> \subsection`. Do not add book-body `\subsubsection` or `\paragraph`.
 - Keep overview files structural. Extend the natural existing owner, keep prerequisites before dependants, prefer cross-references to duplication, and keep figures near their introducing text.
 - Add no skeletons or placeholders. A new subsection requires `ALLOW_NEW_SUBSECTION: yes`; a new section or part requires explicit permission.
+- Preserve intentional existing scaffolding. Do not rename a broad active subsection to the name of its current single content block merely because only that block is present today; subsection titles may reserve room for planned future material. Do not remove or deprecate active empty subsection inputs when they are existing placeholders. Remove or deprecate an active subsection only when the current reorganization moved its substantive content elsewhere and the emptied subsection is no longer the natural future owner.
 - Outside-scope edits are limited to necessary input edges, affected labels/references, recurring notation, prerequisite promotion, or paired figure/text repairs; report them.
 
 Before editing, run `git status --short` and read the structural references, target overviews/files, nearby prerequisites, labels, notation, and figures.
@@ -66,7 +67,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 Traverse active `\input` order. The atomic unit of completion is one formal environment, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
-Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
+Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, motivation, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, and algorithm forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, required commentary status, and final rendered page. Do not mark rows in bulk.
 
 Process exactly one ledger row at a time. Read the whole environment, its proof, and the immediately relevant earlier owners; then apply:
 
@@ -229,7 +230,7 @@ Proof preambles and proof items undergo the same explicit-formal-notation-succin
 
 For induction, bootstrap, or parameter-uniform proofs, name the predicate once, then state the base case and induction hypothesis in compact symbolic form. Do not restate the same uniformity in prose and notation, and do not introduce placeholder language such as “dummy parameter” when a precise object such as parameter space $\{\ast\}$ or a singleton family is available.
 
-**Earlier-result reuse.** After explicit formalization, search only earlier active theorems, propositions, lemmas, and corollaries. Cite one only when it precedes the current result, its hypotheses hold, its conclusion supplies the exact step, and citation is clearer or shorter than repetition. Never use a later result or a definition, example, counterexample, intuition, remark, method, perspective, applied environment, or algorithm as proof authority. Keep short calculations inline; if no result applies, prove the step directly.
+**Earlier-result reuse.** After explicit formalization, search only earlier active theorems, propositions, lemmas, and corollaries. Cite one only when it precedes the current result, its hypotheses hold, its conclusion supplies the exact step, and citation is clearer or shorter than repetition. Never use a later result or a definition, example, counterexample, intuition, remark, motivation, method, perspective, applied environment, or algorithm as proof authority. Keep short calculations inline; if no result applies, prove the step directly.
 
 Use result references as `$P$ by Theorem \ref{...}.` or `By Lemma \ref{...}, $P$.` Never make a result the subject of “gives,” “yields,” “shows,” “makes,” “implies,” “ensures,” or “provides.”
 
@@ -423,7 +424,7 @@ A `motivation` block explains why the next definition, result, method, model, or
 3. **Forward target:** what the reader should expect the next object to do.
 4. **Boundary:** no hidden theorem, proof step, or prerequisite needed later.
 
-Keep it short enough that the reader reaches the formal object quickly. Do not use motivation to summarize an entire subsection, duplicate an overview, or state results before their formal owners. If the material answers "how to solve this class of problems," use a typed method; if it explains a mental model for an already introduced object, use `intuition`.
+Keep it short enough that the reader reaches the formal object quickly. Do not use motivation to summarize an entire subsection, duplicate an overview, or state results before their formal owners. If the material answers "how to solve this class of problems," use a typed method; if it explains a mental model for an already introduced object, use `intuition`. Use label prefix `mot:` for motivation anchors.
 
 A `perspective` block synthesizes or reinterprets already established material. It belongs after the relevant formal owners. A nontrivial perspective should have:
 
@@ -432,7 +433,7 @@ A `perspective` block synthesizes or reinterprets already established material. 
 3. **Synthesis:** what becomes simpler, comparable, or unified from this viewpoint.
 4. **Boundary:** what the perspective does not prove or where the analogy breaks.
 
-It may point to earlier formal owners but cannot introduce prerequisites for later use. If the perspective contains a classification, theorem, reusable workflow, or domain assumption that later arguments need, split that content into the formal owner first.
+It may point to earlier formal owners but cannot introduce prerequisites for later use. If the perspective contains a classification, theorem, reusable workflow, or domain assumption that later arguments need, split that content into the formal owner first. Use label prefix `per:` for perspective anchors.
 
 A `principle` records a durable heuristic, organizing doctrine, or source-supported rule of thumb. It is not a theorem. State its scope, use case, and limitation; if it is universally true and used as proof authority, recast it as a theorem-style result with proof.
 
@@ -488,9 +489,9 @@ Do not overload a model block with proofs or worked computations. Put reusable c
 
 ## 6. Dependencies, labels, notation, and figures
 
-- Definitions, notation, and prerequisites precede use. Formal results and typed methods must not depend on remarks or examples; promote or move essential content.
+- Definitions, notation, and prerequisites precede use. Formal results and typed methods must not depend on examples, counterexamples, intuitions, remarks, motivations, perspectives, warnings, empirical studies, valuation cases, or other non-authoritative expository/applied blocks; promote or move essential content.
 - Resolve ownership structurally by reordering, moving, splitting, promoting, or citing the correct earlier owner—not by an ad hoc prerequisite paragraph.
-- Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `cex:`, `int:`, `rem:`, `per:`, `assump:`, `conv:`, `model:`, `law:`, `der:`, `approx:`, `dim:`, `emp:`, `val:`, `warn:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
+- Use one stable descriptive label per anchor with established prefixes (`def:`, `thm:`, `prop:`, `lem:`, `cor:`, `meth:`, `ex:`, `cex:`, `int:`, `rem:`, `mot:`, `per:`, `assump:`, `conv:`, `model:`, `law:`, `der:`, `approx:`, `dim:`, `emp:`, `val:`, `warn:`, `fig:`, `alg:`). Update every affected reference and remove stale, missing, or duplicate labels.
 - Read the collision index and relevant notation file. Disambiguate reused glyphs by font, decoration, arguments, or local declaration. Reuse base macros; add global notation/macros only when durable across major sections.
 - Figures must clarify mathematics. Prefer editable TikZ, nearby house colors/weights, essential labels only, and succinct captions; move explanatory prose, legends, and equations into a succinct color-coded caption when clearer.
 - Every touched TikZ figure requires a temporary standalone compile, rendered preview, visual inspection, and iteration. Source or compile inspection alone is insufficient.
