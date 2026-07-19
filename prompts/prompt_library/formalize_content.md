@@ -27,7 +27,7 @@ Configuration:
 - ALLOW_NEW_SUBSECTION: no
 - ALLOW_NEW_SECTION_OR_PART: no
 - ALLOW_NEW_ENVIRONMENT_OR_FIGURE_TYPE: no
-- BUILD: yes
+- BUILD: changed-scope
 
 Load before editing:
 1. `prompts/standards/repository_and_scope.md`.
@@ -53,10 +53,10 @@ Execution:
 3. Make one semantic pass in source order. Existing edits inside coverage are input, not wording or structure that must be preserved: rewrite or supersede them whenever the loaded standards support a better result, unless the user explicitly protected that edit. Enforce explicit claims, correct environment and authority, complete proof obligations, scoped notation, the domain overlay, and source limits. Consolidate an immediately adjacent explanatory environment into its short formal owner when it has no independent reference, verification, reusable takeaway, or distinct job; preserve substantive examples. In every remaining titled theorem-style environment, put `\\` immediately after the opening `\hlt{Title}` and before body prose. Keep patches atomic; do not emit per-row progress messages.
 4. Apply NOTATION_POLICY before layout: use established notation by default for mathematical relations, predicates, quantifiers, maps, definitions, set builders, implications/equivalences, recurrences, convergence, and bounds. Retain prose only when it adds interpretation, context, scope, assumptions, proof architecture, or other meaning not encoded symbolically; use scoped `\forall`, `\exists`, or `\exists!` instead of verbal quantifier scaffolding. Then normalize required `\limits`, fractions, scripts, and stacked constructs, and apply the recursive 100-horizontal-character-equivalent preflight in `math_layout.md` to every changed prose–inline-math span. Count printed references/citations, not command names or label keys; split or compress semantically when over budget without omitting needed content. Flag forced display style or nested vertical stacks for the one final render.
 5. Cold-read only changed rows and rows whose authority, notation, reference, or placement they affect. Run applicable search gates and `git diff --check` once after the file stabilizes.
-6. Run exactly one isolated full build and render the affected pages once. Inspect overfull boxes near changed lines and the changed blocks. Rebuild or rerender only when this final pass finds an actual current-edit overflow, collision, broken reference, or unreadable visual.
+6. Run exactly one isolated changed-scope build under the fast formalization profile; never build all of `math.tex`. Build the changed numbered file for a subsection, the owning `overview.tex` for a section, or the part `overview.tex` for a part, using the live `math.tex` preamble and `parts/base.tex`. Render that scope once and inspect its log and every produced page. Rebuild or rerender only when this final pass finds an actual current-edit overflow, collision, broken local reference, or unreadable visual.
 7. Stop at the active file boundary and report the next cursor.
 
-Final report: scope/domain/file and next cursor; pre-existing in-scope edits superseded and explicitly protected edits retained; rows changed and substantive proof/environment/notation/source decisions; display/matrix/figure exceptions; horizontal-budget preflight, search, diff, single-build, log, and one-pass render results; preserved out-of-scope work and genuine blockers.
+Final report: scope/domain/file and next cursor; pre-existing in-scope edits superseded and explicitly protected edits retained; rows changed and substantive proof/environment/notation/source decisions; display/matrix/figure exceptions; horizontal-budget preflight, search, diff, changed-scope build, log, and one-pass scope-render results; preserved out-of-scope work and genuine blockers.
 ```
 
 For existing edits/new files only, use `FILE_COVERAGE: changed-and-new`. Use `COMMENTARY_POLICY: required-all-reviewed` when every reviewed theorem-style result needs the commentary pair. Keep `RUN_BATCH: one-numbered-file` unless the selected scope is already one small file and the user explicitly accepts a broader batch.

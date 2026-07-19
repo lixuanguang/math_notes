@@ -55,8 +55,17 @@ Use only with `formalize_content.md`:
 1. Keep a compact source-order ledger; perform one semantic pass, then cold-read changed rows and their affected dependants only.
 2. Enforce notation-first, then normalize scoped symbolic quantifiers, limits, fractions, scripts, stacked constructs, and local notation before applying the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
 3. Run applicable search gates and `git diff --check` once after the target file stabilizes.
-4. Run one isolated full build. Inspect overfull/underfull boxes, unresolved references, and errors near changed lines.
-5. Render affected pages once and inspect the changed blocks and any touched visual. Repeat only for a concrete defect found in this final pass.
+4. Select the narrow build owner: the changed numbered file for a subsection, its directory `overview.tex` for a section, or the part-level `overview.tex` for a part. With multiple authorized changed files, use their narrowest common owner within `SCOPE_LEVEL`; never widen to the full document.
+5. Run one isolated scope build:
+
+```sh
+scope_build_dir="$(mktemp -d /private/tmp/math_notes_scope.XXXXXX)"
+ruby scripts/build_latex_scope.rb <scope-owner.tex> "$scope_build_dir"
+```
+
+The helper copies the current pre-`\begin{document}` portion of `math.tex`, which preserves its document class, options, metadata, and `parts/base.tex` input; it restores path-derived counters and inputs only the selected owner. Do not substitute a hand-maintained preamble or compile `math.tex`. Inspect scope-local errors and warnings near changed lines. Diagnose unresolved external labels or citations statically without widening the build solely to resolve them.
+
+6. Render every page of `scope_inspection.pdf` once and inspect the changed blocks and touched visuals. Repeat only for a concrete defect found in this final pass.
 
 ## Full semantic and render profile
 
