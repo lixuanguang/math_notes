@@ -32,6 +32,7 @@ Instruction precedence is: current user prompt; safety and mathematical correctn
 | `CONTENT_POLICY` | `refine-only` | Use `source-grounded` for provided-source intake. |
 | `ALLOW_NEW_SUBSECTION` | `no` | Permit only when explicitly set to `yes`. |
 | `ALLOW_NEW_SECTION_OR_PART` | `no` | Requires explicit permission. |
+| `ALLOW_NEW_ENVIRONMENT_OR_FIGURE_TYPE` | `no` | Permit only through an explicit source-intake gap protocol. |
 | `BUILD` | `yes` | Build outside the repository. |
 
 `FILE_COVERAGE` meanings:
@@ -547,7 +548,7 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 
 ### 7.2 Source provenance and coverage
 
-- For `CONTENT_POLICY: source-grounded`, maintain a source-to-target ledger for the run. Each source block should have an exact source identifier, mathematical or applied type, target owner, and status: `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, or `blocked-new-section-or-part`.
+- For `CONTENT_POLICY: source-grounded`, maintain a source-to-target ledger for the run. Each source block should have an exact source identifier, mathematical or applied type, target owner, and status: `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, `needs-new-environment-or-figure-type`, or `blocked-new-section-or-part`.
 - Distinguish `source-stated`, `source-derived`, and `repo-derived` material. Source-stated material is explicitly present in SOURCE_MATERIAL; source-derived material is a direct formalization or short consequence needed to make the source statement usable; repo-derived material comes from earlier active results used to complete a proof or avoid duplication.
 - Do not litter the LaTeX with source bookkeeping. Put provenance in the edit report unless a local `% TODO(source): ...` is necessary because the mathematical content is genuinely unreadable, ambiguous, or incomplete.
 - A source-grounded pass is incomplete if it merely adds the easiest visible result and leaves other supported source blocks unclassified.
@@ -594,6 +595,7 @@ Local environment quality is necessary but not sufficient. A proper notes collec
 
 - Keep shared environments and prompt standards domain-neutral. Future physics, quant-finance, and fundamental-finance PDFs may add subject-specific notation files or preamble layers, but they should inherit the same environment roles unless a subject-specific style file explicitly overrides them.
 - Before adding a new environment, ask whether an existing environment already owns the role. Prefer the smallest stable vocabulary: definitions/results/proofs for mathematics, typed methods/algorithms for procedures, examples/counterexamples for pedagogy, and Section 5.8 environments for applied assumptions, models, checks, empirical studies, and valuation cases.
+- Add a new environment or typed figure wrapper only for a durable role that existing environments cannot represent without distortion. Source-intake prompts may use the explicit gap protocol: search reputable web standards for the role, propose the minimum standard, update `parts/base.tex` and prompt standards if authorized, then use the new role only for source-supported material. Web searches in this protocol justify role and format standards only; they must not supply subject content, examples, claims, proofs, data, or assumptions.
 - Record future cross-volume dependencies explicitly in overviews or reports when a subsection will rely on material that may move to another PDF. Keep local labels stable and descriptive enough that cross-PDF references can later be mapped or duplicated intentionally.
 - Separate universal mathematical content from domain applications. A stochastic-process theorem should remain in the mathematics owner; a Black-Scholes model, calibration, backtest, or valuation case belongs in the applied owner and cites the mathematical prerequisites.
 - Distinguish source types in reports and local prose when relevant: textbook theorem, model assumption, physical law, empirical dataset, simulated output, market convention, accounting identity, valuation input, analyst forecast, and author interpretation.

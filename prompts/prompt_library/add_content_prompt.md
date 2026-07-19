@@ -25,11 +25,12 @@ Configuration:
 - SOURCE_MATERIAL: <exact attached files, screenshots, PDFs, or page ranges>
 - ALLOW_NEW_SUBSECTION: yes
 - ALLOW_NEW_SECTION_OR_PART: no
+- ALLOW_NEW_ENVIRONMENT_OR_FIGURE_TYPE: yes-if-standard-supported
 - BUILD: no
 
 Authority and safety:
 1. Read `prompts/alignment_requirements.md` completely and treat it as canonical except where this prompt is stricter. This prompt overrides `prompts/alignment_requirements.md` on building and source-intake batching: do not run a LaTeX build, and do not stop after only one numbered subsection file when SOURCE_MATERIAL supports more allowed placements.
-2. Use only SOURCE_MATERIAL and existing repository content. Do not search online, browse, or add unsupported material from memory.
+2. Use only SOURCE_MATERIAL and existing repository content for mathematical, scientific, financial, data, proof, example, and source claims. Do not search online, browse, or add unsupported subject material from memory. The only browsing exception is the environment/figure-type gap protocol below: search the web only for reputable writing, publishing, documentation, or domain-presentation standards that justify a new environment or figure role.
 3. Do not stage, commit, push, reset, checkout, restore, revert, delete files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Assume unrelated uncommitted edits may exist from parallel runs. Preserve them. Before editing, run `git status --short`, inspect the target files, and use focused patches only.
 5. Never overwrite a whole file. Never remove existing content unless it is a tiny directly related duplicate; explain any such removal. If a target file changed unexpectedly or a patch does not apply cleanly, stop and report the conflict.
@@ -48,7 +49,7 @@ Manual screenshot intake loop:
 4. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; record each block as `source-stated`, `source-derived`, or `repo-derived` when applicable; use active `\input` order for the target files, not screenshot order, when editing.
 5. With `RUN_BATCH: all-source-supported`, process every planned target file in the same run. Do not ask whether to continue to the next subsection, section, or part. Continue until all source-supported, permission-allowed blocks are classified and integrated or explicitly reported as blocked.
 6. If a source block naturally requires a new section or part, do not stop to ask mid-run. Mark that block `blocked-new-section-or-part`, continue with the remaining allowed blocks, and report the exact proposed higher-level location.
-7. For each planned target file, compare the source ledger against that file and nearby prerequisites. Classify each source block as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, or `blocked-new-section-or-part`.
+7. For each planned target file, compare the source ledger against that file and nearby prerequisites. Classify each source block as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, `needs-new-environment-or-figure-type`, or `blocked-new-section-or-part`.
 8. Edit only `partial`, `missing`, or locally `misplaced` material for the active planned target. Leave covered material unchanged unless a tiny local amendment is needed to integrate a new block.
 9. After each inserted or materially amended block, run the final-quality loop below before moving to the next block. After each target file, run the current-edit gates for that file, then proceed to the next planned target without asking for approval.
 10. Do not advance past the last file actually supported by SOURCE_MATERIAL. If later files need new source material, report that as a source boundary, not as a continuation prompt.
@@ -73,7 +74,16 @@ Classify the sources first:
 2. Substantive pages: integrate conservatively.
 3. Mixed: use contents pages only for placement and coverage; integrate only what the substantive pages support.
 4. For substantive material, extract and classify supported formulas, definitions, claims, theorems, propositions, lemmas, corollaries, examples, counterexamples, nonexamples, intuitions, typed methods, assumptions, conventions, models, laws, derivations, approximations, dimensional checks, empirical studies, valuation cases, warnings, remarks, motivations, perspectives, principles, processes, exercises, illustrations, visualizations, schematics, financial exhibits, images, table-like visuals, tables, proof ideas, notation, and prerequisites before choosing the insertion point.
-5. Report ambiguous classifications before insertion instead of silently forcing them into an environment.
+5. Report ambiguous classifications before insertion instead of silently forcing them into an environment. If a substantive source block does not fit any existing environment or typed figure wrapper, run the environment/figure-type gap protocol before editing that block.
+
+Environment/figure-type gap protocol:
+1. Exhaust the existing vocabulary first: theorem-style results, definitions, typed methods, algorithms, examples/counterexamples/intuitions/remarks/motivations/perspectives/principles/processes, applied environments in Section 5.8, ordinary tables, and typed figure wrappers in Section 6.1. Do not create a new role for a one-off stylistic preference, a vague heading, or content that can be cleanly split across existing owners.
+2. Use this protocol only when the source contains a durable role whose semantics would be distorted by every existing environment or figure type, or when forcing it into an existing role would hide required standards, provenance, dependency authority, units/data/date context, or reader expectations.
+3. Search the web for standards for that role using reputable sources: official package documentation, mathematical/scientific/finance publishers, professional societies, regulators, academic writing centers, or recognized domain style guides. Do not use the web to add subject content, examples, claims, proofs, data, assumptions, or context beyond SOURCE_MATERIAL.
+4. Propose a minimal standards extension before using it. The proposal must name the role, why existing roles fail, candidate environment or figure-wrapper name, label prefix if needed, ownership/dependency status, required components, non-authority or proof-authority rule, source/provenance rule, layout/render checks, and exact prompt/base files to update.
+5. If `ALLOW_NEW_ENVIRONMENT_OR_FIGURE_TYPE: yes-if-standard-supported` and the web standards plus SOURCE_MATERIAL justify the role, make focused updates to `parts/base.tex`, `prompts/alignment_requirements.md`, this prompt, and the prompt-library README if workflow discovery changes. Use `\newtheorem` plus `\normalfont` for text environments that belong in theorem numbering, or a typed wrapper around `figure` for visual roles that should keep ordinary Figure numbering. Keep the implementation minimal and domain-neutral.
+6. Use the new environment or figure type in the same run only for source-supported blocks that require that role. Do not migrate unrelated existing content merely because the new type exists.
+7. If standards support is weak, the role is not durable, or adding it would require a new section/part or broad refactor outside the run, do not force the content into a bad owner. Mark the source block `needs-new-environment-or-figure-type`, continue allowed blocks, and report the blocker with the searched sources and proposed next action.
 
 Placement rules:
 1. Prefer an existing subsection file whenever reasonable.
@@ -119,6 +129,7 @@ If the sources are only contents or outline pages, report:
 - already covered, partially covered, and missing material;
 - whether no new structure, a new subsection, a new section, or a new part seems appropriate;
 - the exact proposed location if a new subsection is recommended.
+- any source block whose natural owner appears to require a new environment or figure type, with the standards-search result or proposed blocker status.
 
 Edit report:
 If edits were made, report:
@@ -130,10 +141,11 @@ If edits were made, report:
 - example/counterexample/intuition/remark/motivation/perspective/expository/applied decisions: example targets and checks, counterexample claims/admissibility/hypothesis/failure/lessons, intuition anchors/mental models/scope/formal bridges, motivation/perspective/remark role checks, applied context/assumption/unit/data/valuation checks, remarks kept as non-authoritative, and any hidden content promoted to a formal owner;
 - figure decisions: primary role, formal anchor or data/model owner, caption/callout, label, source/provenance, axes/units/date/currency/window/context checks when relevant, accessibility checks, and any table-like material kept as searchable text instead of a figure;
 - extracted source blocks grouped by classification and provenance when that clarifies coverage;
-- coverage ledger summary: covered, partial, missing, misplaced, unsupported, and needs-later-file blocks;
+- coverage ledger summary: covered, partial, missing, misplaced, unsupported, needs-later-file, needs-new-environment-or-figure-type, and blocked-new-section-or-part blocks;
 - existing material cross-referenced instead of duplicated;
 - any exercises or questions integrated;
 - any uncertainties, gaps, TODOs, or blocked section/part needs;
+- any new environment/figure-type gap decisions: searched standards, sources used, role proposed, files updated, role used, or blocker reported;
 - collection-level decisions: overview/input updates, notation lifecycle, examples/counterexamples/intuitions, figure roles, equation labels, and TODO taxonomy;
 - completion cursor, source-boundary status, and whether a later `second-pass` over the same SOURCE_MATERIAL is recommended;
 - final-quality confirmation for new/touched environments: preambles self-contained, proof items matched, notation audit done, standard gates clean for current edits, and no rough block deferred to later formalization;

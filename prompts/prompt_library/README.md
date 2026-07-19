@@ -17,7 +17,7 @@ add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.
 
 Phase ownership:
 
-- `add_content_prompt.md` classifies every source block, auto-places allowed material when configured, integrates all source-supported content in one run, and records source provenance.
+- `add_content_prompt.md` classifies every source block, auto-places allowed material when configured, integrates all source-supported content in one run, records source provenance, and handles new environment/figure-type gaps through standards-only web research when explicitly authorized by its configuration.
 - `add_content_prompt.md` with `PASS_MODE: second-pass` catches missed supported content and removes/merges accidental duplicate coverage from the first pass.
 - `reorganize_content_prompt.md` handles movement, splitting, same-level placement, subsection creation when allowed, duplicate labels, and promotion recommendations. It preserves broad subsection titles and active empty placeholder subsections unless the run itself emptied and displaced their content. It is the phase that identifies subsection-to-section or section-to-part promotion; it performs the promotion only when `ALLOW_NEW_SECTION_OR_PART: yes`.
 - `dependency_flow_prompt.md` repairs prerequisite order, notation lifecycle, source ownership after movement, and invalid dependency authority.
