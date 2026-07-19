@@ -1,18 +1,15 @@
-# Add Content Prompt
+# Add Source-Grounded Content — Entry Point
 
 ```text
-I am working in:
-/Users/lxg/Documents/GitHub/math_notes
+Repository: /Users/lxg/Documents/GitHub/math_notes
 
-I attached screenshots, source images, PDFs, or exact source files from a mathematics, physics, quantitative-finance, fundamental-finance, or other technical source. Inspect the repository and choose the best target under the current `parts/` structure. Use `STRUCTURE_MIGRATION_README.md` as the placement and ownership reference.
-
-The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, applied/scientific/finance, proof, commentary, citation, layout, source-provenance, collection-level, research-paper ingestion, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
+Goal: inspect supplied screenshots, images, PDFs, papers, or exact files; choose the natural owner in the active `parts/` tree; and integrate every permission-allowed source block at final local quality. This is not rough transcription or a paper summary.
 
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
 - DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
-- TARGET: <exact parts/... path, unambiguous part-scoped cursor, or "auto-place from SOURCE_MATERIAL">
+- TARGET: <exact parts/... path, active-tree cursor, or auto-place from SOURCE_MATERIAL>
 - START_CURSOR: beginning
 - FILE_COVERAGE: changed-and-new
 - RUN_BATCH: all-source-supported
@@ -23,148 +20,75 @@ Configuration:
 - PROOF_COMPLETENESS: full
 - PROOFLESS_EXCEPTIONS: none
 - CONTENT_POLICY: source-grounded
-- SOURCE_MATERIAL: <exact attached files, screenshots, PDFs, or page ranges>
+- SOURCE_MATERIAL: <exact attachments/files/pages>
 - ALLOW_NEW_SUBSECTION: yes
 - ALLOW_NEW_SECTION_OR_PART: no
 - ALLOW_NEW_ENVIRONMENT_OR_FIGURE_TYPE: yes-if-standard-supported
-- BUILD: no
+- BUILD: yes
 
-Authority and safety:
-1. Read `prompts/alignment_requirements.md` completely, including Section 7.11 for domain overlays, and treat it as canonical except where this prompt is stricter. This prompt overrides `prompts/alignment_requirements.md` on building and source-intake batching: do not run a LaTeX build, and do not stop after only one numbered subsection file when SOURCE_MATERIAL supports more allowed placements.
-2. Use only SOURCE_MATERIAL and existing repository content for mathematical, scientific, financial, data, proof, example, and source claims. Do not search online, browse, or add unsupported subject material from memory. The only browsing exception is the environment/figure-type gap protocol below: search the web only for reputable writing, publishing, documentation, or domain-presentation standards that justify a new environment or figure role.
-3. Do not stage, commit, push, reset, checkout, restore, revert, delete files, clean the worktree, or edit generated PDF/auxiliary files.
-4. Assume unrelated uncommitted edits may exist from parallel runs. Preserve them. Before editing, run `git status --short`, inspect the target files, and use focused patches only.
-5. Never overwrite a whole file. Never remove existing content unless it is a tiny directly related duplicate; explain any such removal. If a target file changed unexpectedly or a patch does not apply cleanly, stop and report the conflict.
+Load before planning:
+1. `prompts/standards/repository_and_scope.md`.
+2. `prompts/standards/sources/source_grounding.md`.
+3. `prompts/standards/structure/organization_and_dependencies.md`.
+4. `prompts/standards/structure/collection_quality.md`.
+5. `prompts/standards/writing/mathematical_style.md`.
+6. `prompts/standards/layout/math_layout.md` — mandatory for every inserted/touched LaTeX block, including inline/display and no-overflow rules.
+7. `prompts/standards/validation.md` (full semantic and render profile, applied to all inserted/materially amended rows and affected pages).
+8. `prompts/standards/domains/README.md`, then only the configured or source-ledger domain overlay(s).
 
-Required reading before placement:
-1. Read `STRUCTURE_MIGRATION_README.md`, `math.tex`, and `parts/base.tex`.
-2. Read the relevant part and section `overview.tex` files.
-3. Read nearby subsection files for style, notation, labels, figures, algorithms, and existing coverage.
-4. Check for existing related definitions, results, examples, counterexamples, intuitions, applied environments, `proofmethod`, `computationmethod`, legacy `method`, algorithms, notation, and figures so you can cross-reference or extend rather than duplicate.
-5. If SOURCE_MATERIAL contains a research paper or preprint, read `prompts/alignment_requirements.md` Section 7.10 before placement and inspect the paper's abstract, introduction, main results/methods, figures/tables, discussion/conclusion, and appendices or supplements only as needed to identify critical content.
-6. If the source contains an algorithm, pseudocode, or step-by-step computational procedure, inspect nearby algorithm usage before choosing the format.
+After classifying source blocks, load every matching conditional module before planning its LaTeX owner:
+- theorem/proof -> `prompts/standards/writing/theorems_and_proofs.md`;
+- method/process/algorithm -> `prompts/standards/writing/methods_and_algorithms.md`;
+- example/counterexample/intuition/remark/motivation/perspective/principle/exercise/qnbank -> `prompts/standards/writing/expository_environments.md`;
+- assumption/convention/model/law/derivation/approximation/dimensionalcheck/empiricalstudy/valuationcase/warning -> `prompts/standards/writing/applied_environments.md`;
+- figure/plot/diagram/image/table-like visual -> `prompts/standards/layout/figures.md`;
+- durable notation/collision/macro -> `prompts/standards/structure/notation_lifecycle.md`.
 
-Manual screenshot intake loop:
-1. Inspect all screenshots in order first. Treat them as the source ledger, not as a vague topic suggestion.
-2. Group the screenshots into coherent source blocks: definitions, results, proofs, methods, examples, algorithms, figures, exercises, research-paper critical content, or outline material.
-3. Resolve the source domain first. With `DOMAIN: auto`, classify each source block as mathematics, quantitative finance, fundamental finance/accounting/valuation, physics, or mixed before placement; use the Section 7.11 overlay when deciding owner, environment, figure type, notation context, and evidence standard.
-4. Resolve the natural owner from the active `parts/` tree. With `TARGET: auto-place from SOURCE_MATERIAL`, choose the best existing part/section/subsection from the screenshots and repository structure.
-5. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; record each block as `source-stated`, `source-derived`, or `repo-derived` when applicable; use active `\input` order for the target files, not screenshot order, when editing.
-6. With `RUN_BATCH: all-source-supported`, process every planned target file in the same run. Do not ask whether to continue to the next subsection, section, or part. Continue until all source-supported, permission-allowed blocks are classified and integrated or explicitly reported as blocked.
-7. If a source block naturally requires a new section or part, do not stop to ask mid-run. Mark that block `blocked-new-section-or-part`, continue with the remaining allowed blocks, and report the exact proposed higher-level location.
-8. For each planned target file, compare the source ledger against that file and nearby prerequisites. Classify each source block as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, `needs-new-environment-or-figure-type`, or `blocked-new-section-or-part`.
-9. Edit only `partial`, `missing`, or locally `misplaced` material for the active planned target. Leave covered material unchanged unless a tiny local amendment is needed to integrate a new block.
-10. After each inserted or materially amended block, run the final-quality loop below before moving to the next block. After each target file, run the current-edit gates for that file, then proceed to the next planned target without asking for approval.
-11. Do not advance past the last file actually supported by SOURCE_MATERIAL. If later files need new source material, report that as a source boundary, not as a continuation prompt.
+Source boundary and browsing:
+- Subject content may come only from SOURCE_MATERIAL and existing active repository content.
+- Do not browse for claims, proofs, examples, data, assumptions, notation, or exposition.
+- The sole browsing exception is the environment/figure-type gap protocol in `source_grounding.md`; web research there may justify presentation semantics only.
 
-PASS_MODE meanings:
-- `first-pass`: place all supported material from SOURCE_MATERIAL across every allowed target file at final local quality.
-- `second-pass`: rerun over the same SOURCE_MATERIAL from the earliest affected target, compare against the current LaTeX state, and add only genuinely missing or still-partial source-supported content. Explicitly check for duplicated prose, repeated theorem payloads, and first-pass material that should be compressed, merged, or cross-referenced instead of repeated.
+Required repository reading:
+1. Run `git status --short`; preserve all unrelated work and use focused patches.
+2. Read `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, relevant part/section overviews, likely target files, nearby prerequisites, notation, labels, figures, algorithms, and existing related environment owners.
+3. For papers/preprints, inspect only the portions needed for the critical-content ledger described in `source_grounding.md`.
 
-Final-quality loop for every inserted or touched environment:
-1. Apply the complete canonical row workflow and Sections 5.1-7.11 of `prompts/alignment_requirements.md` to each new or materially touched block.
-2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, intuitions, proof steps, convergence claims, complexity bounds, or implementation details.
-3. Re-read the source block, the LaTeX preamble, each statement item, each typed-method step, each example/counterexample/intuition/remark/motivation/perspective/expository/applied role, each figure role, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, in the correct typed-method environment when written as a method, role-complete when written as an example, counterexample, intuition, remark, motivation, perspective, principle, process, applied environment, exercise, or question-bank item, figure-complete when written as a visual, and proof-complete when written as a theorem-style result.
-4. Keep theorem-style statements source-proportional. Do not move proof scaffolding, Picard iteration machinery, local construction constants, or proof-only error estimates into the statement unless the source presents them as reusable conclusions. When Structural Commentary / Key Insight is required, place the adjacent two-line pair only at the end: immediately before `\end{proof}` if there is a proof, or immediately before the theorem-style `\end{...}` for an allowed proofless exception; both lines must end with `\\`.
-5. Run the semantic deduplication and bundled-data ordering checks from `prompts/alignment_requirements.md`: no adjacent clause may repeat the same quantifier, scope, hypothesis, induction assumption, or conclusion in both prose and notation, and no map may use a derived domain before that domain is defined.
-6. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
-7. Run the standard gates on each active planned target file after its current edits and run `git diff --check`. If `BUILD: yes`, build and inspect edited line ranges for overfull/underfull warnings; if `BUILD: no`, report that this visual check was intentionally skipped.
-8. Apply collection-level checks locally: orientation text only where structural, new notation scoped at the smallest durable level, source-supported examples/counterexamples/intuitions placed near the definitions, results, or models they explain or test, equation labels only when referenced, and TODO comments typed and reported.
-9. Fix every current-edit gate hit and distinguish genuinely pre-existing hits in the report. Do not leave a block that would require a later targeted-refinement pass just to reach canonical quality.
+Source-ledger and placement loop:
+1. Inspect all supplied pages/images in order before editing. Group them into coherent blocks and classify each as outline, substantive, mixed, or research paper; assign domain and semantic/visual role. Report genuinely ambiguous classifications before insertion rather than forcing a misleading owner.
+2. Build the complete source-to-target ledger from `source_grounding.md` and `collection_quality.md`. With auto-placement, choose the best existing owner from the active tree.
+3. Compare each source block with its proposed owner and prerequisites; assign coverage/provenance status. Use active input order, not screenshot order, for edits.
+4. Outline-only material receives a placement/coverage audit and no insertion.
+5. `first-pass`: integrate all supported, allowed blocks across all planned targets.
+6. `second-pass`: compare the same source ledger against current LaTeX from the earliest affected target; add only genuinely missing/partial content and merge, compress, or cross-reference accidental duplication.
+7. Under `RUN_BATCH: all-source-supported`, continue through every planned target without approval pauses. Do not advance beyond SOURCE_MATERIAL.
+8. If a source block requires a new section/part, mark `blocked-new-section-or-part`, continue allowed blocks, and report the exact proposed owner. Add a new subsection only when no existing subsection is natural; give it real payload and update only the necessary active input edge. Never create empty skeletons.
+9. If no current environment/figure role can truthfully own a durable source block, follow the gap protocol before editing it. Continue other allowed blocks even if that block remains blocked.
 
-Classify the sources first:
-1. Contents or outline only: do not edit. Give a concise coverage and placement audit.
-2. Substantive pages: integrate conservatively.
-3. Research paper or preprint: apply the critical-content filter in `prompts/alignment_requirements.md` Section 7.10 before any environment-level insertion. Do not summarize the paper section by section.
-4. Mixed: use contents pages only for placement and coverage; integrate only what the substantive pages support.
-5. For substantive material, extract and classify supported formulas, definitions, claims, theorems, propositions, lemmas, corollaries, examples, counterexamples, nonexamples, intuitions, typed methods, assumptions, conventions, models, laws, derivations, approximations, dimensional checks, empirical studies, valuation cases, warnings, remarks, motivations, perspectives, principles, processes, exercises, illustrations, visualizations, schematics, financial exhibits, images, table-like visuals, tables, proof ideas, notation, and prerequisites before choosing the insertion point.
-6. Report ambiguous classifications before insertion instead of silently forcing them into an environment. If a substantive source block does not fit any existing environment or typed figure wrapper, run the environment/figure-type gap protocol before editing that block.
+Final-quality loop per inserted/materially amended block:
+1. Apply every loaded module completely. Treat a theorem statement and proof as one ledger row; every other environment/figure as its own row.
+2. Preserve source-supported generality and authority. Formalize what the source plus earlier active results support; do not invent missing content.
+3. Re-read the source block, target preamble, each semantic item/step, and each proof obligation separately. Use the correct environment and typed figure role; promote hidden prerequisites before later use.
+4. Keep theorem statements source-proportional; move proof machinery to the proof/method. Complete theorem-style proofs or report a source/scope blocker. Enforce exact Structural Commentary / Key Insight requirements.
+5. Reuse/extend an existing method or owner rather than duplicating supported prose. Prefer `computationmethod` for conceptual procedures and an algorithm only for useful executable pseudocode.
+6. Place source-supported examples, counterexamples, intuitions, checks, domain context, and figures near their anchors. Do not invent them.
+7. Scope notation at the smallest durable level. Add global notation only when it recurs across major sections. Number equations only when referenced or genuinely central.
+8. Apply the inline-strict semantic repair order. After each target file, run applicable source/search/diff gates and fix current-edit hits before continuing.
+9. After all planned targets, run one isolated full build, inspect warnings for every edited range, render every affected page at readable resolution, and repair all current-edit overflow, collision, sparse-tail, figure, and page-break defects. Do not leave a rough block for a later prompt when the supplied source already supports a canonical local result.
 
-Research-paper critical-content filter:
-1. Identify the domain first, respecting the configured `DOMAIN` when it is not `auto`: mathematics, quantitative finance, fundamental finance/accounting/valuation, physics, or mixed. Then apply the corresponding Sections 7.10 and 7.11 domain standards.
-2. Build a paper-level extraction ledger before editing. Record bibliographic metadata, paper type, target owner, source-stated/source-derived/repo-derived status, and one decision for each major paper component: `ingest-critical`, `covered-earlier`, `skip-background`, `skip-routine-detail`, `skip-weak-fit`, `blocked-insufficient-support`, `blocked-new-section-or-part`, or `needs-new-environment-or-figure-type`.
-3. Ingest only critical content that creates or repairs a durable local owner. For mathematics, this means main definitions/results, sharp hypotheses, essential examples/counterexamples, proof architecture, and reusable methods. For quantitative finance, this means problem type, market/model/data/sample, assumptions, pricing/hedging/risk/calibration/backtest method, metrics, costs/constraints, validation, and limitations. For fundamental finance, this means entity/security/industry scope, date/currency/accounting basis, data sources, definitions/adjustments, valuation/accounting method, assumptions/drivers, scenarios/sensitivities, risks, and fact/forecast/opinion status. For physics, this means system/regime, quantities/units, governing equations/laws, assumptions, boundary/initial conditions, approximations, derivation route, experimental/simulation setup, uncertainty, and validity limits.
-4. Skip literature review, broad motivation, author rhetoric, paper-specific narrative, duplicated preliminaries, routine derivations, exhaustive robustness tables, appendices, and implementation minutiae unless they contain a needed owner, assumption, method, proof, dataset, diagnostic, limitation, or figure.
-5. Do not promote a paper's abstract, introduction, or discussion claim into theorem-style, applied, finance, or physics content unless the paper body or supplement supports the formal statement, model, data, or derivation.
-6. Keep output compact. Prefer one clean local owner plus a short source note or report entry over several paper-specific blocks that will not be reused.
-
-Environment/figure-type gap protocol:
-1. Exhaust the existing vocabulary first: theorem-style results, definitions, typed methods, algorithms, examples/counterexamples/intuitions/remarks/motivations/perspectives/principles/processes, applied environments in Section 5.8, ordinary tables, and typed figure wrappers in Section 6.1. Do not create a new role for a one-off stylistic preference, a vague heading, or content that can be cleanly split across existing owners.
-2. Use this protocol only when the source contains a durable role whose semantics would be distorted by every existing environment or figure type, or when forcing it into an existing role would hide required standards, provenance, dependency authority, units/data/date context, or reader expectations.
-3. Search the web for standards for that role using reputable sources: official package documentation, mathematical/scientific/finance publishers, professional societies, regulators, academic writing centers, or recognized domain style guides. Do not use the web to add subject content, examples, claims, proofs, data, assumptions, or context beyond SOURCE_MATERIAL.
-4. Propose a minimal standards extension before using it. The proposal must name the role, why existing roles fail, candidate environment or figure-wrapper name, label prefix if needed, ownership/dependency status, required components, non-authority or proof-authority rule, source/provenance rule, layout/render checks, and exact prompt/base files to update.
-5. If `ALLOW_NEW_ENVIRONMENT_OR_FIGURE_TYPE: yes-if-standard-supported` and the web standards plus SOURCE_MATERIAL justify the role, make focused updates to `parts/base.tex`, `prompts/alignment_requirements.md`, this prompt, and the prompt-library README if workflow discovery changes. Use `\newtheorem` plus `\normalfont` for text environments that belong in theorem numbering, or a typed wrapper around `figure` for visual roles that should keep ordinary Figure numbering. Keep the implementation minimal and domain-neutral.
-6. Use the new environment or figure type in the same run only for source-supported blocks that require that role. Do not migrate unrelated existing content merely because the new type exists.
-7. If standards support is weak, the role is not durable, or adding it would require a new section/part or broad refactor outside the run, do not force the content into a bad owner. Mark the source block `needs-new-environment-or-figure-type`, continue allowed blocks, and report the blocker with the searched sources and proposed next action.
-
-Placement rules:
-1. Prefer an existing subsection file whenever reasonable.
-2. Add a new numbered subsection only when the material clearly does not fit an existing subsection.
-3. Do not create a new section or part. If one seems necessary, classify the affected source block as `blocked-new-section-or-part`, continue all other allowed blocks, and report the exact proposed location.
-4. Do not create broad skeletons, placeholder files, or empty future headings.
-5. Keep visible depth exactly `\part`, `\section`, `\subsection`; do not add book-body `\subsubsection` or `\paragraph`.
-6. If a new subsection file is added, update only the necessary `overview.tex` or active `\input` edge.
-7. Keep prerequisites before dependants and prefer structurally correct placement over local prerequisite patches.
-
-Integration style:
-1. Add a polished, compact, source-grounded integration, not a full textbook transcription.
-2. Preserve source-supported coverage; mark genuine uncertainty with concise comments such as `% TODO(source): verify ...`.
-3. Use existing theorem environments, macros, labels, and nearby style. Use `\hlt{...}` for result titles when local style does.
-4. Prefer concise definitions, propositions, lemmas, corollaries, examples, counterexamples, intuitions, typed methods, applied environments, remarks, motivations, perspectives, principles, processes, exercises, question-bank items, and algorithms only when the source and existing repo content support them. Use `proofmethod` for transferable proof patterns and `computationmethod` for transferable computations, constructions, approximations, diagnostics, or algorithm previews. Use legacy `method` only for justified hybrid/other cases.
-5. When adding a theorem, lemma, proposition, corollary, example, or algorithm, compare it against existing `proofmethod`, `computationmethod`, and legacy `method` blocks in the nearby owner and prerequisites. If the new source-supported material provides a reusable proof route, construction, diagnostic, verification check, limitation, or selection cue, extend the existing method or add the smallest appropriate typed method instead of duplicating that prose inside multiple results.
-6. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, intuitions, or proof steps. If a theorem-style proof cannot be completed from the source plus earlier repository results, do not promote it to a theorem-style result; use a source TODO, remark, or report the blocker.
-7. Do not closely paraphrase long textbook passages. Write original notes in the repository's style.
-8. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `cex:...`, `int:...`, `meth:...`, `assump:...`, `model:...`, `law:...`, `der:...`, `approx:...`, `dim:...`, `emp:...`, `val:...`, `warn:...`, `alg:...`, and `fig:...`.
-9. For exercises or questions, integrate only useful supported mathematics; otherwise leave at most a concise TODO/source note.
-10. Add a figure only when it is mathematically, scientifically, computationally, or financially useful and supported by the source. First classify its primary role under `prompts/alignment_requirements.md` Section 6.1 and use the corresponding typed wrapper: `illustrationfigure`, `visualizationfigure`, `schematicfigure`, `financialexhibitfigure`, `sourceimagefigure`, or `tablevisualfigure`. Prefer editable TikZ or `tikz-cd` for illustrations and schematics, and searchable `table`/`tabular` for structured data. Use `tablevisualfigure` only when the material must remain visual. For visualizations, include axes, units, scale, parameters, data/model/source, sample window or regime, and uncertainty/sensitivity when relevant. For financial exhibits, include date, currency, period/frequency, basis, benchmark/source, and historical/forecast/model-implied status. Do not reproduce text screenshots or decorative figures.
-11. Update notation files only for notation that will recur across major sections. Keep local notation near first use and do not let proof-local notation leak into later blocks.
-12. Add source-supported examples, nonexamples, counterexamples, intuitions, or test computations when they clarify major definitions, hypotheses, results, methods, or models. Use `example` for positive/illustrative instances, `counterexample` for refutations or hypothesis-necessity failures, and `intuition` for mental models, analogies, pictures, or heuristic bridges. Each nontrivial example must identify what it illustrates, bind exact data, verify the relevant property or computation, and state the takeaway. Each counterexample must state the claim tested, give admissible data, verify any hypotheses, verify the failing conclusion, and state the precise lesson. Each intuition must state the formal anchor, mental model, correspondence, scope, and formal bridge. Do not invent examples, counterexamples, or intuitions during screenshot intake.
-13. Keep intuitions, remarks, motivations, perspectives, principles, processes, exercises, and question-bank items within the roles in `prompts/alignment_requirements.md` Section 5.7. Remarks need anchor/role/scope/non-authority checks; motivations need need/natural-move/forward-target/boundary checks; perspectives need anchors/viewpoint/synthesis/boundary checks. Keep assumptions, conventions, models, laws, derivations, approximations, dimensional checks, empirical studies, valuation cases, and warnings within the roles in Section 5.8. Promote hidden results, methods, algorithms, definitions, notation, or prerequisites before later use.
-14. Number and label equations only when they are referenced later or central enough to need an anchor; otherwise keep formulas inline or unnumbered according to `MATH_LAYOUT`.
-
-Algorithms:
-1. Prefer a prose `computationmethod` environment for short conceptual computational procedures.
-2. Use `breakablealgorithm` with `algorithmic` only when actual step-by-step pseudocode is useful and supported by the source. If the content is a reusable computational idea but not executable pseudocode, keep it as a `computationmethod`.
-3. Follow nearby repository style, for example `\begin{breakablealgorithm}`, `\caption{...}`, `\begin{algorithmic}`, `\Require`, `\Ensure`, and `\State`.
-4. Keep algorithms compact and mathematically focused; do not transcribe long textbook pseudocode mechanically.
-
-Canonical quality reminders:
-1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.11 directly, especially source-proportional theorem-style statements, self-contained theorem-style and typed-method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, example/counterexample/intuition/remark/expository/applied environment roles, figure role classification and visual standards, research-paper critical-content filtering, domain overlays, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples/intuitions/applied checks, equation numbering, TODO discipline, and multi-PDF readiness.
-3. For methods, first choose `proofmethod`, `computationmethod`, or justified legacy `method`, then extract the problem type, data, target, entry cue, approach choice, operative steps, verification check, and reusable limitation/transfer point supported by the source. Apply proof-method standards to proof routes and computation-method standards to constructions, computations, approximations, diagnostics, and algorithm previews. Enumerate only actual solving steps; cases, definitions, summaries, and interpretation stay in prose or formulas.
-4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
-
-Planning-only report:
-If the sources are only contents or outline pages, report:
-- what the source appears to cover;
-- best existing `parts/...` locations;
-- already covered, partially covered, and missing material;
-- whether no new structure, a new subsection, a new section, or a new part seems appropriate;
-- the exact proposed location if a new subsection is recommended.
-- any source block whose natural owner appears to require a new environment or figure type, with the standards-search result or proposed blocker status.
+Planning-only report for outline sources:
+- source coverage, best active owners, already/partially/not covered material, structure level needed, exact proposed subsection when relevant, domain classification, and any environment/figure-role gap.
 
 Edit report:
-If edits were made, report:
-- chosen target and why;
-- PASS_MODE, DOMAIN, and all active planned target files processed;
-- research-paper domain and critical-content ledger summary when SOURCE_MATERIAL includes papers/preprints;
-- files changed;
-- main definitions, results, examples/counterexamples/nonexamples/intuitions, typed methods, applied environments, remarks, motivations, perspectives, principles, processes, exercises/question-bank items, algorithms, figures, or source notes added;
-- method environment and approach decisions: `proofmethod`/`computationmethod`/legacy `method` choices, existing methods extended or cross-referenced, problem types, entry cues, selected approaches, verification checks, and alternatives intentionally omitted as unsupported;
-- example/counterexample/intuition/remark/motivation/perspective/expository/applied decisions: example targets and checks, counterexample claims/admissibility/hypothesis/failure/lessons, intuition anchors/mental models/scope/formal bridges, motivation/perspective/remark role checks, applied context/assumption/unit/data/valuation checks, remarks kept as non-authoritative, and any hidden content promoted to a formal owner;
-- figure decisions: primary role, formal anchor or data/model owner, caption/callout, label, source/provenance, axes/units/date/currency/window/context checks when relevant, accessibility checks, and any table-like material kept as searchable text instead of a figure;
-- extracted source blocks grouped by classification and provenance when that clarifies coverage;
-- coverage ledger summary: covered, partial, missing, misplaced, unsupported, needs-later-file, needs-new-environment-or-figure-type, and blocked-new-section-or-part blocks;
-- existing material cross-referenced instead of duplicated;
-- any exercises or questions integrated;
-- any uncertainties, gaps, TODOs, or blocked section/part needs;
-- any new environment/figure-type gap decisions: searched standards, sources used, role proposed, files updated, role used, or blocker reported;
-- collection-level decisions: overview/input updates, notation lifecycle, examples/counterexamples/intuitions, figure roles, equation labels, and TODO taxonomy;
-- completion cursor, source-boundary status, and whether a later `second-pass` over the same SOURCE_MATERIAL is recommended;
-- final-quality confirmation for new/touched environments: preambles self-contained, proof items matched, notation audit done, standard gates clean for current edits, and no rough block deferred to later formalization;
-- build/log status for edited line ranges when BUILD is enabled, or an explicit BUILD-disabled note;
-- whether uncommitted edits were detected and preserved;
-- build action taken or intentionally skipped according to `BUILD`, and confirmation that no staging, commit, push, reset, checkout, revert, delete, or clean action was performed.
+- chosen targets and rationale; PASS_MODE, DOMAIN, all planned files processed, and source boundary;
+- paper critical-content ledger summary when applicable;
+- files changed and source blocks added/amended by role;
+- coverage/provenance status totals and existing owners reused instead of duplicated;
+- method, expository, applied, algorithm, figure, notation, equation, TODO, and structure decisions;
+- gap-protocol searches/extensions or blockers; unauthorized section/part proposals;
+- final-quality confirmation: self-contained preambles, matched proof obligations, source authority, notation audit, inline layout audit, and current-edit gates;
+- isolated build, edited-line warning, and affected-page render results, including retained display/matrix exceptions;
+- preserved uncommitted work, remaining uncertainties, completion cursor, and whether a second pass is useful.
 ```
 
-After a first pass, rerun this prompt with `PASS_MODE: second-pass` when you want to catch additional supported content from the same SOURCE_MATERIAL. Then use `prompts/prompt_library/reorganize_content_prompt.md` or `prompts/prompt_library/dependency_flow_prompt.md` if placement or prerequisite order is still uncertain. Use `prompts/prompt_library/formalize_content.md` for later wider-scope review and build verification, not as a substitute for finalizing the new source-grounded blocks here.
+After a first pass, rerun with `PASS_MODE: second-pass` only when the same SOURCE_MATERIAL may contain missed supported content. Use reorganization/dependency entry points only if those concerns remain; use formalization for a later wider-scope row review, not to rescue rough source intake.

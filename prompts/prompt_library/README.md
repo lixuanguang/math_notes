@@ -1,33 +1,53 @@
-# Prompt Library
+# Prompt Library: Entry Points
 
-Use one prompt directly instead of running a monolithic workflow.
+Start here. Choose one entry point; do not preload every file under `prompts/standards/`.
 
-- `add_content_prompt.md`: final-quality source-grounded insertion from screenshots, PDFs, papers, or provided files, including domain-overlay classification, critical research-paper ingestion, typed-method, example, counterexample, intuition, figure-role, applied-environment, and remark extraction.
-- `refine_blocks_prompt.md`: targeted refinement of screenshot-selected theorem/proof/typed-method/figure/example/counterexample/intuition/applied/remark blocks.
-- `reorganize_content_prompt.md`: structural movement, splitting, placement, figure-role placement, and duplicate-label cleanup.
-- `dependency_flow_prompt.md`: dependency-order audit, figure-only prerequisite audit, and structural repair.
-- `formalize_content.md`: full environment-level formalization against `prompts/alignment_requirements.md`.
-- `notation_list_prompt.md`: post-formalization notation-list audit and repair, including domain-aware collision and context checks.
-- `further_research_prompt.md`: web-based reference recommendation pass with domain-specific authority filters that updates `Content_Enhancement_Recommendations.md` without editing bibliography or LaTeX content.
+| Goal | Entry point | Default validation |
+| --- | --- | --- |
+| Integrate supplied source material at final local quality | `add_content_prompt.md` | Per-file semantic checks plus final build/page render |
+| Fix named or screenshot-selected blocks | `refine_blocks_prompt.md` | Targeted build/render |
+| Move, split, or re-place content | `reorganize_content_prompt.md` | Structural, no build |
+| Repair prerequisite and authority order | `dependency_flow_prompt.md` | Structural, no build |
+| Fully formalize one active numbered file | `formalize_content.md` | Full build and page render |
+| Repair durable notation and collisions | `notation_list_prompt.md` | Full build and notation-page render |
+| Find references for future enrichment | `further_research_prompt.md` | Web/metadata validation; no LaTeX build |
 
-Recommended sequence for a new source batch:
+## Loading model
+
+Every entry point provides:
+
+- a small mandatory module list;
+- conditional modules selected after inspecting the target/source;
+- task-specific configuration and batching;
+- a validation profile.
+
+The module contract is in `prompts/standards/README.md`. Conditional does not mean optional: if the target contains that block type, its module must be read completely before editing it. With `DOMAIN: auto`, classify affected rows using `prompts/standards/domains/README.md` and load only domain overlays actually represented.
+
+Examples:
+
+- Refining one theorem proof loads repository/scope, mathematical style, theorem/proof, math layout, the matching domain, and targeted validation. It does not load figures, applied finance, source ingestion, or research recommendations.
+- Moving a figure loads repository/scope, organization/dependencies, collection quality, figures, the relevant domain, and structural validation. It does not load theorem proof-writing rules unless theorem content is changed.
+- Adding a mixed paper loads source grounding and the domain router, then only the environment/domain modules used by the extraction ledger.
+
+## Suggested source workflow
+
+Use only phases that remain necessary:
 
 ```text
-add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.md with PASS_MODE: second-pass -> reorganize_content_prompt.md -> dependency_flow_prompt.md -> formalize_content.md -> notation_list_prompt.md -> further_research_prompt.md
+add_content_prompt.md (first-pass)
+-> optional add_content_prompt.md (second-pass)
+-> reorganize_content_prompt.md
+-> dependency_flow_prompt.md
+-> formalize_content.md
+-> notation_list_prompt.md
+-> optional further_research_prompt.md
 ```
 
-Phase ownership:
+- Source intake owns complete source classification, placement, provenance, and final local quality. A second pass catches genuinely missed source-supported content and first-pass duplication.
+- Reorganization owns movement, same-level placement, promotion recommendations, placeholder preservation, and mixed-domain owner separation.
+- Dependency flow owns prerequisite, notation/context-before-use, authority, and figure-only ownership repairs.
+- Formalization owns the row-by-row explicit/formal/notation/succinct pass, environment typing, proof completion, inline layout, cold pass, build, and rendered inspection.
+- Notation work runs after local wording stabilizes and promotes only durable notation.
+- Further research recommends authoritative non-duplicate sources but never edits current mathematical content or the bibliography.
 
-- `add_content_prompt.md` classifies every source block by domain when configured with `DOMAIN: auto`, auto-places allowed material when configured, integrates all source-supported content in one run, applies critical-content filtering for research papers by domain, records source provenance, and handles new environment/figure-type gaps through standards-only web research when explicitly authorized by its configuration.
-- `add_content_prompt.md` with `PASS_MODE: second-pass` catches missed supported content and removes/merges accidental duplicate coverage from the first pass.
-- `reorganize_content_prompt.md` handles movement, splitting, same-level placement, subsection creation when allowed, duplicate labels, and promotion recommendations, including mixed-domain separation when universal mathematical prerequisites, models, empirical studies, valuation cases, or physical regimes would be clearer in separate owners. It preserves broad subsection titles and active empty placeholder subsections unless the run itself emptied and displaced their content. It is the phase that identifies subsection-to-section or section-to-part promotion; it performs the promotion only when `ALLOW_NEW_SECTION_OR_PART: yes`.
-- `dependency_flow_prompt.md` repairs prerequisite order, notation lifecycle, source ownership after movement, invalid dependency authority, and domain context before use.
-- `formalize_content.md` performs the row-by-row theorem/proof/typed-method/figure/example/counterexample/intuition/applied/remark/style/layout/build pass after the structure is stable, migrates legacy `method` blocks to `proofmethod` or `computationmethod` when clear, classifies figures by role, converts refutational examples to `counterexample`, extracts supported intuitive prose to `intuition`, and repairs applied blocks against Sections 5.8 and 7.11.
-- `notation_list_prompt.md` audits `parts/00_notations/` after formalization, promotes only durable notation, repairs collision entries, applies domain-aware unit/date/currency/measure/basis/regime context checks, removes verified stale entries, and reports macro candidates.
-- `further_research_prompt.md` runs after the notes structure and notation are stable, searches the web for high-quality references that could enhance the selected scope using domain-specific authority filters, skips sources already present in `references.bib`, and records only non-duplicative recommendations in `Content_Enhancement_Recommendations.md`.
-
-For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.
-
-Skip any prompt whose work is already settled. For canonical theorem/proof, typed-method, figure-role, example/counterexample/intuition/remark/motivation/perspective/expository, applied/scientific/finance, mathematical, layout, source-provenance, and collection-level requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline, Section 5.7 for examples, counterexamples, intuition, remarks, motivation, and perspective, Section 5.8 for applied environments, Section 6.1 for typed figures (`illustrationfigure`, `visualizationfigure`, `schematicfigure`, `financialexhibitfigure`, `sourceimagefigure`, `tablevisualfigure`), Section 7 for collection-level standards, Section 7.9 for further research recommendations, Section 7.10 for research-paper ingestion, and Section 7.11 for math/quant-finance/fundamental-finance/physics domain overlays.
-
-When prompt requirements overlap, keep the shared standard in `prompts/alignment_requirements.md` and leave only workflow-specific instructions in the library prompt.
+For manual corrections to existing blocks, use `refine_blocks_prompt.md` directly. Skip any phase whose work is already settled.

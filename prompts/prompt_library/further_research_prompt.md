@@ -1,10 +1,9 @@
-# Further Research Prompt
+# Further Research — Entry Point
 
 ```text
-I am working in:
-/Users/lxg/Documents/GitHub/math_notes
+Repository: /Users/lxg/Documents/GitHub/math_notes
 
-Search for possible reference books, papers, surveys, standards, or authoritative technical sources that could enhance the selected part, section, subsection, or file in a later source-grounded run. Maintain recommendations in `Content_Enhancement_Recommendations.md`.
+Goal: identify authoritative books, papers, surveys, standards, or technical sources that could improve the selected scope in a later source-grounded run. Maintain `Content_Enhancement_Recommendations.md`; do not insert current note content.
 
 Configuration:
 - MODE: edit
@@ -20,60 +19,18 @@ Configuration:
 - BIBLIOGRAPHY_FILE: references.bib
 - BUILD: no
 
-Authority and safety:
-1. Read `prompts/alignment_requirements.md` Sections 7.9 and 7.11 and treat them as canonical.
-2. This prompt searches for references only. Do not add mathematical content to `parts/`, do not edit `references.bib` or `references.tex`, do not add `\cite` or `\nocite`, and do not build LaTeX.
-3. Run `git status --short` before editing. Preserve unrelated changes. Do not stage, commit, push, reset, checkout, restore, revert, delete files, clean the worktree, or edit generated PDF/auxiliary files.
-4. Use web results only to identify and evaluate candidate references. Do not import claims, proofs, examples, data, assumptions, or exposition from the web into the notes.
+Load before editing:
+1. `prompts/standards/repository_and_scope.md` (repository safety/ownership only; no LaTeX edit is authorized).
+2. `prompts/standards/sources/research_recommendations.md`.
+3. `prompts/standards/domains/README.md`, then only the configured or gap-matched domain overlay(s).
 
-Required reading:
-1. Read `STRUCTURE_MIGRATION_README.md`, `math.tex`, `references.bib`, `references.tex`, and `Content_Enhancement_Recommendations.md` if it exists.
-2. Read the target overview/file(s) and nearby active files enough to identify local gaps, missing perspectives, weak coverage, source-light areas, applied extensions, or future subsection needs.
-3. Resolve DOMAIN and the exact active scope, then record the target path(s) in the recommendation entry. With `DOMAIN: auto` or `mixed`, classify each gap by domain before searching.
+Execution:
+1. Run `git status --short`; read `STRUCTURE_MIGRATION_README.md`, `math.tex`, TARGET and nearby active owners, `references.bib`, `references.tex`, and the existing recommendation file.
+2. Resolve exact scope/domain and identify concrete local gaps before browsing.
+3. Follow the search, authority, metadata, and duplicate gates in `prompts/standards/sources/research_recommendations.md`. Prefer primary publisher/author/journal/DOI/standard/regulator/catalog records and verify metadata from authoritative pages.
+4. Record search terms, venues, date, and meaningful exclusions. Add/update only concise, actionable, non-duplicate recommendations under the narrowest target.
+5. Edit only `Content_Enhancement_Recommendations.md` (create it only if absent). Do not edit LaTeX, bibliography files, citations, or generated outputs; do not build.
+6. Recheck every added identifier/link and duplicate decision against the authoritative metadata page, then run `git diff --check` on the recommendation file.
 
-Search standard:
-1. Build a short search plan before browsing: target domain, target concepts, prerequisites, adjacent fields, possible source types, and exclusion criteria.
-2. Search reputable sources first: publisher pages, author pages, arXiv, DOI/Crossref/DataCite records, MathSciNet/Zentralblatt-style metadata when accessible, university library catalog pages, WorldCat, official standards/regulators, and professional society pages.
-3. Prefer references in this order when available: standard graduate or advanced undergraduate books, peer-reviewed survey articles, landmark papers, official standards/regulatory documents for applied topics, and stable open course notes only when no stronger citable source exists.
-4. Apply the Section 7.11 domain authority overlay: mathematics favors canonical books, monographs, survey papers, and landmark papers; quantitative finance favors peer-reviewed theory/empirical/computational papers, standard texts, data/code-reproducibility sources, exchange or regulator documents, and model-risk guidance; fundamental finance favors valuation standards, accounting frameworks, official filings/regulators, CFA/IVS/GIPS-style standards, and peer-reviewed finance/accounting literature; physics favors peer-reviewed papers, standard texts, scientific society instructions, NIST/unit/uncertainty standards, and experiment/simulation documentation.
-5. Record the search terms, search venues, date searched, and any significant exclusion reason when a tempting source is rejected.
-6. For every candidate, collect enough metadata for later bibliography work: authors/editors, title, year, edition/version when relevant, publisher or journal, DOI/ISBN/arXiv/URL when available, and a candidate BibTeX key.
-
-Duplicate and bibliography gate:
-1. Before adding a recommendation, check `references.bib` using normalized title words, author/editor names, year, DOI, ISBN, arXiv identifier, URL, and plausible BibTeX key.
-2. If the candidate already appears in `references.bib`, do not add it to `Content_Enhancement_Recommendations.md`. Mention it only in the final report under `Skipped because already in bibliography`.
-3. Check `Content_Enhancement_Recommendations.md` for an existing matching recommendation. Update the existing entry when the new search adds metadata, scope, or rationale; do not add a duplicate entry.
-4. If metadata is too thin to identify the source reliably, do not add it as a recommendation. Report it as `rejected-insufficient-metadata`.
-
-Recommendation entry standard:
-Add or update recommendations under the narrowest stable target heading. Each entry must include:
-- status: `proposed`, `deferred`, `rejected`, or `superseded`;
-- target path or active scope;
-- domain: `math`, `quant-finance`, `fundamental-finance`, `physics`, or `mixed`;
-- candidate BibTeX key;
-- full reference metadata;
-- identifiers: DOI, ISBN, arXiv, URL, or stable publisher/catalog URL when available;
-- type: book, monograph, survey, paper, standard, regulator document, course notes, dataset documentation, or other;
-- local gap/enhancement: what this would improve in the target notes;
-- fit rationale: why this source is authoritative and appropriate;
-- usage plan: theorem/proof enrichment, examples/counterexamples, methods, applied models, empirical studies, valuation cases, figures, notation, historical context, exercises, or bibliography expansion only;
-- duplicate check: exact statement that `references.bib` and the recommendation file were checked;
-- search log: date, search venues, and key terms.
-
-Edit rules:
-1. Edit only `Content_Enhancement_Recommendations.md` unless the file is missing, in which case create it.
-2. Do not recommend more than 3-7 high-quality sources per target batch unless the user explicitly requests a broad bibliography survey.
-3. Keep recommendations concise but complete enough to act on later.
-4. Do not add broad wish-list references with no local target or no clear enhancement role.
-5. Do not use recommendations as proof authority or source grounding for current LaTeX content. A later add-content run must use the actual source material.
-
-Final report:
-- resolved target, scope, and DOMAIN;
-- files read and web venues searched;
-- recommendations added or updated;
-- candidates skipped because already in `references.bib`;
-- candidates rejected and why;
-- duplicate checks performed;
-- file changed;
-- confirmation that no LaTeX content, bibliography, citation, build, staging, commit, push, reset, checkout, revert, delete, or clean action was performed.
+Final report: resolved target/domain; repository files and web venues checked; recommendations added/updated; candidates skipped because already bibliographed/recommended; candidates rejected and reasons; duplicate/metadata checks; changed file; preserved pre-existing work; confirmation that no subject content, bibliography, citation, build, or Git publication action occurred.
 ```
