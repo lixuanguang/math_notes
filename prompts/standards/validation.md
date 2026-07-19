@@ -14,13 +14,13 @@ Mechanical checks support but never replace block-by-block semantic review.
 Run the applicable searches on each changed target and review every hit manually:
 
 ```sh
-rg -n -i '\b(for all|for every|for each|there exists|there is a unique)\b' <target>
+rg -n -i '\b(for all|for every|for each|at every( index)?|for some|there exists|there is a unique)\b' <target>
 rg -n -i '(Theorem|Proposition|Lemma|Corollary) \\ref\{[^}]+\} (gives|give|yields|shows|makes|implies|ensures|provides)\b' <target>
 rg -n '\\\[|\\begin\{(displaymath|equation\*?|align\*?|gather\*?|multline\*?)\}|\$\$' <target>
 rg -n '\\begin\{(smallmatrix|matrix|pmatrix|bmatrix|vmatrix|Vmatrix)\}' <target>
 rg -n '\\begin\{(figure|illustrationfigure|visualizationfigure|schematicfigure|financialexhibitfigure|sourceimagefigure|tablevisualfigure)\}|\\includegraphics|\\begin\{tikzpicture\}|\\begin\{tikzcd\}|\\begin\{axis\}' <target>
 rg -n '\b(Moreover|Furthermore|In addition|Also|In particular)\b' <target>
-rg -n -i '\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$[^%\n.]*\b(for all|for every|for each|there exists|there is a unique)\b|\b(for all|for every|for each|there exists|there is a unique)\b[^%\n.]*\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$|\b(dummy parameter)\b' <target>
+rg -n -i '\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$[^%\n.]*\b(for all|for every|for each|at every( index)?|for some|there exists|there is a unique)\b|\b(for all|for every|for each|at every( index)?|for some|there exists|there is a unique)\b[^%\n.]*\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$|\b(dummy parameter)\b' <target>
 rg -n -i '\\[A-Za-z]+:[^.\n]*,\s*with \$?[A-Z][A-Za-z_0-9]*\\defeq|\$\\exists [^$]*\\ni [^$]*\$ (compact|open)' <target>
 rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:' <target>
 rg -n '\\hlt\{(Structural Commentary|Key Insight)\}:[^%\n]*[^\\]$' <target>
@@ -28,7 +28,7 @@ rg -n -U '\\end\{definition\}\s*\n\s*\\begin\{example\}' <target>
 ruby scripts/check_environment_title_breaks.rb <target>
 ```
 
-Review every adjacent definition/example hit against the environment-granularity rule; adjacency is a review trigger, not an automatic merge. Also review repeated parallel setup, long statement scaffolding, and each retained display/matrix exception. A hit may be valid; a clean search may still hide a semantic defect.
+For each verbal-quantifier hit, use scoped `\forall`, `\exists`, or `\exists!` when its predicate is symbolic; retain the prose only when it carries meaning that notation would obscure. Review every adjacent definition/example hit against the environment-granularity rule; adjacency is a review trigger, not an automatic merge. Also review repeated parallel setup, long statement scaffolding, and each retained display/matrix exception. A hit may be valid; a clean search may still hide a semantic defect.
 
 ## Structural-only profile
 
@@ -53,7 +53,7 @@ Use for screenshot/named-block refinement:
 Use only with `formalize_content.md`:
 
 1. Keep a compact source-order ledger; perform one semantic pass, then cold-read changed rows and their affected dependants only.
-2. Normalize limits, fractions, scripts, stacked constructs, and local notation, then apply the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
+2. Normalize scoped symbolic quantifiers, limits, fractions, scripts, stacked constructs, and local notation, then apply the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
 3. Run applicable search gates and `git diff --check` once after the target file stabilizes.
 4. Run one isolated full build. Inspect overfull/underfull boxes, unresolved references, and errors near changed lines.
 5. Render affected pages once and inspect the changed blocks and any touched visual. Repeat only for a concrete defect found in this final pass.

@@ -26,6 +26,12 @@ A theorem-style statement, definition, or typed-method preamble must state its s
 
 Prefer one complete sentence per source line. Do not split a sentence or equation solely for source wrapping.
 
+### Quantifier compression
+
+- In definitions, statements, calculations, and formal proof clauses, replace verbal quantifier scaffolding with a scoped symbol when the predicate is already symbolic: “$P(i)$ for every/each/at every index $i\in I$” becomes `$(\forall i\in I)\,P(i)$`; “$P(i)$ for some $i\in I$” becomes `$(\exists i\in I)\,P(i)$`; and a unique-existence clause becomes `$(\exists! i\in I)\,P(i)$`.
+- Bind the variable and domain inside the quantifier prefix, keep the entire predicate in the same math span, and make parallel universal/existential clauses stylistically symmetric. Do not repeat the same scope verbally beside the notation.
+- Retain prose when the predicate is primarily linguistic, the quantifier carries discourse emphasis, or symbolic conversion would hide meaning, dependencies, or a proof step. A quantifier symbol is compression, not a substitute for an undefined predicate.
+
 ## Semantic enumeration
 
 Enumeration is semantic, not decorative.
