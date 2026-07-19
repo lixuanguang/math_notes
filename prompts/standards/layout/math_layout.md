@@ -40,11 +40,13 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 
 ## Mixed prose–math line budget
 
-For formalization, use 100 rendered-visible characters as the preflight cap for one intended prose–inline-math span. This is calibrated to the current 8pt body and 175mm text block. It reduces repeated rendering but does not authorize overfull output.
+For formalization, use 100 horizontal character-equivalents as the preflight cap for one intended prose–inline-math span. This is calibrated to the current 8pt body and 175mm text block. It reduces repeated rendering but does not authorize overfull output.
 
-- Count the visible printed result: letters, digits, punctuation, spaces, and math symbols each count once. Count `\ref`, `\eqref`, and citations by their expected printed text; do not count LaTeX command names, braces, comments, or label keys.
+- Normalize layout before counting, including required `\limits`, `\frac`, established notation, and inline `smallmatrix` where applicable.
+- Count horizontally composed printed letters, digits, punctuation, spaces, and math symbols once. Count `\ref`, `\eqref`, and citations by expected printed text; do not count command names, braces, comments, or label keys.
+- Vertically composed material counts by horizontal footprint, not total glyphs: for `\sum\limits_{i=1}^{n}`, use the widest of the operator and its two bounds; for `\frac{A}{B}`, use the wider of numerator and denominator plus one character of padding. For an inline matrix, count its widest row plus delimiters, not all rows serially.
 - If a span exceeds 100, remove duplication, reuse established notation, or split at a genuine semantic boundary. Do not delete hypotheses, quantifiers, conclusions, source qualifiers, or required commentary.
-- Treat the cap as an early trigger, not a geometric proof. Wide fractions, radicals, long arrows or limits, matrices, URLs, identifiers, and dense bold/calligraphic math can overflow below 100; the final TeX overfull-box check remains decisive.
+- Treat the cap as an early trigger, not a geometric proof. Radicals, long arrows, wide bounds, URLs, identifiers, and dense bold/calligraphic math can overflow below 100; the final TeX overfull-box check remains decisive.
 
 ## No-overflow requirement
 
