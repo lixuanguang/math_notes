@@ -4,7 +4,7 @@
 I am working in:
 /Users/lxg/Documents/GitHub/math_notes
 
-Refine only the theorem, lemma, proposition, corollary, proof, definition, method, or example blocks visible in the attached screenshots or explicitly named by the user. Do not perform source intake, broad file formalization, or unrelated cleanup.
+Refine only the theorem, lemma, proposition, corollary, proof, definition, `method`, `proofmethod`, `computationmethod`, algorithm, or example blocks visible in the attached screenshots or explicitly named by the user. Do not perform source intake, broad file formalization, or unrelated cleanup.
 
 Configuration:
 - MODE: edit
@@ -23,11 +23,11 @@ Safety:
 5. If the target block changes unexpectedly, stop and report the conflict.
 
 Refinement standard:
-1. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 to the target block: source-proportional theorem-style statements, explicit-formal-notation-succinct rewriting, self-contained preambles, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, method subtype classification and approach extraction, required commentary, result-reference language, inline layout, notation lifecycle, equation numbering, and TODO discipline.
+1. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 to the target block: source-proportional theorem-style statements, explicit-formal-notation-succinct rewriting, self-contained preambles, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, typed-method environment choice and approach extraction, required commentary, result-reference language, inline layout, notation lifecycle, equation numbering, and TODO discipline.
 2. Keep the target boundary tight. Edit only the named/screenshot-selected block plus necessary local labels, references, notation declarations, or immediately adjacent proof/commentary lines.
 3. Keep proof segmentation available. Use proof items for independent statement claims, iff directions, equivalent-condition implications, genuine cases, or named proof stages; use compact prose for a single direct argument. Do not add lists for setup, interpretation, or label-only scaffolding.
 4. Use compact local notation when it reduces repeated setup or repairs layout, but only when the notation is bound in the block or nearby context.
-5. For a target `method`, first classify it as proof-pattern, computational, hybrid, or other. Then identify the problem type, givens, target, entry cue, approach choice, operative steps, verification check, and source-supported limitation/transfer point. For proof-pattern methods, check proof architecture and proof obligations; for computational methods, check inputs, outputs, admissibility, construction/update steps, and postconditions. Keep only the components supported by the target/source; do not invent alternative strategies.
+5. For a target `method`, `proofmethod`, or `computationmethod`, first choose the correct environment: `proofmethod` for proof routes, `computationmethod` for computations/constructions/diagnostics, and legacy `method` only for justified hybrid/other cases. Then identify the problem type, givens, target, entry cue, approach choice, operative steps, verification check, and source-supported limitation/transfer point. For proof methods, check proof architecture and proof obligations; for computation methods, check inputs, outputs, admissibility, construction/update steps, and postconditions. Keep only the components supported by the target/source; do not invent alternative strategies.
 6. If the screenshot/user request exposes a defect that cannot be fixed inside the target boundary, stop after the safe local edits and report the exact wider dependency or placement blocker.
 
 Validation:

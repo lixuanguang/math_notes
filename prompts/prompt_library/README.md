@@ -2,8 +2,8 @@
 
 Use one prompt directly instead of running a monolithic workflow.
 
-- `add_content_prompt.md`: final-quality source-grounded insertion from screenshots, PDFs, or provided files.
-- `refine_blocks_prompt.md`: targeted refinement of screenshot-selected theorem/proof/method blocks.
+- `add_content_prompt.md`: final-quality source-grounded insertion from screenshots, PDFs, or provided files, including typed-method extraction.
+- `refine_blocks_prompt.md`: targeted refinement of screenshot-selected theorem/proof/typed-method blocks.
 - `reorganize_content_prompt.md`: structural movement, splitting, placement, and duplicate-label cleanup.
 - `dependency_flow_prompt.md`: dependency-order audit and structural repair.
 - `formalize_content.md`: full environment-level formalization against `prompts/alignment_requirements.md`.
@@ -21,7 +21,7 @@ Phase ownership:
 - `add_content_prompt.md` with `PASS_MODE: second-pass` catches missed supported content and removes/merges accidental duplicate coverage from the first pass.
 - `reorganize_content_prompt.md` handles movement, splitting, same-level placement, subsection creation when allowed, duplicate labels, and promotion recommendations. It is the phase that identifies subsection-to-section or section-to-part promotion; it performs the promotion only when `ALLOW_NEW_SECTION_OR_PART: yes`.
 - `dependency_flow_prompt.md` repairs prerequisite order, notation lifecycle, source ownership after movement, and invalid dependency authority.
-- `formalize_content.md` performs the row-by-row theorem/proof/method-subtype/style/layout/build pass after the structure is stable.
+- `formalize_content.md` performs the row-by-row theorem/proof/typed-method/style/layout/build pass after the structure is stable and migrates legacy `method` blocks to `proofmethod` or `computationmethod` when clear.
 - `notation_list_prompt.md` audits `parts/00_notations/` after formalization, promotes only durable notation, repairs collision entries, removes verified stale entries, and reports macro candidates.
 
 For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.

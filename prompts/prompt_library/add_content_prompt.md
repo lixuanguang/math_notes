@@ -38,7 +38,7 @@ Required reading before placement:
 1. Read `STRUCTURE_MIGRATION_README.md`, `math.tex`, and `parts/base.tex`.
 2. Read the relevant part and section `overview.tex` files.
 3. Read nearby subsection files for style, notation, labels, figures, algorithms, and existing coverage.
-4. Check for existing related definitions, results, examples, methods, algorithms, notation, and figures so you can cross-reference or extend rather than duplicate.
+4. Check for existing related definitions, results, examples, `proofmethod`, `computationmethod`, legacy `method`, algorithms, notation, and figures so you can cross-reference or extend rather than duplicate.
 5. If the source contains an algorithm, pseudocode, or step-by-step computational procedure, inspect nearby algorithm usage before choosing the format.
 
 Manual screenshot intake loop:
@@ -60,7 +60,7 @@ PASS_MODE meanings:
 Final-quality loop for every inserted or touched environment:
 1. Apply the complete canonical row workflow and Sections 5.1-7.7 of `prompts/alignment_requirements.md` to each new or materially touched block.
 2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, proof steps, convergence claims, complexity bounds, or implementation details.
-3. Re-read the source block, the LaTeX preamble, each statement item, each method step, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, subtype-classified and method-complete when written as a method, and proof-complete when written as a theorem-style result.
+3. Re-read the source block, the LaTeX preamble, each statement item, each typed-method step, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, in the correct typed-method environment when written as a method, and proof-complete when written as a theorem-style result.
 4. Keep theorem-style statements source-proportional. Do not move proof scaffolding, Picard iteration machinery, local construction constants, or proof-only error estimates into the statement unless the source presents them as reusable conclusions.
 5. Run the semantic deduplication and bundled-data ordering checks from `prompts/alignment_requirements.md`: no adjacent clause may repeat the same quantifier, scope, hypothesis, induction assumption, or conclusion in both prose and notation, and no map may use a derived domain before that domain is defined.
 6. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
@@ -88,26 +88,27 @@ Integration style:
 1. Add a polished, compact, source-grounded integration, not a full textbook transcription.
 2. Preserve source-supported coverage; mark genuine uncertainty with concise comments such as `% TODO(source): verify ...`.
 3. Use existing theorem environments, macros, labels, and nearby style. Use `\hlt{...}` for result titles when local style does.
-4. Prefer concise definitions, propositions, lemmas, corollaries, examples, methods, remarks, and algorithms only when the source and existing repo content support them. Use a `method` only when there is a transferable problem-solving pattern, not merely a one-off worked computation. Classify each nontrivial method as proof-pattern, computational, hybrid, or other according to `prompts/alignment_requirements.md`.
-5. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, or proof steps. If a theorem-style proof cannot be completed from the source plus earlier repository results, do not promote it to a theorem-style result; use a source TODO, remark, or report the blocker.
-6. Do not closely paraphrase long textbook passages. Write original notes in the repository's style.
-7. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `meth:...`, `alg:...`, and `fig:...`.
-8. For exercises or questions, integrate only useful supported mathematics; otherwise leave at most a concise TODO/source note.
-9. Add TikZ figures only when a diagram is mathematically useful. Do not reproduce text screenshots or decorative figures.
-10. Update notation files only for notation that will recur across major sections. Keep local notation near first use and do not let proof-local notation leak into later blocks.
-11. Add source-supported examples, nonexamples, counterexamples, or test computations when they clarify major definitions or hypotheses. Do not invent examples during screenshot intake.
-12. Number and label equations only when they are referenced later or central enough to need an anchor; otherwise keep formulas inline or unnumbered according to `MATH_LAYOUT`.
+4. Prefer concise definitions, propositions, lemmas, corollaries, examples, typed methods, remarks, and algorithms only when the source and existing repo content support them. Use `proofmethod` for transferable proof patterns and `computationmethod` for transferable computations, constructions, approximations, diagnostics, or algorithm previews. Use legacy `method` only for justified hybrid/other cases.
+5. When adding a theorem, lemma, proposition, corollary, example, or algorithm, compare it against existing `proofmethod`, `computationmethod`, and legacy `method` blocks in the nearby owner and prerequisites. If the new source-supported material provides a reusable proof route, construction, diagnostic, verification check, limitation, or selection cue, extend the existing method or add the smallest appropriate typed method instead of duplicating that prose inside multiple results.
+6. Do not invent missing inputs, outputs, hypotheses, convergence claims, complexity bounds, implementation details, examples, or proof steps. If a theorem-style proof cannot be completed from the source plus earlier repository results, do not promote it to a theorem-style result; use a source TODO, remark, or report the blocker.
+7. Do not closely paraphrase long textbook passages. Write original notes in the repository's style.
+8. Use stable descriptive labels such as `def:...`, `prop:...`, `lem:...`, `ex:...`, `meth:...`, `alg:...`, and `fig:...`.
+9. For exercises or questions, integrate only useful supported mathematics; otherwise leave at most a concise TODO/source note.
+10. Add TikZ figures only when a diagram is mathematically useful. Do not reproduce text screenshots or decorative figures.
+11. Update notation files only for notation that will recur across major sections. Keep local notation near first use and do not let proof-local notation leak into later blocks.
+12. Add source-supported examples, nonexamples, counterexamples, or test computations when they clarify major definitions or hypotheses. Do not invent examples during screenshot intake.
+13. Number and label equations only when they are referenced later or central enough to need an anchor; otherwise keep formulas inline or unnumbered according to `MATH_LAYOUT`.
 
 Algorithms:
-1. Prefer a prose `method` environment for short conceptual procedures.
-2. Use `breakablealgorithm` with `algorithmic` only when actual step-by-step pseudocode is useful and supported by the source. If the content is a reusable computational idea but not executable pseudocode, keep it as a computational method.
+1. Prefer a prose `computationmethod` environment for short conceptual computational procedures.
+2. Use `breakablealgorithm` with `algorithmic` only when actual step-by-step pseudocode is useful and supported by the source. If the content is a reusable computational idea but not executable pseudocode, keep it as a `computationmethod`.
 3. Follow nearby repository style, for example `\begin{breakablealgorithm}`, `\caption{...}`, `\begin{algorithmic}`, `\Require`, `\Ensure`, and `\State`.
 4. Keep algorithms compact and mathematically focused; do not transcribe long textbook pseudocode mechanically.
 
 Canonical quality reminders:
 1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 directly, especially source-proportional theorem-style statements, self-contained theorem-style and method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples, equation numbering, and TODO discipline.
-3. For methods, first classify the subtype, then extract the problem type, data, target, entry cue, approach choice, operative steps, verification check, and reusable limitation/transfer point supported by the source. Apply proof-pattern standards to proof routes and computational-method standards to constructions, computations, approximations, diagnostics, and algorithms previews. Enumerate only actual solving steps; cases, definitions, summaries, and interpretation stay in prose or formulas.
+2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.7 directly, especially source-proportional theorem-style statements, self-contained theorem-style and typed-method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples, equation numbering, and TODO discipline.
+3. For methods, first choose `proofmethod`, `computationmethod`, or justified legacy `method`, then extract the problem type, data, target, entry cue, approach choice, operative steps, verification check, and reusable limitation/transfer point supported by the source. Apply proof-method standards to proof routes and computation-method standards to constructions, computations, approximations, diagnostics, and algorithm previews. Enumerate only actual solving steps; cases, definitions, summaries, and interpretation stay in prose or formulas.
 4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 
 Planning-only report:
@@ -123,8 +124,8 @@ If edits were made, report:
 - chosen target and why;
 - PASS_MODE and all active planned target files processed;
 - files changed;
-- main definitions, results, examples, methods, algorithms, figures, or source notes added;
-- method subtype and approach decisions: proof-pattern/computational/hybrid classification, problem types, entry cues, selected approaches, verification checks, and alternatives intentionally omitted as unsupported;
+- main definitions, results, examples, typed methods, algorithms, figures, or source notes added;
+- method environment and approach decisions: `proofmethod`/`computationmethod`/legacy `method` choices, existing methods extended or cross-referenced, problem types, entry cues, selected approaches, verification checks, and alternatives intentionally omitted as unsupported;
 - extracted source blocks grouped by classification and provenance when that clarifies coverage;
 - coverage ledger summary: covered, partial, missing, misplaced, unsupported, and needs-later-file blocks;
 - existing material cross-referenced instead of duplicated;
