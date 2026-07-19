@@ -11,6 +11,7 @@ The goal is final-quality source-grounded insertion, not rough intake. Shared ma
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
+- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <exact parts/... path, unambiguous part-scoped cursor, or "auto-place from SOURCE_MATERIAL">
 - START_CURSOR: beginning
 - FILE_COVERAGE: changed-and-new
@@ -29,7 +30,7 @@ Configuration:
 - BUILD: no
 
 Authority and safety:
-1. Read `prompts/alignment_requirements.md` completely and treat it as canonical except where this prompt is stricter. This prompt overrides `prompts/alignment_requirements.md` on building and source-intake batching: do not run a LaTeX build, and do not stop after only one numbered subsection file when SOURCE_MATERIAL supports more allowed placements.
+1. Read `prompts/alignment_requirements.md` completely, including Section 7.11 for domain overlays, and treat it as canonical except where this prompt is stricter. This prompt overrides `prompts/alignment_requirements.md` on building and source-intake batching: do not run a LaTeX build, and do not stop after only one numbered subsection file when SOURCE_MATERIAL supports more allowed placements.
 2. Use only SOURCE_MATERIAL and existing repository content for mathematical, scientific, financial, data, proof, example, and source claims. Do not search online, browse, or add unsupported subject material from memory. The only browsing exception is the environment/figure-type gap protocol below: search the web only for reputable writing, publishing, documentation, or domain-presentation standards that justify a new environment or figure role.
 3. Do not stage, commit, push, reset, checkout, restore, revert, delete files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Assume unrelated uncommitted edits may exist from parallel runs. Preserve them. Before editing, run `git status --short`, inspect the target files, and use focused patches only.
@@ -46,21 +47,22 @@ Required reading before placement:
 Manual screenshot intake loop:
 1. Inspect all screenshots in order first. Treat them as the source ledger, not as a vague topic suggestion.
 2. Group the screenshots into coherent source blocks: definitions, results, proofs, methods, examples, algorithms, figures, exercises, research-paper critical content, or outline material.
-3. Resolve the natural owner from the active `parts/` tree. With `TARGET: auto-place from SOURCE_MATERIAL`, choose the best existing part/section/subsection from the screenshots and repository structure.
-4. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; record each block as `source-stated`, `source-derived`, or `repo-derived` when applicable; use active `\input` order for the target files, not screenshot order, when editing.
-5. With `RUN_BATCH: all-source-supported`, process every planned target file in the same run. Do not ask whether to continue to the next subsection, section, or part. Continue until all source-supported, permission-allowed blocks are classified and integrated or explicitly reported as blocked.
-6. If a source block naturally requires a new section or part, do not stop to ask mid-run. Mark that block `blocked-new-section-or-part`, continue with the remaining allowed blocks, and report the exact proposed higher-level location.
-7. For each planned target file, compare the source ledger against that file and nearby prerequisites. Classify each source block as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, `needs-new-environment-or-figure-type`, or `blocked-new-section-or-part`.
-8. Edit only `partial`, `missing`, or locally `misplaced` material for the active planned target. Leave covered material unchanged unless a tiny local amendment is needed to integrate a new block.
-9. After each inserted or materially amended block, run the final-quality loop below before moving to the next block. After each target file, run the current-edit gates for that file, then proceed to the next planned target without asking for approval.
-10. Do not advance past the last file actually supported by SOURCE_MATERIAL. If later files need new source material, report that as a source boundary, not as a continuation prompt.
+3. Resolve the source domain first. With `DOMAIN: auto`, classify each source block as mathematics, quantitative finance, fundamental finance/accounting/valuation, physics, or mixed before placement; use the Section 7.11 overlay when deciding owner, environment, figure type, notation context, and evidence standard.
+4. Resolve the natural owner from the active `parts/` tree. With `TARGET: auto-place from SOURCE_MATERIAL`, choose the best existing part/section/subsection from the screenshots and repository structure.
+5. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; record each block as `source-stated`, `source-derived`, or `repo-derived` when applicable; use active `\input` order for the target files, not screenshot order, when editing.
+6. With `RUN_BATCH: all-source-supported`, process every planned target file in the same run. Do not ask whether to continue to the next subsection, section, or part. Continue until all source-supported, permission-allowed blocks are classified and integrated or explicitly reported as blocked.
+7. If a source block naturally requires a new section or part, do not stop to ask mid-run. Mark that block `blocked-new-section-or-part`, continue with the remaining allowed blocks, and report the exact proposed higher-level location.
+8. For each planned target file, compare the source ledger against that file and nearby prerequisites. Classify each source block as `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs later file`, `needs-new-environment-or-figure-type`, or `blocked-new-section-or-part`.
+9. Edit only `partial`, `missing`, or locally `misplaced` material for the active planned target. Leave covered material unchanged unless a tiny local amendment is needed to integrate a new block.
+10. After each inserted or materially amended block, run the final-quality loop below before moving to the next block. After each target file, run the current-edit gates for that file, then proceed to the next planned target without asking for approval.
+11. Do not advance past the last file actually supported by SOURCE_MATERIAL. If later files need new source material, report that as a source boundary, not as a continuation prompt.
 
 PASS_MODE meanings:
 - `first-pass`: place all supported material from SOURCE_MATERIAL across every allowed target file at final local quality.
 - `second-pass`: rerun over the same SOURCE_MATERIAL from the earliest affected target, compare against the current LaTeX state, and add only genuinely missing or still-partial source-supported content. Explicitly check for duplicated prose, repeated theorem payloads, and first-pass material that should be compressed, merged, or cross-referenced instead of repeated.
 
 Final-quality loop for every inserted or touched environment:
-1. Apply the complete canonical row workflow and Sections 5.1-7.8 of `prompts/alignment_requirements.md` to each new or materially touched block.
+1. Apply the complete canonical row workflow and Sections 5.1-7.11 of `prompts/alignment_requirements.md` to each new or materially touched block.
 2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, intuitions, proof steps, convergence claims, complexity bounds, or implementation details.
 3. Re-read the source block, the LaTeX preamble, each statement item, each typed-method step, each example/counterexample/intuition/remark/motivation/perspective/expository/applied role, each figure role, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, in the correct typed-method environment when written as a method, role-complete when written as an example, counterexample, intuition, remark, motivation, perspective, principle, process, applied environment, exercise, or question-bank item, figure-complete when written as a visual, and proof-complete when written as a theorem-style result.
 4. Keep theorem-style statements source-proportional. Do not move proof scaffolding, Picard iteration machinery, local construction constants, or proof-only error estimates into the statement unless the source presents them as reusable conclusions. When Structural Commentary / Key Insight is required, place the adjacent two-line pair only at the end: immediately before `\end{proof}` if there is a proof, or immediately before the theorem-style `\end{...}` for an allowed proofless exception; both lines must end with `\\`.
@@ -79,7 +81,7 @@ Classify the sources first:
 6. Report ambiguous classifications before insertion instead of silently forcing them into an environment. If a substantive source block does not fit any existing environment or typed figure wrapper, run the environment/figure-type gap protocol before editing that block.
 
 Research-paper critical-content filter:
-1. Identify the domain first: mathematics, quantitative finance, fundamental finance/accounting/valuation, physics, or mixed. Then apply the corresponding Section 7.10 domain standard.
+1. Identify the domain first, respecting the configured `DOMAIN` when it is not `auto`: mathematics, quantitative finance, fundamental finance/accounting/valuation, physics, or mixed. Then apply the corresponding Sections 7.10 and 7.11 domain standards.
 2. Build a paper-level extraction ledger before editing. Record bibliographic metadata, paper type, target owner, source-stated/source-derived/repo-derived status, and one decision for each major paper component: `ingest-critical`, `covered-earlier`, `skip-background`, `skip-routine-detail`, `skip-weak-fit`, `blocked-insufficient-support`, `blocked-new-section-or-part`, or `needs-new-environment-or-figure-type`.
 3. Ingest only critical content that creates or repairs a durable local owner. For mathematics, this means main definitions/results, sharp hypotheses, essential examples/counterexamples, proof architecture, and reusable methods. For quantitative finance, this means problem type, market/model/data/sample, assumptions, pricing/hedging/risk/calibration/backtest method, metrics, costs/constraints, validation, and limitations. For fundamental finance, this means entity/security/industry scope, date/currency/accounting basis, data sources, definitions/adjustments, valuation/accounting method, assumptions/drivers, scenarios/sensitivities, risks, and fact/forecast/opinion status. For physics, this means system/regime, quantities/units, governing equations/laws, assumptions, boundary/initial conditions, approximations, derivation route, experimental/simulation setup, uncertainty, and validity limits.
 4. Skip literature review, broad motivation, author rhetoric, paper-specific narrative, duplicated preliminaries, routine derivations, exhaustive robustness tables, appendices, and implementation minutiae unless they contain a needed owner, assumption, method, proof, dataset, diagnostic, limitation, or figure.
@@ -128,7 +130,7 @@ Algorithms:
 
 Canonical quality reminders:
 1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.10 directly, especially source-proportional theorem-style statements, self-contained theorem-style and typed-method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, example/counterexample/intuition/remark/expository/applied environment roles, figure role classification and visual standards, research-paper critical-content filtering, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples/intuitions/applied checks, equation numbering, TODO discipline, and multi-PDF readiness.
+2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.11 directly, especially source-proportional theorem-style statements, self-contained theorem-style and typed-method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, example/counterexample/intuition/remark/expository/applied environment roles, figure role classification and visual standards, research-paper critical-content filtering, domain overlays, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples/intuitions/applied checks, equation numbering, TODO discipline, and multi-PDF readiness.
 3. For methods, first choose `proofmethod`, `computationmethod`, or justified legacy `method`, then extract the problem type, data, target, entry cue, approach choice, operative steps, verification check, and reusable limitation/transfer point supported by the source. Apply proof-method standards to proof routes and computation-method standards to constructions, computations, approximations, diagnostics, and algorithm previews. Enumerate only actual solving steps; cases, definitions, summaries, and interpretation stay in prose or formulas.
 4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 
@@ -144,7 +146,7 @@ If the sources are only contents or outline pages, report:
 Edit report:
 If edits were made, report:
 - chosen target and why;
-- PASS_MODE and all active planned target files processed;
+- PASS_MODE, DOMAIN, and all active planned target files processed;
 - research-paper domain and critical-content ledger summary when SOURCE_MATERIAL includes papers/preprints;
 - files changed;
 - main definitions, results, examples/counterexamples/nonexamples/intuitions, typed methods, applied environments, remarks, motivations, perspectives, principles, processes, exercises/question-bank items, algorithms, figures, or source notes added;

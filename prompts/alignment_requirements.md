@@ -20,6 +20,7 @@ Instruction precedence is: current user prompt; safety and mathematical correctn
 | --- | --- | --- |
 | `MODE` | `edit` | Use `audit-only` only when requested. |
 | `SCOPE_LEVEL` | required | `part`, `section`, `subsection`, or `file`. |
+| `DOMAIN` | `auto` | `auto`, `math`, `quant-finance`, `fundamental-finance`, `physics`, or `mixed`; apply Section 7.11 overlays. |
 | `TARGET` | required | Exact path or unambiguous part-scoped cursor. |
 | `START_CURSOR` | `beginning` | Exact file when resuming. |
 | `FILE_COVERAGE` | `all-active` | `all-active`, `changed-and-new`, `tracked-modified`, or `untracked-new`. |
@@ -42,6 +43,8 @@ Instruction precedence is: current user prompt; safety and mathematical correctn
 - `tracked-modified` or `untracked-new`: only that Git-status class.
 
 Inspect inactive untracked files for ownership, but do not add an input edge without permission. Capture the coverage set before editing.
+
+`DOMAIN: auto` means infer the domain for each ledger row from the source, local owner, notation, and active content. Use `mixed` only when the scope truly combines domains; then apply the narrowest correct overlay row by row. A domain overlay changes required context and evidence standards, not repository safety rules or proof authority rules.
 
 `MATH_LAYOUT` modes: `inline-strict` enforces Section 5.5; `inline-first` additionally permits a genuinely long derivation display when compression would harm clarity; `preserve-essential-displays` preserves useful existing displays but creates none without structural need.
 
@@ -68,7 +71,7 @@ Preserve all unrelated tracked and untracked work. Do not reset, checkout, resto
 
 Traverse active `\input` order. The atomic unit of completion is one formal environment or figure, not a file, page, grep result, or environment count. Never replace semantic review with a part-wide regex sweep.
 
-Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, motivation, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, algorithm, and figure forms its own row. Record type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, figure role when relevant, required commentary status, and final rendered page. Do not mark rows in bulk.
+Before editing a numbered file, make an internal logical-unit ledger in source order. A theorem-style statement and its immediately following proof form one row; each definition, `method`, `proofmethod`, `computationmethod`, example, counterexample, remark, intuition, motivation, perspective, assumption, convention, model, law, derivation, approximation, dimensional check, empirical study, valuation case, warning, algorithm, and figure forms its own row. Record domain, type/label, `COMPONENT_COUNT` or `CLAIM_COUNT`, proof status, figure role when relevant, required commentary status, and final rendered page. Do not mark rows in bulk.
 
 Process exactly one ledger row at a time. Read the whole environment, its proof, and the immediately relevant earlier owners; then apply:
 
@@ -79,8 +82,9 @@ Process exactly one ledger row at a time. Read the whole environment, its proof,
 5. **Reuse:** find any applicable earlier theorem-style result.
 6. **Succinct:** remove repetition without losing meaning.
 7. **Structure:** choose the correct environment and claim/proof items.
-8. **Pack:** optimize inline layout and semantic line breaks.
-9. **Verify:** compile, render, inspect, and repeat until compliant.
+8. **Domain overlay:** apply Section 7.11 where the row's evidence, context, units, data, valuation, model, or experimental status is domain-specific.
+9. **Pack:** optimize inline layout and semantic line breaks.
+10. **Verify:** compile, render, inspect, and repeat until compliant.
 
 After each row, perform this adversarial check before moving on:
 
@@ -652,6 +656,65 @@ For physics papers, preserve the physical system, regime, quantities with units/
 
 For all domains, keep paper-stated, source-derived, and repo-derived content distinct. A paper's abstract or discussion may motivate ingestion, but it is not proof authority for a formal claim unless the formal result, method, data, or derivation is supported in the paper body or supplement.
 
+### 7.11 Domain specialization overlays
+
+This domain-specialization standard is distilled from the mathematical-writing, proof, and notation sources in Sections 5.0-5.7; the applied, scientific, finance, figure, further-research, and paper-ingestion sources in Sections 5.8, 6.1, 7.9, and 7.10; and these additional domain baselines:
+
+- Knuth, Larrabee, and Roberts, `Mathematical Writing`: https://cs.stanford.edu/~knuth/klr.html
+- Stanford CS103, "Proofwriting Checklist": https://web.stanford.edu/class/archive/cs/cs103/cs103.1262/proofwriting_checklist
+- NIST Technical Note 1297, "Guidelines for Evaluating and Expressing the Uncertainty of NIST Measurement Results": https://www.nist.gov/pml/nist-technical-note-1297
+- SEC, "Plain English Handbook": https://www.sec.gov/files/handbook.pdf
+- CFA Institute, "Global Investment Performance Standards for Firms": https://www.gipsstandards.org/standards/gips-standards-for-firms/
+
+Do not maintain four duplicate standards for every environment. Separate standards only when the domain changes at least one of:
+
+1. the evidence object: proof, model, law, derivation, approximation, dataset, experiment, backtest, filing, valuation input, or visual evidence;
+2. the context needed to read notation: unit, dimension, currency, date, compounding, frequency, probability measure, accounting basis, physical regime, or sample window;
+3. the authority of a claim: theorem/proof, source-stated law, model assumption, empirical estimate, simulated output, valuation opinion, or educational interpretation;
+4. the reproducibility burden: proof details, data/code/materials availability, calibration/backtest protocol, uncertainty/error, sensitivity, or audit trail.
+
+Keep these standards universal across mathematics, quantitative finance, fundamental finance/accounting/valuation, and physics:
+
+- repository safety, Git discipline, scope control, source-grounded content boundaries, and active `parts/` ownership;
+- structural hierarchy, overview hygiene, placeholder preservation, dependency order, labels, references, TODO taxonomy, and searchability;
+- theorem-style proportionality, proof completeness, statement/proof item matching, proof-reference policy, and the rule that only theorem-style results with proofs can serve as mathematical proof authority;
+- definition quality, local notation binding, global notation lifecycle, equation numbering, inline/display layout, commentary placement, and semantic deduplication;
+- the roles of examples, counterexamples, intuitions, remarks, motivations, perspectives, principles, processes, typed methods, algorithms, and figures.
+
+Apply domain overlays to these standards instead of rewriting them:
+
+- notation and context: add units/dimensions for physics, currency/date/frequency/accounting basis for fundamental finance, measure/filtration/model/date/frequency for quantitative finance, and object/domain/hypothesis scope for pure mathematics;
+- methods: keep the `proofmethod` versus `computationmethod` distinction universal, but specialize entry cues, admissibility checks, verification, and limitations by domain;
+- examples and counterexamples: preserve the universal target/data/verification/takeaway or claim/admissibility/failure/lesson structure, but choose data and checks that match the domain;
+- intuitions, motivations, perspectives, and remarks: keep the anchor/scope/non-authority rules universal, but state the domain-specific mental model or boundary precisely;
+- applied environments, figures, research-paper ingestion, and further-research recommendations: use the domain-specific evidence and reproducibility standards below.
+
+Use this domain matrix when `DOMAIN` is `auto`, `mixed`, or explicitly set:
+
+| Domain | Evidence and owner | Required overlay |
+| --- | --- | --- |
+| `math` | Definitions, theorem-style results, proofs, examples, counterexamples, proof methods, and computations. | State exact objects, domains, hypotheses, quantifiers, conclusions, proof architecture, and reusable constructions. Use theorem-style only for claims that can be proved from earlier results or source-supported proof. Keep empirical, physical, and valuation claims out of theorem-style environments unless converted to mathematical assumptions and proved conclusions. |
+| `quant-finance` | Mathematical pricing/risk theory, stochastic models, calibration, optimization, backtests, simulations, data studies, and trading or risk workflows. | Identify market or asset universe, time/indexing convention, probability measure and filtration when relevant, model dynamics or statistical model, admissibility/no-arbitrage constraints, objective/loss/payoff, input data and sample window, calibration/backtest protocol, transaction costs, liquidity, constraints, benchmark, metric, uncertainty/robustness, code/data availability, model-risk limitation, and whether the claim is model-implied, simulated, empirical, backtested, or interpretive. Never turn backtest performance into a theorem, forecast, or investment recommendation. |
+| `fundamental-finance` | Accounting identities, financial statement analysis, valuation cases, corporate-finance models, filings, estimates, forecasts, scenarios, and analyst-style interpretation. | Identify entity/security/industry scope, reporting or valuation date, currency, fiscal period, accounting standard or basis, data source, variable definitions and adjustments, historical versus forecast versus estimate status, valuation/accounting method, assumptions and drivers, discount/growth/multiple choices, scenario/sensitivity checks, risk/quality/conflict limitations, and conclusion status. Never make a valuation estimate look exact or convert an empirical association, accounting convention, or analyst opinion into a theorem. |
+| `physics` | Physical laws, models, derivations, approximations, dimensional checks, simulations, experiments, measurements, and visualizations. | Identify physical system, regime, coordinates/sign convention, quantities with units and dimensions, governing equations or laws, assumptions/idealizations, boundary or initial conditions, retained and dropped terms, dimensionless parameters, derivation route, experiment or simulation setup, uncertainty/error, data/code/material availability, and validity limits. Dimensional consistency is a check, not proof that a law/model is true. |
+
+Standard-by-standard separation decision:
+
+| Standard family | Separate by domain? | Rule |
+| --- | --- | --- |
+| Safety, scope, structure, labels, TODOs, searchability | No. | Use one universal standard. Domain only affects placement and terminology in reports. |
+| Theorem-style statements and proofs | Mostly no. | Universal proof standard applies. Add a domain overlay only to keep non-mathematical claims out of theorem-style or to state domain hypotheses as mathematical assumptions before proving consequences. |
+| Definitions and notation | Overlay. | Universal clarity rules apply; add unit/dimension/currency/date/measure/basis/regime context when the domain needs it. |
+| Typed methods and algorithms | Overlay. | Universal `proofmethod`/`computationmethod` distinction applies; verification, admissibility, stopping, backtest, sensitivity, dimensional, or proof-obligation checks depend on domain. |
+| Examples and counterexamples | Overlay. | Universal role standard applies; domain decides what counts as admissible data, verification, and a meaningful boundary case. |
+| Intuition, motivation, perspective, remark, key insight, structural commentary | Overlay. | Universal non-authority and placement rules apply; domain-specific mental models, limitations, and significance must be explicit and source-supported. |
+| Applied environments | Yes. | Use Section 5.8 plus the domain matrix. These blocks are where finance/physics/empirical standards diverge most. |
+| Figures and tables | Yes by visual role and overlay by domain. | Use Section 6.1 figure roles, then add axes/units/source/window for visualizations, date/currency/basis for financial exhibits, scale/uncertainty/acquisition context for scientific images, and formal anchors for mathematical illustrations. |
+| Research-paper ingestion | Yes. | Use Section 7.10 critical-content filters by domain. Preserve only durable owners, methods, evidence, limitations, and reproducibility context. |
+| Further research recommendations | Overlay. | Use Section 7.9 format universally, but choose source authority by domain: canonical books/surveys for mathematics, peer-reviewed or regulatory/model-risk sources for quant finance, filings/accounting/valuation standards and finance literature for fundamental finance, and peer-reviewed/scientific society/standards sources for physics. |
+
+When a row does not fit an existing environment because a domain has a durable evidence object not represented here, use the new environment or figure-type gap protocol in Section 7.8. Web research in that protocol may define the missing standard, but it must not supply subject content for the notes.
+
 ## 8. Validation and completion
 
 Before marking a file complete, inspect every formal environment and review matches for:
@@ -677,7 +740,7 @@ At scope completion:
 
 1. Reconcile the environment ledger: every row received an individual first pass and cold second pass; report reviewed, rewritten, retained, split, and proofless-exception counts.
 2. Reconcile `FILE_COVERAGE`: every eligible file in the active batch was reviewed.
-3. Reconcile component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, counterexample claim/admissibility/hypothesis/failure/lesson checks, intuition anchor/mental-model/correspondence/scope/formal-bridge checks, applied-environment checks from Section 5.8, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
+3. Reconcile domain classification, component/claim counts, typed-method environment choice/problem-type/data/target/approach/verification extraction, example target/data/verification/takeaway checks, counterexample claim/admissibility/hypothesis/failure/lesson checks, intuition anchor/mental-model/correspondence/scope/formal-bridge checks, applied-environment checks from Section 5.8 and domain overlays from Section 7.11, remark/expository role checks, factored list preambles, the sentence-by-sentence prose-to-notation audit, proof completeness, and one-to-one statement/proof coverage.
 4. Reconcile every proof citation: earlier order, theorem-style category, matching hypotheses/conclusion, and genuine usefulness.
 5. Reconcile `COMMENTARY_POLICY` for quality, exact syntax, and placement, not merely matching counts: the pair must be adjacent, terminal, ordered Structural Commentary then Key Insight, and both lines must end with `\\`.
 6. Reconcile displays and matrix row counts under `MATH_LAYOUT`.
@@ -696,4 +759,4 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir="$build_dir" math.t
 
 The active batch is complete only when all selected files satisfy these rules, the isolated build passes unless disabled, unrelated work is preserved, and only genuine out-of-scope/source/authorization issues remain. Under `RUN_BATCH: one-numbered-file`, completing one file is success even when the wider part or section remains; report the exact next cursor. Under `all-selected`, stop at a file boundary if rigor would otherwise fall.
 
-The final report must state: scope, active batch, and coverage completed; ledger counts; files changed; main structural/mathematical/environment/notation/figure changes; source-provenance and collection-level decisions when applicable; result splits, proof additions, proofless exceptions, and proof-reference changes; commentary, display, equation-numbering, and matrix exceptions; cold-pass and build results; preserved pre-existing work; remaining blockers; and the exact next cursor or explicit wider-scope completion.
+The final report must state: scope, domain setting, active batch, and coverage completed; ledger counts; files changed; main structural/mathematical/environment/notation/figure changes; source-provenance and collection-level decisions when applicable; result splits, proof additions, proofless exceptions, and proof-reference changes; commentary, display, equation-numbering, and matrix exceptions; cold-pass and build results; preserved pre-existing work; remaining blockers; and the exact next cursor or explicit wider-scope completion.

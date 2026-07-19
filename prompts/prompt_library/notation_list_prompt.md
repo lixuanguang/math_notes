@@ -11,6 +11,7 @@ Use this prompt after `prompts/prompt_library/formalize_content.md`, once theore
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file | notation-list>
+- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <exact parts/... scope, parts/00_notations, exact notation file, or "changed formalization scope">
 - START_CURSOR: <beginning | exact notation file>
 - FILE_COVERAGE: <changed-and-new | tracked-modified | all-active>
@@ -33,7 +34,7 @@ External notation baseline:
 7. NIST SP 811, "Check List for Reviewing Manuscripts" (https://www.nist.gov/pml/special-publication-811/nist-guide-si-check-list-reviewing-manuscripts): physical quantities should keep quantity symbols, numerical values, and unit symbols distinct and consistently formatted.
 
 Authority and safety:
-1. Read `prompts/alignment_requirements.md` completely, especially Sections 5.1, 5.8, 6, 7.3, 7.5, 7.6, 7.7, 7.8, and 8. This prompt is stricter for notation-list ownership and collision edits.
+1. Read `prompts/alignment_requirements.md` completely, especially Sections 5.1, 5.8, 6, 7.3, 7.5, 7.6, 7.7, 7.8, 7.11, and 8. This prompt is stricter for notation-list ownership and collision edits.
 2. Run `git status --short` before editing and preserve unrelated work.
 3. Do not stage, commit, push, reset, checkout, restore, revert, delete unrelated files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Do not browse during a normal run. Use the external baseline above and the repository standards already recorded here.
@@ -45,7 +46,7 @@ Required reading:
 3. Read every notation file selected by NOTATION_COVERAGE.
 4. Read `parts/base.tex` macro/operator definitions.
 5. Read the formalized target content from the previous run, plus nearby prerequisites needed to understand notation scope and collisions.
-6. Resolve active `\input` order for the affected mathematical files before deciding whether notation is local, section-level, or global.
+6. Resolve DOMAIN and active `\input` order for the affected mathematical files before deciding whether notation is local, section-level, or global. With `DOMAIN: auto` or `mixed`, classify each notation-ledger row by domain so units, dimensions, currency/date/frequency, probability measure, accounting or valuation basis, and physical regime context are not lost.
 
 Notation coverage:
 - `affected-scope`: audit notation introduced or materially changed in TARGET and its touched notation files.
@@ -57,6 +58,7 @@ With `RUN_BATCH: one-notation-file`, complete only the next notation file in act
 Notation ledger:
 Before editing, build a ledger with one row per candidate notation symbol, macro, operator, or convention:
 - surface form and source file/line;
+- domain;
 - first active use and nearby definition;
 - intended meaning;
 - applied context when relevant: unit, physical dimension, currency, date, compounding, frequency, measure, basis of value, or data source;
@@ -74,7 +76,7 @@ Edit standard:
 4. Use the smallest correct owner: collision rules in `00_collision_index_and_scope_rules.tex`, basic global conventions in `01_global_conventions.tex`, and subject-specific notation in the corresponding subject file.
 5. Prefer existing macros and operator names. Do not add a macro when a notation entry or local declaration is enough.
 6. With `ALLOW_NEW_MACRO: no`, report macro candidates instead of editing `parts/base.tex`. With `ALLOW_NEW_MACRO: yes`, add a macro only for a recurring expression whose spelling must be globally stable; use `\newcommand` or `\DeclareMathOperator` according to existing style, and do not redefine existing commands.
-7. Entries must be compact and distinguish meaning by subject, argument type, font, decoration, unit/dimension, currency/date/frequency, measure, or local declaration. Avoid prose bloat, source commentary, proof context, valuation narrative, and textbook explanation.
+7. Entries must be compact and distinguish meaning by subject, argument type, font, decoration, unit/dimension, currency/date/frequency, probability measure, accounting or valuation basis, physical regime, or local declaration. Avoid prose bloat, source commentary, proof context, valuation narrative, and textbook explanation.
 8. If one glyph carries multiple deliberate meanings, either record the disambiguating feature in the collision index or split the subject entries so each meaning is findable.
 9. If two entries describe the same notation with inconsistent meanings, do not average them. Verify active usage, choose the canonical owner, update or merge entries, and report any local-content files that need follow-up.
 10. Remove a stale entry only after verifying it has no active uses or is fully superseded by another entry. If unsure, keep it and mark/report `% TODO(notation): verify ...`.
@@ -92,10 +94,10 @@ Validation:
 2. Run `git diff --check`.
 3. If `BUILD: yes`, build outside the repository and inspect notation-list pages affected by the edited file; if `BUILD: no`, report that the rendered notation-list check was intentionally skipped.
 4. Confirm every changed notation entry has a verified active use or an explicit convention role.
-5. Confirm every notation-list edit respects scope, owner file, collision index, macro policy, and accessible/convertible LaTeX structure.
+5. Confirm every notation-list edit respects scope, domain overlay, owner file, collision index, macro policy, and accessible/convertible LaTeX structure.
 
 Final report:
-- resolved notation coverage, active notation file, and next notation-file cursor;
+- resolved notation coverage, DOMAIN, active notation file, and next notation-file cursor;
 - notation-ledger counts: candidates reviewed, entries added, rewritten, moved, merged, retained, removed, TODOs, and macro candidates;
 - files changed and why each file is the correct notation owner;
 - collisions found and how each was disambiguated;

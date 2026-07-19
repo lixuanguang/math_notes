@@ -9,6 +9,7 @@ Reorganize the selected LaTeX scope so structure, placement, file order, source 
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
+- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
 - TARGET: <exact parts/... path or unambiguous part-scoped cursor>
 - START_CURSOR: <beginning | exact resume file>
 - FILE_COVERAGE: <all-active | changed-and-new | tracked-modified | untracked-new>
@@ -19,7 +20,7 @@ Configuration:
 - BUILD: no
 
 Authority and safety:
-1. Read `prompts/alignment_requirements.md` for repository structure, safety, labels, dependency ownership, collection-level standards, and allowed hierarchy.
+1. Read `prompts/alignment_requirements.md` for repository structure, safety, labels, dependency ownership, domain-overlay standards, collection-level standards, and allowed hierarchy.
 2. This prompt is structural, not a prose/formalization pass. Preserve moved mathematical content verbatim except for necessary surrounding glue, input edges, labels/references explicitly approved in this run, and tiny local duplicate cleanup.
 3. Do not build LaTeX, stage, commit, push, reset, checkout, restore, revert, delete unrelated files, clean the worktree, or edit generated PDF/auxiliary files.
 4. Run `git status --short` before editing. Preserve unrelated tracked and untracked work. If a patch conflicts or a target file changed unexpectedly, stop and report the conflict.
@@ -28,7 +29,7 @@ Required reading:
 1. Read `STRUCTURE_MIGRATION_README.md`, `math.tex`, and `parts/base.tex`.
 2. Read relevant part and section `overview.tex` files.
 3. Read the target files and nearby subsection files needed to understand ownership, placeholders, prerequisites, labels, notation, and figures.
-4. Resolve active `\input` order before proposing moves.
+4. Resolve DOMAIN and active `\input` order before proposing moves. With `DOMAIN: auto` or `mixed`, classify the domain of each candidate block so Section 7.11 can guide ownership, promotion, and figure placement.
 
 Structural audit:
 For the current topic batch, check:
@@ -36,8 +37,10 @@ For the current topic batch, check:
 - subsection files made empty by the current proposed moves, where deprecation or active-input removal may be appropriate;
 - material that belongs in a different file, subsection, or order;
 - content whose size, independence, or prerequisite role suggests promotion from subsection to section or from section to part;
+- domain-mixed files where universal mathematical prerequisites, quantitative-finance models, fundamental-finance valuation cases, or physics laws/models would be clearer in separate owners;
 - definitions, notation, examples, intuitions, applied environments, results, methods, and proofs appearing in an illogical order;
 - major definitions or unfamiliar results without nearby source-supported examples, nonexamples, counterexamples, intuitions, or test computations;
+- finance or physics material separated from required domain context such as valuation date/currency/accounting basis, probability measure/sample window, units/dimensions, physical regime, or uncertainty/sensitivity notes;
 - prerequisites that should move before dependants;
 - formal results or methods depending on intuitions, remarks, motivations, perspectives, or examples;
 - duplicate local material or duplicate labels;
@@ -75,6 +78,7 @@ Report before editing when the placement is nontrivial:
 - whether any active empty subsection is an existing placeholder to preserve, or was emptied by the proposed moves and may be deprecated;
 - whether any subsection title is intentionally broad and should be preserved rather than narrowed to the current single topic;
 - whether any subsection-to-section or section-to-part promotion is recommended or blocked by configuration;
+- DOMAIN used, any mixed-domain split, and whether separation should occur by mathematical prerequisite, applied model, empirical study, valuation case, or physical regime;
 - duplicate-label consolidation, if any, with canonical label and references to update;
 - notation lifecycle, equation-label, TODO, example/counterexample/intuition placement, and applied-environment ownership concerns;
 - figure role and placement concerns;
@@ -86,6 +90,7 @@ Validation and final report:
 - confirm existing active placeholder subsections and broad future-facing subsection titles were preserved unless this run emptied and displaced their content;
 - confirm no formal result or method still depends on an intuition/remark/motivation/perspective/example in the affected batch;
 - confirm collection-level checks in the affected batch: overview orientation, notation lifecycle, source provenance when applicable, example/intuition placement, applied-environment ownership, equation labels, typed TODOs, and multi-PDF readiness;
+- confirm Section 7.11 domain overlays remain coherent after movement: no theorem-style block owns empirical/valuation/physical-source claims improperly, and domain context stays near the applied owner;
 - confirm moved mathematical content was preserved verbatim except for reported local glue/reference edits;
 - list files changed, blocks moved, labels/references updated, and remaining structural blockers;
 - state that no build, staging, commit, push, reset, checkout, revert, unrelated delete, or clean action was performed.
