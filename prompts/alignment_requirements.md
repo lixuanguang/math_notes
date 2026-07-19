@@ -621,6 +621,37 @@ Before adding a recommendation, check `references.bib` by normalized title, auth
 
 Prefer authoritative references in this order when available: standard graduate or advanced undergraduate books, peer-reviewed survey articles, landmark papers, official standards or regulator/publisher documents for applied topics, and well-maintained open course notes only when no stronger citable source exists. Exclude low-authority webpages, unreviewed summaries, link farms, inaccessible metadata-only records without enough bibliographic information, and sources whose proposed value is vague.
 
+### 7.10 Research-paper ingestion
+
+Research-paper ingestion is a critical-content extraction phase, not a paper-summary phase. It is based on:
+
+- MIT, "Writing a Math Phase Two Paper": https://web.mit.edu/mathp2/www/piil.html
+- Terence Tao, "Give appropriate amounts of detail": https://terrytao.wordpress.com/advice-on-writing-papers/give-appropriate-amounts-of-detail/
+- AIP Publishing, "Author Instructions": https://publishing.aip.org/resources/researchers/author-instructions/
+- APS, "Editorial Policies and Practices": https://journals.aps.org/authors/editorial-policies
+- Nature Portfolio, "Reporting standards and availability of data, materials, code and protocols": https://www.nature.com/nm/editorial-policies/reporting-standards
+- PLOS ONE, "Criteria for Publication": https://journals.plos.org/plosone/s/criteria-for-publication
+- Journal of Financial Economics, "Data and Code Sharing Policy": https://www.jfinec.com/data-and-code-sharing-policy
+- American Finance Association, "Submission to the Journal of Finance": https://afajof.org/submissions/
+- Federal Reserve, "Supervisory Guidance on Model Risk Management": https://www.federalreserve.gov/frrs/guidance/supervisory-guidance-on-model-risk-management.htm
+- FASB, "The Conceptual Framework": https://fasb.org/the-conceptual-framework
+- CFA Institute, "Equity Valuation: Applications and Processes": https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/equity-valuation-applications-and-processes
+- SEC, "Commission Guidance Regarding Management's Discussion and Analysis": https://www.sec.gov/rules-regulations/2003/12/commission-guidance-regarding-managements-discussion-analysis-financial-condition-results-operations
+
+For every paper, record bibliographic metadata, paper type, local target, and extraction decision. Read abstract, introduction, main results/methods, figures/tables, discussion/conclusion, appendices or supplemental material only as needed to decide what is critical. Do not ingest the literature review, rhetorical framing, broad background, routine derivations, exhaustive robustness tables, implementation minutiae, or appendices unless they contain a definition, assumption, method, proof, dataset, diagnostic, limitation, or figure needed by the notes.
+
+The critical-content filter is: include only material that creates or repairs a durable local owner, such as a definition, main theorem/result, transferable proof method, computational method, model, law, derivation, approximation, empirical study, valuation case, counterexample, example, source-supported intuition, central figure/table, notation, or limitation. Exclude one-off narrative, paper-specific wording, duplicated preliminaries already owned earlier, and any result whose hypotheses, proof, data, or source status cannot be made explicit.
+
+For mathematics papers, preserve the main definitions, main theorem-style results, sharp hypotheses, named constructions, essential examples/counterexamples, and proof architecture. Include auxiliary lemmas only when they are reused locally or are the cleanest owner of a needed idea. Prefer a `proofmethod`, `intuition`, or `perspective` block for a transferable proof idea rather than copying a long proof. Do not import every lemma in a technical proof chain, every notation convention, or general preliminaries already covered by the notes.
+
+For quantitative-finance papers, classify the paper as theoretical, empirical, computational, or mixed. Preserve the problem type, market/asset universe, model dynamics or statistical model, measure/probability convention, admissibility and no-arbitrage assumptions, objective or loss function, pricing/hedging/risk/backtest/calibration method, inputs and outputs, benchmark, performance or error metric, transaction-cost/liquidity/constraint treatment, validation or robustness check, data/code availability, and limitations. Distinguish model-implied, simulated, empirical, backtested, and interpretive claims. Do not ingest strategy performance as investment advice or omit costs, sample window, rebalancing frequency, look-ahead/survivorship/data-snooping controls, or model-use limitations when the paper's result depends on them.
+
+For fundamental-finance, accounting, and valuation papers, preserve the research question or valuation purpose, entity/security/industry scope, reporting or valuation date, currency, accounting basis, fiscal period, data source, variable definitions and adjustments, valuation/accounting method, key assumptions and drivers, historical versus forecast status, scenarios or sensitivities, quality and variability of earnings/cash-flow discussion, risk factors, conflicts or independence limits, and conclusion only at the level supported by the source. Distinguish fact, estimate, forecast, opinion, and recommendation. Do not turn an empirical association, valuation estimate, or analyst conclusion into a general theorem or investment recommendation.
+
+For physics papers, preserve the physical system, regime, quantities with units/dimensions, governing laws or equations, assumptions, boundary/initial conditions, approximations and retained/dropped terms, dimensionless parameters, derivation route, experimental/simulation setup, uncertainty/error estimates, data/code/material availability, and validity limits. Use `law`, `model`, `derivation`, `approximation`, `dimensionalcheck`, `empiricalstudy`, `schematicfigure`, or `visualizationfigure` as appropriate. Do not ingest apparatus details, exploratory discussion, or full computational pipelines unless they are needed to understand, reproduce, or bound the result.
+
+For all domains, keep paper-stated, source-derived, and repo-derived content distinct. A paper's abstract or discussion may motivate ingestion, but it is not proof authority for a formal claim unless the formal result, method, data, or derivation is supported in the paper body or supplement.
+
 ## 8. Validation and completion
 
 Before marking a file complete, inspect every formal environment and review matches for:

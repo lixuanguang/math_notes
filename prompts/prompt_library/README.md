@@ -2,7 +2,7 @@
 
 Use one prompt directly instead of running a monolithic workflow.
 
-- `add_content_prompt.md`: final-quality source-grounded insertion from screenshots, PDFs, or provided files, including typed-method, example, counterexample, intuition, figure-role, applied-environment, and remark extraction.
+- `add_content_prompt.md`: final-quality source-grounded insertion from screenshots, PDFs, papers, or provided files, including critical research-paper ingestion, typed-method, example, counterexample, intuition, figure-role, applied-environment, and remark extraction.
 - `refine_blocks_prompt.md`: targeted refinement of screenshot-selected theorem/proof/typed-method/figure/example/counterexample/intuition/applied/remark blocks.
 - `reorganize_content_prompt.md`: structural movement, splitting, placement, figure-role placement, and duplicate-label cleanup.
 - `dependency_flow_prompt.md`: dependency-order audit, figure-only prerequisite audit, and structural repair.
@@ -18,7 +18,7 @@ add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.
 
 Phase ownership:
 
-- `add_content_prompt.md` classifies every source block, auto-places allowed material when configured, integrates all source-supported content in one run, records source provenance, and handles new environment/figure-type gaps through standards-only web research when explicitly authorized by its configuration.
+- `add_content_prompt.md` classifies every source block, auto-places allowed material when configured, integrates all source-supported content in one run, applies critical-content filtering for research papers by domain, records source provenance, and handles new environment/figure-type gaps through standards-only web research when explicitly authorized by its configuration.
 - `add_content_prompt.md` with `PASS_MODE: second-pass` catches missed supported content and removes/merges accidental duplicate coverage from the first pass.
 - `reorganize_content_prompt.md` handles movement, splitting, same-level placement, subsection creation when allowed, duplicate labels, and promotion recommendations. It preserves broad subsection titles and active empty placeholder subsections unless the run itself emptied and displaced their content. It is the phase that identifies subsection-to-section or section-to-part promotion; it performs the promotion only when `ALLOW_NEW_SECTION_OR_PART: yes`.
 - `dependency_flow_prompt.md` repairs prerequisite order, notation lifecycle, source ownership after movement, and invalid dependency authority.
@@ -28,6 +28,6 @@ Phase ownership:
 
 For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.
 
-Skip any prompt whose work is already settled. For canonical theorem/proof, typed-method, figure-role, example/counterexample/intuition/remark/motivation/perspective/expository, applied/scientific/finance, mathematical, layout, source-provenance, and collection-level requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline, Section 5.7 for examples, counterexamples, intuition, remarks, motivation, and perspective, Section 5.8 for applied environments, Section 6.1 for typed figures (`illustrationfigure`, `visualizationfigure`, `schematicfigure`, `financialexhibitfigure`, `sourceimagefigure`, `tablevisualfigure`), Section 7 for collection-level standards, and Section 7.9 for further research recommendations.
+Skip any prompt whose work is already settled. For canonical theorem/proof, typed-method, figure-role, example/counterexample/intuition/remark/motivation/perspective/expository, applied/scientific/finance, mathematical, layout, source-provenance, and collection-level requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline, Section 5.7 for examples, counterexamples, intuition, remarks, motivation, and perspective, Section 5.8 for applied environments, Section 6.1 for typed figures (`illustrationfigure`, `visualizationfigure`, `schematicfigure`, `financialexhibitfigure`, `sourceimagefigure`, `tablevisualfigure`), Section 7 for collection-level standards, Section 7.9 for further research recommendations, and Section 7.10 for research-paper ingestion.
 
 When prompt requirements overlap, keep the shared standard in `prompts/alignment_requirements.md` and leave only workflow-specific instructions in the library prompt.

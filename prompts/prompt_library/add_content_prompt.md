@@ -6,7 +6,7 @@ I am working in:
 
 I attached screenshots, source images, PDFs, or exact source files from a mathematics, physics, quantitative-finance, fundamental-finance, or other technical source. Inspect the repository and choose the best target under the current `parts/` structure. Use `STRUCTURE_MIGRATION_README.md` as the placement and ownership reference.
 
-The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, applied/scientific/finance, proof, commentary, citation, layout, source-provenance, collection-level, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
+The goal is final-quality source-grounded insertion, not rough intake. Shared mathematical, applied/scientific/finance, proof, commentary, citation, layout, source-provenance, collection-level, research-paper ingestion, and validation standards live in `prompts/alignment_requirements.md`; this prompt adds source-intake, placement, and screenshot-ledger rules.
 
 Configuration:
 - MODE: edit
@@ -40,11 +40,12 @@ Required reading before placement:
 2. Read the relevant part and section `overview.tex` files.
 3. Read nearby subsection files for style, notation, labels, figures, algorithms, and existing coverage.
 4. Check for existing related definitions, results, examples, counterexamples, intuitions, applied environments, `proofmethod`, `computationmethod`, legacy `method`, algorithms, notation, and figures so you can cross-reference or extend rather than duplicate.
-5. If the source contains an algorithm, pseudocode, or step-by-step computational procedure, inspect nearby algorithm usage before choosing the format.
+5. If SOURCE_MATERIAL contains a research paper or preprint, read `prompts/alignment_requirements.md` Section 7.10 before placement and inspect the paper's abstract, introduction, main results/methods, figures/tables, discussion/conclusion, and appendices or supplements only as needed to identify critical content.
+6. If the source contains an algorithm, pseudocode, or step-by-step computational procedure, inspect nearby algorithm usage before choosing the format.
 
 Manual screenshot intake loop:
 1. Inspect all screenshots in order first. Treat them as the source ledger, not as a vague topic suggestion.
-2. Group the screenshots into coherent source blocks: definitions, results, proofs, methods, examples, algorithms, figures, exercises, or outline material.
+2. Group the screenshots into coherent source blocks: definitions, results, proofs, methods, examples, algorithms, figures, exercises, research-paper critical content, or outline material.
 3. Resolve the natural owner from the active `parts/` tree. With `TARGET: auto-place from SOURCE_MATERIAL`, choose the best existing part/section/subsection from the screenshots and repository structure.
 4. Build a complete source-to-target plan before editing. Include every source block with an allowed existing owner or an allowed new subsection; record each block as `source-stated`, `source-derived`, or `repo-derived` when applicable; use active `\input` order for the target files, not screenshot order, when editing.
 5. With `RUN_BATCH: all-source-supported`, process every planned target file in the same run. Do not ask whether to continue to the next subsection, section, or part. Continue until all source-supported, permission-allowed blocks are classified and integrated or explicitly reported as blocked.
@@ -72,9 +73,18 @@ Final-quality loop for every inserted or touched environment:
 Classify the sources first:
 1. Contents or outline only: do not edit. Give a concise coverage and placement audit.
 2. Substantive pages: integrate conservatively.
-3. Mixed: use contents pages only for placement and coverage; integrate only what the substantive pages support.
-4. For substantive material, extract and classify supported formulas, definitions, claims, theorems, propositions, lemmas, corollaries, examples, counterexamples, nonexamples, intuitions, typed methods, assumptions, conventions, models, laws, derivations, approximations, dimensional checks, empirical studies, valuation cases, warnings, remarks, motivations, perspectives, principles, processes, exercises, illustrations, visualizations, schematics, financial exhibits, images, table-like visuals, tables, proof ideas, notation, and prerequisites before choosing the insertion point.
-5. Report ambiguous classifications before insertion instead of silently forcing them into an environment. If a substantive source block does not fit any existing environment or typed figure wrapper, run the environment/figure-type gap protocol before editing that block.
+3. Research paper or preprint: apply the critical-content filter in `prompts/alignment_requirements.md` Section 7.10 before any environment-level insertion. Do not summarize the paper section by section.
+4. Mixed: use contents pages only for placement and coverage; integrate only what the substantive pages support.
+5. For substantive material, extract and classify supported formulas, definitions, claims, theorems, propositions, lemmas, corollaries, examples, counterexamples, nonexamples, intuitions, typed methods, assumptions, conventions, models, laws, derivations, approximations, dimensional checks, empirical studies, valuation cases, warnings, remarks, motivations, perspectives, principles, processes, exercises, illustrations, visualizations, schematics, financial exhibits, images, table-like visuals, tables, proof ideas, notation, and prerequisites before choosing the insertion point.
+6. Report ambiguous classifications before insertion instead of silently forcing them into an environment. If a substantive source block does not fit any existing environment or typed figure wrapper, run the environment/figure-type gap protocol before editing that block.
+
+Research-paper critical-content filter:
+1. Identify the domain first: mathematics, quantitative finance, fundamental finance/accounting/valuation, physics, or mixed. Then apply the corresponding Section 7.10 domain standard.
+2. Build a paper-level extraction ledger before editing. Record bibliographic metadata, paper type, target owner, source-stated/source-derived/repo-derived status, and one decision for each major paper component: `ingest-critical`, `covered-earlier`, `skip-background`, `skip-routine-detail`, `skip-weak-fit`, `blocked-insufficient-support`, `blocked-new-section-or-part`, or `needs-new-environment-or-figure-type`.
+3. Ingest only critical content that creates or repairs a durable local owner. For mathematics, this means main definitions/results, sharp hypotheses, essential examples/counterexamples, proof architecture, and reusable methods. For quantitative finance, this means problem type, market/model/data/sample, assumptions, pricing/hedging/risk/calibration/backtest method, metrics, costs/constraints, validation, and limitations. For fundamental finance, this means entity/security/industry scope, date/currency/accounting basis, data sources, definitions/adjustments, valuation/accounting method, assumptions/drivers, scenarios/sensitivities, risks, and fact/forecast/opinion status. For physics, this means system/regime, quantities/units, governing equations/laws, assumptions, boundary/initial conditions, approximations, derivation route, experimental/simulation setup, uncertainty, and validity limits.
+4. Skip literature review, broad motivation, author rhetoric, paper-specific narrative, duplicated preliminaries, routine derivations, exhaustive robustness tables, appendices, and implementation minutiae unless they contain a needed owner, assumption, method, proof, dataset, diagnostic, limitation, or figure.
+5. Do not promote a paper's abstract, introduction, or discussion claim into theorem-style, applied, finance, or physics content unless the paper body or supplement supports the formal statement, model, data, or derivation.
+6. Keep output compact. Prefer one clean local owner plus a short source note or report entry over several paper-specific blocks that will not be reused.
 
 Environment/figure-type gap protocol:
 1. Exhaust the existing vocabulary first: theorem-style results, definitions, typed methods, algorithms, examples/counterexamples/intuitions/remarks/motivations/perspectives/principles/processes, applied environments in Section 5.8, ordinary tables, and typed figure wrappers in Section 6.1. Do not create a new role for a one-off stylistic preference, a vague heading, or content that can be cleanly split across existing owners.
@@ -118,7 +128,7 @@ Algorithms:
 
 Canonical quality reminders:
 1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.8 directly, especially source-proportional theorem-style statements, self-contained theorem-style and typed-method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, example/counterexample/intuition/remark/expository/applied environment roles, figure role classification and visual standards, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples/intuitions/applied checks, equation numbering, TODO discipline, and multi-PDF readiness.
+2. Apply `prompts/alignment_requirements.md` Sections 5.1-7.10 directly, especially source-proportional theorem-style statements, self-contained theorem-style and typed-method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, example/counterexample/intuition/remark/expository/applied environment roles, figure role classification and visual standards, research-paper critical-content filtering, required commentary, result-reference language, inline layout, source provenance, notation lifecycle, examples/counterexamples/intuitions/applied checks, equation numbering, TODO discipline, and multi-PDF readiness.
 3. For methods, first choose `proofmethod`, `computationmethod`, or justified legacy `method`, then extract the problem type, data, target, entry cue, approach choice, operative steps, verification check, and reusable limitation/transfer point supported by the source. Apply proof-method standards to proof routes and computation-method standards to constructions, computations, approximations, diagnostics, and algorithm previews. Enumerate only actual solving steps; cases, definitions, summaries, and interpretation stay in prose or formulas.
 4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 
@@ -135,6 +145,7 @@ Edit report:
 If edits were made, report:
 - chosen target and why;
 - PASS_MODE and all active planned target files processed;
+- research-paper domain and critical-content ledger summary when SOURCE_MATERIAL includes papers/preprints;
 - files changed;
 - main definitions, results, examples/counterexamples/nonexamples/intuitions, typed methods, applied environments, remarks, motivations, perspectives, principles, processes, exercises/question-bank items, algorithms, figures, or source notes added;
 - method environment and approach decisions: `proofmethod`/`computationmethod`/legacy `method` choices, existing methods extended or cross-referenced, problem types, entry cues, selected approaches, verification checks, and alternatives intentionally omitted as unsupported;
