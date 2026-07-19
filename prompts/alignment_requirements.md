@@ -2,7 +2,7 @@
 
 ## 1. Objective and authority
 
-Align `/Users/lxg/Documents/GitHub/math_notes` into a mathematically correct, explicit, formal, notation-driven, succinct, logically ordered, and visually consistent reference.
+Align `/Users/lxg/Documents/GitHub/math_notes` into a mathematically correct, explicit, formal, notation-aware, succinct, logically ordered, and visually consistent reference.
 
 Canonical editing sequence:
 
@@ -73,7 +73,7 @@ Process exactly one ledger row at a time. Read the whole environment, its proof,
 1. **Census:** count independent definition components, claims, cases, or steps.
 2. **Explicit:** expose objects, domains, hypotheses, quantifiers, conclusions, and proof mechanisms.
 3. **Formal:** bind notation and replace vague prose with exact relations.
-4. **Notation-driven:** audit every mathematical phrase and replace prose with bound, established notation wherever possible without becoming opaque.
+4. **Notation-aware:** audit every mathematical phrase; use bound, established notation when it improves precision or compression, and keep concise prose when notation would obscure the point.
 5. **Reuse:** find any applicable earlier theorem-style result.
 6. **Succinct:** remove repetition without losing meaning.
 7. **Structure:** choose the correct environment and claim/proof items.
@@ -86,9 +86,11 @@ After each row, perform this adversarial check before moving on:
 2. Would removing any sentence delete an independent component or claim that should be itemized?
 3. Is setup repeated across items instead of factored into a preamble?
 4. Does every proof line perform a stated obligation through an equation, estimate, construction, or applicable earlier result?
-5. Has every replaceable mathematical phrase become established notation without hiding logic?
-6. Are commentary lines genuinely structural/insightful and maximally concise?
-7. Does the rendered block have clean semantic breaks and no sparse tail?
+5. Has every mathematical phrase been kept as concise prose or converted to notation for a clear reason, without hiding logic?
+6. Do adjacent clauses repeat the same object, quantifier, hypothesis, conclusion, or induction assumption in both prose and notation?
+7. Is every derived symbol defined before first use, and are parallel data such as neighborhoods, intervals, parameters, or domains factored into one ordered bundle?
+8. Are commentary lines genuinely structural/insightful and maximally concise?
+9. Does the rendered block have clean semantic breaks and no sparse tail?
 
 If any answer exposes a defect, rewrite the entire affected environment again. Do not stop at the longer explicit/formal draft, a surface copyedit, or a passing search.
 
@@ -110,14 +112,43 @@ When a prompt-library workflow references this file, the workflow inherits the c
 
 ## 5. Canonical writing standard
 
+### 5.0 External baseline for theorem-style writing
+
+This section records the baseline used by all prompt-library workflows. It is distilled from:
+
+- Steven L. Kleiman and Glenn P. Tesler, MIT, "Writing a Math Phase Two Paper": https://web.mit.edu/mathp2/www/piil.html
+- Leonard Gillman, AMS/MAA, `Writing Mathematics Well`: https://bookstore.ams.org/mmbk-7/
+- Stanford CS103 Proofwriting Checklist: https://web.stanford.edu/class/archive/cs/cs103/cs103.1262/proofwriting_checklist
+- Donald E. Knuth, Tracy L. Larrabee, and Paul M. Roberts, `Mathematical Writing`: https://cs.stanford.edu/~knuth/klr.html
+- AMS Author Handbook: https://www.jointmathematicsmeetings.org/arc/handbook/index.html
+- Terence Tao, "Give appropriate amounts of detail": https://terrytao.wordpress.com/advice-on-writing-papers/give-appropriate-amounts-of-detail/
+- UIUC NetMath, "Writing up proofs": https://new.math.uiuc.edu/netgeom/advice/howto-proofs.html
+
+Baseline principles:
+
+1. **State first, prove second.** A theorem-style result is a named mathematical assertion followed by its proof or an explicit proof-status exception. The proof must not be smuggled into the statement.
+2. **Use theorem-style roles for information.** A theorem is a major result; a proposition is an independently useful smaller result; a lemma is a subsidiary result used to prove later results; a corollary follows with little extra proof from earlier theorem-style results. Do not inflate routine construction steps into theorems.
+3. **Keep statements concise but usable.** A statement must bind the objects, hypotheses, and conclusions needed to use the result, but definitions, discussion, motivation, proof scaffolding, routine construction data, and source commentary belong outside the statement.
+4. **Use generality deliberately.** State the result at the level of generality supported by the source and useful in the notes. Do not add parameters, constants, compact sets, iterates, or quantitative estimates merely because they appear in the proof.
+5. **Make proof structure visible.** A nontrivial proof should begin with its operative plan when helpful: direct argument, contradiction, induction, fixed point, compactness, approximation, comparison, or reduction to an earlier result.
+6. **Scope variables and assumptions.** Every proof variable must be introduced before use, with its domain and dependency clear. Avoid derived notation before its definition.
+7. **Make every proof sentence load-bearing.** Each sentence should advance a stated obligation by a cited result, definition check, construction, equality, inequality, limit, compactness argument, or logical implication.
+8. **Give appropriate detail.** Spend detail on the crucial or unfamiliar step; compress routine, expected, and standard steps only when the mathematical step remains checkable.
+9. **Prefer conceptual proof flow.** Use calculations where they carry the argument, but do not list formulas without explanatory direction.
+10. **Use notation sparingly and consistently.** Notation should reduce cognitive load, not encode too much at once. Separate adjacent formulas with words, keep notation simple, and suppress useless information.
+
+These principles are a floor, not a license to weaken this file's stricter source-grounded, proof-completeness, layout, dependency, and validation rules.
+
 ### 5.1 Formal language and notation
 
 - Bind every local symbol before use. Theorem-style statements must contain their own local objects, hypotheses, and conclusions without restating whole earlier theories.
 - A theorem-style statement, definition, or method preamble must not use a reference to a definition, theorem, proposition, lemma, corollary, example, or remark as a substitute for the actual local hypothesis or object. State the needed condition directly when it is short enough, e.g. a local Lipschitz condition, extension order, admissible-solution convention, graph notation, or compactness hypothesis. Use references in proof steps only when they supply a genuine earlier result.
-- Formal definitions, claims, proofs, methods, and calculations use `\forall`, `\exists`, and `\exists!` instead of mathematical “for all/every/each” and “there exists/is a unique.” Keep prose quantifiers only in genuine exposition.
+- Formal definitions, claims, proofs, methods, and calculations must bind quantifier scope explicitly. Use `\forall`, `\exists`, and `\exists!` inside mathematical clauses when they improve precision or compactness; use concise prose quantifiers when they read better. Do not use symbols as English-word substitutes outside mathematical clauses.
 - Prefer `\defeq`, maps, set-builder notation, recurrences, `\implies`, and `\iff` when clearer.
-- During the explicit-formal-notation-succinct loop, inspect every sentence after the explicit draft. Replace mathematical prose wherever possible: domains and membership by `x\in X`; quantifiers by `\forall`, `\exists`, or `\exists!`; maps by `f:X\to Y`; definitions by `\defeq`; conditions by relations; implication/equivalence by `\implies`/`\iff`; convergence by `\to`; bounds by inequalities; and parallel cases by symbolic items. Repeat this audit after compression because rewriting can reintroduce prose.
-- Prose may remain only when it conveys motivation, interpretation, proof architecture, a necessary logical transition, or meaning that notation would obscure. Do not preserve a verbal mathematical relation merely because it is grammatical, and do not invent cryptic symbols or use `\text{...}` to disguise prose as notation.
+- During the explicit-formal-notation-succinct loop, inspect every sentence after the explicit draft. Replace vague or repetitive mathematical prose when notation improves readability: domains and membership by `x\in X`; quantifiers by `\forall`, `\exists`, or `\exists!`; maps by `f:X\to Y`; definitions by `\defeq`; conditions by relations; implication/equivalence by `\implies`/`\iff`; convergence by `\to`; bounds by inequalities; and parallel cases by symbolic items. Repeat this audit after compression because rewriting can reintroduce prose or over-symbolize a clear sentence.
+- After formalization, deduplicate adjacent prose and notation. Do not write both a symbolic and verbal version of the same quantifier, scope, hypothesis, or conclusion. Prefer one bound sentence, e.g. `By Theorem \ref{...}(i) with parameter space $\{\ast\}$, $\mathsf H_{1,d}$ holds $\forall d$; assume $\mathsf H_{j,d}$ $\forall d$.` Avoid forms like `$\mathsf H_{1,d}$ holds $\forall d$. Assume $\mathsf H_{j,d}$ for all $d$.`
+- For bundled existence or construction data, order symbols by dependency and factor parallel roles. State spaces, neighborhoods, intervals, and parameters first; define derived products or domains next; introduce maps or solutions using those domains last. Prefer `Then $\exists$ compact $I\ni t_0$ and open neighborhoods $B\subseteq\R^n$ of $x_0$, $\Lambda_0\subseteq\R^p$ of $\lambda_0$ such that, with $D\defeq I\times B\times\Lambda_0$, there is $\phi:D\to\R^n$.` Avoid forms like `$\phi:D\to\R^n$, with $D\defeq...$` and repeated clauses such as `$B\ni x_0$ open..., $\Lambda_0\ni\lambda_0$ open...` when a shared neighborhood phrase factors them.
+- Prose should remain when it conveys motivation, interpretation, proof architecture, a necessary logical transition, or meaning that notation would obscure. Do not preserve vague prose merely because it is grammatical, and do not invent cryptic symbols or use `\text{...}` to disguise prose as notation.
 - Avoid “obvious,” “clearly,” unexplained “similarly,” and vague symmetry shortcuts. State the shortest operative equality, implication, bound, construction, or limit argument.
 - Prefer one complete sentence per source line. Do not split a sentence or equation merely for source wrapping.
 
@@ -157,7 +188,7 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 | Environment | Required form |
 | --- | --- |
 | Definition | One component: compact prose/formula. Two or more parallel objects, constructions, characterizations, or tests: itemize them; factor common setup first. A parallel postamble may be a second list. After `\item \hlt{Keyword}:` begin with notation or a condition and do not echo the keyword. |
-| Theorem/proposition/lemma/corollary | Setup before claims. One conclusion: no list. Two or more independent conclusions: claim items or a logical-weight split. |
+| Theorem/proposition/lemma/corollary | Source-proportional setup before claims. One conclusion: no list. Two or more independent conclusions: claim items or a logical-weight split. Do not turn a result statement into a construction ledger. |
 | Proof | Direct argument: compact prose. Multiple statement claims: matching proof items in the same order. Iff directions may remain inside their matching claim item when concise. |
 | Method/process | Setup first; enumerate genuine operative steps. A one-line convention remains prose. |
 | Example | Setup, computation, conclusion. Enumerate only distinct steps/cases/comparisons. |
@@ -170,19 +201,25 @@ For equivalent conditions, use flat items such as `\item[$(i)$]$\Rightarrow(ii)$
 
 The theorem-style category is exactly `theorem`, `proposition`, `lemma`, and `corollary`.
 
+**Statement proportionality.** A theorem-style statement should be no more complicated than the source-supported mathematical result requires. Include only hypotheses, objects, and conclusions that the reader needs to use the result. Do not pull proof scaffolding into the statement merely because it was useful during formalization: auxiliary constants, compact boxes, Picard operators, iterates, error majorants, local domains, or chosen bounds belong in the proof, a method, an example, or a separate proposition only when they are independently reusable and source-supported. If the source states a concise existence/uniqueness theorem, keep the theorem concise; put the construction or quantitative estimate in the proof or in a separate result only if the source presents it as a result.
+
+An overloaded theorem-style statement must be simplified or split when it contains several lines of `Set/Let/Put/Define/Choose` scaffolding before any conclusion, exposes iteration machinery such as `K`, `u_m`, `u_{m+1}`, or error constants only needed for the proof, bundles a theorem, method, and estimate into one environment, or has claim items whose main role is to record the proof construction rather than reusable conclusions. The statement may retain explicit constants only when they appear in the final bound, define the domain of the conclusion, or are part of the source theorem's actual payload.
+
 **Claim census.** A conclusion is distinct if it can be removed without changing another conclusion, has another logical type, or needs its own proof obligation. Characterization, existence, uniqueness, bound, measurability, convergence, representation, and continuity are distinct types. `Moreover`, `Furthermore`, `In addition`, `Also`, conclusion-bearing `In particular`, or an `and` joining different conclusion types trigger a recount. If `CLAIM_COUNT >= 2`, use claim items or split the result. Proof items must cover statement items one-for-one in the same order and conceptual labels.
 
 Split a heavy result by logical weight: keep the main proof mechanism as the theorem/proposition and immediate consequences as corollaries rather than peer theorems.
 
-**Proof completeness.** Under `PROOF_COMPLETENESS: full`, every reviewed theorem-style result must have a complete proof unless its exact label appears in `PROOFLESS_EXCEPTIONS`. Convert “Proof idea,” “Sketch,” “standard argument,” bare theorem-name invocations, and hand-wavy transitions into explicit proofs using definitions or applicable earlier results, then formalize and compress them. Do not delete a weak proof merely because it is difficult. If a proof needs unavailable prerequisite machinery, repair the earlier ownership when authorized or report the exact blocker; do not mark the result complete. A listed proofless exception must still have a mathematically complete statement and required commentary.
+**Proof completeness.** Under `PROOF_COMPLETENESS: full`, every reviewed theorem-style result must have a complete proof unless its exact label appears in `PROOFLESS_EXCEPTIONS`. Complete means every logical obligation is justified and checkable; it does not mean every routine algebraic simplification or standard epsilon manipulation must be expanded when no new idea is hidden. Convert “Proof idea,” “Sketch,” “standard argument,” bare theorem-name invocations, and hand-wavy transitions into explicit proofs using definitions or applicable earlier results, then formalize and compress them. Do not delete a weak proof merely because it is difficult. If a proof needs unavailable prerequisite machinery, repair the earlier ownership when authorized or report the exact blocker; do not mark the result complete. A listed proofless exception must still have a mathematically complete statement and required commentary.
 
-Proof preambles and proof items undergo the same explicit-formal-notation-succinct loop as statements. A proof item is not complete merely because its conclusion is plausible: show the operative equality, inequality, limit, construction, or hypothesis check. Handle degenerate cases when notation would otherwise divide by zero, invoke an empty family, or assume uniqueness implicitly.
+Proof preambles and proof items undergo the same explicit-formal-notation-succinct loop as statements. When the proof is not immediate, begin by naming the operative plan or reduction if it will orient the reader. A proof item is not complete merely because its conclusion is plausible: show the operative equality, inequality, limit, construction, or hypothesis check. Handle degenerate cases when notation would otherwise divide by zero, invoke an empty family, or assume uniqueness implicitly.
+
+For induction, bootstrap, or parameter-uniform proofs, name the predicate once, then state the base case and induction hypothesis in compact symbolic form. Do not restate the same uniformity in prose and notation, and do not introduce placeholder language such as “dummy parameter” when a precise object such as parameter space $\{\ast\}$ or a singleton family is available.
 
 **Earlier-result reuse.** After explicit formalization, search only earlier active theorems, propositions, lemmas, and corollaries. Cite one only when it precedes the current result, its hypotheses hold, its conclusion supplies the exact step, and citation is clearer or shorter than repetition. Never use a later result or a definition, example, remark, method, perspective, or algorithm as proof authority. Keep short calculations inline; if no result applies, prove the step directly.
 
 Use result references as `$P$ by Theorem \ref{...}.` or `By Lemma \ref{...}, $P$.` Never make a result the subject of “gives,” “yields,” “shows,” “makes,” “implies,” “ensures,” or “provides.”
 
-**Commentary.** Under `required-new-and-rewritten`, every new or materially rewritten theorem-style result requires both lines after proof items and immediately before `\end{proof}`:
+**Commentary.** The Structural Commentary / Key Insight pair is a local annotation convention, not an external theorem-writing baseline. Under `required-new-and-rewritten`, every new or materially rewritten theorem-style result requires both lines after proof items and immediately before `\end{proof}`:
 
 ```tex
 \hlt{Structural Commentary}: <proof architecture or dependency>.\\
@@ -201,6 +238,8 @@ Under `inline-strict`:
 - Inventory every retained display and record its exact exception.
 
 Prefer inline formulas, but preserve readability through notation and semantic sentences. Use `\limits` on bounded/indexed large operators (`\sum`, `\prod`, `\coprod`, `\bigoplus`, `\bigcup`, `\bigcap`, `\bigsqcup`, `\lim`, `\limsup`, `\liminf`, `\inf`, `\sup`, `\min`, `\max`). Convert arithmetic slash fractions to `\frac{...}{...}` while preserving quotient notation such as `G/H`. Do not use `\quad`/`\qquad` as prose separators or `\text{...}` merely to force prose into math.
+
+`inline-strict` is a local layout preference, not an external mathematical-writing baseline. It must not override statement proportionality, proof clarity, or source fidelity. If inline layout pressure causes added notation, bundled hypotheses, or construction machinery to migrate into a theorem-style statement, simplify the statement first; if the formula is still important, long, or badly broken, use the narrowest documented display exception or switch to the configured less-strict layout mode.
 
 Use deliberate `\\` only between complete semantic units, not inside a sentence/equality chain. Dense prose should separate setup, contrast, construction, consequence, and interpretation, then be re-rendered.
 
@@ -233,9 +272,13 @@ rg -n -i '(Theorem|Proposition|Lemma|Corollary) \\ref\{[^}]+\} (gives|give|yield
 rg -n '\\\[|\\begin\{(displaymath|equation\*?|align\*?|gather\*?|multline\*?)\}|\$\$' <target>
 rg -n '\\begin\{(smallmatrix|matrix|pmatrix|bmatrix|vmatrix|Vmatrix)\}' <target>
 rg -n '\b(Moreover|Furthermore|In addition|Also|In particular)\b' <target>
+rg -n -i '\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$[^%\n.]*\b(for all|for every|for each|there exists|there is a unique)\b|\b(for all|for every|for each|there exists|there is a unique)\b[^%\n.]*\$[^$]*(\\forall|\\exists|\\exists!)[^$]*\$|\b(dummy parameter)\b' <target>
+rg -n -i '\\[A-Za-z]+:[^.\n]*,\s*with \$?[A-Z][A-Za-z_0-9]*\\defeq|\$\\exists [^$]*\\ni [^$]*\$ (compact|open)' <target>
 ```
 
-These are review gates, not blind replacements and not evidence that the semantic ledger is complete.
+These are review gates, not blind replacements and not evidence that the semantic ledger is complete. In particular, a prose-quantifier hit may be acceptable when its scope is clear and prose is more readable; a symbolic-quantifier hit may still fail if the symbol is being used as an English-word substitute or makes the sentence harder to parse.
+
+Also manually review every theorem-style statement that spans many source lines before its first conclusion, contains several `Set`, `Let`, `Put`, `Define`, or `Choose` clauses, or exposes construction machinery such as Picard operators, iterates, local boxes, suprema/maxima, or error constants. Confirm each such item is a source-supported reusable part of the result rather than proof scaffolding. If not, simplify the statement and move the machinery into the proof, a method, an example, or a separate source-supported proposition.
 
 At scope completion:
 

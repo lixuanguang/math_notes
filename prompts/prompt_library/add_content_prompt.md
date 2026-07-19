@@ -61,9 +61,11 @@ Final-quality loop for every inserted or touched environment:
 1. Apply the complete canonical row workflow and Sections 5.1-5.5 of `prompts/alignment_requirements.md` to each new or materially touched block.
 2. Treat SOURCE_MATERIAL as the hard support boundary. Formalize and complete what the source plus earlier repository results support; do not invent missing hypotheses, examples, proof steps, convergence claims, complexity bounds, or implementation details.
 3. Re-read the source block, the LaTeX preamble, each statement item, and each proof item separately. The final block must be self-contained at the local level, source-supported, itemized only when semantically needed, and proof-complete when written as a theorem-style result.
-4. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
-5. Run the standard gates on each active planned target file after its current edits and run `git diff --check`. If `BUILD: yes`, build and inspect edited line ranges for overfull/underfull warnings; if `BUILD: no`, report that this visual check was intentionally skipped.
-6. Fix every current-edit gate hit and distinguish genuinely pre-existing hits in the report. Do not leave a block that would require a later targeted-refinement pass just to reach canonical quality.
+4. Keep theorem-style statements source-proportional. Do not move proof scaffolding, Picard iteration machinery, local construction constants, or proof-only error estimates into the statement unless the source presents them as reusable conclusions.
+5. Run the semantic deduplication and bundled-data ordering checks from `prompts/alignment_requirements.md`: no adjacent clause may repeat the same quantifier, scope, hypothesis, induction assumption, or conclusion in both prose and notation, and no map may use a derived domain before that domain is defined.
+6. Use source-supported compact local notation when it removes repeated setup or repairs layout. If layout still fails, follow the repair order in Section 5.5 before retaining any display exception.
+7. Run the standard gates on each active planned target file after its current edits and run `git diff --check`. If `BUILD: yes`, build and inspect edited line ranges for overfull/underfull warnings; if `BUILD: no`, report that this visual check was intentionally skipped.
+8. Fix every current-edit gate hit and distinguish genuinely pre-existing hits in the report. Do not leave a block that would require a later targeted-refinement pass just to reach canonical quality.
 
 Classify the sources first:
 1. Contents or outline only: do not edit. Give a concise coverage and placement audit.
@@ -101,7 +103,7 @@ Algorithms:
 
 Canonical quality reminders:
 1. Do not over-expand beyond the provided material, but do not leave rough transcription when the source supports a clean formal block.
-2. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 directly, especially self-contained theorem-style and method preambles, factored setup, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
+2. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 directly, especially source-proportional theorem-style statements, self-contained theorem-style and method preambles, factored setup, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
 3. For methods, enumerate only actual executable solving steps. Cases, definitions, summaries, and interpretation stay in prose or formulas.
 4. `prompts/prompt_library/formalize_content.md` is for later wider-scope review and build verification, not for rescuing rough new blocks from this prompt.
 

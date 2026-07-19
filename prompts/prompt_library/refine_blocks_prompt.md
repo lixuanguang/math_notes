@@ -23,7 +23,7 @@ Safety:
 5. If the target block changes unexpectedly, stop and report the conflict.
 
 Refinement standard:
-1. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 to the target block: explicit-formal-notation-succinct rewriting, self-contained preambles, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
+1. Apply `prompts/alignment_requirements.md` Sections 5.1-5.5 to the target block: source-proportional theorem-style statements, explicit-formal-notation-succinct rewriting, self-contained preambles, bundled-data ordering, semantic deduplication, semantic enumeration, statement/proof item matching, proof completeness, required commentary, result-reference language, and inline layout.
 2. Keep the target boundary tight. Edit only the named/screenshot-selected block plus necessary local labels, references, notation declarations, or immediately adjacent proof/commentary lines.
 3. Use the proof-segmentation patterns in Section 5.2 for iff directions and equivalent conditions. Do not add lists for setup, interpretation, or label-only scaffolding.
 4. Use compact local notation when it reduces repeated setup or repairs layout, but only when the notation is bound in the block or nearby context.

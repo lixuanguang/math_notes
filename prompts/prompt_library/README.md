@@ -16,6 +16,6 @@ add_content_prompt.md with PASS_MODE: first-pass -> optional add_content_prompt.
 
 For manual screenshot corrections to existing blocks, use `refine_blocks_prompt.md` directly.
 
-Skip any prompt whose work is already settled. For canonical mathematical and layout requirements, read `prompts/alignment_requirements.md`.
+Skip any prompt whose work is already settled. For canonical theorem/proof, mathematical, and layout requirements, read `prompts/alignment_requirements.md`, especially Section 5.0 for the external writing baseline.
 
 When prompt requirements overlap, keep the shared standard in `prompts/alignment_requirements.md` and leave only workflow-specific instructions in the library prompt.
