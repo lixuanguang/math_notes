@@ -8,6 +8,11 @@ Local environment quality is necessary but not sufficient. Apply the relevant ch
 - State the unit's role, main prerequisites, main objects/results, and forward dependencies only when they help placement.
 - Preserve a readable route: notation and definitions before use, examples/checks near anchors, and results after prerequisites.
 
+## Environment granularity
+
+- Review adjacent environments as structural units, not isolated rows. Consolidate a one-sentence formal owner followed immediately by an example, remark, or other explanatory block when the second block only instantiates, paraphrases, or lists elementary cases of the first and has no independent reference, substantial verification, reusable takeaway, or distinct pedagogical job.
+- Keep the formal owner and integrate the dependent material with a brief transition. Remove or update stale labels and references. Do not absorb an independently referenced example, nontrivial computation, boundary test, counterexample, or materially different authority merely to reduce environment count.
+
 ## Source provenance and coverage
 
 For `CONTENT_POLICY: source-grounded`, maintain a source-to-target ledger. Give every source block an exact identifier, type, target owner, provenance (`source-stated`, `source-derived`, or `repo-derived`), and status: `covered`, `partial`, `missing`, `misplaced`, `unsupported`, `needs-later-file`, `needs-new-environment-or-figure-type`, or `blocked-new-section-or-part`.
