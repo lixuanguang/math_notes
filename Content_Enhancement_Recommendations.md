@@ -12,13 +12,14 @@ Recommendations are not source grounding for current LaTeX content. A later add-
 ### <target path or active scope>
 
 - Status: proposed
+- Domain: <math | quant-finance | fundamental-finance | physics | mixed>
 - Candidate key: `<bibtex-key>`
 - Reference: <authors/editors>, *<title>*, <edition/version if any>, <publisher or journal>, <year>.
 - Identifiers: DOI <...>; ISBN <...>; arXiv <...>; URL <...>.
 - Type: <book | monograph | survey | paper | standard | regulator document | course notes | dataset documentation | other>
 - Local gap/enhancement: <specific subsection/section/part gap this could improve>
 - Fit rationale: <why the source is authoritative and suitable>
-- Usage plan: <theorem/proof enrichment | examples/counterexamples | methods | applied models | figures | notation | historical context | exercises | bibliography expansion only>
+- Usage plan: <theorem/proof enrichment | examples/counterexamples | methods | applied models | empirical studies | valuation cases | figures | notation | historical context | exercises | bibliography expansion only>
 - Duplicate check: `references.bib` checked by title/authors/year/identifier/key; recommendation file checked for duplicates.
 - Search log: searched <venues> on <YYYY-MM-DD> using <terms>.
 ```
