@@ -1,60 +1,128 @@
 \subsection{Lists and Counting Principles}
 
-% Source integration: attached probability chapter screenshots, Section 1.4,
-% on finite sample spaces and counting methods.
+Counting translates structured finite choices into cardinalities.
+In uniform finite probability models, those cardinalities later determine probabilities.
 
-Counting arguments turn structured finite choices into cardinalities. In probability, this is the bridge from a uniform finite sample space to numerical probabilities.
+\begin{definition} \label{def:finite-sets-and-standard-index-sets} \hlt{Finite Sets and Standard Index Sets}\\
+Set $J_0\defeq\emptyset$, and for $n\in\N$ set $J_n\defeq\{1,\ldots,n\}$.
+A set $A$ is \hlt{finite} if it admits a bijection $e:J_n\to A$ with $n\in\N_0$.
+\end{definition}
 
-\begin{definition} \label{def:lists-words-and-product-sets} \hlt{Lists, Words, and Product Sets}
-Let $S_1,\ldots,S_p$ be finite sets.
+\begin{proposition} \label{prop:finite-cardinality-well-defined} \hlt{Finite Cardinality Is Well Defined}\\
+Let $A$ be a set, let $m,n\in\N_0$, and let $e:J_m\to A$ and $g:J_n\to A$ be bijections.
+Then $m=n$.
+Consequently, if $A$ is finite, define $\#A$ as the unique $n\in\N_0$ for which a bijection $J_n\to A$ exists.
+\begin{proof}
+It suffices to prove that a bijection $J_m\to J_n$ forces $m=n$, because $g^{-1}\circ e:J_m\to J_n$ is bijective.
+For $r\in\N$, let $P_r$ assert that a bijection $J_{r-1}\to J_n$, with $n\in\N_0$, can exist only when $r-1=n$.
+We apply Theorem \ref{thm:mathematical-induction}.
+For $r=1$, the domain $J_0$ is empty, so a bijection $J_0\to J_n$ forces $n=0$.
+Assume $P_r$ and let $\varphi:J_r\to J_n$ be bijective.
+Since $J_r\neq\emptyset$, $n\in\N$.
+Put $q\defeq\varphi(r)$.
+The restriction $\varphi|_{J_{r-1}}$ is a bijection $J_{r-1}\to J_n\setminus\{q\}$.
+Define $\rho:J_{n-1}\to J_n\setminus\{q\}$ by $\rho(i)=i$ for $i<q$ and $\rho(i)=i+1$ for $i\geq q$.
+Then $\rho$ is bijective, so $\rho^{-1}\circ\varphi|_{J_{r-1}}:J_{r-1}\to J_{n-1}$ is bijective.
+By $P_r$, $r-1=n-1$, and hence $r=n$.
+Thus $P_{r+1}$ holds, and $(\forall r\in\N)\,P_r$ by induction.\\
+\hlt{Structural Commentary}: Induction removes one matched terminal point from two finite index sets.\\
+\hlt{Key Insight}: A bijection preserves the number of listed positions.\\
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:lists-words-and-product-sets} \hlt{Lists, Words, and Product Sets}\\
+Let $p\in\N$ and let $S_1,\ldots,S_p$ be sets.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item A \hlt{list} of length $p$ with $i$th entry in $S_i$ is an element $(s_1,\ldots,s_p)\in S_1\times\cdots\times S_p$.
-\item If $S_1=\cdots=S_p=S$, a list in $S^p$ may be called a \hlt{word} of length $p$ over the alphabet $S$.
-\item A counting model is \hlt{ordered} when changing the order of the selected objects changes the outcome.
+\item If $S_1=\cdots=S_p=S$, a list in $S^p$ is a \hlt{word} of length $p$ over the alphabet $S$.
+\item A counting model is \hlt{ordered} when its outcomes are lists and coordinate order is retained.
+Thus interchanging two unequal entries produces a different outcome.
 \end{enumerate}
 \end{definition}
 
-\begin{theorem} \label{thm:multiplication-principle-finite-products} \hlt{Multiplication Principle}\\
-Let $p\geq1$ and let $S_1,\ldots,S_p$ be finite sets with $\abs{S_i}=n_i$. Then $\abs{S_1\times\cdots\times S_p}=\prod_{i=1}^{p}n_i$.\\
-Equivalently, a $p$-stage experiment whose $i$th stage has $n_i$ possible choices after every history has $\prod_{i=1}^{p}n_i$ ordered outcomes; in particular, two stages of sizes $m,n$ give $mn$ ordered outcomes.
+\begin{proposition} \label{prop:addition-subtraction-and-division-principles} \hlt{Addition, Subtraction, and Division Principles}\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Addition}: Let $r\in\N$ and let $A_1,\ldots,A_r$ be pairwise disjoint finite sets.
+Then $\bigcup\limits_{i=1}^{r}A_i$ is finite and $\#\bigl(\bigcup\limits_{i=1}^{r}A_i\bigr)=\sum\limits_{i=1}^{r}\#A_i$.
+\item \hlt{Subtraction}: If $A$ is finite and $B\subseteq A$, then $B$ and $A\setminus B$ are finite and $\#(A\setminus B)=\#A-\#B$.
+\item \hlt{Division}: Let $f:Y\to X$ be a surjection between finite sets.
+Suppose its fibers are finite and $d\in\N$ satisfies $(\forall x\in X)\,\#f^{-1}(\{x\})=d$.
+Then $\#Y=d\#X$ and $\#X=\frac{\#Y}{d}$.
+\end{enumerate}
 \begin{proof}
-The case $p=1$ is immediate.\\
-For $p=2$, write $\abs{S_1}=m$ and $\abs{S_2}=n$, and choose enumerations $S_1=\{a_1,\ldots,a_m\}$ and $S_2=\{b_1,\ldots,b_n\}$.\\
-The map $\{1,\ldots,m\}\times\{1,\ldots,n\}\to S_1\times S_2$, $(i,j)\mapsto(a_i,b_j)$, is a bijection, so $\abs{S_1\times S_2}=mn$.\\
-For $p>2$, use induction: $\abs{S_1\times\cdots\times S_p}=\abs{(S_1\times\cdots\times S_{p-1})\times S_p}=(\prod_{i=1}^{p-1}n_i)n_p=\prod_{i=1}^{p}n_i$.\\
-\hlt{Structural Commentary}: Outcomes form a finite product, or a constant-branching tree.\\
-\hlt{Key Insight}: Counts multiply because every history has equally many extensions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $n_i\defeq\#A_i$, choose a bijection $e_i:J_{n_i}\to A_i$, and set $q_0\defeq0$ and $q_k\defeq\sum\limits_{i=1}^{k}n_i$ for $k\in J_r$.
+For $i\in J_r$, set $I_i\defeq\{t\in J_{q_r}:q_{i-1}<t\leq q_i\}$.
+The sets $I_i$ partition $J_{q_r}$.
+For $t\in I_i$, set $e(t)\defeq e_i(t-q_{i-1})$.
+This defines a map $e:J_{q_r}\to\bigcup\limits_{i=1}^{r}A_i$.
+The disjointness of the $A_i$ and the bijectivity of each $e_i$ make $e$ bijective.
+Thus the union is finite and has cardinality $q_r=\sum\limits_{i=1}^{r}\#A_i$.
+\item For $r\in\N$, let $P_r$ assert the claim whenever $\#A=r-1$.
+We apply Theorem \ref{thm:mathematical-induction}.
+If $r=1$, then $A=\emptyset$, so the claim holds.
+Assume $P_r$, let $\#A=r$, choose a bijection $e:J_r\to A$, put $a\defeq e(r)$, and set $A'\defeq A\setminus\{a\}$.
+Then $e|_{J_{r-1}}:J_{r-1}\to A'$ is bijective, so $\#A'=r-1$.
+If $a\in B$, apply $P_r$ to $B\setminus\{a\}\subseteq A'$ and use the disjoint union $B=(B\setminus\{a\})\cup\{a\}$.
+If $a\notin B$, apply $P_r$ to $B\subseteq A'$ and use the disjoint union $A\setminus B=(A'\setminus B)\cup\{a\}$.
+In either case, part (i) proves that both sets are finite and that $\#A=\#B+\#(A\setminus B)$.
+Rearranging proves the asserted formula and completes the induction.
+\item Put $m\defeq\#X$.
+If $m=0$, surjectivity forces $Y=\emptyset$, and both conclusions follow.
+If $m\in\N$, choose a bijection $e:J_m\to X$ and write $x_i\defeq e(i)$.
+The fibers $f^{-1}(\{x_i\})$ are pairwise disjoint and have union $Y$.
+By part (i) and Proposition \ref{prop:finite-sum-basic-laws}, $\#Y=\sum\limits_{i=1}^{m}d=d\sum\limits_{i=1}^{m}1=dm=d\#X$.
+Since $d\neq0$, division gives $\#X=\frac{\#Y}{d}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Explicit listings reduce unions, complements, and fibers to disjoint blocks.\\
+\hlt{Key Insight}: Cardinalities add over disjoint representations.\\
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:multiplication-principle-finite-products} \hlt{Multiplication Principle}\\
+Let $p\in\N$ and let $n_1,\ldots,n_p\in\N_0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Finite products}: If $S_1,\ldots,S_p$ are finite and $(\forall i\in J_p)\,\#S_i=n_i$, then $\#(S_1\times\cdots\times S_p)=\prod\limits_{i=1}^{p}n_i$.
+\item \hlt{Successive choices}: Set $H_0\defeq\{\emptyset\}$.
+Recursively, for $i\in J_p$ and $h\in H_{i-1}$, let $C_i(h)$ be finite with $\#C_i(h)=n_i$, and set $H_i\defeq\{(h,c):h\in H_{i-1},\ c\in C_i(h)\}$.
+Then $H_p$ is finite and $\#H_p=\prod\limits_{i=1}^{p}n_i$.
+\end{enumerate}
+\begin{proof}
+First let $A,B$ be finite.
+If $A=\emptyset$, then $A\times B=\emptyset$.
+Otherwise put $m\defeq\#A$, choose a bijection $a:J_m\to A$, and write $a_i\defeq a(i)$.
+The sets $\{a_i\}\times B$ are pairwise disjoint, each is bijective with $B$, and their union is $A\times B$.
+By Proposition \ref{prop:addition-subtraction-and-division-principles}, $\#(A\times B)=m\#B=\#A\#B$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Apply Theorem \ref{thm:mathematical-induction} to $p$.
+For $p=1$, the map $s\mapsto(s)$ is a bijection $S_1\to S_1^1$, so the formula holds.
+Assume the formula for $p$ factors.
+Flattening the final ordered pair identifies $(S_1\times\cdots\times S_p)\times S_{p+1}$ bijectively with $S_1\times\cdots\times S_{p+1}$.
+The binary identity and the induction hypothesis give $\#(S_1\times\cdots\times S_{p+1})=(\prod\limits_{i=1}^{p}n_i)n_{p+1}=\prod\limits_{i=1}^{p+1}n_i$.
+\item The set $H_0$ is finite with $\#H_0=1$.
+Suppose $H_{i-1}$ is finite.
+If $H_{i-1}=\emptyset$, then $H_i=\emptyset$.
+Otherwise the sets $\{h\}\times C_i(h)$, indexed by $h\in H_{i-1}$, are pairwise disjoint, have cardinality $n_i$, and have union $H_i$.
+By Proposition \ref{prop:addition-subtraction-and-division-principles}, $\#H_i=n_i\#H_{i-1}$ in both cases.
+Applying Theorem \ref{thm:mathematical-induction} to these base and step clauses gives $\#H_p=n_p\cdots n_1=\prod\limits_{i=1}^{p}n_i$.
+\end{enumerate}
+\hlt{Structural Commentary}: Disjoint extension fibers convert each additional choice stage into multiplication.\\
+\hlt{Key Insight}: Uniform branching multiplies the number of histories.\\
 \end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:cards-binary-and-dna-counting} \hlt{Finite Words by the Multiplication Principle}
+\begin{example} \label{ex:cards-binary-and-dna-counting} \hlt{Finite Words by the Multiplication Principle}\\
+By Theorem \ref{thm:multiplication-principle-finite-products}, the following slot counts multiply.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A playing card can be described by a suit and a face value, so there are $4\cdot13=52$ suit-value combinations.
-\item There are $2^8=256$ binary words of length $8$.
-\item A DNA word of length $N$ over the alphabet $\{A,C,G,T\}$ has $4^N$ possible sequences.\\
-A codon of length $3$ therefore has $4^3=64$ possible words.
+\item A playing card is determined by one of $4$ suits and one of $13$ ranks, giving $4\cdot13=52$ cards.
+\item The binary alphabet $\{0,1\}$ has $\#(\{0,1\}^8)=2^8=256$ words of length $8$.
+\item For $N\in\N$, the alphabet $\{A,C,G,T\}$ has $4^N$ words of length $N$; in particular, there are $4^3=64$ codons.
 \end{enumerate}
-\hlt{Key Insight}: Independent slots multiply; word counts grow exponentially with length.
+\hlt{Key Insight}: Independent slots multiply; word counts grow exponentially with length.\\
 \end{example}
-
-\begin{proposition} \label{prop:addition-subtraction-and-division-principles} \hlt{Addition, Subtraction, and Division Principles}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item \hlt{Addition}: if finite sets $A_1,\ldots,A_r$ are pairwise disjoint, then $\abs{\bigcup_{i=1}^{r}A_i}=\sum_{i=1}^{r}\abs{A_i}$.
-\item \hlt{Subtraction}: if $B\subseteq A$ and $A$ is finite, then $\abs{A\setminus B}=\abs{A}-\abs{B}$.
-\item \hlt{Division}: if $f:Y\to X$ is surjective, $X,Y$ are finite, $d\geq1$, and $\abs{f^{-1}(\{x\})}=d$ for every $x\in X$.\\
-Then $\abs{Y}=d\abs{X}$ and $\abs{X}=\abs{Y}/d$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Let $n_i=\abs{A_i}$ and enumerate $A_i=\{a_{i,1},\ldots,a_{i,n_i}\}$. Since the $A_i$ are pairwise disjoint, $(i,k)\mapsto a_{i,k}$ is a bijection $\{(i,k):1\leq i\leq r,\ 1\leq k\leq n_i\}\to\bigcup_{i=1}^{r}A_i$, so $\abs{\bigcup_{i=1}^{r}A_i}=\sum_{i=1}^{r}n_i=\sum_{i=1}^{r}\abs{A_i}$.
-\item Since $A$ is the disjoint union of $B$ and $A\setminus B$, part (i) gives $\abs{A}=\abs{B}+\abs{A\setminus B}$, so $\abs{A\setminus B}=\abs{A}-\abs{B}$.
-\item For $x\neq x'$, $f^{-1}(\{x\})\cap f^{-1}(\{x'\})=\varnothing$, and $Y=\bigcup_{x\in X}f^{-1}(\{x\})$. Thus the fibers partition $Y$, so by (i), $\abs{Y}=\sum_{x\in X}\abs{f^{-1}(\{x\})}=\sum_{x\in X}d=d\abs{X}$; since $d\geq1$, $\abs{X}=\abs{Y}/d$.
-\end{enumerate}
-\hlt{Structural Commentary}: Count parts; quotient equal fibers.\\
-\hlt{Key Insight}: Make representations disjoint, then add their fiber sizes.
-\end{proof}
-\end{proposition}
