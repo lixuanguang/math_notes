@@ -1,0 +1,102 @@
+\subsection{Cardinal Arithmetic}
+
+Throughout this subsection, assume Principle \ref{princ:axiom-of-choice-analysis} and use the cardinal operations from Definition \ref{def:cardinal-comparison-and-arithmetic}.
+
+\begin{proposition} \label{prop:cardinal-arithmetic-reference-laws} \hlt{Cardinal Arithmetic Reference Laws}\\
+Let $\kappa,\lambda,\mu$ be cardinals.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\kappa+\lambda=\lambda+\kappa$ and $\kappa\lambda=\lambda\kappa$.
+\item $\kappa+(\lambda+\mu)=(\kappa+\lambda)+\mu$ and $\kappa(\lambda\mu)=(\kappa\lambda)\mu$.
+\item $\kappa(\lambda+\mu)=\kappa\lambda+\kappa\mu$.
+\item $\kappa^{\lambda+\mu}=\kappa^\lambda\kappa^\mu$, $(\kappa^\lambda)^\mu=\kappa^{\lambda\mu}$, and $(\kappa\lambda)^\mu=\kappa^\mu\lambda^\mu$.
+\end{enumerate}
+\begin{proof}
+Set $A\defeq\{0\}\times\kappa$, $B\defeq\{1\}\times\lambda$, and $C\defeq\{2\}\times\mu$.\\
+The sets are pairwise disjoint, and their coordinate projections are bijections onto $\kappa,\lambda,\mu$, respectively.\\
+Thus $\abs{A}=\kappa$, $\abs{B}=\lambda$, and $\abs{C}=\mu$ by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(ii) and Definition \ref{def:cardinals-as-initial-ordinals}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The identity is a bijection $A\cup B\to B\cup A$. The map $(a,b)\mapsto(b,a)$ is a bijection $A\times B\to B\times A$ with itself as inverse.
+\item The equality $A\cup(B\cup C)=(A\cup B)\cup C$ holds.\\
+The map $(a,(b,c))\mapsto((a,b),c)$ is a bijection $A\times(B\times C)\to(A\times B)\times C$ with inverse $((a,b),c)\mapsto(a,(b,c))$.
+\item The equality $A\times(B\cup C)=(A\times B)\cup(A\times C)$ holds. The union on the right is disjoint because $B\cap C=\emptyset$.
+\item Define $R:A^{B\cup C}\to A^B\times A^C$ by $R(f)\defeq(f|_B,f|_C)$. Its inverse is $R^{-1}(g,h)\defeq g\cup h$; disjointness makes this union a function.\\
+Define $Q:(A^B)^C\to A^{B\times C}$ by $Q(F)(b,c)\defeq F(c)(b)$. Its inverse sends $h$ to $c\mapsto(b\mapsto h(b,c))$. Let $\pi_A(a,b)\defeq a$ and $\pi_B(a,b)\defeq b$.\\
+The map $D:(A\times B)^C\to A^C\times B^C$ defined by $D(h)\defeq(\pi_A\circ h,\pi_B\circ h)$ has inverse $D^{-1}(f,g)(c)\defeq(f(c),g(c))$.
+\end{enumerate}
+Claims (i)--(iv) follow from these set equalities and bijections by Proposition \ref{prop:cardinal-operations-on-representatives}(iii)--(v).\\
+\hlt{Structural Commentary}: Set identities and explicit bijections transport representative arithmetic to cardinal laws.\\
+\hlt{Key Insight}: Restriction, currying, and projections control the exponent laws.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:infinite-cardinal-square-law} \hlt{Infinite Cardinal Square Law}\\
+If $\kappa$ is an infinite cardinal, then $\abs{\kappa\times\kappa}=\kappa$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Induction setup}: For an ordinal $\alpha$, let $P(\alpha)$ mean that, if $\alpha$ is an infinite cardinal, then $\abs{\alpha\times\alpha}=\alpha$.\\
+Fix an ordinal $\kappa$ and assume $(\forall\beta<\kappa)\,P(\beta)$. It suffices by Principle \ref{princ:ordinal-foundations}(ii) to prove $P(\kappa)$.\\
+The assertion $P(\kappa)$ is vacuous unless $\kappa$ is an infinite cardinal, so assume that it is.
+\item \hlt{Well-order construction}: Define $r:\kappa\times\kappa\to\kappa$ by $r(\xi,\eta)\defeq\max\{\xi,\eta\}$.\\
+For $p=(\beta,\beta')$ and $q=(\gamma,\gamma')$ in $\kappa\times\kappa$, declare $p\prec q$ when the first applicable condition holds:
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item $r(p)<r(q)$;
+\item $r(p)=r(q)$ and $\beta<\gamma$;
+\item $r(p)=r(q)$, $\beta=\gamma$, and $\beta'<\gamma'$.
+\end{enumerate}
+Put $p\preceq q$ iff $p=q$ or $p\prec q$. Ordinal comparison makes these clauses exhaustive for distinct pairs.\\
+Comparison by the first differing entry of $(r(p),\beta,\beta')$ is transitive and antisymmetric; hence $\preceq$ is a total order.\\
+If $\emptyset\neq S\subseteq\kappa\times\kappa$, set $R_S\defeq\{r(p):p\in S\}$. The nonempty set $R_S$ has a least element $\rho$ by Principle \ref{princ:ordinal-foundations}(i).\\
+Set $I_S\defeq\{\xi<\kappa:(\exists\eta<\kappa)\,[(\xi,\eta)\in S\land r(\xi,\eta)=\rho]\}$; it is nonempty by the definition of $\rho$.\\
+The minimum $\xi_0\defeq\min I_S$ exists by Principle \ref{princ:ordinal-foundations}(i).\\
+Set $J_S\defeq\{\eta<\kappa:(\xi_0,\eta)\in S\land r(\xi_0,\eta)=\rho\}$; it is nonempty by the definition of $I_S$.\\
+The minimum $\eta_0\defeq\min J_S$ exists by Principle \ref{princ:ordinal-foundations}(i). Then $(\xi_0,\eta_0)$ is least in $S$, so $\preceq$ is a well-order.
+\item \hlt{Ordinal comparison}: Choose an ordinal $\delta$ and an order isomorphism $f:(\delta,\leq)\to(\kappa\times\kappa,\preceq)$ by Principle \ref{princ:ordinal-foundations}(iii).\\
+The map $\xi\mapsto(\xi,0)$ injects $\kappa$ into $\kappa\times\kappa$. Since $\abs{\kappa}=\kappa$ by Definition \ref{def:cardinals-as-initial-ordinals}, $\kappa\leq\abs{\kappa\times\kappa}$ by Proposition \ref{prop:ordinal-cardinality-comparison}.\\
+The equality $\abs{\kappa\times\kappa}=\abs{\delta}$ holds by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(ii), and $\abs{\delta}\leq\delta$ by Definition \ref{def:cardinals-as-initial-ordinals}. Thus $\kappa\leq\abs{\kappa\times\kappa}=\abs{\delta}\leq\delta$.
+\item \hlt{Initial-segment contradiction}: Suppose $\kappa<\delta$. Write $f(\kappa)=(\beta,\beta')$ and set $X\defeq\{q\in\kappa\times\kappa:q\prec(\beta,\beta')\}$.\\
+The restriction $f|_{\kappa}:\kappa\to X$ is bijective because $f$ preserves and reflects order.\\
+Hence $\abs{X}=\kappa$ by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(ii) and Definition \ref{def:cardinals-as-initial-ordinals}.\\
+Set $\alpha\defeq\max\{\beta,\beta'\}+1$. Since $\beta,\beta'<\kappa$ and $\kappa$ is a limit ordinal by Lemma \ref{lem:infinite-cardinals-are-limit-ordinals}, $\alpha<\kappa$.\\
+Set $\lambda\defeq\abs{\alpha}$. Then $\lambda$ is a cardinal, and a bijection $u:\alpha\to\lambda$ exists by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(i).\\
+Since $\lambda\leq\alpha$ by Definition \ref{def:cardinals-as-initial-ordinals}, $\lambda<\kappa$. If $q\in X$, then $r(q)\leq\max\{\beta,\beta'\}<\alpha$, so $q\in\alpha\times\alpha$.\\
+The coordinate map $(\xi,\eta)\mapsto(u(\xi),u(\eta))$ is a bijection $\alpha\times\alpha\to\lambda\times\lambda$, whose restriction to $X$ is injective.\\
+Thus $\kappa=\abs{X}\leq\abs{\lambda\times\lambda}$ by Proposition \ref{prop:ordinal-cardinality-comparison}. If $\lambda$ is finite, then $\abs{\lambda\times\lambda}<\aleph_0\leq\kappa$ by Theorem \ref{thm:multiplication-principle-finite-products} and Proposition \ref{prop:finite-cardinality-and-aleph-zero-agreement}.\\
+If $\lambda$ is infinite, then $\abs{\lambda\times\lambda}=\lambda<\kappa$ by induction hypothesis. In either case, $\abs{\lambda\times\lambda}<\kappa$, contradicting $\kappa\leq\abs{\lambda\times\lambda}$; hence $\kappa\not<\delta$.
+\item \hlt{Conclusion}: Since $\kappa\leq\delta$, $\delta=\kappa$ by Principle \ref{princ:ordinal-foundations}(i). Thus $f$ is a bijection $\kappa\to\kappa\times\kappa$, so $\abs{\kappa\times\kappa}=\kappa$ by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(ii) and Definition \ref{def:cardinals-as-initial-ordinals}. Hence $P(\kappa)$ holds, completing the induction.
+\end{enumerate}
+\hlt{Structural Commentary}: Strong induction bounds max-ranked initial segments by smaller cardinal squares.\\
+\hlt{Key Insight}: Every predecessor lies in a square of smaller cardinality.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:infinite-cardinal-absorption-reference} \hlt{Infinite Cardinal Absorption}\\
+Let $\kappa,\lambda$ be cardinals, and let $\mu\defeq\max\{\kappa,\lambda\}$ be infinite.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\kappa+\lambda=\mu$.
+\item If $\kappa,\lambda>0$, then $\kappa\lambda=\mu$.
+\item $\aleph_0+\aleph_0=\aleph_0\aleph_0=\aleph_0$.
+\end{enumerate}
+\begin{proof}
+The equality $\abs{\mu\times\mu}=\mu$ holds by Theorem \ref{thm:infinite-cardinal-square-law}. Set $U\defeq(\{0\}\times\mu)\cup(\{1\}\times\mu)$.\\
+Since $0,1\in\mu$, the maps $\xi\mapsto(0,\xi)$ and $(i,\xi)\mapsto(\xi,i)$ inject $\mu$ into $U$ and $U$ into $\mu\times\mu$, respectively.\\
+The identities $\abs{U}=\mu+\mu$ and $\abs{\mu}=\mu$ hold by Definition \ref{def:cardinal-comparison-and-arithmetic} and Definition \ref{def:cardinals-as-initial-ordinals}, respectively.\\
+Thus $\mu\leq\mu+\mu\leq\abs{\mu\times\mu}=\mu$ by Proposition \ref{prop:ordinal-cardinality-comparison}, so $\mu+\mu=\mu$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $V\defeq(\{0\}\times\kappa)\cup(\{1\}\times\lambda)$. If $\mu=\kappa$, then $\xi\mapsto(0,\xi)$ injects $\mu$ into $V$; if $\mu=\lambda$, then $\xi\mapsto(1,\xi)$ does so.\\
+The inclusions $\kappa\hookrightarrow\mu$ and $\lambda\hookrightarrow\mu$ induce an injection $V\to U$, and $\abs{V}=\kappa+\lambda$ by Definition \ref{def:cardinal-comparison-and-arithmetic}.\\
+Thus $\mu\leq\kappa+\lambda\leq\mu+\mu=\mu$ by Proposition \ref{prop:ordinal-cardinality-comparison}, so $\kappa+\lambda=\mu$.
+\item Assume $\kappa,\lambda>0$, so $0\in\kappa\cap\lambda$. If $\mu=\kappa$, then $\xi\mapsto(\xi,0)$ injects $\mu$ into $\kappa\times\lambda$; if $\mu=\lambda$, then $\xi\mapsto(0,\xi)$ does so.\\
+The coordinate inclusions induce an injection $\kappa\times\lambda\to\mu\times\mu$, and $\kappa\lambda=\abs{\kappa\times\lambda}$ by Definition \ref{def:cardinal-comparison-and-arithmetic}.\\
+Thus $\mu\leq\kappa\lambda\leq\abs{\mu\times\mu}=\mu$ by Proposition \ref{prop:ordinal-cardinality-comparison}, so $\kappa\lambda=\mu$.
+\item The cardinal $\aleph_0$ is infinite by Proposition \ref{prop:finite-cardinality-and-aleph-zero-agreement}(iv). The asserted equalities follow by (i),(ii) with $\kappa=\lambda=\aleph_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: The square law sandwiches each sum and nonzero product between $\mu$ and itself.\\
+\hlt{Key Insight}: An infinite maximum absorbs every bounded factor.
+\end{proof}
+\end{theorem}
