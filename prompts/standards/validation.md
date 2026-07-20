@@ -6,7 +6,7 @@ Mechanical checks support but never replace block-by-block semantic review.
 
 1. Re-read every changed block against all loaded modules, enforcing notation-first wherever prose adds no meaning or context beyond the notation.
 2. Check affected labels, references, input edges, hierarchy, notation ownership, domain context, source provenance, equation anchors, and typed TODOs.
-3. For every theorem-style statement/proof, make a claim ledger and verify the exact canonical roman, direction, or implication-cycle mapping in `theorems_and_proofs.md`.
+3. For every theorem-style statement/proof, make a claim ledger and verify the exact canonical roman, direction, or implication-cycle mapping in `theorems_and_proofs.md`. Also record the operative-stage count for a single-claim proof and flag four or more stages or a projected half-page proof for long-proof segmentation.
 4. Run `git diff --check` and distinguish pre-existing problems from current edits.
 5. Confirm unrelated work remains untouched.
 
@@ -58,7 +58,7 @@ Use for screenshot/named-block refinement:
 
 Use only with `formalize_content.md`:
 
-1. Keep a compact source-order ledger, including each theorem-style statement claim and its proof item(s); perform one semantic pass, then cold-read changed rows and their affected dependants only.
+1. Keep a compact source-order ledger, including each theorem-style statement claim, its proof item(s), and the operative-stage count of each single-claim proof; perform one semantic pass, then cold-read changed rows and their affected dependants only.
 2. Enforce notation-first, then normalize scoped symbolic quantifiers, limits, fractions, scripts, stacked constructs, and local notation before applying the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. Greedily pack complete adjacent units and justify every retained `\\` by a cap/wrap result or an exact repository exception. Preflight any projected terminal remainder below 20 equivalents as sparse. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
 3. Run applicable search gates and `git diff --check` once after the target file stabilizes.
 4. Select the narrow build owner: the changed numbered file for a subsection, its directory `overview.tex` for a section, or the part-level `overview.tex` for a part. With multiple authorized changed files, use their narrowest common owner within `SCOPE_LEVEL`; never widen to the full document.
@@ -71,7 +71,7 @@ ruby scripts/build_latex_scope.rb <scope-owner.tex> "$scope_build_dir"
 
 The helper copies the current pre-`\begin{document}` portion of `math.tex`, which preserves its document class, options, metadata, and `parts/base.tex` input; it restores path-derived counters and inputs only the selected owner. Do not substitute a hand-maintained preamble or compile `math.tex`. Inspect scope-local errors and warnings near changed lines. Diagnose unresolved external labels or citations statically without widening the build solely to resolve them.
 
-6. Render every page of `scope_inspection.pdf` once and inspect the changed blocks and touched visuals. Inspect every naturally wrapped terminal line: any continuation below 20% of the available text measure, including a lone reference/citation or formula tail, is a concrete defect. Repeat only to repair a defect found in this final pass.
+6. Render every page of `scope_inspection.pdf` once and inspect the changed blocks and touched visuals. For each reviewed single-claim proof, compare the proof body with the available text height: more than half a page or any page crossing requires the outer named operative-stage enumeration, even when the prose is otherwise correct. Inspect every naturally wrapped terminal line: any continuation below 20% of the available text measure, including a lone reference/citation or formula tail, is a concrete defect. Repeat only to repair a defect found in this final pass.
 
 ## Full semantic and render profile
 

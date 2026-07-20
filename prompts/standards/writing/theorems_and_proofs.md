@@ -14,7 +14,7 @@ The theorem-style category is exactly `theorem`, `proposition`, `lemma`, and `co
 
 A conclusion is distinct when it can be removed without changing another conclusion, has a different logical type, or creates a separate proof obligation. Existence, uniqueness, characterization, representation, bound, measurability, convergence, and continuity are different types. Recount after `Moreover`, `Furthermore`, `In addition`, `Also`, conclusion-bearing `In particular`, or an `and` joining different types.
 
-- One conclusion: compact prose, no list.
+- One conclusion: compact prose, no statement list. Keep its proof as compact prose unless the long-proof rule below requires operative-stage items.
 - Two or more independent conclusions or conditions: claim items using the canonical roman list below.
 - Proof segmentation is mandatory, not optional, when the statement has condition/claim items, an iff has two directions, or equivalent conditions are proved by an implication cycle. Every statement item must be covered in source order; no proof item may silently combine, skip, renumber, or reorder claims.
 
@@ -63,6 +63,32 @@ For a statement containing a list of condition claims, and for a proof containin
 ```
 
 Mixed claim types use the same mapping in statement order. For example, if claim (i) is an iff and claim (ii) is direct, the proof items are `\item[$(i)$] ($\Rightarrow$)`, `\item[$(i)$] ($\Leftarrow$)`, and `\item[$(ii)$]`. Use custom claim labels whenever a repeated claim number or implication edge would make the automatic enumerate counter disagree with the statement. Do not use unlabeled prose paragraphs in place of any required item.
+
+### Long single-claim proofs
+
+A single conclusion does not justify a statement list, but a long proof still requires visible operative structure.
+
+- The final scoped render is decisive: if the proof body from `Proof.` through its conclusion occupies more than half of the available text height of one page, or crosses a page boundary, a single uninterrupted proof is prohibited. Segment it with the canonical roman enumeration.
+- Before rendering, treat four or more distinct operative stages, or a projected proof height over half a page, as a segmentation trigger. Typical stages are setup/reduction, construction, verification, comparison or estimate, contradiction, and conclusion.
+- Use three to seven ordered items, each covering a genuine stage and beginning with a concise `\hlt{Stage Name}:` when the stage is not self-evident. Do not make an item for each sentence, cited result, algebraic line, or routine transition.
+- Keep common setup before the list only when every item needs it. Otherwise include setup as the first operative item. Close the list before Structural Commentary and Key Insight.
+- If an operative-stage item needs a subordinate list, use `label=(\alph*)` so its clauses cannot be confused with outer roman stages. Do not let long-proof stage labels masquerade as statement claim numbers: the statement remains unnumbered, and the stages collectively prove its one claim.
+
+Canonical long-proof structure:
+
+```tex
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Setup}: ...
+\item \hlt{Construction}: ...
+\item \hlt{Verification}: ...
+\item \hlt{Conclusion}: ...
+\end{enumerate}
+\hlt{Structural Commentary}: ...\\
+\hlt{Key Insight}: ...
+\end{proof}
+```
 
 ## Proof completeness
 

@@ -46,7 +46,7 @@ Enumeration is semantic, not decorative.
 - Shared setup, motivation, interpretation, caveats, and summaries stay outside lists.
 - Compare drafted items token by token and factor every repeated phrase, domain, tuple, parameter, or hypothesis into the preamble.
 - Use `(i), (ii), ...` for parallel components and claims. For theorem-style claims, iff directions, and equivalent-condition implication cycles, use the exact statement/proof mapping and item syntax in `theorems_and_proofs.md`; generic prose segmentation is not a substitute.
-- Do not create label-only outer items, unnecessary nested lists, or lists for a single direct argument.
+- Do not create label-only outer items or unnecessary nested lists. Keep a short single direct argument as prose; a single-claim proof exceeding half a rendered page is the explicit exception and must use the operative-stage enumeration in `theorems_and_proofs.md`.
 
 Repository list style:
 
