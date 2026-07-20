@@ -6,111 +6,65 @@
 
 Vector spaces encode addition and scalar multiplication. Subspaces, spans, bases, dimension, and coordinates describe how linear structure is generated and measured.
 
-\begin{definition} \label{def:vector-space} \hlt{Vector Space}
-\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.vector_space_axioms}
-\leanok\\
-Let $\mathbb{F}$ be a field. A vector space over $\mathbb{F}$ is a set $\mathcal{V}$ with vector addition and scalar multiplication such that, $\forall\,\mathbf{u}, \mathbf{v}, \mathbf{w} \in \mathcal{V}$ and $\forall\,a,b \in \mathbb{F}$, the following axioms hold:
-\begin{enumerate}[label=\roman*.]
+% TODO(structure): promote an authoritative definition of a field before this subsection; the current owner, Definition \ref{def:ring-commutative-identity-field}, occurs only in Part 7 and therefore cannot supply an earlier prerequisite here.
+
+\begin{definition} \label{def:vector-space} \hlt{Vector Space}\\
+\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.vector_space_axioms}\leanok Let $\mathbb{F}$ be a field. A vector space over $\mathbb{F}$ is a set $\mathcal{V}$ with the following structure.\\
+The operations are $+\colon\mathcal{V}\times\mathcal{V}\to\mathcal{V}$ and scalar multiplication $\mathbb{F}\times\mathcal{V}\to\mathcal{V}$. The scalar action is written $(a,\mathbf{v})\mapsto a\mathbf{v}$, and the axioms are:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item vector addition is commutative: $\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$;
-\item vector addition is associative: $(\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w})$;
-\item there exists an additive identity $\mathbf{0} \in \mathcal{V}$ such that $\mathbf{0} + \mathbf{v} = \mathbf{v}$;
-\item for each $\mathbf{v} \in \mathcal{V}$ there exists an additive inverse $-\mathbf{v} \in \mathcal{V}$ such that $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$;
-\item scalar multiplication has identity: $1\mathbf{v} = \mathbf{v}$;
-\item scalar multiplication is compatible with multiplication in $\mathbb{F}$: $(ab)\mathbf{v} = a(b\mathbf{v})$;
-\item scalar multiplication distributes over vector addition: $a(\mathbf{u} + \mathbf{v}) = a\mathbf{u} + a\mathbf{v}$;
-\item scalar multiplication distributes over addition in $\mathbb{F}$: $(a+b)\mathbf{v} = a\mathbf{v} + b\mathbf{v}$.
+\item $(\forall\,\mathbf{u},\mathbf{v}\in\mathcal{V})\,\mathbf{u}+\mathbf{v}=\mathbf{v}+\mathbf{u}$;
+\item $(\forall\,\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V})\,(\mathbf{u}+\mathbf{v})+\mathbf{w}=\mathbf{u}+(\mathbf{v}+\mathbf{w})$;
+\item an element $\mathbf{0}\in\mathcal{V}$ satisfies $(\forall\,\mathbf{v}\in\mathcal{V})\,\mathbf{0}+\mathbf{v}=\mathbf{v}$;
+\item $(\forall\,\mathbf{v}\in\mathcal{V})(\exists\,\mathbf{w}\in\mathcal{V})\,\mathbf{v}+\mathbf{w}=\mathbf{0}$;
+\item $(\forall\,\mathbf{v}\in\mathcal{V})\,1\mathbf{v}=\mathbf{v}$;
+\item $(\forall\,a,b\in\mathbb{F})(\forall\,\mathbf{v}\in\mathcal{V})\,(ab)\mathbf{v}=a(b\mathbf{v})$;
+\item $(\forall\,a\in\mathbb{F})(\forall\,\mathbf{u},\mathbf{v}\in\mathcal{V})\,a(\mathbf{u}+\mathbf{v})=a\mathbf{u}+a\mathbf{v}$;
+\item $(\forall\,a,b\in\mathbb{F})(\forall\,\mathbf{v}\in\mathcal{V})\,(a+b)\mathbf{v}=a\mathbf{v}+b\mathbf{v}$.
 \end{enumerate}
 If $\mathcal{V}=\{\mathbf{0}\}$, then $\mathcal{V}$ is a \hlt{zero vector space}; otherwise $\mathcal{V}$ is a \hlt{nonzero vector space}.
 \end{definition}
 
 \begin{theorem} \label{thm:basicvectorspaceconsequences} \hlt{Basic Consequences of Vector Space Axioms}\\
-\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.basic_vector_space_consequences}
-\leanok
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then:
+\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.basic_vector_space_consequences}\leanok Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item the additive identity is unique;
-\item for each $\mathbf{v}\in\mathcal{V}$, the additive inverse of $\mathbf{v}$ is unique;
-\item $\forall \mathbf{v}\in\mathcal{V}$, $0\mathbf{v}=\mathbf{0}$;
-\item $\forall a\in\mathbb{F}$, $a\mathbf{0}=\mathbf{0}$;
-\item $\forall a\in\mathbb{F}$ and $\mathbf{v}\in\mathcal{V}$, $a\mathbf{v}=\mathbf{0}\iff a=0$ or $\mathbf{v}=\mathbf{0}$.
+\item each $\mathbf{v}\in\mathcal{V}$ has a unique additive inverse, denoted $-\mathbf{v}$;
+\item $(\forall\,\mathbf{v}\in\mathcal{V})\,0\mathbf{v}=\mathbf{0}$;
+\item $(\forall\,a\in\mathbb{F})\,a\mathbf{0}=\mathbf{0}$;
+\item $(\forall\,a\in\mathbb{F})(\forall\,\mathbf{v}\in\mathcal{V})\,[a\mathbf{v}=\mathbf{0}\iff(a=0\lor\mathbf{v}=\mathbf{0})]$.
 \end{enumerate}
 \begin{proof}
 \leanok
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathbf{0}$ and $\mathbf{0}'$ are additive identities, then $\mathbf{0}=\mathbf{0}+\mathbf{0}'=\mathbf{0}'$.
-\item If $\mathbf{w},\mathbf{w}'$ are additive inverses of $\mathbf{v}$, then $\mathbf{w}=\mathbf{w}+\mathbf{0}=\mathbf{w}+(\mathbf{v}+\mathbf{w}') =(\mathbf{w}+\mathbf{v})+\mathbf{w}'=\mathbf{0}+\mathbf{w}'=\mathbf{w}'$.
-\item $0\mathbf{v}=(0+0)\mathbf{v}=0\mathbf{v}+0\mathbf{v}$; adding $-(0\mathbf{v})$ gives $0\mathbf{v}=\mathbf{0}$.
-\item $a\mathbf{0}=a(\mathbf{0}+\mathbf{0})=a\mathbf{0}+a\mathbf{0}$; adding $-(a\mathbf{0})$ gives $a\mathbf{0}=\mathbf{0}$.
-\item[$(v)$] ($\Rightarrow$) Suppose $a\mathbf{v}=\mathbf{0}$. If $a=0$, the first alternative holds.\\
-If $a\neq0$, then $\mathbf{v}=1\mathbf{v}=(a^{-1}a)\mathbf{v}=a^{-1}(a\mathbf{v})=a^{-1}\mathbf{0}=\mathbf{0}$.
+\item[$(i)$] If $\mathbf{0}$ and $\mathbf{0}'$ are additive identities, then $\mathbf{0}=\mathbf{0}+\mathbf{0}'=\mathbf{0}'$.
+\item[$(ii)$] If $\mathbf{w},\mathbf{w}'$ are additive inverses of $\mathbf{v}$, then $\mathbf{w}=\mathbf{w}+\mathbf{0}=\mathbf{w}+(\mathbf{v}+\mathbf{w}') =(\mathbf{w}+\mathbf{v})+\mathbf{w}'=\mathbf{0}+\mathbf{w}'=\mathbf{w}'$.
+\item[$(iii)$] $0\mathbf{v}=(0+0)\mathbf{v}=0\mathbf{v}+0\mathbf{v}$; adding $-(0\mathbf{v})$ gives $0\mathbf{v}=\mathbf{0}$.
+\item[$(iv)$] $a\mathbf{0}=a(\mathbf{0}+\mathbf{0})=a\mathbf{0}+a\mathbf{0}$; adding $-(a\mathbf{0})$ gives $a\mathbf{0}=\mathbf{0}$.
+\item[$(v)$] ($\Rightarrow$) Suppose $a\mathbf{v}=\mathbf{0}$. If $a=0$, then $a=0\lor\mathbf{v}=\mathbf{0}$. If $a\neq0$, then $\mathbf{v}=1\mathbf{v}=(a^{-1}a)\mathbf{v}=a^{-1}(a\mathbf{v})=a^{-1}\mathbf{0}=\mathbf{0}$ by (iv).
 \item[$(v)$] ($\Leftarrow$) If $a=0$ or $\mathbf{v}=\mathbf{0}$, then (iii) or (iv) gives $a\mathbf{v}=\mathbf{0}$.
 \end{enumerate}
-\hlt{Structural Commentary}: These identities make cancellation, zeros, and inverses available.\\
-\hlt{Key Insight}: The vector space axioms force the zero and inverse behaviour to be rigid, not optional structure.
+\hlt{Structural Commentary}: The proof derives cancellation, zero actions, and inverse uniqueness from the axioms.\\
+\hlt{Key Insight}: Zero and inverse behavior is forced by the axioms.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:negativeoneactsasinverse} \hlt{Scalar Multiplication by $-1$ Is Negation}\\
-\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.negative_one_smul_eq_neg_vector}
-\leanok
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then $\forall\,\mathbf{v}\in\mathcal{V}$, $(-1)\mathbf{v}=-\mathbf{v}$.
+\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.negative_one_smul_eq_neg_vector}\leanok Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. Then $(\forall\,\mathbf{v}\in\mathcal{V})\,(-1)\mathbf{v}=-\mathbf{v}$.
 \begin{proof}
-\leanok
-For $\mathbf{v}\in\mathcal{V}$, $(-1)\mathbf{v} + \mathbf{v} = (-1)\mathbf{v} + 1\mathbf{v} = (-1+1)\mathbf{v} = 0\mathbf{v} = \mathbf{0}$.\\
-Hence $(-1)\mathbf{v}$ is an additive inverse of $\mathbf{v}$; by uniqueness, $(-1)\mathbf{v} = -\mathbf{v}$.\\
-\hlt{Structural Commentary}: Scalar multiplication by $-1$ is exactly the same operation as taking an additive inverse.\\
-\hlt{Key Insight}: Negation is not an extra operation; it is already encoded by the field action.
+\leanok For $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}+(-1)\mathbf{v}=1\mathbf{v}+(-1)\mathbf{v}=(1-1)\mathbf{v}=0\mathbf{v}$.\\
+Hence $\mathbf{v}+(-1)\mathbf{v}=\mathbf{0}$ by Theorem \ref{thm:basicvectorspaceconsequences}(iii).\\
+Thus $(-1)\mathbf{v}=-\mathbf{v}$ by Theorem \ref{thm:basicvectorspaceconsequences}(ii).\\
+\hlt{Structural Commentary}: The proof identifies $(-1)\mathbf{v}$ as the unique additive inverse.\\
+\hlt{Key Insight}: Negation is scalar action by $-1$.
 \end{proof}
 \end{corollary}
 
-\begin{definition} \hlt{Product of Vector Spaces}\\
-Let $\mathcal{V}_1,\ldots,\mathcal{V}_m$ be vector spaces over $\mathbb{F}$. Their \hlt{product} is $\mathcal{V}_1\times\cdots\times\mathcal{V}_m \defeq \{(\mathbf{v}_1,\ldots,\mathbf{v}_m):\mathbf{v}_j\in\mathcal{V}_j\}$.\\
-Addition and scalar multiplication are defined componentwise:\\
-$(\mathbf{u}_1,\ldots,\mathbf{u}_m)+(\mathbf{v}_1,\ldots,\mathbf{v}_m)\defeq(\mathbf{u}_1+\mathbf{v}_1,\ldots,\mathbf{u}_m+\mathbf{v}_m)$ and $a(\mathbf{v}_1,\ldots,\mathbf{v}_m)\defeq(a\mathbf{v}_1,\ldots,a\mathbf{v}_m)$.
-\end{definition}
-
-\begin{proposition} \label{prop:product-vector-space} \hlt{Products Are Vector Spaces}\\
-If $\mathcal{V}_1,\ldots,\mathcal{V}_m$ are vector spaces over $\mathbb{F}$, then $\mathcal{V}_1\times\cdots\times\mathcal{V}_m$ is a vector space under componentwise operations.
-\begin{proof}
-The additive identity is $(\mathbf{0}_1,\ldots,\mathbf{0}_m)$, where $\mathbf{0}_j$ is the zero vector of $\mathcal{V}_j$, and additive inverse of $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is $(-\mathbf{v}_1,\ldots,-\mathbf{v}_m)$. All remaining vector space axioms hold componentwise because they hold in each $\mathcal{V}_j$.\\
-\hlt{Structural Commentary}: Product spaces collect several vector spaces into one coordinatewise structure.\\
-\hlt{Key Insight}: Every vector space axiom reduces to the same axiom in each component.
-\end{proof}
-\end{proposition}
-
-\begin{definition} \label{def:finitely-nonzero-sequence-space} \hlt{Finitely Nonzero Sequence Space}
-\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.FinitelyNonzeroSequenceSpace}
-\leanok\\
-Let $\mathbb{F}^{(\mathbb{N})}$ denote the set of sequences $(x_1,x_2,\ldots)$ in $\mathbb{F}$ with finite support, i.e. $x_j=0$ for all but finitely many $j\in\mathbb{N}$. Addition and scalar multiplication are componentwise.
-\end{definition}
-
-\begin{proposition} \label{prop:finitely-nonzero-sequences-vector-space} \hlt{Finitely Nonzero Sequences Form a Vector Space}\\
-\lean{MathNotes.LinearAlgebra.StructuralLinearAlgebra.VectorSpacesAndLinearStructure.finitely_nonzero_sequences_vector_space}
-\leanok
-The set $\mathbb{F}^{(\mathbb{N})}$ is a vector space over $\mathbb{F}$ under componentwise addition and scalar multiplication.
-\begin{proof}
-\leanok
-The zero sequence has finite support.\\
-If $\mathbf{x},\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$ and $a\in\mathbb{F}$, then $a\mathbf{x}+\mathbf{y}$ can be nonzero only where $\mathbf{x}$ or $\mathbf{y}$ is nonzero, a finite set of indices.\\
-Hence $a\mathbf{x}+\mathbf{y}\in\mathbb{F}^{(\mathbb{N})}$, and the vector space axioms are inherited componentwise from $\mathbb{F}$.\\
-\hlt{Structural Commentary}: Finite support is preserved by finite linear combinations.\\
-\hlt{Key Insight}: Componentwise operations cannot create infinitely many new nonzero entries.
-\end{proof}
-\end{proposition}
-
-\begin{example} \label{ex:roman-vector-space-examples} \hlt{Standard Vector Space Models}\\
-Let $\mathbb{F}$ be a field and let $X$ be a set. The following are $\mathbb{F}$-vector spaces.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\mathbb{F}^{X}=\{f:X\to\mathbb{F}\}$, with pointwise operations
-$(f+g)(x)=f(x)+g(x)$ and $(af)(x)=a f(x)$.
-\item $\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbb{F}^n$, with entrywise operations. For $\mathbb{F}=\mathbb{F}_q$, set $V(n,q):=\mathbb{F}_q^n$.
-\item $\operatorname{Seq}(\mathbb{F})=\mathbb{F}^{\mathbb{N}}$, with componentwise operations; $\mathbb{F}^{(\mathbb{N})}$ is its finite-support subspace.
-\item Over $\mathbb{C}$, the sequence spaces $c_0=\{(z_n):z_n\to0\}$, $\ell^\infty=\{(z_n):\sup_n\abs{z_n}<\infty\}$, and, for $1\leq p<\infty$, $\ell^p=\left\{(z_n):\sum\limits_{n=1}^{\infty}\abs{z_n}^{p}<\infty\right\}$ are vector spaces under componentwise operations; for $\ell^p$, closure under addition follows from Minkowski's inequality.
-\end{enumerate}
-\hlt{Structural Commentary}: The vector-space axioms are independent of finite-dimensional coordinates; function and sequence spaces give canonical infinite-dimensional models.\\
-\hlt{Key Insight}: Pointwise or componentwise operations inherit linear structure from the scalar field.
+\begin{example} \label{ex:roman-vector-space-examples} \hlt{Function-Space Model}\\
+Let $\mathbb{F}$ be a field and let $X$ be a set. Set $\mathbb{F}^{X}\defeq\{f:X\to\mathbb{F}\}$. For $f,g\in\mathbb{F}^{X}$ and $a\in\mathbb{F}$, define $f+g$ and $af$ pointwise.\\
+Thus $(f+g)(x)=f(x)+g(x)$ and $(af)(x)=af(x)$ for $x\in X$. Then $\mathbb{F}^{X}$ is an $\mathbb{F}$-vector space.\\
+Evaluating each axiom at $x\in X$ reduces it to the corresponding field identity, and $\mathbf{0}$ is the constant $0$ function.\\
+\hlt{Key Insight}: Pointwise operations inherit linear structure from the scalar field.
 \end{example}
