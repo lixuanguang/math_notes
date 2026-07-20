@@ -5,8 +5,12 @@ AUTHORITY_REFERENCE = /\b(?:Theorem|Proposition|Lemma|Corollary|Definition|Assum
 BANNED_FORMS = [
   /\b(?:we|one)\s+(?:apply|invoke|use|employ)\b/i,
   /\b(?:apply|invoke|use|employ)(?:ing|s|ed)?\s+(?:(?:Theorem|Proposition|Lemma|Corollary|Definition|Assumption)\b|\([ivx]+\)|(?:part|claim)\b)/i,
-  /(?:(?:Theorem|Proposition|Lemma|Corollary|Definition|Assumption)\s+\\ref\{[^}]+\}|\b(?:part|claim)\s+\([^)]+\)|\$P[^$]*\$)\s+(?:gives?|yields?|shows?|makes?|implies|ensures?|provides?|proves?|applied)\b/i
+  /(?:(?:Theorem|Proposition|Lemma|Corollary|Definition|Assumption)\s+\\ref\{[^}]+\}|\b(?:part|claim)\s+\([^)]+\)|\$P[^$]*\$)\s+(?:shows?|makes?|implies|ensures?|provides?|proves?|applied)\b/i
 ].freeze
+
+# Ban inference uses even when their subject is not a named authority, such as
+# "spanning gives", "uniqueness gives", or "subtraction yields".
+BANNED_INFERENCE_VERBS = /\b(?:give|gives|gave|yield|yields|yielded)\b/i
 
 def source_text(line)
   line.sub(/(?<!\\)%.*\z/, "")
@@ -43,6 +47,10 @@ paths.each do |path|
         next unless line.match?(pattern)
 
         violations << [path, index + 1, "agent/apply/gives-style authority language is forbidden", raw_line.strip]
+      end
+
+      if line.match?(BANNED_INFERENCE_VERBS)
+        violations << [path, index + 1, "give/yield inference language is forbidden in proofs; use a by-clause or direct symbolic step", raw_line.strip]
       end
     end
 
