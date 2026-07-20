@@ -1,0 +1,174 @@
+\subsection{Permutations, Subsets, and Binomial Coefficients}
+
+% Source integration: attached probability chapter screenshots, Section 1.4.2,
+% on permutations, combinations, and multinomial coefficients.
+
+\begin{definition} \label{def:permutations-and-sign} \hlt{Permutations and Sign}\\
+Let $n\in\N_0$. A \hlt{permutation} of $J_n$ is a bijection $\sigma:J_n\to J_n$, and $\mathfrak{S}_n$ denotes the set of all such permutations.\\
+Given $\sigma\in\mathfrak{S}_n$, set $\operatorname{Inv}(\sigma)\defeq\{(j,k)\in J_n^2:j<k,\ \sigma(j)>\sigma(k)\}$ and define its \hlt{sign} by $\sign(\sigma)\defeq(-1)^{\#\operatorname{Inv}(\sigma)}$.
+\end{definition}
+
+\begin{definition} \label{def:factorials-binomial-coefficients} \hlt{Factorials and Binomial Coefficients}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Factorial}: Set $0!\defeq1$ and $n!\defeq\prod\limits_{j=1}^{n}j$ for $n\in\N$.
+\item \hlt{Falling factorial}: Set $(n)_0\defeq1$ for $n\in\N_0$. If $n,r\in\N$ and $r\leq n$, set $(n)_r\defeq\prod\limits_{j=0}^{r-1}(n-j)$.
+\item \hlt{Binomial coefficient}: If $n,r\in\N_0$ and $r\leq n$, set $\binom{n}{r}\defeq\frac{n!}{r!(n-r)!}$; this is read \hlt{$n$ choose $r$}.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:ordered-sampling-with-and-without-replacement} \hlt{Ordered Sampling With and Without Replacement}\\
+Let $n,r\in\N_0$ and let $S$ be finite with $\#S=n$. Set $S^0\defeq\{()\}$ and use $x^0\defeq1$ for $x\in\N_0$.\\
+Define $D_r(S)\defeq\{s=(s_1,\ldots,s_r)\in S^r:(\forall i,j\in J_r)\,[i<j\Rightarrow s_i\neq s_j]\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{With replacement}: The ordered samples form $S^r$, and $\#(S^r)=n^r$.
+\item \hlt{Without replacement}: If $r\leq n$, the ordered samples with distinct entries form $D_r(S)$, and $\#D_r(S)=(n)_r$.
+\item \hlt{Full orderings}: $\#D_n(S)=n!$ and $\#\mathfrak{S}_n=n!$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $r=0$, then $\#S^0=1=n^0$. If $r\in\N$, then $\#S^r=\prod\limits_{k=1}^{r}n=n^r$ by Theorem \ref{thm:multiplication-principle-finite-products}(ii).
+\item Suppose $r\leq n$. If $r=0$, then $D_0(S)=S^0$ and $\#D_0(S)=1=(n)_0$.\\
+Suppose $r\in\N$. At stage $k\in J_r$, an injective prefix $(s_1,\ldots,s_{k-1})$ uses a set of cardinality $k-1$.\\
+The available set $S\setminus\{s_1,\ldots,s_{k-1}\}$ is finite with cardinality $n-k+1$ by Proposition \ref{prop:addition-subtraction-and-division-principles}(ii).\\
+Successive-choice histories flatten bijectively to $D_r(S)$, so $\#D_r(S)=\prod\limits_{k=1}^{r}(n-k+1)=(n)_r$ by Theorem \ref{thm:multiplication-principle-finite-products}(i).
+\item The identity $\#D_n(S)=n!$ holds by (ii). Define $\Phi:\mathfrak{S}_n\to D_n(J_n)$ by $\Phi(\sigma)\defeq(\sigma(i))_{i\in J_n}$.\\
+Given $s\in D_n(J_n)$, the map $i\mapsto s_i$ is injective and its image has cardinality $n$. Its complement in $J_n$ has cardinality $0$ by Proposition \ref{prop:addition-subtraction-and-division-principles}(ii), so the map is surjective.\\
+Thus $s\mapsto(i\mapsto s_i)$ is the inverse of $\Phi$. Hence $\Phi$ is bijective and $\#\mathfrak{S}_n=\#D_n(J_n)=n!$.
+\end{enumerate}
+\hlt{Structural Commentary}: Product counting handles all lists; available-set histories handle injective lists.\\
+\hlt{Key Insight}: Removing used entries decreases each successive choice count by one.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:unordered-samples-binomial-coefficients} \hlt{Unordered Samples Without Replacement}\\
+Let $n,r\in\N_0$ with $r\leq n$, let $S$ be finite with $\#S=n$, and set $\mathcal{P}_r(S)\defeq\{A\subseteq S:\#A=r\}$.\\
+Then $\mathcal{P}_r(S)$ is finite and $\#\mathcal{P}_r(S)=\binom{n}{r}=\frac{(n)_r}{r!}=\frac{n!}{(n-r)!\,r!}$.
+\begin{proof}
+Choose a bijection $e:J_n\to S$. Define $\chi:\mathcal{P}_r(S)\to\{0,1\}^n$ by $\chi(A)_i\defeq1$ when $e(i)\in A$ and $\chi(A)_i\defeq0$ otherwise.\\
+If $A\neq B$, choose $x\in(A\setminus B)\cup(B\setminus A)$ and then choose $i\in J_n$ with $e(i)=x$. Thus $\chi(A)_i\neq\chi(B)_i$, so $\chi$ is injective.\\
+The set $\{0,1\}^n$ is finite by Proposition \ref{prop:ordered-sampling-with-and-without-replacement}(i). Its subset $\chi(\mathcal{P}_r(S))$ is finite by Proposition \ref{prop:addition-subtraction-and-division-principles}(ii).\\
+Hence $\mathcal{P}_r(S)$ is finite because $\chi$ is a bijection onto its image. Define $\pi:D_r(S)\to\mathcal{P}_r(S)$ by $\pi(s_1,\ldots,s_r)\defeq\{s_1,\ldots,s_r\}$.\\
+Given $A\in\mathcal{P}_r(S)$, choose a bijection $f:J_r\to A$. Then $(f(i))_{i\in J_r}\in\pi^{-1}(\{A\})$, so $\pi$ is surjective.\\
+The fiber $\pi^{-1}(\{A\})$ is bijective with $D_r(A)$, so $\#\pi^{-1}(\{A\})=r!$ by Proposition \ref{prop:ordered-sampling-with-and-without-replacement}(iii).\\
+The identity $\#D_r(S)=(n)_r$ holds by Proposition \ref{prop:ordered-sampling-with-and-without-replacement}(ii). The equality $\#D_r(S)=r!\,\#\mathcal{P}_r(S)$ holds by Proposition \ref{prop:addition-subtraction-and-division-principles}(iii).\\
+Therefore $\#\mathcal{P}_r(S)=\frac{(n)_r}{r!}=\frac{n!}{(n-r)!\,r!}=\binom{n}{r}$.\\
+\hlt{Structural Commentary}: Binary encoding proves finiteness; uniform ordering fibers convert ordered samples to subsets.\\
+\hlt{Key Insight}: Each subset has exactly $r!$ ordered listings.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:committee-binomial-coefficient} \hlt{Committees}\\
+Let $C$ be a class of $20$ people. The $3$-person committees form $\mathcal{P}_3(C)$. Thus $\#\mathcal{P}_3(C)=\binom{20}{3}=\frac{20\cdot19\cdot18}{3\cdot2\cdot1}=1140$ by Proposition \ref{prop:unordered-samples-binomial-coefficients}.\\
+\hlt{Key Insight}: A committee is an unordered subset, so permutations of its members are not recounted.
+\end{example}
+
+\begin{proposition} \label{prop:binomial-coefficient-edge-and-symmetry} \hlt{Edge Values and Symmetry}\\
+Let $n,k\in\N_0$ with $k\leq n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Edge values}: $\binom{n}{0}=\binom{n}{n}=1$.
+\item \hlt{Symmetry}: $\binom{n}{k}=\binom{n}{n-k}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Since $0!\defeq1$, $\binom{n}{0}=\frac{n!}{0!\,n!}=1$ and $\binom{n}{n}=\frac{n!}{n!\,0!}=1$.
+\item Since $0\leq n-k\leq n$, $\binom{n}{n-k}=\frac{n!}{(n-k)!\,k!}=\frac{n!}{k!\,(n-k)!}=\binom{n}{k}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Direct factorial simplification proves the edge values and symmetry.\\
+\hlt{Key Insight}: The denominator is invariant under $k\leftrightarrow n-k$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:binomial-theorem-and-subset-count} \hlt{Binomial Theorem and Subset Count}\\
+Let $n\in\N$ and let $a,b\in\C$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Binomial theorem}: $(a+b)^n=\sum\limits_{k=0}^{n}\binom{n}{k}a^kb^{n-k}$.
+\item \hlt{Subset count}: If $S$ is finite with $\#S=n$, then $\mathcal{P}(S)$ is finite and $\#\mathcal{P}(S)=2^n=\sum\limits_{k=0}^{n}\binom{n}{k}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write $(a+b)^n=\prod\limits_{j=1}^{n}(a+b)$. A subset $I\subseteq J_n$ records the factors contributing $a$; the corresponding term is $a^{\#I}b^{n-\#I}$.\\
+For $k\in\{0,\ldots,n\}$, $\#\mathcal{P}_k(J_n)=\binom{n}{k}$ by Proposition \ref{prop:unordered-samples-binomial-coefficients}. Grouping terms by $k=\#I$ proves the identity.
+\item Fix a finite set $S$ with $\#S=n$ and choose a bijection $e:J_n\to S$.\\
+Define $\chi:\mathcal{P}(S)\to\{0,1\}^n$ by $\chi(A)_i\defeq1$ when $e(i)\in A$ and $\chi(A)_i\defeq0$ otherwise.\\
+The inverse sends $v\in\{0,1\}^n$ to $\{e(i):i\in J_n,\ v_i=1\}$, so $\chi$ is bijective.\\
+Hence $\mathcal{P}(S)$ is finite with $\#\mathcal{P}(S)=2^n$ by Proposition \ref{prop:ordered-sampling-with-and-without-replacement}(i).\\
+The sets $\mathcal{P}_0(S),\ldots,\mathcal{P}_n(S)$ are pairwise disjoint with union $\mathcal{P}(S)$. Hence $\#\mathcal{P}(S)=\sum\limits_{k=0}^{n}\#\mathcal{P}_k(S)$ by Proposition \ref{prop:addition-subtraction-and-division-principles}(i).\\
+For $k\in\{0,\ldots,n\}$, $\#\mathcal{P}_k(S)=\binom{n}{k}$ by Proposition \ref{prop:unordered-samples-binomial-coefficients}. Therefore $\#\mathcal{P}(S)=\sum\limits_{k=0}^{n}\binom{n}{k}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Expansion and subset partitioning classify the same binary choices by cardinality.\\
+\hlt{Key Insight}: Choosing the $a$-positions is equivalent to choosing a subset of $J_n$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:multisets-and-multiplicity} \hlt{Multisets}\\
+Let $S$ be a set. A \hlt{multiset on $S$} is a pair $(S_0,m)$ such that
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $S_0\subseteq S$ is the \hlt{underlying set};
+\item $m:S_0\to\N$ is the \hlt{multiplicity function}, and $m(s)$ is the \hlt{multiplicity} of $s\in S_0$;
+\item if $S_0$ is finite, set $E_m\defeq\{(s,j):s\in S_0,\ j\in J_{m(s)}\}$ and define the \hlt{size} by $\lvert m\rvert\defeq\#E_m$.
+\end{enumerate}
+The graph $\{(s,m(s)):s\in S_0\}$ is an equivalent record of $(S_0,m)$.
+\end{definition}
+
+\begin{example} \label{ex:multiset-eigenvalue-bookkeeping} \hlt{Multiset Bookkeeping}\\
+The list $(a,a,b,b,b,c)$ determines the multiset $(S_0,m)$ with $S_0=\{a,b,c\}$, $m(a)=2$, $m(b)=3$, and $m(c)=1$.\\
+The set $E_m$ has $2+3+1=6$ elements, so $\lvert m\rvert=6$. The same bookkeeping records eigenvalues counted with algebraic multiplicity.\\
+\hlt{Key Insight}: A multiset forgets order while retaining the number of occurrences of each element.
+\end{example}
+
+\begin{definition} \label{def:multinomial-coefficients} \hlt{Multinomial Coefficients}\\
+Let $r\in\N$ and let $\mathbf{n}=(n_1,\ldots,n_r)\in\N_0^r$. Set $n\defeq\sum\limits_{i=1}^{r}n_i$ and define $\binom{n}{n_1,\ldots,n_r}\defeq\frac{n!}{n_1!\cdots n_r!}$.
+\end{definition}
+
+\begin{proposition} \label{prop:multinomial-coefficient-count-and-expansion} \hlt{Multinomial Count and Expansion}\\
+Let $r\in\N$, let $\mathbf{n}=(n_1,\ldots,n_r)\in\N_0^r$, and let $x_1,\ldots,x_r\in\C$. Set $n\defeq\sum\limits_{i=1}^{r}n_i$.\\
+Let $\mathcal{M}_{\mathbf{n}}$ be the set of tuples $(A_1,\ldots,A_r)$ of pairwise disjoint subsets of $J_n$ satisfying $\bigcup\limits_{i=1}^{r}A_i=J_n$ and $(\forall i\in J_r)\,\#A_i=n_i$.\\
+Set $K_{r,n}\defeq\{\mathbf{m}=(m_1,\ldots,m_r)\in\N_0^r:\sum\limits_{i=1}^{r}m_i=n\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Multinomial count}: $\#\mathcal{M}_{\mathbf{n}}=\binom{n}{n_1,\ldots,n_r}=\frac{n!}{n_1!\cdots n_r!}$.
+\item \hlt{Multinomial expansion}: $(x_1+\cdots+x_r)^n=\sum\limits_{\mathbf{m}\in K_{r,n}}\binom{n}{m_1,\ldots,m_r}\prod\limits_{i=1}^{r}x_i^{m_i}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $N_0\defeq n$ and $N_j\defeq n-\sum\limits_{i=1}^{j}n_i$ for $j\in J_r$; thus $N_r=0$. After $A_1,\ldots,A_{j-1}$ are chosen, put $R_j\defeq J_n\setminus\bigcup\limits_{i=1}^{j-1}A_i$.\\
+The equality $\#R_1=N_0$ holds directly. If $j\geq2$, then $\#R_j=N_{j-1}$ by Proposition \ref{prop:addition-subtraction-and-division-principles}(i)--(ii).\\
+Since $N_{j-1}=\sum\limits_{i=j}^{r}n_i\geq n_j$, the number of choices for $A_j\in\mathcal{P}_{n_j}(R_j)$ is $\binom{N_{j-1}}{n_j}$ by Proposition \ref{prop:unordered-samples-binomial-coefficients}.\\
+Since $N_r=0$, the successive-choice histories are exactly the elements of $\mathcal{M}_{\mathbf{n}}$. Hence $\#\mathcal{M}_{\mathbf{n}}=\prod\limits_{j=1}^{r}\binom{N_{j-1}}{n_j}$ by Theorem \ref{thm:multiplication-principle-finite-products}(i).\\
+The factorial factors telescope, so $\#\mathcal{M}_{\mathbf{n}}=\prod\limits_{j=1}^{r}\frac{N_{j-1}!}{n_j!\,N_j!}=\frac{n!}{n_1!\cdots n_r!}=\binom{n}{n_1,\ldots,n_r}$.
+\item Expand $(x_1+\cdots+x_r)^n=\prod\limits_{k=1}^{n}(x_1+\cdots+x_r)$. Each term is determined by a function $\phi:J_n\to J_r$ and equals $\prod\limits_{k=1}^{n}x_{\phi(k)}$.\\
+Set $m_i\defeq\#\phi^{-1}(\{i\})$ for $i\in J_r$. Then $\mathbf{m}=(m_1,\ldots,m_r)\in K_{r,n}$. The fibers $(\phi^{-1}(\{1\}),\ldots,\phi^{-1}(\{r\}))$ form an element of $\mathcal{M}_{\mathbf{m}}$.\\
+Conversely, each element of $\mathcal{M}_{\mathbf{m}}$ determines a unique function with those fibers.\\
+Thus the number of terms equal to $\prod\limits_{i=1}^{r}x_i^{m_i}$ is $\binom{n}{m_1,\ldots,m_r}$ by (i). Grouping the terms over $\mathbf{m}\in K_{r,n}$ proves the expansion.
+\end{enumerate}
+\hlt{Structural Commentary}: Successive subset choices count labeled partitions; fiber profiles classify product terms.\\
+\hlt{Key Insight}: Multinomial coefficients count functions with prescribed fiber sizes.
+\end{proof}
+\end{proposition}
+
+\begin{example} \label{ex:multinomial-arrangements-and-pairings} \hlt{Repeated Letters, Committees, and Pairings}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The position sets of the letters in $(\mathrm{A},\mathrm{A},\mathrm{G},\mathrm{G},\mathrm{G},\mathrm{G},\mathrm{C},\mathrm{C},\mathrm{C})$ form a labeled partition of sizes $2,4,3$.\\
+Thus the number of arrangements is $\binom{9}{2,4,3}=\frac{9!}{2!\,4!\,3!}=1260$ by Proposition \ref{prop:multinomial-coefficient-count-and-expansion}(i).
+\item Splitting seven people into labeled subcommittees of sizes $3,2,2$ gives $\binom{7}{3,2,2}=\frac{7!}{3!\,2!\,2!}=210$ assignments by Proposition \ref{prop:multinomial-coefficient-count-and-expansion}(i).
+\item Let $m\in\N$ and let $S$ be finite with $\#S=2m$.\\
+Let $\mathcal{Q}_m(S)$ be the set of pairwise disjoint $m$-element families $\mathcal{A}\subseteq\mathcal{P}_2(S)$ satisfying $\bigcup\mathcal{A}=S$; its elements are the pairings of $S$.\\
+The sets $\mathcal{P}(S)$ and $\mathcal{P}(\mathcal{P}(S))$ are finite by two applications of Proposition \ref{prop:binomial-theorem-and-subset-count}(ii). Hence $\mathcal{Q}_m(S)$ is finite by Proposition \ref{prop:addition-subtraction-and-division-principles}(ii).\\
+Define $q:D_{2m}(S)\to\mathcal{Q}_m(S)$ by $q(s)\defeq\{\{s_{2j-1},s_{2j}\}:j\in J_m\}$. Each $s\in D_{2m}(S)$ lists $S$ exactly once, so $q(s)\in\mathcal{Q}_m(S)$.\\
+Given $\mathcal{A}\in\mathcal{Q}_m(S)$, choose a bijection $p:J_m\to\mathcal{A}$. Choose labels $((a_j,b_j))_{j\in J_m}$ satisfying $(\forall j\in J_m)\,p(j)=\{a_j,b_j\}$.\\
+Then $(a_1,b_1,\ldots,a_m,b_m)\in q^{-1}(\{\mathcal{A}\})$, so $q$ is surjective.\\
+Each pairing has $m!\,2^m$ preimages: the $m$ pairs may be ordered arbitrarily, and the two members of each pair may be interchanged.\\
+The identity $\#D_{2m}(S)=(2m)!$ holds by Proposition \ref{prop:ordered-sampling-with-and-without-replacement}(iii). Therefore the number of pairings is $\frac{(2m)!}{m!\,2^m}$ by Proposition \ref{prop:addition-subtraction-and-division-principles}(iii).
+\end{enumerate}
+\hlt{Key Insight}: Multinomial counts labeled blocks; quotienting symmetries handles unlabeled blocks.
+\end{example}

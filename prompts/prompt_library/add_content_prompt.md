@@ -8,7 +8,7 @@ Goal: inspect supplied screenshots, images, PDFs, papers, or exact files; choose
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | registered domain from prompts/standards/domains/README.md | mixed>
 - TARGET: <exact parts/... path, active-tree cursor, or auto-place from SOURCE_MATERIAL>
 - START_CURSOR: beginning
 - FILE_COVERAGE: changed-and-new
@@ -31,12 +31,12 @@ Load before planning:
 2. `prompts/standards/sources/source_grounding.md`.
 3. `prompts/standards/structure/organization_and_dependencies.md`.
 4. `prompts/standards/structure/collection_quality.md`.
-5. `prompts/standards/writing/mathematical_style.md`.
-6. `prompts/standards/layout/math_layout.md` — mandatory for every inserted/touched LaTeX block, including inline/display and no-overflow rules.
-7. `prompts/standards/validation.md` (full semantic and render profile, applied to all inserted/materially amended rows and affected pages).
-8. `prompts/standards/domains/README.md`, then only the configured or source-ledger domain overlay(s).
+5. `prompts/standards/layout/math_layout.md` — mandatory for every inserted/touched LaTeX block, including inline/display and no-overflow rules.
+6. `prompts/standards/validation.md` (full semantic and render profile, applied to all inserted/materially amended rows and affected pages).
+7. Domain overlays: for one explicit DOMAIN, resolve only its row in `prompts/standards/domains/README.md`; for auto/mixed, read the router and load only source-ledger matches.
 
 After classifying source blocks, load every matching conditional module before planning its LaTeX owner:
+- mathematical prose/definition/result/calculation/notation -> `prompts/standards/writing/mathematical_style.md`;
 - theorem/proof -> `prompts/standards/writing/theorems_and_proofs.md`;
 - method/process/algorithm -> `prompts/standards/writing/methods_and_algorithms.md`;
 - example/counterexample/intuition/remark/motivation/perspective/principle/exercise/qnbank -> `prompts/standards/writing/expository_environments.md`;

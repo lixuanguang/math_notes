@@ -25,7 +25,7 @@ Build a complete source-to-target ledger before editing. For each block record e
 
 Record bibliographic metadata, paper type, domain, target, and an extraction decision for each major component. Inspect the abstract, introduction, main results/methods, figures/tables, discussion/conclusion, and supplements only as needed to identify durable content.
 
-Ingest only material that creates or repairs a durable local owner: a main definition/result, sharp hypothesis, essential example/counterexample, proof architecture, transferable proof/computation method, model, law, derivation, approximation, empirical study, valuation case, central figure/table, notation convention, validation check, or limitation.
+Ingest only material that creates or repairs a durable local owner: a main definition, result, argument, interpretation, textual variant, archival record, specification, algorithm or contract, sharp hypothesis, essential example/counterexample, proof architecture, transferable method, system/process/circuit model, law, derivation, approximation, experiment, benchmark or empirical study, measurement, valuation case, score/performance/artwork analysis, central figure/table, notation convention, validation check, or limitation.
 
 Skip literature reviews, broad background already owned, rhetoric, duplicated preliminaries, routine derivations, exhaustive robustness tables, implementation minutiae, and appendices unless they contain a needed owner, proof, dataset, diagnostic, reproducibility fact, limitation, or visual.
 
@@ -34,9 +34,23 @@ Do not promote an abstract/introduction/discussion assertion into formal content
 Apply the matching domain file:
 
 - **Mathematics:** main definitions/results, exact hypotheses, essential examples/counterexamples, reusable proof architecture; auxiliary lemmas only when reused or the cleanest owner.
+- **Computer science:** abstraction/language/system and version, specification or contract, inputs/outputs/state, algorithm and correctness/complexity basis, implementation/runtime/configuration, dataset/workload/metric, experiment protocol, artifacts, security/privacy assumptions, and limitations.
+- **Linguistics:** language/variety and identifier, data/example status, speaker/corpus/source, transcription and gloss convention, judgment/generalization/analysis, access and ethics, and limitations.
+- **Philosophy:** problem and concepts, position, argument reconstruction, premises/inference/conclusion, objection/reply, source edition/translation, disputed status, and limitations.
+- **Literature:** work/edition/translation and locator, passage or textual feature, interpretation, witness/variant, reception/context, alternative reading, and scope limits.
+- **History:** question/time/place, source type and provenance, archival locator, source criticism, chronology or mechanism, historiography, gaps, and limits.
+- **Political science:** concept/unit/jurisdiction/time, theory/mechanism, cases/data/survey/design, operationalization and identification, ethics/transparency, and limits.
+- **Economics:** model/timing/equilibrium, data series/vintage/units, estimand/identification, welfare/policy/forecast assumptions, code/data availability, and limits.
+- **Chemistry:** identity/nomenclature, quantities/conditions, procedure/yield, characterization/raw data, reaction or mechanism status, computation, safety, and limits.
+- **Materials science and engineering:** composition/batch/form/history, method/specimen, structure/property/performance, instrument/uncertainty, simulation/data, and limits.
+- **Chemical engineering:** boundary/basis/streams/balances, property and reaction models, equipment/flowsheet/simulation, safety, scale, economic/environmental basis, and limits.
+- **Electronic engineering:** device/system/topology, operating regime and conventions, source/datasheet conditions, circuit/model/equations, schematic, calculation/simulation setup, test equipment and loading, measurement uncertainty, requirement/compliance status, and validity limits.
+- **Nuclear science and engineering:** nuclide/reaction, data status and library release, facility/state/model, transport/depletion/dose context, validation and uncertainty, safety/regulatory authority, and limits.
 - **Quantitative finance:** problem/market/model/data/sample, measure/admissibility, objective, pricing/hedging/risk/calibration/backtest method, costs/constraints, benchmark/metric, validation, availability, and limitations.
 - **Fundamental finance:** entity/security/industry, date/currency/basis, data and adjustments, valuation/accounting method, drivers, forecasts/scenarios/sensitivities, risks, conflicts, and fact/estimate/opinion status.
 - **Physics:** system/regime, quantities/units, laws/equations, conditions, approximations, derivation, experiment/simulation, uncertainty, availability, and validity limits.
+- **Music:** work/source/edition, performance/recording identity, exact locator, notation and analytical convention, variants, encoding version, rights, context, and limits.
+- **Fine arts:** object/attribution/date/material/location, evidence authority, observation/interpretation, provenance, image/rights/conservation context, uncertainty, and limits.
 
 ## Environment or figure-type gap protocol
 

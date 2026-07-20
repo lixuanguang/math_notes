@@ -120,9 +120,9 @@ inspect the relevant `overview.tex` and numbered subsection files.
 parts/01_set_theory_logic_foundations/
   01_sets/
   02_logic_and_proofs/
-  03_counting_and_finite_sums/
-  04_relations_orders_and_lattices/
-  05_functions/
+  03_functions/
+  04_counting_and_finite_sums/
+  05_relations_orders_and_lattices/
   06_cardinality_choice_and_infinite_sets/
   07_axiomatic_and_advanced_set_theory/
 

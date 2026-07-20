@@ -7,7 +7,7 @@ The files in this directory are shared requirements, not entry-point prompts. St
 1. Read `prompts/standards/repository_and_scope.md` for every editing workflow.
 2. Inspect the requested target or supplied source and make a block/figure census.
 3. Load only the modules required by that census and the entry point's mandatory list.
-4. When `DOMAIN: auto`, read `prompts/standards/domains/README.md`, classify each affected block, and then read only the matching domain files. With `DOMAIN: mixed`, read each domain file actually represented.
+4. With one explicit `DOMAIN`, resolve only its registry row and load that overlay. With `DOMAIN: auto`, read `prompts/standards/domains/README.md`, classify each affected block, and load only the matches; with `mixed`, load each domain actually represented.
 5. A conditional module becomes mandatory as soon as the workflow touches its subject. For example, touching a theorem and a figure requires both `prompts/standards/writing/theorems_and_proofs.md` and `prompts/standards/layout/figures.md`.
 6. Requirements accumulate. A workflow may narrow scope, sources, batching, or build behavior, but it may not silently weaken an applicable standard.
 7. `external_sources.md` records the research basis and is not normally loaded during editing.
@@ -34,8 +34,8 @@ The files in this directory are shared requirements, not entry-point prompts. St
 
 ## Non-negotiable cross-module rules
 
-- Mathematical succinctness must never hide objects, domains, hypotheses, quantifiers, conclusions, proof obligations, units, dates, source status, or limitations required to interpret a claim.
+- Succinctness must never hide objects, domains, hypotheses, quantifiers, conclusions, proof obligations, interfaces, operating conditions, units, dates, edition or provenance, evidence or authority status, rights context, or limitations required to interpret a claim.
 - Under `MATH_LAYOUT: inline-strict`, the inline/display rules and rendered overflow checks in `prompts/standards/layout/math_layout.md` are mandatory.
 - Only earlier theorem-style results with adequate proofs may serve as mathematical proof authority.
-- Expository, applied, empirical, financial, physical, and visual blocks are not proof authority unless their mathematical consequence is separately stated and proved in a theorem-style environment.
+- Expository, interpretive, textual, historical, empirical, computational, engineering, financial, physical, performance, artistic, and visual blocks are not mathematical proof authority unless their mathematical consequence is separately stated and proved in a theorem-style environment.
 - Preserve unrelated work and the active `parts/` hierarchy.

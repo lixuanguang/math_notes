@@ -1,0 +1,122 @@
+\subsection{Relations Between Sets and Closures}
+
+\begin{definition} \label{def:inverse-and-composition-of-relations} \hlt{Inverse and Composition of Relations}\\
+Let $X,Y,Z$ be sets, let $R\subseteq X\times Y$, and let $S\subseteq Y\times Z$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Inverse}: $R^{-1}\defeq\{(y,x)\in Y\times X:(x,y)\in R\}$.
+\item \hlt{Composition}: $S\circ R\defeq\{(x,z)\in X\times Z:(\exists y\in Y)\,[(x,y)\in R\land(y,z)\in S]\}$.
+\item \hlt{Diagonal}: $\Delta_X\defeq\{(x,x):x\in X\}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:inverse-and-composition-laws} \hlt{Inverse and Composition Laws}\\
+Let $W,X,Y,Z$ be sets. Let $R\subseteq X\times Y$, let $S\subseteq Y\times Z$, and let $T\subseteq Z\times W$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Identity}: $\Delta_Y\circ R=R=R\circ\Delta_X$.
+\item \hlt{Associativity}: $T\circ(S\circ R)=(T\circ S)\circ R$.
+\item \hlt{Involution}: $(R^{-1})^{-1}=R$.
+\item \hlt{Reversal}: $(S\circ R)^{-1}=R^{-1}\circ S^{-1}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] For $(x,y)\in X\times Y$, $(x,y)\in\Delta_Y\circ R\Longleftrightarrow(\exists u\in Y)\,[(x,u)\in R\land u=y]\Longleftrightarrow(x,y)\in R$.\\
+For the right identity, $(x,y)\in R\circ\Delta_X\Longleftrightarrow(\exists v\in X)\,[v=x\land(v,y)\in R]\Longleftrightarrow(x,y)\in R$.
+\item[$(ii)$]$(\Rightarrow)$ Suppose $(x,w)\in T\circ(S\circ R)$. Choose $z\in Z$ with $(x,z)\in S\circ R$ and $(z,w)\in T$.\\
+Choose $y\in Y$ with $(x,y)\in R$ and $(y,z)\in S$. Thus $(y,w)\in T\circ S$ and $(x,w)\in(T\circ S)\circ R$.
+\item[$(ii)$]$(\Leftarrow)$ Suppose $(x,w)\in(T\circ S)\circ R$. Choose $y\in Y$ with $(x,y)\in R$ and $(y,w)\in T\circ S$.\\
+Choose $z\in Z$ with $(y,z)\in S$ and $(z,w)\in T$. Thus $(x,z)\in S\circ R$ and $(x,w)\in T\circ(S\circ R)$.
+\item[$(iii)$] For $(x,y)\in X\times Y$, $(x,y)\in(R^{-1})^{-1}\Longleftrightarrow(y,x)\in R^{-1}\Longleftrightarrow(x,y)\in R$.
+\item[$(iv)$]$(\Rightarrow)$ Suppose $(z,x)\in(S\circ R)^{-1}$. Then $(x,z)\in S\circ R$.\\
+Choose $y\in Y$ with $(x,y)\in R$ and $(y,z)\in S$. Hence $(z,y)\in S^{-1}$ and $(y,x)\in R^{-1}$, so $(z,x)\in R^{-1}\circ S^{-1}$.
+\item[$(iv)$]$(\Leftarrow)$ Suppose $(z,x)\in R^{-1}\circ S^{-1}$. Choose $y\in Y$ with $(z,y)\in S^{-1}$ and $(y,x)\in R^{-1}$.\\
+Then $(y,z)\in S$ and $(x,y)\in R$, so $(x,z)\in S\circ R$ and $(z,x)\in(S\circ R)^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Membership expansion and witness comparison prove the four laws.\\
+\hlt{Key Insight}: Composition records witnesses; inversion reverses their order.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:relation-powers-and-closures} \hlt{Relation Powers and Closures}\\
+Let $X$ be a set and let $R\subseteq X^2$. Set $R^0\defeq\Delta_X$ and $R^{n+1}\defeq R\circ R^n$ for $n\in\N_0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Reflexive closure}: $\operatorname{Ref}(R)\defeq R\cup\Delta_X$.
+\item \hlt{Transitive closure}: $R^+\defeq\bigcup\limits_{n\in\N}R^n$.
+\item \hlt{Reflexive-transitive closure}: $R^*\defeq\bigcup\limits_{n\in\N_0}R^n=\Delta_X\cup R^+$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma} \label{lem:addition-law-for-relation-powers} \hlt{Addition Law for Relation Powers}\\
+Let $X$ be a set and let $R\subseteq X^2$. Then $(\forall m,n\in\N_0)\,R^n\circ R^m=R^{m+n}$.
+\begin{proof} Fix $m\in\N_0$. For $r\in\N$, let $P_r$ assert $R^{r-1}\circ R^m=R^{m+r-1}$.\\
+The identity $R^0\circ R^m=\Delta_X\circ R^m=R^m$ holds by Proposition \ref{prop:inverse-and-composition-laws}(i), so $P_1$ holds.\\
+Assume $P_r$. Then $R^r\circ R^m=R\circ(R^{r-1}\circ R^m)$ by Proposition \ref{prop:inverse-and-composition-laws}(ii) and the recursion.\\
+Hence $R^r\circ R^m=R\circ R^{m+r-1}=R^{m+r}$ by $P_r$ and the recursion, so $P_{r+1}$ holds.\\
+Consequently, $(\forall r\in\N)\,P_r$ by induction. For $n\in\N_0$, take $r=n+1$ to obtain $R^n\circ R^m=R^{m+n}$.\\
+\hlt{Structural Commentary}: Reindexed induction combines the recursive power law with associativity.\\
+\hlt{Key Insight}: Relation composition adds power indices.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:reflexive-and-transitive-closures-are-smallest} \hlt{Minimality of Reflexive and Transitive Closures}\\
+Let $X$ be a set and let $R\subseteq X^2$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Reflexive}: $\operatorname{Ref}(R)$ is the smallest reflexive relation on $X$ containing $R$.
+\item \hlt{Transitive}: $R^+$ is the smallest transitive relation on $X$ containing $R$.
+\item \hlt{Reflexive and transitive}: $R^*$ is the smallest reflexive and transitive relation on $X$ containing $R$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The relation $\operatorname{Ref}(R)$ contains $R$ and $\Delta_X$, so it is reflexive.\\
+If $Q\subseteq X^2$ is reflexive and $R\subseteq Q$, then $\Delta_X\subseteq Q$, whence $\operatorname{Ref}(R)=R\cup\Delta_X\subseteq Q$.
+\item Since $R=R^1$, $R\subseteq R^+$. Suppose $(x,y)\in R^+$ and $(y,z)\in R^+$. Choose $m,n\in\N$ with $(x,y)\in R^m$ and $(y,z)\in R^n$.\\
+Then $(x,z)\in R^{m+n}\subseteq R^+$ by Lemma \ref{lem:addition-law-for-relation-powers}, so $R^+$ is transitive. Let $Q\subseteq X^2$ be transitive with $R\subseteq Q$.\\
+For $n\in\N$, let $P_n$ assert $R^n\subseteq Q$. $P_1$ holds by $R^1=R\subseteq Q$. Assume $P_n$. Then $R^{n+1}=R\circ R^n\subseteq Q\circ Q$ by $R\subseteq Q$ and $P_n$.\\
+Also $Q\circ Q\subseteq Q$ by the transitivity of $Q$, so $P_{n+1}$ holds. Thus $(\forall n\in\N)\,P_n$ by induction, and $R^+\subseteq Q$.
+\item The relation $R^*$ contains $R$ and is reflexive by $R^*=\Delta_X\cup R^+$. Suppose $(x,y)\in R^*$ and $(y,z)\in R^*$.\\
+Choose $m,n\in\N_0$ with $(x,y)\in R^m$ and $(y,z)\in R^n$. Then $(x,z)\in R^{m+n}\subseteq R^*$ by Lemma \ref{lem:addition-law-for-relation-powers}, so $R^*$ is transitive.\\
+If $Q\subseteq X^2$ is reflexive and transitive with $R\subseteq Q$, then $\Delta_X\subseteq Q$ and $R^+\subseteq Q$ by (ii). Thus $R^*=\Delta_X\cup R^+\subseteq Q$.
+\end{enumerate}
+\hlt{Structural Commentary}: Containment, closure, and minimality are verified in parallel.\\
+\hlt{Key Insight}: Closure is generated by diagonal pairs together with finite composites.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:successor-relation-closures} \hlt{Closures of the Successor Relation}\\
+Define $R\subseteq\Z^2$ by $m\,R\,n\Longleftrightarrow n=m+1$. For $k\in\N$, let $P_k$ assert $(\forall m,n\in\Z)\,[m\,R^k\,n\Longleftrightarrow n=m+k]$. $P_1$ holds by the definition of $R$.\\
+Assume $P_k$. For $(m,n)\in\Z^2$, $m\,R^{k+1}\,n\Longleftrightarrow(\exists u\in\Z)\,[u=m+k\land n=u+1]\Longleftrightarrow n=m+k+1$.\\
+Thus $P_{k+1}$ holds, and $(\forall k\in\N)\,P_k$ by induction.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{Ref}(R)=\{(m,n)\in\Z^2:n=m\lor n=m+1\}$.
+\item $R^+=\{(m,n)\in\Z^2:m<n\}$.
+\item $R^*=\{(m,n)\in\Z^2:m\leq n\}$.
+\end{enumerate}
+\hlt{Key Insight}: Finite successor compositions generate the strict and nonstrict integer orders.
+\end{example}
+
+\begin{definition} \label{def:order-isomorphism} \hlt{Order Isomorphism}\\
+Let $(S,\leq_S)$ and $(T,\leq_T)$ be partially ordered sets.\\
+A bijection $f:S\to T$ is an \hlt{order isomorphism} when the following condition holds. $(\forall x,y\in S)\,[x\leq_Sy\Longleftrightarrow f(x)\leq_Tf(y)]$.\\
+The two partially ordered sets are \hlt{order-isomorphic} when such a map exists.
+\end{definition}
+
+\begin{example} \label{ex:basic-order-isomorphisms} \hlt{Basic Order Isomorphisms}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Define $f:\Z\to\{2n:n\in\Z\}$ by $f(n)\defeq2n$. Its inverse is $2n\mapsto n$, so $f$ is bijective.\\
+Moreover, $m\leq n\Longleftrightarrow2m\leq2n$; hence $f$ is an order isomorphism for the usual orders.
+\item Let $X$ be a set and define $c:\mathcal{P}(X)\to\mathcal{P}(X)$ by $c(A)\defeq X\setminus A$. Since $c(c(A))=A$, the map is bijective.\\
+Moreover, $A\subseteq B\Longleftrightarrow c(A)\supseteq c(B)$. Hence $c$ is an order isomorphism from $(\mathcal{P}(X),\subseteq)$ to $(\mathcal{P}(X),\supseteq)$.
+\item Let $(S,\leq)$ be a poset and set $\downarrow s\defeq\{x\in S:x\leq s\}$. Define $\eta:S\to\{\downarrow s:s\in S\}$ by $\eta(s)\defeq\downarrow s$.\\
+If $s\leq t$, then $\downarrow s\subseteq\downarrow t$ by transitivity. If $\downarrow s\subseteq\downarrow t$, then $s\in\downarrow s\subseteq\downarrow t$, so $s\leq t$. Thus $s\leq t\Longleftrightarrow\eta(s)\subseteq\eta(t)$.\\
+If $\eta(s)=\eta(t)$, then $s\leq t$ and $t\leq s$, so $s=t$ by antisymmetry. Thus $\eta$ is injective.\\
+It is surjective by the definition of its codomain, so it is an order isomorphism.
+\end{enumerate}
+\hlt{Key Insight}: Order isomorphisms preserve comparisons while changing their representation.
+\end{example}

@@ -8,7 +8,7 @@ Goal: after formalization, make the notation layer durable, compact, searchable,
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file | notation-list>
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | registered domain from prompts/standards/domains/README.md | mixed>
 - TARGET: <parts/... scope, parts/00_notations, exact notation file, or changed formalization scope>
 - START_CURSOR: <beginning | exact notation file>
 - FILE_COVERAGE: <changed-and-new | tracked-modified | all-active>
@@ -27,7 +27,7 @@ Load before editing:
 2. `prompts/standards/structure/notation_lifecycle.md`.
 3. `prompts/standards/layout/math_layout.md` — notation pages and any first-use repair must still render without overflow.
 4. `prompts/standards/validation.md` (full semantic/render profile, narrowed to notation work).
-5. `prompts/standards/domains/README.md`, then only the configured or notation-ledger domain overlay(s).
+5. Domain overlays: for one explicit DOMAIN, resolve only its row in `prompts/standards/domains/README.md`; for auto/mixed, read the router and load only notation-ledger matches.
 6. Load `prompts/standards/writing/mathematical_style.md` only when a first-use mathematical clause must be repaired.
 
 Coverage:

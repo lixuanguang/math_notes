@@ -2,13 +2,13 @@
 
 ## Objective and authority
 
-Produce a mathematically correct, explicit, formal, notation-aware, succinct, logically ordered, source-honest, and visually sound reference.
+Produce a scholarly and technically correct, explicit, formal where appropriate, notation-aware, succinct, logically ordered, source-honest, and visually sound reference.
 
-Use this editing loop whenever mathematical content is changed:
+Use this editing loop whenever scholarly, mathematical, or technical content is changed:
 
 > Make the content explicit, formalize it, replace repeated boilerplate with readable notation, reuse applicable earlier results, compress without information loss, and verify the rendered result.
 
-Instruction precedence is: the current user request; safety and mathematical correctness; the selected prompt-library entry point and its loaded modules; `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, and active `parts/` content; nearby style. `prompts/alignment_requirements.md` is a compatibility router, not a competing monolithic prompt.
+Instruction precedence is: the current user request; safety, evidence integrity, and mathematical correctness; the selected prompt-library entry point and its loaded modules; `STRUCTURE_MIGRATION_README.md`, `math.tex`, `parts/base.tex`, and active `parts/` content; nearby style. `prompts/alignment_requirements.md` is a compatibility router, not a competing monolithic prompt.
 
 ## Repository ownership
 
@@ -30,7 +30,7 @@ Instruction precedence is: the current user request; safety and mathematical cor
 
 - `MODE`: `edit` unless the entry point or user requests `audit-only`.
 - `SCOPE_LEVEL`: `part`, `section`, `subsection`, or `file`, plus workflow-specific values such as `notation-list`.
-- `DOMAIN`: `auto`, `math`, `quant-finance`, `fundamental-finance`, `physics`, or `mixed`.
+- `DOMAIN`: `auto`, `mixed`, or one registered value from `prompts/standards/domains/README.md`. The router is the single owner of the domain list.
 - `TARGET`: an exact path or unambiguous active-tree cursor.
 - `START_CURSOR`: `beginning` or an exact resume file.
 - `FILE_COVERAGE`:
@@ -52,18 +52,20 @@ Before editing, run `git status --short` and read the structural owners, target 
 
 Preserve all unrelated tracked and untracked work. Do not reset, checkout, restore, revert, clean, delete unrelated files, stage, commit, push, or edit repository-generated PDF/auxiliary files. Use focused patches. Do not overwrite whole content files for a local change. If an overlapping target changes unexpectedly or a patch fails, stop on that file and report the conflict.
 
+`formalize_content.md` supplies the deliberate exception for pre-existing edits inside its exact coverage: those edits may be rewritten or superseded by the canonical formalization unless the user explicitly marks a path, label, or block for preservation. Work from the current file state—never restore a baseline with Git—and preserve all out-of-scope and explicitly protected edits. Record superseded and protected edits in the final report. A concurrent change after the initial census is still an unexpected overlap and must not be overwritten silently.
+
 ## Semantic review protocol
 
 The atomic review unit is a logical environment or figure, not a file, page, grep match, or environment count. For a full formalization or source-intake pass:
 
 1. Traverse active `\input` order.
-2. Build a source-order ledger. A theorem-style statement and its immediately following proof form one row; every other formal environment and figure is its own row.
-3. Record the row's domain, type/label, component or claim count, proof status, required commentary status, figure role where relevant, action, and final page.
+2. Build a source-order ledger. A theorem-style statement and its immediately following proof form one row; every other formal environment and figure is its own row. For fast formalization, keep only row identity/type/domain, proof or commentary status when applicable, and action; expand a row when changed or blocked.
+3. Otherwise record the row's domain, type/label, component or claim count, proof status, required commentary status, figure role where relevant, action, and final page.
 4. Process one row at a time: census; explicitness; formalization; notation; earlier-result reuse; compression; environment choice; domain overlay; layout; verification.
 5. Rewrite the complete affected environment when a defect is semantic. Do not stop at a surface copyedit or at the longer first explicit draft.
 6. Keep patches atomic: normally one row plus its necessary local labels/references.
-7. For long runs, emit a compact checkpoint after each row, such as `[7/18] thm:... — rewritten; 2 claims; proof complete; commentary checked.`
-8. After the first pass, cold-read every row again in source order. Recount components and claims, reread each proof and commentary line, and inspect every affected rendered block.
+7. For long full-profile runs, emit compact checkpoints. Fast formalization uses no per-row checkpoint.
+8. Full-profile runs cold-read every row in source order. Fast formalization cold-reads changed rows and any row whose authority, notation, reference, or placement they affect.
 
 A successful build and clean searches are necessary but not sufficient; completion is semantic.
 

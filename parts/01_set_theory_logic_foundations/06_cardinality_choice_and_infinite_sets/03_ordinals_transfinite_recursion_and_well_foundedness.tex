@@ -1,0 +1,242 @@
+\subsection{Ordinals, Transfinite Recursion, and Well-Foundedness}
+
+\begin{definition} \label{def:ordinals-and-order-types} \hlt{Ordinals and Order Types}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A set $T$ is \hlt{transitive} iff $(\forall x\in T)\,x\subseteq T$.
+\item An \hlt{ordinal} is a transitive set $\alpha$ on which $\in$ is a strict well-order. The relation $\in$ is irreflexive and transitive on $\alpha$, distinct elements are $\in$-comparable, and each nonempty $A\subseteq\alpha$ contains $m$ satisfying $(\forall a\in A)\,a\notin m$.
+\item For ordinals $\alpha,\beta$, write $\alpha<\beta$ iff $\alpha\in\beta$ and $\alpha\leq\beta$ iff $\alpha\subseteq\beta$.
+\item Set $0\defeq\emptyset$. The \hlt{successor} of $\alpha$ is $\alpha+1\defeq\alpha\cup\{\alpha\}$. The \hlt{finite ordinals} are $0$ and its finite iterated successors.\\
+An ordinal is \hlt{infinite} iff it is not finite. It is a \hlt{limit ordinal} iff it is nonzero and is not a successor.
+\item The least infinite ordinal is $\omega$; its elements are the finite ordinals $0,1,2,\ldots$.\\
+If a well-ordered set $(S,\leq_S)$ is order-isomorphic to an ordinal $\delta$ in the sense of Definition \ref{def:order-isomorphism}, then $\delta$ is the \hlt{order type} of $(S,\leq_S)$.
+\end{enumerate}
+\end{definition}
+
+\begin{principle} \label{princ:ordinal-foundations} \hlt{Ordinal Foundation Principles}\\
+The following standard properties of von Neumann ordinals form the ordinal framework used below.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Ordinal comparison}: two ordinals are equal or one belongs to the other, and each nonempty set of ordinals has a least member.
+\item \hlt{Strong transfinite induction}: if $P$ is a property of ordinals satisfying $(\forall\alpha)\,[((\forall\beta<\alpha)\,P(\beta))\Rightarrow P(\alpha)]$, then $(\forall\alpha)\,P(\alpha)$.
+\item \hlt{Order types}: a well-ordered set is order-isomorphic to a unique ordinal.
+\item \hlt{Well-ordering theorem}: under Principle \ref{princ:axiom-of-choice-analysis}, each set admits a well-order and is therefore bijective with an ordinal by (iii).
+\end{enumerate}
+These principles concern ordinal comparison and recursive construction; do not prescribe a particular well-order on an arbitrary set.
+\end{principle}
+
+\begin{definition} \label{def:well-founded-relation} \hlt{Well-Founded Relation}\\
+Let $\prec$ be a relation on a set $X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{predecessor set} of $x\in X$ is $\operatorname{Pred}_{\prec}(x)\defeq\{y\in X:y\prec x\}$.
+\item For $A\subseteq X$, an element $m\in A$ is \hlt{$\prec$-minimal in $A$} iff $\operatorname{Pred}_{\prec}(m)\cap A=\emptyset$.
+\item The relation $\prec$ is \hlt{well-founded} iff $(\forall A\subseteq X)\,[A\neq\emptyset\Rightarrow(\exists m\in A)\,\operatorname{Pred}_{\prec}(m)\cap A=\emptyset]$.
+\end{enumerate}
+Neither totality nor transitivity is required.
+\end{definition}
+
+\begin{theorem} \label{thm:well-founded-induction} \hlt{Well-Founded Induction}\\
+Let $\prec$ be a well-founded relation on $X$, and let $P$ be a property of elements of $X$.\\
+If $(\forall x\in X)\,[((\forall y\in\operatorname{Pred}_{\prec}(x))\,P(y))\Rightarrow P(x)]$, then $(\forall x\in X)\,P(x)$.
+\begin{proof}
+Set $B\defeq\{x\in X:\neg P(x)\}$. Suppose $B\neq\emptyset$, and choose a $\prec$-minimal $b\in B$. If $y\in\operatorname{Pred}_{\prec}(b)$, then $y\notin B$ by minimality.\\
+Thus $(\forall y\in\operatorname{Pred}_{\prec}(b))\,P(y)$. The induction premise gives $P(b)$, contradicting $b\in B$. Hence $B=\emptyset$ and $(\forall x\in X)\,P(x)$.\\
+\hlt{Structural Commentary}: A least-counterexample contradiction applies the induction premise at one minimal failure.\\
+\hlt{Key Insight}: A minimal failure has only successful predecessors.
+\end{proof}
+\end{theorem}
+
+\begin{principle} \label{princ:transfinite-and-well-founded-recursion} \hlt{Transfinite and Well-Founded Recursion}\\
+Recursive values may depend on the full restriction of the desired function to earlier arguments.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Ordinal recursion}: let $\theta$ be an ordinal, and suppose $G(\alpha,g)$ is assigned whenever $\alpha<\theta$ and $\operatorname{dom}g=\alpha$.\\
+Then $(\exists!F)\,[\operatorname{dom}F=\theta\land(\forall\alpha<\theta)\,F(\alpha)=G(\alpha,F|_{\alpha})]$.
+\item \hlt{Well-founded recursion}: let $\prec$ be well-founded on $X$, and suppose $H(x,g)$ is assigned whenever $x\in X$ and $\operatorname{dom}g=\operatorname{Pred}_{\prec}(x)$.\\
+Then $(\exists!F)\,[\operatorname{dom}F=X\land(\forall x\in X)\,F(x)=H(x,F|_{\operatorname{Pred}_{\prec}(x)})]$.
+\end{enumerate}
+In (i), the least disagreement proves uniqueness; in (ii), uniqueness follows by Theorem \ref{thm:well-founded-induction} for the property that two candidates agree.\\
+The rules apply only when the value at an argument depends on values at its predecessors.
+\end{principle}
+
+\begin{definition} \label{def:ordinal-arithmetic} \hlt{Ordinal Arithmetic}\\
+For a set $A$ of ordinals, set $\sup A\defeq\bigcup A$. Fix an ordinal $\alpha$.\\\
+Transfinite recursion in the second argument defines the following operations.\\
+Each limit clause assumes that $\lambda$ is a nonzero limit ordinal.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Addition}: $\alpha+0\defeq\alpha$ and $\alpha+(\beta+1)\defeq(\alpha+\beta)+1$. For a limit $\lambda$, $\alpha+\lambda\defeq\sup\{\alpha+\beta:\beta<\lambda\}$.
+\item \hlt{Multiplication}: $\alpha\cdot0\defeq0$ and $\alpha\cdot(\beta+1)\defeq\alpha\cdot\beta+\alpha$. For a limit $\lambda$, $\alpha\cdot\lambda\defeq\sup\{\alpha\cdot\beta:\beta<\lambda\}$.
+\item \hlt{Exponentiation}: $\alpha^0\defeq1$ and $\alpha^{\beta+1}\defeq\alpha^\beta\cdot\alpha$. For a limit $\lambda$, $\alpha^\lambda\defeq\sup\{\alpha^\beta:\beta<\lambda\}$.
+\end{enumerate}
+The successor clause for addition agrees with Definition \ref{def:ordinals-and-order-types}.
+\end{definition}
+
+\begin{example} \label{ex:ordinal-arithmetic-remembers-order} \hlt{Ordinal Arithmetic Remembers Order}\\
+The limit clauses give $1+\omega=\sup\{1+n:n<\omega\}=\omega$ and $2\cdot\omega=\sup\{2\cdot n:n<\omega\}=\omega$.\\
+The successor clauses give $\omega+1>\omega$ and $\omega\cdot2=\omega+\omega>\omega$. Thus $1+\omega<\omega+1$ and $2\cdot\omega<\omega\cdot2$.\\
+Ordinal addition and multiplication retain the order of concatenation and are not commutative.
+\end{example}
+
+\begin{definition} \label{def:cardinals-as-initial-ordinals} \hlt{Cardinals as Initial Ordinals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item An ordinal $\kappa$ is a \hlt{cardinal}, or \hlt{initial ordinal}, iff $(\forall\beta<\kappa)\,\beta\not\sim_{\#}\kappa$.
+\item If a set $X$ is bijective with an ordinal, its \hlt{cardinality} $\abs{X}$ is the least such ordinal.\\
+The minimum exists by Principle \ref{princ:ordinal-foundations}(i), applied to the nonempty set of candidates no larger than a fixed witness.\\
+Under Principle \ref{princ:axiom-of-choice-analysis}, every set has a cardinality by Principle \ref{princ:ordinal-foundations}(iv).
+\item A cardinal is \hlt{infinite} iff it is not a finite ordinal, and $\aleph_0\defeq\abs{\omega}$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition} \label{def:cofinal-subsets-and-cofinality} \hlt{Cofinal Subsets and Cofinality}\\
+Let $\alpha$ be an ordinal.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A subset $C\subseteq\alpha$ is \hlt{cofinal in $\alpha$}, or \hlt{unbounded in $\alpha$}, iff $(\forall\beta<\alpha)(\exists\gamma\in C)\,\beta\leq\gamma$.
+\item A function $f:\delta\to\alpha$ is \hlt{cofinal} iff $f(\delta)$ is cofinal in $\alpha$.
+\item The \hlt{cofinality} of $\alpha$ is $\operatorname{cf}(\alpha)\defeq\min\{\delta:(\exists f:\delta\to\alpha)(\forall\beta<\alpha)(\exists\xi<\delta)\,\beta\leq f(\xi)\}$.
+\end{enumerate}
+The minimum exists because $\operatorname{id}_{\alpha}$ is cofinal and nonempty sets of ordinals have least elements.\\
+If $\alpha$ is a limit ordinal, then $C$ is cofinal iff $\sup C=\alpha$. Indeed, if $C$ is not cofinal, then some member of $\alpha$ strictly bounds $C$ from above.\\
+Conversely, cofinality above each successor below $\alpha$ forces $\bigcup C=\alpha$. The empty function is cofinal in $0$, while $0\mapsto\alpha$ is cofinal from $1$ to $\alpha+1$. Since an empty range is not cofinal in a successor, $\operatorname{cf}(0)=0$ and $\operatorname{cf}(\alpha+1)=1$.
+\end{definition}
+
+\begin{lemma} \label{lem:nondecreasing-cofinal-witness} \hlt{Nondecreasing Cofinal Witness}\\
+Let $\lambda$ be a nonzero limit ordinal and set $\delta\defeq\operatorname{cf}(\lambda)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The ordinal $\delta$ is nonzero and is a limit ordinal.
+\item There is a cofinal function $f:\delta\to\lambda$ satisfying $(\forall\xi\leq\eta<\delta)\,f(\xi)\leq f(\eta)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose a cofinal function $h:\delta\to\lambda$. Since an empty range is not cofinal in $\lambda$, $\delta\neq0$.\\
+Suppose $\delta=\varepsilon+1$. The restriction $h|_{\varepsilon}$ is not cofinal by the minimality of $\delta$, so $(\exists\beta<\lambda)(\forall\eta<\varepsilon)\,h(\eta)<\beta$.\\
+Set $\rho\defeq\max\{\beta,h(\varepsilon)\}+1$. Since $\lambda$ is a limit ordinal, $\rho<\lambda$ and $(\forall\eta<\delta)\,h(\eta)<\rho$, contradicting the cofinality of $h$. QED.
+\item For $\xi<\delta$, set $f(\xi)\defeq\sup\{h(\eta):\eta\leq\xi\}$. Since $\xi+1<\delta$, range of $h|_{\xi+1}$ is not cofinal and is bounded below $\lambda$; hence $f(\xi)<\lambda$.\\
+If $\xi\leq\eta<\delta$, then the set defining $f(\xi)$ is contained in the set defining $f(\eta)$, so $f(\xi)\leq f(\eta)$.\\
+Finally, $h(\xi)\leq f(\xi)$ for $\xi<\delta$, and therefore $f$ is cofinal.
+\end{enumerate}
+\hlt{Structural Commentary}: Minimality first excludes successor domains, then successive suprema monotone-ize a cofinal witness.\\
+\hlt{Key Insight}: No proper initial segment of a minimal cofinal domain is cofinal.
+\end{proof}
+\end{lemma}
+
+\begin{definition} \label{def:regular-and-singular-cardinals} \hlt{Regular and Singular Cardinals}\\
+An infinite cardinal $\kappa$ is \hlt{regular} iff $\operatorname{cf}(\kappa)=\kappa$, and it is \hlt{singular} iff $\operatorname{cf}(\kappa)<\kappa$.
+\end{definition}
+
+\begin{theorem} \label{thm:cofinality-is-a-regular-cardinal} \hlt{Idempotence and Cardinality of Cofinality}\\
+Let $\alpha$ be an ordinal and set $\delta\defeq\operatorname{cf}(\alpha)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{cf}(\delta)=\delta$.
+\item The ordinal $\delta$ is a cardinal.
+\item If $\alpha$ is a nonzero limit ordinal, then $\delta$ is an infinite regular cardinal.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\alpha=0$, then $\delta=0$ and $\operatorname{cf}(\delta)=0$. If $\alpha$ is a successor, then $\delta=1$ and $\operatorname{cf}(\delta)=1$.\\
+Suppose $\alpha$ is a nonzero limit ordinal. A nondecreasing cofinal function $f:\delta\to\alpha$ exists by Lemma \ref{lem:nondecreasing-cofinal-witness}(ii); fix one.\\
+The ordinal $\delta$ is a nonzero limit ordinal by Lemma \ref{lem:nondecreasing-cofinal-witness}(i).\\
+A nondecreasing cofinal function $g:\operatorname{cf}(\delta)\to\delta$ therefore exists by Lemma \ref{lem:nondecreasing-cofinal-witness}(ii).\\
+For $\beta<\alpha$, choose $\xi<\delta$ with $\beta\leq f(\xi)$ and then $\eta<\operatorname{cf}(\delta)$ with $\xi\leq g(\eta)$. Monotonicity gives $\beta\leq f(g(\eta))$, so $f\circ g$ is cofinal in $\alpha$.\\
+The minimality of $\delta$ gives $\delta\leq\operatorname{cf}(\delta)$, while $\operatorname{id}_{\delta}$ gives $\operatorname{cf}(\delta)\leq\delta$. Hence $\operatorname{cf}(\delta)=\delta$.
+\item If $\delta$ were not a cardinal, choose $\beta<\delta$ and a bijection $b:\beta\to\delta$. Its range is cofinal, so $\operatorname{cf}(\delta)\leq\beta<\delta$, contradicting (i). QED.
+\item Let $\alpha$ be a nonzero limit ordinal. The ordinal $\delta$ is nonzero and limit by Lemma \ref{lem:nondecreasing-cofinal-witness}(i), hence it is infinite.\\
+It is a cardinal by (ii), and $\operatorname{cf}(\delta)=\delta$ by (i), so it is regular.
+\end{enumerate}
+\hlt{Structural Commentary}: Composition forbids cofinality from shrinking twice; initiality and regularity then follow.\\
+\hlt{Key Insight}: Minimal cofinal domains are fixed points of cofinality.
+\end{proof}
+\end{theorem}
+
+\begin{example} \label{ex:basic-ordinal-cofinalities} \hlt{Basic Ordinal Cofinalities}\\
+An empty range is bounded. For a nonempty finite range in a limit ordinal, recursion produces a maximum; its successor still lies below the limit and bounds the range. Hence no finite ordinal is a cofinal domain for a nonzero limit ordinal.\\
+The maps $n\mapsto n$, $n\mapsto\omega+n$, and $n\mapsto\omega^n$ from $\omega$ are cofinal in $\omega$, $\omega\cdot2$, and $\omega^\omega$, respectively.\\
+Each target therefore has cofinality at most $\omega$ and no finite cofinality. Thus $\operatorname{cf}(\omega)=\operatorname{cf}(\omega\cdot2)=\operatorname{cf}(\omega^\omega)=\omega$.\\
+Cofinality measures the shortest unbounded approach, not the order type or cardinality of its target.
+\end{example}
+
+\begin{proposition} \label{prop:cardinality-canonical-and-bijection-invariant} \hlt{Cardinality Is Canonical and Bijection-Invariant}\\
+Assume Principle \ref{princ:axiom-of-choice-analysis}. For sets $X,Y$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $X\sim_{\#}\abs{X}$, and $\abs{X}$ is a cardinal.
+\item $\abs{X}=\abs{Y}\Longleftrightarrow X\sim_{\#}Y$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] The relation $X\sim_{\#}\abs{X}$ holds by the definition of $\abs{X}$. If $\beta<\abs{X}$ and $\beta\sim_{\#}\abs{X}$, then $\beta\sim_{\#}X$ by Proposition \ref{prop:cardinality-equivalence-relation}, contradicting the minimality of $\abs{X}$. Thus $\abs{X}$ is a cardinal.
+\item[$(ii)$] ($\Rightarrow$) If $\abs{X}=\abs{Y}$, then $X\sim_{\#}\abs{X}=\abs{Y}\sim_{\#}Y$, so $X\sim_{\#}Y$ by Proposition \ref{prop:cardinality-equivalence-relation}.
+\item[$(ii)$] ($\Leftarrow$) If $X\sim_{\#}Y$, then $(\forall\gamma)\,[\gamma\sim_{\#}X\Longleftrightarrow\gamma\sim_{\#}Y]$ by Proposition \ref{prop:cardinality-equivalence-relation}.\\
+The least ordinals satisfying these equivalent conditions are equal, so $\abs{X}=\abs{Y}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Minimal ordinal representatives identify exactly the equivalence classes of bijections.\\
+\hlt{Key Insight}: Cardinality retains only bijection type.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:finite-cardinality-and-aleph-zero-agreement} \hlt{Finite Cardinality and $\aleph_0$ Agree with Earlier Notation}\\
+Assume Principle \ref{princ:axiom-of-choice-analysis}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $X$ is finite and $\#X=n$, then $\abs{X}=n$, where $n$ on the right is the corresponding finite ordinal.
+\item $\aleph_0=\omega$.
+\item A set $X$ is countable iff $\abs{X}=\aleph_0$.
+\item The cardinal $\aleph_0$ is the least infinite cardinal.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] The unique map $J_0\to0$ is bijective, and for $n\in\N$ the map $q_n:J_n\to n$ defined by $q_n(k)\defeq k-1$ is bijective.\\
+Since $X\sim_{\#}J_n$ and $J_n\sim_{\#}n$, $X\sim_{\#}n$ by Proposition \ref{prop:cardinality-equivalence-relation}.\\
+If $\beta<n$ and $\beta\sim_{\#}X$, choose $m<n$ with $\beta=m$. Then $J_m\sim_{\#}J_n$ by Proposition \ref{prop:cardinality-equivalence-relation}.\\
+Hence $m=n$ by Proposition \ref{prop:finite-cardinality-well-defined}, contradicting $m<n$. Thus $n$ is the least ordinal bijective with $X$, so $\abs{X}=n$.
+\item[$(ii)$] The map $q:\N\to\omega$ defined by $q(k)\defeq k-1$ is bijective. If $\beta<\omega$, choose $m\in\N_0$ with $\beta=m$.\\
+If $\beta\sim_{\#}\omega$, then a witnessing bijection, $q$, and the bijection $J_m\to m$ from (i) compose to give an injection $\N\to J_m$, which is impossible by Proposition \ref{prop:natural-numbers-do-not-inject-into-finite-sets}(i). Hence $\omega$ is the least ordinal bijective with itself, so $\aleph_0=\abs{\omega}=\omega$.
+\item[$(iii)$] ($\Rightarrow$) If $X$ is countable, then $X\sim_{\#}\N$ by Definition \ref{def:finite-countable-uncountable}. Since $\N\sim_{\#}\omega$ by (ii), $X\sim_{\#}\omega$ by Proposition \ref{prop:cardinality-equivalence-relation}.\\
+Hence $\abs{X}=\aleph_0$ by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(ii) and (ii).
+\item[$(iii)$] ($\Leftarrow$) If $\abs{X}=\aleph_0$, then $X\sim_{\#}\omega$ by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(ii) and (ii). Since $\omega\sim_{\#}\N$ by (ii), $X\sim_{\#}\N$ by Proposition \ref{prop:cardinality-equivalence-relation}.\\
+Thus $X$ is countable by Definition \ref{def:finite-countable-uncountable}.
+\item[$(iv)$] An infinite cardinal is an infinite ordinal and is therefore at least the least infinite ordinal $\omega=\aleph_0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Explicit finite and countable bijections identify the initial ordinals selected by cardinality.\\
+\hlt{Key Insight}: General cardinality extends both finite size and countability.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:ordinal-cardinality-comparison} \hlt{Cardinality Comparison by Injections}\\
+Assume Principle \ref{princ:axiom-of-choice-analysis}. For sets $X,Y$, $\abs{X}\leq\abs{Y}$ iff an injection $X\to Y$ exists.
+\begin{proof}
+Set $\kappa\defeq\abs{X}$ and $\lambda\defeq\abs{Y}$. The ordinals $\kappa,\lambda$ are cardinals and satisfy $X\sim_{\#}\kappa$ and $Y\sim_{\#}\lambda$ by Proposition \ref{prop:cardinality-canonical-and-bijection-invariant}(i).\\
+Choose bijections $u:X\to\kappa$ and $v:Y\to\lambda$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\kappa\leq\lambda$, then $v^{-1}\circ\iota\circ u:X\to Y$ is injective, where $\iota:\kappa\hookrightarrow\lambda$ is inclusion.
+\item[$(\Leftarrow)$] Suppose $e:X\to Y$ is injective. Then $v\circ e\circ u^{-1}:\kappa\to\lambda$ is injective.\\
+If $\lambda<\kappa$, inclusion injects $\lambda$ into $\kappa$, so $\kappa\sim_{\#}\lambda$ by Theorem \ref{thm:schroeder-bernstein}.\\
+This contradicts the initiality of $\kappa$. Hence ordinal comparison gives $\kappa\leq\lambda$.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugate an injection to initial ordinals and exclude the reverse strict comparison.\\
+\hlt{Key Insight}: Schroeder--Bernstein prevents a cardinal from embedding into a smaller cardinal.
+\end{proof}
+\end{proposition}
+
+\begin{lemma} \label{lem:infinite-cardinals-are-limit-ordinals} \hlt{Infinite Cardinals Are Limit Ordinals}\\
+Every infinite cardinal is a limit ordinal.
+\begin{proof}
+Suppose an infinite cardinal has the form $\kappa=\alpha+1$. The ordinal $\alpha$ is infinite, otherwise its successor would be finite, so $\omega\leq\alpha$.\\
+Define $f:\alpha+1\to\alpha$ by $f(\alpha)\defeq0$, by $f(\xi)\defeq\xi+1$ when $\xi<\omega$, and by $f(\xi)\defeq\xi$ when $\omega\leq\xi<\alpha$.\\
+The three domain pieces are disjoint, and their images are $\{0\}$, $\omega\setminus\{0\}$, and $\{\xi:\omega\leq\xi<\alpha\}$.\\
+These images are disjoint and cover $\alpha$, so $f$ is bijective. Thus $\kappa$ is bijective with the smaller ordinal $\alpha$, contradicting that $\kappa$ is a cardinal.\\
+Hence $\kappa$ is neither zero nor a successor ordinal, and therefore it is a limit ordinal.\\
+\hlt{Structural Commentary}: A direct folding bijection contradicts initiality for any alleged infinite successor cardinal.\\
+\hlt{Key Insight}: An infinite successor ordinal absorbs its final endpoint.
+\end{proof}
+\end{lemma}

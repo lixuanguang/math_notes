@@ -1,0 +1,72 @@
+\subsection{Ordered Sets, Well-Orders, and Lattices}
+
+\begin{definition} \label{def:ordered-set-vocabulary} \hlt{Ordered Set Vocabulary}\\
+Let $S$ be a set, let $E,C\subseteq S$, and let $\leq_S\subseteq S^2$. Set $x<_Sy\Longleftrightarrow(x\leq_Sy\land x\neq y)$.\\
+The relation $\leq_S$ is \hlt{antisymmetric} iff $(\forall x,y\in S)\,[(x\leq_Sy\land y\leq_Sx)\Rightarrow x=y]$. Elements $x,y\in S$ are \hlt{comparable} iff $x\leq_Sy\lor y\leq_Sx$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Partial order}: The relation $\leq_S$ is a partial order iff it is reflexive, antisymmetric, and transitive. Then $(S,\leq_S)$ is a \hlt{poset}.
+\item \hlt{Total order}: A partial order $\leq_S$ is total iff $(\forall x,y\in S)\,(x\leq_Sy\lor y\leq_Sx)$. Then $(S,\leq_S)$ is an \hlt{ordered set}.
+\item \hlt{Chain}: If $\leq_S$ is a partial order, then $C$ is a chain iff $(\forall x,y\in C)\,(x\leq_Sy\lor y\leq_Sx)$.
+\item \hlt{Well-order}: The order $\leq_S$ well-orders $S$ iff it is total and the following condition holds. $(\forall Y\in\mathcal{P}(S)\setminus\{\emptyset\})(\exists \ell\in Y)(\forall y\in Y)\,\ell\leq_Sy$.
+\item \hlt{Bounds}: An element $\beta\in S$ is an upper bound of $E$ iff $(\forall x\in E)\,x\leq_S\beta$. It is a lower bound iff $(\forall x\in E)\,\beta\leq_Sx$.
+\item \hlt{Boundedness}: The set $E$ is bounded above iff $(\exists \beta\in S)(\forall x\in E)\,x\leq_S\beta$. It is bounded below iff $(\exists \beta\in S)(\forall x\in E)\,\beta\leq_Sx$.
+\item \hlt{Supremum}: For $\alpha\in S$, $\alpha=\sup E$ iff the following two conditions hold.
+\begin{enumerate}[label=\arabic*.]
+\setlength{\itemsep}{0pt}
+\item \hlt{Upper bound}: $(\forall x\in E)\,x\leq_S\alpha$.
+\item \hlt{Upper bound}: $(\forall x\in E)\,x\leq_S\alpha$.
+\item \hlt{Least}: $(\forall \beta\in S)\,[((\forall x\in E)\,x\leq_S\beta)\Rightarrow\alpha\leq_S\beta]$.
+\end{enumerate}
+\item \hlt{Infimum}: For $\gamma\in S$, $\gamma=\inf E$ iff the following two conditions hold.
+\begin{enumerate}[label=\arabic*.]
+\setlength{\itemsep}{0pt}
+\item \hlt{Lower bound}: $(\forall x\in E)\,\gamma\leq_Sx$.
+\item \hlt{Greatest}: $(\forall \beta\in S)\,[((\forall x\in E)\,\beta\leq_Sx)\Rightarrow\beta\leq_S\gamma]$.
+\end{enumerate}
+\item \hlt{Maximal and minimal elements}: An element $m\in E$ is maximal iff $(\nexists x\in E)\,m<_Sx$. It is minimal iff $(\nexists x\in E)\,x<_Sm$.
+\item \hlt{Least-upper-bound property}: This property is characterized by the following condition.\\
+$(\forall A\in\mathcal{P}(S)\setminus\{\emptyset\})\,[((\exists \beta\in S)(\forall x\in A)\,x\leq_S\beta)\Rightarrow(\exists \alpha\in S)\,\alpha=\sup A]$.
+\end{enumerate}
+\end{definition}
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/supremum_infimum_bounds.tikz}
+  \caption{The supremum is the least upper bound, while the infimum is the greatest lower bound.}
+  \label{fig:supremum-infimum-bounds}
+\end{illustrationfigure}
+
+Figure \ref{fig:supremum-infimum-bounds} illustrates the bounds in Definition \ref{def:ordered-set-vocabulary} for a set $A$.\\
+It marks $\inf A$ and $\sup A$ as extremal bounds; Example \ref{ex:supremum-need-not-be-attained} shows that neither need belong to the set.
+
+\begin{example} \label{ex:supremum-need-not-be-attained} \hlt{Suprema Need Not Be Elements}\\
+In $\Q$, set $E_1\defeq\{r\in\Q:r<0\}$ and $E_2\defeq\{r\in\Q:r\leq0\}$. Both sets have supremum $0$, but $0\notin E_1$ and $0\in E_2$.\\
+For $E\defeq\{\frac{1}{n}:n\in\N\}$, $\sup E=1\in E$ and $\inf E=0\notin E$.\\
+\hlt{Key Insight}: An extremal bound need not be an element of the set.
+\end{example}
+
+\begin{theorem} \label{thm:lub-property-gives-glb-property} \hlt{Least Upper Bounds Give Greatest Lower Bounds}\\
+Let $(S,\leq)$ be an ordered set with the least-upper-bound property. Let $B\subseteq S$ be nonempty and bounded below. Then $\inf B$ exists in $S$.
+\begin{proof} Set $L\defeq\{\ell\in S:(\forall b\in B)\,\ell\leq b\}$. $L\neq\emptyset$ by the boundedness of $B$ below. Choose $b_0\in B$.\\
+Then $(\forall \ell\in L)\,\ell\leq b_0$, so $L$ is bounded above. Set $\alpha\defeq\sup L$; it exists in $S$ by the least-upper-bound property.\\
+For $b\in B$, the element $b$ is an upper bound of $L$, so $\alpha\leq b$. Hence $\alpha\in L$. Moreover, $(\forall \ell\in L)\,\ell\leq\alpha$ by $\alpha=\sup L$.\\
+Thus $\alpha$ is the greatest lower bound of $B$, and $\alpha=\inf B$.\\
+\hlt{Structural Commentary}: The proof takes the supremum of the lower-bound set.\\
+\hlt{Key Insight}: A nonempty set bounds its lower bounds above.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:lattice-vocabulary} \hlt{Lattice Vocabulary}\\
+Let $(L,\leq)$ be a partially ordered set.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Meet}: For $x,y\in L$, the meet is $x\wedge y\defeq\inf\{x,y\}$ when this infimum exists.
+\item \hlt{Join}: For $x,y\in L$, the join is $x\vee y\defeq\sup\{x,y\}$ when this supremum exists.
+\item \hlt{Lattice}: The partially ordered set $L$ is a lattice iff the following condition holds. $(\forall x,y\in L)\,[x\wedge y\in L\land x\vee y\in L]$.
+\item \hlt{Complete lattice}: A lattice $L$ is complete iff $(\forall E\subseteq L)\,[\inf E\in L\land\sup E\in L]$.
+\item \hlt{Bottom}: An element $\bot\in L$ is a bottom element iff $(\forall x\in L)\,\bot\leq x$.
+\item \hlt{Top}: An element $\top\in L$ is a top element iff $(\forall x\in L)\,x\leq\top$.
+\item \hlt{Modular lattice}: A lattice $L$ is modular iff the following law holds. $(\forall x,y,z\in L)\,[x\leq z\Rightarrow z\wedge(y\vee x)=(z\wedge y)\vee x]$.
+\end{enumerate}
+\end{definition}

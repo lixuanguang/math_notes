@@ -8,7 +8,7 @@ Goal: identify authoritative books, papers, surveys, standards, or technical sou
 Configuration:
 - MODE: edit
 - SCOPE_LEVEL: <part | section | subsection | file>
-- DOMAIN: <auto | math | quant-finance | fundamental-finance | physics | mixed>
+- DOMAIN: <auto | registered domain from prompts/standards/domains/README.md | mixed>
 - TARGET: <exact parts/... path or unambiguous active scope>
 - START_CURSOR: <beginning | exact resume file>
 - FILE_COVERAGE: <all-active | changed-and-new | tracked-modified | untracked-new>
@@ -22,7 +22,7 @@ Configuration:
 Load before editing:
 1. `prompts/standards/repository_and_scope.md` (repository safety/ownership only; no LaTeX edit is authorized).
 2. `prompts/standards/sources/research_recommendations.md`.
-3. `prompts/standards/domains/README.md`, then only the configured or gap-matched domain overlay(s).
+3. Domain overlays: for one explicit DOMAIN, resolve only its row in `prompts/standards/domains/README.md`; for auto/mixed, read the router and load only gap matches.
 
 Execution:
 1. Run `git status --short`; read `STRUCTURE_MIGRATION_README.md`, `math.tex`, TARGET and nearby active owners, `references.bib`, `references.tex`, and the existing recommendation file.

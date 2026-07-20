@@ -1,0 +1,58 @@
+\subsection{Choice and Zorn's Lemma}
+
+\begin{definition} \label{def:choice-function} \hlt{Choice Function}\\
+Let $\mathcal{F}$ be a family of nonempty sets, let $I$ be a set, and let $(X_i)_{i\in I}$ be an indexed family of nonempty sets.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{choice function} on $\mathcal{F}$ is a map $c:\mathcal{F}\to\bigcup\limits_{F\in\mathcal{F}}F$ satisfying $(\forall F\in\mathcal{F})\,c(F)\in F$.
+\item An \hlt{indexed choice function} for $(X_i)_{i\in I}$ is a map $c:I\to\bigcup\limits_{i\in I}X_i$ satisfying $(\forall i\in I)\,c(i)\in X_i$.
+\end{enumerate}
+\end{definition}
+
+\begin{principle} \label{princ:axiom-of-choice-analysis} \hlt{Choice Principle}\\
+Let $I$ be a set and let $(X_i)_{i\in I}$ be an indexed family of nonempty sets. The axiom of choice asserts $(\exists c:I\to\bigcup\limits_{i\in I}X_i)(\forall i\in I)\,c(i)\in X_i$.\\
+Equivalently, $\prod\limits_{i\in I}X_i\neq\varnothing$. An explicit $c$ proves existence directly; the principle supplies simultaneous choices without an explicit rule.
+\end{principle}
+
+\begin{principle} \label{princ:zorns-lemma} \hlt{Zorn's Lemma}\\
+Let $(P,\leq)$ be a poset with $P\neq\varnothing$. Assume the following chain-upper-bound condition.\\
+$(\forall C\subseteq P)\,[((\forall x,y\in C)\,(x\leq y\lor y\leq x))\Rightarrow(\exists u\in P)(\forall c\in C)\,c\leq u]$. Then $(\exists m\in P)(\forall x\in P)\,(m\leq x\Rightarrow x=m)$.
+\end{principle}
+
+\begin{definition} \label{def:inclusion-and-containment-orders-for-zorn} \hlt{Inclusion and Containment Orders}\\
+Let $\mathcal{F}$ be a family of sets and let $\mathcal{A}\subseteq\mathcal{F}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Inclusion}: for $A,B\in\mathcal{F}$, define $A\leq B$ iff $A\subseteq B$. An upper bound of $\mathcal{A}$ is $U\in\mathcal{F}$ satisfying $(\forall A\in\mathcal{A})\,A\subseteq U$.\\
+An element $M\in\mathcal{F}$ is maximal iff $(\forall B\in\mathcal{F})\,(M\subseteq B\Rightarrow B=M)$.
+\item \hlt{Reverse inclusion}: for $A,B\in\mathcal{F}$, define $A\leq B$ iff $B\subseteq A$. An upper bound of $\mathcal{A}$ is $U\in\mathcal{F}$ satisfying $(\forall A\in\mathcal{A})\,U\subseteq A$.\\
+An element $M\in\mathcal{F}$ is maximal iff $(\forall B\in\mathcal{F})\,(B\subseteq M\Rightarrow B=M)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:inclusion-and-reverse-inclusion-partial-orders} \hlt{Inclusion Orders Are Partial Orders}\\
+Let $\mathcal{F}$ be a family of sets. Inclusion and reverse inclusion are partial orders on $\mathcal{F}$.
+\begin{proof}
+Fix $A,B,C\in\mathcal{F}$. Since $A\subseteq A$, inclusion is reflexive. If $A\subseteq B$ and $B\subseteq C$, then $A\subseteq C$, so inclusion is transitive.\\
+If $A\subseteq B$ and $B\subseteq A$, then $A=B$ by Assumption \ref{assump:set-extensionality}, so inclusion is antisymmetric. Hence inclusion is a partial order.\\
+For reverse inclusion, $A\supseteq A$ gives reflexivity, $A\supseteq B\supseteq C$ gives $A\supseteq C$, and $A\supseteq B\supseteq A$ gives $A=B$ by Assumption \ref{assump:set-extensionality}.\\
+Thus reverse inclusion is also a partial order.\\
+\hlt{Structural Commentary}: Each order law follows from the corresponding containment law and set extensionality.\\
+\hlt{Key Insight}: Reversing containment preserves reflexivity, transitivity, and antisymmetry.
+\end{proof}
+\end{proposition}
+
+\begin{proofmethod} \label{meth:zorn-maximality-template} \hlt{Zorn Maximality Template}\\
+Use this method when the target follows from a candidate admitting no proper admissible extension.\\
+Let $P$ be the set of candidates, and let $\leq$ record admissible extension.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Verify that $P\neq\varnothing$ and that $\leq$ is a partial order on $P$.
+\item Fix a chain $C\subseteq P$, construct $u\in P$, and prove $(\forall p\in C)\,p\leq u$.
+\item Obtain a maximal $m\in P$ by Principle \ref{princ:zorns-lemma}, and prove that maximality forces the target property.
+\end{enumerate}
+For $C\neq\varnothing$, common candidates are $\bigcup\limits_{A\in C}A$ under inclusion and $\bigcap\limits_{A\in C}A$ under reverse inclusion.\\
+Under reverse inclusion, another object contained in every member of $C$ may be necessary.\\
+If $C=\varnothing$, any element of $P$ is an upper bound. In every case, prove $u\in P$; this is the indispensable admissibility check.\\
+\hlt{Key Idea}: A chain bound must preserve every admissibility condition defining the candidate set.
+\end{proofmethod}
