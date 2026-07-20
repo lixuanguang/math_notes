@@ -32,13 +32,15 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 - A sentence ending, a new proof step, or a change from premise to consequence does not by itself justify `\\`. Do not use sentence-per-line, step-per-line, or construction-per-line formatting when adjacent material fits.
 - The repository-mandated title/prose break and the break between Structural Commentary and Key Insight remain exact exceptions. A structural command such as `\item`, `\begin`, or `\end` already starts a new unit and needs no preceding `\\`; in particular, Key Insight has no terminal `\\` immediately before an environment end.
 - Separate dense setup, contrast, construction, consequence, and interpretation into semantic sentences, then render again.
-- A continuation line with fewer than five lexical words, or a comparably short mathematical tail, triggers this repair order:
+- Sparse-continuation threshold: every naturally wrapped continuation line in changed prose, statements, proof items, captions, and commentary must occupy at least 20% of the available text measure. A continuation below 20% is a layout defect even when it consists of a complete reference, citation, formula tail, concluding phrase, or punctuation.
+- Preflight a span expected to wrap by estimating both the full 100-equivalent line and its remainder. A projected terminal remainder of fewer than 20 horizontal character-equivalents is presumptively sparse; compress or rebalance before rendering rather than relying on TeX to leave a short tail.
+- Repair every below-20% continuation in this order:
   1. remove repeated prose or duplicated notation;
-  2. use established notation or bind a readable local abbreviation;
-  3. join a needlessly separated premise and conclusion;
-  4. split genuine logical units at semantic boundaries;
+  2. shorten or reposition its governing clause so the tail returns to the preceding line;
+  3. use established notation, a compact `by`-clause, or a readable local abbreviation;
+  4. rebalance genuinely long material at an earlier semantic boundary so every resulting line is at least 20% occupied;
   5. use a display only when the active mode supplies an independent exception.
-- A sparse tail may remain only when it is an irreducible intentional unit and alternatives reduce clarity.
+- Do not retain a below-20% continuation merely because the wording is grammatically complete or because the tail is a cross-reference. A standalone structural line is not a continuation; title openings, list labels, and mandated commentary lines remain governed by their own rules.
 - Never repair layout by shrinking fonts, changing margins, adding arbitrary spacing, inserting mid-expression breaks, or creating unnecessary displays.
 - If inline pressure introduces extra notation or proof construction into a theorem statement, restore statement proportionality first. If the resulting formula still breaks badly, use the narrowest documented display exception or the configured less-strict mode.
 
@@ -77,7 +79,7 @@ Apply the table recursively to nesting. Inline `\dfrac`, `\cfrac`, cases, and al
 
 No changed equation, inline formula, display, matrix, commentary line, caption, or neighboring text may extend into the margin, collide, or become unreadably dense when rendered. The character budget is preflight, not proof.
 
-After the selected batch stabilizes, build once, inspect overfull/underfull boxes near edited lines, and render each affected page once at readable resolution. Rebuild or rerender only if that final pass finds a current-edit overflow, sparse tail, collision, or unreadable visual; repair the defect and verify the repaired page.
+After the selected batch stabilizes, build once, inspect overfull/underfull boxes near edited lines, and render each affected page once at readable resolution. Inspect the terminal line of every wrapped paragraph and item; any continuation under 20% of the text measure fails validation. Rebuild or rerender only if that final pass finds a current-edit overflow, below-threshold continuation, collision, or unreadable visual; repair the defect and verify the repaired page.
 
 Do not dismiss a small overfull box in edited content as cosmetic. Distinguish and report unrelated pre-existing warnings elsewhere.
 

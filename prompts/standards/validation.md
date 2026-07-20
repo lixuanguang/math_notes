@@ -59,7 +59,7 @@ Use for screenshot/named-block refinement:
 Use only with `formalize_content.md`:
 
 1. Keep a compact source-order ledger, including each theorem-style statement claim and its proof item(s); perform one semantic pass, then cold-read changed rows and their affected dependants only.
-2. Enforce notation-first, then normalize scoped symbolic quantifiers, limits, fractions, scripts, stacked constructs, and local notation before applying the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. Greedily pack complete adjacent units and justify every retained `\\` by a cap/wrap result or an exact repository exception. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
+2. Enforce notation-first, then normalize scoped symbolic quantifiers, limits, fractions, scripts, stacked constructs, and local notation before applying the recursive 100-horizontal-character-equivalent rules to every changed prose–inline-math span. Greedily pack complete adjacent units and justify every retained `\\` by a cap/wrap result or an exact repository exception. Preflight any projected terminal remainder below 20 equivalents as sparse. References/citations count by printed form; flag forced display style and nested vertical stacks for the final render's height/collision check.
 3. Run applicable search gates and `git diff --check` once after the target file stabilizes.
 4. Select the narrow build owner: the changed numbered file for a subsection, its directory `overview.tex` for a section, or the part-level `overview.tex` for a part. With multiple authorized changed files, use their narrowest common owner within `SCOPE_LEVEL`; never widen to the full document.
 5. Run one isolated scope build:
@@ -71,7 +71,7 @@ ruby scripts/build_latex_scope.rb <scope-owner.tex> "$scope_build_dir"
 
 The helper copies the current pre-`\begin{document}` portion of `math.tex`, which preserves its document class, options, metadata, and `parts/base.tex` input; it restores path-derived counters and inputs only the selected owner. Do not substitute a hand-maintained preamble or compile `math.tex`. Inspect scope-local errors and warnings near changed lines. Diagnose unresolved external labels or citations statically without widening the build solely to resolve them.
 
-6. Render every page of `scope_inspection.pdf` once and inspect the changed blocks and touched visuals. Repeat only for a concrete defect found in this final pass.
+6. Render every page of `scope_inspection.pdf` once and inspect the changed blocks and touched visuals. Inspect every naturally wrapped terminal line: any continuation below 20% of the available text measure, including a lone reference/citation or formula tail, is a concrete defect. Repeat only to repair a defect found in this final pass.
 
 ## Full semantic and render profile
 
@@ -87,7 +87,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir="$build_dir" math.t
 
 3. Inspect log warnings for every edited line range.
 4. Render every affected page individually at readable resolution and inspect changed equations, inline formulas, commentary, matrices, figures, captions, page breaks, and surrounding text.
-5. Repeat until there is no avoidable overflow, sparse tail, collision, weak/missing commentary, claim/proof mismatch, underformalized proof, repeated setup, invalid reference, figure overlap, or unreadable scaling.
+5. Repeat until there is no avoidable overflow, continuation below 20% occupancy, collision, weak/missing commentary, claim/proof mismatch, underformalized proof, repeated setup, invalid reference, figure overlap, or unreadable scaling.
 
 Contact sheets and overfull-box scans are navigation aids, not final visual QA.
 

@@ -4,7 +4,7 @@ Last revalidated: 2026-07-19.
 
 This file records the current first-party basis for the segmented standards. It is not normally loaded during editing; the operational requirements live in the other modules.
 
-Repository-specific choices are deliberately stricter than generic publication guidance: `MATH_LAYOUT: inline-strict`, the four-row displayed-matrix threshold, `\limits` preference, sparse-tail repair order, Structural Commentary / Key Insight pair, one-row-at-a-time ledger, and `one-numbered-file` batch default are user standards. External sources do not override them.
+Repository-specific choices are deliberately stricter than generic publication guidance: `MATH_LAYOUT: inline-strict`, the four-row displayed-matrix threshold, `\limits` preference, the 20%-minimum continuation rule and sparse-tail repair order, Structural Commentary / Key Insight pair, one-row-at-a-time ledger, and `one-numbered-file` batch default are user standards. External sources do not override them.
 
 ## Mathematical writing and proofs
 
