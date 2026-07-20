@@ -1,0 +1,171 @@
+\subsection{Models, Constructibility, and Independence}
+
+Fix a classical proof calculus with assumption discharge and double-negation elimination.\\
+Use a $\mathrm{ZFC}$ metatheory formalizing first-order syntax, satisfaction, and the required set constructions.\\
+Write $\mathrm{Ord}$ for the class of ordinals. The theories $\mathrm{ZF}$, $\mathrm{ZFC}$, and their extensions are \hlt{object theories} interpreted in models.\\
+No claim below assumes that the metatheory proves its own consistency.
+
+\begin{definition} \label{def:models-and-inner-models-of-set-theory} \hlt{Models and Inner Models of Set Theory}\\
+Fix an object theory $T$ in the first-order language of membership.\\
+Let $\mathcal{M}=(M,E)$ satisfy $\emptyset\neq M$ and $E\subseteq M\times M$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The structure $\mathcal{M}$ is a \hlt{set model} of $T$ iff $(\forall\sigma\in T)\,\mathcal{M}\models\sigma$.
+\item It is a \hlt{transitive set model} of $T$ iff it is a set model, $(\forall x\in M)\,x\subseteq M$, and $E=\{(x,y)\in M\times M:x\in y\}$.
+\item A class $N$ is an \hlt{inner model} of $T$ iff $(\forall x\in N)\,x\subseteq N$, $\mathrm{Ord}\subseteq N$, and $(N,\in)\models T$.
+\end{enumerate}
+Countability of a set model is an external metatheoretic property.\\
+Thus it can regard one of its sets as uncountable when the relevant bijection is external.
+\end{definition}
+
+\begin{definition} \label{def:relative-consistency-and-independence} \hlt{Relative Consistency, Consistency Strength, and Independence}\\
+Let $T,U$ be object theories in the fixed proof calculus; for a sentence $\varphi$, set $T+\varphi\defeq T\cup\{\varphi\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{Con}(T)$ abbreviates $T\nvdash\bot$.
+\item A \hlt{relative-consistency result from $T$ to $U$} is a metatheoretic proof of $\operatorname{Con}(T)\Longrightarrow\operatorname{Con}(U)$.
+\item The theories $T$ and $U$ are \hlt{equiconsistent} iff $[\operatorname{Con}(T)\Longrightarrow\operatorname{Con}(U)]\land[\operatorname{Con}(U)\Longrightarrow\operatorname{Con}(T)]$ is metatheoretically provable.
+\item The theory $U$ has at least the \hlt{consistency strength} of $T$ iff the metatheory proves $\operatorname{Con}(U)\Longrightarrow\operatorname{Con}(T)$.
+\item A sentence $\varphi$ is \hlt{independent of $T$} iff $T\nvdash\varphi$ and $T\nvdash\neg\varphi$.
+\end{enumerate}
+Relative consistency does not assert its antecedent; independence selects no ambient truth.\\
+The sentence $\mathrm{CH}$ asserts $2^{\aleph_0}=\aleph_1$. For a cardinal $\kappa$, let $\kappa^+$ be the least cardinal strictly greater than $\kappa$.\\
+The sentence $\mathrm{GCH}$ asserts $(\forall\kappa\geq\aleph_0)\,2^\kappa=\kappa^+$, with the quantifier restricted to cardinals.
+\end{definition}
+
+\begin{proposition} \label{prop:independence-via-consistent-extensions} \hlt{Independence via Two Consistent Extensions}\\
+Let $T$ be a classical object theory and let $\varphi$ be a sentence.\\
+Then $\varphi$ is independent of $T$ iff $\operatorname{Con}(T+\varphi)\land\operatorname{Con}(T+\neg\varphi)$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $T\nvdash\varphi$ and $T\nvdash\neg\varphi$. By assumption discharge, $T+\varphi\vdash\bot\Longrightarrow T\vdash\neg\varphi$.\\
+By assumption discharge and double-negation elimination, $T+\neg\varphi\vdash\bot\Longrightarrow T\vdash\neg\neg\varphi\Longrightarrow T\vdash\varphi$.\\
+Both consequents contradict the hypothesis, so $\operatorname{Con}(T+\varphi)$ and $\operatorname{Con}(T+\neg\varphi)$.
+\item[$(\Leftarrow)$] Assume $\operatorname{Con}(T+\varphi)$ and $\operatorname{Con}(T+\neg\varphi)$. Then $T\vdash\varphi\Longrightarrow T+\neg\varphi\vdash\bot$ and $T\vdash\neg\varphi\Longrightarrow T+\varphi\vdash\bot$.\\
+Thus $T\nvdash\varphi$ and $T\nvdash\neg\varphi$, so $\varphi$ is independent of $T$.
+\end{enumerate}
+\hlt{Structural Commentary}: The two directions translate extension consistency into the two nonprovability obligations.\\
+\hlt{Key Insight}: Opposite consistent extensions encode both nonprovability conditions.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:constructible-hierarchy} \hlt{Constructible Hierarchy}\\
+For a set $M$, fix $n\in\N_0$ and $\mathbf{p}=(p_1,\ldots,p_n)\in M^n$. Let $\varphi(x,z_1,\ldots,z_n)$ be a formula with no other free variables.\\
+For these data, set $A\defeq\{x\in M:(M,\in)\models\varphi(x,p_1,\ldots,p_n)\}$. The family $\operatorname{Def}(M)$ consists exactly of these sets as the data vary.\\
+Transfinite recursion sets $L_0\defeq\emptyset$ and $L_{\alpha+1}\defeq\operatorname{Def}(L_\alpha)$. At a nonzero limit ordinal $\lambda$, set $L_\lambda\defeq\bigcup\limits_{\beta<\lambda}L_\beta$.\\
+The \hlt{constructible universe} is $L\defeq\bigcup\limits_{\alpha\in\mathrm{Ord}}L_\alpha$; a set is \hlt{constructible} iff it belongs to $L$.
+\end{definition}
+
+\begin{proposition} \label{prop:basic-constructible-hierarchy-properties} \hlt{Basic Properties of the Constructible Hierarchy}\\
+For ordinals $\alpha\leq\beta$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $L_\alpha$ is transitive;
+\item $L_\alpha\subseteq L_\beta$;
+\item $L$ is transitive;
+\item $L_\alpha\cap\mathrm{Ord}=\alpha$;
+\item $\mathrm{Ord}\subseteq L$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\operatorname{Trans}(M)\defeq(\forall x\in M)\,x\subseteq M$ and $P(\gamma)\defeq[\operatorname{Trans}(L_\gamma)\land L_\gamma\subseteq L_{\gamma+1}]$. To prove $(\forall\gamma\in\mathrm{Ord})\,P(\gamma)$ by transfinite induction.\\
+Since $L_0=\emptyset$ is transitive and $L_0\subseteq L_1$, the assertion $P(0)$ holds. Assume $P(\gamma)$.\\
+If $x\in y\in L_{\gamma+1}$, then $y\subseteq L_\gamma$ and $x\in L_\gamma\subseteq L_{\gamma+1}$; hence $L_{\gamma+1}$ is transitive.\\
+For $x\in L_{\gamma+1}$, the parameter $x$ and formula $z\in x$ define $x$ over $L_{\gamma+1}$. Thus $x\in L_{\gamma+2}$ and $P(\gamma+1)$ holds.\\
+At a nonzero limit ordinal $\lambda$, assume $(\forall\gamma<\lambda)\,P(\gamma)$. If $x\in y\in L_\lambda$, choose $\gamma<\lambda$ with $y\in L_\gamma$.\\
+Then $x\in L_\gamma\subseteq L_\lambda$ by $P(\gamma)$, so $L_\lambda$ is transitive. For $x\in L_\lambda$, the parameter $x$ and formula $z\in x$ define $x$ over $L_\lambda$.\\
+Thus $L_\lambda\subseteq L_{\lambda+1}$ and $P(\lambda)$ holds. Thus $(\forall\alpha\in\mathrm{Ord})\,\operatorname{Trans}(L_\alpha)$.
+\item Fix $\alpha$ and prove $(\forall\beta\in\mathrm{Ord})\,[\alpha\leq\beta\Rightarrow L_\alpha\subseteq L_\beta]$ by transfinite induction.\\
+At $\beta=0$, the premise $\alpha\leq0$ gives $\alpha=0$, so the inclusion is equality. If $\beta=\gamma+1$ and $\alpha\leq\beta$, then either $\alpha=\beta$ or $\alpha\leq\gamma$.\\
+In the latter case, $L_\alpha\subseteq L_\gamma\subseteq L_{\gamma+1}$ by the induction hypothesis and the simultaneous induction in (i).\\
+At a nonzero limit $\beta$, the case $\alpha=\beta$ is trivial.\\
+If $\alpha<\beta$, then $\alpha+1<\beta$ and $L_\alpha\subseteq L_{\alpha+1}\subseteq L_\beta$ by the simultaneous induction in (i) and the definition of $L_\beta$.
+\item If $x\in y\in L$, choose $\gamma\in\mathrm{Ord}$ with $y\in L_\gamma$. Then $x\in L_\gamma\subseteq L$ by (i), so $L$ is transitive.
+\item Set $Q(\gamma)\defeq[L_\gamma\cap\mathrm{Ord}=\gamma]$ and proceed by transfinite induction. At $0$, $L_0\cap\mathrm{Ord}=0$.\\
+At a nonzero limit ordinal $\lambda$, $L_\lambda\cap\mathrm{Ord}=\bigcup\limits_{\xi<\lambda}(L_\xi\cap\mathrm{Ord})=\bigcup\limits_{\xi<\lambda}\xi=\lambda$ by the induction hypothesis.\\
+Assume $Q(\gamma)$. If $\delta\in L_{\gamma+1}\cap\mathrm{Ord}$, then $\delta\subseteq L_\gamma\cap\mathrm{Ord}=\gamma$, so $\delta\leq\gamma$. Conversely, $\delta<\gamma\Longrightarrow\delta\in\gamma=L_\gamma\cap\mathrm{Ord}\subseteq L_{\gamma+1}$.\\
+Ordinalhood is bounded and defines $\gamma=L_\gamma\cap\mathrm{Ord}$ over the transitive set $L_\gamma$; hence $\gamma\in L_{\gamma+1}$.\\
+Therefore $L_{\gamma+1}\cap\mathrm{Ord}=\gamma+1$, which proves $Q(\gamma+1)$.
+\item $(\forall\alpha\in\mathrm{Ord})\,\alpha\in L_{\alpha+1}$ by (iv); hence $\mathrm{Ord}\subseteq L$.
+\end{enumerate}
+\hlt{Structural Commentary}: Simultaneous induction gives transitivity and nesting; a second induction identifies the stage ordinals.\\
+\hlt{Key Insight}: Definability carries each stage and its index forward.
+\end{proof}
+\end{proposition}
+
+\begin{principle} \label{princ:constructible-inner-model-relative-consistency} \hlt{Constructible Inner Model Result}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The theory $\mathrm{ZF}$ proves that $L$ is an inner model of $\mathrm{ZFC}+\mathrm{GCH}$.
+\item The metatheory proves $\operatorname{Con}(\mathrm{ZF})\Longrightarrow\operatorname{Con}(\mathrm{ZFC}+\mathrm{GCH})$.
+\item The reverse consistency implication holds because $\mathrm{ZFC}+\mathrm{GCH}$ contains $\mathrm{ZF}$; hence the theories are equiconsistent.
+\end{enumerate}
+Reflection and condensation are not developed here, so this principle records framework and supplies no proof authority.
+\end{principle}
+
+\begin{definition} \label{def:forcing-generic-filter-and-extension} \hlt{Forcing Posets, Generic Filters, and Extensions}\\
+Let $M$ be a transitive set. Let $\mathbb{P}=(P,\leq,1_{\mathbb{P}})\in M$ be a partial order whose greatest element is $1_{\mathbb{P}}$.\\
+The element $1_{\mathbb{P}}$ is the weakest condition, and $p\leq q$ means that $p$ is stronger than $q$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A set $D$ is \hlt{dense in $P$}, written $\operatorname{Dense}_P(D)$, iff $D\subseteq P$ and $(\forall p\in P)(\exists q\in D)\,q\leq p$.
+\item A \hlt{filter on $P$} is a set $\emptyset\neq G\subseteq P$ satisfying $(\forall p\in G)(\forall q\in P)\,[p\leq q\Rightarrow q\in G]$.\\
+Its directedness condition is $(\forall p,q\in G)(\exists r\in G)\,[r\leq p\land r\leq q]$.
+\item The filter $G$ is \hlt{$M$-generic} iff $(\forall D\in M)\,[\operatorname{Dense}_P(D)\Rightarrow G\cap D\neq\emptyset]$.
+\item Transfinite recursion defines $\mathcal{N}_0^P\defeq\emptyset$ and $\mathcal{N}_{\alpha+1}^P\defeq\mathcal{P}(\mathcal{N}_\alpha^P\times P)$.\\
+At a nonzero limit ordinal $\lambda$, set $\mathcal{N}_\lambda^P\defeq\bigcup\limits_{\beta<\lambda}\mathcal{N}_\beta^P$. Set $\mathcal{N}^P\defeq\bigcup\limits_{\alpha\in\mathrm{Ord}}\mathcal{N}_\alpha^P$; its elements are the \hlt{$P$-names}.
+\item For a filter $G$ and $\tau\in\mathcal{N}^P$, recursion on name rank defines $\tau^G\defeq\{\sigma^G:(\exists p\in G)\,[(\sigma,p)\in\tau]\}$.
+\item For an $M$-generic filter $G$, the \hlt{forcing extension} is $M[G]\defeq\{\tau^G:\tau\in M\cap\mathcal{N}^P\}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:generic-filter-existence} \hlt{Existence of Generic Filters over Countable Transitive Sets}\\
+In the metatheory, let $M$ be a countable transitive set. Let $\mathbb{P}=(P,\leq,1_{\mathbb{P}})\in M$ be a partial order, and fix $p\in P$.\\
+Then an $M$-generic filter $G\subseteq P$ satisfying $p\in G$ exists.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Enumeration}: External countability gives $(D_n)_{n<\omega}$ enumerating $\{D\in M:\operatorname{Dense}_P(D)\}$. Repetitions are allowed; set $p_0\defeq p$.
+\item \hlt{Descending construction}: Recursively choose $p_{n+1}\in D_n$ with $p_{n+1}\leq p_n$ by the density of $D_n$.
+\item \hlt{Filter verification}: Set $G\defeq\{q\in P:(\exists n<\omega)\,p_n\leq q\}$. Then $p=p_0\in G$.\\
+If $q\in G$, $q\leq r$, and $r\in P$, choose $n<\omega$ with $p_n\leq q$; transitivity gives $p_n\leq r$, so $r\in G$.\\
+If $q_1,q_2\in G$, choose $i,j<\omega$ with $p_i\leq q_1$ and $p_j\leq q_2$.\\
+Set $k\defeq\max\{i,j\}$. Then $p_k\in G$, $p_k\leq q_1$, and $p_k\leq q_2$ by the descending construction. Thus $G$ is a filter on $P$.
+\item \hlt{Genericity}: The construction gives $(\forall n<\omega)\,p_{n+1}\in G\cap D_n$.\\
+If $D\in M$ and $\operatorname{Dense}_P(D)$, then $(\exists n<\omega)\,D=D_n$; hence $G\cap D\neq\emptyset$. Therefore $G$ is $M$-generic and contains $p$.
+\end{enumerate}
+\hlt{Structural Commentary}: A descending chain turns enumerated dense sets into one filter.\\
+\hlt{Key Insight}: Later conditions strengthen all earlier choices.
+\end{proof}
+\end{theorem}
+
+\begin{principle} \label{princ:forcing-extension-preview} \hlt{Forcing Extension Framework}\\
+Let $M$ be a countable transitive model of $\mathrm{ZFC}$. Let $\mathbb{P}=(P,\leq,1_{\mathbb{P}})\in M$, and let $G\subseteq P$ be $M$-generic.\\
+The forcing theorem has the following conclusions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $M\subseteq M[G]$.
+\item $M\cap\mathrm{Ord}=M[G]\cap\mathrm{Ord}$.
+\item $M[G]\models\mathrm{ZFC}$.
+\end{enumerate}
+Its proof recursively defines the forcing relation on formulas and names before proving the Truth Lemma.\\
+That machinery is not developed here, so this principle supplies no proof authority.
+\end{principle}
+
+\begin{principle} \label{princ:continuum-hypothesis-relative-consistency} \hlt{Relative Consistency and Independence of the Continuum Hypothesis}\\
+The constructible-inner-model and forcing constructions establish the following relative-consistency implications.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{Con}(\mathrm{ZFC})\Longrightarrow\operatorname{Con}(\mathrm{ZFC}+\mathrm{CH})$.
+\item $\operatorname{Con}(\mathrm{ZFC})\Longrightarrow\operatorname{Con}(\mathrm{ZFC}+\neg\mathrm{CH})$.
+\end{enumerate}
+Under $\operatorname{Con}(\mathrm{ZFC})$, the sentence $\mathrm{CH}$ is independent of $\mathrm{ZFC}$ by Proposition \ref{prop:independence-via-consistent-extensions}.\\
+Each extension contains $\mathrm{ZFC}$, so both are equiconsistent with $\mathrm{ZFC}$. The constructible universe supplies (i).\\
+For (ii), conditions are finite partial functions from $\omega\times\omega_2$ to $2$.\\
+Reverse inclusion orders them, and the resulting poset has the countable chain condition.\\
+It preserves $\omega_1$ and $\omega_2$ and adds $\omega_2$ distinct subsets of $\omega$.\\
+The relative-consistency proof is syntactic, or equivalently Boolean-valued. It does not assume a transitive model of all $\mathrm{ZFC}$.\\
+The required constructibility and forcing theorems are not proved here, so this principle supplies no proof authority.
+\end{principle}

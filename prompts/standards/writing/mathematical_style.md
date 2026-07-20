@@ -22,6 +22,8 @@ Apply this loop to every changed definition, statement, proof, method, calculati
 6. Compress repeated setup across parallel items into one preamble.
 7. Re-read after compression: no object, condition, dependency, exception, or proof step may have disappeared; no cryptic abbreviation may have replaced clarity.
 
+For a formal proof clause whose prose only narrates displayed symbols, prefer the symbolic relation itself: replace “if $A$, then $B$, so $C$” with `$A\Rightarrow B\Rightarrow C$`, a verbal containment claim with `\subseteq`, parallel membership cases with a scoped quantifier, and narrated equality substitutions with a short equality chain. Keep the prose transition when it identifies the proof stage, explains why a construction is chosen, or contributes meaning beyond the symbols. When a predicate such as transitivity recurs several times in one proof, a transparent local definition such as `$\operatorname{Trans}(M)\defeq(\forall x\in M)\,x\subseteq M$` is preferable to repeatedly spelling it out in prose.
+
 A theorem-style statement, definition, or typed-method preamble must state its short local condition directly instead of using a reference as a substitute for the object or hypothesis. References belong in proofs when they supply an actual earlier result. Do not use “obvious,” “clearly,” unexplained “similarly,” or vague symmetry when a short operative equality, implication, bound, construction, or limit argument is available.
 
 ### Render-aligned source lines

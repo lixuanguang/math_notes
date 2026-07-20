@@ -34,12 +34,14 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 - Separate dense setup, contrast, construction, consequence, and interpretation into semantic sentences, then render again.
 - Sparse-continuation threshold: every naturally wrapped continuation line in changed prose, statements, proof items, captions, and commentary must occupy at least 20% of the available text measure. A continuation below 20% is a layout defect even when it consists of a complete reference, citation, formula tail, concluding phrase, or punctuation.
 - Preflight a span expected to wrap by estimating both the full 100-equivalent line and its remainder. A projected terminal remainder of fewer than 20 horizontal character-equivalents is presumptively sparse; compress or rebalance before rendering rather than relying on TeX to leave a short tail.
+- A sparse tail is first a formalization defect, not permission to add a break. Re-run the notation-aware succinct loop over its entire governing sentence, implication chain, or calculation before changing line layout.
 - Repair every below-20% continuation in this order:
-  1. remove repeated prose or duplicated notation;
-  2. shorten or reposition its governing clause so the tail returns to the preceding line;
-  3. use established notation, a compact `by`-clause, or a readable local abbreviation;
+  1. replace notation-equivalent prose with established scoped notation and remove prose/notation duplication;
+  2. use a compact `by`-clause or define a readable local predicate/abbreviation when it is reused;
+  3. shorten or reposition the governing clause so the tail returns to the preceding line;
   4. rebalance genuinely long material at an earlier semantic boundary so every resulting line is at least 20% occupied;
   5. use a display only when the active mode supplies an independent exception.
+- Prefer a readable implication, equivalence, inclusion, set identity, or short calculation to a sentence that merely narrates the same symbols. Preserve prose that supplies assumptions, construction choices, proof architecture, interpretation, or another meaning absent from the notation.
 - Do not retain a below-20% continuation merely because the wording is grammatically complete or because the tail is a cross-reference. A standalone structural line is not a continuation; title openings, list labels, and mandated commentary lines remain governed by their own rules.
 - Never repair layout by shrinking fonts, changing margins, adding arbitrary spacing, inserting mid-expression breaks, or creating unnecessary displays.
 - If inline pressure introduces extra notation or proof construction into a theorem statement, restore statement proportionality first. If the resulting formula still breaks badly, use the narrowest documented display exception or the configured less-strict mode.
