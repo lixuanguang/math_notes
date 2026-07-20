@@ -50,12 +50,22 @@ files.each do |path|
       end
     end
 
-    valid_break = closing_brace && source[(closing_brace + 1), 2] == "\\\\"
-    next if valid_break
-
-    violations += 1
     line_number = source[0...title_start].count("\n") + 1
-    warn "#{path}:#{line_number}: titled environment must place \\\\ immediately after \\hlt{Title}"
+    after_title = closing_brace ? source[(closing_brace + 1)..] : ""
+    direct_body = after_title.lstrip
+    immediate_break = after_title.start_with?("\\\\")
+    direct_enumeration = direct_body.start_with?("\\begin{enumerate}")
+    enumeration_after_break = immediate_break && after_title[2..].lstrip.start_with?("\\begin{enumerate}")
+
+    if enumeration_after_break
+      violations += 1
+      warn "#{path}:#{line_number}: omit \\\\ after \\hlt{Title} when the body starts directly with enumerate"
+    elsif direct_enumeration || immediate_break
+      next
+    else
+      violations += 1
+      warn "#{path}:#{line_number}: titled environment must place \\\\ immediately after \\hlt{Title} before body prose"
+    end
   end
 end
 

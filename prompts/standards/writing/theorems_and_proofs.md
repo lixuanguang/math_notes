@@ -15,9 +15,54 @@ The theorem-style category is exactly `theorem`, `proposition`, `lemma`, and `co
 A conclusion is distinct when it can be removed without changing another conclusion, has a different logical type, or creates a separate proof obligation. Existence, uniqueness, characterization, representation, bound, measurability, convergence, and continuity are different types. Recount after `Moreover`, `Furthermore`, `In addition`, `Also`, conclusion-bearing `In particular`, or an `and` joining different types.
 
 - One conclusion: compact prose, no list.
-- Two or more independent conclusions: claim items or a logical split.
-- Proof items must cover statement items one-for-one, in the same order and with matching conceptual labels.
-- Iff directions may remain within the relevant claim item when concise.
+- Two or more independent conclusions or conditions: claim items using the canonical roman list below.
+- Proof segmentation is mandatory, not optional, when the statement has condition/claim items, an iff has two directions, or equivalent conditions are proved by an implication cycle. Every statement item must be covered in source order; no proof item may silently combine, skip, renumber, or reorder claims.
+
+### Canonical condition and claim enumeration
+
+For a simple unnumbered iff claim, split the proof into its two directions exactly as follows:
+
+```tex
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] ...
+\item[$(\Leftarrow)$] ...
+\end{enumerate}
+```
+
+For equivalent numbered conditions proved by a cyclic implication chain, list the conditions with the canonical claim list, then use:
+
+```tex
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ ...
+\item[$(ii)$]$\Rightarrow (iii)$ ...
+\item[$(iii)$]$\Rightarrow (i)$ ...
+\end{enumerate}
+```
+
+For numbered claims in which each condition requires its own iff proof, repeat the claim label and split its directions:
+
+```tex
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) ...
+\item[$(i)$] ($\Leftarrow$) ...
+\item[$(ii)$] ($\Rightarrow$) ...
+\item[$(ii)$] ($\Leftarrow$) ...
+\end{enumerate}
+```
+
+For a statement containing a list of condition claims, and for a proof containing one direct proof per claim, use:
+
+```tex
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item ...
+\end{enumerate}
+```
+
+Mixed claim types use the same mapping in statement order. For example, if claim (i) is an iff and claim (ii) is direct, the proof items are `\item[$(i)$] ($\Rightarrow$)`, `\item[$(i)$] ($\Leftarrow$)`, and `\item[$(ii)$]`. Use custom claim labels whenever a repeated claim number or implication edge would make the automatic enumerate counter disagree with the statement. Do not use unlabeled prose paragraphs in place of any required item.
 
 ## Proof completeness
 
@@ -42,7 +87,8 @@ Authority language is strictly `by`-only: use `$P$ by Theorem \ref{...}.` or `By
 ## Compact statement and proof paragraphs
 
 - Do not place a blank source line inside a theorem-style statement or its `proof`; it creates an unwanted paragraph break, vertical gap, and indentation.
-- Keep consecutive statement/proof sentences in one rendered paragraph and therefore one logical source line. Use a semantic list/case environment for genuine proof divisions, or an intended `\\` for a compact rendered break; never use an empty line or an unintended `\\` as visual padding.
+- Keep consecutive statement/proof sentences in one rendered paragraph and greedily pack them onto the fewest rendered lines allowed by the 100-equivalent cap and actual scoped width. Do not assign each sentence, implication, construction, or induction step its own `\\`.
+- Before rendering, retain `\\` only when the line obtained by joining the next complete unit would exceed the cap or another exact repository rule requires it. The single final scoped render may justify one semantic break for a below-cap span that actually wraps. Use a semantic list/case environment for genuine proof divisions; never use an empty line or `\\` as visual padding.
 
 ## Structural Commentary and Key Insight
 
@@ -58,12 +104,12 @@ Placement and syntax are exact:
 
 ```tex
 \hlt{Structural Commentary}: <proof architecture or dependency>.\\
-\hlt{Key Insight}: <invariant, obstruction, mechanism, or decisive choice>.\\
+\hlt{Key Insight}: <invariant, obstruction, mechanism, or decisive choice>.
 ```
 
 - With a proof, these are the final two content lines immediately before `\end{proof}`.
 - For an allowed proofless exception, they are the final two lines immediately before the theorem-style `\end{...}`.
-- Keep them adjacent, in this order, and end both with `\\`.
+- Keep them adjacent and in this order. End Structural Commentary with `\\` so Key Insight starts on the next rendered line. Do not end Key Insight with `\\`; the following `\end{proof}` or theorem-style `\end{...}` is already a structural boundary.
 - Never place them in the statement, before/after the proof, mid-proof, or inside non-theorem environments.
 - Structural Commentary names actual proof architecture or dependency, not the theorem conclusion or “by definition.” Aim for at most 18 lexical words.
 - Key Insight states why the proof works, without adding an unowned hypothesis or claim. Aim for at most 12 lexical words.

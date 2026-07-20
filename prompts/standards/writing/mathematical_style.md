@@ -28,7 +28,8 @@ A theorem-style statement, definition, or typed-method preamble must state its s
 
 - A physical source newline must correspond to rendered or structural organization. Keep each uninterrupted rendered paragraph—and the uninterrupted body of each `\item`—on one logical source line; let the editor soft-wrap it.
 - Start a new source line only after an intended `\\` or at a genuine structural boundary such as `\begin`, `\end`, `\item`, a heading, list setup, display, figure/table/algorithm command, or comment. A blank line is permitted between top-level blocks but never inside a formal statement, proof, or other theorem-style environment. Keep structural commands on their own lines when that exposes nesting.
-- Join adjacent prose lines when TeX would replace their source newline with an ordinary space. Never insert `\\` merely to justify source formatting: it must represent an intended rendered break.
+- Join adjacent prose lines when TeX would replace their source newline with an ordinary space. Never insert `\\` merely to justify source formatting, mark the end of a sentence, or expose a proof step.
+- Greedily pack adjacent complete sentences or clauses under the 100-equivalent cap. Before rendering, retain `\\` only when deleting it would make the combined span exceed that cap or an exact repository rule requires the break. Use the single final scoped render to detect the exceptional below-cap span that still wraps.
 - Source wrapping does not satisfy the 100-horizontal-character-equivalent preflight. Resolve a rendered-width excess by notation, semantic compression, or a genuine structural split, not by inserting an inert source newline.
 
 ### Quantifier compression
@@ -44,7 +45,7 @@ Enumeration is semantic, not decorative.
 - Run a component census. Two or more parallel objects, constructions, characterizations, cases, independently usable conclusions, or operative steps normally require items.
 - Shared setup, motivation, interpretation, caveats, and summaries stay outside lists.
 - Compare drafted items token by token and factor every repeated phrase, domain, tuple, parameter, or hypothesis into the preamble.
-- Use `(i), (ii), ...` for parallel components/claims and roman proof steps or explicit `$(\Rightarrow)$`, `$(\Leftarrow)$` labels when directions are the real units.
+- Use `(i), (ii), ...` for parallel components and claims. For theorem-style claims, iff directions, and equivalent-condition implication cycles, use the exact statement/proof mapping and item syntax in `theorems_and_proofs.md`; generic prose segmentation is not a substitute.
 - Do not create label-only outer items, unnecessary nested lists, or lists for a single direct argument.
 
 Repository list style:

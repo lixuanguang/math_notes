@@ -26,7 +26,11 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 
 ## Line breaking, packing, and overflow
 
-- Use deliberate `\\` only between complete semantic units—never inside a sentence, formula, or equality chain.
+- Minimize hard line breaks. The default is one greedily packed rendered line, not one `\\` per sentence or proof step.
+- Test every candidate `\\` in source by temporarily removing it and joining the following complete semantic unit. After notation and prose compression, remove the break whenever the combined span is at most 100 horizontal character-equivalents. Continue packing later units until adding the next unit would exceed the cap.
+- A joined span exceeding the preflight cap makes a `\\` eligible, not automatic: place at most one break at the nearest complete semantic boundary that is expected to produce balanced lines. The single final scoped render then decides borderline geometry; if a preflight-packed span actually wraps, one repair may retain or reposition a semantic break. Never break inside a sentence, formula, or equality chain.
+- A sentence ending, a new proof step, or a change from premise to consequence does not by itself justify `\\`. Do not use sentence-per-line, step-per-line, or construction-per-line formatting when adjacent material fits.
+- The repository-mandated title/prose break and the break between Structural Commentary and Key Insight remain exact exceptions. A structural command such as `\item`, `\begin`, or `\end` already starts a new unit and needs no preceding `\\`; in particular, Key Insight has no terminal `\\` immediately before an environment end.
 - Separate dense setup, contrast, construction, consequence, and interpretation into semantic sentences, then render again.
 - A continuation line with fewer than five lexical words, or a comparably short mathematical tail, triggers this repair order:
   1. remove repeated prose or duplicated notation;
@@ -38,11 +42,12 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 - Never repair layout by shrinking fonts, changing margins, adding arbitrary spacing, inserting mid-expression breaks, or creating unnecessary displays.
 - If inline pressure introduces extra notation or proof construction into a theorem statement, restore statement proportionality first. If the resulting formula still breaks badly, use the narrowest documented display exception or the configured less-strict mode.
 
-## Titled environment line break
+## Titled environment opening
 
-- Every titled theorem-style environment must end its opening `\hlt{Title}` immediately with `\\`, before any body prose, even when the title and prose would fit on one rendered line. Use the canonical opening `\begin{example} \label{...} \hlt{Title}\\` and apply the same rule to every other titled custom environment.
+- When body prose follows a titled theorem-style environment, end the opening `\hlt{Title}` immediately with `\\`, even when the title and prose would fit on one rendered line. Use `\begin{example} \label{...} \hlt{Title}\\` before prose.
+- Direct-enumeration exception: when `\begin{enumerate}` is the first body construct after `\hlt{Title}`, omit `\\` and place the enumeration directly after the title. The list supplies the structural break; an extra `\\` creates an unwanted gap.
 - This rule governs environment titles only. It does not apply to untitled environments or inline semantic labels such as `\item \hlt{Keyword}: ...`.
-- Run `ruby scripts/check_environment_title_breaks.rb <target>` after formalization; the checker handles nested braces inside titles.
+- Run `ruby scripts/check_environment_title_breaks.rb <target>` after formalization; the checker handles nested title braces and enforces both the prose break and direct-enumeration exception.
 
 ## Mixed prose–math line budget
 
@@ -65,6 +70,7 @@ For formalization, use 100 horizontal character-equivalents as the preflight cap
 
 Apply the table recursively to nesting. Inline `\dfrac`, `\cfrac`, cases, and aligned multirow structures are vertical-risk constructs: prefer ordinary `\frac`/`\tfrac`, bind readable notation, or use an existing irreducible-two-dimensional display exception. Any forced display style or nested stack deeper than one level must receive a line-height/collision check in the single final render even when its horizontal count is below 100.
 - If a span exceeds 100, remove duplication, reuse established notation, or split at a genuine semantic boundary. Do not delete hypotheses, quantifiers, conclusions, source qualifiers, or required commentary.
+- The 100-equivalent value is both a cap and a packing preflight: do not stop a line early merely because a sentence ended. Subject to semantic clarity and the final render, fill it with the next complete unit while the combined span remains within the cap.
 - Treat the cap as an early trigger, not a geometric proof. Radicals, long arrows, wide bounds, URLs, identifiers, and dense bold/calligraphic math can overflow below 100; the final TeX overfull-box check remains decisive.
 
 ## No-overflow requirement
