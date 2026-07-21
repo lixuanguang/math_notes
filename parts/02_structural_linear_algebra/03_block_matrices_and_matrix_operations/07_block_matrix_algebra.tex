@@ -1,106 +1,80 @@
 \subsection{Block Matrix Algebra}
-\begin{definition} \hlt{Block Matrices}\\
-Suppose $\mathcal{V} = \mathcal{U}_1 \oplus \mathcal{U}_2$ and $\mathcal{W} = \mathcal{Z}_1 \oplus \mathcal{Z}_2$. If $T \in \LL(\mathcal{V}, \mathcal{W})$, relative to bases adapted to these decompositions in the sense of Definition \ref{def:adapted-basis-direct-sum}, the matrix of $T$ has block form $[T] =
-\begin{bmatrix}
-A_{11} & A_{12} \\
-A_{21} & A_{22}
-\end{bmatrix}$,
-where each block records the part of $T$ mapping one summand of the domain into one summand of the codomain.
+Throughout this subsection, all vector spaces and matrices are over the same fixed field $\mathbb{F}$, and every matrix size is a positive integer.
+
+\begin{definition} \label{def:block-partitions-and-conformality} \hlt{Block Partitions and Conformality}\\
+Let $r,s\geq1$, let $m_1,\ldots,m_r$ and $n_1,\ldots,n_s$ be positive integers, and let $A\in\operatorname{Mat}\!\left(\sum\limits_{i=1}^{r}m_i,\sum\limits_{j=1}^{s}n_j,\mathbb{F}\right)$.\\
+An \hlt{$r\times s$ block partition} $A=[A_{ij}]$ groups consecutive rows according to $(m_1,\ldots,m_r)$ and consecutive columns according to $(n_1,\ldots,n_s)$, so $(\forall\,i\in\{1,\ldots,r\})(\forall\,j\in\{1,\ldots,s\})\,A_{ij}\in\operatorname{Mat}(m_i,n_j,\mathbb{F})$. The submatrices $A_{ij}$ are the \hlt{blocks}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Two $r\times s$ block partitions $A=[A_{ij}]$ and $C=[C_{ij}]$ are \hlt{conformal for addition} if corresponding blocks have the same size.
+\item An $r\times s$ block partition $A=[A_{ik}]$ and an $s\times t$ block partition $B=[B_{kj}]$, where $t\geq1$, are \hlt{conformal for multiplication} if\\
+$\exists\,p_1,\ldots,p_t\in\mathbb{Z}_{>0}$ such that $A_{ik}\in\operatorname{Mat}(m_i,n_k,\mathbb{F})$ and $B_{kj}\in\operatorname{Mat}(n_k,p_j,\mathbb{F})$ $\forall i\in\{1,\ldots,r\}$, $k\in\{1,\ldots,s\}$, $j\in\{1,\ldots,t\}$.
+\end{enumerate}
 \end{definition}
 
-\begin{definition} \hlt{Conformal Block Partitions}\\
-For a block matrix $A=[A_{ij}]$, the submatrices $A_{ij}$ are called \hlt{blocks}. Two block partitions are \hlt{conformal for addition} when corresponding blocks have the same sizes. They are \hlt{conformal for multiplication} when every block product appearing in the usual row-column block multiplication is defined.
+\begin{definition} \label{def:adapted-block-matrix-of-linear-map} \hlt{Block Matrix of a Linear Map}\\
+Suppose $\mathcal{V}=\mathcal{U}_1\oplus\mathcal{U}_2$ and $\mathcal{W}=\mathcal{Z}_1\oplus\mathcal{Z}_2$, where $\dim(\mathcal{U}_j)=n_j\geq1$ and $\dim(\mathcal{Z}_i)=m_i\geq1$ for $i,j\in\{1,2\}$. Choose ordered bases $\alpha_j$ of $\mathcal{U}_j$ and $\beta_i$ of $\mathcal{Z}_i$. By Definition \ref{def:adapted-basis-direct-sum}, $\alpha=(\alpha_1,\alpha_2)$ and $\beta=(\beta_1,\beta_2)$ are bases of $\mathcal{V}$ and $\mathcal{W}$ adapted to the decompositions.\\
+For $T\in\LL(\mathcal{V},\mathcal{W})$, its representation matrix has conformal partition $[T]_{\beta\leftarrow\alpha}=\left[\begin{smallmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{smallmatrix}\right]$, where $A_{ij}\in\operatorname{Mat}(m_i,n_j,\mathbb{F})$ for $i,j\in\{1,2\}$.\\
+The $j$th block column contains coordinate columns of images of basis $\alpha_j$, while the $i$th block row retains their $\beta_i$-coordinate entries.
 \end{definition}
 
 \begin{proposition} \label{prop:block-matrix-arithmetic} \hlt{Block Matrix Arithmetic}\\
-For conformal $2\times2$ block matrices,
-\begin{align}
-\begin{bmatrix}
-A_{11} & A_{12}\\
-A_{21} & A_{22}
-\end{bmatrix}
-+
-\begin{bmatrix}
-B_{11} & B_{12}\\
-B_{21} & B_{22}
-\end{bmatrix}
-=
-\begin{bmatrix}
-A_{11}+B_{11} & A_{12}+B_{12}\\
-A_{21}+B_{21} & A_{22}+B_{22}
-\end{bmatrix}
-\nonumber
-\end{align}
-and
-\begin{align}
-\begin{bmatrix}
-A_{11} & A_{12}\\
-A_{21} & A_{22}
-\end{bmatrix}
-\begin{bmatrix}
-B_{11} & B_{12}\\
-B_{21} & B_{22}
-\end{bmatrix}
-=
-\begin{bmatrix}
-A_{11}B_{11}+A_{12}B_{21} & A_{11}B_{12}+A_{12}B_{22}\\
-A_{21}B_{11}+A_{22}B_{21} & A_{21}B_{12}+A_{22}B_{22}
-\end{bmatrix}.
-\nonumber
-\end{align}
+The following identities hold.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A=[A_{ij}]$ and $C=[C_{ij}]$ are conformal $r\times s$ block partitions, then $A+C=[A_{ij}+C_{ij}]$.\\
+In particular, conformal $2\times2$ partitions satisfy $A+C=\left[\begin{smallmatrix}A_{11}+C_{11}&A_{12}+C_{12}\\A_{21}+C_{21}&A_{22}+C_{22}\end{smallmatrix}\right]$.
+\item If $A=[A_{ik}]$ and $B=[B_{kj}]$ are conformal for multiplication, then $(AB)_{ij}=\sum\limits_{k=1}^{s}A_{ik}B_{kj}$ for every admissible $i,j$.\\
+In particular, conformal $2\times2$ partitions satisfy $AB=\left[\begin{smallmatrix}A_{11}B_{11}+A_{12}B_{21}&A_{11}B_{12}+A_{12}B_{22}\\A_{21}B_{11}+A_{22}B_{21}&A_{21}B_{12}+A_{22}B_{22}\end{smallmatrix}\right]$.
+\end{enumerate}
 \begin{proof}
-Each displayed block consists of the same entries obtained by ordinary entrywise addition or ordinary row-column multiplication, with the common indices grouped according to the partition.\\
-\hlt{Structural Commentary}: This is ordinary matrix arithmetic with indices grouped into rectangular packages.\\
-\hlt{Key Insight}: Conformality is exactly the condition that the grouped row-column products make sense.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Definition \ref{def:matrices-and-matrix-operations}, matrix addition is entrywise. Because conformality assigns the same entry positions to corresponding blocks, addition may be performed blockwise, so $A+C=[A_{ij}+C_{ij}]$. The case $r=s=2$ is the stated specialization.
+\item By Proposition \ref{prop:matrix-product-entry-row-column}, each entry of $AB$ is the row-column sum over the shared index. Group that index into the $s$ consecutive intervals determined by the common block sizes. The contribution from the $k$th interval is the corresponding entry of $A_{ik}B_{kj}$.\\
+Therefore $(AB)_{ij}=\sum\limits_{k=1}^{s}A_{ik}B_{kj}$. The case of two block rows and two block columns is the stated specialization.
+\end{enumerate}
+\hlt{Structural Commentary}: Addition is entrywise; multiplication groups the shared index.\\
+\hlt{Key Insight}: Block arithmetic is ordinary matrix arithmetic performed at a coarser scale.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:stacked-nullspaces-and-concatenated-column-spaces} \hlt{Stacks Intersect Kernels, Concatenations Sum Columns}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(p,n,\mathbb{F})$, $C\in\operatorname{Mat}(m,r,\mathbb{F})$, and $D\in\operatorname{Mat}(m,s,\mathbb{F})$.\\
-Then $\ker\begin{bmatrix} A\\ B\end{bmatrix}=\ker(A)\cap\ker(B)$; and $\operatorname{col}\begin{bmatrix} C & D\end{bmatrix} =\operatorname{col}(C)+\operatorname{col}(D)$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(p,n,\mathbb{F})$, $C\in\operatorname{Mat}(m,r,\mathbb{F})$, and $D\in\operatorname{Mat}(m,s,\mathbb{F})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\ker\!\left(\left[\begin{smallmatrix}A\\B\end{smallmatrix}\right]\right)=\ker(A)\cap\ker(B)$.
+\item $\operatorname{col}\!\left(\left[\begin{smallmatrix}C&D\end{smallmatrix}\right]\right)=\operatorname{col}(C)+\operatorname{col}(D)$.
+\end{enumerate}
 \begin{proof}
-For $\mathbf{x}\in\mathbb{F}^n$, $\mathbf{x}\in\ker\begin{bmatrix}A\\ B\end{bmatrix} \iff \begin{bmatrix}A\\ B\end{bmatrix}\mathbf{x}=\mathbf{0} \iff A\mathbf{x}=\mathbf{0}\ \text{and}\ B\mathbf{x}=\mathbf{0} \iff \mathbf{x}\in\ker(A)\cap\ker(B)$.\\
-For $\mathbf{y}\in\mathbb{F}^m$, $\mathbf{y}\in\operatorname{col}\begin{bmatrix}C&D\end{bmatrix} \iff \exists\,\mathbf{u}\in\mathbb{F}^r,\ \mathbf{v}\in\mathbb{F}^s$ such that $\mathbf{y}=\begin{bmatrix}C&D\end{bmatrix}\begin{bmatrix}\mathbf{u}\\ \mathbf{v}\end{bmatrix}$\\
-$\iff \exists\,\mathbf{u},\mathbf{v}$ such that $\mathbf{y}=C\mathbf{u}+D\mathbf{v} \iff \mathbf{y}\in\operatorname{col}(C)+\operatorname{col}(D)$.\\
-\hlt{Structural Commentary}: Stacking intersects constraints; concatenation adds column directions.\\
-\hlt{Key Insight}: Stacks encode intersections of nullspaces, while concatenations encode sums of column spaces.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Proposition \ref{prop:block-matrix-arithmetic}, $\left[\begin{smallmatrix}A\\B\end{smallmatrix}\right]\mathbf{x}=\left[\begin{smallmatrix}A\mathbf{x}\\B\mathbf{x}\end{smallmatrix}\right]$ for every $\mathbf{x}\in\mathbb{F}^n$.\\
+By Definition \ref{def:column-space-matrix-rank-nullity}, $\mathbf{x}\in\ker\!\left(\left[\begin{smallmatrix}A\\B\end{smallmatrix}\right]\right)$ if and only if $A\mathbf{x}=\mathbf{0}$ and $B\mathbf{x}=\mathbf{0}$, which is equivalent to $\mathbf{x}\in\ker(A)\cap\ker(B)$.
+\item By Proposition \ref{prop:block-matrix-arithmetic}, $\left[\begin{smallmatrix}C&D\end{smallmatrix}\right]\left[\begin{smallmatrix}\mathbf{u}\\\mathbf{v}\end{smallmatrix}\right]=C\mathbf{u}+D\mathbf{v}$ for every $\mathbf{u}\in\mathbb{F}^r$ and $\mathbf{v}\in\mathbb{F}^s$.\\
+By Definition \ref{def:column-space-matrix-rank-nullity}, $\operatorname{col}\!\left(\left[\begin{smallmatrix}C&D\end{smallmatrix}\right]\right)=\{C\mathbf{u}+D\mathbf{v}:\mathbf{u}\in\mathbb{F}^r,\ \mathbf{v}\in\mathbb{F}^s\}=\operatorname{col}(C)+\operatorname{col}(D)$.
+\end{enumerate}
+\hlt{Structural Commentary}: The kernel and column-space definitions translate both block actions.\\
+\hlt{Key Insight}: Vertical blocks intersect kernels; horizontal blocks add column spaces.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:block-centrosymmetric-commutation} \hlt{Block Centrosymmetry and Commutation}\\
-Let $M=
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}\in\operatorname{Mat}(2n,2n,\mathbb{F})$,
-$L_{2n}=
-\begin{bmatrix}
-0 & I_n\\
-I_n & 0
-\end{bmatrix}$.\\
-Then $M$ has block centrosymmetric form $A=D$ and $B=C$ if and only if $L_{2n}M=ML_{2n}$.
+Let $n\geq1$, let $A,B,C,D\in\operatorname{Mat}(n,n,\mathbb{F})$, and set $M=\left[\begin{smallmatrix}A&B\\C&D\end{smallmatrix}\right]$ and $L_{2n}=\left[\begin{smallmatrix}0&I_n\\I_n&0\end{smallmatrix}\right]$ in $\operatorname{Mat}(2n,2n,\mathbb{F})$.\\
+Then $M$ has \hlt{block centrosymmetric form}, meaning $A=D$ and $B=C$, if and only if $L_{2n}M=ML_{2n}$.
 \begin{proof}
-Block multiplication gives $L_{2n}M=
-\begin{bmatrix}
-C & D\\
-A & B
-\end{bmatrix}$ and 
-$ML_{2n}=
-\begin{bmatrix}
-B & A\\
-D & C
-\end{bmatrix}$.\\
-The two matrices are equal exactly when $A=D$ and $B=C$.\\
-\hlt{Structural Commentary}: The matrix $L_{2n}$ swaps the two block coordinates. Commuting with that swap means $M$ treats the two block positions symmetrically.\\
-\hlt{Key Insight}: Compute both block products; equality forces matching opposite blocks.
+By Proposition \ref{prop:block-matrix-arithmetic}, $L_{2n}M=\left[\begin{smallmatrix}C&D\\A&B\end{smallmatrix}\right]$ and $ML_{2n}=\left[\begin{smallmatrix}B&A\\D&C\end{smallmatrix}\right]$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $M$ has block centrosymmetric form, then $A=D$ and $B=C$, so the two block products agree. Therefore $L_{2n}M=ML_{2n}$.
+\item[$(\Leftarrow)$] If $L_{2n}M=ML_{2n}$, then corresponding blocks are equal by Definition \ref{def:matrices-and-matrix-operations}.\\
+Thus $C=B$ and $D=A$, so $M$ has block centrosymmetric form.
+\end{enumerate}
+\hlt{Structural Commentary}: Explicit block multiplication reduces commutation with $L_{2n}$ to equality of opposite blocks.\\
+\hlt{Key Insight}: The exchange matrix detects block centrosymmetry.
 \end{proof}
 \end{proposition}
 
-\begin{definition} \hlt{Direct Sum of Matrices}\\
-For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(p,q,\mathbb{F})$, the \hlt{direct sum} of $A$ and $B$ is $A\oplus B\defeq
-\begin{bmatrix}
-A & 0\\
-0 & B
-\end{bmatrix}
-\in\operatorname{Mat}(m+p,n+q,\mathbb{F})$.
+\begin{definition} \label{def:matrix-direct-sum} \hlt{Direct Sum of Matrices}\\
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(p,q,\mathbb{F})$, the \hlt{direct sum} of $A$ and $B$ is $A\oplus B\defeq\left[\begin{smallmatrix}A&0\\0&B\end{smallmatrix}\right]\in\operatorname{Mat}(m+p,n+q,\mathbb{F})$, where the upper-right and lower-left zero blocks have sizes $m\times q$ and $p\times n$, respectively.
 \end{definition}
