@@ -1,68 +1,104 @@
 \subsection{Row Reduction and Elementary Matrices}
 
 \begin{definition} \label{def:elementary-row-operations-and-matrices} \hlt{Elementary Row Operations and Elementary Matrices}\\
-For row symbols $R_i$, the \hlt{elementary row operations} are:
+Let $m\geq1$. For $i,j\in\{1,\ldots,m\}$, the \hlt{elementary row operations} are:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Row scaling}: $R_i\leftarrow cR_i$, $c\in\mathbb{F}^{\times}$;
-\item \hlt{Row swap}: $R_i\leftrightarrow R_j$, $i\neq j$;
-\item \hlt{Row replacement}: $R_i\leftarrow R_i+cR_j$, $i\neq j$, $c\in\mathbb{F}$.
+\item \hlt{Row scaling}: $R_i\leftarrow cR_i$, where $c\in\mathbb{F}^{\times}$;
+\item \hlt{Row swap}: $R_i\leftrightarrow R_j$, where $i\neq j$;
+\item \hlt{Row replacement}: $R_i\leftarrow R_i+cR_j$, where $i\neq j$ and $c\in\mathbb{F}$.
 \end{enumerate}
-An \hlt{elementary matrix} is $E=\epsilon(I_m)$, where $\epsilon$ is one elementary row operation.
+For an elementary row operation $\epsilon$ on $m$ rows, its \hlt{elementary matrix} is $E_{\epsilon}\defeq\epsilon(I_m)$.
 \end{definition}
 
 \begin{proposition} \label{prop:elementary-matrices-perform-row-operations} \hlt{Elementary Matrices Perform Row Operations}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $\epsilon$ be an elementary operation on $m$ rows, and set $E_{\epsilon}\defeq\epsilon(I_m)$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\epsilon$ is an elementary row operation and $E_{\epsilon}=\epsilon(I_m)$, then $E_{\epsilon}A=\epsilon(A)$.
-\item $E_{\epsilon}^{-1}=E_{\epsilon^{-1}}$; hence every elementary matrix is invertible with elementary inverse.
-\item If $F=E_{\epsilon}^t\in\operatorname{Mat}(n,n,\mathbb{F})$, then $AF=(\epsilon(A^t))^t$.\\
-Hence right multiplication performs the corresponding column operation.
+\item $E_{\epsilon}A=\epsilon(A)$.
+\item $E_{\epsilon}^{-1}=E_{\epsilon^{-1}}$; in particular, every elementary matrix has an elementary inverse.
+\item If $\eta$ is an elementary operation on $n$ rows and $F_{\eta}\defeq\eta(I_n)^t$, then $AF_{\eta}=(\eta(A^t))^t$.\\
+Thus right multiplication by $F_{\eta}$ performs the corresponding column operation.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For each row index $r$, $\operatorname{row}_r(E_{\epsilon}A)=\operatorname{row}_r(E_{\epsilon})A$.\\
-So the rows of $E_{\epsilon}A$ are exactly the $\epsilon$-linear combinations of the rows of $A$.
-\item Since $\epsilon^{-1}$ is elementary, $E_{\epsilon^{-1}}E_{\epsilon} =E_{\epsilon^{-1}}\epsilon(I_m) =\epsilon^{-1}(\epsilon(I_m)) =I_m$, and similarly $E_{\epsilon}E_{\epsilon^{-1}}=I_m$.
-\item By (i) and Proposition \ref{prop:transpose-reverses-products}, $(AF)^t=E_{\epsilon}A^t=\epsilon(A^t)$, so $AF=(\epsilon(A^t))^t$.
+\item The rows of $E_{\epsilon}$ identify the rows of $E_{\epsilon}A$ by matrix multiplication:
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item For scaling, $(E_{\epsilon})_{i,\cdot}=c\mathbf{e}_i^t$, while every other row is standard; hence $(E_{\epsilon}A)_{i,\cdot}=cA_{i,\cdot}$ and the other rows are unchanged.
+\item For a swap, $(E_{\epsilon})_{i,\cdot}=\mathbf{e}_j^t$ and $(E_{\epsilon})_{j,\cdot}=\mathbf{e}_i^t$; hence $E_{\epsilon}A$ exchanges rows $i$ and $j$, with every other row fixed.
+\item For replacement, $(E_{\epsilon})_{i,\cdot}=\mathbf{e}_i^t+c\mathbf{e}_j^t$, so $(E_{\epsilon}A)_{i,\cdot}=A_{i,\cdot}+cA_{j,\cdot}$; the other coordinate rows preserve their rows.
 \end{enumerate}
-\hlt{Structural Commentary}: Elementary matrices encode row and column operations by multiplication.\\
-\hlt{Key Insight}: Row operations are left multiplication; column operations are right multiplication.
+\item The inverse of a scaling by $c$ is scaling by $c^{-1}$, a swap is self-inverse, and the inverse of replacement by $c$ is replacement by $-c$.\\
+Therefore $E_{\epsilon^{-1}}E_{\epsilon}=\epsilon^{-1}(\epsilon(I_m))=I_m$ and $E_{\epsilon}E_{\epsilon^{-1}}=\epsilon(\epsilon^{-1}(I_m))=I_m$ by part (i).
+\item $(AF_{\eta})^t=F_{\eta}^tA^t=\eta(I_n)A^t=\eta(A^t)$ by Proposition \ref{prop:transpose-reverses-products}, Proposition \ref{prop:elementary-transpose-rules}(i), and part (i).\\
+After transposition, $(AF_{\eta})^{tt}=AF_{\eta}$, so $AF_{\eta}=(\eta(A^t))^t$.
+\end{enumerate}
+\hlt{Structural Commentary}: The proof translates row operations, their inverses, and transposition into multiplication identities.\\
+\hlt{Key Insight}: Elementary matrices store row operations as left factors.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:row-equivalence-and-rref} \hlt{Row Equivalence and Reduced Row Echelon Form}\\
-For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, write $A\sim_{\mathrm{row}}B$ if $B=E_k\cdots E_1A$ for elementary $E_i\in\operatorname{Mat}(m,m,\mathbb{F})$ and some $k\geq0$.\\
-A matrix $R=[r_{ij}]$ is in \hlt{reduced row echelon form} if its nonzero rows have pivot columns $p_1,\ldots,p_s$ such that:
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, $k=0$ interpreted as $I_m$; $A\sim_{\mathrm{row}}B\Longleftrightarrow B=E_k\cdots E_1A$ for $k\in\mathbb{N}_0$, elementary $E_1,\ldots,E_k\in\operatorname{Mat}(m,m,\mathbb{F})$.\\
+A matrix $R=[r_{i,j}]\in\operatorname{Mat}(m,n,\mathbb{F})$ is in \hlt{reduced row echelon form} if $(\exists s\in\{0,\ldots,m\})(\exists p_1,\ldots,p_s\in\{1,\ldots,n\})$ such that:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item rows $1,\ldots,s$ are nonzero and rows $s+1,\ldots,m$ are zero;
-\item $r_{i,p_i}=1$ and $r_{i,j}=0$ for $j<p_i$;
+\item $(\forall i\in\{1,\ldots,s\})\,R_{i,\cdot}\neq\mathbf{0}^t$ and $(\forall i\in\{s+1,\ldots,m\})\,R_{i,\cdot}=\mathbf{0}^t$;
+\item $(\forall i\in\{1,\ldots,s\})\,[r_{i,p_i}=1\land(\forall j\in\{1,\ldots,p_i-1\})\,r_{i,j}=0]$;
 \item $p_1<\cdots<p_s$;
-\item $r_{\ell,p_i}=0$ for all $\ell\neq i$.
+\item $(\forall i\in\{1,\ldots,s\})(\forall \ell\in\{1,\ldots,m\}\setminus\{i\})\,r_{\ell,p_i}=0$.
 \end{enumerate}
+The indices $p_1,\ldots,p_s$ are the \hlt{pivot columns} of $R$.
 \end{definition}
 
 \begin{theorem} \label{thm:rref-existence-uniqueness-and-elementary-factorization} \hlt{Reduced Row Echelon Form}\\
-For every $A\in\operatorname{Mat}(m,n,\mathbb{F})$, there is a unique RREF matrix $\operatorname{rref}(A)$ with $A\sim_{\mathrm{row}}\operatorname{rref}(A)$.\\
-If $R=\operatorname{rref}(A)$, then $R=E_k\cdots E_1A$ for elementary $E_i\in\operatorname{Mat}(m,m,\mathbb{F})$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $(\exists!\,R\in\operatorname{Mat}(m,n,\mathbb{F}))\,[R\text{ is in RREF}\land A\sim_{\mathrm{row}}R]$. Write $\operatorname{rref}(A)\defeq R$.
 \begin{proof}
-Gaussian elimination successively chooses a pivot column, swaps/scales to a pivot $1$, clears the pivot column, and continues on the remaining submatrix. Proposition \ref{prop:elementary-matrices-perform-row-operations} gives $R=E_k\cdots E_1A$ with $R$ in RREF.\\
-For uniqueness, row operations preserve $\ker(A)=\{\mathbf{x}:A\mathbf{x}=\mathbf{0}\}$. For an RREF matrix, the pivot set and pivot-variable formulas are determined by this kernel.\\
-Hence two row-equivalent RREF matrices have the same pivot columns and rows.\\
-\hlt{Structural Commentary}: RREF is the canonical row-operation representative of a matrix.\\
-\hlt{Key Insight}: Elimination gives existence; the solution space pins down the reduced representative.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Construction}: Set $i=1$ and $p_0=0$. Suppose rows $1,\ldots,i-1$ have pivot columns $p_1<\cdots<p_{i-1}$, these pivot columns are coordinate columns, and the remaining rows vanish in columns $1,\ldots,p_{i-1}$.\\
+If the remaining rows are zero, stop. Otherwise let $p_i$ be the least column containing a nonzero entry in rows $i,\ldots,m$.\\
+Swap such an entry into row $i$, scale it to $1$, and clear column $p_i$ by row replacement.\\
+The new pivot row vanishes before $p_i$, so these operations preserve the preceding pivot columns and extend the stated invariant.
+\item \hlt{Verification}: Each stage increases both the pivot-row index and the pivot-column index, so the construction stops after at most $\min(m,n)$ stages. At termination, the invariant is exactly the four RREF conditions.\\
+Each step is elementary, and hence the resulting matrix $R$ satisfies $R=E_k\cdots E_1A$ by Proposition \ref{prop:elementary-matrices-perform-row-operations}. Thus $A\sim_{\mathrm{row}}R$.
+\item \hlt{Leading Indices}: Let $R$ and $S$ be RREF matrices row-equivalent to $A$. Every elementary row operation replaces rows by linear combinations of rows, and its elementary inverse reverses the inclusion by Proposition \ref{prop:elementary-matrices-perform-row-operations}(i)--(ii).\\
+Hence $\operatorname{row}(R)=\operatorname{row}(A)=\operatorname{row}(S)\defeq\mathcal{W}$. If $\mathcal{W}=\{\mathbf{0}\}$, then $R=S=0$; assume $\mathcal{W}\neq\{\mathbf{0}\}$.\\
+For $\mathbf{v}\in\mathcal{W}\setminus\{\mathbf{0}\}$, set $\ell(\mathbf{v})\defeq\min\{j:v_j\neq0\}$. Let $X\in\{R,S\}$ have nonzero rows $X_{1,\cdot},\ldots,X_{h,\cdot}$ and pivot columns $q_1<\cdots<q_h$.\\
+$\mathbf{v}=\sum\limits_{i=1}^{h}c_iX_{i,\cdot}^t$, set $a\defeq\min\{i:c_i\neq0\}$. The RREF conditions imply $(\forall j\in\{1,\ldots,q_a-1\})\,v_j=0$ and $v_{q_a}=c_a\neq0$, so $\ell(\mathbf{v})=q_a$.\\
+Conversely, $\ell(X_{i,\cdot}^t)=q_i$. Therefore $\{\ell(\mathbf{v}):\mathbf{v}\in\mathcal{W}\setminus\{\mathbf{0}\}\}$ is the pivot set of both $R$ and $S$.
+\item \hlt{Uniqueness}: Let $p_1<\cdots<p_s$ be the common pivot columns.\\
+For $i\in\{1,\ldots,s\}$, the vector $\mathbf{d}_i\defeq R_{i,\cdot}^t-S_{i,\cdot}^t$ belongs to $\mathcal{W}$ and $(\forall j\in\{1,\ldots,s\})\,(\mathbf{d}_i)_{p_j}=0$.\\
+If $\mathbf{d}_i\neq\mathbf{0}$, then its leading index is a pivot column by part (iii), contradicting these zero pivot coordinates.\\
+Thus $R_{i,\cdot}=S_{i,\cdot}$ for $i\leq s$, while every row with index greater than $s$ is zero. Hence $R=S$.
+\end{enumerate}
+\hlt{Structural Commentary}: Elimination constructs a representative; leading-index invariance proves uniqueness in the common row space.\\
+\hlt{Key Insight}: A reduced row space determines every pivot row.
 \end{proof}
 \end{theorem}
 
 \begin{lemma} \label{lem:invertible-matrices-row-reduce-to-identity} \hlt{Invertible Matrices Row-Reduce to the Identity}\\
-If $P\in\operatorname{Mat}(m,m,\mathbb{F})$ is invertible, then $\operatorname{rref}(P)=I_m$. Hence there are elementary matrices $E_1,\ldots,E_k\in\operatorname{Mat}(m,m,\mathbb{F})$ such that $E_k\cdots E_1P=I_m$.
+Let $P\in\operatorname{Mat}(m,m,\mathbb{F})$ be invertible. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{rref}(P)=I_m$.
+\item $I_m=E_k\cdots E_1P$ for a $k\in\mathbb{N}_0$ and elementary $E_1,\ldots,E_k\in\operatorname{Mat}(m,m,\mathbb{F})$.
+\end{enumerate}
 \begin{proof}
-Let $R=\operatorname{rref}(P)$. By Theorem \ref{thm:rref-existence-uniqueness-and-elementary-factorization}, $R=E_k\cdots E_1P$ for elementary matrices $E_i$. Since each $E_i$ is invertible by Proposition \ref{prop:elementary-matrices-perform-row-operations}, left multiplication by $E_k\cdots E_1$ preserves the kernel, so $\ker(R)=\ker(P)$. Because $P$ is invertible, $P\mathbf{x}=\mathbf{0}$ implies $\mathbf{x}=P^{-1}P\mathbf{x}=\mathbf{0}$; hence $\ker(R)=\{\mathbf{0}\}$.\\
-Suppose the nonzero rows of $R$ have pivot columns $p_1<\cdots<p_s$. If $s<m$, choose a non-pivot column $j$. Set the non-pivot variable $x_j=1$, set all other non-pivot variables equal to $0$, and define the pivot variables recursively from $i=s$ down to $1$ so that the $i$th row equation is satisfied. This gives a nonzero $\mathbf{x}$ with $R\mathbf{x}=\mathbf{0}$, contradicting $\ker(R)=\{\mathbf{0}\}$. Thus $s=m$.\\
-Since $p_1<\cdots<p_m$ are $m$ columns in an $m\times m$ matrix, $p_i=i$ for every $i$. The RREF conditions then force the $i$th pivot column to be the $i$th standard coordinate column, so $R=I_m$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $R=[r_{i,j}]\defeq\operatorname{rref}(P)$. Then $R=E_k\cdots E_1P$ by Theorem \ref{thm:rref-existence-uniqueness-and-elementary-factorization} and the definition of row equivalence.\\
+Each $E_i$ is invertible by Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii), so $R$ is invertible by repeated use of Corollary \ref{cor:matrix-inverse-product-and-transpose}(i). Consequently, $\ker(R)=\{\mathbf{0}\}$.\\
+Let $p_1<\cdots<p_s$ be the pivot columns of $R$. If $s<m$, choose $j\in\{1,\ldots,m\}\setminus\{p_1,\ldots,p_s\}$ and define $\mathbf{x}\in\mathbb{F}^m$ by $x_j=1$, $(\forall i\in\{1,\ldots,s\})\,x_{p_i}=-r_{i,j}$, and $(\forall \ell\in\{1,\ldots,m\}\setminus\{j,p_1,\ldots,p_s\})\,x_{\ell}=0$.\\
+Then $(\forall i\in\{1,\ldots,s\})\,(R\mathbf{x})_i=x_{p_i}+r_{i,j}x_j=0$ and $(\forall i\in\{s+1,\ldots,m\})\,(R\mathbf{x})_i=0$. This contradicts $\ker(R)=\{\mathbf{0}\}$, so $s=m$.\\
+The strictly increasing pivot indices $p_1,\ldots,p_m\in\{1,\ldots,m\}$ satisfy $p_i=i$.\\
+Every pivot column is therefore the corresponding coordinate column, so $R=I_m$.
+\item By part (i), $P\sim_{\mathrm{row}}\operatorname{rref}(P)=I_m$. Thus $I_m=E_k\cdots E_1P$ by the definition of row equivalence.
+\end{enumerate}
+\hlt{Structural Commentary}: Kernel triviality excludes free columns; the square pivot set then forces the identity.\\
+\hlt{Key Insight}: An invertible reduced matrix has no free variable.
 \end{proof}
 \end{lemma}
 
@@ -72,29 +108,30 @@ For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, the following are equivalent:
 \setlength{\itemsep}{0pt}
 \item $A\sim_{\mathrm{row}}B$.
 \item $\operatorname{rref}(A)=\operatorname{rref}(B)$.
-\item $\exists\,P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$ such that $B=PA$.
+\item $(\exists\,P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times})\,B=PA$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ Row-equivalent matrices have the same unique RREF by Theorem \ref{thm:rref-existence-uniqueness-and-elementary-factorization}.
-\item[$(ii)$]$\Rightarrow (iii)$ If $R=\operatorname{rref}(A)=\operatorname{rref}(B)$, then $R=E_k\cdots E_1A=F_{\ell}\cdots F_1B$.\\
-Since each $F_j$ is invertible, $B=(F_{\ell}\cdots F_1)^{-1}E_k\cdots E_1A$.
-\item[$(iii)$]$\Rightarrow (i)$ If $B=PA$ and $P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$, Lemma \ref{lem:invertible-matrices-row-reduce-to-identity} gives elementary matrices with $E_k\cdots E_1P=I_m$.\\
-Hence $P=E_1^{-1}\cdots E_k^{-1}$, so $B$ is obtained from $A$ by elementary row operations.
+\item[$(i)$]$\Rightarrow (ii)$ Write $B=G_q\cdots G_1A$ and set $G\defeq G_q\cdots G_1$.\\
+The matrix $G$ is invertible, $G^{-1}=G_1^{-1}\cdots G_q^{-1}$, and each $G_j^{-1}$ is elementary by Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii) and Corollary \ref{cor:matrix-inverse-product-and-transpose}(i).\\
+For $R\defeq\operatorname{rref}(A)$, write $R=E_k\cdots E_1A$. Then $R=E_k\cdots E_1G^{-1}B$, so $B\sim_{\mathrm{row}}R$ and $R=\operatorname{rref}(B)$ by Theorem \ref{thm:rref-existence-uniqueness-and-elementary-factorization}. 
+\item[$(ii)$]$\Rightarrow (iii)$ Let $R\defeq\operatorname{rref}(A)=\operatorname{rref}(B)$ and write $R=E_k\cdots E_1A=F_{\ell}\cdots F_1B$. For $E\defeq E_k\cdots E_1$ and $F\defeq F_{\ell}\cdots F_1$, the matrix $P\defeq F^{-1}E$ is invertible by Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii) and Corollary \ref{cor:matrix-inverse-product-and-transpose}(i), and $B=PA$. 
+\item[$(iii)$]$\Rightarrow (i)$ Let $B=PA$ with $P$ invertible. Choose elementary matrices satisfying $E_k\cdots E_1P=I_m$ by Lemma \ref{lem:invertible-matrices-row-reduce-to-identity}(ii).\\
+Then $P=E_1^{-1}\cdots E_k^{-1}$, and each $E_i^{-1}$ is elementary by Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii). Hence $A\sim_{\mathrm{row}}B$.
 \end{enumerate}
-\hlt{Structural Commentary}: Row equivalence is invertible left multiplication.\\
-\hlt{Key Insight}: Products of elementary matrices are the coordinate record of row reduction.
+\hlt{Structural Commentary}: The implication cycle passes among canonical representatives, elementary products, and invertible left factors.\\
+\hlt{Key Insight}: Row equivalence is exactly invertible left multiplication.
 \end{proof}
 \end{corollary}
 
-\begin{method} \label{meth:augmented-inverse-computation-preview} \hlt{Augmented Inverse Computation Preview}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{F})$:
+\begin{computationmethod} \label{meth:augmented-inverse-computation-preview} \hlt{Inverse Computation by Gauss--Jordan Reduction}\\
+For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, this procedure returns $A^{-1}$ or certifies that $A$ is not invertible.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Form $[\,A\ I_n\,]$.
-\item Apply Gauss--Jordan reduction to the left block.
-\item If $[\,A\ I_n\,]\sim[\,I_n\ B\,]$, then $B=A^{-1}$.
-\item Otherwise $A$ is not invertible, by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
+\item Form $[\,A\mid I_n\,]$ and perform each Gauss--Jordan row operation on the entire augmented matrix until the left block is $\operatorname{rref}(A)$.
+\item If the result is $[\,I_n\mid B\,]$, choose $P\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ such that $[\,I_n\mid B\,]=P[\,A\mid I_n\,]=[\,PA\mid P\,]$ by Corollary \ref{cor:row-equivalence-characterization}.\\
+Then $P=B$, $BA=I_n$, and $AB=I_n$ by Theorem \ref{thm:square-one-sided-inverse-is-two-sided}; return $B=A^{-1}$.
+\item If $\operatorname{rref}(A)\neq I_n$, then $A$ is not invertible by Lemma \ref{lem:invertible-matrices-row-reduce-to-identity}(i).
 \end{enumerate}
-\end{method}
+\end{computationmethod}
