@@ -1,6 +1,6 @@
 \subsection{Householder Reflections}
 
-Throughout this subsection, $\mathbb{F}$ is $\mathbb{R}$ or $\mathbb{C}$.
+Throughout this subsection, $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
 
 \begin{definition} \label{def:householder-matrix} \hlt{Householder Matrix}\\
 Let $n\geq1$ and $\mathbf{w}\in\mathbb{F}^n\setminus\{\mathbf{0}\}$, and set $\mathbf{u}\defeq\frac{\mathbf{w}}{\norm{\mathbf{w}}_2}$. The \hlt{Householder matrix} associated with $\mathbf{w}$ is $U_{\mathbf{w}}\defeq I_n-2P_{\mathbf{u}}=I_n-2\frac{\mathbf{w}\mathbf{w}^*}{\norm{\mathbf{w}}_2^2}$.\\
@@ -16,34 +16,35 @@ Let $n\geq1$ and let $\mathbf{w}\in\mathbb{F}^n\setminus\{\mathbf{0}\}$. Then:
 \item $U_{\mathbf{w}}^*U_{\mathbf{w}}=I_n$, so $U_{\mathbf{w}}$ is unitary;
 \item $(\forall\,\mathbf{x}\in\mathbf{w}^{\perp})\,U_{\mathbf{w}}\mathbf{x}=\mathbf{x}$;
 \item $(\forall\,\mathbf{x}\in\operatorname{span}(\mathbf{w}))\,U_{\mathbf{w}}\mathbf{x}=-\mathbf{x}$;
-\item $\mathbf{w}\in\mathbb{R}^n\Longrightarrow U_{\mathbf{w}}$ is real symmetric and orthogonal.
+\item $\mathbf{w}\in\mathbb{R}^n\Longrightarrow U_{\mathbf{w}}$ is symmetric and orthogonal over $\mathbb{R}$.
 \end{enumerate}
 \begin{proof}
 Set $\mathbf{u}\defeq\frac{\mathbf{w}}{\norm{\mathbf{w}}_2}$ and $P\defeq P_{\mathbf{u}}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $(\forall\,i,j\in\{1,\ldots,n\})\,(P^*)_{ij}=\overline{P_{ji}}=P_{ij}$ by Proposition \ref{prop:rank-one-projection-matrix-properties}(iii). Hence $P^*=P$ and $U_{\mathbf{w}}^*=I_n-2P=U_{\mathbf{w}}$.
+\item The identity $P^*=P$ holds by Proposition \ref{prop:rank-one-projection-matrix-properties}(iii). Hence $U_{\mathbf{w}}^*=I_n-2P=U_{\mathbf{w}}$.
 \item The identity $P^2=P$ holds by Proposition \ref{prop:rank-one-projection-matrix-properties}(iv). Hence $U_{\mathbf{w}}^2=(I_n-2P)^2=I_n-4P+4P^2=I_n$.
 \item The identity $U_{\mathbf{w}}^*U_{\mathbf{w}}=U_{\mathbf{w}}^2=I_n$ holds by (i)--(ii), so $U_{\mathbf{w}}$ is unitary.
 \item Fix $\mathbf{x}\in\mathbf{w}^{\perp}=\operatorname{span}(\mathbf{u})^{\perp}$. Then $P\mathbf{x}=\mathbf{0}$ by Proposition \ref{prop:rank-one-projection-matrix-properties}(ii), so $U_{\mathbf{w}}\mathbf{x}=\mathbf{x}$.
-\item Fix $\mathbf{x}\in\operatorname{span}(\mathbf{w})=\operatorname{span}(\mathbf{u})$. Then $(\exists\,a\in\mathbb{F})\,\mathbf{x}=a\mathbf{u}$. Thus $P\mathbf{x}=\innerprod{a\mathbf{u},\mathbf{u}}\mathbf{u}=a\mathbf{u}=\mathbf{x}$ by $\norm{\mathbf{u}}_2=1$, and $U_{\mathbf{w}}\mathbf{x}=-\mathbf{x}$.
-\item If $\mathbf{w}\in\mathbb{R}^n$, then $\mathbf{u}$ and $P$ have real entries. Thus $U_{\mathbf{w}}$ is real symmetric and orthogonal by (i) and (iii).
+\item Fix $\mathbf{x}\in\operatorname{span}(\mathbf{w})=\operatorname{span}(\mathbf{u})$, and choose $a\in\mathbb{F}$ with $\mathbf{x}=a\mathbf{u}$. Then $P\mathbf{x}=\innerprod{a\mathbf{u},\mathbf{u}}\mathbf{u}=a\mathbf{u}=\mathbf{x}$ by $\norm{\mathbf{u}}_2=1$, so $U_{\mathbf{w}}\mathbf{x}=-\mathbf{x}$.
+\item Suppose $\mathbf{w}\in\mathbb{R}^n$. Then $\mathbf{u}$, $P$, and $U_{\mathbf{w}}$ have real entries.\\
+The identities $U_{\mathbf{w}}^t=U_{\mathbf{w}}$ and $U_{\mathbf{w}}^tU_{\mathbf{w}}=I_n$ hold by (i) and (iii), respectively.
 \end{enumerate}
-\hlt{Structural Commentary}: Self-adjoint idempotence of $P_{\mathbf{u}}$ separates the algebraic and fixed-space claims.\\
-\hlt{Key Insight}: $I-2P_{\mathbf{u}}$ flips exactly the projected component.
+\hlt{Structural Commentary}: Self-adjoint idempotence proves unitarity; the range--kernel split identifies the two eigenspaces.\\
+\hlt{Key Insight}: $I_n-2P_{\mathbf{u}}$ fixes $\ker(P_{\mathbf{u}})$ and negates $\operatorname{range}(P_{\mathbf{u}})$.
 \end{proof}
 \end{theorem}
 
-Figure \ref{fig:householder-reflection} depicts the hyperplane fixed and normal line reversed by Theorem \ref{thm:householder-matrix-properties}(iv)--(v).
+Figure \ref{fig:householder-reflection} illustrates the two eigenspace actions in Theorem \ref{thm:householder-matrix-properties}(iv)--(v).
 \begin{illustrationfigure}[H]
   \input{figures/linear_algebra/householder_reflection.tikz}
-  \caption{Householder reflection: $U_{\mathbf{w}}$ fixes the $\mathbf{w}^{\perp}$ component of $\mathbf{x}$ and reverses its $\operatorname{span}(\mathbf{w})$ component.}
+  \caption{Householder reflection: $U_{\mathbf{w}}$ preserves the $\mathbf{w}^{\perp}$ component of $\mathbf{x}$ and negates its $\operatorname{span}(\mathbf{w})$ component.}
   \label{fig:householder-reflection}
 \end{illustrationfigure}
 
 \begin{theorem} \label{thm:householder-maps-equal-norm-vectors} \hlt{Householder Map Between Equal-Norm Vectors}\\
-Let $n\geq1$ and let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$ satisfy $\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2\neq0$.\\
-Set $z\defeq\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}$ and choose $\sigma\in\mathbb{F}$ so that $(z=0\Longrightarrow\sigma=1)\land(z\neq0\Longrightarrow\sigma=-\frac{\overline{z}}{\abs{z}})$. Set $\mathbf{w}\defeq\mathbf{y}-\sigma\mathbf{x}$. Then:
+Let $n\geq1$ and let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$ satisfy $\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2\neq0$. Set $z\defeq\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}$.\\
+Choose $\sigma\in\mathbb{F}$ with $\sigma=1$ for $z=0$ and $\sigma=-\frac{\overline{z}}{\abs{z}}$ for $z\neq0$. Set $\mathbf{w}\defeq\mathbf{y}-\sigma\mathbf{x}$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\abs{\sigma}=1$;
@@ -54,36 +55,38 @@ Set $z\defeq\innerprod[\mathbb{F}^n]{\mathbf{x},\mathbf{y}}$ and choose $\sigma\
 Set $r\defeq\norm{\mathbf{x}}_2=\norm{\mathbf{y}}_2$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The identity $\abs{\sigma}=1$ holds by the defining alternatives.
-\item The identity $\sigma z=-\abs{z}$ holds by the defining alternatives.\\
-By (i) and conjugate symmetry, $\norm{\mathbf{w}}_2^2=2r^2-\sigma z-\overline{\sigma z}=2(r^2+\abs{z})>0$, so $\mathbf{w}\neq\mathbf{0}$ by positive definiteness.
-\item By $\mathbf{y}=\mathbf{w}+\sigma\mathbf{x}$, $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}-\left(1+2\sigma\frac{\innerprod{\mathbf{x},\mathbf{w}}}{\norm{\mathbf{w}}_2^2}\right)\mathbf{w}$. The identity $\innerprod{\mathbf{x},\mathbf{w}}=z-\overline{\sigma}r^2$ holds by the definition of $\mathbf{w}$. Thus $2\sigma\innerprod{\mathbf{x},\mathbf{w}}=2\sigma z-2r^2=-2(r^2+\abs{z})=-\norm{\mathbf{w}}_2^2$ by (i)--(ii), and $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}$.
+\item The identity $\abs{\sigma}=1$ holds by the two defining cases.
+\item The identity $\sigma z=-\abs{z}$ holds by the two defining cases.\\
+Thus $\norm{\mathbf{w}}_2^2=2r^2-2\operatorname{Re}(\sigma z)=2(r^2+\abs{z})>0$ by (i) and conjugate symmetry. Hence $\mathbf{w}\neq\mathbf{0}$ by positive definiteness.
+\item By $\mathbf{y}=\mathbf{w}+\sigma\mathbf{x}$ and Definition \ref{def:householder-matrix}, $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}-\mathbf{w}-2\sigma\frac{\innerprod{\mathbf{x},\mathbf{w}}}{\norm{\mathbf{w}}_2^2}\mathbf{w}$.\\
+The identity $2\sigma\innerprod{\mathbf{x},\mathbf{w}}=2\sigma z-2r^2=-\norm{\mathbf{w}}_2^2$ holds by the definition of $\mathbf{w}$ and (i)--(ii). Therefore $\sigma U_{\mathbf{w}}\mathbf{x}=\mathbf{y}$.
 \end{enumerate}
-\hlt{Structural Commentary}: The phase choice makes the reflection direction nonzero and cancels its coefficient.\\
-\hlt{Key Insight}: A unit phase aligns equal-norm vectors through one reflection.
+\hlt{Structural Commentary}: The phase makes $\sigma z$ nonpositive real; the norm identity then cancels the reflected component.\\
+\hlt{Key Insight}: $2\sigma\innerprod{\mathbf{x},\mathbf{w}}=-\norm{\mathbf{w}}_2^2$ annihilates the residual $\mathbf{w}$-coefficient.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:householder-unitary-annihilator} \hlt{Householder Unitary Annihilator}\\
-Let $n\geq1$, $\mathbf{x}=[x_1\ \cdots\ x_n]^t\in\mathbb{F}^n\setminus\{\mathbf{0}\}$. Choose $\sigma\in\mathbb{F}$, $(x_1=0\Longrightarrow\sigma=1)\land(x_1\neq0\Longrightarrow\sigma=-\frac{\overline{x_1}}{\abs{x_1}})$. Set $\mathbf{w}\defeq\norm{\mathbf{x}}_2\mathbf{e}_1-\sigma\mathbf{x}$. Then:
+Let $n\geq1$ and $\mathbf{x}=[x_1\ \cdots\ x_n]^t\in\mathbb{F}^n\setminus\{\mathbf{0}\}$. Choose $\sigma\in\mathbb{F}$ with $\sigma=1$ for $x_1=0$ and $\sigma=-\frac{\overline{x_1}}{\abs{x_1}}$ for $x_1\neq0$.\\
+Set $\mathbf{w}\defeq\norm{\mathbf{x}}_2\mathbf{e}_1-\sigma\mathbf{x}$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\mathbf{w}\neq\mathbf{0}$;
 \item $\sigma U_{\mathbf{w}}\mathbf{x}=\norm{\mathbf{x}}_2\mathbf{e}_1$;
-\item $\norm{\mathbf{x}}_2=1\Longrightarrow\overline{\sigma}U_{\mathbf{w}}$ is unitary with first column $\mathbf{x}$.
+\item $\norm{\mathbf{x}}_2=1\Longrightarrow\overline{\sigma}U_{\mathbf{w}}$ is unitary with $(\overline{\sigma}U_{\mathbf{w}})\mathbf{e}_1=\mathbf{x}$.
 \end{enumerate}
 \begin{proof}
 Set $\mathbf{y}\defeq\norm{\mathbf{x}}_2\mathbf{e}_1$. Then $\norm{\mathbf{y}}_2=\norm{\mathbf{x}}_2$ and $\innerprod{\mathbf{x},\mathbf{y}}=x_1\norm{\mathbf{x}}_2$.\\
-Since $\norm{\mathbf{x}}_2>0$, the defining alternatives for $\sigma$ coincide with those determined by $\innerprod{\mathbf{x},\mathbf{y}}$.
+Since $\norm{\mathbf{x}}_2>0$, the defining cases for $\sigma$ coincide with those determined by $\innerprod{\mathbf{x},\mathbf{y}}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item The relation $\mathbf{w}\neq\mathbf{0}$ holds by Theorem \ref{thm:householder-maps-equal-norm-vectors}(ii) with this $\mathbf{y}$.
 \item The identity $\sigma U_{\mathbf{w}}\mathbf{x}=\norm{\mathbf{x}}_2\mathbf{e}_1$ holds by Theorem \ref{thm:householder-maps-equal-norm-vectors}(iii) with this $\mathbf{y}$.
-\item Suppose $\norm{\mathbf{x}}_2=1$ and set $A\defeq\sigma U_{\mathbf{w}}$. Then $\abs{\sigma}=1$ by Theorem \ref{thm:householder-maps-equal-norm-vectors}(i), and $U_{\mathbf{w}}^*U_{\mathbf{w}}=I_n$ by Theorem \ref{thm:householder-matrix-properties}(iii).\\
-Hence $A^*A=\abs{\sigma}^2U_{\mathbf{w}}^*U_{\mathbf{w}}=I_n$, and $A^*$ is unitary by Theorem \ref{thm:unitary-matrix-equivalent-conditions}(iv). By (ii), $A\mathbf{x}=\mathbf{e}_1$, so $A^*\mathbf{e}_1=A^*A\mathbf{x}=\mathbf{x}$.\\
-The identity $A^*=\overline{\sigma}U_{\mathbf{w}}^*=\overline{\sigma}U_{\mathbf{w}}$ holds by Theorem \ref{thm:householder-matrix-properties}(i), so $\overline{\sigma}U_{\mathbf{w}}$ is unitary with first column $\mathbf{x}$.
+\item Suppose $\norm{\mathbf{x}}_2=1$ and set $A\defeq\sigma U_{\mathbf{w}}$. The identity $A^*A=\abs{\sigma}^2U_{\mathbf{w}}^*U_{\mathbf{w}}=I_n$ holds by Theorem \ref{thm:householder-maps-equal-norm-vectors}(i) and Theorem \ref{thm:householder-matrix-properties}(iii).\\
+Thus $A^*$ is unitary by Theorem \ref{thm:unitary-matrix-equivalent-conditions}(i),(iv) with $U=A$. By (ii), $A\mathbf{x}=\mathbf{e}_1$, so $A^*\mathbf{e}_1=A^*A\mathbf{x}=\mathbf{x}$.\\
+The identity $A^*=\overline{\sigma}U_{\mathbf{w}}$ holds by Theorem \ref{thm:householder-matrix-properties}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Equal-norm reflection constructs the annihilator; taking its adjoint prescribes a column.\\
-\hlt{Key Insight}: Reflect to $\mathbf{e}_1$, then adjoint to install $\mathbf{x}$.
+\hlt{Structural Commentary}: Equal-norm reflection constructs $A\mathbf{x}=\mathbf{e}_1$; unitarity transfers this identity to the first column of $A^*$.\\
+\hlt{Key Insight}: The adjoint reverses the annihilation map and installs $\mathbf{x}$ as a column.
 \end{proof}
 \end{corollary}
