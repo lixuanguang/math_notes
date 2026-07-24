@@ -1,83 +1,109 @@
 \subsection{Products AB and BA and Jordan Structure}
 
 \begin{proposition} \label{prop:ab-ba-characteristic-polynomial-and-similarity} \hlt{$AB$ and $BA$ Have the Same Characteristic Polynomial}\\
-For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, $p_{AB}=p_{BA}$.\\
-If $A\in\operatorname{GL}(n,\mathbb{F})$ or $B\in\operatorname{GL}(n,\mathbb{F})$, then $AB\sim_{\mathbb{F}}BA$; otherwise not necessarily.
+Let $\mathbb{F}$ be a field, let $n\in\mathbb{Z}_{>0}$, and let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_{AB}=p_{BA}$.
+\item If $A$ or $B$ is invertible, then $AB$ and $BA$ are similar.
+\item There exist singular $A_0,B_0\in\operatorname{Mat}(2,2,\mathbb{F})$ such that $A_0B_0$ and $B_0A_0$ are not similar.
+\end{enumerate}
 \begin{proof}
-In $\mathbb{F}(z)$, by Sylvester's identity $\det(zI-AB)=z^n\det(I-z^{-1}AB)=z^n\det(I-z^{-1}BA)=\det(zI-BA)$, hence $p_{AB}=p_{BA}$. If $A$ is invertible, $BA=A^{-1}(AB)A$; if $B$ is invertible, $AB=B^{-1}(BA)B$.\\
-Without invertibility, take $A=\begin{bmatrix}1&0\\0&0\end{bmatrix}$ and $B=\begin{bmatrix}0&1\\0&0\end{bmatrix}$.\\
-Then $AB=B$, $BA=0$, $p_{AB}=p_{BA}=z^2$, but $\operatorname{rank}(AB)=1\neq0=\operatorname{rank}(BA)$, so $AB\not\sim_{\mathbb{F}}BA$.\\
-\hlt{Structural Commentary}: Characteristic polynomials see less than similarity.\\
-\hlt{Key Insight}: $AB$ and $BA$ share determinant data; invertibility yields similarity.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Regard $z$ as an indeterminate over $\mathbb{F}$ and set $M\defeq\left(\begin{smallmatrix}I_n&-z^{-1}A\\-B&I_n\end{smallmatrix}\right)\in\operatorname{Mat}(2n,2n,\mathbb{F}(z))$.\\
+By block multiplication, $\left(\begin{smallmatrix}I_n&0\\B&I_n\end{smallmatrix}\right)M=\left(\begin{smallmatrix}I_n&-z^{-1}A\\0&I_n-z^{-1}BA\end{smallmatrix}\right)$. Similarly, $\left(\begin{smallmatrix}I_n&z^{-1}A\\0&I_n\end{smallmatrix}\right)M=\left(\begin{smallmatrix}I_n-z^{-1}AB&0\\-B&I_n\end{smallmatrix}\right)$.\\
+The two left factors have determinant $1$ by Theorem \ref{thm:block-upper-triangular-determinant} and Theorem \ref{thm:determinant-basic-laws}(i),(ix).\\
+The right sides have determinants $\det(I_n-z^{-1}BA)$ and $\det(I_n-z^{-1}AB)$, respectively, by Theorem \ref{thm:block-upper-triangular-determinant} and Theorem \ref{thm:determinant-basic-laws}(ix).\\
+Thus $\det(I_n-z^{-1}AB)=\det M=\det(I_n-z^{-1}BA)$ by Theorem \ref{thm:determinant-basic-laws}(vi).\\
+For $T\in\{AB,BA\}$, $p_T(z)=\det(zI_n-T)$ by Definition \ref{def:matrix-characteristic-polynomial}.\\
+The identity $\det(zI_n-T)=z^n\det(I_n-z^{-1}T)$ holds by repeated column linearity in Theorem \ref{thm:determinant-basic-laws}(ii).\\
+Hence $p_{AB}=p_{BA}$ by the preceding determinant equality.
+\item If $A$ is invertible, then $BA=A^{-1}(AB)A$. If $B$ is invertible, then $AB=B^{-1}(BA)B$.\\
+In either case, $AB$ and $BA$ are similar by Definition \ref{def:similar-matrices}.
+\item Set $A_0\defeq\left(\begin{smallmatrix}1&0\\0&0\end{smallmatrix}\right)$ and $B_0\defeq\left(\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right)$. Column spaces are one-dimensional, so both matrices have rank $1$ by Definition \ref{def:column-space-matrix-rank-nullity}.\\
+Hence both are singular by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}. The identities $A_0B_0=B_0$ and $B_0A_0=0$ hold by direct multiplication.\\
+The products are not similar by their unequal ranks and Theorem \ref{thm:full-rank-products-preserve-rank}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Elimination compares determinants; conjugation treats units; rank separates singular products.\\
+\hlt{Key Insight}: The determinant identity survives singular factors, but conjugation need not.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:ab-ba-same-nonzero-jordan-blocks} \hlt{Nonzero Jordan Blocks of $AB$ and $BA$}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. For every $\lambda\neq0$, the Jordan blocks of $AB$ and $BA$ at $\lambda$ coincide.
+Let $n\in\mathbb{Z}_{>0}$ and let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. For $\lambda\in\mathbb{C}\setminus\{0\}$, the Jordan blocks of $AB$ and $BA$ at $\lambda$ coincide.
 \begin{proof}
-Set $X=\begin{bmatrix}AB&A\\0&0\end{bmatrix}$ and $Y=\begin{bmatrix}0&A\\0&BA\end{bmatrix}$. Then $\begin{bmatrix}I_n&0\\B&I_n\end{bmatrix}
-X
-\begin{bmatrix}I_n&0\\-B&I_n\end{bmatrix}
-=Y$, so $X$ and $Y$ are similar.\\
-For $\lambda\neq0$ and $p\geq1$, the shifted powers have block triangular forms
-\begin{align}
-(X-\lambda I_{2n})^p=
-\begin{bmatrix}
-(AB-\lambda I_n)^p&*\\
-0&(-\lambda)^pI_n
-\end{bmatrix},
-\qquad
-(Y-\lambda I_{2n})^p=
-\begin{bmatrix}
-(-\lambda)^pI_n&*\\
-0&(BA-\lambda I_n)^p
-\end{bmatrix} \nonumber
-\end{align}
-The diagonal block $(-\lambda)^pI_n$ is invertible.\\
-Block Gaussian elimination by invertible row and column operations removes the starred block, so
-\begin{align}
-\operatorname{rank}\bigl((X-\lambda I_{2n})^p\bigr)
-&=n+\operatorname{rank}\bigl((AB-\lambda I_n)^p\bigr), \nonumber\\
-\operatorname{rank}\bigl((Y-\lambda I_{2n})^p\bigr)
-&=n+\operatorname{rank}\bigl((BA-\lambda I_n)^p\bigr).
-\nonumber
-\end{align}
-Since $X$ and $Y$ are similar, these left sides agree for all $p$.\\
-Hence the shifted rank drops of $AB$ and $BA$ at $\lambda$ agree. By Theorem \ref{thm:jordan-block-sizes-from-rank-drops}, their Jordan blocks at $\lambda$ coincide.\\
-\hlt{Structural Commentary}: Similar block embeddings make the nonzero shifted ranks match.\\
-\hlt{Key Insight}: At $\lambda\neq0$, the extra block is invertible and splits off.
+Fix $\lambda\in\mathbb{C}\setminus\{0\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Auxiliary Similarity}: Set $X\defeq\left(\begin{smallmatrix}AB&A\\0&0\end{smallmatrix}\right)$ and $Y\defeq\left(\begin{smallmatrix}0&A\\0&BA\end{smallmatrix}\right)$. Set $P\defeq\left(\begin{smallmatrix}I_n&0\\B&I_n\end{smallmatrix}\right)$.\\
+The identities $P^{-1}=\left(\begin{smallmatrix}I_n&0\\-B&I_n\end{smallmatrix}\right)$ and $PXP^{-1}=Y$ hold by block multiplication. Hence $X$ and $Y$ are similar by Definition \ref{def:similar-matrices}.
+\item \hlt{Shifted Powers}: Set $C\defeq AB-\lambda I_n$, $D\defeq-\lambda I_n$, $G\defeq BA-\lambda I_n$, and $E_1=F_1\defeq A$.\\
+For $p\in\mathbb{Z}_{>0}$, define $E_{p+1}\defeq C^pA+E_pD$ and $F_{p+1}\defeq D^pA+F_pG$.\\
+For $p\in\mathbb{Z}_{>0}$, let $\mathcal{P}_p^X$ denote $(X-\lambda I_{2n})^p=\left(\begin{smallmatrix}C^p&E_p\\0&D^p\end{smallmatrix}\right)$. Let $\mathcal{P}_p^Y$ denote $(Y-\lambda I_{2n})^p=\left(\begin{smallmatrix}D^p&F_p\\0&G^p\end{smallmatrix}\right)$, and set $\mathcal{P}_p\defeq(\mathcal{P}_p^X\land\mathcal{P}_p^Y)$.\\
+The relations $\mathcal{P}_1$ and $(\forall\,p\in\mathbb{Z}_{>0})\,(\mathcal{P}_p\Longrightarrow\mathcal{P}_{p+1})$ hold by the definitions and block multiplication with the recurrences.\\
+Hence $(\forall\,p\in\mathbb{Z}_{>0})\,\mathcal{P}_p$ by Theorem \ref{thm:mathematical-induction}.
+\item \hlt{Rank Splitting}: The matrix $D$ is invertible by $\lambda\neq0$. For $p\in\mathbb{Z}_{>0}$, set $U_p\defeq\left(\begin{smallmatrix}I_n&-E_pD^{-p}\\0&I_n\end{smallmatrix}\right)$. Set $V_p\defeq\left(\begin{smallmatrix}I_n&-D^{-p}F_p\\0&I_n\end{smallmatrix}\right)$.\\
+Both matrices are invertible by Proposition \ref{prop:block-upper-triangular-inverse}.\\
+Identity $U_p\left(\begin{smallmatrix}C^p&E_p\\0&D^p\end{smallmatrix}\right)=C^p\oplus D^p$ holds by block multiplication. Identity $\left(\begin{smallmatrix}D^p&F_p\\0&G^p\end{smallmatrix}\right)V_p=D^p\oplus G^p$ holds by block multiplication.\\
+For $H,K\in\operatorname{Mat}(n,n,\mathbb{C})$, $\operatorname{im}(H\oplus K)=\operatorname{im}(H)\oplus\operatorname{im}(K)$ by the coordinate-block action.\\
+The matrix $D^p$ has inverse $D^{-p}$ by induction on $p$, so $\operatorname{rank}(D^p)=n$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.\\
+The equality $\operatorname{rank}((X-\lambda I_{2n})^p)=\operatorname{rank}(C^p\oplus D^p)$ holds by item (ii), invertibility of $U_p$, and Theorem \ref{thm:full-rank-products-preserve-rank}(ii).\\
+Thus $\operatorname{rank}((X-\lambda I_{2n})^p)=n+\operatorname{rank}(C^p)$ by the image identity and Theorem \ref{thm:direct-sum-iff-dimensions-add}(i).\\
+The equality $\operatorname{rank}((Y-\lambda I_{2n})^p)=\operatorname{rank}(D^p\oplus G^p)$ holds by item (ii), invertibility of $V_p$, and Theorem \ref{thm:full-rank-products-preserve-rank}(ii).\\
+Thus $\operatorname{rank}((Y-\lambda I_{2n})^p)=n+\operatorname{rank}(G^p)$ by the image identity and Theorem \ref{thm:direct-sum-iff-dimensions-add}(i).
+\item \hlt{Jordan Recovery}: For $p\in\mathbb{Z}_{>0}$, $(Y-\lambda I_{2n})^p=P(X-\lambda I_{2n})^pP^{-1}$ by the identity in (i) and induction on $p$.\\
+Thus $\operatorname{rank}(C^p)=\operatorname{rank}(G^p)$ by item (iii) and Theorem \ref{thm:full-rank-products-preserve-rank}(ii). The equality also holds for $p=0$ by $C^0=G^0=I_n$.\\
+Polynomials $p_{AB}$ and $p_{BA}$ are equal by Proposition \ref{prop:ab-ba-characteristic-polynomial-and-similarity}(i). Hence $\lambda$ belongs to both spectra or to neither by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii).\\
+If $\lambda$ is outside spectra, neither product has $\lambda$-block. If $\lambda$ belongs to spectra, shifted-rank differences agree by rank equalities.\\
+Hence each $\lambda$-block size has equal multiplicity by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Auxiliary similarity transfers rank data; Weyr differences recover each nonzero block.\\
+\hlt{Key Insight}: The added diagonal block is invertible exactly when $\lambda\neq0$.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:ab-ba-nonzero-jordan-blocks} tracks the auxiliary similarity to the two shifted-rank sequences.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/ab_ba_nonzero_jordan_blocks.tikz}
   \caption{For $\lambda\neq0$, the auxiliary similarity reduces the comparison to shifted ranks of $AB$ and $BA$.}
   \label{fig:ab-ba-nonzero-jordan-blocks}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{corollary} \label{cor:ab-ba-similar-rank-power-criterion} \hlt{Similarity Criterion for $AB$ and $BA$}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. $AB$ is similar to $BA$ if and only if $\operatorname{rank}\bigl((AB)^p\bigr)=\operatorname{rank}\bigl((BA)^p\bigr)$, $p=1,\ldots,n$.
+Let $n\in\mathbb{Z}_{>0}$ and let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $AB$ is similar to $BA$ if and only if $(\forall\,p\in\{1,\ldots,n\})\,\operatorname{rank}((AB)^p)=\operatorname{rank}((BA)^p)$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$]
-If $AB\sim BA$, then $(AB)^p\sim(BA)^p$ for all $p$, so their ranks are equal.
-\item[$(\Leftarrow)$]
-Assume the rank equalities hold for $p=1,\ldots,n$. By Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks}, the nonzero Jordan blocks coincide. Together with the equality at $p=0$, the rank equalities give the same Weyr characteristic at $\lambda=0$. By Theorem \ref{thm:jordan-block-sizes-from-rank-drops}, the nilpotent blocks also agree, so the Jordan forms coincide up to block order.
+\item[$(\Rightarrow)$] Suppose $AB$ and $BA$ are similar. Choose $S\in\operatorname{GL}_n(\mathbb{C})$ satisfying $BA=S(AB)S^{-1}$ by Definition \ref{def:similar-matrices}.\\
+For $p\in\mathbb{Z}_{>0}$, $(BA)^p=S(AB)^pS^{-1}$ by induction on $p$. Hence $\operatorname{rank}((AB)^p)=\operatorname{rank}((BA)^p)$ by Theorem \ref{thm:full-rank-products-preserve-rank}(ii).
+\item[$(\Leftarrow)$] Assume the stated rank equalities. At exponent $0$, both powers equal $I_n$ and have rank $n$.\\
+For $T\in\{AB,BA\}$, $(\operatorname{rank}(T^q))_{q=n}^{\infty}$ is constant by Theorem \ref{thm:kernel-powers-stabilize-by-dimension} and Corollary \ref{cor:matrix-rank-nullity}(i).\\
+The two power-rank sequences agree by the assumed equalities, the exponent-zero identity, and stabilization.\\
+The nonzero Jordan blocks coincide by Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks}. The characteristic polynomials agree by Proposition \ref{prop:ab-ba-characteristic-polynomial-and-similarity}(i).\\
+Hence $0\in\operatorname{spec}(AB)\Longleftrightarrow0\in\operatorname{spec}(BA)$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii). Regard $AB$ and $BA$ as matrix-induced operators on $\mathbb{C}^n$. Choose Jordan matrices $J_{AB}$ and $J_{BA}$ similar to them by Theorem \ref{thm:complex-jordan-form}.\\
+If $0$ belongs to these spectra, the power-rank differences agree by the equal sequences.\\
+In this case, the zero-block multiplicities agree by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}(ii) with $J_{AB}$ and $J_{BA}$ in turn.\\
+If $0$ lies outside spectra, neither product has zero-Jordan block. Block multisets agree by nonzero- and zero-block comparisons.\\
+Choose a common block ordering and let $J$ be its direct sum.\\
+Coordinate permutation matrices $Q_{AB},Q_{BA}\in\operatorname{GL}_n(\mathbb{C})$ exist by the matching block multisets.\\
+They satisfy $Q_{AB}^{-1}J_{AB}Q_{AB}=J=Q_{BA}^{-1}J_{BA}Q_{BA}$ by block multiplication. Hence $AB$ and $BA$ are similar by Proposition \ref{prop:similarity-equivalence-relation}.
 \end{enumerate}
-\hlt{Structural Commentary}: Nonzero blocks agree automatically; only the nilpotent blocks must be tested.\\
-\hlt{Key Insight}: Powers of $AB$ and $BA$ measure exactly the zero-Jordan-block data.
+\hlt{Structural Commentary}: Power-rank invariance handles one direction; zero-block recovery handles the converse.\\
+\hlt{Key Insight}: Nonzero blocks already match, so ordinary power ranks detect the remainder.
 \end{proof}
 \end{corollary}
 
-\begin{method} \label{meth:checking-ab-ba-similarity} \hlt{Checking Whether $AB$ and $BA$ Are Similar}\\
-For $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$:
+\begin{computationmethod} \label{meth:checking-ab-ba-similarity} \hlt{Checking Whether $AB$ and $BA$ Are Similar}\\
+Given $n\in\mathbb{Z}_{>0}$ and $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$, the output is a decision whether $AB$ and $BA$ are similar.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The nonzero Jordan blocks of $AB$ and $BA$ already match.
-\item Compute $\operatorname{rank}\bigl((AB)^p\bigr)$ and $\operatorname{rank}\bigl((BA)^p\bigr)$ for $p=1,\ldots,n$.
-\item If all ranks agree, then $AB\sim BA$; if some rank differs, then only the nilpotent Jordan structure differs.
+\item Form $C\defeq AB$ and $D\defeq BA$.
+\item Compute $\operatorname{rank}(C^p)$ and $\operatorname{rank}(D^p)$ for $p\in\{1,\ldots,n\}$.
+\item Return ``similar'' if every computed rank pair agrees; otherwise return ``not similar.''\\
+The first unequal pair certifies different zero-Jordan structures.
 \end{enumerate}
-Step (i) follows from Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks}, and step (iii) is Corollary \ref{cor:ab-ba-similar-rank-power-criterion}.
-\end{method}
+The nonzero Jordan blocks agree by Theorem \ref{thm:ab-ba-same-nonzero-jordan-blocks}. The output is correct by Corollary \ref{cor:ab-ba-similar-rank-power-criterion}.
+\end{computationmethod}
