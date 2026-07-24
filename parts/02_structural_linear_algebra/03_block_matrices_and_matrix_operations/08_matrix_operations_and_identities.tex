@@ -1,6 +1,80 @@
 \subsection{Matrix Operations and Identities}
 Throughout this subsection, all matrices are over the same fixed field $\mathbb{F}$, and every matrix size is a positive integer.
 
+\begin{definition} \label{def:matrix-trace-and-determinant} \hlt{Trace and Determinant of a Matrix}\\
+Let $n\geq1$ and $A=[a_{jk}]\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{trace} of $A$ is $\operatorname{tr}(A)\defeq\sum\limits_{j=1}^{n}a_{jj}$.
+\item The \hlt{determinant} of $A$ is $\det A\defeq\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)\prod\limits_{j=1}^{n}a_{\sigma(j),j}$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem} \label{thm:determinant-basic-laws} \hlt{Basic Determinant Laws}\\
+Let $n\geq1$ and $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det I_n=1$.
+\item For fixed $k\in\{1,\ldots,n\}$ and $(A_{\cdot,j})_{j\neq k}$, the map $\mathbf{x}\mapsto\det(A_{\cdot,1},\ldots,\mathbf{x},\ldots,A_{\cdot,n})$ is linear.
+\item Swapping two columns negates the determinant.
+\item If two columns of $A$ are equal, then $\det A=0$.
+\item If $A$ is triangular, then $\det A=\prod\limits_{j=1}^{n}a_{jj}$.
+\item $\det(AB)=\det(A)\det(B)$.
+\item $A$ is invertible if and only if $\det A\neq0$.
+\item If $A$ is invertible, then $\det(A^{-1})=(\det A)^{-1}$.
+\item $\det(A^t)=\det(A)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] In the permutation formula for $I_n$, only the identity permutation has a nonzero product, and its contribution is $1$.
+\item[$(ii)$] For $k\in\{1,\ldots,n\}$, $\det(A_{\cdot,1},\ldots,\mathbf{x},\ldots,A_{\cdot,n})=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)x_{\sigma(k)}\prod\limits_{\ell\neq k}a_{\sigma(\ell),\ell}$, which is linear in $\mathbf{x}$.
+\item[$(iii)$] Let $\tau$ transpose columns $p$ and $q$, and let $B_{\cdot,j}=A_{\cdot,\tau(j)}$. Then $\det B=-\det A$ by reindexing the determinant sum with $\rho=\sigma\circ\tau$, because $\sign(\rho\circ\tau)=-\sign(\rho)$.
+\item[$(iv)$] If columns $p$ and $q$ are equal, pair the term indexed by $\sigma$ with the term indexed by $\sigma\circ(p\ q)$. Their products agree and their signs are opposite, so every pair sums to zero, including when $\operatorname{char}(\mathbb{F})=2$.
+\item[$(v)$] Suppose $A$ is upper triangular. A nonzero term satisfies $(\forall j\in\{1,\ldots,n\})\,\sigma(j)\leq j$, hence $\sigma=\operatorname{id}$ and $\det A=\prod\limits_{j=1}^{n}a_{jj}$. The lower-triangular case is analogous with $(\forall j\in\{1,\ldots,n\})\,\sigma(j)\geq j$.
+\item[$(vi)$] Let $F$ be alternating and multilinear in its $n$ column arguments. Standard-basis expansion produces terms indexed by $(i_1,\ldots,i_n)\in\{1,\ldots,n\}^n$; repeated indices vanish by alternation.\\
+The surviving tuples are permutations, and $F(\mathbf{e}_{\sigma(1)},\ldots,\mathbf{e}_{\sigma(n)})=\sign(\sigma)F(I_n)$ by alternation. Hence $F(A_{\cdot,1},\ldots,A_{\cdot,n})=F(I_n)\det A$.\\
+For fixed $A$, $H(B)\defeq\det(AB)$ is alternating and multilinear in the columns of $B$, with $H(I_n)=\det A$. Thus $\det(AB)=H(B)=H(I_n)\det B=\det(A)\det(B)$.
+\item[$(vii)$] ($\Rightarrow$) If $A$ is invertible, then $\det A\neq0$ because $1=\det(AA^{-1})=\det(A)\det(A^{-1})$ by parts (i) and (vi).
+\item[$(vii)$] ($\Leftarrow$) If $A$ were singular, one column would be a linear combination of the others, and $\det A=0$ by parts (ii) and (iv), contrary to $\det A\neq0$. Thus $A$ is invertible.
+\item[$(viii)$] If $A$ is invertible, then $\det(A^{-1})=(\det A)^{-1}$ by $1=\det(AA^{-1})=\det(A)\det(A^{-1})$ from parts (i), (vi), and (vii).
+\item[$(ix)$] $\det(A^t)=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)\prod\limits_{j=1}^{n}a_{j,\sigma(j)}=\sum\limits_{\tau\in\mathfrak{S}_n}\sign(\tau)\prod\limits_{j=1}^{n}a_{\tau(j),j}=\det A$ by reindexing with $\tau=\sigma^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The permutation formula establishes alternation and triangularity before multiplicativity and invertibility.\\
+\hlt{Key Insight}: Alternating multilinearity reduces every column expansion to signed basis permutations.
+\end{proof}
+\end{theorem}
+
+\begin{lemma} \label{lem:determinant-identity-direct-sum} \hlt{Identity Blocks Do Not Change Determinant}\\
+Let $m\geq1$, $n\geq0$, and $A\in\operatorname{Mat}(m,m,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det(I_n\oplus A)=\det A$;
+\item $\det(A\oplus I_n)=\det A$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $n=0$, the identity holds by the empty identity-block convention. If $n\geq1$, every nonzero permutation term fixes $\{1,\ldots,n\}$ pointwise; relabeling the remaining indices produces exactly the determinant expansion of $A$.
+\item If $n=0$, the identity again holds by convention. If $n\geq1$, every nonzero term fixes the last $n$ indices pointwise, and the remaining sum is $\det A$.
+\end{enumerate}
+\hlt{Structural Commentary}: Each block position reduces the permutation sum to the indices occupied by $A$.\\
+\hlt{Key Insight}: An identity block forces its coordinates to remain fixed.
+\end{proof}
+\end{lemma}
+
+\begin{theorem} \label{thm:block-upper-triangular-determinant} \hlt{Determinant of an Upper Block-Triangular Matrix}\\
+Let $r,s\geq1$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
+Then $\det\left(\begin{smallmatrix}A&B\\0&D\end{smallmatrix}\right)=\det(A)\det(D)$.
+\begin{proof}
+$\left(\begin{smallmatrix}A&B\\0&D\end{smallmatrix}\right)=\left(\begin{smallmatrix}I_r&0\\0&D\end{smallmatrix}\right)\left(\begin{smallmatrix}I_r&B\\0&I_s\end{smallmatrix}\right)\left(\begin{smallmatrix}A&0\\0&I_s\end{smallmatrix}\right)$.\\
+The outer determinants are $\det D$ and $\det A$ by Lemma \ref{lem:determinant-identity-direct-sum}; the middle determinant is $1$ by Theorem \ref{thm:determinant-basic-laws}(v).\\
+The formula follows by Theorem \ref{thm:determinant-basic-laws}(vi).\\
+\hlt{Structural Commentary}: A three-factor decomposition isolates the two diagonal-block determinants.\\
+\hlt{Key Insight}: The off-diagonal block lies in a unit upper-triangular factor.
+\end{proof}
+\end{theorem}
+
 \begin{definition} \label{def:polynomial-evaluation-on-square-matrix} \hlt{Polynomial Evaluation on a Square Matrix}\\
 Let $n\geq1$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Define $A^0\defeq I_n$ and $(\forall\,j\in\mathbb{Z}_{\geq0})\,A^{j+1}\defeq A^jA$.\\
 For $p(z)=\sum\limits_{j=0}^{d}c_jz^j\in\mathbb{F}[z]$, where $d\geq0$, the \hlt{evaluation of $p$ at $A$} is $p(A)\defeq\sum\limits_{j=0}^{d}c_jA^j\in\operatorname{Mat}(n,n,\mathbb{F})$.

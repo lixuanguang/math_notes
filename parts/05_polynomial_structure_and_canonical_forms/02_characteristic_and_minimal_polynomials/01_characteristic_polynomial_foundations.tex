@@ -1,132 +1,221 @@
 \subsection{Characteristic Polynomial Foundations}
 
 \begin{motivation} \label{mot:characteristic-and-minimal-polynomials} \hlt{Two Spectral Polynomials}\\
-The characteristic polynomial records eigenvalues with algebraic multiplicity.\\
-The minimal polynomial records the shortest polynomial relation satisfied by the operator.
+Eigenvalues alone do not record algebraic repetition, and a matrix can satisfy many polynomial relations.\\
+The characteristic polynomial records root multiplicities; the minimal polynomial selects the least-degree monic relation.
 \end{motivation}
 
 \begin{definition} \label{def:matrix-characteristic-polynomial} \hlt{Characteristic Polynomial}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{characteristic polynomial} of $A$ is $p_A(z)\defeq\det(zI_n-A)$.
+Let $n\geq1$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. The \hlt{characteristic polynomial} of $A$ is $p_A(z)\defeq\det(zI_n-A)\in\mathbb{F}[z]$.
 \end{definition}
 
 \begin{theorem} \label{thm:matrix-characteristic-polynomial-basic-coefficients} \hlt{Basic Form of the Characteristic Polynomial}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $p_A$ is monic of degree $n$ and $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$.\\
-Moreover, for $\lambda\in\mathbb{F}$, $\lambda\in\operatorname{spec}(A)$ if and only if $p_A(\lambda)=0$.
+Let $n\geq1$ and $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. The following hold:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$; in particular, $p_A$ is monic of degree $n$.
+\item $\operatorname{spec}(A)=\{\lambda\in\mathbb{F}:p_A(\lambda)=0\}$.
+\end{enumerate}
 \begin{proof}
-The only determinant term of degree greater than $n-2$ comes from the identity permutation:
-\begin{align}
-(z-a_{11})(z-a_{22})\cdots(z-a_{nn})=z^n-(a_{11}+\cdots+a_{nn})z^{n-1}+\cdots.
-\nonumber
-\end{align}
-Thus $p_A$ is monic and the coefficient of $z^{n-1}$ is $-\operatorname{tr}A$; also $p_A(0)=\det(-A)=(-1)^n\det A$. Finally, $p_A(\lambda)=0$ if and only if $\lambda I_n-A$ is singular, equivalently $\ker(A-\lambda I_n)\neq\{\mathbf{0}\}$.\\
-\hlt{Structural Commentary}: The diagonal product determines the top two coefficients.\\
-\hlt{Key Insight}: Eigenvalues are precisely the roots of $\det(zI_n-A)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Definitions \ref{def:matrix-characteristic-polynomial} and \ref{def:matrix-trace-and-determinant}, $p_A(z)=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)\prod\limits_{j=1}^{n}(z\delta_{\sigma(j),j}-a_{\sigma(j),j})$.\\
+A nonidentity permutation moves at least two indices, so its summand has degree at most $n-2$.\\
+The identity summand is $\prod\limits_{j=1}^{n}(z-a_{jj})=z^n-(\operatorname{tr}A)z^{n-1}+\cdots$ by Definition \ref{def:matrix-trace-and-determinant}(i).\\
+$p_A(0)=\det(-A)=(-1)^n\det A$ by Definition \ref{def:matrix-characteristic-polynomial} and repeated column linearity from Theorem \ref{thm:determinant-basic-laws}(ii). Thus (i) holds.
+\item Fix $\lambda\in\mathbb{F}$. By Definition \ref{def:matrix-characteristic-polynomial} and Theorem \ref{thm:determinant-basic-laws}(vii), $p_A(\lambda)=0\Longleftrightarrow\lambda I_n-A$ is singular.\\
+By Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum} and Definition \ref{def:spectrum-and-geometric-multiplicity}(iii), this is equivalent to $\lambda\in\operatorname{spec}(A)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Permutation degrees determine the coefficients; shifted singularity identifies the root set.\\
+\hlt{Key Insight}: The determinant vanishes exactly when the spectral shift has nonzero kernel.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:matrix-algebraic-multiplicity} \hlt{Algebraic Multiplicity}\\
-For $\lambda\in\mathbb{F}$, let $m_A(\lambda)$ be the multiplicity of $\lambda$ as a root of $p_A$, with $m_A(\lambda)=0$ if $\lambda\notin\operatorname{spec}(A)$.\\
-For $\lambda\in\operatorname{spec}(A)$, this is the \hlt{algebraic multiplicity} of $\lambda$. Unqualified multiplicity means algebraic multiplicity.
+Let $n\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and $\lambda\in\mathbb{F}$. The \hlt{algebraic multiplicity} $m_A(\lambda)$ is the multiplicity of $\lambda$ as a root of $p_A$.\\
+If $\lambda\notin\operatorname{spec}(A)$, set $m_A(\lambda)\defeq0$. Unqualified multiplicity means algebraic multiplicity.
 \end{definition}
 
-\begin{figure}[H]
+Figure \ref{fig:characteristic-polynomial-roots} summarizes the passage from a matrix to its characteristic polynomial and roots.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/characteristic_polynomial_roots.tikz}
-  \caption{Form $p_A(z)=\det(zI_n-A)$ and factor it; each root $\lambda$ is counted by $m_A(\lambda)$.}
+  \caption{The chain $A\mapsto p_A\mapsto\{\lambda_1,\ldots,\lambda_d\}$; $m_A$ retains each root multiplicity.}
   \label{fig:characteristic-polynomial-roots}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{method} \label{meth:characteristic-equation-eigenspace-computation} \hlt{Characteristic Equation and Eigenspace Computation}\\
-To compute eigenvalues and eigenspaces of $A\in\operatorname{Mat}(n,n,\mathbb{F})$:
+\begin{computationmethod} \label{meth:characteristic-equation-eigenspace-computation} \hlt{Characteristic Equation and Eigenspace Computation}\\
+Given $n\geq1$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$, compute its spectral data as follows:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Form the characteristic polynomial $p_A(z)=\det(zI_n-A)$ from Definition \ref{def:matrix-characteristic-polynomial}.
-\item Solve the characteristic equation $p_A(\lambda)=0$. By Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}, the solutions are exactly the eigenvalues in $\mathbb{F}$.
-\item For each eigenvalue $\lambda$, row-reduce $A-\lambda I_n$ and compute
-\begin{align}
-E_{\lambda}(A)=\ker(A-\lambda I_n). \nonumber
-\end{align}
-\item Choose a basis of each eigenspace. The dimension of this basis is the geometric multiplicity of $\lambda$.
+\item Form $p_A(z)=\det(zI_n-A)$ by Definition \ref{def:matrix-characteristic-polynomial}.
+\item Compute $\{\lambda\in\mathbb{F}:p_A(\lambda)=0\}=\operatorname{spec}(A)$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii), recording each $m_A(\lambda)$.
+\item $(\forall\,\lambda\in\operatorname{spec}(A))$, row-reduce $A-\lambda I_n$ and compute $E_{\lambda}(A)=\ker(A-\lambda I_n)$.
+\item Choose a basis of each $E_{\lambda}(A)$ and return its dimension as the geometric multiplicity.
 \end{enumerate}
-Algebraic multiplicity comes from the factorisation of $p_A$, while geometric multiplicity comes from the nullspace computation.
-\end{method}
+The output separates algebraic multiplicity from the nullspace dimension.
+\end{computationmethod}
 
 \begin{proposition} \label{prop:upper-triangular-characteristic-polynomial} \hlt{Upper-Triangular Eigenvalues}\\
-If $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ is upper triangular, then $p_A(z)=\prod\limits_{j=1}^{n}(z-a_{jj})$.\\
-Thus $\operatorname{spec}(A)=\{a_{jj}:1\leq j\leq n\}$, and for $\lambda\in\operatorname{spec}(A)$, $m_A(\lambda)=\#\{j:a_{jj}=\lambda\}$.
+Let $n\geq1$, let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ be upper triangular, and set $J_n\defeq\{1,\ldots,n\}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_A(z)=\prod\limits_{j=1}^{n}(z-a_{jj})$;
+\item $\operatorname{spec}(A)=\{a_{jj}:j\in J_n\}$;
+\item $(\forall\,\lambda\in\mathbb{F})$, $m_A(\lambda)=\#\{j\in J_n:a_{jj}=\lambda\}$.
+\end{enumerate}
 \begin{proof}
-Since $zI_n-A$ is upper triangular with diagonal entries $z-a_{jj}$, $p_A(z)=\det(zI_n-A)=\prod\limits_{j=1}^{n}(z-a_{jj})$.\\
-Thus the roots of $p_A$ are exactly the diagonal entries, and the exponent of $(z-\lambda)$ is $\#\{j:a_{jj}=\lambda\}$.\\
-\hlt{Structural Commentary}: Triangular form removes all off-diagonal determinant contributions.\\
-\hlt{Key Insight}: Once a matrix is triangular, the spectrum is visible on the diagonal.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Matrix $zI_n-A$ is upper triangular with diagonal entries $z-a_{jj}$. By Theorem \ref{thm:determinant-basic-laws}(v) and Definition \ref{def:matrix-characteristic-polynomial}, $p_A(z)=\prod\limits_{j=1}^{n}(z-a_{jj})$.
+\item By (i) and Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii), the roots of $p_A$ and the elements of $\operatorname{spec}(A)$ are exactly the diagonal entries.
+\item Fix $\lambda\in\mathbb{F}$. In the factorization from (i), the exponent of $z-\lambda$ is $\#\{j\in J_n:a_{jj}=\lambda\}$.\\
+This equals $m_A(\lambda)$ by Definition \ref{def:matrix-algebraic-multiplicity}, including when $\lambda\notin\operatorname{spec}(A)$. Thus (iii) holds.
+\end{enumerate}
+\hlt{Structural Commentary}: Triangularity reduces the determinant to diagonal factors; repeated factors encode algebraic multiplicity.\\
+\hlt{Key Insight}: For an upper-triangular matrix, the entire characteristic root multiset is visible on the diagonal.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:similarity-preserves-characteristic-polynomial} \hlt{Similarity Preserves Characteristic Data}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ and suppose $B=SAS^{-1}$ for some invertible $S$. Then $p_B=p_A$. In particular, for each $\lambda\in\operatorname{spec}(A)$, $m_B(\lambda)=m_A(\lambda)$ and $\dim E_{\lambda}(B)=\dim E_{\lambda}(A)$.
+Let $n\geq1$, let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, and let $S\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ satisfy $B=SAS^{-1}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_B=p_A$;
+\item $(\forall\,\lambda\in\mathbb{F})$, $m_B(\lambda)=m_A(\lambda)$;
+\item $(\forall\,\lambda\in\mathbb{F})$, the restriction $S|_{E_{\lambda}(A)}:E_{\lambda}(A)\to E_{\lambda}(B)$ is an isomorphism, so $\dim E_{\lambda}(B)=\dim E_{\lambda}(A)$.
+\end{enumerate}
 \begin{proof}
-For every $z$, $p_B(z) =\det(zI_n-SAS^{-1}) =\det(S(zI_n-A)S^{-1}) =\det(S)\det(zI_n-A)\det(S)^{-1} =p_A(z)$.\\
-Thus roots and root multiplicities agree, so $m_B(\lambda)=m_A(\lambda)$. Also $B-\lambda I_n=S(A-\lambda I_n)S^{-1}$.\\
-Hence $\mathbf{x}\in\ker(A-\lambda I_n)$ if and only if $S\mathbf{x}\in\ker(B-\lambda I_n)$, $S$ restricts to isomorphism between two eigenspaces.\\
-\hlt{Structural Commentary}: Similarity changes coordinates, not the shifted determinant or shifted kernel dimension.\\
-\hlt{Key Insight}: Conjugation inserts $S$ and $S^{-1}$, which cancel in determinants and identify kernels.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By $zI_n-B=S(zI_n-A)S^{-1}$ and Theorem \ref{thm:determinant-basic-laws}(vi),(viii), $p_B(z)=\det(S)\det(zI_n-A)\det(S^{-1})=p_A(z)$.
+\item Equal polynomials have the same roots with the same multiplicities. By (i) and Definition \ref{def:matrix-algebraic-multiplicity}, $(\forall\,\lambda\in\mathbb{F})\,m_B(\lambda)=m_A(\lambda)$.
+\item Fix $\lambda\in\mathbb{F}$. If $\mathbf{x}\in E_{\lambda}(A)$, then $(B-\lambda I_n)S\mathbf{x}=S(A-\lambda I_n)\mathbf{x}=\mathbf{0}$, so $S(E_{\lambda}(A))\subseteq E_{\lambda}(B)$. The same calculation for $A=S^{-1}BS$ proves the reverse inclusion. Thus $S|_{E_{\lambda}(A)}$ is an isomorphism onto $E_{\lambda}(B)$, and the dimensions agree.
+\end{enumerate}
+\hlt{Structural Commentary}: Conjugation preserves the shifted determinant and transports shifted kernels through one coordinate change.\\
+\hlt{Key Insight}: Similarity preserves both algebraic multiplicity and geometric multiplicity.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:block-upper-triangular-characteristic-polynomial} \hlt{Block Upper-Triangular Characteristic Polynomial}\\
-Let $A=
-\begin{bmatrix}
-B & C\\
-0 & D
-\end{bmatrix}$, $B$ and $D$ are square. Then $p_A(z)=p_B(z)p_D(z)$, so $m_A(\lambda)=m_B(\lambda)+m_D(\lambda) \ \forall\lambda\in\mathbb{F}$.
+Let $r,s\geq1$, let $B\in\operatorname{Mat}(r,r,\mathbb{F})$, $C\in\operatorname{Mat}(r,s,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$, and set $A\defeq\left(\begin{smallmatrix}B&C\\0&D\end{smallmatrix}\right)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_A=p_Bp_D$;
+\item $(\forall\,\lambda\in\mathbb{F})$, $m_A(\lambda)=m_B(\lambda)+m_D(\lambda)$.
+\end{enumerate}
 \begin{proof}
-The shifted matrix is block upper triangular, $zI-A=
-\begin{bmatrix}
-zI-B & -C\\
-0 & zI-D \end{bmatrix}$.\\
-Theorem \ref{thm:block-upper-triangular-determinant} gives $p_A(z)=\det(zI-B)\det(zI-D)=p_B(z)p_D(z)$.\\
-Roots of a product are the roots of the factors, with multiplicity added.\\
-\hlt{Structural Commentary}: The off-diagonal block couples vectors but not determinant factors.\\
-\hlt{Key Insight}: In block upper-triangular form, spectral data lives on the diagonal blocks.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The shifted matrix is $zI_{r+s}-A=\left(\begin{smallmatrix}zI_r-B&-C\\0&zI_s-D\end{smallmatrix}\right)$. By Theorem \ref{thm:block-upper-triangular-determinant} and Definition \ref{def:matrix-characteristic-polynomial}, $p_A=p_Bp_D$.
+\item Fix $\lambda\in\mathbb{F}$. By (i) and Definition \ref{def:matrix-algebraic-multiplicity}, the multiplicity of $\lambda$ in $p_A$ is the sum of its multiplicities in $p_B$ and $p_D$, including when $\lambda$ is absent from one or both spectra.
+\end{enumerate}
+\hlt{Structural Commentary}: The determinant splits across the diagonal blocks, so root orders add across the two characteristic factors.\\
+\hlt{Key Insight}: The off-diagonal block affects eigenvectors but not the characteristic polynomial.
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:geometric-multiplicity-bounded-by-algebraic-multiplicity} \hlt{Geometric Multiplicity Is at Most Algebraic Multiplicity}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and let $\lambda\in\operatorname{spec}(A)$. Then $\dim E_{\lambda}(A)\leq m_A(\lambda)$.
+\begin{theorem} \label{thm:matrix-schur-triangularization-ordered} \hlt{Matrix Schur Triangularisation with Ordered Diagonal}\\
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity and listed in a prescribed order, and let $A\mathbf{x}=\lambda_1\mathbf{x}$ with $\norm{\mathbf{x}}_2=1$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\exists\,U_2\in\operatorname{Mat}(n,n-1,\mathbb{C}))$ such that $[\mathbf{x}\ U_2]$ is unitary and $[\mathbf{x}\ U_2]^*A[\mathbf{x}\ U_2]$ is upper triangular with diagonal $\lambda_1,\ldots,\lambda_n$;
+\item if $A\in\operatorname{Mat}(n,n,\mathbb{R})$, $\lambda_1,\ldots,\lambda_n\in\mathbb{R}$, and $\mathbf{x}\in\mathbb{R}^n$, then the matrix in (i) may be chosen real orthogonal.
+\end{enumerate}
 \begin{proof}
-Let $k=\dim E_{\lambda}(A)$ and choose a basis $\mathbf{x}_1,\ldots,\mathbf{x}_k$ of $E_{\lambda}(A)$. Extend it to a basis of $\mathbb{F}^n$, and let $S$ be the matrix whose columns are this basis. In the new basis,
-\begin{align}
-S^{-1}AS=
-\begin{bmatrix}
-\lambda I_k & *\\
-0 & C
-\end{bmatrix}.
-\nonumber
-\end{align}
-By Theorem \ref{thm:similarity-preserves-characteristic-polynomial} and Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}, $p_A(z)=p_{S^{-1}AS}(z)=(z-\lambda)^kp_C(z)$. Thus $m_A(\lambda)\geq k=\dim E_{\lambda}(A)$.\\
-\hlt{Structural Commentary}: An eigenspace-first basis exposes a $\lambda I_k$ block.\\
-\hlt{Key Insight}: Each independent eigenvector forces one visible factor $z-\lambda$ in the characteristic polynomial.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item We induct on $n$. The case $n=1$ follows by taking $U=[\mathbf{x}]$.\\
+Assume $n>1$. Extend $\mathbf{x}$ to an orthonormal basis by Corollary \ref{cor:orthonormal-list-extends-to-basis}, and write the resulting unitary matrix as $V=[\mathbf{x}\ V_2]$.\\
+Since $A\mathbf{x}=\lambda_1\mathbf{x}$, the first column of $V^*AV$ is $\lambda_1\mathbf{e}_1$, so write $V^*AV=\left(\begin{smallmatrix}\lambda_1&\mathbf{b}^*\\0&A'\end{smallmatrix}\right)$ with $\mathbf{b}\in\mathbb{C}^{n-1}$ and $A'\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$. By Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i) and Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}(i), $p_A(z)=(z-\lambda_1)p_{A'}(z)$. Thus $\lambda_2,\ldots,\lambda_n$ is the prescribed eigenvalue list of $A'$.\\
+By the induction hypothesis, choose a unitary $W\in\operatorname{Mat}(n-1,n-1,\mathbb{C})$ such that $T'\defeq W^*A'W$ is upper triangular with diagonal $\lambda_2,\ldots,\lambda_n$. Set $U\defeq V(I_1\oplus W)$. Then $U$ is unitary, its first column is $\mathbf{x}$, and $U^*AU=\left(\begin{smallmatrix}\lambda_1&\mathbf{b}^*W\\0&T'\end{smallmatrix}\right)$ has the required form.
+\item We repeat the induction within $\mathbb{R}^n$. The case $n=1$ is immediate. For $n>1$, extend the real unit vector $\mathbf{x}$ to a real orthonormal basis by Corollary \ref{cor:orthonormal-list-extends-to-basis}. The resulting real orthogonal $V=[\mathbf{x}\ V_2]$ satisfies $V^{\mathsf{T}}AV=\left(\begin{smallmatrix}\lambda_1&\mathbf{b}^{\mathsf{T}}\\0&A'\end{smallmatrix}\right)$ with real blocks.\\
+By the factorization in (i), the real matrix $A'$ has the prescribed real eigenvalue list $\lambda_2,\ldots,\lambda_n$.\\
+By the real induction hypothesis, choose a real orthogonal $W$ with $W^{\mathsf{T}}A'W$ upper triangular in that order. Thus $U\defeq V(I_1\oplus W)$ is real orthogonal, begins with $\mathbf{x}$, and has the required triangularization.
+\end{enumerate}
+\hlt{Structural Commentary}: Schur induction isolates the prescribed eigenline and passes the remaining ordered roots to the trailing block.\\
+\hlt{Key Insight}: The first eigenvector fixes the first diagonal entry and leaves the remaining multiplicities for the next step.
+\end{proof}
+\end{theorem}
+
+Figure \ref{fig:schur-ordered-triangularization} summarizes the induction by isolating the prescribed first eigenline.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/linear_algebra/schur_ordered_triangularization.tikz}
+  \caption{Schur induction: isolate an eigenline, then triangularise the compressed block.}
+  \label{fig:schur-ordered-triangularization}
+\end{illustrationfigure}
+
+\begin{corollary} \label{cor:eigenvalues-of-inverse-matrix} \hlt{Eigenvalues of the Inverse}\\
+Let $n\geq1$ and let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be invertible with eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity.\\
+Then $A^{-1}$ has eigenvalues $\lambda_1^{-1},\ldots,\lambda_n^{-1}$, counted with algebraic multiplicity.
+\begin{proof}
+By Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}, $(\forall\,j\in\{1,\ldots,n\})\,\lambda_j\neq0$. Choose $\mathbf{0}\neq\mathbf{y}\in E_{\lambda_1}(A)$ and set $\mathbf{x}\defeq\frac{\mathbf{y}}{\norm{\mathbf{y}}_2}$, so $\norm{\mathbf{x}}_2=1$.\\
+By Theorem \ref{thm:matrix-schur-triangularization-ordered}(i), $A=UTU^*$ for a unitary $U$ and an upper-triangular $T$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
+Hence $A^{-1}=UT^{-1}U^*$, while $T^{-1}$ is upper triangular with diagonal $\lambda_1^{-1},\ldots,\lambda_n^{-1}$ by Theorem \ref{thm:inverse-upper-triangular}.\\
+By Proposition \ref{prop:upper-triangular-characteristic-polynomial}(iii) and Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(ii), this reciprocal diagonal list is the eigenvalue multiset of $A^{-1}$.\\
+\hlt{Structural Commentary}: Schur form turns inversion into inversion of a triangular matrix, whose diagonal entries invert individually.\\
+\hlt{Key Insight}: Algebraic multiplicities are preserved when the nonzero spectral multiset is sent through $\lambda\mapsto\lambda^{-1}$.
+\end{proof}
+\end{corollary}
+
+\begin{theorem} \label{thm:geometric-multiplicity-bounded-by-algebraic-multiplicity} \hlt{Geometric Multiplicity Is at Most Algebraic Multiplicity}\\
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and let $\lambda\in\operatorname{spec}(A)$. Then $\dim E_{\lambda}(A)\leq m_A(\lambda)$.
+\begin{proof}
+Set $k\defeq\dim E_{\lambda}(A)$ and choose a basis $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ of $E_{\lambda}(A)$.\\
+If $k=n$, then $E_{\lambda}(A)=\mathbb{F}^n$, so $A=\lambda I_n$. By Proposition \ref{prop:upper-triangular-characteristic-polynomial}(i),(iii), $p_A(z)=(z-\lambda)^n$ and $m_A(\lambda)=n=k$. Suppose $k<n$.\\
+Extend eigenspace basis to basis of $\mathbb{F}^n$ by Theorem \ref{thm:hamel-basis-extension}, let $S$ be invertible matrix whose columns are resulting basis vectors.\\
+Since the first $k$ columns are $\lambda$-eigenvectors, write $S^{-1}AS=\left(\begin{smallmatrix}\lambda I_k&C\\0&D\end{smallmatrix}\right)$ with $C\in\operatorname{Mat}(k,n-k,\mathbb{F})$ and $D\in\operatorname{Mat}(n-k,n-k,\mathbb{F})$.\\
+By Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i) and Proposition \ref{prop:block-upper-triangular-characteristic-polynomial}(i), $p_A(z)=(z-\lambda)^kp_D(z)$. Hence $m_A(\lambda)\geq k=\dim E_{\lambda}(A)$ by Definition \ref{def:matrix-algebraic-multiplicity}.\\
+\hlt{Structural Commentary}: An eigenspace-first basis exposes $(z-\lambda)^k$, including the endpoint $k=n$.\\
+\hlt{Key Insight}: Geometric multiplicity supplies a visible lower bound on the order of the corresponding characteristic root.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:diagonalizable-iff-algebraic-geometric-multiplicities-match} \hlt{Diagonalizability and Multiplicity}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is diagonalizable if and only if $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$.
+Let $n\geq1$ and let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A$ is similar to a diagonal matrix if and only if $(\forall\,\lambda\in\operatorname{spec}(A))\,\dim E_{\lambda}(A)=m_A(\lambda)$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $A$ is diagonalizable, then $A$ is similar to a diagonal matrix $D$. Theorem \ref{thm:similarity-preserves-characteristic-polynomial} gives $m_A(\lambda)=m_D(\lambda)$ and $\dim E_{\lambda}(A)=\dim E_{\lambda}(D)$. For diagonal $D$, both numbers count diagonal entries equal to $\lambda$.
-\item[$(\Leftarrow)$] Assume $\dim E_{\lambda}(A)=m_A(\lambda)$ for every eigenvalue.\\
-If $\mu_1,\ldots,\mu_d$ are distinct eigenvalues, then $\sum\limits_{i=1}^{d}m_A(\mu_i)=n$. Hence $\dim E_{\mu_1}(A)+\cdots+\dim E_{\mu_d}(A)=n$.\\
-Theorem \ref{thm:conditions-equivalent-to-diagonalizability} gives an eigenbasis, so $A$ is diagonalizable.
+\item[$(\Rightarrow)$] Suppose $A$ is similar to a diagonal matrix $D$. By Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(ii),(iii), $(\forall\,\lambda\in\mathbb{C})\,m_A(\lambda)=m_D(\lambda)$ and $\dim E_{\lambda}(A)=\dim E_{\lambda}(D)$.\\
+By Proposition \ref{prop:upper-triangular-characteristic-polynomial}(iii), $m_D(\lambda)$ counts the diagonal entries equal to $\lambda$, and the corresponding standard basis vectors form a basis of $E_{\lambda}(D)$. Thus the required equality holds.
+\item[$(\Leftarrow)$] Assume the stated equality and let $T_A:\mathbb{C}^n\to\mathbb{C}^n$ be defined by $T_A(\mathbf{v})=A\mathbf{v}$. By Theorem \ref{thm:complex-upper-triangularization}, $T_A$ has an upper-triangular matrix $B$ relative to a basis. By Corollary \ref{cor:similar-iff-same-linear-operator} and Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(ii), $A$ and $B$ have the same algebraic multiplicities.\\
+List the distinct eigenvalues as $\mu_1,\ldots,\mu_d$. By Proposition \ref{prop:upper-triangular-characteristic-polynomial}(ii),(iii), the $n$ diagonal positions of $B$ are partitioned by these eigenvalues and $\sum\limits_{i=1}^{d}m_A(\mu_i)=n$. Thus the hypothesis implies $\sum\limits_{i=1}^{d}\dim E_{\mu_i}(T_A)=\sum\limits_{i=1}^{d}\dim E_{\mu_i}(A)=n$.\\
+By Theorem \ref{thm:conditions-equivalent-to-diagonalizability}(v),(i), $T_A$ is diagonalizable. Its matrices in the standard basis and in a diagonalizing basis are therefore similar by Corollary \ref{cor:similar-iff-same-linear-operator}, so $A$ is similar to a diagonal matrix.
 \end{enumerate}
-\hlt{Structural Commentary}: Diagonalizability means root counts match eigenspace dimensions.\\
-\hlt{Key Insight}: No missing eigendirections means an eigenbasis.
+\hlt{Structural Commentary}: Triangularization accounts for the complete algebraic-multiplicity total, while the hypothesis converts it into a full eigenspace dimension count.\\
+\hlt{Key Insight}: A complex matrix is diagonalizable exactly when no algebraic multiplicity is lost as an eigenspace dimension.
 \end{proof}
 \end{theorem}
 
+\begin{proposition} \label{prop:permutation-similarity-reorders-diagonal} \hlt{Permutation Similarity Reorders Diagonal Entries}\\
+Let $n\geq1$, let $\lambda_1,\ldots,\lambda_n\in\mathbb{C}$, and let $\sigma\in\mathfrak{S}_n$. Set $\Lambda\defeq\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$ and $P\defeq[\mathbf{e}_{\sigma(1)}\ \cdots\ \mathbf{e}_{\sigma(n)}]$. Then $P^*\Lambda P=\operatorname{diag}(\lambda_{\sigma(1)},\ldots,\lambda_{\sigma(n)})$.
+\begin{proof}
+For $i,j\in\{1,\ldots,n\}$, the $(i,j)$ entry of $P^*\Lambda P$ is $\mathbf{e}_{\sigma(i)}^*\Lambda\mathbf{e}_{\sigma(j)}=\lambda_{\sigma(j)}\mathbf{e}_{\sigma(i)}^*\mathbf{e}_{\sigma(j)}=\lambda_{\sigma(j)}\delta_{ij}$.\\
+Hence all off-diagonal entries vanish and the $j$th diagonal entry is $\lambda_{\sigma(j)}$, which proves the matrix identity.\\
+\hlt{Structural Commentary}: The entry calculation tracks both the row and column reordering induced by the same permutation.\\
+\hlt{Key Insight}: Permutation similarity reorders a diagonal list without changing its entries.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:normal-matrices-same-spectrum-unitarily-similar} \hlt{Normal Matrices with the Same Spectrum Are Unitarily Similar}\\
+Let $n\geq1$. If $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ are normal and have the same eigenvalue multiset, then $A$ and $B$ are unitarily similar.
+\begin{proof}
+By Theorem \ref{thm:complex-spectral-theorem}(i),(iii), write $A=U\Lambda U^*$ and $B=V\Gamma V^*$ with $U,V$ unitary and $\Lambda,\Gamma$ diagonal.\\
+Since the eigenvalue multisets agree, choose $\sigma\in\mathfrak{S}_n$ that matches the diagonal of $\Lambda$ to that of $\Gamma$, and set $P\defeq[\mathbf{e}_{\sigma(1)}\ \cdots\ \mathbf{e}_{\sigma(n)}]$.\\
+By Proposition \ref{prop:permutation-similarity-reorders-diagonal}, $\Gamma=P^*\Lambda P$. Set $Q\defeq UPV^*$.\\
+Then $Q$ is unitary by Proposition \ref{prop:algebra-of-unitary-matrices}, and $Q^*AQ=VP^*U^*(U\Lambda U^*)UPV^*=V\Gamma V^*=B$. Thus $A$ and $B$ are unitarily similar.\\
+\hlt{Structural Commentary}: Spectral diagonalizations reduce the comparison to a unitary permutation of equal eigenvalue multisets.\\
+\hlt{Key Insight}: For normal matrices, the eigenvalue multiset completely determines the unitary-similarity class.
+\end{proof}
+\end{corollary}
+
 \begin{definition} \label{def:operator-characteristic-polynomial} \hlt{Characteristic Polynomial of an Operator}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$, let $n=\dim(\mathcal{V})$, and let $T\in\LL(\mathcal{V})$. For a basis $\beta$ of $\mathcal{V}$, the \hlt{characteristic polynomial} of $T$ is $q_T(z)\defeq p_{[T]_{\beta\leftarrow\beta}}(z)=\det(zI_n-[T]_{\beta\leftarrow\beta})$.\\
-This is independent of $\beta$ by Theorems \ref{thm:change-of-basis-formula} and \ref{thm:similarity-preserves-characteristic-polynomial}.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$, let $n\defeq\dim(\mathcal{V})$, and let $T\in\LL(\mathcal{V})$.\\
+For a basis $\beta$ of $\mathcal{V}$, set $q_{T,\beta}(z)\defeq p_{[T]_{\beta\leftarrow\beta}}(z)=\det(zI_n-[T]_{\beta\leftarrow\beta})$.\\
+This value is independent of $\beta$ by Theorems \ref{thm:change-of-basis-formula} and \ref{thm:similarity-preserves-characteristic-polynomial}(i). It is the \hlt{characteristic polynomial} of $T$ and is denoted by $q_T$.
 \end{definition}
 
 \begin{proposition} \label{prop:operator-characteristic-polynomial-degree-roots} \hlt{Degree and Roots of $q_T$}\\
@@ -140,10 +229,11 @@ Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$, let
 Choose a basis $\beta$ of $\mathcal{V}$ and set $A=[T]_{\beta\leftarrow\beta}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Definition \ref{def:operator-characteristic-polynomial} gives $q_T=p_A$, so Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $\deg q_T=\dim(\mathcal{V})$.
-\item For $\mathbf{v}\in\mathcal{V}$, $T\mathbf{v}=\lambda\mathbf{v}$ if and only if $A[\mathbf{v}]_{\beta}=\lambda[\mathbf{v}]_{\beta}$. Since the coordinate map is bijective, $\operatorname{spec}(T)=\operatorname{spec}(A)$. Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} identifies this set with the roots of $p_A=q_T$.
+\item By Definition \ref{def:operator-characteristic-polynomial}, $q_T=p_A$. Hence $\deg q_T=\dim(\mathcal{V})$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(i).
+\item Fix $\lambda\in\mathbb{F}$. By Proposition \ref{prop:matrix-representation-action}, $(\forall\,\mathbf{v}\in\mathcal{V})\,[T\mathbf{v}]_{\beta}=A[\mathbf{v}]_{\beta}$.\\
+By Proposition \ref{prop:coordinate-map-isomorphism}(ii),(iii), $\lambda\in\operatorname{spec}(T)\Longleftrightarrow\lambda\in\operatorname{spec}(A)$. By Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii), the latter set is the root set of $p_A=q_T$.
 \end{enumerate}
-\hlt{Structural Commentary}: Coordinates transfer degree and eigenvalue data from $A$ to $T$.\\
-\hlt{Key Insight}: The characteristic polynomial is independent of the chosen basis.
+\hlt{Structural Commentary}: Coordinates transfer polynomial degree and the nonzero eigenvector equation between $T$ and its matrix.\\
+\hlt{Key Insight}: The operator characteristic polynomial has the expected dimension and detects exactly the operator eigenvalues.
 \end{proof}
 \end{proposition}
