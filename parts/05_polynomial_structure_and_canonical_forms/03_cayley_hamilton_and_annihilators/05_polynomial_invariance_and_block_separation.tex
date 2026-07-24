@@ -1,54 +1,75 @@
 \subsection{Polynomial Invariance and Block Separation}
 \begin{proposition} \label{prop:kernel-range-polynomial-in-operator-invariant} \hlt{Kernel and Range of a Polynomial in an Operator Are Invariant}\\
-Let $T\in\LL(\mathcal{V})$ and $p\in\mathbb{F}[z]$. Then $\ker(p(T))$ and $\operatorname{range}(p(T))$ are invariant under $T$.
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$, let $T\in\LL(\mathcal{V})$, and let $p\in\mathbb{F}[z]$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\ker(p(T))$ is invariant under $T$;
+\item $\operatorname{range}(p(T))$ is invariant under $T$.
+\end{enumerate}
 \begin{proof}
-If $\mathbf{v}\in\ker(p(T))$, then $p(T)\mathbf{v}=\mathbf{0}$.\\
-Since $p(T)$ commutes with $T$ by Proposition \ref{prop:operator-polynomial-products}, $p(T)(T\mathbf{v})=T(p(T)\mathbf{v})=T\mathbf{0}=\mathbf{0}$.\\
-If $\mathbf{v}\in\operatorname{range}(p(T))$, write $\mathbf{v}=p(T)\mathbf{u}$. Then $T\mathbf{v}=Tp(T)\mathbf{u}=p(T)(T\mathbf{u})$, so $T\mathbf{v}\in\operatorname{range}(p(T))$.\\
-\hlt{Structural Commentary}: Polynomial kernels and ranges are stable under the original operator.\\
-\hlt{Key Insight}: Since $T$ commutes with $p(T)$, it preserves both $\ker p(T)$ and $\operatorname{range}p(T)$.
+By Proposition \ref{prop:operator-polynomial-products}(ii), with $p$ and the polynomial $z$, the operators $p(T)$ and $T$ commute.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathbf{v}\in\ker(p(T))$, so $p(T)\mathbf{v}=\mathbf{0}$. By commutativity, $p(T)(T\mathbf{v})=T(p(T)\mathbf{v})=\mathbf{0}$; $T\mathbf{v}\in\ker(p(T))$, so $\ker(p(T))$ invariant under $T$.
+\item Let $\mathbf{v}\in\operatorname{range}(p(T))$. By this membership, choose $\mathbf{u}\in\mathcal{V}$ such that $\mathbf{v}=p(T)\mathbf{u}$.\\
+By commutativity, $T\mathbf{v}=Tp(T)\mathbf{u}=p(T)(T\mathbf{u})\in\operatorname{range}(p(T))$. Hence $\operatorname{range}(p(T))$ is invariant under $T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Commutativity transfers $T$-stability separately to the polynomial kernel and range.\\
+\hlt{Key Insight}: The identity $Tp(T)=p(T)T$ preserves both subspaces.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:sylvester-linear-matrix-equation} \hlt{Sylvester Linear Matrix Equation}\\
-Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$ and $B\in\operatorname{Mat}(n,n,\mathbb{C})$. If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then for every $C\in\operatorname{Mat}(m,n,\mathbb{C})$ the equation $AX-XB=C$ has a unique solution $X\in\operatorname{Mat}(m,n,\mathbb{C})$.
+Let $m,n\geq1$, let $A\in\operatorname{Mat}(m,m,\mathbb{C})$, and let $B\in\operatorname{Mat}(n,n,\mathbb{C})$.\\
+If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then $(\forall C\in\operatorname{Mat}(m,n,\mathbb{C}))(\exists!X\in\operatorname{Mat}(m,n,\mathbb{C}))\,AX-XB=C$.
 \begin{proof}
-Let $L(X)=AX-XB$. Since $L$ has equal finite-dimensional domain and codomain, it suffices to show $\ker L=\{0\}$. If $AX=XB$, then $p(A)X=Xp(B)$ for every polynomial $p$. \\
-With $p=p_B$, $p_B(B)=0$ by Theorem \ref{thm:cayley-hamilton-matrix}, so $p_B(A)X=Xp_B(B)=0$. For every $\lambda\in\operatorname{spec}(A)$, disjointness gives $p_B(\lambda)\neq0$; hence $p_B(A)$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test}. Thus $X=0$, so $L$ is bijective.\\
-\hlt{Structural Commentary}: Polynomial calculus passes through homogeneous solutions; disjoint spectra invert $p_B(A)$.\\
-\hlt{Key Insight}: Spectral separation turns an intertwining relation into the zero relation.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Sylvester Map}: Set $\mathcal{M}\defeq\operatorname{Mat}(m,n,\mathbb{C})$ and define $L:\mathcal{M}\to\mathcal{M}$ by $L(X)\defeq AX-XB$.\\
+The map $L$ is linear by Proposition \ref{prop:matrix-product-associativity-and-identities}(iii)--(iv), and $\dim_{\mathbb{C}}(\mathcal{M})=mn$ by Proposition \ref{prop:matrix-spaces-are-vector-spaces}.\\
+It suffices to prove $\ker(L)=\{0\}$ by Proposition \ref{prop:injective-iff-kernel-zero} and Corollary \ref{cor:equal-dimension-kernel-range}.
+\item \hlt{Polynomial Intertwining}: Suppose $X\in\ker(L)$, so $AX=XB$. We prove $(\forall k\in\mathbb{Z}_{\geq0})\,A^kX=XB^k$. For $k=0$, this is $I_mX=XI_n$.\\
+If $A^kX=XB^k$, then, by Proposition \ref{prop:matrix-product-associativity-and-identities} and $AX=XB$, $A^{k+1}X=A(A^kX)=A(XB^k)=(AX)B^k=(XB)B^k=XB^{k+1}$.\\
+The claim follows by mathematical induction. Therefore $(\forall p\in\mathbb{C}[z])\,p(A)X=Xp(B)$ by Definition \ref{def:polynomial-evaluation-on-square-matrix}.
+\item \hlt{Kernel Vanishing}: By Theorem \ref{thm:cayley-hamilton-matrix} and the polynomial-intertwining identity from (ii), $p_B(A)X=Xp_B(B)=0$.\\
+If $\lambda\in\operatorname{spec}(A)$, then $\lambda\notin\operatorname{spec}(B)$ by the disjointness hypothesis, so $p_B(\lambda)\neq0$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii).\\
+Thus $p_B(A)$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test}, and $X=p_B(A)^{-1}p_B(A)X=0$. Hence $\ker(L)=\{0\}$.
+\item \hlt{Existence and Uniqueness}: The map $L$ is injective by (iii) and Proposition \ref{prop:injective-iff-kernel-zero}.\\
+The map $L$ is surjective by Corollary \ref{cor:equal-dimension-kernel-range} and invertible by Proposition \ref{prop:linear-map-invertible-iff-bijective}.\\
+Consequently, $(\forall C\in\mathcal{M})(\exists!X\in\mathcal{M})\,L(X)=C$, equivalently, $(\forall C\in\mathcal{M})(\exists!X\in\mathcal{M})\,AX-XB=C$.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial intertwining combines Cayley--Hamilton for $B$ with spectral invertibility for $p_B(A)$.\\
+\hlt{Key Insight}: Disjoint spectra force every homogeneous Sylvester solution to vanish.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:sylvester-equation-spectral-gap} summarizes the spectral-separation argument behind invertibility of the Sylvester map.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/sylvester_equation_spectral_gap.tikz}
   \caption{Disjoint spectra make $p_B(A)$ invertible, so the Sylvester map $L(X)=AX-XB$ is invertible.}
   \label{fig:sylvester-equation-spectral-gap}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{corollary} \label{cor:block-upper-triangular-remove-disjoint-coupling} \hlt{Removing a Spectrally Separated Off-Diagonal Block}\\
-Let $A\in\operatorname{Mat}(m,m,\mathbb{C})$, $B\in\operatorname{Mat}(n,n,\mathbb{C})$, $C\in\operatorname{Mat}(m,n,\mathbb{C})$, and $M=\begin{bmatrix}A&C\\0&B\end{bmatrix}$. If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then $M$ is similar to $A\oplus B$.
+Let $m,n\geq1$, let $A\in\operatorname{Mat}(m,m,\mathbb{C})$, let $B\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $C\in\operatorname{Mat}(m,n,\mathbb{C})$. Set $M\defeq\left(\begin{smallmatrix}A&C\\0&B\end{smallmatrix}\right)\in\operatorname{Mat}(m+n,m+n,\mathbb{C})$.\\
+If $\operatorname{spec}(A)\cap\operatorname{spec}(B)=\emptyset$, then $M$ is similar to $A\oplus B$.
 \begin{proof}
-By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X$ such that $AX-XB=-C$. Then
-\begin{align}
-\begin{bmatrix}I&-X\\0&I\end{bmatrix}
-\begin{bmatrix}A&C\\0&B\end{bmatrix}
-\begin{bmatrix}I&X\\0&I\end{bmatrix}
-=
-\begin{bmatrix}A&AX+C-XB\\0&B\end{bmatrix}
-=
-\begin{bmatrix}A&0\\0&B\end{bmatrix}.
-\nonumber
-\end{align}
-\hlt{Structural Commentary}: A block shear cancels the off-diagonal block via Sylvester's equation.\\
-\hlt{Key Insight}: Spectrally separated diagonal blocks cannot carry essential upper-right coupling.
+By Theorem \ref{thm:sylvester-linear-matrix-equation}, choose $X\in\operatorname{Mat}(m,n,\mathbb{C})$ such that $AX-XB=-C$. Set $P\defeq\left(\begin{smallmatrix}I_m&-X\\0&I_n\end{smallmatrix}\right)$ and $Q\defeq\left(\begin{smallmatrix}I_m&X\\0&I_n\end{smallmatrix}\right)$.\\
+By Proposition \ref{prop:block-matrix-arithmetic}(ii), $PQ=QP=I_{m+n}$, so $P$ is invertible and $P^{-1}=Q$. By same proposition, $PMQ=\left(\begin{smallmatrix}A&AX+C-XB\\0&B\end{smallmatrix}\right)$.\\
+By $AX-XB=-C$, $PMQ=\left(\begin{smallmatrix}A&0\\0&B\end{smallmatrix}\right)=A\oplus B$. Thus $PMP^{-1}=A\oplus B$ by $P^{-1}=Q$, and $M$ is similar to $A\oplus B$ by Definition \ref{def:similar-matrices}.\\
+\hlt{Structural Commentary}: A Sylvester solution determines the block shear that removes the coupling.\\
+\hlt{Key Insight}: Spectral separation makes the upper-right block removable by similarity.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:schur-block-form-by-eigenvalue-groups} \hlt{Schur Form Grouped by Eigenvalues}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$ with algebraic multiplicities $n_1,\ldots,n_d$.\\
-Then $A$ is unitarily similar to a block upper-triangular matrix
+Let $n,d,n_1,\ldots,n_d\geq1$, let $\lambda_1,\ldots,\lambda_d\in\mathbb{C}$ be distinct, and let $A\in\operatorname{Mat}(n,n,\mathbb{C})$.\\
+Suppose $\sum\limits_{i=1}^{d}n_i=n$, $\operatorname{spec}(A)=\{\lambda_1,\ldots,\lambda_d\}$, and $(\forall i\in\{1,\ldots,d\})\,m_A(\lambda_i)=n_i$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The matrix $A$ is unitarily similar to a block upper-triangular matrix
 \begin{align}
 T=
 \begin{bmatrix}
@@ -61,22 +82,34 @@ T_{11}&T_{12}&\cdots&T_{1d}\\
 T_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C}),
 \nonumber
 \end{align}
-where each $T_{ii}$ is upper triangular with all diagonal entries equal to $\lambda_i$. Moreover, $A$ is similar to $T_{11}\oplus\cdots\oplus T_{dd}$.
+where each $T_{ii}$ is upper triangular with every diagonal entry equal to $\lambda_i$.
+\item The matrix $A$ is similar to $T_{11}\oplus\cdots\oplus T_{dd}$.
+\end{enumerate}
 \begin{proof}
-Order the Schur diagonal as $\lambda_1,\ldots,\lambda_1,\lambda_2,\ldots,\lambda_2,\ldots,\lambda_d,\ldots,\lambda_d$.\\
-By Theorem \ref{thm:matrix-schur-triangularization-ordered}, $A$ has the displayed block Schur form. Since $\operatorname{spec}(T_{11})$ is disjoint from the trailing block spectrum, Corollary \ref{cor:block-upper-triangular-remove-disjoint-coupling} splits off $T_{11}$. Iterating splits off every diagonal block.\\
-\hlt{Structural Commentary}: Grouped Schur form isolates spectral blocks; Sylvester shears split disjoint groups.\\
-\hlt{Key Insight}: Cross-group upper blocks are coordinate artefacts.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Order the eigenvalue multiset of $A$ by listing $\lambda_i$ exactly $n_i$ times, $i\in\{1,\ldots,d\}$. Choose a unit vector $\mathbf{x}\in E_{\lambda_1}(A)$.\\
+By Theorem \ref{thm:matrix-schur-triangularization-ordered}(i), $T\defeq U^*AU$ is upper triangular with this ordered diagonal for some unitary $U$.\\
+After grouping consecutive rows and columns according to $(n_1,\ldots,n_d)$, $T$ has the stated block form and each $T_{ii}$ has constant diagonal $\lambda_i$. Thus $A$ is unitarily similar to $T$ by Definition \ref{def:unitary-and-permutation-similarity}.
+\item By part (i), Theorem \ref{thm:unitary-matrix-equivalent-conditions}(vi), and Definition \ref{def:similar-matrices}, $A$ is similar to $T$. If $d=1$, then $T=T_{11}$.\\
+Suppose $d\geq2$. Set $R_0\defeq T$, and for $k\in\{1,\ldots,d-1\}$ let $R_k$ be the trailing principal block with block indices $k+1,\ldots,d$. Then $R_{k-1}=\left(\begin{smallmatrix}T_{kk}&C_k\\0&R_k\end{smallmatrix}\right)$. By Proposition \ref{prop:upper-triangular-characteristic-polynomial}, $\operatorname{spec}(T_{kk})=\{\lambda_k\}$ and $\operatorname{spec}(R_k)=\{\lambda_{k+1},\ldots,\lambda_d\}$.\\
+Hence $R_{k-1}$ is similar to $T_{kk}\oplus R_k$ by Corollary \ref{cor:block-upper-triangular-remove-disjoint-coupling}.\\
+Consequently, for every $k\in\{1,\ldots,d-1\}$, $T$ is similar to $T_{11}\oplus\cdots\oplus T_{kk}\oplus R_k$ by mathematical induction, Proposition \ref{prop:direct-sum-matrix-algebra}(ii), and transitivity in Proposition \ref{prop:similarity-equivalence-relation}. Since $R_{d-1}=T_{dd}$, the conclusion follows by transitivity in Proposition \ref{prop:similarity-equivalence-relation}.
+\end{enumerate}
+\hlt{Structural Commentary}: Ordered Schur form groups eigenvalues; Sylvester shears then split successive spectral blocks.\\
+\hlt{Key Insight}: Cross-group blocks are coordinate-dependent and removable by similarity.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:commuting-with-disjoint-blocks-has-zero-off-diagonal-blocks} \hlt{Commuting with Disjoint Blocks}\\
-Let $A_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C})$ for $i\in\{1,\ldots,d\}$, set $n=\sum\limits_{i=1}^{d}n_i$ and $A=A_{11}\oplus\cdots\oplus A_{dd}$, and suppose the spectra of $A_{11},\ldots,A_{dd}$ are pairwise disjoint.\\
-Let $B=[B_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$ be partitioned conformally with $A$. If $AB=BA$, then $B_{ij}=0$ for all $i\neq j$.
+Let $d,n_1,\ldots,n_d\geq1$ and let $A_{ii}\in\operatorname{Mat}(n_i,n_i,\mathbb{C})$, $i\in\{1,\ldots,d\}$, have pairwise disjoint spectra.\\
+Set $n\defeq\sum\limits_{i=1}^{d}n_i$ and $A\defeq A_{11}\oplus\cdots\oplus A_{dd}\in\operatorname{Mat}(n,n,\mathbb{C})$.\\
+If a conformally partitioned $B=[B_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$ satisfies $AB=BA$, then $B_{ij}=0$ for all distinct $i,j\in\{1,\ldots,d\}$.
 \begin{proof}
-Equating $(i,j)$ blocks in $AB=BA$ gives $A_{ii}B_{ij}-B_{ij}A_{jj}=0$.\\
-For $i\neq j$, the spectra of $A_{ii}$ and $A_{jj}$ are disjoint. By Theorem \ref{thm:sylvester-linear-matrix-equation}, the homogeneous equation has the unique solution $0$, so $B_{ij}=0$.\\
-\hlt{Structural Commentary}: A commuting matrix cannot mix direct-sum blocks with disjoint spectra.\\
-\hlt{Key Insight}: The off-diagonal block solves a homogeneous Sylvester equation, whose only solution is zero.
+By $AB=BA$ and Proposition \ref{prop:block-matrix-arithmetic}(ii), $(\forall i,j\in\{1,\ldots,d\})\,A_{ii}B_{ij}-B_{ij}A_{jj}=0$.\\
+Fix $i,j\in\{1,\ldots,d\}$ with $i\neq j$. The spectra of $A_{ii}$ and $A_{jj}$ are disjoint.\\
+Hence $B_{ij}=0$ by the uniqueness assertion in Theorem \ref{thm:sylvester-linear-matrix-equation} with zero right-hand side.\\
+\hlt{Structural Commentary}: Block commutation reduces every off-diagonal entry to a homogeneous Sylvester equation.\\
+\hlt{Key Insight}: Homogeneous spectral separation forces each off-diagonal block to vanish.
 \end{proof}
 \end{corollary}
