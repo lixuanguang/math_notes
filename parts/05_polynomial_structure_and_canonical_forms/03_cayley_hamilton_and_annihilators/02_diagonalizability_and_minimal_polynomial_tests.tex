@@ -1,60 +1,79 @@
 \subsection{Diagonalizability and Minimal Polynomial Tests}
+
 \begin{theorem} \label{thm:diagonalizable-iff-minimal-polynomial-squarefree} \hlt{Diagonalizability and the Minimal Polynomial}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have distinct eigenvalues $\lambda_1,\ldots,\lambda_d$.\\
-Then $A$ is diagonalizable if and only if $\mu_A(z)=(z-\lambda_1)\cdots(z-\lambda_d)$.\\
-Equivalently, $A$ is diagonalizable if and only if $\mu_A$ is square-free.
-\begin{proof}
-Set $p(z)\defeq\prod_{i=1}^{d}(z-\lambda_i)$.
-By Theorem \ref{thm:minimal-polynomial-basic-properties}, $\mu_A(z)=\prod_{i=1}^{d}(z-\lambda_i)^{q_i}$ with $q_i\geq1$, so $\mu_A$ is square-free if and only if $\mu_A=p$.
-\begin{enumerate}[label=\roman*.]
+Let $n\geq1$ and let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have the distinct eigenvalues $\lambda_1,\ldots,\lambda_d$, where $d\geq1$. Interpret empty products below as $1$ for scalars and as the identity operator for operators. Set $p(z)\defeq\prod\limits_{i=1}^{d}(z-\lambda_i)$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $A=S\Lambda S^{-1}$ is diagonalizable, then $p(\Lambda)=0$, so $p(A)=0$.\\
-Theorem \ref{thm:minimal-polynomial-basic-properties} gives $\mu_A\mid p$; since every factor $z-\lambda_i$ occurs in $\mu_A$, we have $\mu_A=p$.
-\item[$(\Leftarrow)$] Suppose $\mu_A=p$. For $i\in\{1,\ldots,d\}$, set $\ell_i(z)\defeq\prod\limits_{j\neq i}\frac{z-\lambda_j}{\lambda_i-\lambda_j}$ and $\rho_i\defeq\ell_i(A)$.\\
-The polynomials $\ell_i\ell_j$ for $i\neq j$, $\sum_i\ell_i-1$, and $z-\sum_i\lambda_i\ell_i$ vanish at $\lambda_1,\ldots,\lambda_d$, so each is divisible by $p$. Since $p(A)=0$, $\rho_i\rho_j=0$ for $i\neq j$, $\sum_i\rho_i=I_n$, and $A=\sum_i\lambda_i\rho_i$. Thus $\rho_i^2=\rho_i$.\\
-If $\rho_i=0$, then $\prod_{j\neq i}(A-\lambda_jI_n)=0$, contradicting the minimality of the degree-$d$ polynomial $\mu_A=p$. Hence every $\rho_i\neq0$.\\
-Theorem \ref{thm:algebraic-spectral-resolution-diagonalizable}, applied to the operator induced by $A$, gives that $A$ is diagonalizable.
+\item $A$ is similar to a diagonal matrix;
+\item $\mu_A=p$;
+\item $\mu_A$ has no repeated root, or is \hlt{square-free}.
 \end{enumerate}
-\hlt{Structural Commentary}: Lagrange polynomials turn square-free annihilation into a spectral resolution.\\
-\hlt{Key Insight}: Distinct roots produce complementary eigenspace projections.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ Suppose $A=S\Lambda S^{-1}$ for some $S\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$ and diagonal $\Lambda=\operatorname{diag}(\nu_1,\ldots,\nu_n)$.\\
+For each $k$, the nonzero vector $S\mathbf{e}_k$ is an eigenvector of $A$ with eigenvalue $\nu_k$, so $p(\nu_k)=0$.\\
+Hence $p(A)=S\operatorname{diag}(p(\nu_1),\ldots,p(\nu_n))S^{-1}=0$ by Theorem \ref{thm:polynomial-functional-calculus-diagonalizable-matrix}. Divisibility $\mu_A\mid p$ holds by Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial} and Definition \ref{def:minimal-polynomial-matrix}.\\
+By Theorem \ref{thm:minimal-polynomial-basic-properties}(iii), $\deg(\mu_A)\geq d$. Since $\mu_A\mid p$, $\deg(\mu_A)\leq d$. Thus the monic polynomials $\mu_A$ and $p$ are equal.
+\item[$(ii)$] $\Rightarrow (iii)$ The roots $\lambda_1,\ldots,\lambda_d$ are distinct, so $p=\prod\limits_{i=1}^{d}(z-\lambda_i)$ has no repeated root.
+\item[$(iii)$] $\Rightarrow (i)$ By Theorem \ref{thm:minimal-polynomial-basic-properties}(iii), there are integers $q_1,\ldots,q_d\geq1$ such that $\mu_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$.\\
+The absence of repeated roots forces $q_i=1$ for every $i$, so $\mu_A=p$.\\
+Let $T_A\in\LL(\mathbb{C}^n)$ be the operator induced by $A$ from Definition \ref{def:linear-map-induced-by-matrix}. Then $\mu_{T_A}=p$ and $p(T_A)=0$ by Definition \ref{def:minimal-polynomial-matrix}.\\
+First, suppose $g\in\mathbb{C}[z]$ vanishes at every $\lambda_i$. Write $g(z)=\sum\limits_{r=0}^{m}c_rz^r$.\\
+If $g(\lambda)=0$, then $g(z)=g(z)-g(\lambda)$; the identity $z^r-\lambda^r=(z-\lambda)\sum\limits_{s=0}^{r-1}z^{r-1-s}\lambda^s$ therefore writes $g=(z-\lambda)h$ for some $h\in\mathbb{C}[z]$.\\
+Write $g=(z-\lambda_1)g_1$. For $k\geq2$, $0=g(\lambda_k)=(\lambda_k-\lambda_1)g_1(\lambda_k)$ and $\lambda_k-\lambda_1\neq0$, so $g_1(\lambda_k)=0$.\\
+After $d$ such factorizations, $g=ph$ for some $h\in\mathbb{C}[z]$, so $p\mid g$. For $i\in\{1,\ldots,d\}$, set $\ell_i(z)\defeq\prod\limits_{j\neq i}\frac{z-\lambda_j}{\lambda_i-\lambda_j}$ and $\rho_i\defeq\ell_i(T_A)$. Since $\ell_i(\lambda_k)=\delta_{ik}$, each polynomial $\ell_i\ell_j$ with $i\neq j$, $\sum\limits_{i=1}^{d}\ell_i-1$, and $z-\sum\limits_{i=1}^{d}\lambda_i\ell_i$ vanishes at every $\lambda_k$ and is therefore divisible by $p$.\\
+Since $p(T_A)=0$, the identities $\rho_i\rho_j=0$ for $i\neq j$, $\sum\limits_{i=1}^{d}\rho_i=I_{\mathbb{C}^n}$, and $T_A=\sum\limits_{i=1}^{d}\lambda_i\rho_i$ hold by Definition \ref{def:polynomial-applied-to-operator} and Proposition \ref{prop:operator-polynomial-products}.\\
+Hence $\rho_i=\rho_i\sum\limits_{j=1}^{d}\rho_j=\rho_i^2$ for every $i$. If $\rho_i=0$, multiplication by the nonzero scalar $\prod\limits_{j\neq i}(\lambda_i-\lambda_j)$ shows that the monic polynomial $\prod\limits_{j\neq i}(z-\lambda_j)$ annihilates $T_A$, contradicting the degree-$d$ minimality of $\mu_{T_A}=p$. Thus every $\rho_i$ is nonzero.\\
+By Theorem \ref{thm:algebraic-spectral-resolution-diagonalizable}(i), $T_A$ is diagonalizable. By Definition \ref{def:diagonalizable-operator}, choose a basis $\beta$ of $\mathbb{C}^n$ for which $D\defeq[T_A]_{\beta\leftarrow\beta}$ is diagonal.\\
+Since $A$ and $D$ represent $T_A$ in two bases, they are similar by Corollary \ref{cor:similar-iff-same-linear-operator}.
+\end{enumerate}
+\hlt{Structural Commentary}: Diagonal form plus degree bounds identify $\mu_A=p$; Lagrange projections transfer $\mu_A=p$ to diagonalization.\\
+\hlt{Key Insight}: Multiplicity one in $\mu_A$ is exactly what makes the polynomial spectral projections complementary.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:squarefree-annihilator-implies-diagonalizable} \hlt{Square-Free Annihilator Criterion}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. If a polynomial $f$ with no repeated roots satisfies $f(A)=0$, then $A$ is diagonalizable.
+Let $n\geq1$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$. If $0\neq f\in\mathbb{C}[z]$ is square-free and $f(A)=0$, then $A$ is similar to a diagonal matrix.
 \begin{proof}
-Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial} gives $\mu_A\mid f$. Thus $\mu_A$ is square-free, so Theorem \ref{thm:diagonalizable-iff-minimal-polynomial-squarefree} applies.\\
-\hlt{Structural Commentary}: A square-free annihilator forces square-free $\mu_A$.\\
-\hlt{Key Insight}: Square-free $\mu_A$ means diagonalizable.
+The divisibility $\mu_A\mid f$ holds by Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial} and Definition \ref{def:minimal-polynomial-matrix}. If $\mu_A$ had a repeated root $\lambda$, then $(z-\lambda)^2\mid\mu_A$ and hence $(z-\lambda)^2\mid f$, contrary to the hypothesis. Thus $\mu_A$ is square-free. By Theorem \ref{thm:diagonalizable-iff-minimal-polynomial-squarefree}(iii),(i), $A$ is similar to a diagonal matrix.\\
+\hlt{Structural Commentary}: Divisibility transfers any repeated linear factor of the minimal polynomial to every annihilator.\\
+\hlt{Key Insight}: A square-free annihilator excludes repeated roots from $\mu_A$.
 \end{proof}
 \end{corollary}
 
-\begin{method} \label{meth:operator-minimal-polynomial-from-matrix} \hlt{Computing $\mu_T$ from a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be the matrix of $T$ in some basis.
-Propositions \ref{prop:matrix-representation-respects-linear-combinations} and \ref{prop:composition-and-matrix-multiplication} give $[p(T)]=p(A)$ for every $p\in\mathbb{F}[z]$; Theorem \ref{thm:linear-maps-and-matrices-same-data} then gives $\mu_T=\mu_A$.
+\begin{computationmethod} \label{meth:operator-minimal-polynomial-from-matrix} \hlt{Computing $\mu_T$ from a Matrix}\\
+Given an $n$-dimensional vector space $\mathcal{V}$ over $\mathbb{F}$, where $n\geq1$, an operator $T\in\LL(\mathcal{V})$, and a basis $\beta$, set $A\defeq[T]_{\beta\leftarrow\beta}\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
+The output is $\mu_T$. For every $p\in\mathbb{F}[z]$, the identity $[p(T)]_{\beta\leftarrow\beta}=p(A)$ holds by Proposition \ref{prop:matrix-representation-respects-linear-combinations} and Proposition \ref{prop:composition-and-matrix-multiplication}.\\
+Hence $p(T)=0$ if and only if $p(A)=0$ by Theorem \ref{thm:linear-maps-and-matrices-same-data}. Therefore $\mu_T=\mu_A$ by Definition \ref{def:operator-minimal-polynomial} and Definition \ref{def:minimal-polynomial-matrix}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $m=1,\ldots,n^2$, test the monic candidate $p_m(z)=a_0+a_1z+\cdots+a_{m-1}z^{m-1}+z^m$.
-\item Solve linear system by comparing matrix entries in $a_0I+a_1A+\cdots+a_{m-1}A^{m-1}=-A^m$ for $a_0,\ldots,a_{m-1}$.
-\item If no solution exists, increase $m$. The first solvable candidate is $\mu_T$.
+\item For $1\leq m\leq n^2$, set $p_m(z)\defeq a_0+a_1z+\cdots+a_{m-1}z^{m-1}+z^m$, where $(a_0,\ldots,a_{m-1})\in\mathbb{F}^m$ is unknown.
+\item Compare matrix entries in $a_0I_n+a_1A+\cdots+a_{m-1}A^{m-1}=-A^m$ and solve the resulting linear system.
+\item If the system is inconsistent, increase $m$. At the first solvable degree, choose a solution and return the corresponding $p_m$.
 \end{enumerate}
-Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} guarantees termination by $m=n^2$.
-\end{method}
+By Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} and Theorem \ref{thm:operator-minimal-polynomial-existence}, the search terminates by $m=n^2$. The returned polynomial is the least-degree monic annihilator of $A$ and hence equals $\mu_T$ by the preceding equivalence and Definition \ref{def:operator-minimal-polynomial}.
+\end{computationmethod}
 
-\begin{figure}[H]
+Figure \ref{fig:minimal-polynomial-linear-system} summarizes the linear-system search for the least-degree monic annihilator.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/minimal_polynomial_linear_system.tikz}
-  \caption{Solve $a_0I+\cdots+a_{m-1}A^{m-1}=-A^m$; the first solvable monic candidate is $\mu_T$.}
+  \caption{Solve $a_0I_n+\cdots+a_{m-1}A^{m-1}=-A^m$; the first solvable monic candidate is $\mu_T$.}
   \label{fig:minimal-polynomial-linear-system}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{method} \label{meth:minimal-polynomial-testing-from-characteristic-polynomial} \hlt{Testing a Minimal Polynomial from $p_A$}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and suppose $p_A(z)=\prod_i(z-\lambda_i)^{a_i}$ is known.
+\begin{computationmethod} \label{meth:minimal-polynomial-testing-from-characteristic-polynomial} \hlt{Testing a Minimal Polynomial from $p_A$}\\
+Given $n,d\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, known factorization $p_A(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{a_i}$, with distinct $\lambda_1,\ldots,\lambda_d$ and $a_1,\ldots,a_d\geq1$, return $\mu_A$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item Write each candidate as $m_{\mathbf{q}}(z)=\prod_i(z-\lambda_i)^{q_i}$, where $1\leq q_i\leq a_i$.
-\item Test exponent vectors $\mathbf{q}=(q_i)$ in increasing total degree $\sum_iq_i$.
-\item For each $\mathbf{q}$, compute $m_{\mathbf{q}}(A)=\prod_i(A-\lambda_iI)^{q_i}$.
-\item The first candidate with $m_{\mathbf{q}}(A)=0$ is $\mu_A$, by Theorem \ref{thm:minimal-polynomial-basic-properties}.
+\item Form the finite candidate family $m_{\mathbf{q}}(z)=\prod\limits_{i=1}^{d}(z-\lambda_i)^{q_i}$, where $1\leq q_i\leq a_i$.
+\item Test exponent vectors $\mathbf{q}=(q_i)_{i=1}^{d}$ in increasing total degree $\sum\limits_{i=1}^{d}q_i$, using any order among vectors of equal total degree.
+\item For each $\mathbf{q}$, compute $m_{\mathbf{q}}(A)=\prod_{i=1}^{d}(A-\lambda_iI_n)^{q_i}$.
+\item Stop at the first candidate satisfying $m_{\mathbf{q}}(A)=0$ and return it.
 \end{enumerate}
-\end{method}
+The search terminates because $p_A$ is a candidate and $p_A(A)=0$ by Theorem \ref{thm:cayley-hamilton-matrix}.\\
+Since $\mu_A$ is a candidate by Theorem \ref{thm:minimal-polynomial-basic-properties}(iii), degree ordering and Definition \ref{def:minimal-polynomial-matrix} imply $\deg(m)=\deg(\mu_A)$ for returned candidate $m$.\\
+The annihilator $m-\mu_A$ then has lower degree unless it is zero; hence $m=\mu_A$.
+\end{computationmethod}
