@@ -1,148 +1,185 @@
 \subsection{Generalized Eigenspaces and Nilpotent Structure}
 
-Generalized eigenvectors repair the main defect of ordinary eigenvectors: an operator may not have enough eigendirections to form a basis. The replacement is to study vectors killed by powers of shifted operators.
+Throughout this subsection, $\mathcal{V}$ denotes a vector space over $\mathbb{F}$. Generalized eigenvectors enlarge ordinary eigendirections by allowing vectors annihilated by powers of shifted operators.
 
 \begin{definition} \label{def:generalized-eigenvector-and-eigenspace} \hlt{Generalized Eigenvectors and Generalized Eigenspaces}\\
-Let $T\in\LL(\mathcal{V})$, $\lambda\in\mathbb{F}$. Nonzero vector $\mathbf{v}\in\mathcal{V}$ is a \hlt{generalized eigenvector} of $T$ to $\lambda$ if $(T-\lambda I_{\mathcal{V}})^j\mathbf{v}=\mathbf{0}$ for some positive integer $j$. The \hlt{generalized eigenspace} corresponding to $\lambda$ is
-\begin{align}
-\mathcal{G}_{\lambda}(T)\defeq \{\mathbf{0}\}\cup\{\mathbf{v}\neq\mathbf{0}:\mathbf{v}\text{ is a generalized eigenvector of }T\text{ corresponding to }\lambda\}.
-\nonumber
-\end{align}
+Let $T\in\LL(\mathcal{V})$ and $\lambda\in\mathbb{F}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A nonzero $\mathbf{v}\in\mathcal{V}$ is a \hlt{generalized eigenvector} of $T$ corresponding to $\lambda$ iff $(\exists j\in\mathbb{Z}_{>0})\,(T-\lambda I_{\mathcal{V}})^j\mathbf{v}=\mathbf{0}$.
+\item The \hlt{generalized eigenspace} corresponding to $\lambda$ is $\mathcal{G}_{\lambda}(T)\defeq\{\mathbf{v}\in\mathcal{V}:(\exists j\in\mathbb{Z}_{>0})\,(T-\lambda I_{\mathcal{V}})^j\mathbf{v}=\mathbf{0}\}$.
+\end{enumerate}
 \end{definition}
 
-Every eigenvector is a generalized eigenvector by taking $j=1$. The point is that higher powers of $T-\lambda I_{\mathcal{V}}$ may reveal directions that are not eigenvectors but are eventually pushed into the eigenspace.
+Every eigenvector is generalized by taking $j=1$. For a nonzero generalized eigenvector, successive applications of $T-\lambda I_{\mathcal{V}}$ eventually reach the ordinary eigenspace.
 
 \begin{proposition} \label{prop:kernels-of-powers-increase} \hlt{Kernels of Powers Increase}\\
-Let $T\in\LL(\mathcal{V})$. Then $\{\mathbf{0}\}=\ker(T^0)\subseteq\ker(T)\subseteq\ker(T^2)\subseteq\cdots\subseteq\ker(T^k)\subseteq\ker(T^{k+1})\subseteq\cdots$.
+Let $T\in\LL(\mathcal{V})$, with $T^0\defeq I_{\mathcal{V}}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\ker(T^0)=\{\mathbf{0}\}$;
+\item $(\forall k\in\mathbb{Z}_{\geq0})\,\ker(T^k)\subseteq\ker(T^{k+1})$.
+\end{enumerate}
 \begin{proof}
-If $\mathbf{v}\in\ker(T^k)$, then $T^k\mathbf{v}=\mathbf{0}$, hence $T^{k+1}\mathbf{v}=T(T^k\mathbf{v})=\mathbf{0}$. Thus $\ker(T^k)\subseteq\ker(T^{k+1})$ for every $k\geq0$.\\
-\hlt{Structural Commentary}: Powers of $T$ form an increasing chain of kernels.\\
-\hlt{Key Insight}: Once a vector is killed by $T^k$, applying one more $T$ cannot revive it.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By $T^0=I_{\mathcal{V}}$, $\ker(T^0)=\{\mathbf{0}\}$.
+\item Fix $k\in\mathbb{Z}_{\geq0}$ and $\mathbf{v}\in\ker(T^k)$. Then $T^k\mathbf{v}=\mathbf{0}$, so $T^{k+1}\mathbf{v}=T(T^k\mathbf{v})=\mathbf{0}$. Hence $\mathbf{v}\in\ker(T^{k+1})$.
+\end{enumerate}
+\hlt{Structural Commentary}: The identity power starts the filtration; one additional application preserves annihilation.\\
+\hlt{Key Insight}: An operator cannot revive a vector already sent to zero.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:kernel-power-stabilization-after-equality} \hlt{Equality Forces Stabilization}\\
-Let $T\in\LL(\mathcal{V})$ and $m\geq0$. If $\ker(T^m)=\ker(T^{m+1})$, then $\ker(T^m)=\ker(T^{m+1})=\ker(T^{m+2})=\cdots$.
+Let $T\in\LL(\mathcal{V})$ and $m\in\mathbb{Z}_{\geq0}$. If $\ker(T^m)=\ker(T^{m+1})$, then $(\forall k\in\mathbb{Z}_{\geq0})\,\ker(T^{m+k})=\ker(T^m)$.
 \begin{proof}
-By Proposition \ref{prop:kernels-of-powers-increase}, it suffices to prove $\ker(T^{m+k+1})\subseteq\ker(T^{m+k})$ for every $k\geq0$.\\
-Take $\mathbf{v}\in\ker(T^{m+k+1})$. Then $T^{m+1}(T^k\mathbf{v})=T^{m+k+1}\mathbf{v}=\mathbf{0}$, so $T^k\mathbf{v}\in\ker(T^{m+1})=\ker(T^m)$.\\
-Hence $T^{m+k}\mathbf{v}=T^m(T^k\mathbf{v})=\mathbf{0}$, proving the reverse inclusion.\\
-\hlt{Structural Commentary}: Stabilization at one step propagates through the whole tail.\\
-\hlt{Key Insight}: A later kernel vector can be shifted down into the already-stable kernel.
+By Proposition \ref{prop:kernels-of-powers-increase}(ii), it suffices to prove $(\forall k\in\mathbb{Z}_{\geq0})\,\ker(T^{m+k+1})\subseteq\ker(T^{m+k})$.\\
+Fix $k\in\mathbb{Z}_{\geq0}$ and $\mathbf{v}\in\ker(T^{m+k+1})$. Then $T^{m+1}(T^k\mathbf{v})=T^{m+k+1}\mathbf{v}=\mathbf{0}$, so $T^k\mathbf{v}\in\ker(T^{m+1})=\ker(T^m)$.\\
+Thus $T^{m+k}\mathbf{v}=T^m(T^k\mathbf{v})=\mathbf{0}$, so $\mathbf{v}\in\ker(T^{m+k})$. Hence every adjacent inclusion in the kernel tail is an equality.\\
+\hlt{Structural Commentary}: The initial equality converts every later kernel inclusion into equality.\\
+\hlt{Key Insight}: Shift a later kernel vector into the already-stable pair.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:kernel-powers-stabilize-by-dimension} \hlt{Kernels Stop Growing by $\dim(\mathcal{V})$}\\
-If $\mathcal{V}$ is finite-dimensional, $T\in\LL(\mathcal{V})$, and $n=\dim(\mathcal{V})$, then $\ker(T^n)=\ker(T^{n+1})=\ker(T^{n+2})=\cdots$.
+Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and set $n\defeq\dim(\mathcal{V})$. Then $(\forall k\in\mathbb{Z}_{\geq0})\,\ker(T^{n+k})=\ker(T^n)$.
 \begin{proof}
-If $\ker(T^n)\neq\ker(T^{n+1})$, then all inclusions $\{\mathbf{0}\}=\ker(T^0)\subsetneq\ker(T)\subsetneq\cdots\subsetneq\ker(T^{n+1})$ are strict by Proposition \ref{prop:kernel-power-stabilization-after-equality}. Each strict inclusion raises dimension by at least $1$, so $\dim\ker(T^{n+1})\geq n+1$, impossible because $\ker(T^{n+1})\subseteq\mathcal{V}$. Thus $\ker(T^n)=\ker(T^{n+1})$, and the tail equality follows from Proposition \ref{prop:kernel-power-stabilization-after-equality}.\\
-\hlt{Structural Commentary}: Strict kernel growth is dimension-limited.\\
-\hlt{Key Insight}: Dimension bounds force the kernel chain to stabilize no later than step $\dim(\mathcal{V})$.
+Suppose $\ker(T^n)\neq\ker(T^{n+1})$. By Proposition \ref{prop:kernel-power-stabilization-after-equality}, every inclusion in $\{\mathbf{0}\}=\ker(T^0)\subsetneq\ker(T)\subsetneq\cdots\subsetneq\ker(T^{n+1})$ is strict.\\
+Thus $n+1\leq\dim\ker(T^{n+1})\leq n$ by Proposition \ref{prop:kernel-and-range-are-subspaces}(i) and Proposition \ref{prop:dimension-bounds-and-basis-criteria}(i)--(ii), a contradiction.\\
+Hence $\ker(T^n)=\ker(T^{n+1})$, and the claim follows by Proposition \ref{prop:kernel-power-stabilization-after-equality}.\\
+\hlt{Structural Commentary}: A hypothetical late growth step forces too many strict subspace inclusions.\\
+\hlt{Key Insight}: An $n$-dimensional space permits at most $n$ strict kernel increases.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:kernel-power-filtration} records the dimension-limited growth and eventual stabilization of the kernel filtration.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/kernel_power_filtration.tikz}
   \caption{The kernel filtration grows until it stabilizes; after equality appears once, the tail is constant.}
   \label{fig:kernel-power-filtration}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:kernel-range-stable-direct-sum} \hlt{Stable Kernel-Range Decomposition}\\
-Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and set $n=\dim(\mathcal{V})$. Then $\mathcal{V}=\ker(T^n)\oplus\operatorname{range}(T^n)$.
+Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and set $n\defeq\dim(\mathcal{V})$. Then $\mathcal{V}=\ker(T^n)\oplus\operatorname{range}(T^n)$.
 \begin{proof}
-First show the intersection is trivial. If $\mathbf{v}\in\ker(T^n)\cap\operatorname{range}(T^n)$, then $\mathbf{v}=T^n\mathbf{u}$ and $T^n\mathbf{v}=\mathbf{0}$. Hence $T^{2n}\mathbf{u}=\mathbf{0}$, so $\mathbf{u}\in\ker(T^{2n})=\ker(T^n)$ by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}. Thus $\mathbf{v}=T^n\mathbf{u}=\mathbf{0}$.\\
-By Rank-Nullity Theorem \ref{thm:rank-nullity}, $\dim\ker(T^n)+\dim\operatorname{range}(T^n)=\dim(\mathcal{V})$.\\
-The zero intersection and the dimension count imply the sum is direct and equals $\mathcal{V}$.\\
-\hlt{Structural Commentary}: At the stable power, killed directions and surviving image directions separate cleanly.\\
-\hlt{Key Insight}: Stabilization turns the usual rank-nullity count into an actual direct-sum decomposition.
+Let $\mathbf{v}\in\ker(T^n)\cap\operatorname{range}(T^n)$. Choose $\mathbf{u}\in\mathcal{V}$ with $\mathbf{v}=T^n\mathbf{u}$ by range membership.\\
+Then $T^{2n}\mathbf{u}=T^n\mathbf{v}=\mathbf{0}$ by kernel membership. Thus $\mathbf{u}\in\ker(T^{2n})=\ker(T^n)$ by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}, and $\mathbf{v}=T^n\mathbf{u}=\mathbf{0}$.\\
+Hence $\ker(T^n)\cap\operatorname{range}(T^n)=\{\mathbf{0}\}$. By Theorem \ref{thm:rank-nullity}(ii), $\dim\ker(T^n)+\dim\operatorname{range}(T^n)=n$. The sum is direct by Proposition \ref{prop:uniqueness-direct-sum-two-subspaces}.\\
+By Corollary \ref{cor:dimension-direct-sum}, $\dim(\ker(T^n)\oplus\operatorname{range}(T^n))=n$. Hence the direct sum equals $\mathcal{V}$ by Proposition \ref{prop:dimension-bounds-and-basis-criteria}(ii).\\
+\hlt{Structural Commentary}: Kernel stabilization first kills the intersection; rank--nullity then fills the ambient dimension.\\
+\hlt{Key Insight}: Stable image vectors cannot also lie in the stable kernel.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:generalized-eigenspace-stabilized-kernel} \hlt{Description of Generalized Eigenspaces}\\
-Let $\mathcal{V}$ be finite-dimensional, $T\in\LL(\mathcal{V})$, $\lambda\in\mathbb{F}$, and $n=\dim(\mathcal{V})$. Then $\mathcal{G}_{\lambda}(T)=\ker\bigl((T-\lambda I_{\mathcal{V}})^n\bigr)$.\\
-In particular, $\mathcal{G}_{\lambda}(T)$ is a subspace of $\mathcal{V}$.
-\begin{proof}
-Set $S=T-\lambda I_{\mathcal{V}}$.
-\begin{enumerate}[label=\roman*.]
+Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, let $\lambda\in\mathbb{F}$, and set $n\defeq\dim(\mathcal{V})$. Then:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\mathbf{v}\in \mathcal{G}_{\lambda}(T)$, then $S^j\mathbf{v}=\mathbf{0}$ for some $j\geq1$. If $j\leq n$, then $\mathbf{v}\in\ker(S^n)$ by Proposition \ref{prop:kernels-of-powers-increase}; if $j>n$, then $\ker(S^j)=\ker(S^n)$ by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}.
-\item[$(\Leftarrow)$] If $\mathbf{v}\in\ker(S^n)$, then either $\mathbf{v}=\mathbf{0}$ or $\mathbf{v}$ is a generalized eigenvector of $T$ corresponding to $\lambda$.
+\item $\mathcal{G}_{\lambda}(T)=\ker((T-\lambda I_{\mathcal{V}})^n)$;
+\item $\mathcal{G}_{\lambda}(T)$ is a subspace of $\mathcal{V}$.
 \end{enumerate}
-Thus $\mathcal{G}_{\lambda}(T)=\ker(S^n)$, which is a subspace.\\
-\hlt{Structural Commentary}: Generalized eigenspaces are stable shifted kernels.\\
-\hlt{Key Insight}: Finite dimension makes exponent $\dim(\mathcal{V})$ enough.
+\begin{proof}
+Set $S\defeq T-\lambda I_{\mathcal{V}}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathbf{v}\in\mathcal{G}_{\lambda}(T)$. By Definition \ref{def:generalized-eigenvector-and-eigenspace}(ii), choose $j\in\mathbb{Z}_{>0}$ such that $S^j\mathbf{v}=\mathbf{0}$.\\
+If $j\leq n$, then $\mathbf{v}\in\ker(S^n)$ by Proposition \ref{prop:kernels-of-powers-increase}(ii); if $j>n$, then $\mathbf{v}\in\ker(S^j)=\ker(S^n)$ by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}. Thus $\mathcal{G}_{\lambda}(T)\subseteq\ker(S^n)$.\\
+Conversely, $S^{n+1}\mathbf{v}=\mathbf{0}$ for every $\mathbf{v}\in\ker(S^n)$, so $\ker(S^n)\subseteq\mathcal{G}_{\lambda}(T)$ by Definition \ref{def:generalized-eigenvector-and-eigenspace}(ii).
+\item By (i) and Proposition \ref{prop:kernel-and-range-are-subspaces}(i), $\mathcal{G}_{\lambda}(T)=\ker(S^n)$ is a subspace of $\mathcal{V}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Kernel-chain stabilization replaces all admissible exponents by the single exponent $n$.\\
+\hlt{Key Insight}: Every generalized eigenvector is detected by the stabilized shifted kernel.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:generalized-eigenspaces-invariant} \hlt{Generalized Eigenspaces Are Invariant}\\
-Let $\mathcal{V}$ be finite-dimensional and $T\in\LL(\mathcal{V})$. Then $\mathcal{G}_{\lambda}(T)$ is invariant under $T$ for every $\lambda\in\mathbb{F}$.
+Let $\mathcal{V}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. Then $(\forall\lambda\in\mathbb{F})\,T(\mathcal{G}_{\lambda}(T))\subseteq\mathcal{G}_{\lambda}(T)$.
 \begin{proof}
-By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}, $\mathcal{G}_{\lambda}(T)=\ker((T-\lambda I_{\mathcal{V}})^n)$, where $n=\dim(\mathcal{V})$.\\
-This is the kernel of a polynomial in $T$, so it is invariant under $T$ by Proposition \ref{prop:kernel-range-polynomial-in-operator-invariant}.\\
-\hlt{Structural Commentary}: A generalized eigenspace is cut out by a polynomial equation in $T$.\\
-\hlt{Key Insight}: Polynomial kernels commute with the operator that defines them.
+Fix $\lambda\in\mathbb{F}$, set $n\defeq\dim(\mathcal{V})$, and let $p(z)\defeq(z-\lambda)^n$. By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}(i) and Proposition \ref{prop:operator-polynomial-products}(i), $\mathcal{G}_{\lambda}(T)=\ker(p(T))$.\\
+Hence $\mathcal{G}_{\lambda}(T)$ is invariant under $T$ by Proposition \ref{prop:kernel-range-polynomial-in-operator-invariant}(i).\\
+\hlt{Structural Commentary}: The stabilized shifted kernel is rewritten as a polynomial kernel in $T$.\\
+\hlt{Key Insight}: Polynomial kernels remain invariant under their defining operator.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:nilpotent-operator} \hlt{Nilpotent Operator}\\
-An operator $N\in\LL(\mathcal{V})$ is \hlt{nilpotent} if $N^m=0$ for some positive integer $m$.
+An operator $N\in\LL(\mathcal{V})$ is \hlt{nilpotent} iff $(\exists m\in\mathbb{Z}_{>0})\,N^m=0$.
 \end{definition}
 
 \begin{corollary} \label{cor:nilpotent-power-dimension-zero} \hlt{Nilpotent Power Bound}\\
-If $\mathcal{V}$ is finite-dimensional, $N\in\LL(\mathcal{V})$ is nilpotent, and $n=\dim(\mathcal{V})$, then $N^n=0$.
+Let $\mathcal{V}$ be finite-dimensional, let $N\in\LL(\mathcal{V})$ be nilpotent, and set $n\defeq\dim(\mathcal{V})$. Then $N^n=0$.
 \begin{proof}
-Since $N$ is nilpotent, $\ker(N^m)=\mathcal{V}$ for some $m$.\\
-The kernel chain has stabilized by the $n$th step by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}, so $\ker(N^n)=\mathcal{V}$. Hence $N^n=0$.\\
-\hlt{Structural Commentary}: Nilpotence says some kernel in the chain is already the whole space.\\
-\hlt{Key Insight}: The stabilization bound pulls that full-kernel conclusion back to exponent $\dim(\mathcal{V})$.
+By nilpotence, choose $m\in\mathbb{Z}_{>0}$ such that $N^m=0$, so $\ker(N^m)=\mathcal{V}$. If $m\leq n$, then $\ker(N^m)\subseteq\ker(N^n)$ by Proposition \ref{prop:kernels-of-powers-increase}(ii).\\
+If $m>n$, then $\ker(N^m)=\ker(N^n)$ by Theorem \ref{thm:kernel-powers-stabilize-by-dimension}. Thus $\ker(N^n)=\mathcal{V}$ in both cases, and therefore $N^n=0$.\\
+\hlt{Structural Commentary}: Kernel growth or stabilization transfers a full nilpotent kernel to exponent $n$.\\
+\hlt{Key Insight}: The dimension bound never requires a larger nilpotence exponent.
 \end{proof}
 \end{corollary}
 
 \begin{lemma} \label{lem:scalar-plus-nilpotent-invertible} \hlt{Nonzero Scalar Plus Nilpotent Is Invertible}\\
 Let $N\in\LL(\mathcal{V})$ be nilpotent and let $a\in\mathbb{F}$ with $a\neq0$. Then $aI_{\mathcal{V}}+N$ is invertible.
 \begin{proof}
-Choose $m$ such that $N^m=0$. Then $(aI_{\mathcal{V}}+N)\left(a^{-1}\sum\limits_{r=0}^{m-1}(-a^{-1}N)^r\right) =I_{\mathcal{V}}-(-a^{-1}N)^m=I_{\mathcal{V}}$,
-and the same computation in the reverse order gives a two-sided inverse.\\
-\hlt{Structural Commentary}: A nilpotent perturbation has a finite geometric-series inverse.\\
-\hlt{Key Insight}: Nilpotence truncates the Neumann series exactly.
+Choose $m\in\mathbb{Z}_{>0}$ such that $N^m=0$ by nilpotence, and set $X\defeq-a^{-1}N$ and $B\defeq a^{-1}\sum\limits_{r=0}^{m-1}X^r$.\\
+By Proposition \ref{prop:operator-polynomial-products}(i)--(ii) and the finite geometric-series identity, $(aI_{\mathcal{V}}+N)B=B(aI_{\mathcal{V}}+N)=I_{\mathcal{V}}-X^m=I_{\mathcal{V}}$. Hence $B=(aI_{\mathcal{V}}+N)^{-1}$.\\
+\hlt{Structural Commentary}: The finite geometric series verifies both inverse identities for the nilpotent perturbation.\\
+\hlt{Key Insight}: Nilpotence makes the geometric-series remainder vanish exactly.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:distinct-generalized-eigenvectors-independent} \hlt{Generalized Eigenvectors for Distinct Eigenvalues Are Independent}\\
-Let $\mathcal{V}$ be finite-dimensional and $T\in\LL(\mathcal{V})$. Suppose $\lambda_1,\ldots,\lambda_m$ are distinct eigenvalues of $T$, and let $\mathbf{v}_1,\ldots,\mathbf{v}_m$ be corresponding generalized eigenvectors. Then $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is linearly independent.
+Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $m\in\mathbb{Z}_{>0}$. Suppose $\lambda_1,\ldots,\lambda_m$ are distinct eigenvalues of $T$, and let $\mathbf{v}_1,\ldots,\mathbf{v}_m$ be corresponding generalized eigenvectors.\\
+Then $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is linearly independent.
 \begin{proof}
-Let $n=\dim(\mathcal{V})$ and suppose $a_1\mathbf{v}_1+\cdots+a_m\mathbf{v}_m=\mathbf{0}$.\\
-Fix $r\in\{1,\ldots,m\}$ and apply $Q_r(T)\defeq\prod\limits_{i\neq r}(T-\lambda_iI_{\mathcal{V}})^n$ to the relation.\\
-For $i\neq r$, $Q_r(T)\mathbf{v}_i=\mathbf{0}$ by Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}, so $a_rQ_r(T)\mathbf{v}_r=\mathbf{0}$.\\
-On $\mathcal{G}_{\lambda_r}(T)$, the operator $T-\lambda_iI_{\mathcal{V}}$ equals $(T-\lambda_rI_{\mathcal{V}})+(\lambda_r-\lambda_i)I_{\mathcal{V}}$. The first term is nilpotent on $\mathcal{G}_{\lambda_r}(T)$ and $\lambda_r-\lambda_i\neq0$, so each factor is invertible on $\mathcal{G}_{\lambda_r}(T)$ by Lemma \ref{lem:scalar-plus-nilpotent-invertible}. Thus $Q_r(T)\mathbf{v}_r\neq\mathbf{0}$, forcing $a_r=0$. Since $r$ was arbitrary, all coefficients vanish.\\
-\hlt{Structural Commentary}: Polynomial filters isolate one generalized eigenspace at a time.\\
-\hlt{Key Insight}: Distinct eigenvalues let polynomial filters kill the other components and preserve the target one.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Candidate Relation}: Set $n\defeq\dim(\mathcal{V})$ and suppose $a_1\mathbf{v}_1+\cdots+a_m\mathbf{v}_m=\mathbf{0}$.
+\item \hlt{Polynomial Filter}: Fix $r\in\{1,\ldots,m\}$ and set $Q_r(T)\defeq\prod\limits_{i\in\{1,\ldots,m\}\setminus\{r\}}(T-\lambda_iI_{\mathcal{V}})^n$, with the empty product equal to $I_{\mathcal{V}}$.
+\item \hlt{Non-Target Annihilation}: By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}(i) and commutativity in Proposition \ref{prop:operator-polynomial-products}(ii), $Q_r(T)\mathbf{v}_i=\mathbf{0}$ for $i\neq r$.\\
+Hence applying $Q_r(T)$ to the candidate relation leaves $a_rQ_r(T)\mathbf{v}_r=\mathbf{0}$.
+\item \hlt{Target Invertibility}: Set $\mathcal{G}_r\defeq\mathcal{G}_{\lambda_r}(T)$ and $N_r\defeq(T-\lambda_rI_{\mathcal{V}})|_{\mathcal{G}_r}$.\\
+By Proposition \ref{prop:generalized-eigenspaces-invariant} and Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}(i)--(ii), $N_r\in\LL(\mathcal{G}_r)$ and $N_r^n=0$.\\
+For $i\neq r$, $(T-\lambda_iI_{\mathcal{V}})|_{\mathcal{G}_r}=N_r+(\lambda_r-\lambda_i)I_{\mathcal{G}_r}$ with $\lambda_r-\lambda_i\neq0$, so this restriction is invertible by Lemma \ref{lem:scalar-plus-nilpotent-invertible}.\\
+Thus $Q_r(T)|_{\mathcal{G}_r}$, a product of $n$th powers of these restrictions or the identity if $m=1$, is invertible by Proposition \ref{prop:inverse-of-product-linear-maps}(i).
+\item \hlt{Coefficient Vanishing}: Since $\mathbf{v}_r\in\mathcal{G}_r\setminus\{\mathbf{0}\}$, $Q_r(T)\mathbf{v}_r\neq\mathbf{0}$ by item (iv), and hence $a_r=0$ by item (iii).\\
+Since $r$ was arbitrary, $a_1=\cdots=a_m=0$, so $(\mathbf{v}_1,\ldots,\mathbf{v}_m)$ is linearly independent.
+\end{enumerate}
+\hlt{Structural Commentary}: Polynomial filters annihilate non-target vectors while nilpotent-plus-scalar factors preserve the target.\\
+\hlt{Key Insight}: Distinct spectral shifts are invertible on the remaining generalized eigenspace.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:nilpotent-strictly-upper-triangular-matrix} \hlt{Nilpotent Operators and Strictly Upper-Triangular Matrices}\\
-Let $\mathcal{V}$ be finite-dimensional and $N\in\LL(\mathcal{V})$. Then $N$ is nilpotent if and only if $N$ has a strictly upper-triangular matrix in some basis.
+Let $\mathcal{V}$ be nonzero and finite-dimensional, let $N\in\LL(\mathcal{V})$, and set $n\defeq\dim(\mathcal{V})$.\\
+Then $N$ is nilpotent iff some ordered basis $\beta$ satisfies $[N]_{\beta}=[a_{ij}]$ and $(\forall i,j\in\{1,\ldots,n\})\,(i\geq j\implies a_{ij}=0)$.
 \begin{proof}
-Let $n=\dim(\mathcal{V})$. By Corollary \ref{cor:nilpotent-power-dimension-zero}, $\{\mathbf{0}\}\subseteq\ker(N)\subseteq\ker(N^2)\subseteq\cdots\subseteq\ker(N^n)=\mathcal{V}$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Choose a basis of $\ker(N)$, extend it to a basis of $\ker(N^2)$, and continue until obtaining a basis of $\mathcal{V}$.\\
-If $\mathbf{v}$ first appears in $\ker(N^k)$, then $N\mathbf{v}\in\ker(N^{k-1})$, which is spanned by earlier basis vectors. Hence the matrix of $N$ is strictly upper triangular.
-\item[$(\Leftarrow)$] If the matrix of $N$ is $n\times n$ strictly upper triangular, then $N$ sends each basis vector into the span of earlier basis vectors. After $n$ applications every basis vector is sent to $\mathbf{0}$, so $N^n=0$.
+\item[$(\Rightarrow)$] Suppose $N$ is nilpotent. By Corollary \ref{cor:nilpotent-power-dimension-zero} and Proposition \ref{prop:kernels-of-powers-increase}(i)--(ii), $\{\mathbf{0}\}=\ker(N^0)\subseteq\ker(N)\subseteq\cdots\subseteq\ker(N^n)=\mathcal{V}$.\\
+By Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}(i)--(ii) and Theorem \ref{thm:extending-independent-lists}, choose an ordered basis $\beta$ whose initial segments span the kernels in this chain.\\
+If $\mathbf{v}$ first enters at level $k$, then $N\mathbf{v}\in\ker(N^{k-1})$, which is spanned by earlier vectors of $\beta$; hence $[N]_{\beta}$ is strictly upper triangular.
+\item[$(\Leftarrow)$] Suppose $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ and $[N]_{\beta}$ is strictly upper triangular.\\
+Set $F_0\defeq\{\mathbf{0}\}$ and $F_j\defeq\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_j)$ for $j\in\{1,\ldots,n\}$. Then $(\forall j\in\{1,\ldots,n\})\,N(F_j)\subseteq F_{j-1}$.\\
+By iteration, $N^n(\mathcal{V})=N^n(F_n)\subseteq F_0=\{\mathbf{0}\}$, so $N^n=0$ and $N$ is nilpotent by Definition \ref{def:nilpotent-operator}.
 \end{enumerate}
-\hlt{Structural Commentary}: Kernel filtration gives adapted basis; triangular form records motion to earlier layers.\\
-\hlt{Key Insight}: Nilpotence is strict upper-triangularity in a suitable basis.
+\hlt{Structural Commentary}: The forward direction adapts a basis to kernels; the reverse direction descends basis indices.\\
+\hlt{Key Insight}: Strict index descent forces every basis vector to reach zero.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:nilpotent-filtration-basis} illustrates how a basis adapted to the kernel filtration makes nilpotent action move toward earlier layers.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/nilpotent_filtration_basis.tikz}
   \caption{Extending bases through the kernel filtration makes $N$ move vectors to earlier layers.}
   \label{fig:nilpotent-filtration-basis}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{perspective} \label{per:generalized-eigenvectors-as-nilpotent-data} \hlt{Eigenvalue Plus Nilpotent Part}\\
-On $\mathcal{G}_{\lambda}(T)$, the operator $T$ behaves as $\lambda I_{\mathcal{V}}$ plus the nilpotent operator $T-\lambda I_{\mathcal{V}}$. Generalized eigenvectors are therefore ordinary eigenvectors enriched by nilpotent chain data.
+Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, let $\lambda\in\mathbb{F}$, and set $n\defeq\dim(\mathcal{V})$. Define $\mathcal{G}_{\lambda}\defeq\mathcal{G}_{\lambda}(T)$ and $N_{\lambda}\defeq(T-\lambda I_{\mathcal{V}})|_{\mathcal{G}_{\lambda}}$.\\
+By Proposition \ref{prop:generalized-eigenspaces-invariant}, $N_{\lambda}\in\LL(\mathcal{G}_{\lambda})$. By Theorem \ref{thm:generalized-eigenspace-stabilized-kernel}(i), $N_{\lambda}^n=0$, and hence $N_{\lambda}^{n+1}=0$. Thus $N_{\lambda}$ is nilpotent and $T|_{\mathcal{G}_{\lambda}}=\lambda I_{\mathcal{G}_{\lambda}}+N_{\lambda}$.\\
+Generalized eigenvectors therefore record the nilpotent component of $T$ within the stabilized shifted kernel.
 \end{perspective}
