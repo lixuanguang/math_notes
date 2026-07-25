@@ -1,18 +1,37 @@
 \subsection{Jordan Operator Functions and Square Roots}
 
+For $z\in\mathbb{C}$, set $e^z\defeq\sum\limits_{m=0}^{\infty}\frac{z^m}{m!}$.
+\begin{definition} \label{def:matrix-exponential} \hlt{Matrix Exponential}\\
+Let $n\in\mathbb{Z}_{>0}$ and $C\in\operatorname{Mat}(n,n,\mathbb{C})$. The \hlt{matrix exponential} of $C$ is $e^C=\exp(C)\defeq\sum\limits_{m=0}^{\infty}\frac{C^m}{m!}$.
+\end{definition}
+
+\begin{proposition} \label{prop:matrix-exponential-entrywise-absolute-convergence} \hlt{Entrywise Absolute Convergence of the Matrix Exponential}\\
+Let $n\in\mathbb{Z}_{>0}$ and $C\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $(\forall\,i,j\in\{1,\ldots,n\})\ \sum\limits_{m=0}^{\infty}\frac{\abs{(C^m)_{ij}}}{m!}<\infty$.
+\begin{proof} Set $M\defeq\max\limits_{1\leq i,j\leq n}\abs{C_{ij}}$. By induction, $(\forall m\in\mathbb{Z}_{>0})(\forall i,j\in\{1,\ldots,n\})\,\abs{(C^m)_{ij}}\leq n^{m-1}M^m$.\\
+For $(i,j)\in\{1,\ldots,n\}^2$, $\abs{(C^0)_{ij}}\leq1$ and $\sum\limits_{m=0}^{\infty}\frac{\abs{(C^m)_{ij}}}{m!}\leq1+\frac{e^{nM}-1}{n}<\infty$ by the scalar exponential series.\\
+\hlt{Structural Commentary}: The entrywise power bound reduces matrix convergence to one scalar exponential majorant.\\
+\hlt{Key Insight}: Each matrix multiplication contributes at most one factor of $nM$.
+\end{proof}
+\end{proposition}
+
+The real scalar facts used below are $(\forall x\in\mathbb{R})\,e^x>0$ and $(\forall x\in\mathbb{R}_{>0})(\exists\ell\in\mathbb{R})\,e^{\ell}=x$.\\
+For complex scalars, $(\forall\lambda\in\mathbb{C}\setminus\{0\})(\exists\ell\in\mathbb{C})\,e^{\ell}=\lambda$ and $(\forall\lambda\in\mathbb{C})(\exists\alpha\in\mathbb{C})\,\alpha^2=\lambda$.
+
 \begin{proposition} \label{prop:exponential-of-jordan-block} \hlt{Exponential of a Jordan Block}\\
-For $k\in\mathbb{N}$ with $k\geq1$, $\lambda\in\mathbb{C}$, and $t\in\mathbb{C}$, one has $e^{tJ_k(\lambda)}=e^{\lambda t}\sum\limits_{r=0}^{k-1}\frac{t^r}{r!}J_k(0)^r$.
+Let $k\in\mathbb{Z}_{>0}$ and $\lambda,t\in\mathbb{C}$. Then $e^{tJ_k(\lambda)}=e^{\lambda t}\sum\limits_{r=0}^{k-1}\frac{t^r}{r!}J_k(0)^r$.
 \begin{proof}
-Set $N=J_k(0)$, so $J_k(\lambda)=\lambda I_k+N$ and $N^k=0$.\\
-By binomial theorem, $(\lambda I_k+N)^m=\sum\limits_{r=0}^{\min(m,k-1)}\binom{m}{r}\lambda^{m-r}N^r$.\\
-Absolute convergence permits regrouping by powers of $N$. Thus $e^{tJ_k(\lambda)}=\sum\limits_{r=0}^{k-1}\frac{t^r}{r!}N^r\sum\limits_{s=0}^{\infty}\frac{(\lambda t)^s}{s!}=e^{\lambda t}\sum\limits_{r=0}^{k-1}\frac{t^r}{r!}N^r$.\\
-\hlt{Structural Commentary}: Expand the scalar and nilpotent parts together, then regroup by nilpotent degree.\\
-\hlt{Key Insight}: Nilpotence truncates the matrix directions while the scalar series remains exponential.
+Set $N\defeq J_k(0)$, so $J_k(\lambda)=\lambda I_k+N$ and $N^k=0$. Adopt $\binom{m}{r}=0$ for $r>m$.\\
+For $m\in\mathbb{Z}_{\geq0}$, $(tJ_k(\lambda))^m=\sum\limits_{r=0}^{k-1}\binom{m}{r}(\lambda t)^{m-r}t^rN^r$ by induction and commutation of $\lambda I_k$ with $N$.\\
+For $M\in\mathbb{Z}_{\geq0}$ and $r\in\{0,\ldots,k-1\}$, the coefficient of $N^r$ in the $M$th exponential partial sum is $a_{M,r}\defeq\sum\limits_{m=r}^{M}\frac{1}{m!}\binom{m}{r}(\lambda t)^{m-r}t^r$.\\
+The limit $\lim\limits_{M\to\infty}a_{M,r}=\frac{t^r}{r!}\sum\limits_{s=0}^{\infty}\frac{(\lambda t)^s}{s!}=\frac{t^r}{r!}e^{\lambda t}$ follows by setting $s=m-r$.\\
+The asserted formula holds by taking the entrywise limit over the finite family $(N^r)_{r=0}^{k-1}$.\\
+\hlt{Structural Commentary}: Jordan binomial expansion separates scalar powers from finitely many nilpotent powers before taking limits.\\
+\hlt{Key Insight}: Nilpotence leaves finitely many scalar exponential coefficients.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:matrix-exponential-commuting-similarity-laws} \hlt{Commuting and Similarity Laws for the Exponential}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ and $S\in GL_n(\mathbb{C})$. Then:
+Let $n\in\mathbb{Z}_{>0}$, let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $S\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $AB=BA\implies e^{A+B}=e^Ae^B$.
@@ -21,139 +40,211 @@ Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ and $S\in GL_n(\mathbb{C})$. Then
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Since $A$ and $B$ commute, $(A+B)^m=\sum\limits_{r=0}^m\binom{m}{r}A^rB^{m-r}$.\\
-Absolute convergence permits the Cauchy product, $e^Ae^B=\sum\limits_{m=0}^{\infty}\frac{1}{m!}\sum\limits_{r=0}^m\binom{m}{r}A^rB^{m-r}=e^{A+B}$.
-\item Put $X=SAS^{-1}$ and $H_m\colon X^m=SA^mS^{-1}$. Then $H_0$ is $I_n=SI_nS^{-1}$.\\
-If $H_m$ holds, then $X^{m+1}=SA^mS^{-1}SAS^{-1}=SA^{m+1}S^{-1}$, so $H_{m+1}$ holds.\\
-By induction, $H_m$ holds for all $m\in\mathbb{N}_0$, and $e^X=S\left(\sum\limits_{m=0}^{\infty}\frac{A^m}{m!}\right)S^{-1}=Se^AS^{-1}$.
+\item Since $A$ and $B$ commute, $(A+B)^m=\sum\limits_{r=0}^m\binom{m}{r}A^rB^{m-r}$ by induction on $m\in\mathbb{Z}_{\geq0}$.\\
+The Cauchy product is valid by entrywise absolute convergence. Hence $e^Ae^B=\sum\limits_{m=0}^{\infty}\frac{1}{m!}\sum\limits_{r=0}^m\binom{m}{r}A^rB^{m-r}=e^{A+B}$ by the binomial identity.
+\item Set $X\defeq SAS^{-1}$. Then $(\forall m\in\mathbb{Z}_{\geq0})\,X^m=SA^mS^{-1}$ by induction from $S^{-1}S=I_n$.\\
+Thus $(\forall M\in\mathbb{Z}_{\geq0})\,\sum\limits_{m=0}^{M}\frac{X^m}{m!}=S\left(\sum\limits_{m=0}^{M}\frac{A^m}{m!}\right)S^{-1}$. The equality $e^X=Se^AS^{-1}$ holds by entrywise limits.
 \end{enumerate}
-\hlt{Structural Commentary}: Apply power-series algebra only after verifying the required matrix identities.\\
-\hlt{Key Insight}: Commutativity enables products; similarity passes through powers.
+\hlt{Structural Commentary}: Binomial powers control products; conjugated powers control similarity before entrywise limits.\\
+\hlt{Key Insight}: Absolute convergence permits the required finite-degree regrouping.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:analytic-power-series-on-jordan-blocks} \hlt{Analytic Power Series on Jordan Blocks}\\
-Let $n\in\mathbb{N}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and $f(z)=\sum\limits_{m=0}^{\infty}c_mz^m$ have radius $R>0$ with $\rho(A)<R$.\\
-Set $D_R\defeq\{z\in\mathbb{C}:\abs{z}<R\}$ and $N_k\defeq J_k(0)$. For $(k,\lambda)\in\mathbb{N}\times D_R$, set $F_k(\lambda)\defeq\sum\limits_{r=0}^{k-1}\frac{f^{(r)}(\lambda)}{r!}N_k^r$.\\
-For $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$ with $\lambda_{\alpha}\in D_R$, set $f(J)\defeq\bigoplus\limits_{\alpha=1}^sF_{k_{\alpha}}(\lambda_{\alpha})$. Then:
+Let $n\in\mathbb{Z}_{>0}$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $f(z)=\sum\limits_{m=0}^{\infty}c_mz^m$ have radius of convergence $R\in(0,\infty]$.\\
+Set $\rho(A)\defeq\max\limits_{\lambda\in\operatorname{spec}(A)}\abs{\lambda}$ and $D_R\defeq\{z\in\mathbb{C}:\abs{z}<R\}$, and suppose $\rho(A)<R$.\\
+For $r\in\mathbb{Z}_{\geq0}$ and $\lambda\in D_R$, set $f^{(r)}(\lambda)\defeq\sum\limits_{m=r}^{\infty}\frac{m!}{(m-r)!}c_m\lambda^{m-r}$. For $k\in\mathbb{Z}_{>0}$, set $N_k\defeq J_k(0)$ and $F_k(\lambda)\defeq\sum\limits_{r=0}^{k-1}\frac{f^{(r)}(\lambda)}{r!}N_k^r$.\\
+For $s,k_1,\ldots,k_s\in\mathbb{Z}_{>0}$ and $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$ with $\lambda_{\alpha}\in D_R$, set $f(J)\defeq\bigoplus\limits_{\alpha=1}^sF_{k_{\alpha}}(\lambda_{\alpha})$.\\
+Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\sum\limits_{m=0}^{\infty}c_mJ_k(\lambda)^m$ converges to $F_k(\lambda)$ for every $(k,\lambda)\in\mathbb{N}\times D_R$.
+\item $(\forall\,(k,\lambda)\in\mathbb{Z}_{>0}\times D_R)\ \sum\limits_{m=0}^{\infty}c_mJ_k(\lambda)^m=F_k(\lambda)$.
 \item The series $f(A)\defeq\sum\limits_{m=0}^{\infty}c_mA^m$ converges.
 \item If $A=SJS^{-1}$ is a Jordan decomposition, then $f(A)=Sf(J)S^{-1}$.
 \end{enumerate}
 \begin{proof}
-For $M\in\mathbb{N}_0$, set $P_M(X)\defeq\sum\limits_{m=0}^Mc_mX^m$, and use $\binom{m}{r}=0$ for $r>m$.
+For $M\in\mathbb{Z}_{\geq0}$, set $P_M(X)\defeq\sum\limits_{m=0}^Mc_mX^m$, and adopt $\binom{m}{r}=0$ for $r>m$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Fix $(k,\lambda)\in\mathbb{N}\times D_R$ and set $N=N_k$. Since $N^k=0$, $J_k(\lambda)^m=\sum\limits_{r=0}^{k-1}\binom{m}{r}\lambda^{m-r}N^r$ for $m\in\mathbb{N}_0$.\\
-For $0\leq r<k$, $\sum\limits_{m=r}^{\infty}c_m\binom{m}{r}\lambda^{m-r}=\frac{f^{(r)}(\lambda)}{r!}$ by termwise differentiation.\\
-Absolute convergence permits regrouping over $0\leq r<k$, so $P_M(J_k(\lambda))\to F_k(\lambda)$.
-\item By Theorem \ref{thm:complex-jordan-form}, $A=SJS^{-1}$ with $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$. Since $\lambda_{\alpha}\in\operatorname{spec}(A)$ and $\rho(A)<R$, $\lambda_{\alpha}\in D_R$.\\
-By (i), $P_M(J)\to f(J)$, and $P_M(A)=SP_M(J)S^{-1}\to Sf(J)S^{-1}$.
-\item By (ii), $f(A)=\lim\limits_{M\to\infty}P_M(A)=S\left(\lim\limits_{M\to\infty}P_M(J)\right)S^{-1}=Sf(J)S^{-1}$.
+\item Fix $(k,\lambda)\in\mathbb{Z}_{>0}\times D_R$ and set $N\defeq N_k$.\\
+Then $(\forall m\in\mathbb{Z}_{\geq0})\,J_k(\lambda)^m=\sum\limits_{r=0}^{k-1}\binom{m}{r}\lambda^{m-r}N^r$ by $N^k=0$ and the binomial identity.\\
+If $\lambda=0$, only the term $m=r$ is nonzero in $f^{(r)}(0)$, and $f^{(r)}(0)=r!c_r$. Suppose $\lambda\neq0$, and choose $\eta$ with $\abs{\lambda}<\eta<R$.\\
+For fixed $r$, the sequence $m^r(\abs{\lambda}/\eta)^m$ is bounded, and $\sum\limits_{m=0}^{\infty}\abs{c_m}\eta^m<\infty$.\\
+For $m\geq r$, $\frac{m!}{(m-r)!}\abs{c_m}\abs{\lambda}^{m-r}\leq\abs{\lambda}^{-r}m^r(\abs{\lambda}/\eta)^m\abs{c_m}\eta^m$.\\
+Hence each differentiated series defining $F_k(\lambda)$ converges absolutely.\\
+For $M\in\mathbb{Z}_{\geq0}$, $P_M(J_k(\lambda))=\sum\limits_{r=0}^{k-1}\left(\sum\limits_{m=r}^{M}c_m\binom{m}{r}\lambda^{m-r}\right)N^r$, with an empty inner sum interpreted as $0$.\\
+For $r\in\{0,\ldots,k-1\}$, the coefficient tends to $\frac{f^{(r)}(\lambda)}{r!}$. The outer sum is finite, so $P_M(J_k(\lambda))\to F_k(\lambda)$.
+\item By Theorem \ref{thm:complex-jordan-form}, choose $S\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$ and $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$ such that $A=SJS^{-1}$.\\
+Each $\lambda_{\alpha}\in D_R$ by $\abs{\lambda_{\alpha}}\leq\rho(A)<R$. Thus $P_M(J)\to f(J)$ by part (i) and Proposition \ref{prop:direct-sum-matrix-algebra}(iv).\\
+By induction, $(\forall m\in\mathbb{Z}_{\geq0})\,A^m=SJ^mS^{-1}$. Hence $P_M(A)=SP_M(J)S^{-1}\to Sf(J)S^{-1}$, so $f(A)$ converges.
+\item By part (ii), $f(A)=\lim\limits_{M\to\infty}P_M(A)=S\left(\lim\limits_{M\to\infty}P_M(J)\right)S^{-1}=Sf(J)S^{-1}$.
 \end{enumerate}
-\hlt{Structural Commentary}: Blockwise binomial expansion reduces $f(J_k(\lambda))$ to nilpotent powers.\\
-\hlt{Key Insight}: Derivatives supply the chain coefficients.
+\hlt{Structural Commentary}: Blockwise binomial limits establish convergence before similarity transfers the resulting function.\\
+\hlt{Key Insight}: Derivatives are precisely the nilpotent-power coefficients.
 \end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:two-by-two-matrix-exponential-closed-form} \hlt{Closed Form for a $2\times2$ Exponential}\\
-Let $A=\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$, and set $\delta\defeq\frac{a+d}{2}$ and $B\defeq A-\delta I_2$. Choose $\Delta\in\mathbb{C}$ with $\Delta^2=\left(\frac{a-d}{2}\right)^2+bc$.\\
-By Theorem \ref{thm:cayley-hamilton-matrix}, $B^2=\Delta^2I_2$. Since $A=\delta I_2+B$, by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i) and even--odd decomposition of exponential series, $e^A=e^{\delta}\left(\cosh(\Delta)I_2+\frac{\sinh(\Delta)}{\Delta}B\right)$. At $\Delta=0$, $\frac{\sinh(\Delta)}{\Delta}$ is interpreted by continuity as $1$.
-\end{example}
+\begin{proposition} \label{prop:two-by-two-matrix-exponential-closed-form} \hlt{Closed Form for a $2\times2$ Exponential}\\
+Let $a,b,c,d\in\mathbb{C}$ and set $A\defeq\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$. Set $\delta\defeq\frac{a+d}{2}$ and $B\defeq A-\delta I_2$. Choose $\Delta\in\mathbb{C}$ with $\Delta^2=\left(\frac{a-d}{2}\right)^2+bc$.\\
+Define $\cosh w\defeq\sum\limits_{m=0}^{\infty}\frac{w^{2m}}{(2m)!}$ and $\psi(w)\defeq\sum\limits_{m=0}^{\infty}\frac{w^{2m}}{(2m+1)!}$. Then $e^A=e^{\delta}\bigl(\cosh(\Delta)I_2+\psi(\Delta)B\bigr)$.
+\begin{proof}
+The relations $\operatorname{tr}(B)=0$ and $\det(B)=-\Delta^2$ hold by direct calculation. Hence $B^2=\Delta^2I_2$ by Theorem \ref{thm:cayley-hamilton-matrix}.\\
+Thus $(\forall m\in\mathbb{Z}_{\geq0})\,B^{2m}=\Delta^{2m}I_2$ and $B^{2m+1}=\Delta^{2m}B$.\\
+Hence $e^B=\cosh(\Delta)I_2+\psi(\Delta)B$ by separating the even and odd exponential terms.\\
+The matrices $\delta I_2$ and $B$ commute, so $e^A=e^{\delta I_2}e^B=e^{\delta}\bigl(\cosh(\Delta)I_2+\psi(\Delta)B\bigr)$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i).\\
+\hlt{Structural Commentary}: Cayley--Hamilton reduces all powers to even scalar terms and odd multiples of $B$.\\
+\hlt{Key Insight}: The series $\psi$ remains defined when $\Delta=0$.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:matrix-exponential-spectral-mapping-jordan} \hlt{Spectral Mapping and Jordan Structure of the Exponential}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $A=SJS^{-1}$ be a Jordan decomposition, and set $E\defeq\exp\left(A\right)$.\\
-Write $J=\bigoplus\limits_{\alpha=1}^sB_{\alpha}$, $B_{\alpha}=J_{k_{\alpha}}(\lambda_{\alpha})$. For $\rho\in\mathbb{C}$, set $I_{\rho}\defeq\{\alpha:e^{\lambda_{\alpha}}=\rho\}$, $\Lambda_{\rho}(A)\defeq\{\lambda\in\operatorname{spec}(A):e^{\lambda}=\rho\}$.\\
+Let $n\in\mathbb{Z}_{>0}$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $A=SJS^{-1}$ be a Jordan decomposition with $S\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$.\\
+Set $E\defeq e^A$ and write $J=\bigoplus\limits_{\alpha=1}^sB_{\alpha}$, where $s,k_1,\ldots,k_s\in\mathbb{Z}_{>0}$ and $B_{\alpha}\defeq J_{k_{\alpha}}(\lambda_{\alpha})$.\\
+For $\rho\in\mathbb{C}$, set $I_{\rho}\defeq\{\alpha\in\{1,\ldots,s\}:e^{\lambda_{\alpha}}=\rho\}$ and $\Lambda_{\rho}(A)\defeq\{\lambda\in\operatorname{spec}(A):e^{\lambda}=\rho\}$.\\
 Let $\mathcal{S}_{\rho}(M)$ denote the multiset of $\rho$-Jordan block sizes of $M$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\operatorname{spec}(E)=\{e^{\lambda}:\lambda\in\operatorname{spec}(A)\}$.
-\item $\forall\rho\in\operatorname{spec}(E)$, $\mathcal{G}_{\rho}(E)=\bigoplus\limits_{\lambda\in\Lambda_{\rho}(A)}\mathcal{G}_{\lambda}(A)$.
-\item $\mathcal{S}_{\rho}(E)=\{k_{\alpha}:\alpha\in I_{\rho}\}$ for every $\rho\in\operatorname{spec}(E)$.
+\item $(\forall\,\rho\in\operatorname{spec}(E))\ \mathcal{G}_{\rho}(E)=\bigoplus\limits_{\lambda\in\Lambda_{\rho}(A)}\mathcal{G}_{\lambda}(A)$.
+\item $(\forall\,\rho\in\operatorname{spec}(E))\ \mathcal{S}_{\rho}(E)=\{k_{\alpha}:\alpha\in I_{\rho}\}$ as multisets.
 \item $\det(E)=e^{\operatorname{tr}(A)}$.
 \end{enumerate}
 \begin{proof}
-Set $\sigma(M)\defeq\operatorname{spec}(M)$, $E_J\defeq e^J$, $E_{\alpha}\defeq e^{B_{\alpha}}$, and $\tau\defeq\sum\limits_{\alpha=1}^sk_{\alpha}\lambda_{\alpha}=\operatorname{tr}(A)$.\\
-By Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii), $E=SE_JS^{-1}$; work with $J$. Let $V_{\alpha}$ be coordinate space of $B_{\alpha}$; $K_{\rho}\defeq\bigoplus\limits_{\alpha\in I_{\rho}}V_{\alpha}$.\\
-Write $B_{\alpha}=\lambda_{\alpha}I_{k_{\alpha}}+N_{\alpha}$, $q_{\alpha}(z)\defeq\sum\limits_{r=0}^{k_{\alpha}-1}\frac{z^r}{(r+1)!}$, $Q_{\alpha}\defeq q_{\alpha}(N_{\alpha})$. By Proposition \ref{prop:exponential-of-jordan-block}, $E_{\alpha}-e^{\lambda_{\alpha}}I_{k_{\alpha}}=e^{\lambda_{\alpha}}N_{\alpha}Q_{\alpha}$.\\
-With $M_{\alpha}\defeq Q_{\alpha}-I_{k_{\alpha}}\in N_{\alpha}\mathbb{C}[N_{\alpha}]$, $M_{\alpha}^{k_{\alpha}}=0$ and $Q_{\alpha}^{-1}=\sum\limits_{j=0}^{k_{\alpha}-1}(-M_{\alpha})^j$. Also $Q_{\alpha}N_{\alpha}=N_{\alpha}Q_{\alpha}$.
+Set $\sigma(M)\defeq\operatorname{spec}(M)$, $E_J\defeq e^J$, and $E_{\alpha}\defeq e^{B_{\alpha}}$. Then $E=SE_JS^{-1}$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii).\\
+The identity $E_J=\bigoplus\limits_{\alpha=1}^sE_{\alpha}$ holds by Proposition \ref{prop:direct-sum-matrix-algebra}(iv) for exponential partial sums and entrywise limits.\\
+Let $V_{\alpha}$ be the coordinate space of $B_{\alpha}$ and set $K_{\rho}\defeq\bigoplus\limits_{\alpha\in I_{\rho}}V_{\alpha}$.\\
+Write $B_{\alpha}=\lambda_{\alpha}I_{k_{\alpha}}+N_{\alpha}$, set $q_{\alpha}(z)\defeq\sum\limits_{r=0}^{k_{\alpha}-1}\frac{z^r}{(r+1)!}$, and set $Q_{\alpha}\defeq q_{\alpha}(N_{\alpha})$. Then $E_{\alpha}-e^{\lambda_{\alpha}}I_{k_{\alpha}}=e^{\lambda_{\alpha}}N_{\alpha}Q_{\alpha}$ by Proposition \ref{prop:exponential-of-jordan-block}.\\
+Set $h_{\alpha}(z)\defeq\sum\limits_{r=1}^{k_{\alpha}-1}\frac{z^{r-1}}{(r+1)!}$ and $M_{\alpha}\defeq Q_{\alpha}-I_{k_{\alpha}}=N_{\alpha}h_{\alpha}(N_{\alpha})$. Then $M_{\alpha}^{k_{\alpha}}=0$.\\
+Thus $Q_{\alpha}^{-1}=\sum\limits_{j=0}^{k_{\alpha}-1}(-M_{\alpha})^j$ by direct multiplication. Therefore $Q_{\alpha}$ is invertible and commutes with $N_{\alpha}$.\\
+The identity $e^{\lambda_{\alpha}}e^{-\lambda_{\alpha}}=1$ holds by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i) for $1\times1$ matrices, so $e^{\lambda_{\alpha}}\neq0$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\operatorname{diag}(E_{\alpha})=e^{\lambda_{\alpha}}I_{k_{\alpha}}$, so $\sigma(E_{\alpha})=\{e^{\lambda_{\alpha}}\}$.\\
-By $E=SE_JS^{-1}$ and $E_J=\bigoplus_{\alpha=1}^sE_{\alpha}$, $\sigma(E)=\{e^{\lambda_{\alpha}}:1\leq\alpha\leq s\}=\{e^{\lambda}:\lambda\in\sigma(A)\}$.
-\item If $\alpha\in I_{\rho}$, then $(E_{\alpha}-\rho I_{k_{\alpha}})^r=\rho^rN_{\alpha}^rQ_{\alpha}^r$ for $r\in\mathbb{N}$, so $\mathcal{G}_{\rho}(E_J|_{V_{\alpha}})=V_{\alpha}$.\\
-If $\alpha\notin I_{\rho}$, then $E_{\alpha}-\rho I_{k_{\alpha}}\in GL_{k_{\alpha}}(\mathbb{C})$. Thus $\mathcal{G}_{\rho}(E)=S\mathcal{G}_{\rho}(E_J)=S K_{\rho}=\bigoplus\limits_{\lambda\in\Lambda_{\rho}(A)}\mathcal{G}_{\lambda}(A)$.
-\item For $\alpha\in I_{\rho}$ and $r\in\mathbb{N}$, $\operatorname{rank}((E_{\alpha}-\rho I_{k_{\alpha}})^r)=\operatorname{rank}(N_{\alpha}^r)$. By Theorem \ref{thm:jordan-block-sizes-from-rank-drops}, $\mathcal{S}_{\rho}(E_{\alpha})=\{k_{\alpha}\}$.\\
-For $\alpha\notin I_{\rho}$, $\mathcal{S}_{\rho}(E_{\alpha})=\varnothing$. By similarity and direct sums, (iii) follows.
-\item $\det(E)=\det(E_J)=\prod\limits_{\alpha=1}^se^{k_{\alpha}\lambda_{\alpha}}=e^{\tau}=e^{\operatorname{tr}(A)}$.
+\item Each $E_{\alpha}$ is upper triangular with constant diagonal $e^{\lambda_{\alpha}}$ by Proposition \ref{prop:exponential-of-jordan-block}.\\
+Hence $\sigma(E_J)=\{e^{\lambda_{\alpha}}:\alpha\in\{1,\ldots,s\}\}$ by Proposition \ref{prop:upper-triangular-characteristic-polynomial}(ii). The equality $\sigma(E)=\sigma(E_J)$ holds by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i).\\
+Similarly, $\sigma(A)=\sigma(J)=\{\lambda_{\alpha}:\alpha\in\{1,\ldots,s\}\}$ by Proposition \ref{prop:upper-triangular-characteristic-polynomial}(ii) and Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i). Thus $\sigma(E)=\{e^{\lambda}:\lambda\in\sigma(A)\}$.
+\item Fix $\rho\in\sigma(E)$. If $\alpha\in I_{\rho}$, then $(\forall r\in\mathbb{Z}_{\geq0})\,(E_{\alpha}-\rho I_{k_{\alpha}})^r=\rho^rN_{\alpha}^rQ_{\alpha}^r$, so the $k_{\alpha}$th shifted power is zero.\\
+If $\alpha\notin I_{\rho}$, then $E_{\alpha}-\rho I_{k_{\alpha}}$ is upper triangular with nonzero diagonal and is invertible by Theorem \ref{thm:determinant-basic-laws}(v),(vii).\\
+Hence $\mathcal{G}_{\rho}(E_J)=K_{\rho}$. For $\lambda\in\mathbb{C}$ and $r\in\mathbb{Z}_{\geq0}$, $(A-\lambda I_n)^rS=S(J-\lambda I_n)^r$ by induction from $A=SJS^{-1}$.\\
+Similarly, $(\forall r\in\mathbb{Z}_{\geq0})\,(E-\rho I_n)^rS=S(E_J-\rho I_n)^r$. Thus $S\mathcal{G}_{\lambda}(J)=\mathcal{G}_{\lambda}(A)$ and $S\mathcal{G}_{\rho}(E_J)=\mathcal{G}_{\rho}(E)$.\\
+Consequently, $\mathcal{G}_{\rho}(E)=SK_{\rho}=\bigoplus\limits_{\lambda\in\Lambda_{\rho}(A)}\mathcal{G}_{\lambda}(A)$.
+\item Fix $\rho\in\sigma(E)$. For $\alpha\in I_{\rho}$ and $r\in\mathbb{Z}_{\geq0}$, $\operatorname{rank}((E_{\alpha}-\rho I_{k_{\alpha}})^r)=\operatorname{rank}(N_{\alpha}^r)$ by Theorem \ref{thm:full-rank-products-preserve-rank}(ii).\\
+Thus the shifted rank drops of $E_{\alpha}$ equal those of $J_{k_{\alpha}}(\rho)$, and $\mathcal{S}_{\rho}(E_{\alpha})=\{k_{\alpha}\}$ by Theorem \ref{thm:jordan-block-sizes-from-rank-drops}.\\
+If $\alpha\notin I_{\rho}$, then $\mathcal{S}_{\rho}(E_{\alpha})=\varnothing$ by part (ii); $\mathcal{S}_{\rho}(E)=\{k_{\alpha}:\alpha\in I_{\rho}\}$ by direct-sum block decomposition, similarity of $E_J$ and $E$.
+\item For $X,Y\in\operatorname{Mat}(n,n,\mathbb{C})$, $\operatorname{tr}(XY)=\sum\limits_{i=1}^n\sum\limits_{j=1}^nX_{ij}Y_{ji}=\operatorname{tr}(YX)$ by Definition \ref{def:matrix-trace-and-determinant}(i). Hence $\operatorname{tr}(A)=\operatorname{tr}(SJS^{-1})=\operatorname{tr}(J)=\sum\limits_{\alpha=1}^sk_{\alpha}\lambda_{\alpha}$.\\
+The equality $\det(E)=\det(E_J)=\prod\limits_{\alpha=1}^se^{k_{\alpha}\lambda_{\alpha}}$ holds by Theorem \ref{thm:determinant-basic-laws}(v),(vi),(viii), similarity, and triangularity of $E_J$.\\
+This product equals $e^{\sum\limits_{\alpha=1}^sk_{\alpha}\lambda_{\alpha}}=e^{\operatorname{tr}(A)}$ by repeated scalar instances of Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Exponentials merge block labels with equal $e^{\lambda}$.\\
-\hlt{Key Insight}: $Q_{\alpha}$ is invertible, so nilpotent ranks are unchanged.
+\hlt{Structural Commentary}: Similarity transfers block exponentials; invertible $Q_{\alpha}$ preserves their nilpotent rank profiles.\\
+\hlt{Key Insight}: Exponentiation changes block labels but not block lengths.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:complex-matrix-logarithm} \hlt{Matrix Logarithm}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. A matrix $B\in\operatorname{Mat}(n,n,\mathbb{C})$ is a \hlt{matrix logarithm} of $A$ if $e^B=A$.
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$. A matrix $B\in\operatorname{Mat}(n,n,\mathbb{C})$ is a \hlt{matrix logarithm} of $A$ if $e^B=A$.
 \end{definition}
 
-\begin{theorem} \label{thm:complex-matrix-logarithm-existence} \hlt{Existence of Complex Matrix Logarithms}\\
-Let $n\in\mathbb{N}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $\exists B\in\operatorname{Mat}(n,n,\mathbb{C})$ with $e^B=A$ iff $A\in GL_n(\mathbb{C})$.
+\begin{theorem} \label{thm:complex-matrix-logarithm-existence} \hlt{Complex Matrix Logarithms}\\
+Let $k,n\in\mathbb{Z}_{>0}$, let $\lambda\in\mathbb{C}\setminus\{0\}$, and choose $\ell\in\mathbb{C}$ satisfying $e^{\ell}=\lambda$.\\
+Set $N\defeq J_k(0)$, $X\defeq\lambda^{-1}N$, and $L_k(\lambda,\ell)\defeq\ell I_k+\sum\limits_{r=1}^{k-1}\frac{(-1)^{r+1}}{r}X^r$, with an empty sum interpreted as $0$. Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $e^{L_k(\lambda,\ell)}=J_k(\lambda)$.
+\item $(\exists B\in\operatorname{Mat}(n,n,\mathbb{C}))\,e^B=A$ if and only if $A\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $A=e^B$. Since $B$ and $-B$ commute, by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i), $Ae^{-B}=I_n=e^{-B}A$; $A\in GL_n(\mathbb{C})$.
-\item[$(\Leftarrow)$] Suppose $A\in GL_n(\mathbb{C})$. Choose $A=SJS^{-1}$ with $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$. Then $\lambda_{\alpha}\neq0$ for all $\alpha$.\\
-Choose $\ell_{\alpha}\in\mathbb{C}$, $e^{\ell_{\alpha}}=\lambda_{\alpha}$. Set $N_{\alpha}\defeq J_{k_{\alpha}}(0)$, $X_{\alpha}\defeq\lambda_{\alpha}^{-1}N_{\alpha}$. Set $Y_{\alpha}\defeq\sum\limits_{r=1}^{k_{\alpha}-1}\frac{(-1)^{r+1}}{r}X_{\alpha}^r$, $L_{\alpha}\defeq\ell_{\alpha}I_{k_{\alpha}}+Y_{\alpha}$.\\
-Since $X_{\alpha}^{k_{\alpha}}=0$, by $e^{\log(1+x)}=1+x$ in $\mathbb{C}[x]/(x^{k_{\alpha}})$, $e^{Y_{\alpha}}=I_{k_{\alpha}}+X_{\alpha}$.\\
-Since $\ell_{\alpha}I_{k_{\alpha}}$ commutes with $Y_{\alpha}$, by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i), $e^{L_{\alpha}}=e^{\ell_{\alpha}}(I_{k_{\alpha}}+X_{\alpha})=J_{k_{\alpha}}(\lambda_{\alpha})$.\\
-Set $L_J\defeq\bigoplus\limits_{\alpha=1}^sL_{\alpha}$ and $B\defeq SL_JS^{-1}$. By Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii), $e^B=Se^{L_J}S^{-1}=SJS^{-1}=A$.
+\item[$(i)$] Set $Y\defeq\sum\limits_{r=1}^{k-1}\frac{(-1)^{r+1}}{r}X^r$. If $k=1$, then $X=Y=0$ and $e^Y=I_k+X$. Suppose $k\geq2$.\\
+In $\mathbb{C}[[x]]$, set $y(x)\defeq\sum\limits_{r=1}^{k-1}\frac{(-1)^{r+1}}{r}x^r$ and write $e^{y(x)}=\sum\limits_{q=0}^{\infty}b_qx^q$.\\
+The coefficients through degree $k-2$ of $(1+x)(e^y)'$ and $e^y$ agree by $(1+x)y'(x)=1+(-1)^kx^{k-1}$.\\
+The relations $b_1=1$ and $(q+1)b_{q+1}=(1-q)b_q$ for $q\in\{1,\ldots,k-2\}$ hold by $b_0=1$ and coefficient comparison.\\
+Hence $b_q=0$ for $q\in\{2,\ldots,k-1\}$ by this recurrence. Set $h(z)\defeq\sum\limits_{r=1}^{k-1}\frac{(-1)^{r+1}}{r}z^{r-1}$. Then $Y=Xh(X)$, so $Y^k=0$.\\
+The equality $e^Y=\sum\limits_{q=0}^{k-1}b_qX^q=I_k+X$ holds by regrouping its finite exponential by powers of $X$.\\
+The summands $\ell I_k$ and $Y$ commute. Therefore $e^{L_k(\lambda,\ell)}=e^{\ell}(I_k+X)=\lambda I_k+N=J_k(\lambda)$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i).
+\item[$(ii)$] ($\Rightarrow$) Suppose $A=e^B$. Then $Ae^{-B}=e^Be^{-B}=I_n=e^{-B}e^B=e^{-B}A$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(i). Thus $A\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$.
+\item[$(ii)$] ($\Leftarrow$) Suppose $A\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$. By Theorem \ref{thm:complex-jordan-form}, choose $S\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$ and $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$ such that $A=SJS^{-1}$.\\
+For $\alpha\in\{1,\ldots,s\}$, $\lambda_{\alpha}\neq0$ by Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}. Choose $\ell_{\alpha}\in\mathbb{C}$ satisfying $e^{\ell_{\alpha}}=\lambda_{\alpha}$, and set $L_{\alpha}\defeq L_{k_{\alpha}}(\lambda_{\alpha},\ell_{\alpha})$.\\
+Set $L_J\defeq\bigoplus\limits_{\alpha=1}^sL_{\alpha}$, $B\defeq SL_JS^{-1}$. Then $e^{L_J}=\bigoplus\limits_{\alpha=1}^se^{L_{\alpha}}=J$ by part (i), Proposition \ref{prop:direct-sum-matrix-algebra}(iv) for partial sums, entrywise limits.\\
+Hence $e^B=Se^{L_J}S^{-1}=A$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Combine scalar logs with nilpotent log polynomials.\\
-\hlt{Key Insight}: Nonzero block eigenvalues permit logarithms.
+\hlt{Structural Commentary}: A formal truncated logarithm handles each nilpotent block before direct-sum and similarity assembly.\\
+\hlt{Key Insight}: Modulo $X^k$, the truncated logarithm exponentiates exactly to $I_k+X$.
 \end{proof}
 \end{theorem}
 
-\begin{perspective} \label{per:real-matrix-logarithm-qualification} \hlt{Real Matrix Logarithms}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, by Theorem \ref{thm:complex-matrix-logarithm-existence}, $A=e^B$ for some complex $B$ iff $A\in GL_n(\mathbb{C})$.\\
-Over $\mathbb{R}$, $A\in GL_n(\mathbb{R})$ is not sufficient.\\
-If $A\in GL_n(\mathbb{R})$ and $\operatorname{spec}(A)\cap\mathbb{R}\subset(0,\infty)$, choose $\ell_{\lambda}=\log\lambda\in\mathbb{R}$ for real $\lambda$ and $\ell_{\overline{\lambda}}=\overline{\ell_{\lambda}}$ for nonreal pairs.\\
-By conjugate pairing of real Jordan blocks, the block logarithms assemble to $B\in\operatorname{Mat}(n,n,\mathbb{R})$ with $e^B=A$.\\
-For $A\in GL_n(\mathbb{R})$, $A^2$ has a real logarithm: $\mu<0$ and $\mu\in\operatorname{spec}(A^2)$ imply $\{\lambda,\overline{\lambda}\}=\{\pm i\sqrt{-\mu}\}$ for some $\lambda\in\operatorname{spec}(A)$. By conjugate pairing, the negative real blocks of $A^2$ occur in pairs.\\
-These are sufficient facts, not the full real criterion.
-\end{perspective}
-
-\begin{proposition} \label{prop:jordan-resolvent-and-primary-projectors} \hlt{Jordan Resolvent and Primary Spectral Projectors}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, set $\Sigma\defeq\operatorname{spec}(A)$, and set $G_{\nu}\defeq\mathcal{G}_{\nu}(A)$.\\
-For $m\in\mathbb{N}$, $M\in\operatorname{Mat}(m,m,\mathbb{C})$, and $z\notin\operatorname{spec}(M)$, set $R_M(z)\defeq(zI_m-M)^{-1}$.\\
-By primary decomposition, $\mathbb{C}^n=\bigoplus\limits_{\nu\in\Sigma}G_{\nu}$. For $\mu\in\Sigma$, define $P_{\mu}$ by $P_{\mu}|_{G_{\nu}}=\delta_{\mu\nu}I_{G_{\nu}}$.\\
-For meromorphic $F$ near $\mu$, let $[F]_{\mu,-1}$ be its $(z-\mu)^{-1}$ coefficient. Then:
+\begin{proposition} \label{prop:real-matrix-logarithm-sufficient-conditions} \hlt{Real Matrix Logarithm Conditions}\\
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{R})^{\times}$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $k\in\mathbb{N}$, $\lambda\in\mathbb{C}$, $B=J_k(\lambda)=\lambda I_k+N$, and $z\neq\lambda$, $R_B(z)=\sum\limits_{r=0}^{k-1}\frac{N^r}{(z-\lambda)^{r+1}}$.
-\item $[R_A]_{\mu,-1}=P_{\mu}$ for every $\mu\in\Sigma$.
-\item $P_{\lambda}P_{\mu}=\delta_{\lambda\mu}P_{\mu}$ for all $\lambda,\mu\in\Sigma$, and $AP_{\mu}=P_{\mu}A$ for all $\mu\in\Sigma$.
+\item If $(\exists B\in\operatorname{Mat}(n,n,\mathbb{R}))\,e^B=A$, then $\det(A)>0$.
+\item If $\operatorname{spec}(A)\cap\mathbb{R}\subset(0,\infty)$, then $(\exists B\in\operatorname{Mat}(n,n,\mathbb{R}))\,e^B=A$.
+\item $(\exists C\in\operatorname{Mat}(n,n,\mathbb{R}))\,e^C=A^2$.
+\end{enumerate}
+\begin{proof}
+For $x,y\in\mathbb{R}$, set $R(x,y)\defeq\left(\begin{smallmatrix}x&y\\-y&x\end{smallmatrix}\right)$. For $m\in\mathbb{Z}_{>0}$ and $D=[d_{rs}]\in\operatorname{Mat}(m,m,\mathbb{C})$, set $\mathfrak{R}(D)\defeq[R(\operatorname{Re}d_{rs},\operatorname{Im}d_{rs})]_{r,s=1}^m$.\\
+For $D,E\in\operatorname{Mat}(m,m,\mathbb{C})$, $\mathfrak{R}(D+E)=\mathfrak{R}(D)+\mathfrak{R}(E)$ and $\mathfrak{R}(DE)=\mathfrak{R}(D)\mathfrak{R}(E)$ by direct block multiplication.\\
+Hence $e^{\mathfrak{R}(D)}=\mathfrak{R}(e^D)$ by exponential partial sums and entrywise limits.\\
+For $\lambda=a+ib$ with $a\in\mathbb{R}$ and $b>0$, $\mathfrak{R}(J_k(\lambda))=\mathcal{J}_k(a,b)$ by the block definitions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A=e^B$ with $B\in\operatorname{Mat}(n,n,\mathbb{R})$, then $\det(A)=e^{\operatorname{tr}(B)}>0$ by Theorem \ref{thm:matrix-exponential-spectral-mapping-jordan}(iv) and positivity of the real scalar exponential.
+\item By Theorem \ref{thm:real-jordan-block-form}(i), choose $S\in\operatorname{GL}_n(\mathbb{R})$ such that $J_{\mathbb{R}}\defeq S^{-1}AS$ is a direct sum of real Jordan blocks.\\
+For a scalar summand $J_k(\lambda)$, $\lambda>0$ by the hypothesis. Choose $\ell\in\mathbb{R}$ with $e^{\ell}=\lambda$.\\
+Then $L_k(\lambda,\ell)$ is real, and $e^{L_k(\lambda,\ell)}=J_k(\lambda)$ by Theorem \ref{thm:complex-matrix-logarithm-existence}(i).\\
+For a summand $\mathcal{J}_k(a,b)$, set $\lambda\defeq a+ib$, choose $\ell\in\mathbb{C}$ with $e^{\ell}=\lambda$, and set $D\defeq L_k(\lambda,\ell)$.\\
+Then $e^{\mathfrak{R}(D)}=\mathfrak{R}(J_k(\lambda))=\mathcal{J}_k(a,b)$ by the realification identities and Theorem \ref{thm:complex-matrix-logarithm-existence}(i).\\
+Let $L_{\mathbb{R}}$ be the direct sum of these real block logarithms and set $B\defeq SL_{\mathbb{R}}S^{-1}$.\\
+Then $e^B=S e^{L_{\mathbb{R}}}S^{-1}=SJ_{\mathbb{R}}S^{-1}=A$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii), exponential partial sums, and entrywise limits.
+\item \hlt{Squared Block Sizes}: Fix $(k,\lambda)\in\mathbb{Z}_{>0}\times(\mathbb{C}\setminus\{0\})$, set $N\defeq J_k(0)$, and set $X_{\lambda}\defeq J_k(\lambda)^2$. Then $X_{\lambda}-\lambda^2I_k=N(2\lambda I_k+N)$.\\
+The matrix $2\lambda I_k+N$ is invertible by a finite geometric inverse and commutes with $N$.\\
+Thus $(\forall r\in\mathbb{Z}_{\geq0})\,\operatorname{rank}((J_k(\lambda)^2-\lambda^2I_k)^r)=\operatorname{rank}(N^r)$ by Theorem \ref{thm:full-rank-products-preserve-rank}(ii).\\
+The matrix $X_{\lambda}$ is upper triangular with constant diagonal $\lambda^2$, so its only eigenvalue is $\lambda^2$.\\
+A Jordan form of $X_{\lambda}$ exists by Theorem \ref{thm:complex-jordan-form}, and it consists of one block $J_k(\lambda^2)$ by Theorem \ref{thm:jordan-block-sizes-from-rank-drops} and the shifted-rank equality.\\
+\hlt{Real Assembly}: Choose $S\in\operatorname{GL}_n(\mathbb{R})$ and a real Jordan block matrix $J_{\mathbb{R}}\defeq S^{-1}AS$ by Theorem \ref{thm:real-jordan-block-form}(i).\\
+For scalar summand $J_k(\lambda)$, $\lambda\in\mathbb{R}\setminus\{0\}$. By squared-block step, Theorem \ref{thm:real-jordan-block-form}(i), choose $Q\in\operatorname{GL}_k(\mathbb{R})$ s.t. $J_k(\lambda)^2=QJ_k(\lambda^2)Q^{-1}$.\\
+Choose $\ell\in\mathbb{R}$ with $e^{\ell}=\lambda^2$, $D\defeq QL_k(\lambda^2,\ell)Q^{-1}$. Then $D$ is real and $e^D=J_k(\lambda)^2$ by Theorem \ref{thm:complex-matrix-logarithm-existence}(i) and Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii).\\
+For a summand $\mathcal{J}_k(a,b)$, set $\lambda\defeq a+ib$. By the squared-block step, choose $Q_{\lambda}\in\operatorname{GL}_k(\mathbb{C})$ such that $X_{\lambda}=Q_{\lambda}J_k(\lambda^2)Q_{\lambda}^{-1}$.\\
+Choose $\ell_{\lambda}\in\mathbb{C}$ with $e^{\ell_{\lambda}}=\lambda^2$, and set $D_{\lambda}\defeq Q_{\lambda}L_k(\lambda^2,\ell_{\lambda})Q_{\lambda}^{-1}$. Then $e^{D_{\lambda}}=X_{\lambda}$ by Theorem \ref{thm:complex-matrix-logarithm-existence}(i) and Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii).\\
+Thus $e^{\mathfrak{R}(D_{\lambda})}=\mathfrak{R}(X_{\lambda})=\mathcal{J}_k(a,b)^2$ (realification identities). Let $C_{\mathbb{R}}$ be direct sum of resulting real log of all squared summands.\\
+Set $C\defeq SC_{\mathbb{R}}S^{-1}$. Then $e^C=S e^{C_{\mathbb{R}}}S^{-1}=SJ_{\mathbb{R}}^2S^{-1}=A^2$ by Proposition \ref{prop:matrix-exponential-commuting-similarity-laws}(ii), exponential partial sums, entrywise limits.
+\end{enumerate}
+\hlt{Structural Commentary}: Realification handles nonreal blocks; shifted-rank profiles preserve block lengths after squaring.\\
+\hlt{Key Insight}: The block realification map commutes with powers and exponentials.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:jordan-resolvent-and-primary-projectors} \hlt{Jordan Resolvent and Primary Spectral Projectors}\\
+Let $n\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$; $\Sigma\defeq\operatorname{spec}(A)$, $G_{\nu}\defeq\mathcal{G}_{\nu}(A)$. For $m\in\mathbb{Z}_{>0}$, $M\in\operatorname{Mat}(m,m,\mathbb{C})$, $z\notin\operatorname{spec}(M)$, $R_M(z)\defeq(zI_m-M)^{-1}$.\\
+The identity $\mathbb{C}^n=\bigoplus\limits_{\nu\in\Sigma}G_{\nu}$ holds by Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}. For $\mu\in\Sigma$, define $P_{\mu}\in\operatorname{Mat}(n,n,\mathbb{C})$ by $P_{\mu}|_{G_{\nu}}=\delta_{\mu\nu}I_{G_{\nu}}$.\\
+When entries of matrix-valued function $F$ admit Laurent expansions at $\mu$, let $[F]_{\mu,-1}$ denote matrix of $(z-\mu)^{-1}$ coefficients. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $k\in\mathbb{Z}_{>0}$, $\lambda\in\mathbb{C}$, $B\defeq J_k(\lambda)=\lambda I_k+N$ with $N\defeq J_k(0)$, and $z\neq\lambda$, $R_B(z)=\sum\limits_{r=0}^{k-1}\frac{N^r}{(z-\lambda)^{r+1}}$.
+\item $(\forall\mu\in\Sigma)\,[R_A]_{\mu,-1}=P_{\mu}$.
+\item $(\forall\lambda,\mu\in\Sigma)\,P_{\lambda}P_{\mu}=\delta_{\lambda\mu}P_{\mu}$.
+\item $(\forall\mu\in\Sigma)\,AP_{\mu}=P_{\mu}A$.
 \item $\sum\limits_{\mu\in\Sigma}P_{\mu}=I_n$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $B=J_k(\lambda)=\lambda I_k+N$ and set $a\defeq(z-\lambda)^{-1}$.\\
-By $zI_k-B=(z-\lambda)(I_k-aN)$, $N^k=0$, and the finite geometric identity, $(I_k-aN)^{-1}=\sum\limits_{r=0}^{k-1}a^rN^r$.\\
-By $R_B(z)=a(I_k-aN)^{-1}$, $R_B(z)=a\sum\limits_{r=0}^{k-1}a^rN^r=\sum\limits_{r=0}^{k-1}\frac{N^r}{(z-\lambda)^{r+1}}$.
-\item Choose $A=SJS^{-1}$ by Theorem \ref{thm:complex-jordan-form}, with $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$. By similarity, $R_A(z)=SR_J(z)S^{-1}$.\\
-Set $H_{\nu}\defeq\mathcal{G}_{\nu}(J)$ and $C_{\mu}\defeq[R_J]_{\mu,-1}$. By (i), $C_{\mu}|_{H_{\nu}}=\delta_{\mu\nu}I_{H_{\nu}}$. By conjugation, $[R_A]_{\mu,-1}=SC_{\mu}S^{-1}=P_{\mu}$.
-\item Let $v=\sum\limits_{\nu\in\Sigma}v_{\nu}$, $v_{\nu}\in G_{\nu}$. Then $P_{\mu}v=v_{\mu}$, $P_{\lambda}P_{\mu}v=\delta_{\lambda\mu}v_{\mu}=\delta_{\lambda\mu}P_{\mu}v$; $AG_{\nu}\subseteq G_{\nu}$, $AP_{\mu}v=Av_{\mu}=P_{\mu}Av$.
-\item For $v=\sum\limits_{\nu\in\Sigma}v_{\nu}$ as in (iii), $\left(\sum\limits_{\mu\in\Sigma}P_{\mu}\right)v=\sum\limits_{\mu\in\Sigma}v_{\mu}=v$. Since $v$ is arbitrary, (iv) follows.
+\item Set $a\defeq(z-\lambda)^{-1}$. Since $N^k=0$, $(I_k-aN)\sum\limits_{r=0}^{k-1}a^rN^r=I_k-a^kN^k=I_k$ by direct multiplication.\\
+Thus $(I_k-aN)^{-1}=\sum\limits_{r=0}^{k-1}a^rN^r$. The equality $R_B(z)=a\sum\limits_{r=0}^{k-1}a^rN^r=\sum\limits_{r=0}^{k-1}\frac{N^r}{(z-\lambda)^{r+1}}$ holds by $zI_k-B=(z-\lambda)(I_k-aN)$.
+\item By Theorem \ref{thm:complex-jordan-form}, choose $S\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$ and $J=\bigoplus\limits_{\alpha=1}^sJ_{k_{\alpha}}(\lambda_{\alpha})$ such that $A=SJS^{-1}$.\\
+The identity $R_A(z)=SR_J(z)S^{-1}$ holds by direct multiplication. Set $H_{\nu}\defeq\mathcal{G}_{\nu}(J)$ and $C_{\mu}\defeq[R_J]_{\mu,-1}$.\\
+By part (i), $C_{\mu}$ is the identity on a block with eigenvalue $\mu$ and zero on the Laurent coefficient of every block regular at $\mu$.\\
+Hence $C_{\mu}|_{H_{\nu}}=\delta_{\mu\nu}I_{H_{\nu}}$. For $r\in\mathbb{Z}_{\geq0}$, $(A-\nu I_n)^rS=S(J-\nu I_n)^r$ by induction, so $SH_{\nu}=G_{\nu}$. Thus $[R_A]_{\mu,-1}=SC_{\mu}S^{-1}=P_{\mu}$.
+\item Let $\mathbf{v}=\sum\limits_{\nu\in\Sigma}\mathbf{v}_{\nu}$ with $\mathbf{v}_{\nu}\in G_{\nu}$. Then $P_{\lambda}P_{\mu}\mathbf{v}=\delta_{\lambda\mu}\mathbf{v}_{\mu}=\delta_{\lambda\mu}P_{\mu}\mathbf{v}$.
+\item Let $\mathbf{v}$ be as in part (iii). Since $AG_{\nu}\subseteq G_{\nu}$ by Proposition \ref{prop:generalized-eigenspaces-invariant}, $AP_{\mu}\mathbf{v}=A\mathbf{v}_{\mu}=P_{\mu}A\mathbf{v}$.
+\item For $\mathbf{v}=\sum\limits_{\nu\in\Sigma}\mathbf{v}_{\nu}$ as in part (iii), $\left(\sum\limits_{\mu\in\Sigma}P_{\mu}\right)\mathbf{v}=\sum\limits_{\mu\in\Sigma}\mathbf{v}_{\mu}=\mathbf{v}$. Hence the operator sum equals $I_n$.
 \end{enumerate}
-\hlt{Structural Commentary}: Laurent coefficients isolate primary summands.\\
-\hlt{Key Insight}: The simple-pole coefficient is the primary projection.
+\hlt{Structural Commentary}: Jordan resolvents identify residues blockwise; primary decomposition then verifies projector algebra.\\
+\hlt{Key Insight}: Only the matching Jordan blocks contribute a simple-pole coefficient.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:unit-circle-primary-spectral-splitting} \hlt{Contracting, Neutral, and Expanding Primary Subspaces}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $P_{\lambda}$ be the primary projection onto $\mathcal{G}_{\lambda}(A)$.\\
+Let $n\in\mathbb{Z}_{>0}$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $P_{\lambda}$ be the primary projection onto $\mathcal{G}_{\lambda}(A)$ from Proposition \ref{prop:jordan-resolvent-and-primary-projectors}.\\
 Set $\Sigma_-\defeq\{\lambda\in\operatorname{spec}(A):\abs{\lambda}<1\}$, $\Sigma_0\defeq\{\lambda\in\operatorname{spec}(A):\abs{\lambda}=1\}$, and $\Sigma_+\defeq\{\lambda\in\operatorname{spec}(A):\abs{\lambda}>1\}$. Define:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -161,36 +252,44 @@ Set $\Sigma_-\defeq\{\lambda\in\operatorname{spec}(A):\abs{\lambda}<1\}$, $\Sigm
 \item $\mathcal{G}^{0}(A)\defeq\bigoplus\limits_{\lambda\in\Sigma_0}\mathcal{G}_{\lambda}(A)$ and $P_A^{0}\defeq\sum\limits_{\lambda\in\Sigma_0}P_{\lambda}$, the \hlt{neutral} part.
 \item $\mathcal{G}^{+}(A)\defeq\bigoplus\limits_{\lambda\in\Sigma_+}\mathcal{G}_{\lambda}(A)$ and $P_A^{+}\defeq\sum\limits_{\lambda\in\Sigma_+}P_{\lambda}$, the \hlt{expanding} part.
 \end{enumerate}
-By primary decomposition, $\mathbb{C}^n=\mathcal{G}^{-}(A)\oplus\mathcal{G}^{0}(A)\oplus\mathcal{G}^{+}(A)$, and Proposition \ref{prop:jordan-resolvent-and-primary-projectors} identifies $P_A^{-}$, $P_A^{0}$, and $P_A^{+}$ as the corresponding projections.
+Empty direct sum is understood as $\{\mathbf{0}\}$, empty projector sum as $0$. Identity $\mathbb{C}^n=\mathcal{G}^{-}(A)\oplus\mathcal{G}^{0}(A)\oplus\mathcal{G}^{+}(A)$ holds by Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}.\\
+Proposition \ref{prop:jordan-resolvent-and-primary-projectors}(iii),(v) identifies $P_A^{-}$, $P_A^{0}$, and $P_A^{+}$ as the corresponding projections.
 \end{definition}
 
 \begin{lemma} \label{lem:identity-plus-nilpotent-square-root} \hlt{Identity Plus Nilpotent Has a Square Root}\\
 Let $\mathcal{V}$ be a complex vector space and let $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists\,R\in\LL(\mathcal{V})$ such that $R^2=I_{\mathcal{V}}+N$.
 \begin{proof}
-Choose $m\in\mathbb{N}$ with $N^m=0$. Set $a_0=1$. For $1\leq k<m$, set $s_k\defeq\sum\limits_{r=1}^{k-1}a_ra_{k-r}$ and $a_k\defeq\frac{1}{2}(\delta_{k1}-s_k)$.\\
-Set $R\defeq\sum\limits_{k=0}^{m-1}a_kN^k$. For $0\leq k<m$, set $c_k\defeq\sum\limits_{r=0}^ka_ra_{k-r}$.\\
-By recursion, $c_0=1$, $c_1=1$ if $m\geq2$, and $c_k=0$ for $2\leq k<m$. By $N^m=0$, $R^2=\sum\limits_{k=0}^{m-1}c_kN^k=I_{\mathcal{V}}+N$.\\
-\hlt{Structural Commentary}: Coefficient matching truncates at nilpotency.\\
-\hlt{Key Insight}: Choose $a_k$ so $R^2$ has only degrees $0$ and $1$.
+Choose $m\in\mathbb{Z}_{>0}$ with $N^m=0$ and set $a_0\defeq1$. For $k\in\{1,\ldots,m-1\}$, set $s_k\defeq\sum\limits_{r=1}^{k-1}a_ra_{k-r}$ and $a_k\defeq\frac{1}{2}(\delta_{k1}-s_k)$.\\
+Set $R\defeq\sum\limits_{k=0}^{m-1}a_kN^k$. For $k\in\{0,\ldots,m-1\}$, the coefficient of $N^k$ in the formal square is $c_k\defeq\sum\limits_{r=0}^{k}a_ra_{k-r}$.\\
+The relations $c_0=1$ and $(\forall k\in\{1,\ldots,m-1\})\,c_k=2a_k+s_k=\delta_{k1}$ hold by the recursion.\\
+Every term of degree at least $m$ vanishes at $N$, so $R^2=\sum\limits_{k=0}^{m-1}c_kN^k=I_{\mathcal{V}}+N$.\\
+\hlt{Structural Commentary}: Recursive coefficient matching constructs the square root before nilpotence truncates higher terms.\\
+\hlt{Key Insight}: The recursion forces the formal square to equal $1+x$.
 \end{proof}
 \end{lemma}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/nilpotent_square_root_polynomial.tikz}
-  \caption{Nilpotence truncates the square-root series; coefficients are chosen so $R^2=I+N$.}
+  \caption{Recursive coefficients and nilpotence reduce the polynomial square to $R^2=I+N$.}
   \label{fig:nilpotent-square-root-polynomial}
-\end{figure}
+\end{illustrationfigure}
+
+Figure \ref{fig:nilpotent-square-root-polynomial} depicts the finite polynomial square-root construction.
 
 \begin{theorem} \label{thm:complex-invertible-operator-has-square-root} \hlt{Invertible Complex Operators Have Square Roots}\\
 Let $\mathcal{V}$ be finite-dimensional over $\mathbb{C}$ and let $T\in\LL(\mathcal{V})$ be invertible. Then $\exists\,R\in\LL(\mathcal{V})$ such that $R^2=T$.
 \begin{proof}
-If $\mathcal{V}=\{\mathbf{0}\}$, take $R=I_{\mathcal{V}}$. Assume $\mathcal{V}\neq\{\mathbf{0}\}$. Let $\{\lambda_1,\ldots,\lambda_m\}=\operatorname{spec}(T)$ and set $\mathcal{U}_j\defeq\mathcal{G}_{\lambda_j}(T)$.\\
-By Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}, $\mathcal{V}=\bigoplus\limits_{j=1}^m\mathcal{U}_j$. By $T\in GL(\mathcal{V})$, $\lambda_j\neq0$. Set $N_j\defeq(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{U}_j}$ and $M_j\defeq\lambda_j^{-1}N_j$.\\
-Then $M_j$ is nilpotent and $T|_{\mathcal{U}_j}=\lambda_j(I_{\mathcal{U}_j}+M_j)$. By Lemma \ref{lem:identity-plus-nilpotent-square-root}, choose $B_j\in\LL(\mathcal{U}_j)$ with $B_j^2=I_{\mathcal{U}_j}+M_j$.\\
-Choose $\alpha_j\in\mathbb{C}$ with $\alpha_j^2=\lambda_j$ and set $R_j\defeq\alpha_jB_j$. By these choices, $R_j^2=\lambda_jB_j^2=\lambda_j(I_{\mathcal{U}_j}+M_j)=T|_{\mathcal{U}_j}$.\\
-Define $R\defeq\bigoplus\limits_{j=1}^mR_j$. By $(R^2)|_{\mathcal{U}_j}=R_j^2=T|_{\mathcal{U}_j}$ for every $j$, $R^2=T$.\\
-\hlt{Structural Commentary}: Square-root each primary restriction, then sum.\\
-\hlt{Key Insight}: Nonzero eigenvalues separate scalar roots from nilpotent roots.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Primary Reduction}: If $\mathcal{V}=\{\mathbf{0}\}$, take $R=I_{\mathcal{V}}$. Assume $\mathcal{V}\neq\{\mathbf{0}\}$.\\
+List the distinct eigenvalues as $\lambda_1,\ldots,\lambda_m$, where $m\in\mathbb{Z}_{>0}$, and set $\mathcal{U}_j\defeq\mathcal{G}_{\lambda_j}(T)$.\\
+Identity $\mathcal{V}=\bigoplus\limits_{j=1}^m\mathcal{U}_j$ holds, $N_j\defeq(T-\lambda_jI_{\mathcal{V}})|_{\mathcal{U}_j}$ is nilpotent, by Theorem \ref{thm:complex-primary-decomposition-generalized-eigenspaces}. For $j\in\{1,\ldots,m\}$, $\lambda_j\neq0$ by Corollary \ref{cor:invertible-iff-zero-not-eigenvalue}.
+\item \hlt{Local Roots}: Set $M_j\defeq\lambda_j^{-1}N_j$, so $T|_{\mathcal{U}_j}=\lambda_j(I_{\mathcal{U}_j}+M_j)$. By Lemma \ref{lem:identity-plus-nilpotent-square-root}, choose $B_j\in\LL(\mathcal{U}_j)$ with $B_j^2=I_{\mathcal{U}_j}+M_j$.\\
+Choose $\alpha_j\in\mathbb{C}$ with $\alpha_j^2=\lambda_j$ and set $R_j\defeq\alpha_jB_j$. Then $R_j^2=\lambda_jB_j^2=T|_{\mathcal{U}_j}$.
+\item \hlt{Assembly}: Define $R\in\LL(\mathcal{V})$ by $R(\sum\limits_{j=1}^m\mathbf{v}_j)\defeq\sum\limits_{j=1}^mR_j\mathbf{v}_j$ for $\mathbf{v}_j\in\mathcal{U}_j$. For $j\in\{1,\ldots,m\}$, $(R^2)|_{\mathcal{U}_j}=R_j^2=T|_{\mathcal{U}_j}$. Hence $R^2=T$.
+\end{enumerate}
+\hlt{Structural Commentary}: Primary decomposition reduces $T$ to scalar multiples of identity-plus-nilpotent restrictions before assembly.\\
+\hlt{Key Insight}: Each nonzero eigenvalue separates into scalar and nilpotent square roots.
 \end{proof}
 \end{theorem}
