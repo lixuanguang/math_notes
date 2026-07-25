@@ -1,146 +1,177 @@
 \subsection{Polar and Singular Value Decompositions}
 
+Throughout this subsection, $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and all matrix dimensions are positive integers.\\
+Every inner-product space is finite-dimensional over $\mathbb{F}$.
+
 \begin{theorem} \label{thm:polar-decomposition} \hlt{Polar Decomposition}\\
-For every $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\exists$ an isometry $S\in\LL(\mathcal{V})$ s.t. $T=S\sqrt{T^*T}$.
+Let $T\in\LL(\mathcal{V})$. Then $(\exists S\in\LL(\mathcal{V}))\,[S\text{ is an isometry}\land T=S\sqrt{T^*T}]$.
 \begin{proof}
-Let $P=\sqrt{T^*T}$. Since $T^*T$ is positive, $P$ is well defined by Proposition \ref{prop:positive-square-root-unique}.\\
-For every $\mathbf{v}\in\mathcal{V}$, $\norm{T\mathbf{v}}^2 =\innerprod{T^*T\mathbf{v},\mathbf{v}} =\innerprod{P^2\mathbf{v},\mathbf{v}} =\norm{P\mathbf{v}}^2$.\\
-Define $S_1:\operatorname{range}(P)\to\operatorname{range}(T)$ by $S_1(P\mathbf{v})=T\mathbf{v}$. The norm identity shows this is well defined: if $P\mathbf{v}_1=P\mathbf{v}_2$, then $\norm{T(\mathbf{v}_1-\mathbf{v}_2)}=\norm{P(\mathbf{v}_1-\mathbf{v}_2)}=0$. It also shows $S_1$ is an isometry onto $\operatorname{range}(T)$.\\
-The same norm identity gives $\ker(P)=\ker(T)$, so $\operatorname{rank}(P)=\operatorname{rank}(T)$ by rank-nullity. Hence $\operatorname{range}(P)^{\perp}$ and $\operatorname{range}(T)^{\perp}$ have the same dimension. Choose any isometry between these complements and combine it orthogonally with $S_1$ to obtain an isometry $S$ on all of $\mathcal{V}$.\\
-Then $SP\mathbf{v}=S_1(P\mathbf{v})=T\mathbf{v}$ for every $\mathbf{v}$, so $T=S\sqrt{T^*T}$.\\
-\hlt{Structural Commentary}: The positive factor $\sqrt{T^*T}$ reproduces exactly the lengths produced by $T$.\\
-\hlt{Key Insight}: Once the metric stretching has been extracted, the remaining map is forced to be an isometry.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Positive Factor}: Set $P\defeq\sqrt{T^*T}$ by Theorem \ref{thm:positive-operator-characterization}(v)$\Rightarrow$(i) and Proposition \ref{prop:positive-square-root-unique}.\\
+$(\forall\mathbf{v}\in\mathcal{V})\,\norm{T\mathbf{v}}^2=\innerprod{P^2\mathbf{v},\mathbf{v}}=\norm{P\mathbf{v}}^2$ by $P=P^*$. $\ker(P)=\ker(T)$ by this norm identity.
+\item \hlt{Range Isometry}: The rule $S_1(P\mathbf{v})\defeq T\mathbf{v}$ defines a linear bijection $\operatorname{range}(P)\to\operatorname{range}(T)$ by (i).\\
+$S_1$ is an isometry by $\norm{S_1(P\mathbf{v})}=\norm{P\mathbf{v}}$ from (i).
+\item \hlt{Complement Extension}: $\dim\operatorname{range}(P)^\perp=\dim\operatorname{range}(T)^\perp$ by (i), Theorem \ref{thm:rank-nullity}, and Corollary \ref{cor:dimension-of-orthogonal-complement}.\\
+Set $d\defeq\dim\operatorname{range}(P)^\perp$. Choose orthonormal bases $(\mathbf{a}_j)_{j=1}^{d}$ and $(\mathbf{b}_j)_{j=1}^{d}$ of the two complements by Corollary \ref{cor:finite-dimensional-inner-product-space-has-orthonormal-basis}.\\
+Define $S_0\mathbf{a}_j\defeq\mathbf{b}_j$. Then $(\forall i,j\in J_d)\,\innerprod{S_0\mathbf{a}_i,S_0\mathbf{a}_j}=\innerprod{\mathbf{a}_i,\mathbf{a}_j}=\delta_{ij}$. Thus $S_0$ is an isometry by sesquilinearity and Theorem \ref{thm:isometry-iff-inner-product-preserving}.
+\item \hlt{Global Isometry}: $\mathcal{V}=\operatorname{range}(P)\odot\operatorname{range}(P)^\perp$ by Theorem \ref{thm:orthogonal-direct-sum-decomposition}. Define $S(\mathbf{x}+\mathbf{y})\defeq S_1\mathbf{x}+S_0\mathbf{y}$.\\
+$S$ is an isometry by the orthogonal source and target decompositions. Finally, $(\forall\mathbf{v}\in\mathcal{V})\,SP\mathbf{v}=S_1(P\mathbf{v})=T\mathbf{v}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The Gram norm identity builds a range isometry, extended across equidimensional complements.\\
+\hlt{Key Insight}: $\ker\sqrt{T^*T}=\ker T$ synchronizes the two range dimensions.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:operator-polar-decomposition-uniqueness} \hlt{Uniqueness in Operator Polar Decomposition}\\
-Let $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, and put $\abs{T}\defeq\sqrt{T^*T}$ and $\abs{T^*}\defeq\sqrt{TT^*}$.
+Let $T\in\LL(\mathcal{V})$, and set $\abs{T}\defeq\sqrt{T^*T}$ and $\abs{T^*}\defeq\sqrt{TT^*}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $T=SP$, $S^*S=I_{\mathcal{V}}$, and $P\succeq0$, then $P=\abs{T}$. Hence the positive right polar factor is unique.
-\item $\exists$ left polar decomposition $T=\abs{T^*}R$ with $R$ an isometry, and $\abs{T^*}$ is unique positive left polar factor.
-\item If $T$ is invertible, then both isometric factors are unique:
-$S=T\abs{T}^{-1}$ and $R=\abs{T^*}^{-1}T$.
+\item If $T=SP$, $S^*S=I_{\mathcal{V}}$, and $P\geq0$, then $P=\abs{T}$; hence the positive right polar factor is unique.
+\item $(\exists R\in\LL(\mathcal{V}))\,[R\text{ is an isometry}\land T=\abs{T^*}R]$, and $\abs{T^*}$ is the unique positive left polar factor.
+\item If $T$ is invertible, then both isometric factors are unique: $S=T\abs{T}^{-1}$ and $R=\abs{T^*}^{-1}T$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $T=SP$, then $T^*T=P S^*S P=P^2$. Since $P\succeq0$, Proposition \ref{prop:positive-square-root-unique} gives $P=\sqrt{T^*T}=\abs{T}$.
-\item Apply Theorem \ref{thm:polar-decomposition} to $T^*$. There is an isometry $S_0$ such that $T^*=S_0\abs{T^*}$.\\
-Taking adjoints gives $T=\abs{T^*}S_0^*$. Set $R=S_0^*$. If also $T=QR$ with $Q\succeq0$ and $R$ an isometry, then $RR^*=I_{\mathcal{V}}$ in finite dimensions, so $TT^*=QRR^*Q=Q^2$. Hence $Q=\abs{T^*}$.
-\item If $T$ is invertible, then $\abs{T}$ and $\abs{T^*}$ are positive definite, hence invertible.\\
-Therefore any right and left polar decompositions force $S=T\abs{T}^{-1}$, $R=\abs{T^*}^{-1}T$.
+\item If $T=SP$, then $T^*T=PS^*SP=P^2$, so $P=\abs{T}$ by Proposition \ref{prop:positive-square-root-unique}.
+\item Fix $T^*=S_0\abs{T^*}$ by Theorem \ref{thm:polar-decomposition}.\\
+Then $R\defeq S_0^*$ is an isometry and $T=\abs{T^*}R$ by Theorem \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity} and Proposition \ref{prop:basic-isometry-properties}(iii)--(iv).\\
+If $T=Q\widetilde R$ with $Q\geq0$ and $\widetilde R$ isometric, then $TT^*=Q^2$ by $\widetilde R\widetilde R^*=I_{\mathcal{V}}$; hence $Q=\abs{T^*}$ by Proposition \ref{prop:positive-square-root-unique}.
+\item If $T$ is invertible, then $\ker\abs{T}=\ker\abs{T^*}=\{\mathbf{0}\}$ by invertibility of their squares.\\
+Thus both moduli are invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}, and $S=T\abs{T}^{-1}$, $R=\abs{T^*}^{-1}T$.
 \end{enumerate}
-\hlt{Structural Commentary}: The positive polar factor is canonical.\\
-\hlt{Key Insight}: Invertibility removes the kernel complement, so the whole factorisation becomes unique.
+\hlt{Structural Commentary}: Gram squaring fixes each modulus; invertibility then isolates its isometry.\\
+\hlt{Key Insight}: Positivity selects one square root of each Gram operator.
 \end{proof}
 \end{corollary}
 
-\begin{figure}[H]
+Figure \ref{fig:polar-decomposition-operator} summarizes the range isometry used to separate the positive stretch from the isometric factor.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/polar_decomposition_operator.tikz}
   \caption{Polar decomposition builds $S_1$ using $\norm{T\mathbf{v}}=\norm{\sqrt{T^*T}\mathbf{v}}$.}
   \label{fig:polar-decomposition-operator}
-\end{figure}
-
-\begin{perspective} \label{per:polar-decomposition-spectral-analogy} \hlt{Polar Decomposition Separates Stretch and Direction}\\
-In $T=S\sqrt{T^*T}$, the positive factor $\sqrt{T^*T}$ determines the metric stretch and the isometry $S$ determines the direction. Thus polar decomposition is the operator analogue of modulus times phase.\\
-\hlt{Structural Commentary}: For normal $T$, the polar factors commute and share spectral data.\\
-\hlt{Key Insight}: Polar decomposition factors an operator into positive geometry and isometric motion.
-\end{perspective}
+\end{illustrationfigure}
 
 \begin{definition} \label{def:singular-values} \hlt{Singular Values}\\
-For finite-dimensional inner-product spaces $\mathcal{U},\mathcal{V}$ and $T\in\LL(\mathcal{U},\mathcal{V})$, the \hlt{singular values} of $T$ are the eigenvalues of $\sqrt{T^*T}\in\LL(\mathcal{U})$, where each eigenvalue $\lambda$ is repeated $\dim E_{\lambda}(\sqrt{T^*T})$.
+For $T\in\LL(\mathcal{U},\mathcal{V})$, the \hlt{singular values} of $T$ are the eigenvalues of $\sqrt{T^*T}\in\LL(\mathcal{U})$, listed with their eigenspace multiplicities.
 \end{definition}
 
 \begin{theorem} \label{thm:singular-value-decomposition} \hlt{Singular Value Decomposition}\\
-Let $T\in\LL(\mathcal{V})$ have singular values $s_1,\ldots,s_n$. Then there exist orthonormal bases $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ and $(\mathbf{f}_1,\ldots,\mathbf{f}_n)$ of $\mathcal{V}$ such that $T\mathbf{v}=s_1\innerprod{\mathbf{v},\mathbf{e}_1}\mathbf{f}_1+\cdots+s_n\innerprod{\mathbf{v},\mathbf{e}_n}\mathbf{f}_n$ for every $\mathbf{v}\in\mathcal{V}$.
+Let $T\in\LL(\mathcal{V})$, set $n\defeq\dim\mathcal{V}$, and list its singular values as $s_1,\ldots,s_n$.\\
+Then $\exists$ orthonormal bases $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ and $(\mathbf{f}_1,\ldots,\mathbf{f}_n)$ of $\mathcal{V}$ such that $(\forall\mathbf{v}\in\mathcal{V})\,T\mathbf{v}=\sum\limits_{j=1}^{n}s_j\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{f}_j$.
 \begin{proof}
-Let $\abs{T}=\sqrt{T^*T}$. Since $\abs{T}$ is positive, the real or complex spectral theorem gives an orthonormal basis $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ with $\abs{T}\mathbf{e}_j=s_j\mathbf{e}_j$. Thus $\abs{T}\mathbf{v}=\sum\limits_{j=1}^{n}s_j\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{e}_j$.\\
-By Theorem \ref{thm:polar-decomposition}, $T=S\abs{T}$ for some isometry $S$. Put $\mathbf{f}_j=S\mathbf{e}_j$. The vectors $\mathbf{f}_1,\ldots,\mathbf{f}_n$ form an orthonormal basis, and applying $S$ to the displayed expansion gives the desired formula.\\
-\hlt{Structural Commentary}: SVD diagonalises $\abs{T}$, then transports its eigenvectors by $S$.\\
-\hlt{Key Insight}: The $s_j$ are stretches; the $\mathbf{f}_j$ are their landing directions.
+Set $\abs{T}\defeq\sqrt{T^*T}$. Fix an orthonormal eigenbasis $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ of $\abs{T}$ with $(\forall j\in J_n)\,\abs{T}\mathbf{e}_j=s_j\mathbf{e}_j$ by Theorem \ref{thm:real-spectral-theorem} when $\mathbb{F}=\mathbb{R}$ and Theorem \ref{thm:complex-spectral-theorem} when $\mathbb{F}=\mathbb{C}$. Fix $T=S\abs{T}$ by Theorem \ref{thm:polar-decomposition}, and set $(\forall j\in J_n)\,\mathbf{f}_j\defeq S\mathbf{e}_j$.\\
+The list $(\mathbf{f}_1,\ldots,\mathbf{f}_n)$ is an orthonormal basis by Theorem \ref{thm:isometry-iff-inner-product-preserving} and Proposition \ref{prop:basic-isometry-properties}(iii). $(\forall\mathbf{v}\in\mathcal{V})\,T\mathbf{v}=\sum\limits_{j=1}^{n}s_j\innerprod{\mathbf{v},\mathbf{e}_j}\mathbf{f}_j$ by Theorem \ref{thm:orthonormal-basis-coordinates}.\\
+\hlt{Structural Commentary}: Spectral coordinates diagonalise $\abs{T}$; the polar isometry transports its eigenbasis.\\
+\hlt{Key Insight}: $T\mathbf{e}_j=s_j\mathbf{f}_j$ pairs stretch with direction.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:singular-value-decomposition} shows each right singular direction stretched and carried isometrically to its left singular direction.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/singular_value_decomposition.tikz}
   \caption{Since $T=S\sqrt{T^*T}$, each $\mathbf{e}_j$ maps to $s_j\mathbf{f}_j$.}
   \label{fig:singular-value-decomposition}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{proposition} \label{prop:singular-values-from-t-star-t} \hlt{Singular Values from $T^*T$}\\
 The singular values of $T\in\LL(\mathcal{U},\mathcal{V})$ are the nonnegative square roots of the eigenvalues of $T^*T$, with the same eigenspace multiplicities.
 \begin{proof}
-By the spectral theorem, choose an orthonormal basis $\mathbf{e}_1,\ldots,\mathbf{e}_n$ and nonnegative scalars $\lambda_1,\ldots,\lambda_n$ such that $T^*T\mathbf{e}_j=\lambda_j\mathbf{e}_j$. The unique positive square root of $T^*T$ sends $\mathbf{e}_j$ to $\sqrt{\lambda_j}\mathbf{e}_j$.\\
-Thus the singular values are $\sqrt{\lambda_j}$, with the same eigenspace multiplicities.\\
-\hlt{Structural Commentary}: The positive square root keeps eigenspaces and sends $\lambda$ to $\sqrt{\lambda}$.\\
-\hlt{Key Insight}: Singular values can be read from $T^*T$ directly.
+Set $n\defeq\dim\mathcal{U}$ and $G\defeq T^*T$. Then $G\geq0$ by Theorem \ref{thm:positive-operator-characterization}(v)$\Rightarrow$(i).\\
+Fix an orthonormal eigenbasis $(\mathbf{e}_j)_{j=1}^{n}$ with $G\mathbf{e}_j=\lambda_j\mathbf{e}_j$ by Theorem \ref{thm:real-spectral-theorem} when $\mathbb{F}=\mathbb{R}$ and Theorem \ref{thm:complex-spectral-theorem} when $\mathbb{F}=\mathbb{C}$.\\
+$(\forall j\in J_n)\,\lambda_j\geq0$ by Theorem \ref{thm:positive-operator-characterization}(i)$\Rightarrow$(ii). Define $(\forall j\in J_n)\,R\mathbf{e}_j\defeq\sqrt{\lambda_j}\mathbf{e}_j$.\\
+Then $R\geq0$ by Theorem \ref{thm:positive-operator-characterization}(ii)$\Rightarrow$(i), and $R^2=G$; hence $R=\sqrt{G}$ by Proposition \ref{prop:positive-square-root-unique}.\\
+The eigenspace multiplicities are preserved by $(\forall\lambda\geq0)\,E_{\lambda}(G)=E_{\sqrt{\lambda}}(R)$.\\
+\hlt{Structural Commentary}: One Gram eigenbasis constructs the root and identifies every eigenspace.\\
+\hlt{Key Insight}: $\lambda\mapsto\sqrt{\lambda}$ is injective on the nonnegative spectrum.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:rectangular-operator-singular-vector-decomposition} \hlt{Singular Vectors for a Linear Map}\\
-Let $\mathcal{U},\mathcal{V}$ be finite-dimensional inner-product spaces over $\mathbb{R}$ or $\mathbb{C}$, and let $T\in\LL(\mathcal{U},\mathcal{V})$ have rank $r$.\\
-Put $n=\dim\mathcal{U}$, $m=\dim\mathcal{V}$, and $\mathcal{U}_+=\operatorname{range}(T^*),\quad \mathcal{U}_0=\ker(T)$; $\mathcal{V}_+=\operatorname{range}(T),\quad \mathcal{V}_0=\ker(T^*)$.\\
-Then $\exists$ ordered orthonormal bases $\beta=(\mathbf{u}_1,\ldots,\mathbf{u}_r,\mathbf{u}_{r+1},\ldots,\mathbf{u}_n)$; $\gamma=(\mathbf{v}_1,\ldots,\mathbf{v}_r,\mathbf{v}_{r+1},\ldots,\mathbf{v}_m)$\\
-with $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_r)=\mathcal{U}_+$; $\operatorname{span}(\mathbf{u}_{r+1},\ldots,\mathbf{u}_n)=\mathcal{U}_0$; $\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_r)=\mathcal{V}_+$; $\operatorname{span}(\mathbf{v}_{r+1},\ldots,\mathbf{v}_m)=\mathcal{V}_0$,\\
-and numbers $s_1,\ldots,s_r>0$ such that $T\mathbf{u}_k=s_k\mathbf{v}_k$; $T^*\mathbf{v}_k=s_k\mathbf{u}_k$, for $1\leq k\leq r$.\\
+Let $T\in\LL(\mathcal{U},\mathcal{V})$ have rank $r$. Set $n\defeq\dim\mathcal{U}$, $m\defeq\dim\mathcal{V}$, $\mathcal{U}_+\defeq\operatorname{range}(T^*)$, $\mathcal{U}_0\defeq\ker(T)$, $\mathcal{V}_+\defeq\operatorname{range}(T)$, and $\mathcal{V}_0\defeq\ker(T^*)$.\\
+Then $\exists$ ordered orthonormal bases $\beta=(\mathbf{u}_1,\ldots,\mathbf{u}_n)$ and $\gamma=(\mathbf{v}_1,\ldots,\mathbf{v}_m)$\\
+with $\operatorname{span}\{\mathbf{u}_j:j\in J_r\}=\mathcal{U}_+$, $\operatorname{span}\{\mathbf{u}_j:j\in J_n\setminus J_r\}=\mathcal{U}_0$, $\operatorname{span}\{\mathbf{v}_j:j\in J_r\}=\mathcal{V}_+$, and $\operatorname{span}\{\mathbf{v}_j:j\in J_m\setminus J_r\}=\mathcal{V}_0$,\\
+and positive scalars $(s_k)_{k\in J_r}$ such that $(\forall k\in J_r)\,T\mathbf{u}_k=s_k\mathbf{v}_k$ and $T^*\mathbf{v}_k=s_k\mathbf{u}_k$.\\
 The $s_k$ are the positive singular values; $\mathbf{u}_k$ and $\mathbf{v}_k$ are right and left singular vectors.
 \begin{proof}
-Let $A=T^*T$. Then $A\succeq0$, $A=A^*$, and $\ker(A)=\ker(T)$. By spectral theorem, choose rthonormal eigenbasis $\mathbf{u}_1,\ldots,\mathbf{u}_n$ s.t. $A\mathbf{u}_k=s_k^2\mathbf{u}_k$ for $1\leq k\leq r$; $A\mathbf{u}_k=0$ for $k>r$; $s_k>0$.\\
-Thus $\operatorname{span}(\mathbf{u}_{r+1},\ldots,\mathbf{u}_n)=\mathcal{U}_0$, and Proposition \ref{prop:adjoint-kernel-range-orthogonality} gives $\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_r)=\mathcal{U}_+$. For $1\leq k\leq r$,\\
-set $\mathbf{v}_k=s_k^{-1}T\mathbf{u}_k$. Then $\innerprod{\mathbf{v}_i,\mathbf{v}_j} =\frac{1}{s_is_j}\innerprod{T\mathbf{u}_i,T\mathbf{u}_j} =\frac{1}{s_is_j}\innerprod{T^*T\mathbf{u}_i,\mathbf{u}_j} =\delta_{ij}$; $T^*\mathbf{v}_k=s_k^{-1}A\mathbf{u}_k=s_k\mathbf{u}_k$.\\
-Hence $\mathbf{v}_1,\ldots,\mathbf{v}_r$ are orthonormal and span $\mathcal{V}_+=T(\mathcal{U}_+)$. Complete them by an orthonormal basis of $\mathcal{V}_0=\mathcal{V}_+^\perp$.\\
-\hlt{Structural Commentary}: $T^*T$ gives right directions; $T$ gives left directions.\\
-\hlt{Key Insight}: Away from the two kernels, $T$ and $T^*$ act symmetrically by the same positive scalars.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Gram Reduction}: For $G\defeq T^*T$, $G\geq0$, $\ker(G)=\ker(T)$ by Theorem \ref{thm:positive-operator-characterization}, Proposition \ref{prop:adjoint-product-kernels-ranges-and-projections}; $\operatorname{rank}(G)=r$ by Theorem \ref{thm:rank-nullity}.
+\item \hlt{Right Singular Basis}: Choose orthonormal eigenbasis $(\mathbf{u}_1,\ldots,\mathbf{u}_n)$ of $G$ by Theorem \ref{thm:real-spectral-theorem} if $\mathbb{F}=\mathbb{R}$, Theorem \ref{thm:complex-spectral-theorem} if $\mathbb{F}=\mathbb{C}$.\\
+Order it so that $G\mathbf{u}_k=s_k^2\mathbf{u}_k$ for $k\in J_r$ and $G\mathbf{u}_k=\mathbf{0}$ for $k\in J_n\setminus J_r$.\\
+These groups span $\mathcal{U}_+$ and $\mathcal{U}_0$ by Proposition \ref{prop:adjoint-kernel-range-orthogonality}(iii), and the $s_k$ are the positive singular values by Proposition \ref{prop:singular-values-from-t-star-t}.
+\item \hlt{Left Singular Vectors}: Set $(\forall k\in J_r)\,\mathbf{v}_k\defeq s_k^{-1}T\mathbf{u}_k$. Then $(\forall i,j\in J_r)\,\innerprod{\mathbf{v}_i,\mathbf{v}_j}=\frac{\innerprod{\mathbf{u}_i,G\mathbf{u}_j}}{s_is_j}=\delta_{ij}$.\\
+$(\forall k\in J_r)\,T\mathbf{u}_k=s_k\mathbf{v}_k$ and $T^*\mathbf{v}_k=s_k\mathbf{u}_k$ by the definitions of $\mathbf{v}_k$ and $G$.
+\item \hlt{Codomain Completion}: The identity $\mathcal{V}_+=T(\mathcal{U}_+)=\operatorname{span}\{\mathbf{v}_k:k\in J_r\}$ holds by $\mathcal{U}=\mathcal{U}_+\odot\mathcal{U}_0$.\\
+Complete $(\mathbf{v}_1,\ldots,\mathbf{v}_r)$ orthonormally by Corollary \ref{cor:orthonormal-list-extends-to-basis}. The remaining vectors lie in $\mathcal{V}_+^\perp=\mathcal{V}_0$ by Proposition \ref{prop:adjoint-kernel-range-orthogonality}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: The Gram spectrum splits the domain; normalized images build the active codomain basis.\\
+\hlt{Key Insight}: $T^*T\mathbf{u}_k=s_k^2\mathbf{u}_k$ forces both singular-vector relations.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:singular-subspaces-adjoint-symmetry} summarizes the paired active subspaces and kernels for $T$ and $T^*$.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/singular_subspaces_adjoint_symmetry.tikz}
   \caption{The singular-vector bases split the domain and codomain into active singular subspaces and kernels.}
   \label{fig:singular-subspaces-adjoint-symmetry}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{perspective} \label{per:operator-to-matrix-svd-bridge} \hlt{Operator-to-Matrix SVD Bridge}\\
-In the bases from Theorem \ref{thm:rectangular-operator-singular-vector-decomposition}, the matrix of $T$ is rectangular diagonal with diagonal entries $s_1,\ldots,s_r$ and zeros elsewhere. Returning to standard orthonormal bases gives the matrix form $A=V\Sigma W^*$ in Theorem \ref{thm:matrix-singular-value-decomposition}.
-\end{perspective}
+\begin{definition} \label{def:matrix-modulus} \hlt{Matrix Modulus}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. The matrices $A^*A$ and $AA^*$ are positive semidefinite by Proposition \ref{prop:rectangular-gram-products-are-psd}(i)--(ii).\\
+Their unique positive semidefinite square roots exist by Corollary \ref{cor:positive-semidefinite-square-root-formula}(i).\\
+The \hlt{moduli} of $A$ and $A^*$ are $\abs{A}\defeq(A^*A)^{1/2}\in\operatorname{Mat}(n,n,\mathbb{F})$ and $\abs{A^*}\defeq(AA^*)^{1/2}\in\operatorname{Mat}(m,m,\mathbb{F})$.
+\end{definition}
 
 \begin{definition} \label{def:matrix-singular-values} \hlt{Matrix Singular Values}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $q=\min(m,n)$, and let $r=\operatorname{rank}(A)$. The \hlt{positive singular values} of $A$ are the positive eigenvalues of $\abs{A}=(A^*A)^{1/2}$, written $\sigma_1\geq\sigma_2\geq\cdots\geq\sigma_r>0$.\\
-The full list of singular values is $\sigma_1,\ldots,\sigma_r,\sigma_{r+1},\ldots,\sigma_q$, where $\sigma_{r+1}=\cdots=\sigma_q=0$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $q\defeq\min(m,n)$, and $r\defeq\operatorname{rank}(A)$.\\
+The matrix $\abs{A}$ has exactly $r$ positive eigenvalues by Theorem \ref{thm:gram-factor-kernel-rank-column-data}(iii) and Corollary \ref{cor:positive-semidefinite-square-root-formula}(ii).\\
+These eigenvalues, counted with multiplicity, are the \hlt{positive singular values} of $A$.\\
+For $r\geq1$, list them as $\sigma_1\geq\cdots\geq\sigma_r>0$; for $r=0$, this list is empty.\\
+The full singular-value list has length $q$; if $r<q$, set $\sigma_{r+1}=\cdots=\sigma_q=0$.
 \end{definition}
 
 \begin{theorem} \label{thm:matrix-singular-value-decomposition} \hlt{Matrix Singular Value Decomposition}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$. Then $\exists$ unitary matrices $V\in\operatorname{Mat}(m,m,\mathbb{F})$, $W\in\operatorname{Mat}(n,n,\mathbb{F})$ such that $A=V\Sigma W^*$, $\Sigma=
-\begin{bmatrix}
-\operatorname{diag}(\sigma_1,\ldots,\sigma_q) & 0\\
-0 & 0
-\end{bmatrix}
-\in\operatorname{Mat}(m,n,\mathbb{R})$
-with the evident deletion of empty blocks.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q\defeq\min(m,n)$. Then $\exists$ unitary matrices $V\in\operatorname{Mat}(m,m,\mathbb{F})$ and $W\in\operatorname{Mat}(n,n,\mathbb{F})$ such that $A=V\Sigma W^*$, where the rectangular diagonal matrix $\Sigma\in\operatorname{Mat}(m,n,\mathbb{R})$ satisfies $(\forall j\in J_q)\,\Sigma_{jj}=\sigma_j$.
 \begin{proof}
-If $A=0$, take $\Sigma=0$ and choose any unitary $V,W$. Assume $r=\operatorname{rank}(A)\geq1$.\\
-Diagonalise $A^*A$ as $W^*A^*AW=\operatorname{diag}(\sigma_1^2,\ldots,\sigma_r^2,0,\ldots,0)$, where $\mathbf{w}_1,\ldots,\mathbf{w}_n$ are the columns of $W$.\\
-For $1\leq j\leq r$, set $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$. Then $\mathbf{v}_i^*\mathbf{v}_j =\frac{1}{\sigma_i\sigma_j}\mathbf{w}_i^*A^*A\mathbf{w}_j =\delta_{ij}$ so $\mathbf{v}_1,\ldots,\mathbf{v}_r$ are orthonormal.\\
-Complete them to an orthonormal basis of $\mathbb{F}^m$ and let $V$ be the matrix with these columns.\\
-For $j>r$, $\norm{A\mathbf{w}_j}_2^2=\mathbf{w}_j^*A^*A\mathbf{w}_j=0$, hence $A\mathbf{w}_j=0$. Thus $AW=V\Sigma$, equivalently $A=V\Sigma W^*$.\\
-\hlt{Structural Commentary}: $A^*A$ determines the right singular directions and singular values.\\
-\hlt{Key Insight}: Apply $A$ and normalize to get the left singular directions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Gram Spectrum}: Set $r\defeq\operatorname{rank}(A)$. If $r=0$, take $(V,W,\Sigma)=(I_m,I_n,0)$; assume $r\geq1$ below.\\
+Choose a unitary eigenvector matrix $W=[\mathbf{w}_1\ \cdots\ \mathbf{w}_n]$ for $A^*A$ by Theorem \ref{thm:real-spectral-theorem} when $\mathbb{F}=\mathbb{R}$ and Theorem \ref{thm:complex-spectral-theorem} when $\mathbb{F}=\mathbb{C}$.\\
+Then $W^*A^*AW=\operatorname{diag}(\sigma_1^2,\ldots,\sigma_r^2,0,\ldots,0)$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(ii).
+\item \hlt{Left Singular Vectors}: Set $(\forall j\in J_r)\,\mathbf{v}_j\defeq\sigma_j^{-1}A\mathbf{w}_j$. Then $(\forall i,j\in J_r)\,\mathbf{v}_i^*\mathbf{v}_j=\frac{\mathbf{w}_i^*A^*A\mathbf{w}_j}{\sigma_i\sigma_j}=\delta_{ij}$.
+\item \hlt{Unitary Completion}: Complete $(\mathbf{v}_1,\ldots,\mathbf{v}_r)$ to an orthonormal basis by Corollary \ref{cor:orthonormal-list-extends-to-basis}.\\
+The matrix $V$ with these columns is unitary by Theorem \ref{thm:unitary-matrix-equivalent-conditions}(ii)$\Rightarrow$(i).
+\item \hlt{Factorisation}: For $j\in J_n\setminus J_r$, $\norm{A\mathbf{w}_j}_2^2=\mathbf{w}_j^*A^*A\mathbf{w}_j=0$. $AW=V\Sigma$ by (ii) and the preceding identity, so $A=V\Sigma W^*$.
+\end{enumerate}
+\hlt{Structural Commentary}: The Gram eigenbasis fixes $W,\Sigma$; normalized images construct $V$.\\
+\hlt{Key Insight}: $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$ orthonormalizes the nonzero images.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:matrix-svd-unit-ball-to-ellipse} traces the unit ball through the three SVD factors.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/matrix_svd_unit_ball_to_ellipse.tikz}
-  \caption{SVD: right-unitary motion, diagonal stretch, left-unitary motion.}
+  \caption{The factors $W^*$, $\Sigma$, and $V$ rotate, stretch, and reorient the unit ball.}
   \label{fig:matrix-svd-unit-ball-to-ellipse}
-\end{figure}
+\end{illustrationfigure}
+
+\begin{perspective} \label{per:operator-to-matrix-svd-bridge} \hlt{Operator-to-Matrix SVD Bridge}\\
+In the bases from Theorem \ref{thm:rectangular-operator-singular-vector-decomposition}, the matrix of $T$ is rectangular diagonal with positive entries $s_1,\ldots,s_r$ and zeros elsewhere.\\
+Changing to standard orthonormal bases produces the matrix SVD in Theorem \ref{thm:matrix-singular-value-decomposition} without changing the singular data.
+\end{perspective}
 
 \begin{proposition} \label{prop:basic-singular-value-identities} \hlt{Basic Singular Value Identities}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$ and $r=\operatorname{rank}(A)$. Let $c\in\mathbb{F}$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q\defeq\min(m,n)$ and $r\defeq\operatorname{rank}(A)$. Let $c\in\mathbb{F}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item The positive eigenvalues of $A^*A$ and $AA^*$ are $\sigma_1^2,\ldots,\sigma_r^2$.
@@ -149,18 +180,16 @@ Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\
 \item The singular values of $cA$ are $\abs{c}\sigma_1,\ldots,\abs{c}\sigma_q$.
 \end{enumerate}
 \begin{proof}
-Let $A=V\Sigma W^*$ be an SVD. Then $A^*A=W(\Sigma^*\Sigma)W^*$ and $AA^*=V(\Sigma\Sigma^*)V^*$.
+Fix an SVD $A=V\Sigma W^*$ by Theorem \ref{thm:matrix-singular-value-decomposition}. Then $A^*A=W(\Sigma^*\Sigma)W^*$ and $AA^*=V(\Sigma\Sigma^*)V^*$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The nonzero diagonal entries of $\Sigma^*\Sigma$ and $\Sigma\Sigma^*$ are $\sigma_1^2,\ldots,\sigma_r^2$.
-\item Since $A^*A$ and $\Sigma^*\Sigma$ are unitarily similar, and $AA^*$ and $\Sigma\Sigma^*$ are unitarily similar,\\
-$\operatorname{tr}(A^*A)=\operatorname{tr}(\Sigma^*\Sigma)=\sum\limits_{j=1}^q\sigma_j^2 =\operatorname{tr}(\Sigma\Sigma^*)=\operatorname{tr}(AA^*)$. The final equality is the definition of $\norm{A}_F$.
-\item For $A^*$, the two Gram matrices are interchanged. Over $\mathbb{C}$, $(A^t)^*A^t=(AA^*)^t$ and $(\overline{A})^*\overline{A}=(A^*A)^t$.\\
-Since a matrix and its transpose have the same characteristic polynomial, the spectra agree.
-\item Since $(cA)^*(cA)=\abs{c}^2A^*A$, singular values scale by $\abs{c}$.
+\item The positive eigenvalues of both Gram matrices are $\sigma_1^2,\ldots,\sigma_r^2$ by the two unitary similarities and Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i)--(ii).
+\item $\operatorname{tr}(A^*A)=\operatorname{tr}(AA^*)=\sum\limits_{j=1}^{q}\sigma_j^2=\norm{A}_F^2$ by Theorem \ref{thm:similarity-preserves-trace-and-determinant}(i).
+\item Claim for $A^*$ holds by (i). Over $\mathbb{C}$, $(A^t)^*A^t=(AA^*)^t$, $(\overline{A})^*\overline{A}=(A^*A)^t$, with unchanged Gram spectra by Proposition \ref{prop:transpose-conjugate-adjoint-characteristic-polynomial}.
+\item The singular values of $cA$ are $\abs{c}\sigma_1,\ldots,\abs{c}\sigma_q$ by $(cA)^*(cA)=\abs{c}^2A^*A$.
 \end{enumerate}
-\hlt{Structural Commentary}: Unitary factors do not change Gram spectra; $\Sigma$ contains all singular data.\\
-\hlt{Key Insight}: Reduce each claim to $\Sigma^*\Sigma$ and $\Sigma\Sigma^*$.
+\hlt{Structural Commentary}: Unitary Gram reductions transfer spectra, traces, adjoints, and scalar scaling.\\
+\hlt{Key Insight}: Both Gram spectra contain the squared entries of $\Sigma$.
 \end{proof}
 \end{proposition}
 
@@ -173,24 +202,22 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $\mathbb{F}\in\{\mathbb{R},\mathbb
 \item $\sigma_n>0$;
 \item $A^*A\succ0$.
 \end{enumerate}
-If $r=\operatorname{rank}(A)<n$, then $\sigma_1,\ldots,\sigma_r>0$ and $\sigma_{r+1}=\cdots=\sigma_n=0$.
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ By Corollary \ref{cor:square-matrix-invertible-iff-full-rank}, invertibility gives full rank.
-\item[$(ii)$]$\Rightarrow (iii)$ By Definition \ref{def:matrix-singular-values}, the number of positive singular values is $\operatorname{rank}(A)$.
-\item[$(iii)$]$\Rightarrow (iv)$ If $\sigma_n>0$, then $A$ has full column rank, so Proposition \ref{prop:rectangular-gram-products-are-psd} gives $A^*A\succ0$.
-\item[$(iv)$]$\Rightarrow (i)$ If $A\mathbf{x}=\mathbf{0}$, then $\mathbf{x}^*A^*A\mathbf{x}=0$; PSD gives $\mathbf{x}=\mathbf{0}$. Thus $\ker(A)=\{\mathbf{0}\}$, so $A$ is invertible.
+\item[$(i)$] $\Rightarrow (ii)$ $\operatorname{rank}(A)=n$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
+\item[$(ii)$] $\Rightarrow (iii)$ $\sigma_n>0$ by the definition of the full singular-value list.
+\item[$(iii)$] $\Rightarrow (iv)$ Since all $n$ singular values are positive, $\operatorname{rank}(A)=n$ and $A^*A\succ0$ by Proposition \ref{prop:rectangular-gram-products-are-psd}(v).
+\item[$(iv)$] $\Rightarrow (i)$ $\ker(A)=\{\mathbf{0}\}$ by $(\forall\mathbf{x}\in\mathbb{F}^n)\,[A\mathbf{x}=\mathbf{0}\Rightarrow\mathbf{x}^*A^*A\mathbf{x}=0\Rightarrow\mathbf{x}=\mathbf{0}]$.\\
+Thus $\operatorname{rank}(A)=n$ by Theorem \ref{thm:rank-nullity}, and $A$ is invertible by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
 \end{enumerate}
-The rank-defect statement follows again from Definition \ref{def:matrix-singular-values}.\\
-\hlt{Structural Commentary}: SVD sees nonsingularity as the absence of zero stretch directions.\\
-\hlt{Key Insight}: A zero singular value is exactly a nonzero vector sent to zero.
+\hlt{Structural Commentary}: Rank links invertibility and $\sigma_n$; the Gram form detects injectivity.\\
+\hlt{Key Insight}: $\sigma_n>0$ is exactly full rank for a square matrix.
 \end{proof}
 \end{corollary}
 
 \begin{definition} \label{def:compact-singular-value-decomposition} \hlt{Compact Singular Value Decomposition}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq1$.\\
-A factorisation $A=X\Sigma_rY^*$ is a \hlt{compact singular value decomposition} if $X\in\operatorname{Mat}(m,r,\mathbb{F})$ and $Y\in\operatorname{Mat}(n,r,\mathbb{F})$ have orthonormal columns and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$ with $\sigma_1\geq\cdots\geq\sigma_r>0$.
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq1$. Factorisation $A=X\Sigma_rY^*$ is a \hlt{compact singular value decomposition} if $X\in\operatorname{Mat}(m,r,\mathbb{F})$, $Y\in\operatorname{Mat}(n,r,\mathbb{F})$, $X^*X=Y^*Y=I_r$, and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$ with $\sigma_1\geq\cdots\geq\sigma_r>0$.
 \end{definition}
 
 \begin{theorem} \label{thm:compact-singular-value-decomposition} \hlt{Compact Singular Value Decomposition}\\
@@ -198,63 +225,82 @@ Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r\geq1$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $A=V\Sigma W^*$ is an SVD and $X,Y$ are the first $r$ columns of $V,W$, then $A=X\Sigma_rY^*$.
-\item Conversely, if $X,Y$ have orthonormal columns and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$ with $\sigma_1\geq\cdots\geq\sigma_r>0$, then $X\Sigma_rY^*$ has positive singular values $\sigma_1,\ldots,\sigma_r$.
+\item Conversely, if $X\in\operatorname{Mat}(m,r,\mathbb{F})$ and $Y\in\operatorname{Mat}(n,r,\mathbb{F})$ have orthonormal columns and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$,\\
+with $\sigma_1\geq\cdots\geq\sigma_r>0$, then $X\Sigma_rY^*$ has positive singular values $\sigma_1,\ldots,\sigma_r$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Partition $V=[X\ X_0]$, $W=[Y\ Y_0]$, and $\Sigma=
-\begin{bmatrix}
-\Sigma_r & 0\\
-0 & 0
-\end{bmatrix}$. Multiplication gives $A=V\Sigma W^*=X\Sigma_rY^*$.
-\item Let $B=X\Sigma_rY^*$. Since $X^{*}X=Y^{*}Y=I_r$, $B^{*}B=Y\Sigma_r^{2}Y^{*}$.\\
-Completing $Y$ to a unitary matrix $\widetilde{Y}=[Y\ Y_0]$ gives $\widetilde{Y}^*B^*B\widetilde{Y}=\Sigma_r^2\oplus0$.\\
-Thus the positive eigenvalues of $B^*B$ are $\sigma_1^2,\ldots,\sigma_r^2$, so the positive singular values of $B$ are $\sigma_1,\ldots,\sigma_r$.
+\item For $V=[X\ X_0]$ and $W=[Y\ Y_0]$, $A=V\Sigma W^*=X\Sigma_rY^*$ by block multiplication.
+\item Set $B\defeq X\Sigma_rY^*$. Then $B^*B=Y\Sigma_r^2Y^*$ by $X^*X=I_r$. Complete $Y$ to a unitary $\widetilde Y=[Y\ Y_0]$ by Theorem \ref{thm:extend-isometric-columns-to-unitary-matrix}(ii).\\
+Then $\widetilde Y^*B^*B\widetilde Y=\operatorname{diag}(\Sigma_r^2,0)$, so $B$ has positive singular values $\sigma_1,\ldots,\sigma_r$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Compact SVD keeps only the nonzero singular directions.\\
-\hlt{Key Insight}: The rank-$r$ data $X,\Sigma_r,Y$ reconstructs $A$.
+\hlt{Structural Commentary}: Block truncation constructs the compact form; unitary completion recovers its Gram spectrum.\\
+\hlt{Key Insight}: $B^*B=Y\Sigma_r^2Y^*$ retains exactly the positive singular data.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:compact-svd-subspaces} \hlt{Column and Kernel Spaces from Compact SVD}\\
-Let $A=X\Sigma_rY^*$ be a compact SVD. Then $\operatorname{col}(A)=\operatorname{col}(X)=(\ker A^*)^{\perp}$, and $\ker(A)=\operatorname{col}(Y)^{\perp}=(\operatorname{col}(A^*))^{\perp}$.
+Let $A=X\Sigma_rY^*$ be a compact SVD. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{col}(A)=\operatorname{col}(X)=(\ker A^*)^{\perp}$;
+\item $\ker(A)=\operatorname{col}(Y)^{\perp}=(\operatorname{col}(A^*))^{\perp}$.
+\end{enumerate}
 \begin{proof}
-Since $A=X\Sigma_rY^*$ and $AY\Sigma_r^{-1}=X$, $\operatorname{col}(A)=\operatorname{col}(X)$.\\
-For $\mathbf{z}\in\mathbb{F}^n$, $A\mathbf{z}=0$ $\Longleftrightarrow$ $X\Sigma_rY^*\mathbf{z}=0$ $\Longleftrightarrow$ $Y^*\mathbf{z}=0$ $\Longleftrightarrow$ $\mathbf{z}\perp\operatorname{col}(Y)$, because $X$ has independent columns and $\Sigma_r$ is invertible. The orthogonal-complement identities follow from Proposition \ref{prop:adjoint-kernel-range-orthogonality}.\\
-\hlt{Structural Commentary}: Compact SVD exposes image directions $X$ and null directions $\operatorname{col}(Y)^\perp$.\\
-\hlt{Key Insight}: $A$ acts only on the right singular subspace $\operatorname{col}(Y)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{col}(A)=\operatorname{col}(X)$ by $A=X\Sigma_rY^*$ and $AY\Sigma_r^{-1}=X$, while $\operatorname{col}(A)=(\ker A^*)^\perp$ by Proposition \ref{prop:adjoint-kernel-range-orthogonality}(iv).
+\item $(\forall\mathbf{z}\in\mathbb{F}^n)\,A\mathbf{z}=\mathbf{0}\Longleftrightarrow Y^*\mathbf{z}=\mathbf{0}\Longleftrightarrow\mathbf{z}\perp\operatorname{col}(Y)$ by $X^*X=I_r$ and invertibility of $\Sigma_r$. $\ker(A)=(\operatorname{col}(A^*))^\perp$ by Proposition \ref{prop:adjoint-kernel-range-orthogonality}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Invertible middle scaling transfers the image and isolates the right orthogonal kernel.\\
+\hlt{Key Insight}: $X\Sigma_r$ is injective on the right singular coordinates.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:compact-svd-subspaces} summarizes the active right singular subspace, its image, and the kernel annihilated by $A$.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/compact_svd_subspaces.tikz}
   \caption{Compact SVD: $A$ maps $\operatorname{col}(Y)$ onto $\operatorname{col}(X)$ and kills $\ker(A)=\operatorname{col}(Y)^\perp$.}
   \label{fig:compact-svd-subspaces}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:compact-svd-unitary-ambiguity} \hlt{Uniqueness of Compact SVD up to Singular Subspaces}\\
-Let $A=X_1\Sigma_rY_1^*=X_2\Sigma_rY_2^*$ be compact SVDs with the same $\Sigma_r$. Then $X_1=X_2U$, $Y_1=Y_2U$ for some unitary $U$ satisfying $U\Sigma_r=\Sigma_rU$. Hence $U=U_1\oplus\cdots\oplus U_d$ along the equal singular-value blocks of $\Sigma_r$.
+Let $A=X_1\Sigma_rY_1^*=X_2\Sigma_rY_2^*$ be compact SVDs with the same $\Sigma_r$.\\
+Then $\exists$ unitary matrix $U\in\operatorname{Mat}(r,r,\mathbb{F})$, block diagonal on equal-value blocks of $\Sigma_r$, such that $X_1=X_2U$, $Y_1=Y_2U$, $U\Sigma_r=\Sigma_rU$.
 \begin{proof}
-Theorem \ref{thm:compact-svd-subspaces} gives $\operatorname{col}(X_1)=\operatorname{col}(X_2)$ and $\operatorname{col}(Y_1)=\operatorname{col}(Y_2)$. Since each $X_i$ and $Y_i$ has orthonormal columns, there are unitary $U,V\in\operatorname{Mat}(r,r,\mathbb{F})$ such that $X_1=X_2U$ and $Y_1=Y_2V$. Substitution and multiplication on the left by $X_2^*$ and on the right by $Y_2$ give $\Sigma_r=U\Sigma_rV^*$, hence $U\Sigma_r=\Sigma_rV$.\\
-Therefore $U\Sigma_r^2U^*=\Sigma_r^2$, so $U$ commutes with $\Sigma_r^2$. Lemma \ref{lem:block-diagonal-commutant-distinct-scalars} makes $U$ block diagonal on equal singular-value blocks. Hence $U\Sigma_r=\Sigma_rU$, and $U\Sigma_r=\Sigma_rV$ forces $V=U$ because $\Sigma_r$ is invertible.\\
-\hlt{Structural Commentary}: Compact SVD is unique up to unitary changes inside equal singular-value blocks.\\
-\hlt{Key Insight}: Distinct singular values fix subspaces; repeated ones only fix the subspace, not its basis.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Coordinate Changes}: The equalities $\operatorname{col}(X_1)=\operatorname{col}(X_2)$ and $\operatorname{col}(Y_1)=\operatorname{col}(Y_2)$ hold by Theorem \ref{thm:compact-svd-subspaces}.\\
+For $U\defeq X_2^*X_1$ and $Z\defeq Y_2^*Y_1$, $X_1=X_2U$, $Y_1=Y_2Z$, and $U,Z$ are unitary by the common column spaces and orthonormality.
+\item \hlt{Gram Coupling}: $\Sigma_r=U\Sigma_rZ^*$ by substitution, so $U\Sigma_r=\Sigma_rZ$. $U\Sigma_r^2U^*=\Sigma_r^2$ by this equality and its adjoint.
+\item \hlt{Block Ambiguity}: The matrix $U$ is block diagonal on the equal-value blocks of $\Sigma_r$ by $U\Sigma_r^2=\Sigma_r^2U$ and Lemma \ref{lem:block-diagonal-commutant-distinct-scalars}(ii).\\
+$U\Sigma_r=\Sigma_rU$ by this block structure.
+\item \hlt{Common Change}: $Z=U$ by $U\Sigma_r=\Sigma_rZ=\Sigma_rU$ and invertibility of $\Sigma_r$.
+\end{enumerate}
+\hlt{Structural Commentary}: Common subspaces create two unitary changes; Gram coupling identifies them blockwise.\\
+\hlt{Key Insight}: Commutation with $\Sigma_r^2$ confines motion to equal-value blocks.
 \end{proof}
 \end{theorem}
 
-\begin{definition} \label{def:matrix-modulus} \hlt{Matrix Modulus}\\
-For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, the \hlt{modulus} of $A$ is $\abs{A}\defeq(A^*A)^{1/2}\in\operatorname{Mat}(n,n,\mathbb{F})$.\\
-Thus $\abs{A^*}=(AA^*)^{1/2}\in\operatorname{Mat}(m,m,\mathbb{F})$.
-\end{definition}
-
 \begin{proposition} \label{prop:matrix-modulus-from-svd} \hlt{Modulus from SVD}\\
-Let $A=V\Sigma W^*$ be an SVD. Then $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$ and $\abs{A^*}=V(\Sigma\Sigma^*)^{1/2}V^*$.
+Let $A=V\Sigma W^*$ be an SVD. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$;
+\item $\abs{A^*}=V(\Sigma\Sigma^*)^{1/2}V^*$.
+\end{enumerate}
 \begin{proof}
-Since $A^*A=W(\Sigma^*\Sigma)W^*$ and $AA^*=V(\Sigma\Sigma^*)V^*$, the displayed matrices are positive semidefinite square roots of $A^*A$ and $AA^*$, respectively. Uniqueness of the positive semidefinite square root gives the claim.\\
-\hlt{Structural Commentary}: The modulus keeps only the singular-value stretch.\\
-\hlt{Key Insight}: In an SVD, $\abs{A}$ is the right singular-vector version of the diagonal stretch.
+Set $D_R\defeq(\Sigma^*\Sigma)^{1/2}$ and $D_L\defeq(\Sigma\Sigma^*)^{1/2}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The matrix $WD_RW^*$ is positive semidefinite by Theorem \ref{thm:positive-semidefinite-stability-rules}(ii) and squares to $A^*A$. Hence $\abs{A}=WD_RW^*$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(i).
+\item The matrix $VD_LV^*$ is positive semidefinite by Theorem \ref{thm:positive-semidefinite-stability-rules}(ii) and squares to $AA^*$. Hence $\abs{A^*}=VD_LV^*$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: Unitary conjugation transports each diagonal root to its Gram matrix.\\
+\hlt{Key Insight}: The two moduli express $\Sigma$ in opposite singular bases.
 \end{proof}
 \end{proposition}
 
@@ -269,47 +315,47 @@ Let $A=V\Sigma W^*\in\operatorname{Mat}(m,n,\mathbb{F})$ be an SVD.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Proposition \ref{prop:matrix-modulus-from-svd} gives $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$.\\
-Since $V_n(\Sigma^*\Sigma)^{1/2}=V\Sigma$, $U\abs{A}=V_nW^*W(\Sigma^*\Sigma)^{1/2}W^*=V\Sigma W^*=A$. Also $U^*U=WV_n^*V_nW^*=I_n$.
-\item Apply (i) to $A^*$ with the SVD $A^*=W\Sigma^*V^*$, obtaining $A^*=U_0\abs{A^*}$ with $U_0=W_mV^*$ and $U_0^*U_0=I_m$. Taking adjoints gives $A=\abs{A^*}U_0^*=\abs{A^*}VW_m^*$, and $U_0^*(U_0^*)^*=U_0^*U_0=I_m$. Thus $U=VW_m^*$ works.
-\item This is the common case of (i) and (ii), with $U=VW^*$ unitary.
+\item For $D_R\defeq(\Sigma^*\Sigma)^{1/2}$, $V_nD_R=V\Sigma$; hence $U\abs{A}=A$ by Proposition \ref{prop:matrix-modulus-from-svd}(i), while $U^*U=WV_n^*V_nW^*=I_n$.
+\item By (i) with $A^*=W\Sigma^*V^*$, $A^*=U_0\abs{A^*}$ for $U_0\defeq W_mV^*$ and $U_0^*U_0=I_m$.\\
+For $U=U_0^*=VW_m^*$, $A=\abs{A^*}U$ and $UU^*=I_m$ by taking adjoints.
+\item If $m=n$, then $V_n=V$, $W_m=W$, and $U=VW^*$ is unitary; both identities hold by (i)--(ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Polar decomposition compresses the two SVD unitary factors into one partial isometry.\\
-\hlt{Key Insight}: SVD records every singular direction; polar form records stretch plus motion.
+\hlt{Structural Commentary}: Each dimensional regime absorbs the compatible singular bases into a one-sided isometry.\\
+\hlt{Key Insight}: $VW^*$ preserves the diagonal stretch encoded by the modulus.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:svd-polar-computation} \hlt{SVD and Polar Computation Method}\\
-To compute an SVD and the associated polar factors of $A\in\operatorname{Mat}(m,n,\mathbb{F})$:
+\begin{computationmethod} \label{meth:svd-polar-computation} \hlt{SVD and Polar Factor Computation}\\
+Given $A\in\operatorname{Mat}(m,n,\mathbb{F})$, method constructs full SVD, its compact form when $A\neq0$, and the dimension-compatible polar factorisation:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Diagonalise $A^*A$; the square roots of its positive eigenvalues are the positive singular values.
-\item Choose orthonormal right singular vectors $\mathbf{w}_j$ for the positive eigenvalues and set $\mathbf{v}_j=\sigma_j^{-1}A\mathbf{w}_j$.
-\item Complete the $\mathbf{v}_j$ and $\mathbf{w}_j$ to unitary matrices $V,W$ to obtain $A=V\Sigma W^*$.\\
-Omit zero-singular directions for compact SVD.
-\item Use $\abs{A}=W(\Sigma^*\Sigma)^{1/2}W^*$ and merge $V,W$ as in Theorem \ref{thm:rectangular-polar-decomposition} to obtain the polar factor.
+\item Set $r\defeq\operatorname{rank}(A)$ and diagonalise $A^*A$ with a unitary eigenvector matrix $W=[\mathbf{w}_1\ \cdots\ \mathbf{w}_n]$.\\
+For $r\geq1$, order its positive eigenvalues as $\sigma_1^2\geq\cdots\geq\sigma_r^2>0$; for $r=0$, the positive list is empty.
+\item Set $(\forall j\in J_r)\,\mathbf{v}_j\defeq\sigma_j^{-1}A\mathbf{w}_j$, and complete $(\mathbf{v}_1,\ldots,\mathbf{v}_r)$ to an orthonormal basis of $\mathbb{F}^m$. Let $V$ contain this basis.
+\item Form the rectangular diagonal $\Sigma$ with diagonal $\sigma_1,\ldots,\sigma_r,0,\ldots,0$. Verify $AW=V\Sigma$, and hence $A=V\Sigma W^*$.
+\item If $r\geq1$, set $X\defeq[\mathbf{v}_1\ \cdots\ \mathbf{v}_r]$, $Y\defeq[\mathbf{w}_1\ \cdots\ \mathbf{w}_r]$, and $\Sigma_r\defeq\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$. Then $A=X\Sigma_rY^*$ by Theorem \ref{thm:compact-singular-value-decomposition}(i).
+\item Compute the moduli by Proposition \ref{prop:matrix-modulus-from-svd}. For $m\geq n$, set $U\defeq V_nW^*$ and obtain $A=U\abs{A}$.\\
+For $m\leq n$, set $U\defeq VW_m^*$ and obtain $A=\abs{A^*}U$ by Theorem \ref{thm:rectangular-polar-decomposition}.
 \end{enumerate}
-\end{method}
+\end{computationmethod}
 
 \begin{theorem} \label{thm:polar-factor-uniqueness} \hlt{Uniqueness of the Positive Polar Factor}\\
 Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $m\geq n$ and $A=UB$ with $U^*U=I_n$ and $B\succeq0$, then $B=\abs{A}$.\\
-If $\operatorname{rank}(A)=n$, then $U=A\abs{A}^{-1}$ is unique.
-\item If $m\leq n$ and $A=CU$ with $UU^*=I_m$ and $C\succeq0$, then $C=\abs{A^*}$.\\
-If $\operatorname{rank}(A)=m$, then $U=\abs{A^*}^{-1}A$ is unique.
+\item If $m\geq n$ and $A=UB$ with $U^*U=I_n$ and $B\succeq0$, then $B=\abs{A}$. If $\operatorname{rank}(A)=n$, then $U=A\abs{A}^{-1}$ is unique.
+\item If $m\leq n$ and $A=CU$ with $UU^*=I_m$ and $C\succeq0$, then $C=\abs{A^*}$. If $\operatorname{rank}(A)=m$, then $U=\abs{A^*}^{-1}A$ is unique.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $A^*A=BU^*UB=B^2$, $B=\abs{A}$ by uniqueness of positive square root. If $\operatorname{rank}(A)=n$, then $\ker(A)=\{\mathbf{0}\}$.\\
-Since $\mathbf{x}^*A^*A\mathbf{x}=\norm{A\mathbf{x}}_2^2$, this gives $\ker(A^*A)=\{\mathbf{0}\}$ and $\abs{A}$ is invertible. Thus $U=A\abs{A}^{-1}$.
-\item $AA^*=CUU^*C=C^2$, so $C=\abs{A^*}$. If $\operatorname{rank}(A)=m$, then $A^*$ has full column rank, so $\ker(A^*)=\{\mathbf{0}\}$.\\
-Since $\mathbf{y}^*AA^*\mathbf{y}=\norm{A^*\mathbf{y}}_2^2$, this gives $\ker(AA^*)=\{\mathbf{0}\}$ and $\abs{A^*}$ is invertible. Thus $U=\abs{A^*}^{-1}A$.
+\item From $A^*A=BU^*UB=B^2$, $B=\abs{A}$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(i). If $\operatorname{rank}(A)=n$, then $A^*A\succ0$ by Proposition \ref{prop:rectangular-gram-products-are-psd}(v).\\
+Thus $\ker\abs{A}=\{\mathbf{0}\}$ and $U=A\abs{A}^{-1}$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
+\item From $AA^*=CUU^*C=C^2$, $C=\abs{A^*}$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(i). If $\operatorname{rank}(A)=m$, then $AA^*\succ0$ by Proposition \ref{prop:rectangular-gram-products-are-psd}(vi).\\
+Thus $\ker\abs{A^*}=\{\mathbf{0}\}$ and $U=\abs{A^*}^{-1}A$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
 \end{enumerate}
-\hlt{Structural Commentary}: The positive factor is fixed by the Gram matrix.\\
-\hlt{Key Insight}: Full rank makes the partial isometry unique.
+\hlt{Structural Commentary}: Gram squaring fixes each positive factor; full rank makes it invertible.\\
+\hlt{Key Insight}: An invertible modulus uniquely isolates the one-sided isometry.
 \end{proof}
 \end{theorem}
 
@@ -318,19 +364,28 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and suppose $A=U\abs{A}$ with $U$ u
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $A$ is normal, then $\abs{A}^2=A^*A=AA^*=U\abs{A}^2U^*$. Thus $U\abs{A}^2U^*=\abs{A}^2$. The matrix $U\abs{A}U^*$ is PSD and squares to $\abs{A}^2$, so uniqueness of positive square root gives $U\abs{A}U^*=\abs{A}$. Hence $U\abs{A}=\abs{A}U$.
-\item[$(\Leftarrow)$] If $U\abs{A}=\abs{A}U$, then $AA^*=U\abs{A}^2U^*=\abs{A}^2=A^*A$.
+\item[$(\Rightarrow)$] $\abs{A}^2=A^*A=AA^*=U\abs{A}^2U^*$ by normality. $U\abs{A}U^*$ is positive semidefinite by Theorem \ref{thm:positive-semidefinite-stability-rules}(ii), and $(U\abs{A}U^*)^2=\abs{A}^2$.\\
+Thus $U\abs{A}U^*=\abs{A}$ by Corollary \ref{cor:positive-semidefinite-square-root-formula}(i), and $U\abs{A}=\abs{A}U$.
+\item[$(\Leftarrow)$] $AA^*=U\abs{A}^2U^*=\abs{A}^2=A^*A$ by $U\abs{A}=\abs{A}U$.
 \end{enumerate}
-\hlt{Structural Commentary}: Normality says that the polar motion preserves the stretching eigenspaces.\\
-\hlt{Key Insight}: Normality is commutation of polar motion and stretch.
+\hlt{Structural Commentary}: Normality identifies positive roots; commutation reverses the Gram identity.\\
+\hlt{Key Insight}: Root uniqueness converts Gram equality into polar commutation.
 \end{proof}
 \end{theorem}
 
+\begin{perspective} \label{per:polar-decomposition-spectral-analogy} \hlt{Polar Decomposition Separates Stretch and Direction}\\
+In square factorisation $A=U\abs{A}$, positive factor records metric stretch, unitary factor records direction, paralleling scalar modulus and phase. For normal $A$, these factors commute by Theorem \ref{thm:normal-iff-polar-factors-commute}.\\
+In rectangular case, Theorem \ref{thm:rectangular-polar-decomposition} supplies only dimension-compatible one-sided isometry.
+\end{perspective}
+
 \begin{proposition} \label{prop:absolute-determinant-positive-polar-factor} \hlt{Absolute Determinant Comes from the Positive Polar Factor}\\
-For $T\in\LL(\mathcal{V})$ on a finite-dimensional inner-product space, $\abs{\det T}=\det\sqrt{T^*T}$.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ and $T\in\LL(\mathcal{V})$. Then $\abs{\det T}=\det\sqrt{T^*T}$.
 \begin{proof}
-By Theorem \ref{thm:polar-decomposition}, $T=S\sqrt{T^*T}$ for some isometry $S$. Hence $\abs{\det T} =\abs{\det S}\,\abs{\det\sqrt{T^*T}} =\det\sqrt{T^*T}$, where Proposition \ref{prop:isometry-determinant-absolute-one} gives $\abs{\det S}=1$, and positivity of $\sqrt{T^*T}$ gives nonnegative determinant.\\
-\hlt{Structural Commentary}: Polar decomposition isolates stretch; only the positive factor changes volume.\\
-\hlt{Key Insight}: Determinant sign or phase belongs to the isometric part; volume belongs to the positive part.
+Set $P\defeq\sqrt{T^*T}$ and fix an isometry $S$ satisfying $T=SP$ by Theorem \ref{thm:polar-decomposition}. Then $\abs{\det S}=1$ by Proposition \ref{prop:isometry-determinant-absolute-one}(ii).\\
+Fix an orthonormal eigenbasis of $P$ by Theorem \ref{thm:real-spectral-theorem} when $\mathbb{F}=\mathbb{R}$ and Theorem \ref{thm:complex-spectral-theorem} when $\mathbb{F}=\mathbb{C}$.\\
+Its eigenvalues are nonnegative by Theorem \ref{thm:positive-operator-characterization}(i)$\Rightarrow$(ii), so $\det P\geq0$ by Theorem \ref{thm:determinant-basic-laws}(v).\\
+Thus $\abs{\det T}=\abs{\det S}\abs{\det P}=\det P$ by Theorem \ref{thm:determinant-basic-laws}(vi).\\
+\hlt{Structural Commentary}: Polar multiplicativity separates unit-modulus motion from the nonnegative spectral product.\\
+\hlt{Key Insight}: The positive factor alone carries the absolute determinant.
 \end{proof}
 \end{proposition}
