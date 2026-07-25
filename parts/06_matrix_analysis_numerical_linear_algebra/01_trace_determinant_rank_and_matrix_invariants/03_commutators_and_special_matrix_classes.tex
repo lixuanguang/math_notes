@@ -1,130 +1,167 @@
 \subsection{Commutators and Special Matrix Classes}
 
-\begin{definition} \hlt{Commutator}\\
-For $S,T\in\LL(\mathcal{V})$, the \hlt{commutator} of $S$ and $T$ is $[S,T]\defeq ST-TS$.\\
-For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{matrix commutator} is $[A,B]\defeq AB-BA$.
+\begin{definition} \label{def:operator-and-matrix-commutator} \hlt{Commutator}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $S,T\in\LL(\mathcal{V})$, their \hlt{commutator} is $[S,T]\defeq ST-TS$.
+\item For $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, their \hlt{matrix commutator} is $[A,B]\defeq AB-BA$.
+\end{enumerate}
 \end{definition}
 
 \begin{proposition} \label{prop:commutators-have-zero-trace} \hlt{Trace Obstruction for Commutators}\\
-If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\operatorname{tr}(AB-BA)=0$. Hence any matrix similar to a commutator has trace zero.
+Let $A,B,C\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}([A,B])=0$.
+\item If $C$ is similar to $[A,B]$, then $\operatorname{tr}(C)=0$.
+\end{enumerate}
 \begin{proof}
-By linearity of trace and Proposition \ref{prop:trace-cyclicity-two-factors}, $\operatorname{tr}(AB-BA)=\operatorname{tr}(AB)-\operatorname{tr}(BA)=0$.\\
-If $C$ is similar to $AB-BA$, then Theorem \ref{thm:similarity-preserves-trace-and-determinant} gives $\operatorname{tr}(C)=\operatorname{tr}(AB-BA)=0$.\\
-\hlt{Structural Commentary}: Trace kills commutators because it is cyclic.\\
-\hlt{Key Insight}: $AB$ and $BA$ have the same trace, so their difference has trace zero.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}([A,B])=\operatorname{tr}(AB)-\operatorname{tr}(BA)=0$ by Proposition \ref{prop:trace-arithmetic}(i),(ii) and Proposition \ref{prop:trace-cyclicity-two-factors}.
+\item If $C$ is similar to $[A,B]$, then $\operatorname{tr}(C)=\operatorname{tr}([A,B])=0$ by Theorem \ref{thm:similarity-preserves-trace-and-determinant}(i) and part (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Trace cyclicity annihilates a commutator; similarity invariance transfers the obstruction.\\
+\hlt{Key Insight}: The two product traces cancel exactly.
 \end{proof}
 \end{proposition}
 
 \begin{corollary} \label{cor:identity-is-not-operator-commutator} \hlt{The Identity Is Not a Commutator}\\
-Assume $\dim\mathcal{V}\cdot1_{\mathbb{F}}\neq0$. There do not exist $S,T\in\LL(\mathcal{V})$ such that $ST-TS=I_{\mathcal{V}}$.
+Let $\mathcal{V}$ be finite-dimensional over $\mathbb{F}$ and $(\dim\mathcal{V})\cdot1_{\mathbb{F}}\neq0$. Then $(\nexists\,S,T\in\LL(\mathcal{V}))\ [S,T]=I_{\mathcal{V}}$.
 \begin{proof}
-If $ST-TS=I_{\mathcal{V}}$, choose a basis and let $A=[S]$ and $B=[T]$ in that basis. Then $AB-BA=I_n$.\\
-Taking traces and using Proposition \ref{prop:trace-cyclicity-two-factors}, $0=\operatorname{tr}(AB)-\operatorname{tr}(BA)=\operatorname{tr}(I_n)=n\cdot1_{\mathbb{F}}$, contradicting the hypothesis.\\
-\hlt{Structural Commentary}: Commutators have zero trace, while the identity has dimension as its trace.\\
-\hlt{Key Insight}: Trace detects a scalar obstruction invisible from multiplication alone.
+Set $n\defeq\dim\mathcal{V}$, and suppose $[S,T]=I_{\mathcal{V}}$. Choose a basis $\beta$ of $\mathcal{V}$ and set $A\defeq[S]_{\beta\leftarrow\beta}$ and $B\defeq[T]_{\beta\leftarrow\beta}$.\\
+Then $[A,B]=[ST-TS]_{\beta\leftarrow\beta}=I_n$ by Propositions \ref{prop:composition-and-matrix-multiplication} and \ref{prop:matrix-representation-respects-linear-combinations}.\\
+By Proposition \ref{prop:commutators-have-zero-trace}(i), $0=\operatorname{tr}([A,B])=\operatorname{tr}(I_n)=n\cdot1_{\mathbb{F}}$, contrary to the hypothesis.\\
+\hlt{Structural Commentary}: Coordinate matrices transfer the operator equation to the matrix trace obstruction.\\
+\hlt{Key Insight}: The identity has trace $(\dim\mathcal{V})\cdot1_{\mathbb{F}}$.
 \end{proof}
 \end{corollary}
 
-\begin{method} \label{meth:trace-determinant-invariant-computation} \hlt{Trace--Determinant Invariant Method}\\
-To get eigenvalue data without solving for eigenvalues:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item choose a basis in which $[T]_{\beta\leftarrow\beta}$ is easiest to compute;
-\item compute $\operatorname{tr}T$ and $\det T$ from this matrix;
-\item if the eigenvalues are $\lambda_1,\ldots,\lambda_n$, conclude $\lambda_1+\cdots+\lambda_n=\operatorname{tr}T$, and $\lambda_1\cdots\lambda_n=\det T$;
-\item for equations $ST-TS=A$, first test $\operatorname{tr}A=0$; otherwise no solution exists.
-\end{enumerate}
-\end{method}
-
 \begin{lemma} \label{lem:scalar-matrix-dependent-orbits} \hlt{Scalar Matrices and One-Step Orbits}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $n\geq2$.\\
-Then $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}\in\mathbb{F}^n$ if and only if $A$ is a scalar matrix.
+Let $n\geq2$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $(\forall\,\mathbf{x}\in\mathbb{F}^n)\ (\mathbf{x},A\mathbf{x})$ is linearly dependent iff $A$ is a scalar matrix.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $A=cI_n$. Then $A\mathbf{x}=c\mathbf{x}$ for every $\mathbf{x}$, so $(\mathbf{x},A\mathbf{x})$ is linearly dependent.
-\item[$(\Leftarrow)$] Suppose $(\mathbf{x},A\mathbf{x})$ is linearly dependent for every $\mathbf{x}$.\\
-For each standard basis vector $\mathbf{e}_i$, $\exists a_i\in\mathbb{F}$ such that $A\mathbf{e}_i=a_i\mathbf{e}_i$. For $i\geq2$, dependence of $\mathbf{e}_1+\mathbf{e}_i$ and $A(\mathbf{e}_1+\mathbf{e}_i)=a_1\mathbf{e}_1+a_i\mathbf{e}_i$ means $a_1\mathbf{e}_1+a_i\mathbf{e}_i=b(\mathbf{e}_1+\mathbf{e}_i)$ for some $b\in\mathbb{F}$. Comparing the independent vectors $\mathbf{e}_1,\mathbf{e}_i$ gives $a_1=b=a_i$. Hence every $a_i$ equals $a_1$, so $A=a_1I_n$.
+\item[$(\Rightarrow)$] Suppose $(\forall\,\mathbf{x}\in\mathbb{F}^n)\ (\mathbf{x},A\mathbf{x})$ is linearly dependent. Since $\mathbf{e}_i\neq\mathbf{0}$, $(\exists\,a_i\in\mathbb{F})\ A\mathbf{e}_i=a_i\mathbf{e}_i$ for $i\in\{1,\ldots,n\}$.\\
+For $i\in\{2,\ldots,n\}$, the dependence of $\mathbf{e}_1+\mathbf{e}_i$ and $A(\mathbf{e}_1+\mathbf{e}_i)=a_1\mathbf{e}_1+a_i\mathbf{e}_i$ implies $(\exists\,b_i\in\mathbb{F})\ a_1\mathbf{e}_1+a_i\mathbf{e}_i=b_i(\mathbf{e}_1+\mathbf{e}_i)$.\\
+Thus $a_1=b_i=a_i$ by independence of $(\mathbf{e}_1,\mathbf{e}_i)$. Hence $(\forall\,i\in\{1,\ldots,n\})\ A\mathbf{e}_i=a_1\mathbf{e}_i$, so $A=a_1I_n$ by equality on standard basis.
+\item[$(\Leftarrow)$] If $A=cI_n$, then $(\forall\,\mathbf{x}\in\mathbb{F}^n)\ A\mathbf{x}=c\mathbf{x}$, so each pair $(\mathbf{x},A\mathbf{x})$ is linearly dependent.
 \end{enumerate}
-\hlt{Structural Commentary}: A scalar matrix preserves every one-dimensional coordinate direction and every diagonal line between two coordinates. These diagonal lines force all coordinate scalars to agree.\\
-\hlt{Key Insight}: If every vector is an eigenvector, then there can be only one eigenvalue.
+\hlt{Structural Commentary}: Coordinate lines produce individual scalars; diagonal lines force those scalars to coincide.\\
+\hlt{Key Insight}: Dependence along $\mathbf{e}_1+\mathbf{e}_i$ equates the coordinate eigenvalues.
 \end{proof}
 \end{lemma}
 
 \begin{lemma} \label{lem:nonscalar-similar-zero-entry} \hlt{Nonscalar Matrices Have a Zero Diagonal Entry After Similarity}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ with $n\geq2$.\\
-If $A$ is not a scalar matrix, then $A$ is similar over $\mathbb{F}$ to a matrix whose $(1,1)$ entry is $0$.
+Let $n\geq2$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. If $A$ is not scalar, then $A$ is similar over $\mathbb{F}$ to a matrix whose $(1,1)$ entry is $0$.
 \begin{proof}
-By Lemma \ref{lem:scalar-matrix-dependent-orbits}, there is $\mathbf{x}\in\mathbb{F}^n$ such that $(\mathbf{x},A\mathbf{x})$ is linearly independent. Extend $(\mathbf{x},A\mathbf{x})$ to a basis $\beta$ of $\mathbb{F}^n$. In the basis $\beta$, the first column of the matrix of $A$ is the coordinate vector of $A\mathbf{x}$, namely $(0,1,0,\ldots,0)^t$. Thus the $(1,1)$ entry is $0$, and this matrix is similar to $A$.\\
-\hlt{Structural Commentary}: Nonscalarity produces a vector whose first iterate points in a genuinely new direction. Using these two vectors as the start of a basis forces a zero in the first diagonal position.\\
-\hlt{Key Insight}: Put $\mathbf{x}$ first and $A\mathbf{x}$ second in the basis.
+Choose $\mathbf{x}\in\mathbb{F}^n$ such that $(\mathbf{x},A\mathbf{x})$ linearly independent by Lemma \ref{lem:scalar-matrix-dependent-orbits}. Extend this pair to basis $\beta$ of $\mathbb{F}^n$ by Theorem \ref{thm:extending-independent-lists}.\\
+Let $T_A:\mathbb{F}^n\to\mathbb{F}^n$ be defined by $T_A(\mathbf{y})\defeq A\mathbf{y}$, and set $C\defeq[T_A]_{\beta\leftarrow\beta}$. The first column of $C$ is $[A\mathbf{x}]_{\beta}=(0,1,0,\ldots,0)^t$.\\
+Hence the $(1,1)$ entry of $C$ is zero, and $C$ is similar to $A$ by Theorem \ref{thm:change-of-basis-formula}(i), with the standard basis as the original basis.\\
+\hlt{Structural Commentary}: A noninvariant line begins a basis whose second vector is $A\mathbf{x}$.\\
+\hlt{Key Insight}: The coordinate vector of $A\mathbf{x}$ begins with zero.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:similar-to-constant-diagonal} \hlt{Similarity to a Constant-Diagonal Matrix}\\
-Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. Then $A$ is similar over $\mathbb{F}$ to a matrix whose diagonal entries are all equal to $\frac{1}{n}\operatorname{tr}(A)$.
+Let $n\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and $(\forall\,k\in\{1,\ldots,n\})\ k\cdot1_{\mathbb{F}}\neq0$. Then $A$ is similar to a matrix with constant diagonal $\frac{1}{n}\operatorname{tr}(A)$.
 \begin{proof}
-Set $\tau=\frac{1}{n}\operatorname{tr}(A)$ and $B=A-\tau I_n$. Then $\operatorname{tr}(B)=0$. It is enough to show that every trace-zero matrix is similar to a matrix with zero diagonal, because Theorem \ref{thm:similarity-preserves-scalar-shifts} then adds $\tau I_n$ back to the diagonal.\\
-To prove the trace-zero claim by induction on $n$. If $n=1$, a trace-zero matrix is $[0]$. Let $n\geq2$ and assume the claim holds for smaller sizes. Let $\operatorname{tr}(B)=0$. If $B$ is scalar, then $B=cI_n$ and $0=\operatorname{tr}(B)=nc$.\\
-Since $n\cdot1_{\mathbb{F}}\neq0$, we get $c=0$, so $B$ already has zero diagonal.\\
-If $B$ is not scalar, Lemma \ref{lem:nonscalar-similar-zero-entry} makes $B$ similar to $\begin{bmatrix}
-0 & *\\
-* & B_1
-\end{bmatrix}$, and $\operatorname{tr}(B_1)=0$.\\
-By induction, choose an invertible $S_1$ such that $S_1^{-1}B_1S_1$ has zero diagonal. Conjugating the displayed block matrix by $1\oplus S_1$ leaves the first diagonal entry equal to $0$ and replaces the lower-right block by $S_1^{-1}B_1S_1$.\\
-Hence the resulting similar matrix has every diagonal entry equal to $0$.\\
-\hlt{Structural Commentary}: The proof removes one zero diagonal entry at a time.\\
-\hlt{Key Insight}: Similarity creates the first zero; trace zero handles the smaller block.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Trace Shift}: Set $\tau\defeq\frac{1}{n}\operatorname{tr}(A)$ and $B\defeq A-\tau I_n$. Then $\operatorname{tr}(B)=\operatorname{tr}(A)-(n\cdot1_{\mathbb{F}})\tau=0$ by Proposition \ref{prop:trace-arithmetic}(i),(ii).\\
+It suffices to show that every trace-zero matrix of size at most $n$ is similar to a zero-diagonal matrix.\\
+Indeed, adding $\tau I_n$ preserves similarity by Theorem \ref{thm:similarity-preserves-scalar-shifts}(i), with shift $-\tau$.
+\item \hlt{Induction}: For $m\in\{1,\ldots,n\}$, let $\mathcal{P}_m$ assert that every trace-zero matrix in $\operatorname{Mat}(m,m,\mathbb{F})$ is similar to a zero-diagonal matrix. Property $\mathcal{P}_1$ holds because a trace-zero $1\times1$ matrix is $[0]$.\\
+Fix $m\in\{2,\ldots,n\}$, assume $\mathcal{P}_{m-1}$, and let $C\in\operatorname{Mat}(m,m,\mathbb{F})$ satisfy $\operatorname{tr}(C)=0$.
+\item \hlt{Scalar Case}: If $C=cI_m$, then $0=\operatorname{tr}(C)=(m\cdot1_{\mathbb{F}})c$. Thus $c=0$ by $m\cdot1_{\mathbb{F}}\neq0$, so $C$ already has zero diagonal.
+\item \hlt{Nonscalar Case}: If $C$ is not scalar, then $C$ is similar to $D\defeq\left[\begin{smallmatrix}0&\mathbf{u}^t\\ \mathbf{v}&C_1\end{smallmatrix}\right]$ by Lemma \ref{lem:nonscalar-similar-zero-entry}.\\
+The equality $\operatorname{tr}(C_1)=\operatorname{tr}(D)=\operatorname{tr}(C)=0$ holds by Theorem \ref{thm:similarity-preserves-trace-and-determinant}(i) and the block diagonal entries.\\
+Choose $S_1\in\operatorname{Mat}(m-1,m-1,\mathbb{F})^{\times}$ such that $S_1^{-1}C_1S_1$ has zero diagonal by $\mathcal{P}_{m-1}$. Set $R\defeq I_1\oplus S_1$.\\
+Then $R^{-1}DR$ has zero diagonal because its lower-right block is $S_1^{-1}C_1S_1$.\\
+Thus $C$ is similar to a zero-diagonal matrix by Proposition \ref{prop:similarity-equivalence-relation}, so $\mathcal{P}_m$ holds.\\
+Therefore $\mathcal{P}_n$ holds by induction, and the original assertion follows by the trace shift in part (i).
+\end{enumerate}
+\hlt{Structural Commentary}: A trace shift reduces to zero diagonal; induction isolates one diagonal entry at a time.\\
+\hlt{Key Insight}: The remaining block retains trace zero after the first entry vanishes.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:shoda-trace-zero-commutators} \hlt{Shoda's Theorem in the Distinct-Diagonal Case}\\
-Let $n\geq1$ and assume $k\cdot1_{\mathbb{F}}\neq0$ for every $1\leq k\leq n$. For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the matrix $A$ is a commutator in $\operatorname{Mat}(n,n,\mathbb{F})$ if and only if $\operatorname{tr}(A)=0$. In particular, no nonzero scalar matrix is a commutator.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+Let $n\geq1$, $(\forall\,k\in\{1,\ldots,n\})\ k\cdot1_{\mathbb{F}}\neq0$, and $A\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Proposition \ref{prop:commutators-have-zero-trace} gives $\operatorname{tr}(A)=0$.\\
-Thus $cI_n$ can be a commutator only when $nc=\operatorname{tr}(cI_n)=0$, hence only when $c=0$.
-\item[$(\Leftarrow)$] Suppose $\operatorname{tr}(A)=0$. By Theorem \ref{thm:similar-to-constant-diagonal}, there is an invertible $S$ such that $B=S^{-1}AS=[b_{ij}]$ has zero diagonal. Let $X=\operatorname{diag}(1,2,\ldots,n)$, viewing the integers as scalars in $\mathbb{F}$, and define $Y=[y_{ij}]$ by
-\begin{align}
-y_{ij}=
-\begin{cases}
-(i-j)^{-1}b_{ij}, & i\neq j,\\
-0, & i=j.
-\end{cases}
-\nonumber
-\end{align}
-The hypothesis ensures that $i-j\neq0$ in $\mathbb{F}$ whenever $i\neq j$. Thus $XY-YX=[(i-j)y_{ij}]=B$.\\
-Hence $A=(SXS^{-1})(SYS^{-1})-(SYS^{-1})(SXS^{-1})$, so $A$ is a commutator.
+\item $A$ is a commutator in $\operatorname{Mat}(n,n,\mathbb{F})$ iff $\operatorname{tr}(A)=0$.
+\item No nonzero scalar matrix in $\operatorname{Mat}(n,n,\mathbb{F})$ is a commutator.
 \end{enumerate}
-\hlt{Structural Commentary}: Trace is the obstruction; similarity exposes zero diagonal form.\\
-\hlt{Key Insight}: Cyclicity forces trace zero; distinct diagonals realize it.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) If $A=[U,V]$ for $U,V\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\operatorname{tr}(A)=0$ by Proposition \ref{prop:commutators-have-zero-trace}(i).
+\item[$(i)$] ($\Leftarrow$) Suppose $\operatorname{tr}(A)=0$. Choose $S\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ such that $B\defeq S^{-1}AS=[b_{ij}]$ has zero diagonal by Theorem \ref{thm:similar-to-constant-diagonal}.\\
+For $i\in\{1,\ldots,n\}$, set $d_i\defeq i\cdot1_{\mathbb{F}}$, and let $X\defeq\operatorname{diag}(d_1,\ldots,d_n)$. Define $Y=[y_{ij}]$ by $y_{ii}\defeq0$ and $y_{ij}\defeq(d_i-d_j)^{-1}b_{ij}$ for $i\neq j$.\\
+For $i\neq j$, set $k\defeq|i-j|$. Then $1\leq k\leq n-1$ and $d_i-d_j\in\{k\cdot1_{\mathbb{F}},-k\cdot1_{\mathbb{F}}\}\subseteq\mathbb{F}^{\times}$ by the hypothesis.\\
+Hence $[X,Y]_{ii}=0=b_{ii}$ and $[X,Y]_{ij}=(d_i-d_j)y_{ij}=b_{ij}$, so $B=[X,Y]$.\\
+Therefore $A=[SXS^{-1},SYS^{-1}]$ by direct multiplication, and $A$ is a commutator.
+\item[$(ii)$] If $c\in\mathbb{F}\setminus\{0\}$, then $\operatorname{tr}(cI_n)=(n\cdot1_{\mathbb{F}})c\neq0$. Thus $cI_n$ is not a commutator by part (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Trace supplies necessity; constant-diagonal similarity and distinct scalars construct the converse.\\
+\hlt{Key Insight}: Dividing each off-diagonal entry by $d_i-d_j$ realizes the commutator.
 \end{proof}
 \end{theorem}
 
 \begin{remark} \label{rem:shoda-field-hypothesis} \hlt{Field Hypothesis in the Diagonal Proof}\\
-The proof above uses that the integers $1,\ldots,n$ are distinct and that each smaller block size remains nonzero in $\mathbb{F}$. In small characteristic, this diagonal proof must be replaced by a more delicate argument.
+Theorem \ref{thm:shoda-trace-zero-commutators} uses the field hypothesis twice: the scalars $d_1,\ldots,d_n$ must be distinct, and every block size in the induction must remain nonzero. In small characteristic this diagonal construction requires replacement.
 \end{remark}
+
+\begin{computationmethod} \label{meth:trace-determinant-invariant-computation} \hlt{Trace--Determinant Invariant Computation}\\
+Let $n\geq1$, $A,C\in\operatorname{Mat}(n,n,\mathbb{F})$, and suppose $p_A(z)=\prod\limits_{j=1}^{n}(z-\lambda_j)$ over a field containing $\mathbb{F}$. The following procedure extracts aggregate eigenvalue data and screens a commutator equation:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ represents an operator, choose a basis in which its representing matrix is easiest to compute.
+\item Compute $\operatorname{tr}(A)$ from the diagonal entries and $\det(A)$ by a convenient determinant formula.
+\item Record $\sum\limits_{j=1}^{n}\lambda_j=\operatorname{tr}(A)$ and $\prod\limits_{j=1}^{n}\lambda_j=\det(A)$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(i).
+\item For $[X,Y]=C$, first compute $\operatorname{tr}(C)$. If it is nonzero, no solution exists by Proposition \ref{prop:commutators-have-zero-trace}(i).
+\end{enumerate}
+\end{computationmethod}
 
 \begin{definition} \label{def:idempotent-and-nilpotent-matrices} \hlt{Idempotent and Nilpotent Matrices}\\
 Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $A$ is \hlt{idempotent} if $A^2=A$.
-\item $A$ is \hlt{nilpotent} if $A^k=0$ for some positive integer $k$.
+\item $A$ is \hlt{idempotent} iff $A^2=A$.
+\item $A$ is \hlt{nilpotent} iff $(\exists\,k\in\mathbb{Z}_{>0})\ A^k=0$.
 \end{enumerate}
-An idempotent matrix is an algebraic projection: it fixes its range and kills its kernel.
 \end{definition}
 
 \begin{proposition} \label{prop:idempotent-matrix-basic-invariants} \hlt{Basic Invariants of Idempotents}\\
-If $P\in\operatorname{Mat}(n,n,\mathbb{F})$ satisfies $P^2=P$, then $\mathbb{F}^n=\operatorname{range}(P)\oplus\ker(P)$, $P$ is diagonalizable, and its only possible eigenvalues are $0$ and $1$. Moreover $\operatorname{tr}(P)=\operatorname{rank}(P)$.\\
-If $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $P$ is the orthogonal projection onto $\operatorname{range}(P)$ if and only if $P=P^*$.
+Let $P\in\operatorname{Mat}(n,n,\mathbb{F})$ satisfy $P^2=P$, and set $r\defeq\operatorname{rank}(P)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathbb{F}^n=\operatorname{range}(P)\oplus\ker(P)$.
+\item $(\forall\,\mathbf{y}\in\operatorname{range}(P))\ P\mathbf{y}=\mathbf{y}$ and $(\forall\,\mathbf{z}\in\ker(P))\ P\mathbf{z}=\mathbf{0}$.
+\item $P$ is similar to $I_r\oplus0_{n-r}$.
+\item $P$ is diagonalizable over $\mathbb{F}$.
+\item $\operatorname{spec}(P)\subseteq\{0,1\}$.
+\item $\operatorname{tr}(P)=\operatorname{rank}(P)$.
+\item If $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $P$ is the orthogonal projection onto $\operatorname{range}(P)$ iff $P=P^*$.
+\end{enumerate}
 \begin{proof}
-For every $\mathbf{x}$, write $\mathbf{x}=P\mathbf{x}+(\mathbf{x}-P\mathbf{x})$. The first term lies in $\operatorname{range}(P)$, while $P(\mathbf{x}-P\mathbf{x})=P\mathbf{x}-P^2\mathbf{x}=0$, so the second term lies in $\ker(P)$. The intersection is zero because $\mathbf{x}=P\mathbf{y}$ and $P\mathbf{x}=0$ imply $\mathbf{x}=P^2\mathbf{y}=P\mathbf{x}=0$.\\
-In a basis adapted to $\operatorname{range}(P)\oplus\ker(P)$, the matrix of $P$ is $I_r\oplus0$, where $r=\operatorname{rank}(P)$.\\
-Hence $P$ is diagonalizable, its eigenvalues lie in $\{0,1\}$, and $\operatorname{tr}(P)=r$.\\
-For the final claim, self-adjoint idempotents are exactly orthogonal projections by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.\\
-\hlt{Structural Commentary}: Idempotents split the space into fixed directions and killed directions.\\
-\hlt{Key Insight}: In adapted coordinates, every idempotent is just $I_r\oplus0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] For $\mathbf{x}\in\mathbb{F}^n$, write $\mathbf{x}=P\mathbf{x}+(\mathbf{x}-P\mathbf{x})$, where $P\mathbf{x}\in\operatorname{range}(P)$.\\
+Since $P(\mathbf{x}-P\mathbf{x})=P\mathbf{x}-P^2\mathbf{x}=\mathbf{0}$, the second term lies in $\ker(P)$.\\
+If $\mathbf{x}\in\operatorname{range}(P)\cap\ker(P)$, write $\mathbf{x}=P\mathbf{u}$. Then $\mathbf{x}=P^2\mathbf{u}=P\mathbf{x}=\mathbf{0}$, so the sum is direct.
+\item[$(ii)$] If $\mathbf{y}=P\mathbf{u}\in\operatorname{range}(P)$, then $P\mathbf{y}=P^2\mathbf{u}=P\mathbf{u}=\mathbf{y}$. The assertion on $\ker(P)$ follows from its definition.
+\item[$(iii)$] Choose a basis $(\mathbf{u}_1,\ldots,\mathbf{u}_r)$ of $\operatorname{range}(P)$ and a basis $(\mathbf{v}_1,\ldots,\mathbf{v}_{n-r})$ of $\ker(P)$ by Corollary \ref{cor:matrix-rank-nullity}(i).\\
+Their concatenation is a basis by part (i).\\
+By part (ii), the representing matrix in this basis is $I_r\oplus0_{n-r}$. Thus $P$ is similar to this matrix by Theorem \ref{thm:change-of-basis-formula}(i).
+\item[$(iv)$] The matrix $I_r\oplus0_{n-r}$ is diagonal, and the similarity in part (iii) is a diagonalization of $P$.
+\item[$(v)$] If $P\mathbf{x}=\lambda\mathbf{x}$ for $\mathbf{x}\neq\mathbf{0}$, then $\lambda^2\mathbf{x}=P^2\mathbf{x}=P\mathbf{x}=\lambda\mathbf{x}$. Hence $\lambda(\lambda-1)=0$, so $\lambda\in\{0,1\}$.
+\item[$(vi)$] By Theorem \ref{thm:similarity-preserves-trace-and-determinant}(i) and part (iii), $\operatorname{tr}(P)=\operatorname{tr}(I_r\oplus0_{n-r})=r=\operatorname{rank}(P)$.
+\item[$(vii)$] ($\Rightarrow$) Regarding $P$ as an operator on the standard inner-product space, $P=P^*$ by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.
+\item[$(vii)$] ($\Leftarrow$) Regarding $P$ as an operator on the standard inner-product space, it is the orthogonal projection onto $\operatorname{range}(P)$ by the idempotence hypothesis, $P=P^*$, and Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.
+\end{enumerate}
+\hlt{Structural Commentary}: Range--kernel coordinates determine invariants; self-adjointness characterizes orthogonal projection.\\
+\hlt{Key Insight}: In an adapted basis, every idempotent is $I_r\oplus0_{n-r}$.
 \end{proof}
 \end{proposition}

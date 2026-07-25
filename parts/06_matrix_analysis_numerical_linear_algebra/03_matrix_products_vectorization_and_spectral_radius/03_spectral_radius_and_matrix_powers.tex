@@ -1,95 +1,126 @@
 \subsection{Spectral Radius and Matrix Powers}
 
+Throughout this subsection, $\mathbb{F}$ is a field.
+
 \begin{theorem} \label{thm:ranks-of-matrix-powers-stabilize} \hlt{Ranks of Matrix Powers Stabilize}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Then:
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\operatorname{rank}(A^k)\geq\operatorname{rank}(A^{k+1})$ for $k=1,2,\ldots$;
-\item if $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+1})$, then $\operatorname{col}(A^k)=\operatorname{col}(A^{k+p})$ and $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+p})$ for every $p=1,2,\ldots$;
-\item if $A$ is not invertible, then there is a least positive integer $q\leq n$ such that $\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$.
+\item $(\forall\,k\in\mathbb{Z}_{>0})\,\operatorname{rank}(A^k)\geq\operatorname{rank}(A^{k+1})$;
+\item if $k\in\mathbb{Z}_{>0}$ and $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+1})$, then $(\forall\,p\in\mathbb{Z}_{>0})\,\bigl[\operatorname{col}(A^k)=\operatorname{col}(A^{k+p})\ \land\ \operatorname{rank}(A^k)=\operatorname{rank}(A^{k+p})\bigr]$;
+\item if $A$ is not invertible, then $\min\{q\in\mathbb{Z}_{>0}:\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})\}\in J_n$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Since $A^{k+1}=A^kA$, each column of $A^{k+1}$ is a linear combination of the columns of $A^k$. Hence $\operatorname{col}(A^{k+1})\subseteq\operatorname{col}(A^k)$, so $\operatorname{rank}(A^{k+1})\leq\operatorname{rank}(A^k)$.
-\item The inclusion $\operatorname{col}(A^{k+1})\subseteq\operatorname{col}(A^k)$ and equality of dimensions give $\operatorname{col}(A^{k+1})=\operatorname{col}(A^k)$. Let $U=\operatorname{col}(A^k)$. Then multiplication by $A$ maps $U$ onto $U$, so induction gives $\operatorname{col}(A^{k+p})=U$ for every $p\geq1$.
-\item If $A$ is not invertible, then Corollary \ref{cor:square-matrix-invertible-iff-full-rank} gives $\operatorname{rank}(A)\leq n-1$. If all inequalities $\operatorname{rank}(A^k)>\operatorname{rank}(A^{k+1})$ held for $k=1,\ldots,n$, then $\operatorname{rank}(A^{n+1})\leq\operatorname{rank}(A)-n<0$, impossible. Hence equality occurs for some $q\leq n$; choose the least such $q$.
+\item Fix $k\in\mathbb{Z}_{>0}$. Then $\operatorname{col}(A^{k+1})\subseteq\operatorname{col}(A^k)$ by $A^{k+1}=A^kA$, and the rank inequality holds by taking dimensions.
+\item Fix $k\in\mathbb{Z}_{>0}$ with $\operatorname{rank}(A^k)=\operatorname{rank}(A^{k+1})$, and set $U\defeq\operatorname{col}(A^k)$.\\
+The identities $U=\operatorname{col}(A^{k+1})$ and $A(U)=U$ hold by part (i), equality of dimensions, and $AA^k=A^{k+1}$.\\
+$(\forall\,p\in\mathbb{Z}_{>0})\,\operatorname{col}(A^{k+p})=U$ by induction; the rank identities hold by taking dimensions.
+\item $\operatorname{rank}(A)\leq n-1$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank} and noninvertibility.\\
+If $(\forall\,q\in J_n)\,\operatorname{rank}(A^q)>\operatorname{rank}(A^{q+1})$, then $\operatorname{rank}(A^{n+1})\leq\operatorname{rank}(A)-n\leq-1$, contradicting nonnegativity of rank.\\
+The relation $(\exists\,q\in J_n)\,\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$ holds by this contradiction.\\
+The minimum in (iii) belongs to $J_n$ by this witness and well-ordering.
 \end{enumerate}
-\hlt{Structural Commentary}: The column spaces of powers form a decreasing chain. In finite dimensions, a decreasing chain cannot keep losing dimension forever.\\
-\hlt{Key Insight}: Once two consecutive ranks agree, the image has stabilized under multiplication by $A$.
+\hlt{Structural Commentary}: Nested column spaces and dimension equality create an invariant image; finite dimension forces stabilization.\\
+\hlt{Key Insight}: Each strict rank drop consumes at least one dimension.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:matrix-index} \hlt{Index of a Matrix}\\
-If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, define its \hlt{index} to be $0$. If $A$ is not invertible, its index is the least positive integer $q$ such that $\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})$.
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ is invertible, its \hlt{index} is $0$.
+\item If $A$ is not invertible, its \hlt{index} is $\min\{q\in\mathbb{Z}_{>0}:\operatorname{rank}(A^q)=\operatorname{rank}(A^{q+1})\}$.
+\end{enumerate}
 \end{definition}
 
 \begin{definition} \label{def:spectral-radius-and-convergent-matrix} \hlt{Spectral Radius and Convergent Matrix}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{C})$, the \hlt{spectral radius} is $\rho(A)\defeq\max\{\abs{\lambda}:\lambda\in\operatorname{spec}(A)\}$.\\
-We say $A^p\to0$ if every entry of $A^p$ converges to $0$ as $p\to\infty$.
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{spectral radius} is $\rho(A)\defeq\max\limits_{\lambda\in\operatorname{spec}(A)}\abs{\lambda}$.
+\item The notation $A^p\to0$ means $(\forall\,(i,j)\in J_n^2)\,\lim\limits_{p\to\infty}(A^p)_{ij}=0$.
+\end{enumerate}
 \end{definition}
 
 \begin{proposition} \label{prop:nilpotent-matrix-basic-invariants} \hlt{Basic Invariants of Nilpotents}\\
-For $N\in\operatorname{Mat}(n,n,\mathbb{F})$, the following are equivalent:
+Let $n\in\mathbb{Z}_{>0}$ and $N\in\operatorname{Mat}(n,n,\mathbb{F})$. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $N$ is nilpotent;
-\item the characteristic polynomial of $N$ is $t^n$;
+\item the characteristic polynomial of $N$ is $z^n$;
 \item $N^n=0$.
 \end{enumerate}
-In this case, $\operatorname{tr}(N)=0$, $\det(N)=0$ for $n\geq1$, and the spectral radius of $N$ over $\mathbb{C}$ is $0$.
+Under these equivalent conditions, $\operatorname{tr}(N)=\det(N)=0$ and, if $\mathbb{F}=\mathbb{C}$, $\rho(N)=0$.
 \begin{proof}
-If $N^k=0$, then every eigenvalue $\lambda$ of $N$ over an algebraic closure satisfies $\lambda^k=0$, hence $\lambda=0$. Thus the characteristic polynomial is $t^n$. If the characteristic polynomial is $t^n$, Cayley--Hamilton gives $N^n=0$. The implication $N^n=0\Rightarrow$ nilpotent is immediate. The trace, determinant, and spectral-radius statements follow from the eigenvalue data and from Definitions \ref{def:matrix-trace-and-determinant} and \ref{def:spectral-radius-and-convergent-matrix}.\\
-\hlt{Structural Commentary}: Nilpotent matrices have no spectral mass away from zero.\\
-\hlt{Key Insight}: Cayley--Hamilton turns the characteristic polynomial $t^n$ into the equation $N^n=0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$]$\Rightarrow (ii)$ By nilpotency, choose $r\in\mathbb{Z}_{>0}$ satisfying $N^r=0$.\\
+Every eigenvalue $\lambda$ over an algebraic closure equals $0$ by $\lambda^r\mathbf{v}=N^r\mathbf{v}=\mathbf{0}$ for an associated $\mathbf{v}\neq\mathbf{0}$.\\
+$p_N(z)=z^n$ by complete splitting and Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(i). \item[$(ii)$]$\Rightarrow (iii)$ $p_N(N)=N^n=0$ by Theorem \ref{thm:cayley-hamilton-matrix}. \item[$(iii)$]$\Rightarrow (i)$ Matrix $N$ is nilpotent by $N^n=0$.
+\end{enumerate}
+Assume the equivalent conditions. The identities $\operatorname{tr}(N)=\det(N)=0$ hold by $p_N(z)=z^n$ and Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(i).\\
+If $\mathbb{F}=\mathbb{C}$, then $\operatorname{spec}(N)=\{0\}$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii), and $\rho(N)=0$ by the spectral-radius formula.\\
+\hlt{Structural Commentary}: Eigenvalue collapse identifies $p_N$; Cayley--Hamilton and its coefficients recover the remaining invariants.\\
+\hlt{Key Insight}: Vanishing eigenvalues precede the uniform exponent $N^n=0$.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:matrix-powers-converge-to-zero-spectral-radius} \hlt{Matrix Powers Converge to Zero}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A^p\to0$ if and only if $\rho(A)<1$.
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $A^p\to0$ if and only if $\rho(A)<1$.
 \begin{proof}
-Choose a Jordan form $A=SJS^{-1}$.\\
-Since $S$ and $S^{-1}$ are fixed, $A^p\to0$ if and only if every Jordan block power in $J^p$ converges to $0$.
+By Theorem \ref{thm:complex-jordan-form}, choose $S\in\operatorname{Mat}(n,n,\mathbb{C})^\times$ and a Jordan matrix $J$ satisfying $A=SJS^{-1}$.\\
+$A^p\to0\Longleftrightarrow J^p\to0$ by $A^p=SJ^pS^{-1}$, $J^p=S^{-1}A^pS$, and finite sums.\\
+The convergence $J^p\to0$ is equivalent to convergence of each Jordan block power by the block-diagonal structure of $J$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Each block power tends to $0$, so Proposition \ref{prop:powers-of-jordan-block} gives $\abs{\lambda}<1$ for every eigenvalue. Thus $\rho(A)<1$.
-\item[$(\Leftarrow)$] If $\rho(A)<1$, then every eigenvalue satisfies $\abs{\lambda}<1$. Proposition \ref{prop:powers-of-jordan-block} makes each block power tend to $0$.
+\item[$(\Rightarrow)$] $\rho(A)=\max\limits_{\lambda\in\operatorname{spec}(A)}\abs{\lambda}<1$ by the block reduction and Proposition \ref{prop:powers-of-jordan-block}(ii).
+\item[$(\Leftarrow)$] Each Jordan block power tends to $0$ by $\rho(A)<1$ and Proposition \ref{prop:powers-of-jordan-block}(ii). $A^p\to0$ by the two reductions above.
 \end{enumerate}
-\hlt{Structural Commentary}: Similarity reduces matrix-power convergence to Jordan block-power convergence.\\
-\hlt{Key Insight}: The largest eigenvalue modulus controls the asymptotic size of all blocks.
+\hlt{Structural Commentary}: Similarity transfers entrywise convergence to block powers, which reduce it to eigenvalue moduli.\\
+\hlt{Key Insight}: Geometric decay dominates each fixed polynomial superdiagonal factor.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:jordan-spectral-radius-convergence} depicts the Jordan-block threshold at the unit circle.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/jordan_spectral_radius_convergence.tikz}
-  \caption{The gray circle is $\abs{\lambda}=1$: inside it, powers decay; on or outside it, they do not.}
+  \caption{Jordan block powers decay for $\abs{\lambda}<1$, but not on or outside the gray unit circle.}
   \label{fig:jordan-spectral-radius-convergence}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{definition} \label{def:power-bounded-matrix} \hlt{Power Bounded Matrix}\\
-A matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is \hlt{power bounded} if for each entry position $(i,j)$, the sequence of entries of $A^p$ in that position is bounded for $p=1,2,\ldots$.
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The matrix $A$ is \hlt{power bounded} if $(\forall\,(i,j)\in J_n^2)\,\sup\limits_{p\in\mathbb{Z}_{>0}}\abs{(A^p)_{ij}}<\infty$.
 \end{definition}
 
 \begin{theorem} \label{thm:matrix-power-bounded-jordan-criterion} \hlt{Power Bounded Jordan Criterion}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
+Let $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $A$ is power bounded.
-\item $\rho(A)\leq1$, and every eigenvalue $\lambda$ with $\abs{\lambda}=1$ has only $1\times1$ Jordan blocks.
-\item $\rho(A)\leq1$, and $\dim E_{\lambda}(A)=m_A(\lambda)$ for every $\lambda\in\operatorname{spec}(A)$ with $\abs{\lambda}=1$.
+\item $\rho(A)\leq1$, and Jordan blocks associated with eigenvalues of modulus $1$ have size $1$.
+\item $\rho(A)\leq1$, and $(\forall\,\lambda\in\operatorname{spec}(A))\,\bigl(\abs{\lambda}=1\Longrightarrow\dim E_{\lambda}(A)=m_A(\lambda)\bigr)$.
 \end{enumerate}
 \begin{proof}
-Work in Jordan form.
+By Theorem \ref{thm:complex-jordan-form}, choose $S\in\operatorname{Mat}(n,n,\mathbb{C})^\times$ and a Jordan matrix $J$ satisfying $A=SJS^{-1}$.\\
+Power boundedness of $A$ and $J$ is equivalent by $A^p=SJ^pS^{-1}$, $J^p=S^{-1}A^pS$, and entrywise fixed finite linear combinations.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow(ii)$: If $\abs{\lambda}>1$, the diagonal entries $\lambda^p$ are unbounded.\\
-If $\abs{\lambda}=1$ and $J_k(\lambda)$ has $k\geq2$, then the first superdiagonal contains $p\lambda^{p-1}$, also unbounded.
-\item[$(ii)$]$\Rightarrow(i)$: Blocks with $\abs{\lambda}<1$ converge to $0$ by Proposition \ref{prop:powers-of-jordan-block}; $1\times1$ blocks with $\abs{\lambda}=1$ are bounded. Finite direct sums and fixed similarities preserve boundedness.
-\item[$(ii)$]$\Leftrightarrow(iii)$: For fixed $\lambda$, $\dim E_{\lambda}(A)$ counts Jordan blocks, while $m_A(\lambda)$ counts their total size.\\
-Equality holds exactly when every block has size $1$.
+\item[$(i)$]$\Rightarrow (ii)$ The matrix $J$ is power bounded by (i) and the fixed-similarity equivalence.\\
+A block with $\abs{\lambda}>1$ is excluded by its unbounded diagonal sequence $(\lambda^p)_{p\geq1}$.\\
+If $\abs{\lambda}=1$ and $k\geq2$, then $J_k(\lambda)^p$ is unbounded by Proposition \ref{prop:powers-of-jordan-block}(i) and $\abs{p\lambda^{p-1}}=p$. Condition (ii) holds by these exclusions. \item[$(ii)$]$\Rightarrow (iii)$ Fix $\lambda\in\operatorname{spec}(A)$ with $\abs{\lambda}=1$.\\
+The dimension $\dim E_{\lambda}(A)$ is the number of Jordan blocks at $\lambda$ by Corollary \ref{cor:jordan-blocks-diagonalizability}(i).\\
+The multiplicity $m_A(\lambda)$ is the sum of their sizes by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(ii) and Proposition \ref{prop:upper-triangular-characteristic-polynomial}(iii).\\
+The desired equality holds by these two counting identities and the size-one condition in (ii). \item[$(iii)$]$\Rightarrow (i)$ All unit-circle blocks have size $1$ by (iii), the preceding counts, and positive integral block sizes.\\
+Blocks with $\abs{\lambda}<1$ converge to $0$ by Proposition \ref{prop:powers-of-jordan-block}(ii), while the size-one unit-circle blocks are bounded by $\abs{\lambda^p}=1$.\\
+The matrix $J$ is power bounded by $\rho(A)\leq1$, these block bounds, and its block-diagonal structure.\\
+The matrix $A$ is power bounded by the fixed-similarity equivalence.
 \end{enumerate}
-\hlt{Structural Commentary}: Unit-circle eigenvalues are harmless only when their nilpotent parts vanish.\\
-\hlt{Key Insight}: Nontrivial Jordan blocks on the unit circle create polynomial growth.
+\hlt{Structural Commentary}: Jordan form separates exponential and boundary polynomial growth; block counts detect nilpotent parts.\\
+\hlt{Key Insight}: A unit-circle block is bounded exactly when its size is one.
 \end{proof}
 \end{theorem}
