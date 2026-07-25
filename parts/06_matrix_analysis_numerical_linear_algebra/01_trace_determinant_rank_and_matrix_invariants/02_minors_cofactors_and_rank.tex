@@ -1,97 +1,121 @@
 \subsection{Minors, Cofactors, and Rank}
 
 \begin{definition} \label{def:minors-cofactors-and-adjugate} \hlt{Minors, Cofactors, and Adjugate}\\
-For $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $M_{ij}$ delete row $i$ and column $j$ from $A$; set $\det(\emptyset_{0\times0})=1$. Define $C_{ij}\defeq(-1)^{i+j}\det(M_{ij})$.\\
-Then $C=[C_{ij}]$ is the \hlt{cofactor matrix}, and $\operatorname{adj}(A)\defeq C^t$ is the \hlt{adjugate}.
+Let $n\geq1$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Set $\det(\emptyset_{0\times0})\defeq1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $i,j\in\{1,\ldots,n\}$, the \hlt{minor matrix} $M_{ij}(A)$ is obtained by deleting row $i$ and column $j$ from $A$.\\
+The corresponding \hlt{minor} is $\det(M_{ij}(A))$.
+\item The $(i,j)$-\hlt{cofactor} is $C_{ij}(A)\defeq(-1)^{i+j}\det(M_{ij}(A))$.
+\item The \hlt{cofactor matrix} is $C(A)\defeq[C_{ij}(A)]$, and the \hlt{adjugate} is $\operatorname{adj}(A)\defeq C(A)^t$.
+\end{enumerate}
+When $A$ is fixed, write $M_{ij}$ and $C_{ij}$.
 \end{definition}
 
 \begin{lemma} \label{lem:cofactor-expansion} \hlt{Cofactor Expansion}\\
-For $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$, $\det A=\sum\limits_{k=1}^{n}a_{ik}C_{ik}$ and $\det A=\sum\limits_{k=1}^{n}a_{kj}C_{kj}$.
+Let $n\geq1$ and $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall i\in J_n)\,\det A=\sum\limits_{k=1}^{n}a_{ik}C_{ik}$.
+\item $(\forall j\in J_n)\,\det A=\sum\limits_{k=1}^{n}a_{kj}C_{kj}$.
+\end{enumerate}
 \begin{proof}
-Using $\det A=\sum\limits_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod\limits_{r=1}^n a_{r,\sigma(r)}$, group terms by $\sigma(i)=k$.\\
-For fixed $k$, the remaining permutation sum equals $(-1)^{i+k}\det(M_{ik})=C_{ik}$, giving the row formula. Applying this to $A^t$ and using Theorem \ref{thm:determinant-basic-laws} gives the column formula.\\
-\hlt{Structural Commentary}: Cofactor expansion is the big determinant formula collected around one row or column.\\
-\hlt{Key Insight}: Fix one entry; the rest is its minor.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $i\in J_n$. For $k\in J_n$, set $\mathfrak{S}_{i,k}\defeq\{\sigma\in\mathfrak{S}_n:\sigma(i)=k\}$ and $T_{i,k}\defeq\sum\limits_{\sigma\in\mathfrak{S}_{i,k}}\sign(\sigma)\prod\limits_{r=1}^{n}a_{r,\sigma(r)}$.\\
+$(\forall k\in J_n)\,T_{i,k}=a_{ik}(-1)^{i+k}\det(M_{ik})=a_{ik}C_{ik}$ by the order-preserving deletion bijection $\mathfrak{S}_{i,k}\xrightarrow{\sim}\mathfrak{S}_{n-1}$, $i+k-2$ adjacent transpositions, the determinant and cofactor definitions, and Theorem \ref{thm:determinant-basic-laws}(ix).\\
+$\det A=\sum\limits_{k\in J_n}T_{i,k}=\sum\limits_{k=1}^{n}a_{ik}C_{ik}$ by $\mathfrak{S}_n=\bigsqcup\limits_{k\in J_n}\mathfrak{S}_{i,k}$, Definition \ref{def:matrix-trace-and-determinant}(ii), Theorem \ref{thm:determinant-basic-laws}(ix), and the preceding identity.
+\item Fix $j\in J_n$. $(\forall k\in J_n)\,[M_{jk}(A^t)=M_{kj}(A)^t\land C_{jk}(A^t)=C_{kj}(A)]$ by Definition \ref{def:minors-cofactors-and-adjugate} and Theorem \ref{thm:determinant-basic-laws}(ix).\\
+$\det A=\det(A^t)=\sum\limits_{k=1}^{n}a_{kj}C_{jk}(A^t)=\sum\limits_{k=1}^{n}a_{kj}C_{kj}(A)$ by Theorem \ref{thm:determinant-basic-laws}(ix), part (i) for row $j$ of $A^t$, and the preceding identities.
+\end{enumerate}
+\hlt{Structural Commentary}: Permutation fibers prove the row formula; transposition transfers it to columns.\\
+\hlt{Key Insight}: Deleting a fixed row and column leaves the corresponding minor sum.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:adjugate-identity-and-cramers-rule} \hlt{Adjugate Identity and Cramer's Rule}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and let $\mathbf{b}\in\mathbb{F}^n$. Then $A\operatorname{adj}(A)=\operatorname{adj}(A)A=(\det A)I_n$. If $\det A\neq0$, then, for $A\mathbf{x}=\mathbf{b}$, $A^{-1}=\frac{1}{\det A}\operatorname{adj}(A)$ and $x_j=\frac{\det A_j(\mathbf{b})}{\det A}$ for $1\leq j\leq n$, where $A_j(\mathbf{b})$ replaces column $j$ of $A$ by $\mathbf{b}$.
+Let $n\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and $\mathbf{b}\in\mathbb{F}^n$. For $j\in\{1,\ldots,n\}$, let $A_j(\mathbf{b})$ be obtained from $A$ by replacing column $j$ by $\mathbf{b}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\operatorname{adj}(A)=\operatorname{adj}(A)A=(\det A)I_n$.
+\item $(\forall j\in\{1,\ldots,n\})\quad(\operatorname{adj}(A)\mathbf{b})_j=\det(A_j(\mathbf{b}))$.
+\item If $\det A\neq0$, then $A^{-1}=(\det A)^{-1}\operatorname{adj}(A)$.
+\item If $\det A\neq0$, then the unique solution of $A\mathbf{x}=\mathbf{b}$ satisfies $(\forall j\in\{1,\ldots,n\})\quad x_j=\frac{\det(A_j(\mathbf{b}))}{\det A}$.
+\end{enumerate}
 \begin{proof}
-Since $(\operatorname{adj}A)_{kj}=C_{jk}$, $(A\operatorname{adj}A)_{ij}=\sum\limits_k a_{ik}C_{jk}$.\\
-For $i=j$ this is $\det A$ by Lemma \ref{lem:cofactor-expansion}; for $i\neq j$ it is the cofactor expansion of a matrix with rows $i$ and $j$ equal, hence $0$. Thus $A\operatorname{adj}(A)=(\det A)I_n$. The same argument applied to $A^t$ gives $\operatorname{adj}(A)A=(\det A)I_n$. If $\det A\neq0$, division gives the inverse formula. Finally, $(\operatorname{adj}A\,\mathbf{b})_j=\sum_i C_{ij}b_i=\det A_j(\mathbf{b})$, by expansion down column $j$, so $x=A^{-1}\mathbf{b}$ gives Cramer's rule.\\
-\hlt{Structural Commentary}: Cofactors assemble all one-column replacements of $A$ into a single inverse formula.\\
-\hlt{Key Insight}: Off-diagonal products vanish because they are determinants with two equal rows or columns.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $i,j\in J_n$, $(A\operatorname{adj}(A))_{ij}=\sum\limits_{k=1}^{n}a_{ik}C_{jk}$ by Definition \ref{def:minors-cofactors-and-adjugate}.\\
+The identity $\sum\limits_{k=1}^{n}a_{ik}C_{jk}=\delta_{ij}\det A$ holds by Lemma \ref{lem:cofactor-expansion}(i) and Theorem \ref{thm:determinant-basic-laws}(iv),(ix) with $A_{j,\cdot}\leftarrow A_{i,\cdot}$ when $i\neq j$.\\
+Likewise, $(\operatorname{adj}(A)A)_{ij}=\sum\limits_{k=1}^{n}C_{ki}a_{kj}$ by Definition \ref{def:minors-cofactors-and-adjugate}.\\
+The identity $\sum\limits_{k=1}^{n}C_{ki}a_{kj}=\delta_{ij}\det A$ holds by Lemma \ref{lem:cofactor-expansion}(ii) and Theorem \ref{thm:determinant-basic-laws}(iv) with $A_{\cdot,i}\leftarrow A_{\cdot,j}$ when $i\neq j$.\\
+Hence $A\operatorname{adj}(A)=\operatorname{adj}(A)A=(\det A)I_n$.
+\item Fix $j\in J_n$; $(\forall i\in J_n)\,C_{ij}(A_j(\mathbf{b}))=C_{ij}(A)$ by Definition \ref{def:minors-cofactors-and-adjugate}. Identity $(\operatorname{adj}(A)\mathbf{b})_j=\sum\limits_{i=1}^{n}C_{ij}(A)b_i$ holds by Definition \ref{def:minors-cofactors-and-adjugate}.\\
+$\sum\limits_{i=1}^{n}C_{ij}(A)b_i=\sum\limits_{i=1}^{n}C_{ij}(A_j(\mathbf{b}))b_i=\det(A_j(\mathbf{b}))$ by the preceding cofactor identity and Lemma \ref{lem:cofactor-expansion}(ii).
+\item If $\det A\neq0$, then $A((\det A)^{-1}\operatorname{adj}(A))=I_n=((\det A)^{-1}\operatorname{adj}(A))A$ by part (i).\\
+Hence $A^{-1}=(\det A)^{-1}\operatorname{adj}(A)$ by the definition of a matrix inverse.
+\item If $\det A\neq0$, then $\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{b}\}=\{A^{-1}\mathbf{b}\}$ by part (iii).\\
+For $\mathbf{x}=A^{-1}\mathbf{b}$, $(\forall j\in J_n)\,x_j=(\det A)^{-1}(\operatorname{adj}(A)\mathbf{b})_j=\frac{\det(A_j(\mathbf{b}))}{\det A}$ by parts (ii)--(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: Row and column replacements establish the adjugate identity before its inverse and solution consequences.\\
+\hlt{Key Insight}: Off-diagonal cofactor sums create a repeated row or column.
 \end{proof}
 \end{theorem}
 
-\begin{remark} \label{rem:bordered-determinant-adjugate-form} \hlt{Adjugate Form of the Bordered Formula}\\
-Proposition \ref{prop:bordered-determinant-formulas} gives the adjugate form $\det
-\begin{bmatrix}
-A & \mathbf{x}\\
-\mathbf{y}^t & c
-\end{bmatrix}
-=
-c\det(A)-\mathbf{y}^t\operatorname{adj}(A)\mathbf{x}$.
-No invertibility of $A$ is required.
-\end{remark}
+\begin{proposition} \label{prop:bordered-determinant-adjugate-form} \hlt{Adjugate Form of the Bordered Formula}\\
+Let $n\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and $c\in\mathbb{F}$.\\
+Then $\det\left[\begin{smallmatrix}A&\mathbf{x}\\ \mathbf{y}^t&c\end{smallmatrix}\right]=c\det(A)-\mathbf{y}^t\operatorname{adj}(A)\mathbf{x}$, without any invertibility assumption on $A$.
+\begin{proof}
+Set $D\defeq\left[\begin{smallmatrix}A&\mathbf{x}\\ \mathbf{y}^t&c\end{smallmatrix}\right]$. $(\forall j\in J_n)$, $M_{n+1,j}(D)=\left[A_{\cdot,1}\ \cdots\ A_{\cdot,j-1}\ A_{\cdot,j+1}\ \cdots\ A_{\cdot,n}\ \mathbf{x}\right]$.\\
+$(\forall j\in J_n)$, $\det(M_{n+1,j}(D))=(-1)^{n-j}\det(A_j(\mathbf{x}))$ by $n-j$ column swaps and Theorem \ref{thm:determinant-basic-laws}(iii).\\
+$(\forall j\in J_n)$, $C_{n+1,j}(D)=(-1)^{n+1+j+n-j}\det(A_j(\mathbf{x}))=-\det(A_j(\mathbf{x}))$ by Definition \ref{def:minors-cofactors-and-adjugate}.\\
+$\det D=c\det A-\sum\limits_{j=1}^{n}y_j\det(A_j(\mathbf{x}))$ by Lemma \ref{lem:cofactor-expansion}(i) for row $n+1$ and the preceding cofactor identity.\\
+$\det D=c\det A-\mathbf{y}^t\operatorname{adj}(A)\mathbf{x}$ by Theorem \ref{thm:adjugate-identity-and-cramers-rule}(ii) and the preceding identity.\\
+\hlt{Structural Commentary}: Last-row expansion converts each border entry into a one-column replacement determinant.\\
+\hlt{Key Insight}: The cofactor and column-move signs combine to one minus sign.
+\end{proof}
+\end{proposition}
 
 \begin{theorem} \label{thm:cauchy-binet-minors} \hlt{Cauchy--Binet Formula}\\
-Let $A\in\operatorname{Mat}(k,n,\mathbb{F})$, $B\in\operatorname{Mat}(n,k,\mathbb{F})$, and $k\leq n$. For $J=\{j_1<\cdots<j_k\}\subseteq\{1,\ldots,n\}$, let $A^J$ use the columns of $A$ in $J$ and $B_J$ use the rows of $B$ in $J$.\\
-Then $\det(AB)=\sum\limits_J \det(A^J)\det(B_J)$, where $J$ ranges over all $k$-subsets.
+Let $1\leq k\leq n$, $A\in\operatorname{Mat}(k,n,\mathbb{F})$, and $B\in\operatorname{Mat}(n,k,\mathbb{F})$. Let $\mathcal{J}_{k,n}$ be the set of $k$-element subsets of $\{1,\ldots,n\}$.\\
+For $J=\{q_1<\cdots<q_k\}\in\mathcal{J}_{k,n}$, let $A^J$ consist of the columns of $A$ indexed by $J$, and let $B_J$ consist of the rows of $B$ indexed by $J$. Then $\det(AB)=\sum\limits_{J\in\mathcal{J}_{k,n}}\det(A^J)\det(B_J)$.
 \begin{proof}
-Put $S(A,B)\defeq \sum\limits_J \det(A^J)\det(B_J)$. For an elementary $n\times n$ matrix $E$, determinant multilinearity and row/column operation rules give $S(A,B)=S(AE,E^{-1}B)$, and $AB=(AE)(E^{-1}B)$.\\
-If $\operatorname{rank}A<k$, both sides vanish. Otherwise reduce $A$ by elementary column operations to $A'=[C\ 0]$ with $C$ invertible, and transform $B$ oppositely to $B'$.\\
-Then $AB=A'B'$ and $\det(A'B')=\det(C)\det(B'_{J_0})=S(A',B')$, $J_0=\{1,\ldots,k\}$, as every other $k$-minor of $A'$ is zero. Hence $\det(AB)=S(A,B)$.\\
-\hlt{Structural Commentary}: Cauchy--Binet is determinant multiplicativity for rectangular middle dimensions.\\
-\hlt{Key Insight}: The middle space contributes one $k$-coordinate shadow at a time.
+For $\mathbf{j}=(j_1,\ldots,j_k)\in J_n^k$, set $B_{\mathbf{j}}\defeq[b_{j_r,s}]_{r,s=1}^{k}$. Then $(\forall r\in J_k)\,(AB)_{r,\cdot}=\sum\limits_{j\in J_n}a_{rj}B_{j,\cdot}$.\\
+Hence $\det(AB)=\sum\limits_{\mathbf{j}\in J_n^k}\left(\prod\limits_{r=1}^{k}a_{rj_r}\right)\det(B_{\mathbf{j}})$ by Theorem \ref{thm:determinant-basic-laws}(ii),(ix) and finite distributivity.\\
+$[(\exists r,s\in J_k)\,(r\neq s\land j_r=j_s)]\Rightarrow\det(B_{\mathbf{j}})=0$ by Theorem \ref{thm:determinant-basic-laws}(iv),(ix).\\
+Fix $J=\{q_1<\cdots<q_k\}\in\mathcal{J}_{k,n}$ and set $\mathbf{q}^{\tau}\defeq(q_{\tau^{-1}(r)})_{r\in J_k}$ for $\tau\in\mathfrak{S}_k$.\\
+Then $\{\mathbf{j}\in J_n^k:\{j_r:r\in J_k\}=J\}=\{\mathbf{q}^{\tau}:\tau\in\mathfrak{S}_k\}$, and $(\forall\tau\in\mathfrak{S}_k)\,\det(B_{\mathbf{q}^{\tau}})=\sign(\tau)\det(B_J)$ by Theorem \ref{thm:determinant-basic-laws}(iii),(ix).\\
+$\sum\limits_{\tau\in\mathfrak{S}_k}\sign(\tau)\left(\prod\limits_{r=1}^{k}a_{\tau(r),q_r}\right)\det(B_J)=\det(A^J)\det(B_J)$ by Definition \ref{def:matrix-trace-and-determinant}(ii).\\
+Therefore $\det(AB)=\sum\limits_{J\in\mathcal{J}_{k,n}}\det(A^J)\det(B_J)$ by the preceding expansion, vanishing implication, and identities.\\
+\hlt{Structural Commentary}: Row multilinearity expands over $J_n^k$; alternation restricts the sum to $\mathcal{J}_{k,n}$.\\
+\hlt{Key Insight}: Each surviving subset contributes one column minor times one row minor.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:transpose-preserves-spectrum-and-geometric-multiplicity} \hlt{Transpose Preserves Spectrum and Geometric Multiplicity}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ and $\lambda\in\mathbb{F}$. Then $\lambda\in\operatorname{spec}(A)$ $\Longleftrightarrow$ $\lambda\in\operatorname{spec}(A^t)$, and $\dim E_{\lambda}(A)=\dim E_{\lambda}(A^t)$.
-\begin{proof}
-Since $(A-\lambda I_n)^t=A^t-\lambda I_n$, Theorem \ref{thm:row-rank-equals-column-rank} gives $\operatorname{rank}(A-\lambda I_n)=\operatorname{rank}(A^t-\lambda I_n)$.\\
-Matrix rank-nullity then gives $\dim E_{\lambda}(A) =n-\operatorname{rank}(A-\lambda I_n) =n-\operatorname{rank}(A^t-\lambda I_n) =\dim E_{\lambda}(A^t)$.
-\begin{enumerate}[label=\roman*.]
+Let $n\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and $\lambda\in\mathbb{F}$.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\lambda\in\operatorname{spec}(A)$, then $E_{\lambda}(A)\neq\{\mathbf{0}\}$, so $E_{\lambda}(A^t)\neq\{\mathbf{0}\}$ and $\lambda\in\operatorname{spec}(A^t)$.
-\item[$(\Leftarrow)$] The same argument with $A$ and $A^t$ interchanged gives the converse.
+\item $\dim(E_{\lambda}(A))=\dim(E_{\lambda}(A^t))$.
+\item $\lambda\in\operatorname{spec}(A)$ iff $\lambda\in\operatorname{spec}(A^t)$.
 \end{enumerate}
-\hlt{Structural Commentary}: Transposition preserves rank, so shifted kernels have the same dimension.\\
-\hlt{Key Insight}: Spectrum and geometric multiplicity are kernel facts for $A-\lambda I_n$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Since $(A-\lambda I_n)^t=A^t-\lambda I_n$, $\operatorname{rank}(A-\lambda I_n)=\operatorname{rank}(A^t-\lambda I_n)$ by Theorem \ref{thm:row-rank-equals-column-rank}.\\
+Hence $\dim(E_{\lambda}(A))=n-\operatorname{rank}(A-\lambda I_n)=n-\operatorname{rank}(A^t-\lambda I_n)=\dim(E_{\lambda}(A^t))$ by Corollary \ref{cor:matrix-rank-nullity}(i).
+\item[$(ii)$] ($\Rightarrow$) If $\lambda\in\operatorname{spec}(A)$, then $\dim(E_{\lambda}(A))>0$ by the matrix-spectrum definition.\\
+Hence $\dim(E_{\lambda}(A^t))>0$ by part (i), so $\lambda\in\operatorname{spec}(A^t)$ by the matrix-spectrum definition.
+\item[$(ii)$] ($\Leftarrow$) If $\lambda\in\operatorname{spec}(A^t)$, then $\dim(E_{\lambda}(A^t))>0$ by the matrix-spectrum definition.\\
+Hence $\dim(E_{\lambda}(A))>0$ by part (i), so $\lambda\in\operatorname{spec}(A)$ by the matrix-spectrum definition.
+\end{enumerate}
+\hlt{Structural Commentary}: Transpose-invariant rank fixes shifted-kernel dimensions before the two spectral directions.\\
+\hlt{Key Insight}: Spectrum and geometric multiplicity are nontriviality and dimension of shifted kernels.
 \end{proof}
 \end{proposition}
 
-\begin{corollary} \label{cor:square-matrix-algebraic-invertibility-dictionary} \hlt{Square Matrix Algebraic Invertibility Dictionary}\\
-Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(n,n,\mathbb{F})$. The following are equivalent:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $A$ is invertible;
-\item $\mathbf{a}_1,\ldots,\mathbf{a}_n$ form a basis of $\mathbb{F}^n$;
-\item $\mathbf{a}_1,\ldots,\mathbf{a}_n$ are linearly independent;
-\item $\mathbf{a}_1,\ldots,\mathbf{a}_n$ span $\mathbb{F}^n$;
-\item for every $\mathbf{b}\in\mathbb{F}^n$, the system $A\mathbf{x}=\mathbf{b}$ has a unique solution;
-\item the homogeneous system $A\mathbf{x}=\mathbf{0}$ has only the zero solution.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*).]
-\setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ By Theorem \ref{thm:invertible-matrix-columns-basis}, the columns of an invertible matrix form a basis.
-\item[$(ii)$]$\Rightarrow (iii)$ A basis is linearly independent.
-\item[$(iii)$]$\Rightarrow (iv)$ In $\mathbb{F}^n$, $n$ linearly independent vectors form a basis, hence span.
-\item[$(iv)$]$\Rightarrow (v)$ In $\mathbb{F}^n$, $n$ spanning vectors form a basis, so every $\mathbf{b}$ has unique coordinates $\mathbf{x}$ in $A\mathbf{x}=\mathbf{b}$.
-\item[$(v)$]$\Rightarrow (vi)$ Apply (v) to $\mathbf{b}=\mathbf{0}$; since $\mathbf{x}=\mathbf{0}$ is a solution, it is the only one.
-\item[$(vi)$]$\Rightarrow (i)$ Condition (vi) says the columns are independent.\\
-Hence they form a basis of $\mathbb{F}^n$, and Corollary \ref{cor:basis-columns-form-invertible-matrix} gives invertibility.
-\end{enumerate}
-\hlt{Structural Commentary}: Square invertibility is column basishood.\\
-\hlt{Key Insight}: Invertible columns give unique coordinates.
-\end{proof}
-\end{corollary}
-
 \begin{corollary} \label{cor:matrix-nonsingularity-rank-determinant-spectrum-dictionary} \hlt{Nonsingularity by Rank, Determinant, and Spectrum}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. The following are equivalent:
+Let $n\geq1$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $A$ is invertible;
@@ -99,116 +123,106 @@ Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. The following are equivalent:
 \item $\det A\neq0$;
 \item $0\notin\operatorname{spec}(A)$.
 \end{enumerate}
-Over $\mathbb{C}$, this is also equivalent to all eigenvalues of $A$ being nonzero.
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ This is Corollary \ref{cor:square-matrix-invertible-iff-full-rank}.
-\item[$(ii)$]$\Rightarrow (iii)$ Full rank gives invertibility by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}, hence $\det A\neq0$ by Theorem \ref{thm:determinant-basic-laws}.
-\item[$(iii)$]$\Rightarrow (iv)$ If $\det A\neq0$, then $A$ is invertible by Theorem \ref{thm:determinant-basic-laws}; hence $0\notin\operatorname{spec}(A)$ by Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}.
-\item[$(iv)$]$\Rightarrow (i)$ This is Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}.
+\item[$(i)$]$\Rightarrow (ii)$ If $A$ is invertible, then $\operatorname{rank}(A)=n$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}. \item[$(ii)$]$\Rightarrow (iii)$ If $\operatorname{rank}(A)=n$, then $A$ is invertible by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}. Hence $\det A\neq0$ by Theorem \ref{thm:determinant-basic-laws}(vii). \item[$(iii)$]$\Rightarrow (iv)$ If $\det A\neq0$, then $A$ is invertible by Theorem \ref{thm:determinant-basic-laws}(vii). Hence $0\notin\operatorname{spec}(A)$ by Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}. \item[$(iv)$]$\Rightarrow (i)$ If $0\notin\operatorname{spec}(A)$, then $A$ is invertible by Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}.
 \end{enumerate}
-Over $\mathbb{C}$, Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} identifies $\lambda_1,\ldots,\lambda_n$ as the roots of $p_A$, so (iv) is equivalent to $\lambda_j\neq0$ for all $j$.\\
-\hlt{Structural Commentary}: Rank, determinant, and spectrum detect singularity.\\
-\hlt{Key Insight}: Singularity can be seen as rank loss, zero determinant, or the zero eigenvalue.
+\hlt{Structural Commentary}: The cycle passes through full rank and determinant before returning through zero-spectrum exclusion.\\
+\hlt{Key Insight}: Invertibility has equivalent range, determinant, and shifted-kernel tests.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:rank-product-and-concatenation-bounds} \hlt{Rank Bounds for Products and Concatenations}\\
-Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,n,\mathbb{F})$, and $C\in\operatorname{Mat}(m,p,\mathbb{F})$. Then $\operatorname{rank}(AB)\leq \min(\operatorname{rank}(A),\operatorname{rank}(B))$ and $\operatorname{rank}(AB)=\operatorname{rank}(A)$ if and only if $\operatorname{col}(AB)=\operatorname{col}(A)$.\\
-Also, $\max(\operatorname{rank}(A),\operatorname{rank}(C))\leq\operatorname{rank}\!\begin{bmatrix}A & C\end{bmatrix}$ and $\operatorname{rank}\!\begin{bmatrix}A & C\end{bmatrix}=\operatorname{rank}(A)$ if and only if $\operatorname{col}(A)=\operatorname{col}(A)+\operatorname{col}(C)$.
+Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,n,\mathbb{F})$, and $C\in\operatorname{Mat}(m,p,\mathbb{F})$. Set $D\defeq\left[\begin{smallmatrix}A&C\end{smallmatrix}\right]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{rank}(AB)\leq\min(\operatorname{rank}(A),\operatorname{rank}(B))$.
+\item $\operatorname{rank}(AB)=\operatorname{rank}(A)\Longleftrightarrow\operatorname{col}(AB)=\operatorname{col}(A)$.
+\item $\max(\operatorname{rank}(A),\operatorname{rank}(C))\leq\operatorname{rank}(D)$.
+\item $\operatorname{rank}(D)=\operatorname{rank}(A)\Longleftrightarrow\operatorname{col}(C)\subseteq\operatorname{col}(A)$.
+\end{enumerate}
 \begin{proof}
-Each column of $AB$ is a linear combination of the columns of $A$, so $\operatorname{col}(AB)\subseteq\operatorname{col}(A)$. Therefore $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$; since both spaces are finite-dimensional, equality holds exactly when $\operatorname{col}(AB)=\operatorname{col}(A)$. Applying this same argument to $(AB)^t=B^tA^t$ and using Theorem \ref{thm:row-rank-equals-column-rank} gives $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$.\\
-For the block matrix, its columns are precisely the columns of $A$ and $C$, hence $\operatorname{col}\!\begin{bmatrix}A & C\end{bmatrix} =\operatorname{col}(A)+\operatorname{col}(C)$.\\
-This space contains both $\operatorname{col}(A)$ and $\operatorname{col}(C)$, giving the lower bound. Equality with $\operatorname{rank}(A)$ occurs exactly when the containing subspace has the same dimension as $\operatorname{col}(A)$, equivalently when $\operatorname{col}(A)+\operatorname{col}(C)=\operatorname{col}(A)$.\\
-\hlt{Structural Commentary}: Products can only reduce accessible column directions, while horizontal concatenation can only add column directions.\\
-\hlt{Key Insight}: Rank tracks whether a matrix operation preserves, loses, or adds column-space dimension.
+Column-space inclusion is rank-monotone, with equality iff the spaces coincide, by the rank definition and Proposition \ref{prop:dimension-bounds-and-basis-criteria}.\\
+For matrices $X,Y$ of compatible dimensions, $\operatorname{col}(XY)\subseteq\operatorname{col}(X)$ by Propositions \ref{prop:matrix-product-by-columns} and \ref{prop:matrix-vector-product-column-combination}.\\
+The identities $(XY)^t=Y^tX^t$ and $\operatorname{rank}(X^t)=\operatorname{rank}(X)$ hold by Proposition \ref{prop:transpose-reverses-products} and Theorem \ref{thm:row-rank-equals-column-rank}, respectively.\\
+The identity $\operatorname{col}(D)=\operatorname{col}(A)+\operatorname{col}(C)$ holds by the definition of $D$ and the column-space definition.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$ by the product-column inclusion and the rank criterion.\\
+$\operatorname{rank}(AB)\leq\operatorname{rank}(B)$ by the transpose identities, the product-column inclusion for $B^tA^t$, and the rank criterion.
+\item[$(ii)$] ($\Rightarrow$) $\operatorname{col}(AB)=\operatorname{col}(A)$ by $\operatorname{rank}(AB)=\operatorname{rank}(A)$, the product-column inclusion, and the rank criterion.
+\item[$(ii)$] ($\Leftarrow$) $\operatorname{rank}(AB)=\operatorname{rank}(A)$ by $\operatorname{col}(AB)=\operatorname{col}(A)$ and the rank definition.
+\item[$(iii)$] $\max(\operatorname{rank}(A),\operatorname{rank}(C))\leq\operatorname{rank}(D)$ by $\operatorname{col}(A)\cup\operatorname{col}(C)\subseteq\operatorname{col}(D)$, the concatenation identity, and the rank criterion.
+\item[$(iv)$] ($\Rightarrow$) $\operatorname{col}(C)\subseteq\operatorname{col}(D)=\operatorname{col}(A)$ by the concatenation identity, $\operatorname{rank}(D)=\operatorname{rank}(A)$, and the rank criterion.
+\item[$(iv)$] ($\Leftarrow$) $\operatorname{col}(C)\subseteq\operatorname{col}(A)\Rightarrow\operatorname{col}(D)=\operatorname{col}(A)$ by the concatenation identity.\\
+Hence $\operatorname{rank}(D)=\operatorname{rank}(A)$ by the rank definition.
+\end{enumerate}
+\hlt{Structural Commentary}: Product and concatenation identities reduce every claim to nested column spaces.\\
+\hlt{Key Insight}: Equal dimensions force equality after column-space inclusion is established.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:sylvester-rank-inequality} \hlt{Sylvester Rank Inequality}\\
 Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$. Then $\operatorname{rank}(A)+\operatorname{rank}(B)-k\leq\operatorname{rank}(AB)$.
 \begin{proof}
-Let $R=\operatorname{col}(B)\subseteq\mathbb{F}^k$. The columns of $AB$ are $A$ applied to the columns of $B$, so $\operatorname{col}(AB)=A(R)$.\\
-Apply rank-nullity to the restriction $T_A|_R:R\to\mathbb{F}^m$. Its range is $A(R)=\operatorname{col}(AB)$ and its kernel is $R\cap\ker(A)$.\\
-Hence $\operatorname{rank}(AB) =\dim(A(R)) =\dim(R)-\dim(R\cap\ker(A)) \geq \operatorname{rank}(B)-\dim(\ker(A))$.\\
-Since $A$ has $k$ columns, Corollary \ref{cor:matrix-rank-nullity} gives $\dim(\ker(A))=k-\operatorname{rank}(A)$. Substitution gives desired inequality.\\
-\hlt{Structural Commentary}: Multiplication by $A$ can lose only the part of $\operatorname{col}(B)$ lying in $\ker(A)$. Sylvester's inequality is this loss estimate in dimensions.\\
-\hlt{Key Insight}: The shared middle dimension $k$ bounds how much rank can disappear in the product.
+Set $R\defeq\operatorname{col}(B)$ and define $S:R\to\mathbb{F}^m$ by $S(\mathbf{x})\defeq A\mathbf{x}$.\\
+The identities $\operatorname{range}(S)=\operatorname{col}(AB)$ and $\ker(S)=R\cap\ker(A)$ hold by Proposition \ref{prop:matrix-product-by-columns} and the definitions of $R$ and $S$.\\
+$\operatorname{rank}(AB)=\dim(R)-\dim(R\cap\ker(A))\geq\operatorname{rank}(B)-\dim(\ker(A))$ by Theorem \ref{thm:rank-nullity}(ii), the rank definition, and Proposition \ref{prop:dimension-bounds-and-basis-criteria}(i).\\
+$\operatorname{rank}(AB)\geq\operatorname{rank}(B)-(k-\operatorname{rank}(A))=\operatorname{rank}(A)+\operatorname{rank}(B)-k$ by the preceding bound and Corollary \ref{cor:matrix-rank-nullity}(i).\\
+\hlt{Structural Commentary}: Rank--nullity restricts $A$ to $\operatorname{col}(B)$ and isolates the lost middle-space directions.\\
+\hlt{Key Insight}: Only $\operatorname{col}(B)\cap\ker(A)$ can disappear under multiplication.
 \end{proof}
 \end{theorem}
-
-\begin{theorem} \label{thm:frobenius-rank-inequality} \hlt{Frobenius Rank Inequality}\\
-Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,p,\mathbb{F})$, and $C\in\operatorname{Mat}(p,n,\mathbb{F})$.\\
-Then $\operatorname{rank}(AB)+\operatorname{rank}(BC) \leq \operatorname{rank}(B)+\operatorname{rank}(ABC)$.
-\begin{proof}
-Let $R=\operatorname{col}(B)$ and $S=\operatorname{col}(BC)$. Since every column of $BC$ is a linear combination of columns of $B$, we have $S\subseteq R$. The induced map $T_A$ maps $R$ onto $\operatorname{col}(AB)$ and maps $S$ onto $\operatorname{col}(ABC)$.\\
-Rank-nullity on the restrictions $T_A|_R$ and $T_A|_S$ gives
-\begin{align}
-\operatorname{rank}(AB)&=\dim R-\dim(R\cap\ker(A)), \quad \operatorname{rank}(ABC)=\dim S-\dim(S\cap\ker(A)). \nonumber
-\end{align}
-Since $S\cap\ker(A)\subseteq R\cap\ker(A)$, we have $\dim(S\cap\ker(A))\leq\dim(R\cap\ker(A))$.\\
-Thus $\dim R-\dim(R\cap\ker(A))+\dim S \leq \dim R+\dim S-\dim(S\cap\ker(A))$.\\
-Substituting $\dim R=\operatorname{rank}(B)$ and $\dim S=\operatorname{rank}(BC)$ gives the stated inequality.\\
-\hlt{Structural Commentary}: Frobenius tracks $A$ on nested column spaces.\\
-\hlt{Key Insight}: The smaller column space cannot lose more dimensions to $\ker(A)$ than the larger one.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:frobenius-rank-inequality-special-cases} \hlt{Rank Inequalities from Frobenius}\\
-The following are special cases of Theorem \ref{thm:frobenius-rank-inequality}:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-$\operatorname{rank}(AB)\leq\min(\operatorname{rank}(A),\operatorname{rank}(B))$;
-\item
-$\operatorname{rank}(A)+\operatorname{rank}(B)-k\leq\operatorname{rank}(AB)$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item
-Apply Frobenius to conformable factors $X,Y,Z$. Taking $Z=0$ gives $\operatorname{rank}(XY)\leq\operatorname{rank}(Y)$, because $\operatorname{rank}(Y0)=\operatorname{rank}(XY0)=0$. Taking $X=0$ gives $\operatorname{rank}(YZ)\leq\operatorname{rank}(Y)$.\\
-Renaming the factors gives $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$ and $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$.
-\item
-Taking the middle matrix to be $I_k$ gives $\operatorname{rank}(A)+\operatorname{rank}(B)\leq k+\operatorname{rank}(AB)$, which is Sylvester's inequality.
-\end{enumerate}
-\hlt{Structural Commentary}: Frobenius is the three-factor parent inequality. The usual upper and lower product-rank bounds appear by making one factor zero or identity.\\
-\hlt{Key Insight}: Zero factors isolate upper bounds; an identity middle factor yields the Sylvester lower bound.
-\end{proof}
-\end{corollary}
 
 \begin{proposition} \label{prop:sylvester-law-of-nullity} \hlt{Sylvester's Law of Nullity}\\
-For a matrix $X$, let $\operatorname{nullity}(X)=\dim(\ker(X))$; this is the dimension of its nullspace.
+For a matrix $X$, write $\operatorname{nullity}(X)\defeq\dim(\ker(X))$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $A\in\operatorname{Mat}(m,k,\mathbb{F})$ and $B\in\operatorname{Mat}(k,n,\mathbb{F})$, then $\operatorname{nullity}(AB)\leq\operatorname{nullity}(A)+\operatorname{nullity}(B)$.
-\item
-If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$.
+\item If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$, then $\max(\operatorname{nullity}(A),\operatorname{nullity}(B))\leq\operatorname{nullity}(AB)$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item
-By rank-nullity and Theorem \ref{thm:sylvester-rank-inequality},
-\begin{align*}
-\operatorname{nullity}(AB) &=n-\operatorname{rank}(AB) \leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k \\
-&=(k-\operatorname{rank}(A))+(n-\operatorname{rank}(B)) =\operatorname{nullity}(A)+\operatorname{nullity}(B).
-\end{align*}
-\item For square $A,B$, $\operatorname{rank}(AB)\leq\operatorname{rank}(A)$, $\operatorname{rank}(AB)\leq\operatorname{rank}(B)$. Subtract from $n$ gives desired lower bounds.
+\item $\operatorname{nullity}(AB)\leq n-\operatorname{rank}(A)-\operatorname{rank}(B)+k=\operatorname{nullity}(A)+\operatorname{nullity}(B)$ by Theorem \ref{thm:sylvester-rank-inequality} and Corollary \ref{cor:matrix-rank-nullity}(i) for $AB$, $A$, and $B$.
+\item $\operatorname{nullity}(AB)\geq\max(n-\operatorname{rank}(A),n-\operatorname{rank}(B))=\max(\operatorname{nullity}(A),\operatorname{nullity}(B))$ by Theorem \ref{thm:rank-product-and-concatenation-bounds}(i) and Corollary \ref{cor:matrix-rank-nullity}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Nullity is rank loss from the domain.\\
-\hlt{Key Insight}: Use rank-nullity to translate rank bounds into kernel bounds.
+\hlt{Structural Commentary}: Rank--nullity reverses the lower and upper product-rank bounds into nullity bounds.\\
+\hlt{Key Insight}: Subtracting rank from a fixed domain dimension reverses inequalities.
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:rank-triangle-inequality} \hlt{Rank Triangle Inequality}\\
-If $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, then $\abs{\operatorname{rank}(A)-\operatorname{rank}(B)} \leq \operatorname{rank}(A+B) \leq \operatorname{rank}(A)+\operatorname{rank}(B)$.
+\begin{theorem} \label{thm:frobenius-rank-inequality} \hlt{Frobenius Rank Inequality}\\
+Let $A\in\operatorname{Mat}(m,k,\mathbb{F})$, $B\in\operatorname{Mat}(k,p,\mathbb{F})$, and $C\in\operatorname{Mat}(p,n,\mathbb{F})$. Then $\operatorname{rank}(AB)+\operatorname{rank}(BC)\leq\operatorname{rank}(B)+\operatorname{rank}(ABC)$.
 \begin{proof}
-Since $\operatorname{col}(A+B)\subseteq\operatorname{col}(A)+\operatorname{col}(B)$, Theorem \ref{thm:dimension-formula-for-sum} gives $\operatorname{rank}(A+B)\leq\dim(\operatorname{col}(A)+\operatorname{col}(B))\leq\operatorname{rank}(A)+\operatorname{rank}(B)$.
-Applying this upper bound to $A=(A+B)-B$ gives $\operatorname{rank}(A)\leq\operatorname{rank}(A+B)+\operatorname{rank}(B)$, so $\operatorname{rank}(A)-\operatorname{rank}(B)\leq\operatorname{rank}(A+B)$. Applying it to $B=(A+B)-A$ gives $\operatorname{rank}(B)-\operatorname{rank}(A)\leq\operatorname{rank}(A+B)$.\\
-Together these are exactly $\abs{\operatorname{rank}(A)-\operatorname{rank}(B)}\leq\operatorname{rank}(A+B)$.\\
-\hlt{Structural Commentary}: The rank of a sum is controlled by the sum of the two column spaces. The reverse bounds come by solving for either summand.\\
-\hlt{Key Insight}: Rank behaves like a dimension-valued size under addition.
+Set $R\defeq\operatorname{col}(B)$ and $S\defeq\operatorname{col}(BC)$, and define $T_A:\mathbb{F}^k\to\mathbb{F}^m$ by $T_A(\mathbf{x})\defeq A\mathbf{x}$.\\
+The identities $S\subseteq R$, $T_A(R)=\operatorname{col}(AB)$, and $T_A(S)=\operatorname{col}(ABC)$ hold by Proposition \ref{prop:matrix-product-by-columns}.\\
+$(\forall U\in\{R,S\})\,\dim(T_A(U))=\dim(U)-\dim(U\cap\ker(A))$ by Theorem \ref{thm:rank-nullity}(ii) for $T_A|_U$ and the definition of restriction.\\
+The Frobenius inequality holds by $S\cap\ker(A)\subseteq R\cap\ker(A)$, Proposition \ref{prop:dimension-bounds-and-basis-criteria}(i), the preceding identities, and the rank definition.\\
+\hlt{Structural Commentary}: Rank--nullity compares $A$ on the nested column spaces of $BC$ and $B$.\\
+\hlt{Key Insight}: The smaller space cannot meet $\ker(A)$ in more dimensions.
+\end{proof}
+\end{theorem}
+
+Theorem \ref{thm:frobenius-rank-inequality} contains both two-factor bounds as degenerations: a zero outer factor recovers Theorem \ref{thm:rank-product-and-concatenation-bounds}(i), while an identity middle factor recovers Theorem \ref{thm:sylvester-rank-inequality}.
+
+\begin{theorem} \label{thm:rank-triangle-inequality} \hlt{Rank Triangle Inequality}\\
+Let $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{rank}(A+B)\leq\operatorname{rank}(A)+\operatorname{rank}(B)$.
+\item $\abs{\operatorname{rank}(A)-\operatorname{rank}(B)}\leq\operatorname{rank}(A+B)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{col}(A+B)\subseteq\operatorname{col}(A)+\operatorname{col}(B)$ by adding corresponding columns.\\
+$\operatorname{rank}(A+B)\leq\operatorname{rank}(A)+\operatorname{rank}(B)$ by Proposition \ref{prop:dimension-bounds-and-basis-criteria}(i), Theorem \ref{thm:dimension-formula-for-sum}, and the rank definition.
+\item $\abs{\operatorname{rank}(A)-\operatorname{rank}(B)}\leq\operatorname{rank}(A+B)$ by part (i) with $A=(A+B)+(-B)$,
+and $B=(A+B)+(-A)$, $(\forall X\in\{A,B\})\,\operatorname{col}(-X)=\operatorname{col}(X)$, and the rank and absolute-value definitions.
+\end{enumerate}
+\hlt{Structural Commentary}: The column-space sum proves the upper bound; rearranging each summand proves both reverse bounds.\\
+\hlt{Key Insight}: Rewriting either summand converts the upper bound into a lower bound.
 \end{proof}
 \end{theorem}
