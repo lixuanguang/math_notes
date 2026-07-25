@@ -1,75 +1,118 @@
 \subsection{Matrix Equivalence and Rank Normal Forms}
+Throughout this subsection, $m,n\geq1$, and all vector spaces and matrices are over the same fixed field $\mathbb{F}$.
+
 \begin{definition} \label{def:matrix-equivalence} \hlt{Matrix Equivalence}\\
-For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, write $A\sim_{\mathrm{eq}} B$ if $\exists$ $P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$ and $Q\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ s.t. $B=PAQ$.
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, write $A\sim_{\mathrm{eq}}B$ iff $(\exists\,P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times})(\exists\,Q\in\operatorname{Mat}(n,n,\mathbb{F})^{\times})\,B=PAQ$.
 \end{definition}
 
 \begin{proposition} \label{prop:matrix-equivalence-basic-properties} \hlt{Matrix Equivalence and Elementary Operations}\\
-The relation $\sim_{\mathrm{eq}}$ is an equivalence relation on $\operatorname{Mat}(m,n,\mathbb{F})$. Moreover, $A\sim_{\mathrm{eq}}B$ if and only if $B$ can be obtained from $A$ by finitely many elementary row and column operations.
+Let $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The relation $\sim_{\mathrm{eq}}$ is an equivalence relation on $\operatorname{Mat}(m,n,\mathbb{F})$.
+\item $A\sim_{\mathrm{eq}}B$ iff $B$ can be obtained from $A$ by finitely many elementary row and column operations.
+\end{enumerate}
 \begin{proof}
-Reflexivity follows from $A=I_mAI_n$. If $B=PAQ$ with $P,Q$ invertible, then $A=P^{-1}BQ^{-1}$, so symmetry holds. If $B=P_1AQ_1$ and $C=P_2BQ_2$, then $C=(P_2P_1)A(Q_1Q_2)$, and products of invertible matrices are invertible by Corollary \ref{cor:matrix-inverse-product-and-transpose}; hence transitivity holds.\\
-Each elementary row operation is left multiplication by an invertible elementary matrix by Proposition \ref{prop:elementary-matrices-perform-row-operations}. Each elementary column operation is right multiplication by the transpose of an invertible elementary matrix, again by Proposition \ref{prop:elementary-matrices-perform-row-operations} and Corollary \ref{cor:matrix-inverse-product-and-transpose}. Thus any finite sequence of elementary row and column operations has the form $B=PAQ$ with $P,Q$ invertible, so $A\sim_{\mathrm{eq}}B$.\\
-Conversely, suppose $A\sim_{\mathrm{eq}}B$, so $B=PAQ$ with $P,Q$ invertible. Lemma \ref{lem:invertible-matrices-row-reduce-to-identity} gives products of elementary matrices expressing $P$ and $Q$ as products of elementary factors. Left multiplication by the factors of $P$ is a sequence of elementary row operations, and right multiplication by the factors of $Q$ is a sequence of elementary column operations. Hence $B$ can be obtained from $A$ by finitely many elementary row and column operations.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] The relation is reflexive by Definition \ref{def:matrix-equivalence}, with $A=I_mAI_n$.\\
+If $B=PAQ$ with $P,Q$ invertible, then $A=P^{-1}BQ^{-1}$, so symmetry holds by Definition \ref{def:matrix-equivalence}.\\
+If $B=P_1AQ_1$ and $C=P_2BQ_2$, then $C=(P_2P_1)A(Q_1Q_2)$, and both products are invertible by Corollary \ref{cor:matrix-inverse-product-and-transpose}(i).\\
+Hence transitivity holds by Definition \ref{def:matrix-equivalence}.
+\item[$(ii)$] ($\Rightarrow$) Suppose $A\sim_{\mathrm{eq}}B$. Choose $P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$ and $Q\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ satisfying $B=PAQ$ by Definition \ref{def:matrix-equivalence}.\\
+The matrix $Q^t$ is invertible by Corollary \ref{cor:matrix-inverse-product-and-transpose}(ii). The matrices $P$ and $Q^t$ are products of elementary matrices by Lemma \ref{lem:invertible-matrices-row-reduce-to-identity}(ii) and Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii). Hence left multiplication by the factors of $P$ performs elementary row operations, while right multiplication by the transposes of the factors of $Q^t$ performs elementary column operations by Proposition \ref{prop:elementary-matrices-perform-row-operations}(i),(iii).\\
+Thus these operations transform $A$ into $PAQ=B$.
+\item[$(ii)$] ($\Leftarrow$) Suppose $B$ is obtained from $A$ by finitely many elementary row and column operations.\\
+Each elementary row operation is left multiplication by an invertible elementary matrix by Proposition \ref{prop:elementary-matrices-perform-row-operations}(i),(ii).\\
+Each elementary column operation is right multiplication by the transpose of an invertible elementary matrix by Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii),(iii) and Corollary \ref{cor:matrix-inverse-product-and-transpose}(ii). Associativity collects the left factors into $P$ and the right factors into $Q$, so the operation sequence has the form $B=PAQ$ with $P,Q$ invertible by Corollary \ref{cor:matrix-inverse-product-and-transpose}(i). Hence $A\sim_{\mathrm{eq}}B$ by Definition \ref{def:matrix-equivalence}.
+\end{enumerate}
+\hlt{Structural Commentary}: Part (i) uses invertible-factor algebra; part (ii) translates elementary operations into factors.\\
+\hlt{Key Insight}: Two-sided factors are exactly row and column operations.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:matrix-equivalence-same-linear-map} \hlt{Equivalent Matrices Represent the Same Linear Map}\\
 Let $\dim\mathcal{V}=n$, $\dim\mathcal{W}=m$, and $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
-Then $A\sim_{\mathrm{eq}}B$ $\Longleftrightarrow$ $\exists\,T\in\LL(\mathcal{V},\mathcal{W})$ with $A=[T]_{\gamma\leftarrow\beta},\ B=[T]_{\gamma'\leftarrow\beta'}$ for some bases $\beta,\beta'$ of $\mathcal{V}$ and $\gamma,\gamma'$ of $\mathcal{W}$.
+Then $A\sim_{\mathrm{eq}}B$ iff some $T\in\LL(\mathcal{V},\mathcal{W})$ and bases $\beta,\beta'$ of $\mathcal{V}$ and $\gamma,\gamma'$ of $\mathcal{W}$ satisfy $A=[T]_{\gamma\leftarrow\beta}$ and $B=[T]_{\gamma'\leftarrow\beta'}$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $B=PAQ$ with $P,Q$ invertible. Choose bases $\beta,\gamma$ and define $T\in\LL(\mathcal{V},\mathcal{W})$ by $[T]_{\gamma\leftarrow\beta}=A$.\\
-By Theorem \ref{thm:change-of-basis-matrices}, choose basis $\gamma'$ with $P=C_{\gamma'\leftarrow\gamma}$, and basis $\beta'$ with $Q^{-1}=C_{\beta'\leftarrow\beta}$. Then $Q=C_{\beta\leftarrow\beta'}$.\\
-Then Theorem \ref{thm:two-sided-change-of-basis-for-linear-maps} gives $[T]_{\gamma'\leftarrow\beta'}=PAQ=B$.
-\item[$(\Leftarrow)$] If $A=[T]_{\gamma\leftarrow\beta}$ and $B=[T]_{\gamma'\leftarrow\beta'}$, then $B=C_{\gamma'\leftarrow\gamma}AC_{\beta\leftarrow\beta'}$, so $A\sim_{\mathrm{eq}}B$.
+\item[$(\Rightarrow)$] Suppose $A\sim_{\mathrm{eq}}B$. Choose $P\in\operatorname{Mat}(m,m,\mathbb{F})^{\times}$ and $Q\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ satisfying $B=PAQ$ by Definition \ref{def:matrix-equivalence}.\\
+Choose bases $\beta,\gamma$ by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}, and choose $T\in\LL(\mathcal{V},\mathcal{W})$ satisfying $[T]_{\gamma\leftarrow\beta}=A$ by Theorem \ref{thm:linear-maps-and-matrices-same-data}(i).\\
+Choose bases $\gamma'$ and $\beta'$ satisfying $P=C_{\gamma'\leftarrow\gamma}$ and $Q^{-1}=C_{\beta'\leftarrow\beta}$ by Theorem \ref{thm:change-of-basis-matrices}(ii).\\
+Then $Q=C_{\beta\leftarrow\beta'}$ by Theorem \ref{thm:change-of-basis-matrices}(i), and $[T]_{\gamma'\leftarrow\beta'}=PAQ=B$ by Theorem \ref{thm:two-sided-change-of-basis-for-linear-maps}.
+\item[$(\Leftarrow)$] Choose $T\in\LL(\mathcal{V},\mathcal{W})$ and bases $\beta,\beta'$ of $\mathcal{V}$ and $\gamma,\gamma'$ of $\mathcal{W}$ satisfying $A=[T]_{\gamma\leftarrow\beta}$ and $B=[T]_{\gamma'\leftarrow\beta'}$ by the hypothesis.\\
+Then $B=C_{\gamma'\leftarrow\gamma}AC_{\beta\leftarrow\beta'}$ by Theorem \ref{thm:two-sided-change-of-basis-for-linear-maps}, so $A\sim_{\mathrm{eq}}B$ by Definition \ref{def:matrix-equivalence}.
 \end{enumerate}
-\hlt{Structural Commentary}: Equivalence is two-sided basis change.\\
-\hlt{Key Insight}: Same map; different coordinates.
+\hlt{Structural Commentary}: One direction realizes invertible factors as basis changes; the converse reads coordinate transport.\\
+\hlt{Key Insight}: Domain and codomain coordinates account for both factors.
 \end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:rank-classifies-matrix-equivalence} \hlt{Rank Classifies Matrix Equivalence}\\
-For $0\leq r\leq\min(m,n)$, set $J_r^{m,n}\defeq
-\begin{bmatrix}
-I_r & 0\\
-0 & 0
-\end{bmatrix}
-\in\operatorname{Mat}(m,n,\mathbb{F})$.\\
-For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$, $A\sim_{\mathrm{eq}}J_{\operatorname{rank}(A)}^{m,n}$ and $A\sim_{\mathrm{eq}}B\Longleftrightarrow \operatorname{rank}(A)=\operatorname{rank}(B)$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{definition} \label{def:matrix-rank-normal-form} \hlt{Matrix Rank Normal Form}\\
+For $0\leq r\leq\min(m,n)$, define $J_r^{m,n}\in\operatorname{Mat}(m,n,\mathbb{F})$ as follows:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $B=PAQ$ with $P,Q$ invertible, then $\operatorname{rank}(B)=\operatorname{rank}(A)$ by Theorem \ref{thm:full-rank-products-preserve-rank}.
-\item[$(\Leftarrow)$] For any $X$ with $\operatorname{rank}(X)=r$, let $T_X:\mathbb{F}^n\to\mathbb{F}^m$ be $T_X(\mathbf{x})=X\mathbf{x}$.\\
-Choose $\mathcal{M}_X$ with $\mathbb{F}^n=\ker(T_X)\oplus\mathcal{M}_X$; then $T_X|_{\mathcal{M}_X}:\mathcal{M}_X\to\operatorname{range}(T_X)$ is an isomorphism.\\
-Choose a basis $(\mathbf{u}_1,\ldots,\mathbf{u}_r)$ of $\mathcal{M}_X$, extend it by a basis of $\ker(T_X)$ to $\beta_X$, and choose $\gamma_X$ beginning with $T_X\mathbf{u}_1,\ldots,T_X\mathbf{u}_r$. Then $[T_X]_{\gamma_X\leftarrow\beta_X}=J_r^{m,n}$, so $X\sim_{\mathrm{eq}}J_r^{m,n}$.\\
-If $\operatorname{rank}(A)=\operatorname{rank}(B)=r$, then $A\sim_{\mathrm{eq}}J_r^{m,n}$ and $B\sim_{\mathrm{eq}}J_r^{m,n}$. By Proposition \ref{prop:matrix-equivalence-basic-properties}, symmetry gives $J_r^{m,n}\sim_{\mathrm{eq}}B$, and transitivity gives $A\sim_{\mathrm{eq}}B$.
+\item $J_0^{m,n}\defeq0$.
+\item If $r\geq1$, then $J_r^{m,n}\defeq\left(\begin{smallmatrix}I_r&0_{r\times(n-r)}\\0_{(m-r)\times r}&0_{(m-r)\times(n-r)}\end{smallmatrix}\right)$.
 \end{enumerate}
-\hlt{Structural Commentary}: Rank is the invariant of two-sided equivalence.\\
-\hlt{Key Insight}: Adapt bases to kernel and range.
+\end{definition}
+
+\begin{theorem} \label{thm:rank-classifies-matrix-equivalence} \hlt{Rank Classifies Matrix Equivalence}\\
+For $A,B\in\operatorname{Mat}(m,n,\mathbb{F})$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\sim_{\mathrm{eq}}J_{\operatorname{rank}(A)}^{m,n}$.
+\item $A\sim_{\mathrm{eq}}B$ iff $\operatorname{rank}(A)=\operatorname{rank}(B)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Set $r\defeq\operatorname{rank}(A)$ and $T_A(\mathbf{x})\defeq A\mathbf{x}$ for $\mathbf{x}\in\mathbb{F}^n$. Then $T_A\in\LL(\mathbb{F}^n,\mathbb{F}^m)$ by Proposition \ref{prop:matrix-induced-map-linear}.\\
+Choose $\mathcal{M}_A\leq\mathbb{F}^n$ satisfying $\mathbb{F}^n=\ker(T_A)\oplus\mathcal{M}_A$ by Proposition \ref{prop:complements-exist-finite-dimensions}.\\
+The restriction $T_A|_{\mathcal{M}_A}:\mathcal{M}_A\to\operatorname{range}(T_A)$ is an isomorphism by Proposition \ref{prop:rank-nullity-complement-view}(i). The equality $\operatorname{range}(T_A)=\operatorname{col}(A)$ holds by Proposition \ref{prop:matrix-vector-product-column-combination} and Definition \ref{def:column-space-matrix-rank-nullity}; hence $\dim(\mathcal{M}_A)=r$ by Theorem \ref{thm:finite-dimensional-isomorphic-iff-same-dimension} and Definition \ref{def:column-space-matrix-rank-nullity}.\\
+Choose a basis $\mathbf{u}\defeq(\mathbf{u}_1,\ldots,\mathbf{u}_r)$ of $\mathcal{M}_A$ and a basis $\kappa$ of $\ker(T_A)$ by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}, where $\mathbf{u}$ is empty if $r=0$.\\
+The list $(T_A\mathbf{u}_1,\ldots,T_A\mathbf{u}_r)$ is a basis of $\operatorname{range}(T_A)$ by Proposition \ref{prop:isomorphisms-preserve-bases}; extend it to a basis $\gamma_A$ of $\mathbb{F}^m$ by Theorem \ref{thm:extending-independent-lists}.\\
+Equality $\mathbb{F}^n=\mathcal{M}_A\oplus\ker(T_A)$ holds by Proposition \ref{prop:uniqueness-direct-sum-two-subspaces}. Hence concatenation $\beta_A\defeq(\mathbf{u},\kappa)$ is basis of $\mathbb{F}^n$ by Theorem \ref{thm:direct-sum-iff-dimensions-add}(ii).\\
+The first $r$ basis vectors map to the first $r$ vectors of $\gamma_A$, while the remaining basis vectors lie in $\ker(T_A)$.\\
+Thus $[T_A]_{\gamma_A\leftarrow\beta_A}=J_r^{m,n}$ by Definition \ref{def:matrix-representation-of-linear-map} and Definition \ref{def:matrix-rank-normal-form}.\\
+The standard-basis matrix of $T_A$ is $A$ by Definition \ref{def:linear-map-induced-by-matrix} and Definition \ref{def:matrix-representation-of-linear-map}. Therefore $A\sim_{\mathrm{eq}}J_r^{m,n}$ by Theorem \ref{thm:matrix-equivalence-same-linear-map}.
+\item[$(ii)$] ($\Rightarrow$) If $A\sim_{\mathrm{eq}}B$, then $B=PAQ$ for invertible $P,Q$ by Definition \ref{def:matrix-equivalence}, and $\operatorname{rank}(B)=\operatorname{rank}(A)$ by Theorem \ref{thm:full-rank-products-preserve-rank}(ii).
+\item[$(ii)$] ($\Leftarrow$) If $\operatorname{rank}(A)=\operatorname{rank}(B)=r$, then $A\sim_{\mathrm{eq}}J_r^{m,n}\sim_{\mathrm{eq}}B$ and $A\sim_{\mathrm{eq}}B$ by part (i) and Proposition \ref{prop:matrix-equivalence-basic-properties}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: Complement bases construct the normal form; rank preservation proves classification.\\
+\hlt{Key Insight}: Kernel and range dimensions determine the two-sided orbit.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:linear-map-rank-normal-form} \hlt{Rank Normal Form for Linear Maps}\\
-Let $T\in\LL(\mathcal{V},\mathcal{W})$, $\dim\mathcal{V}=n$, $\dim\mathcal{W}=m$, and $\operatorname{rank}(T)=r$. Then $\exists$ bases $\beta,\gamma$ with $[T]_{\gamma\leftarrow\beta}=J_r^{m,n}$.
+Let $T\in\LL(\mathcal{V},\mathcal{W})$, $\dim\mathcal{V}=n$, $\dim\mathcal{W}=m$, and $\operatorname{rank}(T)=r$. Then some bases $\beta$ of $\mathcal{V}$ and $\gamma$ of $\mathcal{W}$ satisfy $[T]_{\gamma\leftarrow\beta}=J_r^{m,n}$.
 \begin{proof}
-For initial bases $\beta_0,\gamma_0$, let $A=[T]_{\gamma_0\leftarrow\beta_0}$.\\
-By Theorem \ref{thm:rank-classifies-matrix-equivalence}, $A\sim_{\mathrm{eq}}J_r^{m,n}$; Theorem \ref{thm:matrix-equivalence-same-linear-map} gives bases $\beta,\gamma$ with $[T]_{\gamma\leftarrow\beta}=J_r^{m,n}$.\\
-\hlt{Structural Commentary}: Rank gives the two-basis normal form.\\
-\hlt{Key Insight}: Rank normalizes the map.
+Choose initial bases $\beta_0,\gamma_0$ by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}, and set $A\defeq[T]_{\gamma_0\leftarrow\beta_0}$.\\
+Then $\{[\mathbf{y}]_{\gamma_0}:\mathbf{y}\in\operatorname{range}(T)\}=\{A\mathbf{x}:\mathbf{x}\in\mathbb{F}^n\}=\operatorname{col}(A)$ by Proposition \ref{prop:matrix-representation-action}, \ref{prop:coordinate-map-isomorphism}(iii), \ref{prop:matrix-vector-product-column-combination}, and Definition \ref{def:column-space-matrix-rank-nullity}.\\
+The coordinate map is linear and injective by Proposition \ref{prop:coordinate-map-isomorphism}(i),(ii), so its restriction is an isomorphism from $\operatorname{range}(T)$ onto $\operatorname{col}(A)$.\\
+Hence $\operatorname{rank}(A)=\operatorname{rank}(T)=r$ by Theorem \ref{thm:finite-dimensional-isomorphic-iff-same-dimension} and the definitions of matrix and operator rank.\\
+Thus $A\sim_{\mathrm{eq}}J_r^{m,n}$ by Theorem \ref{thm:rank-classifies-matrix-equivalence}(i); choose invertible $P,Q$ satisfying $J_r^{m,n}=PAQ$ by Definition \ref{def:matrix-equivalence}.\\
+Choose bases $\gamma,\beta$ satisfying $P=C_{\gamma\leftarrow\gamma_0}$ and $Q^{-1}=C_{\beta\leftarrow\beta_0}$ by Theorem \ref{thm:change-of-basis-matrices}(ii).\\
+Then $Q=C_{\beta_0\leftarrow\beta}$ by Theorem \ref{thm:change-of-basis-matrices}(i), and $[T]_{\gamma\leftarrow\beta}=J_r^{m,n}$ by Theorem \ref{thm:two-sided-change-of-basis-for-linear-maps}.\\
+\hlt{Structural Commentary}: Matrix normal form supplies factors that are realized as coordinate changes.\\
+\hlt{Key Insight}: Rank fixes the canonical coordinate matrix.
 \end{proof}
 \end{corollary}
 
 \begin{corollary} \label{cor:linear-map-equivalence-by-rank} \hlt{Linear Maps Classified by Rank}\\
-For $S,T\in\LL(\mathcal{V},\mathcal{W})$, write $S\sim_{\mathrm{bc}}T$ if $\exists$ bases $\beta_S,\beta_T$ of $\mathcal{V}$ and $\gamma_S,\gamma_T$ of $\mathcal{W}$ such that $[S]_{\gamma_S\leftarrow\beta_S}=[T]_{\gamma_T\leftarrow\beta_T}$.\\
-Then $S\sim_{\mathrm{bc}}T$ $\Longleftrightarrow$ $\operatorname{rank}(S)=\operatorname{rank}(T)$
+Let $\dim\mathcal{V}=n$, $\dim\mathcal{W}=m$. For $S,T\in\LL(\mathcal{V},\mathcal{W})$,  $S\sim_{\mathrm{bc}}T$ iff some bases $\beta_S,\beta_T$ of $\mathcal{V}$ and $\gamma_S,\gamma_T$ of $\mathcal{W}$ satisfy $[S]_{\gamma_S\leftarrow\beta_S}=[T]_{\gamma_T\leftarrow\beta_T}$.\\
+Then $S\sim_{\mathrm{bc}}T$ iff $\operatorname{rank}(S)=\operatorname{rank}(T)$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $[S]_{\gamma_S\leftarrow\beta_S}=[T]_{\gamma_T\leftarrow\beta_T}$, then the two maps have the same matrix rank, hence the same rank.
-\item[$(\Leftarrow)$] If $\operatorname{rank}(S)=\operatorname{rank}(T)=r$, Corollary \ref{cor:linear-map-rank-normal-form} gives bases with $[S]_{\gamma_S\leftarrow\beta_S}=J_r^{m,n}=[T]_{\gamma_T\leftarrow\beta_T}$.
+\item[$(\Rightarrow)$] Suppose $S\sim_{\mathrm{bc}}T$. Choose bases $\beta_S,\beta_T$ of $\mathcal{V}$ and $\gamma_S,\gamma_T$ of $\mathcal{W}$ satisfying $[S]_{\gamma_S\leftarrow\beta_S}=[T]_{\gamma_T\leftarrow\beta_T}$ by the definition of $\sim_{\mathrm{bc}}$, and set $A\defeq[S]_{\gamma_S\leftarrow\beta_S}$. For $R\in\{S,T\}$, interpret $\beta_R$ and $\gamma_R$ accordingly.\\
+Then $\{[\mathbf{y}]_{\gamma_R}:\mathbf{y}\in\operatorname{range}(R)\}=\{A\mathbf{x}:\mathbf{x}\in\mathbb{F}^n\}=\operatorname{col}(A)$ by Proposition \ref{prop:matrix-representation-action}, \ref{prop:coordinate-map-isomorphism}(iii), \ref{prop:matrix-vector-product-column-combination}, and Definition \ref{def:column-space-matrix-rank-nullity}.\\
+The restricted coordinate map is an isomorphism by Proposition \ref{prop:coordinate-map-isomorphism}(i),(ii).\\
+Thus $(\forall R\in\{S,T\})\,\operatorname{rank}(R)=\dim(\operatorname{col}(A))$ by Theorem \ref{thm:finite-dimensional-isomorphic-iff-same-dimension} and Definition \ref{def:rank-and-nullity-linear-map}, so $\operatorname{rank}(S)=\operatorname{rank}(T)$.
+\item[$(\Leftarrow)$] If $\operatorname{rank}(S)=\operatorname{rank}(T)=r$, choose bases satisfying $[S]_{\gamma_S\leftarrow\beta_S}=J_r^{m,n}=[T]_{\gamma_T\leftarrow\beta_T}$ by Corollary \ref{cor:linear-map-rank-normal-form}.
 \end{enumerate}
-\hlt{Structural Commentary}: Rank is the invariant of basis-change equivalence.\\
-\hlt{Key Insight}: Same rank means same normal form.
+\hlt{Structural Commentary}: Both directions compare operator ranks with the shared rank normal form.\\
+\hlt{Key Insight}: Equal ranks select the same canonical matrix.
 \end{proof}
 \end{corollary}

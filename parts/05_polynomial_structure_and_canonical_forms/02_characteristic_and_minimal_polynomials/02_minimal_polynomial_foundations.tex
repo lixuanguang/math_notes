@@ -1,37 +1,71 @@
 \subsection{Minimal Polynomial Foundations}
 
-\begin{definition} \label{def:monic-polynomial} \hlt{Monic Polynomial}\\
-A nonzero polynomial is \hlt{monic} if its highest-degree coefficient is $1$.
-\end{definition}
-
 \begin{theorem} \label{thm:operator-minimal-polynomial-existence} \hlt{Existence of the Minimal Polynomial}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then $T$ has a unique least-degree monic annihilator.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $T$ has a monic annihilator of positive least degree;
+\item the annihilator in (i) is unique.
+\end{enumerate}
 \begin{proof}
-Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials} gives a nonzero annihilator; scaling makes it monic, so a least-degree monic annihilator exists. If $p$ and $q$ are two of them, then $(p-q)(T)=0$ and $\deg(p-q)<\deg p$.\\
-If $p\neq q$, scaling $p-q$ gives a smaller monic annihilator, impossible. Hence $p=q$.\\
-\hlt{Structural Commentary}: Existence comes from finite-dimensional dependence; uniqueness from minimality.\\
-\hlt{Key Insight}: Two least monic annihilators cannot differ.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By Proposition \ref{prop:finite-dimensional-operators-have-annihilating-polynomials}, choose a nonconstant annihilator $h$ and replace it by its monic normalization.\\
+Let $\mathcal{M}_T$ be the monic annihilators of $T$ and set $\mathcal{D}_T\defeq\{\deg p:p\in\mathcal{M}_T\}$; then $\varnothing\neq\mathcal{D}_T\subseteq\mathbb{N}$.\\
+By well-ordering, set $d\defeq\min\mathcal{D}_T$ and choose a monic annihilator $p$ with $\deg p=d$.\\
+A nonzero constant $c$ cannot annihilate $T$ because $c(T)=cI_{\mathcal{V}}\neq0$ on $\mathcal{V}\neq\{\mathbf{0}\}$. Thus $d\geq1$.
+\item Let $p$ and $q$ be monic annihilators of degree $d$. If $p\neq q$, then $(p-q)(T)=p(T)-q(T)=0$ by Definition \ref{def:polynomial-applied-to-operator}.\\
+Their leading terms cancel, so $\deg(p-q)<d$. Normalizing the nonzero polynomial $p-q$ therefore produces a monic annihilator of degree less than $d$, contrary to the definition of $d$. Hence $p=q$.
+\end{enumerate}
+\hlt{Structural Commentary}: Well-ordering selects a least normalized annihilator; leading-term cancellation forces uniqueness.\\
+\hlt{Key Insight}: Two minimal monic annihilators would differ by a smaller annihilator.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:operator-minimal-polynomial} \hlt{Minimal Polynomial of an Operator}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} of $T$, denoted $\mu_T$, is the unique monic polynomial of smallest degree such that $\mu_T(T)=0$.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. The \hlt{minimal polynomial} $\mu_T$ is the unique monic polynomial of least degree satisfying $\mu_T(T)=0$; it exists by Theorem \ref{thm:operator-minimal-polynomial-existence}.
 \end{definition}
 
 \begin{definition} \label{def:minimal-polynomial-matrix} \hlt{Minimal Polynomial of a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. The \hlt{minimal polynomial} of $A$, denoted $\mu_A$, is the unique monic polynomial of smallest positive degree such that $\mu_A(A)=0$.
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and let $T_A\in\LL(\mathbb{F}^n)$ be induced by $A$ as in Definition \ref{def:linear-map-induced-by-matrix}. The \hlt{minimal polynomial} of $A$ is $\mu_A\defeq\mu_{T_A}$.\\
+For $j\in\mathbb{Z}_{\geq0}$, set $P_j\defeq((\forall\,\mathbf{v}\in\mathbb{F}^n)\,T_A^j\mathbf{v}=A^j\mathbf{v})$. Then $P_0$ holds by Definitions \ref{def:operator-powers} and \ref{def:linear-map-induced-by-matrix}.\\
+If $P_j$ holds, then $(\forall\,\mathbf{v}\in\mathbb{F}^n)\,T_A^{j+1}\mathbf{v}=T_A(A^j\mathbf{v})=A^{j+1}\mathbf{v}$ by Definition \ref{def:linear-map-induced-by-matrix}, so $P_{j+1}$ holds. Hence $(\forall\,j\in\mathbb{Z}_{\geq0})\,P_j$ by Theorem \ref{thm:mathematical-induction}.\\
+If $p(z)=\sum\limits_{j=0}^{d}c_jz^j\in\mathbb{F}[z]$, then $(\forall\,\mathbf{v}\in\mathbb{F}^n)\,p(T_A)\mathbf{v}=\sum\limits_{j=0}^{d}c_jA^j\mathbf{v}=p(A)\mathbf{v}$ by Definitions \ref{def:polynomial-applied-to-operator} and \ref{def:polynomial-evaluation-on-square-matrix}.\\
+Thus $\mu_A$ is equivalently the unique monic polynomial of least positive degree satisfying $\mu_A(A)=0$.
 \end{definition}
 
 \begin{theorem} \label{thm:operator-annihilator-iff-multiple-minimal-polynomial} \hlt{Annihilators Are Multiples of $\mu_T$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim, $T\in\LL(\mathcal{V})$, and $f\in\mathbb{F}[z]$ be nonzero. Then $f(T)=0$ if and only if $\mu_T$ divides $f$.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}$, let $T\in\LL(\mathcal{V})$, and let $f\in\mathbb{F}[z]$ be nonzero. Then $f(T)=0$ if and only if $\mu_T$ divides $f$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $f(T)=0$. Divide $f=s\mu_T+r$, where $r=0$ or $\deg r<\deg\mu_T$.\\
-Then $r(T)=0$, so minimality forces $r=0$. Hence $\mu_T$ divides $f$.
-\item[$(\Leftarrow)$] If $f=\mu_Ts$, then $f(T)=\mu_T(T)s(T)=0$.
+\item[$(\Rightarrow)$] Suppose $f(T)=0$ and set $d\defeq\deg\mu_T$. Starting from $r_0\defeq f$ and $s_0\defeq0$, suppose $\deg r_k\geq d$, set $e_k\defeq\deg r_k-d$, and let $a_k\in\mathbb{F}^{\times}$ be the leading coefficient of $r_k$. Set $r_{k+1}\defeq r_k-a_kz^{e_k}\mu_T$ and $s_{k+1}\defeq s_k+a_kz^{e_k}$.\\
+The identity $f=s_k\mu_T+r_k$ holds for $k=0$ and is preserved by the recurrence.\\
+Monicity of $\mu_T$ implies $r_{k+1}=0$ or $\deg r_{k+1}<\deg r_k$. Degree descent terminates with $f=s\mu_T+r$, where $r=0$ or $\deg r<d$.\\
+By Definition \ref{def:polynomial-applied-to-operator} and Proposition \ref{prop:operator-polynomial-products}(i), $r(T)=f(T)-s(T)\mu_T(T)=0$. If $r\neq0$, its monic normalization is an annihilator of degree less than $d$, which is impossible by Definition \ref{def:operator-minimal-polynomial}. Thus $r=0$ and $\mu_T$ divides $f$.
+\item[$(\Leftarrow)$] If $f=\mu_Ts$, then $f(T)=\mu_T(T)s(T)=0$ by Proposition \ref{prop:operator-polynomial-products}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Polynomial division reduces every annihilator to its remainder modulo $\mu_T$.\\
-\hlt{Key Insight}: Minimality forces that remainder to be zero.
+\hlt{Structural Commentary}: Leading-term cancellation constructs a remainder; minimality eliminates every nonzero remainder.\\
+\hlt{Key Insight}: A nonzero remainder would normalize below $\deg\mu_T$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:similarity-preserves-minimal-polynomial} \hlt{Similarity Preserves the Minimal Polynomial}\\
+Let $n\geq1$ and let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be similar. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_A=p_B$;
+\item $\mu_A=\mu_B$.
+\end{enumerate}
+\begin{proof}
+Choose $S\in\operatorname{Mat}(n,n,\mathbb{F})^{\times}$ satisfying $B=SAS^{-1}$ by Definition \ref{def:similar-matrices}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_A=p_B$ by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i).
+\item Set $P_j\defeq(B^j=SA^jS^{-1})$ for $j\in\mathbb{Z}_{\geq0}$. The identity $P_0$ holds because $B^0=I_n=SI_nS^{-1}=SA^0S^{-1}$. If $P_j$ holds, then $B^{j+1}=B^jB=SA^jS^{-1}SAS^{-1}=SA^{j+1}S^{-1}$, so $P_{j+1}$ holds. Hence $(\forall\,j\in\mathbb{Z}_{\geq0})\,P_j$ by Theorem \ref{thm:mathematical-induction}.\\
+By Definition \ref{def:polynomial-evaluation-on-square-matrix}, $(\forall\,f\in\mathbb{F}[z])\,f(B)=Sf(A)S^{-1}$. Therefore $f(B)=0\Longleftrightarrow f(A)=0$, so $A$ and $B$ have the same monic least-degree annihilator by Definition \ref{def:minimal-polynomial-matrix}.
+\end{enumerate}
+\hlt{Structural Commentary}: Power induction transports characteristic and minimal polynomial data across one conjugation.\\
+\hlt{Key Insight}: Conjugation preserves every polynomial equation.
 \end{proof}
 \end{theorem}

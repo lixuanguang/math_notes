@@ -1,60 +1,52 @@
 \subsection{Trace and Determinant}
 
-% **Role:** quantitative matrix behavior and computation.
-%
-% Trace, determinant, rank, spectral radius, PSD/PD matrices, idempotents, nilpotents.
-
-Matrix classes package operator structure in coordinates. Trace, determinant, rank, positivity, idempotents, nilpotents, spectral radius, and structured products give computable invariants.
-
-\begin{definition} \label{def:matrix-trace-and-determinant} \hlt{Trace and Determinant of a Matrix}\\
-For $A=[A_{j,k}]\in\operatorname{Mat}(n,n,\mathbb{F})$, the \hlt{trace} of $A$ is $\operatorname{tr}(A)\defeq A_{1,1}+\cdots+A_{n,n}$.\\
-The \hlt{determinant} of $A$ is $\det A \defeq \sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.
-\end{definition}
-
-\begin{definition} \label{def:gram-determinant} \hlt{Gram Determinant}\\
-For vectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in an inner-product space, define their \hlt{Gram determinant} by $\operatorname{GramDet}(\mathbf{u}_1,\ldots,\mathbf{u}_n) \defeq \det \operatorname{Gram}(\mathbf{u}_1,\ldots,\mathbf{u}_n)$.
-\end{definition}
-
-\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
-On $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product from Example \ref{ex:function-and-matrix-inner-products}, the Riesz vector of the trace functional $A\mapsto\operatorname{tr}(A)$ is $I_n$, since $\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
-\end{example}
-
 \begin{proposition} \label{prop:trace-arithmetic} \hlt{Trace Arithmetic}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ and $r\in\mathbb{F}$. Then
+Let $n\in\mathbb{Z}_{>0}$, $A=[a_{jk}],B=[b_{jk}]\in\operatorname{Mat}(n,n,\mathbb{F})$, and $r\in\mathbb{F}$. Then
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\operatorname{tr}(rA)=r\operatorname{tr}(A)$;
 \item $\operatorname{tr}(A+B)=\operatorname{tr}(A)+\operatorname{tr}(B)$.
 \end{enumerate}
 \begin{proof}
-We prove the two identities separately.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Summing the diagonal entries of $rA$ gives $\operatorname{tr}(rA)=\sum\limits_{j=1}^{n}ra_{jj}=r\sum\limits_{j=1}^{n}a_{jj}=r\operatorname{tr}(A)$.
-\item Summing the diagonal entries of $A+B$ gives $\operatorname{tr}(A+B)=\sum\limits_{j=1}^{n}(a_{jj}+b_{jj}) =\sum\limits_{j=1}^{n}a_{jj}+\sum_{j=1}^{n}b_{jj} =\operatorname{tr}(A)+\operatorname{tr}(B)$.
+\item $\operatorname{tr}(rA)=\sum\limits_{j=1}^{n}ra_{jj}=r\sum\limits_{j=1}^{n}a_{jj}=r\operatorname{tr}(A)$ by Definition \ref{def:matrix-trace-and-determinant}.
+\item $\operatorname{tr}(A+B)=\sum\limits_{j=1}^{n}(a_{jj}+b_{jj})=\sum\limits_{j=1}^{n}a_{jj}+\sum\limits_{j=1}^{n}b_{jj}=\operatorname{tr}(A)+\operatorname{tr}(B)$ by Definition \ref{def:matrix-trace-and-determinant}.
 \end{enumerate}
-\hlt{Structural Commentary}: Trace is linear because it is the sum of diagonal entries.\\
-\hlt{Key Insight}: Scalar multiplication and addition pass through the diagonal sum.
+\hlt{Structural Commentary}: Each identity reduces trace to a finite diagonal sum.\\
+\hlt{Key Insight}: Finite summation commutes with scalar multiplication and addition.
 \end{proof}
 \end{proposition}
 
+\begin{example} \label{ex:frobenius-trace-riesz-vector} \hlt{Trace Functional and the Frobenius Inner Product}\\
+Let $n\in\mathbb{Z}_{>0}$ and $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and equip $\operatorname{Mat}(n,n,\mathbb{F})$ with the Frobenius inner product from Example \ref{ex:function-and-matrix-inner-products}.\\
+Map $A\mapsto\operatorname{tr}(A)$ is a linear functional by Proposition \ref{prop:trace-arithmetic}. Riesz vector is $I_n$ as $(\forall\,A=[a_{jk}]\in\operatorname{Mat}(n,n,\mathbb{F}))\,\innerprod[F]{A,I_n}=\sum\limits_{j=1}^{n}a_{jj}=\operatorname{tr}(A)$.
+\end{example}
+
 \begin{proposition} \label{prop:trace-cyclicity-two-factors} \hlt{Trace Is Cyclic for Two Factors}\\
-If $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $B\in\operatorname{Mat}(n,m,\mathbb{F})$, then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.
+Let $m,n\in\mathbb{Z}_{>0}$, $A=[a_{jk}]\in\operatorname{Mat}(m,n,\mathbb{F})$, and $B=[b_{kj}]\in\operatorname{Mat}(n,m,\mathbb{F})$. Then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.
 \begin{proof}
-Expand both traces by entries: $\operatorname{tr}(AB) =\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{n}A_{j,k}B_{k,j} =\sum\limits_{k=1}^{n}\sum\limits_{j=1}^{m}B_{k,j}A_{j,k} =\operatorname{tr}(BA)$.\\
-\hlt{Structural Commentary}: Cyclicity is just reindexing the same double sum.\\
-\hlt{Key Insight}: The two double sums contain exactly the same scalar terms.
+$\operatorname{tr}(AB)=\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{n}a_{jk}b_{kj}=\sum\limits_{k=1}^{n}\sum\limits_{j=1}^{m}b_{kj}a_{jk}=\operatorname{tr}(BA)$ by commutativity of $\mathbb{F}$ and interchange of finite sums.\\
+\hlt{Structural Commentary}: Entry expansion identifies both traces after interchanging the finite indices.\\
+\hlt{Key Insight}: Both traces sum the scalars $a_{jk}b_{kj}$.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:trace-cyclic-products} \hlt{Cyclic Products}\\
-Let $m\geq 2$, $A_j\in\operatorname{Mat}(n_j,n_{j+1},\mathbb{F})$ for $j=1,\ldots,m$, $n_{m+1}=n_1$, $P_{p,q}\defeq A_pA_{p+1}\cdots A_q$.\\
-Then $\operatorname{tr}(P_{1,m})=\operatorname{tr}(A_mP_{1,m-1})$. Consequently, for $A,B,C\in\operatorname{Mat}(n,n,\mathbb{F})$, $\operatorname{tr}(ABC)=\operatorname{tr}(BCA)=\operatorname{tr}(CAB)$.
+Let $m\in\mathbb{Z}_{\geq2}$ and $n_1,\ldots,n_m\in\mathbb{Z}_{>0}$, and set $n_{m+1}\defeq n_1$. Suppose $(\forall\,j\in\{1,\ldots,m\})\,A_j\in\operatorname{Mat}(n_j,n_{j+1},\mathbb{F})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}(A_1\cdots A_m)=\operatorname{tr}(A_mA_1\cdots A_{m-1})$;
+\item $(\forall\,n\in\mathbb{Z}_{>0})(\forall\,A,B,C\in\operatorname{Mat}(n,n,\mathbb{F}))\,\operatorname{tr}(ABC)=\operatorname{tr}(BCA)=\operatorname{tr}(CAB)$.
+\end{enumerate}
 \begin{proof}
-Since $P_{1,m-1}\in\operatorname{Mat}(n_1,n_m,\mathbb{F})$ and $A_m\in\operatorname{Mat}(n_m,n_1,\mathbb{F})$, by Proposition \ref{prop:trace-cyclicity-two-factors}, $\operatorname{tr}(P_{1,m}) =\operatorname{tr}(P_{1,m-1}A_m) =\operatorname{tr}(A_mP_{1,m-1})$.\\
-Applying this cyclic move twice to $ABC$ gives the three-factor identity.\\
-\hlt{Structural Commentary}: Trace preserves cyclic order, not arbitrary order.\\
-\hlt{Key Insight}: One cyclic move is $\operatorname{tr}(XY)=\operatorname{tr}(YX)$ with $X=P_{1,m-1}$ and $Y=A_m$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $X\defeq A_1\cdots A_{m-1}\in\operatorname{Mat}(n_1,n_m,\mathbb{F})$. Then $\operatorname{tr}(A_1\cdots A_m)=\operatorname{tr}(XA_m)=\operatorname{tr}(A_mX)$ by Proposition \ref{prop:trace-cyclicity-two-factors}.
+\item Fix $n\in\mathbb{Z}_{>0}$ and $A,B,C\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $\operatorname{tr}(ABC)=\operatorname{tr}(CAB)=\operatorname{tr}(BCA)$ by two applications of part (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Two-factor cyclicity proves one general rotation, whose repeated use proves the specialization.\\
+\hlt{Key Insight}: Grouping $A_1\cdots A_{m-1}$ reduces rotation to two factors.
 \end{proof}
 \end{proposition}
 
@@ -63,315 +55,276 @@ Let $A=E_{1,2}$, $B=E_{2,1}$, and $C=E_{1,1}$ in $\operatorname{Mat}(2,2,\mathbb
 Thus trace permits cyclic rotations of factors, but not arbitrary rearrangements.
 \end{example}
 
-\begin{theorem} \label{thm:determinant-basic-laws} \hlt{Basic Determinant Laws}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\det I_n=1$.
-\item $\det(A)$ is linear as a function of each column of $A$ when the other columns are fixed.
-\item Swapping two columns negates the determinant; equal columns force $\det A=0$.
-\item If $A$ is triangular, then $\det A=A_{1,1}\cdots A_{n,n}$.
-\item $\det(AB)=\det(A)\det(B)$.
-\item $A$ is invertible if and only if $\det A\neq0$. In that case $\det(A^{-1})=(\det A)^{-1}$.
-\item $\det(A^t)=\det(A)$.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $\det I_n=\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)(I_n)_{\sigma(1),1}\cdots (I_n)_{\sigma(n),n}=1$ as product is nonzero only when $\sigma(k)=k \ \forall k$.
-\item For fixed $k$, $\det(A_{\cdot,1},\ldots,\mathbf{x},\ldots,A_{\cdot,n}) =\sum\limits_{\sigma\in\mathfrak{S}_n} \sign(\sigma)x_{\sigma(k)}\prod\limits_{\ell\neq k}A_{\sigma(\ell),\ell}$, which is linear in $\mathbf{x}$.
-\item If $B_{\cdot,k}=A_{\cdot,\tau(k)}$ for transposition $\tau$, then $\det B=\sum\limits_{\rho\in\mathfrak{S}_n}\sign(\rho\tau)\prod\limits_{k=1}^n A_{\rho(k),k} =-\det A$.\\
-If the swapped columns are equal, then $B=A$, so $\det A=-\det A$ and $\det A=0$.
-\item If $A$ is upper triangular and $\prod_{k=1}^n A_{\sigma(k),k}\neq0$, then $\sigma(k)\leq k$ for all $k$, hence $\sigma(k)=k$ for all $k$.\\
-Thus $\det A=A_{1,1}\cdots A_{n,n}$. If $A$ is lower triangular, nonzero products require $\sigma(k)\geq k$ for all $k$, again forcing $\sigma(k)=k$ for all $k$, so the same diagonal product formula holds.
-\item If $F$ is alternating and multilinear in columns, then expanding each column in the standard basis gives\\
-$F(A_{\cdot,1},\ldots,A_{\cdot,n}) =\sum\limits_{i_1,\ldots,i_n}A_{i_1,1}\cdots A_{i_n,n}F(\mathbf{e}_{i_1},\ldots,\mathbf{e}_{i_n}) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)F(I_n)A_{\sigma(1),1}\cdots A_{\sigma(n),n}$.\\
-The terms with repeated $i_j$ vanish by alternation, and the surviving ordered bases differ from $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ by sign of permutation. For $H(B)=\det(AB)$, map $H$ is alternating multilinear and $H(I_n)=\det A$.\\
-Hence $\det(AB)=H(B)=H(I_n)\det B=\det(A)\det(B)$.
-\item If $A$ is invertible, then $1=\det I_n=\det(AA^{-1})=\det(A)\det(A^{-1})$.\\
-If $A_{\cdot,k}=\sum\limits_{\ell\neq k}c_\ell A_{\cdot,\ell}$, then $\det A=\sum\limits_{\ell\neq k}c_\ell\det(A_{\cdot,1},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,\ell},\ldots,A_{\cdot,n})=0$.\\
-Thus $\det A\neq0$ iff the columns of $A$ are independent, iff $A$ is invertible.
-\item Using the permutation definition and replacing $\sigma$ by $\sigma^{-1}$,\\
-$\det(A^t) =\sum\limits_{\sigma\in\mathfrak{S}_n}\sign(\sigma)A_{1,\sigma(1)}\cdots A_{n,\sigma(n)} =\sum\limits_{\tau\in\mathfrak{S}_n}\sign(\tau)A_{\tau(1),1}\cdots A_{\tau(n),n} =\det(A)$; $\sign(\tau^{-1})=\sign(\tau)$.
-\end{enumerate}
-\hlt{Structural Commentary}: The determinant is the normalized alternating multilinear measure of columns.\\
-\hlt{Key Insight}: Multilinearity expands columns; alternation kills repeated directions.
-\end{proof}
-\end{theorem}
+For real $2\times2$ matrices, Figure \ref{fig:determinant-column-geometry} illustrates the column geometry behind Theorem \ref{thm:determinant-basic-laws}.
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/determinant_column_geometry.tikz}
-  \caption{Determinant is signed column-volume; swaps reverse orientation and dependence gives zero volume.}
+  \caption{The columns $\mathbf{a}_1,\mathbf{a}_2\in\mathbb{R}^2$ span a parallelogram whose signed area is their determinant.}
   \label{fig:determinant-column-geometry}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{method} \label{meth:determinant-by-structure} \hlt{Determinant by Structure}\\
-To compute or simplify a determinant:
+\begin{computationmethod} \label{meth:determinant-by-structure} \hlt{Determinant by Structure}\\
+Given $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{F})$, the output is $\det A$, computed by the first reduction that lowers the calculation:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item first look for triangular or block triangular form;
-\item use column linearity to split complicated columns only when it reduces structure;
-\item use column swaps to move useful pivots into position, tracking a factor of $-1$ for each swap;
-\item detect zero determinants from dependent columns or repeated columns;
-\item for products or changes of basis, use multiplicativity instead of expanding permutations.
+\item if $A$ is triangular, multiply its diagonal entries;
+\item if the columns are linearly dependent, including when two coincide, return $0$;
+\item if a column decomposition exposes triangular or dependent summands, expand that column by linearity;
+\item if a column permutation exposes useful pivots, track the sign of the permutation;
+\item if $A=BC$ and the factors have simpler determinants, compute $\det B\det C$.
 \end{enumerate}
-These steps use Theorem \ref{thm:determinant-basic-laws}.
-\end{method}
+Each reduction and its output are valid by Theorem \ref{thm:determinant-basic-laws}; verify that every column swap has been counted exactly once.
+\end{computationmethod}
 
-\begin{figure}[H]
+For real linear maps, Figure \ref{fig:matrix-determinant-volume-scaling} summarizes the geometric scaling interpretation behind the determinant-by-structure method.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/determinant_volume_scaling.tikz}
-  \caption{A linear map scales oriented volume by its determinant; singular maps collapse volume to zero.}
+  \caption{A real linear map scales oriented volume by its determinant; singular maps collapse volume to zero.}
   \label{fig:matrix-determinant-volume-scaling}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{lemma} \label{lem:determinant-identity-direct-sum} \hlt{Identity Blocks Do Not Change Determinant}\\
-Let $A\in\operatorname{Mat}(m,m,\mathbb{F})$ and let $n\geq0$. Then $\det(I_n\oplus A)=\det(A)=\det(A\oplus I_n)$.
-\begin{proof}
-In the permutation formula for $I_n\oplus A$, a nonzero term must satisfy $\sigma(k)=k$ for $1\leq k\leq n$. Remaining choices are exactly permutations of $\{n+1,\ldots,n+m\}$, after relabeling, gives $\det(A)$. Hence $\det(I_n\oplus A)=\det(A)$.\\
-The same argument applied to the last $n$ coordinates gives $\det(A\oplus I_n)=\det(A)$.\\
-The case $n=0$ is the empty identity block convention.\\
-\hlt{Structural Commentary}: Identity blocks add directions without changing volume.\\
-\hlt{Key Insight}: In the determinant expansion, the identity block forces the matching coordinates to be fixed.
-\end{proof}
-\end{lemma}
-
-\begin{theorem} \label{thm:block-upper-triangular-determinant} \hlt{Determinant of an Upper Block-Triangular Matrix}\\
-Let $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$. Then $\det
-\begin{bmatrix}
-A & B\\
-0 & D
-\end{bmatrix}
-=\det(A)\det(D)$.
-\begin{proof}
-Factor $\begin{bmatrix}
-A & B\\
-0 & D
-\end{bmatrix}
-=
-\begin{bmatrix}
-I_r & 0\\
-0 & D
-\end{bmatrix}
-\begin{bmatrix}
-I_r & B\\
-0 & I_s
-\end{bmatrix}
-\begin{bmatrix}
-A & 0\\
-0 & I_s
-\end{bmatrix}$.\\
-The first and last factors have determinants $\det(D)$ and $\det(A)$ by Lemma \ref{lem:determinant-identity-direct-sum}.\\
-The middle factor is upper triangular with every diagonal entry equal to $1$, so its determinant is $1$.\\
-Multiplicativity of determinant gives the formula.\\
-\hlt{Structural Commentary}: Block upper triangular matrices separate determinant contribution into diagonal blocks. The off-diagonal block does not affect the determinant.\\
-\hlt{Key Insight}: Factor the matrix into two block diagonal pieces and one unit upper triangular piece.
-\end{proof}
-\end{theorem}
+\begin{definition} \label{def:schur-complements} \hlt{Schur Complements}\\
+Let $r,s\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, $C\in\operatorname{Mat}(s,r,\mathbb{F})$, and $D\in\operatorname{Mat}(s,s,\mathbb{F})$. Set $M\defeq\left(\begin{smallmatrix}A&B\\C&D\end{smallmatrix}\right)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A$ is invertible, the \hlt{Schur complement of $A$ in $M$} is $M/A\defeq D-CA^{-1}B$.
+\item If $D$ is invertible, the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$.
+\end{enumerate}
+\end{definition}
 
 \begin{proposition} \label{prop:schur-complement-determinant-formula} \hlt{Schur Complement Determinant Formula}\\
-Let $M=
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
-If $A$ is invertible, then the \hlt{Schur complement of $A$ in $M$} is $M/A\defeq D-CA^{-1}B$, and $\det(M)=\det(A)\det(M/A)$.
+Let $r,s\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, $C\in\operatorname{Mat}(s,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$, and $M\defeq\left(\begin{smallmatrix}A&B\\C&D\end{smallmatrix}\right)$.\\
+If $A$ is invertible, then $\det M=\det(A)\det(M/A)$.
 \begin{proof}
-Block Gaussian elimination gives $\begin{bmatrix}
-I_r & 0\\
--CA^{-1} & I_s
-\end{bmatrix}
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}
-=
-\begin{bmatrix}
-A & B\\
-0 & D-CA^{-1}B
-\end{bmatrix}$.\\
-The elimination matrix is lower block-triangular with identity diagonal blocks, so its determinant is $1$. Take determinants, apply Theorem \ref{thm:block-upper-triangular-determinant} to right-hand block triangular matrix, $\det(M)=\det(A)\det(D-CA^{-1}B)$.\\
-\hlt{Structural Commentary}: Schur complementation is block Gaussian elimination.\\
-\hlt{Key Insight}: Eliminating $C$ splits the determinant into $\det(A)$ times the remaining block determinant.
+Set $E\defeq\left(\begin{smallmatrix}I_r&0\\-CA^{-1}&I_s\end{smallmatrix}\right)$. Then $EM=\left(\begin{smallmatrix}A&B\\0&M/A\end{smallmatrix}\right)$; $\det E=1$ by Theorem \ref{thm:determinant-basic-laws}(v).\\
+Thus $\det M=\det(EM)=\det(A)\det(M/A)$ by Theorems \ref{thm:determinant-basic-laws}(vi) and \ref{thm:block-upper-triangular-determinant}.\\
+\hlt{Structural Commentary}: Unit block elimination replaces $C$ by zero and exposes $M/A$.\\
+\hlt{Key Insight}: The elimination factor has determinant one.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:schur-complement-lower-right-determinant} \hlt{Schur Complement of the Lower-Right Block}\\
-Let $M=
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$.\\
-If $D$ is invertible, then the \hlt{Schur complement of $D$ in $M$} is $M/D\defeq A-BD^{-1}C$, and $\det(M)=\det(D)\det(M/D)$.
+Let $r,s\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(r,r,\mathbb{F})$, $B\in\operatorname{Mat}(r,s,\mathbb{F})$, $C\in\operatorname{Mat}(s,r,\mathbb{F})$, $D\in\operatorname{Mat}(s,s,\mathbb{F})$, and $M\defeq\left(\begin{smallmatrix}A&B\\C&D\end{smallmatrix}\right)$.\\
+If $D$ is invertible, then $\det M=\det(D)\det(M/D)$.
 \begin{proof}
-Block Gaussian elimination gives $\begin{bmatrix}
-I_r & -BD^{-1}\\
-0 & I_s
-\end{bmatrix}
-\begin{bmatrix}
-A & B\\
-C & D
-\end{bmatrix}
-=
-\begin{bmatrix}
-A-BD^{-1}C & 0\\
-C & D
-\end{bmatrix}$.\\
-The elimination matrix has determinant $1$. The transpose of the matrix on the right is upper block-triangular, and $\det(X^t)=\det(X)$ by Theorem \ref{thm:determinant-basic-laws}. By Theorem \ref{thm:block-upper-triangular-determinant}, $\det(M)=\det(A-BD^{-1}C)\det(D)$.\\
-\hlt{Structural Commentary}: This is the lower-right version of Schur complementation. Eliminating the upper-right block isolates the determinant contribution of $D$.\\
-\hlt{Key Insight}: Eliminate by blocks, then read the determinant from the diagonal blocks.
+Set $E\defeq\left(\begin{smallmatrix}I_r&-BD^{-1}\\0&I_s\end{smallmatrix}\right)$. Then $EM=\left(\begin{smallmatrix}M/D&0\\C&D\end{smallmatrix}\right)$; $\det E=1$ by Theorem \ref{thm:determinant-basic-laws}(v). The transpose of $EM$ is block upper triangular.\\
+Thus $\det M=\det(EM)=\det(M/D)\det D$ by Theorems \ref{thm:determinant-basic-laws}(vi),(ix) and \ref{thm:block-upper-triangular-determinant}.\\
+\hlt{Structural Commentary}: Unit block elimination replaces $B$ by zero before transposing the triangular form.\\
+\hlt{Key Insight}: Transposition converts the lower block-triangular product to the proved upper case.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:bordered-determinant-formulas} \hlt{Bordered Determinant Formulas}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$, let $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and let $c\in\mathbb{F}$.
+Let $n\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, and $c\in\mathbb{F}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $c\neq0$, then $\det
-\begin{bmatrix}
-c & \mathbf{x}^t\\
-\mathbf{y} & A
-\end{bmatrix}
-=
-c\det\left(A-\frac{1}{c}\mathbf{y}\mathbf{x}^t\right)$.
-\item If $A$ is invertible, then $\det
-\begin{bmatrix}
-A & \mathbf{x}\\
-\mathbf{y}^t & c
-\end{bmatrix}
-=
-\left(c-\mathbf{y}^tA^{-1}\mathbf{x}\right)\det(A)$
+\item If $c\neq0$, then $\det\left(\begin{smallmatrix}c&\mathbf{x}^t\\\mathbf{y}&A\end{smallmatrix}\right)=c\det\left(A-c^{-1}\mathbf{y}\mathbf{x}^t\right)$.
+\item If $A$ is invertible, then $\det\left(\begin{smallmatrix}A&\mathbf{x}\\\mathbf{y}^t&c\end{smallmatrix}\right)=\left(c-\mathbf{y}^tA^{-1}\mathbf{x}\right)\det A$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item This is Proposition \ref{prop:schur-complement-determinant-formula} with the scalar block $c$ in the upper-left corner.
-\item This is Proposition \ref{prop:schur-complement-determinant-formula} with $A$ as the upper-left block and $D=c$.
+\item Claim (i) holds by Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $[c]$ and $M/[c]=A-c^{-1}\mathbf{y}\mathbf{x}^t$.
+\item Claim (ii) holds by Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $A$, $M/A=c-\mathbf{y}^tA^{-1}\mathbf{x}$, and commutativity of $\mathbb{F}$.
 \end{enumerate}
-\hlt{Structural Commentary}: Bordered determinants are Schur complements with scalar borders.\\
-\hlt{Key Insight}: Treat the border as a $1\times1$ block and apply the Schur complement formula.
+\hlt{Structural Commentary}: Each border orientation specializes the upper-left Schur determinant formula.\\
+\hlt{Key Insight}: A scalar block turns its Schur complement into a rank-one correction.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:sylvester-determinant-identity} \hlt{Sylvester Determinant Identity}\\
-Let $A\in\operatorname{Mat}(n,m,\mathbb{F})$ and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
+Let $m,n\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(n,m,\mathbb{F})$, and $B\in\operatorname{Mat}(m,n,\mathbb{F})$. Then $\det(I_n+AB)=\det(I_m+BA)$.
 \begin{proof}
-Let $M=
-\begin{bmatrix}
-I_n & -A\\
-B & I_m
-\end{bmatrix}$.\\
-By Proposition \ref{prop:schur-complement-lower-right-determinant} with lower-right block $I_m$, $\det(M)=\det(I_n+AB)$. By Proposition \ref{prop:schur-complement-determinant-formula} with upper-left block $I_n$, $\det(M)=\det(I_m+BA)$. Hence the two determinants are equal.\\
-\hlt{Structural Commentary}: Two Schur complements of one block matrix give Sylvester's identity.\\
-\hlt{Key Insight}: Compare the same determinant after eliminating different identity blocks.
+Set $M\defeq\left(\begin{smallmatrix}I_n&-A\\B&I_m\end{smallmatrix}\right)$. Then $\det M=\det(I_n+AB)$ by Proposition \ref{prop:schur-complement-lower-right-determinant}, while $\det M=\det(I_m+BA)$ by Proposition \ref{prop:schur-complement-determinant-formula}.\\
+\hlt{Structural Commentary}: The two Schur determinant formulas evaluate one block matrix from opposite corners.\\
+\hlt{Key Insight}: Both identity blocks have determinant one.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:ab-ba-nonzero-eigenvalues} \hlt{Nonzero Eigenvalues of $AB$ and $BA$}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, $B\in\operatorname{Mat}(n,m,\mathbb{C})$, and suppose $n\geq m$. Then $p_{BA}(z)=z^{n-m}p_{AB}(z)$.\\
-Consequently, for $\lambda\neq0$, $m_{AB}(\lambda)=m_{BA}(\lambda)$. If $m_{AB}(0)=k$, then $m_{BA}(0)=k+n-m$.
+Let $m,n\in\mathbb{Z}_{>0}$ with $n\geq m$, let $A\in\operatorname{Mat}(m,n,\mathbb{C})$, and let $B\in\operatorname{Mat}(n,m,\mathbb{C})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall z\in\mathbb{C})\,p_{BA}(z)=z^{n-m}p_{AB}(z)$;
+\item $(\forall\lambda\in\mathbb{C}\setminus\{0\})\,m_{BA}(\lambda)=m_{AB}(\lambda)$;
+\item $m_{BA}(0)=m_{AB}(0)+n-m$.
+\end{enumerate}
 \begin{proof}
-For $z\neq0$, by Theorem \ref{thm:sylvester-determinant-identity} applied to $-z^{-1}B$ and $A$,
-\begin{align}
-\det(zI_n-BA) =z^n\det(I_n-z^{-1}BA) =z^n\det(I_m-z^{-1}AB) =z^{n-m}\det(zI_m-AB).
-\nonumber
-\end{align}
-Both sides are polynomials in $z$, so the identity holds for all $z$. The claimed multiplicities follow by factoring $p_{AB}$ and comparing with $p_{BA}=z^{n-m}p_{AB}$.\\
-\hlt{Structural Commentary}: Sylvester's determinant identity moves the rectangular product across the determinant.\\
-\hlt{Key Insight}: Passing from $AB$ to $BA$ only adds the necessary extra zero roots when the sizes differ.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $z\neq0$, $p_{BA}(z)=z^n\det(I_n-z^{-1}BA)=z^n\det(I_m-z^{-1}AB)=z^{n-m}p_{AB}(z)$ by Theorem \ref{thm:sylvester-determinant-identity} with $-z^{-1}B$ and $A$.\\
+If $n=m$, then $p_{BA}(0)=(-1)^n\det(BA)=(-1)^n\det(AB)=p_{AB}(0)$ by Theorem \ref{thm:determinant-basic-laws}(vi) and commutativity of $\mathbb{C}$.\\
+If $n>m$, then $\operatorname{col}(BA)\subseteq\operatorname{col}(B)$ because $(\forall\mathbf{x}\in\mathbb{C}^n)\,BA\mathbf{x}=B(A\mathbf{x})$.\\
+Thus $\operatorname{rank}(BA)\leq\operatorname{rank}(B)\leq m<n$ by Definition \ref{def:column-space-matrix-rank-nullity}, Proposition \ref{prop:dimension-bounds-and-basis-criteria}(i), and Corollary \ref{cor:matrix-rank-nullity}(i).\\
+$BA$ singular by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}. Then $p_{BA}(0)=(-1)^n\det(BA)=0=0^{n-m}p_{AB}(0)$ by Definition \ref{def:matrix-characteristic-polynomial}, Theorem \ref{thm:determinant-basic-laws}(vii).
+\item $m_{BA}(\lambda)=m_{AB}(\lambda)$ for $\lambda\neq0$ by part (i), because $z^{n-m}$ has multiplicity zero at $\lambda$.
+\item $m_{BA}(0)=m_{AB}(0)+n-m$ by part (i), because $z^{n-m}$ has multiplicity $n-m$ at $0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Sylvester transfer proves the polynomial identity before root orders split into zero and nonzero cases.\\
+\hlt{Key Insight}: The size difference appears only as the factor $z^{n-m}$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:similarity-preserves-trace-and-determinant} \hlt{Trace and Determinant Are Similarity Invariants}\\
-If $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ are similar, then $\operatorname{tr}(A)=\operatorname{tr}(B)$, $\det(A)=\det(B)$.
+Let $n\in\mathbb{Z}_{>0}$ and let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be similar.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}A=\operatorname{tr}B$;
+\item $\det A=\det B$.
+\end{enumerate}
 \begin{proof}
-Write $B=PAP^{-1}$ with $P$ invertible.\\
-Proposition \ref{prop:trace-cyclicity-two-factors} gives $\operatorname{tr}(B)=\operatorname{tr}\bigl(P(AP^{-1})\bigr) =\operatorname{tr}\bigl((AP^{-1})P\bigr) =\operatorname{tr}(A)$.\\
-Theorem \ref{thm:determinant-basic-laws} gives $\det(B)=\det(P)\det(A)\det(P^{-1})=\det(A)$.\\
-\hlt{Structural Commentary}: Trace and determinant ignore the coordinate system used to write an operator.\\
-\hlt{Key Insight}: Conjugating by $P$ inserts $P$ and $P^{-1}$, which cancel inside trace and determinant.
+Choose an invertible $P$ with $B=PAP^{-1}$ by Definition \ref{def:similar-matrices}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}B=\operatorname{tr}\bigl(P(AP^{-1})\bigr)=\operatorname{tr}\bigl((AP^{-1})P\bigr)=\operatorname{tr}A$ by Proposition \ref{prop:trace-cyclicity-two-factors}.
+\item $\det B=\det(P)\det(A)\det(P^{-1})=\det A$ by Theorem \ref{thm:determinant-basic-laws}(vi),(viii).
+\end{enumerate}
+\hlt{Structural Commentary}: Cyclicity and multiplicativity remove the conjugating factors from the two invariants.\\
+\hlt{Key Insight}: In both calculations, $P^{-1}P=I_n$.
 \end{proof}
 \end{theorem}
-
-\begin{perspective} \label{per:similarity-invariants-and-canonical-forms} \hlt{Similarity Invariants and Canonical Forms}\\
-Similarity is equality up to change of basis. Trace, determinant, characteristic polynomials, and minimal polynomials are similarity invariants by Theorems \ref{thm:similarity-preserves-trace-and-determinant}, \ref{thm:similarity-preserves-characteristic-polynomial}, and \ref{thm:similarity-preserves-minimal-polynomial}, but they are not generally complete.\\
-Canonical forms, such as the Jordan form of Theorem \ref{thm:complex-jordan-form}, choose one structured representative of each similarity class when possible.
-\end{perspective}
-
-\begin{principle} \label{princ:trace-determinant-coordinate-free} \hlt{Trace and Determinant Are Coordinate-Free}\\
-Trace and determinant are first computed from a matrix, but their real structural meaning is operator-level: changing basis conjugates the matrix, and conjugation preserves both quantities.
-\end{principle}
-
-\begin{theorem} \label{thm:operator-matrix-trace-determinant-basis-independent} \hlt{Trace and Determinant of an Operator Are Basis-Independent}\\
-Let $\mathcal{V}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $\beta,\gamma$ be bases of $\mathcal{V}$.\\
-Then $\operatorname{tr}\bigl([T]_{\beta\leftarrow\beta}\bigr) =\operatorname{tr}\bigl([T]_{\gamma\leftarrow\gamma}\bigr)$, $\det\bigl([T]_{\beta\leftarrow\beta}\bigr) =\det\bigl([T]_{\gamma\leftarrow\gamma}\bigr)$.
-\begin{proof}
-By Theorem \ref{thm:change-of-basis-formula}, the two matrices are similar: $[T]_{\gamma\leftarrow\gamma} =C_{\gamma\leftarrow\beta}[T]_{\beta\leftarrow\beta}C_{\beta\leftarrow\gamma}$.\\
-Theorem \ref{thm:similarity-preserves-trace-and-determinant} now gives equality of traces and determinants.\\
-\hlt{Structural Commentary}: Basis changes conjugate matrices; trace and determinant remain operator invariants.\\
-\hlt{Key Insight}: Similar matrices have the same trace and determinant.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/operator_trace_determinant_basis_invariance.tikz}
-  \caption{Basis changes conjugate matrices; trace and determinant are unchanged.}
-  \label{fig:operator-trace-determinant-basis-invariance}
-\end{figure}
-
-\begin{definition} \label{def:operator-trace-and-determinant} \hlt{Trace and Determinant of an Operator}\\
-Let $\mathcal{V}$ be finite-dim, let $T\in\LL(\mathcal{V})$. Choose any basis $\beta$ of $\mathcal{V}$. Define $\operatorname{tr}T\defeq\operatorname{tr}\bigl([T]_{\beta\leftarrow\beta}\bigr)$, $\det T\defeq\det\bigl([T]_{\beta\leftarrow\beta}\bigr)$.\\
-Theorem \ref{thm:operator-matrix-trace-determinant-basis-independent} shows these definitions do not depend on chosen basis.
-\end{definition}
-
-\begin{proposition} \label{prop:isometry-determinant-absolute-one} \hlt{Unitary Matrices and Isometries Have Determinant of Modulus One}\\
-Let $U\in\operatorname{Mat}(n,n,\mathbb{F})$ be unitary. Then $\abs{\det U}=1$. More generally, if $S\in\LL(\mathcal{V})$ is an isometry on a finite-dimensional inner-product space over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, then $\abs{\det S}=1$.
-\begin{proof}
-The permutation definition gives $\det(U^*)=\overline{\det U}$. By Theorem \ref{thm:determinant-basic-laws}, taking determinants in $U^*U=I_n$ gives $1=\det(U^*)\det(U)=\overline{\det U}\det U=\abs{\det U}^2$. Hence $\abs{\det U}=1$.\\
-For an isometry $S$, choose an orthonormal basis and let $U$ be the matrix of $S$ in that basis. Then $U$ is unitary by Theorem \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity}, and $\det S=\det U$.\\
-\hlt{Structural Commentary}: In orthonormal coordinates, isometries are unitary or orthogonal, so the determinant calculation is the matrix one.\\
-\hlt{Key Insight}: Determinants turn $U^*U=I$ into $\abs{\det U}^2=1$.
-\end{proof}
-\end{proposition}
-
-\begin{proposition} \label{prop:operator-trace-determinant-characteristic-coefficients} \hlt{Trace and Determinant from $q_T$}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dim over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, let $T\in\LL(\mathcal{V})$, $q_T(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$, $n=\dim\mathcal{V}$.\\
-Then $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$. If $\mathbb{F}=\mathbb{C}$ and $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $T$ with algebraic multiplicity, then $\operatorname{tr}T=\lambda_1+\cdots+\lambda_n$, $\det T=\lambda_1\cdots\lambda_n$.
-\begin{proof}
-Choose a basis $\beta$ and set $A=[T]_{\beta\leftarrow\beta}$.\\
-Then $q_T=p_A$, and by Definition \ref{def:operator-trace-and-determinant}, $\operatorname{tr}T=\operatorname{tr}A$ and $\det T=\det A$.\\
-Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $\operatorname{tr}T=-c_{n-1}$ and $\det T=(-1)^nc_0$.\\
-If $\mathbb{F}=\mathbb{C}$, then comparing $q_T(z)=(z-\lambda_1)\cdots(z-\lambda_n)$ with the displayed form of $q_T$ gives the formulas.\\
-\hlt{Structural Commentary}: Characteristic polynomial stores trace and determinant in first and last coefficients.\\
-\hlt{Key Insight}: Compare coefficients of $\det(zI-T)$.
-\end{proof}
-\end{proposition}
 
 \begin{proposition} \label{prop:trace-determinant-from-eigenvalues} \hlt{Trace and Determinant from Eigenvalues}\\
-Let $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $A\in\operatorname{Mat}(n,n,\mathbb{C})$ according to $m_A$. Then $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j$ and $\det A=\prod\limits_{j=1}^{n}\lambda_j$.
+Let $n\in\mathbb{Z}_{>0}$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $\lambda_1,\ldots,\lambda_n$ list its eigenvalues with algebraic multiplicity.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j$;
+\item $\det A=\prod\limits_{j=1}^{n}\lambda_j$.
+\end{enumerate}
 \begin{proof}
-By Fundamental Theorem of Algebra, $p_A(z)=\prod\limits_{j=1}^{n}(z-\lambda_j) =z^n-\left(\sum\limits_{j=1}^{n}\lambda_j\right)z^{n-1}+\cdots+(-1)^n\prod\limits_{j=1}^{n}\lambda_j$.\\
-Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients} gives $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$. Uniqueness of coefficients gives the identities.\\
-\hlt{Structural Commentary}: Coefficients of $p_A$ encode symmetric functions of the eigenvalues.\\
-\hlt{Key Insight}: Trace is the first root sum and determinant is the full root product.
+$p_A(z)=\prod\limits_{j=1}^{n}(z-\lambda_j)$ by the algebraic-multiplicity list and monicity.\\
+The identity $p_A(z)=z^n-(\operatorname{tr}A)z^{n-1}+\cdots+(-1)^n\det A$ holds by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}A=\sum\limits_{j=1}^{n}\lambda_j$ by comparison of the $z^{n-1}$ coefficients.
+\item $\det A=\prod\limits_{j=1}^{n}\lambda_j$ by comparison of the constant coefficients.
+\end{enumerate}
+\hlt{Structural Commentary}: Two coefficient comparisons transfer the root factorization to trace and determinant.\\
+\hlt{Key Insight}: The next-to-leading and constant coefficients encode the root sum and product.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:transpose-conjugate-adjoint-characteristic-polynomial} \hlt{Transpose, Conjugate, and Adjoint Spectra}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then $p_{A^t}(z)=p_A(z)$, $p_{\overline{A}}(z)=\overline{p_A(\overline{z})}$, and $p_{A^*}(z)=\overline{p_A(\overline{z})}$.\\
-Consequently, if $\lambda\in\operatorname{spec}(A)$, then $m_{A^t}(\lambda)=m_A(\lambda)$ and $m_{\overline{A}}(\overline{\lambda})=m_{A^*}(\overline{\lambda})=m_A(\lambda)$.
+Let $n\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and $\lambda\in\operatorname{spec}(A)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_{A^t}=p_A$;
+\item $(\forall z\in\mathbb{C})\,p_{\overline{A}}(z)=\overline{p_A(\overline{z})}$;
+\item $(\forall z\in\mathbb{C})\,p_{A^*}(z)=\overline{p_A(\overline{z})}$;
+\item $m_{A^t}(\lambda)=m_A(\lambda)$;
+\item $m_{\overline{A}}(\overline{\lambda})=m_A(\lambda)$;
+\item $m_{A^*}(\overline{\lambda})=m_A(\lambda)$.
+\end{enumerate}
 \begin{proof}
-Use determinant identities:
-\begin{align}
-p_{A^t}(z)&=\det(zI_n-A^t)=\det((zI_n-A)^t)=p_A(z), \nonumber\\
-p_{\overline{A}}(z)&=\det(zI_n-\overline{A}) =\det(\overline{\overline{z}I_n-A}) =\overline{\det(\overline{z}I_n-A)} =\overline{p_A(\overline{z})}.
-\nonumber
-\end{align}
-Since $A^*=\overline{A}^{\,t}$, the first identity applied to $\overline{A}$ gives the formula for $A^*$.\\
-Multiplicity is preserved because conjugating a polynomial sends a factor $(z-\lambda)^k$ to $(z-\overline{\lambda})^k$.\\
-\hlt{Structural Commentary}: Transpose preserves $p_A$; conjugation conjugates its roots.\\
-\hlt{Key Insight}: The adjoint combines conjugation with transposition, so its spectrum is conjugated.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall z\in\mathbb{C})\,p_{A^t}(z)=\det((zI_n-A)^t)=p_A(z)$ by Theorem \ref{thm:determinant-basic-laws}(ix).
+\item $(\forall X\in\operatorname{Mat}(n,n,\mathbb{C}))\,\det(\overline{X})=\overline{\det X}$ by conjugation of each term in the permutation formula.\\
+Hence $(\forall z\in\mathbb{C})\,p_{\overline{A}}(z)=\det(\overline{\overline{z}I_n-A})=\overline{p_A(\overline{z})}$.
+\item $(\forall z\in\mathbb{C})\,p_{A^*}(z)=p_{\overline{A}}(z)=\overline{p_A(\overline{z})}$ by $A^*=\overline{A}^{\,t}$ and parts (i)--(ii).
+\item $m_{A^t}(\lambda)=m_A(\lambda)$ by part (i).
+\item Set $k\defeq m_A(\lambda)$. Choose $q\in\mathbb{C}[z]$ satisfying $p_A(z)=(z-\lambda)^kq(z)$ and $q(\lambda)\neq0$ by Definition \ref{def:matrix-algebraic-multiplicity}.\\
+Identity $p_{\overline{A}}(z)=(z-\overline{\lambda})^k\overline{q(\overline{z})}$ holds by part (ii), while $\overline{q(\lambda)}\neq0$ by choice of $q$. Thus $m_{\overline{A}}(\overline{\lambda})=k=m_A(\lambda)$ by Definition \ref{def:matrix-algebraic-multiplicity}.
+\item $m_{A^*}(\overline{\lambda})=m_A(\lambda)$ by parts (iii) and (v).
+\end{enumerate}
+\hlt{Structural Commentary}: Determinant transposition preserves factors, while entrywise conjugation transports each root.\\
+\hlt{Key Insight}: The adjoint adds no spectral change beyond complex conjugation.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:similarity-invariants-and-canonical-forms} \hlt{Similarity Invariants and Canonical Forms}\\
+For square complex matrices, trace and determinant are similarity invariants by Theorem \ref{thm:similarity-preserves-trace-and-determinant}.\\
+The characteristic and minimal polynomials are similarity invariants by Theorems \ref{thm:similarity-preserves-characteristic-polynomial} and \ref{thm:similarity-preserves-minimal-polynomial}.\\
+Set $J\defeq J_3(0)\oplus J_3(0)$ and $K\defeq J_3(0)\oplus J_2(0)\oplus J_1(0)$.\\
+Both have characteristic polynomial $z^6$ by Proposition \ref{prop:upper-triangular-characteristic-polynomial}(i).\\
+Both are nilpotent of index $3$ by Lemma \ref{lem:nilpotent-jordan-block-power-rank} and Proposition \ref{prop:direct-sum-matrix-algebra}(iii).\\
+Hence $\mu_J=\mu_K=z^3$ by Theorem \ref{thm:operator-annihilator-iff-multiple-minimal-polynomial} and Definition \ref{def:minimal-polynomial-matrix}.\\
+They are not similar by Corollary \ref{cor:jordan-form-unique-up-to-block-permutation}(i), because their Jordan block multisets differ.\\
+Thus Theorem \ref{thm:complex-jordan-form} and that corollary make the Jordan block multiset a complete similarity invariant.
+\end{perspective}
+
+\begin{theorem} \label{thm:operator-matrix-trace-determinant-basis-independent} \hlt{Trace and Determinant of an Operator Are Basis-Independent}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and let $\beta,\gamma$ be bases of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}\bigl([T]_{\beta\leftarrow\beta}\bigr)=\operatorname{tr}\bigl([T]_{\gamma\leftarrow\gamma}\bigr)$;
+\item $\det\bigl([T]_{\beta\leftarrow\beta}\bigr)=\det\bigl([T]_{\gamma\leftarrow\gamma}\bigr)$.
+\end{enumerate}
+\begin{proof}
+$[T]_{\gamma\leftarrow\gamma}=C_{\gamma\leftarrow\beta}[T]_{\beta\leftarrow\beta}C_{\beta\leftarrow\gamma}$ by Theorem \ref{thm:change-of-basis-formula}(i). Thus the representing matrices are similar by Definition \ref{def:similar-matrices}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The traces are equal by Theorem \ref{thm:similarity-preserves-trace-and-determinant}(i).
+\item The determinants are equal by Theorem \ref{thm:similarity-preserves-trace-and-determinant}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Change of basis reduces both claims to the corresponding similarity invariants.\\
+\hlt{Key Insight}: Every representing matrix lies in one conjugacy class.
+\end{proof}
+\end{theorem}
+
+Figure \ref{fig:operator-trace-determinant-basis-invariance} summarizes the conjugation relation that makes operator trace and determinant basis-independent.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/linear_algebra/operator_trace_determinant_basis_invariance.tikz}
+  \caption{Basis changes conjugate matrices; trace and determinant are unchanged.}
+  \label{fig:operator-trace-determinant-basis-invariance}
+\end{illustrationfigure}
+
+\begin{definition} \label{def:operator-trace-and-determinant} \hlt{Trace and Determinant of an Operator}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional, let $T\in\LL(\mathcal{V})$, and choose a basis $\beta$ of $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{trace} of $T$ is $\operatorname{tr}T\defeq\operatorname{tr}\bigl([T]_{\beta\leftarrow\beta}\bigr)$.
+\item The \hlt{determinant} of $T$ is $\det T\defeq\det\bigl([T]_{\beta\leftarrow\beta}\bigr)$.
+\end{enumerate}
+Both quantities are independent of $\beta$ by Theorem \ref{thm:operator-matrix-trace-determinant-basis-independent}.
+\end{definition}
+
+\begin{proposition} \label{prop:isometry-determinant-absolute-one} \hlt{Unitary Matrices and Isometries Have Determinant of Modulus One}\\
+Let $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $n\in\mathbb{Z}_{>0}$ and $U\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitary, then $\abs{\det U}=1$.
+\item If $\mathcal{V}\neq\{\mathbf{0}\}$ is a finite-dimensional inner-product space over $\mathbb{F}$ and $S\in\LL(\mathcal{V})$ is an isometry, then $\abs{\det S}=1$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\det(U^*)=\overline{\det U}$ by the permutation formula and Theorem \ref{thm:determinant-basic-laws}(ix).\\
+Taking determinants in $U^*U=I_n$, $1=\overline{\det U}\det U=\abs{\det U}^2$ by Theorem \ref{thm:determinant-basic-laws}(i),(vi), so $\abs{\det U}=1$.
+\item Set $n\defeq\dim\mathcal{V}$. Choose an orthonormal basis $\beta$ by Corollary \ref{cor:finite-dimensional-inner-product-space-has-orthonormal-basis} and set $U\defeq[S]_{\beta\leftarrow\beta}$.\\
+Then $U^*U=I_n$ by Theorems \ref{thm:finite-dimensional-isometry-iff-adjoint-product-identity} and \ref{thm:matrix-of-adjoint-is-conjugate-transpose} and Proposition \ref{prop:composition-and-matrix-multiplication}. Thus $\abs{\det S}=\abs{\det U}=1$ by part (i) and Definition \ref{def:operator-trace-and-determinant}.
+\end{enumerate}
+\hlt{Structural Commentary}: The matrix identity is proved first, then orthonormal coordinates transfer it to operators.\\
+\hlt{Key Insight}: Determinants convert $U^*U=I_n$ into $\abs{\det U}^2=1$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:operator-trace-determinant-characteristic-coefficients} \hlt{Trace and Determinant from $q_T$}\\
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, let $n\defeq\dim\mathcal{V}$, let $T\in\LL(\mathcal{V})$, and write $q_T(z)=z^n+c_{n-1}z^{n-1}+\cdots+c_1z+c_0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}T=-c_{n-1}$;
+\item $\det T=(-1)^nc_0$;
+\item if $\mathbb{F}=\mathbb{C}$ and $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $T$ with algebraic multiplicity, then $\operatorname{tr}T=\sum\limits_{j=1}^{n}\lambda_j$;
+\item under the hypotheses of (iii), $\det T=\prod\limits_{j=1}^{n}\lambda_j$.
+\end{enumerate}
+\begin{proof}
+Choose a basis $\beta$ and set $A\defeq[T]_{\beta\leftarrow\beta}$.\\
+Then $q_T=p_A$ by Definition \ref{def:operator-characteristic-polynomial}, while $\operatorname{tr}T=\operatorname{tr}A$ and $\det T=\det A$ by Definition \ref{def:operator-trace-and-determinant}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{tr}T=-c_{n-1}$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}.
+\item $\det T=(-1)^nc_0$ by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}.
+\item Under the hypotheses of (iii), $\lambda_1,\ldots,\lambda_n$ also list the eigenvalues of $A$ with algebraic multiplicity by $q_T=p_A$.\\
+Hence $\operatorname{tr}T=\sum\limits_{j=1}^{n}\lambda_j$ by Proposition \ref{prop:trace-determinant-from-eigenvalues}(i).
+\item Under the same hypotheses, $\det T=\prod\limits_{j=1}^{n}\lambda_j$ by Proposition \ref{prop:trace-determinant-from-eigenvalues}(ii) with the list from part (iii).
+\end{enumerate}
+\hlt{Structural Commentary}: A basis identifies $q_T$ with $p_A$, after which matrix coefficient formulas transfer claimwise.\\
+\hlt{Key Insight}: Operator trace and determinant are the corresponding matrix invariants in any basis.
 \end{proof}
 \end{proposition}

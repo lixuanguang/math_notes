@@ -15,6 +15,7 @@ FORMAL_ENVIRONMENTS = (File.read(File.join(REPOSITORY_ROOT, "parts", "base.tex")
 STRUCTURAL_START = /\A\\(?:begin|end)\{|\A\\(?:part|section|subsection|subsubsection)\*?\{|\A\\item(?:\[[^\]]*\])?(?:\s|\z)|\A\\setlength\{|\A\\(?:label|caption|includegraphics)\{|\A\\(?:newpage|clearpage|pagebreak|centering|noindent)\b/
 STRUCTURAL_ONLY = /\A(?:\\begin\{[^}]+\}(?:\[[^\]]*\])?(?:\s+\\label\{[^}]+\})?|\\end\{[^}]+\}|\\setlength\{[^}]+\}\{[^}]+\}|\\(?:part|section|subsection|subsubsection)\*?\{.*\}(?:\s*\\label\{[^}]+\})?|\\(?:newpage|clearpage|pagebreak|centering|noindent))\s*\z/
 ITEM_ONLY = /\A\\item(?:\[[^\]]*\])?\s*\z/
+ORPHANED_BREAK_LEADIN = /(?:\b(?:define|where|such that|namely|as follows|is defined by))\s*\\\\\z/i
 
 def source_text(line)
   line.sub(/(?<!\\)%.*\z/, "").rstrip
@@ -79,10 +80,17 @@ abort "Usage: ruby scripts/check_render_aligned_source_lines.rb <target.tex> [..
 
 violations = []
 blank_violations = []
+orphaned_break_violations = []
 paths.each do |path|
   lines = File.readlines(path, chomp: true)
   blank_formal_lines(lines).each { |line_number| blank_violations << [path, line_number] }
   opaque = opaque_lines(lines)
+  lines.each_with_index do |line, index|
+    next if opaque[index]
+
+    text = source_text(line)
+    orphaned_break_violations << [path, index + 1, text] if text.match?(ORPHANED_BREAK_LEADIN)
+  end
   lines.each_cons(2).with_index(1) do |(current, following), line_number|
     next if opaque[line_number - 1] || opaque[line_number]
     next if blank_or_comment?(current) || blank_or_comment?(following)
@@ -97,7 +105,12 @@ blank_violations.each do |path, line_number|
   warn "#{path}:#{line_number}: blank source line inside a formal statement or proof creates a forbidden paragraph break"
 end
 
-if violations.empty? && blank_violations.empty?
+orphaned_break_violations.each do |path, line_number, line|
+  warn "#{path}:#{line_number}: explicit break separates an introducing lead-in from its formula or clause"
+  warn "  #{line.strip}"
+end
+
+if violations.empty? && blank_violations.empty? && orphaned_break_violations.empty?
   puts "Render-aligned source-line check passed."
   exit 0
 end

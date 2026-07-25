@@ -1,82 +1,153 @@
 \subsection{Jordan Chains and Nilpotent Blocks}
-% **Role:** structure revealed by invariant subspaces and eigenbehavior.
-%
-% Jordan form, rational/canonical form if desired, complexification, real block forms.
 
-Jordan and canonical forms turn primary decomposition into explicit blocks. Jordan chains, complexification, and real block forms organize the nilpotent and real spectral structure. Each Jordan block records one eigenvalue together with the length of a nilpotent chain.
+Jordan chains convert nilpotent primary components into explicit blocks; each block records an eigenvalue and a chain length.
 
-\begin{definition} \label{def:jordan-chain-block-and-matrix} \hlt{Jordan Chains, Blocks, and Matrices}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $\lambda\in\mathbb{C}$, and let $k\geq1$. A \hlt{Jordan chain} for $A$ at $\lambda$ is a list $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ such that $(A-\lambda I_n)\mathbf{x}_1=\mathbf{0}$ and $(A-\lambda I_n)\mathbf{x}_j=\mathbf{x}_{j-1}$ for $2\leq j\leq k$.\\
-The \hlt{nilpotent Jordan block} $J_k(0)$ is the $k\times k$ matrix with $1$ on the first superdiagonal and $0$ elsewhere:
-\begin{align}
-J_k(0)=
-\begin{bmatrix}
-0&1&0&\cdots&0\\
-0&0&1&\ddots&\vdots\\
-\vdots&\ddots&\ddots&\ddots&0\\
-0&\cdots&0&0&1\\
-0&\cdots&\cdots&0&0
-\end{bmatrix}.
-\nonumber
-\end{align}
-Set $J_k(\lambda)\defeq\lambda I_k+J_k(0)$. A \hlt{Jordan matrix} is a direct sum of Jordan blocks. A basis is a \hlt{Jordan basis} for an operator $T$ if the matrix of $T$ in that basis is a Jordan matrix.
+\begin{definition} \label{def:jordan-chain-block-and-matrix} \hlt{Jordan Chains, Blocks, and Matrices}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $n,k\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and $\lambda\in\mathbb{C}$. A \hlt{Jordan chain} for $A$ at $\lambda$ is $(\mathbf{x}_1,\ldots,\mathbf{x}_k)\in(\mathbb{C}^n)^k$ with $\mathbf{x}_1\neq\mathbf{0}$.\\
+For $\mathbf{x}_0\defeq\mathbf{0}$, its defining relations are $(\forall j\in\{1,\ldots,k\})\,(A-\lambda I_n)\mathbf{x}_j=\mathbf{x}_{j-1}$.
+\item For $k\in\mathbb{Z}_{>0}$, the \hlt{nilpotent Jordan block} $J_k(0)\in\operatorname{Mat}(k,k,\mathbb{C})$ satisfies $(\forall i,j\in\{1,\ldots,k\})\,[J_k(0)]_{ij}=\delta_{j,i+1}$.\\
+For $\lambda\in\mathbb{C}$, the \hlt{Jordan block} at $\lambda$ is $J_k(\lambda)\defeq\lambda I_k+J_k(0)$.
+\item A \hlt{Jordan matrix} is a finite direct sum of Jordan blocks.
+\item Let $\mathcal{V}$ be a finite-dimensional complex vector space and let $T\in\LL(\mathcal{V})$.\\
+An ordered basis $\beta$ of $\mathcal{V}$ is a \hlt{Jordan basis} for $T$ iff $[T]_{\beta\leftarrow\beta}$ is a Jordan matrix.
+\end{enumerate}
 \end{definition}
 
-\begin{perspective} \label{per:jordan-strings-as-columns} \hlt{Jordan Chains as Columns}\\
-For a Jordan chain $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ and $X=[\mathbf{x}_1\ \cdots\ \mathbf{x}_k]$, $AX=XJ_k(\lambda)$.\\
-If all chains form the columns of a basis matrix $M$, then $AM=MJ$ and $M^{-1}AM=J$.
-\end{perspective}
+\begin{proposition} \label{prop:jordan-chains-as-matrix-columns} \hlt{Jordan Chains as Matrix Columns}\\
+Let $n\in\mathbb{Z}_{>0}$ and let $A\in\operatorname{Mat}(n,n,\mathbb{C})$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $k\in\mathbb{Z}_{>0}$ and $\lambda\in\mathbb{C}$, and let $(\mathbf{x}_1,\ldots,\mathbf{x}_k)$ be a Jordan chain for $A$ at $\lambda$. Set $X\defeq[\mathbf{x}_1\ \cdots\ \mathbf{x}_k]$; then $AX=XJ_k(\lambda)$.
+\item Let $M\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$ be formed by concatenating Jordan chains for $A$, and let $J$ be the matching ordered direct sum of blocks.\\
+Then $AM=MJ$ and $M^{-1}AM=J$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $j\in\{1,\ldots,k\}$. Then $(AX)_{\cdot,j}=\mathbf{x}_{j-1}+\lambda\mathbf{x}_j$ by the chain relation.\\
+The identity $(XJ_k(\lambda))_{\cdot,j}=\mathbf{x}_{j-1}+\lambda\mathbf{x}_j$ holds by the entries of $J_k(\lambda)$. Hence $AX=XJ_k(\lambda)$ by equality of corresponding columns.
+\item Write $M=[X_1\ \cdots\ X_s]$, where $X_i$ is the column matrix of a chain of length $k_i$ at $\lambda_i$.\\
+The identities $(\forall i\in\{1,\ldots,s\})\,AX_i=X_iJ_{k_i}(\lambda_i)$ hold by part (i).\\
+Thus $AM=MJ$ by block multiplication, and $M^{-1}AM=J$ by left multiplication with $M^{-1}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Column identities pass from individual chains to their ordered block concatenation.\\
+\hlt{Key Insight}: Superdiagonal ones encode predecessor vectors in successive columns.
+\end{proof}
+\end{proposition}
 
-\begin{figure}[H]
+Figure \ref{fig:jordan-string-columns-similarity} depicts $N\mathbf{x}_1=\mathbf{0}$ and $N\mathbf{x}_j=\mathbf{x}_{j-1}$ along a Jordan chain.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/jordan_string_columns_similarity.tikz}
-  \caption{Jordan chain for $N=A-\lambda I$; columns give $AX=XJ_k(\lambda)$.}
+  \caption{A Jordan chain for $N=A-\lambda I$; each arrow records the image under $N$.}
   \label{fig:jordan-string-columns-similarity}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:nilpotent-jordan-chain-basis} \hlt{Nilpotent Jordan Chain Basis}\\
-Let $\mathcal{V}$ be finite-dim, $N\in\LL(\mathcal{V})$ be nilpotent. Then $\exists$ vectors $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\mathcal{V}$ and nonnegative integers $m_1,\ldots,m_r$ such that $\mathcal{B}_N= \bigl(N^{m_1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$ is a basis of $\mathcal{V}$ and $N^{m_j+1}\mathbf{v}_j=\mathbf{0}$ for every $j$.
+Let $\mathcal{V}$ be a finite-dimensional vector space over $\mathbb{F}$,  $N\in\LL(\mathcal{V})$ be nilpotent. For $\mathbf{v}\in\mathcal{V}$ and $m\in\mathbb{Z}_{\geq0}$, set $\mathcal{C}_N(\mathbf{v},m)\defeq(N^{m-q}\mathbf{v})_{q=0}^{m}$.\\
+For $r\in\mathbb{Z}_{\geq0}$ and $(\mathbf{v},\mathbf{m})\in\mathcal{V}^r\times\mathbb{Z}_{\geq0}^r$, let $\mathcal{B}_N(\mathbf{v},\mathbf{m})$ denote the concatenation $(\mathcal{C}_N(\mathbf{v}_j,m_j))_{j=1}^{r}$.\\
+Write $\mathsf{CB}_N(r,\mathbf{v},\mathbf{m})$ when $\mathcal{B}_N(\mathbf{v},\mathbf{m})$ is a basis of $\mathcal{V}$ and $(\forall j\in\{1,\ldots,r\})\,N^{m_j+1}\mathbf{v}_j=\mathbf{0}$.\\
+Then $(\exists r\in\mathbb{Z}_{\geq0})(\exists\mathbf{v}\in\mathcal{V}^r)(\exists\mathbf{m}\in\mathbb{Z}_{\geq0}^r)\,\mathsf{CB}_N(r,\mathbf{v},\mathbf{m})$.
 \begin{proof}
-Induct on $n=\dim(\mathcal{V})$. If $N=0$, any basis works with all $m_j=0$.\\
-Now assume $N\neq0$. Then $N$ is not injective, so $\operatorname{range}(N)$ is a proper subspace, and $N|_{\operatorname{range}(N)}$ is nilpotent.\\
-By induction, $\operatorname{range}(N)$ has a chain basis $\bigl(N^{m_1}\mathbf{u}_1,\ldots,N\mathbf{u}_1,\mathbf{u}_1,\ldots, N^{m_r}\mathbf{u}_r,\ldots,N\mathbf{u}_r,\mathbf{u}_r\bigr)$ with $N^{m_j+1}\mathbf{u}_j=\mathbf{0}$.\\
-Choose $\mathbf{v}_j\in\mathcal{V}$ such that $N\mathbf{v}_j=\mathbf{u}_j$, and lift the chains to $\mathcal{L}= \bigl(N^{m_1+1}\mathbf{v}_1,\ldots,N\mathbf{v}_1,\mathbf{v}_1,\ldots, N^{m_r+1}\mathbf{v}_r,\ldots,N\mathbf{v}_r,\mathbf{v}_r\bigr)$.\\
-The list $\mathcal{L}$ is linearly independent. Indeed, applying $N$ to a dependence among vectors in $\mathcal{L}$ gives a dependence among the range-chain basis, so all coefficients except possibly those on the leading vectors $N^{m_j+1}\mathbf{v}_j$ vanish.\\
-The remaining relation is a relation among $N^{m_j+1}\mathbf{v}_j=N^{m_j}\mathbf{u}_j$, which are members of the range-chain basis, so those coefficients vanish too. Also $N(\operatorname{span}(\mathcal{L}))=\operatorname{range}(N)$: each range-chain basis vector $N^q\mathbf{u}_j$ is $N(N^q\mathbf{v}_j)$ for the corresponding lifted vector. Extend $\mathcal{L}$ to a basis by adding $\mathbf{w}_1,\ldots,\mathbf{w}_s$. For each $i$, choose $\mathbf{x}_i\in\operatorname{span}(\mathcal{L})$ such that $N\mathbf{x}_i=N\mathbf{w}_i$, and set $\mathbf{z}_i=\mathbf{w}_i-\mathbf{x}_i$. Then $N\mathbf{z}_i=\mathbf{0}$. Since each $\mathbf{x}_i$ lies in $\operatorname{span}(\mathcal{L})$, replacing $\mathbf{w}_i$ by $\mathbf{z}_i$ preserves the span and linear independence of the full basis. Thus $\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s$ is the desired chain basis.\\
-\hlt{Structural Commentary}: Build chains in $\operatorname{range}(N)$, lift them once, then add kernel chains.\\
-\hlt{Key Insight}: Applying $N$ turns lifted-chain dependences into known range-chain dependences.
+Set $n\defeq\dim(\mathcal{V})$ and argue by strong induction on $n$, assuming the claim in every smaller dimension.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Zero Operator}: If $N=0$, choose an ordered basis $(\mathbf{v}_1,\ldots,\mathbf{v}_r)$ by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}(i).\\
+Set $\mathbf{m}\defeq(0,\ldots,0)\in\mathbb{Z}_{\geq0}^r$; then $\mathcal{B}_N(\mathbf{v},\mathbf{m})=(\mathbf{v}_1,\ldots,\mathbf{v}_r)$. The terminal relations $(\forall j\in\{1,\ldots,r\})\,N\mathbf{v}_j=\mathbf{0}$ hold by $N=0$.\\
+Thus $\mathsf{CB}_N(r,\mathbf{v},\mathbf{m})$ by its defining conditions; when $\mathcal{V}=\{\mathbf{0}\}$, $r=0$ by linear independence of the chosen basis.
+\item \hlt{Range Reduction}: Assume $N\neq0$. Then $n>0$ and $N^n=0$ by Corollary \ref{cor:nilpotent-power-dimension-zero}.\\
+If $N$ were injective, then $N^n$ would be injective by induction on $n$, contrary to $N^n=0$ on the nonzero space $\mathcal{V}$.\\
+Thus $\ker(N)\neq\{\mathbf{0}\}$ by noninjectivity, and $\dim\operatorname{range}(N)<n$ by Theorem \ref{thm:rank-nullity}(ii).\\
+Set $\mathcal{W}\defeq\operatorname{range}(N)$. The restriction $N|_{\mathcal{W}}$ is nilpotent by $N(\mathcal{W})\subseteq\mathcal{W}$ and $(N|_{\mathcal{W}})^n=0$.\\
+Choose $t\in\mathbb{Z}_{\geq0}$, $\mathbf{u}=(\mathbf{u}_j)_{j=1}^{t}\in\mathcal{W}^t$, and $\boldsymbol{\ell}=(\ell_j)_{j=1}^{t}\in\mathbb{Z}_{\geq0}^t$ by the induction hypothesis for $N|_{\mathcal{W}}$.\\
+Set $\mathcal{B}_{\mathcal{W}}\defeq(\mathcal{C}_N(\mathbf{u}_j,\ell_j))_{j=1}^{t}$. This is a basis of $\mathcal{W}$ by equality of restriction powers and the induction hypothesis.\\
+The identities $(\forall j\in\{1,\ldots,t\})\,N^{\ell_j+1}\mathbf{u}_j=\mathbf{0}$ hold by the same facts.\\
+For $j\in\{1,\ldots,t\}$, choose $\mathbf{v}_j\in\mathcal{V}$ satisfying $N\mathbf{v}_j=\mathbf{u}_j$ by $\mathbf{u}_j\in\operatorname{range}(N)$. Set $\mathcal{L}\defeq(\mathcal{C}_N(\mathbf{v}_j,\ell_j+1))_{j=1}^{t}$.
+\item \hlt{Lifted Independence}: Let $c_{j,q}\in\mathbb{F}$, where $1\leq j\leq t$ and $0\leq q\leq\ell_j+1$.\\
+Suppose $\sum\limits_{j=1}^{t}\sum\limits_{q=0}^{\ell_j+1}c_{j,q}N^q\mathbf{v}_j=\mathbf{0}$. The identities $(\forall j\in\{1,\ldots,t\})\,N^{\ell_j+2}\mathbf{v}_j=N^{\ell_j+1}\mathbf{u}_j=\mathbf{0}$ hold by item (ii).\\
+The image of the relation under $N$ is $\sum\limits_{j=1}^{t}\sum\limits_{q=0}^{\ell_j}c_{j,q}N^q\mathbf{u}_j=\mathbf{0}$ by linearity and the terminal identities.\\
+Thus $(\forall j\in\{1,\ldots,t\})(\forall q\in\{0,\ldots,\ell_j\})\,c_{j,q}=0$ by linear independence of $\mathcal{B}_{\mathcal{W}}$.\\
+The original relation reduces to $\sum\limits_{j=1}^{t}c_{j,\ell_j+1}N^{\ell_j}\mathbf{u}_j=\mathbf{0}$ by these coefficient equalities.\\
+Every remaining coefficient is zero by linear independence of $\mathcal{B}_{\mathcal{W}}$. Thus $\mathcal{L}$ is linearly independent by the vanishing of all coefficients.
+\item \hlt{Kernel Completion}: The identities $(\forall j\in\{1,\ldots,t\})(\forall q\in\{0,\ldots,\ell_j\})\,N(N^q\mathbf{v}_j)=N^q\mathbf{u}_j$ hold by $N\mathbf{v}_j=\mathbf{u}_j$.\\
+The inclusion $\mathcal{W}\subseteq N(\operatorname{span}(\mathcal{L}))$ holds by spanning of $\mathcal{B}_{\mathcal{W}}$. The reverse inclusion holds by $\mathcal{W}=\operatorname{range}(N)$, so $\mathcal{W}=N(\operatorname{span}(\mathcal{L}))$.\\
+Choose $\mathbf{w}_1,\ldots,\mathbf{w}_s$ such that $(\mathcal{L},\mathbf{w}_1,\ldots,\mathbf{w}_s)$ is a basis by Theorem \ref{thm:extending-independent-lists}.\\
+Choose $(\mathbf{x}_i)_{i=1}^{s}\in\operatorname{span}(\mathcal{L})^s$ satisfying $(\forall i\in\{1,\ldots,s\})\,N\mathbf{x}_i=N\mathbf{w}_i$ by $\mathcal{W}=N(\operatorname{span}(\mathcal{L}))$.\\
+Set $\mathbf{z}_i\defeq\mathbf{w}_i-\mathbf{x}_i$ for $i\in\{1,\ldots,s\}$. Then $(\forall i\in\{1,\ldots,s\})\,N\mathbf{z}_i=\mathbf{0}$ by construction.\\
+The list $(\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s)$ spans $\mathcal{V}$ by $\mathbf{w}_i=\mathbf{z}_i+\mathbf{x}_i$ and $\mathbf{x}_i\in\operatorname{span}(\mathcal{L})$. Suppose a linear combination of $(\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s)$ is zero.\\
+Substitute $\mathbf{z}_i=\mathbf{w}_i-\mathbf{x}_i$ in this relation. Every $\mathbf{w}_i$-coefficient is zero by linear independence of $(\mathcal{L},\mathbf{w}_1,\ldots,\mathbf{w}_s)$.\\
+The remaining $\mathcal{L}$-coefficients are zero by linear independence of $\mathcal{L}$.\\
+Thus $(\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s)$ is linearly independent, hence a basis by the preceding spanning property.
+\item \hlt{Chain Verification}: Set $r\defeq t+s$ and $\mathbf{v}'\defeq(\mathbf{v}_1,\ldots,\mathbf{v}_t,\mathbf{z}_1,\ldots,\mathbf{z}_s)$. Set $\mathbf{m}'\defeq(\ell_1+1,\ldots,\ell_t+1,\underbrace{0,\ldots,0}_{s\text{ entries}})$.\\
+Then $\mathcal{B}_N(\mathbf{v}',\mathbf{m}')=(\mathcal{L},\mathbf{z}_1,\ldots,\mathbf{z}_s)$ is a basis by item (iv). The identities $(\forall j\in\{1,\ldots,t\})\,N^{\ell_j+2}\mathbf{v}_j=\mathbf{0}$ hold by item (iii).\\
+The identities $(\forall i\in\{1,\ldots,s\})\,N\mathbf{z}_i=\mathbf{0}$ hold by item (iv). Thus $\mathsf{CB}_N(r,\mathbf{v}',\mathbf{m}')$ by its defining conditions.
+\end{enumerate}
+\hlt{Structural Commentary}: Strong induction lifts a range-chain basis; kernel correction completes the lifted list.\\
+\hlt{Key Insight}: The $N$-image of a lifted dependence lies in the known range basis.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:jordan-chain-nilpotent-basis} illustrates the nilpotent shift along one chain in the adapted basis order.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/jordan_chain_nilpotent_basis.tikz}
-  \caption{A nilpotent chain shifts left under $N$; in this basis order it becomes one Jordan block.}
+  \caption{An ordered nilpotent chain shifts left under $N$ and represents one Jordan block.}
   \label{fig:jordan-chain-nilpotent-basis}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{method} \label{meth:filippov-column-space-jordan-strings} \hlt{Filippov Column-Space Jordan Chains}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $\lambda\in\operatorname{spec}(A)$, and set $N=A-\lambda I_n$ on the generalized eigenspace $\mathcal{G}_{\lambda}(A)=\ker(N^n)$.
+\begin{computationmethod} \label{meth:recursive-range-lifting-jordan-construction} \hlt{Recursive Range-Lifting Jordan Construction}\\
+Given $n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(n,n,\mathbb{C})$, construct basis matrix $M\in\operatorname{Mat}(n,n,\mathbb{C})^{\times}$. Construct Jordan matrix $J$ with postcondition $AM=MJ$.\\
+Fix $\lambda\in\operatorname{spec}(A)$ and set $\mathcal{G}_{\lambda}\defeq\ker((A-\lambda I_n)^n)$. Set $N_{\lambda}\defeq(A-\lambda I_n)|_{\mathcal{G}_{\lambda}}$.\\
+The inclusion $(A-\lambda I_n)\mathcal{G}_{\lambda}\subseteq\mathcal{G}_{\lambda}$ holds by commutativity of powers of $A-\lambda I_n$. Thus $N_{\lambda}\in\LL(\mathcal{G}_{\lambda})$ and $N_{\lambda}^n=0$ by the definition of $\mathcal{G}_{\lambda}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Work first inside $\operatorname{range}(N)\cap\mathcal{G}_{\lambda}(A)$, where $N$ is again nilpotent.
-\item Build Jordan chains for this smaller nilpotent operator.
-\item For each chain ending in $\mathbf{u}$, solve $N\mathbf{v}=\mathbf{u}$ in $\mathcal{G}_{\lambda}(A)$ and lift the chain by appending $\mathbf{v}$.
-\item Add enough vectors from $\ker(N)$ to complete a basis of $\mathcal{G}_{\lambda}(A)$; these added vectors are length-one chains.
-\item Repeat the process recursively until all of $\mathcal{G}_{\lambda}(A)$ is covered, then concatenate the chains for all eigenvalues.
+\item If $N_{\lambda}=0$, choose an ordered basis of $\mathcal{G}_{\lambda}$ and regard its vectors as singleton chains.
+\item If $N_{\lambda}\neq0$, recursively construct a chain basis for $N_{\lambda}|_{\operatorname{range}(N_{\lambda})}$.
+\item Given a returned chain $\mathcal{C}_{N_{\lambda}}(\mathbf{u},\ell)$, choose $\mathbf{v}\in\mathcal{G}_{\lambda}$ with $N_{\lambda}\mathbf{v}=\mathbf{u}$. Replace the returned chain by $\mathcal{C}_{N_{\lambda}}(\mathbf{v},\ell+1)$.
+\item Perform the kernel-completion correction from the proof of Theorem \ref{thm:nilpotent-jordan-chain-basis} on the lifted list.\\
+Append the resulting kernel vectors as singleton chains.
+\item Repeat (i)--(iv) over $\lambda\in\operatorname{spec}(A)$, concatenate the resulting bases, and order the matching Jordan blocks identically.
 \end{enumerate}
-The lifting steps are valid by Theorem \ref{thm:nilpotent-jordan-chain-basis}; the chain relations give $AM=MJ$ for the resulting basis matrix.
-\end{method}
+If $N_{\lambda}\neq0$, then $N_{\lambda}$ is not injective because injectivity would make $N_{\lambda}^n=0$ injective.\\
+Thus its range dimension is strictly smaller by Theorem \ref{thm:rank-nullity}(ii), so the recursion terminates.\\
+Steps (i)--(iv) produce a basis of $\mathcal{G}_{\lambda}$ by Theorem \ref{thm:nilpotent-jordan-chain-basis}.\\
+The concatenation in (v) is a basis by Theorem \ref{thm:complex-primary-decompositi generalized-eigenspaces}(i).\\
+Each returned $\mathcal{C}_{N_{\lambda}}(\mathbf{v},m)$ satisfies $N_{\lambda}^{m+1}\mathbf{v}=\mathbf{0}$ by construction. It is a Jordan chain for $A$ at $\lambda$ by $N_{\lambda}=A-\lambda I_n$ on $\mathcal{G}_{\lambda}$. The postcondition $AM=MJ$ holds by Proposition \ref{prop:jordan-chains-as-matrix-columns}(ii).
+\end{computationmethod}
 
 \begin{proposition} \label{prop:powers-of-jordan-block} \hlt{Powers of a Jordan Block}\\
-Let $k\geq1$ and $\lambda\in\mathbb{C}$. For $p\geq0$, $J_k(\lambda)^p =\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$. Thus $J_k(\lambda)^p\to0$ if and only if $\abs{\lambda}<1$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+Let $k\in\mathbb{Z}_{>0}$ and $\lambda\in\mathbb{C}$, using $0^0\defeq1$ in (i). Then:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $J_k(\lambda)^p\to0$, then its diagonal entries $\lambda^p$ tend to $0$, so $\abs{\lambda}<1$.
-\item[$(\Leftarrow)$] If $\abs{\lambda}<1$, then for each fixed $0\leq r<k$ the scalar $\binom{p}{r}\lambda^{p-r}$ tends to $0$, because a polynomial in $p$ is dominated by the exponential decay of $\abs{\lambda}^{p}$.
+\item $(\forall\,p\in\mathbb{Z}_{\geq0})\,J_k(\lambda)^p=\sum\limits_{r=0}^{\min(p,k-1)}\binom{p}{r}\lambda^{p-r}J_k(0)^r$.
+\item $J_k(\lambda)^p\to0$ entrywise as $p\to\infty$ iff $\abs{\lambda}<1$.
 \end{enumerate}
-\hlt{Structural Commentary}: Jordan powers are exponential-polynomial terms.\\
-\hlt{Key Insight}: Polynomial growth cannot defeat exponential decay when $\abs{\lambda}<1$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Fix $p\in\mathbb{Z}_{\geq0}$, $R\defeq J_k(0)$. For $0\leq r<k$, matrix $R^r$ has ones on $r$th superdiagonal, zeros elsewhere by induction on $r$.\\
+The identity $(\forall r\in\mathbb{Z}_{\geq k})\,R^r=0$ holds by the same induction.\\
+By distributivity, each subset of the $p$ factors in $(\lambda I_k+R)^p$ selects the factors contributing $R$.\\
+For $r\in\{0,\ldots,p\}$, exactly $\binom{p}{r}$ subsets select $r$ factors by Proposition \ref{prop:unordered-samples-binomial-coefficients}.\\
+The identity $(\lambda I_k+R)^p=\sum\limits_{r=0}^{p}\binom{p}{r}\lambda^{p-r}R^r$ holds by commutativity and regrouping by subset size.\\
+The identity in (i) holds by deleting the zero terms with $r\geq k$.
+\item[$(ii)$] ($\Rightarrow$) The diagonal sequence satisfies $\lambda^p\to0$ by entrywise convergence of $J_k(\lambda)^p$.\\
+If $\abs{\lambda}\geq1$, then $(\forall p\in\mathbb{Z}_{\geq0})\,\abs{\lambda^p}\geq1$, contrary to $\lambda^p\to0$. Thus $\abs{\lambda}<1$ by contradiction.
+\item[$(ii)$] ($\Leftarrow$) If $\lambda=0$, then $(\forall p\in\mathbb{Z}_{\geq k})\,J_k(0)^p=0$ by the power description in (i).\\
+Assume $\rho\defeq\abs{\lambda}\in(0,1)$ and fix $r\in\{0,\ldots,k-1\}$. Set $a_{p,r}\defeq\binom{p}{r}\rho^{p-r}$ for $p\geq r$.\\
+Set $\theta\defeq\frac{1+\rho}{2}\in(\rho,1)$. Choose $P\in\mathbb{Z}_{\geq r}$ satisfying $(\theta-\rho)(P+1)\geq\theta r$ by unboundedness of $\mathbb{Z}_{>0}$.\\
+$(\forall p\in\mathbb{Z}_{\geq P})\,\frac{a_{p+1,r}}{a_{p,r}}=\frac{\rho(p+1)}{p+1-r}\leq\theta$ by factorial cancellation and the choice of $P$.\\
+Hence $(\forall m\in\mathbb{Z}_{\geq0})\,a_{P+m,r}\leq a_{P,r}\theta^m$ by induction on $m$. Fix $\varepsilon>0$ and set $\delta\defeq\theta^{-1}-1>0$.\\
+Choose $M\in\mathbb{Z}_{>0}$ satisfying $1+M\delta>\frac{a_{P,r}}{\varepsilon}$ by unbounded $\mathbb{Z}_{>0}$. For $m\in\mathbb{Z}_{\geq M}$, $\theta^{-m}=(1+\delta)^m\geq1+m\delta$ by Proposition \ref{prop:binomial-theorem-and-subset-count}(i).\\
+Thus $0\leq a_{P+m,r}\leq\frac{a_{P,r}}{1+m\delta}<\varepsilon$, so $a_{p,r}\to0$. Thus $(\forall r\in\{0,\ldots,k-1\})\,\binom{p}{r}\lambda^{p-r}\to0$ as $p\to\infty$.\\
+Each entry in the expansion from (i) is zero or $\binom{p}{r}\lambda^{p-r}$ for one $r\in\{0,\ldots,k-1\}$.\\
+Its absolute value is therefore either $0$ or $a_{p,r}$, and hence tends to $0$. Thus $J_k(\lambda)^p\to0$ by convergence of each entry.
+\end{enumerate}
+\hlt{Structural Commentary}: Nilpotence truncates the expansion; diagonal entries and a geometric majorant resolve the limit criterion.\\
+\hlt{Key Insight}: Each fixed superdiagonal has polynomial coefficients multiplied by geometric decay.
 \end{proof}
 \end{proposition}

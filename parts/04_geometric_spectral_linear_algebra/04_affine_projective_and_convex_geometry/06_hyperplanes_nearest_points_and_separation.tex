@@ -1,73 +1,108 @@
 \subsection{Hyperplanes, Nearest Points, and Separation}
 
 \begin{definition} \label{def:affine-hyperplanes-halfspaces-separation} \hlt{Hyperplanes, Half-Spaces, and Separation}\\
-Let $\mathbf{N}\in\R^n\setminus\{\mathbf{0}\}$ and $b\in\R$.
+Let $n\in\mathbb{Z}_{>0}$, $\mathbf{N}\in\R^n\setminus\{\mathbf{0}\}$, and $b\in\R$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The \hlt{affine hyperplane} with normal $\mathbf{N}$ and level $b$ is $\mathcal{H}(\mathbf{N},b) \defeq \{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}=b\}$.
-\item The case $b=0$ gives the \hlt{linear hyperplane} $\mathcal{H}(\mathbf{N},0)=\operatorname{span}(\mathbf{N})^\perp$.
-\item The \hlt{closed half-spaces} determined by $\mathcal{H}(\mathbf{N},b)$ are\\
-$\mathcal{H}_+(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}\geq b\}$ and $\mathcal{H}_-(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}\leq b\}$.\\
-The \hlt{open half-spaces} are obtained by replacing $\geq,\leq$ with $>,<$.
-\item For $X\subseteq\R^n$ and $\star\in\{<,\leq,>,\geq\}$, use the \hlt{set-inequality convention} $\innerprod{\mathbf{N},X}\star b$ $\Longleftrightarrow$ $\innerprod{\mathbf{N},\mathbf{x}}\star b \ \forall \mathbf{x}\in X$.
-\item An \hlt{orientation} of $\mathcal{H}(\mathbf{N},b)$ is $\sigma(\mathbf{N},b)\defeq(\sigma\mathbf{N},\sigma b)$ for $\sigma\in\{\pm1\}$.
-\item Sets $X,Y\subseteq\R^n$ are \hlt{strictly separated} by $\mathcal{H}(\mathbf{N},b)$ if $\exists\sigma\in\{\pm1\}$ such that $\innerprod{\sigma\mathbf{N},X}<\sigma b<\innerprod{\sigma\mathbf{N},Y}$
-\item Sets $X,Y\subseteq\R^n$ are \hlt{strongly separated} by $\mathcal{H}(\mathbf{N},b)$ if $\exists\sigma\in\{\pm1\}$ and $\varepsilon>0$ such that\\
-$\innerprod{\sigma\mathbf{N},X}<\sigma b-\varepsilon<\sigma b+\varepsilon<\innerprod{\sigma\mathbf{N},Y}$.
+\item The \hlt{affine hyperplane} with normal $\mathbf{N}$ and level $b$ is $\mathcal{H}(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}=b\}$.\\
+Its affine decomposition is $\mathcal{H}(\mathbf{N},b)=\frac{b}{\norm{\mathbf{N}}^2}\mathbf{N}+\operatorname{span}(\mathbf{N})^\perp$.
+\item The \hlt{linear hyperplane} with normal $\mathbf{N}$ is $\mathcal{H}(\mathbf{N},0)=\operatorname{span}(\mathbf{N})^\perp$.
+\item The \hlt{closed positive half-space} is $\mathcal{H}_+(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}\geq b\}$.\\
+The \hlt{closed negative half-space} is $\mathcal{H}_-(\mathbf{N},b)\defeq\{\mathbf{x}\in\R^n:\innerprod{\mathbf{N},\mathbf{x}}\leq b\}$.\\
+Replacing $\geq,\leq$ by $>,<$ defines the corresponding open half-spaces.
+\item For $X\subseteq\R^n$ and $\star\in\{<,\leq,>,\geq\}$, the \hlt{set-inequality convention} is $\innerprod{\mathbf{N},X}\star b\Longleftrightarrow(\forall\,\mathbf{x}\in X)\,\innerprod{\mathbf{N},\mathbf{x}}\star b$.\\
+Symmetrically, $b\star\innerprod{\mathbf{N},X}\Longleftrightarrow(\forall\,\mathbf{x}\in X)\,b\star\innerprod{\mathbf{N},\mathbf{x}}$.
+\item For $\sigma\in\{\pm1\}$, $\sigma(\mathbf{N},b)\defeq(\sigma\mathbf{N},\sigma b)$ is an \hlt{orientation} of $\mathcal{H}(\mathbf{N},b)$.
+\item Sets $X,Y\subseteq\R^n$ are \hlt{strictly separated} by $\mathcal{H}(\mathbf{N},b)$ iff $(\exists\,\sigma\in\{\pm1\})\,\innerprod{\sigma\mathbf{N},X}<\sigma b<\innerprod{\sigma\mathbf{N},Y}$.
+\item Sets $X,Y\subseteq\R^n$ are \hlt{strongly separated} by $\mathcal{H}(\mathbf{N},b)$ iff $(\exists\,\sigma\in\{\pm1\})(\exists\,\varepsilon>0)\,\innerprod{\sigma\mathbf{N},X}<\sigma b-\varepsilon<\sigma b+\varepsilon<\innerprod{\sigma\mathbf{N},Y}$.
 \end{enumerate}
 \end{definition}
 
-\begin{remark} \label{rem:hyperplane-basic-geometry} \hlt{Hyperplane Geometry}\\
-The half-spaces satisfy $\mathcal{H}_+(\mathbf{N},b)\cap\mathcal{H}_-(\mathbf{N},b)=\mathcal{H}(\mathbf{N},b)$, and two open half-spaces with $\mathcal{H}(\mathbf{N},b)$ partition $\R^n$.\\
-Moreover, $\mathbf{N}\in\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2)$, by Cauchy--Schwarz (Theorem \ref{thm:cauchy-schwarz-inequality}), $\mathbf{N}$ is closest point of this hyperplane to $\mathbf{0}$.
+\begin{remark} \label{rem:hyperplane-basic-geometry} \hlt{Basic Hyperplane Geometry}\\
+The identity $\mathcal{H}_+(\mathbf{N},b)\cap\mathcal{H}_-(\mathbf{N},b)=\mathcal{H}(\mathbf{N},b)$ holds.\\
+$\R^n=\bigl(\mathcal{H}_-(\mathbf{N},b)\setminus\mathcal{H}(\mathbf{N},b)\bigr)\sqcup\mathcal{H}(\mathbf{N},b)\sqcup\bigl(\mathcal{H}_+(\mathbf{N},b)\setminus\mathcal{H}(\mathbf{N},b)\bigr)$.\\
+The three terms are the negative open half-space, the hyperplane, and the positive open half-space.\\
+Since $\mathbf{N}\in\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2)$, $(\forall\,\mathbf{x}\in\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2))\,\norm{\mathbf{N}}^2=\innerprod{\mathbf{N},\mathbf{x}}\leq\norm{\mathbf{N}}\norm{\mathbf{x}}$ by Theorem \ref{thm:cauchy-schwarz-inequality}(i).\\
+Hence $(\forall\,\mathbf{x}\in\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2))\,\norm{\mathbf{N}}\leq\norm{\mathbf{x}}$, so $\mathbf{N}$ is a closest point of this hyperplane to $\mathbf{0}$.
 \end{remark}
 
 \begin{theorem} \label{thm:nearest-point-and-point-separation-convex-set} \hlt{Nearest Points and Separating a Point}\\
 Let $C\subseteq\R^n$ be nonempty, closed, and convex.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item There exists a unique $\mathbf{N}_C\in C$ such that $\norm{\mathbf{N}_C}=\min_{\mathbf{x}\in C}\norm{\mathbf{x}}$.
-\item If $\mathbf{b}\notin C$, set $D\defeq C-\mathbf{b}$ and let $\mathbf{N}\in D$ satisfy $\norm{\mathbf{N}}=\min_{\mathbf{z}\in D}\norm{\mathbf{z}}$.\\
-Then $\mathbf{N}\neq\mathbf{0}$ and $\innerprod{\mathbf{N},C} \geq \norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}} > \innerprod{\mathbf{N},\mathbf{b}}$.\\
-With $\alpha\defeq\innerprod{\mathbf{N},\mathbf{b}}+\frac{1}{2}\norm{\mathbf{N}}^2$, the hyperplane $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $\{\mathbf{b}\}$ and $C$.
+\item $(\exists!\,\mathbf{N}_C\in C)(\forall\,\mathbf{x}\in C)\,\norm{\mathbf{N}_C}\leq\norm{\mathbf{x}}$.
+\item If $\mathbf{b}\notin C$, put $D\defeq C-\mathbf{b}\defeq\{\mathbf{x}-\mathbf{b}:\mathbf{x}\in C\}$ and let $\mathbf{N}$ be its unique minimum-norm vector.\\
+Then $\mathbf{N}\neq\mathbf{0}$ and $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}}>\innerprod{\mathbf{N},\mathbf{b}}$.
+\item Under the hypotheses and notation of (ii), set $\alpha\defeq\innerprod{\mathbf{N},\mathbf{b}}+\frac{1}{2}\norm{\mathbf{N}}^2$. Then $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $\{\mathbf{b}\}$ and $C$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Choose $\mathbf{x}_0\in C$ and $s\geq\norm{\mathbf{x}_0}$. Then $K\defeq C\cap\overline{B}_s(\mathbf{0})$ is nonempty and compact by Theorem \ref{thm:heine-borel-rk}.\\
-Since $\norm{\cdot}$ is continuous, Theorem \ref{thm:extreme-value-theorem-compact} gives $\mathbf{N}_C\in K$ minimizing $\norm{\cdot}$ on $K$.\\
-If $\mathbf{x}\in C$ and $\norm{\mathbf{x}}<\norm{\mathbf{N}_C}$, then $\mathbf{x}\in K$, a contradiction; hence $\mathbf{N}_C$ minimizes on $C$.\\
-If $\mathbf{u}\neq\mathbf{v}$ are minimizers of norm $m$, then $\mathbf{w}\defeq(\mathbf{u}+\mathbf{v})/2\in C$ and, by the parallelogram identity, Theorem \ref{thm:parallelogram-identity-inner-product}, $\norm{\mathbf{w}}^2 =m^2-\frac{1}{4}\norm{\mathbf{u}-\mathbf{v}}^2 <m^2$, a contradiction.
-\item The set $D=C-\mathbf{b}$ is nonempty, closed, and convex, so (i) gives its unique minimum-norm vector $\mathbf{N}$.\\
-Since $\mathbf{b}\notin C$, $\mathbf{0}\notin D$, hence $\mathbf{N}\neq\mathbf{0}$. For $\mathbf{z}\in D$, define $\phi(t)\defeq\norm{\mathbf{N}+t(\mathbf{z}-\mathbf{N})}^2$, $0\leq t\leq1$.\\
-Minimality gives $\phi'_+(0)\geq0$, hence $\innerprod{\mathbf{N},\mathbf{z}}\geq\norm{\mathbf{N}}^2$. Taking $\mathbf{z}=\mathbf{x}-\mathbf{b}$ yields $\innerprod{\mathbf{N},\mathbf{x}}\geq\norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}}$ for all $\mathbf{x}\in C$. For $\alpha\defeq\innerprod{\mathbf{N},\mathbf{b}}+\norm{\mathbf{N}}^2/2$ and $\varepsilon\defeq\norm{\mathbf{N}}^2/4$, then $\innerprod{\mathbf{N},\mathbf{b}} <\alpha-\varepsilon<\alpha+\varepsilon<\innerprod{\mathbf{N},C}$, so $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $\{\mathbf{b}\}$ and $C$.
+\item Put $m\defeq\inf\{\norm{\mathbf{x}}^2:\mathbf{x}\in C\}$. By the definition of infimum, choose $(\mathbf{x}_j)_{j\geq1}\subseteq C$ satisfying $m\leq\norm{\mathbf{x}_j}^2<m+\frac{1}{j}$.\\
+For $j,\ell\geq1$, $\mathbf{w}_{j,\ell}\defeq\frac{1}{2}(\mathbf{x}_j+\mathbf{x}_\ell)\in C$ by convexity.\\
+By Theorem \ref{thm:parallelogram-identity-inner-product}, $\norm{\mathbf{x}_j-\mathbf{x}_\ell}^2=2\norm{\mathbf{x}_j}^2+2\norm{\mathbf{x}_\ell}^2-4\norm{\mathbf{w}_{j,\ell}}^2\leq\frac{2}{j}+\frac{2}{\ell}$, so $(\mathbf{x}_j)_{j\geq1}$ is Cauchy.\\
+Write $\mathbf{x}_j=(x_{j,1},\ldots,x_{j,n})$. For $r\in\{1,\ldots,n\}$ and $q\geq1$, put $a_{q,r}\defeq\inf\{x_{j,r}:j\geq q\}$ and $b_{q,r}\defeq\sup\{x_{j,r}:j\geq q\}$.\\
+Since $(\forall\,j,\ell\geq1)\,\abs{x_{j,r}-x_{\ell,r}}\leq\norm{\mathbf{x}_j-\mathbf{x}_\ell}$, each coordinate sequence is Cauchy.\\
+Each coordinate sequence is bounded, so $a_{q,r},b_{q,r}\in\R$.\\
+For $\eta>0$, choose $q_0\geq1$ with $(\forall\,q\geq q_0)\,0\leq b_{q,r}-a_{q,r}\leq\eta$ by the Cauchy property.\\
+Thus $b_{q,r}-a_{q,r}\to0$, and the intervals $[a_{q,r},b_{q,r}]$ are nested. Put $N_r\defeq\sup\{a_{q,r}:q\geq1\}$.\\
+Nestedness implies $(\forall\,q\geq1)\,[a_{q,r}\leq N_r\leq b_{q,r}\land(\forall\,j\geq q)\,\abs{x_{j,r}-N_r}\leq b_{q,r}-a_{q,r}]$, so $x_{j,r}\to N_r$.\\
+For $\mathbf{N}_C\defeq(N_1,\ldots,N_n)$, $\norm{\mathbf{x}_j-\mathbf{N}_C}^2=\sum\limits_{r=1}^{n}\abs{x_{j,r}-N_r}^2\to0$.\\
+If $\mathbf{N}_C\notin C$, choose $\rho>0$ with $B_\rho(\mathbf{N}_C)\subseteq\R^n\setminus C$ by openness of $\R^n\setminus C$.\\
+$(\exists\,j\geq1)\,\mathbf{x}_j\in B_\rho(\mathbf{N}_C)\subseteq\R^n\setminus C$ by convergence. This contradicts $(\mathbf{x}_j)_{j\geq1}\subseteq C$, so $\mathbf{N}_C\in C$.\\
+By Proposition \ref{prop:reverse-triangle-inequality-inner-product}, $\norm{\mathbf{x}_j}\to\norm{\mathbf{N}_C}$, and therefore $\norm{\mathbf{N}_C}^2=m$.\\
+If $\mathbf{u},\mathbf{v}\in C$ both have squared norm $m$, then $\mathbf{w}\defeq\frac{1}{2}(\mathbf{u}+\mathbf{v})\in C$ by convexity.\\
+By Theorem \ref{thm:parallelogram-identity-inner-product}, $m\leq\norm{\mathbf{w}}^2=m-\frac{1}{4}\norm{\mathbf{u}-\mathbf{v}}^2$, so $\mathbf{u}=\mathbf{v}$.
+\item The singleton $\{-\mathbf{b}\}$ is convex by definition and compact by Proposition \ref{prop:convex-hull-finite-set-combinations-compact}(i),(ii).\\
+Since $C\neq\emptyset$, $D=\{-\mathbf{b}\}+C\neq\emptyset$, and $D$ is closed and convex by Proposition \ref{prop:minkowski-sum-convex-compact-closed}(i),(ii).\\
+Fix its unique minimum-norm vector $\mathbf{N}$ by (i). Since $\mathbf{b}\notin C\Longleftrightarrow\mathbf{0}\notin D$, $\mathbf{N}\neq\mathbf{0}$.\\
+Fix $\mathbf{z}\in D$ and put $\mathbf{h}\defeq\mathbf{z}-\mathbf{N}$. By convexity, $(\forall\,t\in(0,1])\,\mathbf{N}+t\mathbf{h}\in D$.\\
+By minimality, $(\forall\,t\in(0,1])\,0\leq\norm{\mathbf{N}+t\mathbf{h}}^2-\norm{\mathbf{N}}^2=2t\innerprod{\mathbf{N},\mathbf{h}}+t^2\norm{\mathbf{h}}^2$.\\
+If $a\defeq\innerprod{\mathbf{N},\mathbf{h}}<0$, then $\mathbf{h}\neq\mathbf{0}$ and the right-hand side is negative for $t\in\left(0,\min\left\{1,\frac{-2a}{\norm{\mathbf{h}}^2}\right\}\right)$, a contradiction.\\
+Hence $\innerprod{\mathbf{N},\mathbf{z}}\geq\norm{\mathbf{N}}^2$. Substituting $\mathbf{z}=\mathbf{x}-\mathbf{b}$ proves $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}}>\innerprod{\mathbf{N},\mathbf{b}}$.
+\item Put $\varepsilon\defeq\frac{1}{4}\norm{\mathbf{N}}^2>0$. By (ii), $(\forall\,\mathbf{x}\in C)\,\innerprod{\mathbf{N},\mathbf{b}}<\alpha-\varepsilon<\alpha+\varepsilon<\innerprod{\mathbf{N},\mathbf{x}}$.\\
+Hence $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $\{\mathbf{b}\}$ and $C$ by Definition \ref{def:affine-hyperplanes-halfspaces-separation}(vii) with $\sigma=1$.
 \end{enumerate}
-\hlt{Structural Commentary}: The nearest point in $C-\mathbf{b}$ supplies the normal vector to a separating hyperplane.\\
-\hlt{Key Insight}: Minimal norm turns a metric problem into the linear inequality $\innerprod{\mathbf{N},\mathbf{z}}\geq\norm{\mathbf{N}}^2$.
+\hlt{Structural Commentary}: Parallelogram control constructs the minimizer; translation and one-sided variations construct the separator.\\
+\hlt{Key Insight}: Minimum norm forces every feasible displacement into one supporting half-space.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:convex-point-separating-hyperplane} illustrates Theorem \ref{thm:nearest-point-and-point-separation-convex-set}(ii),(iii).\\
+Here $\mathbf{p}=\mathbf{b}+\mathbf{N}\in C$ is nearest to $\mathbf{b}$. The vector $\mathbf{N}\in C-\mathbf{b}$ is both the displacement and the separating normal.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/convex_point_separating_hyperplane.tikz}
-  \caption{A nearest vector in $C-\mathbf{b}$ gives a normal direction and a strongly separating hyperplane.}
+  \caption{For $\mathbf{b}\notin C$, the labeled point $\mathbf{p}=\mathbf{b}+\mathbf{N}\in C$ is nearest to $\mathbf{b}$, the arrow $\mathbf{N}$ is the displacement from $\mathbf{b}$ to $\mathbf{p}$, and the labeled hyperplane lies strictly between $\mathbf{b}$ and the closed convex set $C$.}
   \label{fig:convex-point-separating-hyperplane}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:compact-convex-set-separated-from-subspace} \hlt{Separating a Compact Convex Set from a Subspace}\\
-Let $C\subseteq\R^n$ be nonempty, compact, and convex, and let $S\leq\R^n$ satisfy $C\cap S=\emptyset$.\\
-Then there exists $\mathbf{N}\in S^\perp\setminus\{\mathbf{0}\}$ such that $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2>0$.\\
-Consequently, $\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2/2)$ strongly separates $S$ and $C$.
+Let $C\subseteq\R^n$ be nonempty, compact, and convex, and let $S\leq\R^n$ satisfy $C\cap S=\emptyset$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\exists\,\mathbf{N}\in S^\perp\setminus\{\mathbf{0}\})\,\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2>0$.
+\item For a vector $\mathbf{N}$ as in (i), $\mathcal{H}(\mathbf{N},\frac{1}{2}\norm{\mathbf{N}}^2)$ strongly separates $S$ and $C$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Set $D\defeq S+C$. Since $S$ is closed in finite dimension, Proposition \ref{prop:minkowski-sum-convex-compact-closed} gives $D$ closed and convex.\\
-Also $\mathbf{0}\notin D$, for $\mathbf{0}=\mathbf{s}+\mathbf{c}$ would imply $\mathbf{c}=-\mathbf{s}\in C\cap S$.
-\item Apply Theorem \ref{thm:nearest-point-and-point-separation-convex-set} to $D$ and $\mathbf{0}$. Then $\exists\mathbf{N}\neq\mathbf{0}$ such that $\innerprod{\mathbf{N},\mathbf{s}+\mathbf{c}}\geq\norm{\mathbf{N}}^2$, $\mathbf{s}\in S,\ \mathbf{c}\in C$.\\
-Fix $\mathbf{c}_0\in C$. If $a\defeq\innerprod{\mathbf{N},\mathbf{s}}\neq0$ for some $\mathbf{s}\in S$, then $\innerprod{\mathbf{N},\lambda\mathbf{s}+\mathbf{c}_0}=\lambda a+\innerprod{\mathbf{N},\mathbf{c}_0}\to-\infty$ for $\lambda$ of opposite sign and $|\lambda|\to\infty$, a contradiction. Hence $\mathbf{N}\in S^\perp$. Taking $\mathbf{s}=\mathbf{0}$ gives $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2>0$.\\
-Since $\innerprod{\mathbf{N},\mathbf{s}}=0$ for all $\mathbf{s}\in S$, the choice $\varepsilon\defeq\norm{\mathbf{N}}^2/4$ gives strong separation by $\mathcal{H}(\mathbf{N},\norm{\mathbf{N}}^2/2)$.
+\item The subspace $S$ is convex. Put $Q\defeq P_{S^\perp}$. By Proposition \ref{prop:orthogonal-projection-properties}(i),(vi) and Corollary \ref{cor:double-orthogonal-complement}, $Q$ is linear and $\ker(Q)=S$.\\
+By Proposition \ref{prop:orthogonal-projection-properties}(viii), $(\forall\,\mathbf{v}\in\R^n)\,\norm{Q\mathbf{v}}\leq\norm{\mathbf{v}}$. Fix $\mathbf{x}\notin S$ and put $\mathbf{q}\defeq Q\mathbf{x}\neq\mathbf{0}$.\\
+If $\norm{\mathbf{y}-\mathbf{x}}<\frac{1}{2}\norm{\mathbf{q}}$, then $\norm{Q\mathbf{y}}\geq\norm{\mathbf{q}}-\norm{Q(\mathbf{y}-\mathbf{x})}\geq\norm{\mathbf{q}}-\norm{\mathbf{y}-\mathbf{x}}>0$ by Proposition \ref{prop:reverse-triangle-inequality-inner-product}.\\
+Thus $B_{\frac{1}{2}\norm{\mathbf{q}}}(\mathbf{x})\subseteq\R^n\setminus S$, so $S$ is closed. Put $D\defeq C+S$.\\
+Since $\mathbf{0}\in S$, $C\subseteq D$ and $D\neq\emptyset$. The set $D$ is closed and convex by Proposition \ref{prop:minkowski-sum-convex-compact-closed}(i),(ii).\\
+If $\mathbf{0}\in D$, then $(\exists\,(\mathbf{c},\mathbf{s})\in C\times S)\,\mathbf{0}=\mathbf{c}+\mathbf{s}$, whence $\mathbf{c}=-\mathbf{s}\in C\cap S$, a contradiction.\\
+Fix the unique minimum-norm vector $\mathbf{N}$ of $D$ by Theorem \ref{thm:nearest-point-and-point-separation-convex-set}(i).\\
+By Theorem \ref{thm:nearest-point-and-point-separation-convex-set}(ii) with $D$ and $\mathbf{0}$, $\mathbf{N}\neq\mathbf{0}$ and $(\forall\,\mathbf{c}\in C)(\forall\,\mathbf{s}\in S)\,\innerprod{\mathbf{N},\mathbf{c}+\mathbf{s}}\geq\norm{\mathbf{N}}^2$.\\
+Fix $\mathbf{c}_0\in C$. For $\mathbf{s}\in S$, put $a\defeq\innerprod{\mathbf{N},\mathbf{s}}$. If $a\neq0$, set $\lambda\defeq\frac{\norm{\mathbf{N}}^2-\innerprod{\mathbf{N},\mathbf{c}_0}-1}{a}$.\\
+Then $\lambda\mathbf{s}+\mathbf{c}_0\in D$ but $\innerprod{\mathbf{N},\lambda\mathbf{s}+\mathbf{c}_0}=\norm{\mathbf{N}}^2-1$, a contradiction.\\
+Hence $(\forall\,\mathbf{s}\in S)\,\innerprod{\mathbf{N},\mathbf{s}}=0$, so $\mathbf{N}\in S^\perp$. Taking $\mathbf{s}=\mathbf{0}$ in the preceding bound proves $\innerprod{\mathbf{N},C}\geq\norm{\mathbf{N}}^2>0$.
+\item Put $\alpha\defeq\frac{1}{2}\norm{\mathbf{N}}^2$ and $\varepsilon\defeq\frac{1}{4}\norm{\mathbf{N}}^2$. By (i), $(\forall\,\mathbf{s}\in S)(\forall\,\mathbf{c}\in C)\,\innerprod{\mathbf{N},\mathbf{s}}=0<\alpha-\varepsilon<\alpha+\varepsilon<\norm{\mathbf{N}}^2\leq\innerprod{\mathbf{N},\mathbf{c}}$.\\
+Hence $\mathcal{H}(\mathbf{N},\alpha)$ strongly separates $S$ and $C$ by Definition \ref{def:affine-hyperplanes-halfspaces-separation}(vii) with $\sigma=1$.
 \end{enumerate}
-\hlt{Structural Commentary}: The sum $S+C$ is a closed convex set disjoint from $\mathbf{0}$, so point separation applies.\\
-\hlt{Key Insight}: Since the separating inequality holds for all translates by $S$, scaling inside $S$ forces $\mathbf{N}$ to annihilate $S$.
+\hlt{Structural Commentary}: Minimum-norm separation of $C+S$ constructs the normal; unrestricted subspace scaling proves orthogonality.\\
+\hlt{Key Insight}: Translation invariance along $S$ forces the supporting normal into $S^\perp$.
 \end{proof}
 \end{theorem}

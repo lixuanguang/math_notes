@@ -137,8 +137,9 @@ Placement and syntax are exact:
 - For an allowed proofless exception, they are the final two lines immediately before the theorem-style `\end{...}`.
 - Keep them adjacent and in this order. End Structural Commentary with `\\` so Key Insight starts on the next rendered line. Do not end Key Insight with `\\`; the following `\end{proof}` or theorem-style `\end{...}` is already a structural boundary.
 - Never place them in the statement, before/after the proof, mid-proof, or inside non-theorem environments.
-- Structural Commentary names actual proof architecture or dependency, not the theorem conclusion or “by definition.” Aim for at most 18 lexical words.
-- Key Insight states why the proof works, without adding an unowned hypothesis or claim. Aim for at most 12 lexical words.
+- Draft both lines from a proof ledger after the proof stabilizes. Reuse the proof's actual mathematical nouns; reject wording that could be pasted unchanged beneath an unrelated theorem.
+- Structural Commentary must name an exact mechanism and its dependency, transfer, reduction, or handoff—not merely the theorem conclusion, “by definition,” “the argument,” “resolves the claims,” or “proves the result.” Aim for at most 18 lexical words, but never sacrifice proof specificity to meet the target.
+- Key Insight must state the exact invariant, obstruction, decisive construction, or reason the terminal step works, without adding an unowned hypothesis or claim. Aim for at most 12 lexical words, but never replace mathematical content with a generic slogan to meet the target.
 - Each should fit one rendered line when feasible. A short proof is not an exception.
 
 Before completion, manually check adjacency, order, terminal placement, syntax, content quality, and rendered line length; matching counts alone do not suffice.

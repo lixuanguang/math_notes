@@ -4,57 +4,79 @@
 %
 % Inner products, norms, Cauchy--Schwarz, orthogonality, orthonormal bases, Gram--Schmidt, Gram matrices.
 
-Throughout this subsection, $\mathbb{F}$ is $\mathbb{R}$ or $\mathbb{C}$. Inner products turn linear spaces into geometric spaces with norms, orthogonality, orthonormal bases, and Gram matrices.
+Throughout, $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$. This subsection develops the norm and metric geometry determined by an inner product.
 
-\begin{definition} \label{def:inner-product-preliminary-terminology} \hlt{Preliminary Terminology}
+\begin{definition} \label{def:inner-product-preliminary-terminology} \hlt{Preliminary Terminology}\\
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $\mathbf{x},\mathbf{y}\in\mathbb{R}^n$, the \hlt{dot product} is $\mathbf{x}\cdot\mathbf{y}\defeq x_1y_1+\cdots+x_ny_n$.
-\item For $z=a+bi\in\mathbb{C}$, the \hlt{complex conjugate} is $\overline{z}\defeq a-bi$, and the \hlt{modulus} is $\abs{z}\defeq\sqrt{a^2+b^2}$.
-\item A map $f:\mathcal{V}\to\mathbb{F}$ is \hlt{conjugate linear} if $f(\mathbf{u}+\mathbf{v})=f(\mathbf{u})+f(\mathbf{v})$ and $f(\lambda\mathbf{v})=\overline{\lambda}f(\mathbf{v})$.
-\item A function $B:\mathcal{V}\times\mathcal{V}\to\mathbb{F}$ is \hlt{sesquilinear} if it is linear in one slot and conjugate linear in the other.
+\item For $z=a+bi\in\mathbb{C}$ with $a,b\in\mathbb{R}$, its \hlt{complex conjugate} and \hlt{modulus} are $\overline{z}\defeq a-bi$ and $\abs{z}\defeq\sqrt{a^2+b^2}$.
+\item A map $f:\mathcal{V}\to\mathbb{F}$ is \hlt{conjugate linear} if $(\forall\,\mathbf{u},\mathbf{v}\in\mathcal{V})(\forall\,\lambda\in\mathbb{F})\,\bigl(f(\mathbf{u}+\mathbf{v})=f(\mathbf{u})+f(\mathbf{v})\land f(\lambda\mathbf{v})=\overline{\lambda}f(\mathbf{v})\bigr)$.
+\item A map $B:\mathcal{V}\times\mathcal{V}\to\mathbb{F}$ is \hlt{sesquilinear} if it is linear in its first slot and conjugate linear in its second slot.
 \end{enumerate}
 \end{definition}
 
 \begin{motivation} \label{mot:inner-product-from-dot-product} \hlt{From Dot Products to Inner Products}\\
-For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{R}^n$, the Euclidean length is $\norm{\mathbf{x}}=\sqrt{x_1^2+\cdots+x_n^2}$.\\
-The expression under the square root is the dot product of $\mathbf{x}$ with itself. Over $\mathbb{C}$, conjugates are needed to keep squared length real and nonnegative: $\norm{\mathbf{z}}^2=\abs{z_1}^2+\cdots+\abs{z_n}^2 =z_1\overline{z_1}+\cdots+z_n\overline{z_n}$.\\
-Thus the standard inner product on $\mathbb{F}^n$ is $\innerprod{\mathbf{x},\mathbf{y}} \defeq x_1\overline{y_1}+\cdots+x_n\overline{y_n}$.
+For $\mathbf{x}\in\mathbb{R}^n$, Euclidean squared length is $\mathbf{x}\cdot\mathbf{x}=\sum\limits_{j=1}^{n}x_j^2$.\\
+For $z\in\mathbb{C}$, the scalar $z^2$ need not be real, whereas $z\overline{z}=\abs{z}^2\geq0$.\\
+Conjugating one factor therefore preserves nonnegative squared length and motivates the following axioms.
 \end{motivation}
 
 \begin{definition} \label{def:inner-product} \hlt{Inner Product}\\
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. An \hlt{inner product} on $\mathcal{V}$ is a function that assigns to each pair $\mathbf{u},\mathbf{v}\in\mathcal{V}$ a scalar $\innerprod{\mathbf{u},\mathbf{v}}\in\mathbb{F}$ satisfying, for all $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$ and all $\lambda\in\mathbb{F}$,
-\begin{enumerate}[label=\roman*.]
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. An \hlt{inner product} on $\mathcal{V}$ is a map $\innerprod{\cdot,\cdot}:\mathcal{V}\times\mathcal{V}\to\mathbb{F}$ satisfying, for $(\mathbf{u},\mathbf{v},\mathbf{w},\lambda)\in\mathcal{V}^3\times\mathbb{F}$:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{positivity}: $\innerprod{\mathbf{v},\mathbf{v}}\geq 0$;
-\item \hlt{definiteness}: $\innerprod{\mathbf{v},\mathbf{v}}=0$ if and only if $\mathbf{v}=\mathbf{0}$;
+\item \hlt{positivity}: $\innerprod{\mathbf{v},\mathbf{v}}\in[0,\infty)$;
+\item \hlt{definiteness}: $\innerprod{\mathbf{v},\mathbf{v}}=0\Longleftrightarrow\mathbf{v}=\mathbf{0}$;
 \item \hlt{additivity in the first slot}: $\innerprod{\mathbf{u}+\mathbf{v},\mathbf{w}}=\innerprod{\mathbf{u},\mathbf{w}}+\innerprod{\mathbf{v},\mathbf{w}}$;
 \item \hlt{homogeneity in the first slot}: $\innerprod{\lambda\mathbf{u},\mathbf{v}}=\lambda\innerprod{\mathbf{u},\mathbf{v}}$;
 \item \hlt{conjugate symmetry}: $\innerprod{\mathbf{u},\mathbf{v}}=\overline{\innerprod{\mathbf{v},\mathbf{u}}}$.
 \end{enumerate}
-In the positivity axiom, $\innerprod{\mathbf{v},\mathbf{v}}\geq 0$ means that $\innerprod{\mathbf{v},\mathbf{v}}$ is a real nonnegative scalar.
 \end{definition}
 
 \begin{definition} \label{def:inner-product-space} \hlt{Inner-Product Space}\\
 An \hlt{inner-product space} is a vector space $\mathcal{V}$ together with an inner product on $\mathcal{V}$.
 \end{definition}
 
+Henceforth, unless stated otherwise, $\mathcal{V}$ denotes an inner-product space over $\mathbb{F}$.
+
+\begin{definition} \label{def:norm-induced-by-inner-product} \hlt{Norm Induced by an Inner Product}\\
+For $\mathbf{v}\in\mathcal{V}$, the \hlt{norm} of $\mathbf{v}$ is $\norm{\mathbf{v}}\defeq\sqrt{\innerprod{\mathbf{v},\mathbf{v}}}$.
+\end{definition}
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/linear_algebra/inner_product_norm_vector.tikz}
+  \caption{The norm is vector length, with $\norm{\mathbf{x}}^2=\innerprod{\mathbf{x},\mathbf{x}}$.}
+  \label{fig:inner-product-norm-vector}
+\end{illustrationfigure}
+
+Figure \ref{fig:inner-product-norm-vector} draws $\mathbf{x}\in\mathbb{R}^2$ with coordinate legs $x_1,x_2$, so its length realizes $\norm{\mathbf{x}}^2=x_1^2+x_2^2$.
+
 \begin{example} \label{ex:standard-inner-product-on-fn} \hlt{Standard Inner Product on $\mathbb{F}^n$}\\
-For $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, the standard inner product is $\innerprod{\mathbf{x},\mathbf{y}}=\sum\limits_{j=1}^{n}x_j\overline{y_j}$. When $\mathbb{F}=\mathbb{R}$, this is the usual dot product.
+For $\mathbf{x},\mathbf{y}\in\mathbb{F}^n$, set $\innerprod{\mathbf{x},\mathbf{y}}\defeq\sum\limits_{j=1}^{n}x_j\overline{y_j}$. Sesquilinearity and conjugate symmetry hold componentwise, while $\innerprod{\mathbf{x},\mathbf{x}}=\sum\limits_{j=1}^{n}\abs{x_j}^2$ verifies positivity and definiteness. For $\mathbb{F}=\mathbb{R}$, this is the dot product.
 \end{example}
 
-\begin{example} \label{ex:function-and-matrix-inner-products} \hlt{Function and Matrix Inner Products}\\
-If $\mathcal{V}=C_{\mathbb{F}}[a,b]$, then $\innerprod{f,g}=\int_a^b f(t)\overline{g(t)}\,dt$ is an inner product.\\
-If $\mathcal{V}=\operatorname{Mat}(m,n,\mathbb{F})$, then the \hlt{Frobenius inner product} is $\innerprod[F]{A,B} \defeq \sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n} a_{ij}\overline{b_{ij}}$.
+\begin{example} \label{ex:function-and-matrix-inner-products} \hlt{Function and Matrix Inner Products}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $a<b$, then $\innerprod{f,g}\defeq\int_a^b f(t)\overline{g(t)}\,dt$ is an inner product on $C_{\mathbb{F}}[a,b]$.\\
+Positivity and definiteness follow from $\innerprod{f,f}=\int_a^b\abs{f(t)}^2\,dt\geq0$, with equality only for $f=0$ by continuity.
+\item On $\operatorname{Mat}(m,n,\mathbb{F})$, the \hlt{Frobenius inner product} is $\innerprod[F]{A,B}\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}a_{ij}\overline{b_{ij}}$.\\
+Sesquilinearity holds entrywise, and $\innerprod[F]{A,A}=\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}\abs{a_{ij}}^2$ is nonnegative and vanishes exactly when $A=0$.
+\end{enumerate}
 \end{example}
 
 \begin{example} \label{ex:square-summable-sequence-inner-product} \hlt{Square-Summable Sequences}\\
-Set $\ell^2(\mathbb{F})\defeq\left\{\mathbf{x}=(x_j)_{j\geq1}:\sum\limits_{j=1}^{\infty}\abs{x_j}^2<\infty\right\}$, where $\innerprod{\mathbf{x},\mathbf{y}}\defeq\sum\limits_{j=1}^{\infty}x_j\overline{y_j}$. Since $\abs{x_j\overline{y_j}}\leq(\abs{x_j}^2+\abs{y_j}^2)/2$, the series converges absolutely; termwise operations give an inner product on $\ell^2(\mathbb{F})$, with $\mathbb{F}^{(\mathbb{N})}\subseteq\ell^2(\mathbb{F})$.
+Set $\ell^2(\mathbb{F})\defeq\left\{(x_j)_{j\geq1}:\sum\limits_{j=1}^{\infty}\abs{x_j}^2<\infty\right\}$ and $\innerprod{\mathbf{x},\mathbf{y}}\defeq\sum\limits_{j=1}^{\infty}x_j\overline{y_j}$. The bound $\abs{x_j\overline{y_j}}\leq\frac{1}{2}(\abs{x_j}^2+\abs{y_j}^2)$ ensures absolute convergence.\\
+Termwise algebra verifies sesquilinearity and conjugate symmetry, while $\innerprod{\mathbf{x},\mathbf{x}}=\sum\limits_{j=1}^{\infty}\abs{x_j}^2$ verifies positivity and definiteness.\\
+Thus $\ell^2(\mathbb{F})$ is an inner-product space containing $\mathbb{F}^{(\mathbb{N})}$.
 \end{example}
 
 \begin{proposition} \label{prop:basic-inner-product-identities} \hlt{Basic Inner-Product Identities}\\
-Let $\mathcal{V}$ be an inner-product space. Then for all $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
-\begin{enumerate}[label=\roman*.]
+For $(\mathbf{u},\mathbf{v},\mathbf{w},\lambda)\in\mathcal{V}^3\times\mathbb{F}$:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item for fixed $\mathbf{u}$, the map $\mathbf{v}\mapsto \innerprod{\mathbf{v},\mathbf{u}}$ is linear;
 \item $\innerprod{\mathbf{0},\mathbf{u}}=0$ and $\innerprod{\mathbf{u},\mathbf{0}}=0$;
@@ -64,119 +86,136 @@ Let $\mathcal{V}$ be an inner-product space. Then for all $\mathbf{u},\mathbf{v}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item This is exactly additivity and homogeneity in the first slot.
-\item A linear map sends $\mathbf{0}$ to $0$, so $\innerprod{\mathbf{0},\mathbf{u}}=0$. Conjugate symmetry gives $\innerprod{\mathbf{u},\mathbf{0}}=\overline{\innerprod{\mathbf{0},\mathbf{u}}}=0$.
-\item By conjugate symmetry and additivity, $\innerprod{\mathbf{u},\mathbf{v}+\mathbf{w}} =\overline{\innerprod{\mathbf{v}+\mathbf{w},\mathbf{u}}} =\overline{\innerprod{\mathbf{v},\mathbf{u}}+\innerprod{\mathbf{w},\mathbf{u}}} =\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{u},\mathbf{w}}$.
-\item By conjugate symmetry and homogeneity, $\innerprod{\mathbf{u},\lambda\mathbf{v}} =\overline{\innerprod{\lambda\mathbf{v},\mathbf{u}}} =\overline{\lambda\innerprod{\mathbf{v},\mathbf{u}}} =\overline{\lambda}\innerprod{\mathbf{u},\mathbf{v}}$.
+\item The map $\mathbf{v}\mapsto\innerprod{\mathbf{v},\mathbf{u}}$ is linear by first-slot additivity and homogeneity.
+\item $\innerprod{\mathbf{0},\mathbf{u}}=0$ by (i), and $\innerprod{\mathbf{u},\mathbf{0}}=\overline{\innerprod{\mathbf{0},\mathbf{u}}}=0$ by conjugate symmetry.
+\item $\innerprod{\mathbf{u},\mathbf{v}+\mathbf{w}}=\overline{\innerprod{\mathbf{v}+\mathbf{w},\mathbf{u}}}=\overline{\innerprod{\mathbf{v},\mathbf{u}}}+\overline{\innerprod{\mathbf{w},\mathbf{u}}}=\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{u},\mathbf{w}}$ by conjugate symmetry and additivity.
+\item $\innerprod{\mathbf{u},\lambda\mathbf{v}}=\overline{\innerprod{\lambda\mathbf{v},\mathbf{u}}}=\overline{\lambda\innerprod{\mathbf{v},\mathbf{u}}}=\overline{\lambda}\innerprod{\mathbf{u},\mathbf{v}}$ by conjugate symmetry and homogeneity.
 \end{enumerate}
-\hlt{Structural Commentary}: First-slot linearity and conjugate symmetry force conjugate linearity in second slot.\\
-\hlt{Key Insight}: Once one slot is linear, the other slot is forced to be conjugate linear.
+\hlt{Structural Commentary}: Conjugate symmetry transfers the first-slot axioms to the second slot.\\
+\hlt{Key Insight}: One linear slot determines conjugate linearity in the other.
 \end{proof}
 \end{proposition}
 
-\begin{definition} \label{def:norm-induced-by-inner-product} \hlt{Norm Induced by an Inner Product}\\
-For $\mathbf{v}\in\mathcal{V}$, the \hlt{norm} of $\mathbf{v}$ is $\norm{\mathbf{v}}\defeq\sqrt{\innerprod{\mathbf{v},\mathbf{v}}}$.
-\end{definition}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/inner_product_norm_vector.tikz}
-  \caption{The norm is vector length, with $\norm{\mathbf{x}}^2=\innerprod{\mathbf{x},\mathbf{x}}$.}
-  \label{fig:inner-product-norm-vector}
-\end{figure}
-
 \begin{lemma} \label{lem:inner-products-separate-vectors} \hlt{Inner Products Separate Vectors}\\
-For $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$, $\left(\forall\mathbf{x}\in\mathcal{V},\ \innerprod{\mathbf{x},\mathbf{u}}=\innerprod{\mathbf{x},\mathbf{v}}\right)\Longrightarrow \mathbf{u}=\mathbf{v}$, and $\left(\forall\mathbf{x}\in\mathcal{V},\ \innerprod{\mathbf{x},\mathbf{w}}=0\right)\Longleftrightarrow \mathbf{w}=\mathbf{0}$.
+For $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\bigl((\forall\,\mathbf{x}\in\mathcal{V})\,\innerprod{\mathbf{x},\mathbf{u}}=\innerprod{\mathbf{x},\mathbf{v}}\bigr)\Longrightarrow\mathbf{u}=\mathbf{v}$;
+\item $\bigl((\forall\,\mathbf{x}\in\mathcal{V})\,\innerprod{\mathbf{x},\mathbf{w}}=0\bigr)\Longleftrightarrow\mathbf{w}=\mathbf{0}$.
+\end{enumerate}
 \begin{proof}
-Set $\mathbf{x}=\mathbf{u}-\mathbf{v}$. Then $\norm{\mathbf{u}-\mathbf{v}}^2=\innerprod{\mathbf{u}-\mathbf{v},\mathbf{u}-\mathbf{v}}=0$, hence $\mathbf{u}=\mathbf{v}$.\\
-Taking $\mathbf{u}=\mathbf{w}$ and $\mathbf{v}=\mathbf{0}$ gives the second assertion; the reverse implication is immediate.\\
-\hlt{Structural Commentary}: Testing against all vectors detects the vector being tested.\\
-\hlt{Key Insight}: A vector orthogonal to every vector, including itself, must be zero.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] With $\mathbf{x}=\mathbf{u}-\mathbf{v}$, $\norm{\mathbf{u}-\mathbf{v}}^2=\innerprod{\mathbf{u}-\mathbf{v},\mathbf{u}}-\innerprod{\mathbf{u}-\mathbf{v},\mathbf{v}}=0$ by Proposition \ref{prop:basic-inner-product-identities}. The equality $\mathbf{u}=\mathbf{v}$ holds by definiteness.
+\item[$(ii)$] ($\Rightarrow$) $\norm{\mathbf{w}}^2=\innerprod{\mathbf{w},\mathbf{w}}=0$ by the hypothesis with $\mathbf{x}=\mathbf{w}$, and $\mathbf{w}=\mathbf{0}$ by definiteness.
+\item[$(ii)$] ($\Leftarrow$) If $\mathbf{w}=\mathbf{0}$, then $(\forall\,\mathbf{x}\in\mathcal{V})\,\innerprod{\mathbf{x},\mathbf{w}}=0$ by Proposition \ref{prop:basic-inner-product-identities}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Each claim tests a difference vector against a strategically chosen argument.\\
+\hlt{Key Insight}: Testing a vector against itself detects whether it vanishes.
 \end{proof}
 \end{lemma}
 
-\begin{example} \label{ex:norms-induced-by-inner-products} \hlt{Norms from Standard Inner Products}\\
-In $\mathbb{F}^n$, the norm from the standard inner product is the \hlt{Euclidean norm} $\norm{(x_1,\ldots,x_n)}_2=\sqrt{\abs{x_1}^2+\cdots+\abs{x_n}^2}$.\\
-In $C_{\mathbb{F}}[a,b]$, with the integral inner product, the derived norm is the \hlt{$L^2$ norm} $\norm{f}_{2}=\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.\\
-In $\operatorname{Mat}(m,n,\mathbb{F})$, with the Frobenius inner product, the \hlt{Frobenius norm} is $\norm{A}_{F}=\sqrt{\innerprod[F]{A,A}}=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n}\abs{a_{ij}}^2}$, $A=[a_{ij}]$. The Frobenius norm is also called the \hlt{Schur norm} or \hlt{Hilbert-Schmidt norm}.
+\begin{example} \label{ex:norms-induced-by-inner-products} \hlt{Norms from Standard Inner Products}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item On $\mathbb{F}^n$, the standard inner product induces the \hlt{Euclidean norm} $\norm{(x_1,\ldots,x_n)}_2=\sqrt{\sum\limits_{j=1}^{n}\abs{x_j}^2}$.
+\item On $C_{\mathbb{F}}[a,b]$ with $a<b$, the integral inner product induces the \hlt{$L^2$ norm} $\norm{f}_2=\sqrt{\int_a^b\abs{f(t)}^2\,dt}$.
+\item On $\operatorname{Mat}(m,n,\mathbb{F})$, the Frobenius inner product induces $\norm{A}_F=\sqrt{\innerprod[F]{A,A}}=\sqrt{\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}\abs{a_{ij}}^2}$ for $A=[a_{ij}]$.\\
+This is the \hlt{Frobenius}, \hlt{Schur}, or \hlt{Hilbert--Schmidt norm}.
+\end{enumerate}
 \end{example}
 
-\begin{proposition} \label{prop:derived-norm-basic-properties}\label{prop:basic-norm-identities} \hlt{Basic Properties of the Derived Norm}\\
-Let $\mathcal{V}$ be an inner-product space with derived norm $\norm{\cdot}$. For all $\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
-\begin{enumerate}[label=\roman*.]
+\begin{proposition} \label{prop:derived-norm-basic-properties} \hlt{Basic Properties of the Derived Norm}\\
+For $(\mathbf{v},\lambda)\in\mathcal{V}\times\mathbb{F}$:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\norm{\mathbf{v}}$ is real and nonnegative;
-\item $\norm{\mathbf{v}}=0$ if and only if $\mathbf{v}=\mathbf{0}$;
+\item $\norm{\mathbf{v}}=0\Longleftrightarrow\mathbf{v}=\mathbf{0}$;
 \item $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item By positivity, $\innerprod{\mathbf{v},\mathbf{v}}$ is real and nonnegative, so its square root is real and nonnegative.
-\item By definition, $\norm{\mathbf{v}}=0$ if and only if $\innerprod{\mathbf{v},\mathbf{v}}=0$, which holds if and only if $\mathbf{v}=\mathbf{0}$ by definiteness.
-\item Compute $\norm{\lambda\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\lambda\mathbf{v}} =\lambda\overline{\lambda}\innerprod{\mathbf{v},\mathbf{v}} =\abs{\lambda}^2\norm{\mathbf{v}}^2$. Taking nonnegative square roots, $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$.
+\item[$(i)$] The scalar $\norm{\mathbf{v}}=\sqrt{\innerprod{\mathbf{v},\mathbf{v}}}$ is real and nonnegative by positivity.
+\item[$(ii)$] ($\Rightarrow$) If $\norm{\mathbf{v}}=0$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$, and $\mathbf{v}=\mathbf{0}$ by definiteness.
+\item[$(ii)$] ($\Leftarrow$) If $\mathbf{v}=\mathbf{0}$, then $\innerprod{\mathbf{v},\mathbf{v}}=0$ by definiteness and $\norm{\mathbf{v}}=0$ by the norm definition.
+\item[$(iii)$] $\norm{\lambda\mathbf{v}}^2=\innerprod{\lambda\mathbf{v},\lambda\mathbf{v}}=\lambda\overline{\lambda}\innerprod{\mathbf{v},\mathbf{v}}=\abs{\lambda}^2\norm{\mathbf{v}}^2$ by sesquilinearity. The equality $\norm{\lambda\mathbf{v}}=\abs{\lambda}\norm{\mathbf{v}}$ holds by nonnegative square roots.
 \end{enumerate}
-\hlt{Structural Commentary}: Positivity gives length; sesquilinearity gives scaling.\\
+\hlt{Structural Commentary}: Positivity controls the square root, while sesquilinearity controls scalar rescaling.\\
 \hlt{Key Insight}: Squared length is easier to manipulate than length itself.
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:cauchy-schwarz-inequality} \hlt{Cauchy-Schwarz Inequality}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}\norm{\mathbf{v}}$.
-Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a scalar multiple of the other.
+\begin{theorem} \label{thm:cauchy-schwarz-inequality} \hlt{Cauchy--Schwarz Inequality}\\
+For $\mathbf{u},\mathbf{v}\in\mathcal{V}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\abs{\innerprod{\mathbf{u},\mathbf{v}}}\leq\norm{\mathbf{u}}\norm{\mathbf{v}}$;
+\item equality in (i) holds if and only if $\mathbf{u},\mathbf{v}$ are linearly dependent.
+\end{enumerate}
 \begin{proof}
-If $\mathbf{v}=\mathbf{0}$, both sides are $0$. Assume $\mathbf{v}\neq\mathbf{0}$.\\
-For any $\lambda\in\mathbb{F}$, positivity gives $0\leq \norm{\mathbf{u}-\lambda\mathbf{v}}^2 =\norm{\mathbf{u}}^2-\lambda\innerprod{\mathbf{v},\mathbf{u}}-\overline{\lambda}\innerprod{\mathbf{u},\mathbf{v}}+\abs{\lambda}^2\norm{\mathbf{v}}^2$.\\
-Choose $\lambda=\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}$. Since $\innerprod{\mathbf{v},\mathbf{u}}=\overline{\innerprod{\mathbf{u},\mathbf{v}}}$, the inequality becomes $0\leq \norm{\mathbf{u}}^2-\frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2}$.\\
-Multiplying by $\norm{\mathbf{v}}^2$ and taking square roots proves the inequality. Equality in this argument is equivalent to $\norm{\mathbf{u}-\lambda\mathbf{v}}=0$, hence to $\mathbf{u}=\lambda\mathbf{v}$ for the chosen $\lambda$.\\
-Conversely, if $\mathbf{u}=\lambda\mathbf{v}$, then $\abs{\innerprod{\mathbf{u},\mathbf{v}}} =\abs{\lambda}\,\innerprod{\mathbf{v},\mathbf{v}} =\norm{\lambda\mathbf{v}}\norm{\mathbf{v}} =\norm{\mathbf{u}}\norm{\mathbf{v}}$, so equality holds.\\
-The case $\mathbf{v}=\mathbf{0}$ is also covered because $\mathbf{v}=0\mathbf{u}$.\\
-\hlt{Structural Commentary}: Positivity of squared length controls the mixed inner-product term.\\
-\hlt{Key Insight}: The best scalar comparison between two vectors bounds their inner product.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] If $\mathbf{v}=\mathbf{0}$, the inequality is an equality. Suppose $\mathbf{v}\neq\mathbf{0}$ and set $\lambda\defeq\frac{\innerprod{\mathbf{u},\mathbf{v}}}{\norm{\mathbf{v}}^2}$.\\
+Then $0\leq\norm{\mathbf{u}-\lambda\mathbf{v}}^2=\norm{\mathbf{u}}^2-\frac{\abs{\innerprod{\mathbf{u},\mathbf{v}}}^2}{\norm{\mathbf{v}}^2}$ by positivity, sesquilinearity, and conjugate symmetry.\\
+The inequality $\abs{\innerprod{\mathbf{u},\mathbf{v}}}\leq\norm{\mathbf{u}}\norm{\mathbf{v}}$ follows by multiplication by $\norm{\mathbf{v}}^2$ and nonnegative square roots.
+\item[$(ii)$] ($\Rightarrow$) If equality holds and $\mathbf{v}=\mathbf{0}$, then $\mathbf{u},\mathbf{v}$ are linearly dependent.\\
+If $\mathbf{v}\neq\mathbf{0}$, then $\norm{\mathbf{u}-\lambda\mathbf{v}}=0$ by equality in (i) and the preceding identity, and $\mathbf{u}=\lambda\mathbf{v}$ by Proposition \ref{prop:derived-norm-basic-properties}(ii).
+\item[$(ii)$] ($\Leftarrow$) If $\mathbf{v}=\mathbf{0}$, equality holds. Else linear dependence has form $\mathbf{u}=\lambda\mathbf{v}$; $\abs{\innerprod{\mathbf{u},\mathbf{v}}}=\abs{\lambda}\norm{\mathbf{v}}^2=\norm{\mathbf{u}}\norm{\mathbf{v}}$ by Proposition \ref{prop:derived-norm-basic-properties}(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: A least-residual scalar supplies the bound and characterizes equality.\\
+\hlt{Key Insight}: Positivity controls the mixed term through optimal scalar comparison.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:triangle-inequality-inner-product} \hlt{Triangle Inequality}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}} \leq \norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
-Equality holds if and only if one of $\mathbf{u},\mathbf{v}$ is a nonnegative scalar multiple of the other.
+For $\mathbf{u},\mathbf{v}\in\mathcal{V}$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$;
+\item equality in (i) holds if and only if one of $\mathbf{u},\mathbf{v}$ is a nonnegative real multiple of the other.
+\end{enumerate}
 \begin{proof}
-We compute
-\begin{align}
-\norm{\mathbf{u}+\mathbf{v}}^2 &=\innerprod{\mathbf{u}+\mathbf{v},\mathbf{u}+\mathbf{v}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+\innerprod{\mathbf{u},\mathbf{v}}+\innerprod{\mathbf{v},\mathbf{u}} =\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}} \nonumber\\
-&\leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\abs{\innerprod{\mathbf{u},\mathbf{v}}} \leq \norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\norm{\mathbf{u}}\norm{\mathbf{v}} =\bigl(\norm{\mathbf{u}}+\norm{\mathbf{v}}\bigr)^2.
-\nonumber
-\end{align}
-Taking square roots gives the inequality. If either vector is $\mathbf{0}$, the equality condition is immediate.\\
-Otherwise, equality in the two displayed inequalities holds exactly when $\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}=\abs{\innerprod{\mathbf{u},\mathbf{v}}}$ and equality holds in Cauchy-Schwarz. The first condition says $\innerprod{\mathbf{u},\mathbf{v}}$ is real nonnegative, and the second says $\mathbf{u}=a\mathbf{v}$ for some $a\in\mathbb{F}$. Then $a\norm{\mathbf{v}}^2=\innerprod{\mathbf{u},\mathbf{v}}$ is real nonnegative, so $a\geq0$.\\
-Conversely, if $\mathbf{u}=a\mathbf{v}$ with $a\geq0$, then $\norm{\mathbf{u}+\mathbf{v}}=(a+1)\norm{\mathbf{v}}=\norm{\mathbf{u}}+\norm{\mathbf{v}}$.\\
-\hlt{Structural Commentary}: Square the norm and bound the cross term by Cauchy-Schwarz.\\
-\hlt{Key Insight}: Equality means the two vectors point in the same direction.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\norm{\mathbf{u}+\mathbf{v}}^2=\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}$ by sesquilinearity and conjugate symmetry.\\
+By Theorem \ref{thm:cauchy-schwarz-inequality}(i), this is at most $\bigl(\norm{\mathbf{u}}+\norm{\mathbf{v}}\bigr)^2$. The inequality $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$ follows by nonnegative square roots.
+\item[$(ii)$] ($\Rightarrow$) If either vector is $\mathbf{0}$, it is a nonnegative multiple of the other.\\
+Otherwise equality requires $\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}=\abs{\innerprod{\mathbf{u},\mathbf{v}}}$ and equality in Cauchy--Schwarz.\\
+Choose $a\in\mathbb{F}$ with $\mathbf{u}=a\mathbf{v}$ by Theorem \ref{thm:cauchy-schwarz-inequality}(ii). Then $a\in[0,\infty)$ by $a\norm{\mathbf{v}}^2=\innerprod{\mathbf{u},\mathbf{v}}\in[0,\infty)$.
+\item[$(ii)$] ($\Leftarrow$) If $\mathbf{u}=a\mathbf{v}$ for $a\in[0,\infty)$, then $\norm{\mathbf{u}+\mathbf{v}}=(a+1)\norm{\mathbf{v}}=\norm{\mathbf{u}}+\norm{\mathbf{v}}$. Interchanging $\mathbf{u},\mathbf{v}$ in this calculation covers $\mathbf{v}=a\mathbf{u}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Cauchy--Schwarz bounds the cross term, and its equality case fixes the direction.\\
+\hlt{Key Insight}: Equality requires aligned vectors with nonnegative relative scale.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/triangle_inequality_inner_product.tikz}
-  \caption{Triangle inequality: $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$.}
+  \caption{The direct displacement $\mathbf{u}+\mathbf{v}$ is no longer than the two-step path with legs $\mathbf{u}$ and $\mathbf{v}$.}
   \label{fig:triangle-inequality-inner-product}
-\end{figure}
+\end{illustrationfigure}
+
+Figure \ref{fig:triangle-inequality-inner-product} identifies the three vectors compared by the triangle inequality; it does not supply the proof.
 
 \begin{proposition} \label{prop:reverse-triangle-inequality-inner-product} \hlt{Reverse Triangle Inequality}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\abs{\norm{\mathbf{u}}-\norm{\mathbf{v}}}\leq \norm{\mathbf{u}-\mathbf{v}}$.
+$(\forall\,\mathbf{u},\mathbf{v}\in\mathcal{V})\,\abs{\norm{\mathbf{u}}-\norm{\mathbf{v}}}\leq\norm{\mathbf{u}-\mathbf{v}}$.
 \begin{proof}
-The triangle inequality gives $\norm{\mathbf{u}}\leq\norm{\mathbf{u}-\mathbf{v}}+\norm{\mathbf{v}}$, hence $\norm{\mathbf{u}}-\norm{\mathbf{v}}\leq\norm{\mathbf{u}-\mathbf{v}}$.\\
-Interchanging $\mathbf{u}$ and $\mathbf{v}$ gives $\norm{\mathbf{v}}-\norm{\mathbf{u}}\leq\norm{\mathbf{u}-\mathbf{v}}$. Combining the two inequalities gives the result.\\
-\hlt{Structural Commentary}: Distances control changes in length.\\
-\hlt{Key Insight}: The ordinary triangle inequality applied twice gives the reverse one.
+$\norm{\mathbf{u}}-\norm{\mathbf{v}}\leq\norm{\mathbf{u}-\mathbf{v}}$ by Theorem \ref{thm:triangle-inequality-inner-product}(i) applied to $\mathbf{u}=(\mathbf{u}-\mathbf{v})+\mathbf{v}$.\\
+Likewise, $\norm{\mathbf{v}}-\norm{\mathbf{u}}\leq\norm{\mathbf{u}-\mathbf{v}}$ by the same result with $\mathbf{u},\mathbf{v}$ interchanged.\\
+The two bounds are equivalent to the asserted absolute-value inequality.\\
+\hlt{Structural Commentary}: Two triangle-inequality bounds control both possible signs of the norm difference.\\
+\hlt{Key Insight}: Distance bounds the change in length in either direction.
 \end{proof}
 \end{proposition}
 
 \begin{definition} \label{def:norm-and-normed-vector-space} \hlt{Norm and Normed Vector Space}\\
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. A \hlt{norm} on $\mathcal{V}$ is a function $\norm{\cdot}:\mathcal{V}\to[0,\infty)$ such that, $\forall \mathbf{u},\mathbf{v}\in\mathcal{V}$ and $\lambda\in\mathbb{F}$,
-\begin{enumerate}[label=\roman*.]
+Let $\mathcal{V}$ be a vector space over $\mathbb{F}$. A \hlt{norm} on $\mathcal{V}$ is a map $\norm{\cdot}:\mathcal{V}\to[0,\infty)$ satisfying, for $(\mathbf{u},\mathbf{v},\lambda)\in\mathcal{V}^2\times\mathbb{F}$:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\norm{\mathbf{u}}\geq0$;
-\item $\norm{\mathbf{u}}=0$ if and only if $\mathbf{u}=\mathbf{0}$;
+\item $\norm{\mathbf{u}}=0\Longleftrightarrow\mathbf{u}=\mathbf{0}$;
 \item $\norm{\lambda\mathbf{u}}=\abs{\lambda}\norm{\mathbf{u}}$;
 \item $\norm{\mathbf{u}+\mathbf{v}}\leq\norm{\mathbf{u}}+\norm{\mathbf{v}}$.
 \end{enumerate}
@@ -184,140 +223,150 @@ A \hlt{normed vector space} is a vector space equipped with a norm. Its \hlt{uni
 \end{definition}
 
 \begin{definition} \label{def:inner-product-distance} \hlt{Distance Induced by an Inner Product}\\
-Let $\mathcal{V}$ be an inner-product space. The \hlt{distance} between two vectors in $\mathcal{V}$ is $d(\mathbf{u},\mathbf{v})\defeq\norm{\mathbf{u}-\mathbf{v}}$.
+The \hlt{distance induced by the inner product} is $d:\mathcal{V}\times\mathcal{V}\to[0,\infty)$ defined by $d(\mathbf{u},\mathbf{v})\defeq\norm{\mathbf{u}-\mathbf{v}}$.
 \end{definition}
 
 \begin{proposition} \label{prop:inner-product-distance-is-metric} \hlt{Inner-Product Distance Is a Metric}\\
-The function $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}$ is a metric on $\mathcal{V}$: for all $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$,
-\begin{enumerate}[label=\roman*.]
+For $d(\mathbf{u},\mathbf{v})\defeq\norm{\mathbf{u}-\mathbf{v}}$ and $\mathbf{u},\mathbf{v},\mathbf{w}\in\mathcal{V}$:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $d(\mathbf{u},\mathbf{v})\geq0$, and $d(\mathbf{u},\mathbf{v})=0$ if and only if $\mathbf{u}=\mathbf{v}$;
+\item $d(\mathbf{u},\mathbf{v})\geq0$;
+\item $d(\mathbf{u},\mathbf{v})=0\Longleftrightarrow\mathbf{u}=\mathbf{v}$;
 \item $d(\mathbf{u},\mathbf{v})=d(\mathbf{v},\mathbf{u})$;
 \item $d(\mathbf{u},\mathbf{v})\leq d(\mathbf{u},\mathbf{w})+d(\mathbf{w},\mathbf{v})$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item By Proposition \ref{prop:derived-norm-basic-properties}, $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}\geq0$, with equality iff $\mathbf{u}-\mathbf{v}=\mathbf{0}$.
-\item $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}=\norm{-(\mathbf{v}-\mathbf{u})}=\norm{\mathbf{v}-\mathbf{u}}=d(\mathbf{v},\mathbf{u})$.
-\item Since $\mathbf{u}-\mathbf{v}=(\mathbf{u}-\mathbf{w})+(\mathbf{w}-\mathbf{v})$, Theorem \ref{thm:triangle-inequality-inner-product} gives $d(\mathbf{u},\mathbf{v})\leq d(\mathbf{u},\mathbf{w})+d(\mathbf{w},\mathbf{v})$.
+\item[$(i)$] $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}\geq0$ by Proposition \ref{prop:derived-norm-basic-properties}(i).
+\item[$(ii)$] ($\Rightarrow$) If $d(\mathbf{u},\mathbf{v})=0$, then $\mathbf{u}-\mathbf{v}=\mathbf{0}$ by Proposition \ref{prop:derived-norm-basic-properties}(ii); equivalently, $\mathbf{u}=\mathbf{v}$.
+\item[$(ii)$] ($\Leftarrow$) If $\mathbf{u}=\mathbf{v}$, then $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{0}}=0$ by Proposition \ref{prop:derived-norm-basic-properties}(ii).
+\item[$(iii)$] $d(\mathbf{u},\mathbf{v})=\norm{-(\mathbf{v}-\mathbf{u})}=\norm{\mathbf{v}-\mathbf{u}}=d(\mathbf{v},\mathbf{u})$ by Proposition \ref{prop:derived-norm-basic-properties}(iii) with $\lambda=-1$.
+\item[$(iv)$] Since $\mathbf{u}-\mathbf{v}=(\mathbf{u}-\mathbf{w})+(\mathbf{w}-\mathbf{v})$, $d(\mathbf{u},\mathbf{v})\leq d(\mathbf{u},\mathbf{w})+d(\mathbf{w},\mathbf{v})$ by Theorem \ref{thm:triangle-inequality-inner-product}(i).
 \end{enumerate}
-\noindent
-\hlt{Structural Commentary}: The norm turns displacement vectors into distances.\\
-\hlt{Key Insight}: Metric triangle inequalities are norm triangle inequalities applied to differences.
+\hlt{Structural Commentary}: Each metric axiom reduces to the corresponding norm property on a difference vector.\\
+\hlt{Key Insight}: Distances are norms of displacements.
 \end{proof}
 \end{proposition}
 
 \begin{perspective} \label{per:inner-product-metric-topology-finite-dimensional} \hlt{Metric Viewpoint}\\
-Define $d(\mathbf{u},\mathbf{v})=\norm{\mathbf{u}-\mathbf{v}}$. Then $\mathbf{v}_n\to\mathbf{v}$ iff $\norm{\mathbf{v}_n-\mathbf{v}}\to0$.\\
-In finite-dimensional inner-product spaces, subspaces are closed, linear maps are continuous, and the ambient space is complete. Infinite-dimensional analogues require additional hypotheses; subsequent projection and basis results therefore state finite-dimensional assumptions explicitly.
+Because $d(\mathbf{v}_n,\mathbf{v})=\norm{\mathbf{v}_n-\mathbf{v}}$, metric convergence is exactly norm convergence.\\
+Closedness, continuity, and completeness require topological results developed later; no such conclusion is used as authority here.
 \end{perspective}
 
 \begin{theorem} \label{thm:parallelogram-identity-inner-product} \hlt{Parallelogram Identity}\\
-For all $\mathbf{u},\mathbf{v}\in\mathcal{V}$, $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2 = 2\bigl(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\bigr)$.
+$(\forall\,\mathbf{u},\mathbf{v}\in\mathcal{V})\,\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2=2\bigl(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\bigr)$.
 \begin{proof}
-Expanding both squared norms gives
-\begin{align}
-\norm{\mathbf{u}+\mathbf{v}}^2 =\norm{\mathbf{u}}^2+\innerprod{\mathbf{u},\mathbf{v}} +\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2, \quad \norm{\mathbf{u}-\mathbf{v}}^2 =\norm{\mathbf{u}}^2-\innerprod{\mathbf{u},\mathbf{v}} -\innerprod{\mathbf{v},\mathbf{u}}+\norm{\mathbf{v}}^2. \nonumber
-\end{align}
-Adding the two identities cancels the cross terms and yields the result.\\
-\hlt{Structural Commentary}: Opposite cross terms cancel when the two diagonal norms are added.\\
-\hlt{Key Insight}: Inner-product norms remember parallelogram geometry through cancellation.
+For $\varepsilon\in\{1,-1\}$, $\norm{\mathbf{u}+\varepsilon\mathbf{v}}^2=\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2+2\varepsilon\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}$ by sesquilinearity and conjugate symmetry.\\
+The asserted identity is the sum of the cases $\varepsilon=1,-1$.\\
+\hlt{Structural Commentary}: Paired expansions cancel the cross terms while preserving both squared norms.\\
+\hlt{Key Insight}: Opposite diagonals erase the mixed inner-product contribution.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/parallelogram_identity_inner_product.tikz}
-  \caption{Parallelogram identity: $\norm{\mathbf{u}+\mathbf{v}}^2+\norm{\mathbf{u}-\mathbf{v}}^2=2(\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2)$.}
+  \caption{A parallelogram with side vectors $\mathbf{u},\mathbf{v}$ and diagonal vectors $\mathbf{u}+\mathbf{v},\mathbf{u}-\mathbf{v}$.}
   \label{fig:parallelogram-identity-inner-product}
-\end{figure}
+\end{illustrationfigure}
+
+Figure \ref{fig:parallelogram-identity-inner-product} identifies the sides and diagonals whose squared lengths occur in the parallelogram identity.
 
 \begin{proposition} \label{prop:coordinate-norms-on-fn} \hlt{Coordinate Norms on $\mathbb{F}^n$}\\
-For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}^n$, $\norm{\mathbf{x}}_1=\sum\limits_{j=1}^{n}\abs{x_j}$, $\norm{\mathbf{x}}_2=\left(\sum\limits_{j=1}^{n}\abs{x_j}^2\right)^{1/2}$, $\norm{\mathbf{x}}_{\infty}=\max_{1\leq j\leq n}\abs{x_j}$ are norms on $\mathbb{F}^n$.
+For $\mathbf{x}=(x_1,\ldots,x_n)\in\mathbb{F}^n$, each of the following defines a norm on $\mathbb{F}^n$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\norm{\mathbf{x}}_1\defeq\sum\limits_{j=1}^{n}\abs{x_j}$;
+\item $\norm{\mathbf{x}}_2\defeq\left(\sum\limits_{j=1}^{n}\abs{x_j}^2\right)^{1/2}$;
+\item $\norm{\mathbf{x}}_{\infty}\defeq\max\limits_{1\leq j\leq n}\abs{x_j}$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $\norm{\cdot}_1$, nonnegativity, definiteness, and homogeneity follow from the corresponding facts for modulus. The triangle inequality follows from $\norm{\mathbf{x}+\mathbf{y}}_1=\sum\limits_{j=1}^{n}\abs{x_j+y_j}\leq\sum_{j=1}^{n}\bigl(\abs{x_j}+\abs{y_j}\bigr)=\norm{\mathbf{x}}_1+\norm{\mathbf{y}}_1$.
-\item For $\norm{\cdot}_2$, the axioms follow from its standard inner product via Proposition \ref{prop:derived-norm-basic-properties} and Theorem \ref{thm:triangle-inequality-inner-product}.
-\item For $\norm{\cdot}_{\infty}$, nonnegativity, definiteness, and homogeneity are immediate from the maximum of finitely many moduli. If $k$ is chosen so that $\norm{\mathbf{x}+\mathbf{y}}_{\infty}=\abs{x_k+y_k}$, then $\norm{\mathbf{x}+\mathbf{y}}_{\infty}\leq\abs{x_k}+\abs{y_k}\leq\norm{\mathbf{x}}_{\infty}+\norm{\mathbf{y}}_{\infty}$.
+\item Nonnegativity, definiteness, and absolute homogeneity of $\norm{\cdot}_1$ hold by the corresponding scalar properties.\\
+Its triangle inequality is $\norm{\mathbf{x}+\mathbf{y}}_1=\sum\limits_{j=1}^{n}\abs{x_j+y_j}\leq\sum\limits_{j=1}^{n}(\abs{x_j}+\abs{y_j})=\norm{\mathbf{x}}_1+\norm{\mathbf{y}}_1$ by the scalar triangle inequality.
+\item Standard inner product induces $\norm{\cdot}_2$, first $3$ norm axioms hold  (Proposition \ref{prop:derived-norm-basic-properties}), triangle inequality hold  (Theorem \ref{thm:triangle-inequality-inner-product}(i)).
+\item Nonnegativity and absolute homogeneity of $\norm{\cdot}_{\infty}$ hold by modulus, and $\norm{\mathbf{x}}_{\infty}=0\Longleftrightarrow(\forall\,j\in\{1,\ldots,n\})\,x_j=0\Longleftrightarrow\mathbf{x}=\mathbf{0}$.\\
+Choose $k\in\{1,\ldots,n\}$ with $\norm{\mathbf{x}+\mathbf{y}}_{\infty}=\abs{x_k+y_k}$.\\
+Then $\norm{\mathbf{x}+\mathbf{y}}_{\infty}\leq\abs{x_k}+\abs{y_k}\leq\norm{\mathbf{x}}_{\infty}+\norm{\mathbf{y}}_{\infty}$ by the scalar triangle inequality and the definition of the maximum.
 \end{enumerate}
-\hlt{Structural Commentary}: The $\ell_1$ norm sums coordinate magnitudes, $\ell_{\infty}$ keeps only the largest coordinate magnitude, and $\ell_2$ comes from the standard inner product.\\
-\hlt{Key Insight}: All three obey the same abstract axioms, even though their unit balls have different shapes.
+\hlt{Structural Commentary}: Scalar modulus handles the $\ell_1$ and $\ell_\infty$ cases; inner-product geometry handles the $\ell_2$ case.\\
+\hlt{Key Insight}: Distinct coordinate aggregations satisfy the same norm axioms.
 \end{proof}
 \end{proposition}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/unit_balls_coordinate_norms.tikz}
-  \caption{The unit balls of $\norm{\cdot}_1$, $\norm{\cdot}_2$, and $\norm{\cdot}_{\infty}$ in $\mathbb{R}^2$.}
+  \caption{The $\ell_1$, $\ell_2$, and $\ell_\infty$ unit balls in $\mathbb{R}^2$ are respectively a diamond, a disk, and a square.}
   \label{fig:unit-balls-coordinate-norms}
-\end{figure}
+\end{illustrationfigure}
+
+Figure \ref{fig:unit-balls-coordinate-norms} contrasts the three unit-ball shapes without serving as proof of the norm axioms.\par
 
 \begin{corollary} \label{cor:l1-linfty-not-inner-product-norms} \hlt{$\ell_1$ and $\ell_{\infty}$ Are Not Inner-Product Norms}\\
 If $n\geq2$, then the norms $\norm{\cdot}_1$ and $\norm{\cdot}_{\infty}$ on $\mathbb{F}^n$ are not induced by any inner product.
 \begin{proof}
-Let $\mathbf{e}_1,\mathbf{e}_2$ be the first two standard coordinate vectors.\\
-For $\norm{\cdot}_1$, $\norm{\mathbf{e}_1+\mathbf{e}_2}_1^2+\norm{\mathbf{e}_1-\mathbf{e}_2}_1^2=4+4=8$, but $2\norm{\mathbf{e}_1}_1^2+2\norm{\mathbf{e}_2}_1^2=4$.\\
-For $\norm{\cdot}_{\infty}$, $\norm{\mathbf{e}_1+\mathbf{e}_2}_{\infty}^2+\norm{\mathbf{e}_1-\mathbf{e}_2}_{\infty}^2=1+1=2$ but $2\norm{\mathbf{e}_1}_{\infty}^2+2\norm{\mathbf{e}_2}_{\infty}^2=4$.\\
-Both norms violate Theorem \ref{thm:parallelogram-identity-inner-product}, which every inner-product norm must satisfy.\\
-\hlt{Structural Commentary}: The parallelogram identity detects inner-product norms.\\
-\hlt{Key Insight}: Different unit-ball geometry can rule out hidden inner-product structure.
+For the first two coordinate vectors $\mathbf{e}_1,\mathbf{e}_2$, direct evaluation makes the two sides of the parallelogram identity $8$ and $4$ under $\norm{\cdot}_1$, and $2$ and $4$ under $\norm{\cdot}_{\infty}$. Neither norm is induced by an inner product by Theorem \ref{thm:parallelogram-identity-inner-product}.\\
+\hlt{Structural Commentary}: Two coordinate tests contradict the necessary parallelogram identity.\\
+\hlt{Key Insight}: A failed parallelogram identity excludes every inducing inner product.
 \end{proof}
 \end{corollary}
 
-
 \begin{theorem} \label{thm:polarization-identities} \hlt{Polarization Identities}\\
-Let $\mathcal{V}$ be an inner-product space and let $\mathbf{u},\mathbf{v}\in\mathcal{V}$.
-\begin{enumerate}[label=\roman*.]
+For $\mathbf{u},\mathbf{v}\in\mathcal{V}$:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathbb{F}=\mathbb{R}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2\right)$.
-\item If $\mathbb{F}=\mathbb{C}$, then $\innerprod{\mathbf{u},\mathbf{v}} =\frac{1}{4}\left(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2 +i\norm{\mathbf{u}+i\mathbf{v}}^2-i\norm{\mathbf{u}-i\mathbf{v}}^2\right)$.
+\item If $\mathbb{F}=\mathbb{R}$, then $\innerprod{\mathbf{u},\mathbf{v}}=\frac{1}{4}\bigl(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2\bigr)$.
+\item If $\mathbb{F}=\mathbb{C}$, then $\innerprod{\mathbf{u},\mathbf{v}}=\frac{1}{4}\bigl(\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2+i\norm{\mathbf{u}+i\mathbf{v}}^2-i\norm{\mathbf{u}-i\mathbf{v}}^2\bigr)$.
 \end{enumerate}
 \begin{proof}
 Let $z\defeq\innerprod{\mathbf{u},\mathbf{v}}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathbb{F}=\mathbb{R}$, then expanding squared norms gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z=4z$, proving (i).
-\item If $\mathbb{F}=\mathbb{C}$, the first expansion gives $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re} z$. The same expansion with $i\mathbf{v}$ gives $\norm{\mathbf{u}+i\mathbf{v}}^2-\norm{\mathbf{u}-i\mathbf{v}}^2=4\operatorname{Im} z$. Combining the real and imaginary parts gives (ii).
+\item If $\mathbb{F}=\mathbb{R}$, then $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re}z=4z$ by sesquilinearity, which is equivalent to (i).
+\item If $\mathbb{F}=\mathbb{C}$, then $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re}z$ and $\norm{\mathbf{u}+i\mathbf{v}}^2-\norm{\mathbf{u}-i\mathbf{v}}^2=4\operatorname{Im}z$ by sesquilinearity.\\
+Substitution into $z=\operatorname{Re}z+i\operatorname{Im}z$ is exactly (ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Two norm differences extract the real and imaginary parts.\\
-\hlt{Key Insight}: The norm determines the inner product because it determines both parts of every cross term.
+\hlt{Structural Commentary}: Norm differences recover the real part directly and the imaginary part after rotation.\\
+\hlt{Key Insight}: The norm determines both components of every complex inner product.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/polarization_identity_inner_product.tikz}
-  \caption{Polarization identity: $\norm{\mathbf{u}+\mathbf{v}}^2-\norm{\mathbf{u}-\mathbf{v}}^2=4\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}$.}
+  \caption{The sum and difference vectors isolate $4\operatorname{Re}\innerprod{\mathbf{u},\mathbf{v}}$ through their squared-length difference.}
   \label{fig:polarization-identity-inner-product}
-\end{figure}
+\end{illustrationfigure}
+
+Figure \ref{fig:polarization-identity-inner-product} illustrates the real-part identity; the complex identity also compares $\mathbf{u}\pm i\mathbf{v}$.
 
 \begin{proposition} \label{prop:operator-zero-tests-inner-products} \hlt{Operator Zero Tests from Inner Products}\\
 Let $T\in\LL(\mathcal{V})$.
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\innerprod{T\mathbf{v},\mathbf{w}}=0$ for every $\mathbf{v},\mathbf{w}\in\mathcal{V}$, then $T=0$.
-\item If $\mathbb{F}=\mathbb{C}$ and $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for every $\mathbf{v}\in\mathcal{V}$, then $T=0$.
-\item The preceding diagonal test can fail over $\mathbb{R}$.
+\item $\bigl((\forall\,\mathbf{v},\mathbf{w}\in\mathcal{V})\,\innerprod{T\mathbf{v},\mathbf{w}}=0\bigr)\Longrightarrow T=0$.
+\item If $\mathbb{F}=\mathbb{C}$, then $\bigl((\forall\,\mathbf{v}\in\mathcal{V})\,\innerprod{T\mathbf{v},\mathbf{v}}=0\bigr)\Longrightarrow T=0$.
+\item If $\mathbb{F}=\mathbb{R}$, the implication in (ii) can fail.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Taking $\mathbf{w}=T\mathbf{v}$ gives $\norm{T\mathbf{v}}^2=0$ for every $\mathbf{v}$.
-\item Put $Q(\mathbf{x})=\innerprod{T\mathbf{x},\mathbf{x}}$. For $\mathbf{x},\mathbf{y}\in\mathcal{V}$ and $r\in\mathbb{C}$, the hypothesis applied to $r\mathbf{x}+\mathbf{y}$ gives
-\begin{align}
-0=Q(r\mathbf{x}+\mathbf{y}) =\abs{r}^2Q(\mathbf{x})+Q(\mathbf{y})+r\innerprod{T\mathbf{x},\mathbf{y}}+\overline{r}\innerprod{T\mathbf{y},\mathbf{x}} =r\innerprod{T\mathbf{x},\mathbf{y}}+\overline{r}\innerprod{T\mathbf{y},\mathbf{x}}.
-\nonumber
-\end{align}
-Taking $r=1,i$ gives $\innerprod{T\mathbf{x},\mathbf{y}}=0$ for all $\mathbf{x},\mathbf{y}$; by (i), $T=0$.
-\item On standard $\mathbb{R}^2$, a $90^\circ$ rotation has $\innerprod{T\mathbf{v},\mathbf{v}}=0$ for all $\mathbf{v}$, yet $T\neq0$.
+\item $(\forall\,\mathbf{v}\in\mathcal{V})\,\norm{T\mathbf{v}}^2=\innerprod{T\mathbf{v},T\mathbf{v}}=0$ by the hypothesis with $\mathbf{w}=T\mathbf{v}$; $T=0$ by definiteness.
+\item Set $Q(\mathbf{x})\defeq\innerprod{T\mathbf{x},\mathbf{x}}$. For fixed $\mathbf{x},\mathbf{y}\in\mathcal{V}$, set $a\defeq\innerprod{T\mathbf{x},\mathbf{y}}$ and $b\defeq\innerprod{T\mathbf{y},\mathbf{x}}$.\\
+For $r\in\mathbb{C}$, $0=Q(r\mathbf{x}+\mathbf{y})=ra+\overline{r}b$ by the hypothesis and sesquilinearity.\\
+The choices $r=1,i$ establish $a+b=a-b=0$, and $a=b=0$ by these equations.\\
+The identity $(\forall\,\mathbf{x},\mathbf{y}\in\mathcal{V})\,\innerprod{T\mathbf{x},\mathbf{y}}=0$ holds by the arbitrary choice of $\mathbf{x},\mathbf{y}$, and $T=0$ by (i).
+\item On standard $\mathbb{R}^2$, define $T(x_1,x_2)\defeq(-x_2,x_1)$. Then $(\forall\,\mathbf{v}\in\mathbb{R}^2)\,\innerprod{T\mathbf{v},\mathbf{v}}=-v_2v_1+v_1v_2=0$, while $T(1,0)=(0,1)\neq\mathbf{0}$.
 \end{enumerate}
-\hlt{Structural Commentary}: Complex scalar directions recover mixed inner products from diagonal values.\\
-\hlt{Key Insight}: Over $\mathbb{R}$, a skew-symmetric operator can hide on the diagonal; over $\mathbb{C}$, polarization detects it.
+\hlt{Structural Commentary}: Self-testing handles (i), complex scalar probes handle (ii), and rotation refutes the real analogue.\\
+\hlt{Key Insight}: Complex phases recover mixed terms that real diagonal tests miss.
 \end{proof}
 \end{proposition}
 
 \begin{principle} \label{pri:inner-product-geometry} \hlt{Geometry from Algebra}\\
-Most geometric statements in an inner-product space come from expanding $\norm{\mathbf{u}\pm\mathbf{v}}^2$ and then interpreting the cross terms $\innerprod{\mathbf{u},\mathbf{v}}$ and $\innerprod{\mathbf{v},\mathbf{u}}$.
+For inner-product norms, expanding $\norm{\mathbf{u}\pm\mathbf{v}}^2$ exposes the cross terms that control angles, inequalities, and polarization.\\
+This heuristic does not apply to arbitrary norms, as the $\ell_1$ and $\ell_\infty$ countertests demonstrate.
 \end{principle}

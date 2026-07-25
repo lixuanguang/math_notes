@@ -26,10 +26,17 @@ Use `\limits` on bounded/indexed large operators such as `\sum`, `\prod`, `\copr
 
 ## Line breaking, packing, and overflow
 
-- Minimize hard line breaks. The default is one greedily packed rendered line, not one `\\` per sentence or proof step.
-- Test every candidate `\\` in source by temporarily removing it and joining the following complete semantic unit. After notation and prose compression, remove the break whenever the combined span is at most 100 horizontal character-equivalents. Continue packing later units until adding the next unit would exceed the cap.
-- A joined span exceeding the preflight cap makes a `\\` eligible, not automatic: place at most one break at the nearest complete semantic boundary that is expected to produce balanced lines. The single final scoped render then decides borderline geometry; if a preflight-packed span actually wraps, one repair may retain or reposition a semantic break. Never break inside a sentence, formula, or equality chain.
-- A sentence ending, a new proof step, or a change from premise to consequence does not by itself justify `\\`. Do not use sentence-per-line, step-per-line, or construction-per-line formatting when adjacent material fits.
+- Apply this decision order to each paragraph or item; do not trade an earlier rule for a later one:
+  1. replace notation-equivalent prose and remove duplication;
+  2. divide the content into complete semantic units;
+  3. keep an individual unit intact when it is at most 100 horizontal character-equivalents;
+  4. pack successive complete units while their combined span remains at most 100;
+  5. when the next complete unit would exceed 100, insert a hard break between the two units;
+  6. if one indivisible unit exceeds 100, compress or rewrite it, or divide it at a genuine internal semantic boundary;
+  7. repair any projected or rendered continuation below 20% by the ordered sparse-tail procedure below.
+- The result is the fewest semantically valid hard breaks that satisfy the cap, not an unbounded paragraph left for TeX to wrap and not one `\\` per sentence or proof step. A sentence ending, a new proof step, or a premise-to-consequence transition is not independently a break reason.
+- Never separate a lead-in from the formula, list, or clause it introduces. In particular, `Define\\`, `where\\`, `such that\\`, `namely\\`, `as follows\\`, and `is defined by\\` are invalid. Keep the introduced content on the same rendered line or rewrite the whole unit; when an enumeration follows a lead-in, let `\begin{enumerate}` supply the structural boundary without a preceding `\\`.
+- Never break inside an indivisible formula or equality chain. The single final scoped render decides only borderline geometry: if a preflight-compliant span still wraps badly, one repair may reposition a break at a complete semantic boundary.
 - The repository-mandated title/prose break and the break between Structural Commentary and Key Insight remain exact exceptions. A structural command such as `\item`, `\begin`, or `\end` already starts a new unit and needs no preceding `\\`; in particular, Key Insight has no terminal `\\` immediately before an environment end.
 - Separate dense setup, contrast, construction, consequence, and interpretation into semantic sentences, then render again.
 - Sparse-continuation threshold: every naturally wrapped continuation line in changed prose, statements, proof items, captions, and commentary must occupy at least 20% of the available text measure. A continuation below 20% is a layout defect even when it consists of a complete reference, citation, formula tail, concluding phrase, or punctuation.

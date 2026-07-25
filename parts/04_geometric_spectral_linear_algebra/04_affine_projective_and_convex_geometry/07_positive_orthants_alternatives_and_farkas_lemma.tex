@@ -1,51 +1,45 @@
 \subsection{Positive Orthants, Alternatives, and Farkas's Lemma}
 
-
-% **Role:** finite-dimensional positive systems and dual certificates.
-%
-% Positive orthants, row-space alternatives, certificates, and Farkas's lemma.
-
-This subsection uses finite-dimensional real inner-product geometry to decide when linear systems have positive solutions. The guiding theme is that a missing positive solution is often detected by a separating hyperplane, hence by a dual vector certificate.
+This subsection uses real inner-product geometry to decide feasibility of positive linear systems.\\
+A separating hyperplane converts infeasibility into a dual vector certificate.
 
 \begin{definition} \label{def:positive-vector-orders-orthants} \hlt{Positive Orthants}\\
-For $\mathbf{x}=(x_1,\ldots,x_n)\in\R^n$, use the following order and orthant notation:
+Let $n\in\mathbb{Z}_{>0}$ and $\mathbf{x}=(x_1,\ldots,x_n)\in\R^n$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\mathbf{x}\geq\mathbf{0}$ iff $\mathbf{x}$ is \hlt{coordinatewise nonnegative}: $x_i\geq0$ for every $i$.
-\item $\mathbf{x}>\mathbf{0}$ iff $\mathbf{x}$ is \hlt{nonzero nonnegative}: $\mathbf{x}\geq\mathbf{0}$ and $\mathbf{x}\neq\mathbf{0}$.
-\item $\mathbf{x}\gg\mathbf{0}$ iff $\mathbf{x}$ is \hlt{coordinatewise positive}: $x_i>0$ for every $i$.
-\item $\R_+^n\defeq\{\mathbf{x}\in\R^n:\mathbf{x}>\mathbf{0}\}$ is the \hlt{nonzero nonnegative orthant}.
-\item $\R_{++}^n\defeq\{\mathbf{x}\in\R^n:\mathbf{x}\gg\mathbf{0}\}$ is the \hlt{coordinatewise positive interior}.
+\item $\mathbf{x}\geq\mathbf{0}\Longleftrightarrow(\forall\,i\in\{1,\ldots,n\})\,x_i\geq0$ defines \hlt{coordinatewise nonnegativity}; $\mathbf{x}\leq\mathbf{0}\Longleftrightarrow-\mathbf{x}\geq\mathbf{0}$.
+\item $\mathbf{x}>\mathbf{0}\Longleftrightarrow[\mathbf{x}\geq\mathbf{0}\land\mathbf{x}\neq\mathbf{0}]$ defines \hlt{nonzero nonnegativity}.
+\item $\mathbf{x}\gg\mathbf{0}\Longleftrightarrow(\forall\,i\in\{1,\ldots,n\})\,x_i>0$ defines \hlt{coordinatewise positivity}.
+\item $\R_{\geq0}^n\defeq\{\mathbf{y}\in\R^n:\mathbf{y}\geq\mathbf{0}\}$ is the \hlt{nonnegative orthant}.
+\item $\R_+^n\defeq\{\mathbf{y}\in\R^n:\mathbf{y}>\mathbf{0}\}=\R_{\geq0}^n\setminus\{\mathbf{0}\}$ is the \hlt{nonzero nonnegative orthant}.
+\item $\R_{++}^n\defeq\{\mathbf{y}\in\R^n:\mathbf{y}\gg\mathbf{0}\}$ is the \hlt{coordinatewise positive orthant}.
 \end{enumerate}
 \end{definition}
 
 \begin{motivation} \label{mot:positive-solutions-probability-distributions} \hlt{Positive Null Vectors as Probabilities}\\
-Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\R)$ and let $\mathbf{x}=(x_1,\ldots,x_n)>\mathbf{0}$ satisfy $A\mathbf{x}=\mathbf{0}$.
+Let $m,n\in\mathbb{Z}_{>0}$ and $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\R)$. Suppose $\mathbf{x}=(x_1,\ldots,x_n)>\mathbf{0}$ and $A\mathbf{x}=\mathbf{0}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Set $s\defeq x_1+\cdots+x_n>0$ and $\boldsymbol{\pi}\defeq s^{-1}\mathbf{x}$.
-\item Then $\pi_i\geq0$ and $\sum_{i=1}^n\pi_i=1$, so $\boldsymbol{\pi}$ is a probability vector.
-\item Since $A\boldsymbol{\pi}=s^{-1}A\mathbf{x}=\mathbf{0}$, equivalently $\sum\limits_{i=1}^n\pi_i\mathbf{a}_i=\mathbf{0}$.
-\item If $\mathbf{x}\gg\mathbf{0}$, then $\pi_i>0$ for every $i$.
+\item $(\forall\,i\in\{1,\ldots,n\})\,\pi_i\geq0$ and $\sum\limits_{i=1}^{n}\pi_i=1$, so $\boldsymbol{\pi}$ is a probability vector.
+\item The identity $A\boldsymbol{\pi}=s^{-1}A\mathbf{x}=\mathbf{0}$ is equivalent to $\sum\limits_{i=1}^{n}\pi_i\mathbf{a}_i=\mathbf{0}$.
+\item $\mathbf{x}\gg\mathbf{0}\Longrightarrow(\forall\,i\in\{1,\ldots,n\})\,\pi_i>0$.
 \end{enumerate}
-Thus a positive null vector normalizes to probabilities under which the columns of $A$ have zero expected value.
+Thus a nonzero nonnegative null vector normalizes to a distribution whose probability-weighted column mean is $\mathbf{0}$.
 \end{motivation}
 
 \begin{principle} \label{pri:positive-system-row-space-view} \hlt{Positive Solutions Are Orthant Intersections}\\
-For $A\in\operatorname{Mat}(m,n,\R)$, $\ker(A)=\operatorname{row}(A)^\perp$ by Corollary \ref{cor:matrix-fundamental-subspaces-orthogonal-complements}.\\
-Hence $\{\mathbf{x}\in\R^n:A\mathbf{x}=\mathbf{0},\ \mathbf{x}>\mathbf{0}\} =\operatorname{row}(A)^\perp\cap\R_+^n$; and $\{\mathbf{x}\in\R^n:A\mathbf{x}=\mathbf{0},\ \mathbf{x}\gg\mathbf{0}\} =\operatorname{row}(A)^\perp\cap\R_{++}^n$.\\
-Thus \hlt{positive null vectors} are precisely orthant intersections with $\operatorname{row}(A)^\perp$.
+Let $m,n\in\mathbb{Z}_{>0}$, $A\in\operatorname{Mat}(m,n,\R)$, and $S\defeq\operatorname{row}(A)$. Then $\ker(A)=S^\perp$ by Corollary \ref{cor:matrix-fundamental-subspaces-orthogonal-complements}(i).
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\{\mathbf{x}\in\R^n:A\mathbf{x}=\mathbf{0}\land\mathbf{x}>\mathbf{0}\}=S^\perp\cap\R_+^n$.
+\item $\{\mathbf{x}\in\R^n:A\mathbf{x}=\mathbf{0}\land\mathbf{x}\gg\mathbf{0}\}=S^\perp\cap\R_{++}^n$.
+\end{enumerate}
+Thus positive null vectors are precisely the indicated orthant intersections with $\operatorname{row}(A)^\perp$.
 \end{principle}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/positive_orthant_subspace_alternative.tikz}
-  \caption{In $\R^2$, a negative-slope line $S$ has $S^\perp$ meeting the strongly positive orthant.}
-  \label{fig:positive-orthant-subspace-alternative}
-\end{figure}
-
 \begin{theorem} \label{thm:positive-subspace-alternatives} \hlt{Positive Orthant Alternatives for Subspaces}\\
-Let $S\leq\R^n$. Then:
+Let $n\in\mathbb{Z}_{>0}$ and $S\leq\R^n$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $S\cap\R_+^n=\emptyset \Longleftrightarrow S^\perp\cap\R_{++}^n\neq\emptyset$.
@@ -54,109 +48,133 @@ Let $S\leq\R^n$. Then:
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$(\Rightarrow)$ Let $\Delta\defeq\operatorname{conv}\{\mathbf{e}_1,\ldots,\mathbf{e}_n\}$. By Proposition \ref{prop:convex-hull-finite-set-combinations-compact}, $\Delta$ is compact and convex, and $\Delta\subseteq\R_+^n$.\\
-Hence $\Delta\cap S=\emptyset$. Theorem \ref{thm:compact-convex-set-separated-from-subspace} gives $\mathbf{N}\in S^\perp\setminus\{\mathbf{0}\}$ with $\innerprod{\mathbf{N},\mathbf{e}_i}\geq\norm{\mathbf{N}}^2>0$, $1\leq i\leq n$. QED.
-\item[$(i)$]$(\Leftarrow)$ If $\mathbf{x}\in S\cap\R_+^n$ and $\mathbf{N}\in S^\perp\cap\R_{++}^n$, then $\innerprod{\mathbf{N},\mathbf{x}}>0$, contradicting $\mathbf{N}\perp S$.
-\item[$(ii)$]$(\Rightarrow)$ If $S=\{\mathbf{0}\}$, then $\mathbf{e}_1\in S^\perp\cap\R_+^n$. Assume $S\neq\{\mathbf{0}\}$.\\
-Let $\mathbf{B}_1,\ldots,\mathbf{B}_k$ be a basis of $S$ and set $M=[\mathbf{B}_1\ \cdots\ \mathbf{B}_k]\in\operatorname{Mat}(n,k,\R)$, $\operatorname{rows}(M)=\{\mathbf{R}_1,\ldots,\mathbf{R}_n\}\subseteq\R^k$.\\
-For $\mathbf{a}=(a_1,\ldots,a_n)$, $\mathbf{a}\in S^\perp$ $\Longleftrightarrow$ $\sum\limits_{i=1}^n a_i\mathbf{R}_i=\mathbf{0}$.\\
-Set $K\defeq\operatorname{conv}\{\mathbf{R}_1,\ldots,\mathbf{R}_n\}$. Hence $S^\perp\cap\R_+^n\neq\emptyset$ $\Longleftrightarrow$ $\mathbf{0}\in K$.
-If $\mathbf{0}\notin K$, Theorem \ref{thm:nearest-point-and-point-separation-convex-set} gives $\mathbf{u}\in\R^k$ with $\innerprod{\mathbf{u},\mathbf{R}_i}>0$ for all $i$. Then $\mathbf{v}\defeq M\mathbf{u}\in S$ has coordinates $v_i=\innerprod{\mathbf{u},\mathbf{R}_i}>0$, so $\mathbf{v}\in S\cap\R_{++}^n$, a contradiction. Thus $\mathbf{0}\in K$, and $S^\perp\cap\R_+^n\neq\emptyset$.
+\item[$(i)$] ($\Rightarrow$) Put $\Delta\defeq\operatorname{conv}\{\mathbf{e}_1,\ldots,\mathbf{e}_n\}$, which is convex by definition.\\
+The identity $\Delta=\{(t_1,\ldots,t_n)\in\R^n:(\forall\,i\in\{1,\ldots,n\})\,t_i\geq0,\ \sum\limits_{i=1}^{n}t_i=1\}$ holds by Proposition \ref{prop:convex-hull-finite-set-combinations-compact}(i).\\
+The set $\Delta$ is compact by Proposition \ref{prop:convex-hull-finite-set-combinations-compact}(ii). Hence $\emptyset\neq\Delta\subseteq\R_+^n$ and $\Delta\cap S=\emptyset$.\\
+Choose $\mathbf{N}\in S^\perp\setminus\{\mathbf{0}\}$ satisfying $(\forall\,i\in\{1,\ldots,n\})\,N_i=\innerprod{\mathbf{N},\mathbf{e}_i}\geq\norm{\mathbf{N}}^2>0$ by Theorem \ref{thm:compact-convex-set-separated-from-subspace}(i). Thus $\mathbf{N}\in S^\perp\cap\R_{++}^n$.
+\item[$(i)$] ($\Leftarrow$) Suppose $\mathbf{N}\in S^\perp\cap\R_{++}^n$ and $\mathbf{x}\in S\cap\R_+^n$. Choose $j\in\{1,\ldots,n\}$ with $x_j>0$ by $\mathbf{x}\geq\mathbf{0}$ and $\mathbf{x}\neq\mathbf{0}$.\\
+Then $0=\innerprod{\mathbf{N},\mathbf{x}}=\sum\limits_{i=1}^{n}N_ix_i\geq N_jx_j>0$, a contradiction. Hence $S\cap\R_+^n=\emptyset$.
+\item[$(ii)$] ($\Rightarrow$) Suppose $S\cap\R_{++}^n=\emptyset$ and $S^\perp\cap\R_+^n=\emptyset$. Then $(S^\perp)^\perp\cap\R_{++}^n\neq\emptyset$ by (i) with $S^\perp$.\\
+But $(S^\perp)^\perp=S$ by Corollary \ref{cor:double-orthogonal-complement}, contradicting $S\cap\R_{++}^n=\emptyset$.
+\item[$(ii)$] ($\Leftarrow$) Suppose $\mathbf{N}\in S^\perp\cap\R_+^n$ and $\mathbf{x}\in S\cap\R_{++}^n$. Choose $j\in\{1,\ldots,n\}$ with $N_j>0$ by $\mathbf{N}\geq\mathbf{0}$ and $\mathbf{N}\neq\mathbf{0}$.\\
+Then $0=\innerprod{\mathbf{N},\mathbf{x}}=\sum\limits_{i=1}^{n}N_ix_i\geq N_jx_j>0$, a contradiction. Hence $S\cap\R_{++}^n=\emptyset$.
 \end{enumerate}
-\hlt{Structural Commentary}: Use the simplex and row hull as compact witnesses.\\
-\hlt{Key Insight}: Missing positivity yields an orthogonal positive certificate.
+\hlt{Structural Commentary}: Simplex separation proves (i); double orthogonal complementation converts (i) into (ii).\\
+\hlt{Key Insight}: Orthant avoidance forces a strictly positive normal in the complementary subspace.
 \end{proof}
 \end{theorem}
 
+Figure \ref{fig:positive-orthant-subspace-alternative} illustrates Theorem \ref{thm:positive-subspace-alternatives}(i) in $\R^2$.\\
+The displayed $\mathbf{y}\in S^\perp\cap\R_{++}^2$ certifies $S\cap\R_+^2=\emptyset$; the theorem owns this implication.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/linear_algebra/positive_orthant_subspace_alternative.tikz}
+  \caption{In $\R^2$, the negative-slope line $S$ avoids $\R_+^2$, while $\mathbf{y}\in S^\perp\cap\R_{++}^2$.}
+  \label{fig:positive-orthant-subspace-alternative}
+\end{illustrationfigure}
+
 \begin{theorem} \label{thm:homogeneous-positive-solution-alternatives} \hlt{Homogeneous Positive Alternatives}\\
-Let $A\in\operatorname{Mat}(m,n,\R)$. Exactly one alternative holds in each pair:
+Let $m,n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(m,n,\R)$. Exactly one alternative holds in each pair:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\ker(A)\cap\R_{++}^n\neq\emptyset$ or $\operatorname{col}(A^t)\cap\R_+^n\neq\emptyset$.
 \item $\ker(A)\cap\R_+^n\neq\emptyset$ or $\operatorname{col}(A^t)\cap\R_{++}^n\neq\emptyset$.
 \end{enumerate}
 \begin{proof}
+Put $S\defeq\operatorname{row}(A)=\operatorname{col}(A^t)$. Then $\ker(A)=S^\perp$ by Corollary \ref{cor:matrix-fundamental-subspaces-orthogonal-complements}(i).
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $S\defeq\operatorname{row}(A)=\operatorname{col}(A^t)\subseteq\R^n$. By Principle \ref{pri:positive-system-row-space-view}, $\ker(A)=S^\perp$.\\
-Moreover, $A^t\mathbf{v}\in\operatorname{col}(A^t)=S$ for every $\mathbf{v}\in\R^m$, and every vector of $S$ is of this form.\\
-Hence the first pair is equivalent to $S^\perp\cap\R_{++}^n\neq\emptyset$ or $S\cap\R_+^n\neq\emptyset$.\\
-Theorem \ref{thm:positive-subspace-alternatives}(i) says exactly that these two alternatives are mutually exclusive and exhaustive.
-\item With the same $S$, one has $\ker(A)\cap\R_+^n=S^\perp\cap\R_+^n$, and $\{A^t\mathbf{v}:\mathbf{v}\in\R^m\}\cap\R_{++}^n=S\cap\R_{++}^n$.\\
-Thus the second pair is equivalent to $S^\perp\cap\R_+^n\neq\emptyset$ or $S\cap\R_{++}^n\neq\emptyset$.\\
-Theorem \ref{thm:positive-subspace-alternatives}(ii) says exactly that these two alternatives are mutually exclusive and exhaustive.
+\item The pair in (i) is equivalent to $S^\perp\cap\R_{++}^n\neq\emptyset$ or $S\cap\R_+^n\neq\emptyset$.\\
+Exactly one alternative holds by Theorem \ref{thm:positive-subspace-alternatives}(i).
+\item The pair in (ii) is equivalent to $S^\perp\cap\R_+^n\neq\emptyset$ or $S\cap\R_{++}^n\neq\emptyset$.\\
+Exactly one alternative holds by Theorem \ref{thm:positive-subspace-alternatives}(ii).
 \end{enumerate}
-\hlt{Structural Commentary}: The row space gives the certificate side; the nullspace gives the solution side.\\
-\hlt{Key Insight}: Positive solvability is an orthogonal-complement alternative.
+\hlt{Structural Commentary}: The fundamental-subspace identity translates both subspace alternatives into matrix feasibility tests.\\
+\hlt{Key Insight}: Row space and nullspace meet complementary positive orthants.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:positive-solution-certificates} \hlt{Certifying Positive Homogeneous Systems}\\
-Let $A\in\operatorname{Mat}(m,n,\R)$ and $S\defeq\operatorname{row}(A)=\operatorname{col}(A^t)$.
+\begin{computationmethod} \label{meth:positive-solution-certificates} \hlt{Testing Positive Homogeneous Systems}\\
+Given $m,n\in\mathbb{Z}_{>0}$ and $A\in\operatorname{Mat}(m,n,\R)$, set $S\defeq\operatorname{row}(A)=\operatorname{col}(A^t)$. The following searches are exact by Theorem \ref{thm:homogeneous-positive-solution-alternatives}:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\ker(A)\cap\R_{++}^n=\emptyset$ is certified by $\exists\,\mathbf{v}\in\R^m$ with $A^t\mathbf{v}>\mathbf{0}$.
-\item $\ker(A)\cap\R_+^n=\emptyset$ is certified by $\exists\,\mathbf{v}\in\R^m$ with $A^t\mathbf{v}\gg\mathbf{0}$.
-\item Existence follows from row-space avoidance,\\
-$S\cap\R_+^n=\emptyset\Rightarrow\ker(A)\cap\R_{++}^n\neq\emptyset$; or $S\cap\R_{++}^n=\emptyset\Rightarrow\ker(A)\cap\R_+^n\neq\emptyset$.
+\item Seek $\mathbf{v}\in\R^m$ with $A^t\mathbf{v}>\mathbf{0}$ to certify $\ker(A)\cap\R_{++}^n=\emptyset$.
+\item Seek $\mathbf{v}\in\R^m$ with $A^t\mathbf{v}\gg\mathbf{0}$ to certify $\ker(A)\cap\R_+^n=\emptyset$.
+\item Seek $\mathbf{x}\in\ker(A)\cap\R_{++}^n$ to certify $S\cap\R_+^n=\emptyset$.
+\item Seek $\mathbf{x}\in\ker(A)\cap\R_+^n$ to certify $S\cap\R_{++}^n=\emptyset$.
 \end{enumerate}
-\end{method}
+\end{computationmethod}
 
 \begin{lemma} \label{lem:finitely-generated-nonnegative-cone-closed-convex} \hlt{Nonnegative Matrix Cone}\\
-Let $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\R)$ and $C_A\defeq A(\R_{\geq0}^n)=\left\{\sum\limits_{i=1}^n t_i\mathbf{a}_i:t_i\geq0\right\}$.\\
-Then $C_A$ is a closed convex cone in $\R^m$.
+Let $m,n\in\mathbb{Z}_{>0}$ and $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\R)$. Define $C_A\defeq A(\R_{\geq0}^n)=\left\{\sum\limits_{i=1}^{n}t_i\mathbf{a}_i:(t_1,\ldots,t_n)\in\R_{\geq0}^n\right\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $C_A$ is a convex cone in $\R^m$.
+\item $C_A$ is closed in $\R^m$.
+\end{enumerate}
 \begin{proof}
-For $\mathbf{x}_r=A\mathbf{y}_r\in C_A$ with $\mathbf{y}_r\geq\mathbf{0}$.\\
-For $0\leq t\leq1$, $a\geq0$, $t\mathbf{x}_1+(1-t)\mathbf{x}_2=A(t\mathbf{y}_1+(1-t)\mathbf{y}_2)\in C_A$, where $a\mathbf{x}_1=A(a\mathbf{y}_1)\in C_A$, $C_A$ is convex cone.\\
-For closedness, choose for $\mathbf{x}\in C_A$ a representation $\mathbf{x}=\sum\limits_{i\in I}t_i\mathbf{a}_i,\qquad t_i>0$ with $I$ minimal.\\
-If $\{\mathbf{a}_i:i\in I\}$ were dependent, choose $(d_i)_{i\in I}\neq0$ with $\sum\limits_{i\in I}d_i\mathbf{a}_i=\mathbf{0}$.\\
-Replacing $d$ by $-d$ if necessary, some $d_i<0$; then $\lambda\defeq\min_{d_i<0}\frac{t_i}{-d_i}$ makes $t_i+\lambda d_i\geq0$ for all $i$ and zero for at least one $i$, contradicting minimality. Hence the active columns are independent.\\
-Thus $C_A=\bigcup\limits_{\substack{I\subseteq\{1,\ldots,n\}\\ \{\mathbf{a}_i:i\in I\}\text{ independent}}} K_I$, where $K_I\defeq\left\{\sum\limits_{i\in I}t_i\mathbf{a}_i:t_i\geq0\right\}$.\\
-For such $I$, the map $T_I:\R^I\to\operatorname{span}\{\mathbf{a}_i:i\in I\}$, where $T_I((t_i))=\sum\limits_{i\in I}t_i\mathbf{a}_i$, is a linear isomorphism, so $K_I=T_I(\R_{\geq0}^I)$ is closed in its finite-dimensional range, and the range is closed in $\R^m$.\\
-Hence each $K_I$ is closed in $\R^m$, and the finite union above is closed.\\
-\hlt{Structural Commentary}: Reduce $C_A$ to finitely many independent-column cones.\\
-\hlt{Key Insight}: Minimal support turns generators independent, making each cone closed.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathbf{x}_r=A\mathbf{y}_r\in C_A$ with $\mathbf{y}_r\geq\mathbf{0}$ for $r\in\{1,2\}$. For $t\in[0,1]$, $t\mathbf{x}_1+(1-t)\mathbf{x}_2=A(t\mathbf{y}_1+(1-t)\mathbf{y}_2)\in C_A$.\\
+For $a\in[0,\infty)$, $a\mathbf{x}_1=A(a\mathbf{y}_1)\in C_A$. Thus $C_A$ is convex and a cone.
+\item It suffices to express $C_A$ as a finite union of closed cones.
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Independent supports}: Let $\mathcal{I}$ contain $I\subseteq\{1,\ldots,n\}$ exactly when $\{\mathbf{a}_i:i\in I\}$ is linearly independent; then $\emptyset\in\mathcal{I}$.\\
+For $I\in\mathcal{I}$, set $K_I\defeq\left\{\sum\limits_{i\in I}t_i\mathbf{a}_i:(\forall\,i\in I)\,t_i\geq0\right\}$.\\
+Fix $\mathbf{x}\in C_A\setminus\{\mathbf{0}\}$ and choose $I\subseteq\{1,\ldots,n\}$ with $\mathbf{x}=\sum\limits_{i\in I}t_i\mathbf{a}_i$, $(\forall\,i\in I)\,t_i>0$, and minimal $\abs{I}$.\\
+If the indexed columns are dependent, choose $(d_i)_{i\in I}\in\R^I\setminus\{\mathbf{0}\}$ with $\sum\limits_{i\in I}d_i\mathbf{a}_i=\mathbf{0}$.\\
+After replacing $(d_i)_{i\in I}$ by its negative if necessary, $J\defeq\{i\in I:d_i<0\}\neq\emptyset$. Put $\lambda\defeq\min\limits_{i\in J}\frac{t_i}{-d_i}>0$.\\
+Then $(\forall\,i\in I)\,t_i+\lambda d_i\geq0$, $(\exists\,j\in J)\,t_j+\lambda d_j=0$, and $\mathbf{x}=\sum\limits_{i\in I}(t_i+\lambda d_i)\mathbf{a}_i$.\\
+Deleting the zero coefficients contradicts minimality of $\abs{I}$, so $I\in\mathcal{I}$. Since $\mathbf{0}\in K_{\emptyset}$, $C_A=\bigcup\limits_{I\in\mathcal{I}}K_I$.
+\item \hlt{Closed simplicial cones}: Fix $I\in\mathcal{I}$. If $I=\emptyset$, then $K_I=\{\mathbf{0}\}$. For $\mathbf{x}\neq\mathbf{0}$, $B_{\frac{1}{2}\norm{\mathbf{x}}}(\mathbf{x})\subseteq\R^m\setminus K_I$ by Proposition \ref{prop:reverse-triangle-inequality-inner-product}.\\
+Hence $K_I$ is closed when $I=\emptyset$. Suppose $I\neq\emptyset$ and put $U_I\defeq\operatorname{span}\{\mathbf{a}_i:i\in I\}$.\\
+Then $(\mathbf{a}_i)_{i\in I}$ is a basis of $U_I$. Its dual basis $(\varphi_i)_{i\in I}$ exists by Proposition \ref{prop:linear-map-determined-by-basis}.\\
+Choose $(\mathbf{d}_i)_{i\in I}\subseteq U_I$ satisfying $(\forall\,\mathbf{u}\in U_I)(\forall\,i\in I)\,\varphi_i(\mathbf{u})=\innerprod{\mathbf{u},\mathbf{d}_i}$ by Theorem \ref{thm:riesz-representation-finite-dimensional}(i).\\
+Hence $K_I=\{\mathbf{u}\in U_I:(\forall\,i\in I)\,\innerprod{\mathbf{u},\mathbf{d}_i}\geq0\}$. Identity $\ker(P_{U_I^\perp})=U_I$ holds by Proposition \ref{prop:orthogonal-projection-properties}(vi) and Corollary \ref{cor:double-orthogonal-complement}.\\
+Fix $\mathbf{x}\notin K_I$. If $\mathbf{x}\notin U_I$, put $\mathbf{q}\defeq P_{U_I^\perp}\mathbf{x}\neq\mathbf{0}$. For $\norm{\mathbf{y}-\mathbf{x}}<\frac{1}{2}\norm{\mathbf{q}}$, $\norm{P_{U_I^\perp}(\mathbf{y}-\mathbf{x})}\leq\norm{\mathbf{y}-\mathbf{x}}$ by Proposition \ref{prop:orthogonal-projection-properties}(i),(viii).\\
+Thus $\norm{P_{U_I^\perp}\mathbf{y}}\geq\norm{\mathbf{q}}-\norm{P_{U_I^\perp}(\mathbf{y}-\mathbf{x})}>0$ by Proposition \ref{prop:reverse-triangle-inequality-inner-product}. Hence $\mathbf{y}\notin U_I$.\\
+If $\mathbf{x}\in U_I\setminus K_I$, choose $j\in I$ with $\innerprod{\mathbf{x},\mathbf{d}_j}<0$. Then $\mathbf{d}_j\neq\mathbf{0}$ because $\innerprod{\mathbf{a}_j,\mathbf{d}_j}=1$. Put $r_j\defeq-\frac{\innerprod{\mathbf{x},\mathbf{d}_j}}{2\norm{\mathbf{d}_j}}>0$.\\
+For $\norm{\mathbf{y}-\mathbf{x}}<r_j$, $\abs{\innerprod{\mathbf{y}-\mathbf{x},\mathbf{d}_j}}<-\frac{1}{2}\innerprod{\mathbf{x},\mathbf{d}_j}$ by Theorem \ref{thm:cauchy-schwarz-inequality}(i).\\
+Hence $\innerprod{\mathbf{y},\mathbf{d}_j}\leq\innerprod{\mathbf{x},\mathbf{d}_j}+\abs{\innerprod{\mathbf{y}-\mathbf{x},\mathbf{d}_j}}<\frac{1}{2}\innerprod{\mathbf{x},\mathbf{d}_j}<0$, so $\mathbf{y}\notin K_I$. Thus $\R^m\setminus K_I$ is open, and $K_I$ is closed.
+\item \hlt{Finite union}: Fix $\mathbf{x}\notin C_A$. Choose $(r_I)_{I\in\mathcal{I}}\subseteq(0,\infty)$ satisfying $(\forall\,I\in\mathcal{I})\,B_{r_I}(\mathbf{x})\subseteq\R^m\setminus K_I$ by (b).\\
+Since $\mathcal{I}$ is finite and nonempty, put $r\defeq\min\limits_{I\in\mathcal{I}}r_I>0$. Then $B_r(\mathbf{x})\subseteq\R^m\setminus C_A$ by (a). Thus $\R^m\setminus C_A$ is open, so $C_A$ is closed.
+\end{enumerate}
+\end{enumerate}
+\hlt{Structural Commentary}: Minimal supports form a finite simplicial cover; dual coordinates prove each cone closed.\\
+\hlt{Key Insight}: Independent generators convert cone membership into closed coordinate inequalities.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:farkas-lemma-strict-positive-system} \hlt{Farkas's Lemma}\\
-Let $A\in\operatorname{Mat}(m,n,\R)$, $\mathbf{b}\in\R^m\setminus\{\mathbf{0}\}$, and $C_A\defeq\{A\mathbf{y}:\mathbf{y}\in\R^n,\ \mathbf{y}\geq\mathbf{0}\}$.\\
-Exactly one of the following holds:
+Let $m,n\in\mathbb{Z}_{>0}$ and $A=[\mathbf{a}_1\ \cdots\ \mathbf{a}_n]\in\operatorname{Mat}(m,n,\R)$. Fix $\mathbf{b}\in\R^m\setminus\{\mathbf{0}\}$ and set $C_A\defeq\{A\mathbf{y}:\mathbf{y}\in\R^n\land\mathbf{y}\geq\mathbf{0}\}$.\\
+Exactly one of the following alternatives holds:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\mathbf{b}\in C_A$, equivalently $\exists\,\mathbf{u}>\mathbf{0}$ with $A\mathbf{u}=\mathbf{b}$.
-\item $\exists\,\mathbf{v}\in\R^m$ such that $A^t\mathbf{v}\leq\mathbf{0}$ and $\innerprod{\mathbf{v},\mathbf{b}}>0$.
+\item $\mathbf{b}\in C_A$, equivalently $(\exists\,\mathbf{u}\in\R^n)\,[\mathbf{u}>\mathbf{0}\land A\mathbf{u}=\mathbf{b}]$.
+\item $(\exists\,\mathbf{v}\in\R^m)\,[A^t\mathbf{v}\leq\mathbf{0}\land\innerprod{\mathbf{v},\mathbf{b}}>0]$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathbf{b}=A\mathbf{u}$ with $\mathbf{u}\geq\mathbf{0}$ and $A^t\mathbf{v}\leq\mathbf{0}$, then $\innerprod{\mathbf{v},\mathbf{b}} =\innerprod{\mathbf{v},A\mathbf{u}} =\innerprod{A^t\mathbf{v},\mathbf{u}} \leq0$.
-\item Suppose $\mathbf{b}\notin C_A$. By Lemma \ref{lem:finitely-generated-nonnegative-cone-closed-convex}, $C_A$ is closed and convex. Since $\mathbf{0}\in C_A$, Theorem \ref{thm:nearest-point-and-point-separation-convex-set}, after changing sign if necessary, gives $\mathbf{v}\in\R^m$ and $\alpha\in\R$ such that $\innerprod{\mathbf{v},C_A}<\alpha<\innerprod{\mathbf{v},\mathbf{b}}$.\\
-Thus $\alpha>0$ and $\innerprod{\mathbf{v},\mathbf{b}}>0$. For every $\mathbf{y}\geq\mathbf{0}$, $\innerprod{A^t\mathbf{v},\mathbf{y}} =\innerprod{\mathbf{v},A\mathbf{y}} <\alpha$.\\
-If $(A^t\mathbf{v})_i>0$, taking $\mathbf{y}=\lambda\mathbf{e}_i$ and $\lambda\to\infty$ contradicts the bounded inequality. Hence $A^t\mathbf{v}\leq\mathbf{0}$.
+\item The equivalence $\mathbf{b}\in C_A\Longleftrightarrow(\exists\,\mathbf{u}\in\R^n)\,[\mathbf{u}\geq\mathbf{0}\land A\mathbf{u}=\mathbf{b}]$ holds by the definition of $C_A$.\\
+Every such $\mathbf{u}$ is nonzero by $\mathbf{b}\neq\mathbf{0}$, proving the equivalent formulation in (i). If (i) and (ii) both hold, choose witnesses $\mathbf{u}$ and $\mathbf{v}$.\\
+Then $0<\innerprod{\mathbf{v},\mathbf{b}}=\innerprod{\mathbf{v},A\mathbf{u}}=\innerprod{A^t\mathbf{v},\mathbf{u}}=\sum\limits_{i=1}^{n}(A^t\mathbf{v})_iu_i\leq0$ by the coordinate inequalities, a contradiction.
+\item Suppose $\mathbf{b}\notin C_A$. Then $\mathbf{0}\in C_A$, and $C_A$ is closed and convex by Lemma \ref{lem:finitely-generated-nonnegative-cone-closed-convex}(i),(ii).\\
+Choose $\mathbf{N}\neq\mathbf{0}$ satisfying $(\forall\,\mathbf{c}\in C_A)\,\innerprod{\mathbf{N},\mathbf{c}}\geq\norm{\mathbf{N}}^2+\innerprod{\mathbf{N},\mathbf{b}}$ by Theorem \ref{thm:nearest-point-and-point-separation-convex-set}(ii).\\
+Set $\mathbf{v}\defeq-\mathbf{N}$. Then $(\forall\,\mathbf{c}\in C_A)\,\innerprod{\mathbf{v},\mathbf{c}}\leq\innerprod{\mathbf{v},\mathbf{b}}-\norm{\mathbf{v}}^2$. The choice $\mathbf{c}=\mathbf{0}$ proves $\innerprod{\mathbf{v},\mathbf{b}}\geq\norm{\mathbf{v}}^2>0$. Fix $i\in\{1,\ldots,n\}$.\\
+Then $(\forall\,\lambda\in[0,\infty))\,\lambda\mathbf{a}_i\in C_A$. Hence $(\forall\,\lambda\in[0,\infty))\,\lambda\innerprod{\mathbf{v},\mathbf{a}_i}\leq\innerprod{\mathbf{v},\mathbf{b}}-\norm{\mathbf{v}}^2$. If $\gamma\defeq\innerprod{\mathbf{v},\mathbf{a}_i}>0$, set $\lambda\defeq\frac{\innerprod{\mathbf{v},\mathbf{b}}-\norm{\mathbf{v}}^2}{\gamma}+1\geq1$.\\
+Then $\lambda\gamma>\innerprod{\mathbf{v},\mathbf{b}}-\norm{\mathbf{v}}^2$, a contradiction. Thus $(\forall\,i\in\{1,\ldots,n\})\,\innerprod{\mathbf{v},\mathbf{a}_i}\leq0$.\\
+Equivalently, $A^t\mathbf{v}\leq\mathbf{0}$. Therefore (ii) holds whenever (i) fails, so exactly one alternative holds.
 \end{enumerate}
-\hlt{Structural Commentary}: Nonrepresentability means $\mathbf{b}\notin C_A$.\\
-\hlt{Key Insight}: Separation turns nonmembership in a cone into the dual inequality $A^t\mathbf{v}\leq0$.
+\hlt{Structural Commentary}: Nearest-point separation constructs $\mathbf{v}$; ray scaling tests every coordinate of $A^t\mathbf{v}$.\\
+\hlt{Key Insight}: A separating functional must be nonpositive on each cone generator.
 \end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:farkas-weak-inequality-necessary} \hlt{Why the Weak Inequality Matters}\\
-The conclusion $A^t\mathbf{v}\leq\mathbf{0}$ cannot generally be strengthened to $A^t\mathbf{v}\ll\mathbf{0}$. Let $A=
-\begin{bmatrix}
-1 & 0 & 0\\
-0 & 1 & -1
-\end{bmatrix}$ and $\mathbf{b}=
-\begin{bmatrix}
--1\\
-0
-\end{bmatrix}$.\\
-If $\mathbf{u}\geq\mathbf{0}$, then $(A\mathbf{u})_1=u_1\geq0$, so $A\mathbf{u}\neq\mathbf{b}$.\\
-The certificate $\mathbf{v}=
-\begin{bmatrix}
--1\\
-0
-\end{bmatrix}$ satisfies $A^t\mathbf{v}=(-1,0,0)^t\leq\mathbf{0}$ and $\innerprod{\mathbf{v},\mathbf{b}}=1>0$.\\
-For arbitrary $\mathbf{w}=(r,s)^t$, $A^t\mathbf{w}=(r,s,-s)^t$, so $A^t\mathbf{w}\ll\mathbf{0}$ would force $s<0<-s$, impossible.\\
-\hlt{Structural Commentary}: Opposite columns force a zero in every certificate.\\
-\hlt{Key Insight}: Boundary separation is sometimes the best possible separation.
-\end{example}
+\begin{counterexample} \label{cex:farkas-strict-certificate-impossible} \hlt{A Certificate Need Not Be Strict}\\
+Certificate in Theorem \ref{thm:farkas-lemma-strict-positive-system} need not satisfy $-A^t\mathbf{v}\gg\mathbf{0}$. Take $A=\left(\begin{smallmatrix}1&0&0\\0&1&-1\end{smallmatrix}\right)$, $\mathbf{b}=\left(\begin{smallmatrix}-1\\0\end{smallmatrix}\right)$. If $\mathbf{u}\geq\mathbf{0}$, then $(A\mathbf{u})_1=u_1\geq0$, so $A\mathbf{u}\neq\mathbf{b}$.\\
+The vector $\mathbf{v}=\left(\begin{smallmatrix}-1\\0\end{smallmatrix}\right)$ satisfies $A^t\mathbf{v}=(-1,0,0)^t\leq\mathbf{0}$ and $\innerprod{\mathbf{v},\mathbf{b}}=1>0$. For $\mathbf{w}=(r,s)^t\in\R^2$, $A^t\mathbf{w}=(r,s,-s)^t$.\\
+Thus $-A^t\mathbf{w}\gg\mathbf{0}$ would require both $s<0$ and $s>0$, which is impossible. The weak coordinate inequality is therefore sharp.
+\end{counterexample}

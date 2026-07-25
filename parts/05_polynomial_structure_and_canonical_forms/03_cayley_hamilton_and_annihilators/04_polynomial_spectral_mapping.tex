@@ -1,38 +1,50 @@
 \subsection{Polynomial Spectral Mapping}
 
 \begin{proposition} \label{prop:eigenvalues-of-polynomial-in-matrix} \hlt{Eigenvalues of a Polynomial in a Matrix}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $p\in\mathbb{C}[z]$, and let $\lambda_1,\ldots,\lambda_n$ be the eigenvalues of $A$, counted with algebraic multiplicity. Then the eigenvalues of $p(A)$ are $p(\lambda_1),\ldots,p(\lambda_n)$, counted with algebraic multiplicity.
+Let $n\geq1$, $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and $p\in\mathbb{C}[z]$.\\
+If $(\lambda_i)_{i=1}^{n}$ lists the eigenvalues of $A$ with algebraic multiplicity, then $(p(\lambda_i))_{i=1}^{n}$ lists the eigenvalues of $p(A)$ with algebraic multiplicity.
 \begin{proof}
-Choose a Schur form $U^*AU=T$ with diagonal $\lambda_1,\ldots,\lambda_n$. Then $p(A)=Up(T)U^*$, and $p(T)$ is upper triangular with diagonal $p(\lambda_1),\ldots,p(\lambda_n)$. Hence $p(A)$ has precisely these eigenvalues.\\
-\hlt{Structural Commentary}: Schur form reduces the claim to the diagonal.\\
-\hlt{Key Insight}: A polynomial preserves triangular form and applies $p$ to each diagonal entry.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Ordered Schur Form}: Choose a unit vector $\mathbf{x}\in E_{\lambda_1}(A)$.\\
+By Theorem \ref{thm:matrix-schur-triangularization-ordered}(i), $A=UTU^*$ for a unitary $U$ and an upper-triangular $T$ with diagonal $\lambda_1,\ldots,\lambda_n$.
+\item \hlt{Polynomial Transfer}: By induction on $k$ using $U^*U=UU^*=I_n$, $(\forall\,k\in\mathbb{Z}_{\geq0})\,A^k=UT^kU^*$.\\
+Hence $p(A)=Up(T)U^*$ by Definition \ref{def:polynomial-evaluation-on-square-matrix}.
+\item \hlt{Triangular Evaluation}: By induction on $k$ using Proposition \ref{prop:matrix-product-entry-row-column}, $T^k$ is upper triangular with diagonal $\lambda_1^k,\ldots,\lambda_n^k$.\\
+Hence $p(T)$ is upper triangular with diagonal $p(\lambda_1),\ldots,p(\lambda_n)$ by Definition \ref{def:polynomial-evaluation-on-square-matrix}.
+\item \hlt{Spectral Multiplicities}: The diagonal of $p(T)$ is its eigenvalue list with algebraic multiplicity by Proposition \ref{prop:upper-triangular-characteristic-polynomial}(iii).\\
+The same list applies to $p(A)$ by item (ii) and Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Schur similarity transfers $p(A)$ to $p(T)$; triangularity determines its eigenvalue multiset.\\
+\hlt{Key Insight}: Applying $p$ to a triangular matrix applies $p$ to every diagonal entry with its multiplicity.
 \end{proof}
 \end{proposition}
 
 \begin{corollary} \label{cor:polynomial-spectral-mapping-matrix} \hlt{Polynomial Spectral Mapping}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $p\in\mathbb{C}[z]$. Then $\operatorname{spec}(p(A))=\{p(\lambda):\lambda\in\operatorname{spec}(A)\}$.
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $p\in\mathbb{C}[z]$. Then $\operatorname{spec}(p(A))=\{p(\lambda):\lambda\in\operatorname{spec}(A)\}$.
 \begin{proof}
 Let $\lambda_1,\ldots,\lambda_n$ be the eigenvalues of $A$, counted with algebraic multiplicity.\\
-By Proposition \ref{prop:eigenvalues-of-polynomial-in-matrix}, the eigenvalues of $p(A)$, counted with algebraic multiplicity, are $p(\lambda_1),\ldots,p(\lambda_n)$. Taking underlying sets gives the claim.\\
+By Proposition \ref{prop:eigenvalues-of-polynomial-in-matrix}, the eigenvalues of $p(A)$, counted with algebraic multiplicity, are $p(\lambda_1),\ldots,p(\lambda_n)$.\\
+The claimed equality of the underlying spectral sets follows by Definition \ref{def:spectrum-and-geometric-multiplicity}.\\
 \hlt{Structural Commentary}: Polynomial evaluation pushes the spectrum forward through the scalar polynomial.\\
 \hlt{Key Insight}: Once Schur form has exposed the diagonal, $p$ acts entry by entry there.
 \end{proof}
 \end{corollary}
 
 \begin{corollary} \label{cor:polynomial-spectral-mapping-operator} \hlt{Polynomial Spectral Mapping for Operators}\\
-Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $p\in\mathbb{C}[z]$.\\
-Then $\operatorname{spec}(p(T))=\{p(\lambda):\lambda\in\operatorname{spec}(T)\}$.
+Let $\mathcal{V}\neq\{\mathbf{0}\}$ be finite-dimensional over $\mathbb{C}$, let $T\in\LL(\mathcal{V})$, and let $p\in\mathbb{C}[z]$. Then $\operatorname{spec}(p(T))=\{p(\lambda):\lambda\in\operatorname{spec}(T)\}$.
 \begin{proof}
 Choose a basis $\beta$ and set $A=[T]_{\beta\leftarrow\beta}$.\\
-Then $[p(T)]_{\beta\leftarrow\beta}=p(A)$, and coordinate isomorphism gives $\operatorname{spec}(T)=\operatorname{spec}(A)$ and $\operatorname{spec}(p(T))=\operatorname{spec}(p(A))$.\\
-By Corollary \ref{cor:polynomial-spectral-mapping-matrix}, $\operatorname{spec}(p(T))=\operatorname{spec}(p(A))=\{p(\lambda):\lambda\in\operatorname{spec}(A)\}=\{p(\lambda):\lambda\in\operatorname{spec}(T)\}$.\\
+By Proposition \ref{prop:matrix-representation-respects-linear-combinations} and Proposition \ref{prop:composition-and-matrix-multiplication}, $[p(T)]_{\beta\leftarrow\beta}=p(A)$.\\
+For every $S\in\LL(\mathcal{V})$, $\operatorname{spec}(S)=\operatorname{spec}([S]_{\beta\leftarrow\beta})$ by Definition \ref{def:matrix-representation-of-linear-map}, Proposition \ref{prop:coordinate-map-isomorphism}, and Definition \ref{def:spectrum-and-geometric-multiplicity}.\\
+Thus $\operatorname{spec}(T)=\operatorname{spec}(A)$ and $\operatorname{spec}(p(T))=\operatorname{spec}(p(A))$; hence $\operatorname{spec}(p(T))=\{p(\lambda):\lambda\in\operatorname{spec}(T)\}$ by Corollary \ref{cor:polynomial-spectral-mapping-matrix}.\\
 \hlt{Structural Commentary}: Coordinates reduce the operator statement to the matrix statement.\\
 \hlt{Key Insight}: Polynomial spectral mapping is an operator fact seen through any convenient basis.
 \end{proof}
 \end{corollary}
 
 \begin{corollary} \label{cor:polynomial-in-matrix-invertible-spectrum-test} \hlt{Polynomial Invertibility Test}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and $p\in\mathbb{C}[z]$. If $p(\lambda)\neq0$ for every $\lambda\in\operatorname{spec}(A)$, then $p(A)$ is invertible.
+Let $n\geq1$, let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $p\in\mathbb{C}[z]$. If $p(\lambda)\neq0$ for every $\lambda\in\operatorname{spec}(A)$, then $p(A)$ is invertible.
 \begin{proof}
 By Corollary \ref{cor:polynomial-spectral-mapping-matrix}, $0\notin\operatorname{spec}(p(A))$. By Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}, $p(A)$ is invertible.\\
 \hlt{Structural Commentary}: Invertibility of $p(A)$ is checked on spectral values of $A$.\\

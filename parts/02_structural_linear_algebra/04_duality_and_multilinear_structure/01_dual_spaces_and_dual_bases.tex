@@ -3,117 +3,178 @@
 %
 % Dual spaces, dual maps, annihilators, transpose as dual map, bilinear forms, tensor products as later extension.
 
-Duality studies vectors through scalar-valued tests. Functionals, dual maps, annihilators, transposes, bilinear forms, and tensor products extend linear structure into multilinear language.
+Duality studies vectors through scalar-valued tests. This subsection develops algebraic duals, dual bases, coordinate functionals, separation by functionals, and their dimension consequences.
 
-\begin{definition} \hlt{Linear Functional and Dual Space}\\
-A \hlt{linear functional} on $\mathcal{V}$ is a linear map from $\mathcal{V}$ to $\mathbb{F}$. The \hlt{dual space} of $\mathcal{V}$ is $\mathcal{V}' \defeq \LL(\mathcal{V},\mathbb{F})$.
+Throughout this subsection, all vector spaces are over the same fixed field $\mathbb{F}$.
+
+\begin{definition} \label{def:linear-functional-and-dual-space} \hlt{Linear Functional and Dual Space}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A \hlt{linear functional} on $\mathcal{V}$ is an element $\varphi\in\LL(\mathcal{V},\mathbb{F})$.
+\item The \hlt{algebraic dual space} of $\mathcal{V}$ is $\mathcal{V}'\defeq\LL(\mathcal{V},\mathbb{F})$.
+\end{enumerate}
+Pointwise addition and scalar multiplication make $\mathcal{V}'$ a vector space over $\mathbb{F}$ by Proposition \ref{prop:linear-maps-form-vector-space}.
 \end{definition}
 
-\begin{example} \label{ex:evaluation-and-integral-functionals} \hlt{Evaluation and Integral Functionals}\\
-The evaluation map $\operatorname{ev}_0:\mathbb{F}[x]\to\mathbb{F}$, $p\mapsto p(0)$ is a linear functional, since $\operatorname{ev}_0(\alpha p+\beta q)=\alpha p(0)+\beta q(0)$ for all $\alpha,\beta\in\mathbb{F}$ and $p,q\in\mathbb{F}[x]$.
-If $C[a,b]$ is the real vector space of continuous functions on $[a,b]$, then $I:C[a,b]\to\mathbb{R}$, $I(f)\defeq\int_a^b f(x)\,dx$ is a linear functional, since $I(\alpha f+\beta g)=\alpha I(f)+\beta I(g)$ $\forall \alpha,\beta\in\mathbb{R}$ and $f,g\in C[a,b]$.
+% TODO(structure): move the polynomial-evaluation illustration after the authoritative polynomial-ring owner in Part 7, and the integral illustration after the authoritative integration owner in Part 12; neither later owner can serve as a prerequisite here.
+\begin{example} \label{ex:evaluation-and-integral-functionals} \hlt{Evaluation and Integral Functionals}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Define $\operatorname{ev}_0:\mathbb{F}[x]\to\mathbb{F}$ by $\operatorname{ev}_0(p)\defeq p(0)$.\\
+The identity $(\forall\,\alpha,\beta\in\mathbb{F})(\forall\,p,q\in\mathbb{F}[x])\,\operatorname{ev}_0(\alpha p+\beta q)=\alpha\operatorname{ev}_0(p)+\beta\operatorname{ev}_0(q)$ proves $\operatorname{ev}_0\in\mathcal{V}'$ for $\mathcal{V}=\mathbb{F}[x]$.
+\item For $\mathbb{F}=\mathbb{R}$, let $C[a,b]$ be the real vector space of continuous functions on $[a,b]$ and define $I:C[a,b]\to\mathbb{R}$ by $I(f)\defeq\int\limits_a^b f(x)\,dx$.\\
+By linearity of the integral, $(\forall\,\alpha,\beta\in\mathbb{R})(\forall\,f,g\in C[a,b])\,I(\alpha f+\beta g)=\alpha I(f)+\beta I(g)$, so $I\in C[a,b]'$.
+\end{enumerate}
 \end{example}
 
-\begin{definition} \hlt{Dual Basis}\\
-Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of $\mathcal{V}$. The \hlt{dual basis} of $\beta$ is the list $\beta'=(\varphi_1,\ldots,\varphi_n)$ in $\mathcal{V}'$ defined by
-\begin{align}
-\varphi_j(\mathbf{v}_k)=
-\begin{cases}
-1, & k=j,\\
-0, & k\neq j.
-\end{cases}
-\nonumber
-\end{align}
-Existence and uniqueness of each $\varphi_j$ follow from Proposition \ref{prop:linear-map-determined-by-basis}.
+\begin{definition} \label{def:dual-basis} \hlt{Dual Basis}\\
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be an ordered basis of $\mathcal{V}$, where $n\in\mathbb{N}_0$.\\
+Its \hlt{dual basis} is the list $\beta'=(\varphi_1,\ldots,\varphi_n)$ in $\mathcal{V}'$ characterized by $(\forall\,j,k\in\{1,\ldots,n\})\,\varphi_j(\mathbf{v}_k)=\delta_{j,k}$.\\
+If $n\geq1$, each $\varphi_j$ exists uniquely by Proposition \ref{prop:linear-map-determined-by-basis}; if $n=0$, then $\beta'\defeq()$.
 \end{definition}
 
 \begin{theorem} \label{thm:dual-basis-and-dimension} \hlt{Dual Basis and Dimension of the Dual Space}\\
-Let $\mathcal{V}$ be finite-dimensional with basis $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$, and let $\beta'=(\varphi_1,\ldots,\varphi_n)$ be the dual basis. Then $\beta'$ is a basis of $\mathcal{V}'$. In particular, $\dim(\mathcal{V}')=\dim(\mathcal{V})$.
+Let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis of the finite-dimensional space $\mathcal{V}$, and let $\beta'=(\varphi_1,\ldots,\varphi_n)$ be its dual basis. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\beta'$ is a basis of $\mathcal{V}'$;
+\item $\dim(\mathcal{V}')=\dim(\mathcal{V})$.
+\end{enumerate}
 \begin{proof}
-First suppose $a_1\varphi_1+\cdots+a_n\varphi_n=0$. Evaluating at $\mathbf{v}_j$ gives $a_j=0$ for each $j$, so $\beta'$ is linearly independent. Now let $\varphi\in\mathcal{V}'$. For $\mathbf{v}=c_1\mathbf{v}_1+\cdots+c_n\mathbf{v}_n$, $\left(\sum\limits_{j=1}^n \varphi(\mathbf{v}_j)\varphi_j\right)(\mathbf{v}) =\sum\limits_{j=1}^n \varphi(\mathbf{v}_j)c_j =\varphi(\mathbf{v})$.\\
-Thus $\varphi=\sum_{j=1}^n \varphi(\mathbf{v}_j)\varphi_j$, so $\beta'$ spans $\mathcal{V}'$.\\
-\hlt{Structural Commentary}: A basis of $\mathcal{V}$ induces the dual coordinate system.\\
-\hlt{Key Insight}: A linear functional is determined exactly by its values on a basis.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $n=0$, then $\mathcal{V}=\{\mathbf{0}\}$, and $\mathcal{V}'=\{0\}$ by Proposition \ref{prop:linear-maps-send-zero-to-zero}; thus $()$ is a basis of $\mathcal{V}'$.\\
+Suppose $n\geq1$. If $\sum\limits_{j=1}^{n}a_j\varphi_j=0$, then $(\forall\,k\in\{1,\ldots,n\})\,a_k=\sum\limits_{j=1}^{n}a_j\varphi_j(\mathbf{v}_k)=0$, so $\beta'$ is linearly independent.\\
+For $\varphi\in\mathcal{V}'$ and $\mathbf{v}=\sum\limits_{k=1}^{n}c_k\mathbf{v}_k$, one has $\bigl(\sum\limits_{j=1}^{n}\varphi(\mathbf{v}_j)\varphi_j\bigr)(\mathbf{v})=\sum\limits_{j=1}^{n}\varphi(\mathbf{v}_j)c_j=\varphi(\mathbf{v})$ by Definition \ref{def:dual-basis}.\\
+Hence $\varphi=\sum\limits_{j=1}^{n}\varphi(\mathbf{v}_j)\varphi_j$ by Assumption \ref{assump:function-extensionality}, and $\beta'$ spans $\mathcal{V}'$.
+\item Both bases have length $n$ by (i), so $\dim(\mathcal{V}')=n=\dim(\mathcal{V})$ by Definition \ref{def:dimension}.
+\end{enumerate}
+\hlt{Structural Commentary}: Evaluation on the original basis proves independence and reconstructs every functional.\\
+\hlt{Key Insight}: Basis values are precisely the coordinates of a functional.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:coordinate-functionals-for-hamel-basis} \hlt{Coordinate Functionals for a Hamel Basis}\\
-Let $\mathcal{B}=\{\mathbf{b}_i\}_{i\in I}$ be a Hamel basis of $\mathcal{V}$, define $\varepsilon_i\in\mathcal{V}'$ by $\varepsilon_i\left(\sum\limits_{j\in F}a_j\mathbf{b}_j\right)\defeq a_i$, $F\subseteq I$ finite, $a_i=0$ if $i\notin F$.\\
-Then $\{\varepsilon_i\}_{i\in I}$ is linearly independent in $\mathcal{V}'$. Moreover, the following are equivalent:
+Let $\mathcal{B}=\{\mathbf{b}_i\}_{i\in I}$ be Hamel basis of $\mathcal{V}$. For $\mathbf{v}\in\mathcal{V}$, let $a_{\mathbf{v}}:I\to\mathbb{F}$ be unique finitely supported function satisfying $\mathbf{v}=\sum\limits_{j\in\operatorname{supp}(a_{\mathbf{v}})}a_{\mathbf{v}}(j)\mathbf{b}_j$, and define $\varepsilon_i(\mathbf{v})\defeq a_{\mathbf{v}}(i)$ for $i\in I$. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\operatorname{span}\{\varepsilon_i:i\in I\}=\mathcal{V}'$;
-\item $\abs{I}<\infty$;
-\item $\dim(\mathcal{V})<\infty$.
+\item $(\forall\,i\in I)\,\varepsilon_i\in\mathcal{V}'$;
+\item $\{\varepsilon_i\}_{i\in I}$ is linearly independent;
+\item $\operatorname{span}\{\varepsilon_i:i\in I\}=\mathcal{V}'$ iff $\abs{I}<\infty$;
+\item $\abs{I}<\infty$ iff $\mathcal{V}$ is finite-dimensional.
 \end{enumerate}
 \begin{proof}
-If $\sum\limits_{r=1}^n c_r\varepsilon_{i_r}=0$ with distinct $i_r$, then $0=\left(\sum\limits_{r=1}^n c_r\varepsilon_{i_r}\right)(\mathbf{b}_{i_s})=c_s$ $\forall s$. Hence $\{\varepsilon_i\}_{i\in I}$ linearly independent.
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] $\Rightarrow$ $(ii)$. Suppose $\operatorname{span}\{\varepsilon_i:i\in I\}=\mathcal{V}'$. Put $\operatorname{supp}_{\mathcal{B}}(\psi)\defeq\{i\in I:\psi(\mathbf{b}_i)\neq0\}$.\\
-If $I$ were infinite, define $\varphi\in\mathcal{V}'$ by $\varphi(\mathbf{b}_i)=1$ for all $i\in I$.\\
-Then $\operatorname{supp}_{\mathcal{B}}(\varphi)=I$, while $\operatorname{supp}_{\mathcal{B}}(\psi)$ is finite for every $\psi\in\operatorname{span}\{\varepsilon_i:i\in I\}$, a contradiction.
-\item[$(ii)$] $\Rightarrow$ $(iii)$. Since $\mathcal{B}$ is a basis, $\dim(\mathcal{V})=\abs{I}<\infty$.
-\item[$(iii)$] $\Rightarrow$ $(i)$. If $\dim(\mathcal{V})<\infty$, then Theorem \ref{thm:dual-basis-and-dimension} gives $\operatorname{span}\{\varepsilon_i:i\in I\}=\mathcal{V}'$.
+\item[$(i)$] For $\alpha,\beta\in\mathbb{F}$ and $\mathbf{v},\mathbf{w}\in\mathcal{V}$, the identity $a_{\alpha\mathbf{v}+\beta\mathbf{w}}=\alpha a_{\mathbf{v}}+\beta a_{\mathbf{w}}$ holds by uniqueness in Proposition \ref{prop:hamel-coordinate-representation}.\\
+Hence $(\forall\,i\in I)\,\varepsilon_i(\alpha\mathbf{v}+\beta\mathbf{w})=\alpha\varepsilon_i(\mathbf{v})+\beta\varepsilon_i(\mathbf{w})$, so $(\forall\,i\in I)\,\varepsilon_i\in\mathcal{V}'$ by Definition \ref{def:linear-functional-and-dual-space}.
+\item[$(ii)$] If $i_1,\ldots,i_N\in I$ are distinct and $\sum\limits_{r=1}^{N}c_r\varepsilon_{i_r}=0$, then $(\forall\,s\in\{1,\ldots,N\})\,c_s=\sum\limits_{r=1}^{N}c_r\varepsilon_{i_r}(\mathbf{b}_{i_s})=0$.\\
+Thus every finite relation is trivial, so $\{\varepsilon_i\}_{i\in I}$ is linearly independent.
+\item[$(iii)$] ($\Rightarrow$) Suppose $\operatorname{span}\{\varepsilon_i:i\in I\}=\mathcal{V}'$ and $I$ is infinite. Define $\varphi(\mathbf{v})\defeq\sum\limits_{j\in\operatorname{supp}(a_{\mathbf{v}})}a_{\mathbf{v}}(j)$.\\
+By coordinate uniqueness, $(\forall\,\alpha,\beta\in\mathbb{F})(\forall\,\mathbf{v},\mathbf{w}\in\mathcal{V})\,\varphi(\alpha\mathbf{v}+\beta\mathbf{w})=\alpha\varphi(\mathbf{v})+\beta\varphi(\mathbf{w})$, so $\varphi\in\mathcal{V}'$\\
+ The equality $(\forall\,i\in I)\,\varphi(\mathbf{b}_i)=1$ holds, whereas every element of $\operatorname{span}\{\varepsilon_i:i\in I\}$ vanishes on all but finitely many $\mathbf{b}_i$.\\
+ Thus $\varphi\notin\operatorname{span}\{\varepsilon_i:i\in I\}$, a contradiction, and $\abs{I}<\infty$.
+\item[$(iii)$] ($\Leftarrow$) If $I$ is finite, order $\mathcal{B}$. Then $\{\varepsilon_i\}_{i\in I}$ is its dual basis, so it spans $\mathcal{V}'$ by Theorem \ref{thm:dual-basis-and-dimension}(i).
+\item[$(iv)$] ($\Rightarrow$) If $I$ is finite, then any ordering of $\mathcal{B}$ is a finite basis, so $\mathcal{V}$ is finite-dimensional.
+\item[$(iv)$] ($\Leftarrow$) Suppose $\mathcal{V}$ has a spanning list of length $n$ and $I$ is infinite. Choose distinct $i_1,\ldots,i_{n+1}\in I$.\\
+The list $(\mathbf{b}_{i_1},\ldots,\mathbf{b}_{i_{n+1}})$ is linearly independent, so $n+1\leq n$ by Theorem \ref{thm:finitedimlenofvec}, a contradiction. Hence $I$ is finite.
 \end{enumerate}
-\hlt{Structural Commentary}: Coordinate spans are finite-support.\\
-\hlt{Key Insight}: Infinite-dimensional coordinate functionals are independent, not spanning.
+\hlt{Structural Commentary}: Coefficient uniqueness proves linearity and independence; finite support detects finite-dimensionality.\\
+\hlt{Key Insight}: Finite coordinate support cannot represent a functional nonzero on every basis vector.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:dimension-of-algebraic-dual} \hlt{Dimension of the Algebraic Dual}\\
-For every $\mathbb{F}$-vector space $\mathcal{V}$, $\dim(\mathcal{V})\leq\dim(\mathcal{V}')$. Moreover, the following are equivalent:
+Assume Zorn's lemma and the Choice Principle \ref{princ:axiom-of-choice-analysis}, and let $\mathcal{V}$ be an $\mathbb{F}$-vector space. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\dim(\mathcal{V})=\dim(\mathcal{V}')$;
-\item $\dim(\mathcal{V})<\infty$.
+\item $\dim(\mathcal{V})\leq\dim(\mathcal{V}')$;
+\item $\dim(\mathcal{V})=\dim(\mathcal{V}')$ iff $\dim(\mathcal{V})<\infty$.
 \end{enumerate}
 \begin{proof}
-Let $\mathcal{B}=\{\mathbf{b}_i\}_{i\in I}$ be a Hamel basis. By Proposition \ref{prop:coordinate-functionals-for-hamel-basis}, $\{\varepsilon_i\}_{i\in I}\subseteq\mathcal{V}'$ is linearly independent; hence $\dim(\mathcal{V})=\abs{I}\leq\dim(\mathcal{V}')$. For the equality criterion:
-\begin{enumerate}[label=(\roman*).]
+Choose a Hamel basis $\mathcal{B}=\{\mathbf{b}_i\}_{i\in I}$ by Theorem \ref{thm:hamel-basis-extension}(ii), set $\kappa\defeq\abs{I}=\dim(\mathcal{V})$ by Definition \ref{def:hamel-dimension}, and let $\{\varepsilon_i\}_{i\in I}$ denote the coordinate functionals associated with $\mathcal{B}$.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] $\Rightarrow$ $(ii)$. Suppose $\dim(\mathcal{V})=\dim(\mathcal{V}')$. If $I$ were infinite, then $\mathcal{V}\cong(\mathbb{F}^{I})_0$ and $\mathcal{V}'\cong\mathbb{F}^{I}$.\\
-Let $\mathbb{F}_0\subseteq\mathbb{F}$ be the prime subfield. Since $\mathbb{F}_0$ is countable, $\dim_{\mathbb{F}_0}\big((\mathbb{F}_0^{I})_0\big)=\abs{I}$ and $\abs{\mathbb{F}_0^{I}}>\abs{I}$ by Cantor, so $\dim_{\mathbb{F}_0}(\mathbb{F}_0^{I})>\abs{I}$; hence $\dim_{\mathbb{F}_0}\big((\mathbb{F}_0^{I})_0\big)=\abs{I}< \dim_{\mathbb{F}_0}(\mathbb{F}_0^{I})$.\\
-Every $\mathbb{F}_0$-linearly independent family in $\mathbb{F}_0^{I}$ is $\mathbb{F}$-linearly independent in $\mathbb{F}^{I}$, by expanding coefficients in an $\mathbb{F}_0$-basis of $\mathbb{F}$. Thus $\dim_{\mathbb{F}}(\mathcal{V}) =\dim_{\mathbb{F}}\big((\mathbb{F}^{I})_0\big) < \dim_{\mathbb{F}}(\mathbb{F}^{I}) =\dim_{\mathbb{F}}(\mathcal{V}')$, a contradiction. Hence $\dim(\mathcal{V})<\infty$.
-\item[$(ii)$] $\Rightarrow$ $(i)$. If $\dim(\mathcal{V})<\infty$, then Theorem \ref{thm:dual-basis-and-dimension} gives $\dim(\mathcal{V})=\dim(\mathcal{V}')$.
+\item[$(i)$] The family $\{\varepsilon_i\}_{i\in I}\subseteq\mathcal{V}'$ is linearly independent by Proposition \ref{prop:coordinate-functionals-for-hamel-basis}(ii).\\
+Extend it to a Hamel basis $\mathcal{D}$ of $\mathcal{V}'$ by Theorem \ref{thm:hamel-basis-extension}(iii).\\
+The map $i\mapsto\varepsilon_i$ injects $I$ into $\mathcal{D}$, so $\kappa=\abs{I}\leq\abs{\mathcal{D}}=\dim(\mathcal{V}')$ by Proposition \ref{prop:cardinal-operations-on-representatives}(i) and Definition \ref{def:hamel-dimension}.
+\item[$(ii)$] ($\Rightarrow$) Suppose $\dim(\mathcal{V})=\dim(\mathcal{V}')$. Since $\kappa=\dim(\mathcal{V})$, assume for contradiction that $\kappa$ is infinite.
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Countable scalar core}: Set $D\defeq\{(m,n)\in\mathbb{Z}^2:n\cdot1\neq0\}$ and $\mathbb{F}_0\defeq\{(m\cdot1)(n\cdot1)^{-1}:(m,n)\in D\}\subseteq\mathbb{F}$.\\
+The elements $0,1$ belong to $\mathbb{F}_0$. If $x=(m\cdot1)(n\cdot1)^{-1}$ and $y=(r\cdot1)(s\cdot1)^{-1}$, then $x-y=((ms-rn)\cdot1)((ns)\cdot1)^{-1}$ and $xy=((mr)\cdot1)((ns)\cdot1)^{-1}$; if $x\neq0$, then $x^{-1}=(n\cdot1)(m\cdot1)^{-1}$.\\
+Thus $\mathbb{F}_0$ is a subfield. The set $D$ is at most countable by Proposition \ref{prop:integers-countable}, Corollary \ref{cor:countable-cartesian-products}(ii), and Proposition \ref{prop:subsets-and-images-at-most-countable}(i), so $\mathbb{F}_0$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(ii). The map $E\mapsto\mathbf{1}_E$ injects $\mathcal{P}(I)$ into $\mathbb{F}_0^I$.\\
+The map $i\mapsto\{i\}$ injects $I$ into $\mathcal{P}(I)$, while $I\not\sim_{\#}\mathcal{P}(I)$ by Theorem \ref{thm:cantor-power-set-theorem}.\\
+Hence $\kappa<\abs{\mathcal{P}(I)}\leq\abs{\mathbb{F}_0^I}$ by Proposition \ref{prop:cardinal-operations-on-representatives}(i),(ii).
+\item \hlt{Core-space dimension}: Suppose $\dim_{\mathbb{F}_0}(\mathbb{F}_0^I)\leq\kappa$. Choose a Hamel basis $\mathcal{C}$ of $\mathbb{F}_0^I$ by Theorem \ref{thm:hamel-basis-extension}(ii).\\
+Since $\abs{\mathcal{C}}=\dim_{\mathbb{F}_0}(\mathbb{F}_0^I)\leq\kappa$, an injection $\iota:\mathcal{C}\to\kappa$ exists by Proposition \ref{prop:cardinal-operations-on-representatives}(i).\\
+By Proposition \ref{prop:hamel-coordinate-representation}, the increasing list of $\iota$-images of the support, paired with its nonzero coefficients, injectively encodes each $f\in\mathbb{F}_0^I$ in $\bigcup\limits_{n<\omega}\bigl(\{n\}\times(\kappa\times\mathbb{F}_0)^n\bigr)$. Since $\mathbb{F}_0$ is at most countable and $\kappa$ is infinite, each finite power injects into $\kappa$, and the tagged union injects into $\omega\times\kappa$, by Proposition \ref{prop:finite-cardinality-and-aleph-zero-agreement}(iv) and Theorem \ref{thm:infinite-cardinal-absorption-reference}(ii).\\
+Therefore $\abs{\mathbb{F}_0^I}\leq\kappa$ by Proposition \ref{prop:cardinal-operations-on-representatives}(i), contrary to (a). Thus $\dim_{\mathbb{F}_0}(\mathbb{F}_0^I)>\kappa$.
+\item \hlt{Scalar transfer}: Choose an $\mathbb{F}_0$-basis $\mathcal{C}$ of $\mathbb{F}_0^I$ by Theorem \ref{thm:hamel-basis-extension}(ii). For $\mathbf{v}\in\mathcal{V}$, a unique finitely supported $\mathcal{B}$-coefficient function $a_{\mathbf{v}}:I\to\mathbb{F}$ exists by Proposition \ref{prop:hamel-coordinate-representation}. For $g\in\mathcal{C}$, define $\Phi_g:\mathcal{V}\to\mathbb{F}$ by $\Phi_g(\mathbf{v})\defeq\sum\limits_{i\in\operatorname{supp}(a_{\mathbf{v}})}a_{\mathbf{v}}(i)g(i)$.\\
+The identity $a_{\alpha\mathbf{v}+\beta\mathbf{w}}=\alpha a_{\mathbf{v}}+\beta a_{\mathbf{w}}$ holds by coordinate uniqueness.\\
+Hence $(\forall\,\alpha,\beta\in\mathbb{F})(\forall\,\mathbf{v},\mathbf{w}\in\mathcal{V})\,\Phi_g(\alpha\mathbf{v}+\beta\mathbf{w})=\alpha\Phi_g(\mathbf{v})+\beta\Phi_g(\mathbf{w})$ and $\Phi_g\in\mathcal{V}'$.\\
+Let $N\in\N$, let $g_1,\ldots,g_N\in\mathcal{C}$ be distinct, and suppose $\sum\limits_{r=1}^{N}c_r\Phi_{g_r}=0$.\\
+Equality $(\forall\,i\in I)\,\sum\limits_{r=1}^{N}c_rg_r(i)=0$ holds by evaluation at $\mathbf{b}_i$. Choose $\mathbb{F}_0$-basis $(e_1,\ldots,e_s)$ of $\operatorname{span}_{\mathbb{F}_0}\{c_1,\ldots,c_N\}$ by Corollary \ref{cor:finite-dimensional-spaces-and-subspaces-have-bases}, and $d_{\ell r}\in\mathbb{F}_0$ satisfying $(\forall\,r\in\{1,\ldots,N\})\,c_r=\sum\limits_{\ell=1}^{s}d_{\ell r}e_\ell$. For $i\in I$, $0=\sum\limits_{r=1}^{N}c_rg_r(i)=\sum\limits_{\ell=1}^{s}e_\ell\bigl(\sum\limits_{r=1}^{N}d_{\ell r}g_r(i)\bigr)$.\\
+Hence $(\forall\,\ell\in\{1,\ldots,s\})(\forall\,i\in I)\,\sum\limits_{r=1}^{N}d_{\ell r}g_r(i)=0$ by independence of $(e_1,\ldots,e_s)$.\\
+$(\forall\,\ell\in\{1,\ldots,s\})\,\sum\limits_{r=1}^{N}d_{\ell r}g_r=0$ by Assumption \ref{assump:function-extensionality}, $(\forall\,\ell\in\{1,\ldots,s\})(\forall\,r\in\{1,\ldots,N\})\,d_{\ell r}=0$ by independence of $\mathcal{C}$. Hence $(\forall\,r\in\{1,\ldots,N\})\,c_r=0$, so $g\mapsto\Phi_g$ is injective and $\{\Phi_g:g\in\mathcal{C}\}$ is $\mathbb{F}$-linearly independent.\\
+Extend this set to a Hamel basis $\mathcal{E}$ of $\mathcal{V}'$ by Theorem \ref{thm:hamel-basis-extension}(iii). By (b), $\dim_{\mathbb{F}}(\mathcal{V}')=\abs{\mathcal{E}}\geq\abs{\mathcal{C}}=\dim_{\mathbb{F}_0}(\mathbb{F}_0^I)>\kappa=\dim_{\mathbb{F}}(\mathcal{V})$ by Proposition \ref{prop:cardinal-operations-on-representatives}(i) and Definition \ref{def:hamel-dimension}, contrary to the assumed equality.
 \end{enumerate}
-\hlt{Structural Commentary}: Algebraic duals have arbitrary support.\\
-\hlt{Key Insight}: Infinite algebraic duals are bigger than their original spaces.
+\item[$(ii)$] ($\Leftarrow$) If $\dim(\mathcal{V})<\infty$, then $\dim(\mathcal{V}')=\dim(\mathcal{V})$ by Theorem \ref{thm:dual-basis-and-dimension}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: A countable scalar core transfers Cantor-sized independence from functions to functionals.\\
+\hlt{Key Insight}: Scalar extension preserves independence of core-field coordinate functions.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:functionals-separate-points} \hlt{Functionals Separate Points}\\
-Let $\mathcal{V}$ be a vector space.
+Assume Zorn's lemma, and let $\mathcal{V}$ be a vector space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathbf{v}\neq\mathbf{0}$, then there exists $\varphi\in\mathcal{V}'$ such that $\varphi(\mathbf{v})\neq0$.
-\item A vector $\mathbf{v}\in\mathcal{V}$ is zero if and only if $\varphi(\mathbf{v})=0$ for every $\varphi\in\mathcal{V}'$.
-\item If $\mathcal{U}\leq\mathcal{V}$ and $\mathbf{x}\notin\mathcal{U}$, then there exists $\varphi\in\mathcal{V}'$ such that $\varphi|_{\mathcal{U}}=0$ and $\varphi(\mathbf{x})=1$.
-\item If $\varphi\in\mathcal{V}'$ and $\varphi(\mathbf{x})\neq0$, then $\mathcal{V}=\operatorname{span}(\mathbf{x})\oplus\ker(\varphi)$.
-\item If nonzero $\varphi,\psi\in\mathcal{V}'$ have the same kernel, then $\varphi=a\psi$ for some nonzero $a\in\mathbb{F}$.
+\item $(\forall\,\mathbf{v}\in\mathcal{V}\setminus\{\mathbf{0}\})(\exists\,\varphi\in\mathcal{V}')\,\varphi(\mathbf{v})\neq0$.
+\item $(\forall\,\mathbf{v}\in\mathcal{V})\,[\mathbf{v}=\mathbf{0}\iff(\forall\,\varphi\in\mathcal{V}')\,\varphi(\mathbf{v})=0]$.
+\item If $\mathcal{U}\leq\mathcal{V}$ and $\mathbf{x}\in\mathcal{V}\setminus\mathcal{U}$, then $(\exists\,\varphi\in\mathcal{V}')\,[\varphi|_{\mathcal{U}}=0\land\varphi(\mathbf{x})=1]$.
+\item If $\varphi\in\mathcal{V}'$ and $\mathbf{x}\in\mathcal{V}$ satisfy $\varphi(\mathbf{x})\neq0$, then $\mathcal{V}=\operatorname{span}(\mathbf{x})\oplus\ker(\varphi)$.
+\item If $0\neq\varphi,\psi\in\mathcal{V}'$ and $\ker(\varphi)=\ker(\psi)$, then $(\exists\,a\in\mathbb{F}\setminus\{0\})\,\varphi=a\psi$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Extend $\{\mathbf{v}\}$ to a Hamel basis $\mathcal{B}$ of $\mathcal{V}$ by Theorem \ref{thm:hamel-basis-extension}. Define $\varphi$ on $\mathcal{B}$ by $\varphi(\mathbf{v})=1$ and $\varphi(\mathbf{b})=0$ for $\mathbf{b}\in\mathcal{B}\setminus\{\mathbf{v}\}$, then extend linearly to finite basis expansions.
-\item If $\mathbf{v}=\mathbf{0}$, then $\varphi(\mathbf{v})=0$ for every $\varphi\in\mathcal{V}'$. Conversely, if $\varphi(\mathbf{v})=0$ for every $\varphi\in\mathcal{V}'$ and $\mathbf{v}\neq\mathbf{0}$, then (i) gives some $\psi\in\mathcal{V}'$ with $\psi(\mathbf{v})\neq0$, a contradiction.
-\item Choose a Hamel basis $\mathcal{B}_{\mathcal{U}}$ of $\mathcal{U}$. Since $\mathbf{x}\notin\mathcal{U}=\operatorname{span}(\mathcal{B}_{\mathcal{U}})$, the set $\mathcal{B}_{\mathcal{U}}\cup\{\mathbf{x}\}$ is linearly independent. Extend it to a Hamel basis $\mathcal{B}$ of $\mathcal{V}$ by Theorem \ref{thm:hamel-basis-extension}. Define $\varphi$ on $\mathcal{B}$ by $\varphi(\mathbf{x})=1$ and $\varphi(\mathbf{b})=0$ for every $\mathbf{b}\in\mathcal{B}\setminus\{\mathbf{x}\}$, then extend linearly to finite basis expansions.
-\item Since $\varphi(\mathbf{x})\neq0$, $\operatorname{span}(\mathbf{x})\cap\ker(\varphi)=\{\mathbf{0}\}$.\\
-For any $\mathbf{v}\in\mathcal{V}$, $\mathbf{v}=\frac{\varphi(\mathbf{v})}{\varphi(\mathbf{x})}\mathbf{x}
-       +\left(\mathbf{v}-\frac{\varphi(\mathbf{v})}{\varphi(\mathbf{x})}\mathbf{x}\right)$, and the second summand lies in $\ker(\varphi)$.
-\item Let $\mathcal{K}=\ker(\varphi)=\ker(\psi)$ and choose $\mathbf{x}\notin\mathcal{K}$. By (iv), every $\mathbf{v}\in\mathcal{V}$ can be written $\mathbf{v}=c\mathbf{x}+\mathbf{k}$ with $\mathbf{k}\in\mathcal{K}$. Setting $a=\varphi(\mathbf{x})/\psi(\mathbf{x})$ gives $\varphi(\mathbf{v})=c\varphi(\mathbf{x})=a\,c\psi(\mathbf{x})=a\psi(\mathbf{v})$.
+\item[$(i)$] Fix $\mathbf{v}\neq\mathbf{0}$. The set $\{\mathbf{v}\}$ is linearly independent, so it extends to a Hamel basis $\mathcal{B}=\{\mathbf{b}_i\}_{i\in I}$ by Theorem \ref{thm:hamel-basis-extension}(iii).\\
+Let $\{\varepsilon_i\}_{i\in I}$ denote its coordinate functionals, choose $i_0\in I$ with $\mathbf{b}_{i_0}=\mathbf{v}$. Then $\varepsilon_{i_0}\in\mathcal{V}'$ by Proposition \ref{prop:coordinate-functionals-for-hamel-basis}(i), and $\varepsilon_{i_0}(\mathbf{v})=1$.
+\item[$(ii)$] ($\Rightarrow$) If $\mathbf{v}=\mathbf{0}$, then $(\forall\,\varphi\in\mathcal{V}')\,\varphi(\mathbf{v})=0$ by Proposition \ref{prop:linear-maps-send-zero-to-zero}.
+\item[$(ii)$] ($\Leftarrow$) If $\mathbf{v}\neq\mathbf{0}$, then $(\exists\,\psi\in\mathcal{V}')\,\psi(\mathbf{v})\neq0$ by (i), contrary to the assumed vanishing. Hence $\mathbf{v}=\mathbf{0}$.
+\item[$(iii)$] Choose a Hamel basis $\mathcal{B}_{\mathcal{U}}$ of $\mathcal{U}$ by Theorem \ref{thm:hamel-basis-extension}(ii).\\
+Since $\mathbf{x}\notin\operatorname{span}(\mathcal{B}_{\mathcal{U}})$, every finite relation on $\mathcal{B}_{\mathcal{U}}\cup\{\mathbf{x}\}$ has zero $\mathbf{x}$-coefficient and is then trivial by independence of $\mathcal{B}_{\mathcal{U}}$.\\
+Thus $\mathcal{B}_{\mathcal{U}}\cup\{\mathbf{x}\}$ is linearly independent and extends to a Hamel basis $\mathcal{B}=\{\mathbf{b}_i\}_{i\in I}$ of $\mathcal{V}$ by Theorem \ref{thm:hamel-basis-extension}(iii).\\
+Let $\{\varepsilon_i\}_{i\in I}$ denote its coordinate functionals, choose $i_0\in I$ with $\mathbf{b}_{i_0}=\mathbf{x}$, and set $\varphi\defeq\varepsilon_{i_0}$.\\
+Then $\varphi\in\mathcal{V}'$ by Proposition \ref{prop:coordinate-functionals-for-hamel-basis}(i), $\varphi(\mathbf{x})=1$, and $\varphi|_{\mathcal{U}}=0$ by $\mathcal{U}=\operatorname{span}(\mathcal{B}_{\mathcal{U}})$.
+\item[$(iv)$] If $c\mathbf{x}\in\ker(\varphi)$, then $c\varphi(\mathbf{x})=0$, so $c=0$; hence $\operatorname{span}(\mathbf{x})\cap\ker(\varphi)=\{\mathbf{0}\}$. For $\mathbf{v}\in\mathcal{V}$, set $c_{\mathbf{v}}\defeq\varphi(\mathbf{v})\varphi(\mathbf{x})^{-1}$.\\
+Then $\mathbf{v}=c_{\mathbf{v}}\mathbf{x}+(\mathbf{v}-c_{\mathbf{v}}\mathbf{x})$, with $\mathbf{v}-c_{\mathbf{v}}\mathbf{x}\in\ker(\varphi)$. Thus $\mathcal{V}=\operatorname{span}(\mathbf{x})\oplus\ker(\varphi)$ by Proposition \ref{prop:uniqueness-direct-sum-two-subspaces}.
+\item[$(v)$] Set $\mathcal{K}\defeq\ker(\varphi)=\ker(\psi)$. Since $\varphi\neq0$, choose $\mathbf{x}\in\mathcal{V}\setminus\mathcal{K}$, set $a\defeq\varphi(\mathbf{x})\psi(\mathbf{x})^{-1}\neq0$. The identity $\mathcal{V}=\operatorname{span}(\mathbf{x})\oplus\mathcal{K}$ holds by (iv).\\
+Fix $\mathbf{v}=c\mathbf{x}+\mathbf{k}$ with $c\in\mathbb{F}$ and $\mathbf{k}\in\mathcal{K}$. Then $\varphi(\mathbf{v})=c\varphi(\mathbf{x})=ac\psi(\mathbf{x})=a\psi(\mathbf{v})$. Hence $\varphi=a\psi$ by Assumption \ref{assump:function-extensionality}.
 \end{enumerate}
-\hlt{Structural Commentary}: Dual vectors separate points and define hyperplanes.\\
-\hlt{Key Insight}: A nonzero functional splits the space into one visible direction plus its kernel.
+\hlt{Structural Commentary}: Basis extension constructs separating coordinates; kernel decomposition then compares nonzero functionals.\\
+\hlt{Key Insight}: One normalized coordinate detects any direction outside a prescribed subspace.
 \end{proof}
 \end{proposition}
 
 \begin{corollary} \label{cor:nonzero-functional-hyperplane-kernel} \hlt{Kernels of Nonzero Functionals}\\
-If $0\neq\varphi\in\mathcal{V}'$, then $\varphi$ is surjective onto $\mathbb{F}$, $\mathcal{V}/\ker(\varphi)\cong\mathbb{F}$, and $\operatorname{codim}_{\mathcal{V}}(\ker\varphi)=1$.
+If $0\neq\varphi\in\mathcal{V}'$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\varphi$ is surjective;
+\item $\mathcal{V}/\ker(\varphi)\cong\mathbb{F}$;
+\item $\operatorname{codim}_{\mathcal{V}}(\ker(\varphi))=1$.
+\end{enumerate}
 \begin{proof}
-Choose $\mathbf{x}$ with $\varphi(\mathbf{x})\neq0$. For each $a\in\mathbb{F}$, $\varphi\bigl(a\varphi(\mathbf{x})^{-1}\mathbf{x}\bigr)=a$, so $\operatorname{im}\varphi=\mathbb{F}$.\\
-Hence, by Theorem \ref{thm:quotient-by-kernel-is-range}, $\mathcal{V}/\ker(\varphi)\cong\operatorname{im}\varphi=\mathbb{F}$ and $\operatorname{codim}_{\mathcal{V}}(\ker\varphi)=\dim(\mathcal{V}/\ker\varphi)=1$.\\
-\hlt{Structural Commentary}: A nonzero functional sees exactly one scalar direction and kills a hyperplane.\\
-\hlt{Key Insight}: Kernels of nonzero functionals have codimension one.
+Choose $\mathbf{x}\in\mathcal{V}$ with $\varphi(\mathbf{x})\neq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,a\in\mathbb{F})\,\varphi(a\varphi(\mathbf{x})^{-1}\mathbf{x})=a$, so $\operatorname{range}(\varphi)=\mathbb{F}$.
+\item The isomorphism $\mathcal{V}/\ker(\varphi)\cong\operatorname{range}(\varphi)=\mathbb{F}$ holds by Theorem \ref{thm:quotient-by-kernel-is-range} and (i).
+\item Choose an isomorphism $T:\mathcal{V}/\ker(\varphi)\to\mathbb{F}$ by (ii). Since $(1)$ is a basis of $\mathbb{F}$ over itself, $(T^{-1}(1))$ is a basis of $\mathcal{V}/\ker(\varphi)$ by Proposition \ref{prop:isomorphisms-preserve-bases}. Hence $\operatorname{codim}_{\mathcal{V}}(\ker(\varphi))=\dim(\mathcal{V}/\ker(\varphi))=1$ by Definition \ref{def:codimension-subspace} and Definition \ref{def:dimension}.
+\end{enumerate}
+\hlt{Structural Commentary}: Surjectivity identifies the quotient with the one-dimensional scalar field.\\
+\hlt{Key Insight}: A nonzero functional removes exactly one scalar direction.
 \end{proof}
 \end{corollary}

@@ -1,100 +1,111 @@
 \subsection{Normal, Self-Adjoint, and Spectral Theorems}
 
-
 % **Role:** structure revealed by invariant subspaces and eigenbehavior.
 %
-% Normal, self-adjoint, positive, unitary operators; Schur theorem; spectral theorem; spectral resolutions.
+% Normal and self-adjoint operators; Schur and spectral theorems; spectral resolutions.
 
-Structured spectral theory studies operators whose geometry and spectrum align. Normal, self-adjoint, positive, and unitary maps admit orthogonal decompositions and spectral resolutions.
+Structured spectral theory studies operators whose geometry and spectrum align.\\
+This subsection derives orthonormal eigenbases and spectral resolutions from normality and self-adjointness.\\
+All inner-product spaces below are finite-dimensional over $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$ unless stated otherwise.
 
-\begin{definition} \label{def:normal-operator} \hlt{Normal Operator}\\
-An operator $T\in\LL(\mathcal{V})$ on a finite-dim inner-product space is \hlt{normal} if it commutes with its adjoint: $TT^*=T^*T$.\\
-A square matrix $A$ is \hlt{normal} if $A^*A=AA^*$.\\
-Every self-adjoint operator, every Hermitian matrix, and every unitary matrix is normal.
+\begin{definition} \label{def:normal-operator} \hlt{Normal Operator}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item An operator $T\in\LL(\mathcal{V})$ is \hlt{normal} iff $T^*T=TT^*$.
+\item For $n\geq1$, a matrix $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is \hlt{normal} iff $A^*A=AA^*$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:normal-iff-equal-adjoint-norms} \hlt{Normal Operators and Equal Adjoint Norms}\\
-An operator $T\in\LL(\mathcal{V})$ is normal if and only if $\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$ for every $\mathbf{v}\in\mathcal{V}$.
+Let $T\in\LL(\mathcal{V})$. Then $T$ is normal iff $(\forall\mathbf{v}\in\mathcal{V})\,\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$.
 \begin{proof}
-The operator $A=T^*T-TT^*$ is self-adjoint.\\
-For every $\mathbf{v}\in\mathcal{V}$, $\innerprod{A\mathbf{v},\mathbf{v}} =\innerprod{T^*T\mathbf{v},\mathbf{v}}-\innerprod{TT^*\mathbf{v},\mathbf{v}} =\norm{T\mathbf{v}}^2-\norm{T^*\mathbf{v}}^2$.\\
-Thus $T$ is normal exactly when $A=0$, which by Proposition \ref{prop:self-adjoint-zero-quadratic-form-implies-zero} is equivalent to the displayed quadratic form being zero for every $\mathbf{v}$. This is equivalent to $\norm{T\mathbf{v}}=\norm{T^*\mathbf{v}}$ for every $\mathbf{v}$.\\
-\hlt{Structural Commentary}: Normality is measured by the self-adjoint commutator $T^*T-TT^*$.\\
-\hlt{Key Insight}: A normal operator and its adjoint move every vector the same distance.
+Set $C\defeq T^*T-TT^*$. Then $C^*=C$ by Proposition \ref{prop:basic-adjoint-identities}(i)--(iii).\\
+The identity $(\forall\mathbf{v}\in\mathcal{V})\,\innerprod{C\mathbf{v},\mathbf{v}}=\norm{T\mathbf{v}}^2-\norm{T^*\mathbf{v}}^2$ holds by the adjoint identity and Proposition \ref{prop:basic-adjoint-identities}(iii).
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $T$ is normal, then $C=0$ by Definition \ref{def:normal-operator}(i), so the quadratic identity implies the norm identity.
+\item[$(\Leftarrow)$] The norm identity implies $(\forall\mathbf{v}\in\mathcal{V})\,\innerprod{C\mathbf{v},\mathbf{v}}=0$. Hence $C=0$ by Proposition \ref{prop:self-adjoint-zero-quadratic-form-implies-zero}, and $T$ is normal by Definition \ref{def:normal-operator}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: The adjoint defect becomes a quadratic form and is recovered from its diagonal values.\\
+\hlt{Key Insight}: Equal norm functions detect $T^*T-TT^*=0$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:normal-operator-adjoint-eigenvectors} \hlt{Normal Operators Share Eigenvectors with Their Adjoints}\\
-Let $T\in\LL(\mathcal{V})$ be normal. If $T\mathbf{v}=\lambda\mathbf{v}$ for some $\mathbf{v}\neq\mathbf{0}$, then $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.
+Let $T\in\LL(\mathcal{V})$ be normal, let $\lambda\in\mathbb{F}$, and let $\mathbf{v}\in\mathcal{V}\setminus\{\mathbf{0}\}$. If $T\mathbf{v}=\lambda\mathbf{v}$, then $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.
 \begin{proof}
-The operator $T-\lambda I_{\mathcal{V}}$ is normal by Proposition \ref{prop:basic-adjoint-identities} and scalar multiples of $I_{\mathcal{V}}$ commute with $T$ and $T^*$. Applying Theorem \ref{thm:normal-iff-equal-adjoint-norms} to $T-\lambda I_{\mathcal{V}}$ gives $0=\norm{(T-\lambda I_{\mathcal{V}})\mathbf{v}} =\norm{(T-\lambda I_{\mathcal{V}})^*\mathbf{v}} =\norm{(T^*-\overline{\lambda}I_{\mathcal{V}})\mathbf{v}}$.\\
-\hlt{Structural Commentary}: For normal operators, kernels of $T-\lambda I$ and $T^*-\overline{\lambda}I$ coincide.\\
-\hlt{Key Insight}: Normality makes eigenvector information visible from both $T$ and $T^*$.
+Set $S\defeq T-\lambda I_{\mathcal{V}}$. Then $S^*=T^*-\overline{\lambda}I_{\mathcal{V}}$ by Proposition \ref{prop:basic-adjoint-identities}(i),(iv).\\
+The identity $S^*S-SS^*=T^*T-TT^*=0$ holds by direct expansion and normality of $T$, so $S$ is normal.\\
+Since $S\mathbf{v}=\mathbf{0}$, $\norm{S^*\mathbf{v}}=\norm{S\mathbf{v}}=0$ by Theorem \ref{thm:normal-iff-equal-adjoint-norms}. Thus $S^*\mathbf{v}=\mathbf{0}$ by positive definiteness, equivalently $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.\\
+\hlt{Structural Commentary}: Scalar shifting preserves normality, and the equal-norm criterion transfers the shifted kernel.\\
+\hlt{Key Insight}: $\ker(T-\lambda I_{\mathcal{V}})\subseteq\ker(T^*-\overline{\lambda}I_{\mathcal{V}})$.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:normal-operator-eigenvectors} depicts the common eigenline in Theorem \ref{thm:normal-operator-adjoint-eigenvectors}.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/normal_operator_eigenvectors.tikz}
-  \caption{For normal $T$, $T\mathbf{v}=\lambda\mathbf{v}$ implies $T^*\mathbf{v}=\overline{\lambda}\mathbf{v}$.}
+  \caption{A normal operator and its adjoint preserve the same eigenline with conjugate eigenvalues.}
   \label{fig:normal-operator-eigenvectors}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:normal-eigenvectors-distinct-eigenvalues-orthogonal} \hlt{Orthogonal Eigenvectors for Normal Operators}\\
-Let $T\in\LL(\mathcal{V})$ be normal. Eigenvectors of $T$ corresponding to distinct eigenvalues are orthogonal.
+Let $T\in\LL(\mathcal{V})$ be normal and let $\alpha,\beta\in\operatorname{spec}(T)$ satisfy $\alpha\neq\beta$. Then $(\forall\mathbf{u}\in E_{\alpha}(T)\setminus\{\mathbf{0}\})(\forall\mathbf{v}\in E_{\beta}(T)\setminus\{\mathbf{0}\})\,\innerprod{\mathbf{u},\mathbf{v}}=0$.
 \begin{proof}
-Suppose $T\mathbf{u}=\alpha\mathbf{u}$ and $T\mathbf{v}=\beta\mathbf{v}$ with $\alpha\neq\beta$. By Theorem \ref{thm:normal-operator-adjoint-eigenvectors}, $T^*\mathbf{v}=\overline{\beta}\mathbf{v}$.\\
-Hence $\alpha\innerprod{\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T^*\mathbf{v}} =\innerprod{\mathbf{u},\overline{\beta}\mathbf{v}} =\beta\innerprod{\mathbf{u},\mathbf{v}}$. Since $\alpha-\beta\neq0$, $\innerprod{\mathbf{u},\mathbf{v}}=0$.\\
-\hlt{Structural Commentary}: Normality lets the operator move from one eigenvector to the other through the adjoint.\\
-\hlt{Key Insight}: Distinct eigenvalue scalings are incompatible unless the inner product is zero.
+Fix $\mathbf{u}\in E_{\alpha}(T)\setminus\{\mathbf{0}\}$ and $\mathbf{v}\in E_{\beta}(T)\setminus\{\mathbf{0}\}$. Then $T\mathbf{u}=\alpha\mathbf{u}$ by eigenspace membership and $T^*\mathbf{v}=\overline{\beta}\mathbf{v}$ by Theorem \ref{thm:normal-operator-adjoint-eigenvectors}.\\
+Hence $\alpha\innerprod{\mathbf{u},\mathbf{v}}=\innerprod{T\mathbf{u},\mathbf{v}}=\innerprod{\mathbf{u},T^*\mathbf{v}}=\beta\innerprod{\mathbf{u},\mathbf{v}}$, so $\innerprod{\mathbf{u},\mathbf{v}}=0$ by $\alpha\neq\beta$.\\
+\hlt{Structural Commentary}: The adjoint eigenvalue transports $T$ across the inner product and isolates $\alpha-\beta$.\\
+\hlt{Key Insight}: $(\alpha-\beta)\innerprod{\mathbf{u},\mathbf{v}}=0$ forces orthogonality.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:self-adjoint-eigenvalues-real} \hlt{Eigenvalues of Self-Adjoint Operators Are Real}\\
-Every eigenvalue of a self-adjoint operator on a finite-dimensional inner-product space is real.
+Let $T\in\LL(\mathcal{V})$ be self-adjoint. Then $\operatorname{spec}(T)\subseteq\mathbb{R}$.
 \begin{proof}
-Let $T=T^*$ and $T\mathbf{v}=\lambda\mathbf{v}$ with $\mathbf{v}\neq\mathbf{0}$. Then $\lambda\norm{\mathbf{v}}^2 =\innerprod{\lambda\mathbf{v},\mathbf{v}} =\innerprod{T\mathbf{v},\mathbf{v}} =\innerprod{\mathbf{v},T\mathbf{v}} =\innerprod{\mathbf{v},\lambda\mathbf{v}} =\overline{\lambda}\norm{\mathbf{v}}^2$.\\
-Since $\norm{\mathbf{v}}^2>0$, $\lambda=\overline{\lambda}$, so $\lambda\in\mathbb{R}$.\\
-\hlt{Structural Commentary}: Self-adjointness moves $T$ between inner-product slots without changing the value.\\
-\hlt{Key Insight}: An eigenvalue must equal its conjugate because the eigenvector has positive squared norm.
+Fix $\lambda\in\operatorname{spec}(T)$ and $\mathbf{v}\in E_{\lambda}(T)\setminus\{\mathbf{0}\}$.\\
+The identity $\lambda\norm{\mathbf{v}}^2=\innerprod{T\mathbf{v},\mathbf{v}}=\innerprod{\mathbf{v},T\mathbf{v}}=\overline{\lambda}\norm{\mathbf{v}}^2$ holds by the eigenvector relation and $T=T^*$. Thus $\lambda=\overline{\lambda}$ by $\norm{\mathbf{v}}^2>0$, so $\lambda\in\mathbb{R}$.\\
+\hlt{Structural Commentary}: Self-adjointness compares an eigenvalue with its conjugate on a nonzero eigenvector.\\
+\hlt{Key Insight}: $\norm{\mathbf{v}}^2>0$ forces $\lambda=\overline{\lambda}$.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:invertible-quadratic-self-adjoint} \hlt{Invertible Quadratic Expressions}\\
-Let $T\in\LL(\mathcal{V})$ be self-adjoint on a finite-dimensional inner-product space.\\
-If $b,c\in\mathbb{R}$ and $b^2<4c$, then $T^2+bT+cI_{\mathcal{V}}$ is invertible.
+Let $T\in\LL(\mathcal{V})$ be self-adjoint. If $b,c\in\mathbb{R}$ and $b^2<4c$, then $T^2+bT+cI_{\mathcal{V}}$ is invertible.
 \begin{proof}
-Let $S=T^2+bT+cI_{\mathcal{V}}$. For $\mathbf{v}\neq\mathbf{0}$,
-\begin{align}
-\innerprod{S\mathbf{v},\mathbf{v}} &=\norm{T\mathbf{v}}^2+b\innerprod{T\mathbf{v},\mathbf{v}}+c\norm{\mathbf{v}}^2 \geq \norm{T\mathbf{v}}^2-\abs{b}\norm{T\mathbf{v}}\norm{\mathbf{v}}+c\norm{\mathbf{v}}^2 \nonumber \\
-&=\left(\norm{T\mathbf{v}}-\frac{\abs{b}}{2}\norm{\mathbf{v}}\right)^2+\left(c-\frac{b^2}{4}\right)\norm{\mathbf{v}}^2>0 \nonumber
-\end{align}
-Thus $S\mathbf{v}\neq\mathbf{0}$ for every nonzero $\mathbf{v}$, so $\ker(S)=\{\mathbf{0}\}$. In finite dimensions, injectivity implies invertibility.\\
-\hlt{Structural Commentary}: Negative discriminant keeps this self-adjoint quadratic positive.\\
-\hlt{Key Insight}: Self-adjointness converts $\innerprod{T^2\mathbf{v},\mathbf{v}}$ into $\norm{T\mathbf{v}}^2$, so completing the square controls the kernel.
+Set $S\defeq T^2+bT+cI_{\mathcal{V}}$ and fix $\mathbf{v}\in\mathcal{V}\setminus\{\mathbf{0}\}$. Set $x\defeq\norm{T\mathbf{v}}$, $y\defeq\norm{\mathbf{v}}$, and $a\defeq\innerprod{T\mathbf{v},\mathbf{v}}$.\\
+The relations $a=\overline{a}$ and $\innerprod{T^2\mathbf{v},\mathbf{v}}=x^2$ hold by self-adjointness, conjugate symmetry, and the adjoint identity, so $a\in\mathbb{R}$.\\
+The bound $\abs{a}\leq xy$ holds by Theorem \ref{thm:cauchy-schwarz-inequality}(i), and $ba\geq-\abs{b}\abs{a}\geq-\abs{b}xy$ by $a,b\in\mathbb{R}$.\\
+Consequently, $\innerprod{S\mathbf{v},\mathbf{v}}\geq x^2-\abs{b}xy+cy^2=\left(x-\frac{\abs{b}}{2}y\right)^2+\left(c-\frac{b^2}{4}\right)y^2>0$ by $c-\frac{b^2}{4}>0$ and $y>0$.\\
+Thus $S\mathbf{v}\neq\mathbf{0}$. Since $\mathbf{v}$ was arbitrary, $S$ is injective and hence invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}(ii),(i).\\
+\hlt{Structural Commentary}: The quadratic form of $S$ becomes a completed square in $\norm{T\mathbf{v}}$ and $\norm{\mathbf{v}}$.\\
+\hlt{Key Insight}: The negative discriminant makes the completed square strictly positive.
 \end{proof}
 \end{proposition}
 
 \begin{lemma} \label{lem:self-adjoint-operators-have-eigenvalues} \hlt{Self-Adjoint Operators Have Eigenvalues}\\
 Let $\mathcal{V}\neq\{\mathbf{0}\}$ be a finite-dimensional real inner-product space. Every self-adjoint $T\in\LL(\mathcal{V})$ has an eigenvalue.
 \begin{proof}
-Choose $\mathbf{v}\neq\mathbf{0}$ and set $n=\dim(\mathcal{V})$.\\
-The list $\mathbf{v},T\mathbf{v},\ldots,T^n\mathbf{v}$ is linearly dependent, so some nonzero real polynomial $p$ satisfies $p(T)\mathbf{v}=\mathbf{0}$.\\
-Factor $p$ over $\mathbb{R}$ as $p(x)=a\prod\limits_{j=1}^{M}(x^2+b_jx+c_j)\prod\limits_{k=1}^{m}(x-\lambda_k)$, where $a\neq0$, $b_j^2<4c_j$, $\lambda_k\in\mathbb{R}$.\\
-By Proposition \ref{prop:invertible-quadratic-self-adjoint}, each quadratic factor
-$Q_j(T)\defeq T^2+b_jT+c_jI_{\mathcal{V}}$ is invertible. Let
-$R(T)=\prod_j Q_j(T)$ and $L(T)=\prod_k(T-\lambda_kI_{\mathcal{V}})$. The factors commute because they are polynomials in $T$, and $R(T)$ is invertible.\\
-If $m=0$, then $p(T)=aR(T)$ would be invertible, contradicting $p(T)\mathbf{v}=\mathbf{0}$ with $\mathbf{v}\neq\mathbf{0}$. Hence $m\geq1$.\\
-Since $\mathbf{0}=p(T)\mathbf{v}=aR(T)L(T)\mathbf{v}$ and $aR(T)$ is invertible, $L(T)\mathbf{v}=\mathbf{0}$. Thus $L(T)$ has nontrivial kernel.\\
-If every $T-\lambda_kI_{\mathcal{V}}$ were injective, their product $L(T)$ would be injective, a contradiction. Therefore some $T-\lambda_kI_{\mathcal{V}}$ is not injective, and $\lambda_k$ is an eigenvalue of $T$.\\
-\hlt{Structural Commentary}: An annihilating polynomial remains; quadratic factors are invertible.\\
-\hlt{Key Insight}: The nontrivial kernel must come from a real linear factor, hence from an eigenvalue.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Hermitian Extension}: For $\mathbf{z}=\mathbf{u}+i\mathbf{v}$ and $\mathbf{w}=\mathbf{x}+i\mathbf{y}$ in $\mathcal{V}_{\mathbb{C}}$, define $B(\mathbf{z},\mathbf{w})\defeq\innerprod[\mathcal{V}]{\mathbf{u},\mathbf{x}}+\innerprod[\mathcal{V}]{\mathbf{v},\mathbf{y}}+i\bigl(\innerprod[\mathcal{V}]{\mathbf{v},\mathbf{x}}-\innerprod[\mathcal{V}]{\mathbf{u},\mathbf{y}}\bigr)$.\\
+Additivity and real homogeneity in the first slot hold componentwise, while $B(i\mathbf{z},\mathbf{w})=iB(\mathbf{z},\mathbf{w})$ by $i\mathbf{z}=-\mathbf{v}+i\mathbf{u}$.\\
+Thus the first slot is complex-linear, and $B(\mathbf{w},\mathbf{z})=\overline{B(\mathbf{z},\mathbf{w})}$ by symmetry of the real inner product.\\
+$B(\mathbf{z},\mathbf{z})=\norm{\mathbf{u}}^2+\norm{\mathbf{v}}^2\geq0$ holds by direct substitution, with equality iff $\mathbf{z}=\mathbf{0}$. Hence $B$ is complex inner product on $\mathcal{V}_{\mathbb{C}}$.\\
+This space is finite-dimensional over $\mathbb{C}$ by Proposition \ref{prop:complexification-vector-space-basis}(i)--(iii), and it is nonzero by the hypothesis and Proposition \ref{prop:complexification-real-dimension-and-embedding}(iii).
+\item \hlt{Adjoint Preservation}: The operator $T_{\mathbb{C}}$ is complex-linear by Proposition \ref{prop:complexification-operator-basic-properties}(i). Fix $\mathbf{z}=\mathbf{u}+i\mathbf{v}$ and $\mathbf{w}=\mathbf{x}+i\mathbf{y}$ in $\mathcal{V}_{\mathbb{C}}$.\\
+Identity $B(T_{\mathbb{C}}\mathbf{z},\mathbf{w})=B(\mathbf{z},T_{\mathbb{C}}\mathbf{w})$ holds by self-adjointness of $T$ in each real component. Thus $T_{\mathbb{C}}$ self-adjoint by adjoint definition.
+\item \hlt{Spectral Descent}: Fix $\lambda\in\operatorname{spec}(T_{\mathbb{C}})$ by Theorem \ref{thm:complex-operator-has-eigenvalue}. Then $\lambda\in\mathbb{R}$ by Theorem \ref{thm:self-adjoint-eigenvalues-real}, and $\lambda\in\operatorname{spec}(T)$ by Proposition \ref{prop:real-eigenvalues-complexification}.
+\end{enumerate}
+\hlt{Structural Commentary}: The Hermitian extension preserves the adjoint relation before complex eigenvalue existence descends.\\
+\hlt{Key Insight}: Self-adjoint complexification forces a real eigenvalue shared by $T$.
 \end{proof}
 \end{lemma}
 
 \begin{proposition} \label{prop:self-adjoint-invariant-subspaces} \hlt{Self-Adjoint Operators and Invariant Subspaces}\\
-Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}$ be a subspace of $\mathcal{V}$ invariant under $T$. Then:
-\begin{enumerate}[label=\roman*.]
+Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}\in\operatorname{Inv}(T)$. Then:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\mathcal{U}^{\perp}$ is invariant under $T$;
 \item $T|_{\mathcal{U}}\in\LL(\mathcal{U})$ is self-adjoint;
@@ -103,186 +114,182 @@ Let $T\in\LL(\mathcal{V})$ be self-adjoint, and let $\mathcal{U}$ be a subspace 
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item
-If $\mathbf{v}\in\mathcal{U}^{\perp}$ and $\mathbf{u}\in\mathcal{U}$, then $\innerprod{T\mathbf{v},\mathbf{u}}=\innerprod{\mathbf{v},T\mathbf{u}}=0$ because $T\mathbf{u}\in\mathcal{U}$. Hence $T\mathbf{v}\in\mathcal{U}^{\perp}$.
-\item For $\mathbf{u},\mathbf{v}\in\mathcal{U}$, $\innerprod{(T|_{\mathcal{U}})\mathbf{u},\mathbf{v}} =\innerprod{T\mathbf{u},\mathbf{v}} =\innerprod{\mathbf{u},T\mathbf{v}} =\innerprod{\mathbf{u},(T|_{\mathcal{U}})\mathbf{v}}$. Thus $T|_{\mathcal{U}}$ is self-adjoint.
-\item By (i), $\mathcal{U}^{\perp}$ is invariant, so (ii)'s argument applies to $T|_{\mathcal{U}^{\perp}}$.
+\item The subspace $\mathcal{U}^{\perp}$ is invariant under $T^*=T$ by the hypothesis and Theorem \ref{thm:adjoint-invariant-subspace-orthogonal-complement}(i).
+\item Pair $(\mathcal{U},\mathcal{U}^{\perp})$ reduces $T$ by (i), hypothesis, Theorem \ref{thm:orthogonal-direct-sum-decomposition}, Definition \ref{def:reducing-pair-and-direct-sum-operator}. Hence $(T|_{\mathcal{U}})^*=(T^*)|_{\mathcal{U}}=T|_{\mathcal{U}}$ by Theorem \ref{thm:adjoint-invariant-subspace-orthogonal-complement}(iii).
+\item The restriction $T|_{\mathcal{U}^{\perp}}$ is self-adjoint by (ii) with the invariant subspace $\mathcal{U}^{\perp}$ from (i).
 \end{enumerate}
-\hlt{Structural Commentary}: Self-adjointness preserves orthogonal complements of invariant subspaces.\\
-\hlt{Key Insight}: Move $T$ across the inner product; invariance of $\mathcal{U}$ then forces orthogonality to persist.
+\hlt{Structural Commentary}: Adjoint-complement invariance reduces $T$ and transfers self-adjointness to both restrictions.\\
+\hlt{Key Insight}: $T=T^*$ preserves both summands of $\mathcal{U}\oplus\mathcal{U}^{\perp}$.
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:schur-triangularization} \hlt{Schur Triangularisation}\\
-Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. Then $T$ has an upper-triangular matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\begin{theorem} \label{thm:schur-triangularization} \hlt{Schur Triangularization}\\
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$.\\
+The space $\mathcal{V}$ has an orthonormal basis $\gamma$ for which $[T]_{\gamma\leftarrow\gamma}$ is upper triangular.
 \begin{proof}
-Proceed by induction on $n=\dim(\mathcal{V})$. The cases $n=0$ and $n=1$ are immediate.\\
-Suppose $n\geq2$ and the result holds for smaller dimensions. By Theorem \ref{thm:complex-operator-has-eigenvalue}, choose a unit eigenvector $\mathbf{e}_1$ of $T$, say $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Let $\mathcal{U}=\operatorname{span}(\mathbf{e}_1)$ and define $S\in\LL(\mathcal{U}^{\perp})$ by $S\mathbf{w}=P_{\mathcal{U}^{\perp}}(T\mathbf{w})$.\\
-By induction, choose an orthonormal basis $(\mathbf{e}_2,\ldots,\mathbf{e}_n)$ of $\mathcal{U}^{\perp}$ with respect to which $S$ has an upper-triangular matrix. Then $(\mathbf{e}_1,\ldots,\mathbf{e}_n)$ is an orthonormal basis of $\mathcal{V}$.\\
-For $j\geq2$, the coordinates of $T\mathbf{e}_j$ along $\mathbf{e}_2,\ldots,\mathbf{e}_n$ are exactly the coordinates of $S\mathbf{e}_j$, hence have no entries below row $j$. Also $T\mathbf{e}_1=\lambda\mathbf{e}_1$. Therefore $[T]_{\gamma\leftarrow\gamma}$ is upper triangular for $\gamma=(\mathbf{e}_1,\ldots,\mathbf{e}_n)$.\\
-\hlt{Structural Commentary}: Schur triangularisation builds an eigenline first, then triangularises the projected action on its orthogonal complement.\\
-\hlt{Key Insight}: The lower-right block is controlled by the compression $P_{\mathcal{U}^{\perp}}T|_{\mathcal{U}^{\perp}}$.
+If $\mathcal{V}=\{\mathbf{0}\}$, the empty orthonormal basis has the required property. Assume $n\defeq\dim(\mathcal{V})\geq1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Coordinate Reduction}: Fix an orthonormal basis $\beta$ by Corollary \ref{cor:finite-dimensional-inner-product-space-has-orthonormal-basis} and set $A\defeq[T]_{\beta\leftarrow\beta}$.
+\item \hlt{Unitary Triangularization}: Fix a unitary $U$ with $U^*AU$ upper triangular by Theorem \ref{thm:simultaneous-schur-triangularization-commuting-family}(i) for $\{A\}$.
+\item \hlt{Basis Transport}: Let $\gamma$ be the ordered list whose $\beta$-coordinate columns are the columns of $U$.\\
+These columns form an orthonormal basis of $\mathbb{C}^n$ by Theorems \ref{thm:unitary-matrix-equivalent-conditions}(i),(ii),(vi) and \ref{thm:invertible-matrix-columns-basis}.\\
+The coordinate map is an isomorphism by Proposition \ref{prop:coordinate-map-isomorphism}(iii), so $\gamma$ is a basis by Proposition \ref{prop:isomorphisms-preserve-bases}.\\
+The basis $\gamma$ is orthonormal by Theorem \ref{thm:parseval-identity-finite-dimensional}(ii).
+\item \hlt{Matrix Identification}: The identity $C_{\beta\leftarrow\gamma}=U$ holds by Definition \ref{def:change-of-basis-matrix}.\\
+The identity $C_{\gamma\leftarrow\beta}=U^{-1}=U^*$ holds by Theorems \ref{thm:change-of-basis-matrices}(i) and \ref{thm:unitary-matrix-equivalent-conditions}(vi). Thus $[T]_{\gamma\leftarrow\gamma}=U^*AU$ by Theorem \ref{thm:two-sided-change-of-basis-for-linear-maps}, so this matrix is upper triangular.
+\end{enumerate}
+\hlt{Structural Commentary}: Unitary matrix triangularization is transported through coordinate columns to an orthonormal basis.\\
+\hlt{Key Insight}: $C_{\beta\leftarrow\gamma}=U$ converts unitary similarity into basis change.
 \end{proof}
 \end{theorem}
-
-\begin{theorem} \label{thm:matrix-schur-triangularization-ordered} \hlt{Matrix Schur Triangularisation with Ordered Diagonal}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1,\ldots,\lambda_n$ in a prescribed order. If $A\mathbf{x}=\lambda_1\mathbf{x}$ and $\norm{\mathbf{x}}_2=1$, then there is a unitary $U=[\mathbf{x}\ U_2]$ such that $U^*AU$ is upper triangular with diagonal $\lambda_1,\ldots,\lambda_n$.\\
-If $A$ is real, all $\lambda_i\in\mathbb{R}$, and $\mathbf{x}\in\mathbb{R}^n$, then $U$ may be chosen real orthogonal.
-\begin{proof}
-Induct on $n$. The case $n=1$ is immediate. Extend $\mathbf{x}$ to an orthonormal basis and set $V=[\mathbf{x}\ V_2]$.\\
-Since $A\mathbf{x}=\lambda_1\mathbf{x}$, the first column of $V^*AV$ is $\lambda_1\mathbf{e}_1$, so $V^*AV=
-\begin{bmatrix}
-\lambda_1 & *\\
-0 & A'
-\end{bmatrix}$.\\
-Block triangularity gives $p_{V^*AV}(z)=(z-\lambda_1)p_{A'}(z)$, so $A'$ has eigenvalues $\lambda_2,\ldots,\lambda_n$, counted with algebraic multiplicity. By induction, choose unitary $W$ with $W^*A'W=T'$ upper triangular and diagonal $\lambda_2,\ldots,\lambda_n$.\\
-Then $U\defeq V(I_1\oplus W)$ has first column $\mathbf{x}$ and $U^*AU=
-\begin{bmatrix}
-\lambda_1 & *\\
-0 & T'
-\end{bmatrix}$.\\
-The real case uses real orthonormal extensions; the block $A'$ is real, and the same characteristic-polynomial factorization leaves the real eigenvalue list $\lambda_2,\ldots,\lambda_n$ for the induction step.\\
-\hlt{Structural Commentary}: Isolate the chosen eigenline, then repeat on the lower-right block.\\
-\hlt{Key Insight}: The diagonal order is controlled by which eigenline is peeled off first.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/schur_ordered_triangularization.tikz}
-  \caption{Schur induction: isolate an eigenline, then triangularise the compressed block.}
-  \label{fig:schur-ordered-triangularization}
-\end{figure}
-
-\begin{corollary} \label{cor:eigenvalues-of-inverse-matrix} \hlt{Eigenvalues of the Inverse}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be invertible with eigenvalues $\lambda_1,\ldots,\lambda_n$, counted with algebraic multiplicity. Then $A^{-1}$ has eigenvalues $\lambda_1^{-1},\ldots,\lambda_n^{-1}$, counted with algebraic multiplicity.
-\begin{proof}
-Take a Schur form $A=UTU^*$ with diagonal $\lambda_1,\ldots,\lambda_n$.\\
-Then $A^{-1}=UT^{-1}U^*$, and $T^{-1}$ is upper triangular with diagonal $\lambda_1^{-1},\ldots,\lambda_n^{-1}$.\\
-\hlt{Structural Commentary}: Invert the Schur form and read the diagonal.\\
-\hlt{Key Insight}: The inverse spectrum is the reciprocal spectrum.
-\end{proof}
-\end{corollary}
 
 \begin{lemma} \label{lem:upper-triangular-normal-matrix-is-diagonal} \hlt{Upper-Triangular Normal Matrices Are Diagonal}\\
-If $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is upper triangular and normal, then $A$ is diagonal.
+Let $n\geq1$. If $A\in\operatorname{Mat}(n,n,\mathbb{C})$ is upper triangular and normal, then $A$ is diagonal.
 \begin{proof}
-Induct on $n$. The case $n=1$ is immediate.\\
-Since $A$ is upper triangular, $A\mathbf{e}_1=a_{11}\mathbf{e}_1$, while $A^*\mathbf{e}_1=\overline{a_{11}}\mathbf{e}_1+\overline{a_{12}}\mathbf{e}_2+\cdots+\overline{a_{1n}}\mathbf{e}_n$.\\
-Normality gives $\norm{A\mathbf{e}_1}_2=\norm{A^*\mathbf{e}_1}_2$, hence $a_{12}=\cdots=a_{1n}=0$. Thus $A=a_{11}\oplus B$ with $B$ upper triangular. The block diagonal normality equation gives $B^*B=BB^*$, so $B$ is normal. By induction, $B$ is diagonal.\\
-\hlt{Structural Commentary}: Normality forbids upper-triangular row tails.\\
-\hlt{Key Insight}: Compare the lengths of $A\mathbf{e}_1$ and $A^*\mathbf{e}_1$ to kill the first row, then induct.
+Induct on $n$. If $n=1$, then $A$ is diagonal. Suppose $n\geq2$ and the claim holds in dimension $n-1$.\\
+The $(1,1)$ entries of $A^*A=AA^*$ are $\abs{a_{11}}^2$ and $\abs{a_{11}}^2+\sum\limits_{j=2}^{n}\abs{a_{1j}}^2$, respectively.\\
+Hence $(\forall j\in\{2,\ldots,n\})\,a_{1j}=0$, so $A=a_{11}\oplus B$ with $B$ upper triangular.\\
+The identity $B^*B=BB^*$ holds by comparison of the lower-right blocks, so $B$ is normal.\\
+Thus $B$ is diagonal by the induction hypothesis, and $A$ is diagonal.\\
+\hlt{Structural Commentary}: The $(1,1)$ identity removes the first-row tail and exposes a smaller normal block.\\
+\hlt{Key Insight}: Once $a_{12},\ldots,a_{1n}$ vanish, block normality closes the induction.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:complex-spectral-theorem} \hlt{Complex Spectral Theorem}\\
 Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $T$ is normal;
 \item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
-\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\item $T$ has a diagonal matrix in an orthonormal basis of $\mathcal{V}$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+If $\mathcal{V}=\{\mathbf{0}\}$, the unique operator is normal and the empty basis is an orthonormal eigenbasis with an empty diagonal matrix.\\
+Assume $n\defeq\dim(\mathcal{V})\geq1$.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow(ii)$
-By Theorem \ref{thm:schur-triangularization}, choose an orthonormal basis $\gamma$ such that $A=[T]_{\gamma\leftarrow\gamma}$ is upper triangular. Since $T$ is normal, $A$ is normal. Lemma \ref{lem:upper-triangular-normal-matrix-is-diagonal} gives that $A$ is diagonal, so $\gamma$ is an orthonormal basis of eigenvectors.
-\item[$(ii)$]$\Rightarrow(iii)$
-In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
-\item[$(iii)$]$\Rightarrow(i)$
-If $[T]$ is diagonal in an orthonormal basis, then $[T^*]=[T]^*$ is diagonal as well.\\
-Diagonal matrices commute, so $TT^*=T^*T$; hence $T$ is normal.
+\item[$(i)$] $\Rightarrow (ii)$ Fix an orthonormal basis $\gamma$ such that $A\defeq[T]_{\gamma\leftarrow\gamma}$ is upper triangular by Theorem \ref{thm:schur-triangularization}.\\
+The identities $[T^*]_{\gamma\leftarrow\gamma}=A^*$, $[T^*T]_{\gamma\leftarrow\gamma}=A^*A$, and $[TT^*]_{\gamma\leftarrow\gamma}=AA^*$ hold by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose} and Proposition \ref{prop:composition-and-matrix-multiplication}.\\
+Thus $A^*A=AA^*$ by normality of $T$, so $A$ is normal by Definition \ref{def:normal-operator}(ii).\\
+The matrix $A$ is diagonal by Lemma \ref{lem:upper-triangular-normal-matrix-is-diagonal}; hence $\gamma$ consists of eigenvectors of $T$.
+\item[$(ii)$] $\Rightarrow (iii)$ The matrix of $T$ in an orthonormal eigenbasis is diagonal by Definition \ref{def:matrix-representation-of-linear-map}.
+\item[$(iii)$] $\Rightarrow (i)$ Fix an orthonormal basis $\gamma$ in which $A\defeq[T]_{\gamma\leftarrow\gamma}$ is diagonal. Then $[T^*]_{\gamma\leftarrow\gamma}=A^*$ by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}.\\
+Since $AA^*=A^*A$, $[TT^*]_{\gamma\leftarrow\gamma}=[T^*T]_{\gamma\leftarrow\gamma}$ by Proposition \ref{prop:composition-and-matrix-multiplication}.\\
+Therefore $TT^*=T^*T$ by Theorem \ref{thm:linear-maps-and-matrices-same-data}(i), and $T$ is normal by Definition \ref{def:normal-operator}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Schur gives triangular form; normality kills the upper entries.\\
-\hlt{Key Insight}: Equal norms of $T\mathbf{e}_j$ and $T^*\mathbf{e}_j$ force each row tail to vanish.
+\hlt{Structural Commentary}: Schur form reduces normality to the triangular lemma; diagonal coordinates verify the converse.\\
+\hlt{Key Insight}: An upper-triangular normal matrix has no off-diagonal entries.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:spectral-theorem-triangular-to-diagonal} depicts the forward mechanism in Theorem \ref{thm:complex-spectral-theorem}.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/spectral_theorem_triangular_to_diagonal.tikz}
-\caption{Normality turns Schur triangular form diagonal by forcing row tails to vanish.}
+  \caption{Normality turns Schur triangular form into diagonal form by forcing row tails to vanish.}
   \label{fig:spectral-theorem-triangular-to-diagonal}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:real-spectral-theorem} \hlt{Real Spectral Theorem}\\
 Let $\mathcal{V}$ be a finite-dimensional real inner-product space and let $T\in\LL(\mathcal{V})$. The following are equivalent:
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $T$ is self-adjoint;
 \item $\mathcal{V}$ has an orthonormal basis consisting of eigenvectors of $T$;
-\item $T$ has a diagonal matrix with respect to some orthonormal basis of $\mathcal{V}$.
+\item $T$ has a diagonal matrix in an orthonormal basis of $\mathcal{V}$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$
-Assume $T=T^*$ and induct on $n=\dim(\mathcal{V})$. For $n=0$ there is nothing to prove, and for $n=1$ every nonzero vector is an eigenvector after normalization.\\
-Let $n\geq2$. Lemma \ref{lem:self-adjoint-operators-have-eigenvalues} gives a unit eigenvector $\mathbf{u}$, and set $\mathcal{U}=\operatorname{span}(\mathbf{u})$. The subspace $\mathcal{U}$ is $T$-invariant. By Proposition \ref{prop:self-adjoint-invariant-subspaces}, $\mathcal{U}^{\perp}$ is $T$-invariant and the restriction $T|_{\mathcal{U}^{\perp}}$ is self-adjoint.\\
-Since $\dim(\mathcal{U}^{\perp})=n-1$, the induction hypothesis gives an orthonormal eigenbasis of $\mathcal{U}^{\perp}$.\\
-Adjoining $\mathbf{u}$ gives an orthonormal eigenbasis of $\mathcal{V}$ by Theorem \ref{thm:orthogonal-direct-sum-decomposition}.
-\item[$(ii)$]$\Rightarrow (iii)$
-In an orthonormal eigenbasis, the matrix of $T$ is diagonal.
-\item[$(iii)$]$\Rightarrow (i)$
-In an orthonormal basis where $[T]$ is real diagonal, $[T^*]=[T]^t=[T]$. Hence $T=T^*$.
+\item[$(i)$] $\Rightarrow (ii)$ Suppose $T=T^*$ and induct on $n\defeq\dim(\mathcal{V})$. For $n=0$, the empty basis suffices. For $n=1$, fix $\mathbf{v}\in\mathcal{V}\setminus\{\mathbf{0}\}$.\\
+Then $\operatorname{span}(\mathbf{v})=\mathcal{V}\in\operatorname{Inv}(T)$, so $\mathbf{v}$ is an eigenvector by Proposition \ref{prop:one-dimensional-invariant-subspaces-and-eigenvectors}. Hence $\frac{\mathbf{v}}{\norm{\mathbf{v}}}$ is an orthonormal eigenbasis.\\
+Suppose $n\geq2$ and assume the implication in dimension $n-1$.\\
+Fix $\lambda\in\operatorname{spec}(T)$ by Lemma \ref{lem:self-adjoint-operators-have-eigenvalues}, choose a unit $\mathbf{u}\in E_{\lambda}(T)$ by normalization, and set $\mathcal{U}\defeq\operatorname{span}(\mathbf{u})$.\\
+Then $\mathcal{U}\in\operatorname{Inv}(T)$ by Proposition \ref{prop:one-dimensional-invariant-subspaces-and-eigenvectors}, while $\mathcal{U}^{\perp}\in\operatorname{Inv}(T)$ and $T|_{\mathcal{U}^{\perp}}$ is self-adjoint by Proposition \ref{prop:self-adjoint-invariant-subspaces}(i),(iii).\\
+The identity $\dim(\mathcal{U}^{\perp})=n-1$ holds by Corollary \ref{cor:dimension-of-orthogonal-complement}, so $\mathcal{U}^{\perp}$ has an orthonormal eigenbasis by the induction hypothesis.\\
+Adjoining $\mathbf{u}$ forms an orthonormal eigenbasis of $\mathcal{V}=\mathcal{U}\oplus\mathcal{U}^{\perp}$ by Theorem \ref{thm:orthogonal-direct-sum-decomposition}.
+\item[$(ii)$] $\Rightarrow (iii)$ The matrix of $T$ in an orthonormal eigenbasis is diagonal by Definition \ref{def:matrix-representation-of-linear-map}.
+\item[$(iii)$] $\Rightarrow (i)$ Fix an orthonormal basis $\gamma$ in which $A\defeq[T]_{\gamma\leftarrow\gamma}$ is real diagonal. Then $[T^*]_{\gamma\leftarrow\gamma}=A^t=A$ by Theorem \ref{thm:matrix-of-adjoint-is-conjugate-transpose}.\\
+If $\mathcal{V}\neq\{\mathbf{0}\}$, then $T^*=T$ by Theorem \ref{thm:linear-maps-and-matrices-same-data}(i).\\
+If $\mathcal{V}=\{\mathbf{0}\}$, then $T$ and $T^*$ are both the unique operator on the zero space, so again $T^*=T$.
 \end{enumerate}
-\hlt{Structural Commentary}: Split off one eigendirection, then restrict to its orthogonal complement.\\
-\hlt{Key Insight}: One eigenvector reduces the dimension.
+\hlt{Structural Commentary}: Real eigenvalue existence starts induction on the invariant self-adjoint orthogonal complement.\\
+\hlt{Key Insight}: Removing one eigenline preserves self-adjointness on its complement.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:spectral-resolution-normal-operator} \hlt{Spectral Resolution of a Normal Operator}\\
-Let $\mathcal{V}$ be a finite-dimensional complex inner-product space and let $\mu_1,\ldots,\mu_d$ be distinct scalars.\\
-For $T\in\LL(\mathcal{V})$, consider:
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space, $d\geq1$, let $\mu_1,\ldots,\mu_d\in\mathbb{C}$ be distinct. For $T\in\LL(\mathcal{V})$, the following hold:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $T$ is normal and $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$.
-\item $\exists$ pairwise orthogonal projections $P_1,\ldots,P_d\in\LL(\mathcal{V})$ such that $P_iP_j=0$ for $i\neq j$,\\
-$P_1+\cdots+P_d=I_{\mathcal{V}}$, and $T=\mu_1P_1+\cdots+\mu_dP_d$
-\item Any projections satisfying (ii) obey $\operatorname{range}(P_j)=E_{\mu_j}(T)$ whenever $\mu_j\in\operatorname{spec}(T)$.
+\item $T$ is normal with $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$ iff $(\exists(P_j)_{j=1}^{d}\in\LL(\mathcal{V})^d)$ such that $(\forall j\in\{1,\ldots,d\})\,P_j^*=P_j=P_j^2$,\\
+$(\forall i,j\in\{1,\ldots,d\})\,[i\neq j\Longrightarrow P_iP_j=0]$, $\sum\limits_{j=1}^{d}P_j=I_{\mathcal{V}}$, and $T=\sum\limits_{j=1}^{d}\mu_jP_j$.
+\item Every family $(P_1,\ldots,P_d)$ satisfying the right side of (i) obeys $(\forall j\in\{1,\ldots,d\})\,\operatorname{range}(P_j)=E_{\mu_j}(T)$.
 \end{enumerate}
-Then (i) and (ii) are equivalent, and any projections satisfying (ii) satisfy (iii).
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$. By Theorem \ref{thm:complex-spectral-theorem}, $\mathcal{V}=\bigoplus\limits_{\lambda\in\operatorname{spec}(T)}E_{\lambda}(T)$ as an orthogonal direct sum.\\
-Let $P_j$ be the orthogonal projection onto $E_{\mu_j}(T)$, and set $P_j=0$ when $\mu_j\notin\operatorname{spec}(T)$. Since $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$, these projections are pairwise orthogonal, sum to $I_{\mathcal{V}}$, and satisfy $T=\sum_j\mu_jP_j$.
-\item[$(ii)$]$\Rightarrow (i)$. Since $P_j^*=P_j$ and $P_iP_j=0$ for $i\neq j$, $T^*=\sum\limits_{j=1}^{d}\overline{\mu_j}P_j$ and $T^*T=\sum\limits_{j=1}^{d}\abs{\mu_j}^2P_j=TT^*$.\\
-Thus $T$ is normal. If $\lambda\in\operatorname{spec}(T)$ and $\mathbf{0}\neq\mathbf{x}\in E_{\lambda}(T)$, then $0=(T-\lambda I_{\mathcal{V}})\mathbf{x} =\sum\limits_{j=1}^{d}(\mu_j-\lambda)P_j\mathbf{x}$.\\
-The summands lie in the pairwise orthogonal ranges $\operatorname{range}(P_j)$, hence $0=\sum\limits_{j=1}^{d}\abs{\mu_j-\lambda}^2\norm{P_j\mathbf{x}}^2$.\\
-Because $\sum_jP_j=I_{\mathcal{V}}$, at least one $P_k\mathbf{x}$ is nonzero, so $\mu_k=\lambda$. Thus $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$.
-\item[$(ii)$]$\Rightarrow (iii)$. For $\mathbf{x}\in\mathcal{V}$, $\mathbf{x} =\sum\limits_{i=1}^{d}P_i\mathbf{x}$ and $(T-\mu_jI_{\mathcal{V}})\mathbf{x} =\sum\limits_{i\neq j}(\mu_i-\mu_j)P_i\mathbf{x}$.\\
-The summands are orthogonal, so $\norm{(T-\mu_jI_{\mathcal{V}})\mathbf{x}}^2 =\sum\limits_{i\neq j}\abs{\mu_i-\mu_j}^2\norm{P_i\mathbf{x}}^2$,
-which vanishes exactly when $P_i\mathbf{x}=0$ for all $i\neq j$, equivalently $\mathbf{x}=P_j\mathbf{x}$. Thus $E_{\mu_j}(T)=\operatorname{range}(P_j)$.
+\item[$(i)$] ($\Rightarrow$) Fix an orthonormal eigenbasis of $T$ by Theorem \ref{thm:complex-spectral-theorem}(i),(ii).\\
+Decomposition $\mathcal{V}=\bigoplus\limits_{j=1}^{d}E_{\mu_j}(T)$ holds by grouping basis by eigenvalue and assigning the zero subspace to absent eigenvalues.\\
+Its summands are pairwise orthogonal by Theorem \ref{thm:normal-eigenvectors-distinct-eigenvalues-orthogonal}.\\
+Set $P_j\defeq P_{E_{\mu_j}(T)}$ by Definition \ref{def:orthogonal-projection-subspace}. Then $(\forall j\in\{1,\ldots,d\})\,\operatorname{range}(P_j)=E_{\mu_j}(T)$ by Proposition \ref{prop:orthogonal-projection-properties}(iv).\\
+Thus $(\forall j\in\{1,\ldots,d\})\,P_j^*=P_j=P_j^2$ by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.\\
+Fix $\mathbf{x}\in\mathcal{V}$ and write $\mathbf{x}=\sum\limits_{j=1}^{d}\mathbf{x}_j$ with $(\forall j\in\{1,\ldots,d\})\,\mathbf{x}_j\in E_{\mu_j}(T)$. Then $(\forall j\in\{1,\ldots,d\})\,P_j\mathbf{x}=\mathbf{x}_j$.\\
+Consequently, $(\forall i,j\in\{1,\ldots,d\})\,[i\neq j\Longrightarrow P_iP_j\mathbf{x}=\mathbf{0}]$ and $\sum\limits_{j=1}^{d}P_j\mathbf{x}=\mathbf{x}$.\\
+The identity $T\mathbf{x}=\sum\limits_{j=1}^{d}\mu_j\mathbf{x}_j=\sum\limits_{j=1}^{d}\mu_jP_j\mathbf{x}$ holds by $\mathbf{x}_j\in E_{\mu_j}(T)$. Since $\mathbf{x}$ was arbitrary, the required operator identities hold.
+\item[$(i)$] ($\Leftarrow$) Fix a family satisfying the right side of (i).\\
+The identities $T^*=\sum\limits_{j=1}^{d}\overline{\mu_j}P_j$ and $T^*T=TT^*=\sum\limits_{j=1}^{d}\abs{\mu_j}^2P_j$ hold by Proposition \ref{prop:basic-adjoint-identities}(i) and the product relations.\\
+Thus $T$ is normal by Definition \ref{def:normal-operator}(i). Fix $\lambda\in\operatorname{spec}(T)$ and $\mathbf{x}\in E_{\lambda}(T)\setminus\{\mathbf{0}\}$.\\
+Then $\mathbf{0}=(T-\lambda I_{\mathcal{V}})\mathbf{x}=\sum\limits_{j=1}^{d}(\mu_j-\lambda)P_j\mathbf{x}$. If $i\neq j$, then $\innerprod{P_i\mathbf{x},P_j\mathbf{x}}=\innerprod{\mathbf{x},P_iP_j\mathbf{x}}=0$ by self-adjointness and pairwise annihilation.\\
+Hence $0=\sum\limits_{j=1}^{d}\abs{\mu_j-\lambda}^2\norm{P_j\mathbf{x}}^2$. Since $\sum\limits_{j=1}^{d}P_j\mathbf{x}=\mathbf{x}\neq\mathbf{0}$, $(\exists k\in\{1,\ldots,d\})\,P_k\mathbf{x}\neq\mathbf{0}$.\\
+$\lambda=\mu_k$ by the nonnegative sum and $P_k\mathbf{x}\neq\mathbf{0}$, so $\operatorname{spec}(T)\subseteq\{\mu_1,\ldots,\mu_d\}$.
+\item[$(ii)$] Fix a family satisfying the right side of (i), $j\in\{1,\ldots,d\}$, and $\mathbf{x}\in\mathcal{V}$. Then $\mathbf{x}=\sum\limits_{i=1}^{d}P_i\mathbf{x}$ and $(T-\mu_jI_{\mathcal{V}})\mathbf{x}=\sum\limits_{i\neq j}(\mu_i-\mu_j)P_i\mathbf{x}$.\\
+The vectors $P_i\mathbf{x}$ are pairwise orthogonal by self-adjointness and pairwise annihilation, so $\norm{(T-\mu_jI_{\mathcal{V}})\mathbf{x}}^2=\sum\limits_{i\neq j}\abs{\mu_i-\mu_j}^2\norm{P_i\mathbf{x}}^2$.\\
+The equivalence $\mathbf{x}\in E_{\mu_j}(T)\Longleftrightarrow(\forall i\neq j)\,P_i\mathbf{x}=\mathbf{0}\Longleftrightarrow\mathbf{x}=P_j\mathbf{x}$ holds by distinctness and $\sum\limits_{i=1}^{d}P_i=I_{\mathcal{V}}$.\\
+The equivalence $\mathbf{x}=P_j\mathbf{x}\Longleftrightarrow\mathbf{x}\in\operatorname{range}(P_j)$ holds by $P_j^2=P_j$.
 \end{enumerate}
-\hlt{Structural Commentary}: A normal operator decomposes into scalar actions on orthogonal eigenspaces.\\
-\hlt{Key Insight}: Spectral projections isolate eigenspaces; the operator is the weighted sum of those projections.
+\hlt{Structural Commentary}: Eigenspaces construct the projections; weighted norms recover normality, spectrum, and ranges.\\
+\hlt{Key Insight}: The weighted norm identity separates every spectral coordinate.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:spectral-resolution-projectors} depicts the eigenspace resolution in Theorem \ref{thm:spectral-resolution-normal-operator}.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/spectral_resolution_projectors.tikz}
-  \caption{Spectral resolution: $\mathcal{V}=\bigoplus_j\operatorname{range}(P_j)$, $P_iP_j=0$ for $i\neq j$, $\sum_jP_j=I_{\mathcal{V}}$, and $T=\sum_j\mu_jP_j$.}
+  \caption{Pairwise orthogonal spectral projections resolve $I_{\mathcal{V}}$ and reconstruct $T$ by eigenvalue weights.}
   \label{fig:spectral-resolution-projectors}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{perspective} \label{per:spectral-resolution-as-orthogonal-resolution} \hlt{Spectral Resolutions Are Orthogonal Resolutions}\\
-For the projections $P_j$ in Theorem \ref{thm:spectral-resolution-normal-operator}, $P_j=P_j^*=P_j^2$; $P_iP_j=0\ (i\neq j)$; $\sum_jP_j=I_{\mathcal{V}}$.\\
-Hence $\mathcal{V}=\bigoplus_j^{\perp}\operatorname{range}(P_j)$ is the orthogonal decomposition into $T$-invariant spectral subspaces.\\
-\hlt{Structural Commentary}: Each $P_j$ is forced by its eigenspace: it is the orthogonal projection onto it.\\
-\hlt{Key Insight}: Normality turns diagonalization into a projection-valued decomposition.
+Part (ii) of Theorem \ref{thm:spectral-resolution-normal-operator} identifies $\operatorname{range}(P_j)=E_{\mu_j}(T)$.\\
+Together with Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}, this makes $P_j$ the orthogonal projection onto $E_{\mu_j}(T)$.\\
+Thus a spectral resolution records the orthogonal eigenspace decomposition without choosing bases in its summands. This viewpoint is confined here to finite-dimensional normal operators.
 \end{perspective}
 
 \begin{corollary} \label{cor:normal-spectral-resolution-functional-calculus} \hlt{Functional Calculus from Spectral Resolution}\\
-Let $T=\sum_{j=1}^{d}\mu_jP_j$ be the spectral resolution of a normal operator and let $f\in\mathbb{C}[z]$. Then $f(T)=\sum\limits_{j=1}^{d}f(\mu_j)P_j$.\\
-In particular, for each $j$ there is a polynomial $p_j$ such that $p_j(T)=P_j$.
+Let $\mathcal{V}$ be a finite-dimensional complex inner-product space, let $d\geq1$, and let $\mu_1,\ldots,\mu_d\in\mathbb{C}$ be distinct.\\
+Let $P_1,\ldots,P_d\in\LL(\mathcal{V})$ be orthogonal projections satisfying $(\forall i,j\in\{1,\ldots,d\})\,[i\neq j\Longrightarrow P_iP_j=0]$, $\sum\limits_{j=1}^{d}P_j=I_{\mathcal{V}}$; $T\defeq\sum\limits_{j=1}^{d}\mu_jP_j$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall f\in\mathbb{C}[z])\,f(T)=\sum\limits_{j=1}^{d}f(\mu_j)P_j$;
+\item $(\forall j\in\{1,\ldots,d\})(\exists p_j\in\mathbb{C}[z])\,p_j(T)=P_j$.
+\end{enumerate}
 \begin{proof}
-Since $P_iP_j=0$ for $i\neq j$ and $P_j^2=P_j$, induction gives $T^m=\sum_j\mu_j^mP_j$ for every $m\geq0$.\\
-Linearity then gives the displayed formula for every polynomial $f$.\\
-For the final assertion, choose the Lagrange polynomial $p_j$ satisfying $p_j(\mu_i)=\delta_{ij}$. Then $p_j(T)=P_j$.\\
-\hlt{Structural Commentary}: Orthogonal spectral projections multiply like coordinate idempotents.\\
-\hlt{Key Insight}: Polynomial functions of a normal operator act by scalar functions on each eigenspace.
+Each $P_j$ is idempotent by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item We prove $(\forall m\in\mathbb{Z}_{\geq0})\,T^m=\sum\limits_{j=1}^{d}\mu_j^mP_j$ by induction. The case $m=0$ is $I_{\mathcal{V}}=\sum\limits_{j=1}^{d}P_j$.\\
+If the identity holds at $m$, then $T^{m+1}=\sum\limits_{i,j=1}^{d}\mu_i^m\mu_jP_iP_j=\sum\limits_{j=1}^{d}\mu_j^{m+1}P_j$ by the product relations.\\
+Thus the power identity holds by induction. For $f(z)=\sum\limits_{m=0}^{r}a_mz^m$, $f(T)=\sum\limits_{m=0}^{r}a_m\sum\limits_{j=1}^{d}\mu_j^mP_j=\sum\limits_{j=1}^{d}f(\mu_j)P_j$.
+\item Fix $j\in\{1,\ldots,d\}$ and define $p_j(z)\defeq\prod\limits_{1\leq i\leq d,\ i\neq j}\frac{z-\mu_i}{\mu_j-\mu_i}$, with the empty product interpreted as $1$.\\
+Then $p_j(\mu_i)=\delta_{ij}$ by distinctness of the $\mu_i$. Hence $p_j(T)=\sum\limits_{i=1}^{d}\delta_{ij}P_i=P_j$ by part (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Projector multiplication determines all powers; Lagrange interpolation then isolates each projection.\\
+\hlt{Key Insight}: $p_j(\mu_i)=\delta_{ij}$ selects exactly $P_j$.
 \end{proof}
 \end{corollary}
