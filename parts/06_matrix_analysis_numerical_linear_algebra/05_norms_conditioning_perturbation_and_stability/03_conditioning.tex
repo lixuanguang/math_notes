@@ -1,75 +1,97 @@
 \subsection{Conditioning}
 
+Throughout this subsection, $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$, and all matrix dimensions are positive integers.
+
 \begin{definition} \label{def:spectral-condition-number} \hlt{Spectral Condition Number}\\
-If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, its \hlt{spectral condition number} is $\kappa_2(A)\defeq\norm{A}_2\norm{A^{-1}}_2$.\\
-Equivalently, $\kappa_2(A)=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$. If $A$ is singular, $\kappa_2(A)$ is undefined.
+If $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is invertible, its \hlt{spectral condition number} is $\kappa_2(A)\defeq\norm{A}_2\norm{A^{-1}}_2$. If $A$ is singular, $\kappa_2(A)$ is undefined.
 \end{definition}
 
 \begin{proposition} \label{prop:spectral-condition-number-properties} \hlt{Properties of the Spectral Condition Number}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible.
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible and let $c\in\mathbb{F}\setminus\{0\}$. Let $U,V\in\operatorname{Mat}(n,n,\mathbb{F})$ be unitary.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\kappa_2(AB)\leq\kappa_2(A)\kappa_2(B)$;
-\item $\kappa_2(A)\geq1$, with equality if and only if $A$ is a nonzero scalar multiple of a unitary matrix;
-\item $\kappa_2(cA)=\kappa_2(A)$ for every nonzero scalar $c$;
-\item $\kappa_2(A)=\kappa_2(A^*)=\kappa_2(\overline{A})=\kappa_2(A^t)=\kappa_2(A^{-1})$ over $\mathbb{C}$, with the evident real special cases;
+\item $\kappa_2(A)=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}\geq1$, with equality if and only if $A$ is a nonzero scalar multiple of a unitary matrix;
+\item $\kappa_2(cA)=\kappa_2(A)$;
+\item $\kappa_2(A)=\kappa_2(A^*)=\kappa_2(A^{-1})$; over $\mathbb{C}$, these also equal $\kappa_2(\overline{A})$ and $\kappa_2(A^t)$;
 \item $\kappa_2(A^*A)=\kappa_2(A)^2$;
-\item if $U,V$ are unitary, then $\kappa_2(UAV)=\kappa_2(A)$.
+\item $\kappa_2(UAV)=\kappa_2(A)$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Use submultiplicativity: $\kappa_2(AB)=\norm{AB}_2\norm{B^{-1}A^{-1}}_2\leq\norm{A}_2\norm{B}_2\norm{B^{-1}}_2\norm{A^{-1}}_2$.
-\item Since $I_n=AA^{-1}$, $1=\norm{I_n}_2\leq\kappa_2(A)$. Equality means $\sigma_{\max}(A)=\sigma_{\min}(A)$, equivalently every singular value is the same positive number $s$. If $A=V\Sigma W^*$, then $\Sigma=sI_n$, so $A=sVW^*$ is a nonzero scalar multiple of a unitary matrix. The converse is immediate.
-\item This follows from $\norm{cA}_2=\abs{c}\norm{A}_2$ and $(cA)^{-1}=c^{-1}A^{-1}$.
-\item These matrices have the same singular values as $A$, except $A^{-1}$ has singular values $\sigma_n^{-1}\geq\cdots\geq\sigma_1^{-1}$.
-\item The singular values of $A^*A$ are $\sigma_1(A)^2,\ldots,\sigma_n(A)^2$.
-\item This follows from Proposition \ref{prop:unitary-invariance-of-singular-values}.
+\item[$(i)$] By Proposition \ref{prop:spectral-norm-basic-properties}(v), $\kappa_2(AB)=\norm{AB}_2\norm{B^{-1}A^{-1}}_2\leq\kappa_2(A)\kappa_2(B)$.
+\item[$(ii)$] ($\Rightarrow$) Fix SVD $A=X\Sigma Y^*$ by Theorem \ref{thm:matrix-singular-value-decomposition}. Since $A$ invertible, $\sigma_n(A)>0$ by Corollary \ref{cor:square-invertibility-singular-value-dictionary}(i)$\Rightarrow$(iii), $A^{-1}=Y\Sigma^{-1}X^*$.\\
+Thus $\kappa_2(A)=\frac{\sigma_1(A)}{\sigma_n(A)}\geq1$ by Theorem \ref{thm:spectral-norm-largest-singular-value}(i). For $s\defeq\sigma_1(A)>0$, equality forces $\Sigma=sI_n$, so $A=sXY^*$, a nonzero scalar multiple of a unitary matrix by Theorem \ref{thm:unitary-matrix-equivalent-conditions}(iv) and Proposition \ref{prop:algebra-of-unitary-matrices}(i).
+\item[$(ii)$] ($\Leftarrow$) If $A=dQ$ with $d\neq0$ and $Q$ unitary, then $Q^*Q=I_n$, so the singular values of $Q$ are all $1$.\\
+Those of $A$ are all $\abs{d}$ by Proposition \ref{prop:basic-singular-value-identities}(iv); hence the quotient in part (ii) is $1$.
+\item[$(iii)$] Since $(cA)^{-1}=c^{-1}A^{-1}$, $\kappa_2(cA)=\abs{c}\norm{A}_2\abs{c}^{-1}\norm{A^{-1}}_2=\kappa_2(A)$ by Proposition \ref{prop:spectral-norm-basic-properties}(iii).
+\item[$(iv)$] The singular values are unchanged under adjoint and, over $\mathbb{C}$, under transpose and conjugation by Proposition \ref{prop:basic-singular-value-identities}(iii).\\
+Inversion reverses and reciprocates them by part (ii), so every stated condition number equals $\kappa_2(A)$ by part (ii).
+\item[$(v)$] Matrix $A^*A$ positive definite by Corollary \ref{cor:square-invertibility-singular-value-dictionary}(i)$\Leftrightarrow$(iv). Its eigenvalues are $\sigma_1(A)^2,\ldots,\sigma_n(A)^2$ by Proposition \ref{prop:basic-singular-value-identities}(i).\\
+These are also its singular values by Theorems \ref{thm:real-spectral-theorem} and \ref{thm:complex-spectral-theorem}, as appropriate, and Proposition \ref{prop:unitary-invariance-of-singular-values}(i).\\
+Hence $\kappa_2(A^*A)=\frac{\sigma_1(A)^2}{\sigma_n(A)^2}=\kappa_2(A)^2$ by part (ii).
+\item[$(vi)$] The equality $\kappa_2(UAV)=\kappa_2(A)$ holds by Proposition \ref{prop:unitary-invariance-of-singular-values}(i) and part (ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Condition number compares largest and smallest singular stretches.\\
-\hlt{Key Insight}: A well-conditioned matrix stretches every direction by nearly the same factor.
+\hlt{Structural Commentary}: Norm laws and singular-value transformations transfer directly to $\kappa_2$.\\
+\hlt{Key Insight}: Only the ratio $\frac{\sigma_1(A)}{\sigma_n(A)}$ matters.
 \end{proof}
 \end{proposition}
 
 \begin{corollary} \label{cor:positive-definite-condition-number-eigenvalues} \hlt{Positive Definite Condition Number by Eigenvalues}\\
-Let $A\succ0$ have eigenvalues $0<\lambda_1\leq\cdots\leq\lambda_n$. Then $\norm{A}_2=\lambda_n$; $\norm{A^{-1}}_2=\frac{1}{\lambda_1}$; and $\kappa_2(A)=\frac{\lambda_n}{\lambda_1}$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ satisfy $A\succ0$ and have eigenvalues $0<\lambda_1\leq\cdots\leq\lambda_n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\norm{A}_2=\lambda_n$;
+\item $\norm{A^{-1}}_2=\lambda_1^{-1}$;
+\item $\kappa_2(A)=\frac{\lambda_n}{\lambda_1}$.
+\end{enumerate}
 \begin{proof}
-By Theorems \ref{thm:positive-definite-matrix-equivalences} and \ref{thm:eigenvalues-versus-singular-values}, the singular values of $A$ are $\lambda_1,\ldots,\lambda_n$.\\
-Hence Theorem \ref{thm:spectral-norm-largest-singular-value} gives $\norm{A}_2=\lambda_n$. Since $\operatorname{spec}(A^{-1})=\{\lambda_1^{-1},\ldots,\lambda_n^{-1}\}$, same argument gives $\norm{A^{-1}}_2=\lambda_1^{-1}$, and multiplying yields $\kappa_2(A)=\lambda_n/\lambda_1$.\\
-\hlt{Structural Commentary}: For $A\succ0$, singular and eigenvalue stretches coincide.\\
-\hlt{Key Insight}: Conditioning compares the largest and smallest positive eigendirections.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] The matrix $A$ is self-adjoint with positive eigenvalues by Theorem \ref{thm:positive-definite-matrix-equivalences}(i)$\Rightarrow$(ii).\\
+Singular values are $\lambda_n,\ldots,\lambda_1$ by Theorems \ref{thm:real-spectral-theorem}, \ref{thm:complex-spectral-theorem}, as appropriate, Proposition \ref{prop:unitary-invariance-of-singular-values}(i); $\norm{A}_2=\lambda_n$ by Theorem \ref{thm:spectral-norm-largest-singular-value}(i).
+\item[$(ii)$] The same diagonalization has diagonal entries $\lambda_1^{-1},\ldots,\lambda_n^{-1}$ for $A^{-1}$, so these are its singular values by Proposition \ref{prop:unitary-invariance-of-singular-values}(i).\\
+Thus $\norm{A^{-1}}_2=\lambda_1^{-1}$ by Theorem \ref{thm:spectral-norm-largest-singular-value}(i).
+\item[$(iii)$] The identity $\kappa_2(A)=\frac{\lambda_n}{\lambda_1}$ follows by parts (i)--(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Diagonalization assigns the two operator norms to opposite endpoint eigenvalues.\\
+\hlt{Key Insight}: Positive definiteness removes absolute values and makes $\lambda_1$ nonzero.
 \end{proof}
 \end{corollary}
 
 \begin{perspective} \label{per:determinant-is-not-conditioning} \hlt{Determinant is Not Conditioning}\\
-Determinants measure volume, not sensitivity.\\
-$\kappa_2(cA)=\kappa_2(A)$ for $c\neq0$ (Proposition \ref{prop:spectral-condition-number-properties}), but $\det(cA)=c^n\det(A)$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible and $c\in\mathbb{F}\setminus\{0\}$. Then $\kappa_2(cA)=\kappa_2(A)$ by Proposition \ref{prop:spectral-condition-number-properties}(iii), but $\det(cA)=c^n\det(A)$ by Theorem \ref{thm:determinant-basic-laws}(ii).\\
+Thus determinant records volume scaling, not sensitivity under uniform rescaling.
 \end{perspective}
 
 \begin{theorem} \label{thm:linear-system-relative-error-condition-number} \hlt{Condition Number and Linear-System Error}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible, let $\mathbf{y}\neq\mathbf{0}$, and let $A\mathbf{x}=\mathbf{y}$.\\
-If $A(\Delta\mathbf{x})=\Delta\mathbf{y}$, then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}}_2} \leq \kappa_2(A)\frac{\norm{\Delta\mathbf{y}}_2}{\norm{\mathbf{y}}_2}$
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible, $\mathbf{x},\Delta\mathbf{x},\Delta\mathbf{y}\in\mathbb{F}^n$, $\mathbf{y}\in\mathbb{F}^n\setminus\{\mathbf{0}\}$. If $A\mathbf{x}=\mathbf{y}$ and $A\Delta\mathbf{x}=\Delta\mathbf{y}$, then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}}_2}\leq\kappa_2(A)\frac{\norm{\Delta\mathbf{y}}_2}{\norm{\mathbf{y}}_2}$.
 \begin{proof}
-From $\mathbf{y}=A\mathbf{x}$, we have $\norm{\mathbf{y}}_2\leq\norm{A}_2\norm{\mathbf{x}}_2$, hence $1/\norm{\mathbf{x}}_2\leq\norm{A}_2/\norm{\mathbf{y}}_2$. Also $\Delta\mathbf{x}=A^{-1}\Delta\mathbf{y}$, so $\norm{\Delta\mathbf{x}}_2\leq\norm{A^{-1}}_2\norm{\Delta\mathbf{y}}_2$. Multiplying the two estimates gives the displayed bound.\\
-\hlt{Structural Commentary}: Solution error is controlled by the ratio of extreme singular stretches.\\
-\hlt{Key Insight}: $\kappa_2(A)$ measures worst-case error magnification.
+Since $A$ is invertible and $\mathbf{y}\neq\mathbf{0}$, $\mathbf{x}\neq\mathbf{0}$.\\
+By the defining norm bound, $\norm{\mathbf{y}}_2\leq\norm{A}_2\norm{\mathbf{x}}_2$ and $\norm{\Delta\mathbf{x}}_2=\norm{A^{-1}\Delta\mathbf{y}}_2\leq\norm{A^{-1}}_2\norm{\Delta\mathbf{y}}_2$. The claim follows by division and multiplication.\\
+\hlt{Structural Commentary}: The equations bound $\norm{\mathbf{x}}_2$ through $A$ and $\norm{\Delta\mathbf{x}}_2$ through $A^{-1}$.\\
+\hlt{Key Insight}: The opposing operator norms multiply to $\kappa_2(A)$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:matrix-perturbation-relative-error-condition-number} \hlt{Condition Number and Matrix Perturbation}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible. Suppose $A\mathbf{x}=\mathbf{y}$; $(A+\Delta A)(\mathbf{x}+\Delta\mathbf{x})=\mathbf{y}$, and $\mathbf{x}+\Delta\mathbf{x}\neq\mathbf{0}$.\\
-Then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}+\Delta\mathbf{x}}_2} \leq \kappa_2(A)\frac{\norm{\Delta A}_2}{\norm{A}_2}$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible, let $\Delta A\in\operatorname{Mat}(n,n,\mathbb{F})$, and let $\mathbf{x},\Delta\mathbf{x},\mathbf{y}\in\mathbb{F}^n$.\\
+Suppose $A\mathbf{x}=\mathbf{y}$, $(A+\Delta A)(\mathbf{x}+\Delta\mathbf{x})=\mathbf{y}$, and $\mathbf{x}+\Delta\mathbf{x}\neq\mathbf{0}$. Then $\frac{\norm{\Delta\mathbf{x}}_2}{\norm{\mathbf{x}+\Delta\mathbf{x}}_2}\leq\kappa_2(A)\frac{\norm{\Delta A}_2}{\norm{A}_2}$.
 \begin{proof}
-Subtracting gives $A\Delta\mathbf{x}+\Delta A(\mathbf{x}+\Delta\mathbf{x})=\mathbf{0}$, so $\Delta\mathbf{x}=-A^{-1}\Delta A(\mathbf{x}+\Delta\mathbf{x})$.\\
-Thus $\norm{\Delta\mathbf{x}}_2 \leq \norm{A^{-1}}_2\norm{\Delta A}_2\norm{\mathbf{x}+\Delta\mathbf{x}}_2 =\kappa_2(A)\frac{\norm{\Delta A}_2}{\norm{A}_2}\norm{\mathbf{x}+\Delta\mathbf{x}}_2$. Divide by $\norm{\mathbf{x}+\Delta\mathbf{x}}_2\neq0$.\\
-\hlt{Structural Commentary}: Perturbing the matrix changes the operator applied to the perturbed solution.\\
-\hlt{Key Insight}: The same condition number controls matrix errors and right-hand-side errors.
+Set $\mathbf{z}\defeq\mathbf{x}+\Delta\mathbf{x}\neq\mathbf{0}$. The system equations imply $\Delta\mathbf{x}=-A^{-1}\Delta A\mathbf{z}$.\\
+Hence $\norm{\Delta\mathbf{x}}_2\leq\norm{A^{-1}}_2\norm{\Delta A}_2\norm{\mathbf{z}}_2$ by the defining norm bound and Proposition \ref{prop:spectral-norm-basic-properties}(v).\\
+Since $\norm{A}_2>0$ by Proposition \ref{prop:spectral-norm-basic-properties}(ii), the result follows by division by $\norm{\mathbf{z}}_2$ and the defining formula for $\kappa_2(A)$.\\
+\hlt{Structural Commentary}: Subtraction isolates $\Delta\mathbf{x}$ as $-A^{-1}\Delta A$ acting on the perturbed solution.\\
+\hlt{Key Insight}: Matrix perturbation enters through the product $A^{-1}\Delta A$.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:condition-number-error-bound} depicts the ellipse determined by the extreme singular directions.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/condition_number_error_bound.tikz}
-  \caption{$A$ maps a unit error ball to an ellipse; $\kappa_2(A)=\sigma_{\max}/\sigma_{\min}$ is the long/short semiaxis ratio.}
+  \caption{The unit circle maps to an ellipse with extreme-semiaxis ratio $\kappa_2(A)=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$.}
   \label{fig:condition-number-error-bound}
-\end{figure}
+\end{illustrationfigure}
