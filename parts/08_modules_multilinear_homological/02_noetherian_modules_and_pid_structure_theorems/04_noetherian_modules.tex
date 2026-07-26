@@ -1,12 +1,15 @@
 \subsection{Noetherian Modules}
 
-\begin{definition} \label{def:noetherian-module-ring-acc} \hlt{Noetherian Modules and Rings}\\
-Let $A$ be a commutative ring with identity.
+Throughout this subsection, $A$ denotes a nonzero commutative ring with identity $1_A$.
+
+\begin{definition} \label{def:noetherian-module-ring-acc} \hlt{Noetherian Modules and Rings}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item An $A$-module $M$ satisfies \hlt{ACC} if every chain $M_1\leq M_2\leq\cdots$ of submodules satisfies\\
-$\exists n_0, \forall n\geq n_0, M_n=M_{n_0}$. Such $M$ is \hlt{Noetherian}.
-\item The ring $A$ is \hlt{Noetherian} if the regular $A$-module $A$ is Noetherian,\\ equivalently if every ideal-chain $I_1\subseteq I_2\subseteq\cdots$ stabilizes.
+\item An \hlt{ascending chain} in an $A$-module $M$ is a sequence $(M_n)_{n\in\N}$ of submodules satisfying $(\forall\,n\in\N)\,M_n\leq M_{n+1}$.\\
+It \hlt{stabilizes} if $(\exists\,n_0\in\N)(\forall\,n\in\N)\,[n\geq n_0\Rightarrow M_n=M_{n_0}]$.\\
+The module $M$ is \hlt{Noetherian}, or satisfies the \hlt{ascending chain condition (ACC)}, if all its ascending chains stabilize.
+\item The ring $A$ is \hlt{Noetherian} if the regular $A$-module ${}_A A$ is Noetherian.\\
+By Proposition \ref{prop:submodules-of-regular-module-are-ideals}, this means that all ascending chains of ideals of $A$ stabilize.
 \end{enumerate}
 \end{definition}
 
@@ -14,21 +17,30 @@ $\exists n_0, \forall n\geq n_0, M_n=M_{n_0}$. Such $M$ is \hlt{Noetherian}.
 Let $M$ be an $A$-module.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $M$ is Noetherian $\Longleftrightarrow$ every $N\leq M$ is f.g.
-\item If $A$ is commutative with identity, then $A$ is Noetherian
-$\Longleftrightarrow$ every $\mathcal{I}\lhd A$ is f.g.
+\item $M$ is Noetherian $\Longleftrightarrow(\forall\,N\leq M)\,N$ is finitely generated.
+\item $A$ is Noetherian $\Longleftrightarrow(\forall\,\mathcal{I}\trianglelefteq A)\,\mathcal{I}$ is finitely generated as an $A$-module.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=(\roman*).]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]($\Rightarrow$) Let $N\leq M$. If $N$ is not f.g., choose $u_{n+1}\in N\setminus\langle\!\langle u_1,\ldots,u_n\rangle\!\rangle_A$ inductively.\\
-Then $\langle\!\langle u_1\rangle\!\rangle_A< \langle\!\langle u_1,u_2\rangle\!\rangle_A<\cdots$, contradicting ACC.
-\item[$(i)$]($\Leftarrow$) Let $M_1\leq M_2\leq\cdots$ and put $U=\bigcup_{n\geq1}M_n$. Then $U\leq M$, so $U=\langle\!\langle u_1,\ldots,u_r\rangle\!\rangle_A$.\\
-Choose $k$ with $u_1,\ldots,u_r\in M_k$. Hence $U=M_k$ and $M_n=M_k$ for all $n\geq k$.
-\item[$(ii)$] Apply (i) to the regular $A$-module $A$: its submodules are exactly the ideals of $A$.
+\item[$(i)$] ($\Rightarrow$) Assume $M$ is Noetherian and fix a non-finitely generated $N\leq M$. Set $\mathcal{C}\defeq\{X\subseteq N:X\neq\emptyset\}$.\\
+Fix $c:\mathcal{C}\to N$ satisfying $(\forall\,X\in\mathcal{C})\,c(X)\in X$ by Principle \ref{princ:axiom-of-choice-analysis}. Set $u_1\defeq c(N)$ and $N_1\defeq\langle\!\langle u_1\rangle\!\rangle_A$.\\
+Given $u_1,\ldots,u_n$, set $N_n\defeq\langle\!\langle u_1,\ldots,u_n\rangle\!\rangle_A$. $N\setminus N_n\neq\emptyset$ by non-finite generation of $N$ and finite generation of $N_n$.\\
+Set $u_{n+1}\defeq c(N\setminus N_n)$. These recursive clauses define $(u_n)_{n\in\N}$ by Principle \ref{princ:transfinite-and-well-founded-recursion}(i).\\
+$(\forall\,n\in\N)\,N_n\leq N$ by Proposition \ref{prop:generated-submodule-smallest}(i). $(\forall\,n\in\N)\,u_{n+1}\in N_{n+1}\setminus N_n$ by Definition \ref{def:generated-submodule}(i),(iii).\\
+$(\forall\,n\in\N)\,N_n<N_{n+1}\leq M$ by the preceding containment and nonmembership. This contradicts ACC.
+\item[$(i)$] ($\Leftarrow$) Suppose $(\forall\,N\leq M)\,N$ is finitely generated. Let $(M_n)_{n\in\N}$ be an ascending chain in $M$, and set $U\defeq\bigcup\limits_{n\in\N}M_n$.\\
+$0_M\in U$ by $0_M\in M_1$. Fix $(a,b,x,y)\in A^2\times U^2$. Choose $i,j\in\N$ with $x\in M_i$ and $y\in M_j$ by the definition of $U$.\\
+For $k\defeq\max\{i,j\}$, $ax+by\in M_k\subseteq U$ by $M_i,M_j\subseteq M_k$ and submodule closure.\\
+Hence $U\leq M$ by Theorem \ref{thm:submodule-test}. Fix $r\in\N$ and $(u_1,\ldots,u_r)\in U^r$ satisfying $U=\langle\!\langle u_1,\ldots,u_r\rangle\!\rangle_A$ by finite generation of $U$.\\
+Fix $(k_1,\ldots,k_r)\in\N^r$ satisfying $(\forall\,j\in\{1,\ldots,r\})\,u_j\in M_{k_j}$. Set $k\defeq\max\{k_1,\ldots,k_r\}$. Then $U\subseteq M_k$ by Proposition \ref{prop:generated-submodule-smallest}(iii).\\
+$M_k\subseteq U$ by construction. $(\forall\,n\in\N)\,[n\geq k\Rightarrow M_n=M_k]$ by $M_k\subseteq M_n\subseteq U\subseteq M_k$. Hence $M$ is Noetherian by Definition \ref{def:noetherian-module-ring-acc}(i).
+\item[$(ii)$] ($\Rightarrow$) If $A$ is Noetherian, then ${}_A A$ is Noetherian by Definition \ref{def:noetherian-module-ring-acc}(ii). All ideals of $A$ finitely generated by (i), Proposition \ref{prop:submodules-of-regular-module-are-ideals}.
+\item[$(ii)$] ($\Leftarrow$) Suppose $(\forall\,\mathcal{I}\trianglelefteq A)\,\mathcal{I}$ is finitely generated as an $A$-module.\\
+All submodules of ${}_A A$ are finitely generated by the supposition and Proposition \ref{prop:submodules-of-regular-module-are-ideals}.\\
+Thus ${}_A A$ is Noetherian by (i), and $A$ is Noetherian by Definition \ref{def:noetherian-module-ring-acc}(ii).
 \end{enumerate}
-\noindent
-\hlt{Structural Commentary}: ACC and finite generation are two faces of the same finiteness condition.\\
-\hlt{Key Insight}: Failure of finite generation builds an infinite increasing chain one new generator at a time.
+\hlt{Structural Commentary}: Generator adjunction contradicts ACC; finite generation of the chain union forces stabilization.\\
+\hlt{Key Insight}: Non-finite generation supplies a generator outside every current stage.
 \end{proof}
 \end{theorem}
