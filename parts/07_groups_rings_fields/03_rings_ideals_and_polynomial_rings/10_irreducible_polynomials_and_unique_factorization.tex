@@ -1,34 +1,56 @@
 \subsection{Irreducible Polynomials and Unique Factorization}
 
 \begin{definition} \label{def:irreducible-polynomial} \hlt{Irreducible Polynomials}\\
-A nonconstant polynomial $p\in\mathbb{F}[x]$ is \hlt{irreducible over $\mathbb{F}$} if every factorization $p=ab$ in $\mathbb{F}[x]$ has $a$ or $b$ constant.
+Let $\mathbb{F}$ be a field and let $p\in\mathbb{F}[x]$ be nonconstant.\\
+The polynomial $p$ is \hlt{irreducible over $\mathbb{F}$} iff $(\forall a,b\in\mathbb{F}[x])\,[p=ab\Rightarrow(a\in\mathbb{F}[x]^\times\lor b\in\mathbb{F}[x]^\times)]$.
 \end{definition}
 
-\begin{proposition} \label{prop:irreducible-polynomial-prime-property} \hlt{Irreducible Polynomials Are Prime in $\mathbb{F}[x]$}\\
-Let $p\in\mathbb{F}[x]$ be nonconstant. Then $p$ is irreducible over $\mathbb{F}$ iff $\forall f,g\in\mathbb{F}[x]$, $p\mid fg$ $\Longrightarrow$ $p\mid f$ or $p\mid g$.
+\begin{proposition} \label{prop:irreducible-polynomial-prime-property} \hlt{Irreducibility and the Prime Property in $\mathbb{F}[x]$}\\
+Let $\mathbb{F}$ be a field and let $p\in\mathbb{F}[x]$ be nonconstant. Then $p$ is irreducible over $\mathbb{F}$ iff $(\forall f,g\in\mathbb{F}[x])\,[p\mid fg\Rightarrow(p\mid f\lor p\mid g)]$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Assume $p$ irreducible and $p\mid fg$. If $p\mid f$, done. Otherwise $\gcd(p,f)=1$, so Theorem \ref{thm:polynomial-gcd-bezout} gives $a,b\in\mathbb{F}[x]$ with $ap+bf=1$. Multiplying by $g$ gives $apg+bfg=g$; since $p\mid apg$ and $p\mid bfg$, we get $p\mid g$.
-\item[$(\Leftarrow)$] Assume the divisibility property and write $p=ab$. Since $p\mid ab$, either $p\mid a$ or $p\mid b$. If $p\mid a$, then $a=ph$, so $p=phb$ and cancellation gives $1=hb$, hence $b\in\mathbb{F}^{\times}$. Similarly, $p\mid b$ forces $a\in\mathbb{F}^{\times}$. Thus $p$ is irreducible.
+\item[$(\Rightarrow)$] Assume $p$ is irreducible and $p\mid fg$. If $p\mid f$, the conclusion holds.\\
+Otherwise set $d\defeq\gcd(p,f)$ and choose $A,B\in\mathbb{F}[x]$ with $d=Ap+Bf$ by Theorem \ref{thm:polynomial-gcd-bezout}(iii).\\
+By Definition \ref{def:polynomial-divisibility-gcd-coprime}(ii), $d\mid p$ and $d\mid f$; choose $e\in\mathbb{F}[x]$ with $p=de$. Either $d$ or $e$ is a unit by Definition \ref{def:irreducible-polynomial}.\\
+If $e$ is a unit, choose $v\in\mathbb{F}[x]$ with $ev=1$. Then $d=vp$, so $d\mid f$ implies $p\mid f$, a contradiction. Thus $d$ is a unit.\\
+Choose $u\in\mathbb{F}[x]$ with $ud=1$. Now $1=(uA)p+(uB)f$, so $g=(uA)pg+(uB)fg$. Since $p\mid(uA)pg$ and $p\mid(uB)fg$, $p\mid g$.
+\item[$(\Leftarrow)$] Assume the divisibility property and write $p=ab$. Then $p\mid a$ or $p\mid b$.\\
+If $p\mid a$, choose $h\in\mathbb{F}[x]$ with $a=ph$. Then $(1-hb)p=0$. The nonzero-product property and $p\neq0$ imply $hb=1$, so $b\in\mathbb{F}[x]^\times$.\\
+If $p\mid b$, choose $k\in\mathbb{F}[x]$ with $b=pk$. Then $(1-ak)p=0$. The nonzero-product property and $p\neq0$ imply $ak=1$, so $a\in\mathbb{F}[x]^\times$.\\
+Thus $p$ is irreducible by Definition \ref{def:irreducible-polynomial}.
 \end{enumerate}
-\hlt{Structural Commentary}: Over $\mathbb{F}[x]$, irreducible and prime are the same notion.\\
-\hlt{Key Insight}: Bezout turns coprimality into a divisibility test.
+\hlt{Structural Commentary}: GCD reduction proves primality; polynomial cancellation proves the converse.\\
+\hlt{Key Insight}: Bezout converts coprimality with $f$ into divisibility of $g$.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:unique-factorization-polynomial-ring-field} \hlt{Unique Factorization in $\mathbb{F}[x]$}\\
-For every nonconstant $f\in\mathbb{F}[x]$, $\exists$ $c\in\mathbb{F}^{\times}$ and monic irreducibles $p_1,\ldots,p_m\in\mathbb{F}[x]$ such that $f=c\prod\limits_{i=1}^{m}p_i$.\\
-If $f=d\prod\limits_{j=1}^{n}q_j$ is another such factorization, then $m=n$, $c=d$, and $p_i=q_{\sigma(i)}$ for some $\sigma\in S_m$.
+Let $\mathbb{F}$ be a field and let $f\in\mathbb{F}[x]$ be nonconstant.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f$ admits a factorization $f=c\prod\limits_{i=1}^{m}p_i$ with $m\in\N$, $c\in\mathbb{F}^\times$, and monic irreducibles $p_1,\ldots,p_m\in\mathbb{F}[x]$.
+\item Suppose $f=c\prod\limits_{i=1}^{m}p_i=d\prod\limits_{j=1}^{n}q_j$, where both factorizations have the form in (i).\\
+Then $m=n$, $c=d$, and $(\exists \sigma\in\mathfrak{S}_m)(\forall i\in\{1,\ldots,m\})\,p_i=q_{\sigma(i)}$.
+\end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Existence}: Induct on $\deg f$. If $f$ is irreducible, write $f=\operatorname{lc}(f)\bigl(\operatorname{lc}(f)^{-1}f\bigr)$.\\
-If $f=uv$ with $0<\deg u,\deg v<\deg f$, apply induction to $u$ and $v$ and concatenate the factors.
-\item \hlt{Uniqueness}: Suppose $c\prod_{i=1}^{m}p_i=d\prod_{j=1}^{n}q_j$ with all $p_i,q_j$ monic irreducible. Since $p_1\mid\prod_{j=1}^{n}q_j$, iterating Proposition \ref{prop:irreducible-polynomial-prime-property} gives $p_1\mid q_j$ for some $j$. As $p_1,q_j$ are monic irreducible, $p_1=q_j$.\\
-Cancel and continue by induction on $m$; the final scalar equality follows from leading coefficients.
+\item Suppose a nonconstant polynomial without a factorization in (i) exists. Its degree lies in $\N$.\\
+Choose a counterexample $w$ of minimal degree by Assumption \ref{assump:well-ordering-positive-integers}. If $w$ is irreducible, set $c\defeq\operatorname{lc}(w)$ and $p_1\defeq c^{-1}w$.\\
+Scalar $c$ is a unit, so $p_1$ is monic and irreducible; hence $w=cp_1$, a contradiction. Thus $w=uv$ with $u,v\notin\mathbb{F}[x]^\times$ by Definition \ref{def:irreducible-polynomial}.\\
+Since nonzero constants are units, $\deg u,\deg v>0$. Since $w=uv\neq0$, $\deg w=\deg u+\deg v$, so $\deg u,\deg v<\deg w$.\\
+By minimality, $u$ and $v$ have factorizations of the form in (i). Their product is such a factorization of $w$, a contradiction.
+\item Suppose $f=c\prod\limits_{i=1}^{m}p_i=d\prod\limits_{j=1}^{n}q_j$ has two factorizations of the form in (i). Since $c,d\in\mathbb{F}^\times$, $p_1\mid\prod\limits_{j=1}^{n}q_j$.\\
+Then $(\exists j\in\{1,\ldots,n\})\,p_1\mid q_j$ by induction on $n$ with Proposition \ref{prop:irreducible-polynomial-prime-property}.\\
+Write $q_j=p_1h$. Since $q_j$ is irreducible and $p_1$ is not a unit, $h\in\mathbb{F}[x]^\times$. Choose $k\in\mathbb{F}[x]$ with $hk=1$.\\
+Since $hk=1$, $\deg h=0$ by degree additivity; monicity of $p_1,q_j$ then forces $h=1$, so $q_j=p_1$.\\
+Reindex the $q$-factors to place $q_j$ first; the nonzero-product property permits cancellation of $p_1$.\\
+Repeating this step removes one factor from each side.\\
+A nonempty product of irreducibles has positive degree, so neither side retains factors after the other is exhausted.\\
+Thus $m=n$; the matched indices define $\sigma\in\mathfrak{S}_m$, and the remaining scalar equality is $c=d$.
 \end{enumerate}
-\hlt{Structural Commentary}: Polynomial factorization over a field mirrors prime factorization in $\Z$.\\
-\hlt{Key Insight}: The prime property of irreducibles drives uniqueness.
+\hlt{Structural Commentary}: Degree descent proves existence; prime-factor cancellation proves uniqueness.\\
+\hlt{Key Insight}: Primality matches each irreducible factor with one factor on the other side.
 \end{proof}
 \end{theorem}
