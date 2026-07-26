@@ -34,12 +34,12 @@ The active include order in `math.tex` is:
 ```tex
 \input{parts/base}
 \input{parts/00_notations/overview}
-\input{parts/01_set_theory_logic_foundations/overview}
+\input{parts/01_set_theory_logic_and_foundations/overview}
 \input{parts/02_structural_linear_algebra/overview}
 \input{parts/03_linear_maps_and_matrix_representations/overview}
-\input{parts/04_geometric_spectral_linear_algebra/overview}
+\input{parts/04_geometric_and_spectral_linear_algebra/overview}
 \input{parts/05_polynomial_structure_and_canonical_forms/overview}
-\input{parts/06_matrix_analysis_numerical_linear_algebra/overview}
+\input{parts/06_matrix_analysis_and_numerical_linear_algebra/overview}
 \input{parts/07_groups_rings_fields/overview}
 \input{parts/08_modules_multilinear_homological/overview}
 \input{parts/09_commutative_algebra/overview}
@@ -117,7 +117,7 @@ Use this as the first-pass placement index. For subsection-level placement,
 inspect the relevant `overview.tex` and numbered subsection files.
 
 ```text
-parts/01_set_theory_logic_foundations/
+parts/01_set_theory_logic_and_foundations/
   01_sets/
   02_logic_and_proofs/
   03_functions/
@@ -129,7 +129,7 @@ parts/01_set_theory_logic_foundations/
 parts/02_structural_linear_algebra/
   01_vector_spaces_and_linear_structure/
   02_direct_sums_quotients_and_decomposition/
-  03_block_matrices_and_matrix_operations/
+  03_matrix_representations_change_of_basis_block_matrices_and_operations/
   04_duality_and_multilinear_structure/
 
 parts/03_linear_maps_and_matrix_representations/
@@ -140,7 +140,7 @@ parts/03_linear_maps_and_matrix_representations/
   05_change_of_basis/
   06_matrix_equivalence_and_similarity/
 
-parts/04_geometric_spectral_linear_algebra/
+parts/04_geometric_and_spectral_linear_algebra/
   01_inner_product_geometry/
   02_orthogonality_projections_and_least_squares/
   03_bilinear_and_quadratic_forms/
@@ -157,7 +157,7 @@ parts/05_polynomial_structure_and_canonical_forms/
   06_jordan_and_canonical_forms/
   07_transpose_and_conjugate_similarity/
 
-parts/06_matrix_analysis_numerical_linear_algebra/
+parts/06_matrix_analysis_and_numerical_linear_algebra/
   01_trace_determinant_rank_and_matrix_invariants/
   02_positive_definite_and_structured_matrices/
   03_matrix_products_vectorization_and_spectral_radius/
