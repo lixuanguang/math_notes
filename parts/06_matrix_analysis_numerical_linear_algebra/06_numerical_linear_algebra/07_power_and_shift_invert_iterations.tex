@@ -1,25 +1,54 @@
 \subsection{Power and Shift-Invert Iterations}
 
-\begin{theorem} \label{thm:power-method-dominant-eigenvector-preview} \hlt{Power Method Dominant-Eigenvector Preview}\\
-Let $A\mathbf{v}_j=\lambda_j\mathbf{v}_j$, where $\mathbf{v}_1,\ldots,\mathbf{v}_n$ is a basis of $\mathbb{C}^n$, and assume $\abs{\lambda_1}>\max_{j\geq2}\abs{\lambda_j}$.\\
-If $\mathbf{u}_0=\sum\limits_{j=1}^{n}c_j\mathbf{v}_j$ with $c_1\neq0$, then $\lambda_1^{-k}A^k\mathbf{u}_0\longrightarrow c_1\mathbf{v}_1$. Thus the directions of $A^k\mathbf{u}_0$ converge to $\operatorname{span}\{\mathbf{v}_1\}$.
+Throughout this subsection, $n\in\mathbb{Z}_{\geq2}$.
+
+For $\mathcal{E}\leq\mathbb{C}^n$, write $d(\mathbf{z},\mathcal{E})$ for Euclidean distance, as in Definition \ref{def:distance-to-subspace}.
+
+\begin{theorem} \label{thm:power-method-dominant-eigenvector-preview} \hlt{Power Iteration toward a Dominant Eigenspace}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ bebasis of $\mathbb{C}^n$. Let $(\lambda_1,\ldots,\lambda_n)\in\mathbb{C}^n$ satisfy $(\forall\,j\in J_n)\,A\mathbf{v}_j=\lambda_j\mathbf{v}_j$ and $\abs{\lambda_1}>\max\limits_{2\leq j\leq n}\abs{\lambda_j}$.\\
+Let $(c_1,\ldots,c_n)\in\mathbb{C}^n$ satisfy $c_1\neq0$, and set $\mathbf{u}_0\defeq\sum\limits_{j=1}^{n}c_j\mathbf{v}_j$ and $\mathcal{E}_1\defeq\operatorname{span}\{\mathbf{v}_1\}$. As $k\longrightarrow\infty$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\lambda_1^{-k}A^k\mathbf{u}_0\longrightarrow c_1\mathbf{v}_1$;
+\item $\frac{d(A^k\mathbf{u}_0,\mathcal{E}_1)}{\norm{A^k\mathbf{u}_0}_2}\longrightarrow0$.
+\end{enumerate}
 \begin{proof}
-Set $\rho=\max\limits_{j\geq2}\abs{\lambda_j/\lambda_1}<1$. Since $A^k\mathbf{v}_j=\lambda_j^k\mathbf{v}_j$, $\lambda_1^{-k}A^k\mathbf{u}_0 =c_1\mathbf{v}_1+\sum\limits_{j=2}^{n}c_j\left(\frac{\lambda_j}{\lambda_1}\right)^k\mathbf{v}_j$.\\
-The remainder has norm at most $\rho^k\sum\limits_{j=2}^{n}\abs{c_j}\norm{\mathbf{v}_j}$, hence tends to $0$.\\
-\hlt{Structural Commentary}: The power method is spectral filtering by repeated multiplication.\\
-\hlt{Key Insight}: A spectral gap makes every non-dominant component decay relative to the dominant one.
+The relation $\lambda_1\neq0$ holds by the modulus gap. Set $\rho\defeq\max\limits_{2\leq j\leq n}\abs{\frac{\lambda_j}{\lambda_1}}<1$. For $k\in\mathbb{Z}_{\geq0}$, set $\mathbf{r}_k\defeq\sum\limits_{j=2}^{n}c_j\left(\frac{\lambda_j}{\lambda_1}\right)^k\mathbf{v}_j$.\\
+For $k\in\mathbb{Z}_{\geq0}$, $\lambda_1^{-k}A^k\mathbf{u}_0=c_1\mathbf{v}_1+\mathbf{r}_k$ by induction and linearity. Estimate $\norm{\mathbf{r}_k}_2\leq\rho^k\sum\limits_{j=2}^{n}\abs{c_j}\norm{\mathbf{v}_j}_2$ holds by triangle inequality.\\
+The convergence $\mathbf{r}_k\longrightarrow\mathbf{0}$ holds by $0\leq\rho<1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Claim (i) holds by the scaled identity and $\mathbf{r}_k\longrightarrow\mathbf{0}$.
+\item $(\forall\,k\in\mathbb{Z}_{\geq0})\,A^k\mathbf{u}_0\neq\mathbf{0}$ by the nonzero eigenbasis coordinate $c_1\lambda_1^k$.\\
+For $k\geq0$, $\frac{d(A^k\mathbf{u}_0,\mathcal{E}_1)}{\norm{A^k\mathbf{u}_0}_2}\leq\frac{\norm{\mathbf{r}_k}_2}{\norm{c_1\mathbf{v}_1+\mathbf{r}_k}_2}$ by distance homogeneity and $c_1\mathbf{v}_1\in\mathcal{E}_1$.\\
+The denominator converges to $\norm{c_1\mathbf{v}_1}_2>0$ by the reverse triangle inequality.\\
+Claim (ii) holds by the vanishing numerator and positive denominator limit.
+\end{enumerate}
+\hlt{Structural Commentary}: Eigenbasis scaling isolates a geometric remainder; distance homogeneity transfers its decay to directions.\\
+\hlt{Key Insight}: The spectral gap contracts every nondominant eigenvalue ratio.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:inverse-and-shifted-power-iteration-preview} \hlt{Inverse and Shifted Power Iteration Preview}\\
-Let $\mathcal{N}(\mathbf{z})\defeq\mathbf{z}/\norm{\mathbf{z}}_2$ for $\mathbf{z}\neq\mathbf{0}$.
+\begin{computationmethod} \label{meth:inverse-and-shifted-power-iteration-preview} \hlt{Inverse, Shift-Invert, and Shifted Power Iteration}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, and let $(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis. Let $(\lambda_1,\ldots,\lambda_n)\in\mathbb{C}^n$ satisfy $(\forall\,j\in J_n)\,A\mathbf{v}_j=\lambda_j\mathbf{v}_j$.\\
+Relabel target eigenpair as $(\lambda_1,\mathbf{v}_1)$. Let $(c_1,\ldots,c_n)\in\mathbb{C}^n$ satisfy $c_1\neq0$, set $\mathbf{x}_0\defeq\sum\limits_{j=1}^{n}c_j\mathbf{v}_j$ and $\mathcal{E}_1\defeq\operatorname{span}\{\mathbf{v}_1\}$.\\
+Set $\mathcal{N}(\mathbf{z})\defeq\frac{\mathbf{z}}{\norm{\mathbf{z}}_2}$ for $\mathbf{z}\neq\mathbf{0}$. Define a transformed matrix $B$ and eigenvalues $(\theta_j)_{j=1}^{n}$ by one branch:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Inverse}: if $0\notin\operatorname{spec}(A)$, solve $A\mathbf{y}_{k+1}=\mathbf{x}_k$ and set $\mathbf{x}_{k+1}=\mathcal{N}(\mathbf{y}_{k+1})$.\\
-This is power iteration on $A^{-1}$ and targets minimal $\abs{\lambda}$.
-\item \hlt{Shift-invert}: for $\sigma\notin\operatorname{spec}(A)$, $(A-\sigma I)\mathbf{y}_{k+1}=\mathbf{x}_k$, $\mathbf{x}_{k+1}=\mathcal{N}(\mathbf{y}_{k+1})$.\\
-Eigenvalues become $(\lambda-\sigma)^{-1}$, targeting $\lambda$ nearest $\sigma$.
-\item \hlt{Shifted power}: $\mathbf{x}_{k+1}=\mathcal{N}\bigl((A-\sigma I)\mathbf{x}_k\bigr)$; eigenvalues become $\lambda-\sigma$, emphasizing large $\abs{\lambda-\sigma}$.
+\item \hlt{Inverse}: Assume $0\notin\operatorname{spec}(A)$ and $\abs{\lambda_1}<\min\limits_{2\leq j\leq n}\abs{\lambda_j}$. Matrix $A$ is invertible by Corollary \ref{cor:matrix-invertible-iff-zero-not-spectrum}.\\
+Set $B\defeq A^{-1}$ and $(\theta_j)_{j=1}^{n}\defeq(\lambda_j^{-1})_{j=1}^{n}$. Factor $A$ once. For $k\in\mathbb{Z}_{\geq0}$, solve $A\mathbf{y}_{k+1}=\mathbf{x}_k$ and set $\mathbf{x}_{k+1}\defeq\mathcal{N}(\mathbf{y}_{k+1})$.
+\item \hlt{Shift-Invert}: Choose $\sigma\in\mathbb{C}\setminus\operatorname{spec}(A)$ with $\abs{\lambda_1-\sigma}<\min\limits_{2\leq j\leq n}\abs{\lambda_j-\sigma}$.\\
+Matrix $A-\sigma I_n$ is invertible by Corollary \ref{cor:polynomial-in-matrix-invertible-spectrum-test} with $p(z)=z-\sigma$. Set $B\defeq(A-\sigma I_n)^{-1}$ and $(\theta_j)_{j=1}^{n}\defeq\bigl((\lambda_j-\sigma)^{-1}\bigr)_{j=1}^{n}$.\\
+Factor $A-\sigma I_n$ once. For $k\in\mathbb{Z}_{\geq0}$, solve $(A-\sigma I_n)\mathbf{y}_{k+1}=\mathbf{x}_k$ and set $\mathbf{x}_{k+1}\defeq\mathcal{N}(\mathbf{y}_{k+1})$.
+\item \hlt{Shifted Power}: Choose $\sigma\in\mathbb{C}$ with $\abs{\lambda_1-\sigma}>\max\limits_{2\leq j\leq n}\abs{\lambda_j-\sigma}$. Set $B\defeq A-\sigma I_n$ and $(\theta_j)_{j=1}^{n}\defeq(\lambda_j-\sigma)_{j=1}^{n}$.\\
+For $k\in\mathbb{Z}_{\geq0}$, set $\mathbf{x}_{k+1}\defeq\mathcal{N}\bigl((A-\sigma I_n)\mathbf{x}_k\bigr)$.
 \end{enumerate}
-Use factors of $A$ or $A-\sigma I$ for solves; do not form explicit inverses.
-\end{method}
+Each branch satisfies $(\forall\,j\in J_n)\,B\mathbf{v}_j=\theta_j\mathbf{v}_j$ by the original eigenpair identities.\\
+It also satisfies $\abs{\theta_1}>\max\limits_{2\leq j\leq n}\abs{\theta_j}$ and $\theta_1\neq0$ by the branch hypothesis and the definition of $\theta_j$.\\
+$(\forall\,k\in\mathbb{Z}_{\geq0})\,B^k\mathbf{x}_0\neq\mathbf{0}$ by the nonzero eigenbasis coordinate $c_1\theta_1^k$. $(\forall\,k\in\mathbb{Z}_{>0})(\exists\,\alpha_k\in\mathbb{C}\setminus\{0\})\,\mathbf{x}_k=\alpha_kB^k\mathbf{x}_0$ by induction.\\
+The identity $(\forall\,k\in\mathbb{Z}_{>0})\,\norm{\mathbf{x}_k}_2=1$ holds by the definition of $\mathcal{N}$.\\
+The convergence $\frac{d(B^k\mathbf{x}_0,\mathcal{E}_1)}{\norm{B^k\mathbf{x}_0}_2}\longrightarrow0$ holds by Theorem \ref{thm:power-method-dominant-eigenvector-preview}(ii) with $A=B$ and $\lambda_j=\theta_j$.\\
+Hence $d(\mathbf{x}_k,\mathcal{E}_1)\longrightarrow0$ by homogeneity of distance and $\norm{\mathbf{x}_k}_2=1$.\\
+Branches (i) and (ii) reuse one factorization and never form the displayed inverse matrices.\\
+These are exact-arithmetic iterations; no finite-precision stability, tolerance, or stopping rule is specified.
+\end{computationmethod}
