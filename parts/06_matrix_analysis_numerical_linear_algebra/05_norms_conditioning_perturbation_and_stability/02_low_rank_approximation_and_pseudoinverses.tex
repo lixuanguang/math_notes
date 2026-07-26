@@ -1,105 +1,109 @@
 \subsection{Low-Rank Approximation and Pseudoinverses}
 
+Throughout this subsection, $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$; every matrix dimension is positive.
+
 \begin{proposition} \label{prop:rank-one-svd-orthogonality-and-truncation-error} \hlt{Rank-One SVD Terms and Truncation Error}\\
-Let $A=X\Sigma_rY^*=\sum_{j=1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$ be a compact SVD, with $\sigma_1\geq\cdots\geq\sigma_r>0$.\\
-For $0\leq k\leq r$, set $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, $A_0\defeq0$.\\
-Then the rank-one summands are mutually orthogonal in the Frobenius inner product, and
-\begin{align}
-\norm{A}_F^2=\sum_{j=1}^{r}\sigma_j^2,
-\qquad
-\norm{A-A_k}_F^2=\sum_{j=k+1}^{r}\sigma_j^2,
-\qquad
-\norm{A-A_k}_2=
-\begin{cases}
-\sigma_{k+1},&k<r,\\
-0,&k=r.
-\end{cases}
-\nonumber
-\end{align}
+Let $A=X\Sigma_rY^*=\sum\limits_{j=1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$ be a compact SVD, with $\sigma_1\geq\cdots\geq\sigma_r>0$. For $k\in\{0,\ldots,r\}$, set $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, where $A_0\defeq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall i,j\in J_r)\,\innerprod[F]{\sigma_i\mathbf{x}_i\mathbf{y}_i^*,\sigma_j\mathbf{x}_j\mathbf{y}_j^*}=\sigma_i^2\delta_{ij}$.
+\item $\norm{A}_F^2=\sum\limits_{j=1}^{r}\sigma_j^2$ and $\norm{A-A_k}_F^2=\sum\limits_{j=k+1}^{r}\sigma_j^2$.
+\item $k<r\Longrightarrow\norm{A-A_k}_2=\sigma_{k+1}$, while $k=r\Longrightarrow\norm{A-A_k}_2=0$.
+\end{enumerate}
 \begin{proof}
-For $i,j\in\{1,\ldots,r\}$, $\innerprod[F]{\sigma_i\mathbf{x}_i\mathbf{y}_i^*,\sigma_j\mathbf{x}_j\mathbf{y}_j^*} =\sigma_i\sigma_j\operatorname{tr}(\mathbf{y}_i\mathbf{x}_i^*\mathbf{x}_j\mathbf{y}_j^*) =\sigma_i\sigma_j\delta_{ij}$.\\
-Pythagoras in the Frobenius inner product gives the two Frobenius formulas. The residual $A-A_k$ has compact SVD $\sum_{j=k+1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$, so Theorem \ref{thm:spectral-norm-largest-singular-value} gives the spectral-norm formula.\\
-\hlt{Structural Commentary}: Compact SVD decomposes a matrix into orthogonal rank-one energy packets.\\
-\hlt{Key Insight}: Truncation error is exactly the energy left in the discarded singular directions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall i,j\in J_r)\,\innerprod[F]{\sigma_i\mathbf{x}_i\mathbf{y}_i^*,\sigma_j\mathbf{x}_j\mathbf{y}_j^*}=\sigma_i\sigma_j(\mathbf{y}_i^*\mathbf{y}_j)(\mathbf{x}_j^*\mathbf{x}_i)=\sigma_i^2\delta_{ij}$ by orthonormality.
+\item The first identity holds by Proposition \ref{prop:basic-singular-value-identities}(ii). For $k<r$, the residual is $A-A_k=\sum\limits_{j=k+1}^{r}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$.\\
+Its positive singular values are $\sigma_{k+1},\ldots,\sigma_r$ by Theorem \ref{thm:compact-singular-value-decomposition}(ii).\\
+The second identity now holds by Proposition \ref{prop:basic-singular-value-identities}(ii); for $k=r$, it is $0=0$.
+\item If $k<r$, then $\norm{A-A_k}_2=\sigma_{k+1}$ by (ii) and Theorem \ref{thm:spectral-norm-largest-singular-value}(i); if $k=r$, then $A-A_k=0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Frobenius orthogonality separates rank-one terms; compact SVD identifies the residual spectrum.\\
+\hlt{Key Insight}: Truncation leaves exactly the singular-value tail.
 \end{proof}
 \end{proposition}
 
-\begin{figure}[H]
+Figure \ref{fig:truncated-svd-energy} separates the retained and discarded singular-value terms.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/truncated_svd_energy.tikz}
-  \caption{Blue bars form $A_k$; red bars are discarded, with $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$.}
+  \caption{Bars left of the dashed divider form $A_k$; the right-hand bars satisfy $\norm{A-A_k}_F^2=\sum\limits_{j=k+1}^{r}\sigma_j^2$.}
   \label{fig:truncated-svd-energy}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:eckart-young-frobenius-spectral} \hlt{Eckart--Young Low-Rank Approximation}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have singular values $\sigma_1\geq\cdots\geq\sigma_q\geq0$, where $q=\min(m,n)$ and $\sigma_j=0$ for $j>q$. If $A_k$ is the rank-$k$ truncated SVD, $0\leq k<q$, and $B\in\operatorname{Mat}(m,n,\mathbb{F})$ has $\operatorname{rank}(B)\leq k$, then
-\begin{align}
-\norm{A-A_k}_2\leq\norm{A-B}_2,
-\qquad
-\norm{A-A_k}_F\leq\norm{A-B}_F.
-\nonumber
-\end{align}
-\begin{proof}
-Let $\mathbf{w}_1,\ldots,\mathbf{w}_n$ be right singular vectors for $A$.
-\begin{enumerate}[label=\roman*.]
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ have rank $r$, set $q\defeq\min(m,n)$. Write $\sigma_1\geq\cdots\geq\sigma_q\geq0$ for its singular values, fix a full SVD $A=V\Sigma W^*$.\\
+Write $\mathbf{v}_j,\mathbf{w}_j$ for the columns of $V,W$, and set $(\forall j\in J_n\setminus J_q)\,\sigma_j\defeq0$. For $0\leq k<q$, set $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{v}_j\mathbf{w}_j^*$.\\
+If $B\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\operatorname{rank}(B)\leq k$, then:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Since $\operatorname{rank}(B)\leq k$, rank-nullity gives $\dim\ker(B)\geq n-k$. The subspaces $\ker(B)$ and $\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{k+1})$ in $\mathbb{F}^n$ have dimensions summing at least $n+1$, so their intersection contains a nonzero vector.\\
-Choose unit $\mathbf{x}$ in this intersection. Let $\mathbf{x}=\sum\limits_{i=1}^{k+1}c_i\mathbf{w}_i$ gives $\sum\limits_i\abs{c_i}^2=1$ and $\norm{A\mathbf{x}}_2^2=\sum\limits_{i=1}^{k+1}\sigma_i^2\abs{c_i}^2\geq\sigma_{k+1}^2$.\\
-Thus $\norm{A-B}_2\geq\norm{(A-B)\mathbf{x}}_2=\norm{A\mathbf{x}}_2\geq\sigma_{k+1}=\norm{A-A_k}_2$.
-\item Choose an $(n-k)$-dimensional subspace $\mathcal{U}\subseteq\ker(B)$, with projection $P$ and orthonormal basis $\mathbf{z}_1,\ldots,\mathbf{z}_{n-k}$.\\
-Since $B\mathbf{z}_j=0$, $\norm{A-B}_F^2\geq\sum\limits_{j=1}^{n-k}\norm{(A-B)\mathbf{z}_j}_2^2=\sum\limits_{j=1}^{n-k}\norm{A\mathbf{z}_j}_2^2=\sum\limits_{i=1}^{n}\sigma_i^2\norm{P\mathbf{w}_i}_2^2$.\\
-Put $\alpha_i=\norm{P\mathbf{w}_i}_2^2$. Then $0\leq\alpha_i\leq1$ and $\sum_i\alpha_i=\operatorname{tr}(P)=n-k$.\\
-Among all such weights, the sum $\sum_i\sigma_i^2\alpha_i$ is minimized by placing weight $1$ on the $n-k$ smallest values of the decreasing sequence $\sigma_i^2$, hence $\sum\limits_i\sigma_i^2\alpha_i\geq\sum\limits_{i=k+1}^{n}\sigma_i^2=\norm{A-A_k}_F^2$.
+\item $\norm{A-A_k}_2\leq\norm{A-B}_2$;
+\item $\norm{A-A_k}_F\leq\norm{A-B}_F$.
 \end{enumerate}
-\hlt{Structural Commentary}: Rank-$k$ competitors vanish on at least $n-k$ directions.\\
-\hlt{Key Insight}: The optimal loss is precisely the singular-value tail.
+\begin{proof}
+If $k\geq r$, then $A_k=A$ and $\norm{A-A_k}_2=\norm{A-A_k}_F=0$, so both claims hold.\\
+For $k<r$, the first $r$ columns of $V,W$ form a compact SVD of $A$ by Theorem \ref{thm:compact-singular-value-decomposition}(i). Its rank-$k$ truncation is $A_k$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\dim\ker(B)\geq n-k$ by Corollary \ref{cor:matrix-rank-nullity}(i). $\ker(B)\cap\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{k+1})\neq\{\mathbf{0}\}$ by Corollary \ref{cor:large-subspaces-intersect}(i).\\
+Fix a unit vector $\mathbf{x}=\sum\limits_{i=1}^{k+1}c_i\mathbf{w}_i$ in this intersection. Then $\sum\limits_{i=1}^{k+1}\abs{c_i}^2=1$ and $\norm{A\mathbf{x}}_2^2=\sum\limits_{i=1}^{k+1}\sigma_i^2\abs{c_i}^2\geq\sigma_{k+1}^2$ by orthonormality.\\
+$\norm{A-B}_2\geq\norm{(A-B)\mathbf{x}}_2=\norm{A\mathbf{x}}_2\geq\sigma_{k+1}$ by $B\mathbf{x}=\mathbf{0}$, spectral-norm definition. $\sigma_{k+1}=\norm{A-A_k}_2$ by Proposition \ref{prop:rank-one-svd-orthogonality-and-truncation-error}(iii).
+\item $\dim\ker(B)\geq n-k$ by Corollary \ref{cor:matrix-rank-nullity}(i); choose $\mathcal{U}\subseteq\ker(B)$ with $\dim\mathcal{U}=n-k$.\\
+An orthonormal basis $\mathbf{z}_1,\ldots,\mathbf{z}_{n-k}$ of $\mathcal{U}$ exists by Corollary \ref{cor:finite-dimensional-inner-product-space-has-orthonormal-basis}. Extend it to $\mathbf{z}_1,\ldots,\mathbf{z}_n$ by Corollary \ref{cor:orthonormal-list-extends-to-basis}.\\
+For $Z\defeq[\mathbf{z}_1\ \cdots\ \mathbf{z}_n]$ and $P\defeq P_{\mathcal{U}}$, $Z$ is unitary by Theorem \ref{thm:unitary-matrix-equivalent-conditions}(i)--(ii). $\norm{A-B}_F^2=\norm{(A-B)Z}_F^2$ by Proposition \ref{prop:unitary-invariance-of-singular-values}(iii).\\
+$\norm{(A-B)Z}_F^2\geq\sum\limits_{j=1}^{n-k}\norm{A\mathbf{z}_j}_2^2$ by the column formula for $\norm{\cdot}_F$ and $(\forall j\in J_{n-k})\,B\mathbf{z}_j=\mathbf{0}$.\\
+Set $(\alpha_i)_{i\in J_n}\defeq(\norm{P\mathbf{w}_i}_2^2)_{i\in J_n}$. Then $\sum\limits_{j=1}^{n-k}\norm{A\mathbf{z}_j}_2^2=\sum\limits_{i=1}^{n}\sigma_i^2\alpha_i$ by orthonormality and Proposition \ref{prop:orthogonal-projection-properties}(ix).\\
+$(\forall i\in J_n)\,0\leq\alpha_i\leq1$ by Proposition \ref{prop:orthogonal-projection-properties}(viii). $\sum\limits_{i=1}^{n}\alpha_i=n-k$ by Theorem \ref{thm:parseval-identity-finite-dimensional}. Thus $\beta\defeq\sum\limits_{i=1}^{k}\alpha_i=\sum\limits_{i=k+1}^{n}(1-\alpha_i)$.\\
+$\sum\limits_{i=1}^{n}\sigma_i^2\alpha_i-\sum\limits_{i=k+1}^{n}\sigma_i^2\geq\sigma_{k+1}^2(\beta-\beta)=0$ by singular-value ordering. $\norm{A-B}_F^2\geq\sum\limits_{i=k+1}^{n}\sigma_i^2=\norm{A-A_k}_F^2$ by Proposition \ref{prop:rank-one-svd-orthogonality-and-truncation-error}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Kernel intersection controls spectral loss; projection weights majorize the Frobenius tail.\\
+\hlt{Key Insight}: Rank $k$ preserves at most $k$ singular directions.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:truncated-svd-approximation} \hlt{Truncated SVD Approximation Method}\\
-To compress or approximate $A$ by rank $k$:
+\begin{computationmethod} \label{meth:truncated-svd-approximation} \hlt{Truncated SVD Approximation}\\
+Given $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with compact SVD $A=X\Sigma_rY^*$ and $k\in\{0,\ldots,r-1\}$:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item compute or estimate the leading singular triples $(\sigma_j,\mathbf{x}_j,\mathbf{y}_j)$;
-\item keep $A_k=\sum_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*$;
-\item use $\norm{A-A_k}_F^2=\sum_{j>k}\sigma_j^2$ and $\norm{A-A_k}_2=\sigma_{k+1}$ to quantify the lost information.
+\item set $\mathcal{R}_k\defeq\{B\in\operatorname{Mat}(m,n,\mathbb{F}):\operatorname{rank}(B)\leq k\}$;
+\item form $A_k\defeq\sum\limits_{j=1}^{k}\sigma_j\mathbf{x}_j\mathbf{y}_j^*\in\mathcal{R}_k$;
+\item compute $\norm{A-A_k}_F^2=\sum\limits_{j=k+1}^{r}\sigma_j^2$ and $\norm{A-A_k}_2=\sigma_{k+1}$;
+\item certify $(\forall\nu\in\{2,F\})\,\norm{A-A_k}_{\nu}=\min\limits_{B\in\mathcal{R}_k}\norm{A-B}_{\nu}$ by (ii) and Theorem \ref{thm:eckart-young-frobenius-spectral}.
 \end{enumerate}
-\end{method}
+\end{computationmethod}
+
+The same compact SVD data defines a canonical inverse on the nonzero singular subspaces.
 
 \begin{definition} \label{def:moore-penrose-pseudoinverse} \hlt{Moore--Penrose Pseudoinverse}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. If $A=0$, define $A^{\dagger}=0_{n,m}$.\\
-If $\operatorname{rank}(A)=r\geq1$ and $A=X\Sigma_rY^*$ is a compact SVD, define $A^{\dagger}\defeq Y\Sigma_r^{-1}X^*\in\operatorname{Mat}(n,m,\mathbb{F})$.\\
-This is the \hlt{pseudoinverse} or \hlt{Moore--Penrose pseudoinverse} of $A$.
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$, define $A^{\dagger}\in\operatorname{Mat}(n,m,\mathbb{F})$ by:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A=0\Longrightarrow A^{\dagger}\defeq0_{n,m}$;
+\item $\operatorname{rank}(A)=r\geq1\Longrightarrow A^{\dagger}\defeq Y\Sigma_r^{-1}X^*$ for a compact SVD $A=X\Sigma_rY^*$.
+\end{enumerate}
+The matrix $A^{\dagger}$ is the \hlt{pseudoinverse} or \hlt{Moore--Penrose pseudoinverse} of $A$.
 \end{definition}
 
 \begin{proposition} \label{prop:pseudoinverse-well-defined} \hlt{Pseudoinverse is Well Defined}\\
 The definition of $A^{\dagger}$ does not depend on the chosen compact SVD of $A$.
 \begin{proof}
-Let $A=X_1\Sigma_rY_1^*=X_2\Sigma_rY_2^*$. By Theorem \ref{thm:compact-svd-unitary-ambiguity}, $X_1=X_2U$, $Y_1=Y_2U$, and $U\Sigma_r^{-1}U^*=\Sigma_r^{-1}$.\\
-Hence $Y_1\Sigma_r^{-1}X_1^* =Y_2U\Sigma_r^{-1}U^*X_2^* =Y_2\Sigma_r^{-1}X_2^*$.\\
-\hlt{Structural Commentary}: Compact SVD ambiguity cancels in $Y\Sigma_r^{-1}X^*$.\\
-\hlt{Key Insight}: Inverting the singular values preserves the same block symmetries.
+The assertion is immediate for $A=0$. Suppose $\operatorname{rank}(A)=r\geq1$. Let $A=X_1\Sigma_rY_1^*=X_2\Sigma_rY_2^*$ be compact SVDs.\\
+Unitary $U$ satisfies $X_1=X_2U$, $Y_1=Y_2U$, $U\Sigma_r=\Sigma_rU$ by Theorem \ref{thm:compact-svd-unitary-ambiguity}. $U\Sigma_r^{-1}U^*=\Sigma_r^{-1}$; $Y_1\Sigma_r^{-1}X_1^*=Y_2U\Sigma_r^{-1}U^*X_2^*=Y_2\Sigma_r^{-1}X_2^*$.\\
+\hlt{Structural Commentary}: Compact-SVD ambiguity commutes with reciprocal scaling and cancels between the singular bases.\\
+\hlt{Key Insight}: Equal-value blocks also commute with $\Sigma_r^{-1}$.
 \end{proof}
 \end{proposition}
 
 \begin{corollary} \label{cor:pseudoinverse-from-full-svd} \hlt{Pseudoinverse from a Full SVD}\\
-Let $A=V\Sigma W^*$ be a full SVD of $A\in\operatorname{Mat}(m,n,\mathbb{F})$, with rank $r$ and positive singular values $\sigma_1,\ldots,\sigma_r$.\\
-Write $V=[X\ X_0]$, $W=[Y\ Y_0]$, and $\Sigma_r=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$.\\
-In conformal blocks, $\Sigma=
-\begin{bmatrix}
-\Sigma_r&0\\
-0&0
-\end{bmatrix}$, $\Sigma^{\dagger}\defeq
-\begin{bmatrix}
-\Sigma_r^{-1}&0\\
-0&0
-\end{bmatrix}
-\in\operatorname{Mat}(n,m,\mathbb{F})$. Then $A^{\dagger}=W\Sigma^{\dagger}V^*$.
+Let $A=V\Sigma W^*$ be a full SVD of $A\in\operatorname{Mat}(m,n,\mathbb{F})$ with rank $r$, and set $D_r\defeq\{(j,j):j\in J_r\}$.\\
+Define $\Sigma^{\dagger}\in\operatorname{Mat}(n,m,\mathbb{F})$ by $(\forall j\in J_r)\,(\Sigma^{\dagger})_{jj}\defeq\sigma_j^{-1}$. $(\forall(i,j)\in(J_n\times J_m)\setminus D_r)\,(\Sigma^{\dagger})_{ij}\defeq0$. Then $A^{\dagger}=W\Sigma^{\dagger}V^*$.
 \begin{proof}
-If $r=0$, then $A=0$ and $W\Sigma^{\dagger}V^*=0$.\\
-If $r>0$, the block form gives $A=X\Sigma_rY^*$; $A^{\dagger}=Y\Sigma_r^{-1}X^*$; and $W\Sigma^{\dagger}V^*=Y\Sigma_r^{-1}X^*$. Thus $A^{\dagger}=W\Sigma^{\dagger}V^*$.\\
-\hlt{Structural Commentary}: Full SVD pads compact SVD by zero blocks.\\
-\hlt{Key Insight}: The pseudoinverse flips $V$ and $W$ and inverts only the positive singular values.
+If $r=0$, then $A=0$, $\Sigma^{\dagger}=0_{n,m}$, and $W\Sigma^{\dagger}V^*=A^{\dagger}=0_{n,m}$. Suppose $r\geq1$, and write $V=[X\ X_0]$ and $W=[Y\ Y_0]$.\\
+Then $A=X\Sigma_rY^*$ and $W\Sigma^{\dagger}V^*=Y\Sigma_r^{-1}X^*$ by block multiplication. Hence $A^{\dagger}=W\Sigma^{\dagger}V^*$ by the defining compact-SVD formula.\\
+\hlt{Structural Commentary}: Full-SVD block multiplication isolates the compact factors and their reciprocal scaling.\\
+\hlt{Key Insight}: Only positive diagonal entries are inverted.
 \end{proof}
 \end{corollary}
 
@@ -115,81 +119,86 @@ Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$. Then:
 \item if $m=n$ and $A$ is invertible, then $A^{\dagger}=A^{-1}$.
 \end{enumerate}
 \begin{proof}
-The zero case is immediate. Let $A=X\Sigma_rY^*$ be a compact SVD; then $A^{\dagger}=Y\Sigma_r^{-1}X^*$.
+If $A=0$, then (i)--(v) hold directly and the hypothesis of (vi) fails.\\
+Suppose $\operatorname{rank}(A)=r\geq1$. Fix a compact SVD $A=X\Sigma_rY^*$; then $A^{\dagger}=Y\Sigma_r^{-1}X^*$ by the defining formula.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\operatorname{col}(A^{\dagger})=\operatorname{col}(Y)=\operatorname{col}(A^*)$ and $\ker(A^{\dagger})=\ker(X^*)=\ker(A^*)$.
-\item $AA^{\dagger}=XX^*$, the orthogonal projection onto $\operatorname{col}(X)=\operatorname{col}(A)$.
-\item $A^{\dagger}A=YY^*$, the orthogonal projection onto $\operatorname{col}(Y)=\operatorname{col}(A^*)$.
-\item These follow from $XX^*X=X$ and $YY^*Y=Y$.
-\item The compact SVD of $A^{\dagger}$ is $Y\Sigma_r^{-1}X^*$, so $(A^{\dagger})^{\dagger}=A$.
-\item If $A$ is square and invertible, then $AA^{\dagger}=A^{\dagger}A=I_n$, hence $A^{\dagger}=A^{-1}$.
+\item $\operatorname{col}(A^{\dagger})=\operatorname{col}(Y)$ by $A^{\dagger}=Y\Sigma_r^{-1}X^*$ and $A^{\dagger}X\Sigma_r=Y$. $\ker(A^{\dagger})=\ker(X^*)$ by $Y^*A^{\dagger}=\Sigma_r^{-1}X^*$ and invertibility of $\Sigma_r$.\\
+$A^*=Y\Sigma_rX^*$ is a compact SVD. $\operatorname{col}(A^*)=\operatorname{col}(Y)$ and $\ker(A^*)=\ker(X^*)$ by Theorem \ref{thm:compact-svd-subspaces}(i)--(ii).
+\item $AA^{\dagger}=XX^*=P_{\operatorname{col}(X)}=P_{\operatorname{col}(A)}$ by Proposition \ref{prop:orthogonal-projection-properties}(ix) and Theorem \ref{thm:compact-svd-subspaces}(i).
+\item $A^{\dagger}A=YY^*=P_{\operatorname{col}(Y)}=P_{\operatorname{col}(A^*)}$ by Proposition \ref{prop:orthogonal-projection-properties}(ix) and Theorem \ref{thm:compact-svd-subspaces}(i) for $A^*=Y\Sigma_rX^*$.
+\item $AA^{\dagger}A=XX^*X\Sigma_rY^*=A$ and $A^{\dagger}AA^{\dagger}=YY^*Y\Sigma_r^{-1}X^*=A^{\dagger}$ by $X^*X=Y^*Y=I_r$.
+\item Let $R\in\operatorname{Mat}(r,r,\mathbb{F})$ be the reversal permutation matrix, so $(\forall j\in J_r)\,R\mathbf{e}_j=\mathbf{e}_{r+1-j}$.\\
+Then $A^{\dagger}=(YR)(R^*\Sigma_r^{-1}R)(XR)^*$ is a compact SVD with decreasing positive diagonal.\\
+Hence $(A^{\dagger})^{\dagger}=(XR)(R^*\Sigma_rR)(YR)^*=X\Sigma_rY^*=A$ by the defining compact-SVD formula.
+\item If $A$ is square and invertible, then $A^*$ is invertible by Proposition \ref{prop:adjoints-inverses-and-polynomials}(i).\\
+$\operatorname{col}(A)=\operatorname{col}(A^*)=\mathbb{F}^n$ by Corollary \ref{cor:square-matrix-invertible-iff-full-rank}. $AA^{\dagger}=A^{\dagger}A=I_n$ by (ii)--(iii), so $A^{\dagger}=A^{-1}$.
 \end{enumerate}
-\hlt{Structural Commentary}: The pseudoinverse inverts nonzero singular directions and projects away null directions.\\
-\hlt{Key Insight}: Replace each $\sigma_j>0$ by $\sigma_j^{-1}$ on the same singular subspaces.
+\hlt{Structural Commentary}: Compact-SVD multiplication identifies the two projectors; reversed reciprocal scaling recovers $A$.\\
+\hlt{Key Insight}: Positive singular coordinates invert; null coordinates remain zero.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:pseudoinverse-four-spaces} identifies the active inverse pair and the annihilated kernels.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/pseudoinverse_four_spaces.tikz}
-  \caption{$A$ and $A^{\dagger}$ invert the nonzero singular subspaces; they vanish on $\ker(A)$ and $\ker(A^*)$, respectively.}
+  \caption{The arrows invert the active singular subspaces; the outer boxes mark $\ker(A)$ and $\ker(A^*)$.}
   \label{fig:pseudoinverse-four-spaces}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:penrose-equations-characterize-pseudoinverse} \hlt{Penrose Characterization of the Pseudoinverse}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $\mathcal{C}=\operatorname{col}(A)$, and $\mathcal{D}=\operatorname{col}(A^*)=(\ker A)^{\perp}$. Then $A^{\dagger}$ is unique $B\in\operatorname{Mat}(n,m,\mathbb{F})$ satisfying
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $ABA=A$;
-\item $BAB=B$;
-\item $AB$ is Hermitian;
-\item $BA$ is Hermitian.
-\end{enumerate}
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, $B\in\operatorname{Mat}(n,m,\mathbb{F})$. Set $\mathsf{P}_A(B)\defeq[ABA=A\land BAB=B\land(AB)^*=AB\land(BA)^*=BA]$; $B=A^{\dagger}\Longleftrightarrow\mathsf{P}_A(B)$.
 \begin{proof}
-\begin{enumerate}[label=(\roman*)]
+\begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item Theorem \ref{thm:moore-penrose-basic-properties} gives $AA^{\dagger}A=A$; $A^{\dagger}AA^{\dagger}=A^{\dagger}$, and $AA^{\dagger}$, $A^{\dagger}A$ are orthogonal projections.\\
-Hence $A^{\dagger}$ satisfies the four equations.
-\item Let $B$ satisfy the four equations. Then $(AB)^2=ABAB=AB$; $(AB)^*=AB$.\\
-Also $\operatorname{range}(AB)=\mathcal{C}$, since $\operatorname{range}(AB)\subseteq\mathcal{C}$ and $AB(A\mathbf{x})=ABA\mathbf{x}=A\mathbf{x}$. By Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}, $AB=P_{\mathcal{C}}$.
-\item $(BA)^2=BABA=BA$; $(BA)^*=BA$. Also $\ker(BA)=\ker(A)$, as $BA\mathbf{x}=0\Rightarrow A\mathbf{x}=ABA\mathbf{x}=0$ and the reverse inclusion is immediate. By Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}, $BA=P_{\mathcal{D}}$.
-\item For $\mathbf{y}\in\mathbb{F}^m$, write $\mathbf{y}=\mathbf{p}+\mathbf{z}$ with $\mathbf{p}\in\mathcal{C}$ and $\mathbf{z}\in\mathcal{C}^{\perp}=\ker(A^*)$. Since $AB\mathbf{z}=0$, $B\mathbf{z}=BAB\mathbf{z}=0$.\\
-If $\mathbf{p}=A\mathbf{x}$, then $B\mathbf{p}=BA\mathbf{x}=P_{\mathcal{D}}\mathbf{x}$, independent of the choice of $\mathbf{x}$ because $\ker(P_{\mathcal{D}})=\mathcal{D}^{\perp}=\ker(A)$.\\
-Thus the four equations determine $B$ uniquely. Since $A^{\dagger}$ satisfies them, $B=A^{\dagger}$.
+\item[$(\Rightarrow)$] Suppose $B=A^{\dagger}$. The first two conjuncts hold by Theorem \ref{thm:moore-penrose-basic-properties}(iv).\\
+Matrices $AB$ and $BA$ are orthogonal projections by Theorem \ref{thm:moore-penrose-basic-properties}(ii)--(iii). $(AB)^*=AB$ and $(BA)^*=BA$ by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.
+\item[$(\Leftarrow)$] Suppose $\mathsf{P}_A(B)$, and set $\mathcal{C}\defeq\operatorname{col}(A)$ and $\mathcal{D}\defeq\operatorname{col}(A^*)$. Then $(AB)^2=ABAB=AB$ and $(AB)^*=AB$.\\
+The relations $\operatorname{range}(AB)\subseteq\mathcal{C}$ and $(\forall\mathbf{x}\in\mathbb{F}^n)\,AB(A\mathbf{x})=A\mathbf{x}$ establish $\operatorname{range}(AB)=\mathcal{C}$.\\
+$AB=P_{\mathcal{C}}$ by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}. For $BA$, $(BA)^2=BABA=BA$ and $(BA)^*=BA$.\\
+$\ker(BA)\subseteq\ker(A)$ by $(\forall\mathbf{x}\in\mathbb{F}^n)\,[BA\mathbf{x}=\mathbf{0}\Rightarrow A\mathbf{x}=ABA\mathbf{x}=\mathbf{0}]$.\\
+$\ker(A)\subseteq\ker(BA)$ by $(\forall\mathbf{x}\in\mathbb{F}^n)\,[A\mathbf{x}=\mathbf{0}\Rightarrow BA\mathbf{x}=\mathbf{0}]$; hence $\ker(BA)=\ker(A)$.\\
+$\operatorname{range}(BA)=(\ker(BA))^{\perp}=(\ker A)^{\perp}=\mathcal{D}$ by Proposition \ref{prop:adjoint-kernel-range-orthogonality}(iii)--(iv). $BA=P_{\mathcal{D}}$ by Theorem \ref{thm:orthogonal-projection-self-adjoint-idempotent}.\\
+The identities $AB=AA^{\dagger}$ and $BA=A^{\dagger}A$ hold by Theorem \ref{thm:moore-penrose-basic-properties}(ii)--(iii).\\
+$B=BAB=B(AA^{\dagger})=(BA)A^{\dagger}=(A^{\dagger}A)A^{\dagger}=A^{\dagger}$ by $\mathsf{P}_A(B)$ and Theorem \ref{thm:moore-penrose-basic-properties}(iv).
 \end{enumerate}
-\hlt{Structural Commentary}: Penrose equations force the two projection factors.\\
-\hlt{Key Insight}: Once $AB$ and $BA$ are projections, $B$ is forced.
+\hlt{Structural Commentary}: Self-adjoint idempotence identifies both range projections; their product identities collapse $B$.\\
+\hlt{Key Insight}: $AB=AA^{\dagger}$ and $BA=A^{\dagger}A$ force $B=A^{\dagger}$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:pseudoinverse-minimum-norm-least-squares} \hlt{Pseudoinverse and Minimum-Norm Least Squares}\\
-Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$, let $\mathbf{y}\in\mathbb{F}^m$, and set $\mathbf{x}_0=A^{\dagger}\mathbf{y}$.
+For $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\mathbb{F}^m$, set $\mathbf{x}_0\defeq A^{\dagger}\mathbf{y}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $A\mathbf{x}=\mathbf{y}$ is consistent, then $A\mathbf{x}_0=\mathbf{y}$ and $\mathbf{x}_0$ is the unique solution of smallest Euclidean norm.
-\item For arbitrary $\mathbf{y}$, $\mathbf{x}_0$ is a least-squares solution of $A\mathbf{x}\approx\mathbf{y}$, and it is the unique least-squares solution of smallest Euclidean norm.
+\item $\mathbf{x}_0\in\operatorname{LS}(A,\mathbf{y})$ and $\operatorname*{arg\,min}\limits_{\mathbf{x}\in\operatorname{LS}(A,\mathbf{y})}\norm{\mathbf{x}}_2=\{\mathbf{x}_0\}$.
+\item If $\mathbf{y}\in\operatorname{col}(A)$, then $A\mathbf{x}_0=\mathbf{y}$ and $\operatorname*{arg\,min}\limits_{\mathbf{x}\in\mathbb{F}^n:\,A\mathbf{x}=\mathbf{y}}\norm{\mathbf{x}}_2=\{\mathbf{x}_0\}$.
 \end{enumerate}
 \begin{proof}
-Let $P=AA^{\dagger}=P_{\operatorname{col}(A)}$ and note that $\mathbf{x}_0\in\operatorname{col}(A^{\dagger})=\operatorname{col}(A^*)=(\ker A)^{\perp}$.
+Set $P\defeq AA^{\dagger}=P_{\operatorname{col}(A)}$ by Theorem \ref{thm:moore-penrose-basic-properties}(ii); then $A\mathbf{x}_0=P\mathbf{y}$.\\
+$\mathbf{x}_0\in\operatorname{col}(A^{\dagger})=\operatorname{col}(A^*)=(\ker A)^{\perp}$ by Theorem \ref{thm:moore-penrose-basic-properties}(i) and Proposition \ref{prop:adjoint-kernel-range-orthogonality}(iii).
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathbf{y}\in\operatorname{col}(A)$, then $A\mathbf{x}_0=P\mathbf{y}=\mathbf{y}$. For any solution $\mathbf{x}$, $\mathbf{x}-\mathbf{x}_0\in\ker(A)$,\\
-so $\norm{\mathbf{x}}_2^2 =\norm{\mathbf{x}_0+(\mathbf{x}-\mathbf{x}_0)}_2^2 =\norm{\mathbf{x}_0}_2^2+\norm{\mathbf{x}-\mathbf{x}_0}_2^2$ with equality only when $\mathbf{x}=\mathbf{x}_0$.
-\item For arbitrary $\mathbf{y}$, $A\mathbf{x}_0=P\mathbf{y}$, so $\mathbf{y}-A\mathbf{x}_0\perp\operatorname{col}(A)$ and $\mathbf{x}_0$ is least-squares optimal by Theorem \ref{thm:matrix-least-squares-normal-equations}. Any least-squares solution $\mathbf{x}$ satisfies $A\mathbf{x}=P\mathbf{y}=A\mathbf{x}_0$, hence the same orthogonal decomposition gives $\norm{\mathbf{x}}_2\geq\norm{\mathbf{x}_0}_2$, with equality only for $\mathbf{x}=\mathbf{x}_0$.
+\item $\mathbf{x}_0\in\operatorname{LS}(A,\mathbf{y})$ by $A\mathbf{x}_0=P\mathbf{y}$ and Theorem \ref{thm:orthogonal-projection-minimizes-distance}. $P_{(\ker A)^{\perp}}\mathbf{x}_0=\mathbf{x}_0$ by Proposition \ref{prop:orthogonal-projection-properties}(ii).\\
+The minimum-norm identity holds by Proposition \ref{prop:least-squares-affine-set-and-minimum-norm}(iii).
+\item If $\mathbf{y}\in\operatorname{col}(A)$, then $A\mathbf{x}_0=P\mathbf{y}=\mathbf{y}$ by Proposition \ref{prop:orthogonal-projection-properties}(ii).\\
+Thus $\operatorname{LS}(A,\mathbf{y})=\{\mathbf{x}\in\mathbb{F}^n:A\mathbf{x}=\mathbf{y}\}$ by the zero minimum residual, and the claim holds by (i).
 \end{enumerate}
-\hlt{Structural Commentary}: Least squares projects onto $\operatorname{col}(A)$, then removes the $\ker(A)$ component.\\
-\hlt{Key Insight}: $A^{\dagger}\mathbf{y}$ is the fitted solution orthogonal to $\ker(A)$.
+\hlt{Structural Commentary}: $AA^{\dagger}$ fits the data; $\operatorname{col}(A^{\dagger})=(\ker A)^{\perp}$ selects the shortest preimage.\\
+\hlt{Key Insight}: The pseudoinverse removes every kernel component.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:pseudoinverse-solution-method} \hlt{Pseudoinverse Solution Method}\\
-For a system $A\mathbf{x}\approx\mathbf{y}$:
+\begin{computationmethod} \label{meth:pseudoinverse-solution-method} \hlt{Minimum-Norm Least Squares by Pseudoinverse}\\
+Given $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and $\mathbf{y}\in\mathbb{F}^m$, compute the minimum-norm least-squares solution as follows:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item compute a compact SVD $A=X\Sigma_rY^*$;
-\item form $A^{\dagger}=Y\Sigma_r^{-1}X^*$;
-\item set $\mathbf{x}_0=A^{\dagger}\mathbf{y}$;
-\item interpret $A\mathbf{x}_0=P_{\operatorname{col}(A)}\mathbf{y}$ and $\mathbf{x}_0\in(\ker A)^{\perp}$.
+\item if $A=0$, set $A^{\dagger}=0_{n,m}$;
+\item if $\operatorname{rank}(A)=r\geq1$, compute a compact SVD $A=X\Sigma_rY^*$ and form $A^{\dagger}=Y\Sigma_r^{-1}X^*$;
+\item set $\mathbf{x}_0\defeq A^{\dagger}\mathbf{y}$;
+\item certify $\operatorname*{arg\,min}\limits_{\mathbf{x}\in\operatorname{LS}(A,\mathbf{y})}\norm{\mathbf{x}}_2=\{\mathbf{x}_0\}$ by Theorem \ref{thm:pseudoinverse-minimum-norm-least-squares}(i);
+\item if $\mathbf{y}\in\operatorname{col}(A)$, report $A\mathbf{x}_0=\mathbf{y}$ by Theorem \ref{thm:pseudoinverse-minimum-norm-least-squares}(ii).
 \end{enumerate}
-\end{method}
+\end{computationmethod}
