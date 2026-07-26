@@ -1,18 +1,36 @@
 \subsection{Direct Linear-System Solves}
 
-% **Role:** quantitative matrix behavior and computation.
-%
-% Direct solves, QR algorithms, SVD numerics, least-squares stability, sparse/banded structure, Krylov methods, iterative methods, preconditioning preview.
-
-Numerical linear algebra turns matrix structure into algorithms for direct solves, least squares, eigenvalues, SVD, structured transforms, Krylov methods, iteration, and preconditioning.
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$ and $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
 
 \begin{perspective} \label{per:solve-with-factors-not-inverses} \hlt{Solve with Factors Before Forming Inverses}\\
-For $A\mathbf{x}=\mathbf{b}$, use available factors such as LU, QR, or Cholesky to solve triangular or orthogonal subproblems.\\
-This avoids forming $A^{-1}$ and preserves sparse or triangular structure.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible and $\mathbf{b}\in\mathbb{F}^n$. LU and QR factorisations are defined in Definitions \ref{def:lu-factorization} and \ref{def:wide-and-narrow-qr-factorization}.\\
+Cholesky factorisation is established in Theorem \ref{thm:cholesky-factorization}.\\
+Solve $A\mathbf{x}=\mathbf{b}$ by triangular solves and, for QR, a unitary transformation; do not form $A^{-1}$.\\
+Reuse the factors for additional right-hand sides; fill-in limits exploitable sparsity.
 \end{perspective}
 
-\begin{perspective} \label{per:iterative-refinement-residual-correction} \hlt{Iterative Refinement by Residual Correction}\\
-Given an approximate solution $\mathbf{x}_k$ of $A\mathbf{x}=\mathbf{b}$, set $\mathbf{r}_k=\mathbf{b}-A\mathbf{x}_k$.\\
-Solve $A\mathbf{d}_k=\mathbf{r}_k$ with the same factors or preconditioner, then update $\mathbf{x}_{k+1}=\mathbf{x}_k+\mathbf{d}_k$.\\
-Exact arithmetic corrects in one step; floating point helps when $\mathbf{r}_k$ is accurate and conditioning is moderate.
+\begin{computationmethod} \label{meth:iterative-refinement-residual-correction} \hlt{Iterative Refinement by Residual Correction}\\
+Let $k\in\mathbb{Z}_{\geq0}$, let $A\in\operatorname{Mat}(n,n,\mathbb{F})$ be invertible, and let $\mathbf{b}\in\mathbb{F}^n$. Given a current approximation $\mathbf{x}_k\in\mathbb{F}^n$, obtain $\mathbf{x}_{k+1}$ as follows:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set the residual $\mathbf{r}_k\defeq\mathbf{b}-A\mathbf{x}_k$.
+\item Compute a correction $\mathbf{d}_k$ for $A\mathbf{d}_k=\mathbf{r}_k$ with stored factors or a prescribed correction solver.
+\item Set $\mathbf{x}_{k+1}\defeq\mathbf{x}_k+\mathbf{d}_k$.
+\end{enumerate}
+\end{computationmethod}
+
+\begin{proposition} \label{prop:exact-residual-correction-one-step} \hlt{Exact Residual Correction}\\
+Let $k\in\mathbb{Z}_{\geq0}$, $A\in\operatorname{Mat}(n,n,\mathbb{F})$, and $\mathbf{b},\mathbf{x}_k,\mathbf{d}_k\in\mathbb{F}^n$. Set $\mathbf{r}_k\defeq\mathbf{b}-A\mathbf{x}_k$ and $\mathbf{x}_{k+1}\defeq\mathbf{x}_k+\mathbf{d}_k$. Then $A\mathbf{d}_k=\mathbf{r}_k\Rightarrow A\mathbf{x}_{k+1}=\mathbf{b}$.
+\begin{proof}
+If $A\mathbf{d}_k=\mathbf{r}_k$, then $A\mathbf{x}_{k+1}=A\mathbf{x}_k+A\mathbf{d}_k=A\mathbf{x}_k+\mathbf{r}_k=\mathbf{b}$ by the definitions of $\mathbf{x}_{k+1}$ and $\mathbf{r}_k$.\\
+\hlt{Structural Commentary}: The update and correction substitutions reduce the claim to residual cancellation.\\
+\hlt{Key Insight}: The correction exactly cancels the current residual.
+\end{proof}
+\end{proposition}
+
+\begin{perspective} \label{per:finite-precision-iterative-refinement} \hlt{Finite-Precision Qualification}\\
+Proposition \ref{prop:exact-residual-correction-one-step} is the exact-correction case of Computation Method \ref{meth:iterative-refinement-residual-correction}.\\
+In finite precision, the computed residual and correction satisfy perturbed relations.\\
+Improvement depends on residual evaluation, the correction solve, factor stability, and conditioning.\\
+No quantitative convergence guarantee is asserted without a specified rounding-error model.
 \end{perspective}
