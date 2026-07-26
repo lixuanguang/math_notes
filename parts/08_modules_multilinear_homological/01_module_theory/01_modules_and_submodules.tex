@@ -1,27 +1,24 @@
 \subsection{Modules and Submodules}
 
-Throughout this subsection, $R$ denotes a nonzero commutative ring with identity $1$.\\
-Modules are vector spaces with the scalar field replaced by a ring; the price is that nonzero scalars may fail to be invertible and may even kill nonzero vectors.
-
-\begin{perspective} \label{per:operator-as-module-motivation} \hlt{Polynomial Scalars from One Operator}\\
-Let $\mathcal{V}$ be a vector space over $\mathbb{F}$ and let $T\in\LL(\mathcal{V})$. Every polynomial $p(z)\in\mathbb{F}[z]$ acts on $\mathcal{V}$ by $p\cdot\mathbf{v}\defeq p(T)\mathbf{v}$.\\
-Thus one operator turns $\mathcal{V}$ into an object with scalar ring $\mathbb{F}[z]$.
-\end{perspective}
+Throughout this subsection, $R$ is a nonzero commutative ring with identity $1_R$.\\
+Modules replace field scalars by ring scalars.\\
+Nonzero scalars may therefore be noninvertible or annihilate nonzero vectors.
 
 \begin{definition} \label{def:module-over-ring} \hlt{$R$-Module}\\
-An \hlt{$R$-module} is an abelian group $(M,+)$ equipped with a scalar action
-$R\times M\to M$, $(r,u)\mapsto ru$, such that for all $r,s\in R$ and $u,v\in M$,
+An \hlt{$R$-module} is an abelian group $(M,+)$ equipped with an action $R\times M\to M$, $(r,u)\mapsto ru$.\\
+For $(r,s,u,v)\in R^2\times M^2$, the following identities hold:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $r(u+v)=ru+rv$.
 \item $(r+s)u=ru+su$.
 \item $(rs)u=r(su)$.
-\item $1u=u$.
+\item $1_Ru=u$.
 \end{enumerate}
-The ring $R$ is the \hlt{base ring} of $M$.
+The ring $R$ is the \hlt{base ring} of $M$; denote the additive identity of $M$ by $0_M$.
 \end{definition}
 
-\begin{example} \label{ex:basic-module-models} \hlt{Basic Module Models}
+\begin{example} \label{ex:basic-module-models} \hlt{Basic Module Models}\\
+Fix $m,n\in\N$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $R^n$ is an $R$-module under componentwise addition and scalar multiplication.
@@ -29,60 +26,73 @@ The ring $R$ is the \hlt{base ring} of $M$.
 \item $R$ is an $R$-module over itself by ring multiplication.
 \item Every vector space over a field $\mathbb{F}$ is an $\mathbb{F}$-module.
 \end{enumerate}
-\hlt{Structural Commentary}: Modules are abelian groups with compatible scalar actions.\\
-\hlt{Key Insight}: The new behavior comes from the scalar ring, not from changing addition.
+The module axioms hold componentwise in (i) and entrywise in (ii). They are ring laws in (iii) and vector-space axioms in (iv).
 \end{example}
 
 \begin{perspective} \label{per:base-ring-controls-modules} \hlt{The Base Ring Controls the Geometry}\\
-The structure of an $R$-module is governed by the arithmetic of $R$. When $R$ is a field, every nonzero scalar is invertible, giving the usual theory of bases, dimension, and complements. For a general ring, nonunits and zero divisors obstruct division and cancellation, so these notions need not retain their vector-space properties.
+The module axioms separate the additive group from the scalar ring.\\
+Over a field, scalar division supports the usual theory of bases, dimension, and complements.\\
+Over a general ring, nonunits and zero divisors can obstruct division and cancellation.\\
+Consequently, bases, dimension, and complements need not retain their vector-space behavior.
 \end{perspective}
 
 \begin{definition} \label{def:submodule} \hlt{Submodule}\\
-A \hlt{submodule} of an $R$-module $M$ is a nonempty subset $N\subseteq M$ that is an $R$-module under the operations inherited from $M$, written $N\leq M$.
+Let $M$ be an $R$-module. A \hlt{submodule} $N\leq M$ is a subset $N\subseteq M$ that is an $R$-module under the restricted operations.
 \end{definition}
 
 \begin{theorem} \label{thm:submodule-test} \hlt{Submodule Test}\\
-Let $M$ be an $R$-module and let $\emptyset\neq N\subseteq M$. Then $N\leq M$ $\Longleftrightarrow$ $\forall r,s\in R$, $\forall u,v\in N$, $ru+sv\in N$.
+Let $M$ be an $R$-module and $\emptyset\neq N\subseteq M$. Then $N\leq M\Longleftrightarrow(\forall\,(r,s,u,v)\in R^2\times N^2)\,ru+sv\in N$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $N\leq M$, then $ru,sv\in N$, hence $ru+sv\in N$.
-\item[$(\Leftarrow)$] Assume the displayed condition. Choose $n\in N$. Then $0=0n+0n\in N$.\\
-For $x,y\in N$ and $r\in R$, $x+y=1x+1y\in N$, $-x=(-1)x+0x\in N$, $rx=rx+0x\in N$.\\
-Thus $N$ is an additive subgroup of $M$ closed under $R$-scalar multiplication, so the remaining module axioms are inherited from $M$ and $N\leq M$.
+\item[$(\Rightarrow)$] Assume $N\leq M$. Fix $(r,s,u,v)\in R^2\times N^2$. Then $ru,sv,ru+sv\in N$ by scalar and additive closure.
+\item[$(\Leftarrow)$] Assume $(\forall\,(r,s,u,v)\in R^2\times N^2)\,ru+sv\in N$. $(\forall\,x\in M)\,0_Rx=0_M$ by $0_Rx=(0_R+0_R)x=0_Rx+0_Rx$, cancellation in $(M,+)$.\\
+$(\forall\,x\in M)\,(-1_R)x=-x$ by $(-1_R)x+x=0_Rx=0_M$. Fix $n\in N$. Then $0_M=0_Rn+0_Rn\in N$ by the assumed closure.\\
+$(\forall\,(x,y)\in N^2)\,x+y=1_Rx+1_Ry\in N$ by the assumed closure. $(\forall\,x\in N)\,-x=(-1_R)x+0_Rx\in N$ by the assumed closure.\\
+$(\forall\,(r,x)\in R\times N)\,rx=rx+0_Rx\in N$ by the assumed closure. $N\leq(M,+)$ by the preceding zero, addition, and inverse relations.\\
+The set $N$ is closed under $R$-scalar multiplication by the final relation.\\
+$N\leq M$ by Definition \ref{def:submodule}, since the remaining module axioms are inherited from $M$.
 \end{enumerate}
-\hlt{Structural Commentary}: One closure test packages addition, additive inverses, and scalar multiplication.\\
-\hlt{Key Insight}: Submodules are exactly the subsets closed under all two-term $R$-linear combinations.
+\hlt{Structural Commentary}: The reverse direction extracts every submodule operation from two-term closure.\\
+\hlt{Key Insight}: Two-term $R$-linear combinations encode all submodule closure laws.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:submodule-intersection-sum} \hlt{Intersections and Sums of Submodules}\\
-Let $M$ be an $R$-module.\\
-If $A,B\leq M$, then $A\cap B\leq M$; $A+B\defeq\{a+b:a\in A,\ b\in B\}\leq M$, and $A+B=\bigcap\limits_{\substack{N\leq M\\ A\cup B\subseteq N}}N$.
+Let $M$ be an $R$-module and $A,B\leq M$. Define $\mathcal{S}_{A,B}\defeq\{N\leq M:A\cup B\subseteq N\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $A\cap B\leq M$.
+\item $A+B\defeq\{a+b:(a,b)\in A\times B\}\leq M$.
+\item $A+B=\bigcap\limits_{N\in\mathcal{S}_{A,B}}N$.
+\end{enumerate}
 \begin{proof}
-Since $0\in A\cap B$ and $rx+sy\in A\cap B$ for all $x,y\in A\cap B$ and $r,s\in R$, the submodule test gives $A\cap B\leq M$. If $x=a+b$ and $y=a'+b'$ with $a,a'\in A$ and $b,b'\in B$, then $rx+sy=(ra+sa')+(rb+sb')\in A+B$.\\
-Thus $A+B\leq M$. Moreover, $A\cup B\subseteq A+B$, and if $N\leq M$ contains $A\cup B$, then $a+b\in N$ for all $a\in A$, $b\in B$; hence $A+B\subseteq N$. This proves the displayed intersection formula.\\
-\hlt{Structural Commentary}: $A\cap B$ is the meet; $A+B$ is the join.\\
-\hlt{Key Insight}: Sums are forced by closure under addition.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $0_M\in A\cap B$ by $A,B\leq M$. For $(r,s,x,y)\in R^2\times(A\cap B)^2$, $rx+sy\in A\cap B$ by closure of $A$, $B$; $A\cap B\leq M$ by Theorem \ref{thm:submodule-test}.
+\item $0_M=0_M+0_M\in A+B$. Fix $x=a+b$ and $y=a'+b'$ with $(a,a',b,b')\in A^2\times B^2$.\\
+For $(r,s)\in R^2$, $rx+sy=(ra+sa')+(rb+sb')\in A+B$ by closure of $A$ and $B$. Hence $A+B\leq M$ by Theorem \ref{thm:submodule-test}.
+\item $(\forall\,a\in A)\,a=a+0_M\in A+B$ and $(\forall\,b\in B)\,b=0_M+b\in A+B$. $A\cup B\subseteq A+B$ by these inclusions, so $A+B\in\mathcal{S}_{A,B}$ by (ii).\\
+$(\forall\,N\in\mathcal{S}_{A,B})\,A+B\subseteq N$ by additive closure in $N$. Hence $A+B\subseteq\bigcap\limits_{N\in\mathcal{S}_{A,B}}N$ by the definition of intersection.\\
+Conversely, $\bigcap\limits_{N\in\mathcal{S}_{A,B}}N\subseteq A+B$ by $A+B\in\mathcal{S}_{A,B}$.
+\end{enumerate}
+\hlt{Structural Commentary}: The closure test constructs both submodules; universal containment identifies their join.\\
+\hlt{Key Insight}: $A+B$ contains exactly the additions forced by $A$ and $B$.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:submodules-of-regular-module-are-ideals} \hlt{Ideals Are Submodules of the Regular Module}\\
-View $R$ as the regular $R$-module ${}_R R$. For every $N\subseteq R$,
-\[
-N\leq {}_R R \quad\Longleftrightarrow\quad N\trianglelefteq R.
-\]
+Equip $(R,+)$ with the action $R\times R\to R$, $(r,x)\mapsto rx$. Write ${}_R R$ for this regular module. Then $(\forall\,N\subseteq R)\,[N\leq{}_R R\Longleftrightarrow N\trianglelefteq R]$.
 \begin{proof}
-For $N\subseteq R$,
-\[
-N\leq {}_R R
-\quad\Longleftrightarrow\quad
-N\leq (R,+)\ \text{and}\ RN\subseteq N
-\quad\Longleftrightarrow\quad
-N\trianglelefteq R,
-\]
-by Definition \ref{def:ideal-and-generated-ideal}.\\
-\hlt{Structural Commentary}: Ideals are the module-theoretic subobjects of the ring acting on itself.\\
-\hlt{Key Insight}: Ring multiplication becomes scalar multiplication.
+The group $(R,+)$ is abelian by Definition \ref{def:ring-commutative-identity-field}. The ring laws make ${}_R R$ an $R$-module by Definition \ref{def:module-over-ring}.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $N\leq{}_R R$. Then $N\neq\emptyset$ and $(\forall\,a,b\in N)\,a-b\in N$ by Definition \ref{def:submodule}.\\
+$(\forall\,(r,n)\in R\times N)\,rn,nr\in N$ by scalar closure and commutativity of $R$. Hence $N\trianglelefteq R$ by Definition \ref{def:ideal-and-generated-ideal}.
+\item[$(\Leftarrow)$] Assume $N\trianglelefteq R$. Then $N\leq(R,+)$ by Proposition \ref{prop:subgroup-test} and Definition \ref{def:ideal-and-generated-ideal}.\\
+For $(r,s,u,v)\in R^2\times N^2$, $ru,sv\in N$ by ideal absorption and $ru+sv\in N$ by additive closure. Hence $N\leq{}_R R$ by Theorem \ref{thm:submodule-test}.
+\end{enumerate}
+\hlt{Structural Commentary}: The regular action identifies scalar closure with ideal absorption; commutativity adds right absorption.\\
+\hlt{Key Insight}: Submodules of ${}_R R$ and ideals share the same closure laws.
 \end{proof}
 \end{proposition}
