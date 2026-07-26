@@ -1,43 +1,72 @@
 \subsection{QR Least Squares}
 
+Throughout this subsection, $m,n\in\mathbb{Z}_{>0}$ satisfy $m\geq n$, and $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
+
 \begin{proposition} \label{prop:qr-least-squares-and-projection} \hlt{QR Route for Least Squares}\\
-Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a full-column-rank narrow QR factorisation. For $\mathbf{y}\in\mathbb{F}^m$, the least-squares solution solves $R\mathbf{x}=Q^*\mathbf{y}$. Moreover $P_{\operatorname{col}(A)}=QQ^*$.
+Let $A=QR\in\operatorname{Mat}(m,n,\mathbb{F})$ be a narrow QR factorisation and let $\mathbf{y}\in\mathbb{F}^m$. Assume $\operatorname{rank}(A)=n$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $R$ is invertible;
+\item $(\forall\,\mathbf{x}\in\mathbb{F}^n)\,[\mathbf{x}\in\operatorname{LS}(A,\mathbf{y})\Longleftrightarrow R\mathbf{x}=Q^*\mathbf{y}]$;
+\item $P_{\operatorname{col}(A)}=QQ^*$.
+\end{enumerate}
 \begin{proof}
-The normal equations reduce by $A=QR$ and $Q^*Q=I_n$ to $R^*R\mathbf{x}=R^*Q^*\mathbf{y}$.
-Since $R$ is invertible, this is equivalent to $R\mathbf{x}=Q^*\mathbf{y}$. Also $\operatorname{col}(A)=\operatorname{col}(Q)$, and the columns of $Q$ are orthonormal, so $P_{\operatorname{col}(A)}=QQ^*$.\\
-\hlt{Structural Commentary}: QR replaces $\operatorname{col}(A)$ by an orthonormal basis $Q$.\\
-\hlt{Key Insight}: Project onto $Q$, then solve triangularly.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Inclusion $\ker(R)\subseteq\ker(A)=\{\mathbf{0}\}$ holds by $A=QR$, rank hypothesis, Corollary \ref{cor:matrix-rank-nullity}(i); $R$ invertible by Corollary \ref{cor:square-matrix-algebraic-invertibility-dictionary}(vi)$\Rightarrow$(i).
+\item[$(ii)$] ($\Rightarrow$) For $\mathbf{x}\in\operatorname{LS}(A,\mathbf{y})$, $R^*(R\mathbf{x}-Q^*\mathbf{y})=\mathbf{0}$ by $A=QR$, $Q^*Q=I_n$, Theorem \ref{thm:matrix-least-squares-normal-equations}(i); $R\mathbf{x}=Q^*\mathbf{y}$ by invertibile $R^*$ from (i).
+\item[$(ii)$] ($\Leftarrow$) For $\mathbf{x}\in\mathbb{F}^n$ with $R\mathbf{x}=Q^*\mathbf{y}$, $A^*A\mathbf{x}=R^*R\mathbf{x}=R^*Q^*\mathbf{y}=A^*\mathbf{y}$ by $A=QR$, $Q^*Q=I_n$; $\mathbf{x}\in\operatorname{LS}(A,\mathbf{y})$ by Theorem \ref{thm:matrix-least-squares-normal-equations}(i).
+\item[$(iii)$] Set $\mathcal{U}\defeq\operatorname{col}(A)$. The equality $\mathcal{U}=\operatorname{col}(Q)$ holds by $A=QR$, $Q=AR^{-1}$, and (i).\\
+Write $Q=[\mathbf{q}_1,\ldots,\mathbf{q}_n]$; its columns form an orthonormal basis of $\mathcal{U}$ by Definition \ref{def:wide-and-narrow-qr-factorization}.\\
+For $\mathbf{z}\in\mathbb{F}^m$, $P_{\mathcal{U}}\mathbf{z}=\sum\limits_{j=1}^{n}\innerprod[\mathbb{F}^m]{\mathbf{z},\mathbf{q}_j}\mathbf{q}_j=QQ^*\mathbf{z}$ by Proposition \ref{prop:orthogonal-projection-properties}(ix) and matrix multiplication.\\
+Thus $P_{\operatorname{col}(A)}=QQ^*$ by the definition of $\mathcal{U}$ and arbitrariness of $\mathbf{z}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Kernel transfer proves (i); cancellation and the orthonormal-column formula prove (ii)--(iii).\\
+\hlt{Key Insight}: Invertible $R$ separates projection from triangular coordinate recovery.
 \end{proof}
 \end{proposition}
 
-Successive orthogonalization fits in an orthogonal basis for the same column space.
+\begin{perspective} \label{per:normal-equations-squaring-condition-number} \hlt{Why Normal Equations Can Be Numerically Fragile}\\
+For $A=QR$ as in Proposition \ref{prop:qr-least-squares-and-projection}, $A^*A=R^*R$ and $R$ is invertible.\\
+The identity $\kappa_2(A^*A)=\kappa_2(R^*R)=\kappa_2(R)^2$ holds by the preceding equality and Proposition \ref{prop:spectral-condition-number-properties}(v).\\
+Forming the normal equations therefore squares the spectral condition number of $R$. A QR route omits $A^*A$ and this squaring.\\
+Its finite-precision stability still depends on the factorisation or orthogonalisation implementation and the rounding-error model.
+\end{perspective}
 
 \begin{breakablealgorithm}
-\caption{Least Squares by Successive Orthogonalization}
+\caption{Classical Gram--Schmidt Least Squares in Exact Arithmetic}
 \label{alg:sl-successive-orthogonalization-least-squares}
 \begin{algorithmic}
-\Require Full-column-rank design columns $x_0,\ldots,x_p$ and response vector $y$
-\Ensure Least-squares coefficients $\widehat{\beta}$
+\Require $N\in\mathbb{Z}_{>0}$ and $p\in\mathbb{Z}_{\geq0}$
+\Require $X=[\mathbf{x}_0,\ldots,\mathbf{x}_p]\in\operatorname{Mat}(N,p+1,\mathbb{R})$ with $\operatorname{rank}(X)=p+1$
+\Require $\mathbf{y}\in\mathbb{R}^N$
+\Ensure $\operatorname{LS}(X,\mathbf{y})=\{\widehat{\boldsymbol{\beta}}\}$
 \For{$j=0,\ldots,p$}
-\State $z_j\gets x_j$
+\State $\mathbf{z}_j\gets\mathbf{x}_j$
 \For{$\ell=0,\ldots,j-1$}
-\State $r_{\ell j}\gets q_\ell^Tx_j$
-\State $z_j\gets z_j-r_{\ell j}q_\ell$
+\State $r_{\ell j}\gets\mathbf{q}_\ell^t\mathbf{x}_j$
+\State $\mathbf{z}_j\gets\mathbf{z}_j-r_{\ell j}\mathbf{q}_\ell$
 \EndFor
-\State $r_{jj}\gets \norm{z_j}_2$
-\State $q_j\gets z_j/r_{jj}$
+\State $r_{jj}\gets\norm{\mathbf{z}_j}_2$
+\State $\mathbf{q}_j\gets\frac{\mathbf{z}_j}{r_{jj}}$
 \EndFor
-\State Form $Q=[q_0,\ldots,q_p]$ and the upper-triangular matrix $R=(r_{\ell j})$
-\State Solve $R\widehat{\beta}=Q^Ty$ by back-substitution
+\State Set $r_{\ell j}\gets0$ for $0\leq j<\ell\leq p$
+\State Form $Q=[\mathbf{q}_0,\ldots,\mathbf{q}_p]$ and $R=[r_{\ell j}]_{\ell,j=0}^{p}$
+\State Solve $R\widehat{\boldsymbol{\beta}}=Q^t\mathbf{y}$ by back-substitution
 \end{algorithmic}
 \end{breakablealgorithm}
 
-\begin{perspective} \label{per:normal-equations-squaring-condition-number} \hlt{Why Normal Equations Can Be Numerically Fragile}\\
-For full-column-rank least squares, solving $A^*A\mathbf{x}=A^*\mathbf{y}$ squares the spectral condition number because $\kappa_2(A^*A)=\kappa_2(A)^2$. QR-based methods avoid this squaring and therefore preserve conditioning better.
-\end{perspective}
+The loop is well-defined, $Q^tQ=I_{p+1}$, and $(\forall\,j\in\{0,\ldots,p\})\,r_{jj}>0$ by the rank contract and Theorem \ref{thm:gram-schmidt-process}.\\
+The relation $(\forall\,j\in\{0,\ldots,p\})\,\mathbf{x}_j=\sum\limits_{\ell=0}^{j}r_{\ell j}\mathbf{q}_{\ell}$ holds by the update assignments.\\
+The identity $X=QR$ with upper-triangular $R$ holds by this relation and the zero lower entries.\\
+The postcondition holds by Proposition \ref{prop:qr-least-squares-and-projection}(i)--(ii) and the final triangular solve.\\
+Both loops terminate by their finite bounds; the inner loop is empty for $j=0$. The algorithm asserts no finite-precision stability.
 
 \begin{perspective} \label{per:linear-model-numerical-solution-route} \hlt{Solve Least Squares with Factors}\\
-For $X\in\R^{n\times p}$ with $\operatorname{rank}(X)=p$, normal equations use $X^tX\widehat{\beta}=X^tY$ but $\kappa_2(X^tX)=\kappa_2(X)^2$.\\
-Prefer $X=QR$ with $Q^tQ=I_p$ and $R$ nonsingular, giving $\widehat{\beta}=R^{-1}Q^tY$.\\
-Use Cholesky on $X^tX$ only when $X^tX$ is well conditioned.
+Let $N,p\in\mathbb{Z}_{>0}$, let $X\in\operatorname{Mat}(N,p,\mathbb{R})$ satisfy $\operatorname{rank}(X)=p$, and let $\mathbf{y}\in\mathbb{R}^N$. Fix a narrow QR factorisation $X=QR$.\\
+Matrix $R$ is invertible by Proposition \ref{prop:qr-least-squares-and-projection}(i). The identity $X^tX=R^tR$ holds by $X=QR$ and $Q^tQ=I_p$.\\
+The equality $\kappa_2(X^tX)=\kappa_2(R^tR)=\kappa_2(R)^2$ holds by this identity and Proposition \ref{prop:spectral-condition-number-properties}(v). Let $\widehat{\boldsymbol{\beta}}$ be the unique solution of $R\widehat{\boldsymbol{\beta}}=Q^t\mathbf{y}$.\\
+Then $\operatorname{LS}(X,\mathbf{y})=\{\widehat{\boldsymbol{\beta}}\}$ by Proposition \ref{prop:qr-least-squares-and-projection}(i)--(ii). Compute $\widehat{\boldsymbol{\beta}}$ by triangular substitution rather than forming $X^tX$.\\
+Use Cholesky on $X^tX$ only when its conditioning and the required accuracy justify that route.\\
+The exact-arithmetic algorithm above alone supplies no finite-precision guarantee.
 \end{perspective}
