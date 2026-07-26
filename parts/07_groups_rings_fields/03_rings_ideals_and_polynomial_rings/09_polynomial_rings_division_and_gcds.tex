@@ -1,51 +1,91 @@
 \subsection{Polynomial Rings, Division, and GCDs}
 
-Polynomial rings over fields behave like the integers in the ways linear algebra needs: division with remainder, gcds, Bezout identities, irreducible factorization, and principal ideals.
+Polynomial rings over fields support division with remainder, Euclidean gcds, and Bezout identities.
 
 \begin{definition} \label{def:polynomial-degree-monic-splitting} \hlt{Polynomials over a Field}\\
 Let $\mathbb{F}$ be a field.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\mathbb{F}[x]$ denotes the ring of polynomials in one variable over $\mathbb{F}$.
-\item If $0\neq p\in\mathbb{F}[x]$ and $p(x)=a_0+a_1x+\cdots+a_nx^n$, $a_n\neq0$, then $\operatorname{lc}(p)\defeq a_n$, $\deg p\defeq n$.\\
-Also, $p$ is \hlt{monic} iff $\operatorname{lc}(p)=1$. Set $\deg0=-\infty$.
-\item A nonzero $p\in\mathbb{F}[x]$ \hlt{splits over $\mathbb{F}$} iff $p=\alpha\prod\limits_{i=1}^{m}(x-\lambda_i)$ for some $m\geq0$, $\alpha\in\mathbb{F}^{\times}$, and $\lambda_i\in\mathbb{F}$.
+\item If $n\in\N_0$, $a_0,\ldots,a_n\in\mathbb{F}$, $a_n\neq0$, and $p(x)=\sum\limits_{j=0}^{n}a_jx^j$, set $\operatorname{lc}(p)\defeq a_n$ and $\deg p\defeq n$.\\
+The polynomial $p$ is \hlt{monic} iff $\operatorname{lc}(p)=1$; set $\deg0=-\infty$.
+\item A polynomial $p\in\mathbb{F}[x]\setminus\{0\}$ \hlt{splits over $\mathbb{F}$} iff $(\exists m\in\N_0)(\exists \alpha\in\mathbb{F}^\times)(\exists \lambda_1,\ldots,\lambda_m\in\mathbb{F})\,p(x)=\alpha\prod\limits_{i=1}^{m}(x-\lambda_i)$.
 \end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:polynomial-division-algorithm} \hlt{Polynomial Division Algorithm}\\
-Let $f,g\in\mathbb{F}[x]$ with $g\neq0$. Then $\exists!\,(q,r)\in\mathbb{F}[x]^2$ such that  $f=qg+r$, $r=0$ or $\deg r<\deg g$.
+Let $\mathbb{F}$ be a field and let $f,g\in\mathbb{F}[x]$ with $g\neq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\exists q,r\in\mathbb{F}[x])\,[f=qg+r\land(r=0\lor\deg r<\deg g)]$.
+\item Suppose $f=qg+r=q'g+r'$ for $(q,r),(q',r')\in\mathbb{F}[x]^2$. If $(r=0\lor\deg r<\deg g)\land(r'=0\lor\deg r'<\deg g)$, then $(q,r)=(q',r')$.
+\end{enumerate}
 \begin{proof}
-Let $d=\deg g$ and $\ell=\operatorname{lc}(g)$. Existence follows by induction on $\deg f$. If $f=0$ or $\deg f<d$, take $(q,r)=(0,f)$. Otherwise, let $n=\deg f$, $a=\operatorname{lc}(f)$, and $f_1=f-a\ell^{-1}x^{n-d}g$. Then $\deg f_1<n$.\\
-By induction, $f_1=q_1g+r$ with $r=0$ or $\deg r<d$, hence $f=(q_1+a\ell^{-1}x^{n-d})g+r$.\\
-For uniqueness, if $qg+r=q'g+r'$ with admissible remainders, then $(q-q')g=r'-r$.\\
-If $q\neq q'$, then $\deg((q-q')g)\geq d$, while $\deg(r'-r)<d$, contradiction. Hence $q=q'$ and then $r=r'$.\\
-\hlt{Structural Commentary}: Division works because the leading coefficient of $g$ is invertible in the field.\\
-\hlt{Key Insight}: Cancel leading terms until the remainder is too small to divide again.
+Set $d\defeq\deg g$ and $\ell\defeq\operatorname{lc}(g)$. Call $(q,r)$ admissible for $h\in\mathbb{F}[x]$ if $h=qg+r$ and $(r=0\lor\deg r<d)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The pair $(0,0)$ is admissible for $0$. Suppose some polynomial has no admissible pair.\\
+The shift $k\mapsto k+1$ sends the nonzero counterexample degrees into $\N$.\\
+Choose a counterexample $f$ of minimal degree by Assumption \ref{assump:well-ordering-positive-integers}; set $n\defeq\deg f$.\\
+If $n<d$, then $(0,f)$ is admissible for $f$, so $n\geq d$. Set $a\defeq\operatorname{lc}(f)$ and $f_1\defeq f-a\ell^{-1}x^{n-d}g$.\\
+Coefficient of $x^n$ in $f_1$ is $a-a\ell^{-1}\ell=0$, so $f_1=0$ or $\deg f_1<n$. Admissible pair $(q_1,r)$ for $f_1$ exists by zero case or minimality.\\
+Set $q\defeq q_1+a\ell^{-1}x^{n-d}$. Then $f=qg+r$, so $(q,r)$ is admissible for $f$, a contradiction.
+\item Suppose $(q,r)$ and $(q',r')$ are admissible for $f$. Then $(q-q')g=r'-r$.\\
+If $q\neq q'$, then $\operatorname{lc}(q-q')\ell\neq0$, so $\deg((q-q')g)=\deg(q-q')+d\geq d$.\\
+Since both remainders are zero or have degree below $d$, $\deg(r'-r)<d$, a contradiction.\\
+Therefore $q=q'$, and $(q-q')g=r'-r$ implies $r=r'$.
+\end{enumerate}
+\hlt{Structural Commentary}: Minimal-degree descent proves existence; degree comparison proves uniqueness.\\
+\hlt{Key Insight}: The inverse leading coefficient cancels exactly one highest-degree term.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:polynomial-divisibility-gcd-coprime} \hlt{Divisibility, GCDs, and Coprimality}\\
-For $p,q\in\mathbb{F}[x]$, write $p\mid q$ if $q=hp$ for some $h\in\mathbb{F}[x]$.\\
-A \hlt{greatest common divisor} of $f,g\in\mathbb{F}[x]$, not both zero, is the unique monic polynomial $\gcd(f,g)$ such that:
+Let $\mathbb{F}$ be a field.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\gcd(f,g)\mid f$ and $\gcd(f,g)\mid g$;
-\item every common divisor of $f$ and $g$ divides $\gcd(f,g)$.
+\item \hlt{Divisibility}: for $p,q\in\mathbb{F}[x]$, $p\mid q\Longleftrightarrow(\exists h\in\mathbb{F}[x])\,q=hp$.
+\item \hlt{Greatest common divisor}: for $(f,g)\in\mathbb{F}[x]^2\setminus\{(0,0)\}$, a monic $d\in\mathbb{F}[x]$ is a gcd iff
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item $d\mid f$ and $d\mid g$;
+\item $(\forall h\in\mathbb{F}[x])\,[(h\mid f\land h\mid g)\Rightarrow h\mid d]$.
 \end{enumerate}
-The polynomials $f,g$ are \hlt{relatively prime} if $\gcd(f,g)=1$.
+\item \hlt{Coprimality}: $f,g\in\mathbb{F}[x]$ are relatively prime iff $1$ is a greatest common divisor of $f$ and $g$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:polynomial-gcd-bezout} \hlt{Polynomial GCD and Bezout Identity}\\
-For $f,g\in\mathbb{F}[x]$, not both zero, $\exists$ a unique monic $d\in\mathbb{F}[x]$ s.t. $d\mid f$, $d\mid g$, $h\mid f$, $h\mid g\Longrightarrow h\mid d$\\
-Moreover, $d=\gcd(f,g)$ satisfies $d=af+bg$ for some $a,b\in\mathbb{F}[x]$.\\
-Hence $\gcd(f,g)=1$ iff $\exists\,a,b\in\mathbb{F}[x]$ with $af+bg=1$.
+Let $\mathbb{F}$ be a field and let $f,g\in\mathbb{F}[x]$ be not both zero.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A monic greatest common divisor of $f$ and $g$ exists.
+\item Any two monic greatest common divisors of $f$ and $g$ are equal.
+\item Writing $d\defeq\gcd(f,g)$ for this unique polynomial, $(\exists a,b\in\mathbb{F}[x])\,d=af+bg$.
+\item For $d\defeq\gcd(f,g)$, $d=1\Longleftrightarrow(\exists a,b\in\mathbb{F}[x])\,af+bg=1$.
+\end{enumerate}
 \begin{proof}
-If one of $f,g$ is $0$, the claim is immediate from the monic associate of the other.\\
-Assume $f,g\neq0$ and run the Euclidean algorithm: $r_{i-1}=q_ir_i+r_{i+1}$, where $r_{i+1}<\deg r_i$, starting with $(r_0,r_1)=(f,g)$ and ending with $r_N\neq0$, $r_{N+1}=0$. Then $r_N\mid r_{N-1}$, and upward substitution gives $r_N\mid f,g$.\\
-Conversely, any common divisor of $f,g$ divides every $r_i$, hence divides $r_N$. Thus $d\defeq\operatorname{lc}(r_N)^{-1}r_N$ is a monic gcd; uniqueness follows since two monic gcds divide each other.\\
-Back-substitution gives $d=af+bg$ for some $a,b\in\mathbb{F}[x]$. Finally, $d=1$ gives $af+bg=1$; conversely, if $af+bg=1$, every common divisor divides $1$, so $d=1$.\\
-\hlt{Structural Commentary}: The Euclidean algorithm produces both the gcd and its Bezout certificate.\\
-\hlt{Key Insight}: GCD data is ideal data in $\mathbb{F}[x]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] If exactly one of $f,g$ is zero, let $h$ be the nonzero polynomial and set $d\defeq\operatorname{lc}(h)^{-1}h$.\\
+Then $d$ is monic, $h=\operatorname{lc}(h)d$, $d\mid0$, and every common divisor of $f,g$ divides $d$. Now assume $f,g\neq0$ and set $(r_0,r_1)\defeq(f,g)$.\\
+For $r_i\neq0$, choose $(q_i,r_{i+1})$ by Theorem \ref{thm:polynomial-division-algorithm}(i) with inputs $(r_{i-1},r_i)$.\\
+Then $r_{i-1}=q_ir_i+r_{i+1}$ and $r_{i+1}=0$ or $\deg r_{i+1}<\deg r_i$. The nonzero remainder degrees strictly decrease in $\N_0$.\\
+Hence the process terminates with $r_N\neq0$ and $r_{N+1}=0$ by Assumption \ref{assump:well-ordering-positive-integers}.\\
+Since $r_{N-1}=q_Nr_N$, $r_N\mid r_{N-1}$. Backward induction in recurrence proves $r_N\mid f$ and $r_N\mid g$. Let $c$ be a common divisor of $f,g$.\\
+If $c\mid r_{i-1}$ and $c\mid r_i$, then $c\mid r_{i+1}=r_{i-1}-q_ir_i$. Thus $c\mid r_N$ by induction on $i$ from $c\mid r_0$ and $c\mid r_1$.\\
+Thus $d\defeq\operatorname{lc}(r_N)^{-1}r_N$ is a monic greatest common divisor.
+\item[$(ii)$] Let $d,e$ be monic greatest common divisors. Then $d\mid e$ and $e\mid d$ by Definition \ref{def:polynomial-divisibility-gcd-coprime}(ii).\\
+Choose $h,k\in\mathbb{F}[x]$ with $e=hd$ and $d=ke$. Since $d,e\neq0$, $\deg e=\deg h+\deg d$ and $\deg d=\deg k+\deg e$.\\
+Thus $\deg h=\deg k=0$ and $\deg d=\deg e$. Since $d,e$ are monic, $\operatorname{lc}(h)=1$, so $h=1$ and $e=d$.
+\item[$(iii)$] If one input is zero, the construction in (i) is an $\mathbb{F}[x]$-linear combination of $f$ and $g$.\\
+For $f,g\neq0$, each $r_i$ is an $\mathbb{F}[x]$-linear combination of $f,g$ by induction on $i$.\\
+The induction step uses $r_{i+1}=r_{i-1}-q_ir_i$. Therefore $(\exists a,b\in\mathbb{F}[x])\,d=\operatorname{lc}(r_N)^{-1}r_N=af+bg$.
+\item[$(iv)$] ($\Rightarrow$) If $d=1$, then $(\exists a,b\in\mathbb{F}[x])\,af+bg=1$ by (iii).
+\item[$(iv)$] ($\Leftarrow$) Suppose $a,b\in\mathbb{F}[x]$ satisfy $af+bg=1$. Then $d\mid1$ because $d\mid f$ and $d\mid g$; write $1=hd$.\\
+Then $\deg h+\deg d=0$, so $\deg d=0$; monicity forces $d=1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Descent constructs the gcd; back-substitution constructs its Bezout form.\\
+\hlt{Key Insight}: Euclidean remainders preserve common divisors until the last nonzero term.
 \end{proof}
 \end{theorem}
