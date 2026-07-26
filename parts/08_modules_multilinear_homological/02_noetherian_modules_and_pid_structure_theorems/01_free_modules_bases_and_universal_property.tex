@@ -1,78 +1,111 @@
 \subsection{Free Modules, Bases, and Universal Property}
 
-This section begins with the structure facts that make free modules and
-finite generation usable: rank, splitting maps onto free modules, Noetherian
-modules. It then develops the classification of
-finitely generated modules over a principal ideal domain. The guiding model is
-the abelian-group theorem over $\Z$ and, later, the polynomial-module
-classification behind rational canonical form.
+Throughout this subsection, $R$ denotes a nonzero commutative ring with identity $1_R$.\\
+The symbol $M$ denotes an $R$-module with additive identity $0_M$.
 
 \begin{definition} \label{def:free-module-basis} \hlt{Free Module and Basis}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item A subset $\mathcal{B}\subseteq M$ is a \hlt{basis} of $M$ if $\mathcal{B}$ is $R$-linearly independent and $\langle\!\langle\mathcal{B}\rangle\!\rangle_R=M$.
-\item An $R$-module $M$ is \hlt{free} if $M=\{0\}$ or $M$ has a basis.
+\item An $R$-module $M$ is \hlt{free} if $M$ has a basis.
 \item If $\mathcal{B}$ is a basis of $M$, then $M$ is \hlt{free on $\mathcal{B}$}.
 \end{enumerate}
+The empty set is independent and generates $\{0_M\}$, so the zero module is free on $\emptyset$.
 \end{definition}
 
 \begin{theorem} \label{thm:module-basis-unique-coordinates} \hlt{Basis Means Unique Finite Coordinates}\\
-A subset $\mathcal{B}\subseteq M$ is a basis if and only if $\forall v\in M,\ \exists!\,(F,(r_b)_{b\in F})$, with $F\subseteq_{\operatorname{fin}}\mathcal{B},\ r_b\in R\setminus\{0\}$, $v=\sum\limits_{b\in F}r_bb$.\\
-The case $F=\emptyset$ gives the empty sum $0$.
+For $\mathcal{B}\subseteq M$, define $\Sigma_{\mathcal{B}}:\bigoplus\limits_{b\in\mathcal{B}}R\to M$ by $\Sigma_{\mathcal{B}}((r_b)_{b\in\mathcal{B}})\defeq\sum\limits_{b\in\mathcal{B}}r_bb$. Then $\mathcal{B}$ is a basis of $M$ if and only if $\Sigma_{\mathcal{B}}$ is bijective.
 \begin{proof}
+The sum defining $\Sigma_{\mathcal{B}}$ is finite by membership in $\bigoplus\limits_{b\in\mathcal{B}}R$, so $\Sigma_{\mathcal{B}}$ is well-defined.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Spanning gives a finite expression; collecting equal basis elements and deleting zero coefficients gives the displayed form. If $\sum\limits_{b\in F}r_bb=\sum\limits_{b\in G}s_bb$, then $\sum\limits_{b\in F\cup G}(r_b-s_b)b=0$, where missing coefficients are $0$.\\
-Independence gives $r_b=s_b$ for all $b$, hence $F=G$ and the coefficients agree.
-\item[$(\Leftarrow)$] Existence gives $\langle\!\langle\mathcal{B}\rangle\!\rangle_R=M$. If $\sum\limits_{b\in F}r_bb=0$ and $F_0\defeq\{b\in F:r_b\neq0\}$ is nonempty, then $0=\sum\limits_{b\in F_0}r_bb$ contradicts uniqueness of the empty expression. Thus all $r_b=0$, so $\mathcal{B}$ is independent.
+\item[$(\Rightarrow)$] Assume $\mathcal{B}$ is a basis. Then $\Sigma_{\mathcal{B}}$ is surjective by $\langle\!\langle\mathcal{B}\rangle\!\rangle_R=M$.\\
+Fix $r=(r_b)_{b\in\mathcal{B}}$, $s=(s_b)_{b\in\mathcal{B}}$ with $\Sigma_{\mathcal{B}}(r)=\Sigma_{\mathcal{B}}(s)$, set $H\defeq\operatorname{supp}(r)\cup\operatorname{supp}(s)$. Then $\abs{H}<\infty$ and $\sum\limits_{b\in H}(r_b-s_b)b=0_M$.\\
+Thus $(\forall\,b\in H)\,r_b=s_b$ by the $R$-linear independence of $\mathcal{B}$. Both families vanish on $\mathcal{B}\setminus H$, so $r=s$ and $\Sigma_{\mathcal{B}}$ is injective.
+\item[$(\Leftarrow)$] Assume $\Sigma_{\mathcal{B}}$ is bijective. Then $M=\operatorname{im}\Sigma_{\mathcal{B}}=\langle\!\langle\mathcal{B}\rangle\!\rangle_R$ by surjectivity and Definition \ref{def:generated-submodule}(i), so $\mathcal{B}$ spans $M$.\\
+Fix finite $F\subseteq\mathcal{B}$ and $(r_b)_{b\in F}\in R^F$ with $\sum\limits_{b\in F}r_bb=0_M$, and extend this family by $0_R$ to $\bar r\in\bigoplus\limits_{b\in\mathcal{B}}R$.\\
+Then $\Sigma_{\mathcal{B}}(\bar r)=0_M=\Sigma_{\mathcal{B}}(0)$, so $\bar r=0$ by injectivity. Thus $(\forall\,b\in F)\,r_b=0_R$, so $\mathcal{B}$ is $R$-linearly independent by Definition \ref{def:module-linear-independence}(i).\\
+Therefore $\mathcal{B}$ is a basis by Definition \ref{def:free-module-basis}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Bases give unique finite coordinates.\\
-\hlt{Key Insight}: Existence is spanning; uniqueness is independence.
+\hlt{Structural Commentary}: Surjectivity encodes spanning, while injectivity encodes rigidity of finite relations.\\
+\hlt{Key Insight}: Coordinate families are the fibers of the summation map.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:module-basis-minimal-maximal} \hlt{Bases Are Minimal Spanning and Maximal Independent}\\
-If $\mathcal{B}$ is a basis of $M$, then $\forall b\in\mathcal{B}$, $\langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R\neq M$, and $\forall v\in M\setminus\mathcal{B}$, $\mathcal{B}\cup\{v\}$ is $R$-linearly dependent.
+If $\mathcal{B}$ is a basis of $M$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall b\in\mathcal{B})\ \langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R\neq M$;
+\item $(\forall v\in M\setminus\mathcal{B})\ \mathcal{B}\cup\{v\}$ is $R$-linearly dependent.
+\end{enumerate}
 \begin{proof}
-If $b\in\mathcal{B}$ and $b\in\langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R$, then $b$ has two finite coordinate expressions, contradicting Theorem \ref{thm:module-basis-unique-coordinates}.\\
-Hence deleting $b$ destroys spanning. If $v\notin\mathcal{B}$, write $v=\sum_{b\in F}r_bb$ with $F\subseteq_{\operatorname{fin}}\mathcal{B}$.\\
-Then $v-\sum\limits_{b\in F}r_bb=0$ is a nontrivial relation in $\mathcal{B}\cup\{v\}$, so $\mathcal{B}\cup\{v\}$ is dependent.\\
-\hlt{Structural Commentary}: Basis still implies the familiar minimal/maximal properties.\\
-\hlt{Key Insight}: The converses are vector-space privileges, not general module facts.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $b\in\mathcal{B}$ and suppose $b\in\langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R$.\\
+Then $b$ has a coordinate family vanishing at $b$, whereas the singleton family with coefficient $1_R$ at $b$ represents $b$.\\
+These distinct families both map to $b$ under $\Sigma_{\mathcal{B}}$, contrary to injectivity by Theorem \ref{thm:module-basis-unique-coordinates}. Hence $b\notin\langle\!\langle\mathcal{B}\setminus\{b\}\rangle\!\rangle_R$.
+\item Fix $v\in M\setminus\mathcal{B}$. There is $r=(r_b)_{b\in\mathcal{B}}\in\bigoplus\limits_{b\in\mathcal{B}}R$ with $\Sigma_{\mathcal{B}}(r)=v$ by Theorem \ref{thm:module-basis-unique-coordinates}.\\
+Thus $1_Rv-\sum\limits_{b\in\mathcal{B}}r_bb=0_M$ is a finite relation in $\mathcal{B}\cup\{v\}$ with nonzero coefficient $1_R$ at $v$.\\
+Hence $\mathcal{B}\cup\{v\}$ is $R$-linearly dependent by Definition \ref{def:module-linear-independence}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate uniqueness obstructs deletion; coordinate existence creates dependence after enlargement.\\
+\hlt{Key Insight}: Removing or adjoining one element destroys one basis condition.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:free-module-map-extension} \hlt{Maps Out of a Free Module}\\
-Let $M$ be free on $\mathcal{B}$ and let $N$ be an $R$-module.\\
-For every function $f:\mathcal{B}\to N$, there exists a unique $\widetilde{f}\in\operatorname{Hom}_R(M,N)$ such that $\widetilde{f}|_{\mathcal{B}}=f$.
-\begin{proof} For $v=\sum\limits_{b\in F}r_bb$ with $F\subseteq_{\operatorname{fin}}\mathcal{B}$, define $\widetilde{f}(v)\defeq\sum\limits_{b\in F}r_bf(b)$.\\
-Theorem \ref{thm:module-basis-unique-coordinates} makes the expression of $v$ unique, so $\widetilde{f}$ is well-defined.\\
-For $x=\sum a_bb$ and $y=\sum c_bb$, combining supports gives $\widetilde{f}(rx+sy)=r\widetilde{f}(x)+s\widetilde{f}(y)$, so $\widetilde{f}$ is $R$-linear and clearly extends $f$. If $\phi\in\operatorname{Hom}_R(M,N)$ also extends $f$, then $\phi\left(\sum\limits_{b\in F}r_bb\right)=\sum\limits_{b\in F}r_bf(b)=\widetilde{f}\left(\sum\limits_{b\in F}r_bb\right)$, hence $\phi=\widetilde{f}$.\\
-\hlt{Structural Commentary}: A free module is controlled entirely by its basis values.\\
-\hlt{Key Insight}: Freeness is the universal permission to choose images of basis elements arbitrarily.
+Let $M$ be free on $\mathcal{B}$, let $N$ be an $R$-module, and let $f:\mathcal{B}\to N$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\exists\,\widetilde{f}\in\operatorname{Hom}_R(M,N))\,\widetilde{f}|_{\mathcal{B}}=f$.
+\item If $\phi,\psi\in\operatorname{Hom}_R(M,N)$ satisfy $\phi|_{\mathcal{B}}=\psi|_{\mathcal{B}}=f$, then $\phi=\psi$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $r=(r_b)_{b\in\mathcal{B}}\in\bigoplus\limits_{b\in\mathcal{B}}R$, define $\widetilde{f}(\Sigma_{\mathcal{B}}(r))\defeq\sum\limits_{b\in\mathcal{B}}r_bf(b)$.\\
+This defines $\widetilde{f}:M\to N$ by the bijectivity in Theorem \ref{thm:module-basis-unique-coordinates} and the finite support of $r$.\\
+For $r,s\in\bigoplus\limits_{b\in\mathcal{B}}R$ and $a,c\in R$, $\Sigma_{\mathcal{B}}(ar+cs)=a\Sigma_{\mathcal{B}}(r)+c\Sigma_{\mathcal{B}}(s)$ by the module laws.\\
+Thus $\widetilde{f}(a\Sigma_{\mathcal{B}}(r)+c\Sigma_{\mathcal{B}}(s))=a\widetilde{f}(\Sigma_{\mathcal{B}}(r))+c\widetilde{f}(\Sigma_{\mathcal{B}}(s))$, so $\widetilde{f}\in\operatorname{Hom}_R(M,N)$.\\
+The singleton coordinate families satisfy $(\forall\,b\in\mathcal{B})\,\widetilde{f}(b)=f(b)$, so $\widetilde{f}|_{\mathcal{B}}=f$.
+\item Let $\phi,\psi\in\operatorname{Hom}_R(M,N)$ satisfy $\phi|_{\mathcal{B}}=\psi|_{\mathcal{B}}=f$. For $r=(r_b)_{b\in\mathcal{B}}$, $\phi(\Sigma_{\mathcal{B}}(r))=\sum\limits_{b\in\mathcal{B}}r_bf(b)=\psi(\Sigma_{\mathcal{B}}(r))$ by $R$-linearity.\\
+Thus $\phi=\psi$ by the surjectivity of $\Sigma_{\mathcal{B}}$ and Assumption \ref{assump:function-extensionality}.
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate evaluation constructs the extension; summation-map surjectivity globalizes basis agreement.\\
+\hlt{Key Insight}: Agreement on a basis propagates through finite coordinate sums.
 \end{proof}
 \end{theorem}
 
-\begin{example} \label{ex:free-module-with-nonfree-submodule} \hlt{A Free Module with a Nonfree Submodule}\\
-Let $R=\mathbb{Z}\times\mathbb{Z}$ with componentwise multiplication. As an $R$-module, $R=R(1,1)$, so $R$ is free on $\{(1,1)\}$.\\
-Set $N\defeq\mathbb{Z}\times\{0\}\leq R$. For every $0\neq(a,0)\in N$, $(0,1)(a,0)=0$.\\
-Thus every nonzero element of $N$ is torsion, so $N$ has no nonempty independent subset and is not free.
-\end{example}
+\begin{counterexample} \label{cex:free-module-with-nonfree-submodule} \hlt{A Free Module with a Nonfree Submodule}\\
+A submodule of a free module need not be free. Let $R=\mathbb{Z}\times\mathbb{Z}$ with componentwise operations, so $1_R=(1,1)$ and $0_R=(0,0)$.\\
+Regular module $R$ is free on $\{(1,1)\}$ as $(\forall\,x\in R)(\exists!\,r\in R)\,x=r(1,1)$. Set $N\defeq\mathbb{Z}\times\{0\}$.\\
+Then $N\trianglelefteq R$, so $N\leq{}_R R$ by Proposition \ref{prop:submodules-of-regular-module-are-ideals}. The nonzero scalar $(0,1)$ satisfies $(\forall\,v\in N)\,(0,1)v=0_R$.\\
+For $\emptyset\neq S\subseteq N$, fix $v\in S$; then $(0,1)v=0_R$ is a relation with nonzero coefficient.\\
+Thus $S$ is dependent by Definition \ref{def:module-linear-independence}(ii). The set $\emptyset$ does not span $N$ because $(1,0)\in N\setminus\{0_R\}$.\\
+Hence $N$ has no basis and is not free. Therefore $\emptyset$ is maximal independent but not spanning.
+\end{counterexample}
 
-\begin{example} \label{ex:quotient-free-module-need-not-free} \hlt{A Quotient of a Free Module Need Not Be Free}\\
-As a $\mathbb{Z}$-module, $\mathbb{Z}$ is free on $\{1\}$. For $n>1$, the submodule $n\mathbb{Z}$ is cyclic, but the quotient $\mathbb{Z}/n\mathbb{Z}$ is torsion by Example \ref{ex:zn-is-torsion-module}. Hence $\mathbb{Z}/n\mathbb{Z}$ is not free as a $\mathbb{Z}$-module.
-\end{example}
+\begin{counterexample} \label{cex:quotient-free-module-need-not-free} \hlt{A Quotient of a Free Module Need Not Be Free}\\
+A quotient of a free module by a free submodule need not be free. Fix $n\in\N$ with $n>1$.\\
+As a $\mathbb{Z}$-module, $\mathbb{Z}$ is free on $\{1\}$, and $n\mathbb{Z}$ is free on $\{n\}$.\\
+Set $Q\defeq\mathbb{Z}/n\mathbb{Z}$ and $\overline{1}\defeq1+n\mathbb{Z}$. Then $Q=\langle\!\langle\overline{1}\rangle\!\rangle_{\mathbb{Z}}\neq\{0_Q\}$, so $\{\overline{1}\}$ minimally spans $Q$.\\
+However, $(\forall\,q\in Q)\,nq=0_Q$ with $n\neq0_{\mathbb{Z}}$. Thus each $\emptyset\neq S\subseteq Q$ is linearly dependent by Definition \ref{def:module-linear-independence}(ii).\\
+Hence $Q$ has no basis and is not free; the minimally spanning set $\{\overline{1}\}$ is therefore not a basis.
+\end{counterexample}
 
 \begin{principle} \label{princ:modules-not-vector-spaces} \hlt{Modules Are Not Just Vector Spaces with New Letters}\\
 For a general ring $R$, the following vector-space implications fail:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $N\leq M\nRightarrow\exists\,H\leq M$ with $M=N\oplus H$.
+\item $N\leq M\nRightarrow(\exists\,H\leq M)\ M=N\oplus H$.
 \item $M$ finitely generated and $N\leq M\nRightarrow N$ finitely generated.
-\item $M\neq0\nRightarrow\exists\,\emptyset\neq S\subseteq M$ linearly independent.
-\item $S$ minimal spanning or maximal independent $\nRightarrow S$ is a basis.
+\item $M\neq\{0_M\}\nRightarrow(\exists\,\emptyset\neq S\subseteq M)\ S$ is linearly independent.
+\item $S$ minimally spans $M\nRightarrow S$ is a basis.
+\item $S$ is maximal linearly independent in $M\nRightarrow S$ is a basis.
 \item $M$ free and $N\leq M\nRightarrow N$ free.
 \item $F$ free and $S\leq F\nRightarrow F/S$ free.
 \end{enumerate}
-Over a field, these obstructions vanish because $R\setminus\{0\}\subseteq R^\times$.
+Counterexamples \ref{cex:z-submodules-mostly-not-complemented} and \ref{cex:finitely-generated-module-with-non-fg-submodule} witness (i) and (ii). Counterexample \ref{cex:free-module-with-nonfree-submodule} witnesses (iii), (v), and (vi).\\
+Counterexample \ref{cex:quotient-free-module-need-not-free} witnesses (iv) and (vii). Over a field, these obstructions vanish; algebraically, $R\setminus\{0_R\}\subseteq R^\times$.
 \end{principle}
