@@ -1,11 +1,37 @@
 \subsection{Numerical SVD Methods}
 
-\begin{method} \label{meth:svd-numerics-preview} \hlt{SVD Numerics Preview}\\
-Stable numerical SVD computation proceeds as:
+Throughout this subsection, $m,n\in\mathbb{Z}_{>0}$ and $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
+
+\begin{computationmethod} \label{meth:svd-numerics-preview} \hlt{Bidiagonal Reduction and SVD Reconstruction}\\
+Let $A\in\operatorname{Mat}(m,n,\mathbb{F})$ and set $q\defeq\min\limits\{m,n\}$.\\
+A matrix $B=[b_{ij}]\in\operatorname{Mat}(m,n,\mathbb{F})$ is \hlt{upper bidiagonal} iff $(\forall\,(i,j)\in J_m\times J_n)\,j\notin\{i,i+1\}\Longrightarrow b_{ij}=0$.\\
+The method constructs unitary $P\in\operatorname{Mat}(m,m,\mathbb{F})$ and $Q\in\operatorname{Mat}(n,n,\mathbb{F})$ such that $B=P^*AQ$ is upper bidiagonal.\\
+If $m\geq n$ and $\operatorname{rank}(A)=n$, the positive eigenvalues of $A^*A$ are $\sigma_1(A)^2,\ldots,\sigma_n(A)^2$ by Proposition \ref{prop:basic-singular-value-identities}(i).\\
+Thus forming $A^*A$ squares the extremal singular-value ratio; for square invertible $A$, this is $\kappa_2(A^*A)=\kappa_2(A)^2$ by Proposition \ref{prop:spectral-condition-number-properties}(v).\\
+The reduction instead acts directly on $A$:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Avoid forming $A^*A$ when possible, since it can square the condition number.
-\item Use orthogonal or unitary transformations to reduce $A$ to bidiagonal form.
-\item Compute singular values from the bidiagonal problem, then use them for low-rank approximation, pseudoinverse truncation, and least-squares diagnostics through Theorem \ref{thm:eckart-young-frobenius-spectral} and Definition \ref{def:spectral-condition-number}.
+\item Set $B_0\defeq A$, $P_0\defeq I_m$, and $Q_0\defeq I_n$.
+\item For $k\in J_q$, construct a left unitary $L_k$ and a right unitary $R_k$ as follows:
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathbf{x}_k\in\mathbb{F}^{m-k+1}$ be column $k$ of $B_{k-1}$ in rows $k,\ldots,m$.\\
+If $\mathbf{x}_k=\mathbf{0}$, set $\widehat{L}_k\defeq I_{m-k+1}$. Otherwise, choose a unitary $\widehat{L}_k$ satisfying $\widehat{L}_k\mathbf{e}_1=\frac{\mathbf{x}_k}{\norm{\mathbf{x}_k}_2}$ by Corollary \ref{cor:householder-unitary-annihilator}(iii).\\
+Then $\widehat{L}_k^*\mathbf{x}_k=\norm{\mathbf{x}_k}_2\mathbf{e}_1$. Let $L_k$ act as $\widehat{L}_k$ on rows $k,\ldots,m$ and as the identity on earlier coordinates, and set $C_k\defeq L_k^*B_{k-1}$.
+\item If $k=n$, set $R_k\defeq I_n$. Otherwise, let $\mathbf{w}_k^*$ be row $k$ of $C_k$ in columns $k+1,\ldots,n$.\\
+If $\mathbf{w}_k=\mathbf{0}$, set $\widehat{R}_k\defeq I_{n-k}$. Otherwise, choose a unitary $\widehat{R}_k$ satisfying $\widehat{R}_k\mathbf{e}_1=\frac{\mathbf{w}_k}{\norm{\mathbf{w}_k}_2}$ by Corollary \ref{cor:householder-unitary-annihilator}(iii).\\
+Then $\mathbf{w}_k^*\widehat{R}_k=\norm{\mathbf{w}_k}_2\mathbf{e}_1^*$. Let $R_k$ act as $\widehat{R}_k$ on columns $k+1,\ldots,n$ and as the identity on earlier coordinates.
 \end{enumerate}
-\end{method}
+Set $B_k\defeq L_k^*B_{k-1}R_k$, $P_k\defeq P_{k-1}L_k$, and $Q_k\defeq Q_{k-1}R_k$.\\
+Writing $B_k=[b_{ij}^{(k)}]$, the column invariant is $(\forall\,j\in J_k)(\forall\,i\in J_m)\,i>j\Longrightarrow b_{ij}^{(k)}=0$.\\
+The row invariant is $(\forall\,i\in J_k)(\forall\,j\in J_n)\,j>i+1\Longrightarrow b_{ij}^{(k)}=0$; trailing-coordinate actions preserve both.
+\item Set $P\defeq P_q$, $Q\defeq Q_q$, and $B\defeq B_q$. The matrices $P,Q$ are unitary by Proposition \ref{prop:algebra-of-unitary-matrices}(i), and $B=P^*AQ$ by induction.\\
+The invariant makes $B$ upper bidiagonal, and $A,B$ have the same singular values by Proposition \ref{prop:unitary-invariance-of-singular-values}(i).
+\item Choose a full SVD $B=\widetilde{U}\Sigma\widetilde{V}^*$ by Theorem \ref{thm:matrix-singular-value-decomposition}.\\
+Set $U\defeq P\widetilde{U}$ and $V\defeq Q\widetilde{V}$. Then $U,V$ are unitary by Proposition \ref{prop:algebra-of-unitary-matrices}(i), and $A=U\Sigma V^*$ follows from $B=P^*AQ$.\\
+These singular triples give optimal low-rank approximations by Theorem \ref{thm:eckart-young-frobenius-spectral}, and $A^{\dagger}=V\Sigma^{\dagger}U^*$ by Corollary \ref{cor:pseudoinverse-from-full-svd}.\\
+For $\mathbf{y}\in\mathbb{F}^m$, $A^{\dagger}\mathbf{y}$ is the unique minimum-norm least-squares solution by Theorem \ref{thm:pseudoinverse-minimum-norm-least-squares}(i).
+\end{enumerate}
+The bidiagonal SVD solver, stopping rule, and rounding-error model remain unspecified.\\
+No finite-precision stability, accuracy, or convergence guarantee is asserted.
+\end{computationmethod}

@@ -1,20 +1,36 @@
 \subsection{Fast Fourier Transform}
 
-\begin{method} \label{meth:radix-two-fft-split} \hlt{Radix-Two FFT Split}\\
-Let $n=2m$ and $\mathbf{y}=F_n\mathbf{c}$.
+\begin{computationmethod} \label{meth:radix-two-fft-split} \hlt{Radix-Two Fast Fourier Transform}\\
+For $q\in\mathbb{Z}_{>0}$, let $\omega_q$ and $F_q$ be as in Definition \ref{def:discrete-fourier-matrix} with $n=q$. Let $\ell\in\mathbb{Z}_{\geq0}$, set $n\defeq2^\ell$, and let $\mathbf{c}=(c_r)_{r=0}^{n-1}\in\mathbb{C}^n$.\\
+Under exact complex arithmetic, the following recursion computes $\mathbf{y}=F_n\mathbf{c}$:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Split $\mathbf{c}'\defeq(c_{2r})_{r=0}^{m-1}$ and $\mathbf{c}''\defeq(c_{2r+1})_{r=0}^{m-1}$.
-\item Compute $\mathbf{y}'\defeq F_m\mathbf{c}'$ and $\mathbf{y}''\defeq F_m\mathbf{c}''$.
-\item With $d_j\defeq\omega_n^j$, and using $\omega_n^2=\omega_m$ and $\omega_n^m=-1$, set $y_j=y'_j+d_jy''_j$; and $y_{j+m}=y'_j-d_jy''_j$ for $0\leq j<m$.
-\item For $n=2^\ell$, repeat (i)--(iii) for $\ell$ stages.\\
-$n^2$ dense products become about $\frac12 n\log_2 n$ twiddle multiplications plus additions.
+\item If $\ell=0$, set $\mathbf{y}\defeq\mathbf{c}$ and stop.
+\item If $\ell\geq1$, set $m\defeq\frac{n}{2}=2^{\ell-1}$. Set $\mathbf{c}'\defeq(c_{2r})_{r=0}^{m-1}\in\mathbb{C}^m$ and $\mathbf{c}''\defeq(c_{2r+1})_{r=0}^{m-1}\in\mathbb{C}^m$.
+\item Recursively compute $\mathbf{y}'\defeq F_m\mathbf{c}'$ and $\mathbf{y}''\defeq F_m\mathbf{c}''$.
+\item Set $(\forall\,j\in\{0,\ldots,m-1\})\,d_j\defeq\omega_n^j$.\\
+Set $(\forall\,j\in\{0,\ldots,m-1\})\,\bigl(y_j\defeq y'_j+d_jy''_j,\ y_{j+m}\defeq y'_j-d_jy''_j\bigr)$.
 \end{enumerate}
-\end{method}
+\hlt{Termination}: Each call decreases the exponent by $1$, so the recursion reaches (i) after $\ell$ levels.\\
+\hlt{Correctness}: If $\ell=0$, then $F_1=[1]$, and (i) returns $\mathbf{y}=F_1\mathbf{c}$. Let $\ell\geq1$, assume recursive calls return $\mathbf{y}'=F_m\mathbf{c}'$ and $\mathbf{y}''=F_m\mathbf{c}''$.\\
+Fix $j\in\{0,\ldots,m-1\}$ and set $E_j\defeq\sum\limits_{r=0}^{m-1}\omega_m^{jr}c_{2r}$ and $O_j\defeq\sum\limits_{r=0}^{m-1}\omega_m^{jr}c_{2r+1}$. Then $E_j=y'_j$ and $O_j=y''_j$ by the recursive postconditions.\\
+For $s\in\{0,1\}$, the even-index contribution to $(F_n\mathbf{c})_{j+sm}$ is $E_j$ by $\omega_n^2=\omega_m$ and $\omega_n^{2m}=1$.\\
+The odd-index contribution is $(-1)^sd_jO_j$ by the same identities and $\omega_n^m=-1$. Hence $(F_n\mathbf{c})_{j+sm}=y'_j+(-1)^sd_jy''_j$.\\
+Taking $s=0,1$ recovers (iv), so $\mathbf{y}=F_n\mathbf{c}$ by induction on $\ell$.\\
+\hlt{Cost Model}: Count unit-cost complex arithmetic with precomputed twiddle factors.\\
+Exclude indexing, data movement, storage, and recursion overhead. Each butterfly reuses one multiplication in two additions.\\
+Across each nonbase recursion depth, there are $\frac{n}{2}$ butterflies.\\
+Thus the $\ell$ depths use $\frac{n\ell}{2}$ complex multiplications and $n\ell$ complex additions.\\
+Dense multiplication by $F_n$ uses $n^2$ complex multiplications and $n(n-1)$ complex additions.\\
+\hlt{Limitations}: Only $n=2^\ell$ is supported; no finite-precision accuracy or stability is asserted.
+\end{computationmethod}
 
-\begin{figure}[H]
-  \centering
+Let $\mathbf{c}=(c_0,c_1,c_2,c_3)^t\in\mathbb{C}^4$, and set $\mathbf{c}'\defeq(c_0,c_2)^t$ and $\mathbf{c}''\defeq(c_1,c_3)^t$. Set $\mathbf{y}'\defeq F_2\mathbf{c}'$, $\mathbf{y}''\defeq F_2\mathbf{c}''$, $\mathbf{y}\defeq F_4\mathbf{c}$, and $D\defeq\operatorname{diag}(1,i)$.\\
+Set $B_4(\mathbf{u},\mathbf{v})\defeq\binom{\mathbf{u}+D\mathbf{v}}{\mathbf{u}-D\mathbf{v}}$ for $\mathbf{u},\mathbf{v}\in\mathbb{C}^2$. Figure \ref{fig:fft-butterfly-n4} instantiates the recurrence at $n=4$.\\
+It splits $\mathbf{c}$, applies two $F_2$ transforms, and recombines their outputs as $\mathbf{y}=B_4(\mathbf{y}',\mathbf{y}'')$.
+
+\begin{illustrationfigure}[H]
   \input{figures/linear_algebra/fft_butterfly_n4.tikz}
-  \caption{For $n=4$: split, apply two $F_2$ transforms, then $B_4\binom{\mathbf{y}'}{\mathbf{y}''}=\binom{\mathbf{y}'+D\mathbf{y}''}{\mathbf{y}'-D\mathbf{y}''}$ with $D=\operatorname{diag}(1,i)$.}
+  \caption{The $n=4$ radix-two split: two $F_2$ transforms feed the butterfly $B_4$ and produce $F_4\mathbf{c}$.}
   \label{fig:fft-butterfly-n4}
-\end{figure}
+\end{illustrationfigure}

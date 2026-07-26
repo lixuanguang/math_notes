@@ -1,67 +1,93 @@
 \subsection{Rayleigh Quotients and Minimax}
 
-\begin{definition} \label{def:increasing-hermitian-eigenvalue-ordering} \hlt{Increasing Hermitian Eigenvalue Order}\\
-For a Hermitian matrix $A\in\operatorname{Mat}(n,n,\mathbb{C})$, write $\lambda_1(A)\leq\lambda_2(A)\leq\cdots\leq\lambda_n(A)$ for its eigenvalues counted with algebraic multiplicity. If only one Hermitian matrix is under discussion, we write $\lambda_i$ instead of $\lambda_i(A)$.
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$.
+
+\begin{definition} \label{def:increasing-hermitian-eigenvalue-ordering} \hlt{Hermitian Eigenvalue Order and Rayleigh Quotient}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian. Matrix $A$ has real eigenvalues and admits an orthonormal eigenbasis by Theorems \ref{thm:self-adjoint-eigenvalues-real} and \ref{thm:complex-spectral-theorem}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Write eigenvalues with algebraic multiplicity as $\lambda_1(A)\leq\lambda_2(A)\leq\cdots\leq\lambda_n(A)$. If $A$ is fixed, abbreviate $\lambda_i(A)$ to $\lambda_i$.
+\item For $\mathbf{x}\in\mathbb{C}^n\setminus\{\mathbf{0}\}$, the \hlt{Rayleigh quotient} is $\operatorname{Ray}_A(\mathbf{x})\defeq\frac{\mathbf{x}^*A\mathbf{x}}{\mathbf{x}^*\mathbf{x}}$. If $\norm{\mathbf{x}}_2=1$, then $\operatorname{Ray}_A(\mathbf{x})=\mathbf{x}^*A\mathbf{x}$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:rayleigh-quotient-spectral-interval} \hlt{Rayleigh Quotient on a Spectral Interval}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$. For a unit vector, write $\operatorname{Ray}_A(\mathbf{x})\defeq\mathbf{x}^*A\mathbf{x}$. If $1\leq p\leq q\leq n$ and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ is a unit vector, then $\lambda_p\leq \operatorname{Ray}_A(\mathbf{x})\leq \lambda_q$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with increasing eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{u}_1,\ldots,\mathbf{u}_n$.\\
+If $p,q\in J_n$, $p\leq q$, and $\mathbf{x}\in\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$ satisfies $\norm{\mathbf{x}}_2=1$, then $\lambda_p\leq\operatorname{Ray}_A(\mathbf{x})\leq\lambda_q$.
 \begin{proof}
-Write $\mathbf{x}=\sum_{i=p}^{q}c_i\mathbf{u}_i$. Orthonormality gives $\sum_{i=p}^{q}\abs{c_i}^2=1$, and $\mathbf{x}^*A\mathbf{x} =\sum\limits_{i=p}^{q}\lambda_i\abs{c_i}^2$.\\
-This is a convex combination of $\lambda_p,\ldots,\lambda_q$, so it lies between the smallest and largest of them.\\
-\hlt{Structural Commentary}: In an eigenbasis, the Rayleigh quotient is an eigenvalue average.\\
-\hlt{Key Insight}: Spectral coordinates turn a quadratic form into weighted scalar data.
+Write $\mathbf{x}=\sum\limits_{i=p}^{q}c_i\mathbf{u}_i$; then $(\forall\,i\in\{p,\ldots,q\})\,\abs{c_i}^2\geq0$ and $\sum\limits_{i=p}^{q}\abs{c_i}^2=1$ by orthonormality.\\
+The identity $\operatorname{Ray}_A(\mathbf{x})=\sum\limits_{i=p}^{q}\lambda_i\abs{c_i}^2$ holds by the eigenvector relations and Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(ii).\\
+The bound $\lambda_p\leq\operatorname{Ray}_A(\mathbf{x})\leq\lambda_q$ holds by $\lambda_p\leq\lambda_i\leq\lambda_q$ and the preceding weight relations.\\
+\hlt{Structural Commentary}: Eigenbasis expansion reduces the quotient to a weighted average over its spectral support.\\
+\hlt{Key Insight}: The spectral weights $\abs{c_i}^2$ are nonnegative and sum to one.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:rayleigh-extrema-and-diagonal-entry-bounds} \hlt{Rayleigh Extrema and Diagonal Entry Bounds}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian.
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian with orthonormal eigenpairs $(\lambda_i,\mathbf{u}_i)_{i\in J_n}$, where $\lambda_1\leq\cdots\leq\lambda_n$.\\
+For $p,q\in J_n$ with $p\leq q$, set $\mathcal{U}_{p,q}\defeq\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $\mathcal{U}_{p,q}=\operatorname{span}(\mathbf{u}_p,\ldots,\mathbf{u}_q)$, then $\min\limits_{\substack{\mathbf{x}\in\mathcal{U}_{p,q}\\ \norm{\mathbf{x}}_2=1}}\mathbf{x}^*A\mathbf{x}=\lambda_p(A)$, and $\max\limits_{\substack{\mathbf{x}\in\mathcal{U}_{p,q}\\ \norm{\mathbf{x}}_2=1}}\mathbf{x}^*A\mathbf{x}=\lambda_q(A).$
-\item For every unit vector $\mathbf{x}$, $\lambda_1(A)\leq \mathbf{x}^*A\mathbf{x}\leq\lambda_n(A)$.
-\item If $A=[a_{ij}]$, then $\lambda_1(A)\leq a_{ii}\leq\lambda_n(A)$ for $i=1,\ldots,n$.
+\item $\min\limits_{\substack{\mathbf{x}\in\mathcal{U}_{p,q}\\ \norm{\mathbf{x}}_2=1}}\operatorname{Ray}_A(\mathbf{x})=\lambda_p$.
+\item $\max\limits_{\substack{\mathbf{x}\in\mathcal{U}_{p,q}\\ \norm{\mathbf{x}}_2=1}}\operatorname{Ray}_A(\mathbf{x})=\lambda_q$.
+\item $(\forall\,\mathbf{x}\in\mathbb{C}^n)\,[\norm{\mathbf{x}}_2=1\Longrightarrow\lambda_1\leq\operatorname{Ray}_A(\mathbf{x})\leq\lambda_n]$.
+\item $(\forall\,i\in J_n)\,\lambda_1\leq a_{ii}\leq\lambda_n$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Theorem \ref{thm:rayleigh-quotient-spectral-interval} gives the inequalities on $\mathcal{U}_{p,q}$, with equality at $\mathbf{u}_p$ and $\mathbf{u}_q$.
-\item This is (i) with $p=1$ and $q=n$.
-\item Apply (ii) to $\mathbf{x}=\mathbf{e}_i$, since $\mathbf{e}_i^*A\mathbf{e}_i=a_{ii}$.
+\item The lower bound and its attainment at $\mathbf{u}_p$ hold by Theorem \ref{thm:rayleigh-quotient-spectral-interval} and $A\mathbf{u}_p=\lambda_p\mathbf{u}_p$, respectively.
+\item The upper bound and its attainment at $\mathbf{u}_q$ hold by Theorem \ref{thm:rayleigh-quotient-spectral-interval} and $A\mathbf{u}_q=\lambda_q\mathbf{u}_q$, respectively.
+\item The asserted bound holds by (i)--(ii) with $(p,q)=(1,n)$ and $\mathcal{U}_{1,n}=\mathbb{C}^n$.
+\item $(\forall\,i\in J_n)\,[\norm{\mathbf{e}_i}_2=1\land\operatorname{Ray}_A(\mathbf{e}_i)=a_{ii}]$ by Proposition \ref{prop:coordinate-norms-on-fn}(ii), Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(ii), and coordinate multiplication.\\
+The relation $(\forall\,i\in J_n)\,\lambda_1\leq a_{ii}\leq\lambda_n$ holds by the preceding identity and (iii).
 \end{enumerate}
-\hlt{Structural Commentary}: Rayleigh extrema on extreme eigendirections; diagonal entries are coordinate quotients.\\
-\hlt{Key Insight}: The whole numerical range of a Hermitian matrix sits inside its spectral interval.
+\hlt{Structural Commentary}: Endpoint eigenvectors attain support bounds; coordinate vectors bound every diagonal entry.\\
+\hlt{Key Insight}: Attainment turns spectral enclosures into exact extrema.
 \end{proof}
 \end{corollary}
 
-\begin{figure}[H]
+Figure \ref{fig:rayleigh-quotient-convex-combination} places the quotient inside the eigenvalue interval determined by its spectral support, as asserted by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/rayleigh_quotient_convex_combination.tikz}
-  \caption{For $\mathbf{x}\in\mathcal{U}_{p,q}$, $\operatorname{Ray}_A(\mathbf{x})$ is a convex combination of $\lambda_p,\ldots,\lambda_q$.}
+  \caption{For ordered orthonormal eigenpairs of a Hermitian $A$, a unit vector supported on $\mathbf{u}_p,\ldots,\mathbf{u}_q$ has $\operatorname{Ray}_A(\mathbf{x})\in[\lambda_p,\lambda_q]$.}
   \label{fig:rayleigh-quotient-convex-combination}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{theorem} \label{thm:courant-fischer-rayleigh-minmax} \hlt{Rayleigh Minimax Principle}\\
-Let $A=A^*\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$, and set $R_A(\mathbf{x})=\mathbf{x}^*A\mathbf{x}/(\mathbf{x}^*\mathbf{x})$ for $\mathbf{x}\neq\mathbf{0}$.\\
-For $1\leq k\leq n$, $\lambda_k =\min\limits_{\substack{\mathcal{S}\subseteq\mathbb{C}^n\\ \dim\mathcal{S}=k}}\; \max\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}} R_A(\mathbf{x}) =\max\limits_{\substack{\mathcal{S}\subseteq\mathbb{C}^n\\ \dim\mathcal{S}=n-k+1}}\; \min\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}} R_A(\mathbf{x})$.
-\begin{proof}
-Let $\mathbf{u}_1,\ldots,\mathbf{u}_n$ be an orthonormal eigenbasis in increasing order.\\
-Set $E_k=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$; $F_k=\operatorname{span}(\mathbf{u}_k,\ldots,\mathbf{u}_n)$.\\
-By Theorem \ref{thm:rayleigh-quotient-spectral-interval}, $\max_{\mathbf{0}\neq\mathbf{x}\in E_k}R_A(\mathbf{x})=\lambda_k$ and $\min_{\mathbf{0}\neq\mathbf{x}\in F_k}R_A(\mathbf{x})=\lambda_k$.\\
-If $\dim\mathcal{S}=k$, then $\mathcal{S}\cap F_k\neq\{\mathbf{0}\}$, so $\max_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}}R_A(\mathbf{x})\geq\lambda_k$; equality is attained by $E_k$.\\
-If $\dim\mathcal{T}=n-k+1$, then $\mathcal{T}\cap E_k\neq\{\mathbf{0}\}$, so $\min_{\mathbf{0}\neq\mathbf{x}\in\mathcal{T}}R_A(\mathbf{x})\leq\lambda_k$; equality is attained by $F_k$.\\
-\hlt{Structural Commentary}: Dimension forces intersections with spectral flags.\\
-\hlt{Key Insight}: Minimax is Rayleigh's quotient plus dimension counting.
-\end{proof}
-\end{theorem}
-
-\begin{method} \label{meth:rayleigh-eigenbasis-method} \hlt{Rayleigh Eigenbasis Method}\\
-To bound a Hermitian quadratic form:
+\begin{computationmethod} \label{meth:rayleigh-eigenbasis-method} \hlt{Rayleigh Eigenbasis Method}\\
+Given a Hermitian $A\in\operatorname{Mat}(n,n,\mathbb{C})$ and a unit vector $\mathbf{x}\in\mathbb{C}^n$, construct a certified spectral-support enclosure for $\operatorname{Ray}_A(\mathbf{x})$ as follows:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item diagonalise $A$ with an orthonormal eigenbasis;
-\item expand the unit vector in that basis;
-\item rewrite $\mathbf{x}^*A\mathbf{x}$ as $\sum_i\lambda_i\abs{c_i}^2$;
-\item use the eigenvalue range allowed by the support of $\mathbf{x}$.
+\item compute an orthonormal eigenbasis $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in increasing eigenvalue order by Theorem \ref{thm:complex-spectral-theorem} and Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(i);
+\item compute $c_i\defeq\mathbf{u}_i^*\mathbf{x}$ for $i\in J_n$ and the nonempty support $I(\mathbf{x})\defeq\{i\in J_n:c_i\neq0\}$;
+\item evaluate $\operatorname{Ray}_A(\mathbf{x})=\sum\limits_{i\in J_n}\lambda_i\abs{c_i}^2$;
+\item set $p\defeq\min I(\mathbf{x})$ and $q\defeq\max I(\mathbf{x})$, and output the certified enclosure $\lambda_p\leq\operatorname{Ray}_A(\mathbf{x})\leq\lambda_q$ by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
 \end{enumerate}
-\end{method}
+\end{computationmethod}
+
+\begin{theorem} \label{thm:courant-fischer-rayleigh-minmax} \hlt{Rayleigh Minimax Principle}\\
+Let $A=A^*\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenvalues $\lambda_1\leq\cdots\leq\lambda_n$. For $k\in J_n$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\lambda_k=\min\limits_{\substack{\mathcal{S}\leq\mathbb{C}^n\\ \dim(\mathcal{S})=k}}\ \max\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}}\operatorname{Ray}_A(\mathbf{x})$.
+\item $\lambda_k=\max\limits_{\substack{\mathcal{T}\leq\mathbb{C}^n\\ \dim(\mathcal{T})=n-k+1}}\ \min\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{T}}\operatorname{Ray}_A(\mathbf{x})$.
+\end{enumerate}
+\begin{proof}
+Fix an orthonormal eigenbasis $\mathbf{u}_1,\ldots,\mathbf{u}_n$ in increasing eigenvalue order by Theorem \ref{thm:complex-spectral-theorem} and Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(i).\\
+Set $E_k\defeq\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_k)$ and $F_k\defeq\operatorname{span}(\mathbf{u}_k,\ldots,\mathbf{u}_n)$. $(\forall\,\mathbf{x}\in\mathbb{C}^n\setminus\{\mathbf{0}\})\,\operatorname{Ray}_A(\mathbf{x})=\operatorname{Ray}_A(\mathbf{x}/\norm{\mathbf{x}}_2)$ by Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(ii).\\
+Hence $\max\limits_{\mathbf{0}\neq\mathbf{x}\in E_k}\operatorname{Ray}_A(\mathbf{x})=\lambda_k$ and $\min\limits_{\mathbf{0}\neq\mathbf{x}\in F_k}\operatorname{Ray}_A(\mathbf{x})=\lambda_k$ by Corollary \ref{cor:rayleigh-extrema-and-diagonal-entry-bounds}(ii),(i).
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $\mathcal{S}\leq\mathbb{C}^n$ and $\dim(\mathcal{S})=k$, then $\mathcal{S}\cap F_k\neq\{\mathbf{0}\}$ by Corollary \ref{cor:large-subspaces-intersect}(i) and $\dim(\mathcal{S})+\dim(F_k)=n+1$.\\
+The bound $\max\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{S}}\operatorname{Ray}_A(\mathbf{x})\geq\lambda_k$ holds by the preceding intersection, Theorem \ref{thm:rayleigh-quotient-spectral-interval}, and scale invariance.\\
+The outer minimum equals $\lambda_k$ by this bound and $\mathcal{S}=E_k$ in the preceding extremum identity.
+\item If $\mathcal{T}\leq\mathbb{C}^n$ and $\dim(\mathcal{T})=n-k+1$, then $\mathcal{T}\cap E_k\neq\{\mathbf{0}\}$ by Corollary \ref{cor:large-subspaces-intersect}(i) and $\dim(\mathcal{T})+\dim(E_k)=n+1$.\\
+The bound $\min\limits_{\mathbf{0}\neq\mathbf{x}\in\mathcal{T}}\operatorname{Ray}_A(\mathbf{x})\leq\lambda_k$ holds by the preceding intersection, Theorem \ref{thm:rayleigh-quotient-spectral-interval}, and scale invariance.\\
+The outer maximum equals $\lambda_k$ by this bound and $\mathcal{T}=F_k$ in the preceding extremum identity.
+\end{enumerate}
+\hlt{Structural Commentary}: Spectral-flag intersections supply universal bounds; $E_k$ and $F_k$ attain them.\\
+\hlt{Key Insight}: A dimension sum of $n+1$ forces a shared comparison vector.
+\end{proof}
+\end{theorem}

@@ -1,31 +1,42 @@
 \subsection{Weyl Eigenvalue Bounds}
 
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$.
+
 \begin{theorem} \label{thm:weyl-eigenvalue-inequalities-hermitian-sums} \hlt{Weyl Eigenvalue Inequalities}\\
-Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian. For $1\leq i\leq n$,
-\begin{align*}
-\lambda_i(A+B) &\leq \lambda_{i+j}(A)+\lambda_{n-j}(B),
-& 0 &\leq j\leq n-i,\\
-\lambda_{i-j+1}(A)+\lambda_j(B) &\leq \lambda_i(A+B),
-& 1 &\leq j\leq i.
-\end{align*}
+Let $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,i\in J_n)(\forall\,j\in J_{n-i}\cup\{0\})\,\lambda_i(A+B)\leq\lambda_{i+j}(A)+\lambda_{n-j}(B)$.
+\item $(\forall\,i\in J_n)(\forall\,j\in J_i)\,\lambda_{i-j+1}(A)+\lambda_j(B)\leq\lambda_i(A+B)$.
+\end{enumerate}
 \begin{proof}
-Let $\mathbf{u}_k,\mathbf{v}_k,\mathbf{w}_k$ be increasing eigenbases for $A,A+B,B$.\\
-Fix $i$ and $0\leq j\leq n-i$, and set $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+j})$, $\mathcal{V}=\operatorname{span}(\mathbf{v}_i,\ldots,\mathbf{v}_n)$, $\mathcal{W}=\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{n-j})$.\\
-Their dimensions sum to $2n+1$, so choose a unit $\mathbf{x}\in\mathcal{U}\cap\mathcal{V}\cap\mathcal{W}$.\\
-Then $\lambda_i(A+B)\leq \mathbf{x}^*(A+B)\mathbf{x} =\mathbf{x}^*A\mathbf{x}+\mathbf{x}^*B\mathbf{x} \leq \lambda_{i+j}(A)+\lambda_{n-j}(B)$.\\
-The lower bound follows by applying this upper bound to $-A$ and $-B$ and using $\lambda_k(-C)=-\lambda_{n-k+1}(C)$.\\
-\hlt{Structural Commentary}: Weyl bounds come from intersecting the spectral flags of $A$, $B$, and $A+B$.\\
-\hlt{Key Insight}: One shared test vector controls all three Rayleigh quotients.
+Fix increasingly indexed orthonormal eigenbases $(\mathbf{u}_k)$, $(\mathbf{v}_k)$, and $(\mathbf{w}_k)$ of $A$, $A+B$, and $B$ by Theorem \ref{thm:complex-spectral-theorem}, Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(i).
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $i\in J_n$ and $j\in J_{n-i}\cup\{0\}$. Set $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+j})$ and $\mathcal{V}=\operatorname{span}(\mathbf{v}_i,\ldots,\mathbf{v}_n)$.\\
+Set $\mathcal{W}=\operatorname{span}(\mathbf{w}_1,\ldots,\mathbf{w}_{n-j})$. $\dim(\mathcal{U}\cap\mathcal{V})\geq j+1$ by Corollary \ref{cor:large-subspaces-intersect}(ii) with $\dim(\mathcal{U})=i+j$ and $\dim(\mathcal{V})=n-i+1$.\\
+Fix a unit $\mathbf{x}\in\mathcal{U}\cap\mathcal{V}\cap\mathcal{W}$ by Corollary \ref{cor:large-subspaces-intersect}(i), normalization, the preceding bound, and $\dim(\mathcal{W})=n-j$.\\
+The chain $\lambda_i(A+B)\leq\mathbf{x}^*(A+B)\mathbf{x}=\mathbf{x}^*A\mathbf{x}+\mathbf{x}^*B\mathbf{x}\leq\lambda_{i+j}(A)+\lambda_{n-j}(B)$ holds by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
+\item Fix $i\in J_n$ and $j\in J_i$, and set $p\defeq n-i+1$ and $q\defeq i-j$. $p\in J_n$ and $q\in J_{n-p}\cup\{0\}$ by index arithmetic.\\
+$(\forall\,C\in\{A,B,A+B\})(\forall\,k\in J_n)\,\lambda_k(-C)=-\lambda_{n-k+1}(C)$ by Theorem \ref{thm:complex-spectral-theorem} and Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(i).\\
+$-\lambda_i(A+B)\leq-\lambda_j(B)-\lambda_{i-j+1}(A)$ by part (i) for $(-B,-A,p,q)$ and the reversal identity.\\
+Claim (ii) holds by multiplying this inequality by $-1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Three-flag intersection establishes (i); spectral reversal and sign multiplication establish (ii).\\
+\hlt{Key Insight}: $\dim(\mathcal{U})+\dim(\mathcal{V})+\dim(\mathcal{W})=2n+1$ forces a common Rayleigh vector.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:weyl-inequality-method} \hlt{Weyl Bound Method}\\
-To bound eigenvalues of $A+B$:
+\begin{computationmethod} \label{meth:weyl-inequality-method} \hlt{Weyl Eigenvalue-Bound Method}\\
+Given Hermitian $A,B\in\operatorname{Mat}(n,n,\mathbb{C})$ and $i\in J_n$, compute a certified interval for $\lambda_i(A+B)$ as follows:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item choose the target index $i$;
-\item use the upper Weyl family with $j=0,\ldots,n-i$ to get upper bounds;
-\item use the lower Weyl family with $j=1,\ldots,i$ to get lower bounds;
-\item for positive semidefinite or low-rank $B$, insert the known zero or nonnegative eigenvalues to recover monotonicity or interlacing.
+\item compute the eigenvalues of $A$ and $B$ in increasing order;
+\item set $U_i\defeq\min\limits_{j\in J_{n-i}\cup\{0\}}\{\lambda_{i+j}(A)+\lambda_{n-j}(B)\}$;
+\item set $L_i\defeq\max\limits_{j\in J_i}\{\lambda_{i-j+1}(A)+\lambda_j(B)\}$;
+\item output $[L_i,U_i]$, which satisfies $L_i\leq\lambda_i(A+B)\leq U_i$ by Theorem \ref{thm:weyl-eigenvalue-inequalities-hermitian-sums}(i)--(ii);
+\item for structured $B$, simplify the candidates with any known sign or zero-eigenvalue data.\\
+If $B\succeq0$, then $\operatorname{spec}(B)\subseteq[0,\infty)$ by Theorem \ref{thm:positive-semidefinite-matrix-equivalences}(ii).\\
+If $\operatorname{rank}(B)=r$, then the algebraic multiplicity of $0$ is $n-r$ by Corollary \ref{cor:matrix-rank-nullity}(i) and Theorem \ref{thm:complex-spectral-theorem}.
 \end{enumerate}
-\end{method}
+\end{computationmethod}

@@ -1,55 +1,77 @@
 \subsection{Hessenberg Reduction and QR Eigenvalue Methods}
 
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$ and $\mathbb{F}\in\{\mathbb{R},\mathbb{C}\}$.
+
 \begin{definition} \label{def:upper-hessenberg-matrix} \hlt{Upper Hessenberg Matrix}\\
-Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$. Then $A$ is \hlt{upper Hessenberg} if $a_{ij}=0$ whenever $i>j+1$.\\
-Equivalently, all entries below the first subdiagonal are zero.
+Matrix $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{F})$ is \hlt{upper Hessenberg} iff $(\forall\,(i,j)\in J_n^2)\,[i>j+1\Longrightarrow a_{ij}=0]$.
 \end{definition}
 
-Numerical linear algebra also replaces a matrix by a unitarily similar one with many forced zero entries. Upper Hessenberg form is the standard preliminary reduction before QR-type eigenvalue algorithms.
+Numerical eigenvalue methods introduce structural zeros by unitary similarity.\\
+Upper Hessenberg form is the standard preliminary reduction for QR iteration.\\
+Figure \ref{fig:upper-hessenberg-pattern} separates unrestricted entries from forced zeros below the first subdiagonal.
 
-\begin{figure}[H]
-  \centering
+\begin{illustrationfigure}[H]
   \input{figures/linear_algebra/upper_hessenberg_pattern.tikz}
-  \caption{Upper Hessenberg pattern: red is the first subdiagonal; blue entries below it are forced zero.}
+  \caption{Upper Hessenberg pattern: asterisks are unrestricted and entries below the first subdiagonal are zero.}
   \label{fig:upper-hessenberg-pattern}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:unitary-upper-hessenberg-reduction} \hlt{Unitary Upper Hessenberg Reduction}\\
-Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to upper Hessenberg matrix with real nonnegative subdiagonal entries.
+Every $A\in\operatorname{Mat}(n,n,\mathbb{F})$ is unitarily similar to an upper Hessenberg matrix with real nonnegative subdiagonal entries.
 \begin{proof}
-Set $A_0=A$. For $k=1,\ldots,n-2$, suppose columns $1,\ldots,k-1$ of $A_{k-1}$ already have zeros below the first subdiagonal. Let $\mathbf{w}$ be the tail of column $k$ in rows $k+1,\ldots,n$.\\
-By Corollary \ref{cor:householder-unitary-annihilator}, choose a unitary $V_k$ with $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, $\alpha\geq0$.\\
-Put $U_k=I_k\oplus V_k$ and $A_k=U_k^*A_{k-1}U_k$. Right multiplication by $U_k$ changes only columns $k+1,\ldots,n$, so columns $1,\ldots,k-1$ keep their existing Hessenberg zeros. Left multiplication by $U_k^*$ acts only on rows $k+1,\ldots,n$; those rows are already zero in columns $1,\ldots,k-1$, so the zeros remain. In column $k$, the tail becomes $V_k^*\mathbf{w}=\alpha\mathbf{e}_1$, so entries below row $k+1$ are zero and the new subdiagonal entry is real nonnegative.\\
-After $n-2$ steps, $A_{n-2}=U^*AU$ is upper Hessenberg, where $U=U_1\cdots U_{n-2}$ is unitary.\\
-\hlt{Structural Commentary}: Each trailing unitary creates one Hessenberg column and preserves earlier ones.\\
-\hlt{Key Insight}: Kill one column tail at a time.
+For $n=1$, take $U=I_1$. Assume $n\geq2$ and set $A_0\defeq A$.\\
+For $k\in J_{n-1}$ in increasing order, assume columns $1,\ldots,k-1$ have the required form.\\
+This condition is vacuous for $k=1$. Let $\mathbf{w}_k\in\mathbb{F}^{n-k}$ be the tail of column $k$ of $A_{k-1}$.\\
+If $\mathbf{w}_k=\mathbf{0}$, set $V_k\defeq I_{n-k}$. Otherwise set $\mathbf{v}_k\defeq\frac{\mathbf{w}_k}{\norm{\mathbf{w}_k}_2}$; then $\norm{\mathbf{v}_k}_2=1$.\\
+Choose unitary $V_k$ with $V_k\mathbf{e}_1=\mathbf{v}_k$ by Corollary \ref{cor:householder-unitary-annihilator}(iii) in the nonzero case.\\
+In either case, $V_k^*\mathbf{w}_k=\norm{\mathbf{w}_k}_2\mathbf{e}_1$ by the defining case and unitarity. Set $U_k\defeq I_k\oplus V_k$ and $A_k\defeq U_k^*A_{k-1}U_k$.\\
+The identity $U_k^*U_k=I_n$ holds by block multiplication. The first $k-1$ columns are fixed by right multiplication with $U_k$.\\
+They are fixed by left multiplication with $U_k^*$ because only their zero tails are mixed.\\
+Column $k$ has the required zeros and subdiagonal entry $\norm{\mathbf{w}_k}_2\in\mathbb{R}_{\geq0}$ by the tail identity.\\
+For $U\defeq U_1\cdots U_{n-1}$, $U$ is unitary by identities $U_k^*U_k=I_n$. Identity $A_{n-1}=U^*AU$ holds by iteration.\\
+Matrix $A_{n-1}$ has the required form by induction.\\
+\hlt{Structural Commentary}: Trailing block similarities preserve completed columns while aligning the next column tail.\\
+\hlt{Key Insight}: $V_k^*\mathbf{w}_k=\norm{\mathbf{w}_k}_2\mathbf{e}_1$ installs both zeros and phase normalization.
 \end{proof}
 \end{theorem}
 
 \begin{perspective} \label{per:hessenberg-before-qr} \hlt{Why Hessenberg Form Matters}\\
-Hessenberg form preserves spectral data by unitary similarity, making QR-type eigenvalue algorithms cheaper.
+Unitary similarity preserves $p_A$ by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i), and hence the spectrum by Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii).\\
+Upper Hessenberg form leaves only the first subdiagonal to eliminate in a QR factorisation.
 \end{perspective}
 
-\begin{method} \label{meth:qr-eigenvalue-algorithm-preview} \hlt{QR Eigenvalue Algorithm Preview}\\
-For a square matrix $A_0$, the basic QR eigenvalue iteration is:
+\begin{computationmethod} \label{meth:qr-eigenvalue-algorithm-preview} \hlt{QR Eigenvalue Algorithm Preview}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{F})$. Choose unitary $U$ such that $A_0\defeq U^*AU$ is upper Hessenberg by Theorem \ref{thm:unitary-upper-hessenberg-reduction}. For $k\in\mathbb{Z}_{\geq0}$, perform:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item In practice, first reduce $A_0$ to Hessenberg form by Theorem \ref{thm:unitary-upper-hessenberg-reduction}.
-\item Factor $A_k=Q_kR_k$, with $Q_k$ unitary and $R_k$ upper triangular.
-\item Set $A_{k+1}=R_kQ_k=Q_k^*A_kQ_k$, using shifts to speed convergence.
+\item Choose $\mu_k\in\mathbb{F}$ and factor $A_k-\mu_kI_n=Q_kR_k$ by Theorem \ref{thm:qr-factorization}(i). Here $Q_k$ is unitary and $R_k$ is upper triangular.
+\item Set $A_{k+1}=R_kQ_k+\mu_kI_n=Q_k^*A_kQ_k$.
 \end{enumerate}
-Each step is a unitary similarity, so the spectrum is preserved.
-\end{method}
+$(\forall\,k\in\mathbb{Z}_{\geq0})\,A_k\sim A$ by induction through the initialization and update similarities.\\
+$(\forall\,k\in\mathbb{Z}_{\geq0})\,\operatorname{spec}(A_k)=\operatorname{spec}(A)$ by the preceding relation, Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i), and Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii).\\
+No shift rule, deflation test, stopping criterion, or convergence claim is specified.
+\end{computationmethod}
 
-\begin{method} \label{meth:hessenberg-qr-step-plane-rotations} \hlt{Hessenberg QR Step by Plane Rotations}\\
-Let $H\in\operatorname{Mat}(n,n,\mathbb{C})$ be upper Hessenberg and let $\mu\in\mathbb{C}$.
+\begin{computationmethod} \label{meth:hessenberg-qr-step-plane-rotations} \hlt{Hessenberg QR Step by Plane Unitaries}\\
+Assume $n\geq2$. Let $H\in\operatorname{Mat}(n,n,\mathbb{C})$ be upper Hessenberg, and let $\mu\in\mathbb{C}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Set $B_0=H-\mu I_n$.
-\item For $j=1,\ldots,n-1$, choose a unitary plane rotation $G_j$ acting on coordinates $j,j+1$,\\
-so that $(G_j^*B_{j-1})_{j+1,j}=0$ and $B_j=G_j^*B_{j-1}$.
-\item Put $Q=G_1\cdots G_{n-1}$ and $R=B_{n-1}$; then $H-\mu I_n=QR$.
-\item Define the shifted QR update $H_+=RQ+\mu I_n=Q^*HQ$
+\item Set $B_0\defeq H-\mu I_n$.
+\item For $j\in J_{n-1}$, set $\mathbf{z}_j\defeq\left(\begin{smallmatrix}(B_{j-1})_{jj}\\(B_{j-1})_{j+1,j}\end{smallmatrix}\right)$. If $\mathbf{z}_j=\mathbf{0}$, set $\widehat{G}_j\defeq I_2$. Otherwise set $\mathbf{u}_j\defeq\frac{\mathbf{z}_j}{\norm{\mathbf{z}_j}_2}$, so $\norm{\mathbf{u}_j}_2=1$.\\
+In the nonzero case, choose unitary $\widehat{G}_j$ with $\widehat{G}_j\mathbf{e}_1=\mathbf{u}_j$ by Corollary \ref{cor:householder-unitary-annihilator}(iii).\\
+In either case, $\widehat{G}_j^*\mathbf{z}_j=\norm{\mathbf{z}_j}_2\mathbf{e}_1$ by the construction.\\
+Let $G_j$ act as $\widehat{G}_j$ on coordinates $j,j+1$ and as the identity elsewhere. Set $B_j\defeq G_j^*B_{j-1}$.
+\item Set $Q\defeq G_1\cdots G_{n-1}$ and $R\defeq B_{n-1}$.
+\item Define $H_+\defeq RQ+\mu I_n=Q^*HQ$.
 \end{enumerate}
-Adjacent rotations implement the Hessenberg step by local bulge chasing.
-\end{method}
+Matrix $B_0$ is upper Hessenberg. At iteration $j$, the two mixed rows vanish in columns $1,\ldots,j-1$ by induction.\\
+Their mixing preserves these zeros, and the tail identity annihilates entry $(j+1,j)$.\\
+Thus $B_j$ is upper Hessenberg with its first $j$ columns upper triangular by induction.\\
+Hence $R$ is upper triangular and $H-\mu I_n=QR$ by $B_{n-1}=Q^*(H-\mu I_n)$.\\
+Set $Q_0\defeq I_n$ and $Q_j\defeq G_1\cdots G_j$. Each $Q_{j-1}$ acts only on the first $j$ coordinates.\\
+Thus $Q_{j-1}\mathbf{e}_{j+1}=\mathbf{e}_{j+1}$, and $Q_j$ is upper Hessenberg by induction.\\
+Matrix $Q$ is unitary by the unitarity of each $G_j$. The identity $H_+=Q^*HQ$ holds by the shifted factorisation.\\
+For $i>j+1$, $(RQ)_{ij}=\sum\limits_{\ell=1}^{n}r_{i\ell}q_{\ell j}=0$ by $r_{i\ell}\neq0\Longrightarrow\ell\geq i$ and $q_{\ell j}\neq0\Longrightarrow\ell\leq j+1$. Hence $H_+=RQ+\mu I_n$ is upper Hessenberg.\\
+The identity $\operatorname{spec}(H_+)=\operatorname{spec}(H)$ holds by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i) and Theorem \ref{thm:matrix-characteristic-polynomial-basic-coefficients}(ii).\\
+The construction is exact-arithmetic; no floating-point stability or deflation claim is made.
+\end{computationmethod}

@@ -1,33 +1,50 @@
 \subsection{Brauer Rank-One Spectral Shifts}
 
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$.
+
 \begin{theorem} \label{thm:brauer-rank-one-eigenvalue-shift} \hlt{Brauer Rank-One Eigenvalue Shift}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, let $A\mathbf{x}=\lambda\mathbf{x}$ with $\mathbf{x}\neq\mathbf{0}$, and let $\mathbf{y}\in\mathbb{C}^n$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$ with multiplicity, then the eigenvalues of $A+\mathbf{x}\mathbf{y}^*$ are $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$.\\
-Moreover, $\mathbf{x}$ is an eigenvector of $A+\mathbf{x}\mathbf{y}^*$ corresponding to $\lambda+\mathbf{y}^*\mathbf{x}$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda\in\mathbb{C}$, and $\mathbf{x},\mathbf{y}\in\mathbb{C}^n$. Assume that $\mathbf{x}\neq\mathbf{0}$ and $A\mathbf{x}=\lambda\mathbf{x}$.\\
+Let $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $A$ with algebraic multiplicity, where $\lambda_1=\lambda$, and set $C\defeq A+\mathbf{x}\mathbf{y}^*$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The eigenvalues of $C$, counted with algebraic multiplicity, are $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$.
+\item $C\mathbf{x}=(\lambda+\mathbf{y}^*\mathbf{x})\mathbf{x}$.
+\end{enumerate}
 \begin{proof}
-Put $\mathbf{u}=\mathbf{x}/\norm{\mathbf{x}}_2$. By Schur triangularisation, choose a unitary $U=[\mathbf{u}\ U_2]$ such that $U^*AU=\begin{bmatrix}\lambda&*\\0&T'\end{bmatrix}$, where the diagonal entries of $T'$ are $\lambda_2,\ldots,\lambda_n$. Also $U^*(\mathbf{x}\mathbf{y}^*)U
-=
-\begin{bmatrix}
-\mathbf{y}^*\mathbf{x}&*\\
-0&0
-\end{bmatrix}$.
-Therefore $U^*(A+\mathbf{x}\mathbf{y}^*)U$ is upper triangular with diagonal entries $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$. Finally, $(A+\mathbf{x}\mathbf{y}^*)\mathbf{x}=A\mathbf{x}+\mathbf{x}(\mathbf{y}^*\mathbf{x})=(\lambda+\mathbf{y}^*\mathbf{x})\mathbf{x}$.
-\hlt{Structural Commentary}: A rank-one eigenvector update changes only the first Schur diagonal entry.\\
-\hlt{Key Insight}: Align the update with the first coordinate; only one diagonal term shifts.
+Set $\mathbf{u}\defeq\frac{\mathbf{x}}{\norm{\mathbf{x}}_2}$. Then $\norm{\mathbf{u}}_2=1$ and $A\mathbf{u}=\lambda\mathbf{u}$ by the hypotheses on $\mathbf{x}$.\\
+Fix a unitary $U=[\mathbf{u}\ U_2]$ such that $T\defeq U^*AU$ is upper triangular with diagonal $\lambda_1,\ldots,\lambda_n$ by Theorem \ref{thm:matrix-schur-triangularization-ordered}(i).\\
+$U^*\mathbf{x}=\norm{\mathbf{x}}_2\mathbf{e}_1$ by the definition of $\mathbf{u}$ and $U=[\mathbf{u}\ U_2]$.\\
+For $R\defeq U^*(\mathbf{x}\mathbf{y}^*)U$, only its first row may be nonzero and $R_{11}=\mathbf{y}^*\mathbf{x}$ by the preceding identity and direct multiplication.\\
+$U^*CU=T+R$ is upper triangular with diagonal $\lambda+\mathbf{y}^*\mathbf{x},\lambda_2,\ldots,\lambda_n$ by the definitions of $C$, $T$, and $R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The displayed diagonal is the eigenvalue list of $C$ by Proposition \ref{prop:upper-triangular-characteristic-polynomial}(iii) and Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(ii).
+\item $C\mathbf{x}=A\mathbf{x}+\mathbf{x}(\mathbf{y}^*\mathbf{x})=(\lambda+\mathbf{y}^*\mathbf{x})\mathbf{x}$ by the definition of $C$ and $A\mathbf{x}=\lambda\mathbf{x}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Ordered Schur form isolates the eigenline; triangular multiplicities transfer back after one diagonal shift.\\
+\hlt{Key Insight}: $U^*\mathbf{x}=\norm{\mathbf{x}}_2\mathbf{e}_1$ confines the update to the first Schur row.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:brauer-rank-one-shift} depicts the Schur-coordinate mechanism in Theorem \ref{thm:brauer-rank-one-eigenvalue-shift}.\\
+The update replaces $\lambda$ by $\lambda+\mathbf{y}^*\mathbf{x}$ and preserves the trailing Schur block $T'$.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/brauer_rank_one_shift.tikz}
-  \caption{Brauer's update shifts one Schur diagonal entry.}
+  \caption{Brauer's aligned update replaces the leading Schur entry and preserves the trailing block $T'$.}
   \label{fig:brauer-rank-one-shift}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{corollary} \label{cor:damped-rank-one-eigenvalue-reset} \hlt{Damped Rank-One Eigenvalue Reset}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ have eigenpair $(\lambda,\mathbf{x})$, let $\mathbf{y}^*\mathbf{x}=1$, and let $\tau\in\mathbb{C}$. If $\lambda,\lambda_2,\ldots,\lambda_n$ are the eigenvalues of $A$, then $A_{\tau}\defeq \tau A+(1-\tau)\lambda\mathbf{x}\mathbf{y}^*$ has eigenvalues $\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$.
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$, $\lambda,\tau\in\mathbb{C}$, and $\mathbf{x},\mathbf{y}\in\mathbb{C}^n$. Assume that $\mathbf{x}\neq\mathbf{0}$, $A\mathbf{x}=\lambda\mathbf{x}$, and $\mathbf{y}^*\mathbf{x}=1$.\\
+Let $\lambda_1,\ldots,\lambda_n$ list the eigenvalues of $A$ with algebraic multiplicity, where $\lambda_1=\lambda$. Set $A_{\tau}\defeq\tau A+(1-\tau)\lambda\mathbf{x}\mathbf{y}^*$.\\
+Then the eigenvalues of $A_{\tau}$ are $\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$, counted with algebraic multiplicity.
 \begin{proof}
-The eigenvalues of $\tau A$ are $\tau\lambda,\tau\lambda_2,\ldots,\tau\lambda_n$. Since $A_{\tau}=\tau A+\mathbf{x}((1-\overline{\tau})\overline{\lambda}\mathbf{y})^*$, Theorem \ref{thm:brauer-rank-one-eigenvalue-shift} shifts only $\tau\lambda$ by $(1-\tau)\lambda\mathbf{y}^*\mathbf{x}=(1-\tau)\lambda$. Thus $\tau\lambda$ becomes $\lambda$, while the other eigenvalues stay $\tau\lambda_i$.\\
-\hlt{Structural Commentary}: Damping scales the spectrum; Brauer's update restores one eigenvalue.\\
-\hlt{Key Insight}: Brauer's theorem changes one spectral coordinate without moving the rest.
+The eigenvalues of $\tau A$ are $\tau\lambda_1,\ldots,\tau\lambda_n$ by Proposition \ref{prop:eigenvalues-of-polynomial-in-matrix} with $p(\zeta)=\tau\zeta$. Set $\mathbf{q}\defeq(1-\overline{\tau})\overline{\lambda}\mathbf{y}$.\\
+The identities $A_{\tau}=\tau A+\mathbf{x}\mathbf{q}^*$ and $(\tau A)\mathbf{x}=\tau\lambda\mathbf{x}$ hold by the definitions and $A\mathbf{x}=\lambda\mathbf{x}$. $\mathbf{q}^*\mathbf{x}=(1-\tau)\lambda\mathbf{y}^*\mathbf{x}=(1-\tau)\lambda$ by $\mathbf{y}^*\mathbf{x}=1$.\\
+The claimed eigenvalue list holds by Theorem \ref{thm:brauer-rank-one-eigenvalue-shift}(i) and $\tau\lambda+\mathbf{q}^*\mathbf{x}=\lambda$.\\
+\hlt{Structural Commentary}: Scalar spectral mapping forms the damped spectrum; Brauer's aligned update restores its first entry.\\
+\hlt{Key Insight}: $\mathbf{q}^*\mathbf{x}=(1-\tau)\lambda$ cancels the shift from $\lambda$ to $\tau\lambda$.
 \end{proof}
 \end{corollary}

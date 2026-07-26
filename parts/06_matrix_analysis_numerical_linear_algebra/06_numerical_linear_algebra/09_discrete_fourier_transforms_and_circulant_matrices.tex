@@ -1,46 +1,60 @@
 \subsection{Discrete Fourier Transforms and Circulant Matrices}
 
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$.
+
 \begin{definition} \label{def:discrete-fourier-matrix} \hlt{Discrete Fourier Matrix}\\
-For $n\geq1$, set $\omega_n=e^{2\pi i/n}$ and $F_n\defeq[\omega_n^{jk}]_{j,k=0}^{n-1}$.\\
-Then $F_n\mathbf{c}$ is the unnormalised DFT of $\mathbf{c}\in\C^n$; $Q_n\defeq n^{-1/2}F_n$ is the normalized Fourier matrix.
+Set $\omega_n\defeq e^{2\pi i/n}$, $F_n\defeq[\omega_n^{jk}]_{j,k=0}^{n-1}\in\operatorname{Mat}(n,n,\mathbb{C})$, and $Q_n\defeq n^{-1/2}F_n$.\\
+For $\mathbf{c}\in\mathbb{C}^n$, $F_n\mathbf{c}$ is its unnormalized DFT and $Q_n\mathbf{c}$ its normalized DFT.
 \end{definition}
 
 \begin{definition} \label{def:circulant-matrix-cyclic-shift} \hlt{Circulant Matrix}\\
-On the $0$-indexed basis of $\C^n$, define the \hlt{cyclic shift}
-$P_n\mathbf{e}_j=\mathbf{e}_{(j-1)\operatorname{mod} n}$.\\
-A matrix $C\in\operatorname{Mat}(n,n,\C)$ is \hlt{circulant} if, for some $a_0,\ldots,a_{n-1}\in\C$,
-\begin{align}
-C&=a_0I_n+a_1P_n+\cdots+a_{n-1}P_n^{n-1}=p(P_n), \nonumber\\
-p(z)&=a_0+a_1z+\cdots+a_{n-1}z^{n-1} \nonumber
-\end{align}
+Let $(\mathbf{e}_0,\ldots,\mathbf{e}_{n-1})$ be the $0$-indexed standard basis of $\mathbb{C}^n$.\\
+The \hlt{cyclic shift} is the matrix $P_n\in\operatorname{Mat}(n,n,\mathbb{C})$ defined by $(\forall\,j\in\{0,\ldots,n-1\})\,P_n\mathbf{e}_j=\mathbf{e}_{(j-1)\bmod n}$.\\
+A matrix $C\in\operatorname{Mat}(n,n,\mathbb{C})$ is \hlt{circulant} iff $(\exists\,(a_0,\ldots,a_{n-1})\in\mathbb{C}^n)\,C=\sum\limits_{r=0}^{n-1}a_rP_n^r$.\\
+If $(a_0,\ldots,a_{n-1})\in\mathbb{C}^n$ satisfies this identity, set $p(z)\defeq\sum\limits_{r=0}^{n-1}a_rz^r\in\mathbb{C}[z]$; then $C=p(P_n)$.\\
+Here $p(P_n)$ denotes the polynomial evaluation from Definition \ref{def:polynomial-evaluation-on-square-matrix}.
 \end{definition}
 
-\begin{theorem} \label{thm:fourier-basis-diagonalizes-cyclic-circulants} \hlt{Fourier Basis for Cyclic Shifts and Circulants}\\
-Let $n\geq1$, let $\omega_n\defeq e^{2\pi i/n}$, and let $P_n$ be the cyclic shift.\\
-For $0\leq k<n$, set $\mathbf{f}_k\defeq(\omega_n^{jk})_{j=0}^{n-1}$; $F_n\defeq[\mathbf{f}_0\ \cdots\ \mathbf{f}_{n-1}]$; and $\Omega_n\defeq\operatorname{diag}(1,\omega_n,\ldots,\omega_n^{n-1})$.\\
-Then $F_n^*F_n=nI_n$, so $Q_n\defeq n^{-1/2}F_n$ is unitary, and $P_nF_n=F_n\Omega_n$.\\
-If $C=p(P_n)$ is circulant, then $Q_n^*CQ_n=p(\Omega_n) =\operatorname{diag}\bigl(p(1),p(\omega_n),\ldots,p(\omega_n^{n-1})\bigr)$.
+\begin{theorem} \label{thm:fourier-basis-diagonalizes-cyclic-circulants} \hlt{Fourier Diagonalization of Cyclic Shifts and Circulants}\\
+Let $F_n,Q_n$ be as in Definition \ref{def:discrete-fourier-matrix} and $P_n$ as in Definition \ref{def:circulant-matrix-cyclic-shift}. Set $\Omega_n\defeq\operatorname{diag}(1,\omega_n,\ldots,\omega_n^{n-1})$.\\
+For $(a_0,\ldots,a_{n-1})\in\mathbb{C}^n$, set $p(z)\defeq\sum\limits_{r=0}^{n-1}a_rz^r$ and $C\defeq p(P_n)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $F_n^*F_n=nI_n$, $Q_n^*Q_n=I_n$, and $Q_n$ is unitary;
+\item $P_nF_n=F_n\Omega_n$ and $Q_n^*P_nQ_n=\Omega_n$;
+\item $Q_n^*CQ_n=p(\Omega_n)=\operatorname{diag}\bigl(p(1),p(\omega_n),\ldots,p(\omega_n^{n-1})\bigr)$.
+\end{enumerate}
 \begin{proof}
-For $0\leq k,\ell\leq n-1$, $\innerprod{\mathbf{f}_k,\mathbf{f}_\ell} =\sum\limits_{r=0}^{n-1}(\omega_n^{k-\ell})^r =n\delta_{k\ell}$.
-For $k=\ell$ the sum is $n$; for $k\neq\ell$, $W=\omega_n^{k-\ell}$ has $W\neq1$ and $W^n=1$, so $(1-W)\sum\limits_{r=0}^{n-1}W^r=0$. Hence $F_n^*F_n=nI_n$, and Theorem \ref{thm:unitary-matrix-equivalent-conditions} makes $Q_n$ unitary.\\
-Also $P_n\mathbf{f}_k=\omega_n^k\mathbf{f}_k$, so $Q_n^*P_nQ_n=\Omega_n$; applying $p$ gives the formula.\\
-\hlt{Structural Commentary}: Fourier coordinates diagonalize every circulant.\\
-\hlt{Key Insight}: Orthogonality of roots of unity turns a cyclic matrix problem into scalar evaluation.
+For $k\in\{0,\ldots,n-1\}$, set $\mathbf{f}_k\defeq(\omega_n^{jk})_{j=0}^{n-1}$. Then $F_n=[\mathbf{f}_0\ \cdots\ \mathbf{f}_{n-1}]$ by Definition \ref{def:discrete-fourier-matrix}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $k,\ell\in\{0,\ldots,n-1\}$, $(F_n^*F_n)_{k\ell}=\sum\limits_{r=0}^{n-1}\omega_n^{r(\ell-k)}$. This sum is $n$ if $k=\ell$.\\
+If $k\neq\ell$, then $W\defeq\omega_n^{\ell-k}$ satisfies $W\neq1$ by $0<\abs{\ell-k}<n$ and $W^n=1$, so $\sum\limits_{r=0}^{n-1}W^r=\frac{1-W^n}{1-W}=0$.\\
+Thus $F_n^*F_n=nI_n$ and $Q_n^*Q_n=n^{-1}F_n^*F_n=I_n$. Hence $Q_n$ is unitary by Theorem \ref{thm:unitary-matrix-equivalent-conditions}(i).
+\item For $k,j\in\{0,\ldots,n-1\}$, $(P_n\mathbf{f}_k)_j=(\mathbf{f}_k)_{(j+1)\bmod n}=\omega_n^k(\mathbf{f}_k)_j$ by $\omega_n^{nk}=1$.\\
+Hence $P_nF_n=F_n\Omega_n$ and $P_nQ_n=Q_n\Omega_n$ by column comparison. Therefore $Q_n^*P_nQ_n=\Omega_n$ by (i).
+\item Set $D\defeq\operatorname{diag}\bigl(p(1),p(\omega_n),\ldots,p(\omega_n^{n-1})\bigr)$. By (i),(ii), $P_n=Q_n\Omega_nQ_n^*$.\\
+The identity $C=Q_nDQ_n^*$ holds by Theorem \ref{thm:polynomial-functional-calculus-diagonalizable-matrix} with $(A,S,\Lambda)=(P_n,Q_n,\Omega_n)$.\\
+The identity $p(\Omega_n)=D$ holds by the same theorem with $(A,S,\Lambda)=(\Omega_n,I_n,\Omega_n)$. Hence $Q_n^*CQ_n=D=p(\Omega_n)$ by (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Root orthogonality proves unitarity; shift eigenvectors transfer polynomial evaluation to the diagonal.\\
+\hlt{Key Insight}: The Fourier modes form an orthonormal eigenbasis of the cyclic shift.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
+Figure \ref{fig:circulant-fourier-diagonalization} summarizes Theorem \ref{thm:fourier-basis-diagonalizes-cyclic-circulants}. Horizontal arrows conjugate by $Q_n$, and vertical arrows evaluate $p$.
+
+\begin{illustrationfigure}[H]
   \input{figures/linear_algebra/circulant_fourier_diagonalization.tikz}
-  \caption{Fourier diagonalizes $P_n$; polynomial evaluation diagonalizes $C=p(P_n)$.}
+  \caption{Fourier conjugation commutes with polynomial evaluation: $P_n$ maps to $\Omega_n$ and $C=p(P_n)$ to $p(\Omega_n)$.}
   \label{fig:circulant-fourier-diagonalization}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{proposition} \label{prop:fourier-matrix-inverse} \hlt{Inverse of the Fourier Matrix}\\
-The Fourier matrix satisfies $F_n^*F_n=nI_n$, and therefore $F_n^{-1}=\frac1nF_n^*$.
+The Fourier matrix satisfies $F_n^{-1}=\frac{1}{n}F_n^*$.
 \begin{proof}
-Theorem \ref{thm:fourier-basis-diagonalizes-cyclic-circulants} gives $Q_n^*Q_n=I_n$ for $Q_n=n^{-1/2}F_n$. Multiplying by $n$ gives $F_n^*F_n=nI_n$, so $n^{-1}F_n^*$ is a left inverse of $F_n$. Since $F_n$ is square, Theorem \ref{thm:square-one-sided-inverse-is-two-sided} makes it the inverse.\\
-\hlt{Structural Commentary}: Fourier inversion is conjugate transpose plus one scalar normalization.\\
-\hlt{Key Insight}: The inverse is simple because the Fourier columns are orthogonal.
+The identity $\bigl(\frac{1}{n}F_n^*\bigr)F_n=I_n$ holds by Theorem \ref{thm:fourier-basis-diagonalizes-cyclic-circulants}(i). Hence $F_n^{-1}=\frac{1}{n}F_n^*$ by Theorem \ref{thm:square-one-sided-inverse-is-two-sided}.\\
+\hlt{Structural Commentary}: Fourier orthogonality supplies a left inverse; squareness identifies the two-sided inverse.\\
+\hlt{Key Insight}: Normalization turns conjugate transpose into exact inversion.
 \end{proof}
 \end{proposition}

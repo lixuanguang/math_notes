@@ -1,104 +1,161 @@
 \subsection{Eigenvalue and Singular-Value Interlacing}
 
+Throughout this subsection, all matrix dimensions are positive integers.
+
 \begin{theorem} \label{thm:rank-one-psd-eigenvalue-interlacing} \hlt{Rank-One Positive Perturbation Interlacing}\\
-Let $A,E\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian, with $E\succeq0$ and $\operatorname{rank}(E)\leq1$.\\
-Then $\lambda_i(A)\leq\lambda_i(A+E)\leq\lambda_{i+1}(A)\quad(1\leq i<n)$, $\lambda_n(A)\leq\lambda_n(A+E)$\\
-Equivalently, $\lambda_i(A-E)\leq\lambda_i(A)\leq\lambda_{i+1}(A-E)\quad(1\leq i<n)$, $\lambda_n(A-E)\leq\lambda_n(A)$.
+Let $A,E\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian, with $E\succeq0$ and $\operatorname{rank}(E)\leq1$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,i\in J_n)\,\lambda_i(A)\leq\lambda_i(A+E)$.
+\item $(\forall\,i\in J_{n-1})\,\lambda_i(A+E)\leq\lambda_{i+1}(A)$.
+\item $(\forall\,i\in J_n)\,\lambda_i(A-E)\leq\lambda_i(A)$.
+\item $(\forall\,i\in J_{n-1})\,\lambda_i(A)\leq\lambda_{i+1}(A-E)$.
+\end{enumerate}
 \begin{proof}
-Let $\mathbf{u}_j$ and $\mathbf{v}_j$ be orthonormal eigenvectors of $A$ and $A+E$, respectively, in increasing eigenvalue order.\\
-For the lower bound, set $\mathcal{U}=\operatorname{span}(\mathbf{u}_i,\ldots,\mathbf{u}_n)$, $\mathcal{V}=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_i)$. Since $\dim\mathcal{U}+\dim\mathcal{V}=n+1$, choose a unit $\mathbf{x}\in\mathcal{U}\cap\mathcal{V}$. Then $\lambda_i(A)\leq \mathbf{x}^*A\mathbf{x}\leq \mathbf{x}^*(A+E)\mathbf{x}\leq\lambda_i(A+E)$ by Theorem \ref{thm:rayleigh-quotient-spectral-interval} and $E\succeq0$.\\
-For the upper bound, set $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+1})$, $\mathcal{V}=\operatorname{span}(\mathbf{v}_i,\ldots,\mathbf{v}_n)$, $\mathcal{W}=\ker(E)$. Here $\dim(\mathcal{U}\cap\mathcal{V})\geq2$ and $\dim\mathcal{W}\geq n-1$, so choose a unit $\mathbf{x}\in\mathcal{U}\cap\mathcal{V}\cap\mathcal{W}$. Thus $\lambda_i(A+E)\leq \mathbf{x}^*(A+E)\mathbf{x} =\mathbf{x}^*A\mathbf{x} \leq \lambda_{i+1}(A)$.\\
-The statements for $A-E$ follow by applying the proved result to $A-E$ and $E$.\\
-\hlt{Structural Commentary}: Interlacing comes from test vectors in overlapping spectral subspaces.\\
-\hlt{Key Insight}: Rank one leaves a large kernel, so the upper-bound vector can avoid the perturbation.
+Fix ordered orthonormal eigenbases $(\mathbf{u}_j)_{j\in J_n}$ of $A$ and $(\mathbf{v}_j)_{j\in J_n}$ of $A+E$ by Theorem \ref{thm:complex-spectral-theorem} and Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(i).
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $i\in J_n$, and set $\mathcal{U}=\operatorname{span}(\mathbf{u}_i,\ldots,\mathbf{u}_n)$ and $\mathcal{V}=\operatorname{span}(\mathbf{v}_1,\ldots,\mathbf{v}_i)$.\\
+Fix a unit $\mathbf{x}\in\mathcal{U}\cap\mathcal{V}$ by Corollary \ref{cor:large-subspaces-intersect}(i), normalization, and $\dim(\mathcal{U})+\dim(\mathcal{V})=n+1$.\\
+The chain $\lambda_i(A)\leq\mathbf{x}^*A\mathbf{x}\leq\mathbf{x}^*(A+E)\mathbf{x}\leq\lambda_i(A+E)$ holds by Theorem \ref{thm:rayleigh-quotient-spectral-interval} and $E\succeq0$.
+\item Fix $i\in J_{n-1}$, and set $\mathcal{U}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+1})$, $\mathcal{V}=\operatorname{span}(\mathbf{v}_i,\ldots,\mathbf{v}_n)$, and $\mathcal{W}=\ker(E)$.\\
+The bounds $\dim(\mathcal{U}\cap\mathcal{V})\geq2$ and $\dim(\mathcal{W})\geq n-1$ hold by Corollaries \ref{cor:large-subspaces-intersect}(ii) and \ref{cor:matrix-rank-nullity}(i), respectively.\\
+Fix a unit $\mathbf{x}\in\mathcal{U}\cap\mathcal{V}\cap\mathcal{W}$ by Corollary \ref{cor:large-subspaces-intersect}(i) and normalization.\\
+The chain $\lambda_i(A+E)\leq\mathbf{x}^*(A+E)\mathbf{x}=\mathbf{x}^*A\mathbf{x}\leq\lambda_{i+1}(A)$ holds by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
+\item $(\forall\,i\in J_n)\,\lambda_i(A-E)\leq\lambda_i(A)$ by part (i) with $A-E$ in place of $A$.
+\item $(\forall\,i\in J_{n-1})\,\lambda_i(A)\leq\lambda_{i+1}(A-E)$ by part (ii) with $A-E$ in place of $A$.
+\end{enumerate}
+\hlt{Structural Commentary}: Two flag intersections prove the $A+E$ bounds; substitution transfers them to $A-E$.\\
+\hlt{Key Insight}: Membership in $\ker(E)$ removes the perturbation from the upper comparison.
 \end{proof}
 \end{theorem}
 
-\begin{corollary} \label{cor:rank-two-one-positive-one-negative-interlacing} \hlt{Rank-Two Indefinite Interlacing}\\
-Let $A,H\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian, $n\geq2$. Suppose $\operatorname{rank}(H)\leq2$ and $H$ has at most one positive and one negative eigenvalue. Then
-\begin{align}
-\lambda_1(A+H)\leq\lambda_2(A),\qquad
-\lambda_{i-1}(A)\leq\lambda_i(A+H)\leq\lambda_{i+1}(A)\quad(2\leq i<n),
-\qquad
-\lambda_{n-1}(A)\leq\lambda_n(A+H).
-\nonumber
-\end{align}
+\begin{corollary} \label{cor:rank-two-one-positive-one-negative-interlacing} \hlt{Signed Rank-Two Perturbation Interlacing}\\
+Let $A,H\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian, with $n\geq2$ and $\operatorname{rank}(H)\leq2$. Suppose that $H$ has at most one positive and one negative eigenvalue.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,i\in J_n\setminus\{1\})\,\lambda_{i-1}(A)\leq\lambda_i(A+H)$.
+\item $(\forall\,i\in J_{n-1})\,\lambda_i(A+H)\leq\lambda_{i+1}(A)$.
+\end{enumerate}
 \begin{proof}
-Write $H=E_+-E_-$ with $E_\pm\succeq0$ and $\operatorname{rank}(E_\pm)\leq1$. Set $B=A-E_-$; then $A=B+E_-$ and $A+H=B+E_+$. For $2\leq i<n$, rank-one interlacing gives $\lambda_{i-1}(A)\leq\lambda_i(B)\leq\lambda_i(A+H)\leq\lambda_{i+1}(B)\leq\lambda_{i+1}(A)$.\\
-The endpoints follow similarly: $\lambda_1(A+H)\leq\lambda_2(B)\leq\lambda_2(A)$, and $\lambda_{n-1}(A)\leq\lambda_n(B)\leq\lambda_n(A+H)$.\\
-\hlt{Structural Commentary}: Such an $H$ is a difference of two rank-one PSD perturbations.\\
-\hlt{Key Insight}: Interlace once with $E_-$, then once with $E_+$.
+Fix $H=Q\operatorname{diag}(\mu_1,\ldots,\mu_n)Q^*$ with $Q$ unitary and $\mu_1,\ldots,\mu_n\in\mathbb{R}$ by Theorem \ref{thm:complex-spectral-theorem}.\\
+Set $\mu_j^+\defeq\max\{\mu_j,0\}$ and $\mu_j^-\defeq\max\{-\mu_j,0\}$ for $j\in J_n$, and set $E_\pm\defeq Q\operatorname{diag}(\mu_1^\pm,\ldots,\mu_n^\pm)Q^*$.\\
+The relations $H=E_+-E_-$, $E_\pm\succeq0$, and $\operatorname{rank}(E_\pm)\leq1$ hold by construction and the sign hypothesis.\\
+Set $B\defeq A-E_-$, so $A=B+E_-$ and $A+H=B+E_+$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,i\in J_n\setminus\{1\})\,\lambda_{i-1}(A)\leq\lambda_i(B)\leq\lambda_i(A+H)$ by Theorem \ref{thm:rank-one-psd-eigenvalue-interlacing}(ii),(i).
+\item $(\forall\,i\in J_{n-1})\,\lambda_i(A+H)\leq\lambda_{i+1}(B)\leq\lambda_{i+1}(A)$ by Theorem \ref{thm:rank-one-psd-eigenvalue-interlacing}(ii),(i).
+\end{enumerate}
+\hlt{Structural Commentary}: The signed spectral split makes $A$ and $A+H$ positive rank-one updates of a common base.\\
+\hlt{Key Insight}: Comparison through $B$ aligns the lower and upper index shifts.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:cauchy-principal-submatrix-interlacing} \hlt{Cauchy Interlacing: One Principal Deletion}\\
-Let $A=
-\begin{bmatrix}
-B & \mathbf{y}\\
-\mathbf{y}^* & c
-\end{bmatrix}
-\in\operatorname{Mat}(n+1,n+1,\mathbb{C})$ be Hermitian, with $B\in\operatorname{Mat}(n,n,\mathbb{C})$.\\
-Then, for $1\leq i\leq n$, $\lambda_i(A)\leq\lambda_i(B)\leq\lambda_{i+1}(A)$.
-\begin{proof}
-Let $\mathbf{u}_j$ and $\mathbf{v}_j$ be orthonormal eigenvectors of $A$ and $B$, respectively, in increasing eigenvalue order. Identify $\mathbb{C}^n$ with $\{(\mathbf{z},0)\}\subseteq\mathbb{C}^{n+1}$, so $(\mathbf{z},0)^*A(\mathbf{z},0)=\mathbf{z}^*B\mathbf{z}$.\\
-For the lower bound, set $\mathcal{S}=\operatorname{span}((\mathbf{v}_1,0),\ldots,(\mathbf{v}_i,0))$ and $\mathcal{T}=\operatorname{span}(\mathbf{u}_i,\ldots,\mathbf{u}_{n+1})$. Their dimensions are $i$ and $n+2-i$, so $\dim\mathcal{S}+\dim\mathcal{T}>n+1$ and $\mathcal{S}\cap\mathcal{T}$ contains a nonzero vector.\\
-Choose a unit $\mathbf{x}=(\mathbf{z},0)$ in the intersection. The spectral expansion in the $\mathbf{u}_j$ gives $\mathbf{x}^*A\mathbf{x}\geq\lambda_i(A)$, while the expansion in the $\mathbf{v}_j$ gives $\mathbf{z}^*B\mathbf{z}\leq\lambda_i(B)$. Hence $\lambda_i(A)\leq\lambda_i(B)$.\\
-For the upper bound, take $\mathcal{S}'=\operatorname{span}((\mathbf{v}_i,0),\ldots,(\mathbf{v}_n,0))$ and $\mathcal{T}'=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+1})$. Again the dimensions sum to $n+2$, so choose a unit $\mathbf{x}=(\mathbf{z},0)\in\mathcal{S}'\cap\mathcal{T}'$.\\
-Now $\mathbf{z}^*B\mathbf{z}\geq\lambda_i(B)$ and $\mathbf{x}^*A\mathbf{x}\leq\lambda_{i+1}(A)$, giving $\lambda_i(B)\leq\lambda_{i+1}(A)$.\\
-\hlt{Structural Commentary}: A principal submatrix is a coordinate slice of the larger quadratic form.\\
-\hlt{Key Insight}: Deleting one coordinate costs one dimension, so eigenvalues shift by at most one index.
-\end{proof}
-\end{theorem}
-
-\begin{corollary} \label{cor:singular-values-interlace-after-deleting-row-or-column} \hlt{Singular Values Interlace After Deleting a Row or Column}\\
-Let $B$ be obtained from $A\in\operatorname{Mat}(n,n,\mathbb{C})$ by deleting one row or column.\\
-With singular values ordered decreasingly, $\sigma_i(A)\geq\sigma_i(B)\geq\sigma_{i+1}(A)\quad(1\leq i<n)$.
-\begin{proof}
-For a row deletion, permute rows so that $PA=\begin{bmatrix}B\\ \mathbf{y}^*\end{bmatrix}$. \\
-Then $PA$ has the same singular values as $A$, and $BB^*$ is a principal submatrix of $(PA)(PA)^*$.\\
-Cauchy interlacing applied to these Gram matrices gives the result after taking square roots and reversing the increasing eigenvalue order. A column deletion follows by applying the row case to $A^*$.\\
-\hlt{Structural Commentary}: Row deletion makes $BB^*$ a principal submatrix of a permuted $AA^*$.\\
-\hlt{Key Insight}: Singular-value interlacing is Cauchy interlacing applied to Gram matrices.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:cauchy-interlacing-general-principal-submatrix} \hlt{Cauchy Interlacing for Principal Submatrices}\\
-Let $B\in\operatorname{Mat}(n,n,\mathbb{C})$ be a principal submatrix of Hermitian $A\in\operatorname{Mat}(n+m,n+m,\mathbb{C})$.\\
-Then, for $1\leq i\leq n$, $\lambda_i(A)\leq\lambda_i(B)\leq\lambda_{i+m}(A)$.
-\begin{proof}
-After a permutation similarity, $B$ is leading.\\
-Delete the other $m$ coordinates one at a time and apply Theorem \ref{thm:cauchy-principal-submatrix-interlacing} at each step.\\
-\hlt{Structural Commentary}: Principal submatrices come from repeated coordinate deletion.\\
-\hlt{Key Insight}: Each deletion shifts eigenvalue indices by at most one.
-\end{proof}
-\end{corollary}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/eigenvalue_interlacing_ladder.tikz}
-  \caption{Rank-one and principal-submatrix interlacing place new eigenvalues between old ones.}
-  \label{fig:eigenvalue-interlacing-ladder}
-\end{figure}
-
-\begin{theorem} \label{thm:schur-majorization-eigenvalues-by-diagonal} \hlt{Schur Majorization of the Diagonal}\\
-Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian, with increasing eigenvalues $\lambda_i(A)$ and increasing diagonal entries $d_i$.\\
-Then $\sum\limits_{i=1}^{k}\lambda_i(A)\leq \sum\limits_{i=1}^{k}d_i$, $(1\leq k\leq n)$ with equality for $k=n$.
-\begin{proof}
-Permute coordinates so that $a_{ii}=d_i$, and let $A_k$ be the leading $k\times k$ principal submatrix.\\
-Cauchy interlacing gives $\lambda_i(A)\leq\lambda_i(A_k)$ for $1\leq i\leq k$, hence $\sum\limits_{i=1}^{k}\lambda_i(A)\leq\sum\limits_{i=1}^{k}\lambda_i(A_k)=\operatorname{tr}(A_k)=\sum\limits_{i=1}^{k}d_i$.\\
-For $k=n$, this is $\operatorname{tr}(A)=\operatorname{tr}(A)$.\\
-\hlt{Structural Commentary}: Ordered diagonal sums are traces of leading principal blocks.\\
-\hlt{Key Insight}: Diagonal majorization is Cauchy interlacing plus trace.
-\end{proof}
-\end{theorem}
-
-\begin{method} \label{meth:eigenvalue-interlacing-method} \hlt{Eigenvalue Interlacing Method}\\
-To prove or use an interlacing estimate:
+Let $A\in\operatorname{Mat}(n+1,n+1,\mathbb{C})$ be Hermitian, and let $B\in\operatorname{Mat}(n,n,\mathbb{C})$ be its leading principal submatrix.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item order Hermitian eigenvalues increasingly;
-\item identify dimension lost: rank-one perturbation, one deleted coordinate, $m$-coordinate principal submatrix;
-\item choose test vectors by intersecting spectral subspaces with the unaffected subspace;
-\item convert the Rayleigh quotient bounds into eigenvalue inequalities.
+\item $(\forall\,i\in J_n)\,\lambda_i(A)\leq\lambda_i(B)$.
+\item $(\forall\,i\in J_n)\,\lambda_i(B)\leq\lambda_{i+1}(A)$.
 \end{enumerate}
-\end{method}
+\begin{proof}
+Fix ordered orthonormal eigenbases $(\mathbf{u}_j)_{j\in J_{n+1}}$ of $A$ and $(\mathbf{v}_j)_{j\in J_n}$ of $B$ by Theorem \ref{thm:complex-spectral-theorem} and Definition \ref{def:increasing-hermitian-eigenvalue-ordering}(i).\\
+Define $\iota:\mathbb{C}^n\to\mathbb{C}^{n+1}$ by $\iota(\mathbf{z})=(\mathbf{z},0)$. The identities $\norm{\iota(\mathbf{z})}_2=\norm{\mathbf{z}}_2$ and $\iota(\mathbf{z})^*A\iota(\mathbf{z})=\mathbf{z}^*B\mathbf{z}$ hold by coordinate multiplication.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $i\in J_n$, and set $\mathcal{S}=\operatorname{span}(\iota(\mathbf{v}_1),\ldots,\iota(\mathbf{v}_i))$ and $\mathcal{T}=\operatorname{span}(\mathbf{u}_i,\ldots,\mathbf{u}_{n+1})$.\\
+Fix a unit $\mathbf{x}=\iota(\mathbf{z})\in\mathcal{S}\cap\mathcal{T}$ by Corollary \ref{cor:large-subspaces-intersect}(i), normalization, and $\dim(\mathcal{S})+\dim(\mathcal{T})=n+2$.\\
+The chain $\lambda_i(A)\leq\mathbf{x}^*A\mathbf{x}=\mathbf{z}^*B\mathbf{z}\leq\lambda_i(B)$ holds by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
+\item Fix $i\in J_n$, and set $\mathcal{S}=\operatorname{span}(\iota(\mathbf{v}_i),\ldots,\iota(\mathbf{v}_n))$ and $\mathcal{T}=\operatorname{span}(\mathbf{u}_1,\ldots,\mathbf{u}_{i+1})$.\\
+Fix a unit $\mathbf{x}=\iota(\mathbf{z})\in\mathcal{S}\cap\mathcal{T}$ by Corollary \ref{cor:large-subspaces-intersect}(i), normalization, and $\dim(\mathcal{S})+\dim(\mathcal{T})=n+2$.\\
+The chain $\lambda_i(B)\leq\mathbf{z}^*B\mathbf{z}=\mathbf{x}^*A\mathbf{x}\leq\lambda_{i+1}(A)$ holds by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
+\end{enumerate}
+\hlt{Structural Commentary}: The embedding preserves quadratic forms; complementary spectral flags establish both inequalities.\\
+\hlt{Key Insight}: One coordinate deletion leaves the dimension sum $n+2$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary} \label{cor:cauchy-interlacing-general-principal-submatrix} \hlt{Cauchy Interlacing for Principal Submatrices}\\
+Let $m\in\mathbb{Z}_{>0}$, and let $B\in\operatorname{Mat}(n,n,\mathbb{C})$ be a principal submatrix of a Hermitian $A\in\operatorname{Mat}(n+m,n+m,\mathbb{C})$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,i\in J_n)\,\lambda_i(A)\leq\lambda_i(B)$.
+\item $(\forall\,i\in J_n)\,\lambda_i(B)\leq\lambda_{i+m}(A)$.
+\end{enumerate}
+\begin{proof}
+Choose a permutation matrix $P$ such that $B$ is the leading principal submatrix of $\widetilde{A}\defeq P^*AP$.\\
+The matrices $A$ and $\widetilde{A}$ have the same ordered eigenvalues by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i).\\
+For $r\in\{0,\ldots,m\}$, let $A^{(r)}$ be the leading principal submatrix of $\widetilde{A}$ of size $n+m-r$; thus $A^{(0)}=\widetilde{A}$ and $A^{(m)}=B$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,i\in J_n)\,\lambda_i(A^{(0)})\leq\lambda_i(A^{(1)})\leq\cdots\leq\lambda_i(A^{(m)})$ by successive applications of Theorem \ref{thm:cauchy-principal-submatrix-interlacing}(i).
+\item $(\forall\,i\in J_n)\,\lambda_i(A^{(m)})\leq\lambda_{i+1}(A^{(m-1)})\leq\cdots\leq\lambda_{i+m}(A^{(0)})$ by successive applications of Theorem \ref{thm:cauchy-principal-submatrix-interlacing}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Permutation makes $B$ leading; chained one-coordinate deletions accumulate the upper-index shift.\\
+\hlt{Key Insight}: Each deletion raises the upper comparison index by one.
+\end{proof}
+\end{corollary}
+
+\begin{corollary} \label{cor:singular-values-interlace-after-deleting-row-or-column} \hlt{Singular Values Interlace After Deleting a Row or Column}\\
+Let $n\geq2$, and let $B$ be obtained from $A\in\operatorname{Mat}(n,n,\mathbb{C})$ by deleting one row or one column.\\
+With singular values ordered decreasingly, $(\forall\,i\in J_{n-1})\,\sigma_i(A)\geq\sigma_i(B)\geq\sigma_{i+1}(A)$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Row Gram Reduction}: In the row case, choose a permutation matrix $P$ with $B$ as the first $n-1$ rows of $PA$. Set $G\defeq(PA)(PA)^*$.\\
+The matrix $BB^*$ is its leading principal submatrix, and $PA$ and $A$ have the same singular values by Proposition \ref{prop:unitary-invariance-of-singular-values}(i).
+\item \hlt{Index Identification}: $(\forall\,j\in J_n)\,\lambda_j(G)=\sigma_{n-j+1}(A)^2$ by Proposition \ref{prop:basic-singular-value-identities}(i) and Definition \ref{def:matrix-singular-values}.\\
+The identity $(\forall\,j\in J_{n-1})\,\lambda_j(BB^*)=\sigma_{n-j}(B)^2$ holds by Proposition \ref{prop:basic-singular-value-identities}(i) and Definition \ref{def:matrix-singular-values}.
+\item \hlt{Cauchy Transfer}: Fix $i\in J_{n-1}$ and set $j\defeq n-i$. The chain $\sigma_{i+1}(A)^2\leq\sigma_i(B)^2\leq\sigma_i(A)^2$ holds by Theorem \ref{thm:cauchy-principal-submatrix-interlacing}(i)--(ii).\\
+The row-deletion claim follows by taking nonnegative square roots.
+\item \hlt{Column Reduction}: If $B$ is obtained by deleting a column, then $B^*$ is obtained from $A^*$ by deleting a row.\\
+The stated inequalities hold by the row-deletion claim and Proposition \ref{prop:basic-singular-value-identities}(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: A principal Gram block proves row deletion; adjoints transfer the result to columns.\\
+\hlt{Key Insight}: $j=n-i$ matches increasing Gram eigenvalues with decreasing singular values.
+\end{proof}
+\end{corollary}
+
+Figure \ref{fig:eigenvalue-interlacing-ladder} compares the interlacing windows from Theorem \ref{thm:rank-one-psd-eigenvalue-interlacing} and Corollary \ref{cor:cauchy-interlacing-general-principal-submatrix}.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/linear_algebra/eigenvalue_interlacing_ladder.tikz}
+  \caption{$\lambda_i(A+E)$ lies in $[\lambda_i(A),\lambda_{i+1}(A)]$, while $\lambda_i(B)$ lies in $[\lambda_i(A),\lambda_{i+m}(A)]$.}
+  \label{fig:eigenvalue-interlacing-ladder}
+\end{illustrationfigure}
+
+\begin{theorem} \label{thm:schur-majorization-eigenvalues-by-diagonal} \hlt{Schur Majorization of the Diagonal}\\
+Let $A\in\operatorname{Mat}(n,n,\mathbb{C})$ be Hermitian, and let $d_1\leq\cdots\leq d_n$ be its diagonal entries arranged increasingly.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,k\in J_{n-1})\,\sum\limits_{i=1}^{k}\lambda_i(A)\leq\sum\limits_{i=1}^{k}d_i$.
+\item $\sum\limits_{i=1}^{n}\lambda_i(A)=\sum\limits_{i=1}^{n}d_i$.
+\end{enumerate}
+\begin{proof}
+Choose a permutation matrix $P$ such that the diagonal of $\widetilde{A}\defeq P^*AP$ is $(d_1,\ldots,d_n)$.\\
+The matrices $A$ and $\widetilde{A}$ have the same ordered eigenvalues by Theorem \ref{thm:similarity-preserves-characteristic-polynomial}(i).\\
+Set $A_k$ to be the leading $k\times k$ principal submatrix of $\widetilde{A}$ for $k\in J_n$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $k\in J_{n-1}$. The inequalities $(\forall\,i\in J_k)\,\lambda_i(\widetilde{A})\leq\lambda_i(A_k)$ hold by Corollary \ref{cor:cauchy-interlacing-general-principal-submatrix}(i).\\
+The identity $\sum\limits_{i=1}^{k}\lambda_i(A_k)=\operatorname{tr}(A_k)=\sum\limits_{i=1}^{k}d_i$ holds by Proposition \ref{prop:trace-determinant-from-eigenvalues}(i) and Definition \ref{def:matrix-trace-and-determinant}.\\
+Thus $\sum\limits_{i=1}^{k}\lambda_i(A)\leq\sum\limits_{i=1}^{k}d_i$ by the preceding inequalities and the common ordered spectrum of $A$ and $\widetilde{A}$.
+\item $\sum\limits_{i=1}^{n}\lambda_i(A)=\operatorname{tr}(A)=\sum\limits_{i=1}^{n}d_i$ by Proposition \ref{prop:trace-determinant-from-eigenvalues}(i) and Definition \ref{def:matrix-trace-and-determinant}.
+\end{enumerate}
+\hlt{Structural Commentary}: Cauchy bounds each leading-block eigenvalue before trace sums the inequalities.\\
+\hlt{Key Insight}: Ordering the diagonal makes each partial sum a principal-block trace.
+\end{proof}
+\end{theorem}
+
+\begin{proofmethod} \label{meth:eigenvalue-interlacing-method} \hlt{Eigenvalue Interlacing Proof Method}\\
+Given a proposed Hermitian eigenvalue interlacing inequality, construct a proof route as follows:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item order every Hermitian spectrum increasingly and identify the requested lower and upper indices;
+\item identify the lost or unaffected directions through perturbation rank, a kernel, or deleted coordinates;
+\item choose lower and upper spectral flags whose dimensions force a nonzero intersection by Corollary \ref{cor:large-subspaces-intersect};
+\item normalize an intersection vector and certify the target eigenvalue chain by Theorem \ref{thm:rayleigh-quotient-spectral-interval}.
+\end{enumerate}
+\end{proofmethod}
