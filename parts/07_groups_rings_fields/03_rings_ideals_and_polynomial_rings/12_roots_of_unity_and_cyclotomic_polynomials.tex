@@ -1,47 +1,93 @@
 \subsection{Roots of Unity and Cyclotomic Polynomials}
 
-\begin{definition} \label{def:roots-of-unity-primitive-cyclotomic} \hlt{Roots of Unity and Cyclotomic Polynomials}\\
-For $n\geq1$:
+\begin{definition} \label{def:roots-of-unity-primitive-cyclotomic} \hlt{Roots of Unity, Primitive Roots, and Euler's Totient}\\
+Let $n\in\N$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The complex $n$th roots of unity are $U_n\defeq\{z\in\C:z^n=1\}$.
-\item A root $\omega\in U_n$ is \hlt{primitive} iff $\operatorname{ord}(\omega)=n$; set $\Omega_n\defeq\{\omega\in U_n:\operatorname{ord}(\omega)=n\}$.
-\item The $n$th \hlt{cyclotomic polynomial} is $\Phi_n(x)\defeq\prod\limits_{\omega\in\Omega_n}(x-\omega)$.
-\item The number of primitive $n$th roots is $\varphi(n)\defeq|\Omega_n|$.
+\item The complex \hlt{$n$th roots of unity} are $U_n\defeq\{z\in\C^\times:z^n=1\}$.
+\item A root $\omega\in U_n$ is \hlt{primitive} iff $\operatorname{ord}(\omega)=n$ in $\C^\times$; set $\Omega_n\defeq\{\omega\in U_n:\operatorname{ord}(\omega)=n\}$.
+\item \hlt{Euler's totient} is $\varphi(n)\defeq|\{k\in\{1,\ldots,n\}:\gcd(k,n)=1\}|$.
 \end{enumerate}
 \end{definition}
 
-\begin{proposition} \label{prop:roots-of-unity-cyclic-and-cyclotomic-factorization} \hlt{Roots of Unity Factorization}\\
-Let $\zeta_n=e^{2\pi i/n}$. Then $U_n=\langle\zeta_n\rangle$; $|U_n|=n$; $\Omega_n=\{\zeta_n^k:1\leq k\leq n,\ \gcd(k,n)=1\}$; $|\Omega_n|=\varphi(n)$.\\
-Moreover, $U_n=\coprod\limits_{d\mid n}\Omega_d$ and $x^n-1=\prod\limits_{d\mid n}\Phi_d(x)$.
+\begin{proposition} \label{prop:roots-of-unity-cyclic-structure} \hlt{Cyclic Structure of Roots of Unity}\\
+Let $n\in\N$ and set $\zeta_n\defeq\exp\left(\frac{2\pi i}{n}\right)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $U_n=\langle\zeta_n\rangle$.
+\item $|U_n|=n$.
+\item $\Omega_n=\{\zeta_n^k:k\in\{1,\ldots,n\},\ \gcd(k,n)=1\}$.
+\item $|\Omega_n|=\varphi(n)$.
+\item $U_n=\coprod\limits_{d\mid n}\Omega_d$.
+\end{enumerate}
 \begin{proof}
-The roots of $x^n-1$ are precisely $\zeta_n^k$ for $0\leq k<n$, hence $U_n=\langle\zeta_n\rangle$ and $|U_n|=n$.\\
-In a cyclic group, $\operatorname{ord}(\zeta_n^k)=n/\gcd(k,n)$, so $\zeta_n^k$ is primitive iff $\gcd(k,n)=1$; thus $|\Omega_n|=\varphi(n)$.\\
-Each $z\in U_n$ has unique order $d\mid n$, giving $U_n=\coprod_{d\mid n}\Omega_d$.\\
-Therefore $x^n-1=\prod\limits_{z\in U_n}(x-z)=\prod_{d\mid n}\prod\limits_{\omega\in\Omega_d}(x-\omega)=\prod\limits_{d\mid n}\Phi_d(x)$
-\hlt{Structural Commentary}: Orders partition roots of unity by divisors.\\
-\hlt{Key Insight}: Cyclicity turns root counting into order counting.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The roots of $x^n-1$ in $\C$ are precisely $\zeta_n^k$ for $k\in\{1,\ldots,n\}$. Hence $U_n=\{\zeta_n^k:k\in\{1,\ldots,n\}\}=\langle\zeta_n\rangle$.
+\item Suppose $1\leq j<k\leq n$ and $\zeta_n^j=\zeta_n^k$. Then $\exp\left(\frac{2\pi i(k-j)}{n}\right)=1$, so $\frac{k-j}{n}\in\Z$, contrary to $0<k-j<n$.\\
+Thus the $n$ representatives in (i) are distinct, so $|U_n|=n$.
+\item Fix $k\in\{1,\ldots,n\}$, set $g\defeq\gcd(k,n)$, and write $k=gk_0$ and $n=gn_0$.\\
+Then $(\zeta_n^k)^{n_0}=1$. If $(\zeta_n^k)^m=1$ for $m\in\N$, then $n\mid km$, so $n_0\mid k_0m$.\\
+The ring $\Z$ is a PID by Theorem \ref{thm:integers-and-polynomial-ring-are-pids}(i) and Definition \ref{def:principal-ideal-domain-and-ufd}(i).\\
+Since $\gcd(k_0,n_0)=1$, choose $a,b\in\Z$ with $ak_0+bn_0=1$ by Theorem \ref{thm:pid-prime-irreducible-bezout}(iii).\\
+Then $n_0\mid m$ by $m=ak_0m+bn_0m$. Therefore $\operatorname{ord}(\zeta_n^k)=n_0=\frac{n}{\gcd(k,n)}$.\\
+Hence $\zeta_n^k\in\Omega_n\Longleftrightarrow\gcd(k,n)=1$, which is the asserted description of $\Omega_n$.
+\item $|\Omega_n|=\varphi(n)$ by (iii) and Definition \ref{def:roots-of-unity-primitive-cyclotomic}(iii).
+\item Let $z\in U_n$ and set $d\defeq\operatorname{ord}(z)$. Choose $q,r\in\Z$ with $n=qd+r$ and $0\leq r<d$.\\
+Then $1=z^n=(z^d)^qz^r=z^r$, so $r=0$ by minimality of $d$. Thus $d\mid n$ and $z\in\Omega_d$.\\
+Conversely, if $d\mid n$ and $\omega\in\Omega_d$, then $\omega^n=1$, so $\omega\in U_n$. The union is disjoint by uniqueness of element order.
+\end{enumerate}
+\hlt{Structural Commentary}: Root parametrization proves cyclicity; orders prove counting and partition.\\
+\hlt{Key Insight}: $\gcd(k,n)$ determines the order of $\zeta_n^k$.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:cyclotomic-polynomial} \hlt{Cyclotomic Polynomials}\\
+Let $n\in\N$. The set $\Omega_n$ is finite by Proposition \ref{prop:roots-of-unity-cyclic-structure}(iii). The \hlt{$n$th cyclotomic polynomial} is $\Phi_n(x)\defeq\prod\limits_{\omega\in\Omega_n}(x-\omega)\in\C[x]$.
+\end{definition}
+
+\begin{proposition} \label{prop:roots-of-unity-cyclic-and-cyclotomic-factorization} \hlt{Cyclotomic Factorization of $x^n-1$}\\
+For $n\in\N$, $x^n-1=\prod\limits_{d\mid n}\Phi_d(x)$ in $\C[x]$.
+\begin{proof}
+The roots of $x^n-1$ are $U_n$ by Definition \ref{def:roots-of-unity-primitive-cyclotomic}(i). Their number is $n$ by Proposition \ref{prop:roots-of-unity-cyclic-structure}(ii).\\
+Since $x^n-1$ is monic of degree $n$, $x^n-1=\prod\limits_{z\in U_n}(x-z)$. The equality $\prod\limits_{z\in U_n}(x-z)=\prod\limits_{d\mid n}\prod\limits_{\omega\in\Omega_d}(x-\omega)$ holds by Proposition \ref{prop:roots-of-unity-cyclic-structure}(v).\\
+Each inner product equals $\Phi_d(x)$ by Definition \ref{def:cyclotomic-polynomial}, so $x^n-1=\prod\limits_{d\mid n}\Phi_d(x)$.\\
+\hlt{Structural Commentary}: The order partition regroups linear factors into cyclotomic factors.\\
+\hlt{Key Insight}: Each root belongs to exactly one primitive-order class.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:cyclotomic-polynomials-integer-coefficients} \hlt{Cyclotomic Polynomials Have Integer Coefficients}\\
-For every $n\geq1$, $\Phi_n(x)\in\Z[x]$ is monic.
+For $n\in\N$:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\Phi_n$ is monic.
+\item $\Phi_n\in\Z[x]$.
+\end{enumerate}
 \begin{proof}
-Induct on $n$. For $n=1$, $\Phi_1(x)=x-1$.\\
-Assume $\Phi_d\in\Z[x]$ for every proper divisor $d\mid n$, and set $P_n(x)\defeq\prod\limits_{\substack{d\mid n\\ d<n}}\Phi_d(x)\in\Z[x]$.\\
-Then $P_n$ is monic, and Proposition \ref{prop:roots-of-unity-cyclic-and-cyclotomic-factorization} gives $x^n-1=\Phi_n(x)P_n(x)$.\\
-Divide $x^n-1$ by $P_n$ in $\Z[x]$: $x^n-1=hP_n+r$, where $h,r\in\Z[x]$ and $r=0$ or $\deg r<\deg P_n$.\\
-Uniqueness of division over $\C[x]$ gives $h=\Phi_n$ and $r=0$. Hence $\Phi_n\in\Z[x]$, and $\Phi_n$ is monic by definition.\\
-\hlt{Structural Commentary}: Proper divisors isolate the next cyclotomic factor.\\
-\hlt{Key Insight}: Monic division keeps the quotient in $\Z[x]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The polynomial $\Phi_n$ is monic by Definition \ref{def:cyclotomic-polynomial}, because every factor $x-\omega$ is monic.
+\item Suppose some $\Phi_n$ does not lie in $\Z[x]$, and choose the least such $n$ by Assumption \ref{assump:well-ordering-positive-integers}.\\
+The identity $\Phi_1(x)=x-1$ holds by Proposition \ref{prop:roots-of-unity-cyclic-structure}(iii) and Definition \ref{def:cyclotomic-polynomial}, so $n>1$. Set $D_n\defeq\{d\in\N:d\mid n,\ d<n\}$.\\
+If $d\in D_n$, then $\Phi_d\in\Z[x]$ by minimality and $\Phi_d$ is monic by (i). Hence $P_n(x)\defeq\prod\limits_{d\in D_n}\Phi_d(x)$ is a monic polynomial in $\Z[x]$.\\
+The identity $x^n-1=\Phi_n(x)P_n(x)$ holds by Proposition \ref{prop:roots-of-unity-cyclic-and-cyclotomic-factorization}.\\
+Since $P_n$ is monic, leading-term cancellation stays in $\Z[x]$, strictly lowers degree. Process terminates by Assumption \ref{assump:well-ordering-positive-integers}.\\
+Thus $h,r\in\Z[x]$ satisfy $x^n-1=hP_n+r$ with $r=0$ or $\deg r<\deg P_n$.\\
+Over $\C[x]$, $(\Phi_n,0)$ is another quotient-remainder pair by the factorization identity.\\
+Therefore $(h,r)=(\Phi_n,0)$ by Theorem \ref{thm:polynomial-division-algorithm}(ii). Thus $\Phi_n=h\in\Z[x]$, contrary to the choice of $n$.
+\end{enumerate}
+\hlt{Structural Commentary}: Minimal divisors construct an integral quotient; uniqueness identifies $\Phi_n$.\\
+\hlt{Key Insight}: A monic divisor requires no coefficient division outside $\Z$.
 \end{proof}
 \end{proposition}
 
 \begin{lemma} \label{lem:cyclotomic-size-estimate-for-wedderburn} \hlt{A Cyclotomic Size Estimate}\\
-For $n>1$ and $z\in\Z_{\geq2}$, $|\Phi_n(z)|>z-1$.
+Let $n\in\N$ with $n>1$ and let $z\in\Z$ with $z\geq2$. Then $|\Phi_n(z)|>z-1$.
 \begin{proof}
-For $\omega\in\Omega_n$, $\omega\neq1$ and $|\omega|=1$, hence $|z-\omega|>z-1$. Thus $|\Phi_n(z)|=\prod\limits_{\omega\in\Omega_n}|z-\omega|>(z-1)^{\varphi(n)}\geq z-1$.\\
-\hlt{Structural Commentary}: Primitive factors all lie outside the closest point $1$.\\
-\hlt{Key Insight}: Each primitive root contributes a factor larger than $z-1$.
+Let $\omega\in\Omega_n$. Then $\omega\neq1$ by $\operatorname{ord}(\omega)=n>1$, $|\omega|=1$ by $\omega^n=1$. Since a point on unit circle has real part $1$ only at $1$, $\operatorname{Re}(\omega)<1$.\\
+Therefore $|z-\omega|^2=z^2-2z\operatorname{Re}(\omega)+1>(z-1)^2$, so $|z-\omega|>z-1$. Relation $|\Omega_n|=\varphi(n)\geq1$ holds by Proposition \ref{prop:roots-of-unity-cyclic-structure}(iv), Definition \ref{def:roots-of-unity-primitive-cyclotomic}(iii). By Definition \ref{def:cyclotomic-polynomial}, $|\Phi_n(z)|=\prod\limits_{\omega\in\Omega_n}|z-\omega|>(z-1)^{\varphi(n)}\geq z-1$.\\
+\hlt{Structural Commentary}: Unit-circle geometry bounds each factor; root counting bounds their product.\\
+\hlt{Key Insight}: A primitive $n$th root with $n>1$ cannot equal $1$.
 \end{proof}
 \end{lemma}
