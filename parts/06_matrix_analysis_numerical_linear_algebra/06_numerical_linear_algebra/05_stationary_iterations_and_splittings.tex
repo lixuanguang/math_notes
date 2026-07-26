@@ -1,83 +1,111 @@
 \subsection{Stationary Iterations and Splittings}
 
+Throughout this subsection, $n\in\mathbb{Z}_{>0}$.
+
 \begin{definition} \label{def:matrix-splitting-iteration} \hlt{Matrix Splitting Iteration}\\
-Let $A=S-T$ with $S$ invertible, and set $B\defeq S^{-1}T$.\\
-The \hlt{splitting iteration} for $A\mathbf{x}=\mathbf{b}$ is $S\mathbf{x}_{k+1}=T\mathbf{x}_k+\mathbf{b}$, and $\mathbf{x}_{k+1}=B\mathbf{x}_k+S^{-1}\mathbf{b}$.\\
-For a solution $\mathbf{x}_*$, the error $\mathbf{e}_k\defeq\mathbf{x}_k-\mathbf{x}_*$ satisfies $\mathbf{e}_{k+1}=B\mathbf{e}_k$.
+Let $A,S,T\in\operatorname{Mat}(n,n,\mathbb{C})$ satisfy $A=S-T$, with $S$ invertible. Set $B\defeq S^{-1}T$, and let $\mathbf{b},\mathbf{x}_0\in\mathbb{C}^n$.\\
+The \hlt{splitting iteration} for $A\mathbf{x}=\mathbf{b}$ is $(\forall\,k\in\mathbb{Z}_{\geq0})\,S\mathbf{x}_{k+1}=T\mathbf{x}_k+\mathbf{b}$. Equivalently, $(\forall\,k\in\mathbb{Z}_{\geq0})\,\mathbf{x}_{k+1}=B\mathbf{x}_k+S^{-1}\mathbf{b}$.\\
+If $A\mathbf{x}_*=\mathbf{b}$ and $\mathbf{e}_k\defeq\mathbf{x}_k-\mathbf{x}_*$, then $(\forall\,k\in\mathbb{Z}_{\geq0})\,\mathbf{e}_{k+1}=B\mathbf{e}_k$.
 \end{definition}
 
 \begin{theorem} \label{thm:splitting-iteration-convergence-spectral-radius} \hlt{Splitting Convergence Criterion}\\
-Let $A=S-T$, with $S$ invertible, and set $B=S^{-1}T$. For $\mathbf{x}_{k+1}=B\mathbf{x}_k+S^{-1}\mathbf{b}$:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item if $A$ is invertible, then $\mathbf{x}_k\to A^{-1}\mathbf{b}$ for all $\mathbf{x}_0,\mathbf{b}$ if and only if $\rho(B)<1$;
-\item $\rho(B)<1$ implies $A$ is invertible.
-\end{enumerate}
+Let $A,S,T\in\operatorname{Mat}(n,n,\mathbb{C})$ satisfy $A=S-T$, with $S$ invertible, and set $B\defeq S^{-1}T$.\\
+For $\mathbf{b},\mathbf{x}_0\in\mathbb{C}^n$, write $(\mathbf{x}_k(\mathbf{b},\mathbf{x}_0))_{k\geq0}$ for the splitting sequence in Definition \ref{def:matrix-splitting-iteration}.\\
+Then $\rho(B)<1$ if and only if $A$ is invertible and $(\forall\,(\mathbf{b},\mathbf{x}_0)\in(\mathbb{C}^n)^2)\,\mathbf{x}_k(\mathbf{b},\mathbf{x}_0)\to A^{-1}\mathbf{b}$.
 \begin{proof}
-\begin{enumerate}[label=(\roman*)]
+\begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item Let $\mathbf{x}_*=A^{-1}\mathbf{b}$ and $\mathbf{e}_k=\mathbf{x}_k-\mathbf{x}_*$. Then $\mathbf{e}_k=B^k\mathbf{e}_0$, so convergence for all $\mathbf{x}_0,\mathbf{b}$ is equivalent to $B^k\to0$, equivalently $\rho(B)<1$ by Theorem \ref{thm:matrix-powers-converge-to-zero-spectral-radius}.
-\item If $\rho(B)<1$, then $1\notin\operatorname{spec}(B)$, so $I_n-B$ is invertible. Since $A=S-T=S(I_n-B)$, $A$ is invertible.
+\item[$(\Rightarrow)$] By Theorem \ref{thm:matrix-powers-converge-to-zero-spectral-radius}, $B^k\to0$. If $(I_n-B)\mathbf{z}=\mathbf{0}$, then $B\mathbf{z}=\mathbf{z}$, so $\mathbf{z}=\mathbf{0}$ by $\rho(B)<1$.\\
+Thus $I_n-B$ is invertible by Corollary \ref{cor:square-matrix-algebraic-invertibility-dictionary}(vi)$\Rightarrow$(i), and $A=S(I_n-B)$ is invertible.\\
+Fix $\mathbf{b},\mathbf{x}_0\in\mathbb{C}^n$, set $\mathbf{x}_*\defeq A^{-1}\mathbf{b}$,  $\mathbf{e}_k\defeq\mathbf{x}_k(\mathbf{b},\mathbf{x}_0)-\mathbf{x}_*$. Then $\mathbf{e}_k=B^k\mathbf{e}_0$ by Definition \ref{def:matrix-splitting-iteration}, induction, so $\mathbf{x}_k(\mathbf{b},\mathbf{x}_0)\to A^{-1}\mathbf{b}$.
+\item[$(\Leftarrow)$] Fix $\mathbf{z}\in\mathbb{C}^n$, $(\mathbf{b},\mathbf{x}_0)=(\mathbf{0},\mathbf{z})$. Then $B^k\mathbf{z}=\mathbf{x}_k(\mathbf{0},\mathbf{z})\to\mathbf{0}$ by global-convergence hypothesis, Definition \ref{def:matrix-splitting-iteration}.\\
+The convergence $B^k\to0$ holds entrywise by specializing $\mathbf{z}$ to the standard basis vectors, and $\rho(B)<1$ by Theorem \ref{thm:matrix-powers-converge-to-zero-spectral-radius}.
 \end{enumerate}
-\hlt{Structural Commentary}: A stationary method is a matrix-power problem in disguise.\\
-\hlt{Key Insight}: The iteration matrix $B=S^{-1}T$ controls the errors.
+\hlt{Structural Commentary}: The forward direction propagates errors by $B^k$; the reverse tests homogeneous iterations on a basis.\\
+\hlt{Key Insight}: Arbitrary initial errors decay exactly when $B^k\to0$.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:singular-matrix-splitting-obstruction} \hlt{Singular Matrices Obstruct Splitting Convergence}\\
-Let $A=S-T$, with $S$ invertible. If $A$ is singular, then $1\in\operatorname{spec}(S^{-1}T)$.\\
-Hence $\rho(S^{-1}T)\geq1$, so $\rho(S^{-1}T)<1$ cannot hold.
+Let $A,S,T\in\operatorname{Mat}(n,n,\mathbb{C})$ satisfy $A=S-T$, with $S$ invertible, and suppose $A$ is singular. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $1\in\operatorname{spec}(S^{-1}T)$;
+\item $\rho(S^{-1}T)\geq1$.
+\end{enumerate}
 \begin{proof}
-Choose $\mathbf{0}\neq\mathbf{x}\in\ker A$. Then $(S-T)\mathbf{x}=\mathbf{0}$, so $S\mathbf{x}=T\mathbf{x}$ and $S^{-1}T\mathbf{x}=\mathbf{x}$. Thus $1$ is eigenvalue of $S^{-1}T$.\\
-\hlt{Structural Commentary}: Singular $A$ forces an undamped error mode.\\
-\hlt{Key Insight}: A null vector of $A$ becomes a fixed error mode.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $\mathbf{0}\neq\mathbf{x}\in\ker(A)$ by Corollary \ref{cor:square-matrix-algebraic-invertibility-dictionary}(i)$\Leftrightarrow$(vi). Then $(S-T)\mathbf{x}=\mathbf{0}$, so $S^{-1}T\mathbf{x}=\mathbf{x}$ and $1\in\operatorname{spec}(S^{-1}T)$.
+\item The inequality $\rho(S^{-1}T)\geq1$ holds by (i) and Definition \ref{def:spectral-radius-and-convergent-matrix}.
+\end{enumerate}
+\hlt{Structural Commentary}: The identity $A\mathbf{x}=\mathbf{0}$ converts a null vector into a $1$-eigenvector of $S^{-1}T$.\\
+\hlt{Key Insight}: A fixed error mode prevents spectral-radius contraction.
 \end{proof}
 \end{corollary}
 
-\begin{method} \label{meth:stationary-iterative-method} \hlt{Stationary Iterative Method}\\
-For $A\mathbf{x}=\mathbf{b}$, a stationary iteration is:
+\begin{computationmethod} \label{meth:stationary-iterative-method} \hlt{Stationary Iterative Method}\\
+Let $M\in\operatorname{Mat}(n,n,\mathbb{C})$ and $\mathbf{c},\mathbf{x}_0\in\mathbb{C}^n$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Choose fixed $M$ and $\mathbf{c}$.
-\item Update $\mathbf{x}_{k+1}=M\mathbf{x}_k+\mathbf{c}$.
-\item If $\mathbf{x}_*$ exists, use $\mathbf{x}_{k+1}-\mathbf{x}_*=M(\mathbf{x}_k-\mathbf{x}_*)$ and Theorem \ref{thm:matrix-powers-converge-to-zero-spectral-radius} for convergence.
+\item Generate $(\forall\,k\in\mathbb{Z}_{\geq0})\,\mathbf{x}_{k+1}=M\mathbf{x}_k+\mathbf{c}$.
+\item If $\rho(M)<1$, then $I_n-M$ is invertible by Theorem \ref{thm:splitting-iteration-convergence-spectral-radius}, with $A=I_n-M$, $S=I_n$, and $T=M$.\\
+The vector $\mathbf{x}_*\defeq(I_n-M)^{-1}\mathbf{c}$ is the unique fixed point.
+\item Under $\rho(M)<1$, $\mathbf{x}_k-\mathbf{x}_*=M^k(\mathbf{x}_0-\mathbf{x}_*)\to\mathbf{0}$ by Theorem \ref{thm:matrix-powers-converge-to-zero-spectral-radius}.
 \end{enumerate}
-\end{method}
+This defines an infinite exact-arithmetic sequence. A finite implementation must additionally specify a stopping test and tolerance.
+\end{computationmethod}
 
-\begin{method} \label{meth:jacobi-gauss-seidel-sor-splittings} \hlt{Jacobi, Gauss--Seidel, and SOR Splittings}\\
-Let $A=D+L+U$, with $D$ diagonal, $L$ strictly lower triangular, and $U$ strictly upper triangular. For a splitting $A=S-T$, use $S\mathbf{x}_{k+1}=T\mathbf{x}_k+\mathbf{b}$ and $B=S^{-1}T$.
+\begin{computationmethod} \label{meth:jacobi-gauss-seidel-sor-splittings} \hlt{Jacobi, Gauss--Seidel, and SOR Splittings}\\
+Let $A=D+L+U\in\operatorname{Mat}(n,n,\mathbb{C})$, where $D$ is diagonal and invertible, $L$ is strictly lower triangular, and $U$ is strictly upper triangular.\\
+For a splitting $A=S-T$, use the iteration in Definition \ref{def:matrix-splitting-iteration}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item \hlt{Jacobi}: $S=D$, $T=-(L+U)$, $B_J=-D^{-1}(L+U)$.
 \item \hlt{Gauss--Seidel}: $S=D+L$, $T=-U$, $B_{\operatorname{GS}}=-(D+L)^{-1}U$.
-\item \hlt{SOR}: for $\omega\neq0$, $S_\omega=\frac1\omega D+L$; $T_\omega=\left(\frac1\omega-1\right)D-U$; and $B_\omega=S_\omega^{-1}T_\omega$.
+\item \hlt{SOR}: For $\omega\in\mathbb{R}\setminus\{0\}$, $S_\omega=\frac{1}{\omega}D+L$, $T_\omega=\left(\frac{1}{\omega}-1\right)D-U$, and $B_\omega=S_\omega^{-1}T_\omega$.
 \end{enumerate}
-Convergence is controlled by $\rho(B)$; $\omega=1$ gives Gauss--Seidel.
-\end{method}
+The transposes of $D+L$ and $S_\omega$ are upper triangular with nonzero diagonal entries.\\
+The matrices $D+L$ and $S_\omega$ are invertible by Theorem \ref{thm:inverse-upper-triangular}(i) and Corollary \ref{cor:transpose-invertible-iff}.\\
+Global convergence of a listed scheme is equivalent to $\rho(B)<1$ for its iteration matrix by Theorem \ref{thm:splitting-iteration-convergence-spectral-radius}. For $\omega=1$, SOR is Gauss--Seidel.
+\end{computationmethod}
 
-\begin{corollary} \label{cor:strict-diagonal-dominance-jacobi-convergence} \hlt{Strict Diagonal Dominance Gives Jacobi Convergence}\\
-If $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$ is strictly row diagonally dominant, then Jacobi converges for every right-hand side.
+\begin{corollary} \label{cor:strict-diagonal-dominance-jacobi-convergence} \hlt{Jacobi Convergence under Strict Diagonal Dominance}\\
+Let $A=[a_{ij}]\in\operatorname{Mat}(n,n,\mathbb{C})$ be strictly diagonally dominant, $\mathbf{b},\mathbf{x}_0\in\mathbb{C}^n$, $(\mathbf{x}_k)$ be Jacobi sequence. Then $\mathbf{x}_k\to A^{-1}\mathbf{b}$.
 \begin{proof}
-Here $a_{ii}\neq0$ and $B_J=-D^{-1}(L+U)=I_n-D^{-1}A$. Thus $(B_J)_{ii}=0$ and $\sum\limits_{j\neq i}\abs{(B_J)_{ij}}=\sum\limits_{j\neq i}\abs{a_{ij}}/\abs{a_{ii}}<1$.\\
-Gersgorin gives $\operatorname{spec}(B_J)\subset\{z:\abs{z}<1\}$, so $\rho(B_J)<1$; Theorem \ref{thm:splitting-iteration-convergence-spectral-radius} applies.\\
-\hlt{Structural Commentary}: Diagonal dominance puts the Jacobi spectrum in the unit disk.\\
-\hlt{Key Insight}: Small off-diagonal row sums force the error matrix to have spectral radius below $1$.
+The inequalities $\abs{a_{ii}}>R_i^{\mathrm{off}}(A)\geq0$ hold for $i\in J_n$ by Definition \ref{def:diagonal-dominance}, so $D$ is invertible by Theorem \ref{thm:inverse-upper-triangular}(i).\\
+From $A=D+L+U$, $B_J=-D^{-1}(L+U)=I_n-D^{-1}A$ and $(\forall\,i\in J_n)\,[(B_J)_{ii}=0,\ \sum\limits_{j\in J_n\setminus\{i\}}\abs{(B_J)_{ij}}=\frac{R_i^{\mathrm{off}}(A)}{\abs{a_{ii}}}<1]$.\\
+Hence $\operatorname{spec}(B_J)\subseteq\{z\in\mathbb{C}:\abs{z}<1\}$ by Theorem \ref{thm:gersgorin-disk-theorem}, so $\rho(B_J)<1$. Convergence $\mathbf{x}_k\to A^{-1}\mathbf{b}$ holds by Theorem \ref{thm:splitting-iteration-convergence-spectral-radius}.\\
+\hlt{Structural Commentary}: Strict dominance becomes Gersgorin disks for $B_J$ centered at $0$ with radii below $1$.\\
+\hlt{Key Insight}: Row dominance confines the Jacobi error spectrum to the unit disk.
 \end{proof}
 \end{corollary}
 
 \begin{example} \label{ex:two-by-two-jacobi-gauss-seidel-convergence} \hlt{Two-by-Two Jacobi and Gauss--Seidel}\\
-For $A=\begin{bmatrix}2&1\\1&2\end{bmatrix}$, $\mathbf{b}\in\mathbb{R}^2$, write $A=D+L+U$.\\
-The Jacobi iteration matrix is $B_J=-D^{-1}(L+U)= \begin{bmatrix} 0&-\frac12\\ -\frac12&0 \end{bmatrix}$, so $\rho(B_J)=\frac12$.\\
-The Gauss--Seidel iteration matrix is $B_{\operatorname{GS}}=-(D+L)^{-1}U= \begin{bmatrix} 0&-\frac12\\ 0&\frac14 \end{bmatrix}$, so $\rho(B_{\operatorname{GS}})=\frac14$.\\
-Both converge by Theorem \ref{thm:splitting-iteration-convergence-spectral-radius}, and smaller spectral radius predicts faster asymptotic decay for Gauss--Seidel.
+For $A=\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)$, write $A=D+L+U$.\\
+The Jacobi matrix is $B_J=-D^{-1}(L+U)=\left(\begin{smallmatrix}0&-\frac{1}{2}\\-\frac{1}{2}&0\end{smallmatrix}\right)$, with $\rho(B_J)=\frac{1}{2}$.\\
+The Gauss--Seidel matrix is $B_{\operatorname{GS}}=-(D+L)^{-1}U=\left(\begin{smallmatrix}0&-\frac{1}{2}\\0&\frac{1}{4}\end{smallmatrix}\right)$, with $\rho(B_{\operatorname{GS}})=\frac{1}{4}$.\\
+Both schemes converge globally by Theorem \ref{thm:splitting-iteration-convergence-spectral-radius}.\\
+Thus $\rho(B_{\operatorname{GS}})<\rho(B_J)<1$; this spectral-radius comparison does not assert uniformly smaller transient error.
 \end{example}
 
 \begin{example} \label{ex:poisson-tridiagonal-stationary-rates} \hlt{Poisson Tridiagonal Stationary Rates}\\
-For $A_n=\operatorname{tridiag}(-1,2,-1)$, Jacobi gives $B_J=I_n-\frac12A_n$; $\lambda_k(B_J)=\cos\frac{k\pi}{n+1}$; and $\rho(B_J)=\cos\frac{\pi}{n+1}$.\\
-For the same ordering, Gauss--Seidel satisfies $\rho(B_{\operatorname{GS}})=\rho(B_J)^2=\cos^2\frac{\pi}{n+1}$.
-As $n\to\infty$, both radii tend to $1$; fine grids need acceleration or preconditioning.
+Let $A_n=\operatorname{tridiag}(-1,2,-1)$ and $\theta_k\defeq\frac{k\pi}{n+1}$ for $k\in J_n$.\\
+For $\mathbf{v}^{(k)}=[\sin(\theta_k)\ \cdots\ \sin(n\theta_k)]^t$, $A_n\mathbf{v}^{(k)}=(2-2\cos(\theta_k))\mathbf{v}^{(k)}$ by the sine addition formulas.\\
+These $n$ eigenvalues are distinct, so $B_J=I_n-\frac{1}{2}A_n$ has eigenvalues $\cos(\theta_k)$ and $\rho(B_J)=\cos\left(\frac{\pi}{n+1}\right)$.\\
+For $m\in J_n$, write $A_m=D_m+L_m+U_m$, and let $B_{J,m}$ and $B_{\operatorname{GS},m}$ be its iteration matrices.\\
+Set $p_m(\mu)\defeq\det(\mu I_m-B_{J,m})$ and $q_m(\lambda)\defeq\det(\lambda I_m-B_{\operatorname{GS},m})$, with $p_0=q_0\defeq1$.\\
+Since $\det(D_m+L_m)=2^m$ and $\lambda I_m-B_{\operatorname{GS},m}=(D_m+L_m)^{-1}(\lambda(D_m+L_m)+U_m)$, $q_m(\lambda)=2^{-m}\det(\lambda(D_m+L_m)+U_m)$.\\
+By tridiagonal determinant expansion, $p_1(\mu)=\mu$, $q_1(\lambda)=\lambda$, and, for $2\leq m\leq n$,\\
+$p_m(\mu)=\mu p_{m-1}(\mu)-\frac{1}{4}p_{m-2}(\mu)$, and $q_m(\lambda)=\lambda q_{m-1}(\lambda)-\frac{\lambda}{4}q_{m-2}(\lambda)$. The identity $(\forall\,\mu\in\mathbb{C})\,q_m(\mu^2)=\mu^mp_m(\mu)$ holds for $m=0,1$.\\
+If it holds at $m-1,m-2$, then $q_m(\mu^2)=\mu^m(\mu p_{m-1}(\mu)-\frac{1}{4}p_{m-2}(\mu))=\mu^mp_m(\mu)$, so it holds for $0\leq m\leq n$ by induction.\\
+For $\mu\neq0$, $q_n(\mu^2)=0\Longleftrightarrow p_n(\mu)=0$; hence $\operatorname{spec}(B_{\operatorname{GS}})\setminus\{0\}=\{\lambda^2:\lambda\in\operatorname{spec}(B_J)\setminus\{0\}\}$. Thus, $\rho(B_{\operatorname{GS}})=\rho(B_J)^2=\cos^2\left(\frac{\pi}{n+1}\right)$.\\
+As $n\to\infty$, both radii tend to $1$, so the iterations become asymptotically slow and motivate acceleration or preconditioning.
 \end{example}
 
 \begin{perspective} \label{per:preconditioning-preview} \hlt{Preconditioning Preview}\\
-A preconditioner replaces $A\mathbf{x}=\mathbf{b}$ by an equivalent system such as $M^{-1}A\mathbf{x}=M^{-1}\mathbf{b}$ or $AM^{-1}\mathbf{y}=\mathbf{b}$, with $\mathbf{x}=M^{-1}\mathbf{y}$. It should improve conditioning or convergence while being much cheaper to apply than $A^{-1}$.
+Let $A,M\in\operatorname{Mat}(n,n,\mathbb{C})$, with $M$ invertible, and let $\mathbf{b}\in\mathbb{C}^n$.\\
+The left-preconditioned system $M^{-1}A\mathbf{x}=M^{-1}\mathbf{b}$ is equivalent to $A\mathbf{x}=\mathbf{b}$.\\
+The right-preconditioned system $AM^{-1}\mathbf{y}=\mathbf{b}$ is equivalent under $\mathbf{x}=M^{-1}\mathbf{y}$.\\
+Favorable conditioning or iteration spectra and inexpensive solves with $M$ are design goals, not consequences of invertibility alone.
 \end{perspective}
