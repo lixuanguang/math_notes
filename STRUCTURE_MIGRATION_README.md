@@ -191,9 +191,9 @@ parts/10_algebraic_geometry/
   01_affine_algebraic_sets/
   02_morphisms_and_coordinate_rings/
   03_projective_geometry/
-  04_schemes/
-  05_sheaves_and_cohomology/
-  06_smoothness_tangent_spaces_and_dimension/
+  04_sheaves_and_schemes/
+  05_cohomology/
+  06_dimension_tangent_spaces_and_smoothness/
   07_divisors_line_bundles_and_curves/
 
 parts/11_real_topological_analysis/
