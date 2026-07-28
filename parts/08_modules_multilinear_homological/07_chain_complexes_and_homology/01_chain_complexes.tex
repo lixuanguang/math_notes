@@ -1,5 +1,164 @@
 \subsection{Chain Complexes}
 
-% Placeholder only.
-% Should cover: complexes, cycles, boundaries, homology, and exact sequences.
-% Do not add exposition here until this material is ready to be developed.
+Throughout this subsection, $R$ denotes a nonzero commutative ring with identity $1_R$.\\
+All modules are $R$-modules.
+
+\begin{definition} \label{def:chain-complex} \hlt{Chain Complex}\\
+A \hlt{chain complex} $C_\bullet=(C_n,d^C_n)_{n\in\Z}$ consists of $R$-modules $C_n$. Its \hlt{differentials} are homomorphisms $d^C_n:C_n\to C_{n-1}$.\\
+They satisfy $(\forall\,n\in\Z)\,d^C_{n-1}\circ d^C_n=0$.
+\end{definition}
+
+\begin{proposition} \label{prop:chain-complex-image-kernel-containment} \hlt{Successive Differentials}\\
+Let $C_\bullet$ be a chain complex. Then $(\forall\,n\in\Z)\,\operatorname{im}d^C_{n+1}\leq\ker d^C_n$.
+\begin{proof} Fix $n\in\Z$ and $y\in\operatorname{im}d^C_{n+1}$. Choose $x\in C_{n+1}$ with $y=d^C_{n+1}(x)$ by definition of the image.\\
+Then $d^C_n(y)=d^C_nd^C_{n+1}(x)=0$ by Definition \ref{def:chain-complex}, so $y\in\ker d^C_n$.\\
+\hlt{Structural Commentary}: Differential composition sends image representatives into the next kernel.\\
+\hlt{Key Insight}: Consecutive differentials compose to zero.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:chain-map-and-isomorphism} \hlt{Chain Maps and Chain Isomorphisms}\\
+Let $C_\bullet,D_\bullet$ be chain complexes.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A degreewise homomorphism $f_\bullet:C_\bullet\to D_\bullet$ is a family $(f_n)_{n\in\Z}$ with $f_n\in\operatorname{Hom}_R(C_n,D_n)$.\\
+It is a \hlt{chain map} if $(\forall\,n\in\Z)\,d^D_n f_n=f_{n-1}d^C_n$.
+\item A chain map $g_\bullet:D_\bullet\to C_\bullet$ is an \hlt{inverse} of $f_\bullet$ if $g_\bullet f_\bullet=\operatorname{id}_{C_\bullet}$ and $f_\bullet g_\bullet=\operatorname{id}_{D_\bullet}$.\\
+The map $f_\bullet$ is a \hlt{chain isomorphism} if it has an inverse.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:chain-maps-compose-and-invert-degreewise} \hlt{Composition and Degreewise Inversion}\\
+Let $C_\bullet,D_\bullet,E_\bullet$ be chain complexes.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\operatorname{id}_{C_n})_{n\in\Z}$ is a chain map $C_\bullet\to C_\bullet$.
+\item Let $f_\bullet:C_\bullet\to D_\bullet$ and $g_\bullet:D_\bullet\to E_\bullet$ be chain maps. Then $(g_nf_n)_{n\in\Z}$ is a chain map $C_\bullet\to E_\bullet$.
+\item Let $f_\bullet:C_\bullet\to D_\bullet$ be a chain map.\\
+Then $f_\bullet$ is a chain isomorphism if and only if $(\forall\,n\in\Z)\,f_n$ is an $R$-module isomorphism.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $(\forall\,n\in\Z)\,d^C_n\operatorname{id}_{C_n}=\operatorname{id}_{C_{n-1}}d^C_n=d^C_n$. Identity family is chain map by Definition \ref{def:chain-map-and-isomorphism}(i).
+\item[$(ii)$] For $n\in\Z$, $d^E_ng_nf_n=g_{n-1}d^D_nf_n=g_{n-1}f_{n-1}d^C_n$ by the chain-map identities for $g_\bullet,f_\bullet$; $(g_nf_n)_{n\in\Z}$ is a chain map.
+\item[$(iii)$] ($\Rightarrow$) Let $g_\bullet$ be an inverse of $f_\bullet$. Then $(\forall\,n\in\Z)\,g_nf_n=\operatorname{id}_{C_n}$ and $f_ng_n=\operatorname{id}_{D_n}$ by Definition \ref{def:chain-map-and-isomorphism}(ii).\\
+Thus each $f_n$ is an $R$-module isomorphism.
+\item[$(iii)$] ($\Leftarrow$) Assume each $f_n$ is an $R$-module isomorphism and set $g_n\defeq f_n^{-1}$.\\
+Fix $n\in\Z$, $(a,b)\in R^2$, and $(y,z)\in D_n^2$. For $x=g_n(y)$ and $w=g_n(z)$, $f_n(ax+bw)=ay+bz$.\\
+Hence $g_n(ay+bz)=ax+bw=ag_n(y)+bg_n(z)$ by bijectivity of $f_n$, so $g_n\in\operatorname{Hom}_R(D_n,C_n)$.\\
+$d^C_ng_n=g_{n-1}f_{n-1}d^C_ng_n=g_{n-1}d^D_nf_ng_n=g_{n-1}d^D_n$ by the chain-map identity for $f_\bullet$.\\
+Thus $g_\bullet$ is a chain map, and $g_\bullet f_\bullet=\operatorname{id}_{C_\bullet}$ and $f_\bullet g_\bullet=\operatorname{id}_{D_\bullet}$ degreewise.
+\end{enumerate}
+\hlt{Structural Commentary}: Commuting squares persist under composition and componentwise inversion.\\
+\hlt{Key Insight}: Inverting every component reverses the chain-map square.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:chain-subcomplex} \hlt{Subcomplex}\\
+Let $C_\bullet$ be a chain complex. A \hlt{subcomplex} $S_\bullet\leq C_\bullet$ consists of submodules $S_n\leq C_n$ indexed by $n\in\Z$.\\
+They satisfy $(\forall\,n\in\Z)\,d^C_n(S_n)\subseteq S_{n-1}$, and their differentials are $d^S_n\defeq d^C_n|_{S_n}$.
+\end{definition}
+
+\begin{proposition} \label{prop:chain-map-kernel-image-subcomplexes} \hlt{Kernel and Image Subcomplexes}\\
+Let $f_\bullet:C_\bullet\to D_\bullet$ be a chain map.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\ker f_n)_{n\in\Z}$ is a subcomplex of $C_\bullet$.
+\item $(\operatorname{im}f_n)_{n\in\Z}$ is a subcomplex of $D_\bullet$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Each $\ker f_n\leq C_n$ by Proposition \ref{prop:hom-module-kernel-image}(ii). Fix $x\in\ker f_n$; $f_{n-1}(d^C_nx)=d^D_nf_n(x)=0$ by Definition \ref{def:chain-map-and-isomorphism}(i), so $d^C_nx\in\ker f_{n-1}$.
+\item Each $\operatorname{im}f_n\leq D_n$ by Proposition \ref{prop:hom-module-kernel-image}(iii). Fix $y\in\operatorname{im}f_n$. Choose $x\in C_n$ with $y=f_n(x)$ by the definition of the image.\\
+Then $d^D_n(y)=f_{n-1}(d^C_nx)\in\operatorname{im}f_{n-1}$ by Definition \ref{def:chain-map-and-isomorphism}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: Commuting squares restrict to kernels and transport images.\\
+\hlt{Key Insight}: Commuting with differentials preserves both vanishing and representability.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:quotient-chain-complex} \hlt{Quotient Complex}\\
+Let $C_\bullet$ be a chain complex and let $S_\bullet\leq C_\bullet$ be a subcomplex. Set $(C/S)_n\defeq C_n/S_n$.\\
+For $n\in\Z$ and $c\in C_n$, set $\overline{d}_n(c+S_n)\defeq d^C_n(c)+S_{n-1}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Each $\overline{d}_n:(C/S)_n\to(C/S)_{n-1}$ is a well-defined $R$-homomorphism.
+\item $C_\bullet/S_\bullet\defeq((C/S)_n,\overline{d}_n)_{n\in\Z}$ is a chain complex.
+\item The quotient maps $\pi_n:C_n\twoheadrightarrow C_n/S_n$ form a chain map $\pi_\bullet:C_\bullet\to C_\bullet/S_\bullet$.
+\item $(\forall\,n\in\Z)\,\ker\pi_n=S_n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $c+S_n=c'+S_n$, then $c-c'\in S_n$ by Proposition \ref{prop:quotient-module-well-defined}(i). Thus $d^C_n(c-c')\in S_{n-1}$ by Definition \ref{def:chain-subcomplex}.\\
+Hence $d^C_n(c)+S_{n-1}=d^C_n(c')+S_{n-1}$ by Proposition \ref{prop:quotient-module-well-defined}(i). Hence $\overline{d}_n$ is well-defined. Fix $(a,b,c,c')\in R^2\times C_n^2$.\\
+$\overline{d}_n\bigl(a(c+S_n)+b(c'+S_n)\bigr)=a\overline{d}_n(c+S_n)+b\overline{d}_n(c'+S_n)$ by $R$-linearity of $d^C_n$. Thus $\overline{d}_n$ is $R$-linear.
+\item For $n\in\Z$ and $c\in C_n$, $\overline{d}_{n-1}\overline{d}_n(c+S_n)=d^C_{n-1}d^C_n(c)+S_{n-2}=S_{n-2}$ by Definition \ref{def:chain-complex}. Hence $\overline{d}_{n-1}\overline{d}_n=0$.
+\item For $n\in\Z$ and $c\in C_n$, $\overline{d}_n\pi_n(c)=d^C_n(c)+S_{n-1}=\pi_{n-1}d^C_n(c)$. Thus $\pi_\bullet$ is a chain map by Definition \ref{def:chain-map-and-isomorphism}(i).
+\item $(\forall\,n\in\Z)\,\ker\pi_n=S_n$ by Proposition \ref{prop:quotient-module-well-defined}(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: Subcomplex stability descends differentials and preserves projection kernels.\\
+\hlt{Key Insight}: Differential images of equivalent representatives remain equivalent.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:exact-sequences-and-complexes} \hlt{Exact Sequences and Exact Complexes}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Homomorphisms $M'\xrightarrow{u}M\xrightarrow{v}M''$ are \hlt{exact at $M$} if $\operatorname{im}u=\ker v$.
+\item A sequence of modules and homomorphisms is \hlt{exact} if it is exact at each module. An exact sequence $0\to A\xrightarrow{u}B\xrightarrow{v}C\to0$ is \hlt{short exact}.
+\item A chain complex $C_\bullet$ is \hlt{exact} if $(\forall\,n\in\Z)\,\operatorname{im}d^C_{n+1}=\ker d^C_n$.
+\item Let $u_\bullet:A_\bullet\to B_\bullet$ and $v_\bullet:B_\bullet\to C_\bullet$ be chain maps.\\
+The sequence $0\to A_\bullet\xrightarrow{u_\bullet}B_\bullet\xrightarrow{v_\bullet}C_\bullet\to0$ is \hlt{short exact} if $(\forall\,n\in\Z)$, $0\to A_n\xrightarrow{u_n}B_n\xrightarrow{v_n}C_n\to0$ is exact.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:short-exact-sequence-criterion} \hlt{Short Exact Sequence Criterion}\\
+Let $u\in\operatorname{Hom}_R(A,B)$ and $v\in\operatorname{Hom}_R(B,C)$. The following conditions are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The sequence $0\to A\xrightarrow{u}B\xrightarrow{v}C\to0$ is exact.
+\item The map $u$ is a monomorphism, $\operatorname{im}u=\ker v$, and $v$ is an epimorphism.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ Assume (i). Exactness at $A$ implies $\ker u=\operatorname{im}(0\to A)=\{0_A\}$.\\
+Thus $u$ is a monomorphism by Proposition \ref{prop:hom-module-kernel-image}(iv). Exactness at $B$ is $\operatorname{im}u=\ker v$.\\
+Exactness at $C$ implies $\operatorname{im}v=\ker(C\to0)=C$, so $v$ is an epimorphism by Definition \ref{def:module-homomorphism}(iv).
+\item[$(ii)$] $\Rightarrow (i)$ Assume (ii). Then $\operatorname{im}(0\to A)=\{0_A\}=\ker u$ by Proposition \ref{prop:hom-module-kernel-image}(iv).\\
+Middle equality is an assumption, and $\operatorname{im}v=C=\ker(C\to0)$ by surjectivity of $v$; sequence is exact by Definition \ref{def:exact-sequences-and-complexes}(i)--(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Endpoints test injectivity and surjectivity; the middle compares image and kernel.\\
+\hlt{Key Insight}: Zero endpoints convert exactness into kernel and image tests.
+\end{proof}
+\end{proposition}
+
+\begin{corollary} \label{cor:short-exact-complexes-degreewise-criterion} \hlt{Degreewise Criterion for Short Exact Complexes}\\
+Let $u_\bullet:A_\bullet\to B_\bullet$ and $v_\bullet:B_\bullet\to C_\bullet$ be chain maps. The following conditions are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The sequence $0\to A_\bullet\xrightarrow{u_\bullet}B_\bullet\xrightarrow{v_\bullet}C_\bullet\to0$ is short exact.
+\item $(\forall\,n\in\Z)$, $u_n$ is a monomorphism, $\operatorname{im}u_n=\ker v_n$, and $v_n$ is an epimorphism.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ Assume (i) and fix $n\in\Z$. The component sequence is exact by Definition \ref{def:exact-sequences-and-complexes}(iv).\\
+Thus $u_n$ is a monomorphism, $\operatorname{im}u_n=\ker v_n$, and $v_n$ is an epimorphism by Proposition \ref{prop:short-exact-sequence-criterion}.
+\item[$(ii)$] $\Rightarrow (i)$ Assume (ii) and fix $n\in\Z$. Then $0\to A_n\xrightarrow{u_n}B_n\xrightarrow{v_n}C_n\to0$ is exact by Proposition \ref{prop:short-exact-sequence-criterion}.\\
+Hence the sequence of chain maps is short exact by Definition \ref{def:exact-sequences-and-complexes}(iv).
+\end{enumerate}
+\hlt{Structural Commentary}: The module criterion transfers short exactness degree by degree.\\
+\hlt{Key Insight}: Short exactness of complexes is componentwise.
+\end{proof}
+\end{corollary}
+
+\begin{example} \label{ex:integer-short-exact-chain-complex} \hlt{An Exact Integer Complex}\\
+Take $R=\Z$. Let $u:\Z\to\Z$, $u(n)\defeq2n$, $\pi:\Z\to\Z/2\Z$ be quotient map. Then $u$ is injective, $\operatorname{im}u=2\Z=\ker\pi$, and $\pi$ is surjective.\\
+Hence $0\to\Z\xrightarrow{u}\Z\xrightarrow{\pi}\Z/2\Z\to0$ is short exact by Proposition \ref{prop:short-exact-sequence-criterion}. Set $C_2=C_1=\Z$, $C_0=\Z/2\Z$, and $(\forall\,n\in\Z\setminus\{0,1,2\})\,C_n=0$.\\
+Set $d^C_2=u$, $d^C_1=\pi$, and all other differentials equal to zero.\\
+Three checks above and the zero terms imply $(\forall\,n\in\Z)\,\operatorname{im}d^C_{n+1}=\ker d^C_n$. Hence $C_\bullet$ is an exact chain complex by Definition \ref{def:exact-sequences-and-complexes}(iii).
+\end{example}
