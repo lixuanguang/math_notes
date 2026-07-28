@@ -1,5 +1,116 @@
 \subsection{Homology}
 
-% Placeholder only.
-% Should cover: cycles, boundaries, homology, and exact sequences.
-% Do not add exposition here until this material is ready to be developed.
+Throughout this subsection, $R$ denotes a nonzero commutative ring with identity $1_R$. All modules are $R$-modules.
+
+\begin{definition} \label{def:cycles-boundaries-homology} \hlt{Cycles, Boundaries, and Homology}\\
+Let $C_\bullet$ be a chain complex and let $n\in\Z$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{$n$-cycle module} is $Z_n(C)\defeq\ker d^C_n$.
+\item The \hlt{$n$-boundary module} is $B_n(C)\defeq\operatorname{im}d^C_{n+1}$.
+\item $B_n(C)\leq Z_n(C)$ by Proposition \ref{prop:chain-complex-image-kernel-containment}. The \hlt{$n$th homology module} is $H_n(C)\defeq Z_n(C)/B_n(C)$. For $z\in Z_n(C)$, $[z]_C\defeq z+B_n(C)$.
+\end{enumerate}
+\end{definition}
+
+\begin{example} \label{ex:two-term-integer-complex-homology} \hlt{Homology of a Two-Term Complex}\\
+Take $R=\Z$ and $m\in\N$. Set $C_1=C_0=\Z$ and $(\forall\,n\in\Z\setminus\{0,1\})\,C_n=0$. Set $d^C_1(k)\defeq mk$ and all other differentials equal to zero.\\
+Every consecutive composite is zero, so $C_\bullet$ is a chain complex by Definition \ref{def:chain-complex}.\\
+Then $Z_1(C)=B_1(C)=\{0\}$, $Z_0(C)=\Z$, and $B_0(C)=m\Z$. Hence $H_1(C)=\{0\}$, $H_0(C)=\Z/m\Z$, and $(\forall\,n\in\Z\setminus\{0,1\})\,H_n(C)=\{0\}$.
+\end{example}
+
+\begin{proposition} \label{prop:exact-complex-iff-zero-homology} \hlt{Exactness Is Vanishing Homology}\\
+Let $C_\bullet$ be a chain complex. The following conditions are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The complex $C_\bullet$ is exact.
+\item $(\forall\,n\in\Z)\,H_n(C)=\{0\}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $\Rightarrow (ii)$ Assume (i), $n\in\Z$. Then $B_n(C)=Z_n(C)$ by Definition \ref{def:exact-sequences-and-complexes}(iii); $H_n(C)=Z_n(C)/B_n(C)=\{0\}$ by Definition \ref{def:cycles-boundaries-homology}(iii).
+\item[$(ii)$] $\Rightarrow (i)$ Assume (ii), $n\in\Z$. For $z\in Z_n(C)$, $[z]_C=0_{H_n(C)}=B_n(C)$. Thus $z\in B_n(C)$ by Proposition \ref{prop:quotient-module-well-defined}(i), so $Z_n(C)\subseteq B_n(C)$.\\
+The reverse inclusion holds by Proposition \ref{prop:chain-complex-image-kernel-containment}. Therefore $Z_n(C)=B_n(C)$, and $C_\bullet$ is exact by Definition \ref{def:exact-sequences-and-complexes}(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: Quotient zero turns boundary containment into degreewise equality.\\
+\hlt{Key Insight}: Zero homology is degreewise exactness.
+\end{proof}
+\end{proposition}
+
+\begin{proposition} \label{prop:homology-functoriality} \hlt{Functoriality of Homology}\\
+Let $f_\bullet:C_\bullet\to D_\bullet$ be a chain map and let $n\in\Z$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f_n(Z_n(C))\subseteq Z_n(D)$.
+\item $f_n(B_n(C))\subseteq B_n(D)$.
+\item The rule $H_n(f)([z]_C)\defeq[f_n(z)]_D$ defines $H_n(f)\in\operatorname{Hom}_R(H_n(C),H_n(D))$.
+\item $H_n(\operatorname{id}_{C_\bullet})=\operatorname{id}_{H_n(C)}$.
+\item For a chain map $g_\bullet:D_\bullet\to E_\bullet$, $H_n(g_\bullet f_\bullet)=H_n(g)H_n(f)$.
+\item If $f_\bullet$ is a chain isomorphism, then $H_n(f)$ is an $R$-module isomorphism.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $z\in Z_n(C)$, so $d^C_n(z)=0$. Then $d^D_nf_n(z)=f_{n-1}d^C_n(z)=0$ by Definition \ref{def:chain-map-and-isomorphism}(i), so $f_n(z)\in Z_n(D)$.
+\item Fix $b\in B_n(C)$, choose $x\in C_{n+1}$ with $b=d^C_{n+1}(x)$ by Definition \ref{def:cycles-boundaries-homology}(ii); $f_n(b)=d^D_{n+1}f_{n+1}(x)\in B_n(D)$ by Definition \ref{def:chain-map-and-isomorphism}(i).
+\item If $[z]_C=[z']_C$, then $z-z'\in B_n(C)$ by Proposition \ref{prop:quotient-module-well-defined}(i). Thus $f_n(z)-f_n(z')\in B_n(D)$ by (ii), so $[f_n(z)]_D=[f_n(z')]_D$.\\
+Hence $H_n(f)$ is well-defined. Fix $(a,b)\in R^2$ and $([z]_C,[z']_C)\in H_n(C)^2$.\\
+$H_n(f)(a[z]_C+b[z']_C)=aH_n(f)([z]_C)+bH_n(f)([z']_C)$ by $R$-linearity of $f_n$.
+\item $(\forall\,z\in Z_n(C))\,H_n(\operatorname{id}_{C_\bullet})([z]_C)=[z]_C$ by the defining rule in (iii).
+\item For $z\in Z_n(C)$, $H_n(g_\bullet f_\bullet)([z]_C)=[g_nf_n(z)]_E=H_n(g)H_n(f)([z]_C)$ by (iii).
+\item Let $g_\bullet:D_\bullet\to C_\bullet$ be an inverse of $f_\bullet$. Then $H_n(g)H_n(f)=\operatorname{id}_{H_n(C)}$ and $H_n(f)H_n(g)=\operatorname{id}_{H_n(D)}$ by (iv)--(v).\\
+The map $H_n(f)$ is bijective by these identities. Hence it is an $R$-module isomorphism by Definition \ref{def:module-homomorphism}(iv).
+\end{enumerate}
+\hlt{Structural Commentary}: Differential commutation descends maps and preserves composition on homology.\\
+\hlt{Key Insight}: Cycle and boundary preservation makes homology functorial.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:long-exact-sequence-homology} \hlt{Long Exact Sequence in Homology}\\
+Let $0\to A_\bullet\xrightarrow{u_\bullet}E_\bullet\xrightarrow{v_\bullet}C_\bullet\to0$ be a short exact sequence of chain complexes.\\
+For $n\in\Z$ and $c\in Z_n(C)$, choose $e\in E_n$ with $v_n(e)=c$. Choose $a\in A_{n-1}$ with $u_{n-1}(a)=d^E_n(e)$, and set $\partial_n([c]_C)\defeq[a]_A$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The required $e,a$ exist, and $a\in Z_{n-1}(A)$.
+\item The class $\partial_n([c]_C)$ is independent of the representative $c$ and the choices $e,a$.
+\item $\partial_n\in\operatorname{Hom}_R(H_n(C),H_{n-1}(A))$.
+\item $(\forall\,n\in\Z)\,\operatorname{im}\partial_{n+1}=\ker H_n(u)$.
+\item $(\forall\,n\in\Z)\,\operatorname{im}H_n(u)=\ker H_n(v)$.
+\item $(\forall\,n\in\Z)\,\operatorname{im}H_n(v)=\ker\partial_n$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $n\in\Z$ and $c\in Z_n(C)$, so $d^C_n(c)=0$. The map $v_n$ is surjective by Corollary \ref{cor:short-exact-complexes-degreewise-criterion} and Definition \ref{def:module-homomorphism}(iv).\\
+Choose $e\in E_n$ with $v_n(e)=c$. Then $v_{n-1}d^E_n(e)=d^C_nv_n(e)=d^C_n(c)=0$ by the chain-map identity for $v_\bullet$.\\
+Thus $d^E_n(e)\in\ker v_{n-1}=\operatorname{im}u_{n-1}$ by Corollary \ref{cor:short-exact-complexes-degreewise-criterion}. Choose $a\in A_{n-1}$ with $u_{n-1}(a)=d^E_n(e)$.\\
+$u_{n-2}d^A_{n-1}(a)=d^E_{n-1}d^E_n(e)=0$ by the chain-map and chain-complex identities.\\
+The map $u_{n-2}$ is injective by Corollary \ref{cor:short-exact-complexes-degreewise-criterion} and Definition \ref{def:module-homomorphism}(iv). Hence $d^A_{n-1}(a)=0$ and $a\in Z_{n-1}(A)$.
+\item Fix $n\in\Z$ and let $c,c'\in Z_n(C)$ with $[c]_C=[c']_C$. Let $(e,a)$ and $(e'',a'')$ be construction data for $c,c'$, respectively.\\
+Then $c'-c\in B_n(C)$ by Proposition \ref{prop:quotient-module-well-defined}(i). Choose $t\in C_{n+1}$ with $c'-c=d^C_{n+1}(t)$ by Definition \ref{def:cycles-boundaries-homology}(ii).\\
+The map $v_{n+1}$ is surjective by Corollary \ref{cor:short-exact-complexes-degreewise-criterion} and Definition \ref{def:module-homomorphism}(iv). Choose $s\in E_{n+1}$ with $v_{n+1}(s)=t$.\\
+Set $e'\defeq e+d^E_{n+1}(s)$. Then $v_n(e')=c+d^C_{n+1}(t)=c'$ by the chain-map identity for $v_\bullet$.\\
+$d^E_n(e')=d^E_n(e)$ by Definition \ref{def:chain-complex}, so $(e',a)$ is construction data for $c'$. Now $e''-e'\in\ker v_n=\operatorname{im}u_n$ by Corollary \ref{cor:short-exact-complexes-degreewise-criterion}.\\
+Choose $x\in A_n$ with $u_n(x)=e''-e'$. $u_{n-1}(a''-a-d^A_nx)=0$ by construction data, differential commutation, $u_n(x)=e''-e'$.\\
+The map $u_{n-1}$ is injective by Corollary \ref{cor:short-exact-complexes-degreewise-criterion} and Definition \ref{def:module-homomorphism}(iv). Thus $a''-a=d^A_nx\in B_{n-1}(A)$ and $[a'']_A=[a]_A$.
+\item Fix $n\in\Z$, $(r,s)\in R^2$, and $([c]_C,[c']_C)\in H_n(C)^2$. Let $(e,a)$ and $(e',a')$ be construction data for $c,c'$.\\
+By $R$-linearity, $(re+se',ra+sa')$ is construction data for $rc+sc'$. Hence $\partial_n(r[c]_C+s[c']_C)=r\partial_n([c]_C)+s\partial_n([c']_C)$ by (ii).
+\item Fix $n\in\Z$ and $[c]_C\in H_{n+1}(C)$ with construction data $(e,a)$. $H_n(u)\partial_{n+1}([c]_C)=[u_n(a)]_E=[d^E_{n+1}(e)]_E=0_{H_n(E)}$.\\
+Thus $\operatorname{im}\partial_{n+1}\subseteq\ker H_n(u)$. Let $[a]_A\in\ker H_n(u)$ with $a\in Z_n(A)$. Choose $e\in E_{n+1}$ with $u_n(a)=d^E_{n+1}(e)$ by $[u_n(a)]_E=0_{H_n(E)}$.\\
+Set $c\defeq v_{n+1}(e)$. Then $d^C_{n+1}(c)=v_nd^E_{n+1}(e)=v_nu_n(a)=0$, so $c\in Z_{n+1}(C)$.\\
+The pair $(e,a)$ is construction data for $c$, hence $\partial_{n+1}([c]_C)=[a]_A$.
+\item Fix $n\in\Z$ and $[a]_A\in H_n(A)$. $H_n(v)H_n(u)([a]_A)=[v_nu_n(a)]_C=0_{H_n(C)}$ by exactness at $E_n$.\\
+Thus $\operatorname{im}H_n(u)\subseteq\ker H_n(v)$. Let $[e]_E\in\ker H_n(v)$ with $e\in Z_n(E)$. Choose $c\in C_{n+1}$ with $d^C_{n+1}(c)=v_n(e)$ by $[v_n(e)]_C=0_{H_n(C)}$.\\
+The map $v_{n+1}$ is surjective by Corollary \ref{cor:short-exact-complexes-degreewise-criterion} and Definition \ref{def:module-homomorphism}(iv). Choose $e'\in E_{n+1}$ with $v_{n+1}(e')=c$.\\
+$v_n(e-d^E_{n+1}(e'))=v_n(e)-d^C_{n+1}(c)=0$ by chain-map identity for $v_\bullet$. Thus $e-d^E_{n+1}(e')\in\ker v_n=\operatorname{im}u_n$ by Corollary \ref{cor:short-exact-complexes-degreewise-criterion}.\\
+Choose $a\in A_n$ with $u_n(a)=e-d^E_{n+1}(e')$. Then $u_{n-1}d^A_n(a)=d^E_nu_n(a)=0$ by $e\in Z_n(E)$, Definition \ref{def:chain-complex}.\\
+Map $u_{n-1}$ is monomorphism by Corollary \ref{cor:short-exact-complexes-degreewise-criterion}; injective by Definition \ref{def:module-homomorphism}(iv), so $a\in Z_n(A)$; $[e]_E=[u_n(a)]_E=H_n(u)([a]_A)$.
+\item Fix $n\in\Z$ and $[e]_E\in H_n(E)$. The construction of $\partial_n(H_n(v)([e]_E))$ may use $(e,0_{A_{n-1}})$, so $\partial_nH_n(v)([e]_E)=0_{H_{n-1}(A)}$.\\
+Thus $\operatorname{im}H_n(v)\subseteq\ker\partial_n$. Let $[c]_C\in\ker\partial_n$ with construction data $(e,a)$.\\
+Choose $x\in A_n$ with $a=d^A_n(x)$ by $[a]_A=0_{H_{n-1}(A)}$. Set $e_0\defeq e-u_n(x)$.\\
+Then $d^E_n(e_0)=d^E_n(e)-u_{n-1}d^A_n(x)=0$, and $v_n(e_0)=v_n(e)=c$ by exactness at $E_n$. Hence $e_0\in Z_n(E)$ and $[c]_C=H_n(v)([e_0]_E)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Lifts define connecting classes; exactness matches three image--kernel pairs.\\
+\hlt{Key Insight}: Failed cycle lifts become boundaries one degree lower.
+\end{proof}
+\end{theorem}
