@@ -3,97 +3,142 @@
 % Role: bilinear maps, the tensor-product universal property, its quotient
 % construction, uniqueness, and the bilinear-linear correspondence.
 
-Tensor products are the device that turns bilinear data into linear data. The guiding rule is the same one already used for quotient spaces in Theorem \ref{thm:quotient-universal-property}: a universal object is recognised by the unique way every compatible map factors through it.
+Tensor products linearize bilinear data.\\
+Their construction combines free extension from Theorem \ref{thm:free-module-map-extension} with quotient descent from Theorem \ref{thm:quotient-universal-property}.
 
 \begin{definition} \label{def:bilinear-map} \hlt{Bilinear Maps}\\
 Let $\mathcal{U},\mathcal{V},\mathcal{W}$ be $\mathbb{F}$-vector spaces and $f:\mathcal{U}\times\mathcal{V}\to\mathcal{W}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $f$ is \hlt{bilinear} if $\forall r,s\in\mathbb{F}$, $\mathbf{u},\mathbf{u}'\in\mathcal{U}$, $\mathbf{v},\mathbf{v}'\in\mathcal{V}$, $f(r\mathbf{u}+s\mathbf{u}',\mathbf{v})=r f(\mathbf{u},\mathbf{v})+s f(\mathbf{u}',\mathbf{v})$\\
-and $f(\mathbf{u},r\mathbf{v}+s\mathbf{v}')=r f(\mathbf{u},\mathbf{v})+s f(\mathbf{u},\mathbf{v}')$.
-\item $\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})\defeq\{f:\mathcal{U}\times\mathcal{V}\to\mathcal{W}:f\text{ bilinear}\}$.
-\item If $\mathcal{W}=\mathbb{F}$, then $\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathbb{F})$ is the space of \hlt{bilinear forms} from Definition \ref{def:bilinear-form-and-matrix}.
+\item The map $f$ is \hlt{bilinear} if $(\forall\,\mathbf{v}\in\mathcal{V})\,f(\,\cdot\,,\mathbf{v})\in\LL(\mathcal{U},\mathcal{W})$ and $(\forall\,\mathbf{u}\in\mathcal{U})\,f(\mathbf{u},\,\cdot\,)\in\LL(\mathcal{V},\mathcal{W})$.
+\item $\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})\defeq\{f:\mathcal{U}\times\mathcal{V}\to\mathcal{W}:f\text{ is bilinear}\}$.
+\item If $\mathcal{W}=\mathbb{F}$, then $\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathbb{F})$ is the set of \hlt{bilinear forms} from Definition \ref{def:bilinear-form-and-matrix}.
 \end{enumerate}
 \end{definition}
 
 \begin{example} \label{ex:basic-bilinear-maps} \hlt{Basic Bilinear Maps}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $A$ is an $\mathbb{F}$-algebra, then $\mu:A\times A\to A$, $\mu(a,b)\defeq ab$, is bilinear.
-\item Evaluation $\operatorname{ev}:\LL(\mathcal{V},\mathcal{W})\times\mathcal{V}\to\mathcal{W}$, $\operatorname{ev}(T,\mathbf{v})\defeq T\mathbf{v}$, is bilinear.
-\item If $\varphi\in\mathcal{V}'$ and $\psi\in\mathcal{W}'$, then $B_{\varphi,\psi}:\mathcal{V}\times\mathcal{W}\to\mathbb{F}$, $B_{\varphi,\psi}(\mathbf{v},\mathbf{w})\defeq\varphi(\mathbf{v})\psi(\mathbf{w})$, is bilinear.
+\item For an $\mathbb{F}$-algebra $A$, define $\mu:A\times A\to A$ by $\mu(a,b)\defeq ab$.\\
+The map $\mu$ is bilinear by distributivity and compatibility of scalar and algebra multiplication.
+\item Define $\operatorname{ev}:\LL(\mathcal{V},\mathcal{W})\times\mathcal{V}\to\mathcal{W}$ by $\operatorname{ev}(T,\mathbf{v})\defeq T\mathbf{v}$. The map $\operatorname{ev}$ is bilinear by pointwise linearity in $T$ and the linearity of $T$ in $\mathbf{v}$.
+\item For $\varphi\in\mathcal{V}'$, $\psi\in\mathcal{W}'$, define $B_{\varphi,\psi}:\mathcal{V}\times\mathcal{W}\to\mathbb{F}$ by $B_{\varphi,\psi}(\mathbf{v},\mathbf{w})\defeq\varphi(\mathbf{v})\psi(\mathbf{w})$. Map $B_{\varphi,\psi}$ is bilinear by linearity of $\varphi$, $\psi$.
 \end{enumerate}
 \end{example}
 
 \begin{definition} \label{def:tensor-product-universal-property} \hlt{Tensor Product by Universal Property}\\
-Let $\mathcal{U},\mathcal{V}$ be $\mathbb{F}$-vector spaces.
+Let $\mathcal{U},\mathcal{V},\mathcal{T}$ be $\mathbb{F}$-vector spaces and $t\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{T})$.\\
+Given any $\mathbb{F}$-vector space $\mathcal{W}$, define $t_{\mathcal{W}}^\ast:\LL(\mathcal{T},\mathcal{W})\to\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ by $t_{\mathcal{W}}^\ast(L)\defeq L\circ t$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A pair $(\mathcal{T},t)$ is a \hlt{tensor product} of $\mathcal{U}$ and $\mathcal{V}$ if $\mathcal{T}$ is an $\mathbb{F}$-vector space, $t\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{T})$, and for every $\mathbb{F}$-vector space $\mathcal{W}$ and $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$, $\exists!\widetilde{f}\in\LL(\mathcal{T},\mathcal{W})$ such that $f=\widetilde{f}\circ t$.
-\item The map $\widetilde{f}$ is the \hlt{mediating map} for $f$.
-\item Write $\mathcal{T}=\mathcal{U}\otimes\mathcal{V}$ and $\mathbf{u}\otimes\mathbf{v}\defeq t(\mathbf{u},\mathbf{v})$; such tensors are \hlt{decomposable}.
+\item The pair $(\mathcal{T},t)$ is a \hlt{tensor product} of $\mathcal{U}$ and $\mathcal{V}$ if every map $t_{\mathcal{W}}^\ast$ above is bijective.
+\item For $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$, the map $\widetilde{f}\defeq(t_{\mathcal{W}}^\ast)^{-1}(f)$ is the \hlt{mediating map} for $f$; equivalently, $\widetilde{f}\circ t=f$.
+\item For a chosen tensor product, write $\mathcal{T}=\mathcal{U}\otimes\mathcal{V}$ and $\mathbf{u}\otimes\mathbf{v}\defeq t(\mathbf{u},\mathbf{v})$. A tensor of the form $\mathbf{u}\otimes\mathbf{v}$ is \hlt{decomposable}.
 \end{enumerate}
 \end{definition}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/tensor_universal_property.tikz}
   \caption{A tensor product is universal for bilinear maps out of $\mathcal{U}\times\mathcal{V}$.}
   \label{fig:tensor-universal-property}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{theorem} \label{thm:tensor-product-quotient-construction} \hlt{Coordinate-Free Quotient Construction}\\
-Let $\mathcal{U},\mathcal{V}$ be $\mathbb{F}$-vector spaces and let $\mathbb{F}^{(\mathcal{U}\times\mathcal{V})}$ have basis $\{[\mathbf{u},\mathbf{v}]:(\mathbf{u},\mathbf{v})\in\mathcal{U}\times\mathcal{V}\}$.\\
-Let $\mathcal{R}$ be the span of all $r[\mathbf{u}_1,\mathbf{v}]+s[\mathbf{u}_2,\mathbf{v}]-[r\mathbf{u}_1+s\mathbf{u}_2,\mathbf{v}]$; and $r[\mathbf{u},\mathbf{v}_1]+s[\mathbf{u},\mathbf{v}_2]-[\mathbf{u},r\mathbf{v}_1+s\mathbf{v}_2]$, where $r,s\in\mathbb{F}$, $\mathbf{u},\mathbf{u}_1,\mathbf{u}_2\in\mathcal{U}$, and $\mathbf{v},\mathbf{v}_1,\mathbf{v}_2\in\mathcal{V}$. Then $\mathcal{U}\otimes\mathcal{V}\defeq \mathbb{F}^{(\mathcal{U}\times\mathcal{V})}/\mathcal{R}$, $t(\mathbf{u},\mathbf{v})=[\mathbf{u},\mathbf{v}]+\mathcal{R}$ is a tensor product of $\mathcal{U}$ and $\mathcal{V}$.
-\begin{proof} Let $\pi:\mathbb{F}^{(\mathcal{U}\times\mathcal{V})}\to\mathcal{U}\otimes\mathcal{V}$ be the quotient map.\\
-Since the generators of $\mathcal{R}$ vanish in the quotient, $t(\mathbf{u},\mathbf{v})=\pi[\mathbf{u},\mathbf{v}]$ is bilinear.\\
-Let $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ and define $\alpha:\mathbb{F}^{(\mathcal{U}\times\mathcal{V})}\to\mathcal{W}$ by $\alpha[\mathbf{u},\mathbf{v}]\defeq f(\mathbf{u},\mathbf{v})$.\\
-Bilinearity gives $\mathcal{R}\subseteq\ker\alpha$, so Theorem \ref{thm:quotient-universal-property} gives a unique $\widetilde{f}\in\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$ with $\widetilde{f}\circ \pi=\alpha$. Hence $\widetilde{f}\circ t=f$.\\
-If $L\circ t=f$, then $L$ and $\widetilde{f}$ agree on the spanning set $\{[\mathbf{u},\mathbf{v}]+\mathcal{R}\}$, so $L=\widetilde{f}$.\\
-\hlt{Structural Commentary}: The quotient kills precisely the failure of the raw ordered-pair basis to be bilinear.\\
-\hlt{Key Insight}: A tensor product is a free bilinear map, followed by no extra identifications.
+Figure \ref{fig:tensor-universal-property} depicts $f=\widetilde{f}\circ t$ from Definition \ref{def:tensor-product-universal-property}. The definition owns existence and uniqueness of $\widetilde{f}$.
+
+\begin{theorem} \label{thm:tensor-product-quotient-construction} \hlt{Quotient Construction of the Tensor Product}\\
+Let $\mathcal{U},\mathcal{V}$ be $\mathbb{F}$-vector spaces, $\mathcal{F}\defeq\bigoplus\limits_{(\mathbf{u},\mathbf{v})\in\mathcal{U}\times\mathcal{V}}^{\mathrm{ext}}\mathbb{F}$. For $(\mathbf{u},\mathbf{v})\in\mathcal{U}\times\mathcal{V}$, let $[\mathbf{u},\mathbf{v}]\in\mathcal{F}$ be coordinate family supported at $(\mathbf{u},\mathbf{v})$ with value $1$.\\
+In the following relation families, $r,s\in\mathbb{F}$, $\mathbf{u},\mathbf{u}_1,\mathbf{u}_2\in\mathcal{U}$, and $\mathbf{v},\mathbf{v}_1,\mathbf{v}_2\in\mathcal{V}$.\\
+Let $\mathcal{R}_{\mathcal{U}}\leq\mathcal{F}$ be spanned by all $r[\mathbf{u}_1,\mathbf{v}]+s[\mathbf{u}_2,\mathbf{v}]-[r\mathbf{u}_1+s\mathbf{u}_2,\mathbf{v}]$. Let $\mathcal{R}_{\mathcal{V}}\leq\mathcal{F}$ be spanned by all $r[\mathbf{u},\mathbf{v}_1]+s[\mathbf{u},\mathbf{v}_2]-[\mathbf{u},r\mathbf{v}_1+s\mathbf{v}_2]$.\\
+Set $\mathcal{R}\defeq\mathcal{R}_{\mathcal{U}}+\mathcal{R}_{\mathcal{V}}$, $\mathcal{U}\otimes\mathcal{V}\defeq\mathcal{F}/\mathcal{R}$, and $\mathbf{u}\otimes\mathbf{v}\defeq[\mathbf{u},\mathbf{v}]+\mathcal{R}$. Define $t:\mathcal{U}\times\mathcal{V}\to\mathcal{U}\otimes\mathcal{V}$ by $t(\mathbf{u},\mathbf{v})\defeq\mathbf{u}\otimes\mathbf{v}$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{U}\otimes\mathcal{V}=\operatorname{span}\{\mathbf{u}\otimes\mathbf{v}:\mathbf{u}\in\mathcal{U},\ \mathbf{v}\in\mathcal{V}\}$.
+\item $(\mathcal{U}\otimes\mathcal{V},t)$ is a tensor product of $\mathcal{U}$ and $\mathcal{V}$.
+\end{enumerate}
+\begin{proof}
+$\mathcal{F}$ is an $\mathbb{F}$-vector space by Proposition \ref{prop:external-direct-sum-family-vector-space}(ii). Let $\mathcal{B}\defeq\{[\mathbf{u},\mathbf{v}]:(\mathbf{u},\mathbf{v})\in\mathcal{U}\times\mathcal{V}\}$.\\
+Every $\mathbf{x}=(x_{\mathbf{u},\mathbf{v}})\in\mathcal{F}$ has a unique finite expansion $\mathbf{x}=\sum\limits_{(\mathbf{u},\mathbf{v})\in\operatorname{supp}(\mathbf{x})}x_{\mathbf{u},\mathbf{v}}[\mathbf{u},\mathbf{v}]$ by Definition \ref{def:external-products-and-direct-sums-family}.\\
+The set $\mathcal{B}$ is a basis by this expansion, and $\mathcal{F}$ is free on $\mathcal{B}$ by Definition \ref{def:free-module-basis}.\\
+Let $j:\mathcal{U}\times\mathcal{V}\to\mathcal{F}$ satisfy $j(\mathbf{u},\mathbf{v})\defeq[\mathbf{u},\mathbf{v}]$. Let $\pi:\mathcal{F}\to\mathcal{U}\otimes\mathcal{V}$ be the quotient map.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\mathcal{D}\defeq\{\mathbf{u}\otimes\mathbf{v}:\mathbf{u}\in\mathcal{U},\ \mathbf{v}\in\mathcal{V}\}$. Then $\pi(\mathcal{B})=\mathcal{D}$ by the definitions of $\pi$ and decomposable tensors.\\
+The equality $\mathcal{U}\otimes\mathcal{V}=\pi(\mathcal{F})=\operatorname{span}(\pi(\mathcal{B}))=\operatorname{span}(\mathcal{D})$ holds by the linearity and surjectivity of $\pi$.
+\item Fix $r,s\in\mathbb{F}$, $\mathbf{u}_1,\mathbf{u}_2\in\mathcal{U}$, and $\mathbf{v}\in\mathcal{V}$. The identity $t(r\mathbf{u}_1+s\mathbf{u}_2,\mathbf{v})=rt(\mathbf{u}_1,\mathbf{v})+st(\mathbf{u}_2,\mathbf{v})$ holds by the definition of $\mathcal{R}_{\mathcal{U}}$.\\
+Fix $\mathbf{u}\in\mathcal{U}$ and $\mathbf{v}_1,\mathbf{v}_2\in\mathcal{V}$. The identity $t(\mathbf{u},r\mathbf{v}_1+s\mathbf{v}_2)=rt(\mathbf{u},\mathbf{v}_1)+st(\mathbf{u},\mathbf{v}_2)$ holds by the definition of $\mathcal{R}_{\mathcal{V}}$.\\
+The map $t=\pi\circ j$ is bilinear by these identities. Fix an $\mathbb{F}$-vector space $\mathcal{W}$ and $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$.\\
+The assignment $[\mathbf{u},\mathbf{v}]\mapsto f(\mathbf{u},\mathbf{v})$ extends uniquely to $\alpha\in\LL(\mathcal{F},\mathcal{W})$ by Theorem \ref{thm:free-module-map-extension}.\\
+Fix a displayed generator $x_{\mathcal{U}}\defeq r[\mathbf{u}_1,\mathbf{v}]+s[\mathbf{u}_2,\mathbf{v}]-[r\mathbf{u}_1+s\mathbf{u}_2,\mathbf{v}]$ of $\mathcal{R}_{\mathcal{U}}$.\\
+Then $\alpha(x_{\mathcal{U}})=rf(\mathbf{u}_1,\mathbf{v})+sf(\mathbf{u}_2,\mathbf{v})-f(r\mathbf{u}_1+s\mathbf{u}_2,\mathbf{v})=0$ by bilinearity of $f$.\\
+Fix a displayed generator $x_{\mathcal{V}}\defeq r[\mathbf{u},\mathbf{v}_1]+s[\mathbf{u},\mathbf{v}_2]-[\mathbf{u},r\mathbf{v}_1+s\mathbf{v}_2]$ of $\mathcal{R}_{\mathcal{V}}$.\\
+Then $\alpha(x_{\mathcal{V}})=rf(\mathbf{u},\mathbf{v}_1)+sf(\mathbf{u},\mathbf{v}_2)-f(\mathbf{u},r\mathbf{v}_1+s\mathbf{v}_2)=0$ by bilinearity of $f$.\\
+$\mathcal{R}\leq\ker\alpha$ by the linearity of $\alpha$ and the two generator calculations.\\
+Unique $\widetilde{f}\in\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$ satisfies $\widetilde{f}\circ\pi=\alpha$ by Theorem \ref{thm:quotient-universal-property}(i). Equality $\widetilde{f}\circ t=f$ holds by $(\widetilde{f}\circ t)(\mathbf{u},\mathbf{v})=\alpha[\mathbf{u},\mathbf{v}]=f(\mathbf{u},\mathbf{v})$.\\
+If $L\in\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$ satisfies $L\circ t=f$, then $L=\widetilde{f}$ by agreement on the spanning decomposable tensors from (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Free extension kills both relation subspaces and descends through their quotient.\\
+\hlt{Key Insight}: The two relation subspaces encode linearity in the tensor factors.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/linear_algebra/tensor_quotient_construction_universal.tikz}
-  \caption{The free linear map $\alpha$ kills $\mathcal{R}$, so it descends
-  uniquely to $\widetilde{f}:\mathcal{U}\otimes\mathcal{V}\to\mathcal{W}$.}
+  \caption{The free linear map $\alpha$ kills $\mathcal{R}$, so it descends uniquely to $\widetilde{f}:\mathcal{U}\otimes\mathcal{V}\to\mathcal{W}$.}
   \label{fig:tensor-quotient-construction-universal}
-\end{figure}
+\end{illustrationfigure}
+
+Figure \ref{fig:tensor-quotient-construction-universal} records $j(\mathbf{u},\mathbf{v})=[\mathbf{u},\mathbf{v}]$, $t=\pi\circ j$, and $\widetilde{f}\circ\pi=\alpha$ from Theorem \ref{thm:tensor-product-quotient-construction}.\\
+The theorem owns the spanning and factorisation claims.
 
 \begin{corollary} \label{cor:tensor-product-unique-up-to-isomorphism} \hlt{Tensor Products Are Unique up to Isomorphism}\\
-If $(\mathcal{T},t)$ and $(\mathcal{S},s)$ are tensor products of $\mathcal{U}$ and $\mathcal{V}$,\\
-then there is a unique isomorphism $\Phi:\mathcal{T}\to\mathcal{S}$ satisfying $\Phi(t(\mathbf{u},\mathbf{v}))=s(\mathbf{u},\mathbf{v})$, where $\mathbf{u}\in\mathcal{U},\ \mathbf{v}\in\mathcal{V}$.
+If $(\mathcal{T},t)$ and $(\mathcal{S},s)$ are tensor products of $\mathcal{U}$ and $\mathcal{V}$, then a unique isomorphism $\Phi:\mathcal{T}\to\mathcal{S}$ satisfies $\Phi\circ t=s$.
 \begin{proof}
-Apply universal property of $(\mathcal{T},t)$ to bilinear map $s$ and universal property of $(\mathcal{S},s)$ to bilinear map $t$.\\
-This gives linear maps $\Phi:\mathcal{T}\to\mathcal{S}$ and $\Psi:\mathcal{S}\to\mathcal{T}$. The composites $\Psi\Phi$ and $I_{\mathcal{T}}$ are both mediating maps for $t$, while $\Phi\Psi$ and $I_{\mathcal{S}}$ are both mediating maps for $s$. Uniqueness forces $\Psi\Phi=I_{\mathcal{T}}$ and $\Phi\Psi=I_{\mathcal{S}}$.\\
-\hlt{Structural Commentary}: Universal objects are unique up to canonical isomorphism.\\
-\hlt{Key Insight}: Two universal factorisations force the comparison maps to be inverse.
+Unique mediating maps $\Phi:\mathcal{T}\to\mathcal{S}$ and $\Psi:\mathcal{S}\to\mathcal{T}$ exist by Definition \ref{def:tensor-product-universal-property}(i). They satisfy $\Phi\circ t=s$ and $\Psi\circ s=t$.\\
+The identity $\Psi\Phi=I_{\mathcal{T}}$ holds by mediator uniqueness because $(\Psi\Phi)\circ t=\Psi\circ s=t=I_{\mathcal{T}}\circ t$.\\
+Likewise, $\Phi\Psi=I_{\mathcal{S}}$ by mediator uniqueness because $(\Phi\Psi)\circ s=\Phi\circ t=s=I_{\mathcal{S}}\circ s$.\\
+The map $\Phi$ is an isomorphism with inverse $\Psi$ by these two identities.\\
+If $\Theta:\mathcal{T}\to\mathcal{S}$ is linear and $\Theta\circ t=s$, then $\Theta=\Phi$ by uniqueness of the mediating map for $s$.\\
+\hlt{Structural Commentary}: The two universal factorisations compose to the unique mediating identity maps.\\
+\hlt{Key Insight}: Mediator uniqueness forces the comparison maps to be mutual inverses.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:tensor-linearizes-bilinear-maps} \hlt{Bilinearity Equals Linearity on a Tensor Product}\\
-For $\mathbb{F}$-vector spaces $\mathcal{U},\mathcal{V},\mathcal{W}$, the map $\Phi:\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})\to\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$, $\Phi(f)=\widetilde{f}$,\\
-where $\widetilde{f}(\mathbf{u}\otimes\mathbf{v})=f(\mathbf{u},\mathbf{v})$, is an isomorphism.
+Let $\mathcal{U},\mathcal{V},\mathcal{W}$ be $\mathbb{F}$-vector spaces. Fix a tensor product $(\mathcal{U}\otimes\mathcal{V},t)$ of $\mathcal{U}$ and $\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The set $\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ is an $\mathbb{F}$-vector space under pointwise addition and scalar multiplication.
+\item The assignment $f\mapsto\widetilde{f}$ defines an isomorphism $\Phi:\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})\to\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$.\\
+For $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$, the map $\Phi(f)=\widetilde{f}$ is characterized by $\widetilde{f}\circ t=f$.
+\end{enumerate}
 \begin{proof}
-The universal property gives existence and uniqueness of $\widetilde{f}$.\\
-Define $\Psi:\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})\to\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ by $\Psi(L)\defeq L\circ t$.\\
-Then $\Psi(\Phi(f))=\widetilde{f}\circ t=f$, and $\Phi(\Psi(L))=L$ by uniqueness of the mediating map for $L\circ t$. Hence $\Phi$ is bijective.\\
-For $a\in\mathbb{F}$ and $f,g$ bilinear, $\Phi(af+g)(\mathbf{u}\otimes\mathbf{v})=af(\mathbf{u},\mathbf{v})+g(\mathbf{u},\mathbf{v})=(a\Phi(f)+\Phi(g))(\mathbf{u}\otimes\mathbf{v})$, so $\Phi$ is linear.\\
-\hlt{Structural Commentary}: Tensor products package bilinear maps as ordinary linear maps.\\
-\hlt{Key Insight}: To define a linear map out of $\mathcal{U}\otimes\mathcal{V}$, define a bilinear rule on $\mathcal{U}\times\mathcal{V}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The zero map is bilinear by Definition \ref{def:bilinear-map}(i). Fix $a,b\in\mathbb{F}$ and $f,g\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$.\\
+For $\mathbf{u}\in\mathcal{U}$ and $\mathbf{v}\in\mathcal{V}$, $(af+bg)(\,\cdot\,,\mathbf{v})\in\LL(\mathcal{U},\mathcal{W})$ and $(af+bg)(\mathbf{u},\,\cdot\,)\in\LL(\mathcal{V},\mathcal{W})$ by linearity of the corresponding partial maps.\\
+$af+bg\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ by Definition \ref{def:bilinear-map}(i). The vector-space axioms hold by their pointwise counterparts in $\mathcal{W}$.
+\item The assignment $\Phi(f)=\widetilde{f}$ is well-defined by Definition \ref{def:tensor-product-universal-property}(i). Define $\Psi:\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})\to\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$ by $\Psi(L)\defeq L\circ t$.\\
+The map $\Psi$ is well-defined by linearity of $L$ and bilinearity of $t$.\\
+The identity $\Psi(\Phi(f))=f$ holds by $\widetilde{f}\circ t=f$, and $\Phi(\Psi(L))=L$ by mediator uniqueness for $L\circ t$.\\
+Hence $\Psi=\Phi^{-1}$ by these identities. Fix $a,b\in\mathbb{F}$ and bilinear $f,g$.\\
+The equality $(a\Phi(f)+b\Phi(g))\circ t=af+bg=\Phi(af+bg)\circ t$ holds by the definition of $\Phi$.\\
+Thus $\Phi(af+bg)=a\Phi(f)+b\Phi(g)$ by mediator uniqueness. Map $\Phi$ is linear isomorphism by this linearity and inverse above.
+\end{enumerate}
+\hlt{Structural Commentary}: Mediator uniqueness constructs the inverse and transfers pointwise linear combinations through $t$.\\
+\hlt{Key Insight}: Precomposition with $t$ inverts bilinear linearization.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:defining-linear-maps-on-tensor-products} \hlt{Defining Maps on Tensor Products}\\
-To define $L\in\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$:
+\begin{computationmethod} \label{meth:defining-linear-maps-on-tensor-products} \hlt{Constructing Maps from Tensor Products}\\
+Fix $\mathbb{F}$-vector spaces $\mathcal{U},\mathcal{V},\mathcal{W}$ and a tensor product $(\mathcal{U}\otimes\mathcal{V},t)$. To construct $L\in\LL(\mathcal{U}\otimes\mathcal{V},\mathcal{W})$, proceed as follows:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item define a candidate rule $f:\mathcal{U}\times\mathcal{V}\to\mathcal{W}$ by $f(\mathbf{u},\mathbf{v})$;
-\item prove $f\in\operatorname{Bil}_{\mathbb{F}}(\mathcal{U},\mathcal{V};\mathcal{W})$;
-\item set $L\defeq\Phi(f)$ from Theorem \ref{thm:tensor-linearizes-bilinear-maps}, so $L(\mathbf{u}\otimes\mathbf{v})=f(\mathbf{u},\mathbf{v})$.
+\item specify a rule $f:\mathcal{U}\times\mathcal{V}\to\mathcal{W}$;
+\item verify $(\forall\,\mathbf{v}\in\mathcal{V})\,f(\,\cdot\,,\mathbf{v})\in\LL(\mathcal{U},\mathcal{W})$ and $(\forall\,\mathbf{u}\in\mathcal{U})\,f(\mathbf{u},\,\cdot\,)\in\LL(\mathcal{V},\mathcal{W})$;
+\item set $L\defeq\Phi(f)$; then $L\circ t=f$ by Theorem \ref{thm:tensor-linearizes-bilinear-maps}(ii).
 \end{enumerate}
-Do not assign arbitrary values on decomposable tensors: they span $\mathcal{U}\otimes\mathcal{V}$ but are usually linearly dependent.
-\end{method}
+The decomposable tensors span $\mathcal{U}\otimes\mathcal{V}$ by Theorem \ref{thm:tensor-product-quotient-construction}(i), but are generally linearly dependent.\\
+Assignments on decomposable tensors must therefore respect their linear relations.
+\end{computationmethod}
