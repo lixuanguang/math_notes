@@ -2,34 +2,42 @@
 
 % **Role:** rigorous language of real and complex analysis.
 %
-% Limits of real sequences, subsequences, Cauchy sequences, monotone convergence, limsup/liminf, Bolzano--Weierstrass.
+% Limits of real sequences, subsequences, Cauchy sequences, monotone convergence, Bolzano--Weierstrass.
 
-Sequences are the first testing ground for limits, order, and completeness. The main tools are subsequences, Cauchy criteria, monotone convergence, limsup/liminf, and Bolzano--Weierstrass.
+Sequences test how limits interact with algebra, order, and completeness. This subsection develops limit algebra and subsequences.\\
+It then derives monotone convergence, Bolzano--Weierstrass, and the Cauchy criterion.\\
+Divergence and upper and lower limits appear in the next subsection.
 
 \begin{definition} \label{def:real-complex-sequence-convergence} \hlt{Convergent Real and Complex Sequences}\\
 Let $\mathbb{K}\in\{\R,\C\}$, let $(s_n)$ be a sequence in $\mathbb{K}$, and let $s\in\mathbb{K}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $(s_n)$ \hlt{converges} to $s$ iff for every $\varepsilon>0$ there exists $N\in\N$ such that $n\geq N$ implies $\abs{s_n-s}<\varepsilon$.
-\item Write $s_n\to s$ or $\lim_{n\to\infty}s_n=s$. If no $s\in\mathbb{K}$ satisfies (i), then $(s_n)$ \hlt{diverges}.
+\item $(s_n)$ \hlt{converges} to $s$ iff $(\forall\varepsilon>0)(\exists N\in\N)(\forall n\geq N)\,\abs{s_n-s}<\varepsilon$.
+\item Write $s_n\to s$ or $\lim\limits_{n\to\infty}s_n=s$. The sequence \hlt{diverges} iff no $s\in\mathbb{K}$ satisfies (i).
 \end{enumerate}
+For $\mathbb{K}=\R$, $\abs{\cdot}$ is from Definition \ref{def:real-absolute-value-and-distance}. For $\mathbb{K}=\C$, it is from Definition \ref{def:complex-absolute-value-analysis}.
 \end{definition}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/sequence_epsilon_neighborhood.tikz}
-  \caption{For all $n\geq N$, the terms $s_n$ stay inside $(s-\varepsilon,s+\varepsilon)$.}
+  \caption{For a real sequence, the tail $\{s_n:n\geq N\}$ stays inside $(s-\varepsilon,s+\varepsilon)$.}
   \label{fig:sequence-epsilon-neighborhood}
-\end{figure}
+\end{illustrationfigure}
+For real sequences, Figure \ref{fig:sequence-epsilon-neighborhood} illustrates the tail condition in the definition.
 
 \begin{definition} \label{def:real-sequence-range-and-boundedness} \hlt{Range and Boundedness of a Real Sequence}\\
 Let $(s_n)$ be a real sequence.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item The \hlt{range} of $(s_n)$ is $\operatorname{range}(s_n)\defeq\{s_n:n\in\N\}$.
-\item $(s_n)$ is \hlt{bounded} iff there exist $m,M\in\R$ such that $m\leq s_n\leq M$ for all $n\in\N$.
+\item $(s_n)$ is \hlt{bounded} iff $(\exists m,M\in\R)(\forall n\in\N)\,m\leq s_n\leq M$.
 \end{enumerate}
 \end{definition}
+
+\begin{convention} \label{conv:eventual-sequence-property} \hlt{Eventual Properties}\\
+For statements $P(n)$ indexed by $n\in\N$, $P(n)$ holds \hlt{eventually} iff $(\exists N\in\N)(\forall n\geq N)\,P(n)$.
+\end{convention}
 
 \begin{proposition} \label{prop:convergent-sequence-basic-consequences} \hlt{Basic Consequences of Sequence Convergence}\\
 Let $\mathbb{K}\in\{\R,\C\}$, and let $(s_n)$ and $(t_n)$ be sequences in $\mathbb{K}$.
@@ -38,141 +46,184 @@ Let $\mathbb{K}\in\{\R,\C\}$, and let $(s_n)$ and $(t_n)$ be sequences in $\math
 \item If $s_n\to s$ and $s_n\to t$, then $s=t$.
 \item If $s_n\to s$, then $\{\abs{s_n}:n\in\N\}$ is bounded.
 \item If $\mathbb{K}=\R$, $s_n\leq t_n$ eventually, $s_n\to s$, and $t_n\to t$, then $s\leq t$.\\
-In particular, $s_n\leq c$ eventually implies $s\leq c$.
+If $\mathbb{K}=\R$ and $c\in\R$, then $s_n\leq c$ eventually and $s_n\to s$ imply $s\leq c$.
 \end{enumerate}
 \begin{proof}
+For $\mathbb{K}=\R$, positivity, triangle inequality hold by Proposition \ref{prop:real-absolute-value-triangle-inequality}(i),(iii). For $\mathbb{K}=\C$, these hold by Theorem \ref{thm:complex-absolute-value-identities}(i),(v).
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $\varepsilon>0$ and large $n$, $\abs{s_n-s},\abs{s_n-t}<\varepsilon/2$, so $\abs{s-t}<\varepsilon$; hence $s=t$.
-\item For large $n$, $\abs{s_n-s}<1$, hence $\abs{s_n}\leq\abs{s}+1$; the remaining finitely many $\abs{s_n}$ are bounded.
-\item If $s>t$, let $\varepsilon=(s-t)/3$. For large $n$, $s_n>s-\varepsilon>t+\varepsilon>t_n$, contradicting $s_n\leq t_n$.\\
-Take $t_n=c$ for the final claim.
+\item Suppose $s\neq t$ and set $d\defeq\abs{s-t}>0$. For $\varepsilon\defeq\frac{d}{3}$, choose $N$ such that $\abs{s_n-s}<\varepsilon$ and $\abs{s_n-t}<\varepsilon$ for $n\geq N$.\\
+Then $d\leq\abs{s-s_n}+\abs{s_n-t}<2\varepsilon=\frac{2d}{3}$, a contradiction.
+\item Choose $N\geq2$ such that $\abs{s_n-s}<1$ for $n\geq N$, and set $M\defeq\max\{\abs{s_1},\ldots,\abs{s_{N-1}},\abs{s}+1\}$.\\
+For $n\geq N$, $\abs{s_n}\leq\abs{s_n-s}+\abs{s}<\abs{s}+1\leq M$. The set $\{\abs{s_n}:n\in\N\}$ is bounded by $(\forall n\in\N)\,0\leq\abs{s_n}\leq M$.
+\item Suppose $s>t$ and set $\varepsilon\defeq\frac{s-t}{3}$. Choose $N$ such that $n\geq N$ implies $s_n\leq t_n$, $\abs{s_n-s}<\varepsilon$, and $\abs{t_n-t}<\varepsilon$.\\
+Then $s_n>s-\varepsilon>t+\varepsilon>t_n$, contradicting $s_n\leq t_n$. Final claim is preceding result with constant sequence $t_n=t=c$.
 \end{enumerate}
-\hlt{Structural Commentary}: Limits are rigid: tails determine the value, stay bounded, and preserve eventual order.\\
-\hlt{Key Insight}: The triangle inequality and an $\varepsilon/3$ gap control the basic consequences.
+\hlt{Structural Commentary}: The triangle inequality separates limits, bounds tails, and transfers eventual order.\\
+\hlt{Key Insight}: A common late index turns simultaneous estimates into one contradiction or bound.
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:complex-sequence-limit-algebra} \hlt{Limit Algebra for Complex Sequences}\\
-Suppose $(s_n)$ and $(t_n)$ are complex sequences with $s_n\to s$ and $t_n\to t$. Then, for every $c\in\C$,
+\begin{theorem} \label{thm:complex-sequence-limit-algebra} \hlt{Limit Algebra for Real and Complex Sequences}\\
+Let $\mathbb{K}\in\{\R,\C\}$, and let $(s_n)$ and $(t_n)$ be sequences in $\mathbb{K}$. Assume $s_n\to s$ and $t_n\to t$, and let $c\in\mathbb{K}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $s_n+t_n\to s+t$;
 \item $cs_n\to cs$ and $c+s_n\to c+s$;
 \item $s_nt_n\to st$;
-\item if $s\neq0$ and $s_n\neq0$ for all $n$, then $1/s_n\to1/s$.
+\item if $s\neq0$ and $(\forall n\in\N)\,s_n\neq0$, then $\frac{1}{s_n}\to\frac{1}{s}$.
 \end{enumerate}
 \begin{proof}
+For $\mathbb{K}=\R$, required modulus laws hold by Proposition \ref{prop:real-absolute-value-triangle-inequality}(i)--(iii). For $\mathbb{K}=\C$, these hold by Theorem \ref{thm:complex-absolute-value-identities}(i),(iii),(v).
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Given $\varepsilon>0$, choose $N$ such that $\abs{s_n-s}<\varepsilon/2$, $\abs{t_n-t}<\varepsilon/2$ for $n\geq N$.\\
-Then $\abs{(s_n+t_n)-(s+t)}\leq\abs{s_n-s}+\abs{t_n-t}<\varepsilon$.
-\item Scalar multiplication uses $\abs{cs_n-cs}=\abs{c}\abs{s_n-s}$; translation is (i) with constant sequence $c$.
-\item Since $s_n\to s$, choose $N\geq2$ with $\abs{s_n-s}<1$ for $n\geq N$ and set $M\defeq\max\{\abs{s_1},\ldots,\abs{s_{N-1}},\abs{s}+1\}$.\\
-Then $\abs{s_nt_n-st}\leq \abs{s_n}\abs{t_n-t}+\abs{t}\abs{s_n-s}\leq M\abs{t_n-t}+\abs{t}\abs{s_n-s}\to0$.
-\item If $s\neq0$, then for all sufficiently large $n$, $\abs{s_n}>\abs{s}/2$. Hence $\abs{\frac1{s_n}-\frac1s}=\frac{\abs{s_n-s}}{\abs{s_n}\abs{s}}\leq \frac{2}{\abs{s}^2}\abs{s_n-s}\to0$.
+\item Given $\varepsilon>0$, choose $N$ with $(\forall n\geq N)\,[\abs{s_n-s}<\frac{\varepsilon}{2}\land\abs{t_n-t}<\frac{\varepsilon}{2}]$.\\
+Then $\abs{(s_n+t_n)-(s+t)}\leq\abs{s_n-s}+\abs{t_n-t}<\varepsilon$ by triangle inequality.
+\item If $c=0$, then $(\forall n\in\N)\,cs_n=0=cs$. If $c\neq0$, then for $\varepsilon>0$ choose $N$ such that $\abs{s_n-s}<\frac{\varepsilon}{\abs{c}}$ for $n\geq N$.\\
+The inequality $\abs{cs_n-cs}=\abs{c}\abs{s_n-s}<\varepsilon$ holds by multiplicativity.\\
+$c+s_n\to c+s$ by (i) and convergence of the constant sequence with value $c$.
+\item Choose $M>0$ with $(\forall n\in\N)\,\abs{s_n}\leq M$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(ii).\\
+Given $\varepsilon>0$, choose $N$ with $(\forall n\geq N)\,[\abs{t_n-t}<\frac{\varepsilon}{2M}\land\abs{s_n-s}<\frac{\varepsilon}{2(\abs{t}+1)}]$. The identity $s_nt_n-st=s_n(t_n-t)+t(s_n-s)$ holds.\\
+The bound $\abs{s_nt_n-st}\leq M\abs{t_n-t}+\abs{t}\abs{s_n-s}<\varepsilon$ holds by multiplicativity and the triangle inequality.
+\item The inequality $\abs{s}>0$ holds by the relevant positivity law. Choose $N_0$ such that $\abs{s_n-s}<\frac{\abs{s}}{2}$ for $n\geq N_0$.\\
+The inequality $\abs{s}\leq\abs{s-s_n}+\abs{s_n}$ holds by triangle inequality. For $n\geq N_0$, $\abs{s_n}>\frac{\abs{s}}{2}$ by this inequality, choice of $N_0$.\\
+Given $\varepsilon>0$, choose $N_1$ such that $\abs{s_n-s}<\frac{\varepsilon\abs{s}^2}{2}$ for $n\geq N_1$.\\
+For $u\in\mathbb{K}\setminus\{0\}$, $\abs{u^{-1}}=\frac{1}{\abs{u}}$ because $1=\abs{1}=\abs{u}\abs{u^{-1}}$ by multiplicativity. Hence $\abs{\frac{1}{s_n}-\frac{1}{s}}=\frac{\abs{s_n-s}}{\abs{s_n}\abs{s}}$.\\
+For $n\geq\max\{N_0,N_1\}$, this quotient is less than $\frac{2}{\abs{s}^2}\abs{s_n-s}<\varepsilon$.
 \end{enumerate}
-\hlt{Structural Commentary}: Boundedness controls products; nonzero limits control reciprocals.\\
-\hlt{Key Insight}: Product and reciprocal rules are estimates after the easy sum rule.
+\hlt{Structural Commentary}: Uniform bounds control products; reverse triangle bounds control reciprocals.\\
+\hlt{Key Insight}: Every algebraic limit law reduces to an error identity and a late uniform bound.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:subsequence-and-subsequential-limit} \hlt{Subsequences and Subsequential Limits}\\
-Let $(p_n)$ be a sequence and let $\sigma:\N\to\N$ be strictly increasing, with $n_k\defeq\sigma(k)$.
+Let $\mathbb{K}\in\{\R,\C\}$ and let $p:\N\to\mathbb{K}$, $n\mapsto p_n$, be a sequence.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The sequence $(p_{n_k})_{k\in\N}$ is a \hlt{subsequence} of $(p_n)$.
-\item A point $p$ is a \hlt{subsequential limit} of $(p_n)$ iff there exists such $\sigma$ with $p_{\sigma(k)}\to p$.
+\item If $\sigma:\N\to\N$ is strictly increasing, then $p\circ\sigma:k\mapsto p_{\sigma(k)}$ is a \hlt{subsequence} of $(p_n)$.
+\item $q\in\mathbb{K}$ is a \hlt{subsequential limit} iff $(\exists\,\sigma:\N\to\N)\,[(\forall k\in\N)\,\sigma(k+1)>\sigma(k)\land p_{\sigma(k)}\to q]$.
 \end{enumerate}
 \end{definition}
 
-\begin{remark} \label{rem:subsequence-selection-map} \hlt{Subsequences as Selection Maps}\\
-View $(p_n)$ as a function $p:\N\to X$, $p(n)=p_n$.\\
-For a strictly increasing $\sigma:\N\to\N$, the subsequence is $p\circ\sigma:\N\to X$, namely $k\mapsto p_{\sigma(k)}$.\\
-\hlt{Key Insight}: A subsequence keeps the original order but is allowed to skip terms.
-\end{remark}
-
-\begin{remark} \label{rem:subsequences-of-convergent-sequences} \hlt{Subsequences of Convergent Sequences}\\
-If $p_n\to p$, then every subsequence of $(p_n)$ also converges to $p$. Conversely, if every subsequence of $(p_n)$ converges to $p$, then $(p_n)$ itself converges to $p$, since $(p_n)$ is one of its subsequences.
-\end{remark}
+\begin{proposition} \label{prop:subsequences-of-convergent-sequences} \hlt{Subsequences of Convergent Sequences}\\
+Let $\mathbb{K}\in\{\R,\C\}$, $(p_n)$ be a sequence in $\mathbb{K}$, $p\in\mathbb{K}$. Let $\sigma:\N\to\N$ be strictly increasing.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $p_n\to p\Rightarrow p_{\sigma(k)}\to p$.
+\item If each subsequence of $(p_n)$ converges to $p$, then $p_n\to p$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Strict increase implies $\sigma(1)\geq1$ and $\sigma(k+1)\geq\sigma(k)+1$. The bound $(\forall k\in\N)\,\sigma(k)\geq k$ holds by Theorem \ref{thm:mathematical-induction}.\\
+Given $\varepsilon>0$, choose $N$ such that $\abs{p_n-p}<\varepsilon$ for $n\geq N$. If $k\geq N$, then $\sigma(k)\geq k\geq N$, so $\abs{p_{\sigma(k)}-p}<\varepsilon$.
+\item Apply the hypothesis to the identity selection map $\sigma(k)=k$.
+\end{enumerate}
+\hlt{Structural Commentary}: Increasing selection maps place late subsequence indices in the original tail.\\
+\hlt{Key Insight}: The bound $\sigma(k)\geq k$ transfers every convergence threshold.
+\end{proof}
+\end{proposition}
 
 \begin{definition} \label{def:monotone-sequence} \hlt{Monotone Real Sequence}\\
 Let $(s_n)$ be a real sequence.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $(s_n)$ is \hlt{monotonically increasing} iff $s_n\leq s_{n+1}$ for all $n\in\N$.
-\item $(s_n)$ is \hlt{monotonically decreasing} iff $s_n\geq s_{n+1}$ for all $n\in\N$.
+\item $(s_n)$ is \hlt{monotonically increasing} iff $(\forall n\in\N)\,s_n\leq s_{n+1}$.
+\item $(s_n)$ is \hlt{monotonically decreasing} iff $(\forall n\in\N)\,s_n\geq s_{n+1}$.
 \end{enumerate}
 The sequence is \hlt{monotonic} iff it is increasing or decreasing.
 \end{definition}
 
 \begin{definition} \label{def:dominant-index} \hlt{Dominant Index}\\
-For a real sequence $(s_n)$, an index $n\in\N$ is \hlt{dominant} iff $s_n\geq s_m$ for all $m>n$.
+For a real sequence $(s_n)$, an index $n\in\N$ is \hlt{dominant} iff $(\forall m>n)\,s_n\geq s_m$.
 \end{definition}
 
 \begin{theorem} \label{thm:monotone-subsequence-theorem} \hlt{Monotone Subsequence Theorem}\\
 Every real sequence has a monotone subsequence.
 \begin{proof}
-If the dominant indices $n_1<n_2<\cdots$ are infinite, then $s_{n_1}\geq s_{n_2}\geq\cdots$, giving a decreasing subsequence.\\
-Otherwise choose $N$ beyond all dominant indices and set $n_1>N$.\\
-Given $n_k>N$, nondominance gives $n_{k+1}>n_k$ with $s_{n_{k+1}}>s_{n_k}$; hence $(s_{n_k})$ is increasing.\\
-\hlt{Structural Commentary}: Dominant indices give decreasing case; nondominance recursively gives increasing case.\\
-\hlt{Key Insight}: The proof organizes arbitrary real behavior into one ordered thread.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Dominant set}: Let $D\defeq\{n\in\N:(\forall m>n)\,s_n\geq s_m\}$.
+\item \hlt{Infinite case}: If $D$ is infinite, set $n_1\defeq\min D$ by Assumption \ref{assump:well-ordering-positive-integers}.\\
+The set $\{n\in D:n>n_k\}$ is nonempty at each stage because $D$ is infinite.\\
+Recursively set $n_{k+1}\defeq\min\{n\in D:n>n_k\}$ by the same assumption.\\
+The subsequence $(s_{n_k})$ is decreasing by $n_1<n_2<\cdots$ and $s_{n_1}\geq s_{n_2}\geq\cdots$.
+\item \hlt{Finite case}: If $D$ is finite, choose $N$ such that no $n\geq N$ belongs to $D$, and set $n_1\defeq N$.\\
+Given $n_k\geq N$, choose $n_{k+1}>n_k$ with $s_{n_{k+1}}>s_{n_k}$ by the nondominance of $n_k$.\\
+The subsequence $(s_{n_k})$ is increasing by $n_1<n_2<\cdots$ and $s_{n_1}<s_{n_2}<\cdots$.
+\end{enumerate}
+\hlt{Structural Commentary}: Dominant indices decrease; recursive nondominance beyond them increases.\\
+\hlt{Key Insight}: Dominance splits the index set into the two constructions needed for monotonicity.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/monotone_convergence_supremum.tikz}
-  \caption{For an increasing bounded sequence, $s=\sup\{s_n\}$ is the limit.}
-  \label{fig:monotone-convergence-supremum}
-\end{figure}
-
 \begin{theorem} \label{thm:monotone-convergence} \hlt{Monotone Convergence Theorem for Sequences}\\
-A monotonic real sequence converges if and only if it is bounded.
+A monotonic real sequence converges iff it is bounded.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $s_n\to s$, choose $N$ with $\abs{s_n-s}<1$ for $n\geq N$.\\
-The tail lies in $(s-1,s+1)$ and the initial set $\{s_1,\ldots,s_{N-1}\}$ is finite, so $(s_n)$ is bounded.
-\item[$(\Leftarrow)$] Let $E\defeq\{s_n:n\in\N\}$. If $(s_n)$ is increasing, set $s\defeq\sup E$. Given $\varepsilon>0$, choose $N$ with $s-\varepsilon<s_N\leq s$; then $s-\varepsilon<s_n\leq s$ for $n\geq N$, so $s_n\to s$. If $(s_n)$ is decreasing, set $s\defeq\inf E$. Given $\varepsilon>0$, choose $N$ with $s\leq s_N<s+\varepsilon$; then $s\leq s_n\leq s_N<s+\varepsilon$ for $n\geq N$, so $s_n\to s$.
+\item[$(\Rightarrow)$] The sequence is bounded by Proposition \ref{prop:convergent-sequence-basic-consequences}(ii).
+\item[$(\Leftarrow)$] Let $E\defeq\{s_n:n\in\N\}$. If $(s_n)$ is increasing, then $E$ is bounded above and $s\defeq\sup E$ exists by Theorem \ref{thm:real-field-existence-lub}.\\
+Given $\varepsilon>0$, $s-\varepsilon$ is not an upper bound of $E$, so choose $N$ with $s-\varepsilon<s_N\leq s$.\\
+For $n\geq N$, $0\leq s-s_n\leq s-s_N<\varepsilon$, so $\abs{s_n-s}<\varepsilon$ by Definition \ref{def:real-absolute-value-and-distance}.\\
+If $(s_n)$ is decreasing, then $E$ is bounded below and $s\defeq\inf E$ exists by Corollary \ref{cor:infimum-as-negative-supremum}.\\
+Given $\varepsilon>0$, $s+\varepsilon$ is not a lower bound of $E$, so choose $N$ with $s\leq s_N<s+\varepsilon$.\\
+For $n\geq N$, $0\leq s_n-s\leq s_N-s<\varepsilon$, so $\abs{s_n-s}<\varepsilon$ by Definition \ref{def:real-absolute-value-and-distance}.
 \end{enumerate}
-\hlt{Structural Commentary}: Monotonicity traps bounded tails at $\sup E$ or $\inf E$.\\
-\hlt{Key Insight}: The least upper bound is forced to be the limit.
+\hlt{Structural Commentary}: Boundedness supplies extrema; monotonicity traps each tail against one term.\\
+\hlt{Key Insight}: An extremum becomes the limit because no $\varepsilon$-shift remains a bound.
 \end{proof}
 \end{theorem}
 
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/monotone_convergence_supremum.tikz}
+  \caption{For an increasing bounded sequence, $s=\sup\limits_{n\in\N}s_n$ is the limit.}
+  \label{fig:monotone-convergence-supremum}
+\end{illustrationfigure}
+Figure \ref{fig:monotone-convergence-supremum} illustrates the supremum mechanism in the increasing case.
+
 \begin{theorem} \label{thm:bolzano-weierstrass-real-sequence} \hlt{Bolzano--Weierstrass for Real Sequences}\\
 Every bounded real sequence has a convergent subsequence.
-\begin{proof} Let $(s_{n_k})$ be a monotone subsequence.\\
-If $m\leq s_n\leq M$ for all $n$, then $m\leq s_{n_k}\leq M$ for all $k$; hence $(s_{n_k})$ is bounded and monotone, so it converges.\\
-\hlt{Structural Commentary}: Boundedness prevents escape; monotone subsequences force one ordered thread.\\
-\hlt{Key Insight}: Monotone subsequence plus monotone convergence is the real-line compactness mechanism.
+\begin{proof}
+Choose a monotone subsequence $(s_{n_k})$ by Theorem \ref{thm:monotone-subsequence-theorem}.\\
+Subsequence $(s_{n_k})$ is bounded because its range is contained in the bounded range of $(s_n)$. Subsequence converges by Theorem \ref{thm:monotone-convergence}.\\
+\hlt{Structural Commentary}: Monotone subsequences inherit boundedness and therefore converge.\\
+\hlt{Key Insight}: Boundedness survives passage to the monotone subsequence.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:real-cauchy-sequence} \hlt{Cauchy Real Sequence}\\
-A real sequence $(s_n)$ is \hlt{Cauchy} if, for every $\varepsilon>0$, there is $N\in\N$ such that $m,n\geq N$ implies $\abs{s_n-s_m}<\varepsilon$.
+A real sequence $(s_n)$ is \hlt{Cauchy} iff $(\forall\varepsilon>0)(\exists N\in\N)(\forall m,n\geq N)\,\abs{s_n-s_m}<\varepsilon$.
 \end{definition}
 
 \begin{lemma} \label{lem:real-cauchy-sequence-with-convergent-subsequence} \hlt{Cauchy Plus One Convergent Subsequence}\\
 If a real Cauchy sequence has a subsequence converging to $s\in\R$, then the whole sequence converges to $s$.
-\begin{proof} Given $\varepsilon>0$, choose $N_0$ so that $m,n\geq N_0$ implies $\abs{s_m-s_n}<\varepsilon/2$.\\
-Choose $j$ with $n_j\geq N_0$ and $\abs{s_{n_j}-s}<\varepsilon/2$. Then for every $n\geq N_0$, $\abs{s_n-s}\leq\abs{s_n-s_{n_j}}+\abs{s_{n_j}-s}<\varepsilon$.\\
-\hlt{Structural Commentary}: Cauchy tails follow any convergent thread.\\
-\hlt{Key Insight}: Mutual tail closeness turns one subsequential limit into the full limit.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Index growth}: The inequalities $n_1\geq1$ and $n_{j+1}\geq n_j+1$ hold. The bound $(\forall j\in\N)\,n_j\geq j$ holds by Theorem \ref{thm:mathematical-induction}.
+\item \hlt{Tail thresholds}: Given $\varepsilon>0$, choose $N_0$ such that $m,n\geq N_0\Rightarrow\abs{s_m-s_n}<\frac{\varepsilon}{2}$. Choose $J$ such that $j\geq J\Rightarrow\abs{s_{n_j}-s}<\frac{\varepsilon}{2}$.
+\item \hlt{Common anchor}: Fix $j\geq\max\{J,N_0\}$. Then $n_j\geq j\geq N_0$.
+\item \hlt{Final estimate}: The required triangle inequality holds by Proposition \ref{prop:real-absolute-value-triangle-inequality}(iv). For $n\geq N_0$, $\abs{s_n-s}\leq\abs{s_n-s_{n_j}}+\abs{s_{n_j}-s}<\varepsilon$.
+\end{enumerate}
+\hlt{Structural Commentary}: A term common to both tails anchors every later original term.\\
+\hlt{Key Insight}: A single shared late index joins the two $\frac{\varepsilon}{2}$ estimates.
 \end{proof}
 \end{lemma}
 
 \begin{theorem} \label{thm:real-cauchy-convergence-criterion} \hlt{Real Cauchy Criterion}\\
-A real sequence converges in $\R$ if and only if it is Cauchy.
+A real sequence converges in $\R$ iff it is Cauchy.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $s_n\to s$, choose $N$ with $\abs{s_n-s}<\varepsilon/2$ for $n\geq N$. Then $m,n\geq N$ implies $\abs{s_n-s_m}<\varepsilon$.
-\item[$(\Leftarrow)$] If $(s_n)$ is Cauchy, choose $N$ with $\abs{s_m-s_n}<1$ for $m,n\geq N$. Then the tail lies in $(s_N-1,s_N+1)$, so $(s_n)$ is bounded. Bolzano--Weierstrass gives a convergent subsequence; Lemma \ref{lem:real-cauchy-sequence-with-convergent-subsequence} gives $s_n\to s$.
+\item[$(\Rightarrow)$] Given $\varepsilon>0$, choose $N$ such that $\abs{s_n-s}<\frac{\varepsilon}{2}$ for $n\geq N$.\\
+For $m,n\geq N$, $\abs{s_n-s_m}\leq\abs{s_n-s}+\abs{s-s_m}<\varepsilon$ by Proposition \ref{prop:real-absolute-value-triangle-inequality}(iv).
+\item[$(\Leftarrow)$] Choose $N\geq2$ such that $m,n\geq N\Rightarrow\abs{s_m-s_n}<1$.\\
+The sequence is bounded because its tail lies in $(s_N-1,s_N+1)$ and its finite initial set is bounded.\\
+Choose a subsequence converging to some $s\in\R$ by Theorem \ref{thm:bolzano-weierstrass-real-sequence}. The whole sequence converges by Lemma \ref{lem:real-cauchy-sequence-with-convergent-subsequence}.
 \end{enumerate}
-\hlt{Structural Commentary}: Completeness of $\R$ means Cauchy behavior has a real endpoint.\\
-\hlt{Key Insight}: Cauchy boundedness plus a convergent subsequence forces the full limit.
+\hlt{Structural Commentary}: Convergence controls late pairs; Cauchy boundedness supplies an anchoring limit.\\
+\hlt{Key Insight}: Bolzano--Weierstrass locates a candidate limit, and the Cauchy lemma propagates it.
 \end{proof}
 \end{theorem}
