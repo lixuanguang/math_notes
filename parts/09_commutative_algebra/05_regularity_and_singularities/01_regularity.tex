@@ -1,5 +1,101 @@
 \subsection{Regularity}
 
-% Placeholder only.
-% Should cover: regular local rings, embedding dimension, tangent spaces, and smoothness intuition.
-% Do not add exposition here until this material is ready to be developed.
+\begin{definition} \label{def:ideal-multiples-and-local-cotangent-module}
+\hlt{Ideal Multiples and the Local Cotangent Module}\\
+Let $R$ be a commutative ring with identity, let $\mathcal{I}\trianglelefteq R$, and let $M$ be an $R$-module.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{ideal multiple} of $M$ is $\mathcal{I}M\defeq\langle\!\langle ax:(a,x)\in\mathcal{I}\times M\rangle\!\rangle_R$.
+\item If $R$ is local with maximal ideal $\mathfrak{m}$, set $\mathfrak{m}^2\defeq\mathfrak{m}\mathfrak{m}$. The quotient $R$-module $\mathfrak{m}/\mathfrak{m}^2$ is the \hlt{local cotangent module} of $R$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:units-in-local-ring} \hlt{Units in a Local Ring}\\
+Let $R$ be nonzero commutative local ring with identity and maximal ideal $\mathfrak{m}$. Then $(\forall\,a\in R)\,[a\notin\mathfrak{m}\Longleftrightarrow(\exists\,b\in R)\,ab=1_R]$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Fix $a\notin\mathfrak{m}$ and suppose $(\forall\,b\in R)\,ab\neq1_R$. Then $\mathcal{I}\defeq\langle a\rangle$ is proper. The quotient $S\defeq R/\mathcal{I}$ is nonzero.\\
+Choose a maximal ideal $\mathfrak{n}\trianglelefteq S$ by Theorem \ref{thm:maximal-ideals-exist}. Let $q:R\twoheadrightarrow S$ be the quotient map and set $\mathfrak{p}\defeq q^{-1}(\mathfrak{n})$.\\
+The set $\mathfrak{p}$ is a proper ideal by closure of $\mathfrak{n}$ and $1_S\notin\mathfrak{n}$. Let $\mathfrak{p}\subseteq\mathcal{J}\trianglelefteq R$. The image $q(\mathcal{J})\trianglelefteq S$ by surjectivity of $q$ and ideal closure.\\
+Equality $q(\mathfrak{p})=\mathfrak{n}$ holds by surjectivity of $q$, so $\mathfrak{n}\subseteq q(\mathcal{J})$. Thus $q(\mathcal{J})=\mathfrak{n}$ or $q(\mathcal{J})=S$ by maximality.\\
+In first case, $\mathcal{J}=\mathfrak{p}$ by $\ker q=\mathcal{I}\subseteq\mathfrak{p}$. In second case, choose $j\in\mathcal{J}$ with $q(j)=1_S$; then $1_R-j\in\mathcal{I}\subseteq\mathcal{J}$, so $\mathcal{J}=R$.\\
+Hence $\mathfrak{p}$ is maximal by Definition \ref{def:maximal-ideal}, and $\mathfrak{p}=\mathfrak{m}$ by locality. But $a\in\mathcal{I}\subseteq\mathfrak{p}=\mathfrak{m}$, a contradiction.
+\item[$(\Leftarrow)$] If $ab=1_R$ and $a\in\mathfrak{m}$, then $1_R=ab\in\mathfrak{m}$ by ideal absorption, contradicting properness of $\mathfrak{m}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Maximal ideals above a nonunit principal ideal reduce invertibility to membership in $\mathfrak{m}$.\\
+\hlt{Key Insight}: Every nonunit lies in the unique maximal ideal.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:nakayama-local-vanishing} \hlt{Nakayama's Lemma}\\
+Let $R$ be a nonzero commutative local ring with identity and maximal ideal $\mathfrak{m}$.\\
+If $M$ is a finitely generated $R$-module and $\mathfrak{m}M=M$, then $M=\{0_M\}$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Minimal Generators}: Suppose $M\neq\{0_M\}$.\\
+Choose a generating tuple $(x_i)_{i=1}^n$ of minimal positive length by finite generation and Assumption \ref{assump:well-ordering-positive-integers}.
+\item \hlt{Coefficient Relation}: The tuple $(x_i)_{i=1}^n$ generates $M$.\\
+Thus $(\forall\,y\in\mathfrak{m}M)(\exists\,(a_i)_{i=1}^n\in\mathfrak{m}^n)\,y=\sum\limits_{i=1}^na_ix_i$ by distributivity and ideal absorption.\\
+Choose such $a_1,\ldots,a_n$ for $y=x_n$ by $x_n\in M=\mathfrak{m}M$. Then $(1_R-a_n)x_n=\sum\limits_{i=1}^{n-1}a_ix_i$.
+\item \hlt{Unit Reduction}: The relation $1_R-a_n\notin\mathfrak{m}$ holds because $\mathfrak{m}$ is proper and $a_n\in\mathfrak{m}$.\\
+Choose $b\in R$ with $b(1_R-a_n)=1_R$ by Proposition \ref{prop:units-in-local-ring}. Multiplication by $b$ places $x_n$ in $\langle\!\langle x_1,\ldots,x_{n-1}\rangle\!\rangle_R$.
+\item \hlt{Contradiction}: Thus $M=\langle\!\langle x_1,\ldots,x_{n-1}\rangle\!\rangle_R$, contrary to minimality of $n$. Hence $M=\{0_M\}$.
+\end{enumerate}
+\hlt{Structural Commentary}: Minimal generators convert $\mathfrak{m}M=M$ into a removable last generator.\\
+\hlt{Key Insight}: A coefficient congruent to $1_R$ modulo $\mathfrak{m}$ is invertible.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} \label{prop:local-cotangent-residue-vector-space}
+\hlt{Residue-Field Structure on the Local Cotangent Module}\\
+Let $R$ be a nonzero commutative local ring with identity, maximal ideal $\mathfrak{m}$, and residue field $k\defeq R/\mathfrak{m}$.\\
+The formula $(a+\mathfrak{m})(x+\mathfrak{m}^2)\defeq ax+\mathfrak{m}^2$ makes $\mathfrak{m}/\mathfrak{m}^2$ a $k$-vector space.
+\begin{proof}
+The inclusion $\mathfrak{m}^2\subseteq\mathfrak{m}$ holds by ideal absorption and Definition \ref{def:ideal-multiples-and-local-cotangent-module}. The ring $k$ is a field by Theorem \ref{thm:quotient-by-maximal-ideal-is-field}.\\
+If $a'-a\in\mathfrak{m}$ and $x'-x\in\mathfrak{m}^2$, then $a'x'-ax=a'(x'-x)+(a'-a)x\in\mathfrak{m}^2$.\\
+Thus the scalar action is well defined. The vector-space axioms hold by the $R$-module axioms and quotient operations.\\
+\hlt{Structural Commentary}: Ideal absorption makes scalar representatives modulo $\mathfrak{m}$ act consistently modulo $\mathfrak{m}^2$.\\
+\hlt{Key Insight}: Products of two maximal-ideal elements vanish in the cotangent quotient.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:embedding-dimension} \hlt{Embedding Dimension}\\
+Let $R$ be a nonzero commutative local ring with maximal ideal $\mathfrak{m}$ and residue field $k=R/\mathfrak{m}$.\\
+The \hlt{embedding dimension} of $R$ is $\operatorname{edim}(R)\defeq\dim_k(\mathfrak{m}/\mathfrak{m}^2)$.
+\end{definition}
+
+\begin{proposition} \label{prop:embedding-dimension-minimal-generators}
+\hlt{Embedding Dimension Counts Minimal Generators}\\
+Let $R$ be a nonzero Noetherian commutative local ring with identity and maximal ideal $\mathfrak{m}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\operatorname{edim}(R)\in\N_0$.
+\item $\operatorname{edim}(R)=\min\limits\{n\in\N_0:(\exists\,(x_i)_{i=1}^n\in\mathfrak{m}^n)\,\mathfrak{m}=\langle x_1,\ldots,x_n\rangle\}$.
+\end{enumerate}
+\begin{proof}
+The ideal $\mathfrak{m}$ is finitely generated by Theorem \ref{thm:noetherian-iff-submodules-finitely-generated}(ii). Choose $r\in\N_0$ and $x_1,\ldots,x_r\in\mathfrak{m}$ with $\mathfrak{m}=\langle x_1,\ldots,x_r\rangle$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Cotangent space is finite-dimensional by Definition \ref{def:linear-independence-basis-dimension}(iii) with spanning list $(x_i+\mathfrak{m}^2)_{i=1}^r$; $\operatorname{edim}(R)\in\N_0$ by Definition \ref{def:dimension}.
+\item Set $d\defeq\operatorname{edim}(R)$. If $\mathfrak{m}=\langle z_1,\ldots,z_s\rangle$, then $d\leq s$ by Theorem \ref{thm:finitedimlenofvec} with spanning list $(z_i+\mathfrak{m}^2)_{i=1}^s$.\\
+Choose a $k$-basis $(y_i+\mathfrak{m}^2)_{i=1}^d$ with $y_i\in\mathfrak{m}$, $N\defeq\langle y_1,\ldots,y_d\rangle$. Then $\mathfrak{m}=N+\mathfrak{m}^2$ by spanning property. Set $Q\defeq\mathfrak{m}/N$.\\
+The module $Q$ is finitely generated by the images of $x_1,\ldots,x_r$. The equality $\mathfrak{m}Q=(\mathfrak{m}^2+N)/N=Q$ holds by $\mathfrak{m}=N+\mathfrak{m}^2$.\\
+Thus $Q=\{0_Q\}$ by Theorem \ref{thm:nakayama-local-vanishing}. Hence $\mathfrak{m}=N$, so $d$ generators attain the displayed minimum.
+\end{enumerate}
+\hlt{Structural Commentary}: Cotangent spanning yields a quotient vanishing by Nakayama; arbitrary generators descend to spanning lists.\\
+\hlt{Key Insight}: Modulo $\mathfrak{m}^2$, precisely the irredundant generator directions remain.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:krull-dimension-and-regular-local-ring}
+\hlt{Krull Dimension and Regular Local Rings}\\
+Let $R$ be a nonzero commutative local ring with identity.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathscr{C}(R)$ be the set of finite strictly increasing chains in $\operatorname{Spec}R$. For $\mathcal{P}=(\mathfrak{p}_0\subsetneq\cdots\subsetneq\mathfrak{p}_n)\in\mathscr{C}(R)$, set $\ell(\mathcal{P})\defeq n$.\\
+The \hlt{Krull dimension} is $\dim R\defeq\sup\limits_{\mathcal{P}\in\mathscr{C}(R)}\ell(\mathcal{P})$. Its value is $\infty$ if these lengths are unbounded.
+\item The ring $R$ is \hlt{regular local} if it is Noetherian and $\dim R=\operatorname{edim}(R)$.
+\end{enumerate}
+\end{definition}
