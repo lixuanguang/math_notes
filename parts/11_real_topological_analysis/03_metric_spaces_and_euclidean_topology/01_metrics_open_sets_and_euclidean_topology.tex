@@ -5,64 +5,82 @@
 % Metrics, open/closed sets, neighborhoods, closure, interior, boundary, limit points.
 
 
-Metric topology studies sets through balls: openness, closure, and limit points come from distance. Euclidean estimates rely on norms, Cauchy--Schwarz, and the triangle inequality.
+Metric topology studies sets through balls: openness, closure, and limit points come from distance.\\
+Euclidean estimates rely on norms, Cauchy--Schwarz, and the triangle inequality.
 
 \begin{definition} \label{def:metric-space} \hlt{Metric Space}\\
-A \hlt{metric space} is a set $X$ equipped with a function $d:X\times X\to\R$ such that, for all $p,q,r\in X$,
+A \hlt{metric space} is a pair $(X,d)$, where $X$ is a set and $d:X\times X\to[0,\infty)$. For all $p,q,r\in X$, the following conditions hold:
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item $d(p,q)>0$ if $p\neq q$, and $d(p,p)=0$;
+\item $d(p,q)=0\Longleftrightarrow p=q$;
 \item $d(p,q)=d(q,p)$;
 \item $d(p,q)\leq d(p,r)+d(r,q)$.
 \end{enumerate}
 The function $d$ is called a \hlt{distance function} or \hlt{metric}.
 \end{definition}
 
-\begin{definition} \label{def:metric-topology-core-definitions}\label{def:metric-topology-core-definitions-source-todo} \hlt{Metric Topology Terminology}\\
-Let $X$ be a metric space, and let all points and sets below be understood as points of $X$ and subsets of $X$.
+\begin{definition} \label{def:metric-topology-core-definitions} \hlt{Metric Topology Terminology}\\
+Let $(X,d)$ be a metric space. All points and sets below are understood to be elements and subsets of $X$, respectively.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $p\in X$ and $r>0$, the \hlt{open ball} centered at $p$ with radius $r$ is $B_r(p)\defeq\{q\in X:d(p,q)<r\}$.\\
-The corresponding \hlt{closed ball} is $\overline{B}_r(p)\defeq\{q\in X:d(p,q)\leq r\}$.\\
-The \hlt{sphere} of radius $r$ about $p$ is $\{q\in X:d(p,q)=r\}$.
-\item A \hlt{neighborhood} of $p$ is an open set $U\subseteq X$ with $p\in U$.
-\item A point $p$ is a \hlt{limit point} of $E$ if every open ball $B_r(p)$ contains a point $q\neq p$ with $q\in E$.
-\item If $p\in E$ and $p$ is not a limit point of $E$, then $p$ is an \hlt{isolated point} of $E$.
-\item A set $E$ is \hlt{closed} if every limit point of $E$ is a point of $E$.
-\item A point $p$ is an \hlt{interior point} of $E$ if some neighborhood of $p$ is contained in $E$.
+The corresponding \hlt{closed ball} is $\overline{B}_r(p)\defeq\{q\in X:d(p,q)\leq r\}$. The \hlt{sphere} of radius $r$ about $p$ is $\{q\in X:d(p,q)=r\}$.
+\item A point $p$ is an \hlt{interior point} of $E$ iff $(\exists\,r>0)\,B_r(p)\subseteq E$.
 \item A set $E$ is \hlt{open} if every point of $E$ is an interior point of $E$.
+\item A \hlt{neighborhood} of $p$ is an open set $U\subseteq X$ with $p\in U$.
+\item A point $p$ is a \hlt{limit point} of $E$ iff $(\forall\,r>0)\,B_r(p)\cap(E\setminus\{p\})\neq\emptyset$.
+\item If $p\in E$ and $p$ is not a limit point of $E$, then $p$ is an \hlt{isolated point} of $E$.
+\item A set $E$ is \hlt{closed} iff every limit point of $E$ belongs to $E$.
 \item The \hlt{complement} of $E$ is $E^c\defeq X\setminus E$.
-\item A set $E$ is \hlt{dense} in $X$ if every point of $X$ is either a point of $E$, a limit point of $E$, or both.
+\item A set $E$ is \hlt{dense} in $X$ iff every point of $X$ belongs to $E$, is a limit point of $E$, or both.
 \end{enumerate}
-For $X=\R$, this gives $B_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$.\\
-\hlt{Structural Commentary}: Balls generate the local tests; neighborhoods are open sets containing the point.
+The \hlt{metric topology} induced by $d$ is the collection $\tau_d$ of all open subsets of $X$.\\
+For $X=\R$, $B_\varepsilon(a)=(a-\varepsilon,a+\varepsilon)$. Open balls supply the local tests for the metric topology.\\
+Neighborhoods are the open sets containing the point.
 \end{definition}
 
+\begin{theorem} \label{thm:every-neighborhood-open} \hlt{Every Open Ball Is Open}\\
+Every open ball in a metric space is an open set.
+\begin{proof}
+Let $E=B_r(p)$, and choose $q\in E$. Put $h\defeq r-d(p,q)>0$. If $s\in B_h(q)$, then $d(p,s)\leq d(p,q)+d(q,s)<d(p,q)+h=r$.\\
+Thus $B_h(q)\subseteq E$, so $q$ is an interior point of $E$. Since $q$ was arbitrary, $E$ is open.\\
+\hlt{Structural Commentary}: For $q\in B_r(p)$, positive slack $h=r-d(p,q)$ defines smaller ball. Triangle inequality keeps $B_h(q)$ inside $B_r(p)$.\\
+\hlt{Key Insight}: The triangle inequality turns radius slack into openness.
+\end{proof}
+\end{theorem}
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/metric_ball_topology.tikz}
+  \caption{Every point inside a metric ball has a smaller ball still contained in the original ball.}
+  \label{fig:metric-ball-topology}
+\end{illustrationfigure}
+Figure \ref{fig:metric-ball-topology} illustrates the smaller-ball construction in the proof.
+
 \begin{perspective} \label{per:epsilon-closeness-to-metric-language} \hlt{$\varepsilon$-Closeness Becomes Metric Language}\\
-On $\R$, $\varepsilon$-close means $\abs{x-y}<\varepsilon$, i.e. $d(x,y)<\varepsilon$ with $d(x,y)=\abs{x-y}$; may be abstracted to metric balls.\\
+For the usual metric $d(x,y)\defeq\abs{x-y}$ on $\R$, $\abs{x-y}<\varepsilon\Longleftrightarrow y\in B_\varepsilon(x)$.\\
+Metric balls extend this notion of $\varepsilon$-closeness to arbitrary metric spaces.\\
 \hlt{Key Insight}: Absolute value is distance on $\R$.
 \end{perspective}
 
 \begin{example} \label{ex:euclidean-metric-and-subspaces} \hlt{Euclidean Metric and Subspaces}\\
-The Euclidean space $\R^k$ is a metric space with $d(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_2,\qquad \mathbf{x},\mathbf{y}\in\R^k$.\\
-Every subset $Y$ of a metric space $X$ is a metric space by restricting the same distance function to points of $Y$.
+For $\mathbf{x},\mathbf{y}\in\R^k$, define $d(\mathbf{x},\mathbf{y})\defeq\norm{\mathbf{x}-\mathbf{y}}_2$. Nonnegativity and definiteness hold by Proposition \ref{prop:derived-norm-basic-properties}(i)--(ii).\\
+Symmetry holds by Proposition \ref{prop:derived-norm-basic-properties}(iii) with scalar $-1$. Write $\mathbf{x}-\mathbf{z}=(\mathbf{x}-\mathbf{y})+(\mathbf{y}-\mathbf{z})$.\\
+The metric triangle inequality holds by Theorem \ref{thm:triangle-inequality-inner-product}(i). Thus the Euclidean space $\R^k$ is a metric space.\\
+If $Y\subseteq X$ for a metric space $(X,d)$, then $d|_{Y\times Y}$ is a metric on $Y$.
 \end{example}
 
 \begin{example} \label{ex:discrete-metric} \hlt{Discrete Metric}\\
-On any set $X$, define $d(x,y)=
-\begin{cases}
-0, & x=y,\\
-1, & x\neq y.
-\end{cases}$.\\
-This is the \hlt{discrete metric}: distinct points are all distance $1$ apart.
+On any set $X$, define $d(x,y)\defeq0$ when $x=y$ and $d(x,y)\defeq1$ when $x\neq y$. Definiteness and symmetry are immediate.\\
+If $x\neq z$, then at least one of $x\neq y$ or $y\neq z$ holds, so $d(x,z)=1\leq d(x,y)+d(y,z)$.\\
+Thus $d$ is the \hlt{discrete metric}: distinct points are all distance $1$ apart.
 \end{example}
 
 \begin{example} \label{ex:hamming-distance} \hlt{Hamming Distance}\\
-For $x,y\in\{0,1\}^n$, define $h(x,y)\defeq\abs{\{i:x_i\neq y_i\}}$. Then $h$ is a metric.
-\begin{proof}
-$h\geq0$, $h(x,y)=h(y,x)$, and $h(x,y)=0\Longleftrightarrow x_i=y_i\ \forall i\Longleftrightarrow x=y$.\\
-For $x,y,z\in\{0,1\}^n$, $\{i:x_i\neq y_i\}\subseteq\{i:x_i\neq z_i\}\cup\{i:z_i\neq y_i\}$, so $h(x,y)\leq h(x,z)+h(z,y)$.\\
-\hlt{Structural Commentary}: Hamming distance counts coordinate disagreements.\\
+For $x,y\in\{0,1\}^n$, define $h(x,y)\defeq\abs{\{i\in\{1,\ldots,n\}:x_i\neq y_i\}}$. Then $h$ is a metric.
+\begin{proof} Value $h(x,y)$ nonnegative, satisfies $h(x,y)=h(y,x)$. Moreover, $h(x,y)=0$ iff $(\forall\,i\in\{1,\ldots,n\})\,x_i=y_i$, equivalently $x=y$.\\
+Put $D(u,v)\defeq\{i\in\{1,\ldots,n\}:u_i\neq v_i\}$. Then $D(x,y)\subseteq D(x,z)\cup D(z,y)$; $h(x,y)\leq h(x,z)+h(z,y)$ by cardinality of finite unions.\\
+\hlt{Structural Commentary}: Definiteness uses $D(x,y)=\emptyset$; inclusion proves the triangle inequality.\\
 \hlt{Key Insight}: Each disagreement between $x$ and $y$ must be paid for through $z$ in at least one leg.
 \end{proof}
 \end{example}
@@ -71,35 +89,57 @@ For $x,y,z\in\{0,1\}^n$, $\{i:x_i\neq y_i\}\subseteq\{i:x_i\neq z_i\}\cup\{i:z_i
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item In $\R$, $(a,b)\defeq\{x:a<x<b\}$, $[a,b]\defeq\{x:a\leq x\leq b\}$, with $[a,b)$ and $(a,b]$ defined by mixed inequalities.
-\item For $a_i<b_i$, a \hlt{$k$-cell} is $\prod_{i=1}^{k}[a_i,b_i]=\{\mathbf{x}\in\R^k:a_i\leq x_i\leq b_i,\ 1\leq i\leq k\}$.
-\item For $\mathbf{x}\in\R^k$ and $r>0$, $B_r(\mathbf{x})\defeq\{\mathbf{y}:\norm{\mathbf{y}-\mathbf{x}}_2<r\}$ and $\overline{B}_r(\mathbf{x})\defeq\{\mathbf{y}:\norm{\mathbf{y}-\mathbf{x}}_2\leq r\}$.
-\item $E\subseteq\R^k$ is \hlt{convex} iff $\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\in E$ for all $\mathbf{x},\mathbf{y}\in E$ and $0\leq\lambda\leq1$.
-\item The \hlt{integer lattice} is $\Z^k$, and the \hlt{first orthant} is $\{\mathbf{x}\in\R^k:x_i\geq0\ \forall i\}$.
+\item A set $J\subseteq\R$ is an \hlt{interval} iff $(\forall\,x,y\in J)\,[x<y\Rightarrow[x,y]\subseteq J]$.
+\item For $a_i<b_i$ with $1\leq i\leq k$, a \hlt{$k$-cell} is $\prod\limits_{i=1}^{k}[a_i,b_i]$.
+\item For $\mathbf{x}\in\R^k$ and $r>0$, $B_r(\mathbf{x})\defeq\{\mathbf{y}:\norm{\mathbf{y}-\mathbf{x}}_2<r\}$. The corresponding closed ball is $\overline{B}_r(\mathbf{x})\defeq\{\mathbf{y}:\norm{\mathbf{y}-\mathbf{x}}_2\leq r\}$.
+\item For $\mathbf{x},\mathbf{y}\in\R^k$, the points $\lambda\mathbf{x}+(1-\lambda)\mathbf{y}$ with $\lambda\in[0,1]$ are the two-point convex combinations.\\
+They form the \hlt{line segment} $[\mathbf{x},\mathbf{y}]\defeq\{\lambda\mathbf{x}+(1-\lambda)\mathbf{y}:\lambda\in[0,1]\}$.
+\item A set $C\subseteq\R^k$ is \hlt{convex} iff $(\forall\,\mathbf{x},\mathbf{y}\in C)\,[\mathbf{x},\mathbf{y}]\subseteq C$.
+\item The \hlt{integer lattice} is $\Z^k$, and the \hlt{first orthant} is $\{\mathbf{x}\in\R^k:(\forall\,i\in\{1,\ldots,k\})\,x_i\geq0\}$.
 \item The \hlt{unit ball} is $B^k\defeq\{\mathbf{x}\in\R^k:\norm{\mathbf{x}}_2\leq1\}$, and the \hlt{unit sphere} is $S^{k-1}\defeq\{\mathbf{x}\in\R^k:\norm{\mathbf{x}}_2=1\}$.
-\item A \hlt{convex combination} of $\mathbf{x},\mathbf{y}$ is $\lambda\mathbf{x}+(1-\lambda)\mathbf{y}$ with $0\leq\lambda\leq1$; these points form the line segment $[\mathbf{x},\mathbf{y}]$.
 \end{enumerate}
 \end{definition}
 
-\begin{proposition} \label{prop:balls-and-cells-convex} \hlt{Balls and Cells Are Convex}\\
-Open balls, closed balls, and $k$-cells in $\R^k$ are convex.
+\begin{proposition} \label{prop:balls-and-cells-convex} \hlt{Balls and Cells Are Convex}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Every open or closed ball in $\R^k$ is convex.
+\item Every $k$-cell in $\R^k$ is convex.
+\end{enumerate}
 \begin{proof}
-Let $\mathbf{y},\mathbf{z}\in B_r(\mathbf{x})$ and $0<\lambda<1$.\\
-Then $\norm{\lambda\mathbf{y}+(1-\lambda)\mathbf{z}-\mathbf{x}}_2 =\norm{\lambda(\mathbf{y}-\mathbf{x})+(1-\lambda)(\mathbf{z}-\mathbf{x})}_2 \leq \lambda\norm{\mathbf{y}-\mathbf{x}}_2+(1-\lambda)\norm{\mathbf{z}-\mathbf{x}}_2<r$.\\
-The same proof with $\leq r$ gives closed balls. For a $k$-cell, each coordinate of $\lambda\mathbf{y}+(1-\lambda)\mathbf{z}$ lies between the corresponding coordinates of $\mathbf{y}$ and $\mathbf{z}$, hence remains in the same interval $[a_i,b_i]$.\\
-\hlt{Structural Commentary}: Convexity is checked by following the line segment between two points.\\
-\hlt{Key Insight}: Balls use the triangle inequality; cells use coordinate inequalities.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathbf{y},\mathbf{z}\in B_r(\mathbf{x})$, let $\lambda\in[0,1]$, and put $\mathbf{w}\defeq\lambda\mathbf{y}+(1-\lambda)\mathbf{z}$.\\
+Then $\norm{\mathbf{w}-\mathbf{x}}_2\leq\lambda\norm{\mathbf{y}-\mathbf{x}}_2+(1-\lambda)\norm{\mathbf{z}-\mathbf{x}}_2<r$ by norm homogeneity and the triangle inequality.\\
+Hence $B_r(\mathbf{x})$ is convex. For $\mathbf{y},\mathbf{z}\in\overline{B}_r(\mathbf{x})$ and $\lambda\in[0,1]$, define $\mathbf{w}$ as above. Same estimate ends with $\leq r$, so $\overline{B}_r(\mathbf{x})$ is convex.
+\item Let $\mathbf{y},\mathbf{z}\in\prod\limits_{i=1}^{k}[a_i,b_i]$ and $\lambda\in[0,1]$. For every $1\leq i\leq k$, $a_i\leq\lambda y_i+(1-\lambda)z_i\leq b_i$ by $a_i\leq y_i,z_i\leq b_i$.\\
+Thus $\lambda\mathbf{y}+(1-\lambda)\mathbf{z}$ belongs to the cell.
+\end{enumerate}
+\hlt{Structural Commentary}: Norm bounds preserve balls; coordinate bounds preserve cells.\\
+\hlt{Key Insight}: Norm subadditivity preserves balls, while order intervals preserve each coordinate.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:bounded-compression-metric-same-open-sets} \hlt{Bounded Compression of a Metric}\\
-If $(X,d)$ is a metric space, then $\rho(x,y)\defeq d(x,y)/(1+d(x,y))$ is a bounded metric on $X$, and $\tau_\rho=\tau_d$.
+Let $(X,d)$ be a metric space and set $\rho(x,y)\defeq\frac{d(x,y)}{1+d(x,y)}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The function $\rho$ is a bounded metric on $X$.
+\item The induced topologies satisfy $\tau_\rho=\tau_d$.
+\end{enumerate}
 \begin{proof}
-$0\leq\rho<1$, and definiteness and symmetry follow from $d$.\\
-For $a,b\geq0$, $(a+b)/(1+a+b)\leq a/(1+a)+b/(1+b)$.\\
-Since $t/(1+t)$ is increasing, $d(x,z)\leq d(x,y)+d(y,z)$ gives $\rho(x,z)\leq\rho(x,y)+\rho(y,z)$.\\
-For balls, $B_d(x,\eta)\subseteq B_\rho(x,\eta)$ for $0<\eta<1$, and $B_\rho(x,\eta)\subseteq B_d(x,\eta/(1-\eta))$; hence $\tau_\rho=\tau_d$.\\
-\hlt{Structural Commentary}: Compressing distances into $[0,1)$ changes boundedness but not local neighborhoods.\\
-\hlt{Key Insight}: Topology depends on small-scale control, not on the large-scale size of distances.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Put $f(t)\defeq\frac{t}{1+t}$ for $t\geq0$. Then $0\leq f(t)<1$, so $\rho$ is bounded; definiteness and symmetry follow from $d$.\\
+For $a,b\geq0$, $\frac{a}{1+a}+\frac{b}{1+b}-\frac{a+b}{1+a+b}=\frac{ab(a+b+2)}{(1+a)(1+b)(1+a+b)}\geq0$.\\
+For $0\leq u\leq v$, $\frac{v}{1+v}-\frac{u}{1+u}=\frac{v-u}{(1+u)(1+v)}\geq0$. Hence $f$ is nondecreasing and subadditive.\\
+Consequently, $\rho(x,z)=f(d(x,z))\leq f(d(x,y)+d(y,z))\leq\rho(x,y)+\rho(y,z)$ by the triangle inequality for $d$.
+\item Write $B_s^d(x)$ and $B_s^\rho(x)$ for the balls associated with the indicated metrics.\\
+Since $f$ is strictly increasing, $B_\eta^\rho(x)=B_{\frac{\eta}{1-\eta}}^d(x)$ for $0<\eta<1$. Similarly, $B_{\frac{r}{1+r}}^\rho(x)=B_r^d(x)$ for $r>0$.\\
+A local radius may be reduced below $1$, so the two ball identities imply $\tau_\rho=\tau_d$.
+\end{enumerate}
+\hlt{Structural Commentary}: Scalar monotonicity, subadditivity prove metric claim. Inverse radius formulas prove topology claim.\\
+\hlt{Key Insight}: Compression changes distances but exactly reparametrizes small balls.
 \end{proof}
 \end{proposition}
 
@@ -107,16 +147,17 @@ For balls, $B_d(x,\eta)\subseteq B_\rho(x,\eta)$ for $0<\eta<1$, and $B_\rho(x,\
 Let $(X,\rho)$ and $(Y,\sigma)$ be metric spaces, and let $F:X\to Y$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $F$ is an \hlt{isometry} from $(X,\rho)$ onto $(Y,\sigma)$ iff $F(X)=Y$ and $\forall x,y\in X$, $\sigma(Fx,Fy)=\rho(x,y)$.
-\item $(X,\rho)$ and $(Y,\sigma)$ are \hlt{isometric}, written $(X,\rho)\cong(Y,\sigma)$, iff $\exists$ an isometry $F:(X,\rho)\to(Y,\sigma)$.
+\item The map $F$ is an \hlt{isometry} iff $(\forall\,x,y\in X)\,\sigma(Fx,Fy)=\rho(x,y)$.
+\item The spaces $(X,\rho)$ and $(Y,\sigma)$ are \hlt{isometric}, written $(X,\rho)\cong(Y,\sigma)$, iff a bijective isometry $F:X\to Y$ exists.
 \end{enumerate}
-For a set $Z$, a \hlt{pseudometric} on $Z$ is a map $d:Z\times Z\to[0,\infty)$ such that $\forall x,y,z\in Z$, $d(x,x)=0$, $d(x,y)=d(y,x)$, and $d(x,z)\leq d(x,y)+d(y,z)$; points $x\neq y$ may satisfy $d(x,y)=0$.\\
-\hlt{Structural Commentary}: Isometry preserves distance; pseudometrics permit zero-distance identification.
+For a set $Z$, a \hlt{pseudometric} on $Z$ is a map $d:Z\times Z\to[0,\infty)$.\\
+For all $x,y,z\in Z$, it satisfies $d(x,x)=0$, $d(x,y)=d(y,x)$, and $d(x,z)\leq d(x,y)+d(y,z)$.\\
+Unlike a metric, a pseudometric may satisfy $d(x,y)=0$ for distinct points $x,y\in Z$.\\
+Isometries preserve distance; pseudometrics permit zero-distance identification.
 \end{definition}
 
 \begin{proposition} \label{prop:pseudometric-metric-quotient} \hlt{Metric Quotient of a Pseudometric}\\
-Let $X$ be a set and let $\rho$ be a pseudometric on $X$.\\
-Define $x\sim_\rho y$ iff $\rho(x,y)=0$, and define $\widetilde{\rho}:X/{\sim_\rho}\times X/{\sim_\rho}\to[0,\infty)$ by $\widetilde{\rho}([x],[y])\defeq\rho(x,y)$.
+Let $X$ be set, $\rho$ be pseudometric on $X$. Define $x\sim_\rho y$ iff $\rho(x,y)=0$, and $\widetilde{\rho}:X/{\sim_\rho}\times X/{\sim_\rho}\to[0,\infty)$ by $\widetilde{\rho}([x],[y])\defeq\rho(x,y)$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $\sim_\rho$ is an equivalence relation on $X$.
@@ -125,44 +166,34 @@ Define $x\sim_\rho y$ iff $\rho(x,y)=0$, and define $\widetilde{\rho}:X/{\sim_\r
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $x,y,z\in X$, $\rho(x,x)=0$, $\rho(x,y)=0\Rightarrow\rho(y,x)=0$;\\
-$\rho(x,y)=\rho(y,z)=0\Rightarrow0\leq\rho(x,z)\leq\rho(x,y)+\rho(y,z)=0$.\\
-Hence $\sim_\rho$ is reflexive, symmetric, and transitive.
-\item If $x\sim_\rho x'$ and $y\sim_\rho y'$, then $\rho(x,y)\leq\rho(x,x')+\rho(x',y')+\rho(y',y)=\rho(x',y')$, and the reverse inequality is identical; hence $\widetilde{\rho}$ is well-defined. For $[x],[y],[z]\in X/{\sim_\rho}$, nonnegativity, symmetry, and\\
-$\widetilde{\rho}([x],[z])=\rho(x,z)\leq\rho(x,y)+\rho(y,z)=\widetilde{\rho}([x],[y])+\widetilde{\rho}([y],[z])$ follow from $\rho$.\\
-Finally, $\widetilde{\rho}([x],[y])=0$ iff $\rho(x,y)=0$ iff $[x]=[y]$.
+\item Reflexivity and symmetry of $\sim_\rho$ follow from $\rho(x,x)=0$ and symmetry of $\rho$.\\
+If $x\sim_\rho y$ and $y\sim_\rho z$, then $0\leq\rho(x,z)\leq\rho(x,y)+\rho(y,z)=0$ by the pseudometric triangle inequality.\\
+Hence $x\sim_\rho z$, so $\sim_\rho$ is an equivalence relation.
+\item Suppose $x\sim_\rho x'$ and $y\sim_\rho y'$. Then $\rho(x,y)\leq\rho(x',y')$ by two triangle inequalities and the zero-distance hypotheses.\\
+Interchanging the primed and unprimed representatives proves the reverse inequality.\\
+Thus $\widetilde{\rho}$ is well-defined. For $[x],[y],[z]\in X/{\sim_\rho}$, nonnegativity and symmetry follow from $\rho$.\\
+Moreover, $\widetilde{\rho}([x],[z])\leq\widetilde{\rho}([x],[y])+\widetilde{\rho}([y],[z])$ by the pseudometric triangle inequality.\\
+Finally, $\widetilde{\rho}([x],[y])=0$ iff $\rho(x,y)=0$ iff $[x]=[y]$, so $\widetilde{\rho}$ is definite and therefore a metric.
 \end{enumerate}
-\hlt{Structural Commentary}: Collapse exactly zero-distance classes.\\
-\hlt{Key Insight}: The quotient restores definiteness.
+\hlt{Structural Commentary}: The triangle inequality makes zero distance transitive.\\
+It also makes quotient distance independent of representatives.\\
+\hlt{Key Insight}: Collapsing zero-distance classes restores definiteness and preserves the other axioms.
 \end{proof}
 \end{proposition}
 
 \begin{example} \label{ex:open-closed-neither-and-both} \hlt{Open, Closed, Both, or Neither}\\
-In $\R$, $\emptyset,\R$ are open and closed, while $[a,b)$, $a<b$, is neither. If $d$ is discrete on $X$, then $B_{1/2}(x)=\{x\}$ for all $x\in X$, so every $E\subseteq X$ and $E^c$ are open; hence every $E\subseteq X$ is closed.
+In $\R$, both $\emptyset$ and $\R$ are open and closed. If $a<b$, then $[a,b)$ is not open because $a$ is not an interior point.\\
+It is not closed because $b$ is a limit point not in the set. If $d$ is discrete on $X$, then $B_{\frac12}(x)=\{x\}$ for every $x\in X$.\\
+Thus every $E\subseteq X$ and its complement are open, so every subset of $X$ is also closed.
 \end{example}
 
-\begin{theorem} \label{thm:every-neighborhood-open} \hlt{Every Open Ball Is Open}\\
-Every open ball in a metric space is an open set.
-\begin{proof}
-Let $E=B_r(p)$, and choose $q\in E$. Put $h\defeq r-d(p,q)>0$.\\
-If $s\in B_h(q)$, then $d(p,s)\leq d(p,q)+d(q,s)<d(p,q)+h=r$.\\
-Thus $B_h(q)\subseteq E$, so $q$ is an interior point of $E$. Since $q$ was arbitrary, $E$ is open.\\
-\hlt{Structural Commentary}: Around any point inside a ball, the leftover distance to boundary gives a smaller ball.\\
-\hlt{Key Insight}: The triangle inequality turns radius slack into openness.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/metric_ball_topology.tikz}
-  \caption{Every point inside a metric ball has a smaller ball still contained in the original ball.}
-  \label{fig:metric-ball-topology}
-\end{figure}
-
 \begin{theorem} \label{thm:limit-point-neighborhoods-infinitely-many} \hlt{Limit Points Force Infinitely Many Nearby Points}\\
-Let $(X,d)$ be a metric space, let $E\subseteq X$, and let $p\in X$. If $p$ is a limit point of $E$, then $N\cap E$ is infinite for every neighborhood $N$ of $p$.
+Let $(X,d)$ be metric space, $E\subseteq X$, $p\in X$. If $p$ is limit point of $E$, then $N\cap E$ is infinite for every neighborhood $N$ of $p$.
 \begin{proof}
-Let $N$ be a neighborhood of $p$ and suppose $N\cap E$ is finite. Since $N$ is open and $p\in N$, choose $\eta>0$ with $B_\eta(p)\subseteq N$. Put $F\defeq(N\cap E)\setminus\{p\}$. If $F=\emptyset$, then $B_\eta(p)\cap(E\setminus\{p\})=\emptyset$, contradicting that $p$ is a limit point. If $F\neq\emptyset$, set $\delta\defeq\min(\{\eta\}\cup\{d(p,q):q\in F\})>0$. If $q\in B_\delta(p)\cap(E\setminus\{p\})$, then $q\in F$ and $d(p,q)<\delta\leq d(p,q)$, impossible. Thus $B_\delta(p)\cap(E\setminus\{p\})=\emptyset$, again contradicting that $p$ is a limit point.\\
+Let $N$ be a neighborhood of $p$ and suppose $N\cap E$ is finite. Since $N$ is open and $p\in N$, choose $\eta>0$ with $B_\eta(p)\subseteq N$.\\
+Put $F\defeq(N\cap E)\setminus\{p\}$. If $F=\emptyset$, then $B_\eta(p)\cap(E\setminus\{p\})=\emptyset$, contrary to the limit-point hypothesis.\\
+Suppose $F\neq\emptyset$, and set $\delta\defeq\min(\{\eta\}\cup\{d(p,q):q\in F\})>0$. If $q\in B_\delta(p)\cap(E\setminus\{p\})$, then $q\in F$ and $d(p,q)<\delta\leq d(p,q)$, impossible.\\
+Thus $B_\delta(p)\cap(E\setminus\{p\})=\emptyset$, again contrary to the limit-point hypothesis.\\
 \hlt{Structural Commentary}: A finite list of nearby exceptions has a smallest positive distance from $p$.\\
 \hlt{Key Insight}: Limit points cannot be witnessed by only finitely many neighboring points.
 \end{proof}
@@ -171,50 +202,54 @@ Let $N$ be a neighborhood of $p$ and suppose $N\cap E$ is finite. Since $N$ is o
 \begin{corollary} \label{cor:finite-point-set-no-limit-points} \hlt{Finite Point Sets Have No Limit Points}\\
 A finite point set in a metric space has no limit points.
 \begin{proof}
-Let $E\subseteq X$ be finite. If $p$ were a limit point of $E$, then by Theorem \ref{thm:limit-point-neighborhoods-infinitely-many}, every neighborhood of $p$ would contain infinitely many distinct points of $E$, impossible as $E$ is finite. Hence $E$ has no limit points.\\
-\hlt{Structural Commentary}: This corollary is the finite obstruction to accumulation.\\
+Let $E\subseteq X$ be finite, and suppose $p$ is a limit point of $E$.\\
+Every neighborhood of $p$ then contains infinitely many distinct points of $E$ by Theorem \ref{thm:limit-point-neighborhoods-infinitely-many}.\\
+This contradicts finiteness of $E$, so $E$ has no limit points.\\
+\hlt{Structural Commentary}: One limit point would force infinitely many members of finite $E$.\\
 \hlt{Key Insight}: A limit point requires infinitely many nearby witnesses.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:open-iff-complement-closed} \hlt{Open Sets and Closed Complements}\\
-A set $E$ is open if and only if its complement $E^c$ is closed.
+Let $(X,d)$ be a metric space and $E\subseteq X$. Then $E$ is open if and only if its complement $E^c$ is closed.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Suppose $E$ is open. If $x$ is a limit point of $E^c$ and $x\in E$, then some neighborhood $N$ of $x$ satisfies $N\subseteq E$, contradicting $N\cap(E^c\setminus\{x\})\neq\emptyset$. Hence $x\in E^c$, so $E^c$ is closed.
-\item[$(\Leftarrow)$] Suppose $E^c$ is closed. If $x\in E$, then $x\notin E^c$, hence $x$ is not a limit point of $E^c$. Thus some neighborhood $N$ of $x$ has $N\cap E^c=\emptyset$, i.e. $N\subseteq E$. Hence $E$ is open.
+\item[$(\Rightarrow)$] Suppose $E$ is open. If $x\in E$, then $B_r(x)\subseteq E$ for some $r>0$, so $x$ is not a limit point of $E^c$.\\
+Every limit point of $E^c$ therefore belongs to $E^c$, and $E^c$ is closed.
+\item[$(\Leftarrow)$] Suppose $E^c$ is closed, and fix $x\in E$. Then $x\notin E^c$ and $x$ is not a limit point of $E^c$.\\
+Some $r>0$ therefore satisfies $B_r(x)\cap(E^c\setminus\{x\})=\emptyset$.\\
+Since $x\notin E^c$, this reduces to $B_r(x)\cap E^c=\emptyset$, so $B_r(x)\subseteq E$. Thus $E$ is open.
 \end{enumerate}
-\hlt{Structural Commentary}: Openness of a set is equivalent to closure of the outside.\\
-\hlt{Key Insight}: Interior points of $E$ cannot be limit points of $E^c$.
+\hlt{Structural Commentary}: Ball in $E$ excludes accumulation from $E^c$. Failure of accumulation supplies the reverse ball.\\
+\hlt{Key Insight}: The same local separation test expresses openness of $E$ and closedness of $E^c$.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:closed-iff-complement-open} \hlt{Closed Sets and Open Complements}\\
-A set $F$ is closed if and only if $F^c$ is open.
+Let $(X,d)$ be a metric space and $F\subseteq X$. Then $F$ is closed if and only if $F^c$ is open.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
 \item[$(\Rightarrow)$] If $F$ is closed, then $(F^c)^c=F$ is closed; by Theorem \ref{thm:open-iff-complement-closed} with $E=F^c$, $F^c$ is open.
-\item[$(\Leftarrow)$] If $F^c$ is open, then Theorem \ref{thm:open-iff-complement-closed} gives $(F^c)^c$ closed; since $(F^c)^c=F$, $F$ is closed.
+\item[$(\Leftarrow)$] If $F^c$ is open, then $(F^c)^c$ is closed by Theorem \ref{thm:open-iff-complement-closed}; since $(F^c)^c=F$, $F$ is closed.
 \end{enumerate}
-\hlt{Structural Commentary}: This is the same open--closed duality after taking complements.\\
-\hlt{Key Insight}: Closedness of $F$ is openness of the outside $F^c$.
+\hlt{Structural Commentary}: Applying the open-complement theorem to $F^c$ exchanges set and complement.\\
+\hlt{Key Insight}: Complement involution turns the open-set criterion into the closed-set criterion.
 \end{proof}
 \end{corollary}
 
 \begin{corollary} \label{cor:closed-balls-are-closed} \hlt{Closed Balls Are Closed}\\
-For every $p\in X$ and $r>0$, the closed ball $\overline{B}_r(p)$ is closed.
+Let $(X,d)$ be a metric space. For every $p\in X$ and $r>0$, the closed ball $\overline{B}_r(p)$ is closed.
 \begin{proof}
-Let $q\notin\overline{B}_r(p)$, so $d(p,q)>r$. Put $h\defeq(d(p,q)-r)/2$.\\
-If $s\in B_h(q)$, then $d(p,s)\geq d(p,q)-d(q,s)>d(p,q)-h>r$, so $s\notin\overline{B}_r(p)$.\\
-Hence the complement of $\overline{B}_r(p)$ is open, and $\overline{B}_r(p)$ is closed.\\
-\hlt{Structural Commentary}: Outside a closed ball, positive distance remains to the boundary.\\
-\hlt{Key Insight}: Reverse triangle estimates certify closedness.
+Let $q\notin\overline{B}_r(p)$ and put $h\defeq d(p,q)-r>0$. If $s\in B_h(q)$, then $d(p,s)\geq d(p,q)-d(q,s)>r$ by the triangle inequality.\\
+Thus $B_h(q)\subseteq(\overline{B}_r(p))^c$, so the complement of $\overline{B}_r(p)$ is open. The closed ball $\overline{B}_r(p)$ is therefore closed by Corollary \ref{cor:closed-iff-complement-open}.\\
+\hlt{Structural Commentary}: At an exterior point, the excess $d(p,q)-r$ defines a ball outside $\overline{B}_r(p)$.\\
+\hlt{Key Insight}: The triangle inequality converts positive boundary separation into an open complement.
 \end{proof}
 \end{corollary}
 
-\begin{theorem} \label{thm:metric-open-closed-set-calculus}\label{prop:metric-topology-basic-calculus-source-todo} \hlt{Basic Topological Calculus}\\
+\begin{theorem} \label{thm:metric-open-closed-set-calculus} \hlt{Basic Topological Calculus}\\
 In a metric space:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -226,16 +261,18 @@ In a metric space:
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $G\defeq\bigcup_\alpha G_\alpha$. If $x\in G$, then $x\in G_\alpha$ for some $\alpha$.\\
-Since $G_\alpha$ is open, some neighborhood of $x$ lies in $G_\alpha\subseteq G$. Hence $G$ is open.
-\item Let $F\defeq\bigcap_\alpha F_\alpha$. By Theorem \ref{thm:metric-de-morgan-laws}, $F^c=\bigcup\limits_\alpha F_\alpha^c$.\\
-Each $F_\alpha^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$ is open by (i). Hence $F$ is closed.
-\item Let $H\defeq\bigcap\limits_{i=1}^nG_i$. If $x\in H$, let $r_i>0$, $B_{r_i}(x)\subseteq G_i$, $r\defeq\min_{1\leq i\leq n}r_i$. Then $B_r(x)\subseteq H$, so $H$ is open.
-\item Let $F\defeq\bigcup_{i=1}^nF_i$. By Theorem \ref{thm:metric-de-morgan-laws}, $F^c=\bigcap\limits_{i=1}^nF_i^c$.\\
-Each $F_i^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$ is open by (iii). Hence $F$ is closed.
+\item Let $G\defeq\bigcup\limits_{\alpha\in A}G_\alpha$ for open sets $G_\alpha$. If $x\in G$, then $x\in G_\alpha$ for some $\alpha\in A$.\\
+Since $G_\alpha$ is open, $B_r(x)\subseteq G_\alpha\subseteq G$ for some $r>0$. Hence $G$ is open.
+\item Let $F\defeq\bigcap\limits_{\alpha\in A}F_\alpha$. By Theorem \ref{thm:indexed-de-morgan-laws}, $F^c=\bigcup\limits_{\alpha\in A}F_\alpha^c$.\\
+Each $F_\alpha^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$ is open by (i). Hence $F$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
+\item The empty intersection is $X$, which is open. For $n\geq1$, let $H\defeq\bigcap\limits_{i=1}^nG_i$.\\
+If $x\in H$, choose $r_i>0$ with $B_{r_i}(x)\subseteq G_i$ for $1\leq i\leq n$, and set $r\defeq\min\limits_{1\leq i\leq n}r_i$. Then $B_r(x)\subseteq H$, so $H$ is open.
+\item The empty union is $\emptyset$, which is closed. For $n\geq1$, let $F\defeq\bigcup\limits_{i=1}^nF_i$. By Theorem \ref{thm:indexed-de-morgan-laws}, $F^c=\bigcap\limits_{i=1}^nF_i^c$.\\
+Each $F_i^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$ is open by (iii). Hence $F$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
 \end{enumerate}
-\hlt{Structural Commentary}: Arbitrary unions are easy for open sets; finite intersections require a minimum radius.\\
-\hlt{Key Insight}: The finite minimum is the reason infinite intersections of open sets need not be open.
+\hlt{Structural Commentary}: Open unions retain one ball; finite intersections use a minimum radius.\\
+Complement duality transfers both arguments to closed sets.\\
+\hlt{Key Insight}: Radius minima explain why only finite intersections preserve openness.
 \end{proof}
 \end{theorem}
 
@@ -243,25 +280,30 @@ Each $F_i^c$ is open by Corollary \ref{cor:closed-iff-complement-open}, so $F^c$
 Let $\emptyset\neq G\subseteq\R$ be open.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $G=\bigsqcup_{\alpha\in A}I_\alpha$ for a family of pairwise disjoint open intervals $I_\alpha\subseteq\R$, possibly unbounded.
+\item $G=\bigsqcup\limits_{\alpha\in A}I_\alpha$ for a family of pairwise disjoint open intervals $I_\alpha\subseteq\R$, possibly unbounded.
 \item The index set $A$ is at most countable.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $a,b\in\R$, set $I(a,b)\defeq[\min\{a,b\},\max\{a,b\}]$.\\
-For $x,y\in G$, set $x\sim y$ iff $I(x,y)\subseteq G$, and let $C_x\defeq[x]_\sim$. Then $\sim$ is an equivalence relation.\\
+For $x,y\in G$, set $x\sim y$ iff $I(x,y)\subseteq G$, and let $C_x\defeq[x]_\sim$. Reflexivity and symmetry are immediate.\\
+If $x\sim y$ and $y\sim z$, then $I(x,z)\subseteq I(x,y)\cup I(y,z)\subseteq G$, so $x\sim z$. Thus $\sim$ is an equivalence relation.\\
 If $y\in C_x$ and $z\in I(x,y)$, then $I(x,z)\subseteq I(x,y)\subseteq G$, so $z\in C_x$; hence $C_x$ is an interval.\\
-If $y\in C_x$, choose $r>0$ with $(y-r,y+r)\subseteq G$; $z\in(y-r,y+r)$ implies $I(x,z)\subseteq I(x,y)\cup(y-r,y+r)\subseteq G$, so $z\in C_x$. Thus each $C_x$ is open, and the classes give a disjoint union of $G$.
-\item Let $\mathcal C\defeq G/{\sim}$ and enumerate $\Q=\{q_j:j\in\N\}$. Since each $C\in\mathcal C$ contains a bounded nonempty open interval, $C\cap\Q\neq\emptyset$. Define $\phi(C)\defeq q_{\min\{j:q_j\in C\}}$. Disjointness gives $\phi$ injective, so $\mathcal C$ is at most countable.
+If $y\in C_x$, choose $r>0$ with $(y-r,y+r)\subseteq G$. Every $z\in(y-r,y+r)$ satisfies $I(x,z)\subseteq I(x,y)\cup(y-r,y+r)\subseteq G$, so $z\in C_x$.\\
+Thus each $C_x$ is open, and the equivalence classes form a disjoint union of $G$.
+\item Let $\mathcal C\defeq G/{\sim}$. Choose a bijection $j\mapsto q_j$ from $\N$ onto $\Q$ by Corollary \ref{cor:rationals-countable}.\\
+Each $C\in\mathcal C$ contains a bounded nonempty open interval, so $C\cap\Q\neq\emptyset$ by Theorem \ref{thm:archimedean-and-rational-density}(ii).\\
+By well-ordering, the nonempty set $\{j\in\N:q_j\in C\}$ has a least element; define $\phi(C)\defeq q_{\min\{j:q_j\in C\}}$.\\
+The map $\phi:\mathcal C\to\Q$ is injective by disjointness, so $\mathcal C$ is at most countable.
 \end{enumerate}
-\hlt{Structural Commentary}: Maximal open intervals are counted by rationals.\\
-\hlt{Key Insight}: Density of $\Q$ turns disjoint interval geometry into countability.
+\hlt{Structural Commentary}: Segment containment partitions $G$ into open intervals; their least-indexed rationals embed partition into $\Q$.\\
+\hlt{Key Insight}: One rational witness per disjoint component turns interval geometry into countability.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:metric-closure} \hlt{Closure}\\
-If $E\subseteq X$ and $E^{\operatorname{acc}}$ denotes the set of all limit points of $E$ in $X$, then the \hlt{closure} of $E$ is $\overline{E}\defeq E\cup E^{\operatorname{acc}}$.
+Let $(X,d)$ be a metric space and $E\subseteq X$, and $E^{\operatorname{acc}}$ denote set of all limit points of $E$ in $X$. The \hlt{closure} of $E$ is $\overline{E}\defeq E\cup E^{\operatorname{acc}}$.
 \end{definition}
 
 \begin{theorem} \label{thm:closure-smallest-closed-containing-set} \hlt{Closure Is the Smallest Closed Superset}\\
@@ -270,63 +312,87 @@ If $X$ is a metric space and $E\subseteq X$, then:
 \setlength{\itemsep}{0pt}
 \item $\overline{E}$ is closed;
 \item $\overline{E}=E$ if and only if $E$ is closed;
-\item $\overline{E}\subseteq F$ for every closed set $F\subseteq X$ such that $E\subseteq F$.
+\item $\overline{E}\subseteq F$ for every closed set $F\subseteq X$ such that $E\subseteq F$. Consequently, $\overline{E}$ is the smallest closed subset of $X$ containing $E$.
 \end{enumerate}
-Thus $\overline{E}$ is the smallest closed subset of $X$ that contains $E$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Let $p\notin\overline{E}$. Then $p\notin E$ and $p$ is not a limit point of $E$, so $B_r(p)\cap E=\emptyset$ for some $r>0$.\\
-If $q\in B_r(p)$, then $q\notin E$ and $B_{r-d(p,q)}(q)\subseteq B_r(p)$, so $q\notin E^{\operatorname{acc}}$.\\
-Hence $B_r(p)\subseteq(\overline{E})^c$, and $\overline{E}$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
-\item If $\overline{E}=E$, then $E$ is closed by (i). Conversely, if $E$ is closed, then $E^{\operatorname{acc}}\subseteq E$, so $\overline{E}=E\cup E^{\operatorname{acc}}=E$.
-\item If $F$ is closed and $E\subseteq F$, then $E^{\operatorname{acc}}\subseteq F^{\operatorname{acc}}\subseteq F$. Thus $\overline{E}=E\cup E^{\operatorname{acc}}\subseteq F$.
+\item[$(i)$] Let $p\notin\overline{E}$. Then $p\notin E$ and $p$ is not a limit point of $E$, so $B_r(p)\cap E=\emptyset$ for some $r>0$.\\
+If $q\in B_r(p)$, then $q\notin E$ and $B_{r-d(p,q)}(q)\subseteq B_r(p)$, so $q\notin E^{\operatorname{acc}}$. Hence $B_r(p)\subseteq(\overline{E})^c$, and $\overline{E}$ is closed by Corollary \ref{cor:closed-iff-complement-open}.
+\item[$(ii)$] ($\Rightarrow$) If $\overline{E}=E$, then $E$ is closed by (i).
+\item[$(ii)$] ($\Leftarrow$) If $E$ is closed, then $E^{\operatorname{acc}}\subseteq E$, so $\overline{E}=E\cup E^{\operatorname{acc}}=E$.
+\item[$(iii)$] Let $F$ be closed with $E\subseteq F$. Then $E^{\operatorname{acc}}\subseteq F^{\operatorname{acc}}\subseteq F$ by $E\subseteq F$ and closedness of $F$. Thus $\overline{E}=E\cup E^{\operatorname{acc}}\subseteq F$.\\
+Together with $E\subseteq\overline{E}$ and (i), this proves the asserted minimality.
 \end{enumerate}
-\hlt{Structural Commentary}: Closure adds exactly the limit points forced by $E$.\\
-\hlt{Key Insight}: Closed supersets must contain all limit points, so they must contain $\overline{E}$.
+\hlt{Structural Commentary}: Exterior balls avoid $E$ and its limit points; limit-point monotonicity puts $\overline{E}$ in every closed superset.\\
+\hlt{Key Insight}: The closure is closed, and every closed superset must contain its added limit points.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/limit_point_closure_inner_ball.tikz}
-  \caption{If $d=d(x,x_n)<r$, then any $0<\rho<r-d$ gives
-  $B_\rho(x_n)\subseteq B_r(x)$.}
+  \caption{If $d=d(x,x_n)<r$ and $0<\rho<r-d$, then $B_\rho(x_n)\subseteq B_r(x)$.}
   \label{fig:limit-point-closure-inner-ball}
-\end{figure}
+\end{illustrationfigure}
+Figure \ref{fig:limit-point-closure-inner-ball} depicts the inner-ball containment used in part (i), with $x=p$ and $x_n=q$.
 
-\begin{definition} \label{def:interior-closure-boundary}\label{def:adherent-points-and-closure}\label{def:set-distance-in-metric-space} \hlt{Interior, Boundary, Adherence, and Distance}\\
-Let $(X,d)$ be a metric space and $E,F\subseteq X$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $E^\circ\defeq\{p\in E:\exists r>0,\ B_r(p)\subseteq E\}$ is the \hlt{interior}.
-\item $\operatorname{ext}(E)\defeq(E^c)^\circ=\{p\in X:\exists r>0,\ B_r(p)\cap E=\emptyset\}$ is the \hlt{exterior}.
-\item $\operatorname{bd}(E)\defeq\overline{E}\setminus E^\circ=\{p\in X:\forall r>0,\ B_r(p)\cap E\ne\emptyset,\ B_r(p)\cap E^c\ne\emptyset\}$ is the \hlt{boundary}.
-\item $p\in X$ is \hlt{adherent} to $E$ iff $\forall r>0,\ B_r(p)\cap E\ne\emptyset$, equivalently $p\in\overline{E}$.
-\item For $p\in X$ and $\emptyset\ne E\subseteq X$, the \hlt{point-set distance} is $\operatorname{dist}(p,E)\defeq\inf\{d(p,q):q\in E\}$.
-\item For nonempty $E,F\subseteq X$, the \hlt{set-set distance} is $\operatorname{dist}(E,F)\defeq\inf\{d(x,y):x\in E,\ y\in F\}$.
-\end{enumerate}
+\begin{definition} \label{def:adherent-points-and-closure} \hlt{Adherent Points}\\
+Let $(X,d)$ be a metric space and $E\subseteq X$. A point $p\in X$ is \hlt{adherent} to $E$ iff $(\forall\,r>0)\,B_r(p)\cap E\neq\emptyset$.\\
+Equivalently, $p$ is adherent to $E$ iff $p\in\overline{E}$. Ball condition is automatic for $p\in E$ and is limit-point condition for $p\notin E$.
 \end{definition}
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/adherent_limit_isolated_points.tikz}
+  \caption{Adherent endpoints need not lie in $E$; isolated points are adherent but not limit points.}
+  \label{fig:adherent-limit-isolated-points}
+\end{illustrationfigure}
+Figure \ref{fig:adherent-limit-isolated-points} distinguishes adherent endpoints and isolated points from limit points.
+
+\begin{definition} \label{def:interior-closure-boundary} \hlt{Interior, Exterior, and Boundary}\\
+Let $(X,d)$ be a metric space and $E\subseteq X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $E^\circ\defeq\{p\in E:(\exists\,r>0)\,B_r(p)\subseteq E\}$ is the \hlt{interior}.
+\item $\operatorname{ext}(E)\defeq(E^c)^\circ=\{p\in X:(\exists\,r>0)\,B_r(p)\cap E=\emptyset\}$ is the \hlt{exterior}.
+\item $\operatorname{bd}(E)\defeq\overline{E}\setminus E^\circ=\{p\in X:(\forall\,r>0)\,[B_r(p)\cap E\neq\emptyset\land B_r(p)\cap E^c\neq\emptyset]\}$ is the \hlt{boundary}.
+\end{enumerate}
+The boundary ball test follows by Definition \ref{def:adherent-points-and-closure} applied to $E$ and $E^c$.
+\end{definition}
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/metric_ball_closure_boundary.tikz}
   \caption{Interior, exterior, and boundary points are distinguished by how small balls meet $E$ and $E^c$.}
   \label{fig:metric-ball-closure-boundary}
-\end{figure}
+\end{illustrationfigure}
+Figure \ref{fig:metric-ball-closure-boundary} compares the ball tests for interior, exterior, and boundary points.
+
+\begin{definition} \label{def:set-distance-in-metric-space} \hlt{Point-Set and Set-Set Distance}\\
+Let $(X,d)$ be a metric space and let $E,F\subseteq X$ be nonempty.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $p\in X$, the \hlt{point-set distance} is $\operatorname{dist}(p,E)\defeq\inf\limits_{q\in E}d(p,q)$.
+\item The \hlt{set-set distance} is $\operatorname{dist}(E,F)\defeq\inf\limits_{(x,y)\in E\times F}d(x,y)$.
+\end{enumerate}
+Both infima exist in $\R$ by Corollary \ref{cor:infimum-as-negative-supremum}. The corresponding families of distances are nonempty and bounded below by $0$.
+\end{definition}
 
 \begin{proposition} \label{prop:set-distance-closure-criterion} \hlt{Distance-to-Set Closure Criterion}\\
-Let $\emptyset\ne E\subseteq X$. For $p\in X$, $p\in\overline{E}\Longleftrightarrow \operatorname{dist}(p,E)=0$.
+Let $(X,d)$ be a metric space and $\emptyset\ne E\subseteq X$. For $p\in X$, $p\in\overline{E}\Longleftrightarrow \operatorname{dist}(p,E)=0$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $p\in\overline{E}$, then $\forall\varepsilon>0$, $B_\varepsilon(p)\cap E\ne\emptyset$; choose $q_\varepsilon\in E$ with $d(p,q_\varepsilon)<\varepsilon$.\\
-Thus $0\leq\operatorname{dist}(p,E)\leq\varepsilon$ for all $\varepsilon>0$, so $\operatorname{dist}(p,E)=0$.
-\item[$(\Leftarrow)$] If $\operatorname{dist}(p,E)=0$, then $\forall r>0$, $\exists q\in E$ with $d(p,q)<r$.\\
-Hence $B_r(p)\cap E\ne\emptyset$ for all $r>0$, so $p$ is adherent to $E$, equivalently $p\in\overline{E}$.
+\item[$(\Rightarrow)$] Suppose $p\in\overline{E}$. If $p\in E$, then $0\leq\operatorname{dist}(p,E)\leq d(p,p)=0$.\\
+If $p\notin E$, then $p$ is a limit point of $E$, so for every $\varepsilon>0$ there exists $q_\varepsilon\in E$ with $d(p,q_\varepsilon)<\varepsilon$.\\
+Thus $0\leq\operatorname{dist}(p,E)\leq\varepsilon$ for every $\varepsilon>0$, and $\operatorname{dist}(p,E)=0$.
+\item[$(\Leftarrow)$] Suppose $\operatorname{dist}(p,E)=0$. If $p\notin\overline{E}$, then some $r>0$ satisfies $B_r(p)\cap E=\emptyset$.\\
+Then $d(p,q)\geq r$ for every $q\in E$, so $r$ is a positive lower bound for $\{d(p,q):q\in E\}$. Contradicts infimum $0$, so $p\in\overline{E}$.
 \end{enumerate}
-\hlt{Structural Commentary}: Closure can be detected by vanishing distance to the set.\\
-\hlt{Key Insight}: The infimum packages all small-ball tests into one number.
+\hlt{Structural Commentary}: Adherence supplies points at every positive scale.\\
+Failed adherence supplies a positive lower bound.\\
+\hlt{Key Insight}: Zero distance and intersection with every centered ball both characterize closure.
 \end{proof}
 \end{proposition}
 
@@ -334,10 +400,3 @@ Hence $B_r(p)\cap E\ne\emptyset$ for all $r>0$, so $p$ is adherent to $E$, equiv
 The function $\operatorname{dist}(E,F)$ is useful, but it is not a metric on nonempty subsets.\\
 In $\R$, for example, $\operatorname{dist}((0,1),(1,2))=0$ although the sets are distinct and disjoint.
 \end{remark}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/adherent_limit_isolated_points.tikz}
-  \caption{Adherent endpoints need not lie in $E$; isolated points are adherent but not limit points.}
-  \label{fig:adherent-limit-isolated-points}
-\end{figure}
