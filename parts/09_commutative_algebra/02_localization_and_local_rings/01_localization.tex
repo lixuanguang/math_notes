@@ -1,5 +1,280 @@
 \subsection{Localization}
 
-% Placeholder only.
-% Should cover: multiplicative sets, localized rings and modules, universal properties, and local-global principles.
-% Do not add exposition here until this material is ready to be developed.
+\begin{definition} \label{def:ring-localization} \hlt{Multiplicative Sets and Ring Localization}\\
+Let $R$ be a commutative ring with identity.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item A subset $S\subseteq R$ is \hlt{multiplicative} if $1_R\in S$ and $(\forall\,s,t\in S)\,st\in S$.
+\item On $R\times S$, define $(r,s)\sim(r',s')\Longleftrightarrow(\exists\,u\in S)\,u(s'r-sr')=0_R$.
+\item The \hlt{localization} of $R$ at $S$ is $S^{-1}R\defeq(R\times S)/{\sim}$; write $[(r,s)]_{\sim}=r/s$.
+\item For $(r,s),(r',s')\in R\times S$, define $\frac{r}{s}+\frac{r'}{s'}\defeq\frac{s'r+sr'}{ss'}$ and $\frac{r}{s}\frac{r'}{s'}\defeq\frac{rr'}{ss'}$. Set $0_{S^{-1}R}\defeq 0_R/1_R$ and $1_{S^{-1}R}\defeq 1_R/1_R$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:ring-localization-construction}
+\hlt{Ring Localization Construction}\\
+Let $R$ be a commutative ring with identity and let $S\subseteq R$ be multiplicative.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The relation $\sim$ on $R\times S$ is an equivalence relation.
+\item The fraction operations are well defined and make $S^{-1}R$ a commutative ring with identity.
+\item The map $\lambda_S:R\to S^{-1}R$, $\lambda_S(r)\defeq r/1_R$, is a ring homomorphism.
+\item $\lambda_S(S)\subseteq(S^{-1}R)^\times$.
+\item $\ker(\lambda_S)=\{r\in R:(\exists\,s\in S)\,sr=0_R\}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $(r,s),(r',s')\in R\times S$. Then $(r,s)\sim(r,s)$ with witness $1_R\in S$.\\
+If $(r,s)\sim(r',s')$ with witness $u\in S$, then $u(sr'-s'r)=-u(s'r-sr')=0_R$, so $(r',s')\sim(r,s)$.\\
+For transitivity, assume $(a,s)\sim(b,t)$ via $u\in S$ and $(b,t)\sim(c,q)$ via $v\in S$.\\
+Then $uvt(qa-sc)=uvq(ta-sb)+uvs(qb-tc)=0_R$ by the two witness identities. Thus $(a,s)\sim(c,q)$ with witness $uvt\in S$.
+\item Assume $a/s=a'/s'$ with witness $u\in S$ and $b/t=b'/t'$ with witness $v\in S$.\\
+The cross-multiplied sum difference is $tt'(s'a-sa')+ss'(t'b-tb')$ and vanishes after multiplication by $uv$.\\
+The cross-multiplied product difference is $t'b(s'a-sa')+sa'(t'b-tb')$ and likewise vanishes after multiplication by $uv$.\\
+Since $uv\in S$, both operations are well defined by Definition \ref{def:ring-localization}(ii).\\
+Fix $(a,s),(b,t),(c,q)\in R\times S$. Then $(a/s+b/t)+c/q=(tqa+sqb+stc)/(stq)=a/s+(b/t+c/q)$.\\
+$((a/s)(b/t))(c/q)=abc/(stq)=(a/s)((b/t)(c/q))$. Fraction operations are commutative by commutativity of $R$.\\
+Distributivity holds by $(a/s)(b/t+c/q)=(aqb+atc)/(stq)=ab/(st)+ac/(sq)$.\\
+The classes $0_R/1_R$ and $1_R/1_R$ are the identities, while $-(a/s)=(-a)/s$; hence $S^{-1}R$ is a commutative ring with identity.
+\item Fix $a,b\in R$. The identities $\lambda_S(a+b)=\lambda_S(a)+\lambda_S(b)$, $\lambda_S(ab)=\lambda_S(a)\lambda_S(b)$, and $\lambda_S(1_R)=1$ hold by Definition \ref{def:ring-localization}(iv).
+\item Fix $s\in S$. Then $\lambda_S(s)\in(S^{-1}R)^\times$ by $\lambda_S(s)(1_R/s)=1$.
+\item For $r\in R$, $\lambda_S(r)=0\Longleftrightarrow(\exists\,u\in S)\,ur=0_R$ by Definition \ref{def:ring-localization}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Witness products secure equivalence and operations; representatives verify ring laws.\\
+\hlt{Key Insight}: One denominator witness certifies every equality of localized fractions.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:ring-localization-universal-property}
+\hlt{Universal Property of Ring Localization}\\
+Let $R,A$ be commutative rings with identity, $S\subseteq R$ be multiplicative, $\varphi:R\to A$ ring homomorphism satisfying $\varphi(S)\subseteq A^\times$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The rule $\widetilde{\varphi}:S^{-1}R\to A$, $r/s\mapsto\varphi(r)\varphi(s)^{-1}$, is a ring homomorphism. It satisfies $\widetilde{\varphi}\circ\lambda_S=\varphi$.
+\item The homomorphism $\widetilde{\varphi}$ is unique subject to $\widetilde{\varphi}\circ\lambda_S=\varphi$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $r/s=r'/s'$, choose $u\in S$ with $u(s'r-sr')=0_R$ by Definition \ref{def:ring-localization}(ii).\\
+Then $\varphi(s')\varphi(r)=\varphi(s)\varphi(r')$ by the homomorphism property and cancellation of the unit $\varphi(u)$.\\
+The equality $\widetilde{\varphi}(r/s)=\widetilde{\varphi}(r'/s')$ holds by multiplication by $\varphi(s)^{-1}\varphi(s')^{-1}$. Thus the rule is well defined. Fix $(r,s),(r',s')\in R\times S$.\\
+$\widetilde{\varphi}(r/s+r'/s')=\varphi(s'r+sr')\varphi(ss')^{-1}=\widetilde{\varphi}(r/s)+\widetilde{\varphi}(r'/s')$; $\widetilde{\varphi}((r/s)(r'/s'))=\varphi(rr')\varphi(ss')^{-1}=\widetilde{\varphi}(r/s)\widetilde{\varphi}(r'/s')$.\\
+The map $\widetilde{\varphi}$ is a ring homomorphism by these identities and $\widetilde{\varphi}(1_R/1_R)=1_A$. Equality $\widetilde{\varphi}\circ\lambda_S=\varphi$ holds by $\widetilde{\varphi}(r/1_R)=\varphi(r)$.
+\item Let $\psi:S^{-1}R\to A$ be a ring homomorphism with $\psi\circ\lambda_S=\varphi$. Fix $(r,s)\in R\times S$.\\
+$\psi(r/s)=\psi(\lambda_S(r))\psi(\lambda_S(s))^{-1}=\varphi(r)\varphi(s)^{-1}=\widetilde{\varphi}(r/s)$. Thus $\psi=\widetilde{\varphi}$ by function extensionality.
+\end{enumerate}
+\hlt{Structural Commentary}: Unit cancellation descends fractions; denominator factorization forces uniqueness.\\
+\hlt{Key Insight}: Images of numerators and inverted denominators determine every localized homomorphism.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:module-localization} \hlt{Module Localization}\\
+Let $R$ be a commutative ring with identity, let $S\subseteq R$ be multiplicative, and let $M$ be an $R$-module.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item On $M\times S$, define $(m,s)\sim(n,t)\Longleftrightarrow(\exists\,u\in S)\,u(tm-sn)=0_M$.
+\item Set $S^{-1}M\defeq(M\times S)/{\sim}$ and write $[(m,s)]_{\sim}=m/s$.
+\item For $(m,s),(n,t)\in M\times S$, define $\frac{m}{s}+\frac{n}{t}\defeq\frac{tm+sn}{st}$. For $(r,q)\in R\times S$ and $(m,s)\in M\times S$, define $\frac{r}{q}\frac{m}{s}\defeq\frac{rm}{qs}$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:module-localization-construction}
+\hlt{Module Localization Construction}\\
+Let $R$ be a commutative ring with identity, let $S\subseteq R$ be multiplicative, and let $M$ be an $R$-module.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The relation $\sim$ on $M\times S$ is an equivalence relation.
+\item The fraction operations are well defined and make $S^{-1}M$ an $S^{-1}R$-module.
+\item The map $\eta_S:M\to S^{-1}M$, $m\mapsto m/1_R$, is $R$-linear via $r\cdot x\defeq\lambda_S(r)x$.
+\item $\ker(\eta_S)=\{m\in M:(\exists\,s\in S)\,sm=0_M\}$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $(m,s),(n,t)\in M\times S$. Then $(m,s)\sim(m,s)$ with witness $1_R\in S$.\\
+If $(m,s)\sim(n,t)$ with witness $u\in S$, then $u(sn-tm)=-u(tm-sn)=0_M$, so $(n,t)\sim(m,s)$.\\
+Assume $(m,s)\sim(n,t)$ via $u\in S$ and $(n,t)\sim(p,q)$ via $v\in S$.\\
+Then $uvt(qm-sp)=uvq(tm-sn)+uvs(qn-tp)=0_M$ by the two witness identities. Thus $(m,s)\sim(p,q)$ with witness $uvt\in S$.
+\item Assume $m/s=m'/s'$ with witness $u\in S$ and $n/t=n'/t'$ with witness $v\in S$.\\
+The cross-multiplied sum difference is $tt'(s'm-sm')+ss'(t'n-tn')$ and vanishes after multiplication by $uv$.\\
+Thus addition is well defined by Definition \ref{def:module-localization}(i). Assume $a/q=a'/q'$ in $S^{-1}R$ with witness $w\in S$.\\
+The scalar-product difference is $s'm(q'a-qa')+qa'(s'm-sm')$ and vanishes after multiplication by $uw$.\\
+Thus scalar multiplication is well defined by Definitions \ref{def:ring-localization}(ii) and \ref{def:module-localization}(i).\\
+For $(m,s),(n,t),(p,u)\in M\times S$, $(m/s+n/t)+p/u=(tu m+su n+st p)/(stu)=m/s+(n/t+p/u)$.\\
+Localized addition is commutative by commutativity of $M$; $0_M/1_R$ and $(-m)/s$ are its identity and inverses.\\
+Fix $a/q,b/t\in S^{-1}R$ and $m/s,n/u\in S^{-1}M$. Then $((a/q)(b/t))(m/s)=abm/(qts)=(a/q)((b/t)(m/s))$,\\
+$((a/q)+(b/t))(m/s)=(tam+qbm)/(qts)=(a/q)(m/s)+(b/t)(m/s)$,\\
+$(a/q)(m/s+n/u)=(aum+asn)/(qsu)=(a/q)(m/s)+(a/q)(n/u)$, and $(1_R/1_R)(m/s)=m/s$; $S^{-1}M$ is an $S^{-1}R$-module.
+\item Fix $r\in R$ and $m,n\in M$. The identities $\eta_S(m+n)=\eta_S(m)+\eta_S(n)$ and $\eta_S(rm)=\lambda_S(r)\eta_S(m)$ hold by Definition \ref{def:module-localization}(iii).
+\item For $m\in M$, $\eta_S(m)=0\Longleftrightarrow(\exists\,s\in S)\,sm=0_M$ by Definition \ref{def:module-localization}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: Witness products descend addition and scalars; representatives verify module laws.\\
+\hlt{Key Insight}: Local vanishing is equivalent to annihilation by one denominator.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:module-localization-universal-property}
+\hlt{Universal Property of Module Localization}\\
+Let $R$ be a commutative ring with identity, $S\subseteq R$ be multiplicative,  $M$ be an $R$-module.\\
+Let $N$ be an $S^{-1}R$-module, $\psi:M\to N$ be $R$-linear for action $r\cdot x\defeq\lambda_S(r)x$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The rule $\widetilde{\psi}:S^{-1}M\to N$, $m/s\mapsto(1_R/s)\psi(m)$, is $S^{-1}R$-linear. It satisfies $\widetilde{\psi}\circ\eta_S=\psi$.
+\item The map $\widetilde{\psi}$ is unique subject to $\widetilde{\psi}\circ\eta_S=\psi$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $m/s=n/t$, choose $u\in S$, $u(tm-sn)=0_M$ by Definition \ref{def:module-localization}(i); $\lambda_S(u)[\lambda_S(t)\psi(m)-\lambda_S(s)\psi(n)]=0_N$ by $R$-linearity of $\psi$.\\
+The equality $(1_R/s)\psi(m)=(1_R/t)\psi(n)$ holds by cancelling the unit $\lambda_S(u)$ and scaling by $\lambda_S(s)^{-1}\lambda_S(t)^{-1}$.\\
+Thus the rule is well defined. Fix $(m,s),(n,t)\in M\times S$ and $r/q\in S^{-1}R$.\\
+$\widetilde{\psi}(m/s+n/t)=\frac{1_R}{st}\psi(tm+sn)=\frac{1_R}{s}\psi(m)+\frac{1_R}{t}\psi(n)$; $\widetilde{\psi}((r/q)(m/s))=\frac{1_R}{qs}\psi(rm)=\frac{r}{q}\frac{1_R}{s}\psi(m)=\frac{r}{q}\widetilde{\psi}(m/s)$.\\
+The map $\widetilde{\psi}$ is $S^{-1}R$-linear by the preceding identities. The equality $\widetilde{\psi}\circ\eta_S=\psi$ holds by $\widetilde{\psi}(m/1_R)=\psi(m)$.
+\item Let $\theta:S^{-1}M\to N$ be $S^{-1}R$-linear with $\theta\circ\eta_S=\psi$. Fix $(m,s)\in M\times S$.\\
+$\theta(m/s)=(1_R/s)\theta(m/1_R)=(1_R/s)\psi(m)=\widetilde{\psi}(m/s)$. Thus $\theta=\widetilde{\psi}$ by function extensionality.
+\end{enumerate}
+\hlt{Structural Commentary}: Unit cancellation descends module fractions; factorization forces uniqueness.\\
+\hlt{Key Insight}: Denominator-one values determine every localized module map.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:localization-extension-contraction}
+\hlt{Extension and Contraction under Localization}\\
+Let $R$ be a commutative ring with identity and let $S\subseteq R$ be multiplicative.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{extension} of $\mathcal{I}\trianglelefteq R$ is $\mathcal{I}^{\mathrm{e}}\defeq S^{-1}\mathcal{I}=\{a/s:a\in\mathcal{I},\,s\in S\}$.
+\item The \hlt{contraction} of $\mathcal{J}\trianglelefteq S^{-1}R$ is $\mathcal{J}^{\mathrm{c}}\defeq\lambda_S^{-1}(\mathcal{J})$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:localization-extension-contraction-calculus}
+\hlt{Localization Extension--Contraction Calculus}\\
+Let $R$ be a commutative ring with identity, $S\subseteq R$ be multiplicative. Let $\mathcal{I}\trianglelefteq R$ and $\mathcal{J}\trianglelefteq S^{-1}R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{I}^{\mathrm{e}}\trianglelefteq S^{-1}R$.
+\item $(\forall\,(r,s)\in R\times S)\,[r/s\in\mathcal{I}^{\mathrm{e}}\Longleftrightarrow(\exists\,u\in S)\,ur\in\mathcal{I}]$.
+\item $\mathcal{J}^{\mathrm{c}}\trianglelefteq R$.
+\item $\mathcal{I}^{\mathrm{e}}=S^{-1}R\Longleftrightarrow\mathcal{I}\cap S\neq\emptyset$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] $0_R/1_R\in\mathcal{I}^{\mathrm{e}}$ holds by $0_R\in\mathcal{I}$. Fix $(a,s),(b,t)\in\mathcal{I}\times S$ and $r/q\in S^{-1}R$; then $(a/s)-(b/t)=(ta-sb)/(st)\in\mathcal{I}^{\mathrm{e}}$ by $ta-sb\in\mathcal{I}$.\\
+The membership $(r/q)(a/s)=ra/(qs)\in\mathcal{I}^{\mathrm{e}}$ holds by ideal absorption. Thus $\mathcal{I}^{\mathrm{e}}\trianglelefteq S^{-1}R$ by the ideal axioms.
+\item[$(ii)$] ($\Rightarrow$) Assume $r/s\in\mathcal{I}^{\mathrm{e}}$, $(a,t)\in\mathcal{I}\times S$ with $r/s=a/t$. Choose $u\in S$ satisfying $u(tr-sa)=0_R$ by Definition \ref{def:ring-localization}(ii).\\
+Then $(ut)r=u(sa)\in\mathcal{I}$ by ideal absorption, and $ut\in S$ by multiplicativity.
+\item[$(ii)$] ($\Leftarrow$) Choose $u\in S$ satisfying $ur\in\mathcal{I}$. Then $r/s=(ur)/(us)\in\mathcal{I}^{\mathrm{e}}$ by Definitions \ref{def:ring-localization}(ii) and \ref{def:localization-extension-contraction}(i).
+\item[$(iii)$] The relation $0_R\in\mathcal{J}^{\mathrm{c}}$ holds by $\lambda_S(0_R)=0\in\mathcal{J}$. Fix $a,b\in\mathcal{J}^{\mathrm{c}}$ and $r\in R$.\\
+$\lambda_S(a-b)=\lambda_S(a)-\lambda_S(b)\in\mathcal{J}$ and $\lambda_S(ra)=\lambda_S(r)\lambda_S(a)\in\mathcal{J}$ by ideal closure; $\mathcal{J}^{\mathrm{c}}\trianglelefteq R$ by Definition \ref{def:localization-extension-contraction}(ii) and ideal axioms.
+\item[$(iv)$] ($\Rightarrow$) Assume $\mathcal{I}^{\mathrm{e}}=S^{-1}R$. Choose $u\in S\cap\mathcal{I}$ by $1_R/1_R\in\mathcal{I}^{\mathrm{e}}$ and (ii).
+\item[$(iv)$] ($\Leftarrow$) Choose $u\in\mathcal{I}\cap S$. Then $1_R/1_R\in\mathcal{I}^{\mathrm{e}}$ by (ii), so $\mathcal{I}^{\mathrm{e}}=S^{-1}R$ by ideal absorption.
+\end{enumerate}
+\hlt{Structural Commentary}: Ideal closure handles both transfers; numerator membership detects the unit ideal.\\
+\hlt{Key Insight}: Extension membership depends only on a denominator multiple of the numerator.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:prime-localization-correspondence}
+\hlt{Prime Ideals under Localization}\\
+Let $R$ be a commutative ring with identity and let $S\subseteq R$ be multiplicative. Set $\mathcal{X}_S\defeq\{\mathfrak{p}\in\operatorname{Spec}R:\mathfrak{p}\cap S=\emptyset\}$.\\
+The assignment $\mathfrak{q}\mapsto\mathfrak{q}^{\mathrm{c}}$ is a bijection $\operatorname{Spec}(S^{-1}R)\to\mathcal{X}_S$; its inverse is $\mathfrak{p}\mapsto\mathfrak{p}^{\mathrm{e}}$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Contraction}: Fix $\mathfrak{q}\in\operatorname{Spec}(S^{-1}R)$. Then $\mathfrak{q}^{\mathrm{c}}\trianglelefteq R$ by Proposition \ref{prop:localization-extension-contraction-calculus}(iii). The ideal $\mathfrak{q}^{\mathrm{c}}$ is proper by $\lambda_S(1_R)=1\notin\mathfrak{q}$.\\
+If $ab\in\mathfrak{q}^{\mathrm{c}}$, then $\lambda_S(a)\lambda_S(b)=\lambda_S(ab)\in\mathfrak{q}$. Hence $a\in\mathfrak{q}^{\mathrm{c}}$ or $b\in\mathfrak{q}^{\mathrm{c}}$ by primeness of $\mathfrak{q}$; $\mathfrak{q}^{\mathrm{c}}\in\operatorname{Spec}R$ by Definition \ref{def:prime-ideal}. Fix $s\in S$.\\
+The element $\lambda_S(s)$ is a unit by Proposition \ref{prop:ring-localization-construction}(iv). The relation $\lambda_S(s)\notin\mathfrak{q}$ holds by properness and ideal absorption.\\
+Therefore $\mathfrak{q}^{\mathrm{c}}\cap S=\emptyset$ by Definition \ref{def:localization-extension-contraction}(ii).
+\item \hlt{Extension}: Fix $\mathfrak{p}\in\mathcal{X}_S$. Then $\mathfrak{p}^{\mathrm{e}}\trianglelefteq S^{-1}R$ by Proposition \ref{prop:localization-extension-contraction-calculus}(i). The ideal $\mathfrak{p}^{\mathrm{e}}$ is proper by Proposition \ref{prop:localization-extension-contraction-calculus}(iv).\\
+Fix $(a,s),(b,t)\in R\times S$ and suppose $(a/s)(b/t)\in\mathfrak{p}^{\mathrm{e}}$. Choose $u\in S$ with $uab\in\mathfrak{p}$ by Proposition \ref{prop:localization-extension-contraction-calculus}(ii).\\
+The relation $ab\in\mathfrak{p}$ holds by $u\notin\mathfrak{p}$ and primeness; hence $a\in\mathfrak{p}$ or $b\in\mathfrak{p}$ by primeness.\\
+Thus $a/s\in\mathfrak{p}^{\mathrm{e}}$ or $b/t\in\mathfrak{p}^{\mathrm{e}}$ by Definition \ref{def:localization-extension-contraction}(i). Therefore $\mathfrak{p}^{\mathrm{e}}\in\operatorname{Spec}(S^{-1}R)$ by Definition \ref{def:prime-ideal}.
+\item \hlt{Contracting an Extension}: Fix $\mathfrak{p}\in\mathcal{X}_S$ and $r\in R$. The equivalence $r\in(\mathfrak{p}^{\mathrm{e}})^{\mathrm{c}}\Longleftrightarrow r/1_R\in\mathfrak{p}^{\mathrm{e}}$ holds by Definition \ref{def:localization-extension-contraction}(ii).\\
+The latter condition is equivalent to $(\exists\,u\in S)\,ur\in\mathfrak{p}$ by Proposition \ref{prop:localization-extension-contraction-calculus}(ii).\\
+If $ur\in\mathfrak{p}$ for $u\in S$, then $u\notin\mathfrak{p}$ and $r\in\mathfrak{p}$ by primeness. Converse holds with $u=1_R$. Hence $(\mathfrak{p}^{\mathrm{e}})^{\mathrm{c}}=\mathfrak{p}$ by set extensionality.
+\item \hlt{Extending a Contraction}: Fix $\mathfrak{q}\in\operatorname{Spec}(S^{-1}R)$. If $r\in\mathfrak{q}^{\mathrm{c}}$ and $s\in S$, then $r/s=(r/1_R)(1_R/s)\in\mathfrak{q}$; $(\mathfrak{q}^{\mathrm{c}})^{\mathrm{e}}\subseteq\mathfrak{q}$.\\
+Conversely, fix $(r,s)\in R\times S$ with $r/s\in\mathfrak{q}$. Then $r/1_R=(s/1_R)(r/s)\in\mathfrak{q}$, so $r\in\mathfrak{q}^{\mathrm{c}}$ by Definition \ref{def:localization-extension-contraction}(ii).\\
+Thus $r/s\in(\mathfrak{q}^{\mathrm{c}})^{\mathrm{e}}$ by Definition \ref{def:localization-extension-contraction}(i); $(\mathfrak{q}^{\mathrm{c}})^{\mathrm{e}}=\mathfrak{q}$ by mutual inclusion. Asserted bijection follows by (i)--(iv).
+\end{enumerate}
+\hlt{Structural Commentary}: Primality survives both transfers; numerator tests prove mutual inversion.\\
+\hlt{Key Insight}: A localized prime records exactly which original elements avoid all denominators.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:principal-denominator-set} \hlt{Principal Denominator Set}\\
+Let $R$ be a commutative ring with identity and let $f\in R$. Define $S_f\defeq\{f^n:n\in\N_0\}$.
+\end{definition}
+
+\begin{proposition} \label{prop:canonical-localization-denominator-sets}
+\hlt{Canonical Denominator Sets}\\
+Let $R$ be a commutative ring with identity, let $f\in R$, and let $\mathfrak{p}\in\operatorname{Spec}R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The set $S_f$ is multiplicative.
+\item The set $R\setminus\mathfrak{p}$ is multiplicative.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Multiplicativity holds by $1_R=f^0\in S_f$ and $(\forall\,m,n\in\N_0)\,f^m f^n=f^{m+n}\in S_f$.
+\item The relation $1_R\notin\mathfrak{p}$ holds by properness of $\mathfrak{p}$. If $a,b\notin\mathfrak{p}$, then $ab\notin\mathfrak{p}$ by the contrapositive of primeness.
+\end{enumerate}
+\hlt{Structural Commentary}: Powers and prime complements form the two denominator systems.\\
+\hlt{Key Insight}: Primeness is precisely what makes a complement closed under multiplication.
+\end{proof}
+\end{proposition}
+
+\begin{definition} \label{def:principal-and-prime-localizations}
+\hlt{Principal and Prime Localizations}\\
+Let $R$ be a commutative ring with identity and let $M$ be an $R$-module. Fix $f\in R$ and $\mathfrak{p}\in\operatorname{Spec}R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The \hlt{principal localizations} are $R_f\defeq S_f^{-1}R$ and $M_f\defeq S_f^{-1}M$.
+\item The \hlt{localizations at $\mathfrak{p}$} are $R_{\mathfrak{p}}\defeq(R\setminus\mathfrak{p})^{-1}R$ and $M_{\mathfrak{p}}\defeq(R\setminus\mathfrak{p})^{-1}M$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:canonical-localization-consequences}
+\hlt{Canonical Localization Consequences}\\
+Let $R$ be a commutative ring with identity and let $M$ be an $R$-module.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\,f\in R)$, contraction induces a bijection $\operatorname{Spec}(R_f)\to D(f)$.
+\item $(\forall\,(\mathfrak{p},m)\in\operatorname{Spec}R\times M)\,[m/1_R=0_{M_{\mathfrak{p}}}\Longleftrightarrow(\exists\,s\in R\setminus\mathfrak{p})\,sm=0_M]$.
+\item $(\forall\,m\in M)\,[m=0_M\Longleftrightarrow(\forall\,\mathfrak{p}\in\operatorname{Spec}R)\,m/1_R=0_{M_{\mathfrak{p}}}]$.
+\item If $R$ is an integral domain with field of quotients $K$, then $(R\setminus\{0_R\})^{-1}R\cong K$ canonically.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Fix $f\in R$ and $\mathfrak{p}\in\operatorname{Spec}R$. The equivalence $\mathfrak{p}\cap S_f=\emptyset\Longleftrightarrow f\notin\mathfrak{p}$ holds by primeness and induction.\\
+Equivalence $f\notin\mathfrak{p}\Longleftrightarrow\mathfrak{p}\in D(f)$ holds by Proposition \ref{prop:principal-complement-calculus}(iii). Asserted bijection follows by Theorem \ref{thm:prime-localization-correspondence}.
+\item[$(ii)$] ($\Rightarrow$) Fix $(\mathfrak{p},m)\in\operatorname{Spec}R\times M$ and assume $m/1_R=0_{M_{\mathfrak{p}}}$. The set $R\setminus\mathfrak{p}$ is multiplicative by Proposition \ref{prop:canonical-localization-denominator-sets}(ii).\\
+Choose $s\in R\setminus\mathfrak{p}$ satisfying $sm=0_M$ by Proposition \ref{prop:module-localization-construction}(iv).
+\item[$(ii)$] ($\Leftarrow$) Fix $(\mathfrak{p},m)\in\operatorname{Spec}R\times M$, $s\in R\setminus\mathfrak{p}$ satisfying $sm=0_M$. Equality $m/1_R=0_{M_{\mathfrak{p}}}$ holds by Proposition \ref{prop:module-localization-construction}(iv).
+\item[$(iii)$] ($\Rightarrow$) Fix $m\in M$, $m=0_M$. Relation $(\forall\,\mathfrak{p}\in\operatorname{Spec}R)\,m/1_R=0_{M_{\mathfrak{p}}}$ holds by (ii) with $s=1_R$.
+\item[$(iii)$] ($\Leftarrow$) Fix $m\in M$. For contrapositive, suppose $m\neq0_M$, $\mathcal{A}\defeq\operatorname{Ann}_R(m)$. The set $\mathcal{A}$ is an ideal by Proposition \ref{prop:annihilator-basic-properties}(i).\\
+It is proper by $m\neq0_M$, $1_Rm=m$, and Definition \ref{def:module-annihilator}(i). Set $\mathcal{P}\defeq\{\mathcal{I}\trianglelefteq R:\mathcal{A}\subseteq\mathcal{I},\ \mathcal{I}\neq R\}$, ordered by inclusion.\\
+Then $\mathcal{A}\in\mathcal{P}$, and $\mathcal{P}$ is a nonempty poset by Proposition \ref{prop:inclusion-and-reverse-inclusion-partial-orders}. The ideal $\mathcal{A}$ is an upper bound for the empty chain.\\
+Fix a nonempty chain $\mathcal{C}\subseteq\mathcal{P}$, $\mathcal{U}\defeq\bigcup\limits_{\mathcal{I}\in\mathcal{C}}\mathcal{I}$; $\mathcal{U}\trianglelefteq R$ by Proposition \ref{prop:intersections-and-chain-unions-of-ideals}. Inclusion $\mathcal{A}\subseteq\mathcal{U}$ holds by $\mathcal{C}\neq\emptyset$, $(\forall\,\mathcal{I}\in\mathcal{C})\,\mathcal{A}\subseteq\mathcal{I}$.\\
+Relation $1_R\notin\mathcal{U}$ holds by $(\forall\,\mathcal{I}\in\mathcal{C})\,1_R\notin\mathcal{I}$; $\mathcal{U}\in\mathcal{P}$ is upper bound for $\mathcal{C}$; chain-upper-bound hypothesis of Principle \ref{princ:zorns-lemma} holds.\\
+Choose a maximal $\mathfrak{m}\in\mathcal{P}$ by Principle \ref{princ:zorns-lemma}. If $\mathfrak{m}\subseteq\mathcal{J}\trianglelefteq R$ and $\mathcal{J}\neq R$, then $\mathcal{J}\in\mathcal{P}$; $\mathfrak{m}$ is maximal in $R$ by Definition \ref{def:maximal-ideal}.\\
+Ideal $\mathfrak{m}$ prime by Corollary \ref{cor:maximal-ideals-are-prime}. If $m/1_R=0_{M_{\mathfrak{m}}}$, choose $s\in R\setminus\mathfrak{m}$ with $sm=0_M$ by (ii); contradicts $s\in\operatorname{Ann}_R(m)=\mathcal{A}\subseteq\mathfrak{m}$.\\
+The inequality $m/1_R\neq0_{M_{\mathfrak{m}}}$ holds by contradiction; the contrapositive follows by this prime $\mathfrak{m}$.
+\item[$(iv)$] The set $R\setminus\{0_R\}$ is multiplicative by the integral-domain axioms Fix $r,r'\in R$ and $s,s'\in R\setminus\{0_R\}$.\\
+The relation $(r,s)\sim(r',s')$ is equivalent to $s'r=sr'$ by cancellation.\\
+Thus the localization and field-of-quotients equivalence relations and fraction operations agree by Definition \ref{def:field-of-quotients}.\\
+The identity on $R\times(R\setminus\{0_R\})$ therefore descends to the canonical ring isomorphism.
+\end{enumerate}
+\hlt{Structural Commentary}: Prime correspondence handles denominators; maximal annihilators detect nonvanishing.\\
+\hlt{Key Insight}: Vanishing in all prime localizations detects the zero element.
+\end{proof}
+\end{proposition}
+
+% TODO(structure): Upgrade the set bijection \operatorname{Spec}(R_f)\to D(f) to a
+% homeomorphism after the proposed prerequisite subsection on induced and subspace
+% topologies in Part 09 is explicitly approved.
