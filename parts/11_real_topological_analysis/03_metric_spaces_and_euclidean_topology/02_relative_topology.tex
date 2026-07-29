@@ -1,39 +1,48 @@
 \subsection{Relative Topology}
 
 \begin{definition} \label{def:relative-open-subset} \hlt{Relative Openness}\\
-Suppose $E\subseteq Y\subseteq X$, where $X$ is a metric space. The set $E$ is \hlt{open relative to $Y$} if for each $p\in E$ there is an $r>0$ such that $q\in E$ whenever $q\in Y$ and $d(p,q)<r$.
+Let $(X,d)$ be a metric space and $E\subseteq Y\subseteq X$. The set $E$ is \hlt{open relative to $Y$} iff $(\forall\,p\in E)(\exists\,r>0)\,B_r(p)\cap Y\subseteq E$.
+\end{definition}
+
+\begin{definition} \label{def:relative-closed-subset} \hlt{Relative Closedness}\\
+Let $(X,d)$ be a metric space and $F\subseteq Y\subseteq X$. The set $F$ is \hlt{closed relative to $Y$} iff $Y\setminus F$ is open relative to $Y$.
 \end{definition}
 
 \begin{theorem} \label{thm:relative-open-intersection-with-open-set} \hlt{Relative Opens Are Intersections}\\
-Suppose $Y\subseteq X$. A subset $E$ of $Y$ is open relative to $Y$ if and only if $E=Y\cap G$ for some open subset $G$ of $X$.
+Let $(X,d)$ be a metric space, $Y\subseteq X$, $E\subseteq Y$. Then $E$ is open relative to $Y$ iff $(\exists\,G\in\tau_d)\,E=Y\cap G$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] For each $p\in E$, choose $r_p>0$ with $B_{r_p}(p)\cap Y\subseteq E$, and set $G\defeq\bigcup\limits_{p\in E}B_{r_p}(p)$. Then $G$ is open in $X$, and $E\subseteq G\cap Y$. If $q\in G\cap Y$, then $q\in B_{r_p}(p)\cap Y$ for some $p\in E$, so $q\in E$. Thus $E=G\cap Y$.
-\item[$(\Leftarrow)$] If $E=G\cap Y$ with $G$ open in $X$, then for each $p\in E$ choose $r>0$ with $B_r(p)\subseteq G$.\\
-Hence $B_r(p)\cap Y\subseteq G\cap Y=E$, so $E$ is open relative to $Y$.
+\item[$(\Rightarrow)$] Suppose $E$ is open relative to $Y$. Let $\mathcal{B}\defeq\{B_r(p):p\in E,\ r>0,\ B_r(p)\cap Y\subseteq E\}$.\\
+Set $G\defeq\bigcup\limits_{B\in\mathcal{B}}B$. Every $B\in\mathcal{B}$ is open by Theorem \ref{thm:every-neighborhood-open}, so $G\in\tau_d$ by Theorem \ref{thm:metric-open-closed-set-calculus}(i).\\
+For every $p\in E$, relative openness supplies $B_r(p)\in\mathcal{B}$ containing $p$, so $E\subseteq G\cap Y$.\\
+If $q\in G\cap Y$, then $q\in B_r(p)\cap Y\subseteq E$ for some $B_r(p)\in\mathcal{B}$. Thus $E=G\cap Y$.
+\item[$(\Leftarrow)$] Suppose $E=G\cap Y$ for some $G\in\tau_d$. For $p\in E$, choose $r>0$ with $B_r(p)\subseteq G$.\\
+Then $B_r(p)\cap Y\subseteq G\cap Y=E$, so $E$ is open relative to $Y$.
 \end{enumerate}
-\hlt{Structural Commentary}: Relative openness is ordinary openness viewed through the ambient subset $Y$.\\
-\hlt{Key Insight}: Intersect open sets in $X$ with $Y$ to get exactly the open sets of $Y$.
+\hlt{Structural Commentary}: Witnessing ambient balls form $G$; intersecting $G$ with $Y$ recovers $E$.\\
+\hlt{Key Insight}: Relative openness is exactly ambient openness restricted to $Y$.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:relative-closed-intersection-with-closed-set} \hlt{Relative Closed Sets Are Intersections}\\
-Let $(X,d)$ be a metric space, let $Y\subseteq X$, and let $F\subseteq Y$.\\
-Then $F$ is closed relative to $Y$ iff $\exists C\subseteq X$ such that $C$ is closed in $X$ and $F=Y\cap C$.
+Let $(X,d)$ be a metric space, $Y\subseteq X$, $F\subseteq Y$. Then $F$ is closed relative to $Y$ iff $F=Y\cap C$ for some closed set $C\subseteq X$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $F$ is closed relative to $Y$, then $Y\setminus F$ is open relative to $Y$. By Theorem \ref{thm:relative-open-intersection-with-open-set}, $\exists$ open $G\subseteq X$ such that $Y\setminus F=Y\cap G$. Put $C\defeq X\setminus G$. Then $C$ is closed in $X$, and $F=Y\setminus(Y\setminus F)=Y\setminus(Y\cap G)=Y\cap C$.
-\item[$(\Leftarrow)$] If $F=Y\cap C$ with $C$ closed in $X$, then $X\setminus C$ is open in $X$ and $Y\setminus F=Y\setminus(Y\cap C)=Y\cap(X\setminus C)$.\\
-By Theorem \ref{thm:relative-open-intersection-with-open-set}, $Y\setminus F$ is open relative to $Y$, so $F$ is closed relative to $Y$.
+\item[$(\Rightarrow)$] Suppose $F$ is closed relative to $Y$. Then $Y\setminus F$ is open relative to $Y$. By Theorem \ref{thm:relative-open-intersection-with-open-set}, $Y\setminus F=Y\cap G$ for some $G\in\tau_d$.\\
+Put $C\defeq X\setminus G$. The set $C$ is closed in $X$ by Corollary \ref{cor:closed-iff-complement-open}, and $F=Y\setminus(Y\cap G)=Y\cap C$.
+\item[$(\Leftarrow)$] Suppose $F=Y\cap C$ for a closed set $C\subseteq X$. Then $X\setminus C$ is open by Corollary \ref{cor:closed-iff-complement-open}.\\
+The set $Y\setminus F=Y\cap(X\setminus C)$ is open relative to $Y$ by Theorem \ref{thm:relative-open-intersection-with-open-set}. Thus $F$ is closed relative to $Y$.
 \end{enumerate}
-\hlt{Structural Commentary}: Relative closedness is ordinary closedness seen through the ambient subset.\\
-\hlt{Key Insight}: The closed version is the complement of the relative-open intersection theorem.
+\hlt{Structural Commentary}: Complementing $Y\cap G$ in $Y$ replaces open $G$ by closed $X\setminus G$.\\
+\hlt{Key Insight}: Relative closedness is the complement-dual of relative openness.
 \end{proof}
 \end{corollary}
 
 \begin{example} \label{ex:relative-topology-ambient-examples} \hlt{Relative Topology Depends on the Ambient Space}\\
-Let $X=\{(x,0):x\in\R\}\subseteq\R^2$ with the metric inherited from $\R^2$. The set $E=\{(x,0):-1<x<1\}$ is not open as a subset of $\R^2$, but it is open relative to $X$, since $E=X\cap\bigl((-1,1)\times(-1,1)\bigr)$.\\
-Likewise, $[0,1)$ is not closed in $\R$, but it is closed relative to $(-1,1)$ because $[0,1)=(-1,1)\cap[0,\infty)$.
+Let $X\defeq\{(x,0):x\in\R\}\subseteq\R^2$ with the inherited Euclidean metric, and set $E\defeq\{(x,0):-1<x<1\}$.\\
+No ball in $\R^2$ centered at a point of $E$ lies in the $x$-axis, so $E$ is not open in $\R^2$.\\
+However, $E=X\cap\bigl((-1,1)\times(-1,1)\bigr)$, so $E$ is open relative to $X$. Set $[0,1)$ is not closed in $\R$ because $1$ is a limit point not in the set.\\
+Yet $[0,1)=(-1,1)\cap[0,\infty)$, and $[0,\infty)$ is closed in $\R$. Hence $[0,1)$ is closed relative to $(-1,1)$ by Corollary \ref{cor:relative-closed-intersection-with-closed-set}.
 \end{example}
