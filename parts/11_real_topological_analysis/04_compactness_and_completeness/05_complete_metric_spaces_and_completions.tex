@@ -1,106 +1,166 @@
 \subsection{Complete Metric Spaces and Completions}\label{subsec:complete-metric-spaces-and-completions}
 
-Completeness turns Cauchy approximations into actual points. The examples below record the standard complete spaces used throughout analysis, then isolate the completion construction that adjoins missing Cauchy limits to an arbitrary metric space.
+Completeness asks whether Cauchy approximations converge inside the ambient space.\\
+This subsection records standard complete spaces, the contraction principle, and completion by Cauchy sequences.
 
 \begin{example} \label{ex:finite-dimensional-complete-metric-spaces} \hlt{Finite-Dimensional Complete Metric Spaces}\\
-For $k\in\N$, $(\R^k,d_2)$ and $(\C^k,d_2)$ are complete; in particular, so are $\R$ and $\C$.
+Let $k\in\N$. For $\mathbf{z},\mathbf{w}\in\C^k$, set $d_2(\mathbf{z},\mathbf{w})\defeq\bigl(\sum\limits_{j=1}^k\abs{z_j-w_j}^2\bigr)^{1/2}$. Then $(\R^k,d_2)$, $(\C^k,d_2)$ are complete; case $k=1$ includes $\R$ and $\C$.
 \begin{proof}
-Completeness of $\R$ is Theorem \ref{thm:real-cauchy-convergence-criterion}.\\
-If $z_n=x_n+iy_n$ is Cauchy in $\C$, then $(x_n)$ and $(y_n)$ are Cauchy in $\R$, so $z_n\to x+iy\in\C$.\\
-Corollary \ref{cor:euclidean-cauchy-convergence} gives completeness of $\R^k$, and the isometry $\C^k\cong\R^{2k}$ gives completeness of $\C^k$.\\
-\hlt{Structural Commentary}: Finite-dimensional completeness is coordinatewise completeness.\\
-\hlt{Key Insight}: A Cauchy sequence in finitely many coordinates converges coordinate by coordinate.
+Space $\R^k$ is complete by Corollary \ref{cor:euclidean-cauchy-convergence}. Write $z_j=x_j+iy_j$, $w_j=u_j+iv_j$, define $F:\C^k\to\R^{2k}$ by $F\mathbf{z}\defeq(x_1,y_1,\ldots,x_k,y_k)$.\\
+$d_2(F\mathbf{z},F\mathbf{w})^2=\sum\limits_{j=1}^k[(x_j-u_j)^2+(y_j-v_j)^2]=d_2(\mathbf{z},\mathbf{w})^2$ by Definition \ref{def:complex-absolute-value-analysis}.\\
+The coordinate map $F$ is bijective, and the distance identity makes it an isometry by Definition \ref{def:isometry-and-isometric-metric-spaces}(i).\\
+If $(\mathbf{z}_n)$ is Cauchy in $\C^k$, then $(F\mathbf{z}_n)$ is Cauchy in $\R^{2k}$ and converges to some $\mathbf{u}\in\R^{2k}$.\\
+The identity $d_2(\mathbf{z}_n,F^{-1}\mathbf{u})=d_2(F\mathbf{z}_n,\mathbf{u})\to0$ implies $\mathbf{z}_n\to F^{-1}\mathbf{u}$. Hence $\C^k$ is complete by Definition \ref{def:complete-metric-space}.\\
+\hlt{Structural Commentary}: The coordinate isometry transfers real finite-dimensional completeness to complex coordinates.\\
+\hlt{Key Insight}: Separating real and imaginary parts preserves the Euclidean distance.
 \end{proof}
 \end{example}
 
 \begin{definition} \label{def:contraction-mapping} \hlt{Contraction}\\
-Let $X$ be a metric space with metric $d$.\\
-A map $\varphi:X\to X$ is a \hlt{contraction} if $\exists$ a constant $0\leq c<1$ such that $d(\varphi(x),\varphi(y))\leq c\,d(x,y)$ for $x,y\in X$.\\
-\hlt{Structural Commentary}: Bound $c<1$ excludes nonexpansive maps and is the hypothesis in Theorem \ref{thm:contraction-principle}.
+Let $(X,d)$ be a metric space. A map $\varphi:X\to X$ is a \hlt{contraction} iff $(\exists c\in[0,1))(\forall x,y\in X)\,d(\varphi(x),\varphi(y))\leq c\,d(x,y)$.
 \end{definition}
 
 \begin{theorem} \label{thm:contraction-principle} \hlt{Contraction Principle}\\
-If $X$ is a complete metric space and $\varphi:X\to X$ is a contraction, then $\exists$ a unique $x\in X$ such that $\varphi(x)=x$.
+If $X$ is a nonempty complete metric space and $\varphi:X\to X$ is a contraction, then $(\exists!\,x\in X)\,\varphi(x)=x$.
 \begin{proof}
-Choose $x_0\in X$ and define $x_{n+1}=\varphi(x_n)$.\\
-If $c<1$ is a contraction constant, induction gives $d(x_{n+1},x_n)\leq c^n d(x_1,x_0)$.\\
-For $n<m$, the triangle inequality and the finite geometric sum give $d(x_n,x_m)\leq \sum\limits_{j=n}^{m-1}d(x_j,x_{j+1}) \leq \frac{c^n}{1-c}d(x_1,x_0)$.\\
-Thus $(x_n)$ is Cauchy, so completeness gives $x_n\to x\in X$.\\
-Since a contraction is continuous, $\varphi(x)=\lim\varphi(x_n)=\lim x_{n+1}=x$.\\
-If $\varphi(x)=x$ and $\varphi(y)=y$, then $d(x,y)\leq c\,d(x,y)$, hence $d(x,y)=0$ and $x=y$.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Iteration estimate}: Choose $x_0\in X$ and a contraction constant $c\in[0,1)$ by Definition \ref{def:contraction-mapping}.\\
+Set $x_{n+1}\defeq\varphi(x_n)$. The identity $d(x_1,x_0)=c^0d(x_1,x_0)$ is the induction basis.\\
+If $d(x_{n+1},x_n)\leq c^nd(x_1,x_0)$, then $d(x_{n+2},x_{n+1})\leq c\,d(x_{n+1},x_n)\leq c^{n+1}d(x_1,x_0)$ by the contraction inequality.\\
+Hence $(\forall n\in\N_0)\,d(x_{n+1},x_n)\leq c^nd(x_1,x_0)$ by Theorem \ref{thm:mathematical-induction} with index $n+1$.
+\item \hlt{Cauchy control}: If $0\leq n<m$, then $d(x_n,x_m)\leq\sum\limits_{j=n}^{m-1}d(x_j,x_{j+1})$ by the triangle inequality.\\
+By (i), $\sum\limits_{j=n}^{m-1}d(x_j,x_{j+1})\leq d(x_1,x_0)\sum\limits_{j=n}^{m-1}c^j$. The bound $d(x_n,x_m)\leq\frac{c^n}{1-c}d(x_1,x_0)$ follows by $(1-c)\sum\limits_{j=n}^{m-1}c^j=c^n-c^m\leq c^n$.\\
+The right side tends to $0$ by Theorem \ref{thm:special-sequence-limits}(v) and Theorem \ref{thm:complex-sequence-limit-algebra}(ii). Hence $(x_n)$ is Cauchy by Definition \ref{def:cauchy-sequence}.
+\item \hlt{Fixed-point existence}: By Definition \ref{def:complete-metric-space}, choose $x\in X$ with $x_n\to x$. Bound $d(\varphi(x_n),\varphi(x))\leq c\,d(x_n,x)$ implies $\varphi(x_n)\to\varphi(x)$.\\
+The shifted sequence satisfies $x_{n+1}\to x$ by Corollary \ref{cor:metric-convergent-subsequences}. Since $\varphi(x_n)=x_{n+1}$, $\varphi(x)=x$ by Theorem \ref{thm:metric-sequence-basic-properties}(ii).
+\item \hlt{Uniqueness}: If $\varphi(x)=x$ and $\varphi(y)=y$, then $d(x,y)\leq c\,d(x,y)$, hence $d(x,y)=0$ and $x=y$.
+\end{enumerate}
 \hlt{Structural Commentary}: Iteration turns the contraction estimate into a geometric Cauchy estimate.\\
 \hlt{Key Insight}: Completeness supplies the limiting point; the strict constant $c<1$ forces uniqueness.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:contraction-fixed-point-iteration} combines contraction of distances with convergence of the orbit.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/contraction_fixed_point_iteration.tikz}
-  \caption{A contraction pulls iterates toward the unique fixed point.}
+  \caption{The iterates approach the fixed point $p$ while $\varphi$ contracts pairwise distances.}
   \label{fig:contraction-fixed-point-iteration}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{perspective} \label{per:contractions-feed-local-analysis} \hlt{Fixed Points as Existence Proofs}\\
-A contraction proof solves $x=\varphi(x)$ by iteration in a complete metric space. This is the template behind the inverse function theorem, Theorem \ref{thm:inverse-function-theorem-rn}.
+Theorem \ref{thm:contraction-principle} solves $x=\varphi(x)$ by convergence of iterates in a complete space.\\
+This viewpoint later motivates local inverse-function arguments but does not replace their hypotheses or proof.
 \end{perspective}
 
 \begin{example} \label{ex:rational-metric-not-complete} \hlt{A Noncomplete Metric Space}\\
-The rational numbers with $d(x,y)=\abs{x-y}$ are not complete.\\
-Let $(r_n)$ be the decimal truncation sequence $1.4,\ 1.41,\ 1.414,\ 1.4142,\ldots$, for $\sqrt{2}$.\\
-This is a concrete instance of the truncation squeeze in Proposition \ref{prop:decimal-truncations-squeeze-real}. If $k,n\geq N$, then $\abs{r_k-r_n}\leq10^{-N}$, so $(r_n)$ is Cauchy in $\Q$. As a sequence in $\R$, it converges to $\sqrt{2}$.\\
-If it converged to some $r\in\Q$ in the inherited metric, uniqueness of limits in $\R$ would force $r=\sqrt{2}$, contradicting Proposition \ref{prop:rational-square-root-two-gap}. Thus $\Q$ is not complete in the inherited metric.\\
+The metric space $(\Q,d)$ with $d(x,y)\defeq\abs{x-y}$ is not complete.
+\begin{proof}
+Let $(r_n)$ be decimal truncations $1.4,1.41,1.414,1.4142,\ldots$ of $\sqrt{2}$. Then $(\forall n\in\N)\,r_n\in\Q$, $r_n\to\sqrt{2}$ by Proposition \ref{prop:decimal-truncations-squeeze-real}(ii).\\
+The sequence $(r_n)$ is Cauchy in $\R$ by Theorem \ref{thm:cauchy-convergence-criterion}(i), hence also in $\Q$ with the inherited metric.\\
+If $(\Q,d)$ were complete, choose $r\in\Q$ with $r_n\to r$ by Definition \ref{def:complete-metric-space}. The same convergence holds in $\R$.\\
+Thus $r=\sqrt{2}$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(i), contrary to Proposition \ref{prop:rational-square-root-two-gap}(i).\\
 \hlt{Structural Commentary}: The decimal approximants are Cauchy before their missing limit is available inside $\Q$.\\
-\hlt{Key Insight}: Completeness asks whether every internally Cauchy approximation has an internal endpoint.
+\hlt{Key Insight}: The inherited metric preserves Cauchy control but not the irrational limit.
+\end{proof}
 \end{example}
 
 \begin{perspective} \label{per:cauchy-construction-of-reals-parallel-model} \hlt{Cauchy Construction as a Parallel Model}\\
-Cuts build $\R$ here; equivalence classes of rational Cauchy sequences give the parallel model.\\
-Let $\mathcal{C}_\Q$ be the set of rational Cauchy sequences and set $(a_n)\sim(b_n)$ iff $\abs{a_n-b_n}\to0$; then $\R\simeq\mathcal{C}_\Q/{\sim}$.\\
-Operations and order must be independent of representatives.
+Example \ref{ex:rational-metric-not-complete} exhibits a rational Cauchy sequence with a missing endpoint.\\
+For the set $\mathcal{C}_\Q$ of rational Cauchy sequences, define $(a_n)\sim(b_n)\Longleftrightarrow\abs{a_n-b_n}\to0$.\\
+The quotient $\mathcal{C}_\Q/{\sim}$ motivates the construction below; only the proved completion theorem supplies later authority.
 \end{perspective}
 
-\begin{figure}[H]
+Figure \ref{fig:cauchy-completion-formal-limits} depicts the quotient relation and the embedded constant sequences.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/cauchy_completion_formal_limits.tikz}
-  \caption{Real numbers as equivalence classes of rational Cauchy representatives.}
+  \caption{Equivalent rational Cauchy sequences determine one formal limit, while constant sequences embed $\Q$.}
   \label{fig:cauchy-completion-formal-limits}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{perspective} \label{per:cauchy-completion-skeleton} \hlt{Completion by Cauchy Sequences}\\
-Complete by identifying Cauchy sequences with $d(p_n,q_n)\to0$ and setting $D([(p_n)],[(q_n)])=\lim_{n\to\infty}d(p_n,q_n)$.\\
-Constant sequences embed the original space; triangle inequalities and diagonals give a complete metric.
-\end{perspective}
-
-\begin{theorem} \label{thm:metric-completion-existence-uniqueness} \hlt{Metric Completion}\\
-For every metric space $(X,d)$, $\exists$ complete metric space $(\widehat{X},\widehat{d})$, isometry $\iota:X\to\widehat{X}$ with $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$.\\
-If $(Y,d_Y,\tau)$, $(Z,d_Z,\sigma)$ are two such completions, then $\exists!$ bijective isometry $\Phi:Y\to Z$ s.t. $\Phi\circ\tau=\sigma$.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{definition} \label{def:metric-completion} \hlt{Metric Completion}\\
+A \hlt{completion} of a metric space $(X,d)$ is a triple $(Y,d_Y,\tau)$ satisfying:
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Existence}. Let $\operatorname{CS}(X)$ be the Cauchy sequences in $X$.\\
-For $a=(a_n),b=(b_n)\in\operatorname{CS}(X)$, $\abs{d(a_n,b_n)-d(a_m,b_m)}\leq d(a_n,a_m)+d(b_n,b_m)$, so $D(a,b)\defeq\lim\limits_{n\to\infty} d(a_n,b_n)$ exists. Put $a\sim b\Leftrightarrow D(a,b)=0$, $\widehat{X}\defeq\operatorname{CS}(X)/{\sim}$, and $\widehat{d}([a],[b])\defeq D(a,b)$.\\
-The estimate gives well-definedness; metric axioms pass to limits. Map $\iota(x)\defeq[(x,x,\ldots)]$ is an isometry.\\
-If $a=(a_n)$ and $d(a_n,a_N)<\varepsilon$ for $n\geq N$, then $\widehat{d}(\iota(a_N),[a])\leq\varepsilon$, hence $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$.\\
-Let $([a^{(k)}])$ be Cauchy in $\widehat{X}$. Choose $x_k\in X$ with $\widehat{d}(\iota(x_k),[a^{(k)}])<1/k$.\\
-Since $d(x_k,x_l)\leq1/k+\widehat{d}([a^{(k)}],[a^{(l)}])+1/l$, $(x_k)$ is Cauchy in $X$,\\
-and $\widehat{d}([a^{(k)}],[(x_j)])\leq1/k+\limsup_{j\to\infty}d(x_k,x_j)\to0$. Thus $([a^{(k)}])\to[(x_j)]$, so $(\widehat{X},\widehat{d})$ is complete.
-\item \hlt{Uniqueness}. Let $(Y,d_Y,\tau)$ and $(Z,d_Z,\sigma)$ be completions.\\
-Define $\rho_0:\tau(X)\to\sigma(X)$ by $\rho_0(\tau x)\defeq\sigma x$; it is an isometry.\\
-For $y\in Y$, choose $y_n\in\tau(X)$ with $y_n\to y$. Since $\rho_0(y_n)$ is Cauchy in $Z$, define $\Phi(y)\defeq\lim\limits_{n\to\infty}\rho_0(y_n)$.\\
-If $z_n\in\tau(X)$ and $z_n\to y$, then $d_Z(\rho_0(y_n),\rho_0(z_n))=d_Y(y_n,z_n)\to0$, so $\Phi$ is well defined.\\
-If $y_n'\to y'$, then $d_Z(\Phi(y),\Phi(y'))=\lim\limits_{n\to\infty} d_Z(\rho_0(y_n),\rho_0(y_n'))=\lim\limits_{n\to\infty} d_Y(y_n,y_n')=d_Y(y,y')$.\\
-Hence $\Phi$ is an isometry extending $\rho_0$. Its image is complete, hence closed in $Z$, and contains the dense set $\sigma(X)$; therefore $\Phi(Y)=Z$. Uniqueness follows from continuity and density of $\tau(X)$.
+\item $(Y,d_Y)$ is complete;
+\item $\tau:X\to Y$ is an isometry;
+\item $\overline{\tau(X)}^{\,Y}=Y$.
 \end{enumerate}
-\hlt{Structural Commentary}: Missing limits are installed as equivalence classes of Cauchy approximations.\\
-\hlt{Key Insight}: Completion adds Cauchy limits and is unique over the dense copy of $X$.
+\end{definition}
+
+\begin{theorem} \label{thm:metric-completion-existence-uniqueness} \hlt{Existence and Uniqueness of Metric Completions}\\
+Let $(X,d)$ be a metric space.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The space $(X,d)$ has a completion.
+\item Let $(Y,d_Y,\tau)$ and $(Z,d_Z,\sigma)$ be completions of $(X,d)$. Then $(\exists!\,\Phi:Y\to Z)$ such that $\Phi$ is a bijective isometry and $\Phi\circ\tau=\sigma$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Existence}:
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Pseudometric}: Let $\operatorname{CS}(X)$ be the set of Cauchy sequences in $X$.\\
+For $a=(a_n),b=(b_n)\in\operatorname{CS}(X)$, set $D(a,b)\defeq\lim\limits_{n\to\infty}d(a_n,b_n)$. This limit exists by Proposition \ref{prop:cauchy-sequences-bounded-distance-converges}(ii).\\
+The map $D$ has zero diagonal, is nonnegative, and is symmetric by the corresponding properties of $d$.\\
+Fix $a,b,c\in\operatorname{CS}(X)$. Then $(\forall n\in\N)\,d(a_n,c_n)\leq d(a_n,b_n)+d(b_n,c_n)$ by triangle inequality.\\
+Hence $D(a,c)\leq D(a,b)+D(b,c)$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(iii) and Theorem \ref{thm:complex-sequence-limit-algebra}(i). Thus $D$ is a pseudometric.
+\item \hlt{Quotient and embedding}: Define $a\sim b\Longleftrightarrow D(a,b)=0$ and set $\widehat{X}\defeq\operatorname{CS}(X)/{\sim}$. Put $\widehat{d}([a],[b])\defeq D(a,b)$.\\
+Then $\sim$ is an equivalence relation and $\widehat{d}$ is a well-defined metric by Proposition \ref{prop:pseudometric-metric-quotient}.\\
+For $x\in X$, let $\iota(x)$ be the class of the constant sequence with value $x$.\\
+The identity $\widehat{d}(\iota(x),\iota(y))=d(x,y)$ makes $\iota:X\to\widehat{X}$ an isometry by Definition \ref{def:isometry-and-isometric-metric-spaces}(i).
+\item \hlt{Density}: Fix $[a]\in\widehat{X}$ and $\varepsilon>0$. Choose $N_0\in\N$ with $(\forall m,n\geq N_0)\,d(a_m,a_n)<\frac{\varepsilon}{2}$.\\
+For $N\geq N_0$, $\widehat{d}(\iota(a_N),[a])\leq\frac{\varepsilon}{2}<\varepsilon$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(iii). Hence $\iota(a_N)\to[a]$, and $\overline{\iota(X)}^{\,\widehat{X}}=\widehat{X}$ by Proposition \ref{prop:sequential-closure-criterion}.
+\item \hlt{Completeness}: Let $(\xi_k)$ be Cauchy in $\widehat{X}$. By (c), choose $x_k\in X$ with $\widehat{d}(\iota(x_k),\xi_k)<\frac{1}{k}$.\\
+The bound $d(x_k,x_l)\leq\frac{1}{k}+\widehat{d}(\xi_k,\xi_l)+\frac{1}{l}$ follows by the triangle inequality.\\
+Hence $(x_k)$ is Cauchy by Definition \ref{def:cauchy-sequence} and Theorem \ref{thm:special-sequence-limits}(i).\\
+Set $a\defeq(x_k)\in\operatorname{CS}(X)$. Then $\widehat{d}(\xi_k,[a])<\frac{1}{k}+\lim\limits_{j\to\infty}d(x_k,x_j)$ by the triangle inequality.\\
+Given $\varepsilon>0$, choose $K\in\N$ with $\frac{1}{K}<\frac{\varepsilon}{2}$ and $(\forall k,j\geq K)\,d(x_k,x_j)<\frac{\varepsilon}{2}$.\\
+For $k\geq K$, the final limit is at most $\frac{\varepsilon}{2}$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(iii). Hence $\widehat{d}(\xi_k,[a])<\varepsilon$.\\
+Thus $\xi_k\to[a]$, and $(\widehat{X},\widehat{d},\iota)$ is a completion of $(X,d)$ by Definitions \ref{def:complete-metric-space} and \ref{def:metric-completion}.
+\end{enumerate}
+\item \hlt{Uniqueness}:
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Dense-copy isometry}: Let $(Y,d_Y,\tau)$ and $(Z,d_Z,\sigma)$ be completions of $(X,d)$.\\
+If $\tau x=\tau x'$, then $d(x,x')=d_Y(\tau x,\tau x')=0$, so $x=x'$; similarly, $\sigma$ is injective.\\
+Define $\rho_0:\tau(X)\to\sigma(X)$ by $\rho_0(\tau x)\defeq\sigma x$. Iinjectivity of $\tau$ makes $\rho_0$ well defined, injectivity of $\sigma$ makes $\rho_0$ injective.\\
+The identity $\rho_0(\tau x)=\sigma x$ implies $\rho_0(\tau(X))=\sigma(X)$, so $\rho_0$ is surjective.\\
+For $x,x'\in X$, $d_Z(\rho_0(\tau x),\rho_0(\tau x'))=d(x,x')=d_Y(\tau x,\tau x')$. Hence $\rho_0$ is a bijective isometry by Definition \ref{def:isometry-and-isometric-metric-spaces}(i).
+\item \hlt{Extension}: Fix $y\in Y$. Choose $(y_n)\subseteq\tau(X)$ with $y_n\to y$ by Proposition \ref{prop:sequential-closure-criterion}.\\
+The sequence $(\rho_0(y_n))$ is Cauchy in $Z$ by the isometry property, so it converges by completeness of $Z$.\\
+Define $\Phi(y)\defeq\lim\limits_{n\to\infty}\rho_0(y_n)$. Suppose $(z_n)\subseteq\tau(X)$ also satisfies $z_n\to y$.\\
+The sequence $(\rho_0(z_n))$ is Cauchy by the isometry property and converges by completeness of $Z$.\\
+Set $p\defeq\lim\limits_{n\to\infty}\rho_0(y_n)$ and $q\defeq\lim\limits_{n\to\infty}\rho_0(z_n)$. Then $d_Z(\rho_0(y_n),\rho_0(z_n))=d_Y(y_n,z_n)\leq d_Y(y_n,y)+d_Y(y,z_n)\to0$.\\
+By triangle inequality, $d_Z(p,q)\leq d_Z(p,\rho_0(y_n))+d_Z(\rho_0(y_n),\rho_0(z_n))+d_Z(\rho_0(z_n),q)\to0$. Thus $p=q$, so $\Phi$ is well defined.
+\item \hlt{Distance preservation}: For $y,y'\in Y$, choose $(y_n),(y_n')\subseteq\tau(X)$ converging to $y,y'$, respectively.\\
+Set $u_n\defeq\rho_0(y_n)$, $v_n\defeq\rho_0(y_n')$. Inequality $\abs{d_Y(y_n,y_n')-d_Y(y,y')}\leq d_Y(y_n,y)+d_Y(y_n',y')$ implies $d_Y(y_n,y_n')\to d_Y(y,y')$.\\
+$\abs{d_Z(u_n,v_n)-d_Z(\Phi(y),\Phi(y'))}\leq d_Z(u_n,\Phi(y))+d_Z(v_n,\Phi(y'))$ by triangle inequality. Hence $d_Z(u_n,v_n)\to d_Z(\Phi(y),\Phi(y'))$.\\
+$(\forall n\in\N)\,d_Z(u_n,v_n)=d_Y(y_n,y_n')$. Hence $d_Z(\Phi(y),\Phi(y'))=d_Y(y,y')$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(i).\\
+Thus $\Phi$ is an isometry by Definition \ref{def:isometry-and-isometric-metric-spaces}(i).\\
+For $x\in X$, the constant sequence $y_n=\tau x$ in the extension satisfies $\Phi(\tau x)=\sigma x$. Hence $\Phi\circ\tau=\sigma$.
+\item \hlt{Surjectivity}: If $(\Phi(y_n))$ is Cauchy in $\Phi(Y)$, then $(y_n)$ is Cauchy in $Y$ and converges to some $y\in Y$.\\
+The identity $d_Z(\Phi(y_n),\Phi(y))=d_Y(y_n,y)\to0$ implies $\Phi(y_n)\to\Phi(y)$, so $\Phi(Y)$ is complete.\\
+Hence $\Phi(Y)$ is closed in $Z$ by Proposition \ref{prop:basic-completeness-consequences}(i).\\
+The inclusions $\sigma(X)\subseteq\Phi(Y)$ and $Z=\overline{\sigma(X)}^{\,Z}$ imply $Z\subseteq\Phi(Y)$ by Theorem \ref{thm:closure-smallest-closed-containing-set}(iii).\\
+Thus $\Phi$ is surjective; since every isometry is injective, it is bijective.
+\item \hlt{Uniqueness}: Let $\Psi:Y\to Z$ be another isometry satisfying $\Psi\circ\tau=\sigma$, and fix $y\in Y$.\\
+Choose $(y_n)\subseteq\tau(X)$ with $y_n\to y$ by Proposition \ref{prop:sequential-closure-criterion}.\\
+Then $\Phi(y_n)=\Psi(y_n)$ and $d_Z(\Phi(y),\Psi(y))\leq d_Y(y,y_n)+d_Y(y_n,y)\to0$, so $\Phi(y)=\Psi(y)$. Hence $\Phi=\Psi$.
+\end{enumerate}
+\end{enumerate}
+\hlt{Structural Commentary}: The quotient installs formal limits; density extends the copy of $X$ uniquely between completions.\\
+\hlt{Key Insight}: Cauchy classes provide existence; dense agreement forces uniqueness.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+Figure \ref{fig:metric-completion-uniqueness} summarizes the unique extension between two completions.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/metric_completion_uniqueness.tikz}
-  \caption{For completions $Y,Z$, the dense-copy isometry
-  $\sigma\tau^{-1}:\tau(X)\to\sigma(X)$ extends uniquely to
-  $\overline{\rho}:Y\cong Z$.}
+  \caption{The dense-copy isometry $\sigma\tau^{-1}$ extends uniquely to $\Phi:Y\cong Z$; adapted from \citet[Ch.~12, Fig.~12.4]{roman2008advanced}.}
   \label{fig:metric-completion-uniqueness}
-\end{figure}
+\end{illustrationfigure}
