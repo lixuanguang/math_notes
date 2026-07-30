@@ -4,9 +4,8 @@
 Let $X\subseteq\R$, $f:X\to\R$, $x_0\in\R$, $q\in\R$, $X_+\defeq X\cap(x_0,\infty)$, and $X_-\defeq X\cap(-\infty,x_0)$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $x_0$ is a limit point of $X_+$, then $f(x_0+)=q$ means $\lim_{x\to x_0}(f|_{X_+})(x)=q$.
-\item If $x_0$ is a limit point of $X_-$, then $f(x_0-)=q$ means $\lim_{x\to x_0}(f|_{X_-})(x)=q$.
-\item If $x_0$ is a limit point of $X_+$ and $X_-$, then $\lim_{x\to x_0}(f|_{X\setminus\{x_0\}})(x)$ exists iff $f(x_0+)$ and $f(x_0-)$ exist with $f(x_0+)=f(x_0-)$.
+\item If $x_0$ is a limit point of $X_+$, then $f(x_0+)=q$ means $\lim\limits_{x\to x_0}(f|_{X_+})(x)=q$.
+\item If $x_0$ is a limit point of $X_-$, then $f(x_0-)=q$ means $\lim\limits_{x\to x_0}(f|_{X_-})(x)=q$.
 \end{enumerate}
 For an interval $I$, $f:I\to\R$, and an interior discontinuity $x_0\in I^\circ$:
 \begin{enumerate}[label=(\roman*)]
@@ -18,48 +17,85 @@ For an interval $I$, $f:I\to\R$, and an interior discontinuity $x_0\in I^\circ$:
 \end{enumerate}
 \end{definition}
 
+\begin{proposition} \label{prop:two-sided-limit-from-one-sided-limits} \hlt{Two-Sided Limits from One-Sided Limits}\\
+Let $X\subseteq\R$, let $f:X\to\R$, let $x_0\in\R$, and set $X_+\defeq X\cap(x_0,\infty)$ and $X_-\defeq X\cap(-\infty,x_0)$.\\
+If $x_0$ is a limit point of both $X_+$ and $X_-$, then, for $q\in\R$, $\lim\limits_{x\to x_0}f(x)=q$ iff $f(x_0-)=f(x_0+)=q$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Assume $\lim\limits_{x\to x_0}f(x)=q$, $\varepsilon>0$. Choose $\delta>0$ such that $t\in X$ and $0<\abs{t-x_0}<\delta$ imply $\abs{f(t)-q}<\varepsilon$.\\
+Restricting this estimate to $X_+$ and $X_-$ proves $f(x_0+)=f(x_0-)=q$ by Definitions \ref{def:function-limit-metric} and \ref{def:one-sided-limits-and-discontinuities}.
+\item[$(\Leftarrow)$] Assume $f(x_0+)=f(x_0-)=q$, and fix $\varepsilon>0$. Choose $\delta_+,\delta_->0$ by the right and left limits, and set $\delta\defeq\min\{\delta_+,\delta_-\}$.\\
+If $t\in X$ and $0<\abs{t-x_0}<\delta$, then $t\in X_+\cup X_-$, so $\abs{f(t)-q}<\varepsilon$. Hence $\lim\limits_{x\to x_0}f(x)=q$ by Definition \ref{def:function-limit-metric}.
+\end{enumerate}
+\hlt{Structural Commentary}: The punctured domain splits into its right and left approach sets.\\
+\hlt{Key Insight}: A common one-sided value controls every punctured approach.
+\end{proof}
+\end{proposition}
+
 \begin{example} \label{ex:basic-discontinuity-types} \hlt{Basic Discontinuity Types}\\
-Dirichlet's function $\mathbf{1}_{\Q}$ has a discontinuity of the second kind at every point.\\
-The function $f(x)=x$ on $\Q$ and $f(x)=0$ off $\Q$ is continuous only at $0$; elsewhere its discontinuities are of the second kind. A jump in a piecewise linear function is a simple discontinuity.\\
-Use Corollary \ref{cor:rationals-and-irrationals-dense}: every interval contains rational and irrational points.
+Let $D\defeq\mathbf{1}_{\Q}$. Rational and irrational approaches have values $1$ and $0$, respectively.\\
+Thus $D$ has a second-kind discontinuity throughout $\R$ by Corollary \ref{cor:rationals-and-irrationals-dense}.\\
+Let $h(x)\defeq x$ for $x\in\Q$ and $h(x)\defeq0$ otherwise. Since $\abs{h(x)}\leq\abs{x}$, the function $h$ is continuous at $0$.\\
+At $c\neq0$, rational and irrational approaches tend to $c$ and $0$, so both one-sided limits fail.\\
+A piecewise linear function with unequal finite one-sided values has a jump and hence a first-kind discontinuity.
 \end{example}
 
-\begin{figure}[H]
-  \centering
+\noindent Figure \ref{fig:dirichlet-dense-rows} depicts both values arbitrarily near $c$, precluding either one-sided limit of $\mathbf{1}_{\Q}$.
+
+\begin{illustrationfigure}[H]
   \input{figures/analysis/dirichlet_dense_rows.tikz}
-  \caption{For $g=\mathbf{1}_{\Q}$, interval around $c$ has rational inputs value $1$ and irrational inputs value $0$.}
+  \caption{For $g=\mathbf{1}_{\Q}$, rational inputs map to $1$ and irrational inputs to $0$ in every interval about $c$.}
   \label{fig:dirichlet-dense-rows}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{definition} \label{def:monotone-real-function} \hlt{Monotone Functions}\\
 Let $f:(a,b)\to\R$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $f$ is \hlt{monotonically increasing} iff $a<x<y<b$ implies $f(x)\leq f(y)$.
-\item $f$ is \hlt{monotonically decreasing} iff $a<x<y<b$ implies $f(x)\geq f(y)$.
+\item $f$ is \hlt{monotonically increasing} iff $(\forall x,y\in(a,b))\,[x<y\Rightarrow f(x)\leq f(y)]$.
+\item $f$ is \hlt{monotonically decreasing} iff $(\forall x,y\in(a,b))\,[x<y\Rightarrow f(x)\geq f(y)]$.
 \item $f$ is \hlt{monotone} iff $f$ is monotonically increasing or monotonically decreasing.
 \end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:monotone-functions-one-sided-limits} \hlt{One-Sided Limits of Monotone Functions}\\
-If $f$ is increasing on $(a,b)$, then for every $x\in(a,b)$, $\sup\limits_{a<t<x}f(t)=f(x-)\leq f(x)\leq f(x+)=\inf\limits_{x<t<b}f(t)$.\\
-Moreover, $a<x<y<b$ implies $f(x+)\leq f(y-)$. For decreasing $f$, reverse the inequalities.
+Let $f:(a,b)\to\R$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $f$ is increasing, then $(\forall x\in(a,b))\,f(x-)=\sup\limits_{a<t<x}f(t)\leq f(x)\leq\inf\limits_{x<t<b}f(t)=f(x+)$.
+\item If $f$ is increasing, then $(\forall x,y\in(a,b))\,[x<y\Rightarrow f(x+)\leq f(y-)]$.
+\item If $f$ is decreasing, then $(\forall x\in(a,b))\,f(x-)=\inf\limits_{a<t<x}f(t)\geq f(x)\geq\sup\limits_{x<t<b}f(t)=f(x+)$.
+\item If $f$ is decreasing, then $(\forall x,y\in(a,b))\,[x<y\Rightarrow f(x+)\geq f(y-)]$.
+\end{enumerate}
 \begin{proof}
-Let $A\defeq\sup_{a<t<x}f(t)$.\\
-For every $\varepsilon>0$, choose $s<x$ with $A-\varepsilon<f(s)\leq A$; then $s<t<x$ implies $A-\varepsilon<f(t)\leq A$, so $f(x-)=A$.\\
-Let $B\defeq\inf_{x<t<b}f(t)$. For every $\varepsilon>0$, choose $s>x$ with $B\leq f(s)<B+\varepsilon$; then $x<t<s$ implies $B\leq f(t)<B+\varepsilon$, so $f(x+)=B$. If $x<y$, then $\inf_{x<t<y}f(t)\leq\sup_{x<t<y}f(t)$ gives $f(x+)\leq f(y-)$.\\
-For decreasing $f$, apply the increasing case to $-f$ and multiply the resulting inequalities by $-1$.\\
-\hlt{Structural Commentary}: Monotonicity converts one-sided limits into suprema and infima.\\
-\hlt{Key Insight}: A monotone function has jumps, but not oscillatory one-sided failure.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $x\in(a,b)$, $L_x\defeq\{f(t):a<t<x\}$, $R_x\defeq\{f(t):x<t<b\}$. Sets are nonempty as $f(\frac{a+x}{2})\in L_x$ and $f(\frac{x+b}{2})\in R_x$.\\
+Monotonicity makes $f(x)$ an upper bound of $L_x$ and a lower bound of $R_x$.\\
+Thus $A\defeq\sup L_x\in\R$ by Theorem \ref{thm:real-field-existence-lub}, and $B\defeq\inf R_x\in\R$ by Corollary \ref{cor:infimum-as-negative-supremum}.\\
+For $\varepsilon>0$, choose $s\in(a,x)$ with $A-\varepsilon<f(s)\leq A$. If $s<t<x$, then $A-\varepsilon<f(t)\leq A$, so $f(x-)=A$.\\
+Likewise, choose $u\in(x,b)$ with $B\leq f(u)<B+\varepsilon$. If $x<t<u$, then $B\leq f(t)<B+\varepsilon$, so $f(x+)=B$.\\
+Finally, $A\leq f(x)\leq B$ by monotonicity. Since $x$ was arbitrary, (i) follows.
+\item If $a<x<y<b$ and $t\defeq\frac{x+y}{2}$, then $f(x+)\leq f(t)\leq f(y-)$ by (i).
+\item Set $h\defeq-f$. Then $h$ is increasing, so its one-sided limits exist by (i).\\
+Since $f=-h$, one has $f(x\pm)=-h(x\pm)$ by Theorem \ref{thm:function-limit-algebra}. Identities in (iii) follow by (i) applied to $h$, Corollary \ref{cor:infimum-as-negative-supremum}.
+\item By (ii), $h(x+)\leq h(y-)$ whenever $x<y$. By (iii), multiplication by $-1$ establishes $f(x+)\geq f(y-)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Suprema and infima identify the increasing limits; reflection transfers both conclusions to decreasing maps.\\
+\hlt{Key Insight}: Order traps each one-sided tail at its extremal value.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:monotone-no-second-kind-discontinuities} \hlt{Monotone Functions Have No Second-Kind Discontinuities}\\
-A monotone real function on an interval has no discontinuities of the second kind.
+Let $I\subseteq\R$ be an interval and let $f:I\to\R$ be monotone. Every discontinuity at $x\in I^\circ$ is a jump, and hence is not of the second kind.
 \begin{proof}
-At every interior point, monotonicity gives both one-sided limits, so any discontinuity is of the first kind.\\
-\hlt{Structural Commentary}: Monotonicity rules out oscillatory discontinuities.\\
-\hlt{Key Insight}: All monotone discontinuities are jumps or removable value mismatches.
+Fix discontinuity $x\in I^\circ$, choose $\rho>0$ with $(x-\rho,x+\rho)\subseteq I$. Both one-sided limits of $f|_{(x-\rho,x+\rho)}$ exist by Theorem \ref{thm:monotone-functions-one-sided-limits}.\\
+They equal one-sided limits of $f$ at $x$ by Proposition \ref{prop:function-limits-are-local}, common value would equal $f(x)$ by Theorem \ref{thm:monotone-functions-one-sided-limits}(i),(iii).\\
+Then $\lim\limits_{t\to x}f(t)=f(x)$ by Proposition \ref{prop:two-sided-limit-from-one-sided-limits}. The function $f$ would be continuous at $x$ by Theorem \ref{thm:continuity-as-limit-at-limit-point}, a contradiction.\\
+Thus the one-sided limits are unequal, and $x$ is a jump by Definition \ref{def:one-sided-limits-and-discontinuities}(ii).\\
+\hlt{Structural Commentary}: Local one-sided extrema combine into continuity unless their finite values form a jump.\\
+\hlt{Key Insight}: Monotonicity leaves unequal side limits as the only discontinuity mechanism.
 \end{proof}
 \end{corollary}
 
@@ -69,10 +105,10 @@ Let $f:(a,b)\to\R$ be monotone. Then $f$ is continuous iff $f((a,b))$ is an inte
 Put $I=(a,b)$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $f$ is continuous, then $f(I)$ is connected, hence an interval.
-\item[$(\Leftarrow)$] Contrapositively, let $f$ be discontinuous at $x_0\in I$. Replace $f$ by $-f$ if needed, assume $f$ increasing.\\
-Then $f(x_0-)\leq f(x_0)\leq f(x_0+)$, and discontinuity gives $f(x_0-)<f(x_0+)$.\\
-Choose $y\in(f(x_0-),f(x_0+))\setminus\{f(x_0)\}$. Then $x<x_0$ gives $f(x)<y$, $x>x_0$,$f(x)>y$, $f(x_0)\neq y$.\\
+\item[$(\Rightarrow)$] The image $f(I)$ is connected by Theorem \ref{thm:continuous-image-connected}. It is therefore an interval by Theorem \ref{thm:connected-subsets-of-real-line-interval-property}.
+\item[$(\Leftarrow)$] Prove contrapositive. Suppose $f$ is discontinuous at $x_0\in I$. After replacing $f$ by $-f$ if necessary, assume $f$ is increasing.\\
+Reflection preserves discontinuity, interval property of image. Then $f(x_0-)<f(x_0+)$ by Corollary \ref{cor:monotone-no-second-kind-discontinuities}, Theorem \ref{thm:monotone-functions-one-sided-limits}(i).\\
+Choose $y\in(f(x_0-),f(x_0+))\setminus\{f(x_0)\}$. If $x<x_0$, then $f(x)\leq f(x_0-)<y$; if $x>x_0$, then $f(x)\geq f(x_0+)>y$; and $f(x_0)\neq y$.\\
 So $y\notin f(I)$ while $f(I)$ has values below and above $y$. Hence $f(I)$ is not an interval.
 \end{enumerate}
 \hlt{Structural Commentary}: Monotone discontinuities create image gaps.\\
@@ -80,54 +116,102 @@ So $y\notin f(I)$ while $f(I)$ has values below and above $y$. Hence $f(I)$ is n
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
+\noindent Figure \ref{fig:monotone-jump-image-gap} depicts the range gap created by a monotone jump.
+
+\begin{illustrationfigure}[H]
   \input{figures/analysis/monotone_jump_image_gap.tikz}
-  \caption{A jump of an increasing function leaves values between $f(x_0-)$ and $f(x_0+)$ out of the image; the red marker indicates such a $y\notin f(I)$, so $f(I)$ cannot be an interval.}
+  \caption{A jump of an increasing function omits $y\in(f(x_0-),f(x_0+))$ from $f(I)$, so the image is not an interval.}
   \label{fig:monotone-jump-image-gap}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:monotone-discontinuities-countable} \hlt{Monotone Discontinuities Are Countable}\\
 If $f$ is monotone on $(a,b)$, then the set of points of $(a,b)$ at which $f$ is discontinuous is at most countable.
 \begin{proof}
-Assume $f$ is increasing, and let $E$ be its discontinuity set.\\
-For each $x\in E$, Theorem \ref{thm:monotone-functions-one-sided-limits} gives $f(x-)<f(x+)$; choose $r(x)\in\Q$ with $f(x-)<r(x)<f(x+)$.\\
-If $x_1<x_2$, then $f(x_1+)\leq f(x_2-)$, so $r(x_1)\neq r(x_2)$. Thus $E$ injects into $\Q$, hence is countable by Corollary \ref{cor:rationals-countable}. If $f$ is decreasing, apply the increasing case to $-f$, which has the same discontinuity set.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Jump gaps}: Assume $f$ is increasing, $E$ be its discontinuity set. For $x\in E$, side limits unequal by Corollary \ref{cor:monotone-no-second-kind-discontinuities}.\\
+By Theorem \ref{thm:monotone-functions-one-sided-limits}(i), $f(x-)\leq f(x+)$, so $f(x-)<f(x+)$.
+\item \hlt{Canonical markers}: Fix a bijection $n\mapsto q_n$ from $\N$ onto $\Q$ by Corollary \ref{cor:rationals-countable}.\\
+For $x\in E$, the set $J_x\defeq\{n\in\N:f(x-)<q_n<f(x+)\}$ is nonempty by Corollary \ref{cor:rationals-and-irrationals-dense}.\\
+Set $m(x)\defeq\min J_x$ by Assumption \ref{assump:well-ordering-positive-integers}, and put $r(x)\defeq q_{m(x)}$.
+\item \hlt{Injection}: If $x_1,x_2\in E$ and $x_1<x_2$, then $r(x_1)<f(x_1+)\leq f(x_2-)<r(x_2)$ by Theorem \ref{thm:monotone-functions-one-sided-limits}(ii).\\
+Thus $r:E\to\Q$ is injective. The set $r(E)\subseteq\Q$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i) and Corollary \ref{cor:rationals-countable}.\\
+The corestriction $r:E\to r(E)$ is bijective, so $E$ is at most countable by Definitions \ref{def:cardinality-equivalence} and \ref{def:finite-countable-uncountable}.
+\item \hlt{Decreasing case}: If $f$ is decreasing, then $-f$ is increasing, has same discontinuity set. Result follows by increasing case.
+\end{enumerate}
 \hlt{Structural Commentary}: Each jump contains a rational marker, and monotonicity keeps the markers distinct.\\
 \hlt{Key Insight}: Countability enters by injecting discontinuities into $\Q$.
 \end{proof}
 \end{theorem}
 
-\begin{remark} \label{rem:monotone-discontinuities-need-not-be-isolated} \hlt{Monotone Discontinuities Need Not Be Isolated}\\
-For countable $E=\{x_n:n\in\N\}\subset(a,b)$ and positive summable $(c_n)$, $f(x)=\sum\limits_{x_n<x}c_n$ is increasing, has jumps of size $c_n$ at $x_n$, and is continuous off $E$. Thus monotone discontinuities may be dense.
-\end{remark}
+\begin{counterexample} \label{cex:monotone-discontinuities-need-not-be-isolated} \hlt{Dense Monotone Discontinuities}\\
+Let $a<b$. The set $\Q\cap(a,b)$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i) and Corollary \ref{cor:rationals-countable}.\\
+It is infinite by Corollary \ref{cor:rationals-and-irrationals-dense}, and hence countably infinite by Definition \ref{def:finite-countable-uncountable}. Fix a bijection $n\mapsto q_n$ from $\N$ onto $\Q\cap(a,b)$.\\
+For $N\in\N$, define $F_N:(a,b)\to\R$ by $F_N(x)\defeq\sum\limits_{n=1}^{N}2^{-n}\mathbf{1}_{(-\infty,x)}(q_n)$. Define $F:(a,b)\to\R$ by $F(x)\defeq\sup\limits_{N\in\N}F_N(x)$.\\
+The identity $\sum\limits_{n=1}^{N}2^{-n}=1-2^{-N}$ makes $\{F_N(x):N\in\N\}$ nonempty and bounded above, so $F(x)\in\R$ by Theorem \ref{thm:real-field-existence-lub}.\\
+If $x<y$, then $(\forall N\in\N)\,F_N(x)\leq F_N(y)$, so $F(x)\leq F(y)$. Thus $F$ is increasing. For $M>N$, $0\leq F_M(x)-F_N(x)\leq\sum\limits_{n=N+1}^{M}2^{-n}<2^{-N}$.\\
+Taking the supremum over $M$ proves $0\leq F(x)-F_N(x)\leq2^{-N}$. Fix $x\notin\Q$ and $\varepsilon>0$. Choose $N$ with $2^{1-N}<\varepsilon$ by Theorem \ref{thm:special-sequence-limits}(v).\\
+Choose $\delta>0$ such that $(x-\delta,x+\delta)\cap\{q_1,\ldots,q_N\}=\emptyset$. If $\abs{y-x}<\delta$, then $F_N(y)=F_N(x)$, so $\abs{F(y)-F(x)}\leq2^{1-N}<\varepsilon$.\\
+Hence $F$ continuous at $x$. Fix $k\in\N$, $\varepsilon>0$. Choose $N\geq k$ with $2^{1-N}<\varepsilon$. Choose $\delta>0$ such that $(q_k-\delta,q_k+\delta)\cap\{q_1,\ldots,q_N\}=\{q_k\}$.\\
+If $q_k-\delta<y<q_k$, then $F_N(y)=F_N(q_k)$; if $q_k<y<q_k+\delta$, then $F_N(y)=F_N(q_k)+2^{-k}$.\\
+The tail bound therefore proves $F(q_k-)=F(q_k)$ and $F(q_k+)=F(q_k)+2^{-k}$.\\
+Thus the discontinuity set of $F$ is $\Q\cap(a,b)$, which is dense by Corollary \ref{cor:rationals-and-irrationals-dense}. This countable set has no isolated points.
+\end{counterexample}
 
 \begin{definition} \label{def:extended-real-function-limits} \hlt{Extended Limits and Limits at Infinity}\\
-Neighborhoods of $+\infty$ are intervals $(c,+\infty)$; neighborhoods of $-\infty$ are $(-\infty,c)$.\\
-For $f:E\to\R$ and extended real $A,x$, $f(t)\to A$ as $t\to x$ means: every neighborhood $U$ of $A$ contains $f(t)$ for all punctured $t\in E$ sufficiently near $x$, i.e. $\exists V\ni x$ such that $t\in V\cap E,\ t\neq x$ $\Longrightarrow$ $f(t)\in U$.\\
-For real $A,x$, this agrees with Definition \ref{def:function-limit-metric}.\\
-\hlt{Structural Commentary}: Extended limits use same neighborhood test, $\pm\infty$ allowed as input or output limits.
+On $\overline{\R}$ from Definition \ref{def:extended-real-number-system}, retain the usual neighborhoods at finite points.\\
+For $c\in\R$, take $(c,+\infty]$ and $[-\infty,c)$ as basic neighborhoods of $+\infty$ and $-\infty$, respectively.\\
+Let $E\subseteq\R$, let $f:E\to\R$, let $x\in\overline{\R}$ be a limit point of $E$, and let $A\in\overline{\R}$.\\
+The notation $f(t)\to A$ as $t\to x$ means $(\forall U\ni A)(\exists V\ni x)(\forall t\in(V\cap E)\setminus\{x\})\,f(t)\in U$.\\
+Here $U$ and $V$ range over neighborhoods in $\overline{\R}$. If $A,x\in\R$, this agrees with Definition \ref{def:function-limit-metric}.\\
+\hlt{Key Insight}: The same neighborhood test permits $\pm\infty$ as input or output limits.
 \end{definition}
 
+\noindent Figure \ref{fig:reciprocal-cubic-one-sided-limits} depicts the opposite extended side limits of $x^{-3}$ at $0$.
+
+\begin{visualizationfigure}[H]
+  \centering
+  \input{figures/analysis/reciprocal_cubic_one_sided_limits.tikz}
+  \caption{Qualitative dimensionless plot: a positive vertical rescaling of $y=x^{-3}$ tends to $-\infty$ as $x\to0^-$ and to $+\infty$ as $x\to0^+$.}
+  \label{fig:reciprocal-cubic-one-sided-limits}
+\end{visualizationfigure}
+
 \begin{theorem} \label{thm:extended-limit-algebra} \hlt{Algebra of Extended Limits}\\
-Let $f,g:E\to\R$ and $f(t)\to A$, $g(t)\to B$ as $t\to x$, with $A,B,x$ extended real. Then, whenever RHS is defined:
+Let $E\subseteq\R$, let $x\in\overline{\R}$ be a limit point of $E$, and let $f,g:E\to\R$ satisfy $f(t)\to A$ and $g(t)\to B$ as $t\to x$, where $A,B\in\overline{\R}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item if $f(t)\to A'$ as $t\to x$, then $A'=A$;
-\item $(f+g)(t)\to A+B$;
-\item $(fg)(t)\to AB$;
-\item $(f/g)(t)\to A/B$;
+\item if $A'\in\overline{\R}$ and $f(t)\to A'$ as $t\to x$, then $A'=A$;
+\item if $A+B$ is defined by ordinary real arithmetic or Definition \ref{def:extended-real-arithmetic-conventions}, then $(f+g)(t)\to A+B$;
+\item if $AB$ is defined by ordinary real arithmetic or Definition \ref{def:extended-real-arithmetic-conventions}, then $(fg)(t)\to AB$;
+\item if $A,B\in\R$ and $B\neq0$, then $\frac{f(t)}{g(t)}\to\frac{A}{B}$ on the domain where $g(t)\neq0$.
 \end{enumerate}
-The forms $\infty-\infty$, $0\cdot\infty$, $\infty/\infty$, and $A/0$ are undefined.
+Theorem makes no claim for $(+\infty)+(-\infty)$, $0(\pm\infty)$, product of two infinite factors, zero denominator, or quotient involving $\pm\infty$.
 \begin{proof}
+For $C\defeq A\star B$, define $\mathcal{P}_\star(A,B,C)\defeq(\forall W\ni C)(\exists U\ni A)(\exists V\ni B)\,(U\cap\R)\star(V\cap\R)\subseteq W$.\\
+If $A,B\in\R$, the addition property follows from $\abs{(u+v)-(A+B)}\leq\abs{u-A}+\abs{v-B}$.\\
+The product property follows from $\abs{uv-AB}\leq\abs{u}\abs{v-B}+\abs{B}\abs{u-A}$ by taking $u$ near $A$ and $v$ near $B$.\\
+For $B\neq0$, restrict to $\abs{v}\geq\frac{\abs{B}}{2}$ and use $\abs{\frac{u}{v}-\frac{A}{B}}\leq\frac{\abs{u-A}}{\abs{v}}+\frac{\abs{A}\abs{v-B}}{\abs{v}\abs{B}}$. Thus the quotient property holds with $0\notin V$.\\
+If $A+B=+\infty$ and $W\ni+\infty$, choose $c\in\R$ with $(c,+\infty]\subseteq W$. Choose $\alpha<A$ and $\beta<B$ in $\R$ with $\alpha+\beta>c$.\\
+For $U=(\alpha,+\infty]$ and $V=(\beta,+\infty]$, one has $(U\cap\R)+(V\cap\R)\subseteq(c,+\infty]\subseteq W$. The case $A+B=-\infty$ is symmetric.\\
+If $AB=\pm\infty$, exactly one factor is infinite and the other is finite and nonzero by Definition \ref{def:extended-real-arithmetic-conventions}.\\
+Let $d$ be the finite factor, and restrict its neighboring values $v$ by $vd>0$ and $\abs{v}\geq\frac{\abs{d}}{2}$.\\
+For a target tail with threshold $c$, restrict the infinite factor to the required sign and $\abs{u}>\frac{2(\abs{c}+1)}{\abs{d}}$; then $uv$ lies in that tail.\\
+Thus $\mathcal{P}_\star(A,B,C)$ holds in (ii)--(iv).
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $A'\neq A$, choose disjoint neighborhoods $U$ of $A$ and $U'$ of $A'$. The two limits give a common neighborhood $V$ of $x$ such that $t\in V\cap E,\ t\neq x$ implies $f(t)\in U\cap U'$, a contradiction.
-\item For any neighborhood $W$ of $A+B$, definedness gives neighborhoods $U$ of $A$ and $V$ of $B$ such that $u+v\in W$ for $u\in U$, $v\in V$. Apply the two limits in a common punctured neighborhood of $x$.
-\item The same neighborhood argument applies to multiplication, excluding $0\cdot\infty$.
-\item Apply it to division; since $B\neq0$, choose the neighborhood of $B$ away from $0$.
+\item If $A'\neq A$, choose disjoint neighborhoods $U$ of $A$ and $U'$ of $A'$.\\
+By $f(t)\to A$, choose a neighborhood $P$ of $x$ with $f((P\cap E)\setminus\{x\})\subseteq U$.\\
+By $f(t)\to A'$, choose a neighborhood $P'$ of $x$ with $f((P'\cap E)\setminus\{x\})\subseteq U'$.\\
+Since $x$ is a limit point of $E$, $(P\cap P'\cap E)\setminus\{x\}\neq\emptyset$, contradicting $U\cap U'=\emptyset$.
+\item Let $W$ be a neighborhood of $A+B$, and choose $U,V$ by $\mathcal{P}_+(A,B,A+B)$.\\
+By $f(t)\to A$, choose a neighborhood $P$ of $x$ with $f((P\cap E)\setminus\{x\})\subseteq U$.\\
+By $g(t)\to B$, choose a neighborhood $Q$ of $x$ with $g((Q\cap E)\setminus\{x\})\subseteq V$. Then $(f+g)(t)\in W$ on $(P\cap Q\cap E)\setminus\{x\}$.
+\item Let $W$ be a neighborhood of $AB$, and choose $U,V$ by $\mathcal{P}_\cdot(A,B,AB)$.\\
+Intersecting the corresponding approach neighborhoods produces a punctured neighborhood on which $(fg)(t)\in W$.
+\item Let $W$ be a neighborhood of $\frac{A}{B}$, and choose $U,V$ by $\mathcal{P}_{\mathrm{div}}(A,B,\frac{A}{B})$, with $0\notin V$.\\
+Intersecting the corresponding approach neighborhoods produces a punctured neighborhood on which $g(t)\neq0$ and $\frac{f(t)}{g(t)}\in W$.
 \end{enumerate}
-\hlt{Structural Commentary}: Extended limit algebra is ordinary limit algebra in neighborhood form.\\
-\hlt{Key Insight}: The undefined forms are exactly where neighborhood control breaks.
+\hlt{Structural Commentary}: Operation-compatible neighborhoods transfer two input tails, while disjoint neighborhoods force uniqueness.\\
+\hlt{Key Insight}: Finite sign separation controls every defined infinite product and excludes the indeterminate cases.
 \end{proof}
 \end{theorem}
