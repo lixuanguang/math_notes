@@ -1,334 +1,429 @@
 \subsection{Differentiation and Basic Theorems}
 
-% **Role:** calculus as local linearization plus global geometric integration.
+% **Role:** one-variable differentiation as local linearization and a source of global estimates.
 %
-% Derivatives, MVT, Taylor theorem, Riemann integration, FTC, improper integrals.
+% Derivatives, mean-value theorems, inverse differentiation, and Taylor approximation.
 
-One-variable calculus studies functions on intervals through derivatives, mean-value theorems, Riemann integration, and the FTC, then points toward vector-valued estimates and linear approximation.
+This subsection develops the derivative as a relative-domain limit and first-order approximation.\\
+It then derives algebraic, mean-value, inverse, higher-order, and vector-valued consequences.
 
-\begin{definition} \label{def:derivative-real-function}\label{def:one-variable-differentiation-core-source-todo} \hlt{Derivative of a Real Function}\\
-Let $f$ be real-valued on $[a,b]$ and let $x\in[a,b]$. For $a<t<b$ and $t\neq x$, set $\phi_x(t)\defeq\frac{f(t)-f(x)}{t-x}$.\\
-If $\lim_{t\to x}\phi_x(t)$ exists, denote \hlt{derivative} by $f'(x)$; then $f$ is \hlt{differentiable at $x$}.\\
-If this holds for every $x\in E\subseteq[a,b]$, then $f$ is \hlt{differentiable on $E$}.
+\begin{definition} \label{def:derivative-real-function} \hlt{Derivative of a Real Function}\\
+Let $X\subseteq\R$, let $f:X\to\R$, and let $x_0\in X^{\operatorname{acc}}$. Define $\phi_{x_0}:X\setminus\{x_0\}\to\R$ by $\phi_{x_0}(x)\defeq\frac{f(x)-f(x_0)}{x-x_0}$.\\
+If limit exists, define $f'(x_0)\defeq\lim\limits_{x\to x_0}\phi_{x_0}(x)$ as \hlt{derivative at $x_0$ relative to $X$}. Map $f$ is then \hlt{differentiable at $x_0$ relative to $X$}.\\
+For $E\subseteq X^{\operatorname{acc}}$, $f$ is \hlt{differentiable on $E$ relative to $X$} $\Longleftrightarrow(\forall x\in E)\,f'(x)$ exists relative to $X$.
 \end{definition}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/one_variable_domain_restriction.tikz}
-  \caption{Domain matters: isolated points give no punctured approach; $[x_0,\infty)$ gives a right-hand one.}
-  \label{fig:one-variable-domain-restriction}
-\end{figure}
-
 \begin{perspective} \label{per:one-variable-domain-of-differentiability} \hlt{Derivative Depends on the Domain}\\
-For $f:X\to\R$, $f'(x_0)$ is the limit of $\frac{f(x)-f(x_0)}{x-x_0}$ as $x\to x_0$ in $X\setminus\{x_0\}$; see Definition \ref{def:function-limit-metric}. Hence $x_0$ must be a limit point of $X$: isolated points give no derivative, while half-interval domains give one-sided derivatives.
+The punctured approach set $X\setminus\{x_0\}$ determines the derivative in Definition \ref{def:derivative-real-function}.\\
+Interior interval points produce two-sided derivatives, whereas interval endpoints produce one-sided derivatives.\\
+The limit-point hypothesis excludes isolated points.
 \end{perspective}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:one-variable-domain-restriction} contrasts an isolated point with a half-line endpoint.\\
+Only the endpoint admits a punctured approach within its displayed domain.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/one_variable_domain_restriction.tikz}
+  \caption{Left: $x_0$ is isolated. Right: $X=[x_0,\infty)$ permits right-sided approach to $x_0$.}
+  \label{fig:one-variable-domain-restriction}
+\end{illustrationfigure}
+
+\noindent Figure \ref{fig:derivative-secant-to-tangent} represents a difference quotient by a secant slope. Its limiting value is the tangent slope $f'(x)$.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/derivative_secant_to_tangent.tikz}
-  \caption{The derivative is the limiting slope of secant lines through $(x,f(x))$.}
+  \caption{The secant through $(x,f(x))$ and $(t,f(t))$ has slope $\frac{f(t)-f(x)}{t-x}$; its limit is $f'(x)$.}
   \label{fig:derivative-secant-to-tangent}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{proposition} \label{prop:one-variable-first-order-approximation} \hlt{First-Order Approximation Form}\\
-Let $X\subseteq\R$, let $x_0\in X$ be a limit point, let $f:X\to\R$, and let $L\in\R$. Then $f'(x_0)=L$ relative to $X$ iff $\forall \varepsilon>0$ $\exists \delta>0$ such that $\abs{f(x)-f(x_0)-L(x-x_0)}\leq \varepsilon\abs{x-x_0}$ whenever $x\in X$ and $\abs{x-x_0}<\delta$.
+Let $X\subseteq\R$, let $x_0\in X^{\operatorname{acc}}$, let $f:X\to\R$, and let $L\in\R$. Set $R_L(x)\defeq f(x)-f(x_0)-L(x-x_0)$.\\
+Then $f'(x_0)=L$ $\Longleftrightarrow(\forall\varepsilon>0)(\exists\delta>0)(\forall x\in X\setminus\{x_0\})\,[\abs{x-x_0}<\delta\Longrightarrow\abs{R_L(x)}<\varepsilon\abs{x-x_0}]$.
 \begin{proof}
-For $x\neq x_0$, $\frac{\abs{f(x)-f(x_0)-L(x-x_0)}}{\abs{x-x_0}} = \abs{\frac{f(x)-f(x_0)}{x-x_0}-L}$, while $x=x_0$ makes approx. estimate automatic.
+For $x\in X\setminus\{x_0\}$, $\frac{\abs{R_L(x)}}{\abs{x-x_0}}=\abs{\frac{f(x)-f(x_0)}{x-x_0}-L}$.
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $f'(x_0)=L$, then the displayed right-hand side is at most $\varepsilon$ for all $x\in X\setminus\{x_0\}$ sufficiently near $x_0$. Multiplying by $\abs{x-x_0}$ gives the approximation estimate.
-\item[$(\Leftarrow)$] If the approximation estimate holds, then division by $\abs{x-x_0}$ gives $\abs{\frac{f(x)-f(x_0)}{x-x_0}-L}\leq\varepsilon$ for all $x\in X\setminus\{x_0\}$ sufficiently near $x_0$. Hence $f'(x_0)=L$.
+\item[$(\Rightarrow)$] Assume $f'(x_0)=L$, $\varepsilon>0$. On some punctured $\delta$-neighborhood, the right-hand side is less than $\varepsilon$ by Definition \ref{def:derivative-real-function}.\\
+Multiplication by $\abs{x-x_0}$ proves the estimate.
+\item[$(\Leftarrow)$] Assume the estimate, and $\varepsilon>0$. Choose $\delta>0$ satisfying the estimate by the hypothesis.\\
+Division by $\abs{x-x_0}$ makes right-hand side less than $\varepsilon$ on same punctured neighborhood. Hence $f'(x_0)=L$ by Definition \ref{def:derivative-real-function}.
 \end{enumerate}
-\hlt{Structural Commentary}: Differentiability is first-order linear approximation.\\
-\hlt{Key Insight}: Multiply or divide by $\abs{x-x_0}$.
+\hlt{Structural Commentary}: The two directions rescale the same remainder by $\abs{x-x_0}$.\\
+\hlt{Key Insight}: The normalized first-order error is the derivative-limit error.
 \end{proof}
 \end{proposition}
 
-\begin{theorem} \label{thm:differentiable-implies-continuous}\label{thm:one-variable-differentiation-main-source-todo} \hlt{Differentiability Implies Continuity}\\
-If $f$ is differentiable at $x$, then $f$ is continuous at $x$.
+\begin{theorem} \label{thm:differentiable-implies-continuous} \hlt{Differentiability Implies Continuity}\\
+Let $X\subseteq\R$, let $x_0\in X^{\operatorname{acc}}$, and let $f:X\to\R$. If $f$ is differentiable at $x_0$ relative to $X$, then $f$ is continuous at $x_0$.
 \begin{proof}
-For $t\neq x$, $f(t)-f(x)=\frac{f(t)-f(x)}{t-x}(t-x)$. As $t\to x$, the difference quotient tends to $f'(x)$ and $t-x\to0$.\\
-By Theorem \ref{thm:function-limit-algebra}, $f(t)-f(x)\to0$, so $f(t)\to f(x)$. Theorem \ref{thm:continuity-as-limit-at-limit-point} gives continuity at $x$.\\
-\hlt{Structural Commentary}: A differentiable function has first-order control near the point.\\
-\hlt{Key Insight}: The quotient stays near a finite number while $t-x$ shrinks to zero.
+For $t\in X\setminus\{x_0\}$, $f(t)-f(x_0)=\frac{f(t)-f(x_0)}{t-x_0}(t-x_0)$. Factors tend to $f'(x_0)$ and $0$, so $f(t)-f(x_0)\to0$ by Theorem \ref{thm:function-limit-algebra}(ii).\\
+Thus $f(t)\to f(x_0)$ by Theorem \ref{thm:function-limit-algebra}(i), and continuity holds by Theorem \ref{thm:continuity-as-limit-at-limit-point}.\\
+\hlt{Structural Commentary}: Limit algebra transfers difference-quotient convergence to the function increment.\\
+\hlt{Key Insight}: A finite quotient multiplied by a vanishing increment tends to zero.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:derivative-algebra-rules} \hlt{Algebra Rules for Derivatives}\\
-Let $f,g$ be differentiable at $x$.
+Let $X\subseteq\R$, let $x_0\in X^{\operatorname{acc}}$, and let $f,g:X\to\R$ be differentiable at $x_0$ relative to $X$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $f+g$ is differentiable at $x$, and $(f+g)'(x)=f'(x)+g'(x)$.
-\item $fg$ is differentiable at $x$, and $(fg)'(x)=f'(x)g(x)+f(x)g'(x)$.
-\item If $g(x)\neq0$, then $f/g$ is differentiable at $x$, and $\left(\frac{f}{g}\right)'(x)=\frac{g(x)f'(x)-g'(x)f(x)}{g(x)^2}$.
+\item $(f+g)'(x_0)=f'(x_0)+g'(x_0)$.
+\item $(fg)'(x_0)=f'(x_0)g(x_0)+f(x_0)g'(x_0)$.
+\item If $g(x_0)\neq0$, then $\left(\frac{f}{g}\right)'(x_0)=\frac{g(x_0)f'(x_0)-f(x_0)g'(x_0)}{g(x_0)^2}$.
 \end{enumerate}
 \begin{proof}
+For $h\in\{f,g\}$ and $t\in X\setminus\{x_0\}$, set $Q_h(t)\defeq\frac{h(t)-h(x_0)}{t-x_0}$; then $Q_h(t)\to h'(x_0)$ as $t\to x_0$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Limit algebra applied to $\frac{(f+g)(t)-(f+g)(x)}{t-x}=\frac{f(t)-f(x)}{t-x}+\frac{g(t)-g(x)}{t-x}$ gives the sum rule.
-\item For $h=fg$, $h(t)-h(x)=f(t)(g(t)-g(x))+g(x)(f(t)-f(x))$. Divide by $t-x$ and let $t\to x$.\\
-Theorem \ref{thm:differentiable-implies-continuous} gives $f(t)\to f(x)$, hence the product rule.
-\item If $h=f/g$, continuity of $g$ gives $g(t)\neq0$ near $x$, and $\frac{h(t)-h(x)}{t-x}=\frac{1}{g(t)g(x)}\left[g(x)\frac{f(t)-f(x)}{t-x}-f(x)\frac{g(t)-g(x)}{t-x}\right]$.\\
-Let $t\to x$ to get the quotient rule.
+\item Since $Q_{f+g}=Q_f+Q_g$, the sum rule holds by Theorem \ref{thm:function-limit-algebra}(i).
+\item The identity $Q_{fg}(t)=f(t)Q_g(t)+g(x_0)Q_f(t)$ holds.\\
+The limit $f(t)\to f(x_0)$ holds by Theorem \ref{thm:differentiable-implies-continuous}, so the product rule follows by Theorem \ref{thm:function-limit-algebra}(i),(ii).
+\item Assume $g(x_0)\neq0$. Then $g(t)\neq0$ near $x_0$ by Theorem \ref{thm:differentiable-implies-continuous} and the assumption.\\
+On this punctured neighborhood, $Q_{f/g}(t)=\frac{g(x_0)Q_f(t)-f(x_0)Q_g(t)}{g(t)g(x_0)}$. The quotient rule follows by Theorem \ref{thm:function-limit-algebra}(i)--(iii).
 \end{enumerate}
-\hlt{Structural Commentary}: Product and quotient rules are difference-quotient identities plus continuity.\\
-\hlt{Key Insight}: Difference-quotient identities plus continuity give the algebra rules.
+\hlt{Structural Commentary}: Difference-quotient identities reduce all three claims to limit algebra and continuity.\\
+\hlt{Key Insight}: Expand increments before passing to their limits.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:chain-rule-one-variable} \hlt{Chain Rule}\\
-Let $f$ be differentiable at $x$ and let $g$ be differentiable at $f(x)$.\\
-If $h=g\circ f$, then $h$ is differentiable at $x$ and $h'(x)=g'(f(x))f'(x)$.
-\begin{proof} Set $y=f(x)$. For $u(t)\to0$, $f(t)-f(x)=(t-x)(f'(x)+u(t))$.\\
-For $v(s)\to0$, $g(s)-g(y)=(s-y)(g'(y)+v(s))$.\\
-Since $f(t)\to y$, for $t\neq x$, $\frac{h(t)-h(x)}{t-x}=(g'(y)+v(f(t)))(f'(x)+u(t))\to g'(y)f'(x)$.\\
-\hlt{Structural Commentary}: Differentiate by composing first-order expansions.\\
-\hlt{Key Insight}: First-order parts multiply; errors vanish.
+Let $X,Y\subseteq\R$, $f:X\to Y$, $g:Y\to\R$, $x_0\in X^{\operatorname{acc}}$. Set $y_0\defeq f(x_0)$ and assume $y_0\in Y^{\operatorname{acc}}$.\\
+If $f'(x_0)$ and $g'(y_0)$ exist relative to $X$ and $Y$, then $(g\circ f)'(x_0)=g'(y_0)f'(x_0)$ relative to $X$.
+\begin{proof}
+Define $u:X\to\R$ by $u(x_0)\defeq0$ and $u(t)\defeq\frac{f(t)-f(x_0)}{t-x_0}-f'(x_0)$ for $t\neq x_0$.\\
+Define $v:Y\to\R$ by $v(y_0)\defeq0$ and $v(s)\defeq\frac{g(s)-g(y_0)}{s-y_0}-g'(y_0)$ for $s\neq y_0$. Then $u(t)\to0$ and $v(s)\to0$ by Definition \ref{def:derivative-real-function}.\\
+The limit $f(t)\to y_0$ holds by Theorem \ref{thm:differentiable-implies-continuous}. The definition $v(y_0)=0$ and punctured limit $v(s)\to0$ therefore imply $v(f(t))\to0$.\\
+For $t\in X\setminus\{x_0\}$, $\frac{g(f(t))-g(f(x_0))}{t-x_0}=\bigl(g'(y_0)+v(f(t))\bigr)\bigl(f'(x_0)+u(t)\bigr)$. Right-hand side tends to $g'(y_0)f'(x_0)$ by Theorem \ref{thm:function-limit-algebra}(i),(ii).\\
+\hlt{Structural Commentary}: Composed first-order expansions reduce the derivative to a product of two limit factors.\\
+\hlt{Key Insight}: The linear terms multiply while both normalized remainders vanish.
 \end{proof}
 \end{theorem}
 
 \begin{example} \label{ex:oscillatory-derivative-examples} \hlt{Oscillation at a Point}\\
-Assuming the usual derivative of $\sin x$, define
-\begin{align}
-f_1(x)=
+Assume the usual derivative of $\sin$, and define $f_1,f_2:\R\to\R$ by
+\begin{align*}
+f_1(x)&=
 \begin{cases}
-x\sin(1/x),&x\neq0,\\
+x\sin(\frac{1}{x}),&x\neq0,\\
 0,&x=0,
-\end{cases}
-\qquad
-f_2(x)=
+\end{cases}\\
+f_2(x)&=
 \begin{cases}
-x^2\sin(1/x),&x\neq0,\\
+x^2\sin(\frac{1}{x}),&x\neq0,\\
 0,&x=0.
 \end{cases}
-\nonumber
-\end{align}
-For $f_1$, the quotient at $0$ is $\sin(1/t)$, so $f_1'(0)$ does not exist. For $f_2$, $\abs{(f_2(t)-f_2(0))/t}\leq\abs{t}$, so $f_2'(0)=0$.\\
-However, for $x\neq0$, $f_2'(x)=2x\sin(1/x)-\cos(1/x)$, so $f_2'$ is not continuous at $0$.
+\end{align*}
+Quotient $\frac{f_1(t)-f_1(0)}{t}=\sin(\frac{1}{t})$ has no limit, so $f_1'(0)$ does not exist. Since $\abs{\frac{f_2(t)-f_2(0)}{t}}\leq\abs{t}$, $f_2'(0)=0$.\\
+For $x\neq0$, $f_2'(x)=2x\sin(\frac{1}{x})-\cos(\frac{1}{x})$. Along $x_n=(2\pi n)^{-1}$ and $y_n=((2n+1)\pi)^{-1}$, $f_2'(x_n)=-1$ and $f_2'(y_n)=1$.\\
+Thus $f_2$ is differentiable at $0$, but $f_2'$ is not continuous there.
 \end{example}
 
 \begin{definition} \label{def:local-extrema} \hlt{Local Extrema}\\
-Let $f$ be a real-valued function on a metric space $X$. The function has a \hlt{local maximum} at $p\in X$ if there is $\delta>0$ such that $f(q)\leq f(p)$ whenever $d(p,q)<\delta$. Local minima are defined by reversing the inequality.
+Let $(X,d)$ be a metric space, let $f:X\to\R$, and let $p\in X$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The map $f$ has a \hlt{local maximum at $p$} $\Longleftrightarrow(\exists\delta>0)(\forall q\in X)\,[d(p,q)<\delta\Longrightarrow f(q)\leq f(p)]$.
+\item The map $f$ has a \hlt{local minimum at $p$} $\Longleftrightarrow(\exists\delta>0)(\forall q\in X)\,[d(p,q)<\delta\Longrightarrow f(q)\geq f(p)]$.
+\end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:local-versus-global-extrema} \hlt{Local and Global Extrema}\\
-Global extrema are local, but local extrema depend on domain: isolated points are automatic extrema. Derivative tests therefore need an interior interval point; compactness supplies global extrema (Theorem \ref{thm:extreme-value-theorem-compact}).
+Every global extremum is local, whereas every isolated domain point is both a local maximum and minimum.\\
+Derivative tests therefore require an interior interval point.\\
+Continuous real maps on nonempty compact spaces attain global extrema by Theorem \ref{thm:extreme-value-theorem-compact}.
 \end{remark}
 
 \begin{theorem} \label{thm:interior-extremum-derivative-zero} \hlt{Interior Extremum Has Zero Derivative}\\
-If $f$ has a local extremum at $x\in(a,b)$ and $f'(x)$ exists, then $f'(x)=0$.
+Let $a<b$, $f:(a,b)\to\R$, $x\in(a,b)$. If $f$ has a local extremum at $x$ and is differentiable there, then $f'(x)=0$.
 \begin{proof}
-For a local maximum, $f(t)\leq f(x)$ near $x$.\\
-Thus the quotient $(f(t)-f(x))/(t-x)$ is nonnegative for $t<x$ and nonpositive for $t>x$. Since the two-sided limit exists, $f'(x)\geq0$ and $f'(x)\leq0$, so $f'(x)=0$. For a local minimum, apply the local-maximum case to $-f$.\\
-Since $(-f)'(x)=-f'(x)$, we get $-f'(x)=0$, hence $f'(x)=0$.\\
-\hlt{Structural Commentary}: Interior extrema force opposite one-sided quotient signs.\\
-\hlt{Key Insight}: A two-sided derivative compatible with both signs must be zero.
+At a local maximum, $\frac{f(t)-f(x)}{t-x}\geq0$ for $t<x$ near $x$ and $\frac{f(t)-f(x)}{t-x}\leq0$ for $t>x$ near $x$.\\
+The derivative limit therefore satisfies $f'(x)\geq0$ and $f'(x)\leq0$, so $f'(x)=0$. At a local minimum, $-f$ has a local maximum.\\
+The identity $(-f)'(x)=-f'(x)$ holds by Definition \ref{def:derivative-real-function}, so $f'(x)=0$ by the maximum case.\\
+\hlt{Structural Commentary}: The two approach sides impose opposite sign bounds on the same derivative limit.\\
+\hlt{Key Insight}: A two-sided limit compatible with both quotient signs must be zero.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:rolles-theorem-one-variable} \hlt{Rolle's Theorem}\\
-If $f:[a,b]\to\R$ continuous on $[a,b]$, differentiable on $(a,b)$, and $f(a)=f(b)$, then $\exists x\in(a,b)$ s.t. $f'(x)=0$.
+Let $a<b$ and let $f:[a,b]\to\R$ be continuous on $[a,b]$ and differentiable on $(a,b)$. If $f(a)=f(b)$, then $(\exists x\in(a,b))\,f'(x)=0$.
 \begin{proof}
-If $f$ is constant, any $x\in(a,b)$ works. Otherwise, by Theorem \ref{thm:extreme-value-theorem-compact}, $f$ attains a nonendpoint extremum at some $x\in(a,b)$. Theorem \ref{thm:interior-extremum-derivative-zero} gives $f'(x)=0$.\\
-\hlt{Structural Commentary}: Equal endpoints force any nonconstant height change to turn around inside.\\
-\hlt{Key Insight}: Compactness gives the extremum; differentiability makes the interior extremum stationary.
+If $f$ is constant, $f'(\frac{a+b}{2})=0$ by Definition \ref{def:derivative-real-function}. Otherwise, $[a,b]$ is compact by Theorem \ref{thm:heine-borel-rk}.\\
+The map $f$ attains a maximum and a minimum by Theorem \ref{thm:extreme-value-theorem-compact}.\\
+At least one extremal value differs from $f(a)=f(b)$, so its attaining point $x$ lies in $(a,b)$. Then $f'(x)=0$ by Theorem \ref{thm:interior-extremum-derivative-zero}.\\
+\hlt{Structural Commentary}: Compactness supplies extrema, and equal endpoint values force a nonconstant extremum into the interior.\\
+\hlt{Key Insight}: An interior attained extremum is stationary.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:cauchy-mean-value-theorem} \hlt{Cauchy Mean Value Theorem}\\
-Let $f,g$ be continuous on $[a,b]$, differentiable on $(a,b)$. $\exists$ $x\in(a,b)$, $\bigl(f(b)-f(a)\bigr)g'(x)=\bigl(g(b)-g(a)\bigr)f'(x)$.
+Let $a<b$, $f,g:[a,b]\to\R$ be continuous on $[a,b]$, differentiable on $(a,b)$. Then $(\exists x\in(a,b))\,\bigl(f(b)-f(a)\bigr)g'(x)=\bigl(g(b)-g(a)\bigr)f'(x)$.
 \begin{proof}
-Set $h(t)\defeq\bigl(f(b)-f(a)\bigr)g(t)-\bigl(g(b)-g(a)\bigr)f(t)$.\\
-Then $h(a)=h(b)$, $h$ is continuous on $[a,b]$, and $h$ is differentiable on $(a,b)$. By Theorem \ref{thm:rolles-theorem-one-variable}, $h'(x)=0$ for some $x\in(a,b)$. Since $h'(x)=\bigl(f(b)-f(a)\bigr)g'(x)-\bigl(g(b)-g(a)\bigr)f'(x)$, the identity follows.\\
-\hlt{Structural Commentary}: Build one auxiliary function whose endpoint values agree.\\
-\hlt{Key Insight}: Equal endpoints force an interior horizontal tangent.
+Set $h(t)\defeq\bigl(f(b)-f(a)\bigr)g(t)-\bigl(g(b)-g(a)\bigr)f(t)$; then $h(b)-h(a)=0$. The map $h$ is continuous on $[a,b]$ by Theorem \ref{thm:continuous-algebra-and-components}(i).\\
+It is differentiable on $(a,b)$ by Theorem \ref{thm:derivative-algebra-rules}(i),(ii). Choose $x\in(a,b)$ with $h'(x)=0$ by Theorem \ref{thm:rolles-theorem-one-variable}.\\
+Since $h'(x)=\bigl(f(b)-f(a)\bigr)g'(x)-\bigl(g(b)-g(a)\bigr)f'(x)$, the claimed identity follows.\\
+\hlt{Structural Commentary}: A determinant-like linear combination converts the desired identity into Rolle's endpoint condition.\\
+\hlt{Key Insight}: Cancel the endpoint increments before differentiating.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\begin{corollary} \label{cor:mean-value-theorem} \hlt{Mean Value Theorem}\\
+Let $a<b$, $f:[a,b]\to\R$ be continuous on $[a,b]$ and differentiable on $(a,b)$. Then $(\exists x\in(a,b))\,f(b)-f(a)=(b-a)f'(x)$.
+\begin{proof}
+Set $g(t)\defeq t$. Then $g'(x)=1$ and $g(b)-g(a)=b-a$. Choose $x\in(a,b)$ with $f(b)-f(a)=(b-a)f'(x)$ by Theorem \ref{thm:cauchy-mean-value-theorem}.\\
+\hlt{Structural Commentary}: Specializing Cauchy's auxiliary comparison to the identity map isolates the secant increment.\\
+\hlt{Key Insight}: The identity map converts Cauchy's relation into slope equality.
+\end{proof}
+\end{corollary}
+
+\noindent Figure \ref{fig:mean-value-secant-tangent} depicts Corollary \ref{cor:mean-value-theorem}. The tangent at an interior point $c$ is parallel to the endpoint secant.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/mean_value_secant_tangent.tikz}
   \caption{The Mean Value Theorem finds an interior tangent slope equal to the endpoint secant slope.}
   \label{fig:mean-value-secant-tangent}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{corollary} \label{cor:mean-value-theorem} \hlt{Mean Value Theorem}\\
-If $f$ is continuous on $[a,b]$, differentiable in $(a,b)$, then $\exists$ $x\in(a,b)$ such that $f(b)-f(a)=(b-a)f'(x)$.
+\begin{corollary} \label{cor:bounded-derivative-lipschitz-one-variable} \hlt{Lipschitz Control from a Bounded Derivative}\\
+Let $a<b$, let $M\geq0$, and let $f:[a,b]\to\R$ be continuous on $[a,b]$ and differentiable on $(a,b)$. If $(\forall t\in(a,b))\,\abs{f'(t)}\leq M$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall x,y\in[a,b])\,\abs{f(y)-f(x)}\leq M\abs{y-x}$;
+\item $f$ is uniformly continuous on $[a,b]$.
+\end{enumerate}
 \begin{proof}
-Let $g(t)=t$. Then $g'(x)=1$, $g(b)-g(a)=b-a$.\\
-Hence Theorem \ref{thm:cauchy-mean-value-theorem} gives $f(b)-f(a)=(b-a)f'(x)$ for some $x\in(a,b)$.\\
-\hlt{Structural Commentary}: This is Cauchy's theorem with $g(t)=t$.\\
-\hlt{Key Insight}: A secant slope is achieved as a tangent slope somewhere inside.
-\end{proof}
-\end{corollary}
-
-\begin{corollary} \label{cor:bounded-derivative-lipschitz-one-variable} \hlt{Bounded Derivative Gives Lipschitz Control}\\
-If $f:[a,b]\to\R$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $\abs{f'}\leq M$ on $(a,b)$, then $f$ is $M$-Lipschitz on $[a,b]$, hence uniformly continuous.
-\begin{proof}
-For $x<y$, Corollary \ref{cor:mean-value-theorem} gives $f(y)-f(x)=(y-x)f'(c)$ for some $c\in(x,y)$,\\
-so $\abs{f(y)-f(x)}\leq M(y-x)$. Symmetry handles $x>y$, and $x=y$ is trivial.\\
-\hlt{Structural Commentary}: A derivative bound controls every secant slope.\\
-\hlt{Key Insight}: Local slope bounds become global Lipschitz bounds through the Mean Value Theorem.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $x<y$, choose $c\in(x,y)$ with $f(y)-f(x)=(y-x)f'(c)$ by Corollary \ref{cor:mean-value-theorem}.\\
+Hence $\abs{f(y)-f(x)}\leq M\abs{y-x}$. Interchanging $x,y$ covers $x>y$, and $x=y$ is immediate.
+\item Given $\varepsilon>0$, set $\delta\defeq\frac{\varepsilon}{M+1}$. For $x,y\in[a,b]$, $\abs{x-y}<\delta$ implies $\abs{f(x)-f(y)}\leq M\abs{x-y}<\varepsilon$ by (i).
+\end{enumerate}
+\hlt{Structural Commentary}: The mean-value identity transfers the derivative bound to secants, which supplies a uniform modulus.\\
+\hlt{Key Insight}: One global slope bound controls every pair of points.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:derivative-sign-monotonicity} \hlt{Derivative Sign and Monotonicity}\\
-Suppose $f$ is differentiable in $(a,b)$.
+Let $a<b$ and let $f:(a,b)\to\R$ be differentiable.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $f'(x)\geq0$ for all $x\in(a,b)$, then $f$ is monotonically increasing.
-\item If $f'(x)=0$ for all $x\in(a,b)$, then $f$ is constant.
-\item If $f'(x)\leq0$ for all $x\in(a,b)$, then $f$ is monotonically decreasing.
+\item If $(\forall x\in(a,b))\,f'(x)\geq0$, then $f$ is monotonically increasing.
+\item If $(\forall x\in(a,b))\,f'(x)=0$, then $f$ is constant.
+\item If $(\forall x\in(a,b))\,f'(x)\leq0$, then $f$ is monotonically decreasing.
 \end{enumerate}
-\begin{proof} For $x_1<x_2$ in $(a,b)$, Corollary \ref{cor:mean-value-theorem} on $[x_1,x_2]$ gives $f(x_2)-f(x_1)=(x_2-x_1)f'(c)$ for some $c\in(x_1,x_2)$.
+\begin{proof}
+Fix $x_1,x_2\in(a,b)$ with $x_1<x_2$. The map $f$ is continuous on $[x_1,x_2]$ by Theorem \ref{thm:differentiable-implies-continuous}.\\
+Choose $c\in(x_1,x_2)$ with $f(x_2)-f(x_1)=(x_2-x_1)f'(c)$ by Corollary \ref{cor:mean-value-theorem}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $f'\geq0$, then $f(x_2)-f(x_1)\geq0$.
 \item If $f'=0$, then $f(x_2)-f(x_1)=0$.
 \item If $f'\leq0$, then $f(x_2)-f(x_1)\leq0$.
 \end{enumerate}
-\hlt{Structural Commentary}: Monotonicity is a global reading of the mean-value identity.\\
-\hlt{Key Insight}: The sign of every tangent slope controls every secant slope.
+\hlt{Structural Commentary}: The mean-value identity transfers each derivative-sign hypothesis to every ordered pair.\\
+\hlt{Key Insight}: Tangent-sign control becomes secant-sign control.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:derivatives-have-intermediate-value-property} \hlt{Derivatives Have the Intermediate Value Property}\\
-If $f$ is differentiable on $[a,b]$ in the one-sided endpoint sense and $f'(a)<\lambda<f'(b)$,\\
-Then $f'(x)=\lambda$ for some $x\in(a,b)$. The same conclusion holds when $f'(b)<\lambda<f'(a)$.
+Let $a<b$, $f:[a,b]\to\R$ be differentiable relative to $[a,b]$. If $\lambda\in\R$ and $\bigl(f'(a)-\lambda\bigr)\bigl(f'(b)-\lambda\bigr)<0$, then $(\exists x\in(a,b))\,f'(x)=\lambda$.
 \begin{proof}
-Set $g(t)=f(t)-\lambda t$. Since $g'(a)<0<g'(b)$, there are $t_1,t_2\in(a,b)$ with $g(t_1)<g(a)$ and $g(t_2)<g(b)$. Hence the minimum of $g$ on $[a,b]$ occurs at some $x\in(a,b)$. By Theorem \ref{thm:interior-extremum-derivative-zero}, $0=g'(x)=f'(x)-\lambda$.\\
-Apply the same argument to $-f$ for the reversed case.\\
-\hlt{Structural Commentary}: A derivative need not be continuous, but it cannot jump over values.\\
-\hlt{Key Insight}: Tilt the graph by subtracting $\lambda t$ and force an interior extremum.
+The transformation $(f,\lambda)\mapsto(-f,-\lambda)$ interchanges the endpoint orders and preserves the conclusion.\\
+It therefore suffices to assume $f'(a)<\lambda<f'(b)$. Set $g(t)\defeq f(t)-\lambda t$. Then $g'(a)<0<g'(b)$ by Definition \ref{def:derivative-real-function}.\\
+Choose $t_1,t_2\in(a,b)$ with $g(t_1)<g(a)$, $g(t_2)<g(b)$ by two endpoint derivative limits. Map $g$ is continuous on $[a,b]$ by Theorem \ref{thm:differentiable-implies-continuous}.\\
+The interval $[a,b]$ is compact by Theorem \ref{thm:heine-borel-rk}, so $g$ attains a minimum by Theorem \ref{thm:extreme-value-theorem-compact}.\\
+Neither endpoint is a minimizer, so a minimizer $x$ lies in $(a,b)$. Then $0=g'(x)=f'(x)-\lambda$ by Theorem \ref{thm:interior-extremum-derivative-zero}.\\
+\hlt{Structural Commentary}: Linear tilting turns the target derivative value into an interior-minimum condition.\\
+\hlt{Key Insight}: Opposite endpoint slopes force the tilted minimum away from both endpoints.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/sliding_secant_darboux_derivative.tikz}
-  \caption{Sliding fixed-width secants in Darboux's theorem.}
-  \label{fig:sliding-secant-darboux-derivative}
-\end{figure}
-
 \begin{perspective} \label{per:sliding-secant-proof-of-darboux} \hlt{Sliding Secants}\\
-For fixed small $h>0$, the secant-slope function $\sigma_h(x)\defeq \frac{f(x+h)-f(x)}{h}$ is continuous. Thus Theorem \ref{thm:intermediate-value-theorem} finds intermediate secant slopes, and Corollary \ref{cor:mean-value-theorem} converts them to derivative values.\\
-\hlt{Key Insight}: Slide secants, then apply the Mean Value Theorem.
+Let $f,\lambda$ be as in Theorem \ref{thm:derivatives-have-intermediate-value-property}, and fix $0<h<b-a$. Define $\sigma_h:[a,b-h]\to\R$ by $\sigma_h(x)\defeq\frac{f(x+h)-f(x)}{h}$.\\
+Map $f$ is continuous by Theorem \ref{thm:differentiable-implies-continuous}. Thus $\sigma_h$ is continuous by Theorems \ref{thm:continuous-composition} and \ref{thm:continuous-algebra-and-components}(i).\\
+As $h\to0^+$, $\sigma_h(a)\to f'(a)$ and $\sigma_h(b-h)\to f'(b)$. For sufficiently small $h$, $\lambda$ lies strictly between these endpoint values.\\
+Choose $x\in(a,b-h)$ with $\lambda=\sigma_h(x)$ by Theorem \ref{thm:intermediate-value-theorem}. Choose $c\in(x,x+h)$ with $\lambda=f'(c)$ by Corollary \ref{cor:mean-value-theorem}.\\
+\hlt{Key Insight}: Slide a fixed-width secant, then convert its slope to a tangent slope.
 \end{perspective}
 
+\noindent Figure \ref{fig:sliding-secant-darboux-derivative} illustrates the fixed-width secants in the preceding perspective.\\
+Their horizontal separation remains $h$ while the base point moves.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/sliding_secant_darboux_derivative.tikz}
+  \caption{Fixed-width secants slide across the graph while retaining horizontal separation $h$.}
+  \label{fig:sliding-secant-darboux-derivative}
+\end{illustrationfigure}
+
 \begin{corollary} \label{cor:derivatives-no-simple-discontinuities} \hlt{Derivatives Have No Simple Discontinuities}\\
-If $f$ is differentiable on $[a,b]$, then $f'$ cannot have a simple discontinuity on $[a,b]$.
+Let $a<b$, $f:[a,b]\to\R$ be differentiable relative to $[a,b]$. Then $f'$ has no simple discontinuity in $(a,b)$.
 \begin{proof}
-Suppose a simple discontinuity occurs at an interior point $c$; endpoint cases are one-sided.\\
-If $f'(c-)\neq f'(c+)$, choose $\lambda$ strictly between these limits, $\lambda\neq f'(c)$. For $x<c<y$ close to $c$, Theorem \ref{thm:derivatives-have-intermediate-value-property} gives $z\in(x,y)$ with $f'(z)=\lambda$, contradicting the one-sided limits. If $f'(c-)=f'(c+)=L\neq f'(c)$, choose $\lambda$ between $L$ and $f'(c)$ and apply the same theorem on a sufficiently small one-sided interval with endpoint $c$.\\
-\hlt{Structural Commentary}: Darboux behavior rules out jump discontinuities for derivatives.\\
-\hlt{Key Insight}: Derivatives may oscillate, but they do not jump.
+Fix $c\in(a,b)$, let $L$ be either existing one-sided limit $f'(c-)$ or $f'(c+)$. If $L\neq f'(c)$, choose $\lambda$ strictly between them.\\
+The function $f'$ remains strictly on the $L$-side of $\lambda$ in some one-sided neighborhood of $c$ by Definition \ref{def:one-sided-limits-and-discontinuities}.\\
+Fix $x$ in that neighborhood. The endpoint derivatives of restriction to the segment with endpoints $x,c$ are $f'(x)$ and $f'(c)$.\\
+Choose $z$ strictly between $x$ and $c$ with $f'(z)=\lambda$ by Theorem \ref{thm:derivatives-have-intermediate-value-property}, a contradiction.\\
+Thus every existing one-sided limit of $f'$ at $c$ equals $f'(c)$. If $c$ a simple discontinuity, both one-sided limits exist by Definition \ref{def:one-sided-limits-and-discontinuities}.\\
+Then $f'(t)\to f'(c)$ by Proposition \ref{prop:two-sided-limit-from-one-sided-limits}. Thus $f'$ would be continuous at $c$ by Theorem \ref{thm:continuity-as-limit-at-limit-point}.\\
+\hlt{Structural Commentary}: Darboux interpolation forces each existing one-sided derivative limit to equal the central derivative.\\
+\hlt{Key Insight}: Any gap from $f'(c)$ would force the forbidden value arbitrarily nearby.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:inverse-function-derivative-one-variable} \hlt{Derivative of an Inverse Function}\\
-Let $f:I\to\R$ be one-to-one on an open interval $I$, let $x_0\in I$, and put $y_0=f(x_0)$. Suppose $f$ is differentiable at $x_0$, $f'(x_0)\neq0$, and $g=f^{-1}:f(I)\to I$ is continuous at $y_0$. Then $g$ is differentiable at $y_0$ and $g'(y_0)=\frac{1}{f'(x_0)}$.
+Let $I\subseteq\R$ be an open interval, $f:I\to\R$ be injective, $x_0\in I$. Set $y_0\defeq f(x_0)$ and $g\defeq f^{-1}:f(I)\to I$.\\
+If $f'(x_0)$ exists and is nonzero and $g$ is continuous at $y_0$, then $g'(y_0)=\frac{1}{f'(x_0)}$ relative to $f(I)$.
 \begin{proof}
-For $y\in f(I)$ with $y\neq y_0$, write $x=g(y)$. Then $x\neq x_0$ and $\frac{g(y)-g(y_0)}{y-y_0} =\frac{x-x_0}{f(x)-f(x_0)} =\left(\frac{f(x)-f(x_0)}{x-x_0}\right)^{-1}$.\\
-As $y\to y_0$, the assumed continuity of $g$ gives $x=g(y)\to x_0$.\\
-The difference quotient for $f$ tends to $f'(x_0)\neq0$, so the reciprocal tends to $1/f'(x_0)$ by Theorem \ref{thm:function-limit-algebra}.\\
-\hlt{Structural Commentary}: Matched inverse quotients are reciprocal.\\
-\hlt{Key Insight}: Continuity of the inverse converts the limit $y\to y_0$ back into $x\to x_0$.
+Choose $(x_n)\subseteq I\setminus\{x_0\}$ with $x_n\to x_0$. Then $f(x_n)\to y_0$ by Theorem \ref{thm:differentiable-implies-continuous}, and $f(x_n)\neq y_0$ by injectivity.\\
+Thus $y_0\in f(I)^{\operatorname{acc}}$. For $y\in f(I)\setminus\{y_0\}$, set $x\defeq g(y)$. Then $\frac{g(y)-g(y_0)}{y-y_0}=\frac{x-x_0}{f(x)-f(x_0)}=\left(\frac{f(x)-f(x_0)}{x-x_0}\right)^{-1}$.\\
+As $y\to y_0$, continuity of $g$ implies $x=g(y)\to x_0$. The reciprocal therefore tends to $\frac{1}{f'(x_0)}$ by Theorem \ref{thm:function-limit-algebra}(iii).\\
+\hlt{Structural Commentary}: Inverse continuity transports the input limit, while injectivity makes the matched quotients reciprocal.\\
+\hlt{Key Insight}: Exchange input and output increments before taking the limit.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:one-dimensional-inverse-function-theorem} \hlt{One-Dimensional Inverse Function Theorem}\\
-If $f:(a,b)\to(c,d)$ is a differentiable bijection and $f'\neq0$,\\
-then $f$ is a homeomorphism and $f^{-1}$ is differentiable, with $(f^{-1})'(y)=\frac{1}{f'(f^{-1}(y))}$.
+Let $a<b$, $c<d$, $f:(a,b)\to(c,d)$ be a differentiable bijection. Assume $(\forall x\in(a,b))\,f'(x)\neq0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The map $f$ is a homeomorphism.
+\item The inverse $g\defeq f^{-1}$ is differentiable and satisfies $(\forall y\in(c,d))\,g'(y)=\frac{1}{f'(g(y))}$.
+\end{enumerate}
 \begin{proof}
-By Theorem \ref{thm:derivatives-have-intermediate-value-property}, $f'$ has constant sign. Corollary \ref{cor:mean-value-theorem} makes $f$ strictly monotone, hence its continuous interval inverse is continuous. Apply Theorem \ref{thm:inverse-function-derivative-one-variable} pointwise.\\
-\hlt{Structural Commentary}: Darboux gives constant sign; the inverse derivative formula is local.\\
-\hlt{Key Insight}: Nonvanishing derivative is the one-dimensional obstruction to differentiating the inverse.
+The derivative $f'$ has constant sign by Theorem \ref{thm:derivatives-have-intermediate-value-property} and the nonvanishing hypothesis. Fix $x_1,x_2\in(a,b)$ with $x_1<x_2$.\\
+Choose $\xi\in(x_1,x_2)$ with $f(x_2)-f(x_1)=(x_2-x_1)f'(\xi)$ by Corollary \ref{cor:mean-value-theorem}. Hence $f$ is strictly monotone.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The inverse $g:(c,d)\to(a,b)$ is monotone, and its image is the interval $(a,b)$.\\
+Thus $g$ is continuous by Theorem \ref{thm:monotone-continuity-interval-image}. The map $f$ is continuous by Theorem \ref{thm:differentiable-implies-continuous}, so $f$ is a homeomorphism.
+\item Fix $y\in(c,d)$ and set $x\defeq g(y)$. Then $g'(y)=\frac{1}{f'(x)}=\frac{1}{f'(g(y))}$ by Theorem \ref{thm:inverse-function-derivative-one-variable}.
+\end{enumerate}
+\hlt{Structural Commentary}: Darboux fixes the derivative sign, monotonicity controls the inverse, and the local quotient formula finishes.\\
+\hlt{Key Insight}: A nonvanishing derivative prevents both turning and reciprocal-quotient failure.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:lhospital-one-sided} \hlt{L'Hospital's Rule}\\
-Let $-\infty\leq a<b\leq+\infty$, let $f,g$ be differentiable on $(a,b)$, assume $g'\neq0$, and suppose $\frac{f'}{g'}\to A\in\overline{\R}$ as $x\to a^+$.
+Let $-\infty\leq a<b\leq+\infty$, $A\in\overline{\R}$, $f,g:(a,b)\to\R$ be differentiable. Assume $(\forall x\in(a,b))\,g'(x)\neq0$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $f,g\to0$ as $x\to a^+$, then $\frac{f}{g}\to A$ as $x\to a^+$.
-\item If $|g|\to\infty$ as $x\to a^+$, then $\frac{f}{g}\to A$ as $x\to a^+$.
+\item If $\frac{f'(x)}{g'(x)}\to A$ and $f(x),g(x)\to0$ as $x\to a^+$, then $\frac{f(x)}{g(x)}\to A$.
+\item If $\frac{f'(x)}{g'(x)}\to A$ and $\abs{g(x)}\to+\infty$ as $x\to a^+$, then $\frac{f(x)}{g(x)}\to A$.
+\item If $\frac{f'(x)}{g'(x)}\to A$ as $x\to b^-$, the conclusions in (i)--(ii) hold with $b^-$ in place of $a^+$.
 \end{enumerate}
-The analogous statements hold as $x\to b^-$.
-\begin{proof} For $a<r<s<b$, Theorem \ref{thm:cauchy-mean-value-theorem} gives $t\in(r,s)$ with $\frac{f(s)-f(r)}{g(s)-g(r)}=\frac{f'(t)}{g'(t)}$, so eventual bounds on $\frac{f'}{g'}$ near $a$ transfer to these difference quotients.
+\begin{proof}
+The derivative $g'$ has constant sign by Theorem \ref{thm:derivatives-have-intermediate-value-property} and the nonvanishing hypothesis.\\
+For $r<s$, choose $t\in(r,s)$ with $g(s)-g(r)=(s-r)g'(t)$ by Corollary \ref{cor:mean-value-theorem}. Hence $g$ is strictly monotone.\\
+For $a<r<s<b$, set $Q(r,s)\defeq\frac{f(s)-f(r)}{g(s)-g(r)}$. Choose $t\in(r,s)$ with $Q(r,s)=\frac{f'(t)}{g'(t)}$ by Theorem \ref{thm:cauchy-mean-value-theorem}.\\
+For (i)--(ii), every eventual order bound on $\frac{f'}{g'}$ near $a$ also holds for $Q(r,s)$ when $r,s$ are sufficiently near $a$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Fix $s$ and let $r\to a^+$; since $f(r),g(r)\to0$, the same bounds hold for $\frac{f(s)}{g(s)}$.
-\item Fix $s$ near $a$ and use $\frac{f(r)}{g(r)}=\frac{f(r)-f(s)}{g(r)-g(s)}\frac{g(r)-g(s)}{g(r)}+\frac{f(s)}{g(r)}$.\\
-As $r\to a^+$, the second factor tends to $1$ and the last term to $0$, so the same bounds hold for $\frac{f(r)}{g(r)}$.
+\item After restricting to a smaller right-neighborhood of $a$, $g\neq0$ by strict monotonicity and $g(x)\to0$.\\
+Fix $s$ there and let $r\to a^+$. Then $Q(r,s)\to\frac{f(s)}{g(s)}$.\\
+Each tightened eventual bound for $\frac{f'}{g'}$ therefore transfers to $\frac{f(s)}{g(s)}$. Thus $\frac{f(x)}{g(x)}\to A$ by Definition \ref{def:extended-real-function-limits}.
+\item The limit $\abs{g(r)}\to+\infty$ makes $g(r)\neq0$ near $a$. Fix $s$ sufficient near $a$.\\
+For $r\in(a,s)$, $\frac{f(r)}{g(r)}=Q(r,s)\frac{g(r)-g(s)}{g(r)}+\frac{f(s)}{g(r)}$.\\
+As $r\to a^+$, the second factor tends to $1$ and the last term tends to $0$.\\
+For finite $A$, use a half-width interval; for $A=\pm\infty$, use a farther ray threshold.\\
+Each tightened bound remains inside prescribed neighborhood after these perturbations. Thus $\frac{f(r)}{g(r)}\to A$ by Definition \ref{def:extended-real-function-limits}.
+\item Define $F(u)\defeq f(-u)$ and $G(u)\defeq g(-u)$ on $(-b,-a)$. Then $\frac{F'(u)}{G'(u)}=\frac{f'(-u)}{g'(-u)}$.\\
+The left-endpoint conclusions for $F,G$ hold by (i)--(ii) and translate to the stated limits as $x\to b^-$.
 \end{enumerate}
-In both cases, the transferred eventual bounds force $\frac{f}{g}\to A$.\\
-\hlt{Structural Commentary}: CMVT transfers derivative-quotient bounds to function quotients.\\
-\hlt{Key Insight}: Bounds on $f'/g'$ force the same limit for $f/g$.
+\hlt{Structural Commentary}: Cauchy's quotient identity transfers derivative bounds; endpoint limits remove or dominate the base terms.\\
+\hlt{Key Insight}: Control every two-point quotient before sending one endpoint to the boundary.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/reciprocal_cubic_one_sided_limits.tikz}
-  \caption{For $f(x)=x^{-3}$, the one-sided limits at $0$ are opposite infinities.}
-  \label{fig:reciprocal-cubic-one-sided-limits}
-\end{figure}
-
 \begin{definition} \label{def:higher-derivatives} \hlt{Higher Derivatives}\\
-If $f$ has derivative $f'$ on an interval and $f'$ is differentiable, then $(f')'$ is denoted $f''$ and called the \hlt{second derivative}. Continuing recursively gives $f^{(n)}$, the derivative of order $n$.
+Let $I\subseteq\R$ be an interval and let $f:I\to\R$. Set $f^{(0)}\defeq f$.\\
+For $n\in\N$, define $f^{(n)}\defeq\bigl(f^{(n-1)}\bigr)'$ relative to $I$ whenever this derivative exists on $I$.\\
+The map $f$ is \hlt{$n$ times differentiable} on $I$ $\Longleftrightarrow(\forall j\in\{1,\ldots,n\})\,f^{(j)}$ exists on $I$.
 \end{definition}
 
 \begin{definition} \label{def:smoothness-classes-one-variable} \hlt{Smoothness Classes}\\
-On an interval, $C^0$ means continuous, $C^r$ means $f^{(r)}$ exists and continuous, $C^\infty$ means $C^r$ for every finite $r$.
+Let $I\subseteq\R$ be an interval.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $C^0(I)$ is the class of continuous maps $f:I\to\R$.
+\item For $r\geq1$, $C^r(I)$ is the class of $r$ times differentiable maps $f:I\to\R$ with $f^{(r)}$ continuous.
+\item $C^\infty(I)\defeq\bigcap\limits_{r=0}^{\infty}C^r(I)$ is the class of \hlt{smooth} maps on $I$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:higher-order-leibniz-product-rule} \hlt{Higher-Order Leibniz Product Rule}\\
-Let $r\geq1$, and $f,g:(a,b)\to\R$ be $r$ times differentiable. Then $\forall x\in(a,b)$, $(fg)^{(r)}(x)=\sum\limits_{k=0}^{r}\binom{r}{k}f^{(k)}(x)g^{(r-k)}(x)$.
-\begin{proof} Induct on $r$. For $r=1$, this is the product rule in Theorem \ref{thm:derivative-algebra-rules}. Assume the formula holds at order $r$.\\
-If $f,g$ are $(r+1)$ times differentiable, differentiating gives $(fg)^{(r+1)}=\sum\limits_{k=0}^{r}\binom{r}{k}f^{(k+1)}g^{(r-k)}+\sum\limits_{k=0}^{r}\binom{r}{k}f^{(k)}g^{(r-k+1)}$.\\
-Reindex the first sum by $j=k+1$; the coefficient of $f^{(j)}g^{(r+1-j)}$ is $\binom{r}{j-1}+\binom{r}{j}=\binom{r+1}{j}$, with the endpoint terms $j=0,r+1$ equal to $1$.\\
-\hlt{Structural Commentary}: Differentiating shifts one derivative from the total count onto $f$ or $g$.\\
-\hlt{Key Insight}: Pascal's identity produces the binomial coefficients.
+Let $a<b$, $r\in\N$, $f,g:(a,b)\to\R$ be $r$ times differentiable. Then $(\forall x\in(a,b))\,(fg)^{(r)}(x)=\sum\limits_{k=0}^{r}\binom{r}{k}f^{(k)}(x)g^{(r-k)}(x)$.
+\begin{proof}
+For $r=1$, formula holds by Theorem \ref{thm:derivative-algebra-rules}(ii). Assume it holds at order $r$, $f,g$ be $(r+1)$ times differentiable.\\
+The differentiated identity is $(fg)^{(r+1)}=\sum\limits_{k=0}^{r}\binom{r}{k}f^{(k+1)}g^{(r-k)}+\sum\limits_{k=0}^{r}\binom{r}{k}f^{(k)}g^{(r-k+1)}$ by Theorem \ref{thm:derivative-algebra-rules}(ii).\\
+After reindexing the first sum by $j=k+1$, the coefficient of $f^{(j)}g^{(r+1-j)}$ is $\binom{r}{j-1}+\binom{r}{j}=\binom{r+1}{j}$.\\
+The endpoint coefficients at $j=0,r+1$ are $1$, so the order-$(r+1)$ formula follows.\\
+\hlt{Structural Commentary}: Differentiation creates two shifted sums, and reindexing aligns their common derivative orders.\\
+\hlt{Key Insight}: Pascal's identity merges the two coefficient contributions.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:taylor-theorem-lagrange-remainder} \hlt{Taylor's Theorem with Lagrange Remainder}\\
-Let $f:[a,b]\to\R$, let $n\geq1$, suppose $f^{(n-1)}$ is continuous on $[a,b]$, and suppose $f^{(n)}$ exists on $(a,b)$.\\
-For distinct $\alpha,\beta\in[a,b]$, set $P(t)\defeq\sum\limits_{k=0}^{n-1}\frac{f^{(k)}(\alpha)}{k!}(t-\alpha)^k$.\\
-Then for some $x$ between $\alpha$ and $\beta$, $f(\beta)=P(\beta)+\frac{f^{(n)}(x)}{n!}(\beta-\alpha)^n$.
+Let $a<b$, $n\in\N$, $f:[a,b]\to\R$, $f^{(n-1)}$ continuous on $[a,b]$, $\exists$ $f^{(n)}$ on $(a,b)$. For distinct $\alpha,\beta\in[a,b]$, $J_{\alpha,\beta}\defeq(\min\{\alpha,\beta\},\max\{\alpha,\beta\})$.\\
+Define $P(t)\defeq\sum\limits_{k=0}^{n-1}\frac{f^{(k)}(\alpha)}{k!}(t-\alpha)^k$. Then $(\exists x\in J_{\alpha,\beta})\,f(\beta)=P(\beta)+\frac{f^{(n)}(x)}{n!}(\beta-\alpha)^n$.
 \begin{proof}
-Choose $M$ so that $f(\beta)=P(\beta)+M(\beta-\alpha)^n$, and set $G(t)\defeq f(t)-P(t)-M(t-\alpha)^n$.\\
-Then $G(\alpha)=G'(\alpha)=\cdots=G^{(n-1)}(\alpha)=G(\beta)=0$. Repeated applications of Corollary \ref{cor:mean-value-theorem} give $G^{(n)}(x)=0$ for some $x$ between $\alpha$ and $\beta$. Since $G^{(n)}(x)=f^{(n)}(x)-n!M$, the formula follows.\\
-\hlt{Structural Commentary}: The auxiliary error vanishes at $\beta$ and to order $n-1$ at $\alpha$.\\
-\hlt{Key Insight}: Repeated Rolle-style arguments turn endpoint cancellation into a precise remainder.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Normalization}: Set $M\defeq\frac{f(\beta)-P(\beta)}{(\beta-\alpha)^n}$ and $G(t)\defeq f(t)-P(t)-M(t-\alpha)^n$.
+\item \hlt{Endpoint cancellation}: For $0\leq j\leq n-1$, $P^{(j)}(\alpha)=f^{(j)}(\alpha)$, so $G^{(j)}(\alpha)=0$. Identity $G(\beta)=0$ holds by definition of $M$.
+\item \hlt{Iterated Rolle step}: Set $c_0\defeq\beta$ and $J(u,v)\defeq(\min\{u,v\},\max\{u,v\})$.\\
+For $0\leq j<n$, $G^{(j)}$ is continuous on $[a,b]$ by the regularity hypotheses and Theorem \ref{thm:differentiable-implies-continuous}.\\
+It is differentiable on $(a,b)$ by the regularity hypotheses. Fix $0\leq j<n$ with $G^{(j)}(c_j)=G^{(j)}(\alpha)=0$.\\
+Choose $c_{j+1}\in J(\alpha,c_j)$ with $G^{(j+1)}(c_{j+1})=0$ by Theorem \ref{thm:rolles-theorem-one-variable}. This recursion reaches $c_n\in J_{\alpha,\beta}$.
+\item \hlt{Remainder identification}: For $x\defeq c_n$, $0=G^{(n)}(x)=f^{(n)}(x)-n!M$. Thus $M=\frac{f^{(n)}(x)}{n!}$, which is the claimed formula.
+\end{enumerate}
+\hlt{Structural Commentary}: Endpoint cancellation feeds an $n$-step Rolle chain whose last zero identifies the normalized remainder.\\
+\hlt{Key Insight}: Force the error to vanish once at $\beta$ and $n$ times at $\alpha$.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:vector-valued-derivative-one-variable} \hlt{Vector-Valued Derivative}\\
-For $\mathbf{f}:[a,b]\to\R^k$, set $\mathbf{f}'(x)=\mathbf{L}$ when $\lim\limits_{t\to x}\norm{\frac{\mathbf{f}(t)-\mathbf{f}(x)}{t-x}-\mathbf{L}}_2=0$.\\
-For $\mathbf{f}=(f_1,\ldots,f_k)$, this is equivalent to componentwise differentiability, with $\mathbf{f}'(x)=(f_1'(x),\ldots,f_k'(x))$.
+Let $k\in\N$, $X\subseteq\R$, $x_0\in X^{\operatorname{acc}}$, $\mathbf{f}:X\to\R^k$. For $\mathbf{L}\in\R^k$ and $t\in X\setminus\{x_0\}$, set $\mathbf{q}_{\mathbf{L}}(t)\defeq\frac{\mathbf{f}(t)-\mathbf{f}(x_0)}{t-x_0}-\mathbf{L}$.\\
+Then $\mathbf{f}'(x_0)=\mathbf{L}$ relative to $X$ means $\lim\limits_{t\to x_0}\norm{\mathbf{q}_{\mathbf{L}}(t)}_2=0$.
 \end{definition}
 
-\begin{theorem} \label{thm:vector-valued-mean-value-inequality} \hlt{Vector-Valued Mean Value Inequality}\\
-If $\mathbf{f}:[a,b]\to\R^k$ is continuous on $[a,b]$ and differentiable on $(a,b)$.\\
-Then for some $x\in(a,b)$, $\norm{\mathbf{f}(b)-\mathbf{f}(a)}_2\leq (b-a)\norm{\mathbf{f}'(x)}_2$.
+\begin{proposition} \label{prop:vector-derivative-componentwise} \hlt{Componentwise Characterization of the Vector Derivative}\\
+Let $k\in\N$, $X\subseteq\R$, $\mathbf{f}=(f_1,\ldots,f_k):X\to\R^k$, $x_0\in X^{\operatorname{acc}}$. Let $\mathbf{L}=(L_1,\ldots,L_k)\in\R^k$; all derivatives are relative to $X$.\\
+Then $\mathbf{f}'(x_0)=\mathbf{L}$ $\Longleftrightarrow(\forall i\in\{1,\ldots,k\})\,f_i'(x_0)=L_i$.
 \begin{proof}
-Set $\mathbf{z}\defeq\mathbf{f}(b)-\mathbf{f}(a)$ and $\varphi(t)\defeq\mathbf{z}\cdot\mathbf{f}(t)$.\\
-Corollary \ref{cor:mean-value-theorem} gives $\varphi(b)-\varphi(a)=(b-a)\varphi'(x)=(b-a)\mathbf{z}\cdot\mathbf{f}'(x)$ for some $x\in(a,b)$. Since $\varphi(b)-\varphi(a)=\norm{\mathbf{z}}_2^2$, Theorem \ref{thm:cauchy-schwarz-inequality} gives $\norm{\mathbf{z}}_2^2\leq(b-a)\norm{\mathbf{z}}_2\norm{\mathbf{f}'(x)}_2$, and the result follows by cancellation, with $\mathbf{z}=0$ trivial.\\
-\hlt{Structural Commentary}: A scalar projection yields the vector norm bound.\\
-\hlt{Key Insight}: Project onto the displacement vector, then use Schwarz to return to norms.
+For $t\in X\setminus\{x_0\}$, set $\mathbf{q}(t)\defeq\frac{\mathbf{f}(t)-\mathbf{f}(x_0)}{t-x_0}-\mathbf{L}$.
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $\norm{\mathbf{q}(t)}_2\to0$, then $(\forall i\in\{1,\ldots,k\})\,\abs{q_i(t)}\leq\norm{\mathbf{q}(t)}_2\to0$. Hence $(\forall i\in\{1,\ldots,k\})\,f_i'(x_0)=L_i$ by Definition \ref{def:derivative-real-function}.
+\item[$(\Leftarrow)$] If $(\forall i\in\{1,\ldots,k\})\,q_i(t)\to0$, then $\norm{\mathbf{q}(t)}_2\leq\sqrt{k}\max\limits_{1\leq i\leq k}\abs{q_i(t)}\to0$. Hence $\mathbf{f}'(x_0)=\mathbf{L}$ by Definition \ref{def:vector-valued-derivative-one-variable}.
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate bounds compare the vector quotient error with its finitely many scalar errors.\\
+\hlt{Key Insight}: Finite-dimensional norm convergence is exactly coordinatewise convergence.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:vector-valued-mean-value-inequality} \hlt{Vector-Valued Mean Value Inequality}\\
+Let $k\in\N$, $a<b$, $\mathbf{f}:[a,b]\to\R^k$ be continuous on $[a,b]$, differentiable on $(a,b)$. Then $(\exists x\in(a,b))\,\norm{\mathbf{f}(b)-\mathbf{f}(a)}_2\leq(b-a)\norm{\mathbf{f}'(x)}_2$.
+\begin{proof}
+Set $\mathbf{z}\defeq\mathbf{f}(b)-\mathbf{f}(a)$ and $\varphi(t)\defeq\mathbf{z}\cdot\mathbf{f}(t)$. Map $\varphi$ is continuous on $[a,b]$ by Theorem \ref{thm:continuous-algebra-and-components}(ii),(iii).\\
+For $t\in(a,b)$ and $s\in[a,b]\setminus\{t\}$, $\frac{\varphi(s)-\varphi(t)}{s-t}=\mathbf{z}\cdot\frac{\mathbf{f}(s)-\mathbf{f}(t)}{s-t}$. Thus $\varphi'(t)=\mathbf{z}\cdot\mathbf{f}'(t)$ by Theorem \ref{thm:function-limit-algebra}(iv).\\
+Choose $x\in(a,b)$ with $\varphi(b)-\varphi(a)=(b-a)\mathbf{z}\cdot\mathbf{f}'(x)$ by Corollary \ref{cor:mean-value-theorem}. The identity $\varphi(b)-\varphi(a)=\norm{\mathbf{z}}_2^2$ holds.\\
+Hence $\norm{\mathbf{z}}_2^2\leq(b-a)\norm{\mathbf{z}}_2\norm{\mathbf{f}'(x)}_2$ by Theorem \ref{thm:cauchy-schwarz-inequality}(i). If $\mathbf{z}\neq\mathbf{0}$, cancellation proves the claim; if $\mathbf{z}=\mathbf{0}$, every $x\in(a,b)$ satisfies it.\\
+\hlt{Structural Commentary}: Scalar projection creates a mean-value identity, and Cauchy--Schwarz converts it back to norms.\\
+\hlt{Key Insight}: Project along the endpoint displacement itself.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:one-variable-differentiation-no-overlap-source-todo}\label{meth:one-variable-differentiation-proof-patterns} \hlt{Differentiation Proof Patterns}
+\begin{proofmethod} \label{meth:one-variable-differentiation-proof-patterns} \hlt{Differentiation Proof Patterns}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Domain}: require $x_0$ to be a limit point of $X$; isolated points have no derivative.
-\item \hlt{Definition}: factor $f(t)-f(x)=(t-x)Q_x(t)$ and take $Q_x(t)\to f'(x)$.
-\item \hlt{Approximation}: use Proposition \ref{prop:one-variable-first-order-approximation} to replace quotient limits by first-order error bounds.
-\item \hlt{Algebra}: prove quotient identities first; use continuity to pass to limits.
-\item \hlt{Mean values}: choose $h$ with equal endpoint values and apply Theorem \ref{thm:interior-extremum-derivative-zero}.
-\item \hlt{Taylor}: set $G=f-P-M(t-\alpha)^n$ and iterate the mean value theorem.
+\item \hlt{Domain}: Bind $f:X\to\R$ and $x_0\in X^{\operatorname{acc}}$; isolated points admit no derivative by Definition \ref{def:derivative-real-function}.
+\item \hlt{Definition}: Factor $f(t)-f(x)=(t-x)Q_x(t)$ with $Q_x(t)\to f'(x)$.
+\item \hlt{Approximation}: Replace the quotient limit by a first-order error bound by Proposition \ref{prop:one-variable-first-order-approximation}.
+\item \hlt{Algebra}: Establish exact difference-quotient identities before passing to limits through continuity.
+\item \hlt{Mean values}: Construct $h$ with $h(a)=h(b)$; an interior stationary point then exists by Theorem \ref{thm:rolles-theorem-one-variable}.
+\item \hlt{Taylor}: Set $G=f-P-M(t-\alpha)^n$ and iterate Rolle's theorem through successive derivatives.
 \end{enumerate}
-\hlt{Key Insight}: Difference quotients and auxiliary functions drive one-variable differentiation.
-\end{method}
+\hlt{Key Insight}: Normalize local errors or engineer endpoint cancellation before invoking earlier results.
+\end{proofmethod}
