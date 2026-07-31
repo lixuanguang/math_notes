@@ -1,30 +1,52 @@
 \subsection{Sequences, Countability, and Metrization}
 
-Countability axioms control when topological questions can be reduced to sequences and countable tests. They also separate metric phenomena from genuinely non-metric topologies.
+Countability axioms control when topological questions reduce to sequences and countable tests.\\
+They also separate metric phenomena from genuinely non-metric topologies.
 
-\begin{definition} \label{def:topological-sequence-convergence} \hlt{Sequence Convergence and Sequential Compactness}\\
-Let $X$ be a topological space, and let $\mathcal{N}_X(x)$ denote the neighborhoods of $x\in X$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $(x_n)$ \hlt{converges} to $x$, written $x_n\to x$, iff $\forall U\in\mathcal{N}_X(x)$ $\exists N\in\N$ such that $n\geq N\Rightarrow x_n\in U$.
-\item $X$ is \hlt{sequentially compact} iff every sequence $(x_n)\subseteq X$ has a convergent subsequence $x_{n_k}\to x\in X$.
-\end{enumerate}
+\begin{definition} \label{def:topological-sequence-convergence} \hlt{Sequence Convergence}\\
+Let $X$ be a topological space, and let $\mathcal{N}_X(x)$ denote the neighborhoods of $x\in X$.\\
+For $(x_n)\subseteq X$ and $x\in X$, the sequence $(x_n)$ \hlt{converges} to $x$, written $x_n\to x$, iff $(\forall U\in\mathcal{N}_X(x))(\exists N\in\N)(\forall n\geq N)\,x_n\in U$.
+\end{definition}
+
+\begin{definition} \label{def:topological-sequential-compactness} \hlt{Sequential Compactness}\\
+A topological space $X$ is \hlt{sequentially compact} iff $(\forall (x_n)\subseteq X)(\exists (n_k)\subseteq\N)(\exists x\in X)\,[n_1<n_2<\cdots\land x_{n_k}\to x]$.\\
 \hlt{Key Insight}: Sequential compactness is compactness tested by subsequences.
 \end{definition}
+
+\begin{proposition} \label{prop:product-topology-pointwise-convergence} \hlt{Product Convergence Is Pointwise}\\
+Let $X^\Lambda=\prod\limits_{\lambda\in\Lambda}X_\lambda$ carry the product topology from $\{(X_\lambda,\mathcal{T}_\lambda)\}_{\lambda\in\Lambda}$.\\
+For $\lambda\in\Lambda$, define $\pi_\lambda:X^\Lambda\to X_\lambda$ by $\pi_\lambda(z)\defeq z(\lambda)$.\\
+For $(x_n)\subseteq X^\Lambda$ and $x\in X^\Lambda$, $x_n\to x$ iff $(\forall\lambda\in\Lambda)\,x_n(\lambda)\to x(\lambda)$ in $X_\lambda$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] Fix $\lambda\in\Lambda$ and let $U\in\mathcal{T}_\lambda$ contain $x(\lambda)$.\\
+The cylinder $\pi_\lambda^{-1}(U)$ is a basic neighborhood of $x$ by Proposition \ref{prop:product-collections-are-bases}(ii).\\
+If $x_n\to x$, then $x_n\in\pi_\lambda^{-1}(U)$ eventually, equivalently $x_n(\lambda)\in U$ eventually. Hence $x_n(\lambda)\to x(\lambda)$.
+\item[$(\Leftarrow)$] Assume $(\forall\lambda\in\Lambda)\,x_n(\lambda)\to x(\lambda)$, and let $G\in\mathcal{N}_{X^\Lambda}(x)$.\\
+Choose a basic neighborhood $W=\prod\limits_{\lambda\in\Lambda}U_\lambda$ with $x\in W\subseteq G$ by Proposition \ref{prop:product-collections-are-bases}(ii).\\
+Set $F\defeq\{\lambda\in\Lambda:U_\lambda\neq X_\lambda\}$; then $F$ is finite.\\
+For $\lambda\in F$, choose $N_\lambda\in\N$ such that $(\forall n\geq N_\lambda)\,x_n(\lambda)\in U_\lambda$.\\
+If $F=\emptyset$, set $N\defeq1$; otherwise set $N\defeq\max\limits_{\lambda\in F}N_\lambda$. Then $(\forall n\geq N)\,x_n\in W\subseteq G$, so $x_n\to x$.
+\end{enumerate}
+\hlt{Structural Commentary}: Product neighborhoods impose finitely many coordinate constraints.\\
+\hlt{Key Insight}: Coordinate convergence satisfies every finite constraint.
+\end{proof}
+\end{proposition}
 
 \begin{proposition} \label{prop:hausdorff-sequence-limits-unique} \hlt{Hausdorff Sequence Limits Are Unique}\\
 Let $X$ be a topological space and let $(x_n)\subseteq X$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $X$ is Hausdorff, then $(x_n)$ has at most one limit.
-\item If $X$ has the trivial topology $\{\emptyset,X\}$, then $x_n\to x$ for every $x\in X$.
+\item If $X$ has the trivial topology $\{\emptyset,X\}$, then $(\forall x\in X)\,x_n\to x$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item[$(i)$] If $x_n\to x$ and $x_n\to y$ with $x\neq y$, choose disjoint neighborhoods $U\in\mathcal{N}_X(x)$ and $V\in\mathcal{N}_X(y)$.\\
 Eventually $x_n\in U$ and $x_n\in V$, contradicting $U\cap V=\emptyset$.
-\item[$(ii)$] In the trivial topology, $\mathcal{N}_X(x)=\{X\}$ for every $x\in X$, and every sequence is eventually in $X$.
+\item[$(ii)$] In the trivial topology, $(\forall x\in X)\,\mathcal{N}_X(x)=\{X\}$, and every sequence is eventually in $X$.
 \end{enumerate}
 \hlt{Structural Commentary}: Hausdorff neighborhoods separate competing limits.\\
 \hlt{Key Insight}: A sequence tail cannot lie in two disjoint neighborhoods.
@@ -35,23 +57,32 @@ Eventually $x_n\in U$ and $x_n\in V$, contradicting $U\cap V=\emptyset$.
 Let $(X,\tau)$ be a topological space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $X$ is \hlt{first countable} iff $\forall x\in X$ $\exists$ countable $\mathcal{B}_x\subseteq\mathcal{N}_X(x)$ such that every $U\in\mathcal{N}_X(x)$ contains some $B\in\mathcal{B}_x$.
-\item $X$ is \hlt{second countable} iff $\tau$ has a countable basis.
-\item $X$ is \hlt{separable} iff $\exists$ countable $D\subseteq X$ with $\overline{D}=X$, equivalently every nonempty $U\in\tau$ meets $D$.
+\item $X$ is \hlt{first countable} iff each $x\in X$ has an at most countable neighborhood basis.
+\item $X$ is \hlt{second countable} iff $\tau$ has an at most countable basis.
+\item $X$ is \hlt{separable} iff $(\exists D\subseteq X)[D\text{ is at most countable}\land\overline{D}=X]$.\\
+Equivalently, such a $D$ satisfies $(\forall U\in\tau\setminus\{\emptyset\})\,U\cap D\neq\emptyset$.
 \end{enumerate}
-\hlt{Key Insight}: Countability turns topology into countable local, global, or dense tests.
+\hlt{Key Insight}: Countability axioms reduce topology to at most countably many local, global, or dense tests.
 \end{definition}
 
-\begin{example} \label{ex:metric-spaces-first-countable} \hlt{Metric Spaces Are First Countable}\\
-Every metric space is first countable: $\forall x$, balls $\{B_{1/n}(x):n\geq1\}$ form a countable neighborhood basis at $x$.
-\end{example}
+\begin{proposition} \label{prop:metric-spaces-first-countable} \hlt{Metric Spaces Are First Countable}\\
+Let $(X,d)$ be a metric space. Then $X$ is first countable.
+\begin{proof}
+Let $x\in X$. The collection $\mathcal{B}_x\defeq\{B_{1/n}(x):n\in\N\}$ is at most countable.\\
+If $U$ is a neighborhood of $x$, choose $r>0$ with $B_r(x)\subseteq U$ and $n\in\N$ with $n>r^{-1}$ by Theorem \ref{thm:archimedean-and-rational-density}(i).\\
+Then $B_{1/n}(x)\subseteq B_r(x)\subseteq U$, so $\mathcal{B}_x$ is a neighborhood basis at $x$.\\
+\hlt{Structural Commentary}: Archimedean reciprocal radii refine every metric neighborhood.\\
+\hlt{Key Insight}: Reciprocal-radius balls form one local test sequence.
+\end{proof}
+\end{proposition}
 
 \begin{proposition} \label{prop:second-countable-implies-first-countable} \hlt{Second Countable Implies First Countable}\\
 Let $(X,\tau)$ be second countable. Then $X$ is first countable.
-\begin{proof} Let $\mathcal{B}$ be a countable basis for $\tau$. For $x\in X$, set $\mathcal{B}_x\defeq\{B\in\mathcal{B}:x\in B\}$.\\
-Then $\mathcal{B}_x$ is countable, and for every $U\in\mathcal{N}_X(x)$, some $B\in\mathcal{B}_x$ satisfies $x\in B\subseteq U$.\\
+\begin{proof} Let $\mathcal{B}$ be an at most countable basis for $\tau$.\\
+For $x\in X$, set $\mathcal{B}_x\defeq\{B\in\mathcal{B}:x\in B\}$.\\
+Then $\mathcal{B}_x$ is at most countable, and $(\forall U\in\mathcal{N}_X(x))(\exists B\in\mathcal{B}_x)\,x\in B\subseteq U$.\\
 \hlt{Structural Commentary}: Restrict the global basis to sets containing $x$.\\
-\hlt{Key Insight}: Countable global tests give countable local tests.
+\hlt{Key Insight}: At most countably many global tests become at most countably many local tests.
 \end{proof}
 \end{proposition}
 
@@ -60,16 +91,18 @@ Let $X$ be first countable, let $E\subseteq X$, and let $x\in X$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $x\in\overline{E}$ iff $\exists (x_n)\subseteq E$ with $x_n\to x$.
-\item $E$ is closed iff every convergent sequence in $E$ has all its limits in $E$.
+\item $E$ is closed iff $(\forall (x_n)\subseteq E)(\forall y\in X)\,[x_n\to y\Rightarrow y\in E]$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] ($\Rightarrow$) Let $\{B_n:n\geq1\}$ be a countable neighborhood basis at $x$.\\
-Since $x\in\overline{E}$ and $\bigcap\limits_{j=1}^n B_j\in\mathcal{N}_X(x)$, choose $x_n\in E\cap\bigcap\limits_{j=1}^n B_j$. Then $x_n\to x$.
+\item[$(i)$] ($\Rightarrow$) The neighborhood basis at $x$ is nonempty, so write it as $\{B_n:n\in\N\}$ by Proposition \ref{prop:at-most-countable-iff-enumerable-image}.\\
+Since $x\in\overline{E}$ and $\bigcap\limits_{j=1}^n B_j\in\mathcal{N}_X(x)$, choose $x_n\in E\cap\bigcap\limits_{j=1}^n B_j$.\\
+If $U\in\mathcal{N}_X(x)$, choose $m\in\N$ with $B_m\subseteq U$. Then $(\forall n\geq m)\,x_n\in B_m\subseteq U$, so $x_n\to x$.
 \item[$(i)$] ($\Leftarrow$) If $(x_n)\subseteq E$ and $x_n\to x$, then every neighborhood of $x$ contains some $x_n\in E$, so $x\in\overline{E}$.
 \item[$(ii)$] ($\Rightarrow$) If $E$ is closed and $(x_n)\subseteq E$ with $x_n\to x$, then $x\in\overline{E}=E$ by $(i)$.
-\item[$(ii)$] ($\Leftarrow$) If every convergent sequence in $E$ has all its limits in $E$, then $(i)$ gives $\overline{E}\subseteq E$. Hence $E=\overline{E}$, QED.
+\item[$(ii)$] ($\Leftarrow$) Assume $(\forall (x_n)\subseteq E)(\forall y\in X)\,[x_n\to y\Rightarrow y\in E]$.\\
+Then $\overline{E}\subseteq E$ by $(i)$. Hence $E=\overline{E}$.
 \end{enumerate}
 \hlt{Structural Commentary}: Countable local bases produce one testing sequence.\\
 \hlt{Key Insight}: In first countable spaces, closure is sequential closure.
@@ -77,15 +110,23 @@ Since $x\in\overline{E}$ and $\bigcap\limits_{j=1}^n B_j\in\mathcal{N}_X(x)$, ch
 \end{proposition}
 
 \begin{proposition} \label{prop:second-countable-implies-separable} \hlt{Second Countable Consequences}\\
-If $(X,\tau)$ is second countable, then there is a countable $D\subseteq X$ with $\overline{D}=X$.\\
-Moreover, every subspace of a second countable space is second countable.
+Let $(X,\tau)$ be second countable.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item An at most countable $D\subseteq X$ exists with $\overline{D}=X$.
+\item $(\forall Y\subseteq X)$, the subspace $Y$ is second countable.
+\end{enumerate}
 \begin{proof}
-Let $\mathcal{B}=\{B_n:n\in I\}$ be a countable basis, with $I\subseteq\N$.\\
-For each $n\in I$ with $B_n\neq\emptyset$, choose $x_n\in B_n$ and set $D=\{x_n:n\in I,\ B_n\neq\emptyset\}$. Then $D$ is countable.\\
-If $U\in\tau\setminus\{\emptyset\}$, choose $x\in U$; some $B_n\in\mathcal{B}$ satisfies $x\in B_n\subseteq U$, so $x_n\in D\cap U$. Hence $\overline{D}=X$.\\
-If $Y\subseteq X$, then $\{B_n\cap Y:n\in I\}$ is a countable basis for the subspace topology on $Y$.\\
-\hlt{Structural Commentary}: $\mathcal{B}$ countable gives countable $D$ meeting every $U\in\tau\setminus\{\emptyset\}$.\\
-\hlt{Key Insight}: $D$ is dense iff $D\cap U\neq\emptyset$ for every $U\in\tau\setminus\{\emptyset\}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $\mathcal{B}=\{B_n:n\in I\}$ be an at most countable basis, where $I\subseteq\N$.\\
+For $n\in I$ with $B_n\neq\emptyset$, choose $x_n\in B_n$ and set $D\defeq\{x_n:n\in I,\ B_n\neq\emptyset\}$.\\
+Then $D$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i),(ii).\\
+If $U\in\tau\setminus\{\emptyset\}$, choose $x\in U$ and $B_n\in\mathcal{B}$ with $x\in B_n\subseteq U$. Then $x_n\in D\cap U$, so $\overline{D}=X$.
+\item If $Y\subseteq X$, then $\{B_n\cap Y:n\in I\}$ is an at most countable basis for the subspace topology on $Y$.
+\end{enumerate}
+\hlt{Structural Commentary}: Basis representatives establish density; basis restrictions preserve second countability.\\
+\hlt{Key Insight}: One basis indexed within $\N$ controls both dense points and subspaces.
 \end{proof}
 \end{proposition}
 
@@ -93,20 +134,24 @@ If $Y\subseteq X$, then $\{B_n\cap Y:n\in I\}$ is a countable basis for the subs
 Let $(X,d)$ be a metric space, and let $\tau_d$ be its metric topology. The following are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\exists$ countable $D\subseteq X$ such that $\overline{D}^{\,X}=X$.
-\item $\exists$ countable $\mathcal{B}\subseteq\tau_d$ such that $\mathcal{B}$ is a basis for $\tau_d$.
+\item An at most countable $D\subseteq X$ exists with $\overline{D}^{\,X}=X$.
+\item An at most countable basis $\mathcal{B}\subseteq\tau_d$ exists for $\tau_d$.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$]$\Rightarrow (ii)$ Let $D\subseteq X$ be countable with $\overline{D}^{\,X}=X$, and set $\mathcal{B}\defeq\{B_q(x):x\in D,\ q\in\Q,\ q>0\}$.\\
-Then $\mathcal{B}$ is countable. For $U\in\tau_d$ and $y\in U$, choose $r>0$ with $B_r(y)\subseteq U$, then choose $q\in\Q$ with $0<q<r/2$, $x\in D\cap B_q(y)$. Then $y\in B_q(x)\subseteq B_r(y)\subseteq U$, since $z\in B_q(x)$ implies $d(z,y)<2q<r$. QED.
-\item[$(ii)$]$\Rightarrow (i)$ Let $\mathcal{B}=\{U_n:n\in I\}$ be a countable basis for $\tau_d$, with $I\subseteq\N$.\\
-Choose $x_n\in U_n$ for each nonempty $U_n$, and set $D\defeq\{x_n:U_n\neq\emptyset\}$. Then $D$ is countable.\\
+\item[$(i)$]$\Rightarrow (ii)$ Let $D\subseteq X$ be at most countable with $\overline{D}^{\,X}=X$, and set $\mathcal{B}\defeq\{B_q(x):x\in D,\ q\in\Q,\ q>0\}$.\\
+The parameter set $D\times\Q_{>0}$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i) and Corollary \ref{cor:countable-cartesian-products}(i).\\
+Hence $\mathcal{B}$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(ii).\\
+For $U\in\tau_d$ and $y\in U$, choose $r>0$ with $B_r(y)\subseteq U$ and $q\in\Q$ with $0<q<r/2$ by Theorem \ref{thm:archimedean-and-rational-density}(ii).\\
+Then choose $x\in D\cap B_q(y)$ by $\overline{D}^{\,X}=X$. If $z\in B_q(x)$, then $d(z,y)<2q<r$, so $y\in B_q(x)\subseteq B_r(y)\subseteq U$.\\
+\item[$(ii)$]$\Rightarrow (i)$ Let $\mathcal{B}=\{U_n:n\in I\}$ be an at most countable basis for $\tau_d$, where $I\subseteq\N$.\\
+For $n\in I$ with $U_n\neq\emptyset$, choose $x_n\in U_n$ and set $D\defeq\{x_n:n\in I,\ U_n\neq\emptyset\}$.\\
+Then $D$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i),(ii).\\
 If $\emptyset\neq U\in\tau_d$, choose $y\in U$ and $n\in I$ with $y\in U_n\subseteq U$; then $x_n\in D\cap U$.\\
 Hence every nonempty open set meets $D$, so $\overline{D}^{\,X}=X$.
 \end{enumerate}
-\hlt{Structural Commentary}: In metric spaces, one countable dense set produces all rational-radius local tests.\\
+\hlt{Structural Commentary}: In metric spaces, a dense set indexed within $\N$ produces all rational-radius local tests.\\
 \hlt{Key Insight}: Separability and second countability coincide for metric spaces.
 \end{proof}
 \end{proposition}
@@ -114,23 +159,26 @@ Hence every nonempty open set meets $D$, so $\overline{D}^{\,X}=X$.
 \begin{proposition} \label{prop:subspaces-of-separable-metric-spaces-separable} \hlt{Subspaces of Separable Metric Spaces}\\
 Let $(X,d)$ be a separable metric space and let $E\subseteq X$ with the subspace metric $d|_{E\times E}$. Then $E$ is separable.
 \begin{proof}
-By Proposition \ref{prop:metric-separable-countable-base}, the metric topology $\tau_d$ has a countable basis $\mathcal{B}$. Set $\mathcal{B}_E\defeq\{B\cap E:B\in\mathcal{B}\}$. Then $\mathcal{B}_E$ is countable. If $U$ is open in $E$ and $x\in U$, then $U=E\cap G$ for some $G\in\tau_d$; choose $B\in\mathcal{B}$ with $x\in B\subseteq G$. Hence $x\in B\cap E\subseteq U$, so $\mathcal{B}_E$ is a countable basis for $E$. By Proposition \ref{prop:metric-separable-countable-base}, $E$ is separable.\\
-\hlt{Structural Commentary}: A countable ambient basis restricts to a countable subspace basis.\\
+The metric topology $\tau_d$ has an at most countable basis $\mathcal{B}$ by Proposition \ref{prop:metric-separable-countable-base}.\\
+Set $\mathcal{B}_E\defeq\{B\cap E:B\in\mathcal{B}\}$. Then $\mathcal{B}_E$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(ii).\\
+If $U$ is open in $E$ and $x\in U$, choose $G\in\tau_d$ with $U=E\cap G$ and $B\in\mathcal{B}$ with $x\in B\subseteq G$.\\
+Hence $x\in B\cap E\subseteq U$, so $\mathcal{B}_E$ is an at most countable basis for $E$. Therefore $E$ is separable by Proposition \ref{prop:metric-separable-countable-base}.\\
+\hlt{Structural Commentary}: An ambient basis indexed within $\N$ restricts to a subspace basis indexed within $\N$.\\
 \hlt{Key Insight}: Metric separability passes to all subspaces through countable bases.
 \end{proof}
 \end{proposition}
 
 \begin{corollary} \label{cor:euclidean-subsets-separable} \hlt{Euclidean Subsets Are Separable}\\
 Let $k\in\N$ and let $E\subseteq\R^k$ have the subspace Euclidean metric. Then $E$ is separable.
-\begin{proof} The set $\Q^k$ is countable and dense in $\R^k$.\\
-For $x\in\R^k$ and $r>0$, choose $q=(q_1,\ldots,q_k)\in\Q^k$ with $\abs{x_i-q_i}<r/\sqrt{k}$ for each $i$, so $\norm{x-q}_2<r$.\\
-Thus $\R^k$ is separable, and Proposition \ref{prop:subspaces-of-separable-metric-spaces-separable} gives that $E$ is separable.\\
+\begin{proof} The set $\Q^k$ is countable by Theorem \ref{thm:finite-tuples-over-countable-set-countable} and Corollary \ref{cor:rationals-countable}.\\
+For $x\in\R^k$ and $r>0$, choose $q=(q_1,\ldots,q_k)\in\Q^k$ with $(\forall i\in\{1,\ldots,k\})\,\abs{x_i-q_i}<r/\sqrt{k}$, so $\norm{x-q}_2<r$.\\
+Hence $\Q^k$ is dense in $\R^k$. Thus $\R^k$ is separable, and $E$ is separable by Proposition \ref{prop:subspaces-of-separable-metric-spaces-separable}.\\
 \hlt{Structural Commentary}: Rational grids are countable dense nets.\\
 \hlt{Key Insight}: Euclidean separability passes to subspaces.
 \end{proof}
 \end{corollary}
 
-\begin{example} \label{ex:uncountable-cofinite-topology-not-first-countable} \hlt{Uncountable Cofinite Topology}\\
+\begin{counterexample} \label{cex:cofinite-t1-not-first-countable} \hlt{$T_1$ Spaces Need Not Be First Countable}\\
 Let $X$ be uncountable and let $\tau\defeq\{\emptyset\}\cup\{U\subseteq X:X\setminus U\text{ is finite}\}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
@@ -141,69 +189,81 @@ Let $X$ be uncountable and let $\tau\defeq\{\emptyset\}\cup\{U\subseteq X:X\setm
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] $\emptyset,X\in\tau$. Finite intersections and arbitrary unions of cofinite sets are cofinite, so $\tau$ is a topology.
+\item[$(i)$] One has $\emptyset,X\in\tau$, and a finite intersection of cofinite sets is cofinite.\\
+If $\{U_\alpha\}_{\alpha\in A}\subseteq\tau$ and some $U_{\alpha_0}$ is nonempty, then $X\setminus\bigcup\limits_{\alpha\in A}U_\alpha\subseteq X\setminus U_{\alpha_0}$ is finite.\\
+If every $U_\alpha$ is empty, then the union is empty. Hence $\tau$ is a topology.
 \item[$(ii)$] For $x\in X$, $X\setminus\{x\}\in\tau$, so $\{x\}$ is closed. Hence $(X,\tau)$ is $T_1$.
-\item[$(iii)$] Fix $x\in X$. If $\{B_n:n\geq1\}$ were a countable neighborhood basis at $x$, then $C\defeq\{x\}\cup\bigcup_n(X\setminus B_n)$ is countable. Choose $y\in X\setminus C$. Then $U\defeq X\setminus\{y\}\in\mathcal{N}_X(x)$, but $y\in B_n$ for all $n$, so no $B_n\subseteq U$.
+\item[$(iii)$] Fix $x\in X$. If an at most countable neighborhood basis existed at $x$, write it as $\{B_n:n\in\N\}$ by Proposition \ref{prop:at-most-countable-iff-enumerable-image}.\\
+For $n\in\N$, choose $O_n\in\tau$ with $x\in O_n\subseteq B_n$; then $X\setminus B_n\subseteq X\setminus O_n$ is finite.\\
+Thus $C\defeq\{x\}\cup\bigcup\limits_{n\in\N}(X\setminus B_n)$ is at most countable by Corollary \ref{cor:at-most-countable-union-at-most-countable}.\\
+Choose $y\in X\setminus C$. Then $U\defeq X\setminus\{y\}\in\mathcal{N}_X(x)$, but $(\forall n\in\N)\,y\in B_n$, so no $B_n$ is contained in $U$.
 \end{enumerate}
-\hlt{Key Insight}: Cofinite local bases cannot be countable.
+\hlt{Key Insight}: Countably many finite complements miss a point needed to refine one cofinite neighborhood.
 \end{proof}
-\end{example}
+\end{counterexample}
 
-\begin{definition} \label{def:lindelof-space}\label{def:countably-compact-space} \hlt{Lindel\"of and Countably Compact Spaces}\\
-Let $(X,\tau)$ be a topological space.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $X$ is \hlt{Lindel\"of} iff every open cover $\{O_\alpha\}_{\alpha\in A}\subseteq\tau$ has a countable subcover $\{O_\alpha\}_{\alpha\in J}$, $J\subseteq A$.
-\item $X$ is \hlt{countably compact} iff every countable open cover $\{O_n\}_{n\in\N}\subseteq\tau$ has a finite subcover $\{O_n\}_{n\in J}$, $J\subseteq\N$.
-\end{enumerate}
-\hlt{Key Insight}: Covers reduce to countable or finite subcovers.
+\begin{definition} \label{def:lindelof-space} \hlt{Lindel\"of Spaces}\\
+Let $(X,\tau)$ be a topological space. The space $X$ is \hlt{Lindel\"of} iff every open cover has an at most countable subcover.\\
+\hlt{Key Insight}: Lindel\"ofness reduces arbitrary covers to at most countable subcovers.
 \end{definition}
 
-\begin{proposition} \label{prop:countably-compact-frechet-intersection} \hlt{Frechet Intersection Test for Countable Compactness}\\
-Let $X$ be a topological space. Then $X$ is countably compact iff every descending sequence $F_1\supseteq F_2\supseteq\cdots$ of nonempty closed subsets of $X$ satisfies $\bigcap\limits_{n\geq1}F_n\neq\emptyset$.
+\begin{definition} \label{def:countably-compact-space} \hlt{Countably Compact Spaces}\\
+Let $(X,\tau)$ be a topological space. The space $X$ is \hlt{countably compact} iff every at most countable open cover has a finite subcover.\\
+\hlt{Key Insight}: Countable compactness reduces at most countable covers to finite subcovers.
+\end{definition}
+
+\begin{proposition} \label{prop:countably-compact-frechet-intersection} \hlt{Fr\'echet Intersection Test for Countable Compactness}\\
+Let $X$ be a topological space.\\
+Then $X$ is countably compact iff every descending sequence of nonempty closed subsets of $X$ has nonempty intersection.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Assume $X$ is countably compact. If $\bigcap\limits_{n\geq1}F_n=\emptyset$, then $\{X\setminus F_n:n\geq1\}$ is a countable open cover.\\
+\item[$(\Rightarrow)$] Assume $X$ is countably compact. If $\bigcap\limits_{n\geq1}F_n=\emptyset$, then $\{X\setminus F_n:n\geq1\}$ is an at most countable open cover.\\
 A finite subcover exists; since $F_n$ descends, some $X\setminus F_N$ covers $X$, contradicting $F_N\neq\emptyset$.
-\item[$(\Leftarrow)$] Let $\{O_n:n\geq1\}$ be a countable open cover with no finite subcover.\\
+\item[$(\Leftarrow)$] Suppose an at most countable open cover has no finite subcover.\\
+It has the form $\{O_n:n\in\N\}$ by Proposition \ref{prop:at-most-countable-iff-enumerable-image}.\\
 Then $F_n\defeq X\setminus\bigcup\limits_{j=1}^n O_j$ is nonempty, closed, and descending, while $\bigcap\limits_{n\geq1}F_n=\emptyset$, a contradiction.
 \end{enumerate}
-\hlt{Structural Commentary}: Complements turn countable covers into descending closed sets.\\
+\hlt{Structural Commentary}: Complements turn at most countable covers into descending closed sequences.\\
 \hlt{Key Insight}: Countable compactness is nested closed intersection.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:dini-countably-compact} \hlt{Dini's Theorem on Countably Compact Spaces}\\
-Let $X$ be countably compact, and let $f_n:X\to\R$ be continuous with $f_n(x)\downarrow0$ for every $x\in X$.\\
-Then $f_n\to0$ uniformly: $\forall\varepsilon>0$ $\exists N$ such that $0\leq f_n(x)<\varepsilon$ for all $x\in X$ and $n\geq N$.
-\begin{proof} Fix $\varepsilon>0$ and set $O_n\defeq\{x\in X:f_n(x)<\varepsilon\}$. Then $O_n$ is open, $O_n\subseteq O_{n+1}$, and $\bigcup\limits_{n\geq1}O_n=X$.\\
-Countable compactness gives $X=\bigcup\limits_{j=1}^m O_{n_j}$; with $N\defeq\max_j n_j$, increasingness gives $O_N=X$.\\
-Hence $0\leq f_n(x)\leq f_N(x)<\varepsilon$ for all $x\in X$ and $n\geq N$.\\
+Let $X$ be countably compact, and let $f_n:X\to\R$ be continuous with $(\forall x\in X)\,f_n(x)\downarrow0$.\\
+Then $f_n\to0$ uniformly: $(\forall\varepsilon>0)(\exists N\in\N)(\forall x\in X)(\forall n\geq N)\,0\leq f_n(x)<\varepsilon$.
+\begin{proof} Fix $\varepsilon>0$ and set $O_n\defeq\{x\in X:f_n(x)<\varepsilon\}$.\\
+The set $O_n$ is open by Proposition \ref{prop:topological-continuity-open-preimages}(i), while $O_n\subseteq O_{n+1}$ and $\bigcup\limits_{n\geq1}O_n=X$.\\
+Choose $m,n_1,\ldots,n_m\in\N$ with $X=\bigcup\limits_{j=1}^m O_{n_j}$ by countable compactness.\\
+Set $N\defeq\max\limits_{1\leq j\leq m}n_j$. Then $O_N=X$ by the increasingness of $(O_n)$.\\
+Hence $(\forall x\in X)(\forall n\geq N)\,0\leq f_n(x)\leq f_N(x)<\varepsilon$.\\
 \hlt{Structural Commentary}: Increasing sublevel covers reduce finite subcovers to one index.\\
 \hlt{Key Insight}: Monotone pointwise convergence becomes uniform convergence.
 \end{proof}
 \end{theorem}
 
 \begin{proposition} \label{prop:second-countable-implies-lindelof} \hlt{Second Countable Implies Lindel\"of}\\
-Let $(X,\tau)$ be second countable. Then $X$ is Lindel\"of: every open cover of $X$ has a countable subcover.
-\begin{proof} Let $\mathcal{B}=\{B_n:n\in I\}$ be a countable basis, and let $\mathcal{U}\subseteq\tau$ cover $X$. For $I_0\defeq\{n\in I:\exists U\in\mathcal{U},\ B_n\subseteq U\}$, choose $U_n\in\mathcal{U}$ with $B_n\subseteq U_n$ for each $n\in I_0$. The family $\{U_n:n\in I_0\}$ is countable.\\
+Let $(X,\tau)$ be second countable. Then $X$ is Lindel\"of.
+\begin{proof} Let $\mathcal{B}=\{B_n:n\in I\}$ be an at most countable basis with $I\subseteq\N$, and let $\mathcal{U}\subseteq\tau$ cover $X$.\\
+Set $I_0\defeq\{n\in I:(\exists U\in\mathcal{U})\,B_n\subseteq U\}$, and choose $U_n\in\mathcal{U}$ with $B_n\subseteq U_n$ for $n\in I_0$.\\
+The family $\{U_n:n\in I_0\}$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i),(ii).\\
 If $x\in X$, choose $U\in\mathcal{U}$ with $x\in U$ and $B_n\in\mathcal{B}$ with $x\in B_n\subseteq U$; then $n\in I_0$ and $x\in U_n$.\\
 \hlt{Structural Commentary}: Basis elements refine arbitrary open covers.\\
-\hlt{Key Insight}: A countable basis yields a countable subcover.
+\hlt{Key Insight}: An at most countable basis produces an at most countable subcover.
 \end{proof}
 \end{proposition}
 
 \begin{proposition} \label{prop:second-countable-countably-compact-compact} \hlt{Second Countable Countable Compactness Is Compactness}\\
-Let $X$ be second countable. Then $X$ is compact iff $X$ is countably compact.
+Let $(X,\tau)$ be second countable. Then $X$ is compact iff $X$ is countably compact.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\{O_n\}_{n\in\N}$ covers $X$, compactness gives finite $J\subseteq\N$ with $X=\bigcup\limits_{n\in J}O_n$.
-\item[$(\Leftarrow)$] Let $\mathcal{U}=\{O_\alpha\}_{\alpha\in A}$ cover $X$. By Proposition \ref{prop:second-countable-implies-lindelof}, $\exists$ countable $J\subseteq A$ with $X=\bigcup\limits_{\alpha\in J}O_\alpha$.\\
-Countable compactness gives finite $J_0\subseteq J$ with $X=\bigcup\limits_{\alpha\in J_0}O_\alpha$.
+\item[$(\Rightarrow)$] If an at most countable $\mathcal{U}\subseteq\tau$ covers $X$, then a finite $\mathcal{V}\subseteq\mathcal{U}$ with $X=\bigcup\mathcal{V}$ exists by compactness.
+\item[$(\Leftarrow)$] Let $\mathcal{U}\subseteq\tau$ cover $X$.\\
+An at most countable $\mathcal{V}\subseteq\mathcal{U}$ with $X=\bigcup\mathcal{V}$ exists by Proposition \ref{prop:second-countable-implies-lindelof}.\\
+A finite $\mathcal{W}\subseteq\mathcal{V}$ with $X=\bigcup\mathcal{W}$ exists by countable compactness.
 \end{enumerate}
-\hlt{Structural Commentary}: Second countability reduces covers to countable subcovers.\\
+\hlt{Structural Commentary}: Second countability reduces covers to at most countable subcovers.\\
 \hlt{Key Insight}: Countable compactness then makes the subcover finite.
 \end{proof}
 \end{proposition}
@@ -213,11 +273,21 @@ Let $X$ be a second countable topological space. Then $X$ is compact iff $X$ is 
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Assume $X$ is compact. Let $(x_n)\subseteq X$ and $F_n\defeq\overline{\{x_k:k\geq n\}}$. Since $F_1\supseteq F_2\supseteq\cdots$ are nonempty closed, compactness gives $x\in\bigcap\limits_{n\geq1}F_n$. By first countability, choose a decreasing neighborhood basis $(B_j)$ at $x$. With $n_0=0$, choose $n_j>n_{j-1}$ and $x_{n_j}\in B_j$ from $x\in F_{n_{j-1}+1}$. Then $x_{n_j}\to x$.
-\item[$(\Leftarrow)$] Assume $X$ is sequentially compact. By Proposition \ref{prop:second-countable-countably-compact-compact}, it is enough to prove countable compactness. If $\{O_n\}_{n\geq1}$ is a countable open cover with no finite subcover, choose $x_n\in X\setminus\bigcup\limits_{j=1}^n O_j$. Sequential compactness gives $x_{n_k}\to x\in O_N$ for some $N$. For $k$ large, $n_k\geq N$ and $x_{n_k}\in O_N$, contradicting $x_{n_k}\notin O_N$.
+\item[$(\Rightarrow)$] Assume $X$ is compact. Let $(x_n)\subseteq X$ and set $F_n\defeq\overline{\{x_k:k\geq n\}}$.\\
+The sets $F_1\supseteq F_2\supseteq\cdots$ are nonempty, closed, and have the finite intersection property.\\
+Hence $\exists x\in\bigcap\limits_{n\geq1}F_n$ by Proposition \ref{prop:topological-compactness-fip}.\\
+The space is first countable by Proposition \ref{prop:second-countable-implies-first-countable}.\\
+Write a neighborhood basis at $x$ as $\{C_j:j\in\N\}$ by Proposition \ref{prop:at-most-countable-iff-enumerable-image}, and set $B_j\defeq\bigcap\limits_{i=1}^jC_i$.\\
+With $n_0\defeq0$, recursively choose $n_j>n_{j-1}$ with $x_{n_j}\in B_j$ by $x\in F_{n_{j-1}+1}$ and $B_j\cap\{x_k:k\geq n_{j-1}+1\}\neq\emptyset$.\\
+If $U\in\mathcal{N}_X(x)$, choose $i\in\N$ with $C_i\subseteq U$. Then $(\forall j\geq i)\,x_{n_j}\in B_j\subseteq C_i\subseteq U$, so $x_{n_j}\to x$.
+\item[$(\Leftarrow)$] Assume $X$ is sequentially compact. Countable compactness suffices by Proposition \ref{prop:second-countable-countably-compact-compact}.\\
+Suppose an at most countable open cover has no finite subcover.\\
+It has the form $\{O_n:n\in\N\}$ by Proposition \ref{prop:at-most-countable-iff-enumerable-image}; choose $x_n\in X\setminus\bigcup\limits_{j=1}^n O_j$.\\
+There are a subsequence $(x_{n_k})$ and $x\in X$ with $x_{n_k}\to x$ by sequential compactness. Choose $N\in\N$ with $x\in O_N$.\\
+Eventually $n_k\geq N$ and $x_{n_k}\in O_N$, contradicting $x_{n_k}\notin O_N$.
 \end{enumerate}
-\hlt{Structural Commentary}: Closed tails give a cluster point; local countability extracts a subsequence.\\
-\hlt{Key Insight}: Countable covers and bases make compactness sequential.
+\hlt{Structural Commentary}: Compact closed tails locate a cluster point; an enumerated local basis extracts its subsequence.\\
+\hlt{Key Insight}: At most countable covers and bases make compactness sequential.
 \end{proof}
 \end{theorem}
 
@@ -226,62 +296,139 @@ A topological space is \hlt{metrizable} if its topology is induced by some metri
 \end{definition}
 
 \begin{definition} \label{def:sorgenfrey-line} \hlt{Sorgenfrey Line}\\
-Let $\mathcal{B}_S\defeq\{[a,b):a<b\}$ on $\R$. The \hlt{Sorgenfrey line} is $\R_S\defeq(\R,\tau_S)$, where $\tau_S$ is the topology generated by $\mathcal{B}_S$.
+Let $\mathcal{B}_S\defeq\{[a,b):a<b\}$ on $\R$.\\
+The \hlt{Sorgenfrey line} is $\R_S\defeq(\R,\tau_S)$, where $\tau_S$ is the topology generated by $\mathcal{B}_S$.
 \end{definition}
 
-\begin{example} \label{ex:sorgenfrey-line-countability-tests} \hlt{Sorgenfrey Line Countability Tests}\\
-The Sorgenfrey line $\R_S$ is first countable and separable, but not second countable; hence it is not metrizable.
+\begin{counterexample} \label{cex:sorgenfrey-first-separable-not-second-countable} \hlt{First Countable Separable Spaces Need Not Be Second Countable}\\
+The Sorgenfrey line $\R_S$ satisfies:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{B}_S$ is a basis for $\tau_S$;
+\item $\R_S$ is first countable;
+\item $\R_S$ is separable;
+\item $\R_S$ is not second countable;
+\item $\R_S$ is not metrizable.
+\end{enumerate}
 \begin{proof}
-For $x\in[a,b)\cap[c,d)$, choose $e$ with $x<e\leq\min\{b,d\}$; then $x\in[x,e)\subseteq[a,b)\cap[c,d)$, so $\mathcal{B}_S$ is a basis. Also $\{[x,x+1/n):n\geq1\}\subseteq\mathcal{N}_{\R_S}(x)$ is a local basis, and $\Q\cap[a,b)\neq\emptyset$ for every $[a,b)\neq\emptyset$.\\
-Hence $\R_S$ is first countable and separable.\\
-If $\mathcal{C}$ is a basis for $\R_S$, choose $C_x\in\mathcal{C}$ with $x\in C_x\subseteq[x,x+1)$. For $x<y$, $x\in C_x\setminus C_y$, so $C_x\neq C_y$.\\
-Thus $x\mapsto C_x$ is injective, so no countable $\mathcal{C}$ exists. Hence $\R_S$ is not second countable.\\
-If $\R_S$ were metrizable, separability and Proposition \ref{prop:metric-separable-countable-base} would force second countability.\\
-\hlt{Structural Commentary}: Half-open neighborhoods encode left endpoints.\\
-\hlt{Key Insight}: Local countability does not imply one countable global basis.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Every $x\in\R$ belongs to $[x,x+1)$. If $x\in[a,b)\cap[c,d)$, choose $e$ with $x<e\leq\min\{b,d\}$.\\
+Then $x\in[x,e)\subseteq[a,b)\cap[c,d)$, so $\mathcal{B}_S$ is a basis by Definition \ref{def:basis-for-topology}(ii).
+\item Fix $x\in\R$. If $x\in[a,b)$, choose $n\in\N$ with $n>(b-x)^{-1}$ by Theorem \ref{thm:archimedean-and-rational-density}(i).\\
+Then $[x,x+1/n)\subseteq[a,b)$, so $\{[x,x+1/n):n\in\N\}$ is a neighborhood basis at $x$ by (i).
+\item Every $[a,b)\in\mathcal{B}_S$ meets $\Q$ by Theorem \ref{thm:archimedean-and-rational-density}(ii).\\
+Hence $\overline{\Q}^{\,\R_S}=\R_S$ by (i), and $\R_S$ is separable by Corollary \ref{cor:rationals-countable}.
+\item Let $\mathcal{C}$ be a basis for $\tau_S$. For $x\in\R$, choose $C_x\in\mathcal{C}$ with $x\in C_x\subseteq[x,x+1)$.\\
+If $x<y$, then $x\in C_x\setminus C_y$, so $C_x\neq C_y$. Thus $x\mapsto C_x$ is injective.\\
+The space $\R$ is uncountable by Corollary \ref{cor:closed-intervals-and-reals-uncountable}.\\
+Hence $\mathcal{C}$ is not at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i), so $\R_S$ is not second countable.
+\item If $\R_S$ were metrizable, then it would be second countable by (iii) and Proposition \ref{prop:metric-separable-countable-base}, contradicting (iv).
+\end{enumerate}
+\hlt{Structural Commentary}: Half-open neighborhoods assign distinct left-anchored refinements to every real point.\\
+\hlt{Key Insight}: Local countability coexists with an uncountable global basis obstruction.
 \end{proof}
-\end{example}
+\end{counterexample}
 
 \begin{definition} \label{def:moore-plane} \hlt{Moore Plane}\\
-Let $\mathbb{M}\defeq\{(x,y)\in\R^2:y\geq0\}$ and $L\defeq\R\times\{0\}$. The \hlt{Moore plane} is $\mathbb{M}$ with basis consisting of:
+Let $\mathbb{M}\defeq\{(x,y)\in\R^2:y\geq0\}$ and $L\defeq\R\times\{0\}$. Let $\mathcal{B}_{\mathbb{M}}$ consist of:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $B_{\mathrm{euc}}(p,r)\subseteq\mathbb{M}$ for $p\in\mathbb{M}\setminus L$ and $r>0$;
 \item $N(x,r)\defeq\{(x,0)\}\cup B_{\mathrm{euc}}((x,r),r)$ for $(x,0)\in L$ and $r>0$.
 \end{enumerate}
+The \hlt{Moore plane} is $(\mathbb{M},\tau_{\mathbb{M}})$, where $\tau_{\mathbb{M}}$ is generated by $\mathcal{B}_{\mathbb{M}}$.
 \end{definition}
 
-\begin{example} \label{ex:moore-plane-countability-and-metrizability} \hlt{Moore Plane Countability Tests}\\
-The Moore plane $\mathbb{M}$ is Hausdorff and separable, but not second countable; hence it is not metrizable.
-\begin{proof}
-The basis and Hausdorff axioms follow by shrinking Euclidean disks and tangent neighborhoods $N(x,r)$. Let $D\defeq\Q\times(\Q\cap(0,\infty))$; then every basic neighborhood meets $D$, so $\overline{D}=\mathbb{M}$. Thus $\mathbb{M}$ is separable.\\
-For $(x,0)\in L$, $N(x,r)\cap L=\{(x,0)\}$, so $L$ is an uncountable discrete subspace and hence not separable. If $\mathbb{M}$ were second countable, then $L$ would be second countable and separable by Proposition \ref{prop:second-countable-implies-separable}, a contradiction. If $\mathbb{M}$ were metrizable, separability and Proposition \ref{prop:metric-separable-countable-base} would force second countability.\\
-\hlt{Structural Commentary}: Dense rational interior; discrete uncountable boundary.\\
-\hlt{Key Insight}: The boundary is an uncountable discrete obstruction.
-\end{proof}
-\end{example}
+\noindent Figure \ref{fig:moore-plane-basic-neighborhoods} depicts the two generators from Definition \ref{def:moore-plane}: interior balls and boundary points augmented by tangent disks.
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/moore_plane_basic_neighborhoods.tikz}
-  \caption{A Moore-plane boundary neighborhood is a tangent disk together with its tangent boundary point.}
+  \caption{The Moore-plane generators are ordinary interior balls and tangent disks augmented by their boundary points.}
   \label{fig:moore-plane-basic-neighborhoods}
-\end{figure}
+\end{illustrationfigure}
+
+\begin{counterexample} \label{cex:moore-plane-separable-hausdorff-not-metrizable} \hlt{Separable Hausdorff Spaces Need Not Be Metrizable}\\
+The Moore plane $(\mathbb{M},\tau_{\mathbb{M}})$ satisfies:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\mathcal{B}_{\mathbb{M}}$ is a basis for $\tau_{\mathbb{M}}$;
+\item $(\mathbb{M},\tau_{\mathbb{M}})$ is Hausdorff;
+\item $(\mathbb{M},\tau_{\mathbb{M}})$ is separable;
+\item $(\mathbb{M},\tau_{\mathbb{M}})$ is not second countable;
+\item $(\mathbb{M},\tau_{\mathbb{M}})$ is not metrizable.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Every interior point belongs to a sufficiently small Euclidean ball contained in $\mathbb{M}$, and $(x,0)\in N(x,1)$ for $(x,0)\in L$.\\
+If an interior point lies in two members of $\mathcal{B}_{\mathbb{M}}$, their intersection contains a sufficiently small Euclidean ball around it.\\
+Every member of $\mathcal{B}_{\mathbb{M}}$ containing $(x,0)\in L$ has the form $N(x,r)$, and $N(x,\min\{r,s\})\subseteq N(x,r)\cap N(x,s)$.\\
+Hence $\mathcal{B}_{\mathbb{M}}$ is a basis by Definition \ref{def:basis-for-topology}(ii).
+\item Distinct interior points have disjoint Euclidean balls contained in $\mathbb{M}$. If $(x,0),(y,0)\in L$ with $x\neq y$, then $N(x,r)\cap N(y,r)=\emptyset$ whenever $0<2r<\abs{x-y}$.\\
+Let $p=(x,0)\in L$ and $q=(u,v)\in\mathbb{M}\setminus L$, and set $\delta\defeq\norm{p-q}_2$. Choose $0<r<\delta/4$ and $0<s<\min\{v,\delta/2\}$.\\
+Then $N(x,r)\subseteq B_{\delta/2}^{\mathrm{euc}}(p)$ and $B_{\mathrm{euc}}(q,s)\in\mathcal{B}_{\mathbb{M}}$ are disjoint neighborhoods of $p$ and $q$.\\
+Hence $(\mathbb{M},\tau_{\mathbb{M}})$ is Hausdorff by (i).
+\item Set $D\defeq\Q\times(\Q\cap(0,\infty))$.\\
+Then $D$ is at most countable by Proposition \ref{prop:subsets-and-images-at-most-countable}(i) and Corollary \ref{cor:countable-cartesian-products}(i).\\
+Every member of $\mathcal{B}_{\mathbb{M}}$ contains some $B_{\mathrm{euc}}((a,b),s)$ with $b>s>0$.\\
+Choose $q_1,q_2\in\Q$ with $\abs{a-q_1}<s/\sqrt{2}$ and $\abs{b-q_2}<s/\sqrt{2}$ by Theorem \ref{thm:archimedean-and-rational-density}(ii).\\
+Then $(q_1,q_2)\in D\cap B_{\mathrm{euc}}((a,b),s)$. Hence every basis set meets $D$, so $\overline{D}^{\,\mathbb{M}}=\mathbb{M}$ by (i), and $(\mathbb{M},\tau_{\mathbb{M}})$ is separable.
+\item For $(x,0)\in L$, $N(x,r)\cap L=\{(x,0)\}$, so $L$ is discrete.\\
+The map $x\mapsto(x,0)$ is a bijection $\R\to L$, so $L$ is uncountable by Corollary \ref{cor:closed-intervals-and-reals-uncountable}.\\
+A dense subset of the discrete space $L$ equals $L$, so $L$ is not separable.\\
+If $\mathbb{M}$ were second countable, then $L$ would be second countable by Proposition \ref{prop:second-countable-implies-separable}(ii).\\
+Then $L$ would be separable by Proposition \ref{prop:second-countable-implies-separable}(i), a contradiction.
+\item If $\mathbb{M}$ were metrizable, then it would be second countable by (iii) and Proposition \ref{prop:metric-separable-countable-base}, contradicting (iv).
+\end{enumerate}
+\hlt{Structural Commentary}: Rational interior points establish density, while singleton boundary traces force a nonseparable subspace.\\
+\hlt{Key Insight}: The uncountable discrete boundary obstructs every at most countable basis.
+\end{proof}
+\end{counterexample}
 
 \begin{theorem} \label{thm:urysohn-metrization-second-countable} \hlt{Urysohn Metrization Theorem}\\
 Let $(X,\tau)$ be second countable. Then $\tau$ is induced by a metric iff $(X,\tau)$ is normal.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $d$ induce $\tau$. Then $X$ is $T_1$, since $X\setminus\{x\}=\bigcup\limits_{y\neq x}B_d\left(y,\frac{d(x,y)}{2}\right)$. For disjoint nonempty closed $F,G\subseteq X$, set $u(x)\defeq d(x,F)$ and $v(x)\defeq d(x,G)$. Since $u,v$ are continuous, $U\defeq\{u<v\}$ and $V\defeq\{v<u\}$ are disjoint open sets with $F\subseteq U$ and $G\subseteq V$. Empty cases are trivial, so $(X,\tau)$ is normal.
-\item[$(\Leftarrow)$] Assume $(X,\tau)$ is normal. Let $\{U_n:n\in\N\}$ be a basis and $A\defeq\{(n,m)\in\N^2:\overline{U_n}\subseteq U_m\}$.\\
-For $(n,m)\in A$, choose $f_{n,m}:X\to[0,1]$ by Theorem \ref{thm:urysohn-lemma-normal-space}, with $f_{n,m}=0$ on $\overline{U_n}$, $f_{n,m}=1$ on $X\setminus U_m$.\\
-Set $\rho(x,y)\defeq\sum\limits_{(n,m)\in A}\frac{1}{2^{n+m}}\abs{f_{n,m}(x)-f_{n,m}(y)}$, a $\tau$-continuous pseudometric by uniform convergence.\\
-For every $G\in\tau$ and $x\in G$, Proposition \ref{prop:normality-nested-neighborhoods} and the basis give $n,m$ with $x\in U_n\subseteq\overline{U_n}\subseteq U_m\subseteq G$.\\
-If $y\notin U_m$, then $\rho(x,y)\geq\frac{1}{2^{n+m}}$, so $B_\rho\left(x,\frac{1}{2^{n+m+1}}\right)\subseteq U_m\subseteq G$.\\
-Taking $G=X\setminus\{y\}$ shows $\rho(x,y)>0$ for $x\neq y$. Hence $\rho$ is a metric and its topology is $\tau$.
+\item[$(\Rightarrow)$] Let $d$ induce $\tau$. Then $(X,\tau)$ is normal by Proposition \ref{prop:metric-spaces-are-normal}.
+\item[$(\Leftarrow)$] Assume $(X,\tau)$ is normal.
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Separating family}: Let $\{U_n:n\in I\}$ be an at most countable basis with $I\subseteq\N$, and set $A\defeq\{(n,m)\in I^2:\overline{U_n}\subseteq U_m\}$.\\
+For $(n,m)\in A$, the closed sets $\overline{U_n}$ and $X\setminus U_m$ are disjoint.\\
+Choose a continuous $f_{n,m}:X\to[0,1]$ such that $f_{n,m}|_{\overline{U_n}}=0$ and $f_{n,m}|_{X\setminus U_m}=1$ by Theorem \ref{thm:urysohn-lemma-normal-space}.
+\item \hlt{Weighted limit}: For $k\in\N$, set $A_k\defeq A\cap\{1,\ldots,k\}^2$ and $\rho_k(x,y)\defeq\sum\limits_{(n,m)\in A_k}2^{-(n+m)}\abs{f_{n,m}(x)-f_{n,m}(y)}$.\\
+For $x,y\in X$ and $(n,m)\in A$, one has $0\leq\abs{f_{n,m}(x)-f_{n,m}(y)}\leq1$.\\
+Thus $(\rho_k(x,y))$ is increasing and $0\leq\rho_k(x,y)\leq(\sum\limits_{j=1}^k2^{-j})^2=(1-2^{-k})^2<1$.\\
+Hence $\rho(x,y)\defeq\lim\limits_{k\to\infty}\rho_k(x,y)$ exists by Theorem \ref{thm:monotone-convergence}.\\
+Let $k,\ell\in\N$ with $\ell>k$, and let $x,y\in X$. Every pair in $A_\ell\setminus A_k$ has at least one coordinate exceeding $k$.\\
+Thus $0\leq\rho_\ell(x,y)-\rho_k(x,y)\leq2\sum\limits_{j=k+1}^{\ell}2^{-j}=2^{1-k}(1-2^{k-\ell})\leq2^{1-k}$.\\
+For fixed $k,x,y$, one has $\rho_\ell(x,y)-\rho_k(x,y)\to\rho(x,y)-\rho_k(x,y)$ by Theorem \ref{thm:complex-sequence-limit-algebra}(ii).\\
+Hence $(\forall k\in\N)(\forall x,y\in X)\,0\leq\rho(x,y)-\rho_k(x,y)\leq2^{1-k}$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(iii).
+\item \hlt{Pseudometric and continuity}: Each summand defining $\rho_k$ is nonnegative and vanishes on the diagonal by Proposition \ref{prop:real-absolute-value-triangle-inequality}(i).\\
+It is symmetric by Proposition \ref{prop:real-absolute-value-triangle-inequality}(ii) with $\abs{-1}=1$.\\
+It satisfies the triangle inequality by Proposition \ref{prop:real-absolute-value-triangle-inequality}(iv). Hence $\rho_k$ is a pseudometric.\\
+The diagonal and symmetry identities pass directly to $\rho$. For $x,y,z\in X$, $\rho_k(x,z)\leq\rho_k(x,y)+\rho_k(y,z)$.\\
+The right side converges to $\rho(x,y)+\rho(y,z)$ by Theorem \ref{thm:complex-sequence-limit-algebra}(ii).\\
+Thus $\rho(x,z)\leq\rho(x,y)+\rho(y,z)$ by Proposition \ref{prop:convergent-sequence-basic-consequences}(iii), so $\rho$ is a pseudometric.\\
+Fix $x\in X$. For $(n,m)\in A$, set $h_{n,m,x}(y)\defeq\abs{f_{n,m}(x)-f_{n,m}(y)}$.\\
+The inequality $\abs{h_{n,m,x}(y)-h_{n,m,x}(z)}\leq\abs{f_{n,m}(y)-f_{n,m}(z)}$ holds by two instances of Proposition \ref{prop:real-absolute-value-triangle-inequality}(iv).\\
+For $y\in X$ and $\varepsilon>0$, choose a neighborhood $W$ of $y$ such that $(\forall z\in W)\,\abs{f_{n,m}(y)-f_{n,m}(z)}<\varepsilon$ by continuity of $f_{n,m}$. Hence $h_{n,m,x}$ is continuous.\\
+Therefore $\rho_k(x,\cdot)$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(i).\\
+The map $\rho(x,\cdot)$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(ii) with the estimate in (b) and $2^{1-k}\to0$ by Theorem \ref{thm:special-sequence-limits}(v).
+\item \hlt{Local metric balls}: Let $G\in\tau$ and $x\in G$. Since normality includes $T_1$, the set $\{x\}$ is closed.\\
+Choose open $O$ with $x\in O\subseteq\overline{O}\subseteq G$ by Proposition \ref{prop:normality-nested-neighborhoods}, and choose $m\in I$ with $x\in U_m\subseteq O$.\\
+Choose open $V$ with $x\in V\subseteq\overline{V}\subseteq U_m$ by the same proposition, and choose $n\in I$ with $x\in U_n\subseteq V$.\\
+Then $\overline{U_n}\subseteq\overline{V}\subseteq U_m$, so $(n,m)\in A$.\\
+If $y\notin U_m$, then $f_{n,m}(x)=0$ and $f_{n,m}(y)=1$, so $\rho(x,y)\geq2^{-(n+m)}$. Hence $B_\rho(x,2^{-(n+m+1)})\subseteq U_m\subseteq G$.
+\item \hlt{Definiteness and topology}: If $x\neq y$, take $G=X\setminus\{y\}$ in (d); then $\rho(x,y)>0$. Thus $\rho$ is a metric.\\
+Let $\tau_\rho$ be its metric topology. Then $\tau\subseteq\tau_\rho$ by (d).\\
+Conversely, $B_\rho(x,r)=\rho(x,\cdot)^{-1}((-\infty,r))\in\tau$ by (c) and Proposition \ref{prop:topological-continuity-open-preimages}(i), so $\tau_\rho\subseteq\tau$. Hence $\tau_\rho=\tau$.
 \end{enumerate}
-\hlt{Structural Commentary}: Urysohn functions separate nested basis pairs.\\
-\hlt{Key Insight}: Countably many separators recover the topology as a metric.
+\end{enumerate}
+\hlt{Structural Commentary}: Urysohn separators form a uniformly convergent pseudometric whose local balls recover the basis topology.\\
+\hlt{Key Insight}: Nested basis pairs both distinguish points and refine every open neighborhood.
 \end{proof}
 \end{theorem}
