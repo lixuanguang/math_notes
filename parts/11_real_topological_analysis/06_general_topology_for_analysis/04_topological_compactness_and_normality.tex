@@ -1,24 +1,29 @@
 \subsection{Topological Compactness and Normality Tools}
 
-Compactness in general topology keeps the open-cover principle from metric spaces and pairs especially well with Hausdorff and normal separation. These tools also produce useful continuous functions on normal spaces.
+Compactness retains the open-cover principle without requiring a metric.\\
+Together with Hausdorff and normal separation, it also supports strong closed-set and continuous-function tools.
 
 \begin{definition} \label{def:topological-compactness} \hlt{Compactness in Topological Spaces}\\
 Let $(X,\mathcal{T})$ be a topological space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A family $\{O_\alpha\}_{\alpha\in A}$ is an \hlt{open cover} of $E\subseteq X$ iff $(\forall\alpha\in A)\,O_\alpha\in\mathcal{T}$ and $E\subseteq\bigcup\limits_{\alpha\in A}O_\alpha$.
-\item The space $X$ is \hlt{compact} if every open cover of $X$ has a finite subcover.
-\item A subset $K\subseteq X$ is \hlt{compact} iff $(K,\mathcal{T}_K)$ is compact, where $\mathcal{T}_K$ is the subspace topology from Definition \ref{def:topological-subspace}.
+\item Let $E\subseteq X$, $(O_\alpha)_{\alpha\in A}$ be family of subsets of $X$. It is an \hlt{open cover} of $E$ iff $(\forall\alpha\in A)\,O_\alpha\in\mathcal{T}$ and $E\subseteq\bigcup\limits_{\alpha\in A}O_\alpha$.
+\item The space $X$ is \hlt{compact} iff $(\forall A)(\forall\,(O_\alpha)_{\alpha\in A})\,[((\forall\alpha\in A)\,O_\alpha\in\mathcal{T}\land X\subseteq\bigcup\limits_{\alpha\in A}O_\alpha)\Longrightarrow(\exists\,J\subseteq A)\,(|J|<\infty\land X\subseteq\bigcup\limits_{\alpha\in J}O_\alpha)]$.
+\item For $K\subseteq X$, let $\mathcal{T}_K$ be subspace topology from Definition \ref{def:topological-subspace}. The set $K$ is \hlt{compact} iff $(K,\mathcal{T}_K)$ is compact.
 \end{enumerate}
 \end{definition}
 
 \begin{proposition} \label{prop:compact-subspace-ambient-cover-equivalence} \hlt{Ambient Covers Test Subspace Compactness}\\
-Let $(X,\mathcal{T})$ be a topological space and let $K\subseteq X$. Then $K$ is compact iff every cover of $K$ by members of $\mathcal{T}$ has a finite subcover.
+Let $(X,\mathcal{T})$ be topological space, $K\subseteq X$. Then $K$ is compact iff every cover of $K$ by members of $\mathcal{T}$ has a finite subcover.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Let $\{O_\alpha\}_{\alpha\in A}\subseteq\mathcal{T}$ cover $K$. Then $\{K\cap O_\alpha\}_{\alpha\in A}$ is an open cover of $(K,\mathcal{T}_K)$, so some finite $J\subseteq A$ satisfies $K=\bigcup\limits_{\alpha\in J}(K\cap O_\alpha)\subseteq\bigcup\limits_{\alpha\in J}O_\alpha$ by Definition \ref{def:topological-compactness}(ii),(iii).
-\item[$(\Leftarrow)$] Let $\{V_\alpha\}_{\alpha\in A}\subseteq\mathcal{T}_K$ cover $K$. For $\alpha\in A$, set $O_\alpha\defeq\bigcup\{O\in\mathcal{T}:K\cap O\subseteq V_\alpha\}$. Then $O_\alpha\in\mathcal{T}$ and $K\cap O_\alpha=V_\alpha$ by Definition \ref{def:topological-subspace}. Thus $\{O_\alpha\}_{\alpha\in A}$ covers $K$. Choose a finite $J\subseteq A$ such that $\{O_\alpha\}_{\alpha\in J}$ covers $K$ by the assumed ambient-cover condition. Hence $\{V_\alpha\}_{\alpha\in J}$ covers $K$, and $(K,\mathcal{T}_K)$ is compact.
+\item[$(\Rightarrow)$] Let $(O_\alpha)_{\alpha\in A}\subseteq\mathcal{T}$ cover $K$. By Definition \ref{def:topological-subspace}, $(K\cap O_\alpha)_{\alpha\in A}$ is an open cover of $(K,\mathcal{T}_K)$.\\
+By compactness of $K$, choose a finite $J\subseteq A$ such that $K=\bigcup\limits_{\alpha\in J}(K\cap O_\alpha)\subseteq\bigcup\limits_{\alpha\in J}O_\alpha$.
+\item[$(\Leftarrow)$] Assume every cover of $K$ by members of $\mathcal{T}$ has a finite subcover. Let $(V_\alpha)_{\alpha\in A}\subseteq\mathcal{T}_K$ cover $K$.\\
+For $\alpha\in A$, set $O_\alpha\defeq\bigcup\limits\{O\in\mathcal{T}:K\cap O\subseteq V_\alpha\}$. By Definitions \ref{def:topological-space}(ii) and \ref{def:topological-subspace}, $O_\alpha\in\mathcal{T}$ and $K\cap O_\alpha=V_\alpha$.\\
+Thus $(O_\alpha)_{\alpha\in A}$ covers $K$. By the hypothesis, choose a finite $J\subseteq A$ for which $(O_\alpha)_{\alpha\in J}$ covers $K$.\\
+Hence $(V_\alpha)_{\alpha\in J}$ covers $K$, and $K$ is compact by Definition \ref{def:topological-compactness}(ii),(iii).
 \end{enumerate}
 \hlt{Structural Commentary}: Intersecting ambient opens with $K$ preserves exactly the cover seen by the subspace.\\
 \hlt{Key Insight}: Subspace compactness can be tested without changing the ambient open sets.
@@ -26,12 +31,20 @@ Let $(X,\mathcal{T})$ be a topological space and let $K\subseteq X$. Then $K$ is
 \end{proposition}
 
 \begin{proposition} \label{prop:topological-compactness-fip} \hlt{Finite-Intersection Compactness Test}\\
-Let $(X,\mathcal{T})$ be a topological space. Then $X$ is compact iff every nonempty family $\mathcal{F}$ of closed subsets of $X$ with the finite intersection property (FIP) satisfies $\bigcap\limits_{F\in\mathcal{F}}F\neq\emptyset$.
+Let $(X,\mathcal{T})$ be topological space, $\mathfrak{C}_X$ be collection of nonempty families of closed subsets of $X$ with finite intersection property.\\
+The finite intersection property is as in Definition \ref{def:finite-intersection-property}. Then $X$ is compact iff $(\forall\mathcal{F}\in\mathfrak{C}_X)\,\bigcap\limits_{F\in\mathcal{F}}F\neq\emptyset$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Assume $X$ is compact and let $\emptyset\ne\mathcal{F}\subseteq\mathcal{P}(X)$ be a family of closed subsets with the finite intersection property. This property implies $X\ne\emptyset$. If $\bigcap\limits_{F\in\mathcal{F}}F=\emptyset$, then $\{X\setminus F:F\in\mathcal{F}\}$ is an open cover of $X$. Choose $n\in\N$ and $F_1,\ldots,F_n\in\mathcal{F}$ with $X=\bigcup\limits_{j=1}^n(X\setminus F_j)$ by compactness. Then $\bigcap\limits_{j=1}^nF_j=\emptyset$, a contradiction.
-\item[$(\Leftarrow)$] Assume the closed-family condition and let $\{O_\alpha\}_{\alpha\in A}$ be an open cover of $X$. If $X=\emptyset$, its empty subfamily is a finite subcover. Suppose $X\ne\emptyset$ and no finite subcover exists. Then $A\ne\emptyset$, and $\mathcal{F}\defeq\{X\setminus O_\alpha:\alpha\in A\}$ is a nonempty family of closed subsets with the finite intersection property. Thus $\bigcap\limits_{\alpha\in A}(X\setminus O_\alpha)\ne\emptyset$ by the hypothesis, contrary to $X\subseteq\bigcup\limits_{\alpha\in A}O_\alpha$.
+\item[$(\Rightarrow)$] Assume $X$ is compact. Let $\emptyset\neq\mathcal{F}\subseteq\mathcal{P}(X)$ be a family of closed subsets with finite intersection property.\\
+Suppose $\bigcap_{F\in\mathcal{F}}F=\emptyset$. By Definition \ref{def:open-closed-neighborhood-topological}(ii) and De Morgan's law, $(X\setminus F)_{F\in\mathcal{F}}$ is an open cover of $X$.\\
+By compactness, choose $n\in\N$ and $F_1,\ldots,F_n\in\mathcal{F}$ such that $X=\bigcup\limits_{j=1}^n(X\setminus F_j)$.\\
+By De Morgan's law, $\bigcap_{j=1}^nF_j=\emptyset$, contradicting the finite intersection property.
+\item[$(\Leftarrow)$] Assume the closed-family condition, and let $(O_\alpha)_{\alpha\in A}$ be an open cover of $X$.\\
+If $X=\emptyset$, then the empty subfamily is a finite subcover. Suppose $X\neq\emptyset$ and no finite subfamily covers $X$.\\
+Then $A\neq\emptyset$, and $\mathcal{F}\defeq\{X\setminus O_\alpha:\alpha\in A\}$ is a nonempty family of closed subsets.\\
+By the absence of a finite subcover and De Morgan's law, $\mathcal{F}$ has the finite intersection property.\\
+By hypothesis, $\emptyset\neq\bigcap\limits_{\alpha\in A}(X\setminus O_\alpha)=X\setminus\bigcup\limits_{\alpha\in A}O_\alpha$. This contradicts that $(O_\alpha)_{\alpha\in A}$ covers $X$.
 \end{enumerate}
 \hlt{Structural Commentary}: Complements exchange covers and intersections.\\
 \hlt{Key Insight}: Compactness forbids closed FIP families from missing every point.
@@ -41,7 +54,9 @@ Let $(X,\mathcal{T})$ be a topological space. Then $X$ is compact iff every none
 \begin{proposition} \label{prop:closed-subsets-compact-topological} \hlt{Closed Subsets of Compact Spaces Are Compact}\\
 Let $(X,\mathcal{T})$ be compact and let $K\subseteq X$ be closed. Then $K$ is compact in the subspace topology.
 \begin{proof}
-Let $\{O_\alpha\}_{\alpha\in A}\subseteq\mathcal{T}$ cover $K$. Since $X\setminus K\in\mathcal{T}$, the family $\{O_\alpha\}_{\alpha\in A}\cup\{X\setminus K\}$ covers $X$. A finite subcover exists by compactness of $X$; after discarding $X\setminus K$, the remaining members cover $K$. Thus $K$ is compact by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}.\\
+Let $(O_\alpha)_{\alpha\in A}\subseteq\mathcal{T}$ cover $K$. By closedness of $K$, $X\setminus K\in\mathcal{T}$, so $(O_\alpha)_{\alpha\in A}\cup\{X\setminus K\}$ is an open cover of $X$.\\
+By compactness of $X$, this cover has a finite subcover. After discarding $X\setminus K$, the remaining members still cover $K$.\\
+Hence $K$ is compact by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}.\\
 \hlt{Structural Commentary}: Add the open complement to cover $X$.\\
 \hlt{Key Insight}: Compactness passes to closed subspaces.
 \end{proof}
@@ -57,8 +72,11 @@ Let $(X,\mathcal{T})$ be Hausdorff and let $K\subseteq X$ be compact in the subs
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $K=\emptyset$, take $U=X$ and $V=\emptyset$. Suppose $K\ne\emptyset$. For $x\in K$, choose disjoint $V_x,U_x\in\mathcal{T}$ with $x\in V_x$ and $y\in U_x$. There are $x_1,\ldots,x_n\in K$ with $K\subseteq\bigcup\limits_{j=1}^nV_{x_j}$ by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}. Set $V\defeq\bigcup\limits_{j=1}^nV_{x_j}$ and $U\defeq\bigcap\limits_{j=1}^nU_{x_j}$. Then $y\in U$, $K\subseteq V$, and $U\cap V=\emptyset$.
-\item For $y\in X\setminus K$, choose $U_y$ from (i). Then $X\setminus K=\bigcup\limits_{y\in X\setminus K}U_y\in\mathcal{T}$, so $K$ is closed.
+\item If $K=\emptyset$, then $U=X$, $V=\emptyset$. Suppose $K\neq\emptyset$.\\
+For $x\in K$, choose disjoint $V_x,U_x\in\mathcal{T}$ such that $x\in V_x$ and $y\in U_x$ by the Hausdorff property.\\
+By Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}, choose $x_1,\ldots,x_n\in K$ such that $K\subseteq\bigcup_{j=1}^nV_{x_j}$. Set $V\defeq\bigcup\limits_{j=1}^nV_{x_j}$ and $U\defeq\bigcap\limits_{j=1}^nU_{x_j}$.\\
+By Definitions \ref{def:topological-space}(ii),(iii), $U,V\in\mathcal{T}$. By construction, $y\in U$, $K\subseteq V$, and $U\cap V=\emptyset$.
+\item For $y\in X\setminus K$, choose $U_y\in\mathcal{T}$ as in (i); $X\setminus K=\bigcup\limits_{y\in X\setminus K}U_y\in\mathcal{T}$ by Definition \ref{def:topological-space}(ii); $K$ closed by Definition \ref{def:open-closed-neighborhood-topological}(ii).
 \end{enumerate}
 \hlt{Structural Commentary}: Compactness turns pointwise Hausdorff separations into a finite one.\\
 \hlt{Key Insight}: Every exterior point has an open neighborhood avoiding $K$.
@@ -68,8 +86,11 @@ Let $(X,\mathcal{T})$ be Hausdorff and let $K\subseteq X$ be compact in the subs
 \begin{theorem} \label{thm:compact-hausdorff-normal} \hlt{Compact Hausdorff Spaces Are Normal}\\
 Let $(X,\mathcal{T})$ be compact and Hausdorff. Then $X$ is normal.
 \begin{proof}
-If $x,y\in X$ and $x\ne y$, the Hausdorff property supplies an open neighborhood of $x$ omitting $y$. Hence $X$ is $T_1$ by Proposition \ref{prop:t1-iff-singletons-closed}. Let $A,B\subseteq X$ be disjoint closed sets. They are compact by Proposition \ref{prop:closed-subsets-compact-topological}. If $A=\emptyset$ or $B=\emptyset$, the sets $\emptyset$ and $X$ separate them. Suppose $A,B\ne\emptyset$.\\
-For $b\in B$, choose disjoint $U_b,V_b\in\mathcal{T}$ with $b\in U_b$ and $A\subseteq V_b$ by Proposition \ref{prop:compact-subsets-hausdorff-closed}(i). There are $b_1,\ldots,b_n\in B$ with $B\subseteq\bigcup\limits_{j=1}^nU_{b_j}$ by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}. Then $\bigcup\limits_{j=1}^nU_{b_j}$ and $\bigcap\limits_{j=1}^nV_{b_j}$ are disjoint open neighborhoods of $B$ and $A$. Thus $X$ is normal by Definition \ref{def:separation-axioms}.\\
+For distinct $x,y\in X$, choose open neighborhood of $x$ that omits $y$ by Hausdorff property; $X$ is $T_1$ by Proposition \ref{prop:t1-iff-singletons-closed}.\\
+Let $A,B\subseteq X$ be disjoint closed sets. By Proposition \ref{prop:closed-subsets-compact-topological}, $A$ and $B$ are compact. If $A=\emptyset$ or $B=\emptyset$, then $\emptyset$, $X$ separate them.\\
+Suppose $A,B\neq\emptyset$. For $b\in B$, choose disjoint $U_b,V_b\in\mathcal{T}$ such that $b\in U_b$ and $A\subseteq V_b$ by Proposition \ref{prop:compact-subsets-hausdorff-closed}(i).\\
+By Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}, choose $b_1,\ldots,b_n\in B$ such that $B\subseteq\bigcup\limits_{j=1}^nU_{b_j}$. Set $U\defeq\bigcup\limits_{j=1}^nU_{b_j}$ and $V\defeq\bigcap\limits_{j=1}^nV_{b_j}$.\\
+Then $U,V\in\mathcal{T}$, $B\subseteq U$, $A\subseteq V$, and $U\cap V=\emptyset$. Thus $X$ is normal by Definition \ref{def:separation-axioms}.\\
 \hlt{Structural Commentary}: Compactness makes finitely many Hausdorff separations suffice.\\
 \hlt{Key Insight}: Disjoint closed compact sets have disjoint neighborhoods.
 \end{proof}
@@ -78,25 +99,33 @@ For $b\in B$, choose disjoint $U_b,V_b\in\mathcal{T}$ with $b\in U_b$ and $A\sub
 \begin{theorem} \label{thm:continuous-image-compact-topological} \hlt{Continuous Images of Compact Spaces Are Compact}\\
 Let $f:(X,\mathcal{T}_X)\to(Y,\mathcal{T}_Y)$ be continuous. If $X$ is compact, then $f(X)$ is compact in the subspace topology.
 \begin{proof}
-Let $\{V_\alpha\}_{\alpha\in A}\subseteq\mathcal{T}_Y$ cover $f(X)$. Then $\{f^{-1}(V_\alpha)\}_{\alpha\in A}\subseteq\mathcal{T}_X$ by Proposition \ref{prop:topological-continuity-open-preimages}(i), and this family covers $X$. Choose a finite $J\subseteq A$ with $X=\bigcup\limits_{\alpha\in J}f^{-1}(V_\alpha)$ by compactness. Then $f(X)\subseteq\bigcup\limits_{\alpha\in J}V_\alpha$, so $f(X)$ is compact by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}.\\
+Let $(V_\alpha)_{\alpha\in A}\subseteq\mathcal{T}_Y$ cover $f(X)$. By Proposition \ref{prop:topological-continuity-open-preimages}(i), $(f^{-1}(V_\alpha))_{\alpha\in A}\subseteq\mathcal{T}_X$, and this family covers $X$.\\
+By compactness, choose finite $J\subseteq A$ such that $X=\bigcup\limits_{\alpha\in J}f^{-1}(V_\alpha)$. Then $f(X)\subseteq\bigcup_{\alpha\in J}V_\alpha$, so $f(X)$ is compact by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence}.\\
 \hlt{Structural Commentary}: Pull the cover back to the compact domain.\\
 \hlt{Key Insight}: Finite subcovers descend through the image.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:extreme-value-compact-topological} \hlt{Extreme Values on Compact Spaces}\\
-If $X$ is nonempty and compact and $f:X\to\R$ is continuous, then $f$ attains its minimum and maximum.
+Let $X$ be nonempty compact topological space, $f:X\to\R$ be continuous.\\
+Then $(\exists x_{\min\limits},x_{\max\limits}\in X)\,[f(x_{\min\limits})=\inf\limits f(X)\land f(x_{\max\limits})=\sup\limits f(X)]$.
 \begin{proof}
-The set $f(X)$ is nonempty and compact by Theorem \ref{thm:continuous-image-compact-topological}. It is compact in the metric sense by Proposition \ref{prop:compact-subspace-ambient-cover-equivalence} and Definition \ref{def:open-cover-and-compactness}. Hence it is closed and bounded in $\R$ by Theorem \ref{thm:heine-borel-rk}. Set $M\defeq\sup f(X)$ and $m\defeq\inf f(X)$. Then $M\in\overline{f(X)}=f(X)$ by Theorem \ref{thm:supremum-belongs-to-closure}(ii). For $\varepsilon>0$, choose $y_\varepsilon\in f(X)$ with $m\leq y_\varepsilon<m+\varepsilon$; hence $m\in\overline{f(X)}=f(X)$. Choose $x_{\min},x_{\max}\in X$ with $f(x_{\min})=m$ and $f(x_{\max})=M$.\\
-\hlt{Structural Commentary}: Compact images in $\R$ are closed and bounded.\\
-\hlt{Key Insight}: Closed bounded images contain their endpoints.
+By Theorem \ref{thm:continuous-image-compact-topological}, $f(X)$ is nonempty and compact in its subspace topology.\\
+By Proposition \ref{prop:compact-subspace-ambient-cover-equivalence} and Definition \ref{def:open-cover-and-compactness}, $f(X)$ is compact as a metric subspace of $\R$.\\
+Let $\iota:f(X)\to\R$ be the inclusion map. Since $\iota$ preserves the induced metric, it is continuous by Theorem \ref{thm:metric-isometry-basic-properties}(ii).\\
+By Theorem \ref{thm:extreme-value-theorem-compact}, choose $m,M\in f(X)$ such that $m=\min\limits f(X)$ and $M=\max\limits f(X)$.\\
+Choose $x_{\min\limits},x_{\max\limits}\in X$ such that $f(x_{\min\limits})=m$ and $f(x_{\max\limits})=M$.\\
+\hlt{Structural Commentary}: The image converts topological compactness into the metric hypothesis of the earlier extreme-value theorem.\\
+\hlt{Key Insight}: Applying the metric result to the inclusion $f(X)\hookrightarrow\R$ locates both endpoint values in the image.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:compact-hausdorff-bijection-homeomorphism} \hlt{Compact-to-Hausdorff Bijection Criterion}\\
 Let $f:(X,\mathcal{T}_X)\to(Y,\mathcal{T}_Y)$ be a continuous bijection. If $X$ is compact and $Y$ is Hausdorff, then $f$ is a homeomorphism.
 \begin{proof}
-Let $O\in\mathcal{T}_X$ and set $F\defeq X\setminus O$. The set $F$ is compact by Proposition \ref{prop:closed-subsets-compact-topological}, and $f(F)$ is compact by Theorem \ref{thm:continuous-image-compact-topological}. Hence $f(F)$ is closed in $Y$ by Proposition \ref{prop:compact-subsets-hausdorff-closed}(ii). Since $f$ is bijective, $(f^{-1})^{-1}(O)=f(O)=Y\setminus f(F)\in\mathcal{T}_Y$. Thus $f^{-1}$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(i), and $f$ is a homeomorphism by Definition \ref{def:topological-homeomorphism}.\\
+Let $O\in\mathcal{T}_X$, and set $F\defeq X\setminus O$. By Proposition \ref{prop:closed-subsets-compact-topological}, $F$ is compact. By Theorem \ref{thm:continuous-image-compact-topological}, $f(F)$ is compact.\\
+By Proposition \ref{prop:compact-subsets-hausdorff-closed}(ii), $f(F)$ is closed in $Y$. By bijectivity of $f$, $(f^{-1})^{-1}(O)=f(O)=Y\setminus f(F)\in\mathcal{T}_Y$.\\
+Thus $f^{-1}$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(i). Hence $f$ is a homeomorphism by Definition \ref{def:topological-homeomorphism}(i).\\
 \hlt{Structural Commentary}: Closed sets map compact, then closed.\\
 \hlt{Key Insight}: Compact-to-Hausdorff bijections have continuous inverses.
 \end{proof}
@@ -108,15 +137,18 @@ Let $X$ be a set and let $\mathcal{T},\mathcal{T}_1,\mathcal{T}_2$ be topologies
 \setlength{\itemsep}{0pt}
 \item If $(X,\mathcal{T})$ is compact and $\mathcal{T}_1\subseteq\mathcal{T}$, then $(X,\mathcal{T}_1)$ is compact.
 \item If $(X,\mathcal{T})$ is Hausdorff and $\mathcal{T}\subseteq\mathcal{T}_2$, then $(X,\mathcal{T}_2)$ is Hausdorff.
-\item If $(X,\mathcal{T})$ is compact Hausdorff, then no strictly weaker topology is Hausdorff and no strictly stronger topology is compact.
+\item If $(X,\mathcal{T})$ is compact Hausdorff, $\mathcal{T}_1\subseteq\mathcal{T}$, and $(X,\mathcal{T}_1)$ is Hausdorff, then $\mathcal{T}_1=\mathcal{T}$.
+\item If $(X,\mathcal{T})$ is compact Hausdorff, $\mathcal{T}\subseteq\mathcal{T}_2$, and $(X,\mathcal{T}_2)$ is compact, then $\mathcal{T}_2=\mathcal{T}$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] Every $\mathcal{T}_1$-open cover is a $\mathcal{T}$-open cover, so a finite subcover exists by compactness of $(X,\mathcal{T})$.
-\item[$(ii)$] If $x\neq y$, choose disjoint $\mathcal{T}$-open neighborhoods of $x$ and $y$; they are also $\mathcal{T}_2$-open.
-\item[$(iii)$] Suppose $\mathcal{S}\subseteq\mathcal{T}$ and $(X,\mathcal{S})$ is Hausdorff. The identity $\operatorname{id}:(X,\mathcal{T})\to(X,\mathcal{S})$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(i), so it is a homeomorphism by Theorem \ref{thm:compact-hausdorff-bijection-homeomorphism}. Hence $\mathcal{T}=\mathcal{S}$ by Proposition \ref{prop:homeomorphism-preserves-open-and-closed-sets}(i).\\
-Suppose $\mathcal{T}\subseteq\mathcal{S}$ and $(X,\mathcal{S})$ is compact. The identity $\operatorname{id}:(X,\mathcal{S})\to(X,\mathcal{T})$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(i), so it is a homeomorphism by Theorem \ref{thm:compact-hausdorff-bijection-homeomorphism}. Hence $\mathcal{T}=\mathcal{S}$ by Proposition \ref{prop:homeomorphism-preserves-open-and-closed-sets}(i).
+\item[$(i)$] Every $\mathcal{T}_1$-open cover is a $\mathcal{T}$-open cover. Hence it has a finite subcover by compactness of $(X,\mathcal{T})$.
+\item[$(ii)$] For distinct $x,y\in X$, choose disjoint $\mathcal{T}$-open neighborhoods by Hausdorff property. They are $\mathcal{T}_2$-open because $\mathcal{T}\subseteq\mathcal{T}_2$.
+\item[$(iii)$] The map $\operatorname{id}:(X,\mathcal{T})\to(X,\mathcal{T}_1)$ is bijective. It is continuous by $\mathcal{T}_1\subseteq\mathcal{T}$ and Proposition \ref{prop:topological-continuity-open-preimages}(i).\\
+By Theorem \ref{thm:compact-hausdorff-bijection-homeomorphism}, it is a homeomorphism. Hence $\mathcal{T}_1=\mathcal{T}$ by Proposition \ref{prop:homeomorphism-preserves-open-and-closed-sets}(i).
+\item[$(iv)$] The map $\operatorname{id}:(X,\mathcal{T}_2)\to(X,\mathcal{T})$ is bijective. It is continuous by $\mathcal{T}\subseteq\mathcal{T}_2$ and Proposition \ref{prop:topological-continuity-open-preimages}(i).\\
+By Theorem \ref{thm:compact-hausdorff-bijection-homeomorphism}, it is a homeomorphism. Hence $\mathcal{T}_2=\mathcal{T}$ by Proposition \ref{prop:homeomorphism-preserves-open-and-closed-sets}(i).
 \end{enumerate}
 \hlt{Structural Commentary}: Weakening preserves covers; strengthening preserves separations.\\
 \hlt{Key Insight}: Compact Hausdorff topologies cannot be enlarged or shrunk compatibly.
@@ -124,28 +156,44 @@ Suppose $\mathcal{T}\subseteq\mathcal{S}$ and $(X,\mathcal{S})$ is compact. The 
 \end{proposition}
 
 \begin{lemma} \label{lem:maximal-fip-extension} \hlt{Maximal Finite-Intersection Families}\\
-Assume Zorn's lemma. Let $X$ be a set and let $\mathcal{A}\subseteq\mathcal{P}(X)$ have the finite intersection property. Then $\exists\mathcal{M}\subseteq\mathcal{P}(X)$ such that $\mathcal{A}\subseteq\mathcal{M}$, $\mathcal{M}$ has the finite intersection property, and no proper extension of $\mathcal{M}$ has it.
+Assume Zorn's lemma. Let $X$ be a set, and let $\mathcal{A}\subseteq\mathcal{P}(X)$ have the finite intersection property.\\
+Then $\mathcal{A}$ is contained in a maximal family $\mathcal{M}\subseteq\mathcal{P}(X)$ with the finite intersection property.
 \begin{proof}
-Let $\mathfrak{P}\defeq\{\mathcal{B}\subseteq\mathcal{P}(X):\mathcal{A}\subseteq\mathcal{B}\text{ and }\mathcal{B}\text{ has FIP}\}$, ordered by inclusion. Then $\mathcal{A}\in\mathfrak{P}$, and inclusion is a partial order by Proposition \ref{prop:inclusion-and-reverse-inclusion-partial-orders}. The empty chain has upper bound $\mathcal{A}$. If $\emptyset\ne\mathfrak{C}\subseteq\mathfrak{P}$ is a chain, set $\mathcal{U}\defeq\bigcup\mathfrak{C}$. For a finite nonempty $\{E_1,\ldots,E_n\}\subseteq\mathcal{U}$, choose $\mathcal{B}_j\in\mathfrak{C}$ with $E_j\in\mathcal{B}_j$. One of $\mathcal{B}_1,\ldots,\mathcal{B}_n$ contains all the others because $\mathfrak{C}$ is a chain, so $\bigcap\limits_{j=1}^nE_j\ne\emptyset$. Thus $\mathcal{U}\in\mathfrak{P}$ and is an upper bound of $\mathfrak{C}$. A maximal $\mathcal{M}\in\mathfrak{P}$ exists by the Zorn hypothesis.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Extension poset}: Write $\operatorname{FIP}(\mathcal{B})$ when $\mathcal{B}$ has the finite intersection property.\\
+Set $\mathfrak{P}\defeq\{\mathcal{B}\subseteq\mathcal{P}(X):\mathcal{A}\subseteq\mathcal{B}\land\operatorname{FIP}(\mathcal{B})\}$. Then $\mathcal{A}\in\mathfrak{P}$, and inclusion partially orders $\mathfrak{P}$ by Proposition \ref{prop:inclusion-and-reverse-inclusion-partial-orders}.
+\item \hlt{Chain upper bounds}: The empty chain has upper bound $\mathcal{A}$. Let $\emptyset\neq\mathfrak{C}\subseteq\mathfrak{P}$ be a chain, and set $\mathcal{U}\defeq\bigcup\limits\mathfrak{C}$.\\
+For a finite nonempty family $\{E_1,\ldots,E_n\}\subseteq\mathcal{U}$, choose $\mathcal{B}_j\in\mathfrak{C}$ such that $E_j\in\mathcal{B}_j$.\\
+Because $\mathfrak{C}$ is a chain, one of $\mathcal{B}_1,\ldots,\mathcal{B}_n$ contains all the others.\\
+Thus $\bigcap_{j=1}^nE_j\neq\emptyset$ by the finite intersection property of that member. Hence $\mathcal{U}\in\mathfrak{P}$ and $\mathcal{U}$ is an upper bound of $\mathfrak{C}$.
+\item \hlt{Maximal extension}: By the Zorn hypothesis, $\mathfrak{P}$ has a maximal member $\mathcal{M}$.\\
+By the definition of $\mathfrak{P}$, $\mathcal{A}\subseteq\mathcal{M}$ and $\mathcal{M}$ has the finite intersection property.\\
+Maximality in $\mathfrak{P}$ is exactly maximality among families in $\mathcal{P}(X)$ with that property.
+\end{enumerate}
 \hlt{Structural Commentary}: Chain unions preserve FIP because tests are finite.\\
 \hlt{Key Insight}: Zorn extends any FIP family to a maximal one.
 \end{proof}
 \end{lemma}
 
 \begin{lemma} \label{lem:maximal-fip-family-properties} \hlt{Closure Properties of Maximal FIP Families}\\
-Let $X$ be a set and let $\mathcal{M}\subseteq\mathcal{P}(X)$ be maximal with respect to the finite intersection property.
+Let $X$ be a nonempty set, and let $\mathcal{M}\subseteq\mathcal{P}(X)$ be maximal with respect to the finite intersection property.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item $X\in\mathcal{M}$.
-\item If $n\geq1$ and $M_1,\ldots,M_n\in\mathcal{M}$, then $\bigcap\limits_{j=1}^nM_j\in\mathcal{M}$.
+\item If $n\in\N$ and $M_1,\ldots,M_n\in\mathcal{M}$, then $\bigcap\limits_{j=1}^nM_j\in\mathcal{M}$.
 \item If $C\subseteq X$ and $(\forall n\in\N)(\forall M_1,\ldots,M_n\in\mathcal{M})\,C\cap\bigcap\limits_{j=1}^nM_j\neq\emptyset$, then $C\in\mathcal{M}$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(i)$] The family $\mathcal{M}\cup\{X\}$ has the finite intersection property, so $X\in\mathcal{M}$ by maximality.
-\item[$(ii)$] Set $N\defeq\bigcap\limits_{j=1}^nM_j$. Any finite intersection from $\mathcal{M}\cup\{N\}$ is a finite intersection of members of $\mathcal{M}$, so $\mathcal{M}\cup\{N\}$ has the finite intersection property. Hence $N\in\mathcal{M}$ by maximality.
-\item[$(iii)$] Taking $n=1$ and $M_1=X$ in the hypothesis shows $C\ne\emptyset$. Every finite intersection from $\mathcal{M}\cup\{C\}$ is nonempty by the hypothesis and the finite intersection property of $\mathcal{M}$. Hence $C\in\mathcal{M}$ by maximality.
+\item[$(i)$] Since $X\neq\emptyset$, adjoining $X$ to $\mathcal{M}$ preserves every nonempty finite intersection.\\
+Thus $\mathcal{M}\cup\{X\}$ has the finite intersection property, so $X\in\mathcal{M}$ by maximality.
+\item[$(ii)$] Set $N\defeq\bigcap\limits_{j=1}^nM_j$. Every nonempty finite intersection from $\mathcal{M}\cup\{N\}$ is a finite intersection of members of $\mathcal{M}$.\\
+Hence $\mathcal{M}\cup\{N\}$ has the finite intersection property, and $N\in\mathcal{M}$ by maximality.
+\item[$(iii)$] By (i) and the hypothesis with $n=1$ and $M_1=X$, $C\neq\emptyset$.\\
+Every nonempty finite intersection from $\mathcal{M}\cup\{C\}$ is nonempty by the hypothesis and the finite intersection property of $\mathcal{M}$.\\
+Hence $\mathcal{M}\cup\{C\}$ has the finite intersection property, and $C\in\mathcal{M}$ by maximality.
 \end{enumerate}
 \hlt{Structural Commentary}: Maximality absorbs every FIP-compatible set.\\
 \hlt{Key Insight}: Finite intersections are already forced inside $\mathcal{M}$.
@@ -153,15 +201,29 @@ Let $X$ be a set and let $\mathcal{M}\subseteq\mathcal{P}(X)$ be maximal with re
 \end{lemma}
 
 \begin{theorem} \label{thm:tychonoff-product-theorem} \hlt{Tychonoff Product Theorem}\\
-Assume the axiom of choice and Zorn's lemma. The product $X=\prod\limits_{\lambda\in\Lambda}X_\lambda$ of compact topological spaces is compact in the product topology.
+Assume the axiom of choice and Zorn's lemma. Let $(X_\lambda)_{\lambda\in\Lambda}$ be a family of compact topological spaces.\\
+Then $X\defeq\prod\limits_{\lambda\in\Lambda}X_\lambda$ is compact in the product topology.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Maximal family}: If $X=\emptyset$, every open cover has the empty finite subcover. Suppose $X\ne\emptyset$, and let $\mathcal{F}$ be a nonempty family of closed subsets of $X$ with the finite intersection property. Choose a maximal FIP family $\mathcal{M}\supseteq\mathcal{F}$ by Lemma \ref{lem:maximal-fip-extension}.
-\item \hlt{Coordinate choice}: Define $\pi_\lambda:X\to X_\lambda$ by $\pi_\lambda(x)\defeq x_\lambda$. For $M_1,\ldots,M_n\in\mathcal{M}$ with $n\geq1$, the set $P\defeq\bigcap\limits_{j=1}^nM_j$ is nonempty and $\pi_\lambda(P)\subseteq\bigcap\limits_{j=1}^n\overline{\pi_\lambda(M_j)}$. Thus $\{\overline{\pi_\lambda(M)}:M\in\mathcal{M}\}$ is a nonempty family of closed subsets of $X_\lambda$ with the finite intersection property. Hence $I_\lambda\defeq\bigcap\limits_{M\in\mathcal{M}}\overline{\pi_\lambda(M)}\ne\emptyset$ by Proposition \ref{prop:topological-compactness-fip}. Choose $x_\lambda\in I_\lambda$ for $\lambda\in\Lambda$ by the choice hypothesis, and set $x\defeq(x_\lambda)_{\lambda\in\Lambda}$.
-\item \hlt{Coordinate cylinders}: Let $\lambda\in\Lambda$ and let $O\subseteq X_\lambda$ be an open neighborhood of $x_\lambda$. Set $N\defeq\pi_\lambda^{-1}(O)$. For $n\geq1$ and $M_1,\ldots,M_n\in\mathcal{M}$, set $P\defeq\bigcap\limits_{j=1}^nM_j\in\mathcal{M}$ by Lemma \ref{lem:maximal-fip-family-properties}(ii). Since $x_\lambda\in\overline{\pi_\lambda(P)}$, one has $O\cap\pi_\lambda(P)\ne\emptyset$, so $N\cap P\ne\emptyset$. Hence $N\in\mathcal{M}$ by Lemma \ref{lem:maximal-fip-family-properties}(iii).
-\item \hlt{Basic neighborhoods}: Let $B=\prod\limits_{\lambda\in\Lambda}U_\lambda$ be a basic neighborhood of $x$, and set $S\defeq\{\lambda\in\Lambda:U_\lambda\ne X_\lambda\}$. If $S=\emptyset$, then $B=X\in\mathcal{M}$ by Lemma \ref{lem:maximal-fip-family-properties}(i). If $S=\{\lambda_1,\ldots,\lambda_n\}$, then $B=\bigcap\limits_{j=1}^n\pi_{\lambda_j}^{-1}(U_{\lambda_j})\in\mathcal{M}$ by (iii) and Lemma \ref{lem:maximal-fip-family-properties}(ii).
-\item \hlt{Common point}: Fix $F\in\mathcal{F}$. Every neighborhood $U$ of $x$ contains a basic neighborhood $B$ of $x$ by Definition \ref{def:product-topology} and Proposition \ref{prop:product-collections-are-bases}(ii). Since $B,F\in\mathcal{M}$, $U\cap F\supseteq B\cap F\ne\emptyset$. Thus $x\in\overline{F}=F$ by Proposition \ref{prop:topological-closure-closed-calculus}(iv). Hence $x\in\bigcap\limits_{F\in\mathcal{F}}F$, so $X$ is compact by Proposition \ref{prop:topological-compactness-fip}.
+\item \hlt{Maximal family}: If $X=\emptyset$, then its empty subfamily is a finite subcover of any open cover.\\
+Suppose $X\neq\emptyset$, and let $\mathcal{F}$ be a nonempty family of closed subsets of $X$ with the finite intersection property.\\
+By Lemma \ref{lem:maximal-fip-extension}, choose a maximal family $\mathcal{M}\supseteq\mathcal{F}$ with the finite intersection property.
+\item \hlt{Coordinate choice}: For $\lambda\in\Lambda$, define $\pi_\lambda:X\to X_\lambda$ by $\pi_\lambda(x)\defeq x_\lambda$. For $n\in\N$ and $M_1,\ldots,M_n\in\mathcal{M}$, set $P\defeq\bigcap\limits_{j=1}^nM_j$.\\
+By the finite intersection property, $P\neq\emptyset$ and $\pi_\lambda(P)\subseteq\bigcap\limits_{j=1}^n\overline{\pi_\lambda(M_j)}$.\\
+Thus $(\overline{\pi_\lambda(M)})_{M\in\mathcal{M}}$ is a nonempty family of closed subsets of $X_\lambda$ with the finite intersection property.\\
+Set $I_\lambda\defeq\bigcap\limits_{M\in\mathcal{M}}\overline{\pi_\lambda(M)}$. Then $I_\lambda\neq\emptyset$ by compactness of $X_\lambda$ and Proposition \ref{prop:topological-compactness-fip}.\\
+By the choice hypothesis, select $(x_\lambda)_{\lambda\in\Lambda}\in\prod\limits_{\lambda\in\Lambda}I_\lambda$. Set $x\defeq(x_\lambda)_{\lambda\in\Lambda}\in X$.
+\item \hlt{Coordinate cylinders}: Let $\lambda\in\Lambda$, and let $O\subseteq X_\lambda$ be an open neighborhood of $x_\lambda$. Set $N\defeq\pi_\lambda^{-1}(O)$.\\
+For $n\in\N$ and $M_1,\ldots,M_n\in\mathcal{M}$, set $P\defeq\bigcap\limits_{j=1}^nM_j$. By Lemma \ref{lem:maximal-fip-family-properties}(ii), $P\in\mathcal{M}$.\\
+Since $x_\lambda\in\overline{\pi_\lambda(P)}$, one has $O\cap\pi_\lambda(P)\neq\emptyset$, and hence $N\cap P\neq\emptyset$. Therefore $N\in\mathcal{M}$ by Lemma \ref{lem:maximal-fip-family-properties}(iii).
+\item \hlt{Basic neighborhoods}: Let $B=\prod\limits_{\lambda\in\Lambda}U_\lambda$ be a basic neighborhood of $x$. Set $S\defeq\{\lambda\in\Lambda:U_\lambda\neq X_\lambda\}$.\\
+If $S=\emptyset$, then $B=X\in\mathcal{M}$ by Lemma \ref{lem:maximal-fip-family-properties}(i). If $S=\{\lambda_1,\ldots,\lambda_n\}$, then $B=\bigcap\limits_{j=1}^n\pi_{\lambda_j}^{-1}(U_{\lambda_j})$.\\
+By (iii), $(\forall j\in\{1,\ldots,n\})\,\pi_{\lambda_j}^{-1}(U_{\lambda_j})\in\mathcal{M}$. Hence $B\in\mathcal{M}$ by Lemma \ref{lem:maximal-fip-family-properties}(ii).
+\item \hlt{Common point}: Fix $F\in\mathcal{F}$, and let $U$ be a neighborhood of $x$.\\
+By Definition \ref{def:product-topology}(ii) and Proposition \ref{prop:product-collections-are-bases}(ii), $U$ contains a basic neighborhood $B$ of $x$.\\
+By (iv), $B\in\mathcal{M}$, while $F\in\mathcal{M}$ by $\mathcal{F}\subseteq\mathcal{M}$. By the finite intersection property, $U\cap F\supseteq B\cap F\neq\emptyset$.\\
+Thus $x\in\overline{F}=F$ by Proposition \ref{prop:topological-closure-closed-calculus}(iv). Therefore $x\in\bigcap\limits_{F\in\mathcal{F}}F$, and $X$ is compact by Proposition \ref{prop:topological-compactness-fip}.
 \end{enumerate}
 \hlt{Structural Commentary}: Coordinate compactness selects a candidate point.\\
 \hlt{Key Insight}: Maximal FIP forces all basic neighborhoods of that point to remain compatible.
@@ -169,53 +231,73 @@ Assume the axiom of choice and Zorn's lemma. The product $X=\prod\limits_{\lambd
 \end{theorem}
 
 \begin{definition} \label{def:compact-open-topology} \hlt{Compact-Open Topology}\\
-Let $X,Y$ be topological spaces and let $Y^X\defeq\{f:X\to Y\}$. For compact $K\subseteq X$ and open $O\subseteq Y$, set $\mathcal{U}_{K,O}\defeq\{f\in Y^X:f(K)\subseteq O\}$.\\
-The \hlt{compact-open topology} on $Y^X$ is generated by $\mathcal{S}_{\mathrm{co}}\defeq\{\mathcal{U}_{K,O}:K\subseteq X\text{ compact},\ O\subseteq Y\text{ open}\}$.\\
-\hlt{Structural Commentary}: Subbasic opens prescribe uniform containment on compact subsets.\\
-\hlt{Key Insight}: Compact subsets index the topology's simultaneous coordinate constraints.
+Let $X,Y$ be topological spaces, and set $Y^X\defeq\{f:X\to Y\}$. For compact $K\subseteq X$ and open $O\subseteq Y$, set $\mathcal{U}_{K,O}\defeq\{f\in Y^X:f(K)\subseteq O\}$.\\
+Let $\mathcal{S}_{\mathrm{co}}$ be the collection of all such sets $\mathcal{U}_{K,O}$. The \hlt{compact-open topology} on $Y^X$ is the topology generated by the subbasis $\mathcal{S}_{\mathrm{co}}$.
 \end{definition}
 
 \begin{proposition} \label{prop:compact-open-collection-is-subbasis} \hlt{The Compact-Open Collection Is a Subbasis}\\
-Let $X,Y$ be topological spaces, let $Y^X\defeq\{f:X\to Y\}$, and set $\mathcal{S}_{\mathrm{co}}\defeq\{\mathcal{U}_{K,O}:K\subseteq X\text{ compact},\ O\subseteq Y\text{ open}\}$, where $\mathcal{U}_{K,O}\defeq\{f\in Y^X:f(K)\subseteq O\}$. Then $\mathcal{S}_{\mathrm{co}}$ is a subbasis on $Y^X$.
+Let $X,Y$ be topological spaces, $Y^X\defeq\{f:X\to Y\}$. For compact $K\subseteq X$ and open $O\subseteq Y$, set $\mathcal{U}_{K,O}\defeq\{f\in Y^X:f(K)\subseteq O\}$.\\
+Then the collection $\mathcal{S}_{\mathrm{co}}$ of all such sets $\mathcal{U}_{K,O}$ is a subbasis on $Y^X$.
 \begin{proof}
-The set $\emptyset\subseteq X$ is compact, $\emptyset\subseteq Y$ is open, and $\mathcal{U}_{\emptyset,\emptyset}=Y^X$, so $\bigcup\mathcal{S}_{\mathrm{co}}=Y^X$. Let $\mathcal{B}_{\mathrm{co}}$ consist of finite intersections of members of $\mathcal{S}_{\mathrm{co}}$, including $Y^X$. Since $\mathcal{B}_{\mathrm{co}}$ contains $Y^X$ and is closed under finite intersections, it is a basis by Definition \ref{def:basis-for-topology}(ii). Hence $\mathcal{S}_{\mathrm{co}}$ is a subbasis by Definition \ref{def:basis-for-topology}(iv).\\
+The set $\emptyset\subseteq X$ is compact, $\emptyset\subseteq Y$ is open, and $\mathcal{U}_{\emptyset,\emptyset}=Y^X$. Thus $Y^X\in\mathcal{S}_{\mathrm{co}}$.\\
+Let $\mathcal{B}_{\mathrm{co}}$ be collection of all nonempty finite intersections of members of $\mathcal{S}_{\mathrm{co}}$. Then $Y^X\in\mathcal{B}_{\mathrm{co}}$, $\mathcal{B}_{\mathrm{co}}$ is closed under finite intersections.\\
+Hence $\mathcal{B}_{\mathrm{co}}$ is a basis by Definition \ref{def:basis-for-topology}(ii). Thus $\mathcal{S}_{\mathrm{co}}$ is a subbasis by Definition \ref{def:basis-for-topology}(iv).\\
 \hlt{Structural Commentary}: Finite compact-open constraints remain closed under finite intersection.\\
 \hlt{Key Insight}: The empty-domain constraint supplies the full function space.
 \end{proof}
 \end{proposition}
 
 \begin{remark} \label{rem:compact-open-versus-product-topology} \hlt{Compact-Open Versus Product Topology}\\
-On $Y^X=\prod_{x\in X}Y$, the product topology tests finitely many coordinates $f(x)$.\\
-The compact-open topology tests compact sets at once through $\mathcal{U}_{K,O}=\{f\in Y^X:f(K)\subseteq O\}$. When $K$ is infinite, one subbasic constraint can restrict infinitely many coordinates.
+On $Y^X=\prod\limits_{x\in X}Y$, the product topology tests finitely many coordinates $f(x)$.\\
+The compact-open topology tests compact sets at once through $\mathcal{U}_{K,O}=\{f\in Y^X:f(K)\subseteq O\}$.\\
+When $K$ is infinite, one subbasic constraint can restrict infinitely many coordinates.
 \end{remark}
 
 \begin{definition} \label{def:normally-ascending-family} \hlt{Normally Ascending Families}\\
-Let $X$ be a topological space and let $\Lambda\subseteq\R$.\\
-A family of open sets $\{O_\lambda\}_{\lambda\in\Lambda}$ is \hlt{normally ascending} iff $(\forall\lambda_1,\lambda_2\in\Lambda)\,[\lambda_1<\lambda_2\Rightarrow\overline{O_{\lambda_1}}\subseteq O_{\lambda_2}]$.\\
+Let $X$ be a topological space, $\Lambda\subseteq\R$, $(O_\lambda)_{\lambda\in\Lambda}$ be family of open subsets of $X$.\\
+It is \hlt{normally ascending} iff $(\forall\lambda_1,\lambda_2\in\Lambda)\,[\lambda_1<\lambda_2\Rightarrow\overline{O_{\lambda_1}}\subseteq O_{\lambda_2}]$.\\
 \hlt{Key Insight}: Later open sets contain the closures of earlier ones.
 \end{definition}
 
 \begin{lemma} \label{lem:normally-ascending-function-continuity} \hlt{Normally Ascending Families Define Continuous Functions}\\
-Let $X$ be a topological space, let $\Lambda\subseteq(a,b)$ be dense, and let $\{O_\lambda\}_{\lambda\in\Lambda}$ be normally ascending. Define $g:X\to[a,b]$ by $g(x)=\inf\{\lambda\in\Lambda:x\in O_\lambda\}$, with $\inf\emptyset=b$. Then $g$ is continuous.
+Let $X$ be a topological space, let $a<b$, let $\Lambda\subseteq(a,b)$ be dense, and let $(O_\lambda)_{\lambda\in\Lambda}$ be normally ascending.\\
+For $x\in X$, set $\Lambda_x\defeq\{\lambda\in\Lambda:x\in O_\lambda\}$ and $g(x)\defeq\inf\limits\Lambda_x$, with $\inf\limits\emptyset\defeq b$. Then $g:X\to[a,b]$ is continuous.
 \begin{proof}
-If $\{\lambda\in\Lambda:x\in O_\lambda\}\ne\emptyset$, it is bounded below by $a$, so its infimum exists by Corollary \ref{cor:infimum-as-negative-supremum} and belongs to $[a,b)$. The empty-set convention makes $g:X\to[a,b]$ well-defined.\\
-For $c\in(a,b)$, the infimum definition implies $\{g<c\}=\bigcup\limits_{\lambda<c}O_\lambda$. If $\lambda>c$ and $x\notin\overline{O_\lambda}$, then $x\notin O_\mu$ when $\mu<\lambda$ by normal ascent, so $g(x)\geq\lambda>c$. Conversely, if $g(x)>c$, choose $\mu,\lambda\in\Lambda$ with $c<\mu<\lambda<g(x)$. Then $x\notin O_\lambda\supseteq\overline{O_\mu}$, so $\{g>c\}=\bigcup\limits_{\lambda>c}(X\setminus\overline{O_\lambda})$. Thus both threshold sets are open.\\
-The family $\mathcal{R}\defeq\{[a,c):c\in(a,b)\}\cup\{(c,b]:c\in(a,b)\}$ is a subbasis for the metric topology on $[a,b]$: its finite intersections are relative open intervals and form a basis. Since $g^{-1}([a,c))=\{g<c\}$ and $g^{-1}((c,b])=\{g>c\}$ are open, $g$ is continuous by Proposition \ref{prop:continuity-tested-on-subbasis}.\\
+Fix $x\in X$. If $\Lambda_x\neq\emptyset$, then $\Lambda_x$ is bounded below by $a$. By Corollary \ref{cor:infimum-as-negative-supremum}, $\inf\limits\Lambda_x$ exists, and $a\leq\inf\limits\Lambda_x<b$.\\
+Together with the empty-set convention, this proves that $g:X\to[a,b]$ is well-defined. Fix $c\in(a,b)$.\\
+By the defining property of the infimum, $\{x\in X:g(x)<c\}=\bigcup\limits_{\substack{\lambda\in\Lambda\\ \lambda<c}}O_\lambda$.\\
+If $\lambda\in\Lambda$, $\lambda>c$, and $x\notin\overline{O_\lambda}$, then $(\forall\mu\in\Lambda)\,[\mu<\lambda\Rightarrow x\notin O_\mu]$ by normal ascent. Hence $g(x)\geq\lambda>c$.\\
+Conversely, if $g(x)>c$, choose $\mu,\lambda\in\Lambda$ by density such that $c<\mu<\lambda<g(x)$.\\
+Then $x\notin O_\lambda$, while $\overline{O_\mu}\subseteq O_\lambda$ by normal ascent. Thus $x\notin\overline{O_\mu}$, and therefore $\{x\in X:g(x)>c\}=\bigcup\limits_{\substack{\lambda\in\Lambda\\ \lambda>c}}(X\setminus\overline{O_\lambda})$.\\
+Both threshold sets are open. Set $\mathcal{R}\defeq\{[a,c):c\in(a,b)\}\cup\{(c,b]:c\in(a,b)\}$.\\
+Its finite intersections form the relative-interval basis, so $\mathcal{R}$ is a subbasis for the metric topology on $[a,b]$.\\
+For $c\in(a,b)$, $g^{-1}([a,c))=\{g<c\}$ and $g^{-1}((c,b])=\{g>c\}$ are open. Hence $g$ is continuous by Proposition \ref{prop:continuity-tested-on-subbasis}.\\
 \hlt{Structural Commentary}: Threshold preimages reduce to unions of nested open or closed-complement sets.\\
 \hlt{Key Insight}: Normal ascent makes upper thresholds open.
 \end{proof}
 \end{lemma}
 
 \begin{lemma} \label{lem:normal-dyadic-neighborhood-ladder} \hlt{Dyadic Neighborhood Ladders in Normal Spaces}\\
-Let $X$ be normal, let $F\subseteq X$ be closed, let $U$ be an open neighborhood of $F$, and let $(a,b)$ be an open interval. Dense $\Lambda\subseteq(a,b)$ and normally ascending open sets $\{O_\lambda\}_{\lambda\in\Lambda}$ exist with $(\forall\lambda\in\Lambda)\,F\subseteq O_\lambda\subseteq\overline{O_\lambda}\subseteq U$.
+Let $X$ be normal, let $F\subseteq X$ be closed, let $U$ be an open neighborhood of $F$, and let $a<b$.\\
+Then dense set $\Lambda\subseteq(a,b)$ and normally ascending family $(O_\lambda)_{\lambda\in\Lambda}$ of open sets exist, chosen so that $(\forall\lambda\in\Lambda)\,F\subseteq O_\lambda\subseteq\overline{O_\lambda}\subseteq U$.
 \begin{proof}
 The space $X$ is $T_1$ by Definition \ref{def:separation-axioms}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Index set}: An order-preserving affine bijection transports the construction between open intervals, so it is enough to use $(a,b)=(0,1)$. Set $D_n\defeq\{m2^{-n}:0<m<2^n\}$ and $\Lambda\defeq\bigcup\limits_{n\geq1}D_n$.
-\item \hlt{Base}: Choose $O_{1/2}$ with $F\subseteq O_{1/2}\subseteq\overline{O_{1/2}}\subseteq U$ by Proposition \ref{prop:normality-nested-neighborhoods}.
-\item \hlt{Dyadic insertion}: Suppose the sets indexed by $D_n$ have been chosen with the required adjacent containments. Fix a new $r=m2^{-(n+1)}$ with $m$ odd, and let $p=(m-1)2^{-(n+1)}$ and $q=(m+1)2^{-(n+1)}$. Set $L_p\defeq F$ if $p=0$ and $L_p\defeq\overline{O_p}$ otherwise; set $W_q\defeq U$ if $q=1$ and $W_q\defeq O_q$ otherwise. Then $L_p$ is closed, $W_q$ is open, and $L_p\subseteq W_q$. Choose $O_r$ with $L_p\subseteq O_r\subseteq\overline{O_r}\subseteq W_q$ by Proposition \ref{prop:normality-nested-neighborhoods}. Repeating this finite construction defines all new indices and preserves the adjacent containments.
-\item \hlt{Conclusion}: The set $\Lambda$ is dense in $(0,1)$. If $\lambda_1<\lambda_2$ belong to $\Lambda$, both occur in some $D_n$, and the adjacent containment chain implies $\overline{O_{\lambda_1}}\subseteq O_{\lambda_2}$. The endpoint containments imply $(\forall\lambda\in\Lambda)\,F\subseteq O_\lambda\subseteq\overline{O_\lambda}\subseteq U$. Transporting the indices by $\lambda\mapsto a+(b-a)\lambda$ proves the result for $(a,b)$.
+\item \hlt{Index set}: First construct the family on $(0,1)$. For $n\in\N$, set $D_n\defeq\{m2^{-n}:0<m<2^n\}$, and set $D\defeq\bigcup\limits_{n\in\N}D_n$.
+\item \hlt{Base}: By Proposition \ref{prop:normality-nested-neighborhoods}, choose an open set $O_{1/2}$. The choice satisfies $F\subseteq O_{1/2}\subseteq\overline{O_{1/2}}\subseteq U$.
+\item \hlt{Dyadic insertion}: Suppose the sets indexed by $D_n$ have been chosen with the required containments between adjacent indices.\\
+Let $r=m2^{-(n+1)}$ be a new index, where $m$ is odd. Set $p\defeq(m-1)2^{-(n+1)}$ and $q\defeq(m+1)2^{-(n+1)}$.\\
+Set $L_p\defeq F$ when $p=0$ and $L_p\defeq\overline{O_p}$ otherwise. Set $W_q\defeq U$ when $q=1$ and $W_q\defeq O_q$ otherwise.\\
+By the induction hypothesis, $L_p$ is closed, $W_q$ is open, and $L_p\subseteq W_q$.\\
+By Proposition \ref{prop:normality-nested-neighborhoods}, choose an open set $O_r$ such that $L_p\subseteq O_r\subseteq\overline{O_r}\subseteq W_q$.\\
+Perform the finitely many insertions at level $n+1$; all adjacent containments remain valid.
+\item \hlt{Conclusion}: Fix $0<s<t<1$. By Theorem \ref{thm:special-sequence-limits}(v), choose $n\in\N$ such that $2^{-n}<t-s$.\\
+The finite set $S\defeq\{k\in\Z:0\leq k\leq2^n,\ k\leq2^ns\}$ is nonempty; set $m\defeq\max\limits S$.\\
+Then $s<(m+1)2^{-n}<s+2^{-n}<t$, so $(m+1)2^{-n}\in D\cap(s,t)$. Thus $D$ is dense in $(0,1)$.\\
+If $\lambda_1,\lambda_2\in D$ and $\lambda_1<\lambda_2$, choose $n\in\N$ such that $\lambda_1,\lambda_2\in D_n$. Then $\overline{O_{\lambda_1}}\subseteq O_{\lambda_2}$ by the adjacent containment chain.\\
+By the endpoint containments, $(\forall\lambda\in D)\,F\subseteq O_\lambda\subseteq\overline{O_\lambda}\subseteq U$. Set $\Lambda\defeq\{a+(b-a)r:r\in D\}$ and assign $O_{a+(b-a)r}\defeq O_r$.\\
+Since $r\mapsto a+(b-a)r$ is an order-preserving bijection from $(0,1)$ to $(a,b)$, the transported family has all the required properties.
 \end{enumerate}
 \hlt{Structural Commentary}: Normality inserts closed-neighborhood buffers.\\
 \hlt{Key Insight}: Dyadic induction builds the whole ascending ladder.
@@ -223,10 +305,17 @@ The space $X$ is $T_1$ by Definition \ref{def:separation-axioms}.
 \end{lemma}
 
 \begin{theorem} \label{thm:urysohn-lemma-normal-space} \hlt{Urysohn's Lemma}\\
-Let $X$ be normal, let $A,B\subseteq X$ be disjoint closed sets, and let $a<b$ in $\R$.\\
-Then $\exists$ continuous $f:X\to[a,b]$ such that $f|_A=a$ and $f|_B=b$.
+Let $X$ be normal, $A,B\subseteq X$ be disjoint closed sets, $a<b$ in $\R$.\\
+Then continuous map $f:X\to[a,b]$ exists such that $f|_A=a$ and $f|_B=b$.
 \begin{proof}
-A dense $\Lambda\subseteq(a,b)$ and a normally ascending family $\{O_\lambda\}_{\lambda\in\Lambda}$ satisfying $(\forall\lambda\in\Lambda)\,A\subseteq O_\lambda\subseteq X\setminus B$ exist by Lemma \ref{lem:normal-dyadic-neighborhood-ladder}. Define $f(x)\defeq\inf\{\lambda\in\Lambda:x\in O_\lambda\}$, with $\inf\emptyset=b$. Then $f$ is continuous by Lemma \ref{lem:normally-ascending-function-continuity}. For $x\in A$, the defining set is $\Lambda$ and has infimum $a$; for $x\in B$, it is empty. Hence $f|_A=a$ and $f|_B=b$.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Open ladder}: The set $X\setminus B$ is an open neighborhood of $A$.\\
+By Lemma \ref{lem:normal-dyadic-neighborhood-ladder}, choose dense $\Lambda\subseteq(a,b)$, normally ascending family $(O_\lambda)_{\lambda\in\Lambda}$. Choice satisfies $(\forall\lambda\in\Lambda)\,A\subseteq O_\lambda\subseteq\overline{O_\lambda}\subseteq X\setminus B$.
+\item \hlt{Separator}: Define $f(x)\defeq\inf\limits\{\lambda\in\Lambda:x\in O_\lambda\}$, with $\inf\limits\emptyset\defeq b$. By Lemma \ref{lem:normally-ascending-function-continuity}, $f:X\to[a,b]$ is continuous.
+\item \hlt{Boundary values}: If $x\in A$, then $(\forall\lambda\in\Lambda)\,x\in O_\lambda$. Since $\Lambda$ is dense in $(a,b)$, $\inf\limits\Lambda=a$, and hence $f(x)=a$.\\
+If $x\in B$, then $(\forall\lambda\in\Lambda)\,x\notin O_\lambda$, so $f(x)=b$ by the empty-set convention. Thus $f|_A=a$ and $f|_B=b$.
+\end{enumerate}
 \hlt{Structural Commentary}: A nested open ladder becomes a continuous separator.\\
 \hlt{Key Insight}: Normality separates closed sets by a real-valued function.
 \end{proof}
@@ -237,29 +326,61 @@ Let $X$ be a topological space.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item If $u,v:X\to\R$ are continuous and $c,d\in\R$, then $cu+dv$ is continuous.
-\item Let $(s_n)$ be a sequence of continuous maps from $X$ to $\R$, let $g:X\to\R$, and assume $(\forall\varepsilon>0)(\exists N\in\N)(\forall n\geq N)(\forall x\in X)\,\abs{s_n(x)-g(x)}<\varepsilon$. Then $g$ is continuous.
+\item Let $(s_n)$ be a sequence of continuous maps from $X$ to $\R$, and let $g:X\to\R$.\\
+If $(\forall\varepsilon>0)(\exists N\in\N)(\forall n\geq N)(\forall x\in X)\,\abs{s_n(x)-g(x)}<\varepsilon$, then $g$ is continuous.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Define $A:\R^2\to\R$ and $M_c:\R\to\R$ by $A(r,s)\defeq r+s$ and $M_c(r)\defeq cr$. Fix $(r,s)\in\R^2$ and an open neighborhood $W$ of $r+s$. Choose $\varepsilon>0$ with $B_\varepsilon(r+s)\subseteq W$. Then $A((r-\varepsilon/2,r+\varepsilon/2)\times(s-\varepsilon/2,s+\varepsilon/2))\subseteq W$, so $A$ is continuous in the product topology by Definition \ref{def:topological-continuity}. The map $M_0$ is constant and continuous. If $c\ne0$, fix $r\in\R$ and an open neighborhood $W_c$ of $cr$. Choose $\eta>0$ with $B_\eta(cr)\subseteq W_c$ and set $\delta\defeq\eta/\abs{c}$. Then $M_c(B_\delta(r))\subseteq W_c$, so $M_c$ is continuous. Thus $M_c\circ u$ and $M_d\circ v$ are continuous by Proposition \ref{prop:topological-continuity-open-preimages}(iii). Their pair is continuous by Proposition \ref{prop:product-topology-coordinate-continuity}, so $cu+dv=A\circ(M_c\circ u,M_d\circ v)$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(iii).
-\item Fix $x_0\in X$ and an open neighborhood $O$ of $g(x_0)$. Choose $\varepsilon>0$ with $B_\varepsilon(g(x_0))\subseteq O$, and choose $n\in\N$ such that $(\forall x\in X)\,\abs{s_n(x)-g(x)}<\varepsilon/3$. The set $U\defeq s_n^{-1}(B_{\varepsilon/3}(s_n(x_0)))$ is an open neighborhood of $x_0$ by Proposition \ref{prop:topological-continuity-open-preimages}(i). For $x\in U$, $\abs{g(x)-g(x_0)}\leq\abs{g(x)-s_n(x)}+\abs{s_n(x)-s_n(x_0)}+\abs{s_n(x_0)-g(x_0)}<\varepsilon$. Thus $g(U)\subseteq O$, so $g$ is continuous by Definition \ref{def:topological-continuity}.
+\item Define $A:\R^2\to\R$ and $M_c:\R\to\R$ by $A(r,s)\defeq r+s$ and $M_c(r)\defeq cr$. Fix $(r,s)\in\R^2$ and an open neighborhood $W$ of $r+s$.\\
+Choose $\varepsilon>0$ such that $B_\varepsilon(r+s)\subseteq W$. Then $A\bigl((r-\frac{\varepsilon}{2},r+\frac{\varepsilon}{2})\times(s-\frac{\varepsilon}{2},s+\frac{\varepsilon}{2})\bigr)\subseteq W$.\\
+Thus $A$ is continuous in the product topology by Definition \ref{def:topological-continuity}. The map $M_0$ is continuous because it is constant.\\
+Suppose $c\neq0$, fix $r\in\R$, and let $W_c$ be an open neighborhood of $cr$. Choose $\eta>0$ such that $B_\eta(cr)\subseteq W_c$.\\
+Then $M_c(B_{\frac{\eta}{\abs{c}}}(r))\subseteq B_\eta(cr)\subseteq W_c$, so $M_c$ is continuous at $r$ by Definition \ref{def:topological-continuity}(i). Thus $M_c$ is continuous by Definition \ref{def:topological-continuity}(ii).\\
+Hence $M_c\circ u$ and $M_d\circ v$ are continuous by Proposition \ref{prop:topological-continuity-open-preimages}(iii). Their pair is continuous by Proposition \ref{prop:product-topology-coordinate-continuity}.\\
+Therefore $cu+dv=A\circ(M_c\circ u,M_d\circ v)$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(iii).
+\item Fix $x_0\in X$ and an open neighborhood $O$ of $g(x_0)$. Choose $\varepsilon>0$ such that $B_\varepsilon(g(x_0))\subseteq O$.\\
+By the uniform-convergence hypothesis, choose $n\in\N$ such that $(\forall x\in X)\,\abs{s_n(x)-g(x)}<\frac{\varepsilon}{3}$. Set $U\defeq s_n^{-1}(B_{\frac{\varepsilon}{3}}(s_n(x_0)))$.\\
+Then $U$ is an open neighborhood of $x_0$ by continuity of $s_n$ and Proposition \ref{prop:topological-continuity-open-preimages}(i).\\
+For $x\in U$, $\abs{g(x)-g(x_0)}\leq\abs{g(x)-s_n(x)}+\abs{s_n(x)-s_n(x_0)}+\abs{s_n(x_0)-g(x_0)}<\varepsilon$.\\
+Thus $g(U)\subseteq O$, so $g$ is continuous by Definition \ref{def:topological-continuity}.
 \end{enumerate}
-\hlt{Structural Commentary}: Product continuity controls finite sums; one uniform error bound transfers a neighborhood through an approximant.\\
+\hlt{Structural Commentary}: Product continuity controls finite sums; uniform error transfers neighborhoods through approximants.\\
 \hlt{Key Insight}: A domain-wide error bound lets one continuous approximant control the limit throughout $X$.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:tietze-extension-bounded-normal-space} \hlt{Tietze Extension Theorem, Bounded Form}\\
 Let $X$ be normal, let $F\subseteq X$ be closed, let $a<b$ in $\R$, and let $f:F\to[a,b]$ be continuous.\\
-Then $\exists$ continuous $g:X\to[a,b]$ with $g|_F=f$.
+Then a continuous map $g:X\to[a,b]$ exists with $g|_F=f$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Correction step}: The constant maps on $F$ are continuous because the preimage of an open set is either $\emptyset$ or $F$. Hence $\widetilde f\defeq(2f-a-b)/(b-a):F\to[-1,1]$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(i). Let $h:F\to[-A,A]$ be continuous with $A>0$, and set $C_-\defeq\{x\in F:h(x)\leq-A/3\}$ and $C_+\defeq\{x\in F:h(x)\geq A/3\}$. These sets are disjoint and closed in $F$ because their open complements have open preimages by Proposition \ref{prop:topological-continuity-open-preimages}(i). If $C\subseteq F$ is closed in $F$, write $F\setminus C=F\cap O$ with $O\subseteq X$ open; then $X\setminus C=(X\setminus F)\cup O$ is open. Hence $C_-$ and $C_+$ are closed in $X$. There is a continuous $u:X\to[-A/3,A/3]$ with $u|_{C_-}=-A/3$ and $u|_{C_+}=A/3$ by Theorem \ref{thm:urysohn-lemma-normal-space}. The three cases $h\leq-A/3$, $\abs{h}<A/3$, and $h\geq A/3$ imply $(\forall x\in F)\,\abs{h(x)-u(x)}\leq2A/3$.
-\item \hlt{Recursive approximation}: Set $s_0\defeq0$, which is continuous. Suppose $s_{n-1}:X\to\R$ is continuous and $(\forall x\in F)\,\abs{\widetilde f(x)-s_{n-1}(x)}\leq(2/3)^{n-1}$. The residual $h=\widetilde f-s_{n-1}|_F$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(i). The correction step with $A=(2/3)^{n-1}$ supplies continuous $u_n:X\to\R$ satisfying $(\forall x\in X)\,\abs{u_n(x)}\leq\frac13(2/3)^{n-1}$ and $(\forall x\in F)\,\abs{\widetilde f(x)-s_{n-1}(x)-u_n(x)}\leq(2/3)^n$. Set $s_n\defeq s_{n-1}+u_n$, which is continuous by Proposition \ref{prop:topological-real-continuity-stability}(i). The construction follows by induction.
-\item \hlt{Limit and continuity}: If $m<n$ and $x\in X$, then $\abs{s_n(x)-s_m(x)}\leq\sum\limits_{k=m+1}^n\frac13(2/3)^{k-1}\leq(2/3)^m$. Since $(2/3)^m\to0$ by Theorem \ref{thm:special-sequence-limits}(v), $(s_n(x))$ is Cauchy and converges to some $g(x)\in\R$ by Theorem \ref{thm:real-cauchy-convergence-criterion}. For $\delta>0$, choose $n>m$ with $\abs{g(x)-s_n(x)}<\delta$; then $\abs{g(x)-s_m(x)}<\delta+(2/3)^m$. Hence $(\forall m\in\N)(\forall x\in X)\,\abs{g(x)-s_m(x)}\leq(2/3)^m$, and $g$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(ii).
-\item \hlt{Extension and range}: For $x\in F$, $\abs{\widetilde f(x)-s_n(x)}\leq(2/3)^n\to0$, so $g|_F=\widetilde f$. The bound $\abs{s_n(x)}\leq\sum\limits_{k=1}^n\frac13(2/3)^{k-1}=1-(2/3)^n$ implies $\abs{g(x)}\leq\abs{g(x)-s_n(x)}+\abs{s_n(x)}\leq1$. Hence $g(X)\subseteq[-1,1]$. The map $G\defeq((b-a)g+a+b)/2:X\to[a,b]$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(i) and satisfies $G|_F=f$.
+\item \hlt{Correction step}: Constant maps on $F$ are continuous because their open preimages belong to $\{\emptyset,F\}$.\\
+Hence $\widetilde f\defeq\frac{2f-a-b}{b-a}:F\to[-1,1]$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(i). Let $A>0$, and let $h:F\to[-A,A]$ be continuous.\\
+Set $C_-\defeq\{x\in F:h(x)\leq-\frac{A}{3}\}$ and $C_+\defeq\{x\in F:h(x)\geq\frac{A}{3}\}$.\\
+The sets are disjoint, and $F\setminus C_-=h^{-1}((-\frac{A}{3},A])$ and $F\setminus C_+=h^{-1}([-A,\frac{A}{3}))$.\\
+Both complements are open in $F$ by Proposition \ref{prop:topological-continuity-open-preimages}(i), so $C_-$ and $C_+$ are closed in $F$.\\
+If $C\subseteq F$ is closed in $F$, choose an open $O\subseteq X$ such that $F\setminus C=F\cap O$. Then $X\setminus C=(X\setminus F)\cup O$ is open, so $C$ is closed in $X$.\\
+Thus $C_-$ and $C_+$ are closed in $X$. By Theorem \ref{thm:urysohn-lemma-normal-space}, choose a continuous $u:X\to[-\frac{A}{3},\frac{A}{3}]$.\\
+Choice satisfies $u|_{C_-}=-\frac{A}{3}$ and $u|_{C_+}=\frac{A}{3}$. By cases $h(x)\leq-\frac{A}{3}$, $\abs{h(x)}<\frac{A}{3}$, and $h(x)\geq\frac{A}{3}$, $(\forall x\in F)\,\abs{h(x)-u(x)}\leq\frac{2A}{3}$.
+\item \hlt{Recursive approximation}: Set $s_0\defeq0$, which is continuous.\\
+For $n\in\N$, suppose $s_{n-1}:X\to\R$ is continuous and $(\forall x\in F)\,\abs{\widetilde f(x)-s_{n-1}(x)}\leq(\frac{2}{3})^{n-1}$.\\
+By Proposition \ref{prop:topological-continuity-open-preimages}(ii), $s_{n-1}|_F$ is continuous. Set $A_n\defeq(\frac{2}{3})^{n-1}$ and $h\defeq\widetilde f-s_{n-1}|_F$.\\
+Then $h:F\to[-A_n,A_n]$ is continuous by the induction bound and Proposition \ref{prop:topological-real-continuity-stability}(i).\\
+By the correction step with $A=A_n$, choose a continuous $u_n:X\to\R$.\\
+The domain-wide bound $(\forall x\in X)\,\abs{u_n(x)}\leq\frac{1}{3}(\frac{2}{3})^{n-1}$ holds.\\
+The residual bound $(\forall x\in F)\,\abs{\widetilde f(x)-s_{n-1}(x)-u_n(x)}\leq(\frac{2}{3})^n$ also holds.\\
+Set $s_n\defeq s_{n-1}+u_n$. By Proposition \ref{prop:topological-real-continuity-stability}(i), $s_n$ is continuous. Sequence $(s_n)$ follows by induction.
+\item \hlt{Limit and continuity}: Fix $x\in X$. If $m<n$, then $\abs{s_n(x)-s_m(x)}\leq\sum\limits_{k=m+1}^n\frac{1}{3}(\frac{2}{3})^{k-1}\leq(\frac{2}{3})^m$.\\
+By Theorem \ref{thm:special-sequence-limits}(v), $(\frac{2}{3})^m\to0$. Thus $(s_n(x))$ is Cauchy by Definition \ref{def:real-cauchy-sequence}.\\
+By Theorem \ref{thm:real-cauchy-convergence-criterion}, set $\widetilde g(x)\defeq\lim\limits_{n\to\infty}s_n(x)\in\R$. Fix $m\in\N$, $x\in X$, and $\delta>0$.\\
+Choose $n>m$ such that $\abs{\widetilde g(x)-s_n(x)}<\delta$. Then $\abs{\widetilde g(x)-s_m(x)}<\delta+(\frac{2}{3})^m$.\\
+Since $\delta>0$ is arbitrary, $(\forall m\in\N)(\forall x\in X)\,\abs{\widetilde g(x)-s_m(x)}\leq(\frac{2}{3})^m$.\\
+Hence $s_m\to\widetilde g$ uniformly, and $\widetilde g$ is continuous by Proposition \ref{prop:topological-real-continuity-stability}(ii).
+\item \hlt{Extension and range}: For $x\in F$, $\abs{\widetilde f(x)-s_n(x)}\leq(\frac{2}{3})^n\to0$, so $\widetilde g|_F=\widetilde f$. For $x\in X$, $\abs{s_n(x)}\leq\sum\limits_{k=1}^n\frac{1}{3}(\frac{2}{3})^{k-1}=1-(\frac{2}{3})^n$.\\
+By the uniform error bound, $\abs{\widetilde g(x)}\leq\abs{\widetilde g(x)-s_n(x)}+\abs{s_n(x)}\leq1$. Hence $\widetilde g(X)\subseteq[-1,1]$.\\
+Set $g\defeq\frac{(b-a)\widetilde g+a+b}{2}:X\to[a,b]$. By Proposition \ref{prop:topological-real-continuity-stability}(i), $g$ is continuous. By the definition of $\widetilde f$, $g|_F=f$.
 \end{enumerate}
 \hlt{Structural Commentary}: Urysohn corrections shrink the residual geometrically.\\
 \hlt{Key Insight}: Geometric domain-wide error decay turns approximate extensions into an exact one.
