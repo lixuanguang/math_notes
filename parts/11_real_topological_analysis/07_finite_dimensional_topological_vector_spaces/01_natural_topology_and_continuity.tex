@@ -1,78 +1,170 @@
 \subsection{Natural Topology and Continuity}
 
-Finite-dimensional real vector spaces carry a canonical topology: choose coordinates, use the standard Euclidean topology on $\R^n$, and then forget that coordinates were chosen. All coordinate changes are homeomorphisms.
+Nonzero finite-dimensional real vector spaces carry a canonical topology: choose coordinates, use the standard Euclidean topology on $\R^n$, and then forget that coordinates were chosen. All coordinate changes are homeomorphisms. Throughout this subsection, $\R$ carries its usual topology and $\R^n$ carries its Euclidean topology.
 
 \begin{definition} \label{def:topological-vector-space} \hlt{Topological Vector Space}\\
 Let $\mathcal{V}$ be a real vector space and let $\mathcal{T}$ be a topology on its underlying set.\\
-The pair $(\mathcal{V},\mathcal{T})$ is a \hlt{topological vector space} if addition $A:\mathcal{V}\times\mathcal{V}\to\mathcal{V}$, $A(\mathbf{u},\mathbf{v})=\mathbf{u}+\mathbf{v}$, and scalar multiplication $M:\R\times\mathcal{V}\to\mathcal{V}$, $M(a,\mathbf{v})=a\mathbf{v}$ are continuous, where products carry the product topology.
+Define $A:\mathcal{V}\times\mathcal{V}\to\mathcal{V}$ by $A(\mathbf{u},\mathbf{v})\defeq\mathbf{u}+\mathbf{v}$ and $M:\R\times\mathcal{V}\to\mathcal{V}$ by $M(a,\mathbf{v})\defeq a\mathbf{v}$.\\
+The pair $(\mathcal{V},\mathcal{T})$ is a \hlt{topological vector space} iff $A$ and $M$ are continuous, where both domains carry the product topology.
 \end{definition}
 
-\begin{example} \label{ex:rn-standard-topological-vector-space} \hlt{The Standard Topology on $\R^n$}\\
-With the Euclidean topology, $\R^n$ is a topological vector space: the maps $(\mathbf{x},\mathbf{y})\longmapsto \mathbf{x}+\mathbf{y}$, $(a,\mathbf{x})\longmapsto a\mathbf{x}$ have polynomial coordinate functions $x_i+y_i$ and $ax_i$, hence are continuous.
-\end{example}
-
-\begin{proposition} \label{prop:real-matrix-maps-continuous-homeomorphisms} \hlt{Real Matrix Maps Are Continuous}\\
-Let $A=[a_{j,k}]\in\operatorname{Mat}(m,n,\R)$, and let $T_A:\R^n\to\R^m$ be the induced map $T_A(\mathbf{x})=A\mathbf{x}$. Then $T_A$ is continuous for the Euclidean topologies. If $m=n$ and $A$ is invertible, then $T_A$ is a homeomorphism. In particular, every linear functional on $\R^n$ is continuous.
+\begin{proposition} \label{prop:rn-standard-topological-vector-space} \hlt{The Standard Topology on $\R^n$}\\
+Let $n\in\N$. With the Euclidean topology, $\R^n$ is a topological vector space.
 \begin{proof}
-For $\mathbf{x}=(x_1,\ldots,x_n)^t$, the $j$th coordinate of $T_A(\mathbf{x})$ is $\sum\limits_{k=1}^n a_{j,k}x_k$, hence is continuous. Thus $T_A$ is continuous. If $A$ is invertible, then $(T_A)^{-1}=T_{A^{-1}}$, which is continuous by the first part. Finally, every $f\in(\R^n)'$ equals $T_A$ for a unique $A\in\operatorname{Mat}(1,n,\R)$, so $f$ is continuous.
-\hlt{Structural Commentary}: Matrix maps on Euclidean coordinate spaces are continuous coordinate by coordinate.\\
-\hlt{Key Insight}: Invertible real matrices give homeomorphisms of Euclidean space.
+Fix $(\mathbf{x},\mathbf{y})\in\R^n\times\R^n$ and an open neighborhood $O$ of $\mathbf{x}+\mathbf{y}$.\\
+Choose $\varepsilon>0$ with $B_{\varepsilon}(\mathbf{x}+\mathbf{y})\subseteq O$. If $\mathbf{u}\in B_{\varepsilon/2}(\mathbf{x})$ and $\mathbf{v}\in B_{\varepsilon/2}(\mathbf{y})$, then $\norm{(\mathbf{u}+\mathbf{v})-(\mathbf{x}+\mathbf{y})}_2\leq\norm{\mathbf{u}-\mathbf{x}}_2+\norm{\mathbf{v}-\mathbf{y}}_2<\varepsilon$.\\
+Hence $A(B_{\varepsilon/2}(\mathbf{x})\times B_{\varepsilon/2}(\mathbf{y}))\subseteq O$, so $A$ continuous at $(\mathbf{x},\mathbf{y})$ by Definition \ref{def:topological-continuity}. Fix $(a,\mathbf{x})\in\R\times\R^n$, open neighborhood $W$ of $a\mathbf{x}$.\\
+Choose $\varepsilon>0$ with $B_{\varepsilon}(a\mathbf{x})\subseteq W$, and choose $\delta\in(0,1)$ with $\delta(\norm{\mathbf{x}}_2+\abs{a}+1)<\varepsilon$.\\
+If $b\in(a-\delta,a+\delta)$ and $\mathbf{y}\in B_{\delta}(\mathbf{x})$, then $\abs{b}<\abs{a}+1$ and $\norm{b\mathbf{y}-a\mathbf{x}}_2\leq\abs{b}\norm{\mathbf{y}-\mathbf{x}}_2+\abs{b-a}\norm{\mathbf{x}}_2<\delta(\abs{a}+1+\norm{\mathbf{x}}_2)<\varepsilon$.\\
+Hence $M((a-\delta,a+\delta)\times B_{\delta}(\mathbf{x}))\subseteq W$, $M$ continuous at $(a,\mathbf{x})$ by Definition \ref{def:topological-continuity}; $\R^n$ is  topological vector space by Definition \ref{def:topological-vector-space}.\\
+\hlt{Structural Commentary}: Product neighborhoods split the output error between the input coordinates.\\
+\hlt{Key Insight}: The Euclidean norm estimates both vector operations locally.
 \end{proof}
 \end{proposition}
 
-\begin{definition} \label{def:natural-topology-finite-dimensional-real-vector-space} \hlt{Natural Topology}\\
-Let $\mathcal{V}$ be an $n$-dimensional real vector space, let $\beta$ be a basis, and let $[\cdot]_{\beta}:\mathcal{V}\to\R^n$ be the coordinate isomorphism.\\
-The \hlt{natural topology} on $\mathcal{V}$ is $\mathcal{T}_{\beta} \defeq \{[\cdot]_{\beta}^{-1}(O): O\subseteq\R^n$ is open$\}$.\\
-Equivalently, $U\subseteq\mathcal{V}$ is open if and only if $[\cdot]_{\beta}(U)$ is open in $\R^n$.
+\begin{proposition} \label{prop:real-matrix-maps-continuous-homeomorphisms} \hlt{Real Matrix Maps Are Continuous}\\
+Let $m,n\in\N$, let $A=[a_{j,k}]\in\operatorname{Mat}(m,n,\R)$, and define $T_A:\R^n\to\R^m$ by $T_A(\mathbf{x})\defeq A\mathbf{x}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The map $T_A$ is continuous for the Euclidean topologies.
+\item If $m=n$ and $A$ is invertible, then $T_A$ is a homeomorphism.
+\item $(\R^n)'\subseteq C(\R^n,\R)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $k\in\{1,\ldots,n\}$. For $\mathbf{x},\mathbf{y}\in\R^n$, $\abs{\pi_k(\mathbf{x})-\pi_k(\mathbf{y})}\leq\norm{\mathbf{x}-\mathbf{y}}_2$, so $\pi_k$ is $1$-Lipschitz by Definition \ref{def:lipschitz-map}.\\
+Hence $\pi_k$ is continuous by Proposition \ref{prop:lipschitz-implies-uniform-continuity}. Fix $j\in\{1,\ldots,m\}$.\\
+The $j$th coordinate $\sum\limits_{k=1}^n a_{j,k}\pi_k$ of $T_A$ is continuous by Theorem \ref{thm:continuous-algebra-and-components}(i), since constant maps are continuous.\\
+Therefore $T_A$ is continuous in metric sense by Theorem \ref{thm:continuous-algebra-and-components}(ii). It is continuous for Euclidean topologies by Corollary \ref{cor:metric-and-topological-continuity-agree}.
+\item If $A$ is invertible, then $(T_A)^{-1}=T_{A^{-1}}$, which is continuous by (i). Thus $T_A$ is a homeomorphism by Definition \ref{def:topological-homeomorphism}.
+\item Fix $f\in(\R^n)'$ and let $B\in\operatorname{Mat}(1,n,\R)$ be its matrix. Then $f=T_B$ by Proposition \ref{prop:matrix-representation-action}, so $f$ is continuous by (i).
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate continuity handles matrix maps; inverse matrices,  row representations handle remaining claims.\\
+\hlt{Key Insight}: Matrix coordinates transfer continuity to inverses and linear functionals.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} \hlt{Finite-Dimensional Linear Maps Are Lipschitz}\\
+Let $m,n\in\N$ and let $A\in\LL(\R^n,\R^m)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(\forall\x,\y\in\R^n)\,\norm{A\x-A\y}_2\leq\normop{A}\norm{\x-\y}_2$; hence $A$ is $\normop{A}$-Lipschitz.
+\item If $m=n$ and $A$ is invertible, then $(\forall\x,\y\in\R^n)\,\frac{1}{\normop{A^{-1}}}\norm{\x-\y}_2\leq\norm{A\x-A\y}_2\leq\normop{A}\norm{\x-\y}_2$.\\
+Hence $A:\R^n\to\R^n$ is a homeomorphism.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The bound $(\forall\z\in\R^n)\,\norm{A\z}_2\leq\normop{A}\norm{\z}_2$ holds by Definition \ref{def:operator-norm-rn-rm}. With $\z=\x-\y$, linearity of $A$ proves the claim.
+\item Since $\normop{A^{-1}}>0$, $\norm{\x-\y}_2=\norm{A^{-1}(A\x-A\y)}_2\leq\normop{A^{-1}}\norm{A\x-A\y}_2$ by part (i) for $A^{-1}$.\\
+This inequality and part (i) are the lower and upper bounds.\\
+The maps $A$ and $A^{-1}$ are continuous by part (i) and Proposition \ref{prop:lipschitz-implies-uniform-continuity}, so $A$ is a homeomorphism by Definition \ref{def:topological-homeomorphism}.
+\end{enumerate}
+\hlt{Structural Commentary}: $A^{-1}$ converts upper control into lower control.\\
+\hlt{Key Insight}: Invertible linear maps are bi-Lipschitz.
+\end{proof}
+\end{theorem}
+
+\begin{theorem} \label{thm:invertible-operators-open-and-inversion-continuous} \hlt{Openness of Invertibility and Continuity of Inversion}\\
+Let $n\in\N$, equip $\LL(\R^n)$ with the operator-norm metric, and let $\Omega$ be its set of invertible operators.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $A\in\Omega$, $B\in\LL(\R^n)$, and $\normop{B-A}\,\normop{A^{-1}}<1$, then $B\in\Omega$.
+\item $\Omega$ is open in $\LL(\R^n)$.
+\item The inversion map $\iota:\Omega\to\Omega$, $\iota(A)\defeq A^{-1}$, is continuous.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\alpha\defeq\frac{1}{\normop{A^{-1}}}$ and $\beta\defeq\normop{B-A}$; then $0\leq\beta<\alpha$.\\
+For $\x\in\R^n$, $\alpha\norm{\x}_2\leq\norm{A\x}_2$ by Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}(ii), while $\norm{A\x}_2\leq\norm{(A-B)\x}_2+\norm{B\x}_2\leq\beta\norm{\x}_2+\norm{B\x}_2$ by Definition \ref{def:operator-norm-rn-rm}.\\
+Hence $(\alpha-\beta)\norm{\x}_2\leq\norm{B\x}_2$, so $\ker B=\{\ze\}$ and $B\in\Omega$ by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+For $\y\in\R^n$, set $\x\defeq B^{-1}\y$; then $\norm{B^{-1}\y}_2\leq\frac{1}{\alpha-\beta}\norm{\y}_2$, so $\normop{B^{-1}}\leq\frac{1}{\alpha-\beta}$ by Definition \ref{def:operator-norm-rn-rm}.
+\item For $A\in\Omega$, the ball $\{B\in\LL(\R^n):\normop{B-A}<\frac{1}{\normop{A^{-1}}}\}$ lies in $\Omega$ by (i); hence $\Omega$ is open.
+\item Fix $A\in\Omega$, let $(B_k)\subseteq\Omega$ satisfy $B_k\to A$. Set $\alpha\defeq\frac{1}{\normop{A^{-1}}}$, $\beta_k\defeq\normop{B_k-A}$. Eventually $\beta_k<\frac{\alpha}{2}$, so $\normop{B_k^{-1}}\leq\frac{2}{\alpha}$ by (i).\\
+The bound $\normop{B_k^{-1}-A^{-1}}\leq\frac{2}{\alpha}\beta_k\normop{A^{-1}}\to0$ holds by $B_k^{-1}-A^{-1}=B_k^{-1}(A-B_k)A^{-1}$ and Proposition \ref{prop:spectral-norm-basic-properties}(v).\\
+Thus inversion is continuous at $A$ by Theorem \ref{thm:metric-continuity-sequential-characterization}. Since $A\in\Omega$ was arbitrary, $\iota$ is continuous.
+\end{enumerate}
+\hlt{Structural Commentary}: The lower stretch controls inverse norms; the resolvent identity transfers perturbations to inverses.\\
+\hlt{Key Insight}: Uniform inverse bounds make $B^{-1}(A-B)A^{-1}$ vanish with $B-A$.
+\end{proof}
+\end{theorem}
+
+\begin{definition} \label{def:natural-topology-finite-dimensional-real-vector-space} \hlt{Natural Topology from a Basis}\\
+Let $n\in\N$, let $\mathcal{V}$ be an $n$-dimensional real vector space, let $\beta$ be a basis, and let $[\cdot]_{\beta}:\mathcal{V}\to\R^n$ be the coordinate isomorphism.\\
+The \hlt{natural topology induced by $\beta$} is $\mathcal{T}_{\beta}\defeq\{[\cdot]_{\beta}^{-1}(O):O\subseteq\R^n\text{ is open}\}$. Equivalently, $(\forall U\subseteq\mathcal{V})\,[U\in\mathcal{T}_{\beta}\Longleftrightarrow[\cdot]_{\beta}(U)\text{ is open in }\R^n]$.
 \end{definition}
 
 \begin{proposition} \label{prop:natural-topology-independent-of-basis} \hlt{Natural Topology Is Basis-Independent}\\
-If $\beta$ and $\gamma$ are bases of $\mathcal{V}$, then $\mathcal{T}_{\beta}=\mathcal{T}_{\gamma}$.
+Let $n\in\N$, let $\mathcal{V}$ be an $n$-dimensional real vector space, and let $\beta$ and $\gamma$ be bases of $\mathcal{V}$. Then $\mathcal{T}_{\beta}=\mathcal{T}_{\gamma}$.
 \begin{proof}
-Set $H_{\gamma\leftarrow\beta}\defeq[\cdot]_{\gamma}\circ[\cdot]_{\beta}^{-1}:\R^n\to\R^n$.\\
-Then $H_{\gamma\leftarrow\beta}\mathbf{x}=C_{\gamma\leftarrow\beta}\mathbf{x}$. Since $C_{\gamma\leftarrow\beta}$ is invertible with inverse $C_{\beta\leftarrow\gamma}$, Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms} shows that $H_{\gamma\leftarrow\beta}$ is a homeomorphism with inverse $H_{\beta\leftarrow\gamma}$.\\
-Hence, for $U\subseteq\mathcal{V}$, $U\in\mathcal{T}_{\beta}$ $\iff$ $[\cdot]_{\beta}(U)$ is open $\iff$ $H_{\gamma\leftarrow\beta}([\cdot]_{\beta}(U))=[\cdot]_{\gamma}(U)$ is open $\iff$ $U\in\mathcal{T}_{\gamma}$.
+Set $H_{\gamma\leftarrow\beta}\defeq[\cdot]_{\gamma}\circ[\cdot]_{\beta}^{-1}:\R^n\to\R^n$. The identity $H_{\gamma\leftarrow\beta}\mathbf{x}=C_{\gamma\leftarrow\beta}\mathbf{x}$ holds by Definition \ref{def:change-of-basis-matrix}.\\
+Matrix $C_{\gamma\leftarrow\beta}$ invertible with inverse $C_{\beta\leftarrow\gamma}$ by Theorem \ref{thm:change-of-basis-matrices}(i); $H_{\gamma\leftarrow\beta}$ is  homeomorphism with inverse $H_{\beta\leftarrow\gamma}$ by Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms}(ii).\\
+For $U\subseteq\mathcal{V}$, $U\in\mathcal{T}_{\beta}\Longleftrightarrow[\cdot]_{\beta}(U)\text{ open}\Longleftrightarrow H_{\gamma\leftarrow\beta}([\cdot]_{\beta}(U))=[\cdot]_{\gamma}(U)\text{ open}\Longleftrightarrow U\in\mathcal{T}_{\gamma}$ by Definition \ref{def:natural-topology-finite-dimensional-real-vector-space},  homeomorphism property.\\
 \hlt{Structural Commentary}: Basis changes are homeomorphisms.\\
 \hlt{Key Insight}: The natural topology is carried by the vector-space structure, not by a preferred basis.
 \end{proof}
 \end{proposition}
 
 \begin{theorem} \label{thm:natural-topology-characterization} \hlt{Characterization of the Natural Topology}\\
-Let $\dim_{\R}\mathcal{V}<\infty$. There is a unique topology $\mathcal{T}$ on $\mathcal{V}$ such that:
+Let $\mathcal{V}$ be a real vector space, set $n\defeq\dim_{\R}\mathcal{V}$, assume $1\leq n<\infty$, let $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$ be a basis, and let $\mathcal{T}$ be a topology on $\mathcal{V}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $(\mathcal{V},\mathcal{T})$ is a topological vector space;
-\item $\mathcal{V}'\subseteq C((\mathcal{V},\mathcal{T}),\R)$.
+\item $(\mathcal{V},\mathcal{T}_{\beta})$ is a topological vector space.
+\item $\mathcal{V}'\subseteq C((\mathcal{V},\mathcal{T}_{\beta}),\R)$.
+\item If $(\mathcal{V},\mathcal{T})$ is a topological vector space and $\mathcal{V}'\subseteq C((\mathcal{V},\mathcal{T}),\R)$, then $\mathcal{T}=\mathcal{T}_{\beta}$.
 \end{enumerate}
-Moreover, $\mathcal{T}=\mathcal{T}_{\beta}$ for every basis $\beta$.
 \begin{proof}
-Fix an arbitrary basis $\beta=(\mathbf{v}_1,\ldots,\mathbf{v}_n)$.
+Put $\Phi_{\beta}\defeq[\cdot]_{\beta}$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Existence}: put $\mathcal{T}=\mathcal{T}_{\beta}$. Since $[\cdot]_{\beta}:(\mathcal{V},\mathcal{T}_{\beta})\to\R^n$ is a homeomorphism, the vector operations on $\mathcal{V}$ are transported from the continuous vector operations on $\R^n$.\\
-Also, for $\varphi\in\mathcal{V}'$, $\varphi\circ[\cdot]_{\beta}^{-1}\in(\R^n)'$, hence is continuous by Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms}. Thus (i)--(ii) hold.
-\item \hlt{Uniqueness}: suppose $\mathcal{T}$ satisfies (i)--(ii).\\
-For $1\leq i\leq n$, the coordinate functional $\pi_i\circ[\cdot]_{\beta}\in\mathcal{V}'$ is continuous, so $[\cdot]_{\beta}:(\mathcal{V},\mathcal{T})\to\R^n$ is continuous.\\
-Its inverse $\Psi(a_1,\ldots,a_n)=a_1\mathbf{v}_1+\cdots+a_n\mathbf{v}_n$ is continuous by (i), since it is built from scalar multiplication and finite sums. Hence $[\cdot]_{\beta}$ is a homeomorphism, so $\mathcal{T}=\mathcal{T}_{\beta}$.
+\item The map $\Phi_{\beta}:(\mathcal{V},\mathcal{T}_{\beta})\to\R^n$ is a homeomorphism by Definition \ref{def:natural-topology-finite-dimensional-real-vector-space}.\\
+The product maps $\Phi_{\beta}\times\Phi_{\beta}$ and $\operatorname{id}_{\R}\times\Phi_{\beta}$, together with their product inverses, are continuous by Propositions \ref{prop:product-topology-coordinate-continuity} and \ref{prop:topological-continuity-open-preimages}(iii). Hence both product maps are homeomorphisms by Definition \ref{def:topological-homeomorphism}.\\
+Let $A_{\mathcal{V}},M_{\mathcal{V}}$ and $A_{\R^n},M_{\R^n}$ denote the vector operations on $\mathcal{V}$ and $\R^n$, respectively.\\
+Identity $A_{\mathcal{V}}=\Phi_{\beta}^{-1}\circ A_{\R^n}\circ(\Phi_{\beta}\times\Phi_{\beta})$ holds by Proposition \ref{prop:coordinate-map-isomorphism}(i). Also, $M_{\mathcal{V}}=\Phi_{\beta}^{-1}\circ M_{\R^n}\circ(\operatorname{id}_{\R}\times\Phi_{\beta})$ by Proposition \ref{prop:coordinate-map-isomorphism}(i).\\
+The maps $A_{\mathcal{V}}$ and $M_{\mathcal{V}}$ are continuous by Propositions \ref{prop:rn-standard-topological-vector-space} and \ref{prop:topological-continuity-open-preimages}(iii).
+\item If $\varphi\in\mathcal{V}'$, then $\varphi\circ\Phi_{\beta}^{-1}\in(\R^n)'$,  continuous by Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms}(iii); $\varphi=(\varphi\circ\Phi_{\beta}^{-1})\circ\Phi_{\beta}$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(iii).
+\item Suppose $(\mathcal{V},\mathcal{T})$ is a topological vector space and $\mathcal{V}'\subseteq C((\mathcal{V},\mathcal{T}),\R)$.
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Coordinate Functionals}: For $i\in\{1,\ldots,n\}$, set $\varphi_i\defeq\pi_i\circ\Phi_{\beta}\in\mathcal{V}'$. Each $\varphi_i$ is continuous by the dual-continuity hypothesis.
+\item \hlt{Forward Coordinate Map}: Fix $\mathbf{v}\in\mathcal{V}$ and an open neighborhood $O$ of $\Phi_{\beta}(\mathbf{v})$.\\
+Choose $\varepsilon>0$ with $B_{\varepsilon}(\Phi_{\beta}(\mathbf{v}))\subseteq O$, and set $I_i\defeq\left(\varphi_i(\mathbf{v})-\frac{\varepsilon}{\sqrt{n}},\varphi_i(\mathbf{v})+\frac{\varepsilon}{\sqrt{n}}\right)$ for $i\in\{1,\ldots,n\}$.\\
+The set $U\defeq\bigcap\limits_{i=1}^n\varphi_i^{-1}(I_i)$ is an open neighborhood of $\mathbf{v}$ by Definition \ref{def:topological-space} and Proposition \ref{prop:topological-continuity-open-preimages}(i).\\
+For $\mathbf{u}\in U$, $\norm{\Phi_{\beta}(\mathbf{u})-\Phi_{\beta}(\mathbf{v})}_2<\varepsilon$, so $\Phi_{\beta}(U)\subseteq O$. Hence $\Phi_{\beta}:(\mathcal{V},\mathcal{T})\to\R^n$ is continuous by Definition \ref{def:topological-continuity}.
+\item \hlt{Coordinate Synthesis}: The inverse of $\Phi_{\beta}$ is $\Psi:\R^n\to\mathcal{V}$, $\Psi(\mathbf{a})\defeq\sum\limits_{i=1}^n\pi_i(\mathbf{a})\mathbf{v}_i$, by Definition \ref{def:coordinate-vector-and-coordinate-map}.\\
+Each $\pi_i$ is continuous by Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms}(iii). Each constant map $\mathbf{a}\mapsto\mathbf{v}_i$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(i), because every open-set preimage is either $\emptyset$ or $\R^n$. Hence $\mathbf{a}\mapsto(\pi_i(\mathbf{a}),\mathbf{v}_i)$ is continuous by Proposition \ref{prop:product-topology-coordinate-continuity}, and $\mathbf{a}\mapsto\pi_i(\mathbf{a})\mathbf{v}_i$ is continuous by the topological-vector-space hypothesis and Proposition \ref{prop:topological-continuity-open-preimages}(iii).\\
+Finite sums of these maps continuous by same hypothesis, Proposition \ref{prop:product-topology-coordinate-continuity}, Proposition \ref{prop:topological-continuity-open-preimages}(iii). Thus $\Psi$ is continuous.
+\item \hlt{Conclusion}: The map $\Phi_{\beta}$ is a homeomorphism by (b)--(c) and Definition \ref{def:topological-homeomorphism}. Hence $\mathcal{T}=\mathcal{T}_{\beta}$ by Definition \ref{def:natural-topology-finite-dimensional-real-vector-space}.
 \end{enumerate}
-\hlt{Structural Commentary}: Functionals give coordinates; operations give inverse coordinates.\\
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate functionals recover the forward map; vector operations recover its inverse.\\
 \hlt{Key Insight}: Functionals and vector operations determine finite-dimensional coordinates topologically.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:finite-dimensional-linear-maps-continuous} \hlt{Finite-Dimensional Linear Maps Are Continuous}\\
-Let $\dim_{\R}\mathcal{V},\dim_{\R}\mathcal{W}<\infty$, with natural topologies. Then $\LL(\mathcal{V},\mathcal{W})\subseteq C(\mathcal{V},\mathcal{W})$.\\
-If $T\in\LL(\mathcal{V},\mathcal{W})$ is an isomorphism, then $T$ is a homeomorphism.
+Let $\mathcal{V}$ and $\mathcal{W}$ be nonzero finite-dimensional real vector spaces with their natural topologies.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\LL(\mathcal{V},\mathcal{W})\subseteq C(\mathcal{V},\mathcal{W})$.
+\item If $T\in\LL(\mathcal{V},\mathcal{W})$ is an isomorphism, then $T$ is a homeomorphism.
+\end{enumerate}
 \begin{proof}
-Choose bases $\beta$ of $\mathcal{V}$ and $\gamma$ of $\mathcal{W}$. For $T\in\LL(\mathcal{V},\mathcal{W})$, $[\cdot]_{\gamma}\circ T\circ[\cdot]_{\beta}^{-1}(\mathbf{x}) =[T]_{\gamma\leftarrow\beta}\mathbf{x}$, which is continuous by Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms}. Since $[\cdot]_{\beta}$ and $[\cdot]_{\gamma}$ are homeomorphisms, $T$ is continuous.\\
-If $T$ is an isomorphism, apply the same argument to $T^{-1}$.\\
-\hlt{Structural Commentary}: Finite-dimensional linear maps are just matrix maps in natural coordinates.\\
-\hlt{Key Insight}: A basis turns topological questions about linear maps into continuity of matrix multiplication.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose bases $\beta$ of $\mathcal{V}$ and $\gamma$ of $\mathcal{W}$, and fix $T\in\LL(\mathcal{V},\mathcal{W})$.\\
+Coordinate map $[\cdot]_{\gamma}\circ T\circ[\cdot]_{\beta}^{-1}$ equals $\mathbf{x}\mapsto[T]_{\gamma\leftarrow\beta}\mathbf{x}$ by Proposition \ref{prop:matrix-representation-action}, and it is continuous by Proposition \ref{prop:real-matrix-maps-continuous-homeomorphisms}(i).\\
+Coordinate maps $[\cdot]_{\beta}$, $[\cdot]_{\gamma}$ are homeomorphisms by Definition \ref{def:natural-topology-finite-dimensional-real-vector-space}, Proposition \ref{prop:natural-topology-independent-of-basis}; $T$ is continuous by Proposition \ref{prop:topological-continuity-open-preimages}(iii).
+\item If $T$ is an isomorphism, then $T^{-1}\in\LL(\mathcal{W},\mathcal{V})$, so $T^{-1}$ is continuous by (i); $T$ is a homeomorphism by Definition \ref{def:topological-homeomorphism}.
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate homeomorphisms conjugate linear maps to continuous real matrix maps.\\
+\hlt{Key Insight}: Natural coordinates transfer matrix continuity back to the vector spaces.
 \end{proof}
 \end{corollary}
 
 \begin{perspective} \label{per:finite-dimensional-topology-is-rigid} \hlt{Finite-Dimensional Topology Is Rigid}\\
-For finite-dimensional real vector spaces, topology is algebraically forced.\\
-Note that $\mathcal{T}_{\beta}=\mathcal{T}_{\gamma}$; $\LL(\mathcal{V},\mathcal{W})\subseteq C(\mathcal{V},\mathcal{W})$; $T\in\LL(\mathcal{V},\mathcal{W})$ bijective $\Rightarrow$ $T$ is a homeomorphism.\\
-Infinite-dimensional topological vector spaces need not be rigid in this sense.
+Natural topology is independent of coordinates by Proposition \ref{prop:natural-topology-independent-of-basis}, recoverable from vector operations and continuous algebraic dual by Theorem \ref{thm:natural-topology-characterization}. Every linear map is continuous and every linear isomorphism is a homeomorphism by Corollary \ref{cor:finite-dimensional-linear-maps-continuous}.\\
+Infinite-dimensional topological vector spaces need not share this rigidity.
 \end{perspective}
