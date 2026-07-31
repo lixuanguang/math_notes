@@ -1,49 +1,81 @@
 \subsection{Riemann Integration}
 
-The integration side of one-variable calculus is organized by Riemann and Riemann--Stieltjes sums; the fundamental theorem connects the two halves.
+Ordinary Riemann integration compares Darboux envelopes and approximates their common value by tagged sums.\\
+Riemann--Stieltjes integration and the fundamental theorems follow in the next section.
 
-This subsection develops Riemann and Riemann--Stieltjes integration by partitions, then links integrals to antiderivatives through the Fundamental Theorem of Calculus. Point partitions and interval-envelope partitions are equivalent via common refinement.
-
-\begin{definition} \label{def:partition-and-riemann-upper-lower-sums}\label{def:riemann-stieltjes-core-source-todo} \hlt{Partitions and Riemann Upper/Lower Sums}
+\begin{definition} \label{def:partition-and-riemann-upper-lower-sums} \hlt{Partitions, Darboux Sums, and the Riemann Integral}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A \hlt{partition} of $[a,b]$ is $\Pi=\{x_0,\ldots,x_n\}$ with $a=x_0\leq x_1\leq\cdots\leq x_n=b$.\\
+\item Fix $a,b\in\R$ with $a<b$ and $n\geq1$. A \hlt{partition} of $[a,b]$ is $\Pi=\{x_0,\ldots,x_n\}$ with $a=x_0<x_1<\cdots<x_n=b$.\\
 Set $\Delta x_i\defeq x_i-x_{i-1}$ for $1\leq i\leq n$.
-\item For bounded $f:[a,b]\to\R$, set $M_i\defeq\sup_{x\in[x_{i-1},x_i]}f(x)$ and $m_i\defeq\inf_{x\in[x_{i-1},x_i]}f(x)$.
-\item The \hlt{upper} and \hlt{lower Darboux sums} are $U(\Pi,f)\defeq\sum\limits_{i=1}^{n}M_i\Delta x_i$ and $L(\Pi,f)\defeq\sum\limits_{i=1}^{n}m_i\Delta x_i$.
-\item The \hlt{upper} and \hlt{lower Darboux integrals} are $\overline{\int_a^b f\,dx}\defeq\inf_{\Pi}U(\Pi,f)$ and $\underline{\int_a^b f\,dx}\defeq\sup_{\Pi}L(\Pi,f)$, where $\Pi$ ranges over all partitions of $[a,b]$.
-\item If $\overline{\int_a^b f\,dx}=\underline{\int_a^b f\,dx}$, then $f$ is \hlt{Riemann integrable} on $[a,b]$; $f\in\mathcal{R}[a,b]$, $\int_a^b f\,dx\defeq\overline{\int_a^b f\,dx}=\underline{\int_a^b f\,dx}$.
+\item For bounded $f:[a,b]\to\R$, set $M_i\defeq\sup_{x\in[x_{i-1},x_i]}f(x)$. Set $m_i\defeq\inf_{x\in[x_{i-1},x_i]}f(x)$.
+\item The \hlt{upper Darboux sum} is $U(\Pi,f)\defeq\sum\limits_{i=1}^{n}M_i\Delta x_i$. The \hlt{lower Darboux sum} is $L(\Pi,f)\defeq\sum\limits_{i=1}^{n}m_i\Delta x_i$.
+\item The \hlt{upper Darboux integral} is $\overline{\int_a^b f\,dx}\defeq\inf_{\Pi}U(\Pi,f)$. The \hlt{lower Darboux integral} is $\underline{\int_a^b f\,dx}\defeq\sup_{\Pi}L(\Pi,f)$.\\
+Both extrema range over all partitions of $[a,b]$.
+\item The function $f$ is \hlt{Riemann integrable} on $[a,b]$ iff $\overline{\int_a^b f\,dx}=\underline{\int_a^b f\,dx}$.\\
+In this case, write $f\in\mathcal{R}[a,b]$ and let $\int_a^b f\,dx$ denote their common value.
 \end{enumerate}
-If $m\leq f(x)\leq M$ for $x\in[a,b]$, then $m(b-a)\leq L(\Pi,f)\leq U(\Pi,f)\leq M(b-a)$ for every partition $\Pi$.\\
-Hence the upper and lower Darboux integrals are finite for bounded $f$.\\
-\hlt{Key Insight}: Riemann integrability means least upper Darboux area equals greatest lower Darboux area.
+\hlt{Key Insight}: Integrability means that the least upper envelope area equals the greatest lower envelope area.
 \end{definition}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:riemann-upper-lower-partition} depicts the lower and upper step envelopes from one partition.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/riemann_upper_lower_partition.tikz}
-  \caption{Upper and lower sums record the oscillation of $f$ on each partition interval.}
+  \caption{On each partition interval, the infimum and supremum of $f$ determine the lower and upper rectangle heights.}
   \label{fig:riemann-upper-lower-partition}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{definition} \label{def:tagged-partitions-and-riemann-sums} \hlt{Tagged Partitions and Riemann Sums}\\
-Let $\Pi=\{x_0,\ldots,x_n\}$ be a partition of $[a,b]$, and set $\Delta x_i\defeq x_i-x_{i-1}$.
+Let $\Pi=\{x_0,\ldots,x_n\}$ be a partition of $[a,b]$. Set $\operatorname{mesh}(\Pi)\defeq\max_{1\leq i\leq n}\Delta x_i$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A \hlt{tagging} of $\Pi$ is $c=(c_1,\ldots,c_n)$ with $c_i\in[x_{i-1},x_i]$ for $1\leq i\leq n$; the pair $(\Pi,c)$ is a \hlt{tagged partition}.
+\item A \hlt{tagging} of $\Pi$ is a tuple $c=(c_i)_{i=1}^{n}$ satisfying $c_i\in[x_{i-1},x_i]$ for $1\leq i\leq n$. The pair $(\Pi,c)$ is a \hlt{tagged partition}.
 \item For $f:[a,b]\to\R$, the associated \hlt{Riemann sum} is $R(f,\Pi,c)\defeq\sum\limits_{i=1}^{n}f(c_i)\Delta x_i$.
-\item If $f$ is bounded, then $L(\Pi,f)\leq R(f,\Pi,c)\leq U(\Pi,f)$.
 \end{enumerate}
 \end{definition}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:riemann-tagged-sum} identifies the tags that determine the rectangle heights.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/riemann_tagged_sum.tikz}
-  \caption{A tagged Riemann sum uses one sample value $f(c_i)$ on each subinterval $[x_{i-1},x_i]$.}
+  \caption{A tagged Riemann sum uses the sampled height $f(c_i)$ on each subinterval $[x_{i-1},x_i]$.}
   \label{fig:riemann-tagged-sum}
-\end{figure}
+\end{illustrationfigure}
+
+\begin{proposition} \label{prop:riemann-darboux-and-tagged-sum-bounds} \hlt{Darboux and Tagged-Sum Bounds}\\
+Let $f:[a,b]\to\R$ be bounded, $m,M\in\R$ satisfy $(\forall x\in[a,b])\,m\leq f(x)\leq M$. For a tagged partition $(\Pi,c)$, the following hold:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $m(b-a)\leq L(\Pi,f)\leq U(\Pi,f)\leq M(b-a)$.
+\item $L(\Pi,f)\leq R(f,\Pi,c)\leq U(\Pi,f)$.
+\item $m(b-a)\leq\underline{\int_a^b f\,dx}\leq\overline{\int_a^b f\,dx}\leq M(b-a)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $1\leq i\leq n$, $m\leq m_i\leq M_i\leq M$ by the definitions of $m_i$ and $M_i$.\\
+Multiplication by $\Delta x_i>0$ preserves these inequalities. Their sum is Part (i) by $\sum\limits_{i=1}^{n}\Delta x_i=b-a$.
+\item For $1\leq i\leq n$, $m_i\leq f(c_i)\leq M_i$ by $c_i\in[x_{i-1},x_i]$.\\
+Multiplication by $\Delta x_i$ and summation establish $L(\Pi,f)\leq R(f,\Pi,c)\leq U(\Pi,f)$.
+\item The outer bounds follow by Part (i). For the middle inequality, let $\Pi'$ insert $y\in(x_{j-1},x_j)$ into a partition $\Pi$.\\
+Let $m'_j,m''_j$ and $M'_j,M''_j$ be the infima and suprema of $f$ on the two resulting intervals.\\
+Then $m'_j,m''_j\geq m_j$, so $m'_j(y-x_{j-1})+m''_j(x_j-y)&\geq m_j\Delta x_j$.\\
+Also $M'_j,M''_j\leq M_j$, hence $M'_j(y-x_{j-1})+M''_j(x_j-y)&\leq M_j\Delta x_j$.\\
+All other summands are unchanged; hence $L(\Pi,f)\leq L(\Pi',f)$ and $U(\Pi',f)\leq U(\Pi,f)$.\\
+For arbitrary partitions $\Pi_1,\Pi_2$, set $\Pi^\ast\defeq\Pi_1\cup\Pi_2$. Then $L(\Pi_1,f)\leq L(\Pi^\ast,f)$ and $U(\Pi^\ast,f)\leq U(\Pi_2,f)$ by iteration.\\
+Since $L(\Pi^\ast,f)\leq U(\Pi^\ast,f)$, $L(\Pi_1,f)\leq U(\Pi_2,f)$.\\
+Taking the supremum over $\Pi_1$ and then the infimum over $\Pi_2$ proves the middle inequality.
+\end{enumerate}
+\hlt{Structural Commentary}: Refinement compares distinct Darboux sums; subinterval extrema control tagged sums.\\
+\hlt{Key Insight}: Subinterval infima and suprema trap every admissible rectangle height.
+\end{proof}
 
 \begin{perspective} \label{per:gauge-integral-context} \hlt{Tagged Sums and Gauges}\\
-Gauge integration keeps tagged sums but replaces one mesh bound $\delta$ with a local bound $\delta(c_i)$.\\
-Thus fineness may vary by tag, giving a stronger framework for FTC-type results.
+Relative to Definition \ref{def:tagged-partitions-and-riemann-sums}, gauges replace one uniform mesh tolerance with tag-dependent tolerances.\\
+This comparison motivates stronger integration frameworks, but no gauge-integral result is used here.
 \end{perspective}
