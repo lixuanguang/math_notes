@@ -1,61 +1,124 @@
 \subsection{Step Integrators and Change of Variable}
 
 \begin{definition} \label{def:unit-step-function-analysis} \hlt{Unit Step Function}\\
-The \hlt{unit step function} $I$ is $I(x)=
-\begin{cases}
-0,&x\leq0,\\
-1,&x>0.
-\end{cases}$.
+The \hlt{unit step function} is $I:\R\to\R$ with $I(x)\defeq0$ for $x\leq0$ and $I(x)\defeq1$ for $x>0$.
 \end{definition}
 
 \begin{theorem} \label{thm:single-step-riemann-stieltjes-integral} \hlt{Single Jump Integrator}\\
-If $a<s<b$, $f$ is bounded on $[a,b]$ and continuous at $s$, and $\alpha(x)=I(x-s)$, then $\int_a^b f\,d\alpha=f(s)$.
+Let $a<s<b$, let $f:[a,b]\to\R$ be bounded and continuous at $s$, and set $\alpha(x)\defeq I(x-s)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\in\mathcal{R}(\alpha)$.
+\item $\int_a^b f\,d\alpha=f(s)$.
+\end{enumerate}
 \begin{proof}
-Use partitions $\Pi=\{a,s,x_2,b\}$ with $s<x_2<b$. The only nonzero $\Delta\alpha_i$ occurs on $[s,x_2]$, so $L(\Pi,f,\alpha)$ and $U(\Pi,f,\alpha)$ are the infimum and supremum of $f$ on $[s,x_2]$. As $x_2\downarrow s$, continuity at $s$ squeezes both to $f(s)$.\\
-\hlt{Structural Commentary}: A jump of $\alpha$ makes the integral sample $f$ at the jump.\\
-\hlt{Key Insight}: Stieltjes integration includes point masses without changing the Darboux framework.
+Fix $\varepsilon>0$. Choose $\delta>0$, $(\forall x\in[a,b])\,\abs{x-s}<\delta\implies\abs{f(x)-f(s)}<\frac{\varepsilon}{2}$. Choose $x_2\in(s,\min\{b,s+\delta\})$, $\Pi\defeq\{a,s,x_2,b\}$.\\
+The sole nonzero Stieltjes increment is the unit increment on $[s,x_2]$. Hence $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)=\sup\limits_{[s,x_2]}f-\inf\limits_{[s,x_2]}f<\varepsilon$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The function $f$ belongs to $\mathcal{R}(\alpha)$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.
+\item Choose tagging $t$ whose tag on $[s,x_2]$ is $s$. Then $S_\alpha(f;\Pi,t)=f(s)$; $\abs{\int_a^b f\,d\alpha-f(s)}<\varepsilon$ by Theorem \ref{thm:tagged-riemann-stieltjes-sums}(ii), $\varepsilon>0$. QED.
+\end{enumerate}
+\hlt{Structural Commentary}: The unit jump reduces Darboux and tagged sums to the interval containing $s$.\\
+\hlt{Key Insight}: Only the jump interval carries Stieltjes mass.
 \end{proof}
 \end{theorem}
 
-\begin{theorem} \label{thm:pure-step-riemann-stieltjes-series} \hlt{Pure Step Integrators Give Series}\\
-Suppose $c_n\geq0$, $\sum c_n$ converges, and $(s_n)$ is a sequence of distinct points in $(a,b)$.\\
-Define $\alpha(x)\defeq\sum_{n=1}^{\infty}c_n I(x-s_n)$. If $f$ is continuous on $[a,b]$, then $\int_a^b f\,d\alpha=\sum\limits_{n=1}^{\infty}c_nf(s_n)$.
+\begin{remark} \label{rem:stieltjes-increments-as-alpha-lengths} \hlt{Stieltjes Increments as $\alpha$-Lengths}\\
+Relative to Definition \ref{def:riemann-stieltjes-integral}, the increments $\Delta\alpha_i$ are interval lengths measured by $\alpha$.\\
+For $\alpha(x)=x$, they are ordinary lengths; at a jump, they concentrate weight at one point as in Theorem \ref{thm:single-step-riemann-stieltjes-integral}.
+\end{remark}
+
+\begin{theorem} \label{thm:pure-step-riemann-stieltjes-series} \hlt{Series from Pure Step Integrators}\\
+Let $(c_n)_{n\geq1}\subseteq[0,\infty)$ satisfy $\sum\limits_{n=1}^{\infty}c_n<\infty$, $(s_n)_{n\geq1}$ be distinct points of $(a,b)$, $\alpha(x)\defeq\sum\limits_{n=1}^{\infty}c_nI(x-s_n)$, $f:[a,b]\to\R$ continuous.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The series defining $\alpha$ converges on $[a,b]$, and $\alpha$ is increasing.
+\item $f\in\mathcal{R}(\alpha)$.
+\item $\int_a^b f\,d\alpha=\sum\limits_{n=1}^{\infty}c_nf(s_n)$.
+\end{enumerate}
 \begin{proof}
-By comparison, $\alpha$ is increasing. For $N\in\N$, put $\alpha_N(x)\defeq\sum\limits_{n=1}^{N}c_n I(x-s_n)$ and $\beta_N\defeq\alpha-\alpha_N.$.\\
-Theorems \ref{thm:single-step-riemann-stieltjes-integral} and \ref{thm:riemann-stieltjes-integral-properties} give $\int_a^b f\,d\alpha_N=\sum\limits_{n=1}^{N}c_nf(s_n)$. Also $f\in\mathcal{R}(\beta_N)$ by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable}.\\
-If $\abs{f}\leq M$, then Theorem \ref{thm:riemann-stieltjes-integral-properties} gives $\abs{\int_a^b f\,d\beta_N}\leq M[\beta_N(b)-\beta_N(a)]=M\sum\limits_{n>N}c_n$.\\
-Letting $N\to\infty$ and using additivity in the integrator gives the formula.\\
-\hlt{Structural Commentary}: Finite step integrators sum point samples; summable tails vanish by the integral bound.\\
-\hlt{Key Insight}: A Stieltjes integral can be an ordinary series in disguise.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item If $p>q$, $(\forall x\in[a,b])\,0\leq\sum\limits_{n=q+1}^{p}c_nI(x-s_n)\leq\sum\limits_{n=q+1}^{p}c_n$. Scalar tail tends to zero, so defining series converges uniformly on $[a,b]$.\\
+If $x\leq y$, then $(\forall n\geq1)\,I(x-s_n)\leq I(y-s_n)$; hence $\alpha(x)\leq\alpha(y)$.
+\item The claim follows by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable}.
+\item For $N\geq1$, set $\alpha_N(x)\defeq\sum\limits_{n=1}^{N}c_nI(x-s_n)$ and $\beta_N\defeq\alpha-\alpha_N$.\\
+Both are increasing by $c_n\geq0$ and monotonicity of $I$, and $f\in\mathcal{R}(\beta_N)$ by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable}.\\
+The finite identity $\int_a^b f\,d\alpha_N=\sum\limits_{n=1}^{N}c_nf(s_n)$ holds by Theorems \ref{thm:single-step-riemann-stieltjes-integral} and \ref{thm:riemann-stieltjes-integral-properties}(v).\\
+Terms with $c_n=0$ vanish by the Darboux sums. Set $M\defeq\sup\limits_{x\in[a,b]}\abs{f(x)}$.\\
+The identity $\abs{\int_a^b f\,d\alpha-\sum\limits_{n=1}^{N}c_nf(s_n)}=\abs{\int_a^b f\,d\beta_N}$ holds by Theorem \ref{thm:riemann-stieltjes-integral-properties}(v). Since $a<s_n<b$, $\beta_N(b)-\beta_N(a)=\sum\limits_{n>N}c_n$.\\
+Hence $\abs{\int_a^b f\,d\beta_N}\leq M\sum\limits_{n>N}c_n\to0$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(iv); $\int_a^b f\,d\alpha=\sum\limits_{n=1}^{\infty}c_nf(s_n)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Finite jump identities determine partial sums; the uniform bound controls the summable tail.\\
+\hlt{Key Insight}: Each jump contributes $c_nf(s_n)$.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:riemann-stieltjes-step-integrator} depicts the first three jumps of the pure-step integrator.\\
+The jump $c_i$ at $s_i$ corresponds to the summand $c_if(s_i)$ in Theorem \ref{thm:pure-step-riemann-stieltjes-series}(iii).
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/riemann_stieltjes_step_integrator.tikz}
-  \caption{A step integrator concentrates mass at jumps: $\int f\,d\alpha=\sum_i c_i f(s_i)$.}
+  \caption{A pure-step integrator has jump $c_i$ at $s_i$; closed lower and open upper markers record $I(0)=0$.}
   \label{fig:riemann-stieltjes-step-integrator}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:differentiable-integrator-reduces-to-riemann-integral} \hlt{Differentiable Integrators Reduce to Riemann Integrals}\\
-Assume $\alpha$ increases monotonically, $\alpha'\in\mathcal{R}$ on $[a,b]$, and $f$ is bounded and real on $[a,b]$.\\
-Then $f\in\mathcal{R}(\alpha)$ $\Longleftrightarrow$ $f\alpha'\in\mathcal{R}$, and in that case $\int_a^b f\,d\alpha=\int_a^b f(x)\alpha'(x)\,dx$.
+Let $\alpha:[a,b]\to\R$ be continuous and increasing on $[a,b]$ and differentiable on $(a,b)$.\\
+Let $q\in\mathcal{R}[a,b]$ satisfy $q|_{(a,b)}=\alpha'$, and let $f:[a,b]\to\R$ be bounded. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\in\mathcal{R}(\alpha)\Longleftrightarrow fq\in\mathcal{R}[a,b]$.
+\item Under these conditions, $\int_a^b f\,d\alpha=\int_a^b f(x)q(x)\,dx$.
+\end{enumerate}
 \begin{proof}
-Let $M=\sup_{[a,b]}\abs{f}$. Choose $\Pi$ with $U(\Pi,\alpha')-L(\Pi,\alpha')<\varepsilon$.\\
-For any refinement and any tags $s_i\in[x_{i-1},x_i]$, MVT gives points $t_i\in[x_{i-1},x_i]$ with $\Delta\alpha_i=\alpha'(t_i)\Delta x_i$.\\
-Hence $\abs{\sum_i f(s_i)\Delta\alpha_i-\sum_i f(s_i)\alpha'(s_i)\Delta x_i} \leq M\sum_i\abs{\alpha'(t_i)-\alpha'(s_i)}\Delta x_i \leq M\varepsilon$. Thus every tagged Stieltjes sum for $f\,d\alpha$ is within $M\varepsilon$ of the corresponding tagged Riemann sum for $f\alpha'\,dx$, and conversely. By the tagged-sum criterion, one family has a limit exactly when the other does, and the two limits are equal.\\
-\hlt{Structural Commentary}: The increment $d\alpha$ is replaced by $\alpha'(x)\,dx$ when $\alpha'$ is Riemann integrable.\\
-\hlt{Key Insight}: The mean value theorem turns Stieltjes increments into ordinary Riemann weights.
+Set $M\defeq\sup\limits_{x\in[a,b]}\abs{f(x)}$. For partition $\Pi$, bounded $h$, set $D_\alpha(\Pi,h)\defeq U(\Pi,h,\alpha)-L(\Pi,h,\alpha)$, $D(\Pi,h)\defeq U(\Pi,h)-L(\Pi,h)$.\\
+Set $E(\Pi)\defeq MD(\Pi,q)$. For tagging $t$, choose $u_i\in(x_{i-1},x_i)$ with $\Delta\alpha_i=q(u_i)\Delta x_i$ for $1\leq i\leq n$ by Corollary \ref{cor:mean-value-theorem}.\\
+Then $\abs{S_\alpha(f;\Pi,t)-R(fq,\Pi,t)}\leq E(\Pi)$ by the intervalwise oscillation of $q$.\\
+Hence $\abs{D_\alpha(\Pi,f)-D(\Pi,fq)}\leq2E(\Pi)$ by taking suprema over pairs of taggings.\\
+The gaps $D_\alpha(\Pi,f)$ and $D(\Pi,fq)$ decrease under refinement by Theorem \ref{thm:refinement-monotonicity-riemann-stieltjes}.\\
+The quantity $E(\Pi)=MD(\Pi,q)$ decreases by the same theorem with integrator $x$.\\
+The relation $(\forall\delta>0)(\exists\Pi)\,E(\Pi)<\delta$ holds by Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with integrator $x$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) Fix $\varepsilon>0$. Choose $\Pi$ with $\max\{2D_\alpha(\Pi,f),4E(\Pi)\}<\varepsilon$ by the integrability criterion and refinement.\\
+Then $D(\Pi,fq)\leq D_\alpha(\Pi,f)+2E(\Pi)<\varepsilon$, so $fq\in\mathcal{R}[a,b]$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with integrator $x$.
+\item[$(i)$] ($\Leftarrow$) Fix $\varepsilon>0$. Choose $\Pi$ with $\max\{2D(\Pi,fq),4E(\Pi)\}<\varepsilon$ by the integrability criterion and refinement.\\
+Then $D_\alpha(\Pi,f)\leq D(\Pi,fq)+2E(\Pi)<\varepsilon$, so $f\in\mathcal{R}(\alpha)$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.
+\item[$(ii)$] Assume the equivalent conditions, fix $\varepsilon>0$, and set $I_\alpha\defeq\int_a^b f\,d\alpha$ and $I_q\defeq\int_a^b fq\,dx$.\\
+Choose $\Pi$ with $\max\{3D_\alpha(\Pi,f),3D(\Pi,fq),3E(\Pi)\}<\varepsilon$ by the integrability criterion and refinement.\\
+For any tagging $t$, each tagged sum is within $\frac{\varepsilon}{3}$ of its integral by Theorem \ref{thm:tagged-riemann-stieltjes-sums}(ii).\\
+Hence $\abs{I_\alpha-I_q}<\frac{2\varepsilon}{3}+E(\Pi)<\varepsilon$ by the tagged-sum comparison. Thus $I_\alpha=I_q$.
+\end{enumerate}
+\hlt{Structural Commentary}: Mean-value points compare tagged sums; derivative gaps transfer integrability and identify limits.\\
+\hlt{Key Insight}: The sole comparison error is the Darboux gap of $q$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:riemann-stieltjes-change-of-variable} \hlt{Change of Variable}\\
-Let $\varphi:[A,B]\to[a,b]$ be strictly increasing, continuous, and onto.\\
-Let $\alpha$ be increasing on $[a,b]$, $f\in\mathcal{R}(\alpha)$, and set $\beta(y)\defeq\alpha(\varphi(y))$ and $g(y)\defeq f(\varphi(y))$.\\
-Then $g\in\mathcal{R}(\beta)$ and $\int_A^B g\,d\beta=\int_a^b f\,d\alpha$. If also $\alpha(x)=x$ and $\varphi'\in\mathcal{R}$, then $\int_a^b f(x)\,dx=\int_A^B f(\varphi(y))\varphi'(y)\,dy$.
+Let $\varphi:[A,B]\to[a,b]$ be strictly increasing, continuous, and onto. Let $\alpha:[a,b]\to\R$ be increasing and $f\in\mathcal{R}(\alpha)$.\\
+Set $\beta\defeq\alpha\circ\varphi$ and $g\defeq f\circ\varphi$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\beta$ is increasing on $[A,B]$.
+\item $g\in\mathcal{R}(\beta)$.
+\item $\int_A^B g\,d\beta=\int_a^b f\,d\alpha$.
+\item Suppose $\alpha=\operatorname{id}_{[a,b]}$ and $\varphi$ is differentiable on $(A,B)$. If $q\in\mathcal{R}[A,B]$ satisfies $q|_{(A,B)}=\varphi'$, then $gq\in\mathcal{R}[A,B]$.
+\item Under the hypotheses of Part (iv), $\int_a^b f(x)\,dx=\int_A^B f(\varphi(y))q(y)\,dy$.
+\end{enumerate}
 \begin{proof}
-Partitions $Q=\{y_i\}$ of $[A,B]$ correspond to partitions $\Pi=\{\varphi(y_i)\}$ of $[a,b]$. On corresponding intervals, $g$ has same range as $f$ and $\Delta\beta_i=\Delta\alpha_i$, so $U(Q,g,\beta)=U(\Pi,f,\alpha)$ and $L(Q,g,\beta)=L(\Pi,f,\alpha)$. The upper--lower criterion gives the Stieltjes formula. If $\alpha(x)=x$, then $\beta=\varphi$; apply Theorem \ref{thm:differentiable-integrator-reduces-to-riemann-integral} to the left side.\\
-\hlt{Structural Commentary}: A monotone change of variable relabels the same partition intervals.\\
-\hlt{Key Insight}: Stieltjes change of variable is equality of Darboux sums under reparametrization.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The composition $\beta=\alpha\circ\varphi$ is increasing by the monotonicity of $\alpha$ and $\varphi$.
+\item Fix $\varepsilon>0$. Choose partition $\Pi=\{x_0,\ldots,x_n\}$ with $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}. Set $Q\defeq\{\varphi^{-1}(x_0),\ldots,\varphi^{-1}(x_n)\}$.\\
+The map $\varphi$ sends each interval of $Q$ onto the corresponding interval of $\Pi$. Hence $g$ and $f$ have the same range there and $\Delta\beta_i=\Delta\alpha_i$.\\
+Hence $U(Q,g,\beta)=U(\Pi,f,\alpha)$ and $L(Q,g,\beta)=L(\Pi,f,\alpha)$. Thus $g\in\mathcal{R}(\beta)$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.
+\item Upper-sum, lower-sum families coincide by bijection $\Pi\mapsto\varphi^{-1}(\Pi)$ from Part (ii). Hence $\int_A^B g\,d\beta=\int_a^b f\,d\alpha$ by Part (ii),  $f\in\mathcal{R}(\alpha)$.
+\item Here $\beta=\varphi$ and $g\in\mathcal{R}(\varphi)$ by Part (ii). Hence $gq\in\mathcal{R}[A,B]$ by Theorem \ref{thm:differentiable-integrator-reduces-to-riemann-integral}(i).
+\item The equality $\int_a^b f(x)\,dx=\int_A^B g\,d\varphi=\int_A^B f(\varphi(y))q(y)\,dy$ holds by Part (iii) and Theorem \ref{thm:differentiable-integrator-reduces-to-riemann-integral}(ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Pullback identifies Darboux sums; derivative reduction replaces $d\varphi$ by $q\,dy$.\\
+\hlt{Key Insight}: Corresponding intervals have identical function ranges and integrator increments.
 \end{proof}
 \end{theorem}
