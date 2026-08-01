@@ -1,61 +1,96 @@
 \subsection{Improper Integrals}
 
 \begin{definition} \label{def:improper-riemann-integral} \hlt{Improper Riemann Integrals}\\
-Let $f\in\mathcal{R}$ on every compact subinterval of its domain.\\
-Set $\int_a^b f(x)\,dx\defeq\lim\limits_{d\to b^-}\int_a^d f(x)\,dx$ at a right endpoint, and $\int_a^b f(x)\,dx\defeq\lim\limits_{c\to a^+}\int_c^b f(x)\,dx$ at a left endpoint.\\
-If both endpoints are improper, choose $\xi\in(a,b)$ and set $\int_a^b f(x)\,dx \defeq \int_a^\xi f(x)\,dx+\int_\xi^b f(x)\,dx$, provided both one-sided integrals exist and the sum is not indeterminate.\\
-A finite value means the improper integral \hlt{converges}; otherwise it diverges to $+\infty$ or $-\infty$.
+Let $a,b\in\overline{\R}$ satisfy $a<b$, and let $f:(a,b)\to\R$. Suppose $(\forall c,d\in\R)\,[a<c<d<b\Rightarrow f|_{[c,d]}\in\mathcal{R}[c,d]]$.\\
+Fix $\xi\in(a,b)$. A one-sided integral below is defined whenever its limit exists in $\overline{\R}$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\int_\xi^b f(x)\,dx\defeq\lim\limits_{d\uparrow b}\int_\xi^d f(x)\,dx$, and $\int_a^\xi f(x)\,dx\defeq\lim\limits_{c\downarrow a}\int_c^\xi f(x)\,dx$.
+\item If their sum is defined in $\overline{\R}$, set $\int_a^b f(x)\,dx\defeq\int_a^\xi f(x)\,dx+\int_\xi^b f(x)\,dx$.\\
+This value is independent of $\xi$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(iii) with the identity integrator.
+\item The improper integral \hlt{converges} iff both one-sided integrals lie in $\R$; it \hlt{diverges} otherwise.
+\end{enumerate}
 \end{definition}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:improper-integral-truncations} depicts the two right-endpoint truncations in Definition \ref{def:improper-riemann-integral}.\\
+The left panel has $b\in\R$, while the right panel has $b=+\infty$.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/improper_integral_truncations.tikz}
-  \caption{Improper integrals are limits of ordinary integrals over compact truncations.}
+  \caption{Compact truncations approach a finite singular endpoint on the left and $+\infty$ on the right.}
   \label{fig:improper-integral-truncations}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:nonnegative-improper-integral-supremum} \hlt{Nonnegative Improper Integrals}\\
-Let $f\geq0$ and $f\in\mathcal{R}$ on every $[a,d]$, $a<d<b$. Then $\int_a^b f(x)\,dx=\sup\left\{\int_a^d f(x)\,dx:a<d<b\right\}$.\\
-Thus $\int_a^b f$ exists in $[0,+\infty]$ and converges exactly when this supremum is finite.
+Let $a\in\R$, $b\in\overline{\R}$, $a<b$, and let $f:[a,b)\to[0,+\infty)$ satisfy $(\forall d\in(a,b))\,f|_{[a,d]}\in\mathcal{R}[a,d]$.\\
+Set $H(d)\defeq\int_a^d f(x)\,dx$ for $d\in(a,b)$ and $S\defeq\sup\limits_{\overline{\R}}H((a,b))$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\int_a^b f(x)\,dx=\lim\limits_{d\uparrow b}H(d)=S\in[0,+\infty]$.
+\item The integral $\int_a^b f(x)\,dx$ converges iff $S\in\R$.
+\end{enumerate}
 \begin{proof}
-For $a<d_1<d_2<b$, $\int_a^{d_2}f-\int_a^{d_1}f=\int_{d_1}^{d_2}f\geq0$.\\
-Hence $d\mapsto\int_a^d f$ is increasing, so its extended limit exists and equals its supremum.\\
-\hlt{Structural Commentary}: Nonnegative area can only accumulate.\\
-\hlt{Key Insight}: Improper convergence for $f\geq0$ is boundedness of all finite truncations.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] Inequalities $0\leq H(d_1)\leq H(d_2)$ hold for $a<d_1<d_2<b$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(ii)--(iii) with $\alpha(t)=t$; $H$ increasing, $S\in[0,+\infty]$.\\
+If $S\in\R$, then $(\forall\varepsilon>0)(\exists d_0\in(a,b))(\forall d\in[d_0,b))\,S-\varepsilon<H(d)\leq S$ by the definition of $S$ and monotonicity; hence $H(d)\to S$.\\
+If $S=+\infty$, then $(\forall K\in\R)(\exists d_0\in(a,b))(\forall d\in[d_0,b))\,H(d)>K$ by the same properties; hence $H(d)\to+\infty$.\\
+Fix $\xi\in(a,b)$. The limit $\lim\limits_{c\downarrow a}\int_c^\xi f(x)\,dx=H(\xi)$ holds by Theorems \ref{thm:integral-function-continuity-and-derivative}(i) and \ref{thm:riemann-stieltjes-integral-properties}(iii).\\
+For $\xi<d<b$, $\int_\xi^d f(x)\,dx=H(d)-H(\xi)$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(iii) with $\alpha(t)=t$.\\
+Thus $\int_\xi^b f(x)\,dx=S-H(\xi)$ by Definition \ref{def:improper-riemann-integral}(i) and Theorem \ref{thm:extended-limit-algebra}(ii); $\int_a^b f(x)\,dx=H(\xi)+[S-H(\xi)]=S$ by Definition \ref{def:improper-riemann-integral}(ii).
+\item[$(ii)$] ($\Rightarrow$) If the integral converges, then $S\in\R$ by Part (i) and Definition \ref{def:improper-riemann-integral}(iii).
+\item[$(ii)$] ($\Leftarrow$) If $S\in\R$, then the integral converges by Part (i) and Definition \ref{def:improper-riemann-integral}(iii).
+\end{enumerate}
+\hlt{Structural Commentary}: Monotonicity fixes the extended limit; additivity transfers it to the improper integral.\\
+\hlt{Key Insight}: Bounded truncation areas are exactly finite improper mass.
 \end{proof}
 \end{theorem}
 
 \begin{perspective} \label{per:cauchy-principal-value-not-improper-integral} \hlt{Principal Value Is Different}\\
-Improper integrals over $(-\infty,\infty)$ require separate one-sided limits.\\
-A symmetric limit such as $\lim_{A\to\infty}\int_{-A}^{A}\sin x\,dx$ may still exist (Cauchy principal value, not Definition \ref{def:improper-riemann-integral}).
+Definition \ref{def:improper-riemann-integral} requires separate one-sided limits on $(-\infty,+\infty)$. For $A>0$, $\int_{-A}^{A}\sin x\,dx=0$, so the Cauchy principal value is $0$.\\
+However, $\int_0^d\sin x\,dx=1-\cos d$ has no limit as $d\to+\infty$, so the improper integral diverges.
 \end{perspective}
 
 \begin{definition} \label{def:improper-riemann-stieltjes-real-line} \hlt{Improper Riemann--Stieltjes Integrals on $\R$}\\
-Let $\alpha:\R\to\R$ be increasing and $f\in\mathcal{R}(\alpha)$ on every finite interval.\\
-Define, when the limits exist, $\int_0^\infty f\,d\alpha\defeq\lim_{b\to\infty}\int_0^b f\,d\alpha$; and $\int_{-\infty}^{0} f\,d\alpha\defeq\lim_{a\to-\infty}\int_a^0 f\,d\alpha$.\\
-If their sum is not indeterminate, set $\int_{-\infty}^{\infty}f\,d\alpha \defeq \int_{-\infty}^{0}f\,d\alpha+\int_0^\infty f\,d\alpha$.\\
-Finite value means $f$ is \hlt{$\alpha$-integrable on $\R$}. Write $\alpha(\pm\infty)\defeq\lim_{t\to\pm\infty}\alpha(t)$ when these extended limits are used.
+Let $\alpha:\R\to\R$ be increasing. Let $f:\R\to\R$ satisfy $(\forall a,b\in\R)\,[a<b\Rightarrow f|_{[a,b]}\in\mathcal{R}(\alpha|_{[a,b]})]$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $\alpha(-\infty)\defeq\inf\limits_{\overline{\R}}\alpha(\R)$ and $\alpha(+\infty)\defeq\sup\limits_{\overline{\R}}\alpha(\R)$.
+\item When the limits exist in $\overline{\R}$, set $I_-(f,\alpha)\defeq\lim\limits_{a\to-\infty}\int_a^0 f\,d\alpha$. Under the same condition, set $I_+(f,\alpha)\defeq\lim\limits_{b\to+\infty}\int_0^b f\,d\alpha$.
+\item If $I_-(f,\alpha)+I_+(f,\alpha)$ is defined in $\overline{\R}$, set $\int_{-\infty}^{+\infty}f\,d\alpha\defeq I_-(f,\alpha)+I_+(f,\alpha)$.
+\item The function $f$ is \hlt{$\alpha$-integrable on $\R$} iff $I_-(f,\alpha),I_+(f,\alpha)\in\R$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:improper-riemann-stieltjes-nonnegative-bounded-mass} \hlt{Nonnegative and Bounded-Mass Stieltjes Integrals}\\
-Let $\alpha:\R\to\R$ be increasing, and suppose $f\in\mathcal{R}(\alpha)$ on every finite interval.
+Let $\alpha:\R\to\R$ be increasing. Let $f:\R\to\R$ satisfy $(\forall a,b\in\R)\,[a<b\Rightarrow f|_{[a,b]}\in\mathcal{R}(\alpha|_{[a,b]})]$.\\
+Set $S_+\defeq\sup\limits_{\overline{\R}}\{\int_0^b f\,d\alpha:b>0\}$ and $S_-\defeq\sup\limits_{\overline{\R}}\{\int_a^0 f\,d\alpha:a<0\}$.\\
+For Parts (i)--(iii), assume $(\forall x\in\R)\,f(x)\geq0$; Part (iv) has no sign hypothesis. Then:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $f\geq0$, then either $f$ is $\alpha$-integrable on $\R$ or $\int_{-\infty}^{\infty}f\,d\alpha=+\infty$.
-\item If $-\infty<\alpha(-\infty)<\alpha(\infty)<+\infty$ and $f$ is bounded, then $f$ is $\alpha$-integrable on $\R$.
+\item $I_-(f,\alpha)=S_-$ and $I_+(f,\alpha)=S_+$ belong to $[0,+\infty]$.
+\item $\int_{-\infty}^{+\infty}f\,d\alpha=S_-+S_+\in[0,+\infty]$.
+\item The function $f$ is $\alpha$-integrable on $\R$ iff $S_-,S_+\in\R$.
+\item If $\alpha(-\infty),\alpha(+\infty)\in\R$ and $f$ is bounded, then $f$ is $\alpha$-integrable on $\R$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item
-By additivity and order preservation, $\int_0^b f\,d\alpha$ and $\int_a^0 f\,d\alpha$ are monotone under outward truncation.\\
-Hence both extended one-sided limits exist, so their sum is finite or $+\infty$.
-\item
-Let $\abs{f}\leq M$. For finite $a<b$, Theorem \ref{thm:riemann-stieltjes-integral-properties} gives $\abs{\int_a^b f\,d\alpha}\leq M\bigl[\alpha(b)-\alpha(a)\bigr]$.\\
-Since $\alpha(\infty)$ and $\alpha(-\infty)$ are finite, the right and left tails have vanishing $\alpha$-increment.\\
-Thus the one-sided truncations are Cauchy and have finite limits.
+\item[$(i)$] Set $H_+(t)\defeq\int_0^t f\,d\alpha$ and $H_-(t)\defeq\int_{-t}^0 f\,d\alpha$ for $t>0$. For $0<s<t$, $0\leq H_\pm(s)\leq H_\pm(t)$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(ii)--(iii).\\
+Fix $\sigma\in\{-,+\}$. If $S_\sigma\in\R$, then $(\forall\varepsilon>0)(\exists t_0>0)(\forall t\geq t_0)\,S_\sigma-\varepsilon<H_\sigma(t)\leq S_\sigma$ by the supremum property and monotonicity.\\
+If $S_\sigma=+\infty$, then $(\forall K\in\R)(\exists t_0>0)(\forall t\geq t_0)\,H_\sigma(t)>K$ by the same properties.\\
+Thus $H_\sigma(t)\to S_\sigma$, and $I_\pm(f,\alpha)=S_\pm$ by Definition \ref{def:improper-riemann-stieltjes-real-line}(ii), with $a=-t$ for $\sigma=-$.
+\item[$(ii)$] The identity $\int_{-\infty}^{+\infty}f\,d\alpha=S_-+S_+$ holds by Part (i) and Definition \ref{def:improper-riemann-stieltjes-real-line}(iii).
+\item[$(iii)$] ($\Rightarrow$) If $f$ is $\alpha$-integrable, then $S_-,S_+\in\R$ by Part (i) and Definition \ref{def:improper-riemann-stieltjes-real-line}(iv).
+\item[$(iii)$] ($\Leftarrow$) If $S_-,S_+\in\R$, then $f$ is $\alpha$-integrable by Part (i) and Definition \ref{def:improper-riemann-stieltjes-real-line}(iv).
+\item[$(iv)$] Choose $M>0$ with $(\forall x\in\R)\,\abs{f(x)}\leq M$, and set $g_\pm\defeq M\pm f$.\\
+Each $g_\pm$ is locally Riemann--Stieltjes integrable by Definition \ref{def:riemann-stieltjes-integral} and Theorem \ref{thm:riemann-stieltjes-integral-properties}(i).\\
+The bounds $(\forall x\in\R)\,0\leq g_\pm(x)\leq2M$ hold by the choice of $M$.\\
+For $g\in\{g_-,g_+\}$, $0\leq I_+(g,\alpha)\leq2M[\alpha(+\infty)-\alpha(0)]\in\R$ by Part (i) and Theorem \ref{thm:riemann-stieltjes-integral-properties}(iv).\\
+For $g\in\{g_-,g_+\}$, $0\leq I_-(g,\alpha)\leq2M[\alpha(0)-\alpha(-\infty)]\in\R$ by the same part and theorem.\\
+Thus $I_\pm(f,\alpha)=\frac{1}{2}[I_\pm(g_+,\alpha)-I_\pm(g_-,\alpha)]\in\R$ by Theorems \ref{thm:riemann-stieltjes-integral-properties}(i), \ref{thm:extended-limit-algebra}(ii)--(iii); $f$ $\alpha$-integrable by Definition \ref{def:improper-riemann-stieltjes-real-line}(iv).
 \end{enumerate}
-\hlt{Structural Commentary}: Positivity gives monotone limits; finite mass bounds tails.\\
-\hlt{Key Insight}: A bounded increasing integrator behaves like finite total mass.
+\hlt{Structural Commentary}: Suprema identify nonnegative limits; the shifts $M\pm f$ reduce bounded integrands to them.\\
+\hlt{Key Insight}: Finite integrator mass bounds both positive shifts uniformly.
 \end{proof}
 \end{theorem}
