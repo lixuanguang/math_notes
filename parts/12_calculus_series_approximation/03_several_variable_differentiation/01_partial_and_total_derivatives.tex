@@ -4,110 +4,158 @@
 %
 % Linear approximation, Jacobians, partial/directional derivatives, chain rule.
 
-Several-variable differentiation studies best linear approximations and local geometry, using linear maps, operator norms, determinants, invertibility, and metric estimates.
+Several-variable differentiation treats derivatives as best linear approximations, with operator norms controlling the remainder.\\
+Determinants and invertibility encode the resulting local geometry.
 
-\begin{definition} \label{def:several-variable-differentiation-core-source-todo}\label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
-Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\x\in E$, and $\LL(\R^n,\R^m)$ denote space of linear maps (Definition \ref{def:linear-map}).\\
-If $\exists A\in\LL(\R^n,\R^m)$ s.t. $\lim\limits_{\h\to\ze}\frac{\norm{\f(\x+\h)-\f(\x)-A\h}_2}{\norm{\h}_2}=0$, then $\f$ is \hlt{differentiable at $\x$}, and $A$ denoted $D\f(\x)$ or $\f'(\x)$.\\
-Equivalently, $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$, and $\frac{\norm{\mathbf{r}(\h)}_2}{\norm{\h}_2}\to0$.\\
-If this holds for every $\x\in E$, then $\f$ is differentiable on $E$.
+\begin{definition} \label{def:total-derivative-rn-rm} \hlt{Total Derivative}\\
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $\x\in E$. Write $\LL(\R^n,\R^m)$ for space of linear maps from $\R^n$ to $\R^m$ (Definition \ref{def:linear-map}).\\
+The map $\f$ is \hlt{differentiable at $\x$} iff $(\exists\,A\in\LL(\R^n,\R^m))\,\lim\limits_{\h\to\ze}\frac{\norm{\f(\x+\h)-\f(\x)-A\h}_2}{\norm{\h}_2}=0$.\\
+Any such $A$ is a \hlt{total derivative} of $\f$ at $\x$; when it exists, it is denoted $D\f(\x)$ or $\f'(\x)$.\\
+Equivalently, with $\mathbf r(\h)\defeq\f(\x+\h)-\f(\x)-D\f(\x)\h$, one has $\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$.\\
+The map $\f$ is \hlt{differentiable on $E$} iff $(\forall\,\x\in E)\,D\f(\x)$ exists.
 \end{definition}
 
 \begin{perspective} \label{per:total-derivative-linear-map-first} \hlt{Derivative First, Matrix Second}\\
-The total derivative is a linear map first; the Jacobian is its matrix in chosen bases. This keeps coordinate formulas subordinate to the intrinsic estimate $\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ from Definition \ref{def:operator-norm-rn-rm}.
+The total derivative is a linear map by Definition \ref{def:total-derivative-rn-rm}; its coordinate matrix is secondary.\\
+The intrinsic control is $(\forall\,A\in\LL(\R^n,\R^m))(\forall\,\h\in\R^n)\,\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ by Definition \ref{def:operator-norm-rn-rm}.
 \end{perspective}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:total-derivative-linear-approximation} separates the input increment $\h$ from its image $D\f(\x)\h$. The dashed vector is the smaller remainder $\mathbf r(\h)$.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/total_derivative_linear_approximation.tikz}
-  \caption{$D\f(\x)\h$ is the linear part; $\mathbf{r}(\h)=o(\norm{\h}_2)$ is the error.}
+  \caption{The solid vector $D\f(\x)\h$ reaches the linear approximation; the dashed $\mathbf r(\h)=o(\norm{\h}_2)$ completes the actual increment.}
   \label{fig:total-derivative-linear-approximation}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{theorem} \label{thm:total-derivative-unique-and-continuous}\label{thm:several-variable-differentiation-main-source-todo} \hlt{Basic Consequences of Total Differentiability}\\
-If $\f:E\to\R^m$ is differentiable at $\x\in E$, then $D\f(\x)$ is unique and $\f$ is continuous at $\x$.
+\begin{theorem} \label{thm:total-derivative-unique-and-continuous} \hlt{Basic Consequences of Total Differentiability}\\
+Let $E\subseteq\R^n$ be open, let $\f:E\to\R^m$, and let $\x\in E$. If $\f$ is differentiable at $\x$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item the total derivative $D\f(\x)$ is unique;
+\item $\f$ is continuous at $\x$.
+\end{enumerate}
 \begin{proof}
-If $A_1,A_2$ both satisfy Definition \ref{def:total-derivative-rn-rm}, set $B=A_1-A_2$. Then $\norm{B\h}_2/\norm{\h}_2\to0$ as $\h\to\ze$.\\
-For fixed $\h\neq\ze$, applying this to $t\h$ and using linearity makes the quotient independent of $t$, so $B\h=\ze$.\\
-Hence $B=0$. For continuity, write $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$.\\
-The operator-norm estimate gives $\norm{D\f(\x)\h}_2\leq\normop{D\f(\x)}\norm{\h}_2$, and remainder is $o(\norm{\h}_2)$, so $\f(\x+\h)\to\f(\x)$.\\
-\hlt{Structural Commentary}: The derivative is a rigid first-order linear part.\\
-\hlt{Key Insight}: A remainder smaller than $\norm{\h}$ cannot hide a second linear map.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $A_1,A_2$ be total derivatives at $\x$, $B\defeq A_1-A_2$. If $\mathbf r_j(\h)\defeq\f(\x+\h)-\f(\x)-A_j\h$, then $B\h=\mathbf r_2(\h)-\mathbf r_1(\h)$.\\
+$\norm{B\h}_2=o(\norm{\h}_2)$ by Definition \ref{def:total-derivative-rn-rm},  triangle inequality. For $\mathbf u\neq\ze$ and $t\neq0$, $\frac{\norm{B(t\mathbf u)}_2}{\norm{t\mathbf u}_2}=\frac{\norm{B\mathbf u}_2}{\norm{\mathbf u}_2}$ by linearity,  homogeneity.\\
+For $\mathbf u\neq\ze$, $\norm{B\mathbf u}_2=0$ by this equality and its limit as $t\to0$; $B\ze=\ze$ by linearity. Hence $B=0$.
+\item Set $A\defeq D\f(\x)$, $\mathbf r(\h)\defeq\f(\x+\h)-\f(\x)-A\h$. Then $\norm{\f(\x+\h)-\f(\x)}_2\leq\normop{A}\norm{\h}_2+\norm{\mathbf r(\h)}_2\to0$ by Definitions \ref{def:operator-norm-rn-rm}, \ref{def:total-derivative-rn-rm}.\\
+Thus $\f(\x+\h)\to\f(\x)$ as $\h\to\ze$, so $\f$ is continuous at $\x$.
+\end{enumerate}
+\hlt{Structural Commentary}: Scaling eliminates a second linear part; the operator bound transfers the remainder estimate to continuity.\\
+\hlt{Key Insight}: A nonzero linear error cannot be $o(\norm{\h}_2)$.
 \end{proof}
 \end{theorem}
 
 \begin{example} \label{ex:derivative-of-linear-map} \hlt{Derivative of a Linear Map}\\
-If $A\in\LL(\R^n,\R^m)$ and $\f(\x)=A\x$, then $D\f(\x)=A$ for every $\x\in\R^n$.\\
-The remainder in Definition \ref{def:total-derivative-rn-rm} is identically zero.
+Let $A\in\LL(\R^n,\R^m)$, $\f(\x)\defeq A\x$. Then $(\forall\x,\h\in\R^n)\,\f(\x+\h)-\f(\x)-A\h=\ze$, so $(\forall\x\in\R^n)\,D\f(\x)=A$ by Definition \ref{def:total-derivative-rn-rm}.
 \end{example}
 
 \begin{theorem} \label{thm:chain-rule-several-variables} \hlt{Chain Rule}\\
-If $\f:E\subseteq\R^n\to\R^m$ is differentiable at $\x_0$, $\g:G\subseteq\R^m\to\R^k$ is differentiable at $\f(\x_0)$, and $\f(E)\subseteq G$, then $\g\circ\f$ is differentiable at $\x_0$ and $D(\g\circ\f)(\x_0)=D\g(\f(\x_0))\,D\f(\x_0)$.
+Let $E\subseteq\R^n$ and $G\subseteq\R^m$ be open, $\x_0\in E$. Let $\f:E\to\R^m$, $\g:G\to\R^k$, with $\f(E)\subseteq G$.\\
+If $\f$ is differentiable at $\x_0$ and $\g$ is differentiable at $\f(\x_0)$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\g\circ\f$ is differentiable at $\x_0$;
+\item $D(\g\circ\f)(\x_0)=D\g(\f(\x_0))D\f(\x_0)$.
+\end{enumerate}
 \begin{proof}
-Let $A=D\f(\x_0)$, $B=D\g(\f(\x_0))$, $\mathbf{u}(\h)=\f(\x_0+\h)-\f(\x_0)-A\h$, and $\mathbf{v}(\mathbf{k})=\g(\f(\x_0)+\mathbf{k})-\g(\f(\x_0))-B\mathbf{k}$.\\
-For $\mathbf{k}=\f(\x_0+\h)-\f(\x_0)$, differentiability of $\f$ gives $\mathbf{k}\to\ze$ and $(\g\circ\f)(\x_0+\h)-(\g\circ\f)(\x_0)-BA\h =B\mathbf{u}(\h)+\mathbf{v}(\mathbf{k})$, where $\norm{\mathbf{u}(\h)}_2=o(\norm{\h}_2)$ and $\norm{\mathbf{v}(\mathbf{k})}_2=o(\norm{\mathbf{k}}_2)=o(\norm{\h}_2)$. Divide by $\norm{\h}_2$.\\
-\hlt{Structural Commentary}: The first-order parts compose as linear maps.\\
-\hlt{Key Insight}: The output increment of $\f$ is small enough to feed into the remainder estimate for $\g$.
+Set $A\defeq D\f(\x_0)$, $B\defeq D\g(\f(\x_0))$. Then $BA\in\LL(\R^n,\R^k)$ by Proposition \ref{prop:linear-map-product-algebra}(i).\\
+Set $\mathbf u(\h)\defeq\f(\x_0+\h)-\f(\x_0)-A\h$, $\mathbf q(\h)\defeq\f(\x_0+\h)-\f(\x_0)$, $\mathbf v(\mathbf q)\defeq\g(\f(\x_0)+\mathbf q)-\g(\f(\x_0))-B\mathbf q$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Relation $\norm{\mathbf u(\h)}_2=o(\norm{\h}_2)$ holds by Definition \ref{def:total-derivative-rn-rm}. Relation $\norm{\mathbf v(\mathbf q)}_2=o(\norm{\mathbf q}_2)$ as $\mathbf q\to\ze$ holds by same definition.\\
+Eventually $\norm{\mathbf u(\h)}_2\leq\norm{\h}_2$ as $\h\to\ze$ by the first estimate.\\
+Thus $\norm{\mathbf q(\h)}_2\leq(\normop{A}+1)\norm{\h}_2$ eventually by $\mathbf q(\h)=A\h+\mathbf u(\h)$, Definition \ref{def:operator-norm-rn-rm}; $\norm{\mathbf v(\mathbf q(\h))}_2=o(\norm{\h}_2)$.\\
+The identity $(\g\circ\f)(\x_0+\h)-(\g\circ\f)(\x_0)-BA\h=B\mathbf u(\h)+\mathbf v(\mathbf q(\h))$ holds by the definitions of $\mathbf u$, $\mathbf q$, and $\mathbf v$.\\
+The right side is $o(\norm{\h}_2)$ by the preceding estimates and the operator-norm bound, so $\g\circ\f$ is differentiable at $\x_0$.
+\item The derivative candidate in (i) is $BA$. Thus $D(\g\circ\f)(\x_0)=BA=D\g(\f(\x_0))D\f(\x_0)$ by Theorem \ref{thm:total-derivative-unique-and-continuous}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: The inner increment is $O(\norm{\h}_2)$, allowing the outer remainder to compose with it.\\
+\hlt{Key Insight}: Both composed error terms remain $o(\norm{\h}_2)$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:several-variable-componentwise-differentiability} \hlt{Componentwise Differentiability}\\
-Let $\f=(f_1,\ldots,f_m):E\subseteq\R^n\to\R^m$ and let $\pi_i:\R^m\to\R$ be the $i$th coordinate projection. Then $\f$ is differentiable at $\x\in E$ iff each $f_i$ is differentiable at $\x$, and $D f_i(\x)=\pi_i\circ D\f(\x)$ when these derivatives exist.
-\begin{proof}
-\begin{enumerate}[label=\roman*.]
+Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, $\x\in E$. For $i\in J_m$, let $\pi_i\in\LL(\R^m,\R)$ be the $i$th coordinate projection.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\f$ is differentiable, write $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf r(\h)$ with $\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$.\\
-Applying $\pi_i$ gives $f_i(\x+\h)-f_i(\x)=\pi_i(D\f(\x)\h)+\pi_i(\mathbf r(\h))$ and $\abs{\pi_i(\mathbf r(\h))}\leq\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$.\\
-Thus $D f_i(\x)=\pi_i\circ D\f(\x)$.
-\item[$(\Leftarrow)$] Suppose $D f_i(\x)=A_i\in\LL(\R^n,\R)$ for each $i$. Define $A\in\LL(\R^n,\R^m)$ by $A\h=(A_1\h,\ldots,A_m\h)$.\\
-With $r_i(\h)=f_i(\x+\h)-f_i(\x)-A_i\h$, each $r_i(\h)=o(\norm{\h}_2)$.\\
-So $\mathbf r(\h)=(r_1(\h),\ldots,r_m(\h))$ satisfies $\norm{\mathbf r(\h)}_2\leq\sum_i\abs{r_i(\h)}=o(\norm{\h}_2)$. Definition \ref{def:total-derivative-rn-rm} gives $D\f(\x)=A$.
+\item $\f$ is differentiable at $\x$ iff $(\forall\,i\in J_m)\,f_i$ is differentiable at $\x$.
+\item If $\f$ is differentiable at $\x$, then $(\forall\,i\in J_m)\,D f_i(\x)=\pi_i\circ D\f(\x)$.
 \end{enumerate}
-\hlt{Structural Commentary}: Component derivatives assemble into one linear map.\\
-\hlt{Key Insight}: Components test the derivative; the total derivative packages the tests together.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item[$(i)$] ($\Rightarrow$) Let $\mathbf r(\h)\defeq\f(\x+\h)-\f(\x)-D\f(\x)\h$. For $i\in J_m$, set $r_i(\h)\defeq\pi_i(\mathbf r(\h))$. Map $\pi_i\circ D\f(\x)$ is linear by Proposition \ref{prop:linear-map-product-algebra}(i).\\
+Then $f_i(\x+\h)-f_i(\x)-(\pi_i\circ D\f(\x))\h=r_i(\h)$ and $\abs{r_i(\h)}\leq\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$.\\
+Thus all component functions are differentiable at $\x$ by Definition \ref{def:total-derivative-rn-rm}.
+\item[$(i)$] ($\Leftarrow$) Suppose $(\forall\,i\in J_m)\,f_i$ is differentiable at $\x$,   $A_i\defeq D f_i(\x)$. Define $A:\R^n\to\R^m$ by $A\h\defeq(A_1\h,\ldots,A_m\h)$.\\
+$A\in\LL(\R^n,\R^m)$ by coordinatewise linearity. For $i\in J_m$, set $r_i(\h)\defeq f_i(\x+\h)-f_i(\x)-A_i\h$. Then $(\forall\,i\in J_m)\,\abs{r_i(\h)}=o(\norm{\h}_2)$.\\
+For $\mathbf r(\h)\defeq(r_1(\h),\ldots,r_m(\h))$, $\norm{\mathbf r(\h)}_2\leq\sum\limits_{i=1}^{m}\abs{r_i(\h)}=o(\norm{\h}_2)$ by finiteness of $J_m$.\\
+Hence $\f$ is differentiable at $\x$ with derivative $A$ by Definition \ref{def:total-derivative-rn-rm}.
+\item[$(ii)$] For $i\in J_m$, derivative candidate in $(i)$, ($\Rightarrow$), is $\pi_i\circ D\f(\x)$; $(\forall\,i\in J_m)\,D f_i(\x)=\pi_i\circ D\f(\x)$ by Theorem \ref{thm:total-derivative-unique-and-continuous}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: Coordinate projections prove necessity; finite assembly of scalar remainders proves sufficiency.\\
+\hlt{Key Insight}: Finitely many scalar $o(\norm{\h}_2)$ terms form one vector remainder.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:partials-gradient-directional-derivatives} \hlt{Partial, Gradient, and Directional Derivatives}\\
-Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, $\x\in E$, and let $\mathbf{e}_1,\ldots,\mathbf{e}_n$ be the standard basis of $\R^n$.
+Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, $\x\in E$. Let $\mathbf e_1,\ldots,\mathbf e_n$ be standard basis of $\R^n$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $1\leq i\leq m$ and $1\leq j\leq n$, the \hlt{partial derivative} of $f_i$ in coordinate $j$\\
-at $\x$ is $(D_jf_i)(\x)\defeq\lim\limits_{t\to0}\frac{f_i(\x+t\mathbf{e}_j)-f_i(\x)}{t}$, when this limit exists.
-\item For $\mathbf{u}\in\R^n$, the \hlt{directional derivative} of $\f$ at $\x$ in direction $\mathbf{u}$ is $(D_{\mathbf{u}}\f)(\x)\defeq\lim\limits_{t\to0}\frac{\f(\x+t\mathbf{u})-\f(\x)}{t}$, when this limit exists; if only direction matters, take $\norm{\mathbf{u}}_2=1$.
+\item For $(i,j)\in J_m\times J_n$, set $\phi_{ij}(t)\defeq f_i(\x+t\mathbf e_j)$ if $\x+t\mathbf e_j\in E$. When limit exists, \hlt{partial derivative} is $(D_jf_i)(\x)\defeq\lim\limits_{t\to0}\frac{\phi_{ij}(t)-\phi_{ij}(0)}{t}$.
+\item For $\mathbf u\in\R^n$, set $\gamma_{\mathbf u}(t)\defeq\f(\x+t\mathbf u)$ if $\x+t\mathbf u\in E$. When limit exists, \hlt{directional derivative} is $(D_{\mathbf u}\f)(\x)\defeq\lim\limits_{t\to0}\frac{\gamma_{\mathbf u}(t)-\gamma_{\mathbf u}(0)}{t}$.\\
+When only direction matters, take $\norm{\mathbf{u}}_2=1$.
 \item If $m=1$, write $f=f_1$; if all $(D_jf)(\x)$ exist, the \hlt{gradient} of $f$ at $\x$ is $(\nabla f)(\x)\defeq\sum\limits_{j=1}^{n}(D_jf)(\x)\mathbf{e}_j$.
 \end{enumerate}
 \end{definition}
 
 \begin{perspective} \label{per:partials-are-coordinate-tests} \hlt{Partials Are Coordinate Tests}\\
-Partials and directional derivatives test selected lines; the total derivative controls all small increments by one linear map. Theorem \ref{thm:total-derivative-matrix-partials} extracts partials, and Theorem \ref{thm:c1-iff-continuous-partials} gives a continuity-based converse.
+Partial and directional derivatives in Definition \ref{def:partials-gradient-directional-derivatives} test selected lines.\\
+The total derivative in Definition \ref{def:total-derivative-rn-rm} controls every small increment by one linear map.\\
+The matrix theorem below extracts the line tests; the next subsection proves a continuity-based converse.
 \end{perspective}
 
 \begin{theorem} \label{thm:total-derivative-matrix-partials} \hlt{Matrix of the Total Derivative}\\
-If $\f:E\to\R^m$ is differentiable at $\x$, then every $(D_jf_i)(\x)$ exists and, in standard bases,
-\begin{align}
-[D\f(\x)] =
-\begin{bmatrix}
-(D_1f_1)(\x) & \cdots & (D_nf_1)(\x)\\
-\vdots & & \vdots\\
-(D_1f_m)(\x) & \cdots & (D_nf_m)(\x)
-\end{bmatrix} \nonumber
-\end{align}
-If $m=1$ and $f$ is differentiable at $\x$, then $(D_{\mathbf{u}}f)(\x)=(\nabla f)(\x)\cdot\mathbf{u}$ for every $\mathbf{u}\in\R^n$.
+Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, $\x\in E$. If $\f$ is differentiable at $\x$, then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item all $(D_jf_i)(\x)$ exist, and $(\forall\,(i,j)\in J_m\times J_n)\,[D\f(\x)]_{ij}=(D_jf_i)(\x)$;
+\item if $m=1$ and $f=f_1$, then $(\forall\,\mathbf u\in\R^n)\,(D_{\mathbf u}f)(\x)=(\nabla f)(\x)\cdot\mathbf u$.
+\end{enumerate}
 \begin{proof}
-Set $\h=t\mathbf{e}_j$ in Definition \ref{def:total-derivative-rn-rm}; limit is $D\f(\x)\mathbf{e}_j$, so components form column $j$ (Proposition \ref{prop:matrix-representation-action}).\\
-For $m=1$, set $\h=t\mathbf{u}$, identify linear functional with dot product against $\nabla f(\x)$ (Theorem \ref{thm:riesz-representation-finite-dimensional}).\\
-\hlt{Structural Commentary}: Partials are coordinate columns of $D\f(\x)$.\\
-\hlt{Key Insight}: Differentiability controls all directions at once; partial derivatives record its coordinate columns.
+Set $\mathbf r(\h)\defeq\f(\x+\h)-\f(\x)-D\f(\x)\h$; then $\norm{\mathbf r(\h)}_2=o(\norm{\h}_2)$ by Definition \ref{def:total-derivative-rn-rm}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $j\in J_n$, set $\h=t\mathbf e_j$. Then $\frac{\f(\x+t\mathbf e_j)-\f(\x)}{t}=D\f(\x)\mathbf e_j+\frac{\mathbf r(t\mathbf e_j)}{t}\to D\f(\x)\mathbf e_j$ as $t\to0$ by Definition \ref{def:total-derivative-rn-rm}.\\
+Thus all component limits exist, and their values form column $j$ of $[D\f(\x)]$ by Proposition \ref{prop:matrix-representation-action}.
+\item Suppose $m=1$, $\mathbf u=(u_1,\ldots,u_n)\in\R^n$. Identity $(D_{\mathbf u}f)(\x)=Df(\x)\mathbf u$ holds by Definition \ref{def:total-derivative-rn-rm} with $\h=t\mathbf u$.\\
+By part (i) and linearity, $Df(\x)\mathbf u=\sum\limits_{j=1}^{n}u_jDf(\x)\mathbf e_j=\sum\limits_{j=1}^{n}u_j(D_jf)(\x)=(\nabla f)(\x)\cdot\mathbf u$.
+\end{enumerate}
+\hlt{Structural Commentary}: Line restrictions identify $D\f(\x)\mathbf e_j$; matrix coordinates and linearity recover both claims.\\
+\hlt{Key Insight}: The standard basis converts derivative action into partial-derivative columns.
 \end{proof}
 \end{theorem}
 
-\begin{remark} \label{rem:several-variable-row-column-conventions} \hlt{Row and Column Conventions}\\
-With the coordinate-column convention from Proposition \ref{prop:matrix-representation-action}, the Jacobian matrix above is the standard-basis matrix of the linear map $D\f(\x)$, and its $j$th column is $D\f(\x)\mathbf{e}_j$.
-\end{remark}
-
 \begin{definition} \label{def:jacobian-determinant} \hlt{Jacobian}\\
-Let $E\subseteq\R^n$, let $\f=(y_1,\ldots,y_n):E\to\R^n$, and suppose $\f$ is differentiable at $\x\in E$.\\
-The \hlt{Jacobian determinant} is $J_{\f}(\x)\defeq\det D\f(\x)=\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}(\x)$.\\
-Then $D\f(\x)$ is invertible iff $J_{\f}(\x)\neq0$. Interpretation: $\abs{J_{\f}(\x)}$ is the infinitesimal volume-scaling factor.
+Let $E\subseteq\R^n$ be open, $\f=(y_1,\ldots,y_n):E\to\R^n$, $\f$ is differentiable at $\x\in E$.\\
+The \hlt{Jacobian determinant} of $\f$ at $\x$ is $J_{\f}(\x)\defeq\det D\f(\x)=\frac{\partial(y_1,\ldots,y_n)}{\partial(x_1,\ldots,x_n)}(\x)$.
 \end{definition}
+
+\begin{corollary} \label{cor:jacobian-nonzero-iff-derivative-invertible} \hlt{Nonvanishing Jacobian}\\
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^n$ be differentiable at $\x\in E$, $J_{\f}(\x)$ be its Jacobian determinant. Then $D\f(\x)$ is invertible iff $J_{\f}(\x)\neq0$.
+\begin{proof}
+\begin{enumerate}[label=\roman*.]
+\setlength{\itemsep}{0pt}
+\item[$(\Rightarrow)$] If $D\f(\x)$ is invertible, then $\det D\f(\x)\neq0$ by Theorem \ref{thm:determinant-basic-laws}(vii). Hence $J_{\f}(\x)\neq0$ by Definition \ref{def:jacobian-determinant}.
+\item[$(\Leftarrow)$] If $J_{\f}(\x)\neq0$, then $\det D\f(\x)\neq0$ by Definition \ref{def:jacobian-determinant}. Hence $D\f(\x)$ is invertible by Theorem \ref{thm:determinant-basic-laws}(vii).
+\end{enumerate}
+\hlt{Structural Commentary}: The Jacobian definition transfers the determinant criterion to the derivative matrix.\\
+\hlt{Key Insight}: Nonzero determinant is exactly linear invertibility.
+\end{proof}
+\end{corollary}
+
+\noindent For the map in Definition \ref{def:jacobian-determinant}, $\abs{J_{\f}(\x)}$ is the volume scale of the linear approximation $D\f(\x)$.
