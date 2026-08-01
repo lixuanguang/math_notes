@@ -1,15 +1,34 @@
 \subsection{Further Topics in Integration}
 
-\begin{method} \label{meth:riemann-stieltjes-no-overlap-source-todo}\label{meth:riemann-stieltjes-proof-patterns} \hlt{Integration Proof Patterns}
+\begin{proofmethod} \label{meth:riemann-stieltjes-proof-patterns} \hlt{Riemann--Stieltjes Proof Patterns}\\
+Use this method for Riemann--Stieltjes integrability, estimates, calculus identities, and improper convergence.\\
+Record the interval, integrator, integrand, and target; for Darboux arguments, use (i) and, if needed, (ii) before (iii)--(vii).
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Definitions}: fix $\Pi=\{x_i\}_{i=0}^n$ before defining $M_i,m_i,\Delta x_i,\Delta\alpha_i$.
-\item \hlt{Refinement}: prove the one-point insertion case; iterate.
-\item \hlt{Integrability}: find $\Pi$ with $U(\Pi,f,\alpha)-L(\Pi,f,\alpha)<\varepsilon$.
-\item \hlt{Bad sets}: cover $E$ by $I_j=[u_j,v_j]$ with $\sum_j[\alpha(v_j)-\alpha(u_j)]<\varepsilon$; control $K=[a,b]\setminus\bigcup_j(u_j,v_j)$ uniformly.
-\item \hlt{Properties}: pass to a common refinement before comparing sums.
-\item \hlt{Calculus}: use the mean value theorem to form tagged sums, then apply Theorem \ref{thm:tagged-riemann-stieltjes-sums}.
-\item \hlt{Improper integrals}: truncate endpoints; use monotonicity or tail bounds.
+\item \hlt{Darboux Setup}: Let $a,b\in\R$ satisfy $a<b$, let $\alpha:[a,b]\to\R$ be increasing, and let $f:[a,b]\to\R$ be bounded.\\
+Let $\mathfrak{P}[a,b]$ denote the partitions of $[a,b]$. For $\Pi\in\mathfrak{P}[a,b]$, set $G_\alpha(\Pi;f)\defeq U(\Pi,f,\alpha)-L(\Pi,f,\alpha)$.
+\item \hlt{Common Refinement}: Let $r\in\N$ and $\Pi_1,\ldots,\Pi_r\in\mathfrak{P}[a,b]$. Set $\Pi\defeq\bigcup\limits_{j=1}^{r}\Pi_j$.\\
+Then $(\forall j\in\{1,\ldots,r\})\,G_\alpha(\Pi;f)\leq G_\alpha(\Pi_j;f)$ by Theorem \ref{thm:refinement-monotonicity-riemann-stieltjes}.
+\item \hlt{Integrability Criterion}: $f\in\mathcal{R}(\alpha)\Longleftrightarrow(\forall\varepsilon>0)(\exists\Pi\in\mathfrak{P}[a,b])\,G_\alpha(\Pi;f)<\varepsilon$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.\\
+To prove membership, fix $\varepsilon>0$ and construct such a partition $\Pi$.
+\item \hlt{Finite Discontinuities}: Let $E\defeq\{x\in[a,b]:f\text{ discontinuous at }x\}$ be finite, $\alpha$ continuous on $E$; $f\in\mathcal{R}(\alpha)$ by Theorem \ref{thm:finitely-many-discontinuities-integrable}.\\
+For a direct Darboux proof with $E=\{c_1,\ldots,c_N\}\neq\emptyset$, fix $\eta>0$ and choose $J_j=[u_j,v_j]\subseteq[a,b]$.\\
+Require pairwise disjoint relative interiors, $(\forall j\in\{1,\ldots,N\})\,c_j\in\operatorname{int}_{[a,b]}J_j$, and $\sum\limits_{j=1}^{N}[\alpha(v_j)-\alpha(u_j)]<\eta$.\\
+On $K\defeq[a,b]\setminus\bigcup\limits_{j=1}^{N}\operatorname{int}_{[a,b]}J_j$, control the remaining gap by uniform continuity of $f|_K$.
+\item \hlt{Integral Algebra}: Prove linear-combination and order bounds by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i)--(ii).\\
+Prove interval decompositions and uniform estimates by Parts (iii)--(iv) of the same theorem.
+\item \hlt{Calculus Formula}: Let $f\in\mathcal{R}[a,b]$, and let $F$ be continuous on $[a,b]$, differentiable on $(a,b)$, with $(\forall t\in(a,b))\,F'(t)=f(t)$.\\
+Fix $\varepsilon>0$. Choose $\Pi=\{a=x_0<\cdots<x_n=b\}\in\mathfrak{P}[a,b]$ with $U(\Pi,f)-L(\Pi,f)<\varepsilon$.\\
+Choose tags $(t_i)_{i=1}^{n}$ satisfying $(\forall i\in\{1,\ldots,n\})\,F(x_i)-F(x_{i-1})=f(t_i)\Delta x_i$ by Corollary \ref{cor:mean-value-theorem}.\\
+After telescoping, $\abs{F(b)-F(a)-\int_a^b f(t)\,dt}<\varepsilon$ by Theorem \ref{thm:tagged-riemann-stieltjes-sums}(ii) with the identity integrator.\\
+Hence $F(b)-F(a)=\int_a^b f(t)\,dt$ because $\varepsilon>0$ is arbitrary.
+\item \hlt{Improper Limits}: Verify local integrability and form the separate one-sided limits required by Definitions \ref{def:improper-riemann-integral} and \ref{def:improper-riemann-stieltjes-real-line}.\\
+Let $a\in\R$ and $b\in\overline{\R}$ satisfy $a<b$, $f:[a,b)\to[0,+\infty)$. Assume $(\forall d\in(a,b))\,f|_{[a,d]}\in\mathcal{R}[a,d]$, and set $H(d)\defeq\int_a^d f(x)\,dx$.\\
+Then $\int_a^b f(x)\,dx$ converges iff $\sup\limits_{\overline{\R}}H((a,b))\in\R$ by Theorem \ref{thm:nonnegative-improper-integral-supremum}.\\
+Let $\alpha:\R\to\R$ be increasing with $\alpha(-\infty),\alpha(+\infty)\in\R$, and let $f:\R\to\R$ be bounded.\\
+If $(\forall c,d\in\R)\,[c<d\Rightarrow f|_{[c,d]}\in\mathcal{R}(\alpha|_{[c,d]})]$, then $f$ is $\alpha$-integrable on $\R$ by Theorem \ref{thm:improper-riemann-stieltjes-nonnegative-bounded-mass}(iv).
 \end{enumerate}
-\hlt{Key Insight}: Riemann--Stieltjes integration is Darboux approximation plus a choice of interval weights $\Delta\alpha_i$.
-\end{method}
+\hlt{Verification}: Confirm that the selected route proves the target and that every cited hypothesis holds.\\
+Check that all restrictions, local integrals, endpoint limits, and extended-real sums are defined.\\
+\hlt{Key Insight}: Darboux gaps control finite intervals; monotone truncations or finite integrator mass control tails.
+\end{proofmethod}
