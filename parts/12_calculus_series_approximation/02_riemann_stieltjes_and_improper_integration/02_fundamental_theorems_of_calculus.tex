@@ -1,34 +1,53 @@
 \subsection{Fundamental Theorems of Calculus}
 
 \begin{theorem} \label{thm:integral-function-continuity-and-derivative} \hlt{Integral Functions}\\
-Let $f\in\mathcal{R}$ on $[a,b]$ and define $F(x)\defeq\int_a^x f(t)\,dt$. Then $F$ is continuous.\\
-If $f$ is continuous at $x_0$, then $F'(x_0)=f(x_0)$, with one-sided derivatives at endpoints.
+Let $f\in\mathcal{R}[a,b]$, and define $F:[a,b]\to\R$ by $F(a)\defeq0$ and $F(x)\defeq\int_a^x f(t)\,dt$ for $a<x\leq b$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $F$ is continuous on $[a,b]$.
+\item If $f$ is continuous at $x_0\in(a,b)$, then $F'(x_0)=f(x_0)$.\\
+At the endpoints, continuity of $f$ implies $F'_+(a)=f(a)$ and $F'_-(b)=f(b)$.
+\end{enumerate}
 \begin{proof}
-Let $\abs{f}\leq M$. For $x<y$, Theorem \ref{thm:riemann-stieltjes-integral-properties} gives $\abs{F(y)-F(x)}=\abs{\int_x^y f(t)\,dt}\leq M(y-x)$ so $F$ continuous.\\
-If $f$ continuous at $x_0$, for $x\neq x_0$ near $x_0$, $\abs{\frac{F(x)-F(x_0)}{x-x_0}-f(x_0)} \leq \sup\limits_{u \in [x, x_0]}\abs{f(u)-f(x_0)}\to0$. $F'(x_0)=f(x_0)$.\\
-\hlt{Structural Commentary}: Boundedness controls increments; local continuity gives the derivative.\\
-\hlt{Key Insight}: Averaging a continuous function over shrinking intervals returns its value.
+All integral identities and bounds below hold by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i),(iii)--(iv) with $\alpha(t)=t$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Choose $M\geq0$ such that $(\forall t\in[a,b])\,\abs{f(t)}\leq M$. For $a\leq x<y\leq b$, $\abs{F(y)-F(x)}=\abs{\int_x^y f(t)\,dt}\leq M(y-x)$.\\
+Thus $F$ is Lipschitz and therefore continuous on $[a,b]$.
+\item Fix a continuity point $x_0\in[a,b]$.\\
+For $x\in[a,b]\setminus\{x_0\}$, set $J_x\defeq[\min\{x,x_0\},\max\{x,x_0\}]$.\\
+Then $\abs{\frac{F(x)-F(x_0)}{x-x_0}-f(x_0)}\leq\sup\limits_{u\in J_x}\abs{f(u)-f(x_0)}$.\\
+For $\varepsilon>0$, choose $\delta>0$ such that $(\forall u\in[a,b])\,\abs{u-x_0}<\delta\implies\abs{f(u)-f(x_0)}<\varepsilon$.\\
+If $0<\abs{x-x_0}<\delta$, then $J_x\subseteq(x_0-\delta,x_0+\delta)$, so the right-hand side is at most $\varepsilon$.\\
+Thus the difference quotient tends to $f(x_0)$ two-sidedly in $(a,b)$, right-sidedly at $a$, and left-sidedly at $b$.
+\end{enumerate}
+\hlt{Structural Commentary}: A global Lipschitz bound proves continuity; local average bounds identify the derivative.\\
+\hlt{Key Insight}: Difference quotients of $F$ are averages over shrinking intervals.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:fundamental-theorem-calculus-riemann} \hlt{Fundamental Theorem of Calculus}\\
-If $f\in\mathcal{R}$ on $[a,b]$ and $\exists$ a differentiable function $F$ on $[a,b]$ such that $F'=f$, then $\int_a^b f(x)\,dx=F(b)-F(a)$.
+Let $f\in\mathcal{R}[a,b]$, and let $F:[a,b]\to\R$ be continuous on $[a,b]$ and differentiable on $(a,b)$.\\
+If $(\forall x\in(a,b))\,F'(x)=f(x)$, then $\int_a^b f(x)\,dx=F(b)-F(a)$.
 \begin{proof}
-Choose $\Pi=\{x_0,\ldots,x_n\}$ with $U(\Pi,f)-L(\Pi,f)<\varepsilon$.\\
-By MVT, choose $t_i\in[x_{i-1},x_i]$ so that $F(b)-F(a)=\sum\limits_i\bigl(F(x_i)-F(x_{i-1})\bigr)=\sum\limits_i f(t_i)\Delta x_i$.\\
-Theorem \ref{thm:tagged-riemann-stieltjes-sums} puts this tagged sum within $\varepsilon$ of $\int_a^b f$. Let $\varepsilon\to0$.\\
-\hlt{Structural Commentary}: Mean-value increments convert antiderivatives into tagged Riemann sums.\\
-\hlt{Key Insight}: The integral is the common limit of all sufficiently fine tagged sums.
+Fix $\varepsilon>0$. Choose a partition $\Pi=\{x_0,\ldots,x_n\}$ with $U(\Pi,f)-L(\Pi,f)<\varepsilon$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with $\alpha(x)=x$.\\
+For $1\leq i\leq n$, choose $t_i\in(x_{i-1},x_i)$ satisfying $F(x_i)-F(x_{i-1})=f(t_i)\Delta x_i$ by Corollary \ref{cor:mean-value-theorem}.\\
+Then $F(b)-F(a)=\sum\limits_{i=1}^{n}[F(x_i)-F(x_{i-1})]=\sum\limits_{i=1}^{n}f(t_i)\Delta x_i$. Thus $\abs{F(b)-F(a)-\int_a^b f(x)\,dx}<\varepsilon$ by Theorem \ref{thm:tagged-riemann-stieltjes-sums}(ii) with $\alpha(x)=x$.\\
+Since $\varepsilon>0$ is arbitrary, the claimed identity holds.\\
+\hlt{Structural Commentary}: Mean-value increments form a tagged sum; the Darboux gap identifies its integral limit.\\
+\hlt{Key Insight}: Antiderivative increments are exact tagged rectangles.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:riemann-integration-by-parts} \hlt{Integration by Parts}\\
-Suppose $F,G$ are differentiable on $[a,b]$, $F'=f\in\mathcal{R}$, and $G'=g\in\mathcal{R}$.\\
+Let $F,G:[a,b]\to\R$ be continuous on $[a,b]$ and differentiable on $(a,b)$. Suppose $f,g\in\mathcal{R}[a,b]$ satisfy $F'=f$ and $G'=g$ on $(a,b)$.\\
 Then $\int_a^b F(x)g(x)\,dx=F(b)G(b)-F(a)G(a)-\int_a^b f(x)G(x)\,dx$.
 \begin{proof}
-Set $H\defeq FG$. Since $F,G$ are continuous, $F,G\in\mathcal{R}$; hence $Fg,fG\in\mathcal{R}$ by Theorem \ref{thm:products-and-absolute-values-riemann-stieltjes}.\\
-Thus $H'=Fg+fG\in\mathcal{R}$, and Theorem \ref{thm:fundamental-theorem-calculus-riemann} gives $F(b)G(b)-F(a)G(a)=H(b)-H(a)=\int_a^b Fg+\int_a^b fG$.\\
-\hlt{Structural Commentary}: Integration by parts is the product rule integrated over the interval.\\
-\hlt{Key Insight}: Move one derivative from $G$ onto $F$ by applying the fundamental theorem to $FG$.
+The functions $F,G$ belong to $\mathcal{R}[a,b]$ by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable} with $\alpha(x)=x$. Hence $Fg,fG\in\mathcal{R}[a,b]$ by Theorem \ref{thm:products-and-absolute-values-riemann-stieltjes}(i).\\
+Set $H\defeq FG$ and $h\defeq fG+Fg$. The function $H$ is continuous on $[a,b]$ by Theorem \ref{thm:continuous-algebra-and-components}(i).\\
+$H'=h$ on $(a,b)$ by Theorem \ref{thm:derivative-algebra-rules}(ii), $h\in\mathcal{R}[a,b]$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i). Identity $H(b)-H(a)=\int_a^b h(x)\,dx$ holds by Theorem \ref{thm:fundamental-theorem-calculus-riemann}.\\
+The claim follows by $H=FG$, $h=fG+Fg$, Theorem \ref{thm:riemann-stieltjes-integral-properties}(i), and rearrangement.\\
+\hlt{Structural Commentary}: The product rule creates an integrable derivative; the fundamental theorem supplies its boundary increment.\\
+\hlt{Key Insight}: $H'=fG+Fg$ packages both integration-by-parts terms.
 \end{proof}
 \end{theorem}
