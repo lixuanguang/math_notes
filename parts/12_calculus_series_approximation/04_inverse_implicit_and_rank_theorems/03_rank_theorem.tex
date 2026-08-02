@@ -1,43 +1,74 @@
 \subsection{Rank Theorem}
 
 \begin{perspective} \label{per:rank-theorem-linear-model} \hlt{Rank Theorem Linear Model}\\
-Theorem \ref{thm:quotient-by-kernel-is-range} reduces a linear map to its kernel--range split.\\
+Theorem \ref{thm:quotient-by-kernel-is-range} identifies the quotient by the kernel with the range, the linear kernel--range model.\\
 The constant-rank theorem is the local $C^1$ analogue after coordinate changes.
 \end{perspective}
 
 \begin{theorem} \label{thm:constant-rank-theorem-rudin} \hlt{Rank Theorem}\\
-Let $E\subseteq\R^n$ be open, let $\mathbf{F}\in C^1(E,\R^m)$ have constant rank $r$, and fix $\a\in E$. Set $A\defeq D\mathbf{F}(\a)$, $Y\defeq\operatorname{range}A$, and let $P:\R^m\to Y$ be the orthogonal projection. Then for some $\x_0\in\R^n$, neighborhoods $V_0\ni\x_0$ and $U\ni\a$, and $C^1$ diffeomorphism $H:V_0\to U$, there exists $\varphi\in C^1(A(V_0),\ker P)$ such that $\mathbf{F}\circ H=A+\varphi\circ A$ on $V_0$.
+Let $E\subseteq\R^n$ be open, let $r\in\N_0$, let $\mathbf{F}\in C^1(E,\R^m)$ satisfy $(\forall\,\x\in E)\,\operatorname{rank}D\mathbf{F}(\x)=r$, and fix $\a\in E$.\\
+Set $A\defeq D\mathbf{F}(\a)$ and $Y\defeq\operatorname{range}A$, and let $P:\R^m\to\R^m$ be the orthogonal projection onto $Y$.\\
+Then there are $\x_0\in\R^n$, open neighborhoods $V_0\ni\x_0$ and $U\ni\a$, a $C^1$ diffeomorphism $H:V_0\to U$, and $\varphi\in C^1(A(V_0),\ker P)$, with $A(V_0)$ open in $Y$, such that $(\forall\,\x\in V_0)\,\mathbf{F}(H(\x))=A\x+\varphi(A\x)$.
 \begin{proof}
-If $r=0$, Theorem \ref{thm:bounded-derivative-convex-mean-value} makes $\mathbf{F}$ locally constant; take $H=I$ and $\varphi(0)=\mathbf{F}(\a)$.\\
-Assume $r>0$. Choose $S:Y\to\R^n$ with $AS=I_Y$ and set $G\defeq I+SP(\mathbf{F}-A)$. Since $DG(\a)=I$, Theorem \ref{thm:inverse-function-theorem-rn} gives a local $C^1$ diffeomorphism $G:U\to V_0$ with inverse $H$; shrink $V_0$ convex and put $\x_0\defeq G(\a)$.\\
-Let $\Psi\defeq\mathbf{F}\circ H$. From $AG=P\mathbf{F}$, $P\Psi=A$ and $PD\Psi=A$.\\
-Since $\operatorname{rank}D\Psi=\operatorname{rank}A=\operatorname{rank}PD\Psi=r$, $P$ is injective on $\operatorname{range}D\Psi$; hence $A\mathbf{v}=0$ implies $D\Psi(\x)\mathbf{v}=0$.\\
-By Theorem \ref{thm:bounded-derivative-convex-mean-value}, $\Psi$ is constant on each convex fiber $V_0\cap(\x+\ker A)$.\\
-Define $\varphi(A\x)\defeq(I-P)\Psi(\x)$. Fiber constancy makes $\varphi$ well-defined, $\varphi(A\x)\in\ker P$, and $\Psi=A+\varphi\circ A$. After shrinking $V_0$ so $\sigma(\mathbf{u})\defeq\x_0+S(\mathbf{u}-A\x_0)$ lies in $V_0$ for $\mathbf{u}\in A(V_0)$, $\varphi=(I-P)\Psi\circ\sigma$ is $C^1$.\\
-\hlt{Structural Commentary}: Constant rank gives projection-plus-graph normal form.\\
-\hlt{Key Insight}: Constant rank kills variation along $A$-fibers.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Zero-Rank Case}: If $r=0$, choose an open ball $B\subseteq E$ about $\a$. Then $D\mathbf{F}=0$ on $B$, so $\mathbf{F}|_B$ is constant by Theorem \ref{thm:bounded-derivative-convex-mean-value}(ii).\\
+Set $V_0=U=B$, $\x_0=\a$, $H=I_B$, and $\varphi(\ze)=\mathbf{F}(\a)$. Since $A=P=0$ and $A(V_0)=Y=\{\ze\}$, these objects satisfy the conclusion.
+\item \hlt{Local Coordinates}: Assume $r>0$. Choose a basis $(\mathbf{y}_1,\ldots,\mathbf{y}_r)$ of $Y$ and $\mathbf{s}_j\in\R^n$ with $A\mathbf{s}_j=\mathbf{y}_j$.\\
+Assignments $S\mathbf{y}_j\defeq\mathbf{s}_j$ define $S:Y\to\R^n$ by Proposition \ref{prop:linear-map-determined-by-basis}, $AS=I_Y$. Define $G:E\to\R^n$ by $G(\x)\defeq\x+SP\bigl(\mathbf{F}(\x)-A\x\bigr)$.\\
+Since $DG(\a)=I$, choose open neighborhoods $U\ni\a$ and $V_0\ni\x_0\defeq G(\a)$ such that $G:U\to V_0$ is a $C^1$ diffeomorphism by Theorem \ref{thm:inverse-function-theorem-rn}(i),(iii); set $H\defeq G^{-1}$.
+\item \hlt{Kernel Directions}: Define $\Psi:V_0\to\R^m$ by $\Psi\defeq\mathbf{F}\circ H$. Since $AS=I_Y$ and $P|_Y=I_Y$ by Proposition \ref{prop:orthogonal-projection-properties}(ii), $AG=P\mathbf{F}$ on $U$.\\
+Thus $P\Psi=A$, $PD\Psi=A$ on $V_0$. Fix $\x\in V_0$. By Theorems \ref{thm:inverse-function-theorem-rn}(ii), \ref{thm:chain-rule-several-variables}(ii), $DH(\x)$  invertible, $D\Psi(\x)=D\mathbf{F}(H(\x))DH(\x)$.\\
+Hence $\operatorname{rank}D\Psi(\x)=r$. The restriction of $P$ to $\operatorname{range}D\Psi(\x)$ is onto $Y$ because $PD\Psi(\x)=A$.\\
+Both spaces have dimension $r$, so this restriction is injective by Corollary \ref{cor:equal-dimension-kernel-range}(ii). Therefore $(\forall\,\mathbf{v}\in\ker A)\,D\Psi(\x)\mathbf{v}=\ze$.
+\item \hlt{Fiber Constancy}: For $\mathbf{v}\in\R^n$, the identity $\mathbf{v}=SA\mathbf{v}+(\mathbf{v}-SA\mathbf{v})$ and $AS=I_Y$ imply $\R^n=\operatorname{range}S\oplus\ker A$.\\
+By Corollary \ref{cor:finite-dimensional-linear-maps-continuous}(ii), addition is a homeomorphism from $\operatorname{range}S\times\ker A$ onto $\R^n$.\\
+Choose open convex neighborhoods $C\subseteq\operatorname{range}S$ and $K\subseteq\ker A$ of $\ze$ such that $\x_0+C+K\subseteq V_0$.\\
+Replace $V_0$ by $\x_0+C+K$ and $U$ by $H(V_0)$. If $\ker A\neq\{\ze\}$, choose a linear isomorphism $T:\R^q\to\ker A$, where $q\defeq\dim(\ker A)$.\\
+It is a homeomorphism by Corollary \ref{cor:finite-dimensional-linear-maps-continuous}(ii). For $\mathbf{c}\in C$, map $\mathbf{z}\mapsto\Psi(\x_0+\mathbf{c}+T\mathbf{z})$ has derivative zero on the open convex set $T^{-1}(K)$ by part (iii), so it is constant by Theorem \ref{thm:bounded-derivative-convex-mean-value}(ii).\\
+If $\ker A=\{\ze\}$, every fiber is a singleton. Thus $A\x_1=A\x_2$ implies $\Psi(\x_1)=\Psi(\x_2)$ for $\x_1,\x_2\in V_0$.
+\item \hlt{Graph Map}: Define $\varphi(A\x)\defeq(I-P)\Psi(\x)$ for $\x\in V_0$. This is well-defined by part (iv), $\varphi(A\x)\in\ker P$ by Proposition \ref{prop:orthogonal-projection-properties}(vii).\\
+Since $P\Psi=A$, $(\forall\,\x\in V_0)\,\Psi(\x)=A\x+\varphi(A\x)$. The set $A(V_0)=A\x_0+A(C)$ is open in $Y$ because $A|_{\operatorname{range}S}$ has inverse $S$ and is a homeomorphism by Corollary \ref{cor:finite-dimensional-linear-maps-continuous}(ii). For $\mathbf{u}\in A(V_0)$, set $\sigma(\mathbf{u})\defeq\x_0+S(\mathbf{u}-A\x_0)$.\\
+Then $\sigma(\mathbf{u})\in\x_0+C\subseteq V_0$, $A\sigma(\mathbf{u})=\mathbf{u}$, and $\varphi=(I-P)\Psi\circ\sigma$. Hence $\varphi\in C^1(A(V_0),\ker P)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Local inversion fixes the $Y$-component; equal rank removes variation in the complementary directions.\\
+\hlt{Key Insight}: A constant-rank map is locally a $C^1$ graph over the range of its derivative.
 \end{proof}
 \end{theorem}
 
-Rank-nullity (Theorem \ref{thm:rank-nullity}) says that the domain directions split into rank directions and fiber directions. The rank theorem says a constant-rank map has, locally, the same split after $C^1$ changes of coordinates.
+Rank-nullity (Theorem \ref{thm:rank-nullity}) counts rank and kernel directions by $n=\operatorname{rank}A+\dim(\ker A)$. The rank theorem upgrades this dimension count: after local $C^1$ coordinate changes, a constant-rank map separates those directions.
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:rank-theorem-projection-normal-form} contrasts original curved fibers and image with straight $\ker A$-fibers and projection image in local normal-form coordinates.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/rank_theorem_projection_normal_form.tikz}
-  \caption{After local coordinate changes, a constant-rank map looks like projection onto the rank directions.}
+  \caption{The upper panels depict curved fibers and image before normalization; the lower panels depict straight $\ker A$-fibers and projection onto the rank directions.}
   \label{fig:rank-theorem-projection-normal-form}
-\end{figure}
+\end{illustrationfigure}
 
+\begin{samepage}
 \begin{theorem} \label{thm:lagrange-multiplier-one-constraint} \hlt{One-Constraint Lagrange Multiplier}\\
-Let $E\subseteq\R^n$ be open, $f,g:E\to\R$ be $C^1$, and $S=\{\x:g(\x)=c\}$.\\
-If $p\in S$, $\nabla g(p)\neq\ze$, and $f|_S$ has a local extremum at $p$, then $\exists\lambda\in\R$ with $\nabla f(p)=\lambda\nabla g(p)$.
+Let $E\subseteq\R^n$ be open, $f,g\in C^1(E,\R)$, $c\in\R$, $S\defeq\{\x\in E:g(\x)=c\}$.\\
+If $p\in S$, $\nabla g(p)\neq\ze$, and $f|_S$ has a local extremum at $p$, then $(\exists\,\lambda\in\R)\,\nabla f(p)=\lambda\nabla g(p)$.
 \begin{proof}
-If $Df(p)=0$, take $\lambda=0$. Otherwise suppose $Df(p)$ is not a multiple of $Dg(p)$.\\
-Complete $Dg(p),Df(p)$ to a dual basis $Dg(p),\quad Df(p),\quad \ell_3,\ldots,\ell_n$ by Theorem \ref{thm:dual-basis-and-dimension},\\
-and set $\Phi(\x)=\bigl(g(\x)-c,\ f(\x)-f(p),\ \ell_3(\x-p),\ldots,\ell_n(\x-p)\bigr)$.\\
-Then $D\Phi(p)$ is invertible, so Theorem \ref{thm:inverse-function-theorem-rn} makes $\Phi$ locally invertible. In these coordinates, $S$ is locally the slice with first coordinate $0$, while the second coordinate is $f-f(p)$. Local invertibility gives nearby points of $S$ with this second coordinate of both signs, contradicting extremality.\\
-Hence $Df(p)=\lambda Dg(p)$; Riesz representation, Theorem \ref{thm:riesz-representation-finite-dimensional}, gives the gradient form.\\
-\hlt{Structural Commentary}: The constraint kills first-order variation along $S$.\\
-\hlt{Key Insight}: If $Df$ were independent of $Dg$, $f$ would be a free constraint coordinate.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Constraint Chart}: $Dg(p)\nabla g(p)=\norm{\nabla g(p)}_2^2>0$ by Theorem \ref{thm:total-derivative-matrix-partials}(ii), so $Dg(p)\neq0$.\\
+Extend $(Dg(p))$ to a basis $(Dg(p),\ell_2,\ldots,\ell_n)$ of $(\R^n)'$ by Theorems \ref{thm:dual-basis-and-dimension}(ii) and \ref{thm:extending-independent-lists}.\\
+Define $\Phi:E\to\R^n$ by $\Phi(\x)\defeq\bigl(g(\x)-c,\ell_2(\x-p),\ldots,\ell_n(\x-p)\bigr)$. The map $\Phi$ is $C^1$.\\
+If $D\Phi(p)\mathbf v=0$, all displayed basis functionals vanish at $\mathbf v$; $\mathbf v\cdot\mathbf v=0$ and $\mathbf v=0$. Thus $D\Phi(p)$ is invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+Since $\Phi(p)=\ze$, choose open $U\ni p$, $V\ni\ze$ s.t. $\Phi:U\to V$ is $C^1$ diffeomorphism by Theorem \ref{thm:inverse-function-theorem-rn}(i),(iii); set $\psi\defeq\Phi^{-1}$.
+\item \hlt{Feasible Directions}: Shrink $U$ so that $p$ is an extremum of $f$ on $S\cap U$, and replace $V$ by $\Phi(U)$.\\
+Fix $\mathbf v\in\ker Dg(p)$ and set $\mathbf w\defeq D\Phi(p)\mathbf v$, whose first coordinate is zero.\\
+Choose $\delta>0$ such that $(\forall\,t\in(-\delta,\delta))\,t\mathbf w\in V$, and define $\gamma:(-\delta,\delta)\to U$ by $\gamma(t)\defeq\psi(t\mathbf w)$.\\
+For $t\in(-\delta,\delta)$, first coordinate of $\Phi(\gamma(t))=t\mathbf w$ is zero; $\gamma((-\delta,\delta))\subseteq S\cap U$. By Theorems \ref{thm:inverse-function-theorem-rn}(ii), \ref{thm:chain-rule-several-variables}(ii), $\gamma'(0)=D\psi(\ze)\mathbf w=\mathbf v$.\\
+Map $f\circ\gamma$ has local extremum at $0$, so $0=(f\circ\gamma)'(0)=Df(p)\mathbf v$ by Theorems \ref{thm:interior-extremum-derivative-zero}, \ref{thm:chain-rule-several-variables}(ii); $\ker Dg(p)\subseteq\ker Df(p)$.
+\item \hlt{Multiplier}: Choose $\mathbf u\in\R^n$ with $Dg(p)\mathbf u=1$ by $Dg(p)\neq0$, and set $\lambda\defeq Df(p)\mathbf u$.\\
+For $\mathbf v\in\R^n$, $\mathbf v-Dg(p)\mathbf v\,\mathbf u\in\ker Dg(p)$, so $Df(p)\mathbf v=\lambda Dg(p)\mathbf v$ by part (ii).\\
+Thus $(\forall\,\mathbf v\in\R^n)\,\bigl(\nabla f(p)-\lambda\nabla g(p)\bigr)\cdot\mathbf v=0$ by Theorem \ref{thm:total-derivative-matrix-partials}(ii). Taking $\mathbf v=\nabla f(p)-\lambda\nabla g(p)$ proves $\nabla f(p)=\lambda\nabla g(p)$.
+\end{enumerate}
+\hlt{Structural Commentary}: A $g-c$ coordinate identifies feasible velocities with $\ker Dg(p)$.\\
+\hlt{Key Insight}: Annihilating $\ker Dg(p)$ forces $Df(p)\in\operatorname{span}\{Dg(p)\}$.
 \end{proof}
 \end{theorem}
+\end{samepage}
