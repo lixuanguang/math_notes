@@ -1,151 +1,237 @@
 \subsection{Differentiability and Linear Approximation}
 
-\begin{theorem} \label{thm:bounded-derivative-convex-mean-value} \hlt{Mean-Value Inequality on Convex Sets}\\
+\begin{theorem} \label{thm:bounded-derivative-convex-mean-value}
+\hlt{Mean-Value Inequality on Convex Sets}\\
 Let $E\subseteq\R^n$ be open and convex, and let $\f:E\to\R^m$ be differentiable.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item If $M\geq0$ and $\normop{D\f(\x)}\leq M$ for all $\x\in E$, then $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$ for all $\a,\b\in E$.
-\item If $D\f(\x)=0$ for all $\x\in E$, then $\f$ is constant on $E$.
+\item If $M\geq0$ and $(\forall\,\x\in E)\,\normop{D\f(\x)}\leq M$, then $(\forall\,\a,\b\in E)\,\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$.
+\item If $(\forall\,\x\in E)\,D\f(\x)=0$, then $\f$ is constant on $E$.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Fix $\a,\b\in E$, set $\gamma(t)\defeq(1-t)\a+t\b$, and put $\mathbf{g}\defeq\f\circ\gamma$. Convexity gives $\gamma([0,1])\subseteq E$, and the chain rule gives $\mathbf{g}'(t)=D\f(\gamma(t))(\b-\a)$, so $\norm{\mathbf{g}'(t)}_2\leq M\norm{\b-\a}_2$.\\
-Theorem \ref{thm:vector-valued-mean-value-inequality} gives $\norm{\f(\b)-\f(\a)}_2=\norm{\mathbf{g}(1)-\mathbf{g}(0)}_2\leq M\norm{\b-\a}_2$.
-\item If $D\f(\x)=0$ on $E$, apply (i) with $M=0$: for all $\a,\b\in E$, $\norm{\f(\b)-\f(\a)}_2=0$, hence $\f(\a)=\f(\b)$.
+\item Fix $\a,\b\in E$, $\gamma(t)\defeq(1-t)\a+t\b$, $\mathbf g\defeq\f\circ\gamma$. Then $\gamma([0,1])\subseteq E$ by convexity, and $\mathbf g'(t)=D\f(\gamma(t))(\b-\a)$ by Theorem \ref{thm:chain-rule-several-variables}.\\
+Hence $\norm{\mathbf g'(t)}_2\leq M\norm{\b-\a}_2$ by the operator-norm hypothesis. Therefore $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$ by Theorem \ref{thm:vector-valued-mean-value-inequality}.
+\item If $(\forall\,\x\in E)\,D\f(\x)=0$, then $(\forall\,\a,\b\in E)\,\norm{\f(\b)-\f(\a)}_2=0$ by part (i) with $M=0$; $(\forall\,\a,\b\in E)\,\f(\a)=\f(\b)$.
 \end{enumerate}
-\hlt{Structural Commentary}: Line restriction gives a one-variable estimate.\\
-\hlt{Key Insight}: Derivative bounds control secants.
+\hlt{Structural Commentary}: Convexity retains the segment; the chain rule transfers the bound.\\
+\hlt{Key Insight}: A vector mean-value bound converts derivative control into secant control.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:c1-map} \hlt{$C^1$ Mapping}\\
-Let $E\subseteq\R^n$ be open. A differentiable map $\f:E\to\R^m$ is \hlt{continuously differentiable}, or $C^1$, if $\x\mapsto D\f(\x)$ is continuous from $E$ into $\LL(\R^n,\R^m)$ in operator norm.
+Let $E\subseteq\R^n$ be open, and let $\f:E\to\R^m$ be differentiable.\\
+The map $\f$ is \hlt{continuously differentiable}, or $C^1$, if $D\f:E\to\LL(\R^n,\R^m)$ is continuous in the operator-norm metric.
 \end{definition}
 
-\begin{perspective} \label{per:c1-operator-norm-continuity} \hlt{$C^1$ Uses the Operator-Norm Metric}\\
-$C^1$ continuity measures $\x\mapsto D\f(\x)$ in operator norm. In coordinates this is spectral-norm continuity, equivalent here to continuity of the derivative matrix entries.
+\begin{perspective} \label{per:c1-operator-norm-continuity}
+\hlt{$C^1$ Uses the Operator-Norm Metric}\\
+Definition \ref{def:c1-map} makes $D\f$ itself the object whose continuity is measured.\\
+For matrices $A,B\in\operatorname{Mat}(m,n,\R)$, $\abs{A_{ij}-B_{ij}}\leq\norm{A-B}_2\leq\norm{A-B}_F$. Moreover, $\norm{A-B}_F\leq\sqrt{mn}\max\limits_{i,j}\abs{A_{ij}-B_{ij}}$.\\
+Thus operator-norm continuity and entrywise continuity are equivalent in these finite dimensions.
 \end{perspective}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:coordinate-polygon-partial-path} decomposes $\h$ into coordinate steps. This is the path used below to telescope from $\x$ to $\x+\h$.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/coordinate_polygon_partial_path.tikz}
-  \caption{Coordinate increments telescope $\x$ to $\x+\h$.}
+  \caption{The solid coordinate steps sum to the dashed direct increment $\h$ from $\x$ to $\x+\h$.}
   \label{fig:coordinate-polygon-partial-path}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:c1-iff-continuous-partials} \hlt{$C^1$ Means Continuous Partials}\\
-Let $E\subseteq\R^n$ be open and let $\f=(f_1,\ldots,f_m):E\to\R^m$.\\
-Then $\f$ is $C^1$ on $E$ iff each $D_jf_i$ exists and is continuous on $E$, for $1\leq i\leq m$ and $1\leq j\leq n$.
+Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$. Then $\f$ is $C^1$ on $E$ iff $(\forall\,(i,j)\in J_m\times J_n)\,D_jf_i$ exists, continuous on $E$.
 \begin{proof}
 \begin{enumerate}[label=\roman*.]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $\f$ is $C^1$, then $D\f:E\to\LL(\R^n,\R^m)$ is continuous. By Theorem \ref{thm:total-derivative-matrix-partials}, $(D_jf_i)(\x)$ is the $(i,j)$ matrix entry of $D\f(\x)$; matrix-entry projections are continuous, so each $D_jf_i$ is continuous on $E$.
-\item[$(\Leftarrow)$] By Theorem \ref{thm:several-variable-componentwise-differentiability}, it suffices to treat $m=1$. Fix $\x\in E$ and small $\h$ with coordinate polygon in $E$.\\
-Set $\x^{(0)}\defeq\x$ and $\x^{(j)}\defeq\x+\sum\limits_{k=1}^{j}h_k\mathbf{e}_k$. Telescoping and the one-variable MVT give\\
-$f(\x+\h)-f(\x)=\sum\limits_{j=1}^{n}h_j(D_jf)(\xi_j)$ for some $\xi_j\in[\x^{(j-1)},\x^{(j)}]$. Let $A_\x\h\defeq\sum\limits_{j=1}^{n}h_j(D_jf)(\x)$.\\
-Since $\xi_j\to\x$ as $\h\to\ze$, $\abs{f(\x+\h)-f(\x)-A_\x\h}\leq\sum\limits_{j=1}^{n}\abs{h_j}\abs{(D_jf)(\xi_j)-(D_jf)(\x)}=o(\norm{\h}_2)$.\\
-Thus $Df(\x)=A_\x$, i.e. $Df(\x)=[(D_1f)(\x)\ \cdots\ (D_nf)(\x)]$, and continuity of the entries gives $\f\in C^1$.
+\item[$(\Rightarrow)$] Suppose $\f$ is $C^1$ on $E$. For $(\x,i,j)\in E\times J_m\times J_n$, $(D_jf_i)(\x)=[D\f(\x)]_{ij}$ by Theorem \ref{thm:total-derivative-matrix-partials}.\\
+Since $\abs{A_{ij}-B_{ij}}\leq\norm{A-B}_2$, each $D_jf_i$ is continuous on $E$ by continuity of $D\f$.
+\item[$(\Leftarrow)$] Fix $\x\in E$ and $i\in J_m$, and choose $\rho>0$ with $B_\rho(\x)\subseteq E$ by openness.\\
+For $\norm{\h}_2<\rho$, set $\x^{(0)}\defeq\x$ and $\x^{(j)}\defeq\x+\sum\limits_{k=1}^{j}h_k\mathbf e_k$ for $j\in J_n$.\\
+Each segment $[\x^{(j-1)},\x^{(j)}]$ lies in $B_\rho(\x)$ because every point on it is at distance at most $\norm{\h}_2$ from $\x$.\\
+For $j\in J_n$ with $h_j\neq0$, let $\xi_j$ be a mean-value point on $[\x^{(j-1)},\x^{(j)}]$ by Corollary \ref{cor:mean-value-theorem}.\\
+Then $f_i(\x^{(j)})-f_i(\x^{(j-1)})=h_j(D_jf_i)(\xi_j)$. For $j\in J_n$ with $h_j=0$, set $\xi_j\defeq\x^{(j)}$; the identity holds trivially.\\
+Define $A_{i,\x}\h\defeq\sum\limits_{j=1}^{n}h_j(D_jf_i)(\x)$; then $A_{i,\x}\in\LL(\R^n,\R)$ by coordinatewise linearity.\\
+The bound $\abs{f_i(\x+\h)-f_i(\x)-A_{i,\x}\h}\leq\sum\limits_{j=1}^{n}\abs{h_j}\abs{(D_jf_i)(\xi_j)-(D_jf_i)(\x)}$ holds by telescoping.\\
+The right-hand side is at most $\sqrt n\norm{\h}_2\max\limits_{j\in J_n}\abs{(D_jf_i)(\xi_j)-(D_jf_i)(\x)}$ by Cauchy--Schwarz.\\
+Here $\xi_j\to\x$ as $\h\to\ze$, and the maximum tends to $0$ by continuity and finiteness of $J_n$.\\
+Hence displayed bound is $o(\norm{\h}_2)$. Thus every $f_i$ is differentiable at every $\x$, so $\f$ is differentiable on $E$ by Theorem \ref{thm:several-variable-componentwise-differentiability}(i).\\
+Its derivative entries are $D_jf_i$ by Theorem \ref{thm:total-derivative-matrix-partials}. Continuity, $\norm{A-B}_2\leq\norm{A-B}_F\leq\sqrt{mn}\max\limits_{i,j}\abs{A_{ij}-B_{ij}}$ make $D\f$ continuous.\\
+Hence $\f$ is $C^1$ on $E$ by Definition \ref{def:c1-map}.
 \end{enumerate}
-\hlt{Structural Commentary}: Continuous partials form the derivative matrix.\\
-\hlt{Key Insight}: Coordinate telescoping gives the linear approximation.
+\hlt{Structural Commentary}: Telescoping builds the components; norm comparison assembles them.\\
+\hlt{Key Insight}: Continuous partials control the finitely many coordinate remainders.
 \end{proof}
 \end{theorem}
 
-Higher derivatives repeat the same idea: once $D\f$ is itself a map into the finite-dimensional vector space $\LL(\R^n,\R^m)$, we differentiate it again. The linear-algebra viewpoint matters here because the second derivative is naturally bilinear, not merely an array of second partial derivatives.
+Higher differentiation views $D\f$ as a map into the finite-dimensional space $\LL(\R^n,\R^m)$.\\
+The second derivative is therefore a bilinear map, not merely an array of second partials.
 
 \begin{definition} \label{def:higher-order-partials-and-c2} \hlt{Higher Derivatives and $C^r$}\\
-Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $r\geq1$, and let $\LL^r(\R^n,\R^m)$ denote the space of $r$-linear maps $(\R^n)^r\to\R^m$.
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$. For $q\in\Z_{\geq1}$, $\LL^q(\R^n,\R^m)$ denote space of $q$-linear maps $(\R^n)^q\to\R^m$.\\
+For $T\in\LL^q(\R^n,\R^m)$, set $\normop{T}\defeq\sup\limits_{\norm{\mathbf v_s}_2\leq1,\ s\in J_q} \norm{T(\mathbf v_1,\ldots,\mathbf v_q)}_2$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item The \hlt{$r$th derivative} is recursive: $D^1\f\defeq D\f$.\\
-For $r\geq2$, if $D^{r-1}\f$ is differentiable at $\x$, then $D^r\f(\x)(\mathbf{v}_1,\ldots,\mathbf{v}_r)\defeq\bigl(D(D^{r-1}\f)(\x)\mathbf{v}_1\bigr)(\mathbf{v}_2,\ldots,\mathbf{v}_r)$.
-\item For real-valued $f:E\to\R$, the mixed second partial is $D_{ij}f\defeq D_i(D_jf)$ where defined.
-\item $\f$ is \hlt{$C^r$} on $E$ iff $D^r\f:E\to\LL^r(\R^n,\R^m)$ exists and is continuous; $\f$ is \hlt{$C^\infty$} iff $\f$ is $C^r$ for every $r\geq1$.
+\item Set $D^1\f\defeq D\f$. For $q\geq2$, suppose $D^{q-1}\f$ is differentiable at $\x$.\\
+The \hlt{$q$th derivative} is $D^q\f(\x)(\mathbf v_1,\ldots,\mathbf v_q)\defeq\bigl(D(D^{q-1}\f)(\x)\mathbf v_1\bigr)(\mathbf v_2,\ldots,\mathbf v_q)$.
+\item For real-valued $f:E\to\R$, define the mixed second partial $D_{ij}f\defeq D_i(D_jf)$ wherever the right-hand side exists.
+\item For $r\in\Z_{\geq1}$, the map $\f$ is \hlt{$C^r$} on $E$ iff $(\forall\,q\in J_r)\,D^q\f:E\to\LL^q(\R^n,\R^m)$ exists and is continuous.\\
+The map $\f$ is \hlt{$C^\infty$} on $E$ iff $(\forall\,r\in\Z_{\geq1})\,\f$ is $C^r$ on $E$.
 \end{enumerate}
 \end{definition}
 
-\begin{theorem} \label{thm:second-derivative-partials-and-continuity} \hlt{Second Derivatives and Second Partials}\\
-Let $\f=(f_1,\ldots,f_m):E\subseteq\R^n\to\R^m$ and $p\in E$.
-\begin{enumerate}[label=\roman*.]
+\begin{theorem} \label{thm:second-derivative-partials-and-continuity}
+\hlt{Second Derivatives and Second Partials}\\
+Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, $p\in E$. Set $\mathcal I\defeq J_n\times J_n\times J_m$.
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] If $D^2\f(p)$ exists, then each $D_{ij}f_\ell(p)$ exists and $D^2 f_\ell(p)(\mathbf{e}_i,\mathbf{e}_j)=D_{ij}f_\ell(p)$.
-\item[$(\Leftarrow)$] If all $D_{ij}f_\ell$ exist near $p$ and are continuous at $p$, then $D^2\f(p)$ exists.
+\item If $D^2\f(p)$ exists, then $(\forall\,(i,j,\ell)\in\mathcal I)\,D_{ij}f_\ell(p)$ exists. For these indices, $D^2 f_\ell(p)(\mathbf e_i,\mathbf e_j)=D_{ij}f_\ell(p)$.
+\item Suppose $\f$ is differentiable on a neighborhood $U\subseteq E$ of $p$.\\
+If $(\forall\,(i,j,\ell)\in\mathcal I)\,D_{ij}f_\ell$ exists on $U$ and is continuous at $p$, then $D^2\f(p)$ exists.
 \end{enumerate}
 \begin{proof}
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item[$(\Rightarrow)$] Apply Theorem \ref{thm:several-variable-componentwise-differentiability} to $D\f:E\to\LL(\R^n,\R^m)$. The entries of $D\f$ are $D_jf_\ell$ by Theorem \ref{thm:total-derivative-matrix-partials}; differentiating the $(\ell,j)$ entry in the $\mathbf{e}_i$ direction gives $D_{ij}f_\ell(p)$ and the displayed formula.
-\item[$(\Leftarrow)$] Matrix entries of $D\f$ are functions $D_jf_\ell$. Since first partials $D_i(D_jf_\ell)=D_{ij}f_\ell$ exist near $p$ and are continuous at $p$, coordinate criterion at $p$ gives differentiability of $D\f$ there. Hence $D^2\f(p)$ exists.
+\item Identify $\LL(\R^n,\R^m)$ with $\R^{mn}$ by standard bases. Frobenius, operator norms equivalent because $\norm{M}_2\leq\norm{M}_F\leq\sqrt{mn}\norm{M}_2$.\\
+The entries of $D\f$ are $D_jf_\ell$ by Theorem \ref{thm:total-derivative-matrix-partials}. Each entry is differentiable at $p$ by Theorem \ref{thm:several-variable-componentwise-differentiability}(i).\\
+Its $i$th partial exists by Theorem \ref{thm:total-derivative-matrix-partials}(i). Consequently $Df_\ell$ is differentiable at $p$ by Theorem \ref{thm:several-variable-componentwise-differentiability}(i).\\
+The identity $D^2 f_\ell(p)(\mathbf e_i,\mathbf e_j) =D_i(D_jf_\ell)(p)=D_{ij}f_\ell(p)$ holds by Definition \ref{def:higher-order-partials-and-c2}(i).
+\item Set $F\defeq D\f:U\to\R^{mn}$ under the same identification, so $F_{\ell j}=D_jf_\ell$ by Theorem \ref{thm:total-derivative-matrix-partials}.\\
+Define $A:\R^n\to\R^{mn}$ by $[A\h]_{\ell j}\defeq\sum\limits_{i=1}^{n}h_iD_{ij}f_\ell(p)$; then $A$ is linear. Choose $\rho>0$ with $B_\rho(p)\subseteq U$ by openness.\\
+Define coordinate polygon $p^{(i)}\defeq p+\sum\limits_{q=1}^{i}h_q\mathbf e_q$. Set $S_i\defeq[p^{(i-1)},p^{(i)}]$; if $\norm{\h}_2<\rho$, then $S_i\subseteq B_\rho(p)$.\\
+For $(i,j,\ell)\in\mathcal I$ with $h_i\neq0$, let $\eta_{i\ell j}$ be a mean-value point for $F_{\ell j}$ on $S_i$ by Corollary \ref{cor:mean-value-theorem}.\\
+Then $F_{\ell j}(p^{(i)})-F_{\ell j}(p^{(i-1)})=h_iD_{ij}f_\ell(\eta_{i\ell j})$. For $(i,j,\ell)\in\mathcal I$ with $h_i=0$, set $\eta_{i\ell j}\defeq p^{(i)}$; the identity holds trivially.\\
+For each $(\ell,j)$, $\abs{[F(p+\h)-F(p)-A\h]_{\ell j}}\leq\sum\limits_{i=1}^{n}\abs{h_i}\abs{D_{ij}f_\ell(\eta_{i\ell j})-D_{ij}f_\ell(p)}$ by telescoping.\\
+This is at most $\sqrt n\norm{\h}_2\max\limits_{i\in J_n}\abs{D_{ij}f_\ell(\eta_{i\ell j})-D_{ij}f_\ell(p)}$ by Cauchy--Schwarz.\\
+Since $\eta_{i\ell j}\to p$ as $\h\to\ze$, the right-hand side is $o(\norm{\h}_2)$ by continuity at $p$.\\
+Therefore $\norm{F(p+\h)-F(p)-A\h}_2=o(\norm{\h}_2)$ by finiteness of $J_n\times J_m$.\\
+This is also an operator-norm remainder by the preceding norm equivalence.\\
+Thus $F=D\f$ is differentiable at $p$, and $D^2\f(p)$ exists by Definition \ref{def:higher-order-partials-and-c2}(i).
 \end{enumerate}
-\hlt{Structural Commentary}: Second partials are matrix entries of the derivative of the first-derivative matrix.\\
-\hlt{Key Insight}: Continuous second partials make the first-derivative matrix differentiable.
+\hlt{Structural Commentary}: Entrywise estimates combine into one derivative-matrix remainder.\\
+\hlt{Key Insight}: Pointwise continuity suffices because only finitely many coordinates occur.
 \end{proof}
 \end{theorem}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:signed-parallelogram-second-derivative} records the signed four-vertex difference used below.\\
+Exchanging $\mathbf v$ and $\mathbf w$ preserves both the vertices and their signs.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/signed_parallelogram_second_derivative.tikz}
-  \caption{The signed vertex sum on a small parallelogram is symmetric in $\mathbf{v}$ and $\mathbf{w}$.}
+  \caption{The $+,-,-,+$ vertex pattern is invariant under exchanging $\mathbf v$ and $\mathbf w$.}
   \label{fig:signed-parallelogram-second-derivative}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:second-derivative-symmetric} \hlt{Symmetry of the Second Derivative}\\
-If $D^2\f(p)$ exists, then $D^2\f(p)(\mathbf{v},\mathbf{w})=D^2\f(p)(\mathbf{w},\mathbf{v})$ for all $\mathbf{v},\mathbf{w}\in\R^n$.
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $p\in E$. If $D^2\f(p)$ exists, then $(\forall\,\mathbf v,\mathbf w\in\R^n)\, D^2\f(p)(\mathbf v,\mathbf w)=D^2\f(p)(\mathbf w,\mathbf v)$.
 \begin{proof}
-Reduce to scalar $f$ by Theorem \ref{thm:several-variable-componentwise-differentiability}.\\
-For small $t$, set $\Delta(t,\mathbf{v},\mathbf{w})\defeq f(p+t\mathbf{v}+t\mathbf{w})-f(p+t\mathbf{v})-f(p+t\mathbf{w})+f(p)$.\\
-Then $\Delta(t,\mathbf{v},\mathbf{w})=\Delta(t,\mathbf{w},\mathbf{v})$. The one-variable mean value theorem and differentiability of $Df$ at $p$ give $D^2 f(p)(\mathbf{v},\mathbf{w}) =\lim\limits_{t\to0}\frac{\Delta(t,\mathbf{v},\mathbf{w})}{t^2}$. The same formula with $\mathbf{v},\mathbf{w}$ reversed proves symmetry.\\
-\hlt{Structural Commentary}: A pointwise second derivative is already forced to be a symmetric bilinear form.\\
-\hlt{Key Insight}: The parallelogram difference is symmetric in the two directions.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Scalar Reduction}: Component projections commute with both derivatives by Theorem \ref{thm:several-variable-componentwise-differentiability}.\\
+Suffices to prove symmetry for a scalar-valued $f$. Map $Df$ is defined on a neighborhood of $p$ by Definition \ref{def:higher-order-partials-and-c2}(i).
+\item \hlt{Symmetric Increment}: Fix $\mathbf v,\mathbf w\in\R^n$. For $t$ sufficiently close to $0$, four arguments below lie in $E$ by openness.\\
+Set $\Delta(t,\mathbf v,\mathbf w)\defeq f(p+t\mathbf v+t\mathbf w)-f(p+t\mathbf v)-f(p+t\mathbf w)+f(p)$.\\
+This expression is unchanged when $\mathbf v$ and $\mathbf w$ are exchanged.
+\item \hlt{Limit Formula}: Set $R(\mathbf z)\defeq Df(p+\mathbf z)-Df(p)-D^2f(p)(\mathbf z,\mathord\cdot)$. Then $\normop{R(\mathbf z)}=o(\norm{\mathbf z}_2)$ by Definition \ref{def:higher-order-partials-and-c2}(i).\\
+For $t\neq0$, $\phi_t(s)\defeq f(p+t\mathbf v+s\mathbf w)-f(p+s\mathbf w)$. Let $\xi_t$ be mean-value point for $\phi_t$ between $0$ and $t$ by Corollary \ref{cor:mean-value-theorem}.\\
+Then $\Delta(t,\mathbf v,\mathbf w)=t[Df(p+t\mathbf v+\xi_t\mathbf w)-Df(p+\xi_t\mathbf w)]\mathbf w$. Set $\mathbf z_0\defeq\xi_t\mathbf w$ and $\mathbf z_1\defeq t\mathbf v+\xi_t\mathbf w$.\\
+Then $[Df(p+\mathbf z_1)-Df(p+\mathbf z_0)]\mathbf w=tD^2f(p)(\mathbf v,\mathbf w)+[R(\mathbf z_1)-R(\mathbf z_0)]\mathbf w$ by the definition of $R$.\\
+Both remainder terms are $o(\abs t)$ because $\norm{\mathbf z_0}_2,\norm{\mathbf z_1}_2=O(\abs t)$. Therefore $D^2f(p)(\mathbf v,\mathbf w)=\lim\limits_{t\to0}\frac{\Delta(t,\mathbf v,\mathbf w)}{t^2}$.
+\item \hlt{Symmetry}: Same formula with $\mathbf v$, $\mathbf w$ exchanged has same numerator by part (ii). Hence $D^2f(p)(\mathbf v,\mathbf w)=D^2f(p)(\mathbf w,\mathbf v)$.
+\end{enumerate}
+\hlt{Structural Commentary}: A symmetric four-point increment encodes either bilinear order.\\
+\hlt{Key Insight}: One geometric numerator computes both orders of directional differentiation.
 \end{proof}
 \end{theorem}
 
-\begin{corollary} \label{cor:mixed-partials-from-second-derivative} \hlt{Mixed Partials from $D^2$}\\
-If $D^2\f(p)$ exists, then $D_{ij}f_\ell(p)=D_{ji}f_\ell(p)$ for all components and all $i,j$.
+\begin{corollary} \label{cor:mixed-partials-from-second-derivative}
+\hlt{Mixed Partials from $D^2$}\\
+Let $E\subseteq\R^n$ be open, $\f=(f_1,\ldots,f_m):E\to\R^m$, $p\in E$. If $D^2\f(p)$ exists, then $(\forall\,(i,j,\ell)\in J_n\times J_n\times J_m)\, D_{ij}f_\ell(p)=D_{ji}f_\ell(p)$.
 \begin{proof}
-By Theorem \ref{thm:second-derivative-partials-and-continuity}, $D_{ij}f_\ell(p)=D^2f_\ell(p)(\mathbf{e}_i,\mathbf{e}_j)$; and $D_{ji}f_\ell(p)=D^2f_\ell(p)(\mathbf{e}_j,\mathbf{e}_i)$.\\
-Theorem \ref{thm:second-derivative-symmetric} makes the two right-hand sides equal.\\
-\hlt{Structural Commentary}: Mixed partials are coordinate values of one bilinear map.\\
-\hlt{Key Insight}: Symmetry of $D^2f_\ell(p)$ gives equality of mixed entries.
+For $(i,j,\ell)\in J_n\times J_n\times J_m$, $D_{ij}f_\ell(p)=D^2f_\ell(p)(\mathbf e_i,\mathbf e_j)$ by Theorem \ref{thm:second-derivative-partials-and-continuity}(i).\\
+Likewise, $D_{ji}f_\ell(p)=D^2f_\ell(p)(\mathbf e_j,\mathbf e_i)$ by the same part. The two right-hand sides are equal by Theorem \ref{thm:second-derivative-symmetric}.\\
+\hlt{Structural Commentary}: Second partials are standard-basis values of one bilinear derivative.\\
+\hlt{Key Insight}: Symmetry of $D^2f_\ell(p)$ identifies the two mixed entries.
 \end{proof}
 \end{corollary}
 
 \begin{corollary} \label{cor:higher-derivatives-symmetric} \hlt{Symmetry of Higher Derivatives}\\
-Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $p\in E$, and $r\geq2$.\\
-If $D^r\f(p)$ exists, then for every $\sigma\in S_r$ and $\mathbf{v}_1,\ldots,\mathbf{v}_r\in\R^n$, $D^r\f(p)(\mathbf{v}_{\sigma(1)},\ldots,\mathbf{v}_{\sigma(r)})=D^r\f(p)(\mathbf{v}_1,\ldots,\mathbf{v}_r)$.
-\begin{proof} Induct on $r$; $r=2$ is Theorem \ref{thm:second-derivative-symmetric}. For $r>2$, the induction hypothesis gives symmetry in slots $2,\ldots,r$ of $D^r\f(p)$. Applying Theorem \ref{thm:second-derivative-symmetric} to $D^{r-2}\f:E\to\LL^{r-2}(\R^n,\R^m)$ and evaluating at $\mathbf{v}_3,\ldots,\mathbf{v}_r$ gives symmetry in slots $1,2$. Hence every adjacent transposition fixes $D^r\f(p)$, so every $\sigma\in S_r$ fixes it.\\
-\hlt{Structural Commentary}: Symmetry propagates from $D^2$.\\
-\hlt{Key Insight}: Adjacent swaps generate $S_r$.
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^m$, $p\in E$, $r\in\Z_{\geq2}$, $\mathbf v=(\mathbf v_1,\ldots,\mathbf v_r)\in(\R^n)^r$.\\
+For $\sigma\in\mathfrak S_r$, set $\mathbf v^\sigma\defeq(\mathbf v_{\sigma(1)},\ldots,\mathbf v_{\sigma(r)})$. If $D^r\f(p)$ exists, then $(\forall\,\sigma\in\mathfrak S_r)\,D^r\f(p)(\mathbf v^\sigma)=D^r\f(p)(\mathbf v)$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Base Case}: The case $r=2$ holds by Theorem \ref{thm:second-derivative-symmetric}.
+\item \hlt{Trailing Slots}: Let $r>2$, assume claim for order $r-1$. Since $D^r\f(p)$ exists, map $D^{r-1}\f$ is defined on neighborhood of $p$.\\
+Near $p$, each value of $D^{r-1}\f$ is symmetric by the induction hypothesis.\\
+The symmetric $(r-1)$-linear maps form a closed finite-dimensional subspace.\\
+Thus $D(D^{r-1}\f)(p)\mathbf v_1$ is symmetric in slots $2,\ldots,r$ by closure under limits.
+\item \hlt{First Two Slots}: Identify the finite-dimensional codomain of $D^{r-2}\f$ with a Euclidean space.\\
+Its second derivative at $p$ exists by the existence of $D^r\f(p)$ and is symmetric by Theorem \ref{thm:second-derivative-symmetric}.\\
+After evaluation at $\mathbf v_3,\ldots,\mathbf v_r$, $D^r\f(p)$ is symmetric in slots $1$ and $2$ by the preceding identity.
+\item \hlt{Permutation Step}: Invariance under every adjacent transposition holds by parts (ii)--(iii).\\
+Since adjacent transpositions generate $\mathfrak S_r$, every permutation fixes $D^r\f(p)$.
+\end{enumerate}
+\hlt{Structural Commentary}: Induction controls the tail; $D^2$ symmetry swaps the first pair.\\
+\hlt{Key Insight}: Adjacent transpositions generate every permutation of the derivative slots.
 \end{proof}
 \end{corollary}
 
-The next rectangle argument is the classical coordinate route to equality of mixed partials. It is weaker in hypothesis than global $C^2$, but it proves the same compatibility of coordinate second derivatives.
+The next argument uses coordinate rectangles to compare the two iterated partial derivatives.\\
+Its local continuity hypothesis is weaker than a global $C^2$ assumption.
 
 \begin{theorem} \label{thm:rectangle-mean-value-mixed-partial} \hlt{Rectangle Mean Value Formula}\\
-Let $E\subseteq\R^2$ be open, let $f:E\to\R$, and assume $D_1f$ and $D_{21}f=D_2(D_1f)$ exist on $E$. Let $h,k\neq0$, let $Q\subseteq E$ be the closed coordinate rectangle with opposite vertices $(a,b)$ and $(a+h,b+k)$, and set $\Delta(f,Q)\defeq f(a+h,b+k)-f(a+h,b)-f(a,b+k)+f(a,b)$.\\
-Then there exists $(x,y)\in\operatorname{int}Q$ such that $\Delta(f,Q)=hk(D_{21}f)(x,y)$.
+Let $E\subseteq\R^2$ be open, $f:E\to\R$, and suppose $D_1f$ and $D_{21}f=D_2(D_1f)$ exist on $E$.\\
+Let $h,k\in\R\setminus\{0\}$, $Q\subseteq E$ be closed coordinate rectangle with opposite vertices $(a,b)$ and $(a+h,b+k)$.\\
+Set $\Delta(f,Q)\defeq f(a+h,b+k)-f(a+h,b)-f(a,b+k)+f(a,b)$. Then $(\exists\,(x,y)\in\operatorname{int}Q)\, \Delta(f,Q)=hk(D_{21}f)(x,y)$.
 \begin{proof}
-Let $I,J$ be the open intervals with endpoints $a,a+h$ and $b,b+k$. Set $u(t)\defeq f(t,b+k)-f(t,b)$.\\
-By Corollary \ref{cor:mean-value-theorem}, $\Delta(f,Q)=u(a+h)-u(a)=h[(D_1f)(x,b+k)-(D_1f)(x,b)]$ for some $x\in I$. Applying the same result to $s\mapsto(D_1f)(x,s)$ gives $(D_1f)(x,b+k)-(D_1f)(x,b)=k(D_{21}f)(x,y)$ for some $y\in J$.\\
-Thus $(x,y)\in I\times J=\operatorname{int}Q$ and $\Delta(f,Q)=hk(D_{21}f)(x,y)$.\\
-\hlt{Structural Commentary}: Two MVT steps factor the rectangle increment.\\
-\hlt{Key Insight}: $D_{21}f$ tracks vertical change of $D_1f$.
+Let $I$ and $J$ be the open intervals with endpoints $a,a+h$ and $b,b+k$, respectively. Set $u(t)\defeq f(t,b+k)-f(t,b)$.\\
+The map $u$ is differentiable on $I$ and continuous on its closure by existence of $D_1f$.\\
+Let $x\in I$ be a mean-value point for $u$ by Corollary \ref{cor:mean-value-theorem}. Then $\Delta(f,Q)=h[(D_1f)(x,b+k)-(D_1f)(x,b)]$.\\
+The map $s\mapsto(D_1f)(x,s)$ is differentiable on $J$ and continuous on its closure by existence of $D_{21}f$.\\
+Let $y\in J$ be a mean-value point for $s\mapsto(D_1f)(x,s)$ by the same corollary.\\
+Then $(D_1f)(x,b+k)-(D_1f)(x,b)=k(D_{21}f)(x,y)$. Then $(x,y)\in I\times J=\operatorname{int}Q$ and $\Delta(f,Q)=hk(D_{21}f)(x,y)$.\\
+\hlt{Structural Commentary}: Two mean-value steps factor the rectangle increment.\\
+\hlt{Key Insight}: The four-corner difference samples the vertical change of $D_1f$.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:equality-of-mixed-partials} \hlt{Equality of Mixed Partials}\\
-Let $(a,b)$ lie in an open set $E\subseteq\R^2$. If $D_1f$, $D_2f$, and $D_{21}f$ exist on $E$, and $D_{21}f$ is continuous at $(a,b)$, then $D_{12}f(a,b)$ exists and $(D_{12}f)(a,b)=(D_{21}f)(a,b)$. Hence $D_{12}f=D_{21}f$ when $f\in C^2(E)$.
-\begin{proof} Let $A=(D_{21}f)(a,b)$, $\varepsilon>0$.\\
-Continuity of $D_{21}f$, Theorem \ref{thm:rectangle-mean-value-mixed-partial} gives $\forall$ small $h,k\neq0$, $\abs{\frac{\Delta(f,Q)}{hk}-A}<\varepsilon$.\\
-Fix such an $h$ and let $k\to0$. Since $D_2f$ exists at $(a+h,b)$ and $(a,b)$, $\frac{\Delta(f,Q)}{hk}\to \frac{(D_2f)(a+h,b)-(D_2f)(a,b)}{h}$.\\
-Thus this last quotient differs from $A$ by at most $\varepsilon$ $\forall$ sufficiently small $h\neq0$.\\
-Since $\varepsilon$ was arbitrary, the quotient tends to $A$ as $h\to0$, so $D_{12}f(a,b)$ exists and equals $A$.\\
-\hlt{Structural Commentary}: Continuity of $D_{21}f$ controls local rectangle quotients.\\
-\hlt{Key Insight}: The missing mixed partial is recovered by taking the two one-variable limits in the reverse order.
+Let $E\subseteq\R^2$ be open, $f:E\to\R$, $(a,b)\in E$. Suppose $D_1f$, $D_2f$, and $D_{21}f$ exist on $E$, $D_{21}f$ is continuous at $(a,b)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The mixed partial $(D_{12}f)(a,b)$ exists.
+\item $(D_{12}f)(a,b)=(D_{21}f)(a,b)$.
+\end{enumerate}
+\begin{proof}
+Set $A\defeq(D_{21}f)(a,b)$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $\varepsilon>0$, $\delta>0$ with $B_\delta(a,b)\subseteq E$ by openness. After shrinking $\delta$, $(\forall\,\mathbf z\in B_\delta(a,b))\,\abs{(D_{21}f)(\mathbf z)-A}<\frac{\varepsilon}{2}$ by continuity at $(a,b)$.\\
+For $h,k\neq0$ with $\sqrt{h^2+k^2}<\delta$, let $Q_{h,k}$ be coordinate rectangle. Its opposite vertices are $(a,b)$ and $(a+h,b+k)$.\\
+Then $Q_{h,k}\subseteq B_\delta(a,b)\subseteq E$. Let $\mathbf z_{h,k}\in\operatorname{int}Q_{h,k}$ be a rectangle mean-value point by Theorem \ref{thm:rectangle-mean-value-mixed-partial}.\\
+Then $\frac{\Delta(f,Q_{h,k})}{hk}=(D_{21}f)(\mathbf z_{h,k})$. Hence $\abs{\frac{\Delta(f,Q_{h,k})}{hk}-A}<\frac{\varepsilon}{2}$. Fix $h$ with $0<\abs h<\delta$ and let $k\to0$.\\
+Since $D_2f$ exists at $(a+h,b)$ and $(a,b)$, $\frac{\Delta(f,Q_{h,k})}{hk}\to \frac{(D_2f)(a+h,b)-(D_2f)(a,b)}{h}$; last quotient differs from $A$ by at most $\frac{\varepsilon}{2}<\varepsilon$.\\
+This holds for every $h$ with $0<\abs h<\delta$, so the quotient tends to $A$ as $h\to0$. Thus $(D_{12}f)(a,b)$ exists.
+\item The limit in part (i) equals $A=(D_{21}f)(a,b)$ by the definition of $A$.
+\end{enumerate}
+\hlt{Structural Commentary}: Continuity traps each shrinking rectangle quotient near one value.\\
+\hlt{Key Insight}: The vertical limit recovers $D_2f$; the horizontal limit produces $D_{12}f$.
 \end{proof}
 \end{theorem}
 
-\begin{perspective} \label{per:mixed-partials-need-hypotheses} \hlt{Mixed Partials Need Hypotheses}\\
-$D_{12}f$ and $D_{21}f$ are different iterated limits. Theorems \ref{thm:second-derivative-symmetric} and \ref{thm:equality-of-mixed-partials} give hypotheses for equality.
+\begin{corollary} \label{cor:c2-mixed-partials-commute} \hlt{$C^2$ Mixed Partials Commute}\\
+Let $E\subseteq\R^2$ be open, $f:E\to\R$ be $C^2$. Then $(\forall\,(i,j)\in J_2\times J_2)\,D_{ij}f=D_{ji}f$ on $E$.
+\begin{proof}
+Fix $p\in E$, $(i,j)\in J_2\times J_2$. Derivative $D^2f(p)$ exists by Definition \ref{def:higher-order-partials-and-c2}(iii); $D_{ij}f(p)=D_{ji}f(p)$ by Corollary \ref{cor:mixed-partials-from-second-derivative}.\\
+\hlt{Structural Commentary}: The $C^2$ hypothesis ensures second differentiability at every point.\\
+\hlt{Key Insight}: Pointwise symmetry of $D^2f$ makes the coordinate partials commute globally.
+\end{proof}
+\end{corollary}
+
+\begin{perspective} \label{per:mixed-partials-need-hypotheses}
+\hlt{Mixed Partials Need Hypotheses}\\
+The quantities $D_{12}f$ and $D_{21}f$ arise from different iterated limits.\\
+Existence of $D^2f$ guarantees equality by Corollary \ref{cor:mixed-partials-from-second-derivative}. Continuity of one mixed partial guarantees it by Theorem \ref{thm:equality-of-mixed-partials}.
 \end{perspective}
