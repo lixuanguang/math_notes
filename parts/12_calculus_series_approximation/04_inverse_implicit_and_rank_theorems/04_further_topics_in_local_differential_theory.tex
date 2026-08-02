@@ -1,15 +1,32 @@
 \subsection{Further Topics in Local Differential Theory}
 
-\begin{method} \label{meth:several-variable-differentiation-proof-patterns-source-todo}\label{meth:several-variable-differentiation-proof-patterns} \hlt{Several-Variable Differentiation Proof Patterns}
+\begin{proofmethod} \label{meth:several-variable-differentiation-proof-patterns} \hlt{Several-Variable Differentiation Proof Patterns}\\
+Let $m,n\in\N$, let $E\subseteq\R^n$ be open, and let $\f:E\to\R^m$.\\
+Use the branch named by the desired output, and verify every stated hypothesis before citing its endpoint.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Linear approximation}: write $\f(\x+\h)-\f(\x)=D\f(\x)\h+\mathbf{r}(\h)$ with $\norm{\mathbf{r}(\h)}_2=o(\norm{\h}_2)$.
-\item \hlt{Norm estimates}: use $\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ and the product estimate from Proposition \ref{prop:spectral-norm-basic-properties}.
-\item \hlt{Line-segment reduction}: on convex sets, restrict to $\gamma(t)=(1-t)\a+t\b$ and apply one-variable results.
-\item \hlt{Local inversion}: if $A=D\f(\a)$ is invertible, write $D\f(\x)=A+E_\x$ with $\normop{E_\x}$ small and solve by contraction (Theorem \ref{thm:contraction-principle}); linear block equations use Theorem \ref{thm:linear-implicit-function-theorem}.
-\item \hlt{Coordinates}: read partial derivatives as the entries of the matrix of $D\f(\x)$, using Theorem \ref{thm:total-derivative-matrix-partials}.
-\item \hlt{Higher derivatives}: regard $D^r\f(p)$ as an $r$-linear map; recover coordinate partials via Theorem \ref{thm:second-derivative-partials-and-continuity}.
-\item \hlt{Rank normal forms}: for $A=D\mathbf{F}(\a)$, split domain by $\ker A$ and image by $\operatorname{range}A$; use the quotient-by-kernel picture from Theorem \ref{thm:quotient-by-kernel-is-range} and project with $P_{\operatorname{range}A}$.
+\item \hlt{Linear approximation}: For a differentiability target at $\x\in E$, set $\mathbf r_\x(\h)\defeq\f(\x+\h)-\f(\x)-D\f(\x)\h$ whenever $\x+\h\in E$.\\
+Reduce the target to $\norm{\mathbf r_\x(\h)}_2=o(\norm{\h}_2)$ as $\h\to\ze$, the criterion in Definition \ref{def:total-derivative-rn-rm}.
+\item \hlt{Norm control}: For $k\in\N$, $A\in\LL(\R^n,\R^m)$, and $C\in\LL(\R^k,\R^n)$, use $(\forall\,\h\in\R^n)\,\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ by Definition \ref{def:operator-norm-rn-rm}.\\
+The bound $\normop{AC}\leq\normop{A}\normop{C}$ holds by Proposition \ref{prop:spectral-norm-basic-properties}(v) under standard-basis identification.
+\item \hlt{Coordinate extraction}: For a coordinate target, write $\f=(f_1,\ldots,f_m)$ and use the standard bases.\\
+If $\f$ is differentiable at $\x\in E$, then $(\forall\,(i,j)\in J_m\times J_n)\,[D\f(\x)]_{ij}=(D_jf_i)(\x)$ by Theorem \ref{thm:total-derivative-matrix-partials}(i).
+\item \hlt{Line-segment reduction}: If $E$ is convex, fix $\a,\b\in E$ and set $\gamma(t)\defeq(1-t)\a+t\b$. Then $\gamma([0,1])\subseteq E$.\\
+For differentiable $\f$, $(\forall\,t\in(0,1))\,(\f\circ\gamma)'(t)=D\f(\gamma(t))(\b-\a)$ by Theorem \ref{thm:chain-rule-several-variables}(ii).\\
+If $(\exists M\geq0)(\forall\,\x\in E)\,\normop{D\f(\x)}\leq M$, close with $\norm{\f(\b)-\f(\a)}_2\leq M\norm{\b-\a}_2$ by Theorem \ref{thm:bounded-derivative-convex-mean-value}(i).
+\item \hlt{Higher derivatives}: For $p\in E$ and $q\in\N$, regard an existing $D^q\f(p)$ as an element of $\LL^q(\R^n,\R^m)$ by Definition \ref{def:higher-order-partials-and-c2}(i).\\
+For $q=2$, $(\forall\,(i,j,\ell)\in J_n\times J_n\times J_m)\,D^2f_\ell(p)(\mathbf e_i,\mathbf e_j)=D_{ij}f_\ell(p)$ in the standard bases by Theorem \ref{thm:second-derivative-partials-and-continuity}(i).
+\item \hlt{Local inversion}: Suppose $m=n$, $\f\in C^1(E,\R^n)$, $\a\in E$, and $A\defeq D\f(\a)$ is invertible.\\
+Choose an open ball $O$ about $\a$ and $\theta\in(0,1)$ so that $\overline O\subseteq E$ and $(\forall\,\x\in O)\,\normop{I-A^{-1}D\f(\x)}\leq\theta$.\\
+Choose a closed ball $B$ about $\a$ with $B\subseteq O$. It is complete by Theorem \ref{thm:heine-borel-rk} and Corollary \ref{cor:compact-metric-spaces-complete}.\\
+For $\y$ near $\f(\a)$, define $T_\y(\x)\defeq\x+A^{-1}(\y-\f(\x))$ and verify $T_\y(B)\subseteq B$.\\
+Then $T_\y$ is a $\theta$-contraction on $B$ by Theorem \ref{thm:bounded-derivative-convex-mean-value}(i), so $(\exists!\,\x_\y\in B)\,T_\y(\x_\y)=\x_\y$ by Theorem \ref{thm:contraction-principle}.\\
+The fixed-point equation is equivalent to $\f(\x_\y)=\y$, which supplies local existence and uniqueness.
+\item \hlt{Implicit linearization}: For $L\in\LL(\R^{n+m},\R^n)$, write $L(\h,\mathbf k)=L_x\h+L_y\mathbf k$.\\
+If $L_x$ is invertible, then $(\forall\,\mathbf k\in\R^m)(\exists!\,\h\in\R^n)\,L(\h,\mathbf k)=\ze$ by Theorem \ref{thm:linear-implicit-function-theorem}. The solution is $\h=-(L_x)^{-1}L_y\mathbf k$.
+\item \hlt{Rank normal form}: For constant-rank $\f\in C^1(E,\R^m)$, $\a\in E$, set $A\defeq D\f(\a)$, $Y\defeq\operatorname{range}A$.\\
+Let $P:\R^m\to\R^m$ be orthogonal projection onto $Y$. Identification $\R^n/\ker A\cong Y$ holds by Theorem \ref{thm:quotient-by-kernel-is-range}(iv).\\
+Then choose $\x_0\in\R^n$, open neighborhoods $V_0\ni\x_0$ and $U\ni\a$, a $C^1$ diffeomorphism $H:V_0\to U$, and $\varphi\in C^1(A(V_0),\ker P)$, with $A(V_0)$ open in $Y$, by Theorem \ref{thm:constant-rank-theorem-rudin}. The endpoint is $(\forall\,\x\in V_0)\,\f(H(\x))=A\x+\varphi(A\x)$.
 \end{enumerate}
-\hlt{Key Insight}: Several-variable calculus is one-variable limiting plus finite-dimensional linear algebra.
-\end{method}
+\hlt{Key Insight}: Match the target to a remainder, segment, contraction, block, or kernel--range reduction.
+\end{proofmethod}
