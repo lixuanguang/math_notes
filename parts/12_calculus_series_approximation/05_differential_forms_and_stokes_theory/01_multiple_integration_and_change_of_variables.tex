@@ -4,38 +4,11 @@
 %
 % Alternating forms, pullbacks, orientation, manifolds, integration on manifolds.
 
-This subsection moves from Euclidean-region integration and change of variables to differential forms, pullbacks, and oriented parametrized surfaces.
+This subsection develops integration on cells, compactly supported integrals, and the determinant factor in change of variables.\\
+These constructions support the differential-form and manifold integrals that follow.
 
-\begin{theorem} \label{thm:linear-map-volume-scaling-determinant} \hlt{Linear Maps Scale Volume by $\abs{\det T}$}\\
-Let $T\in\LL(\mathbb{R}^n)$ and let $\Omega\subseteq\mathbb{R}^n$ be bounded Jordan measurable.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $T(\Omega)$ is Jordan measurable.
-\item $\operatorname{vol}(T(\Omega))=\abs{\det T}\operatorname{vol}(\Omega)$.
-\end{enumerate}
-\begin{proof}
-If $T$ invertible, let $T=SP$ with $S$ orthogonal, $P=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$, $\lambda_j>0$, in orthonormal coordinates.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item If $T$ is invertible, $P$ and $S$ preserve Jordan measurability, so $T(\Omega)$ is Jordan measurable.\\
-If $T$ is singular, $T(\Omega)\subseteq W$ for a proper affine subspace $W$, hence $T(\Omega)$ is Jordan null.
-\item If $T$ is invertible, rectangle scaling gives $\operatorname{vol}(P\Omega)=(\det P)\operatorname{vol}(\Omega)$ by Jordan approximation.\\
-Hhence $\operatorname{vol}(T\Omega)=\operatorname{vol}(P\Omega)=\abs{\det T}\operatorname{vol}(\Omega)$. If $T$ is singular, (i) gives $\operatorname{vol}(T\Omega)=0=\abs{\det T}\operatorname{vol}(\Omega)$.
-\end{enumerate}
-\hlt{Structural Commentary}: Polar decomposition leaves only diagonal stretching.\\
-\hlt{Key Insight}: $\abs{\det T}$ is total coordinate stretch.
-\end{proof}
-\end{theorem}
-
-\begin{figure}[H]
-  \centering
-  \input{figures/linear_algebra/determinant_volume_scaling.tikz}
-  \caption{A linear map scales volume by $\abs{\det T}$.}
-  \label{fig:determinant-volume-scaling}
-\end{figure}
-
-\begin{definition} \label{def:multiple-integration-core-source-todo}\label{def:k-cell-and-multiple-integral} \hlt{$k$-Cells and Multiple Integrals}\\
-Let $a_i\leq b_i$.
+\begin{definition} \label{def:k-cell-and-multiple-integral} \hlt{$k$-Cells and Multiple Integrals}\\
+Fix $k\in\Z_{\geq1}$ and real endpoints satisfying $(\forall\,i\in J_k)\,a_i\leq b_i$. Use the convention $\int_a^a h=0$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Set $I^j\defeq\prod\limits_{i=1}^{j}[a_i,b_i]\subseteq\R^j$ for $0\leq j\leq k$, with $I^0$ a point. The \hlt{$k$-cell} is $I^k$.
@@ -44,187 +17,404 @@ The \hlt{multiple integral} is $\int_{I^k}f(\x)\,d\x\defeq f_0$, also written $\
 \end{enumerate}
 \end{definition}
 
-For bounded functions on rectangles, the Darboux picture from Definition \ref{def:partition-and-riemann-upper-lower-sums} generalizes by replacing intervals with grid rectangles.
+For bounded functions on rectangles, the Darboux envelopes from Definition \ref{def:partition-and-riemann-upper-lower-sums} generalize to grid rectangles.
 
 \begin{definition} \label{def:rectangular-grid-riemann-sum} \hlt{Rectangular Grids and Riemann Sums}\\
-Let $R=[a,b]\times[c,d]\subseteq\R^2$, let $P:a=x_0<\cdots<x_m=b$, let $Q:c=y_0<\cdots<y_n=d$, and set $G\defeq P\times Q$.
+Fix $m,n\in\N$. Let $R=[a,b]\times[c,d]\subseteq\R^2$, $f:R\to\R$ be bounded,  $P:a=x_0<\cdots<x_m=b$, $Q:c=y_0<\cdots<y_n=d$, $G\defeq P\times Q$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item The \hlt{grid rectangles} are $R_{ij}\defeq[x_{i-1},x_i]\times[y_{j-1},y_j]$, with $\abs{R_{ij}}\defeq(x_i-x_{i-1})(y_j-y_{j-1})$.
-\item For tags $S=\{(s_{ij},t_{ij})\in R_{ij}\}$, the \hlt{Riemann sum} is $R(f,G,S)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}f(s_{ij},t_{ij})\abs{R_{ij}}$.
-\item For bounded $f:R\to\R$, set $(m_{ij},M_{ij})\defeq(\inf_{R_{ij}}f,\sup_{R_{ij}}f)$ and $(L(f,G),U(f,G))\defeq\sum\limits_{i,j}(m_{ij},M_{ij})\abs{R_{ij}}$.
-\item The \hlt{lower} and \hlt{upper integrals} are $\underline{\int_R}f\defeq\sup_G L(f,G)$ and $\overline{\int_R}f\defeq\inf_G U(f,G)$.\\
-If they agree, $f$ is Riemann integrable on $R$, and $\int_R f$ denotes the common value.
+\item A \hlt{tagging} is $S=\bigl((s_{ij},t_{ij})\bigr)_{(i,j)\in J_m\times J_n}$ with $(\forall\,(i,j)\in J_m\times J_n)\,(s_{ij},t_{ij})\in R_{ij}$. \hlt{Riemann sum} is $R(f,G,S)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}f(s_{ij},t_{ij})\abs{R_{ij}}$.
+\item Set $(m_{ij},M_{ij})\defeq(\inf\limits_{R_{ij}}f,\sup\limits_{R_{ij}}f)$. Set $L(f,G)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}m_{ij}\abs{R_{ij}}$ and $U(f,G)\defeq\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{n}M_{ij}\abs{R_{ij}}$.
+\item The \hlt{lower} and \hlt{upper integrals} are $\underline{\int_R}f\defeq\sup\limits_G L(f,G)$ and $\overline{\int_R}f\defeq\inf\limits_G U(f,G)$.\\
+The extrema range over rectangular grids. If they agree, $f$ is Riemann integrable on $R$, and $\int_R f$ denotes the common value.
 \end{enumerate}
 \end{definition}
 
-\begin{figure}[H]
+Figure \ref{fig:riemann-grid-sample-rectangle} marks a grid rectangle and its tag, the local Riemann-sum data.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/riemann_grid_sample_rectangle.tikz}
   \caption{A grid rectangle $R_{ij}$ and sample point $(s_{ij},t_{ij})$.}
   \label{fig:riemann-grid-sample-rectangle}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:fubini-riemann-rectangle-slices} \hlt{Fubini on a Rectangle, Darboux Form}\\
-Let $R=[a,b]\times[c,d]$, let $f:R\to\R$ be Riemann integrable, and set $f_y(x)\defeq f(x,y)$.\\
-For $y\in[c,d]$, define $\underline{F}(y)\defeq\sup_P L(P,f_y)$ and $\overline{F}(y)\defeq\inf_P U(P,f_y)$, with $P$ ranging over partitions of $[a,b]$.
+Let $a,b,c,d\in\R$ satisfy $a<b$ and $c<d$, $R\defeq[a,b]\times[c,d]$, $f:R\to\R$ be Riemann integrable.\\
+For $y\in[c,d]$, set $f_y(x)\defeq f(x,y)$, $\underline F(y)\defeq\sup\limits_P L(P,f_y)$, $\overline F(y)\defeq\inf\limits_P U(P,f_y)$. Both extrema range over partitions $P$ of $[a,b]$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\underline{F},\overline{F}$ are Riemann integrable on $[c,d]$.
-\item $\int_R f=\int_c^d\underline{F}(y)\,dy=\int_c^d\overline{F}(y)\,dy$.
+\item $\underline F,\overline F\in\mathcal R[c,d]$.
+\item $\int_R f=\int_c^d\underline F(y)\,dy=\int_c^d\overline F(y)\,dy$.
+\item If $(\forall\,y\in[c,d])\,f_y\in\mathcal R[a,b]$, define $g:[c,d]\to\R$ by $g(y)\defeq\int_a^b f(x,y)\,dx$. Then $g\in\mathcal R[c,d]$ and $\int_R f=\int_c^d g(y)\,dy$.
 \end{enumerate}
-If $\int_a^b f(x,y)\,dx$ exists for every $y$, then $\underline{F}(y)=\overline{F}(y)=\int_a^b f(x,y)\,dx$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $G=P\times Q$, horizontal slice sums give $L(f,G)\leq L(Q,\underline{F})\leq U(Q,\overline{F})\leq U(f,G)$.\\
-Since $f$ is integrable on $R$, choose $G$ with $U(f,G)-L(f,G)<\varepsilon$; hence $U(Q,\overline{F})-L(Q,\underline{F})<\varepsilon$.\\
-Thus $\underline{F}$ and $\overline{F}$ are integrable and have the same integral by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.
-\item The same inequalities give $L(f,G)\leq\int_c^d\underline{F}\leq\int_c^d\overline{F}\leq U(f,G)$.\\
-Letting $U(f,G)-L(f,G)\to0$ gives both integrals equal to $\int_R f$.
+\item Choose $\mu,\nu\in\R$, $(\forall\,(x,y)\in R)\,\mu\leq f(x,y)\leq\nu$. Then $(\forall\,y\in[c,d])\,\mu(b-a)\leq\underline F(y)\leq\overline F(y)\leq\nu(b-a)$ by Proposition \ref{prop:riemann-darboux-and-tagged-sum-bounds}(iii).\\
+Fix $G=P\times Q$, with $P:a=x_0<\cdots<x_m=b$ and $Q:c=y_0<\cdots<y_n=d$.\\
+Set $\Delta x_i\defeq x_i-x_{i-1}$, $\Delta y_j\defeq y_j-y_{j-1}$, and $R_{ij}\defeq[x_{i-1},x_i]\times[y_{j-1},y_j]$. Set $m_{ij}\defeq\inf\limits_{R_{ij}}f$ and $M_{ij}\defeq\sup\limits_{R_{ij}}f$.\\
+For $j\in J_n$, set $\ell_j\defeq\sum\limits_{i=1}^{m}m_{ij}\Delta x_i$ and $u_j\defeq\sum\limits_{i=1}^{m}M_{ij}\Delta x_i$.\\
+If $y\in[y_{j-1},y_j]$, then $\ell_j\leq L(P,f_y)\leq\underline F(y)\leq\overline F(y)\leq U(P,f_y)\leq u_j$ by the Darboux definitions.\\
+Multiplication by $\Delta y_j$ and summation over $j$ establish $L(f,G)\leq L(Q,\underline F)\leq U(Q,\overline F)\leq U(f,G)$.\\
+Fix $\varepsilon>0$ and set $I\defeq\int_R f$. Choose grids $G_L=P_L\times Q_L$ and $G_U=P_U\times Q_U$ such that $I-L(f,G_L)<\frac{\varepsilon}{2}$ and $U(f,G_U)-I<\frac{\varepsilon}{2}$.\\
+Set $P_\ast\defeq P_L\cup P_U$, $Q_\ast\defeq Q_L\cup Q_U$, and $G_\ast\defeq P_\ast\times Q_\ast$. Then $U(f,G_\ast)-L(f,G_\ast)<\varepsilon$ by cellwise refinement monotonicity.\\
+Set $D_-\defeq U(Q_\ast,\underline F)-L(Q_\ast,\underline F)$ and $D_+\defeq U(Q_\ast,\overline F)-L(Q_\ast,\overline F)$. Then $0\leq\max\{D_-,D_+\}\leq U(Q_\ast,\overline F)-L(Q_\ast,\underline F)<\varepsilon$ because $\underline F\leq\overline F$.\\
+Thus $\underline F,\overline F\in\mathcal R[c,d]$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion} with $\alpha(t)=t$.
+\item Set $I_-\defeq\int_c^d\underline F(y)\,dy$ and $I_+\defeq\int_c^d\overline F(y)\,dy$.\\
+For $G=P\times Q$, $L(f,G)\leq I_-\leq I_+\leq U(f,G)$ by Part (i), the Darboux definitions, and Theorem \ref{thm:riemann-stieltjes-integral-properties}(ii) with $\alpha(t)=t$.\\
+Hence $\int_R f\leq I_-\leq I_+\leq\int_R f$ by Definition \ref{def:rectangular-grid-riemann-sum}, proving the identities.
+\item Under the slice hypothesis, $(\forall\,y\in[c,d])\,g(y)=\underline F(y)=\overline F(y)$ by Definition \ref{def:partition-and-riemann-upper-lower-sums}. Thus $g\in\mathcal R[c,d]$ and $\int_R f=\int_c^d g(y)\,dy$ by Parts (i)--(ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Product grids become slice sums.\\
-\hlt{Key Insight}: Fubini is a Darboux squeeze.
+\hlt{Structural Commentary}: A common product refinement transfers the rectangular Darboux gap to both slice envelopes.\\
+\hlt{Key Insight}: One cross-gap controls integrability and both integral values.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:iterated-integrals-order-independent} \hlt{Order Independence on Cells}\\
-For $f\in C(I^k)$, all iterated orders defining $\int_{I^k}f$ give the same value.
+Fix $k\in\Z_{\geq1}$, a $k$-cell $I^k$ as in Definition \ref{def:k-cell-and-multiple-integral}, and $f\in C(I^k)$. For $\pi\in\mathfrak S_k$, let $I_\pi(f)$ denote successive integration in $x_{\pi(k)},\ldots,x_{\pi(1)}$.\\
+Then $(\forall\,\pi\in\mathfrak S_k)\,I_\pi(f)$ exists, and $(\forall\,\pi\in\mathfrak S_k)\,I_\pi(f)=\int_{I^k}f$.
 \begin{proof}
-Let $L,L'$ be two iterated orders. For $h(\x)=h_1(x_1)\cdots h_k(x_k)$, $L(h)=L'(h)=\prod\limits_{i=1}^k\int_{a_i}^{b_i}h_i(x_i)\,dx_i$, so $L(g)=L'(g)$ for every finite sum $g$ of such products. These sums are dense in $C(I^k)$ by Theorem \ref{thm:real-stone-weierstrass}.\\
-Choose $g$ with $\norm{f-g}_\infty<\varepsilon/V$, where $V=\prod\limits_{i=1}^k(b_i-a_i)$.\\
-Since $\abs{L(r)},\abs{L'(r)}\leq V\norm{r}_\infty$, then $\abs{L(f)-L'(f)}\leq\abs{L(f-g)}+\abs{L'(f-g)}<2\varepsilon$.\\
-\hlt{Structural Commentary}: Product functions plus uniform approximation prove order independence.\\
-\hlt{Key Insight}: Fubini-type order independence is first an algebraic fact, then a uniform approximation fact.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Existence and continuity}: Let $K$ be a cell, $u\leq v$, $h\in C(K\times[u,v])$, $H(\z)\defeq\int_u^v h(\z,t)\,dt$.\\
+If $u=v$, then $H=0$ by Definition \ref{def:k-cell-and-multiple-integral}; assume $u<v$. The integral exists by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable} with $\alpha(t)=t$.\\
+The domain is compact by Theorem \ref{thm:heine-borel-rk}, so $h$ is uniformly continuous by Theorem \ref{thm:compact-continuity-uniform-continuity}.\\
+For $\z,\z'\in K$, $\abs{H(\z)-H(\z')}\leq(v-u)\sup\limits_{t\in[u,v]}\abs{h(\z,t)-h(\z',t)}$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i),(iv) with $\alpha(t)=t$.\\
+Thus $H\in C(K)$. Repetition proves existence of every $I_\pi(f)$ and continuity of every intermediate integrand.
+\item \hlt{Adjacent interchange}: Fix consecutive coordinates $x_p,x_q$ in an integration order and hold the remaining variables fixed.\\
+If $a_p=b_p$ or $a_q=b_q$, both orders are zero by Definition \ref{def:k-cell-and-multiple-integral}.\\
+Otherwise, set $S\defeq[a_p,b_p]\times[a_q,b_q]$ and let $h\in C(S)$. Then $h$ is uniformly continuous by Theorems \ref{thm:heine-borel-rk} and \ref{thm:compact-continuity-uniform-continuity}.\\
+Set $A\defeq(b_p-a_p)(b_q-a_q)>0$. For $\varepsilon>0$, choose a grid $G$ whose cell oscillations are below $\varepsilon/A$.\\
+Then $U(h,G)-L(h,G)<\varepsilon$, so the rectangular integral gap is zero by Definition \ref{def:rectangular-grid-riemann-sum}. The relevant two-variable slice is continuous by Part (i), and its one-variable slices are integrable by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable} with $\alpha(t)=t$.\\
+Transposed grids preserve Darboux sums. Adjacent integrals commute by Theorem \ref{thm:fubini-riemann-rectangle-slices}(iii) in both coordinate orientations.
+\item \hlt{Permutation reduction}: Fix $\pi\in\mathfrak S_k$. Moving each index to its identity position factors $\pi$ into adjacent transpositions.\\
+Thus $I_\pi(f)=I_{\mathrm{id}}(f)$ by Part (ii), while $I_{\mathrm{id}}(f)=\int_{I^k}f$ by Definition \ref{def:k-cell-and-multiple-integral}.
+\end{enumerate}
+\hlt{Structural Commentary}: Partial integration preserves continuity; rectangular Darboux control licenses each adjacent swap.\\
+\hlt{Key Insight}: Adjacent transpositions connect every order to the defining order.
 \end{proof}
 \end{theorem}
 
 \begin{perspective} \label{per:fubini-hypotheses-control-order} \hlt{Order Interchange Requires Hypotheses}\\
 Finite sums are order-free; limiting processes are not.\\
-Theorems \ref{thm:fubini-riemann-rectangle-slices} and \ref{thm:iterated-integrals-order-independent} give hypotheses for interchanging integral order.
+Theorems \ref{thm:fubini-riemann-rectangle-slices} and \ref{thm:iterated-integrals-order-independent} state hypotheses for interchanging integral order.
 \end{perspective}
 
 \begin{definition} \label{def:support-and-compact-support-integral} \hlt{Support and Simplex Integrals}\\
-For $f:\R^k\to\R$ or $\C$, define $\operatorname{supp}f\defeq\overline{\{\x\in\R^k:f(\x)\neq0\}}$.
+Fix $k\in\Z_{\geq1}$ and $\mathbb F\in\{\R,\C\}$. Integrals of complex-valued functions are taken componentwise.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $f\in C_c(\R^k)$ and any cell $I^k\supseteq\operatorname{supp}f$, define $\int_{\R^k}f\defeq\int_{I^k}f$; this is independent of $I^k$.
-\item The \hlt{standard $k$-simplex} is $Q^k\defeq\{\x\in\R^k:x_i\geq0,\ \sum\limits_{i=1}^{k}x_i\leq1\}$.\\
-For $f\in C(Q^k)$, extend $f$ by $0$ to $[0,1]^k$ and define $\int_{Q^k}f$ as the corresponding multiple integral.
+\item \hlt{Compact support}: For $f:\R^k\to\mathbb F$, set $\operatorname{supp}f\defeq\overline{\{\x\in\R^k:f(\x)\neq0\}}$.\\
+Set $C_c(\R^k,\mathbb F)\defeq\{f\in C(\R^k,\mathbb F):\operatorname{supp}f\text{ is compact}\}$. For $f\in C_c(\R^k,\mathbb F)$ and a $k$-cell $I^k\supseteq\operatorname{supp}f$, set $\int_{\R^k}f\defeq\int_{I^k}f$.
+\item \hlt{Standard simplex}: Set $Q^0$ to be a point and $Q^j\defeq\{\x\in[0,+\infty)^j:\sum\limits_{i=1}^{j}x_i\leq1\}$ for $j\in J_k$.\\
+The \hlt{standard $k$-simplex} is $Q^k$. For $j\in J_k$ and $\z\in Q^{j-1}$, set $u_j(\z)\defeq1-\sum\limits_{i=1}^{j-1}z_i$, with the empty sum equal to $0$.\\
+For $f\in C(Q^k,\mathbb F)$, set $f_k\defeq f$ and recursively set $f_{j-1}(\z)\defeq\int_0^{u_j(\z)}f_j(\z,t)\,dt$ for $j=k,\ldots,1$.\\
+The \hlt{simplex integral} is $\int_{Q^k}f\defeq f_0$.
 \end{enumerate}
 \end{definition}
 
-\begin{definition} \label{def:primitive-mapping-and-flip} \hlt{Primitive Mappings and Flips}\\
-Let $E\subseteq\R^n$ be open.
+\begin{proposition} \label{prop:support-and-simplex-integrals-well-defined} \hlt{Well-Defined Support and Simplex Integrals}\\
+The constructions in Definition \ref{def:support-and-compact-support-integral} satisfy:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $G:E\to\R^n$ is \hlt{primitive in coordinate $m$} if $G(\x)=(x_1,\ldots,x_{m-1},g(\x),x_{m+1},\ldots,x_n)$.
-\item If $g$ is differentiable at $\a\in E$, then $DG(\a)$ is $I_n$ except row $m$ is $\nabla g(\a)$, and $J_G(\a)=(D_mg)(\a)$.
-\item A \hlt{flip} is a linear map $B:\R^n\to\R^n$ with $B\mathbf{e}_p=\mathbf{e}_q$, $B\mathbf{e}_q=\mathbf{e}_p$, and $B\mathbf{e}_i=\mathbf{e}_i$ for $i\notin\{p,q\}$, $p\neq q$.
-\end{enumerate}
-\end{definition}
-
-\begin{theorem} \label{thm:local-decomposition-primitive-mappings} \hlt{Local Decomposition into Primitive Mappings}\\
-Let $E\subseteq\R^n$ be open, let $\F\in C^1(E,\R^n)$, let $\ze\in E$, and assume $\F(\ze)=\ze$ and $D\F(\ze)$ is invertible. Then there exist a neighborhood $U$ of $\ze$, primitive $C^1$ maps $G_1,\ldots,G_n$ near $\ze$, and maps $B_1,\ldots,B_{n-1}$ such that:
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item $G_i(\ze)=\ze$, $DG_i(\ze)$ is invertible, and each $B_i$ is a flip or $I$.
-\item $\F=B_1\cdots B_{n-1}G_n\circ\cdots\circ G_1$ on $U$.
+\item For $f\in C_c(\R^k,\mathbb F)$, set $\mathscr C_f\defeq\{I\subseteq\R^k:I\text{ is a $k$-cell and }\operatorname{supp}f\subseteq I\}$. Then $\mathscr C_f\neq\emptyset$ and $(\forall\,I,J\in\mathscr C_f)\,\int_I f=\int_J f$.
+\item For $f\in C(Q^k,\mathbb F)$, every recursive integral exists and $(\forall\,j\in\{0,\ldots,k\})\,f_j\in C(Q^j,\mathbb F)$.
 \end{enumerate}
 \begin{proof}
-Let $P_m\x\defeq\sum\limits_{i=1}^{m}x_i\mathbf{e}_i$ and set $\F_1\defeq\F$.
+It suffices to treat $\mathbb F=\R$; the complex case holds componentwise.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Suppose $P_{m-1}\F_m=P_{m-1}$, $\F_m(\ze)=\ze$, and $D\F_m(\ze)$ invertible, and write $\F_m=P_{m-1}+\sum\limits_{i=m}^{n}\alpha_i\mathbf{e}_i$.\\
-Choose $k\geq m$ with $(D_m\alpha_k)(\ze)\neq0$, let $B_m$ swap $m,k$ (or $B_m=I$), set $G_m(\x)\defeq\x+(\alpha_k(\x)-x_m)\mathbf{e}_m$.\\
-Then $G_m$ is primitive, $G_m(\ze)=\ze$, $J_{G_m}(\ze)\neq0$, and $G_m$ is locally invertible.\\
-With $\F_{m+1}\defeq B_m\F_m\circ G_m^{-1}$, one has $P_m\F_{m+1}=P_m$, $\F_{m+1}(\ze)=\ze$, and $D\F_{m+1}(\ze)$ invertible.\\
-Iterate for $m=1,\ldots,n-1$ and set $G_n\defeq\F_n$.
-\item From $\F_{m+1}=B_m\F_m\circ G_m^{-1}$ and $B_m^2=I$, $\F_m=B_m\F_{m+1}\circ G_m$.\\
-Iteration gives $\F=\F_1=B_1\cdots B_{n-1}G_n\circ G_{n-1}\circ\cdots\circ G_1$ near $\ze$.
+\item The set $K\defeq\operatorname{supp}f$ is bounded by Theorem \ref{thm:heine-borel-rk}, so a containing $k$-cell exists by Lemma \ref{lem:bounded-rk-set-contained-in-k-cell}.\\
+Let $I,J\in\mathscr C_f$, and choose a cell $L\supseteq I\cup J$ by the same lemma. All three cell integrals exist by Theorem \ref{thm:iterated-integrals-order-independent}.\\
+Since $f=0$ on $\R^k\setminus K$, $\int_I f=\int_L f=\int_J f$ by repeated interval additivity in Theorem \ref{thm:riemann-stieltjes-integral-properties}(iii) with $\alpha(t)=t$.
+\item Proceed by downward induction from $f_k=f\in C(Q^k)$. Fix $j\in J_k$ with $f_j\in C(Q^j)$.\\
+For $(\z,s)\in Q^{j-1}\times[0,1]$, set $\Phi_j(\z,s)\defeq(\z,u_j(\z)s)$ and $q_j(\z,s)\defeq u_j(\z)f_j(\Phi_j(\z,s))$.\\
+For $(\z,s)\in Q^{j-1}\times[0,1]$, $\sum\limits_{i=1}^{j-1}z_i+u_j(\z)s\leq\sum\limits_{i=1}^{j-1}z_i+u_j(\z)=1$.\\
+Thus $\Phi_j(Q^{j-1}\times[0,1])\subseteq Q^j$ by Definition \ref{def:support-and-compact-support-integral}(ii), and $q_j$ is continuous by Theorems \ref{thm:continuous-composition} and \ref{thm:continuous-algebra-and-components}.\\
+The domain of $q_j$ is closed and bounded by Definition \ref{def:support-and-compact-support-integral}(ii), hence compact by Theorem \ref{thm:heine-borel-rk}.\\
+Thus $q_j$ is uniformly continuous by Theorem \ref{thm:compact-continuity-uniform-continuity}. The slice integrals exist by Theorem \ref{thm:continuous-functions-riemann-stieltjes-integrable} with the identity integrator.\\
+For $\z\in Q^{j-1}$ with $u_j(\z)>0$, $f_{j-1}(\z)=\int_0^1q_j(\z,s)\,ds$ by Theorem \ref{thm:riemann-stieltjes-change-of-variable}(v); both sides vanish when $u_j(\z)=0$.\\
+For $\z,\z'\in Q^{j-1}$, $\abs{f_{j-1}(\z)-f_{j-1}(\z')}\leq\sup\limits_{s\in[0,1]}\abs{q_j(\z,s)-q_j(\z',s)}$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i),(iv) with $\alpha(s)=s$.\\
+Uniform continuity of $q_j$ implies $f_{j-1}\in C(Q^{j-1})$, completing the induction.
 \end{enumerate}
-\hlt{Structural Commentary}: Local diffeomorphisms factor by coordinate elimination.\\
-\hlt{Key Insight}: Nonlinear elimination follows $D\F(\ze)$.
+\hlt{Structural Commentary}: Cell enlargement proves independence; fiber rescaling transfers continuity through the simplex recursion.\\
+\hlt{Key Insight}: Rescaling converts every simplex fiber to $[0,1]$.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:linear-map-volume-scaling-determinant} \hlt{Linear Determinant Change of Variables}\\
+Fix $n\in\N$. Let $T\in\LL(\R^n)$ be invertible, $f\in C_c(\R^n,\R)$. Then $\int_{\R^n}f(\y)\,d\y=\abs{\det T}\int_{\R^n}f(T\x)\,d\x$.
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Factorization}: Set $A\defeq[T]$. Choose elementary matrices $E_1,\ldots,E_q$ with $I=E_q\cdots E_1A$ by Lemma \ref{lem:invertible-matrices-row-reduce-to-identity}(ii).\\
+Set $F_r\defeq E_r^{-1}$, $S_r$ be linear map represented by $F_r$. Then $A=F_1\cdots F_q$, and every $F_r$ is elementary by Proposition \ref{prop:elementary-matrices-perform-row-operations}(ii).\\
+For any invertible $S\in\LL(\R^n)$ and $g\in C_c(\R^n,\R)$, $S$ is a homeomorphism by Corollary \ref{cor:finite-dimensional-linear-maps-continuous}.\\
+Thus $\operatorname{supp}(g\circ S)=S^{-1}(\operatorname{supp}g)$, which is compact by Theorem \ref{thm:continuous-image-compact}; hence $g\circ S\in C_c(\R^n,\R)$ by Theorem \ref{thm:continuous-composition}.
+\item \hlt{Elementary Factors}: Fix $g\in C_c(\R^n,\R)$, and choose $M>0$ such that $\operatorname{supp}g\subseteq C\defeq[-M,M]^n$ by Theorem \ref{thm:heine-borel-rk}.\\
+Let $S$ be an invertible elementary linear map. We prove $\int_{\R^n}g(S\x)\,d\x=\abs{\det S}^{-1}\int_{\R^n}g(\y)\,d\y$ by cases.\\
+It suffices to compare cell integrals on cells containing the two supports by Proposition \ref{prop:support-and-simplex-integrals-well-defined}(i).
+\begin{enumerate}[label=(\alph*)]
+\setlength{\itemsep}{0pt}
+\item Suppose $S$ scales coordinate $i$ by $c\neq0$, $D_c\defeq\{\x:\abs{x_i}\leq M/\abs c,\ \abs{x_k}\leq M\ (k\neq i)\}$. Then $D_c\supseteq\operatorname{supp}(g\circ S)$.\\
+Integrate in $x_i$ first by Theorem \ref{thm:iterated-integrals-order-independent}. Positive scaling satisfies the claimed identity by Theorem \ref{thm:riemann-stieltjes-change-of-variable}(v).\\
+For $c<0$, reflected partitions preserve the lower and upper sums, so reflection preserves the integral.\\
+Positive scaling by $\abs c$ then proves the same identity. Finally, $\abs{\det S}=\abs c$ by Theorem \ref{thm:determinant-basic-laws}(v).
+\item Suppose $S$ swaps coordinates $i$ and $j$. Then $S(C)=C$, so $C$ contains both supports.\\
+Renaming the two dummy variables converts the iterated integral of $g\circ S$ into order obtained by swapping $i$ and $j$ for $g$.\\
+The integrals are equal by Theorem \ref{thm:iterated-integrals-order-independent}. Moreover, $\abs{\det S}=1$ by Theorem \ref{thm:determinant-basic-laws}(i),(iii),(ix).
+\item Suppose $S\x=\x+cx_j\mathbf e_i$ with $i\neq j$, and set $D\defeq\{\x:\abs{x_i}\leq(1+\abs c)M,\ \abs{x_k}\leq M\ (k\neq i)\}$.\\
+Then $D\supseteq\operatorname{supp}(g\circ S)$. Integrate in $x_i$ first by Theorem \ref{thm:iterated-integrals-order-independent}.\\
+For fixed remaining coordinates, the translated $x_i$-interval contains $[-M,M]$, outside which the slice of $g$ vanishes. Its integral therefore equals the integral over $[-M,M]$ by Theorem \ref{thm:riemann-stieltjes-change-of-variable}(v) and interval additivity.\\
+Thus the two cell integrals are equal, and $\det S=1$ by Theorem \ref{thm:determinant-basic-laws}(v).
+\end{enumerate}
+\item \hlt{Composition}: If $q=0$, then $T=I$ and the claim is immediate.\\
+Suppose $q\geq1$, and set $g_0\defeq f$ and $g_r\defeq f\circ S_1\circ\cdots\circ S_r$ for $1\leq r\leq q$.\\
+Every $g_r$ has compact support by Part (i). For $1\leq r\leq q$, $\int_{\R^n}g_r(\x)\,d\x=\abs{\det S_r}^{-1}\int_{\R^n}g_{r-1}(\y)\,d\y$ by Part (ii).\\
+Since $g_q=f\circ T$, $\int_{\R^n}f(T\x)\,d\x=\abs{\det T}^{-1}\int_{\R^n}f(\y)\,d\y$ by iteration, Theorem \ref{thm:determinant-basic-laws}(vi). Rearranging proves claim.
+\end{enumerate}
+\hlt{Structural Commentary}: Elementary reduction isolates one-coordinate substitutions; compact support makes identities composable.\\
+\hlt{Key Insight}: Each elementary factor contributes exactly its reciprocal determinant modulus.
+\end{proof}
+\end{theorem}
+
+Figure \ref{fig:determinant-volume-scaling} depicts the linear density factor in Theorem \ref{thm:linear-map-volume-scaling-determinant}. In the illustrated two-dimensional case, $T$ carries a cell to a parallelogram.
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/linear_algebra/determinant_volume_scaling.tikz}
+  \caption{The image parallelogram has the determinant density factor $\abs{\det T}$.}
+  \label{fig:determinant-volume-scaling}
+\end{illustrationfigure}
+
+\begin{definition} \label{def:primitive-mapping-and-flip} \hlt{Primitive Mappings and Flips}\\
+Fix $n\in\N$ and let $E\subseteq\R^n$ be open.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $m\in J_n$, a map $G:E\to\R^n$ is \hlt{primitive in coordinate $m$} if $(\exists\,g:E\to\R)(\forall\,\x\in E)\,G(\x)=\x+(g(\x)-x_m)\mathbf e_m$.
+\item For distinct $p,q\in J_n$, let $\tau=(p\ q)\in\mathfrak S_n$. A \hlt{flip} is the unique $B\in\LL(\R^n)$ satisfying $(\forall\,i\in J_n)\,B\mathbf e_i=\mathbf e_{\tau(i)}$.\\
+Existence and uniqueness hold by Proposition \ref{prop:linear-map-determined-by-basis}.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition} \label{prop:primitive-mapping-derivative-jacobian} \hlt{Derivative and Jacobian of a Primitive Map}\\
+Fix $n\in\N$, an open set $E\subseteq\R^n$, $m\in J_n$, and $\a\in E$. Let $g:E\to\R$ be differentiable at $\a$.\\
+Define $G:E\to\R^n$ by $(\forall\,\x\in E)\,G(\x)=\x+(g(\x)-x_m)\mathbf e_m$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The map $G$ is differentiable at $\a$, and $[DG(\a)]$ is $I_n$ with row $m$ replaced by $\nabla g(\a)^t$.
+\item $J_G(\a)=(D_mg)(\a)$.
+\end{enumerate}
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By the definition of $G$, $G_m=g$ and $(\forall\,k\in J_n\setminus\{m\})(\forall\,\x\in E)\,G_k(\x)=x_k$.\\
+Each map $\x\mapsto x_k$ differentiable at $\a$ with derivative $\h\mapsto h_k$ by Definition \ref{def:total-derivative-rn-rm}; $G$ differentiable at $\a$ by Theorem \ref{thm:several-variable-componentwise-differentiability}(i).\\
+The rows indexed by $k\neq m$ are $\mathbf e_k^t$, and row $m$ is $\nabla g(\a)^t$, by Theorem \ref{thm:total-derivative-matrix-partials}(i).
+\item By Part (i), a nonzero term in the determinant sum must satisfy $(\forall\,k\in J_n\setminus\{m\})\,\sigma(k)=k$, hence $\sigma=\operatorname{id}$.\\
+Its product is $(D_mg)(\a)$, so $J_G(\a)=(D_mg)(\a)$ by Definitions \ref{def:matrix-trace-and-determinant} and \ref{def:jacobian-determinant}.
+\end{enumerate}
+\hlt{Structural Commentary}: One derivative row changes; fixed identity rows eliminate all nonidentity determinant terms.\\
+\hlt{Key Insight}: A primitive map's Jacobian is the partial derivative in its active coordinate.
+\end{proof}
+\end{proposition}
+
+\begin{theorem} \label{thm:local-decomposition-primitive-mappings} \hlt{Local Decomposition into Primitive Mappings}\\
+Fix $n\in\N$, an open set $E\subseteq\R^n$, and $\F\in C^1(E,\R^n)$. Assume $\ze\in E$, $\F(\ze)=\ze$, and $D\F(\ze)$ is invertible.\\
+Then families $(V_i)_{i\in J_n}$, $(G_i)_{i\in J_n}$, $(B_i)_{i\in J_{n-1}}$, and a set $U$ exist such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item For $i\in J_n$, $V_i\subseteq\R^n$ is open, $\ze\in V_i$, and $G_i\in C^1(V_i,\R^n)$ is primitive in coordinate $i$.\\
+The identities $G_i(\ze)=\ze$ and $J_{G_i}(\ze)\neq0$ hold. For $i\in J_{n-1}$, $B_i\in\LL(\R^n)$ is a flip or $I_n$.
+\item Set $U\subseteq E$ is open, $\ze\in U$. On $U$, $B_1\circ\cdots\circ B_{n-1}\circ G_n\circ\cdots\circ G_1$ is defined, equals $\F$. $B$-prefix omitted if $n=1$.
+\end{enumerate}
+\begin{proof}
+For $0\leq r\leq n$, set $P_r\x\defeq\sum\limits_{i=1}^{r}x_i\mathbf e_i$. Set $W_1\defeq E$ and $\F_1\defeq\F$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The base relations $P_0\circ\F_1=P_0$, $\F_1(\ze)=\ze$, and invertibility of $D\F_1(\ze)$ hold by the hypotheses.\\
+Suppose $1\leq m<n$, $W_m\ni\ze$ is open, $\F_m\in C^1(W_m,\R^n)$, $P_{m-1}\circ\F_m=P_{m-1}$, $\F_m(\ze)=\ze$, and $D\F_m(\ze)$ is invertible.\\
+Write $\F_m=P_{m-1}+\sum\limits_{i=m}^{n}\alpha_i\mathbf e_i$ on $W_m$, where $\alpha_m,\ldots,\alpha_n\in C^1(W_m)$.\\
+If $(\forall\,k\in\{m,\ldots,n\})\,(D_m\alpha_k)(\ze)=0$, then $D\F_m(\ze)\mathbf e_m=\sum\limits_{k=m}^{n}(D_m\alpha_k)(\ze)\mathbf e_k=\ze$, a contradiction.\\
+Choose $k\in\{m,\ldots,n\}$ with $(D_m\alpha_k)(\ze)\neq0$. Let $B_m=I_n$ if $k=m$; otherwise let $B_m$ be the flip of coordinates $m,k$.\\
+Define $G_m(\x)\defeq\x+(\alpha_k(\x)-x_m)\mathbf e_m$ on $W_m$. Then $G_m$ is primitive in coordinate $m$, belongs to $C^1(W_m,\R^n)$, and fixes $\ze$.\\
+The identity $J_{G_m}(\ze)=(D_m\alpha_k)(\ze)\neq0$ holds by Proposition \ref{prop:primitive-mapping-derivative-jacobian}(ii), so $DG_m(\ze)$ is invertible by Corollary \ref{cor:jacobian-nonzero-iff-derivative-invertible}.\\
+Choose open neighborhoods $V_m\subseteq W_m$, $W_{m+1}$ of $\ze$ s.t. $G_m|_{V_m}:V_m\to W_{m+1}$ is $C^1$ diffeomorphism by Theorem \ref{thm:inverse-function-theorem-rn}(i),(iii).\\
+Retain this restriction as $G_m$, and define $\F_{m+1}\defeq B_m\circ\F_m\circ G_m^{-1}$ on $W_{m+1}$.\\
+The map $\F_{m+1}$ is $C^1$ and fixes $\ze$ by Theorem \ref{thm:inverse-function-theorem-rn}(iii) and the definitions.\\
+For $\y\in W_{m+1}$, set $\x\defeq G_m^{-1}(\y)$. Then $y_i=x_i$ for $i<m$ and $y_m=\alpha_k(\x)$ by the definition of $G_m$.\\
+The first $m$ components of $B_m\F_m(\x)$ are $y_1,\ldots,y_m$ by the induction hypothesis and the definition of $B_m$; hence $P_m\circ\F_{m+1}=P_m$.\\
+Since $DB_m(\ze)=B_m$, $D\F_{m+1}(\ze)=B_mD\F_m(\ze)(DG_m(\ze))^{-1}$ by Definition \ref{def:total-derivative-rn-rm} and Theorems \ref{thm:chain-rule-several-variables}(ii), \ref{thm:inverse-function-theorem-rn}(ii).\\
+Every factor is invertible, so $D\F_{m+1}(\ze)$ is invertible. This completes the induction for $m=1,\ldots,n-1$.\\
+Set $V_n\defeq W_n$ and $G_n\defeq\F_n$. Since $P_{n-1}\circ\F_n=P_{n-1}$, $G_n$ is primitive in coordinate $n$.\\
+The identities $G_n(\ze)=\ze$ and $J_{G_n}(\ze)\neq0$ hold by the induction invariant and Corollary \ref{cor:jacobian-nonzero-iff-derivative-invertible}. Hence (i) holds.
+\item For $m\in J_{n-1}$, $B_m^2=I_n$ and the recurrence imply $\F_m=B_m\circ\F_{m+1}\circ G_m$ on $V_m$. By continuity and finite repeated shrinking, choose open neighborhood $U\subseteq E$ of $\ze$ on which every partial composition $G_r\circ\cdots\circ G_1$ is defined for $r\in J_n$.\\
+$\F=B_1\circ\cdots\circ B_{n-1}\circ G_n\circ\cdots\circ G_1$ holds on $U$ by successive substitution, $G_n=\F_n$; for $n=1$, it reduces to $\F=G_1$.
+\end{enumerate}
+\hlt{Structural Commentary}: Each primitive inverse fixes the next coordinate; a flip moves its nonzero derivative entry into that position.\\
+\hlt{Key Insight}: An invertible derivative supplies a pivot at every inductive stage.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:partition-of-unity-rudin} \hlt{Partition of Unity on a Compact Set}\\
-Let $K\subseteq\R^n$ be compact and let $\{V_\alpha\}$ cover $K$ by open sets. Then there are $\psi_1,\ldots,\psi_s\in C^1(\R^n)$ such that
+Fix $n\in\N$. Let $K\subseteq\R^n$ be nonempty and compact, and let $(V_\alpha)_{\alpha\in\mathcal A}$ be an open cover of $K$.\\
+Set $\mathcal C_K\defeq\{f\in C(\R^n):\operatorname{supp}(f)\subseteq K\}$.\\
+Then $s\in\N$ and $\psi_1,\ldots,\psi_s\in C^1(\R^n)$ exist such that:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $0\leq\psi_i\leq1$ for all $i$;
-\item $\operatorname{supp}(\psi_i)\subseteq V_\alpha$ for some $\alpha$;
-\item $\sum_{i=1}^s\psi_i=1$ on $K$.
+\item $(\forall\,i\in J_s)\,0\leq\psi_i\leq1$;
+\item $(\forall\,i\in J_s)(\exists\,\alpha\in\mathcal A)\,\operatorname{supp}(\psi_i)\subseteq V_\alpha$;
+\item $\sum\limits_{i=1}^s\psi_i=1$ on $K$.
+\item $(\forall\,f\in\mathcal C_K)\,f=\sum\limits_{i=1}^{s}\psi_i f$;
+\item $(\forall\,(f,i)\in\mathcal C_K\times J_s)(\exists\,\alpha\in\mathcal A)\,\operatorname{supp}(\psi_i f)\subseteq V_\alpha$.
 \end{enumerate}
-If $f\in C(\R^n)$ and $\operatorname{supp}(f)\subseteq K$, then $f=\sum_{i=1}^{s}\psi_if$, with each summand supported in one member of the cover.
 \begin{proof}
+Choose $\alpha:K\to\mathcal A$ with $(\forall\,\x\in K)\,\x\in V_{\alpha(\x)}$ by Definition \ref{def:open-cover-and-compactness}(i).\\
+Choose $R:K\to(0,+\infty)$ with $(\forall\,\x\in K)\,\overline{B}_{R(\x)}(\x)\subseteq V_{\alpha(\x)}$ by openness. Set $r(\x)\defeq\frac{R(\x)}{2}$.\\
+The family $(B_{r(\x)}(\x))_{\x\in K}$ is an open cover of $K$. Choose $s\in\N$ and $\x_1,\ldots,\x_s\in K$ with $K\subseteq\bigcup\limits_{i=1}^{s}B_{r(\x_i)}(\x_i)$ by Definition \ref{def:open-cover-and-compactness}(ii).\\
+For $i\in J_s$, set $\alpha_i\defeq\alpha(\x_i)$, $r_i\defeq r(\x_i)$, and $R_i\defeq R(\x_i)$.\\
+Set $p(t)\defeq1-3t^2+2t^3$. Then $p(0)=1$, $p(1)=0$, $p'(0)=p'(1)=0$, and $(\forall\,t\in[0,1])\,p'(t)=6t(t-1)\leq0$.\\
+Set $\eta(t)\defeq1$ for $t\leq0$, $\eta(t)\defeq p(t)$ for $0<t<1$, and $\eta(t)\defeq0$ for $t\geq1$. Thus $\eta\in C^1(\R)$ and $0\leq\eta\leq1$.\\
+For $i\in J_s$, set $q_i(\x)\defeq\frac{\norm{\x-\x_i}_2^2-r_i^2}{R_i^2-r_i^2}$ and $\varphi_i\defeq\eta\circ q_i$.\\
+Set $\psi_i\defeq\prod\limits_{j=1}^{i-1}(1-\varphi_j)\varphi_i$ for $i\in J_s$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For each $\x\in K$, choose balls with $\overline{B(\x)}\subseteq W(\x)\subseteq\overline{W(\x)}\subseteq V_{\alpha(\x)}$.\\
-By compactness, Definition \ref{def:open-cover-and-compactness}, finitely many $B(\x_i)$ cover $K$.
-\item Choose $\varphi_i\in C^1(\R^n)$ with $\varphi_i=1$ on $B(\x_i)$ and $\operatorname{supp}(\varphi_i)\subseteq W(\x_i)$. Set $\psi_i=(1-\varphi_1)\cdots(1-\varphi_{i-1})\varphi_i$.
-\item Then $0\leq\psi_i\leq1$, each $\psi_i$ is supported in some $V_\alpha$, and $\sum\limits_{i=1}^{s}\psi_i=1-\prod\limits_{i=1}^{s}(1-\varphi_i)$, which equals $1$ on $K$.\\
-Multiplying by $f$ gives the final assertion.
+\item $(\forall\,(i,\ell,\x)\in J_s\times J_n\times\R^n)\,(D_\ell q_i)(\x)=\frac{2(x_\ell-(\x_i)_\ell)}{R_i^2-r_i^2}$. Hence $(\forall\,i\in J_s)\,q_i\in C^1(\R^n)$ by Theorem \ref{thm:c1-iff-continuous-partials}.\\
+The identity $(\forall\,(i,\ell)\in J_s\times J_n)\,D_\ell\varphi_i=(\eta'\circ q_i)D_\ell q_i$ holds by Theorem \ref{thm:chain-rule-several-variables}.\\
+Hence $(\forall\,i\in J_s)\,\varphi_i\in C^1(\R^n)$ by Theorem \ref{thm:c1-iff-continuous-partials}.\\
+The relation $(\forall\,i\in J_s)\,\psi_i\in C^1(\R^n)$ holds by Theorems \ref{thm:derivative-algebra-rules}(i)--(ii) and \ref{thm:c1-iff-continuous-partials}.\\
+Since $(\forall\,j\in J_s)\,0\leq\varphi_j\leq1$, $(\forall\,i\in J_s)\,0\leq\psi_i\leq1$.
+\item For $i\in J_s$, $q_i\geq1$ on $\R^n\setminus B_{R_i}(\x_i)$, so $\varphi_i=0$ there by the definition of $\eta$.\\
+Thus $\operatorname{supp}(\psi_i)\subseteq\operatorname{supp}(\varphi_i)\subseteq\overline{B}_{R_i}(\x_i)$ by Definition \ref{def:support-and-compact-support-integral}(i) and the formula for $\psi_i$.\\
+The inclusion $\overline{B}_{R_i}(\x_i)\subseteq V_{\alpha_i}$ holds by the choice of $R$.
+\item Set $P_0\defeq1$ and $P_i\defeq\prod\limits_{j=1}^{i}(1-\varphi_j)$ for $i\in J_s$.\\
+Then $P_{i-1}-P_i=\psi_i$, so $\sum\limits_{i=1}^{s}\psi_i=1-P_s$. If $\x\in K$, choose $i\in J_s$ with $\x\in B_{r_i}(\x_i)$ by the finite subcover.\\
+Then $q_i(\x)<0$, $\varphi_i(\x)=1$, and $P_s(\x)=0$.
+\item Let $f\in\mathcal C_K$. The identity $f=\sum\limits_{i=1}^{s}\psi_i f$ holds on $K$ by Part (iii).\\
+On $\R^n\setminus K$, $f=0$ by the definition of $\mathcal C_K$ and Definition \ref{def:support-and-compact-support-integral}(i).\\
+Hence $(\forall\,i\in J_s)\,\psi_i f=0$ there, so the identity holds on $\R^n$.
+\item Let $(f,i)\in\mathcal C_K\times J_s$. Then $\operatorname{supp}(\psi_i f)\subseteq\operatorname{supp}(\psi_i)$ by Definition \ref{def:support-and-compact-support-integral}(i).\\
+Thus $\operatorname{supp}(\psi_i f)\subseteq V_{\alpha_i}$ by Part (ii).
 \end{enumerate}
-\hlt{Structural Commentary}: Compactness finite; product cutoffs sum to one.\\
-\hlt{Key Insight}: A partition of unity turns local change-of-variable information into a global formula.
+\hlt{Structural Commentary}: Finite inner balls localize cubic cutoffs; telescoping products assemble the exact sum.\\
+\hlt{Key Insight}: Coverage makes one cutoff equal $1$, annihilating the residual product.
 \end{proof}
 \end{theorem}
 
-The nonlinear change-of-variables theorem is the local volume-scaling formula from Theorem \ref{thm:linear-map-volume-scaling-determinant} applied cell by cell after a fine grid has been warped by a $C^1$ diffeomorphism.
+Theorem \ref{thm:linear-map-volume-scaling-determinant} identifies the determinant factor for linear maps. Local primitive decompositions recover this factor, and compact support globalizes it.\\
+Figure \ref{fig:change-of-variables-grid-warp} depicts the corresponding local grid deformation.
 
-\begin{figure}[H]
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/change_of_variables_grid_warp.tikz}
-  \caption{A $C^1$ change of variables turns a fine grid into curvilinear cells; $\abs{J_T}$ records local volume scaling.}
+  \caption{A $C^1$ change of variables warps a grid; $\abs{J_T}$ records local volume scaling.}
   \label{fig:change-of-variables-grid-warp}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{theorem} \label{thm:change-of-variables-rk}\label{thm:multiple-integration-main-source-todo} \hlt{Change of Variables in $\R^k$}\\
-Let $T:E\to\R^k$ be one-to-one and $C^1$ on open $E\subseteq\R^k$, with $J_T\neq0$ on $E$.\\
-If $f\in C(\R^k)$ and $\operatorname{supp}(f)$ is compact in $T(E)$, then $\int_{\R^k}f(\y)\,d\y = \int_{\R^k}f(T(\x))\,\abs{J_T(\x)}\,d\x$.
+\begin{theorem} \label{thm:change-of-variables-rk} \hlt{Change of Variables in $\R^k$}\\
+Fix $k\in\N$. Let $E\subseteq\R^k$ be open and $T:E\to\R^k$ be injective and $C^1$.\\
+Assume $(\forall\,\x\in E)\,J_T(\x)\neq0$. Let $f\in C_c(\R^k,\R)$ satisfy $\operatorname{supp}f\subseteq T(E)$.\\
+Then $\int_{\R^k}f(\y)\,d\y=\int_{\R^k}f(T(\x))\abs{J_T(\x)}\,d\x$.\\
+On the right, the integrand on $E$ is extended by $0$ to $\R^k$.
 \begin{proof}
-Let $\mathcal{C}$ be the class of maps for which formula holds for all continuous functions with compact support in the image. Primitive maps lie in $\mathcal{C}$ by one-variable substitution, and flips lie in $\mathcal{C}$ by Theorem \ref{thm:iterated-integrals-order-independent}.\\
-If $P,Q\in\mathcal{C}$, then $P\circ Q\in\mathcal{C}$, since Theorems \ref{thm:chain-rule-several-variables} and \ref{thm:determinant-basic-laws} give $J_{P\circ Q}(\x)=J_P(Q(\x))J_Q(\x)$.\\
-After translating coordinates, Theorem \ref{thm:local-decomposition-primitive-mappings} therefore gives the formula on a neighborhood of each point of $E$. By Theorem \ref{thm:inverse-function-theorem-rn}, these neighborhoods have open images covering $\operatorname{supp}(f)$.\\
-Choose a partition of unity from Theorem \ref{thm:partition-of-unity-rudin}, write $f=\sum_i\psi_i f$ with each $\psi_i f$ supported in one such image, apply the local formula to each summand, and sum.\\
-\hlt{Structural Commentary}: Model cases plus partitions of unity prove the theorem.\\
-\hlt{Key Insight}: The absolute Jacobian is local volume scaling, globalized by compact support.
+First, let $U\subseteq\R^k$ be open, $L\subseteq U$ be compact, and $q\in C(U)$ vanish on $U\setminus L$.\\
+Then the zero extension $\widetilde q$ belongs to $C_c(\R^k,\R)$. Indeed, $L$ is closed by Theorem \ref{thm:compact-subsets-of-metric-spaces-closed}.\\
+The formulas $\widetilde q=q$ on $U$ and $\widetilde q=0$ on $\R^k\setminus L$ agree on their overlap and cover $\R^k$, so $\widetilde q$ is continuous and $\operatorname{supp}\widetilde q\subseteq L$.\\
+Set $K\defeq\operatorname{supp}f$. If $f=0$, the claim is immediate; hence assume $f\neq0$, so $K\neq\emptyset$.\\
+For $\x\in E$, $DT(\x)$ is invertible by Corollary \ref{cor:jacobian-nonzero-iff-derivative-invertible}. Thus $T$ is open by Corollary \ref{cor:local-diffeomorphism-open-map}(i).\\
+For open $O\subseteq E$, $(T^{-1})^{-1}(O)=T(O)$ is open in $T(E)$; hence $T^{-1}:T(E)\to E$ is continuous.\\
+Set $L\defeq T^{-1}(K)$. Then $L$ is compact by Theorem \ref{thm:continuous-image-compact}.\\
+Set $\rho(\x)\defeq f(T(\x))\abs{J_T(\x)}$ on $E$. Then $\rho\in C(E)$ and $\rho=0$ on $E\setminus L$.\\
+Its zero extension belongs to $C_c(\R^k,\R)$ by the extension fact.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Model maps}: For a $C^1$ diffeomorphism $S:U\to V$ between open subsets of $\R^k$, set $\mathcal H_V\defeq\{h\in C_c(\R^k,\R):\operatorname{supp}h\subseteq V\}$.\\
+For $h\in\mathcal H_V$, let $R_{S,h}$ be the zero extension of $\x\mapsto h(S(\x))\abs{J_S(\x)}$ from $U$.\\
+Then $R_{S,h}\in C_c(\R^k,\R)$ by the extension fact and Theorem \ref{thm:continuous-image-compact} for $S^{-1}$.\\
+Let $\mathscr D$ consist of the maps $S$ satisfying $(\forall\,h\in\mathcal H_V)\,\int_{\R^k}h=\int_{\R^k}R_{S,h}$.\\
+Let $(\forall\,j\in J_k)\,a_j<b_j$, set $U\defeq\prod\limits_{j=1}^{k}(a_j,b_j)$, and let $G:U\to G(U)$ be a primitive $C^1$ diffeomorphism in coordinate $m$.\\
+Write $G(\x)=\x+(g(\x)-x_m)\mathbf e_m$. The test function $h=0$ satisfies the formula; fix nonzero $h\in\mathcal H_{G(U)}$.\\
+The set $M\defeq G^{-1}(\operatorname{supp}h)$ is compact by Theorem \ref{thm:continuous-image-compact}.\\
+Choose $(c_j,d_j)_{j\in J_k}$ with $(\forall\,j\in J_k)\,a_j<c_j<d_j<b_j$ and $M\subseteq\operatorname{int}I$ by compactness of $M$, where $I\defeq\prod\limits_{j=1}^{k}[c_j,d_j]$.\\
+Set $I'\defeq\prod\limits_{j\in J_k\setminus\{m\}}[c_j,d_j]$, and write $(\z,t)$ for the point whose $m$th coordinate is $t$.\\
+Choose $A<B$ containing the $m$th-coordinate projection of $\operatorname{supp}h$.\\
+The derivative $DG(\x)$ is invertible by Theorem \ref{thm:chain-rule-several-variables}(ii) applied to $G^{-1}\circ G$.\\
+Thus $(\forall\,\x\in U)\,(D_mg)(\x)=J_G(\x)\neq0$ by Proposition \ref{prop:primitive-mapping-derivative-jacobian}(ii) and Corollary \ref{cor:jacobian-nonzero-iff-derivative-invertible}.\\
+For fixed $\z\in I'$, the active-coordinate map $g_\z:t\mapsto g(\z,t)$ is strictly monotone by Theorem \ref{thm:derivatives-have-intermediate-value-property} and Corollary \ref{cor:mean-value-theorem}.\\
+Set $A_\z\defeq\int_A^Bh(\z,y_m)\,dy_m$ and $B_\z\defeq\int_{c_m}^{d_m}h(G(\z,t))\abs{(D_mg)(\z,t)}\,dt$.\\
+If $g_\z$ is increasing, then $A_\z=B_\z$ by Theorem \ref{thm:riemann-stieltjes-change-of-variable}(v) and interval additivity.\\
+If $g_\z$ is decreasing, then $A_\z=B_\z$ by the same theorem, interval additivity, and the reflected-partition bijection $t\mapsto c_m+d_m-t$.\\
+Set $H_m\defeq[A,B]$, $H_j\defeq[c_j,d_j]$ for $j\neq m$, and $H\defeq\prod\limits_{j=1}^{k}H_j$.\\
+Then $\operatorname{supp}h\subseteq H$ and $\operatorname{supp}R_{G,h}\subseteq I$ by the definitions of $M,A,B$ and primitivity of $G$.\\
+Integration over $I'$ proves $G\in\mathscr D$ by Theorem \ref{thm:iterated-integrals-order-independent} and Proposition \ref{prop:support-and-simplex-integrals-well-defined}(i).\\
+Every flip belongs to $\mathscr D$ by Theorem \ref{thm:linear-map-volume-scaling-determinant} and Theorem \ref{thm:determinant-basic-laws}(i),(iii),(ix).\\
+Every coordinate translation belongs to $\mathscr D$ by the same slice argument with $g(\x)=x_m+c$.
+\item \hlt{Restrictions and composition}: If $S:U\to V$ belongs to $\mathscr D$ and $U_0\subseteq U$ is open, then $S|_{U_0}:U_0\to S(U_0)$ belongs to $\mathscr D$.\\
+Indeed, a test function supported in $S(U_0)$ pulls back to a function supported in $U_0$, so the formula for $S$ is the formula for $S|_{U_0}$.\\
+Let $Q:U\to V$ and $P:W\to Z$ belong to $\mathscr D$, with $V\subseteq W$. Fix $h\in C_c(\R^k,\R)$ with $\operatorname{supp}h\subseteq P(V)$.\\
+On $W$, set $q(\z)\defeq h(P(\z))\abs{J_P(\z)}$. Its support is a compact subset of $V$ by Theorem \ref{thm:continuous-image-compact} for $P^{-1}$.\\
+Thus the zero extension of $q$ belongs to $C_c(\R^k,\R)$ by the extension fact.\\
+On $U$, set $r(\x)\defeq q(Q(\x))\abs{J_Q(\x)}$. Then $\int_{\R^k}h=\int_{\R^k}q=\int_{\R^k}r$ by $P,Q\in\mathscr D$.\\
+The identity $J_{P\circ Q}=(J_P\circ Q)J_Q$ holds by Theorem \ref{thm:chain-rule-several-variables}(ii) and Theorem \ref{thm:determinant-basic-laws}(vi).\\
+Hence $P\circ Q:U\to P(V)$ belongs to $\mathscr D$.
+\item \hlt{Localization}: Fix $\a\in E$, set $E_\a\defeq\{\h\in\R^k:\a+\h\in E\}$, and define $\F_\a:E_\a\to\R^k$ by $\F_\a(\h)\defeq T(\a+\h)-T(\a)$.\\
+Then $\F_\a(\ze)=\ze$ and $D\F_\a(\ze)=DT(\a)$ is invertible. Choose a primitive-and-flip factorization of $\F_\a$ near $\ze$ by Theorem \ref{thm:local-decomposition-primitive-mappings}.\\
+For each primitive factor, choose an open box about $\ze$ on which it is a $C^1$ diffeomorphism by Theorem \ref{thm:inverse-function-theorem-rn}(i),(iii).\\
+By continuity and finite shrinking, choose an open box $B_\a\ni\ze$ whose successive images lie in these factor boxes.\\
+The relations $\F_\a|_{B_\a}\in\mathscr D$ and $\tau_\c\in\mathscr D$ for $\c\in\R^k$ hold by Parts (i)--(ii), where $\tau_\c(\x)\defeq\x+\c$.\\
+Set $U_\a\defeq\a+B_\a$. Then $T|_{U_\a}=\tau_{T(\a)}\circ\F_\a\circ\tau_{-\a}\in\mathscr D$ by Part (ii).\\
+Each $T(U_\a)$ is open by Corollary \ref{cor:local-diffeomorphism-open-map}(i), and $(T(U_\a))_{\a\in E}$ covers $K$.
+\item \hlt{Globalization}: Choose $\psi_1,\ldots,\psi_s$ with $f=\sum\limits_{i=1}^{s}\psi_i f$ by Theorem \ref{thm:partition-of-unity-rudin}(iv).\\
+For $i\in J_s$, choose $\a_i\in E$ such that $\operatorname{supp}(\psi_i f)\subseteq T(U_{\a_i})$ by Part (v) of the same theorem, and set $h_i\defeq\psi_i f$.\\
+Then $\int_{\R^k}h_i(\y)\,d\y=\int_{\R^k}h_i(T(\x))\abs{J_T(\x)}\,d\x$ by $T|_{U_{\a_i}}\in\mathscr D$.\\
+Summation proves the claim by $f=\sum\limits_{i=1}^{s}h_i$ and the zero extension of $\rho$.
+\end{enumerate}
+\hlt{Structural Commentary}: Primitive slice substitutions compose locally; compact support permits finite globalization.\\
+\hlt{Key Insight}: The absolute Jacobian is forced one active coordinate at a time, then preserved by composition.
 \end{proof}
 \end{theorem}
 
-\begin{method} \label{meth:change-of-variables-jacobian} \hlt{Change-of-Variables Jacobian Method}\\
-For a differentiable map $\sigma:\Omega\subseteq\mathbb{R}^n\to\mathbb{R}^n$:
+\begin{computationmethod} \label{meth:change-of-variables-jacobian} \hlt{Change-of-Variables Jacobian Method}\\
+Fix $n\in\N$. Let $\Omega\subseteq\R^n$ be open and let $\sigma:\Omega\to\R^n$ be one-to-one and $C^1$.\\
+Assume $(\forall\,\x\in\Omega)\,\det D\sigma(\x)\neq0$.\\
+For continuous $f$ with compact support in $\sigma(\Omega)$, the procedure rewrites the $\y$-integral as an integral over $\x\in\Omega$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item compute the derivative matrix $D\sigma(\mathbf{x})$;
-\item compute the local volume factor $\abs{\det D\sigma(\mathbf{x})}$;
-\item replace $d\mathbf{y}$ by $\abs{\det D\sigma(\mathbf{x})}\,d\mathbf{x}$ when $\mathbf{y}=\sigma(\mathbf{x})$;
-\item transform the domain bounds in the new coordinates.
+\item Compute $D\sigma(\x)$ and $J_\sigma(\x)=\det D\sigma(\x)$.
+\item Substitute $\y=\sigma(\x)$ in the integrand, producing $f(\sigma(\x))$.
+\item Multiply by the local volume factor $\abs{J_\sigma(\x)}$.
+\item Express $\sigma^{-1}(\operatorname{supp}f)$ and the integration bounds in the $\x$-coordinates.
+\item Verify that the transformed integrand has compact support in $\Omega$.\\
+Then $\int_{\R^n}f(\y)\,d\y=\int_{\R^n}f(\sigma(\x))\abs{J_\sigma(\x)}\,d\x$ by Theorem \ref{thm:change-of-variables-rk}.
 \end{enumerate}
-\end{method}
+\end{computationmethod}
 
 \begin{example} \label{ex:polar-and-spherical-jacobians} \hlt{Polar and Spherical Jacobian Factors}\\
-For polar coordinates $\sigma(r,\theta)=(r\cos\theta,r\sin\theta)$, $D\sigma(r,\theta)=
-\begin{bmatrix}
-\cos\theta & -r\sin\theta\\
-\sin\theta & r\cos\theta
-\end{bmatrix}$, and $\abs{\det D\sigma(r,\theta)}=r$.\\
-Thus area integrals acquire the factor $r\,dr\,d\theta$.\\
-For spherical coordinates $\sigma(\rho,\varphi,\theta) =(\rho\sin\varphi\cos\theta,\rho\sin\varphi\sin\theta,\rho\cos\varphi)$, and $\abs{\det D\sigma(\rho,\varphi,\theta)}=\rho^2\sin\varphi$.\\
-Thus volume integrals acquire the factor $\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$.
+On $(0,\infty)\times(0,2\pi)$, set $\sigma_{\mathrm p}(r,\theta)\defeq(r\cos\theta,r\sin\theta)$.\\
+Then $D\sigma_{\mathrm p}(r,\theta)=\left(\begin{smallmatrix}\cos\theta&-r\sin\theta\\\sin\theta&r\cos\theta\end{smallmatrix}\right)$ and $\abs{\det D\sigma_{\mathrm p}(r,\theta)}=r$.\\
+Thus $d\x=r\,dr\,d\theta$ on this coordinate patch by Theorem \ref{thm:change-of-variables-rk}.\\
+Use the spherical patch $(0,\infty)\times(0,\pi)\times(0,2\pi)$.\\
+Set $\sigma_{\mathrm s}(\rho,\varphi,\theta)\defeq(\rho\sin\varphi\cos\theta,\rho\sin\varphi\sin\theta,\rho\cos\varphi)$.\\
+The identity $\det D\sigma_{\mathrm s}(\rho,\varphi,\theta)=\rho^2\sin\varphi>0$ holds by direct differentiation.\\
+Hence $d\x=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$ by Theorem \ref{thm:change-of-variables-rk}.
 \end{example}
 
-\begin{method} \label{meth:multiple-integration-proof-patterns-source-todo}\label{meth:multiple-integration-proof-patterns} \hlt{Multiple-Integration Proof Patterns}\\
-For a multiple-integration identity:
+\begin{proofmethod} \label{meth:multiple-integration-proof-patterns} \hlt{Multiple-Integration Proof Patterns}\\
+For a multiple-integration identity, select the reduction matching the obstruction and close the resulting equality.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item \hlt{Products}: prove product cases, then pass by uniform approximation;
-\item \hlt{Grids}: compare product-grid upper and lower sums with one-variable slice sums;
-\item \hlt{Support}: enclose compact support in a cell and check cell-independence;
-\item \hlt{Local form}: reduce $C^1$ coordinate changes to primitive maps and flips;
-\item \hlt{Determinants}: use multiplicativity and Theorem \ref{thm:determinant-basic-laws};
-\item \hlt{Globalize}: apply the partition of unity, Theorem \ref{thm:partition-of-unity-rudin}.
+\item \hlt{Order swaps}: Reduce an integration-order permutation to adjacent swaps.\\
+Equality follows by Theorem \ref{thm:iterated-integrals-order-independent}.
+\item \hlt{Grid squeeze}: Compare the slice sums with one product-grid lower and upper sum.\\
+Slice integrability and equality then follow by Theorem \ref{thm:fubini-riemann-rectangle-slices}(i)--(ii).
+\item \hlt{Compact support}: Enclose the support in a cell.\\
+Remove the cell choice by Proposition \ref{prop:support-and-simplex-integrals-well-defined}(i).
+\item \hlt{Local form}: A $C^1$ coordinate change factors into primitive maps and flips by Theorem \ref{thm:local-decomposition-primitive-mappings}.
+\item \hlt{Jacobian product}: Combine local factors through $J_{P\circ Q}=(J_P\circ Q)J_Q$.\\
+This identity holds by Theorem \ref{thm:chain-rule-several-variables}(ii) and Theorem \ref{thm:determinant-basic-laws}(vi).
+\item \hlt{Globalization}: Choose the subordinate decomposition by Theorem \ref{thm:partition-of-unity-rudin}(iv)--(v).\\
+Apply the local identity to the summands and add.
 \end{enumerate}
-\hlt{Key Insight}: Change of variables is local determinant geometry plus compactness.
-\end{method}
+\hlt{Key Insight}: Adjacent swaps control order; primitive factors and compact support control coordinates.
+\end{proofmethod}
