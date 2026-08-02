@@ -4,88 +4,78 @@
 %
 % Inverse function theorem, implicit function theorem, rank theorem, local normal forms.
 
-\begin{theorem} \label{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} \hlt{Finite-Dimensional Linear Maps Are Lipschitz}\\
-Let $A\in\LL(\R^n,\R^m)$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item For all $\x,\y\in\R^n$, $\norm{A\x-A\y}_2\leq\normop{A}\norm{\x-\y}_2$; hence $A$ is $\normop{A}$-Lipschitz.
-\item If $m=n$ and $A$ is invertible, then $\frac{1}{\normop{A^{-1}}}\norm{\x-\y}_2\leq\norm{A\x-A\y}_2\leq\normop{A}\norm{\x-\y}_2$ for all $\x,\y\in\R^n$; hence $A:\R^n\to\R^n$ is a homeomorphism.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Definition \ref{def:operator-norm-rn-rm} gives $\norm{A\z}_2\leq\normop{A}\norm{\z}_2$ for all $\z\in\R^n$; set $\z=\x-\y$.
-\item Apply (i) to $A^{-1}$: $\norm{\x-\y}_2=\norm{A^{-1}(A\x-A\y)}_2\leq\normop{A^{-1}}\norm{A\x-A\y}_2$.\\
-This gives the lower bound; the upper bound is (i). Hence $A$ and $A^{-1}$ are continuous.
-\end{enumerate}
-\hlt{Structural Commentary}: $A^{-1}$ converts upper control into lower control.\\
-\hlt{Key Insight}: Invertible linear maps are bi-Lipschitz.
-\end{proof}
-\end{theorem}
-
-\begin{theorem} \label{thm:invertible-operators-open-and-inversion-continuous} \hlt{Invertible Operators Form an Open Set}\\
-Let $\Omega$ be the set of invertible operators in $\LL(\R^n)$.
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item If $A\in\Omega$, $B\in\LL(\R^n)$, and $\normop{B-A}\,\normop{A^{-1}}<1$, then $B\in\Omega$.
-\item $\Omega$ is open in $\LL(\R^n)$.
-\item The inversion map $\iota:\Omega\to\Omega$, $\iota(A)=A^{-1}$, is continuous.
-\end{enumerate}
-\begin{proof}
-\begin{enumerate}[label=(\roman*)]
-\setlength{\itemsep}{0pt}
-\item Put $\alpha\defeq1/\normop{A^{-1}}$ and $\beta\defeq\normop{B-A}<\alpha$.\\
-For every $\x\in\R^n$, $\alpha\norm{\x}_2\leq\norm{A\x}_2\leq\beta\norm{\x}_2+\norm{B\x}_2$, hence $(\alpha-\beta)\norm{\x}_2\leq\norm{B\x}_2$.\\
-Thus $\ker B=\{\ze\}$, so $B\in\Omega$ by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}; setting $\x=B^{-1}\y$ gives $\normop{B^{-1}}\leq(\alpha-\beta)^{-1}$.
-\item For $A\in\Omega$, the ball $\{B:\normop{B-A}<1/\normop{A^{-1}}\}$ lies in $\Omega$ by (i); hence $\Omega$ is open.
-\item If $B\to A\in\Omega$, then eventually $\beta<\alpha/2$, so $B\in\Omega$ and $\normop{B^{-1}}\leq(\alpha-\beta)^{-1}\leq2/\alpha$.\\
-Since $B^{-1}-A^{-1}=B^{-1}(A-B)A^{-1}$, $\normop{B^{-1}-A^{-1}}\leq(2/\alpha)\normop{B-A}\normop{A^{-1}}\to0$.
-\end{enumerate}
-\hlt{Structural Commentary}: Perturbations below the lower stretch stay invertible.\\
-\hlt{Key Insight}: $B^{-1}-A^{-1}$ factors through $A-B$.
-\end{proof}
-\end{theorem}
-
 \begin{perspective} \label{per:linear-inverse-lower-bound} \hlt{Linear Inverse Estimate}\\
-For invertible $A\in\LL(\R^n)$, Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms} gives $c\norm{\h}_2\leq\norm{A\h}_2\leq\normop{A}\norm{\h}_2$; and $c\defeq\frac{1}{\normop{A^{-1}}}$.\\
-The inverse function theorem preserves this lower stretch under small derivative changes.
+Let $A\in\LL(\R^n)$ be invertible, and set $c\defeq\frac{1}{\normop{A^{-1}}}>0$. Then $(\forall\,\h\in\R^n)\,c\norm{\h}_2\leq\norm{A\h}_2\leq\normop{A}\norm{\h}_2$ by Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}(ii).\\
+The inverse function theorem retains this lower stretch when the derivative varies little.
 \end{perspective}
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:linear-isomorphism-conorm} depicts the bound: $A(S^{n-1})\cap B_c(\ze)=\varnothing$.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/linear_isomorphism_conorm.tikz}
-  \caption{Invertibility keeps $A(S^{n-1})$ a positive distance from $0$.}
+  \caption{The image $A(S^{n-1})$ stays outside $B_c(\ze)$, where $c=\frac{1}{\normop{A^{-1}}}$.}
   \label{fig:linear-isomorphism-conorm}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:inverse-function-theorem-rn} \hlt{Inverse Function Theorem}\\
-Let $E\subseteq\R^n$ be open, let $\f:E\to\R^n$ be $C^1$, let $\a\in E$, put $\b\defeq\f(\a)$, and assume $A\defeq D\f(\a)$ is invertible. Then there exist open neighborhoods $U$ of $\a$ and $V$ of $\b$ such that:
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^n$ be $C^1$, $\a\in E$, $\b\defeq\f(\a)$. Assume $A\defeq D\f(\a)$ is invertible.\\
+Then open neighborhoods $U\ni\a$ and $V\ni\b$ can be chosen so that:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\f|_U:U\to V$ is bijective; write $\g\defeq(\f|_U)^{-1}:V\to U$.
-\item $\g$ is differentiable on $V$ and $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$ for all $\y\in V$.
-\item $\g\in C^1(V,\R^n)$; equivalently, $\f|_U$ is a $C^1$ diffeomorphism.
+\item The restriction $\f|_U:U\to V$ is bijective; write $\g\defeq(\f|_U)^{-1}:V\to U$.
+\item The map $\g$ is differentiable on $V$, and $(\forall\,\y\in V)\,D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$.
+\item The map $\g$ is $C^1$ on $V$; equivalently, $\f|_U$ is a $C^1$ diffeomorphism.
 \end{enumerate}
-\begin{proof} Choose $0<\theta<1$ and $r>0$ so that $\overline{B}_r(\a)\subset E$ and $\normop{I-A^{-1}D\f(\x)}\leq\theta$ on $\overline{B}_r(\a)$.\\
-Let $V\defeq\{\y:\norm{A^{-1}(\y-\b)}_2<(1-\theta)r\}$.
+\begin{proof}
+Fix $\theta\in(0,1)$, $r>0$ with $\overline{B}_{2r}(\a)\subseteq E$ by openness.\\
+After shrinking $r$, $(\forall\,\x\in\overline{B}_{2r}(\a))\,\normop{I-A^{-1}D\f(\x)}\leq\theta$ by continuity of $D\f$ at $\a$. Set $V\defeq\{\y\in\R^n:\norm{A^{-1}(\y-\b)}_2<(1-\theta)r\}$.\\
+The set $V$ is an open neighborhood of $\b$ by continuity of the Euclidean norm and Theorem \ref{thm:finite-dimensional-linear-maps-lipschitz-homeomorphisms}(i).\\
+For $\x\in E$, set $\mathbf R_{\x}(\h)\defeq\f(\x+\h)-\f(\x)-D\f(\x)\h$. Then $\norm{\mathbf R_{\x}(\h)}_2=o(\norm{\h}_2)$ by Definition \ref{def:total-derivative-rn-rm}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $\y\in V$, set $\varphi_{\y}(\x)\defeq\x+A^{-1}(\y-\f(\x))$. Theorem \ref{thm:bounded-derivative-convex-mean-value} gives $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf{z})}_2\leq\theta\norm{\x-\mathbf{z}}_2$ on $\overline{B}_r(\a)$, and $\norm{\varphi_{\y}(\x)-\a}_2\leq\theta r+\norm{A^{-1}(\y-\b)}_2<r$. Since $\overline{B}_r(\a)$ is complete, Theorem \ref{thm:contraction-principle} gives a unique fixed point $\x\in\overline{B}_r(\a)$, equivalently $\f(\x)=\y$. With $U\defeq B_r(\a)\cap\f^{-1}(V)$, $\f|_U:U\to V$ is bijective.
-\item Let $\y=\f(\x)$ and $\y+\mathbf{k}=\f(\x+\h)$ lie in $V$. The derivative bound gives $\norm{\h-A^{-1}\mathbf{k}}_2\leq\theta\norm{\h}_2$, hence $\norm{\h}_2\leq C\norm{\mathbf{k}}_2$ locally. Since $\normop{I-A^{-1}D\f(\x)}<1$, $D\f(\x)$ is invertible, and\\
-$\g(\y+\mathbf{k})-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf{k}=-\bigl(D\f(\x)\bigr)^{-1}[\f(\x+\h)-\f(\x)-D\f(\x)\h]$.\\
-Since $\f$ is differentiable at $\x$, division by $\norm{\mathbf{k}}_2$ gives $D\g(\y)=\bigl(D\f(\x)\bigr)^{-1}$.
-\item The estimate in (ii) makes $\g$ continuous. Since $D\g(\y)=\bigl(D\f(\g(\y))\bigr)^{-1}$, continuity of $D\g$ follows from continuity of $D\f$, $\g$, and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}.
+\item Fix $\y\in V$, set $q(\x)\defeq\x-A^{-1}\f(\x)$, and define $\varphi_{\y}(\x)\defeq q(\x)+A^{-1}\y$.\\
+The identity $q(\x+\h)-q(\x)-[I-A^{-1}D\f(\x)]\h=-A^{-1}\mathbf R_{\x}(\h)$ holds by the definition of $q$.\\
+Moreover, $\norm{A^{-1}\mathbf R_{\x}(\h)}_2\leq\normop{A^{-1}}\norm{\mathbf R_{\x}(\h)}_2=o(\norm{\h}_2)$. Thus $Dq(\x)=I-A^{-1}D\f(\x)$ by Definition \ref{def:total-derivative-rn-rm}.\\
+For $\x,\mathbf z\in\overline{B}_r(\a)$, $\norm{\varphi_{\y}(\x)-\varphi_{\y}(\mathbf z)}_2\leq\theta\norm{\x-\mathbf z}_2$ by Theorem \ref{thm:bounded-derivative-convex-mean-value} on $B_{2r}(\a)$.\\
+Since $\varphi_{\y}(\a)=\a+A^{-1}(\y-\b)$, $(\forall\,\x\in\overline{B}_r(\a))\,\norm{\varphi_{\y}(\x)-\a}_2<r$ by the preceding bound and the definition of $V$.\\
+Thus $\varphi_{\y}:\overline{B}_r(\a)\to\overline{B}_r(\a)$ is a contraction. Every Cauchy sequence in closed ball converges in $\R^n$ by Corollary \ref{cor:euclidean-cauchy-convergence}.\\
+Its limit remains in the ball by continuity of the Euclidean norm, so $\overline{B}_r(\a)$ is complete.\\
+Fix the unique point $\x_{\y}\in\overline{B}_r(\a)$ satisfying $\varphi_{\y}(\x_{\y})=\x_{\y}$ by Theorem \ref{thm:contraction-principle}.\\
+Then $\x_{\y}\in B_r(\a)$ and $\f(\x_{\y})=\y$ by the self-map estimate and the fixed-point identity.\\
+The map $\f$ is continuous on $E$ by Theorem \ref{thm:total-derivative-unique-and-continuous}(ii). Set $U\defeq B_r(\a)\cap\f^{-1}(V)$; it is open, and $\a\in U$ because $\b\in V$.\\
+Every $\y\in V$ has the preimage $\x_{\y}\in U$, and any two preimages in $U$ are fixed points of $\varphi_{\y}$.\\
+Hence $\f|_U:U\to V$ is bijective by fixed-point uniqueness.
+\item Fix $\y\in V$ and $\mathbf k\in\R^n$ with $\y+\mathbf k\in V$. Set $\x\defeq\g(\y)$ and $\h\defeq\g(\y+\mathbf k)-\x$; then $\x,\x+\h\in U\subseteq B_r(\a)$.\\
+Bound $\norm{\h-A^{-1}\mathbf k}_2\leq\theta\norm{\h}_2$ holds by Theorem \ref{thm:bounded-derivative-convex-mean-value} for $q$ on $B_{2r}(\a)$. Hence $(1-\theta)\norm{\h}_2\leq\normop{A^{-1}}\norm{\mathbf k}_2$, so $\h\to\ze$ as $\mathbf k\to\ze$.\\
+The operator $A^{-1}D\f(\x)$ is invertible by Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}(i), since $\normop{A^{-1}D\f(\x)-I}\leq\theta<1$.\\
+Hence $D\f(\x)$ is invertible. Then $\g(\y+\mathbf k)-\g(\y)-\bigl(D\f(\x)\bigr)^{-1}\mathbf k=-\bigl(D\f(\x)\bigr)^{-1}\mathbf R_{\x}(\h)$ by $\f(\x+\h)-\f(\x)=\mathbf k$.\\
+Right-hand side is $o(\norm{\mathbf k}_2)$ by Definition \ref{def:total-derivative-rn-rm}, preceding bound on $\h$; $D\g(\y)=\bigl(D\f(\x)\bigr)^{-1}=\bigl(D\f(\g(\y))\bigr)^{-1}$ by Definition \ref{def:total-derivative-rn-rm}.
+\item The map $\g$ is $\frac{\normop{A^{-1}}}{1-\theta}$-Lipschitz by the displacement bound in part (ii). Hence $\g$ is continuous by Proposition \ref{prop:lipschitz-implies-uniform-continuity}.\\
+Let $\iota(B)\defeq B^{-1}$ on the open set of invertible operators. The identity $D\g=\iota\circ D\f\circ\g$ holds by part (ii).\\
+This composition is continuous by continuity of $D\f$ and $\g$ and Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}(iii); $\g$ is $C^1$ by Definition \ref{def:c1-map}.\\
+The restriction $\f|_U$ and its inverse $\g$ are $C^1$, so $\f|_U$ is a $C^1$ diffeomorphism by definition.
 \end{enumerate}
-\hlt{Structural Commentary}: $A^{-1}$ turns solving $\f(\x)=\y$ into a contraction.\\
-\hlt{Key Insight}: Small derivative variation preserves invertibility locally.
+\hlt{Structural Commentary}: Contraction constructs inverse values; the same bound controls inverse remainders.\\
+\hlt{Key Insight}: Closeness of $A^{-1}D\f$ to $I$ controls local injectivity and $D\g$.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:local-diffeomorphism-open-map} \hlt{Local Diffeomorphisms Are Open}\\
-If $\f:E\subseteq\R^n\to\R^n$ is $C^1$ and $D\f$ is everywhere invertible, then $\f$ is an open map (locally one-to-one).
+Let $E\subseteq\R^n$ be open, $\f:E\to\R^n$ be $C^1$. Suppose $(\forall\,\x\in E)\,D\f(\x)$ is invertible.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item The map $\f$ is open.
+\item The map $\f$ is locally one-to-one.
+\end{enumerate}
 \begin{proof}
-Let $W\subseteq E$ be open and let $\y\in\f(W)$. Choose $\x\in W$ with $\f(\x)=\y$. Applying Theorem \ref{thm:inverse-function-theorem-rn} to $\f|_W$ at $\x$ gives open neighborhoods $U\subseteq W$ of $\x$ and $V$ of $\y$ with $\f(U)=V$. Hence $V\subseteq\f(W)$, so $\y$ is interior to $\f(W)$. Since $\y$ was arbitrary, $\f(W)$ is open. Local one-to-one-ness is the same theorem applied pointwise.\\
-\hlt{Structural Commentary}: Openness is checked one image point at a time.\\
-\hlt{Key Insight}: A local inverse turns nearby domain points into a full image neighborhood.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $W\subseteq E$ be open, fix $\y\in\f(W)$, and choose $\x\in W$ with $\f(\x)=\y$.\\
+Open neighborhoods $U\subseteq W$ of $\x$ and $V$ of $\y$ with $\f(U)=V$ exist by Theorem \ref{thm:inverse-function-theorem-rn}(i) for $\f|_W$.\\
+Thus $V\subseteq\f(W)$, so $\y$ is an interior point of $\f(W)$. Hence $\f(W)$ is open because $\y\in\f(W)$ was arbitrary.
+\item Fix $\x\in E$; an open neighborhood $U\ni\x$ on which $\f|_U$ is one-to-one exists by Theorem \ref{thm:inverse-function-theorem-rn}(i).
+\end{enumerate}
+\hlt{Structural Commentary}: Image neighborhoods prove openness; inverse charts prove local injectivity.\\
+\hlt{Key Insight}: An invertible derivative creates an open, one-to-one chart around every point.
 \end{proof}
 \end{corollary}
