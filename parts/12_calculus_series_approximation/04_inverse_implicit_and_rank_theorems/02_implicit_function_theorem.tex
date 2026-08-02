@@ -2,48 +2,64 @@
 
 \begin{definition} \label{def:implicit-derivative-blocks} \hlt{Block Splitting of a Linear Map}\\
 For $A\in\LL(\R^{n+m},\R^n)$ and $(\h,\mathbf{k})\in\R^n\times\R^m$, define $A_x\h\defeq A(\h,\ze)$ and $A_y\mathbf{k}\defeq A(\ze,\mathbf{k})$.\\
-Then $A_x\in\LL(\R^n)$, $A_y\in\LL(\R^m,\R^n)$, and $A(\h,\mathbf{k})=A_x\h+A_y\mathbf{k}$.
+Then $A_x\in\LL(\R^n)$, $A_y\in\LL(\R^m,\R^n)$, and $(\forall\,(\h,\mathbf{k})\in\R^n\times\R^m)\,A(\h,\mathbf{k})=A_x\h+A_y\mathbf{k}$.\\
+If $E\subseteq\R^{n+m}$ is open and $\f:E\to\R^n$ is differentiable at $(\x,\y)\in E$, write $D_1\f(\x,\y)\defeq(D\f(\x,\y))_x$ and $D_2\f(\x,\y)\defeq(D\f(\x,\y))_y$.
 \end{definition}
 
 \begin{theorem} \label{thm:linear-implicit-function-theorem} \hlt{Linear Implicit Function Theorem}\\
-If $A\in\LL(\R^{n+m},\R^n)$, $A_x$ invertible, then $\forall \mathbf{k}\in\R^m$ $\exists$ unique $\h\in\R^n$ s.t. $A(\h,\mathbf{k})=0$, that $\h=-(A_x)^{-1}A_y\mathbf{k}$.
+Let $A\in\LL(\R^{n+m},\R^n)$, $A_x$ is invertible. Then $(\forall\,\mathbf{k}\in\R^m)(\exists!\,\h\in\R^n)\,A(\h,\mathbf{k})=\ze$, and this solution is $\h=-(A_x)^{-1}A_y\mathbf{k}$.
 \begin{proof}
-Fix $\mathbf{k}\in\R^m$ and set $\h_0\defeq-(A_x)^{-1}A_y\mathbf{k}$.\\
-By Definition \ref{def:implicit-derivative-blocks}, $A(\h_0,\mathbf{k}) =A_x\h_0+A_y\mathbf{k} =-A_y\mathbf{k}+A_y\mathbf{k} =0$, so a solution exists.\\
-If $\h\in\R^n$ also satisfies $A(\h,\mathbf{k})=0$, then $A_x\h+A_y\mathbf{k}=0$, hence $A_x\h=-A_y\mathbf{k}$.\\
-Applying $(A_x)^{-1}$ gives $\h=-(A_x)^{-1}A_y\mathbf{k}=\h_0$. Thus the solution exists and is unique.\\
+Fix $\mathbf{k}\in\R^m$, $\h_0\defeq-(A_x)^{-1}A_y\mathbf{k}$. By Definition \ref{def:implicit-derivative-blocks}, $A(\h_0,\mathbf{k})=A_x\h_0+A_y\mathbf{k}=-A_y\mathbf{k}+A_y\mathbf{k}=\ze$, so a solution exists.\\
+If $\h\in\R^n$ also satisfies $A(\h,\mathbf{k})=\ze$, then $A_x\h+A_y\mathbf{k}=\ze$, $\h=-(A_x)^{-1}A_y\mathbf{k}=\h_0$; solution exists and is unique.\\
 \hlt{Structural Commentary}: Splitting $A$ separates the unknown variable from the parameter.\\
-\hlt{Key Insight}: Invertibility of $A_x$ turns constraint $A(\h,\mathbf{k})=0$ into a uniquely solvable linear equation for $\h$.
+\hlt{Key Insight}: Invertibility of $A_x$ turns the constraint $A(\h,\mathbf{k})=\ze$ into a uniquely solvable linear equation for $\h$.
 \end{proof}
 \end{theorem}
 
-The implicit theorem below is the nonlinear counterpart of the block equation theorem. The invertible block is the set of variables one can solve for, just as in Theorem \ref{thm:linear-implicit-function-theorem}.
+The implicit theorem below is the nonlinear counterpart of the block equation theorem.\\
+The invertible block is the set of variables one can solve for, just as in Theorem \ref{thm:linear-implicit-function-theorem}.
 
-\begin{figure}[H]
+\noindent Figure \ref{fig:implicit-locus-as-graph} depicts the local graph form: writing the solved variable as $\x=\g(\y)$ and marking the parameter value $\b$, the zero locus is parameterized by $\y\mapsto(\g(\y),\y)$ near $(\g(\b),\b)$.
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/implicit_locus_as_graph.tikz}
-  \caption{Near a regular point, the zero locus is the graph of an implicit function.}
+  \caption{Inside the shaded product neighborhood, the blue zero locus is the graph $\x=\g(\y)$ over the parameter neighborhood.}
   \label{fig:implicit-locus-as-graph}
-\end{figure}
+\end{illustrationfigure}
 
 \begin{theorem} \label{thm:implicit-function-theorem-rn-rm} \hlt{Implicit Function Theorem}\\
-Let $E\subseteq\R^{n+m}$ be open, $\f\in C^1(E,\R^n)$, $(\a,\b)\in E$, and $\f(\a,\b)=\ze$.\\
-Put $A\defeq D\f(\a,\b)$ and write $A(\h,\mathbf{k})=A_x\h+A_y\mathbf{k}$; assume $A_x$ is invertible.\\
-Then there exist open neighborhoods $U$ of $\a$ and $V$ of $\b$, and a unique map $\g:V\to U$, such that:
+Let $E\subseteq\R^{n+m}$ be open, $\f\in C^1(E,\R^n)$, and $(\a,\b)\in E$ satisfy $\f(\a,\b)=\ze$.\\
+If $D_1\f(\a,\b)$ is invertible, open neighborhoods $U\ni\a$ in $\R^n$ and $V\ni\b$ in $\R^m$ and a map $\g:V\to U$ can be chosen such that:
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $\{(\x,\y)\in U\times V:\f(\x,\y)=\ze\}=\{(\g(\y),\y):\y\in V\}$ and $\g(\b)=\a$.
-\item $\g\in C^1(V,\R^n)$ and $D\g(\y)=-\bigl(D_1\f(\g(\y),\y)\bigr)^{-1}D_2\f(\g(\y),\y)$ for $\y\in V$; in particular, $D\g(\b)=-(A_x)^{-1}A_y$.
+\item $\{(\x,\y)\in U\times V:\f(\x,\y)=\ze\}=\{(\g(\y),\y):\y\in V\}$.\\
+The equality $\g(\b)=\a$ holds, and $\g$ is the unique map $V\to U$ whose graph equals this zero set.
+\item $\g\in C^1(V,\R^n)$ and $(\forall\,\y\in V)\,D\g(\y)=-\bigl(D_1\f(\g(\y),\y)\bigr)^{-1}D_2\f(\g(\y),\y)$. At $\y=\b$, $D\g(\b)=-\bigl(D_1\f(\a,\b)\bigr)^{-1}D_2\f(\a,\b)$.
 \end{enumerate}
 \begin{proof}
-Let $\Phi(\x,\y)\defeq(\f(\x,\y),\y)$. Since $D\Phi(\a,\b)(\h,\mathbf{k})=(A_x\h+A_y\mathbf{k},\mathbf{k})$, $\ker D\Phi(\a,\b)=\{\ze\}$; by Theorems \ref{thm:finite-dimensional-operator-invertible-equivalences} and \ref{thm:inverse-function-theorem-rn}, $\Phi:W\to Z$ is a local $C^1$ diffeomorphism. Shrink product neighborhoods $U\times V\subseteq W$ so that $\{\ze\}\times V\subseteq Z$, $\Phi^{-1}(\{\ze\}\times V)\subseteq U\times V$, and $D_1\f$ is invertible on $U\times V$.
+Set $\Phi:E\to\R^{n+m}$ by $\Phi(\x,\y)\defeq(\f(\x,\y),\y)$, and set $A\defeq D\f(\a,\b)$.\\
+Then $\Phi\in C^1(E,\R^{n+m})$ and $(\forall\,(\h,\mathbf{k})\in\R^n\times\R^m)\,D\Phi(\a,\b)(\h,\mathbf{k})=(A_x\h+A_y\mathbf{k},\mathbf{k})$ by Definition \ref{def:implicit-derivative-blocks}.\\
+For $(\h,\mathbf{k})\in\R^n\times\R^m$ satisfying $D\Phi(\a,\b)(\h,\mathbf{k})=\ze$, one has $\mathbf{k}=\ze$ and $A_x\h=\ze$, hence $\h=\ze$ by invertibility of $A_x=D_1\f(\a,\b)$.\\
+Thus $\ker D\Phi(\a,\b)=\{\ze\}$, so $D\Phi(\a,\b)$ is invertible by Theorem \ref{thm:finite-dimensional-operator-invertible-equivalences}.\\
+Open neighborhoods $W\subseteq E$ of $(\a,\b)$, $Z\subseteq\R^{n+m}$ of $(\ze,\b)$ exist such that $\Phi|_W:W\to Z$ is $C^1$ diffeomorphism by Theorem \ref{thm:inverse-function-theorem-rn}.\\
+The map $D_1\f$ is continuous by $\f\in C^1(E,\R^n)$ and Definition \ref{def:implicit-derivative-blocks}; the invertible operators form an open set by Theorem \ref{thm:invertible-operators-open-and-inversion-continuous}(ii).\\
+Hence choose open neighborhoods $U\subseteq\R^n$ of $\a$ and $V_0\subseteq\R^m$ of $\b$ such that $U\times V_0\subseteq W$ and $(\forall\,(\x,\y)\in U\times V_0)\,D_1\f(\x,\y)$ is invertible.\\
+Choose an open neighborhood $V_1\subseteq\R^m$ of $\b$ with $\{\ze\}\times V_1\subseteq Z$ by openness of $Z$. Set $\mathbf q:V_1\to W$ by $\mathbf q(\y)\defeq(\Phi|_W)^{-1}(\ze,\y)$.\\
+Then $\mathbf q\in C^1(V_1,\R^{n+m})$ and $\mathbf q(\b)=(\a,\b)$. By continuity of $\mathbf q$ at $\b$, shrink $V_1$ so that $V_1\subseteq V_0$ and $\mathbf q(V_1)\subseteq U\times V_0$.\\
+Set $V\defeq V_1$, and let $\g:V\to U$ be the first component of $\mathbf q$.\\
+The identity $(\forall\,\y\in V)\,\Phi(\mathbf q(\y))=(\ze,\y)$ implies $(\forall\,\y\in V)\,\mathbf q(\y)=(\g(\y),\y)$; hence $\mathbf q(V)\subseteq U\times V$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Define $\g(\y)$ by $\Phi^{-1}(\ze,\y)=(\g(\y),\y)$. Since $\Phi(\x,\y)=(\ze,\y)$ iff $\f(\x,\y)=\ze$, the zero set in $U\times V$ is exactly the graph of $\g$, and $\g(\b)=\a$.
-\item The map $\g$ is $C^1$ as a component of $\Phi^{-1}(\ze,\y)$.\\
-Differentiating $\f(\g(\y),\y)=\ze$ gives $D_1\f(\g(\y),\y)D\g(\y)+D_2\f(\g(\y),\y)=0$, hence the formula.
+\item For $(\x,\y)\in U\times V$, $\f(\x,\y)=\ze\Longleftrightarrow\Phi(\x,\y)=(\ze,\y)\Longleftrightarrow(\x,\y)=\mathbf q(\y)\Longleftrightarrow\x=\g(\y)$.\\
+The equality $\g(\b)=\a$ follows from $\mathbf q(\b)=(\a,\b)$. If the graph of $\mathbf h:V\to U$ equals the same zero set, then $(\forall\,\y\in V)\,\mathbf h(\y)=\g(\y)$ by the proved equivalence with $\x=\g(\y)$; hence $\mathbf h=\g$.
+\item The map $\g$ is $C^1$ as the first component of $\mathbf q$. Fix $\y\in V$ and set $B\defeq D\f(\g(\y),\y)$.\\
+Since $(\g(\y),\y)\in U\times V$, the block $B_x=D_1\f(\g(\y),\y)$ is invertible.\\
+The identities $(\forall\,\mathbf z\in V)\,\f(\mathbf q(\mathbf z))=\ze$ and $(\forall\,\mathbf{k}\in\R^m)\,D\mathbf q(\y)\mathbf{k}=(D\g(\y)\mathbf{k},\mathbf{k})$ hold by $\Phi(\mathbf q(\mathbf z))=(\ze,\mathbf z)$ and $\mathbf q(\mathbf z)=(\g(\mathbf z),\mathbf z)$.\\
+Hence $(\forall\,\mathbf{k}\in\R^m)\,B_xD\g(\y)\mathbf{k}+B_y\mathbf{k}=\ze$ by Theorem \ref{thm:chain-rule-several-variables} and Definition \ref{def:implicit-derivative-blocks}.\\
+Therefore $D\g(\y)=-(B_x)^{-1}B_y=-\bigl(D_1\f(\g(\y),\y)\bigr)^{-1}D_2\f(\g(\y),\y)$ by Theorem \ref{thm:linear-implicit-function-theorem} for $B$.\\
+At $\y=\b$, this identity becomes $D\g(\b)=-\bigl(D_1\f(\a,\b)\bigr)^{-1}D_2\f(\a,\b)$ by $\g(\b)=\a$.
 \end{enumerate}
-\hlt{Structural Commentary}: Add $\y$ as a coordinate, then invert.\\
-\hlt{Key Insight}: Invertible $D_x\f$ solves locally for $\x$.
+\hlt{Structural Commentary}: Augmenting $\f$ by the parameter coordinate transfers the zero locus to local inversion.\\
+\hlt{Key Insight}: The same invertible $x$-block solves both the graph and its tangent equation.
 \end{proof}
 \end{theorem}
