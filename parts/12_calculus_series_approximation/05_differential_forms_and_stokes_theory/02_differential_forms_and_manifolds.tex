@@ -1,125 +1,183 @@
 \subsection{Differential Forms and Manifolds}
 
-Differential forms package oriented integration on parametrized cells. They use determinant sign and laws (Definition \ref{def:matrix-trace-and-determinant}, Theorems \ref{thm:determinant-basic-laws}, \ref{thm:cauchy-binet-minors}) and change of variables (Theorem \ref{thm:change-of-variables-rk}); conceptually, forms test oriented cells.
+Differential forms package oriented integration on parametrized cells. Definitions \ref{def:symmetric-and-exterior-tensor-spaces} and \ref{def:graded-tensor-symmetric-exterior-algebras} construct their exterior powers.\\
+Proposition \ref{prop:graded-tensor-symmetric-exterior-algebra-laws} supplies the algebraic laws. Definition \ref{def:matrix-trace-and-determinant} fixes determinant signs.\\
+Theorems \ref{thm:determinant-basic-laws}, \ref{thm:cauchy-binet-minors} and \ref{thm:change-of-variables-rk} supply the integration laws.
 
 \begin{perspective} \label{per:differential-forms-as-functionals} \hlt{Forms as Functionals}\\
-The notation $\int f\,dx$ treats $dx$ as directed coordinate variation. Differential forms make this precise: a $1$-form such as $f\,dx+g\,dy$ assigns a number to an oriented path; $dx$ records net $x$-variation, and $f\,dx$ weights it by $f$.
+The notation $\int f\,dx$ treats $dx$ as directed coordinate variation. A $1$-form such as $f\,dx+g\,dy$ assigns a scalar to a tangent direction; its integral assigns a number to an oriented path. The factor $dx$ records signed $x$-variation, and $f\,dx$ weights it by $f$.
 \end{perspective}
 
-\begin{figure}[H]
+Figure \ref{fig:forms-weighted-variation-paths} contrasts oriented paths $C,C'$ from $p$ to $q$. The sign of $y$ changes the contribution of $y\,dx$.
+
+\begin{illustrationfigure}[H]
   \centering
   \input{figures/analysis/forms_weighted_variation_paths.tikz}
   \caption{$y\,dx$ records signed, $y$-weighted $x$-variation.}
   \label{fig:forms-weighted-variation-paths}
-\end{figure}
+\end{illustrationfigure}
 
-\begin{definition} \label{def:forms-manifolds-core-source-todo}\label{def:k-surfaces-and-differential-forms} \hlt{$k$-Surfaces and Differential Forms}\\
-Let $E\subseteq\R^n$ be open.
+\begin{definition} \label{def:k-surfaces-and-differential-forms} \hlt{$k$-Surfaces and Differential Forms}\\
+Fix $n\in\N$, $k\in J_n$. Let $E\subseteq\R^n$ be open; $(dx_1,\ldots,dx_n)$ be dual basis to standard basis of $\R^n$ from Definition \ref{def:dual-basis}.\\
+Regard these covectors as degree-one elements of the exterior algebra in Definition \ref{def:graded-tensor-symmetric-exterior-algebras}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item A compact \hlt{parameter domain} $D\subseteq\R^k$ is a $k$-cell or $Q^k=\{\mathbf{u}\in\R^k:u_i\geq0,\ \sum\limits_i u_i\leq1\}$.\\
-For compact $D$, $C^r(D)$ means extendable as $C^r$ to an open neighborhood of $D$.
+\item A compact \hlt{parameter domain} $D\subseteq\R^k$ is either a nondegenerate $k$-cell $I^k$ or $Q^k$.\\
+These domains are defined in Definitions \ref{def:k-cell-and-multiple-integral} and \ref{def:support-and-compact-support-integral}(ii), respectively.\\
+For $r\in\Z_{\geq0}$, $C^r(D)$ consists of maps extendable as $C^r$ to an open neighborhood of $D$.
 \item A \hlt{$k$-surface} in $E$ is a $C^1$ map $\Phi:D\to E$ from a compact parameter domain $D\subseteq\R^k$.
-\item For $k\geq1$, a \hlt{$k$-form} on $E$ is $\omega=\sum_I a_I(\x)\,dx_{i_1}\wedge\cdots\wedge dx_{i_k}$, where $I=(i_1,\ldots,i_k)$ and $a_I\in C(E,\R)$.
 \item For an increasing $k$-index $I=(i_1<\cdots<i_k)$, set $dx_I\defeq dx_{i_1}\wedge\cdots\wedge dx_{i_k}$.\\
-A \hlt{standard presentation} is $\omega=\sum_I b_I(\x)\,dx_I$, with $I$ increasing.
-\item For a $k$-surface $\Phi:D\to E$, define $\int_{\Phi}\omega\defeq\int_D\sum_I a_I(\Phi(\mathbf{u}))J_I\Phi(\mathbf{u})\,d\mathbf{u}$, where $J_I\Phi\defeq\frac{\partial(x_{i_1},\ldots,x_{i_k})}{\partial(u_1,\ldots,u_k)}$.
-\item A $0$-form is a continuous function on $E$; a form is $C^r$ iff all coefficients $a_I$ are $C^r$.
+A \hlt{$k$-form} on $E$ is a \hlt{standard presentation} $\omega=\sum\limits_I b_I(\x)\,dx_I$ over increasing $k$-indices, where $b_I\in C(E,\R)$.
+\item A $0$-form is a continuous function on $E$. A form is $C^r$ iff every coefficient function in its standard presentation is $C^r$.
 \end{enumerate}
 \end{definition}
 
 \begin{remark} \label{rem:parametrized-cells-not-images} \hlt{Parametrized Cells, Not Just Images}\\
-Parametrizations may fail to be injective or regular. Forms therefore act on parametrized cells, not just images; this matters for orientation, multiplicity, and cancellation.
+Parametrizations may fail to be injective or regular.\\
+Forms therefore act on parametrized cells, not just images; this distinction retains orientation, multiplicity, and cancellation.
 \end{remark}
 
-\begin{proposition} \label{prop:basic-forms-standard-presentation} \hlt{Basic Forms and Standard Presentation}
+\begin{proposition} \label{prop:basic-forms-standard-presentation} \hlt{Basic Forms and Standard Presentation}\\
+Fix $n\in\N$ and $k\in J_n$, and let $E\subseteq\R^n$ be open.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Swapping neighboring factors in $dx_{i_1}\wedge\cdots\wedge dx_{i_k}$ changes sign; repeated indices give $0$.
-\item Every $k$-form has a unique standard presentation.
+\item Swapping neighboring factors in $dx_{i_1}\wedge\cdots\wedge dx_{i_k}$ changes sign. Any repeated index makes the word $0$.
+\item Let $\mathcal A\subseteq J_n^k$ be finite, $(a_A)_{A\in\mathcal A}\subseteq C(E,\R)$. Then $\sum\limits_{A=(a_1,\ldots,a_k)\in\mathcal A}a_A(\x)\,dx_{a_1}\wedge\cdots\wedge dx_{a_k}$ reduces to unique standard presentation.
 \end{enumerate}
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item For $\Phi(\mathbf{u})=(x_{i_1},\ldots,x_{i_k})$, the coefficient of $dx_{i_1}\wedge\cdots\wedge dx_{i_k}$ is the determinant of the corresponding $k\times k$ Jacobian minor. Row swaps change its sign and repeated rows make it $0$.
-\item By (i), each term either vanishes or sorts to an increasing index, giving existence.\\
-For uniqueness, let $\omega=\sum_I b_I(\x)\,dx_I$ be zero in standard presentation.\\
-If $b_J(\mathbf{v})\neq0$ for increasing $J=(j_1,\ldots,j_k)$, choose $D=[-h,h]^k$ so $b_J(\Phi(\mathbf{u}))$ has constant nonzero sign for $\Phi(\mathbf{u})=\mathbf{v}+\sum\limits_{r=1}^{k}u_r\mathbf{e}_{j_r}$. Then the $J$-Jacobian is $1$ and all other standard Jacobians are $0$, so $0=\int_{\Phi}\omega=\int_D b_J(\Phi(\mathbf{u}))\,d\mathbf{u}$, a contradiction. Hence all $b_I=0$.
+\item A word with a repeated factor is $0$ by Definition \ref{def:symmetric-and-exterior-tensor-spaces}(iv),(vi).\\
+For $p\neq q$, bilinearity implies $0=(dx_p+dx_q)\wedge(dx_p+dx_q)=dx_p\wedge dx_q+dx_q\wedge dx_p$.\\
+Exterior multiplication is associative by Proposition \ref{prop:graded-tensor-symmetric-exterior-algebra-laws}(iv),(v). Thus the two-factor identity proves the neighboring-swap rule.
+\item By (i), every word either vanishes or sorts to an increasing word with the sign of its sorting permutation.\\
+The increasing words form a basis of $\bigwedge^k((\R^n)')$ by Theorem \ref{thm:symmetric-exterior-dimensions}(ii)(a). Hence the resulting coefficients are unique.
 \end{enumerate}
-\hlt{Structural Commentary}: Wedge signs are determinant signs.\\
-\hlt{Key Insight}: Standard form sorts indices once.
+\hlt{Structural Commentary}: Exterior-algebra relations reduce arbitrary coordinate words to ordered basis words.\\
+\hlt{Key Insight}: Antisymmetry converts every nonzero coordinate word to one increasing basis word.
 \end{proof}
 \end{proposition}
 
+\begin{definition} \label{def:integration-of-differential-form} \hlt{Integration of a Differential Form}\\
+Fix $n\in\N$, $k\in J_n$. Let $E\subseteq\R^n$ be open; $\Phi=(\Phi_1,\ldots,\Phi_n):D\to E$ be $C^1$ $k$-surface.\\
+Let $\omega=\sum\limits_I b_I(\x)\,dx_I$ be a $k$-form in standard presentation.\\
+For an increasing $k$-index $I=(i_1,\ldots,i_k)$, set $J_I\Phi(\mathbf{u})\defeq\det[(D_j\Phi_{i_r})(\mathbf{u})]_{r,j=1}^{k}$. Define $\int_{\Phi}\omega\defeq\int_D\sum\limits_I b_I(\Phi(\mathbf{u}))J_I\Phi(\mathbf{u})\,d\mathbf{u}$.
+\end{definition}
+
 \begin{theorem} \label{thm:forms-reparametrization-naturality} \hlt{Naturality Under Reparametrization}\\
-Let $\Phi:D\to E\subseteq\R^n$ be a $C^1$ $k$-surface, and let $R:D'\to D$ be a $C^1$ diffeomorphism with $\epsilon\defeq\operatorname{sgn}\det DR$ constant on $D'$. For every $k$-form $\omega$ on $E$, $\int_{\Phi\circ R}\omega=\epsilon\int_{\Phi}\omega$.
+Fix $n\in\N$, $k\in J_n$. Let $E\subseteq\R^n$ be open, $\Phi:D\to E$ be a $C^1$ $k$-surface, and $D'\subseteq\R^k$ be a parameter domain.\\
+Let $U',U\subseteq\R^k$ be open neighborhoods of $D',D$, respectively. Let $\widetilde R:U'\to U$ be $C^1$ diffeomorphism with $\widetilde R(D')=D$, set $R\defeq\widetilde R|_{D'}$.\\
+Suppose $\operatorname{sgn}\det D\widetilde R\equiv\epsilon\in\{-1,1\}$ on $D'$. If $\omega$ is a $k$-form on $E$, then $\int_{\Phi\circ R}\omega=\epsilon\int_\Phi\omega$.
 \begin{proof}
-By linearity, take $\omega=f\,dx_I$. Cauchy-Binet gives $J_I(\Phi\circ R)(\mathbf{u})=J_I\Phi(R(\mathbf{u}))\det DR(\mathbf{u})$.\\
-Thus $\int_{\Phi\circ R}\omega=\int_{D'}f(\Phi(R\mathbf{u}))J_I\Phi(R\mathbf{u})\det DR(\mathbf{u})\,d\mathbf{u}=\epsilon\int_D f(\Phi(\mathbf{v}))J_I\Phi(\mathbf{v})\,d\mathbf{v}$ by change of variables.\\
-\hlt{Structural Commentary}: Reparametrization changes coordinates only.\\
-\hlt{Key Insight}: Orientation contributes $\operatorname{sgn}\det DR$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item \hlt{Domain rule}: Let $P\subseteq\R^k$ be a parameter domain, $q\in C_c(\R^k,\R)$. If $\operatorname{supp}q\subseteq P$, then $\int_Pq=\int_{\R^k}q$; if $q\geq0$, then $\int_Pq\leq\int_{\R^k}q$.\\
+The cell case holds by Proposition \ref{prop:support-and-simplex-integrals-well-defined}(i) and interval comparison.\\
+If $\operatorname{supp}q\subseteq Q^k$, then $\int_{Q^k}q=\int_{[0,1]^k}q$ by downward recursion in Definition \ref{def:support-and-compact-support-integral}(ii).\\
+If $q\geq0$, then $\int_{Q^k}q\leq\int_{[0,1]^k}q$ by the same recursion and interval comparison.\\
+A containing cell and interval comparison identify or bound the cube integral by $\int_{\R^k}q$.
+\item \hlt{Reduction}: By linearity, fix $\omega=f\,dx_I$, $h(\mathbf v)\defeq f(\Phi(\mathbf v))J_I\Phi(\mathbf v)$. Set $j(\mathbf u)\defeq\abs{\det D\widetilde R(\mathbf u)}$, $A\defeq\int_Dh$, and $B\defeq\int_{D'}h(R(\mathbf u))j(\mathbf u)\,d\mathbf u$.\\
+$J_I(\Phi\circ R)=(J_I\Phi\circ R)\det D\widetilde R$ holds by Theorem \ref{thm:cauchy-binet-minors}. Thus $\int_\Phi\omega=A$, $\int_{\Phi\circ R}\omega=\epsilon B$ by Definition \ref{def:integration-of-differential-form}. To prove $A=B$.
+\item \hlt{Cutoff substitution}: If $D=\prod\limits_{i=1}^{k}[a_i,b_i]$, set $\mathcal L_D\defeq\{\mathbf v\mapsto v_i-a_i,\mathbf v\mapsto b_i-v_i:i\in J_k\}$.\\
+If $D=Q^k$, $\mathcal L_D\defeq\{\mathbf v\mapsto v_i:i\in J_k\}\cup\{\mathbf v\mapsto1-\sum\limits_{i=1}^{k}v_i\}$. For $\delta>0$, $\theta_\delta(t)\defeq\min\{1,\max\{0,\frac{t}{\delta}\}\}$, $\eta_\delta(t)\defeq\max\{0,1-\frac{\abs t}{\delta}\}$.\\
+Set $\chi_\delta(\mathbf v)\defeq\prod\limits_{\ell\in\mathcal L_D}\theta_\delta(\ell(\mathbf v))$. On $D$, $0\leq1-\chi_\delta\leq\sum\limits_{\ell\in\mathcal L_D}\eta_\delta\circ\ell$, $\chi_\delta|_{\partial D}=0$. Set $h_\delta\defeq h\chi_\delta$ on $D$, let $F_\delta$ be its zero extension.\\
+Then $F_\delta\in C_c(\R^k,\R)$ and $\operatorname{supp}F_\delta\subseteq D$. By Part (i) and Theorem \ref{thm:change-of-variables-rk}, $A_\delta\defeq\int_Dh_\delta=\int_{D'}h_\delta(R(\mathbf u))j(\mathbf u)\,d\mathbf u$.
+\item \hlt{Vanishing error}: If $U=\R^k$, set $r\defeq1$. Otherwise, choose $0<r<\min\limits_{\mathbf v\in D}\operatorname{dist}(\mathbf v,\R^k\setminus U)$.\\
+The minimum is positive by Proposition \ref{prop:distance-to-set-is-continuous} and Theorem \ref{thm:extreme-value-theorem-compact}. Set $K_r\defeq\{\mathbf v:\operatorname{dist}(\mathbf v,D)\leq r\}\subseteq U$.\\
+Set $M\defeq\max\limits_D\abs h$ and $\zeta(\mathbf v)\defeq\max\{0,1-r^{-1}\operatorname{dist}(\mathbf v,D)\}$. Set $G_\delta\defeq M\zeta\sum\limits_{\ell\in\mathcal L_D}\eta_\delta\circ\ell$. Then $\zeta|_D=1$ and $G_\delta\in C_c(\R^k,\R)$.\\
+$G_\delta\geq0$ and $\operatorname{supp}G_\delta\subseteq K_r$. Each $\ell\in\mathcal L_D$ is the last coordinate of an affine diffeomorphism $S_\ell$ with $\abs{\det DS_\ell}=1$.\\
+For slanted simplex face, take $S_\ell(\mathbf v)=(v_1,\ldots,v_{k-1},1-\sum\limits_{i=1}^{k}v_i)$. Choose $C_\ell=\prod\limits_{i=1}^{k}[c_{\ell i},d_{\ell i}]\supseteq S_\ell(K_r)$ by Lemma \ref{lem:bounded-rk-set-contained-in-k-cell}.\\
+Set $m_\ell\defeq\prod\limits_{i=1}^{k-1}(d_{\ell i}-c_{\ell i})$, with empty product $1$. Set $q_\ell(\mathbf y)\defeq(\zeta\circ S_\ell^{-1})(\mathbf y)\eta_\delta(y_k)$.\\
+Then $\int_{\R^k}\zeta(\eta_\delta\circ\ell)=\int_{\R^k}q_\ell$ by Theorem \ref{thm:change-of-variables-rk}. $\operatorname{supp}q_\ell\subseteq C_\ell$ and $0\leq q_\ell(\mathbf y)\leq\eta_\delta(y_k)$.\\
+$\int_\R\eta_\delta=\delta$ by direct calculation. By Theorem \ref{thm:iterated-integrals-order-independent}, $\int_{\R^k}q_\ell\leq m_\ell\delta$. Set $E_\delta\defeq\int_{\R^k}G_\delta$. Then $0\leq E_\delta\leq M\delta\sum\limits_{\ell\in\mathcal L_D}m_\ell\to0$.\\
+On $D$, $\abs{h-h_\delta}\leq G_\delta$, so $\abs{A-A_\delta}\leq E_\delta$ by Part (i). $\abs{B-A_\delta}\leq\int_{D'}G_\delta(R(\mathbf u))j(\mathbf u)\,d\mathbf u\leq E_\delta$ by Part (i) and Theorem \ref{thm:change-of-variables-rk}.\\
+Therefore $\abs{A-B}\leq2E_\delta\to0$, so $A=B$ and $\int_{\Phi\circ R}\omega=\epsilon\int_\Phi\omega$ by Part (ii).
+\end{enumerate}
+\hlt{Structural Commentary}: Face cutoffs transfer whole-space substitution to parameter domains; Cauchy--Binet isolates orientation.\\
+\hlt{Key Insight}: Each boundary-slab error is bounded by a constant times $\delta$.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:wedge-product-and-exterior-derivative} \hlt{Product and Exterior Derivative}\\
-For basic forms, $dx_I\wedge dx_J$ is obtained by concatenating $I,J$; it is $0$ if an index repeats, and otherwise $\operatorname{sgn}(\sigma)dx_K$, where $K$ is the increasing rearrangement and $\sigma$ is the sorting permutation. Extend bilinearly.
+Let $n\in\N$, $E\subseteq\R^n$ be open. The \hlt{wedge product} is pointwise exterior-algebra product, bilinear over coefficient functions.\\
+In coordinates, $dx_I\wedge dx_J$ is obtained by concatenating $I,J$ and reducing by Proposition \ref{prop:basic-forms-standard-presentation}.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item For $f\in C^1(E)$, define $df\defeq\sum\limits_{i=1}^{n}(D_if)(\x)\,dx_i$.
-\item For a $C^1$ $k$-form $\omega=\sum_I b_I(\x)\,dx_I$, define $d\omega\defeq\sum\limits_I (db_I)\wedge dx_I$.
+\item Fix $k\in J_n$ and a $C^1$ $k$-form $\omega=\sum\limits_I b_I(\x)\,dx_I$. Set $d\omega\defeq\sum\limits_I (db_I)\wedge dx_I$.
 \end{enumerate}
 \end{definition}
 
 \begin{theorem} \label{thm:exterior-derivative-basic-laws} \hlt{Exterior Derivative Laws}\\
-If $\omega,\lambda$ are $C^1$ forms in $E$ and $\omega$ is a $k$-form, then $d(\omega\wedge\lambda)=(d\omega)\wedge\lambda+(-1)^k\omega\wedge d\lambda$. If $\omega$ is $C^2$, then $d^2\omega=0$.
+Fix $n\in\N$ and let $E\subseteq\R^n$ be open.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Let $k,\ell\in\{0\}\cup J_n$, let $\omega$ be a $C^1$ $k$-form, and let $\lambda$ be a $C^1$ $\ell$-form. Then $d(\omega\wedge\lambda)=(d\omega)\wedge\lambda+(-1)^k\omega\wedge d\lambda$.
+\item If $\omega$ is a $C^2$ form, then $d^2\omega=0$.
+\end{enumerate}
 \begin{proof}
-By bilinearity, it suffices to take $\omega=f\,dx_I$ and $\lambda=g\,dx_J$.\\
-The ordinary product rule gives $d(fg)=f\,dg+g\,df$; moving $dg$ past $k$ factors in $dx_I$ gives the displayed sign.\\
-For a $C^2$ $0$-form $f$, $d^2f=\sum\limits_{i,j}(D_{ij}f)(\x)\,dx_i\wedge dx_j=0$, by Theorem \ref{thm:equality-of-mixed-partials} and antisymmetry.\\
-The general case follows from $\omega=\sum_I b_I\,dx_I$ and the product rule just proved.\\
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item By bilinearity, take $\omega=f\alpha$ and $\lambda=g\beta$. Each of $\alpha,\beta$ is $1$ in degree $0$ or an increasing coordinate word in positive degree.\\
+Since $d\alpha=d\beta=0$, $d(\omega\wedge\lambda)=d(fg)\wedge\alpha\wedge\beta$. Identity $d(fg)=f\,dg+g\,df$ holds by ordinary product rule.\\
+The $g\,df$ term equals $(d\omega)\wedge\lambda$. The $f\,dg$ term equals $(-1)^k\omega\wedge d\lambda$ by Proposition \ref{prop:basic-forms-standard-presentation}(i), after moving $dg$ past the $k$ factors in $\alpha$.
+\item For a $C^2$ $0$-form $f$, $d^2f=\sum\limits_{i,j}(D_{ij}f)(\x)\,dx_i\wedge dx_j$. This sum is $0$ by Theorem \ref{thm:equality-of-mixed-partials} and Proposition \ref{prop:basic-forms-standard-presentation}(i).\\
+For a positive-degree form $\omega=\sum\limits_I b_I\,dx_I$, part (i) and $d(dx_I)=0$ imply $d^2\omega=\sum\limits_I(d^2b_I)\wedge dx_I=0$.
+\end{enumerate}
 \hlt{Structural Commentary}: The exterior derivative is built to make mixed partial cancellation visible.\\
 \hlt{Key Insight}: Symmetric second derivatives meet antisymmetric wedge products, so $d^2=0$.
 \end{proof}
 \end{theorem}
 
 \begin{definition} \label{def:pullback-of-differential-form} \hlt{Change of Variables for Forms}\\
-Let $E\subseteq\R^n$, $V\subseteq\R^m$, let $T=(t_1,\ldots,t_m):E\to V$ be $C^1$, and let $\omega=\sum_I b_I(\y)\,dy_I$ be a $k$-form on $V$.
+Fix $n,m\in\N$. Let $E\subseteq\R^n$ and $V\subseteq\R^m$ be open, and let $T=(t_1,\ldots,t_m):E\to V$ be $C^1$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item Set $dt_i\defeq\sum\limits_{j=1}^{n}(D_jt_i)(\x)\,dx_j$ for $1\leq i\leq m$.
-\item The \hlt{pullback} of $\omega$ by $T$ is $T^\ast\omega\defeq\omega_T\defeq\sum\limits_I b_I(T(\x))\,dt_{i_1}\wedge\cdots\wedge dt_{i_k}$.
+\item Set $dt_i\defeq d(t_i)=\sum\limits_{j=1}^{n}(D_jt_i)(\x)\,dx_j$ for $i\in J_m$.
+\item For a $0$-form $f\in C(V,\R)$, define its \hlt{pullback} by $T^\ast f\defeq f_T\defeq f\circ T$.
+\item Fix $k\in J_m$ and a $k$-form $\omega=\sum\limits_I b_I(\y)\,dy_I$ on $V$. Define $T^\ast\omega\defeq\omega_T\defeq\sum\limits_I b_I(T(\x))\,dt_{i_1}\wedge\cdots\wedge dt_{i_k}$.\\
+If $k\in J_n$, reduce this expression to standard presentation by Proposition \ref{prop:basic-forms-standard-presentation}. If $k>n$, every coordinate word vanishes.
 \end{enumerate}
 \end{definition}
 
-Pullback is the differential-form analogue of the dual map in Definition \ref{def:dual-map}: cells move forward by composition with $T$, while forms move backward so they can be evaluated before or after that forward motion.
-
-\begin{figure}[H]
-  \centering
-  \input{figures/analysis/forms_pushforward_pullback_duality.tikz}
-  \caption{Cells push forward with $T$; forms pull back with $T^\ast$, so $T^\ast\alpha(\varphi)=\alpha(T_\ast\varphi)$.}
-  \label{fig:forms-pushforward-pullback-duality}
-\end{figure}
-
 \begin{theorem} \label{thm:pullback-basic-laws} \hlt{Pullback Commutes with the Basic Operations}\\
-Let $T=(t_1,\ldots,t_m):E\subseteq\R^n\to V\subseteq\R^m$ be $C^1$, and let $\omega_T\defeq T^\ast\omega$.
+Fix $n,m,p\in\N$. Let $E\subseteq\R^n$, $V\subseteq\R^m$, $W\subseteq\R^p$ be open, $T:E\to V$ be $C^1$.
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
-\item $(\omega+\lambda)_T=\omega_T+\lambda_T$ for forms of the same order;
-\item $(\omega\wedge\lambda)_T=\omega_T\wedge\lambda_T$;
-\item $d(\omega_T)=(d\omega)_T$ when $\omega$ is $C^1$ and $T$ is $C^2$;
-\item if $S:V\to W$ is $C^1$, then $(\omega_S)_T=\omega_{S\circ T}$.
+\item If $\omega,\lambda$ are forms of the same degree on $V$, then $(\omega+\lambda)_T=\omega_T+\lambda_T$.
+\item If $\omega,\lambda$ are forms on $V$, then $(\omega\wedge\lambda)_T=\omega_T\wedge\lambda_T$.
+\item If $\omega$ is a $C^1$ form on $V$ and $T$ is $C^2$, then $d(\omega_T)=(d\omega)_T$.
+\item If $S:V\to W$ is $C^1$ and $\eta$ is a form on $W$, then $(\eta_S)_T=\eta_{S\circ T}$.
+\item Let $k\in J_{\min\{m,n\}}$, let $\Phi$ be a $k$-surface in $E$, and let $\omega$ be a $k$-form on $V$. Then $\int_{T\circ\Phi}\omega=\int_{\Phi}\omega_T$.
 \end{enumerate}
-Moreover, if $\Phi$ is a $k$-surface in $E$ and $\omega$ is a $k$-form in $V$, then $\int_{T\circ\Phi}\omega=\int_{\Phi}\omega_T$.
 \begin{proof}
 \begin{enumerate}[label=(\roman*)]
 \setlength{\itemsep}{0pt}
 \item Addition follows termwise from $b_I\mapsto b_I\circ T$ and $dy_i\mapsto dt_i$.
-\item Pullback replaces each $dy_i$ by $dt_i$; bilinearity gives $(\omega\wedge\lambda)_T=\omega_T\wedge\lambda_T$.
-\item Let $\omega=\sum_I b_I\,dy_I$. Since $d(b_I\circ T)=(db_I)_T$ (Theorem \ref{thm:chain-rule-several-variables}) and $d(dt_i)=d^2t_i=0$, $d(\omega_T)=(d\omega)_T$.
-\item If $S=(s_1,\ldots,s_p)$, both $(\omega_S)_T$ and $\omega_{S\circ T}$ replace $dz_q$ by $d(s_q\circ T)$, by the chain rule.
+\item Pullback replaces coefficients by their compositions with $T$ and each $dy_i$ by $dt_i$. Thus $(\omega\wedge\lambda)_T=\omega_T\wedge\lambda_T$ by bilinearity.
+\item If $\omega$ is a $0$-form, the identity holds by Theorem \ref{thm:chain-rule-several-variables}.\\
+For positive degree, write $\omega=\sum\limits_I b_I\,dy_I$. The identity $d(b_I\circ T)=(db_I)_T$ holds by Theorem \ref{thm:chain-rule-several-variables}.\\
+The identity $d(dt_i)=d^2t_i=0$ holds by Theorem \ref{thm:exterior-derivative-basic-laws}(ii). Hence $d(\omega_T)=(d\omega)_T$ by repeated use of Theorem \ref{thm:exterior-derivative-basic-laws}(i).
+\item If $\eta$ is a $0$-form, the identity is associativity of composition.\\
+For positive degree, let $S=(s_1,\ldots,s_p)$. The coefficient functions agree by associativity of composition.\\
+Each $dz_q$ has the same replacement in $(\eta_S)_T$ and $\eta_{S\circ T}$ by Theorem \ref{thm:chain-rule-several-variables}.
+\item Write $\omega=\sum\limits_I b_I\,dy_I$, where $I$ ranges over increasing $k$-indices in $J_m$. Let $J$ range over increasing $k$-indices in $J_n$.\\
+Set $M_{I,J}(\x)\defeq\det[(D_{j_s}t_{i_r})(\x)]_{r,s=1}^{k}$. The pullback expansion is valid by multilinearity and Proposition \ref{prop:basic-forms-standard-presentation}.\\
+Thus $\omega_T=\sum\limits_{I,J}b_I(T(\x))M_{I,J}(\x)\,dx_J$. The composition-minor identity holds by Theorem \ref{thm:cauchy-binet-minors}.\\
+Thus $J_I(T\circ\Phi)(\mathbf{u})=\sum\limits_JM_{I,J}(\Phi(\mathbf{u}))J_J\Phi(\mathbf{u})$; $\int_{\Phi}\omega_T=\int_{T\circ\Phi}\omega$ by Definition \ref{def:integration-of-differential-form}, preceding identities.
 \end{enumerate}
-For the integral identity, expand over $D$ and use Cauchy-Binet on $D(T\circ\Phi)=DT(\Phi)D\Phi$.\\
-\hlt{Structural Commentary}: Pullback translates forms before integration.\\
-\hlt{Key Insight}: Forms are defined so that composition of parameterizations becomes an algebraic substitution.
+\hlt{Structural Commentary}: Pullback composes coefficients before Cauchy--Binet recombines coordinate minors.\\
+\hlt{Key Insight}: The chain rule makes algebraic pullback exactly dual to composition of surfaces.
 \end{proof}
 \end{theorem}
+
+Pullback is the differential-form analogue of the dual map in Definition \ref{def:dual-map}.\\
+Cells move forward by composition with $T$, while forms move backward. The two motions have the same integral by Theorem \ref{thm:pullback-basic-laws}(v).\\
+Figure \ref{fig:forms-pushforward-pullback-duality} records this duality with $T_\ast\varphi=T\circ\varphi$.
+
+\begin{illustrationfigure}[H]
+  \centering
+  \input{figures/analysis/forms_pushforward_pullback_duality.tikz}
+  \caption{Cells push forward with $T$, forms pull back with $T^\ast$, and their integrals agree by Theorem \ref{thm:pullback-basic-laws}(v).}
+  \label{fig:forms-pushforward-pullback-duality}
+\end{illustrationfigure}
