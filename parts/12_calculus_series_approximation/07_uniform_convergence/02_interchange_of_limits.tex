@@ -1,46 +1,91 @@
 \subsection{Interchange of Limits}
 
 \begin{theorem} \label{thm:uniform-convergence-and-riemann-stieltjes-integration} \hlt{Uniform Convergence and Riemann--Stieltjes Integration}\\
-Let $\alpha$ be increasing on $[a,b]$. If $f_n\in\mathcal{R}(\alpha)$ on $[a,b]$ and $f_n\rightrightarrows f$, then $f\in\mathcal{R}(\alpha)$ and $\int_a^b f\,d\alpha=\lim_{n\to\infty}\int_a^b f_n\,d\alpha$.
+Let $a<b$, $\alpha:[a,b]\to\R$ be increasing, $f_n,f:[a,b]\to\R$. Assume $(\forall n\in\N)\ f_n\in\mathcal{R}(\alpha)$ and $f_n\rightrightarrows f$ on $[a,b]$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f\in\mathcal{R}(\alpha)$;
+\item $\int_a^b f\,d\alpha=\lim\limits_{n\to\infty}\int_a^b f_n\,d\alpha$.
+\end{enumerate}
 \begin{proof}
-Put $\varepsilon_n\defeq\sup_{a\leq x\leq b}\abs{f_n(x)-f(x)}$. Then $\varepsilon_n\to0$ by Theorem \ref{thm:uniform-convergence-supremum-test}, and $f_n-\varepsilon_n\leq f\leq f_n+\varepsilon_n$.\\
-Upper and lower integrals of $f$ are therefore squeezed between corresponding integrals of $f_n\pm\varepsilon_n$, and gap is at most $2\varepsilon_n[\alpha(b)-\alpha(a)]$. Thus $f\in\mathcal{R}(\alpha)$. Same estimate gives $\abs{\int_a^b f\,d\alpha-\int_a^b f_n\,d\alpha}\leq \varepsilon_n[\alpha(b)-\alpha(a)]\to0$.\\
-\hlt{Structural Commentary}: Uniform error becomes an integral error multiplied by the total $\alpha$-variation.\\
-\hlt{Key Insight}: Uniform convergence is strong enough to pass limits through the Riemann--Stieltjes integral.
+Choose $n_0$ with $(\forall x\in[a,b])\ \abs{f(x)-f_{n_0}(x)}\leq1$ by Definition \ref{def:uniform-convergence-functions}. Function $f_{n_0}$ bounded by Definition \ref{def:riemann-stieltjes-integral}, so $f$ bounded.\\
+Set $A\defeq\alpha(b)-\alpha(a)\geq0$ and $\varepsilon_n\defeq\sup\limits_{x\in[a,b]}\abs{f_n(x)-f(x)}$. Then $\varepsilon_n\to0$ by Theorem \ref{thm:uniform-convergence-supremum-test}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Fix $\delta>0$, $n$ with $2A\varepsilon_n<\frac{\delta}{2}$ by $\varepsilon_n\to0$. Choose partition $\Pi$ with $U(\Pi,f_n,\alpha)-L(\Pi,f_n,\alpha)<\frac{\delta}{2}$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.\\
+$U(\Pi,f,\alpha)-L(\Pi,f,\alpha)\leq U(\Pi,f_n,\alpha)-L(\Pi,f_n,\alpha)+2A\varepsilon_n<\delta$ by $f_n-\varepsilon_n\leq f\leq f_n+\varepsilon_n$;  $f\in\mathcal{R}(\alpha)$ by Theorem \ref{thm:riemann-stieltjes-integrability-criterion}.
+\item For $n\in\N$, $f-f_n\in\mathcal{R}(\alpha)$ by (i), the hypothesis, and Theorem \ref{thm:riemann-stieltjes-integral-properties}(i).\\
+$\abs{\int_a^b f\,d\alpha-\int_a^b f_n\,d\alpha}\leq A\varepsilon_n$ holds by $(\forall x\in[a,b])\ \abs{f(x)-f_n(x)}\leq\varepsilon_n$, Theorem \ref{thm:riemann-stieltjes-integral-properties}(i),(iv). RHS tends to $0$ by $\varepsilon_n\to0$.
+\end{enumerate}
+\hlt{Structural Commentary}: Supremum errors control Darboux gaps and integral differences through $\alpha(b)-\alpha(a)$.\\
+\hlt{Key Insight}: One global error bound controls every Stieltjes-weighted subinterval.
 \end{proof}
 \end{theorem}
 
 \begin{corollary} \label{cor:termwise-riemann-stieltjes-integration} \hlt{Termwise Integration of Uniformly Convergent Series}\\
-If $f_n\in\mathcal{R}(\alpha)$ on $[a,b]$ and $\sum f_n$ converges uniformly to $f$, then $\int_a^b f\,d\alpha=\sum\limits_{n=1}^{\infty}\int_a^b f_n\,d\alpha$.
+Let $a<b$, $\alpha:[a,b]\to\R$ be increasing, $f_n,f:[a,b]\to\R$ satisfy $(\forall n\in\N)\ f_n\in\mathcal{R}(\alpha)$.\\
+If $\sum\limits_{n=1}^{\infty}f_n$ converges uniformly to $f$ on $[a,b]$, then $\int_a^b f\,d\alpha=\sum\limits_{n=1}^{\infty}\int_a^b f_n\,d\alpha$.
 \begin{proof}
-Let $s_N\defeq\sum_{n=1}^{N}f_n$. By linearity, $s_N\in\mathcal{R}(\alpha)$ and $\int_a^b s_N\,d\alpha=\sum_{n=1}^{N}\int_a^b f_n\,d\alpha$.\\
-Since $s_N\rightrightarrows f$, Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration} gives $\int_a^b f\,d\alpha=\lim_{N\to\infty}\int_a^b s_N\,d\alpha=\sum\limits_{n=1}^{\infty}\int_a^b f_n\,d\alpha$.\\
-\hlt{Structural Commentary}: Reduce the series to its uniformly convergent partial sums.\\
-\hlt{Key Insight}: Uniform convergence lets integration be performed term by term.
+Set $s_N\defeq\sum\limits_{k=1}^{N}f_k$. For $N\in\N$, $s_N\in\mathcal{R}(\alpha)$ and $\int_a^b s_N\,d\alpha=\sum\limits_{k=1}^{N}\int_a^b f_k\,d\alpha$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i).\\
+$\int_a^b f\,d\alpha=\lim\limits_{N\to\infty}\int_a^b s_N\,d\alpha=\sum\limits_{n=1}^{\infty}\int_a^b f_n\,d\alpha$ by $s_N\rightrightarrows f$ and Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration}(ii).\\
+\hlt{Structural Commentary}: Partial sums transfer finite linearity to the uniform integration theorem.\\
+\hlt{Key Insight}: Uniform convergence carries the partial-sum identity to the limit.
 \end{proof}
 \end{corollary}
 
 \begin{theorem} \label{thm:differentiation-under-riemann-stieltjes-integral} \hlt{Differentiation Under a Riemann--Stieltjes Integral}\\
-Let $\alpha:[a,b]\to\R$ be increasing, let $\varphi:[a,b]\times[c,d]\to\R$, write $\varphi^t(x)\defeq\varphi(x,t)$, and fix $s\in(c,d)$.\\
-Assume $\varphi^t\in\mathcal{R}(\alpha)$ for every $t\in[c,d]$, and for some $\eta>0$ with $(s-\eta,s+\eta)\subseteq(c,d)$, $D_2\varphi$ exists on $[a,b]\times(s-\eta,s+\eta)$ and $(D_2\varphi)^t\rightrightarrows(D_2\varphi)^s$ on $[a,b]$ as $t\to s$.\\
-If $F(t)\defeq\int_a^b \varphi(x,t)\,d\alpha(x)$, then $(D_2\varphi)^s\in\mathcal{R}(\alpha)$ and $F'(s)=\int_a^b (D_2\varphi)(x,s)\,d\alpha(x)$.
+Let $a<b$, $c<d$, $\alpha:[a,b]\to\R$ be increasing, $\varphi:[a,b]\times[c,d]\to\R$. Set $\varphi^t(x)\defeq\varphi(x,t)$ and $(D_2\varphi)^t(x)\defeq D_2\varphi(x,t)$ where defined.\\
+Fix $s\in(c,d)$, let $\eta>0$ satisfy $(s-\eta,s+\eta)\subseteq(c,d)$. Assume $(\forall t\in[c,d])\ \varphi^t\in\mathcal{R}(\alpha)$ and $D_2\varphi$ exists on $[a,b]\times(s-\eta,s+\eta)$.\\
+Assume the derivative slices satisfy $(\forall\varepsilon>0)(\exists\delta\in(0,\eta))(\forall t\in(s-\eta,s+\eta))(\forall x\in[a,b])\,[0<\abs{t-s}<\delta\Rightarrow\abs{D_2\varphi(x,t)-D_2\varphi(x,s)}<\varepsilon]$.\\
+Set $F(t)\defeq\int_a^b \varphi(x,t)\,d\alpha(x)$. Then:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $(D_2\varphi)^s\in\mathcal{R}(\alpha)$;
+\item $F'(s)=\int_a^b (D_2\varphi)(x,s)\,d\alpha(x)$.
+\end{enumerate}
 \begin{proof}
-For $t\neq s$, set $\psi_t\defeq(\varphi^t-\varphi^s)/(t-s)\in\mathcal{R}(\alpha)$.\\
-By Corollary \ref{cor:mean-value-theorem}, $\psi_t(x)=D_2\varphi(x,\tau_x(t))$ for some $\tau_x(t)$ between $s$ and $t$; hence $\psi_t\rightrightarrows(D_2\varphi)^s$.\\
-Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration} gives $(D_2\varphi)^s\in\mathcal{R}(\alpha)$ and $\frac{F(t)-F(s)}{t-s}=\int_a^b\psi_t\,d\alpha\to\int_a^b(D_2\varphi)^s\,d\alpha$, so $F'(s)=\int_a^b(D_2\varphi)(x,s)\,d\alpha(x)$.\\
-\hlt{Structural Commentary}: Integrable difference quotients converge uniformly.\\
-\hlt{Key Insight}: Uniform convergence permits $D_t\int=\int D_t$.
+For $0<\abs{t-s}<\eta$, set $\psi_t\defeq\frac{\varphi^t-\varphi^s}{t-s}\in\mathcal{R}(\alpha)$ by Theorem \ref{thm:riemann-stieltjes-integral-properties}(i).\\
+For $x\in[a,b]$, the map $u\mapsto\varphi(x,u)$ is continuous on the interval with endpoints $s,t$ by Theorem \ref{thm:differentiable-implies-continuous}.\\
+Choose $\tau_x(t)$ strictly between $s$ and $t$ with $\psi_t(x)=D_2\varphi(x,\tau_x(t))$ by Corollary \ref{cor:mean-value-theorem}.\\
+Set $e(t)\defeq\sup\limits_{\overline{\R}}\{\abs{\psi_t(x)-D_2\varphi(x,s)}:x\in[a,b]\}$ and fix $\varepsilon>0$.\\
+Choose $0<\delta<\eta$ so that $(0<\abs{r-s}<\delta,\ x\in[a,b])\Rightarrow\abs{D_2\varphi(x,r)-D_2\varphi(x,s)}<\frac{\varepsilon}{2}$ by the slice hypothesis.\\
+If $0<\abs{t-s}<\delta$, then $(\forall x\in[a,b])\,[0<\abs{\tau_x(t)-s}<\delta\land\abs{\psi_t(x)-D_2\varphi(x,s)}<\frac{\varepsilon}{2}]$, so $e(t)\leq\frac{\varepsilon}{2}<\varepsilon$. Thus $\lim\limits_{t\to s}e(t)=0$.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item Set $t_j\defeq s+\frac{\eta}{j+2}$. Then $e(t_j)\to0$, and $\psi_{t_j}\rightrightarrows(D_2\varphi)^s$ on $[a,b]$ by Theorem \ref{thm:uniform-convergence-supremum-test}; $(D_2\varphi)^s\in\mathcal{R}(\alpha)$ by Theorem \ref{thm:uniform-convergence-and-riemann-stieltjes-integration}(i).
+\item Set $A\defeq\alpha(b)-\alpha(a)$. For $0<\abs{t-s}<\eta$, $\abs{\frac{F(t)-F(s)}{t-s}-\int_a^b(D_2\varphi)^s\,d\alpha}\leq Ae(t)$ by (i) and Theorem \ref{thm:riemann-stieltjes-integral-properties}(i),(iv).\\
+Difference quotient converges to $\int_a^b(D_2\varphi)^s\,d\alpha$ by bound and $\lim\limits_{t\to s}e(t)=0$; $F'(s)=\int_a^b(D_2\varphi)(x,s)\,d\alpha(x)$ by Definition \ref{def:derivative-real-function}.
+\end{enumerate}
+\hlt{Structural Commentary}: The mean-value theorem transfers uniform derivative-slice control to integrable difference quotients.\\
+\hlt{Key Insight}: Integral difference quotients inherit the uniform derivative-slice limit.
 \end{proof}
 \end{theorem}
 
 \begin{theorem} \label{thm:uniform-derivative-convergence} \hlt{Uniform Convergence and Differentiation}\\
-Let $f_n$ be differentiable on $[a,b]$, suppose $f_n(x_0)$ converges for some $x_0\in[a,b]$, and suppose $f_n'\rightrightarrows g$ on $[a,b]$. Then $f_n\rightrightarrows f$ for some $f$, and $f'=g$ on $[a,b]$ (one-sided at endpoints).
+Let $a<b$, $f_n:[a,b]\to\R$ be differentiable relative to $[a,b]$, $g:[a,b]\to\R$, and fix $x_0\in[a,b]$.\\
+Assume $f_n(x_0)$ converges and $f_n'\rightrightarrows g$ on $[a,b]$. Then $(\exists f:[a,b]\to\R)$ such that:
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $f_n\rightrightarrows f$ on $[a,b]$;
+\item $f$ is differentiable relative to $[a,b]$ and $f'=g$.
+\end{enumerate}
 \begin{proof}
-For $m,n$, MVT \ref{cor:mean-value-theorem} gives $\abs{f_n(x)-f_m(x)}\leq \abs{f_n(x_0)-f_m(x_0)}+(b-a)\sup\limits_{t\in[a,b]}\abs{f_n'(t)-f_m'(t)}$.\\
-Thus $(f_n)$ is uniformly Cauchy, so $f_n\rightrightarrows f$. Fix $x$ and set $\phi_n(t)\defeq\frac{f_n(t)-f_n(x)}{t-x}$, $\phi(t)\defeq\frac{f(t)-f(x)}{t-x}$.\\
-For $t\neq x$, the same estimate gives $\abs{\phi_n(t)-\phi_m(t)}\leq\norm{f_n'-f_m'}_{\infty}$, hence $\phi_n\rightrightarrows\phi$.\\
-By Theorem \ref{thm:uniform-convergence-interchanges-function-limits}, $f'(x)=\lim\limits_{t\to x}\phi(t)=\lim_{n\to\infty}f_n'(x)=g(x)$.\\
-\hlt{Structural Commentary}: Derivative control anchors functions, then quotients.\\
-\hlt{Key Insight}: Uniform derivative convergence plus one anchor passes derivatives to the limit.
+For $m,n\in\N$, set $h_{m,n}\defeq f_n-f_m$. The function $h_{m,n}$ is differentiable relative to $[a,b]$ with $h_{m,n}'=f_n'-f_m'$ by Theorem \ref{thm:derivative-algebra-rules}(i),(ii) with the constant map $-1$. Hence $h_{m,n}$ is continuous by Theorem \ref{thm:differentiable-implies-continuous}.
+\begin{enumerate}[label=(\roman*)]
+\setlength{\itemsep}{0pt}
+\item $\varepsilon>0$, $q\defeq\frac{\varepsilon}{2(b-a)}$; $N\in\N$, $(m,n\geq N)\Rightarrow[\abs{f_n(x_0)-f_m(x_0)}\leq\frac{\varepsilon}{2}\land(\forall u\in[a,b])\ \abs{f_n'(u)-f_m'(u)}\leq q]$ (Theorems \ref{thm:real-cauchy-convergence-criterion}, \ref{thm:uniform-cauchy-criterion}).\\
+For $m,n\geq N$ and $x\in[a,b]$, $\abs{f_n(x)-f_m(x)}\leq\abs{f_n(x_0)-f_m(x_0)}+(b-a)q\leq\varepsilon$; this is immediate for $x=x_0$ and holds by Corollary \ref{cor:mean-value-theorem} otherwise. Thus $(f_n)$ is uniformly Cauchy.\\
+For $x\in[a,b]$, $(f_n(x))$ is Cauchy by the uniform bound and converges in $\R$ by Theorem \ref{thm:real-cauchy-convergence-criterion}.\\
+Set $f(x)\defeq\lim\limits_{j\to\infty}f_j(x)$. Then $f_n\rightrightarrows f$ by Theorem \ref{thm:uniform-cauchy-criterion}.
+\item Fix $x\in[a,b]$, set $E\defeq[a,b]\setminus\{x\}$, and define $\phi_n,\phi:E\to\R$ by $\phi_n(t)\defeq\frac{f_n(t)-f_n(x)}{t-x}$ and $\phi(t)\defeq\frac{f(t)-f(x)}{t-x}$.\\
+Fix $\varepsilon>0$ and choose $N\in\N$ so that $(m,n\geq N,\ u\in[a,b])\Rightarrow\abs{f_n'(u)-f_m'(u)}\leq\varepsilon$ by Theorem \ref{thm:uniform-cauchy-criterion}.\\
+For $m,n\geq N$ and $t\in E$, $\abs{\phi_n(t)-\phi_m(t)}\leq\varepsilon$ by Corollary \ref{cor:mean-value-theorem} for $h_{m,n}$ on the interval with endpoints $x,t$.\\
+For $t\in E$, $\phi_m(t)\to\phi(t)$ by (i), Theorem \ref{thm:complex-sequence-limit-algebra}(i),(ii). Take $m\to\infty$ in preceding bound, $(n\geq N,\ t\in E)\Rightarrow\abs{\phi_n(t)-\phi(t)}\leq\varepsilon$.\\
+Hence $\phi_n\rightrightarrows\phi$ on $E$ by Definition \ref{def:uniform-convergence-functions}. Point $x$ is a limit point of $E$ by $a<b$, and $\lim\limits_{t\to x}\phi_n(t)=f_n'(x)$ by Definition \ref{def:derivative-real-function}.\\
+Therefore $\lim\limits_{t\to x}\phi(t)=\lim\limits_{n\to\infty}f_n'(x)=g(x)$ by Theorem \ref{thm:uniform-convergence-interchanges-function-limits} and $f_n'\rightrightarrows g$. Thus $f'(x)=g(x)$ relative to $[a,b]$ by Definition \ref{def:derivative-real-function}.\\
+Therefore $(\forall x\in[a,b])\ f'(x)=g(x)$, so $f$ is differentiable relative to $[a,b]$ and $f'=g$.
+\end{enumerate}
+\hlt{Structural Commentary}: Anchor and derivative tails control functions; quotient tails identify the derivative of the limit.\\
+\hlt{Key Insight}: One anchor removes the constants invisible to derivative convergence.
 \end{proof}
 \end{theorem}
